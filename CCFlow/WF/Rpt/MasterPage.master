@@ -1,0 +1,26 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="CCFlow.WF.Rpt.WF_Rpt_MasterPage" Codebehind="MasterPage.master.cs" %>
+<%@ Register src="../UC/Pub.ascx" tagname="Pub" tagprefix="uc1" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>流程数据查询</title>
+        <script type="text/javascript" language="JavaScript" src="../Comm/JS/Calendar/WdatePicker.js" defer="defer" ></script>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body leftmargin="0"    topmargin="0" >
+    <form id="form1" runat="server">
+    <table style="width:100%; height:100%;">
+    <tr>
+    <td valign="top">
+     <uc1:Pub ID="Pub1" runat="server" />
+    </td>
+    <td valign=top>
+        <asp:ContentPlaceHolder id="ContentPlaceHolder2" runat="server">
+        </asp:ContentPlaceHolder>
+    </td>
+    </tr>
+    </table>
+    </form>
+</body>
+</html>

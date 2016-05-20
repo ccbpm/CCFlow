@@ -1,0 +1,65 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="EasySearch.master.cs" Inherits="CCFlow.WF.Rpt.EasySearch" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+
+    <table style="width:100%;"> 
+    <%--<caption class="CaptionMsgLong" >流程查询</caption>--%>
+<caption  class=CaptionMsgLong> <a href="../FlowRpt.aspx"> 按流程查询</a> - 高级查询</a> </caption>
+    <tr>
+    
+    <td>
+<%--    <ul>
+    <li> <a href="EasySearchMyFlow.aspx" >我的流程</a></li>
+    <li> <a href="EasySearchMyFlow.aspx" >我部门流程</a></li>
+    <li> <a href="EasySearchEtcFlow.aspx" >其他部门流程</a></li>
+    </ul>--%>
+
+    
+<fieldset>
+<legend>流程查询方式</legend>
+<ul>
+<li><a href="../Comm/Search.aspx?EnsName=BP.WF.Data.MyFlows" target="mainS" >我参与的流程</a></li>
+<li><a href="../Comm/Search.aspx?EnsName=BP.WF.Data.MyStartFlows" target="mainS">我发起的流程</a></li>
+<li><a href="../Comm/Search.aspx?EnsName=BP.WF.Data.MyDeptFlows" target="mainS">我部门发起的流程</a></li>
+<li><a href="../Comm/Search.aspx?EnsName=BP.WF.Data.MyDeptTodolists" target="mainS">我部门的待办</a></li>
+<li><a href="../KeySearch.aspx" target="mainS">关键字查询</a></li>
+<li><a href="../FlowSearch.aspx" target="mainS">按流程高级查询</a></li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend>流程统计方式</legend>
+<ul>
+<li><a href="../Comm/Group.aspx?EnsName=BP.WF.Data.MyFlows" target="mainS" >我参与的流程</a></li>
+<li><a href="../Comm/Group.aspx?EnsName=BP.WF.Data.MyStartFlows" target="mainS">我发起的流程</a></li>
+<li><a href="../Comm/Group.aspx?EnsName=BP.WF.Data.MyDeptFlows" target="mainS">我部门发起的流程</a></li>
+<li><a href="../Comm/Group.aspx?EnsName=BP.WF.Data.MyDeptTodolists" target="mainS">我部门待办</a></li>
+</ul>
+</fieldset>
+
+    </td>
+
+    <td style=" width:80%; vertical-align:top">
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    </td>
+
+    </tr>
+
+    </table>
+    </form>
+</body>
+</html>

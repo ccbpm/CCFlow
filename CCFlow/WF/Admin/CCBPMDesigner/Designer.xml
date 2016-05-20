@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 活动-任务  -->
+	<Item Name="人机交互任务" No="UserTask" EleType="Activity"   EleDesc="手工执行的任务，大部分节点都是此类型。"  />
+  <Item Name="服务任务"     No="ServiceTask" EleType="Activity"  EleDesc="服务执行任务，大部分节点都是此类型。"    />
+  <Item Name="脚本执行任务" No="ScriptTask" EleType="Activity"   EleDesc="编写脚本执行的任务."    />
+  <Item Name="业务规则任务" No="BusinessRuleTask" EleType="Activity"     />
+  <Item Name="触发执行任务" No="ReceiveTask" EleType="Activity"     />
+  <Item Name="线下手工执行任务" No="ManualTask" EleType="Activity"    EleDesc="线下执行的工作，与流程引擎无关，这里仅仅起说明流程图的作用。"    />
+
+  <!-- 活动-其他 -->
+  <Item Name="顺序流" No="SequenceFlow" EleType="Activity"    EleDesc="节点的连接线，可以在连接线上设置条件。"    />
+  <Item Name="子流程" No="SubProcess" EleType="Activity"    EleDesc="子流程，如果连接到节点上，该节点就可以发起该子流程，需要节点表单上拖入子流程控件。"    />
+  
+  
+  <!-- 事件-发起 -->
+  <Item Name="流程启动事件" No="StartNone" EleType="Event"    EleDesc="流程启动的时候触发的事件."  />
+  <Item Name="定时发起" No="StartTimer" EleType="Event"    EleDesc="定时发起任务的事件."  />
+  <Item Name="信号发起" No="StartSignal" EleType="Event"    EleDesc="获得外部数据发起的事件"  />
+  <Item Name="消息驱动发起" No="StartMessage" EleType="Event"    EleDesc="通过消息驱动的事件"  />
+  <Item Name="发起错误事件" No="StartError" EleType="Event"    EleDesc="发起错误的时候的事件."  />
+  
+  <!-- 事件-结束 -->
+  <Item Name="结束事件" No="EndNone" EleType="Event"    EleDesc="正常结束时候的事件"  />
+  <Item Name="结束错误" No="EndError" EleType="Event"    EleDesc="结束流程错误的时候发生的事件."  />
+  
+  
+
+  <!-- 网关-发起 -->
+  <Item Name="唯一网关" No="ExclusiveGateway" EleType="Gateway"    EleDesc="通过该网关路由到的user task , 必须是有一个节点的是通的，比如根据请假天数判断流程的走向。"  />
+  <Item Name="并行网关" No="ParallelGateway" EleType="Gateway"    EleDesc="通过该网关路由到的user task , 是并行发起的活动，比如会签。"  />
+  <Item Name="事件驱动网关" No="EventbasedGateway" EleType="Gateway"    EleDesc=""  />
+  <Item Name="包容性网关" No="InclusiveGateway" EleType="Gateway"    EleDesc=""  />
+  
+  <EleType Name="活动" No="Activity" />
+  <EleType Name="网关" No="Gateway"  />
+  <EleType Name="事件" No="Event"   />
+
+</NewDataSet>

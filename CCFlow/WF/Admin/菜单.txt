@@ -1,0 +1,63 @@
+
+基础设置
+    集成设置    /WF/Admin/Org/Integration.aspx
+    部门类型    /WF/Comm/Search.aspx?EnsName=BP.GPM.DeptTypes
+    职务管理    /WF/Comm/Search.aspx?EnsName=BP.GPM.Dutys
+    岗位管理    /WF/Comm/Search.aspx?EnsName=BP.GPM.Stations
+
+集团公司(根目录)
+    财务部(部门)
+      财务经理(岗位)
+        王五(人员)
+      出纳
+        赵六
+      张三
+      李四
+    xxxx
+    xxxx
+
+
+
+系统维护:
+
+  菜单权限
+    系统维护     /GPM/AppList.aspx
+    权限组维护   /WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Groups
+    按菜单分配权限  /GPM/AppMenuToEmp.aspx
+    按用户分配权限  /GPM/EmpForMenus.aspx
+    按岗位分配权限  /GPM/StationForMenus.aspx
+    按权限组分配权限 /GPM/EmpGroupForMenus.aspx
+
+  基础设置
+    节假日设置 /WF/Comm/Sys/Holiday.aspx
+    表结构     /WF/Comm/Sys/SystemClass.aspx
+    系统变量 
+    流程预先审批设置 /WF/Admin/GetTask.aspx
+    功能执行    /WF/Comm/MethodLink.aspx
+
+  系统日志:
+    登录日志
+    异常日志
+
+   
+  
+  
+
+表单库
+   (local)本机
+      航空考察
+      企业资质申请表单
+   (crm)客户关系管理
+      航空考察
+      企业资质申请表单
+
+  
+
+表单库
+   (local)本机
+      航空考察
+      
+
+
+
+

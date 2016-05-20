@@ -1,0 +1,42 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="CCFlow.WF.Admin.Org.Site" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+     <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+
+    <table style="width:100%">
+    <caption>集成设置</caption>
+    <tr>
+    <td valign="top" > 
+    
+    <ul>
+    <%--<li><a href="Integration.aspx" >设置组织机构模式</a></li>--%>
+    <li><a href="IntegrationDB.aspx" >数据库直连模式集成</a></li>
+    <li><a href="IntegrationWS.aspx" >通过WebService集成</a></li>
+    <li><a href="IntegrationAD.aspx" >通过AD集成</a></li>
+    </ul>
+
+     </td>
+
+    <td valign="top"  >
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+    </td>
+    </tr>
+
+    </table>
+    </form>
+</body>
+</html>

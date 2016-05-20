@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectView>ShowAllFiles</ProjectView>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <StartPageUrl>SDKFlowDemo/GuestApp/Login.aspx</StartPageUrl>
+          <StartAction>SpecificPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>True</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>True</AlwaysStartWebServerOnDebug>
+          <ProjectOutputReferences>
+            <Ref Project="{83D53118-9A8D-4970-9A88-A2909B13FF64}" Folder="WF\Admin\ClientBin">CCFormDesigner.xap</Ref>
+            <Ref Project="{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}" Folder="WF\Admin\ClientBin">CCFlowDesigner.xap</Ref>
+            <Ref Project="{1D0E0295-4702-46E2-9766-1A33EE418465}" Folder="WF\Admin\ClientBin">CCFlowDesignerSingle.xap</Ref>
+          </ProjectOutputReferences>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

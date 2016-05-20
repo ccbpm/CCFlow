@@ -13,7 +13,8 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>{83D53118-9A8D-4970-9A88-A2909B13FF64}|..\CCFormDesigner\CCFormDesigner.csproj|WF\Admin\ClientBin|False,{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\CCFlowDesigner\CCFlowDesigner.csproj|WF\Admin\ClientBin|False,{1D0E0295-4702-46E2-9766-1A33EE418465}|..\CCFlowDesignerSingle\CCFlowDesignerSingle.csproj|WF\Admin\ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -105,12 +106,10 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="clientaccesspolicy.xml">
@@ -132,6 +131,7 @@
     </Content>
     <Content Include="Service References\CloundWS\WS.disco" />
     <Content Include="Silverlight.js" />
+    <Content Include="WF\Activex\GDCASign\readme.txt" />
     <Content Include="WF\Admin\AttrFlow\Limit.aspx" />
     <Content Include="WF\Admin\AttrNode\BlockModel.aspx" />
     <Content Include="WF\Admin\AttrNode\FullSA.aspx" />
@@ -7746,9 +7746,7 @@
   <ItemGroup>
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
-    <Folder Include="WF\Activex\GDCASign\" />
     <Folder Include="WF\Admin\App\" />
-    <Folder Include="WF\Admin\CCBPMDesigner\Images\" />
     <Folder Include="WF\Admin\CCFormDesigner\lib\sets\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />

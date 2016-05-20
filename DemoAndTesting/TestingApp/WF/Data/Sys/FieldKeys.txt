@@ -1,0 +1,1 @@
+﻿,declare,key,select,from,delete,update,insert,into,go,to,goto,where,order,by,use,user,function,produce,talbe,colmen,rows,

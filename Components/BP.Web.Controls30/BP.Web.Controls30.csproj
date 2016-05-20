@@ -164,12 +164,6 @@
     </Compile>
     <Compile Include="CTL\Lab.cs" />
     <Compile Include="Glo.cs" />
-    <Compile Include="IWCW\BPMultiPage.cs" />
-    <Compile Include="IWCW\BPTabStrip.cs" />
-    <Compile Include="IWCW\BPToolBar.cs" />
-    <Compile Include="IWCW\BPToolBarDDL.cs" />
-    <Compile Include="IWCW\ToolBarTB.cs" />
-    <Compile Include="IWCW\Tree.cs" />
     <Compile Include="NamesOfCheckBtn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -273,6 +267,9 @@
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IWCW\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

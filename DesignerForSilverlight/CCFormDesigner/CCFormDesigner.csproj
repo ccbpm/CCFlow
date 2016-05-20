@@ -62,20 +62,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ColorPicker">
-      <HintPath>..\DLL\ColorPicker.dll</HintPath>
+      <HintPath>..\..\DLL\ColorPicker.dll</HintPath>
+    </Reference>
+    <Reference Include="Divelements.SilverlightTools">
+      <HintPath>..\..\DLL\Divelements.SilverlightTools.dll</HintPath>
+    </Reference>
+    <Reference Include="FJ.Core">
+      <HintPath>..\..\DLL\FJ.Core.dll</HintPath>
     </Reference>
     <Reference Include="Liquid.Menu">
-      <HintPath>..\DLL\Liquid.Menu.dll</HintPath>
+      <HintPath>..\..\DLL\Liquid.Menu.dll</HintPath>
     </Reference>
     <Reference Include="Liquid.TreeView">
-      <HintPath>..\DLL\Liquid.TreeView.dll</HintPath>
+      <HintPath>..\..\DLL\Liquid.TreeView.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions">
-      <HintPath>..\DLL\Microsoft.Expression.Interactions.dll</HintPath>
+      <HintPath>..\..\DLL\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Silverlight.DataSet">
-      <HintPath>..\DLL\Silverlight.DataSet.dll</HintPath>
+      <HintPath>..\..\DLL\Silverlight.DataSet.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
     <Reference Include="System.Json, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -90,10 +96,13 @@
     <Reference Include="System.Windows.Controls.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Windows.Controls.Data.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Windows.Controls.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Windows.Controls.Layout.Toolkit">
+      <HintPath>..\..\DLL\System.Windows.Controls.Layout.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Windows.Interactivity">
-      <HintPath>..\DLL\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\DLL\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />

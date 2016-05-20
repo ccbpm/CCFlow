@@ -1,0 +1,729 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_MapDtl>
+    <No>Demo_Inc10Dtl1</No>
+    <Name>10.机械设备从表</Name>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <PTable>EQU_LIST</PTable>
+    <GroupField />
+    <RowIdx>99</RowIdx>
+    <GroupID>416</GroupID>
+    <RowsOfList>40</RowsOfList>
+    <IsEnableGroupField>0</IsEnableGroupField>
+    <IsShowSum>0</IsShowSum>
+    <IsShowIdx>1</IsShowIdx>
+    <IsCopyNDData>1</IsCopyNDData>
+    <IsHLDtl>0</IsHLDtl>
+    <IsReadonly>0</IsReadonly>
+    <IsShowTitle>1</IsShowTitle>
+    <IsView>1</IsView>
+    <IsExp>1</IsExp>
+    <IsImp>1</IsImp>
+    <IsInsert>1</IsInsert>
+    <IsDelete>1</IsDelete>
+    <IsUpdate>1</IsUpdate>
+    <IsEnablePass>0</IsEnablePass>
+    <IsEnableAthM>0</IsEnableAthM>
+    <IsEnableM2M>0</IsEnableM2M>
+    <IsEnableM2MM>0</IsEnableM2MM>
+    <WhenOverSize>1</WhenOverSize>
+    <DtlOpenType>1</DtlOpenType>
+    <DtlShowModel>0</DtlShowModel>
+    <X>39</X>
+    <Y>69</Y>
+    <H>671</H>
+    <W>761</W>
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <MTR />
+    <GUID />
+    <AtPara />
+  </Sys_MapDtl>
+  <Sys_MapData>
+    <No>Demo_Inc10</No>
+    <Name>10.企业自有的主要机械设备</Name>
+    <EnPK />
+    <PTable>info10_QYZYSB</PTable>
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>600</TableWidth>
+    <DBURL>0</DBURL>
+    <Tag />
+    <FrmType>0</FrmType>
+    <FK_FrmSort>02</FK_FrmSort>
+    <FK_FormTree>02</FK_FormTree>
+    <AppType>0</AppType>
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <AtPara />
+    <Idx>100</Idx>
+    <GUID />
+    <FormRunType>1</FormRunType>
+    <URL />
+    <SearchKeys />
+    <FK_Flow />
+    <IsSearchKey>0</IsSearchKey>
+    <DTSearchWay>0</DTSearchWay>
+    <DTSearchKey />
+    <ParentMapData />
+  </Sys_MapData>
+  <Sys_FrmLine>
+    <MyPK>LE_1_Demo_Inc10</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>30</X1>
+    <Y1>752</Y1>
+    <X2>736</X2>
+    <Y2>752</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_2_Demo_Inc10</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>31</X1>
+    <Y1>61</Y1>
+    <X2>735</X2>
+    <Y2>61</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_3_Demo_Inc10</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>734</X1>
+    <Y1>59</Y1>
+    <X2>734</X2>
+    <Y2>750</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_4_Demo_Inc10</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>30</X1>
+    <Y1>60</Y1>
+    <X2>30</X2>
+    <Y2>749</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLab>
+    <MyPK>LB_1_Demo_Inc10</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <Text>十、企业自有的主要机械设备</Text>
+    <X>255</X>
+    <Y>25</Y>
+    <FontSize>20</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>Bold</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_2_Demo_Inc10</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <Text>注：本表可复制加页。</Text>
+    <X>28</X>
+    <Y>762</Y>
+    <FontSize>12</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10_OID</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>WorkID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>36</IDX>
+    <GroupID>416</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10_FID</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>51</IDX>
+    <GroupID>416</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10_RDT</MyPK>
+    <FK_MapData>Demo_Inc10</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>416</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_OID</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>主键</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>1</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_RefPK</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>RefPK</KeyOfEn>
+    <Name>关联ID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>2</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_FID</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>3</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_RDT</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>记录时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>20</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>4</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_Rec</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>记录人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>20</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>5</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>@WebUser.No</Tag>
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_Model_format</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>Model_format</KeyOfEn>
+    <Name>型号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>100</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>6</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_Site_</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>Site_</KeyOfEn>
+    <Name>场地</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>100</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>7</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_out_date</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>out_date</KeyOfEn>
+    <Name>出厂日期</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>100</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>8</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_Number_</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>Number_</KeyOfEn>
+    <Name>数量(台)</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>100</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>9</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_power_total</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>power_total</KeyOfEn>
+    <Name>功率</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>100</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>10</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_Original_value</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>Original_value</KeyOfEn>
+    <Name>原值（万元）</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>11</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_Net_value</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>Net_value</KeyOfEn>
+    <Name>净值</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>12</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_sbsy</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>sbsy</KeyOfEn>
+    <Name>设备所有</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey>sbsy</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>13</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc10Dtl1_equ_name</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <KeyOfEn>equ_name</KeyOfEn>
+    <Name>设备及仪器名称</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>100</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>14</IDX>
+    <GroupID>232</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapM2M>
+    <MyPK>Demo_Inc10Dtl1_M2MDemo_Inc10_1</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <NoOfObj>M2MDemo_Inc10_1</NoOfObj>
+    <Name>M2M</Name>
+    <DBOfLists />
+    <DBOfObjs>SELECT No,Name,FK_Dept FROM Port_Emp</DBOfObjs>
+    <DBOfGroups>SELECT No,Name FROM Port_Dept</DBOfGroups>
+    <H>100</H>
+    <W>160</W>
+    <X>5</X>
+    <Y>5</Y>
+    <ShowWay>1</ShowWay>
+    <M2MType>0</M2MType>
+    <RowIdx>99</RowIdx>
+    <GroupID>0</GroupID>
+    <Cols>4</Cols>
+    <IsDelete>1</IsDelete>
+    <IsInsert>1</IsInsert>
+  </Sys_MapM2M>
+  <Sys_MapM2M>
+    <MyPK>Demo_Inc10Dtl1_M2MDemo_Inc10_2</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <NoOfObj>M2MDemo_Inc10_2</NoOfObj>
+    <Name>M2MM</Name>
+    <DBOfLists />
+    <DBOfObjs>SELECT No,Name,FK_Dept FROM Port_Emp</DBOfObjs>
+    <DBOfGroups>SELECT No,Name FROM Port_Dept</DBOfGroups>
+    <H>100</H>
+    <W>160</W>
+    <X>5</X>
+    <Y>5</Y>
+    <ShowWay>1</ShowWay>
+    <M2MType>0</M2MType>
+    <RowIdx>99</RowIdx>
+    <GroupID>0</GroupID>
+    <Cols>4</Cols>
+    <IsDelete>1</IsDelete>
+    <IsInsert>1</IsInsert>
+  </Sys_MapM2M>
+  <Sys_FrmAttachment>
+    <MyPK>Demo_Inc10Dtl1_AthM</MyPK>
+    <FK_MapData>Demo_Inc10Dtl1</FK_MapData>
+    <NoOfObj>AthM</NoOfObj>
+    <Name>10.机械设备从表</Name>
+    <Exts />
+    <SaveTo />
+    <Sort />
+    <X>5</X>
+    <Y>5</Y>
+    <W>40</W>
+    <H>150</H>
+    <IsUpload>1</IsUpload>
+    <IsDelete>1</IsDelete>
+    <IsDownload>1</IsDownload>
+    <IsAutoSize>1</IsAutoSize>
+    <IsNote>1</IsNote>
+    <IsShowTitle>1</IsShowTitle>
+    <UploadType>0</UploadType>
+    <CtrlWay>0</CtrlWay>
+    <AthUploadWay>0</AthUploadWay>
+    <AtPara>@IsWoEnableWF=0@IsWoEnableSave=0@IsWoEnableReadonly=0@IsWoEnableRevise=0@IsWoEnableViewKeepMark=0@IsWoEnablePrint=0@IsWoEnableProperty=0@IsWoEnablePageset=0@IsWoEnableIntoKeepMarkModel=0@IsWoEnableViewModel=0</AtPara>
+    <RowIdx>0</RowIdx>
+    <GroupID>0</GroupID>
+    <GUID />
+  </Sys_FrmAttachment>
+  <Sys_GroupField>
+    <OID>416</OID>
+    <Lab>企业自有的主要机械设备</Lab>
+    <EnName>Demo_Inc10</EnName>
+    <Idx>1</Idx>
+    <GUID />
+  </Sys_GroupField>
+  <Sys_Enum>
+    <MyPK>sbsy_CH_0</MyPK>
+    <Lab>自有</Lab>
+    <EnumKey>sbsy</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+</NewDataSet>

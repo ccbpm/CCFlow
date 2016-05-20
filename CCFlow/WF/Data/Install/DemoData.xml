@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 销售台账  -->
+    <SalesBill OID="1" FK_Emp="zhoupeng" FK_Dept="01" FK_Product="01" />
+</NewDataSet>

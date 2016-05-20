@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+
+  <!-- 参数列表  -->
+  <CondType No="Cond" CH="表单条件"    />
+  <CondType No="CondStation" CH="岗位条件"    />
+  <CondType No="CondDept" CH="部门条件"    />
+  <CondType No="CondBySQL" CH="SQL条件"    />
+  <CondType No="CondByUrl" CH="URL条件" />
+  <CondType No="CondByPara" CH="开发者参数" />
+  <CondType No="CondPRI" CH="方向优先级计算设置" />
+
+    <OneWork No="ChartTrack" CH="轨迹图" />
+  
+   <OneWork1 No="ChartTime" CH="甘特图" />
+  <OneWork11 No="CheckTrack" CH="审核记录" />
+  <OneWork No="Track" CH="流程日志" />
+  <OneWork1 No="TrackTime" CH="时间点日志" />
+
+  <!--<OneWork No="CH" CH="考核信息" />-->
+    <OneWork222 No="NDRpt" CH="流程报表" />
+    <OneWork No="Ath" CH="流程附件" />
+     <OneWork No="OP" CH="操作" />
+     <OneWork1 No="OP" CH="发起历史记录" />
+
+  <RptFlow1 No="Home_My" CH="主页" URL="Home.aspx?DoType=My"   ICON="/WF/Img/Btn/Home.gif" />
+    <RptFlow No="Search_My" CH="我参与的流程" URL="Search.aspx?DoType=My"   ICON="/WF/Img/Table.gif" />
+    <RptFlow No="Search_Dept" CH="部门流程"   URL="Search.aspx?DoType=Dept"   ICON="/WF/Img/Table.gif"  />
+
+    <RptFlow No="Group_My" CH="我参与的流程" URL="Group.aspx?DoType=My"   ICON="/WF/Img/Btn/Chart.gif" />
+    <RptFlow No="Group_Dept" CH="部门流程"   URL="Group.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
+    <RptFlow No="D3_Dept" CH="交叉报表"   URL="D3.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
+    <RptFlow No="D3_DB" CH="对比分析"   URL="Contrast.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Chart.gif" />
+
+    <!--<RptFlow No="Bill_MyFlow" CH="我打印的单据" URL="Bill.aspx?DoType=My"   ICON="/WF/Img/Btn/Word.gif" />
+    <RptFlow No="Bill_DeptFlow" CH="部门单据"   URL="Bill.aspx?DoType=Dept"   ICON="/WF/Img/Btn/Word.gif" />-->
+
+    <RptFlow1 No="Chat" CH="流程图"   URL="Chat.aspx?DoType=Dept"   ICON="/WF/Img/Chart.gif" />
+</NewDataSet>

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 参数列表  -->
+  <Item DoWhat="Start" Url="/WF/Port.aspx?DoWhat=Start:UserNo=@UserNo:SID=@SID"
+        CH="工作发起" DESCCH="发起一个工作没有参数"
+        />
+  <Item DoWhat="StartSmall" Url="/WF/Port.aspx?DoWhat=StartSmall:UserNo=@UserNo:SID=@SID"
+      CH="工作发起小界面" DESCCH="发起一个工作没有参数"
+        />
+  <Item1 DoWhat="StartSmallSingle" Url="/WF/Port.aspx?DoWhat=StartSmallSingle:UserNo=@UserNo:SID=@SID"
+    CH="工作发起(特小窗口)" DESCCH="发起一个工作没有参数"
+        />
+
+  <Item DoWhat="Runing" Url="/WF/Port.aspx?DoWhat=Runing:UserNo=@UserNo:SID=@SID"
+CH="在途工作" DESCCH="在途工作"
+        />
+  <Item DoWhat="Runing" Url="/WF/Port.aspx?DoWhat=Runing:UserNo=@UserNo:SID=@SID"
+  CH="在途工作(小窗口)" DESCCH="在途工作"
+        />
+  
+  <Item1 DoWhat="Runing" Url="/WF/Port.aspx?DoWhat=Runing:UserNo=@UserNo:SID=@SID"
+CH="在途工作(特小窗口)" DESCCH="在途工作"
+        />
+
+  <Item DoWhat="EmpWorks" Url="/WF/Port.aspx?DoWhat=EmpWorks:UserNo=@UserNo:SID=@SID"
+  CH="待办工作" DESCCH="待办工作"
+        />
+  <Item DoWhat="EmpWorks" Url="/WF/Port.aspx?DoWhat=EmpWorks:UserNo=@UserNo:SID=@SID"
+  CH="待办工作(小窗口)" DESCCH="待办工作"
+        />
+
+  <Item1 DoWhat="EmpWorks" Url="/WF/Port.aspx?DoWhat=EmpWorks:UserNo=@UserNo:SID=@SID"
+CH="待办工作(特小窗口)" DESCCH="待办工作"
+        />
+
+
+  <Item DoWhat="FlowSearch" Url="/WF/Port.aspx?DoWhat=FlowSearch:UserNo=@UserNo:SID=@SID"
+  CH="流程查询" DESCCH="待办工作"
+        />
+  <Item DoWhat="FlowSearchSmall" Url="/WF/Port.aspx?DoWhat=FlowSearchSmall:UserNo=@UserNo:SID=@SID"
+  CH="流程查询(小窗口)" DESCCH="待办工作"
+        />
+  <Item1 DoWhat="FlowSearchSmallSingle" Url="/WF/Port.aspx?DoWhat=FlowSearchSmallSingle:UserNo=@UserNo:SID=@SID"
+CH="流程查询(特小窗口)" DESCCH="待办工作"
+        />
+
+  <!--<Item DoWhat="StartSmall"  CH="发起工作小界面" />
+  <Item DoWhat="StartSmallSingle"   CH="发起工作小界面(单独的)"  />
+  <Item DoWhat="FlowSearch"   CH="是否可以删除流程?"  />
+  <Item DoWhat="Login"   CH="允许分配工作否?"  />
+  <Item DoWhat="MyFlow"   CH="可否选择接受人"  />
+  <Item DoWhat="IsCanCC"   CH="是否可以抄送"  />
+  <Item DoWhat="IsCanRpt"   CH="是否可以查看工作报告" />
+  <Item DoWhat="IsSecret"   CH="是否是保密步骤"  />
+  <Item DoWhat="FJOpen"   CH="附件权限"  />
+  <Item DoWhat="DoWhat" CH="执行内容" />
+  <Item DoWhat="RunModel" CH="运行模式" />-->
+</NewDataSet>

@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+  <!--  全局的系统设置， Key Val 出现的。  -->
+  
+  <!-- 隶属对象： 典型应用, 在对比查询中的 (隶属关系属性) 属性 ，如果(比较对象_与(分类条件) 在同一个隶属关系中，比如部门，县局，人员，分局，市局。系统就会出现错误。 -->
+  <Item Key="Subjection" Val="@FK_ZSJG@FK_XJ@@FK_FJ@FK_Emp@"  />
+  <Item Key="Subjection" Val="@FK_NY@FK_ND@FK_YF@FK_NYR@"  />
+
+</NewDataSet>

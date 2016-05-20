@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 外部连接配置说明  No, 部门编号，URL 对方sqlserver 的连接。  -->
+  <Item No="Name"   CH="节点名称"  />
+  <Item No="FormType" CH="表单类型" />
+  <Item No="IsTask"   CH="允许分配工作否?"  />
+  <Item No="RunModel" CH="运行模式" />
+</NewDataSet>

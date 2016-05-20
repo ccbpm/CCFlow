@@ -1,0 +1,222 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_MapData>
+    <No>Demo_Inc03</No>
+    <Name>03.企业组织机构框图</Name>
+    <EnPK />
+    <PTable>Info3_ZZJG</PTable>
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>600</TableWidth>
+    <DBURL>0</DBURL>
+    <Tag />
+    <FrmType>0</FrmType>
+    <FK_FrmSort>02</FK_FrmSort>
+    <FK_FormTree>02</FK_FormTree>
+    <AppType>0</AppType>
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <AtPara />
+    <Idx>100</Idx>
+    <GUID />
+    <FormRunType>1</FormRunType>
+    <URL />
+    <SearchKeys />
+    <FK_Flow />
+    <IsSearchKey>0</IsSearchKey>
+    <DTSearchWay>0</DTSearchWay>
+    <DTSearchKey />
+    <ParentMapData />
+  </Sys_MapData>
+  <Sys_FrmLine>
+    <MyPK>LE_1_Demo_Inc03</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>50</X1>
+    <Y1>72</Y1>
+    <X2>724</X2>
+    <Y2>72</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_2_Demo_Inc03</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>566</X1>
+    <Y1>179</Y1>
+    <X2>566</X2>
+    <Y2>179</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_3_Demo_Inc03</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>49</X1>
+    <Y1>72</Y1>
+    <X2>49</X2>
+    <Y2>729</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_4_Demo_Inc03</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>722</X1>
+    <Y1>73</Y1>
+    <X2>722</X2>
+    <Y2>731</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_5_Demo_Inc03</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>48</X1>
+    <Y1>730</Y1>
+    <X2>724</X2>
+    <Y2>730</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLab>
+    <MyPK>LB_1_Demo_Inc03</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <Text>三、企业组织结构框图</Text>
+    <X>288</X>
+    <Y>29</Y>
+    <FontSize>20</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>Bold</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc03_OID</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>WorkID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>44</IDX>
+    <GroupID>402</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc03_FID</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>59</IDX>
+    <GroupID>402</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Inc03_RDT</MyPK>
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>402</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_FrmImgAth>
+    <MyPK>Demo_Inc03_</MyPK>
+    <Name />
+    <FK_MapData>Demo_Inc03</FK_MapData>
+    <CtrlID />
+    <CtrlName />
+    <X>58</X>
+    <Y>79</Y>
+    <H>634</H>
+    <W>655</W>
+    <IsEdit>1</IsEdit>
+    <GUID />
+  </Sys_FrmImgAth>
+  <Sys_GroupField>
+    <OID>402</OID>
+    <Lab>企业组织结构框图</Lab>
+    <EnName>Demo_Inc03</EnName>
+    <Idx>1</Idx>
+    <GUID />
+  </Sys_GroupField>
+</NewDataSet>

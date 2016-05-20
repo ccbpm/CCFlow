@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 外部连接配置说明  No, 部门编号，URL 对方sqlserver 的连接。  -->
+	<Item No="CH_1" Lang="CH" Name="选择系统约定默认值" Val=""  />
+  <Item No="CH_2" Lang="CH" Name="登陆人员账号" Val="@WebUser.No"  />
+  <Item No="CH_3" Lang="CH" Name="登陆人员名称" Val="@WebUser.Name"  />
+  <Item No="CH_4" Lang="CH" Name="登陆人员部门编号" Val="@WebUser.FK_Dept"  />
+  <Item No="CH_5" Lang="CH" Name="登陆人员部门名称" Val="@WebUser.FK_DeptName"  />
+  <Item No="CH_6" Lang="CH" Name="登陆人员部门全称" Val="@WebUser.FK_DeptNameOfFull"  />
+  <Item No="CH_7" Lang="CH" Name="当前日期-1" Val="@yyyy年mm月dd日"  />
+  <Item No="CH_8" Lang="CH" Name="当前日期-2" Val="@yy年mm月dd日"  />
+  <Item No="CH_9" Lang="CH" Name="当前年度" Val="@FK_ND"  />
+  <Item No="CH_10" Lang="CH" Name="当前月份" Val="@FK_YF"  />
+  <Item No="CH_11" Lang="CH" Name="当前工作可处理人员" Val="@CurrWorker"  />
+    
+  <Item No="EN_1" Lang="EN" Name="Select the system default values agreed" Val=""  />
+  <Item No="EN_2" Lang="EN" Name="Operator number" Val="@WebUser.No"  />
+  <Item No="EN_3" Lang="EN" Name="Operator Name" Val="@WebUser.Name"  />
+  <Item No="EN_4" Lang="EN" Name="Department number operator" Val="@WebUser.FK_Dept"  />
+  <Item No="EN_5" Lang="EN" Name="The operator name of the department" Val="@WebUser.FK_DeptName"  />
+  <Item No="EN_6" Lang="EN" Name="Current date-1" Val="@yyyy年mm月dd日"  />
+  <Item No="EN_7" Lang="EN" Name="Current date-2" Val="@yy年mm月dd日"  />
+  <Item No="EN_8" Lang="EN" Name="Current year" Val="@FK_ND"  />
+  <Item No="EN_9" Lang="EN" Name="Current month" Val="@FK_YF"  />
+  <Item No="EN_10" Lang="EN" Name="当前工作可处理人员" Val="@CurrWorker"  />
+
+
+  <Item No="JP_1" Lang="JP" Name="Select the system default values agreed" Val=""  />
+  <Item No="JP_2" Lang="JP" Name="Operator number" Val="@WebUser.No"  />
+  <Item No="JP_3" Lang="JP" Name="Operator Name" Val="@WebUser.Name"  />
+  <Item No="JP_4" Lang="JP" Name="Department number operator" Val="@WebUser.FK_Dept"  />
+  <Item No="JP_5" Lang="JP" Name="The operator name of the department" Val="@WebUser.FK_DeptName"  />
+  <Item No="JP_6" Lang="JP" Name="Current date-1" Val="@yyyy年mm月dd日"  />
+  <Item No="JP_7" Lang="JP" Name="Current date-2" Val="@yy年mm月dd日"  />
+  <Item No="JP_8" Lang="JP" Name="Current year" Val="@FK_ND"  />
+  <Item No="JP_9" Lang="JP" Name="Current month" Val="@FK_YF"  />
+    <Item No="JP_10" Lang="JP" Name="当前工作可处理人员" Val="@CurrWorker"  />
+</NewDataSet>

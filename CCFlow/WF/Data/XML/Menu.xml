@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+  <!-- 系统管理  -->
+  <Item No="01"  Name="组织结构" Img="/Images/Btn/Help.gif"  Url="">
+    <!--<Item No="0101"  Name="部门类型" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.DeptTypes"  Img="/Images/Btn/Card.gif"  />-->
+    
+    <Item No="0102"  Name="岗位类型" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.StationTypes"  Img="/Images/Btn/Card.gif"  />
+    <Item No="0103"  Name="岗位" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Stations"  Img="/Images/Btn/Station.gif"  />
+    <Item No="0104"  Name="职务维护" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Dutys"  Img="/Images/Btn/User.gif"  />
+    <Item No="0105"  Name="组织结构" Url="/GPM/OrganizationalStructure.aspx?EnsName=BP.GPM.Depts"  Img="/GPM/Images/Menu/sitemap.png"  />
+    <Item No="0106"  Name="功能执行"  Url="/WF/Comm/MethodLink.aspx" Img="/Images/Btn/Do.gif"  />
+    <Item No="0107"  Name="节假日设置"  Url="/WF/Comm/Holiday.aspx" Img="/Images/Btn/Do.gif"  />
+  </Item>
+
+  <!-- 信息发布  -->
+  <Item No="02" Name="权限管理" Url="" Img="../Images/Btn/Help.gif" ForUser="" DESC=""  DFor="" Enable="">
+    <Item No="0200" Name="系统类别" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.AppSorts" Img="/Images/Btn/Card.gif" />
+    <!--<Item No="0201" Name="系统与菜单" Url="/Comm/Search.aspx?EnsName=BP.GPM.Apps"
+          Img="/GPM/Images/Menu/application.png" />-->
+    
+    <Item No="0201" Name="系统与菜单" Url="AppList.aspx" Img="/GPM/Images/Menu/application.png" />
+    <Item No="0202" Name="权限组" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Groups" Img="/Images/Btn/Group.gif" />
+    <Item No="0202" Name="按菜单分配权限" Url="AppMenuToEmp.aspx" Img="/Images/Btn/Menu.gif" />
+    <Item No="0203" Name="按用户分配权限" Url="EmpForMenus.aspx" Img="/Images/Btn/User.gif" />
+    <Item No="0204" Name="按岗位分配权限" Url="StationForMenus.aspx" Img="/Images/Btn/Users.gif" />
+    <Item No="0205" Name="按权限组分配权限" Url="EmpGroupForMenus.aspx" Img="/Images/Btn/Users.gif" />
+    
+    <!--<Item No="0101" Name="菜单权限" Url="/Comm/RefFunc/EntitiesTree.aspx?EnsName=BP.GPM.Menus" Img="/GPM/Images/Menu/desktop_2.png" />
+    <Item No="0101" Name="菜单权限123" Url="/Comm/RefFunc/EntityTree.aspx?EnsName=BP.GPM.Menus" Img="/GPM/Images/Menu/credit_card.png" />-->
+    
+  </Item>
+    <!-- 日志管理  -->
+  <Item No="" Name="日志管理" Url="" Img="../Images/Btn/Help.gif" ForUser="" DESC=""  DFor="" Enable="">
+      <Item No="0501" Name="系统登录日志" Url="SystemLoginLog.aspx" Img="/GPM/Images/Menu/feed.png" />  
+   </Item>
+    <!-- 门户导航  -->
+    <Item No="08" Name="门户导航" Url="" Img="../Images/Btn/Help.gif" ForUser="" DESC=""  DFor="" Enable="">
+      <Item No="0801" Name="信息块权限" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Bars" Img="/GPM/Images/Menu/feed.png" />
+      <Item No="0801" Name="消息推送" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.InfoPushs" Img="/GPM/Images/Menu/forward.png" />
+      <Item No="0801"   Name="全局变量"  Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.Sys.GloVars"  Img="/GPM/Images/Menu/collaboration.png" />
+      <Item No="0801" Name="超链接类别" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.LinkSorts" Img="/GPM/Images/Menu/feed.png" />
+      <Item No="0801" Name="超链接" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Links" Img="/GPM/Images/Menu/feed.png" />
+   </Item>
+  
+  <Item No="03"  Name="项目组管理"  Url=""    Img="/Images/Btn/Help.gif">
+    <Item No="0301"   Name="项目组维护"  Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.PRJ.Prjs"  Img="/GPM/Images/Menu/customers.png" />
+    <!--<Item1 No="0302"   Name="资料树节点访问规则"   Url="/PRJ/NodeAccess.aspx"  Img="/GPM/Images/Menu/sitemap.png" />-->
+  </Item>
+  <ShortKey No="05" Name="帮助" Url="../../App/Help/Help.htm" Img="../Images/Btn/Help.gif"  CH="帮助" />
+</NewDataSet>

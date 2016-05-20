@@ -1,0 +1,3309 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_MapData>
+    <No>QiYeKunNanDengJiBiao</No>
+    <Name>企业困难(问题)登记表</Name>
+    <EnPK />
+    <PTable>QiYeKunNanDengJiBiao</PTable>
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1500</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>600</TableWidth>
+    <DBURL>0</DBURL>
+    <Tag />
+    <FrmType>1</FrmType>
+    <FK_FrmSort>03</FK_FrmSort>
+    <FK_FormTree>03</FK_FormTree>
+    <AppType>0</AppType>
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <AtPara />
+    <Idx>100</Idx>
+    <GUID />
+    <FormRunType>1</FormRunType>
+    <URL />
+    <SearchKeys />
+    <FK_Flow />
+    <IsSearchKey>0</IsSearchKey>
+    <DTSearchWay>0</DTSearchWay>
+    <DTSearchKey />
+    <ParentMapData />
+  </Sys_MapData>
+  <Sys_FrmLine>
+    <MyPK>LE_1_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>63</X1>
+    <Y1>4</Y1>
+    <X2>63</X2>
+    <Y2>1198</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_10_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>62</X1>
+    <Y1>197</Y1>
+    <X2>758</X2>
+    <Y2>197</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_11_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>63</X1>
+    <Y1>5</Y1>
+    <X2>758</X2>
+    <Y2>5</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_12_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>388</X1>
+    <Y1>476</Y1>
+    <X2>388</X2>
+    <Y2>508</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_13_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>264</X1>
+    <Y1>998</Y1>
+    <X2>758</X2>
+    <Y2>998</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_14_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>616</X1>
+    <Y1>476</Y1>
+    <X2>616</X2>
+    <Y2>508</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_15_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>440</X1>
+    <Y1>415</Y1>
+    <X2>440</X2>
+    <Y2>511</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_16_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>276</X1>
+    <Y1>569</Y1>
+    <X2>276</X2>
+    <Y2>569</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_17_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>276</X1>
+    <Y1>569</Y1>
+    <X2>276</X2>
+    <Y2>569</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_18_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>255</X1>
+    <Y1>944</Y1>
+    <X2>255</X2>
+    <Y2>944</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_19_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>400</X1>
+    <Y1>809</Y1>
+    <X2>400</X2>
+    <Y2>1036</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_2_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>43</X1>
+    <Y1>45</Y1>
+    <X2>43</X2>
+    <Y2>45</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_20_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>574</X1>
+    <Y1>809</Y1>
+    <X2>574</X2>
+    <Y2>1035</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_21_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>265</X1>
+    <Y1>415</Y1>
+    <X2>265</X2>
+    <Y2>1193</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_22_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>261</X1>
+    <Y1>912</Y1>
+    <X2>261</X2>
+    <Y2>912</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_23_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>269</X1>
+    <Y1>637</Y1>
+    <X2>270</X2>
+    <Y2>637</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_24_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>64</X1>
+    <Y1>1036</Y1>
+    <X2>756</X2>
+    <Y2>1036</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_25_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>155</X1>
+    <Y1>1077</Y1>
+    <X2>758</X2>
+    <Y2>1077</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_26_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>354</X1>
+    <Y1>1035</Y1>
+    <X2>354</X2>
+    <Y2>1196</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_27_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>448</X1>
+    <Y1>1035</Y1>
+    <X2>448</X2>
+    <Y2>1196</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_28_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>538</X1>
+    <Y1>1035</Y1>
+    <X2>538</X2>
+    <Y2>1196</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_29_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>626</X1>
+    <Y1>1034</Y1>
+    <X2>626</X2>
+    <Y2>1196</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_3_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>67</X1>
+    <Y1>582</Y1>
+    <X2>67</X2>
+    <Y2>582</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_30_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>625</X1>
+    <Y1>569</Y1>
+    <X2>625</X2>
+    <Y2>608</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_31_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>570</X1>
+    <Y1>569</Y1>
+    <X2>570</X2>
+    <Y2>608</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_32_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>62</X1>
+    <Y1>1197</Y1>
+    <X2>758</X2>
+    <Y2>1197</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_33_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>264</X1>
+    <Y1>841</Y1>
+    <X2>762</X2>
+    <Y2>841</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_34_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>63</X1>
+    <Y1>344</Y1>
+    <X2>759</X2>
+    <Y2>344</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_35_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>64</X1>
+    <Y1>414</Y1>
+    <X2>757</X2>
+    <Y2>414</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_36_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>64</X1>
+    <Y1>272</Y1>
+    <X2>757</X2>
+    <Y2>272</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_37_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>157</X1>
+    <Y1>78</Y1>
+    <X2>157</X2>
+    <Y2>1195</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_38_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>63</X1>
+    <Y1>79</Y1>
+    <X2>759</X2>
+    <Y2>79</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_39_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>156</X1>
+    <Y1>509</Y1>
+    <X2>759</X2>
+    <Y2>509</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_4_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>758</X1>
+    <Y1>4</Y1>
+    <X2>758</X2>
+    <Y2>1196</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_40_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>156</X1>
+    <Y1>569</Y1>
+    <X2>759</X2>
+    <Y2>569</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_41_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>156</X1>
+    <Y1>607</Y1>
+    <X2>759</X2>
+    <Y2>607</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_42_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>156</X1>
+    <Y1>696</Y1>
+    <X2>759</X2>
+    <Y2>696</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_43_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>156</X1>
+    <Y1>732</Y1>
+    <X2>759</X2>
+    <Y2>732</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_44_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>156</X1>
+    <Y1>809</Y1>
+    <X2>759</X2>
+    <Y2>809</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_45_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>264</X1>
+    <Y1>880</Y1>
+    <X2>760</X2>
+    <Y2>880</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_46_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>264</X1>
+    <Y1>918</Y1>
+    <X2>758</X2>
+    <Y2>918</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_47_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>158</X1>
+    <Y1>447</Y1>
+    <X2>757</X2>
+    <Y2>447</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_48_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>158</X1>
+    <Y1>475</Y1>
+    <X2>757</X2>
+    <Y2>475</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_49_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>565</X1>
+    <Y1>415</Y1>
+    <X2>565</X2>
+    <Y2>510</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_5_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>598</Y1>
+    <X2>40</X2>
+    <Y2>598</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_50_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>158</X1>
+    <Y1>666</Y1>
+    <X2>758</X2>
+    <Y2>666</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_51_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>266</X1>
+    <Y1>959</Y1>
+    <X2>757</X2>
+    <Y2>959</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_52_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>157</X1>
+    <Y1>1120</Y1>
+    <X2>757</X2>
+    <Y2>1120</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_53_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>156</X1>
+    <Y1>1157</Y1>
+    <X2>758</X2>
+    <Y2>1157</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_6_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>790</X1>
+    <Y1>594</Y1>
+    <X2>790</X2>
+    <Y2>594</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_7_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>30</X1>
+    <Y1>87</Y1>
+    <X2>31</X2>
+    <Y2>87</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_8_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>62</X1>
+    <Y1>45</Y1>
+    <X2>758</X2>
+    <Y2>45</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_9_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>61</X1>
+    <Y1>121</Y1>
+    <X2>758</X2>
+    <Y2>121</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmBtn>
+    <MyPK>Btn_1_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>请选择</Text>
+    <X>663</X>
+    <Y>780</Y>
+    <IsView>0</IsView>
+    <IsEnable>0</IsEnable>
+    <BtnType>0</BtnType>
+    <UAC>0</UAC>
+    <UACContext />
+    <EventType>0</EventType>
+    <EventContext />
+    <MsgOK />
+    <MsgErr />
+    <GUID />
+  </Sys_FrmBtn>
+  <Sys_FrmLab>
+    <MyPK>LB_1_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>企业困难(问题)登记表</Text>
+    <X>305</X>
+    <Y>11</Y>
+    <FontSize>22</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_10_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>法定代表人</Text>
+    <X>180</X>
+    <Y>482</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_11_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>电话</Text>
+    <X>398</X>
+    <Y>482</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_12_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>组织机构代码</Text>
+    <X>467</X>
+    <Y>422</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_13_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>经济类型</Text>
+    <X>180</X>
+    <Y>530</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_14_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>通讯地址</Text>
+    <X>185</X>
+    <Y>579</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_15_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>主导产品</Text>
+    <X>180</X>
+    <Y>626</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_16_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>主要市场</Text>
+    <X>177</X>
+    <Y>670</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_17_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>网站地址</Text>
+    <X>176</X>
+    <Y>708</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_18_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>所属行业(领域）</Text>
+    <X>167</X>
+    <Y>761</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_19_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>主要指标</Text>
+    <X>287</X>
+    <Y>816</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_2_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>困难(问题)简要描述</Text>
+    <X>65</X>
+    <Y>49</Y>
+    <FontSize>15</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_20_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>主营收入(万元)</Text>
+    <X>284</X>
+    <Y>852</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_21_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>从业人数(人)</Text>
+    <X>285</X>
+    <Y>891</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_22_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>资产金额(万元)</Text>
+    <X>282</X>
+    <Y>930</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_23_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>利税金额(万元)</Text>
+    <X>283</X>
+    <Y>969</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_24_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>出口(万美元)</Text>
+    <X>292</X>
+    <Y>1009</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_25_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>经营效益</Text>
+    <X>180</X>
+    <Y>913</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_26_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>姓名</Text>
+    <X>296</X>
+    <Y>1046</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_27_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>职务</Text>
+    <X>382</X>
+    <Y>1046</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_28_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>电话</Text>
+    <X>474</X>
+    <Y>1046</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_29_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>手机</Text>
+    <X>563</X>
+    <Y>1048</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_3_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>标题</Text>
+    <X>83</X>
+    <Y>91</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_30_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>E&amp;nbsp;-&amp;nbsp;mail</Text>
+    <X>666</X>
+    <Y>1045</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_31_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>法定代表人</Text>
+    <X>173</X>
+    <Y>1167</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_32_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>总经理</Text>
+    <X>183</X>
+    <Y>1132</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_33_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>销售负责人</Text>
+    <X>173</X>
+    <Y>1091</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_34_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>企业基本@信息</Text>
+    <X>82</X>
+    <Y>615</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_35_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>联系人</Text>
+    <X>80</X>
+    <Y>1118</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_36_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>镇(街道)</Text>
+    <X>475</X>
+    <Y>452</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_37_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>手机</Text>
+    <X>578</X>
+    <Y>480</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_38_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>邮编</Text>
+    <X>583</X>
+    <Y>577</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_39_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>前年(2011)</Text>
+    <X>452</X>
+    <Y>817</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_4_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>具体要求或@希望</Text>
+    <X>75</X>
+    <Y>142</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_40_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>去年(2012)</Text>
+    <X>620</X>
+    <Y>815</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_41_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>(内资占比</Text>
+    <X>396</X>
+    <Y>518</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_42_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>%)</Text>
+    <X>563</X>
+    <Y>519</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_5_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>困难(问题)产@生原因或背@景</Text>
+    <X>69</X>
+    <Y>205</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_6_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>对生产发展@或转型升级@的影响</Text>
+    <X>77</X>
+    <Y>275</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_7_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>解决经历及@主要障碍</Text>
+    <X>78</X>
+    <Y>353</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_8_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>企业全称</Text>
+    <X>175</X>
+    <Y>420</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_9_QiYeKunNanDengJiBiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <Text>县(市)区</Text>
+    <X>177</X>
+    <Y>451</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmRB>
+    <MyPK>QiYeKunNanDengJiBiao_ZhuYaoShiChang_0</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZhuYaoShiChang</KeyOfEn>
+    <EnumKey>ZhuYaoShiChang</EnumKey>
+    <Lab>国外</Lab>
+    <IntKey>0</IntKey>
+    <X>278</X>
+    <Y>673</Y>
+    <GUID />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>QiYeKunNanDengJiBiao_ZhuYaoShiChang_1</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZhuYaoShiChang</KeyOfEn>
+    <EnumKey>ZhuYaoShiChang</EnumKey>
+    <Lab>国内</Lab>
+    <IntKey>1</IntKey>
+    <X>372</X>
+    <Y>672</Y>
+    <GUID />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>QiYeKunNanDengJiBiao_ZhuYaoShiChang_2</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZhuYaoShiChang</KeyOfEn>
+    <EnumKey>ZhuYaoShiChang</EnumKey>
+    <Lab>内外并重</Lab>
+    <IntKey>2</IntKey>
+    <X>456</X>
+    <Y>673</Y>
+    <GUID />
+  </Sys_FrmRB>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_chukouqn</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>chukouqn</KeyOfEn>
+    <Name>chukouqn</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>146</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>415</X>
+    <Y>1005</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_chukouqunian</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>chukouqunian</KeyOfEn>
+    <Name>chukouqunian</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>133</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>602</X>
+    <Y>1007</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ChuTaiXiangGuanZhengCe</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ChuTaiXiangGuanZhengCe</KeyOfEn>
+    <Name>出台相关政策</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>478</X>
+    <Y>127</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_cyrsqn</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>cyrsqn</KeyOfEn>
+    <Name>cyrsqn</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>144</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>415</X>
+    <Y>892</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_cyrsqunian</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>cyrsqunian</KeyOfEn>
+    <Name>cyrsqunian</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>134</UIWidth>
+    <UIHeight>24</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>601</X>
+    <Y>887</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_DianHua</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>DianHua</KeyOfEn>
+    <Name>电话</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>25</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>451</X>
+    <Y>482</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_DianLiQiJu</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>DianLiQiJu</KeyOfEn>
+    <Name>电力器具</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>591</X>
+    <Y>761</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_DianQiJiXieHeQiCai</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>DianQiJiXieHeQiCai</KeyOfEn>
+    <Name>电气机械和器材</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>280</X>
+    <Y>758</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_FaDingDaiBiaoRen</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>FaDingDaiBiaoRen</KeyOfEn>
+    <Name>法定代表人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>109</UIWidth>
+    <UIHeight>25</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>273</X>
+    <Y>482</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_FangZhiFuZhuang</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>FangZhiFuZhuang</KeyOfEn>
+    <Name>纺织服装</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>383</X>
+    <Y>738</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_fdddlzw</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>fdddlzw</KeyOfEn>
+    <Name>fdddlzw</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>79</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>362</X>
+    <Y>1166</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_fddlrdh</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>fddlrdh</KeyOfEn>
+    <Name>fddlrdh</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>80</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>452</X>
+    <Y>1166</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_fddlrsj</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>fddlrsj</KeyOfEn>
+    <Name>fddlrsj</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>79</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>543</X>
+    <Y>1164</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_fddlrxm</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>fddlrxm</KeyOfEn>
+    <Name>fddlrxm</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>78</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>274</X>
+    <Y>1162</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_fddlryx</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>fddlryx</KeyOfEn>
+    <Name>fddlryx</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>643</X>
+    <Y>1165</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_JiaJu</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>JiaJu</KeyOfEn>
+    <Name>家具</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>465</X>
+    <Y>739</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_JianZhuCaiLiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>JianZhuCaiLiao</KeyOfEn>
+    <Name>建筑材料</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>383</X>
+    <Y>760</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_JieJueJingLiJiZhuYaoZhangAi</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>JieJueJingLiJiZhuYaoZhangAi</KeyOfEn>
+    <Name>解决经历及主要障碍</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>584</UIWidth>
+    <UIHeight>58</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>164</X>
+    <Y>350</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_JingJiLeiXing</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>JingJiLeiXing</KeyOfEn>
+    <Name>经济类型</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>386</UIWidth>
+    <UIHeight>21</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>278</X>
+    <Y>543</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_JuTiYaoQiuHuoXiWang</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>JuTiYaoQiuHuoXiWang</KeyOfEn>
+    <Name>具体要求或希望</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>592</UIWidth>
+    <UIHeight>44</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey>1</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>162</X>
+    <Y>149</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_knwtcsyyhbj</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>knwtcsyyhbj</KeyOfEn>
+    <Name>困难(问题)产生原因或背景</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>588</UIWidth>
+    <UIHeight>63</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>163</X>
+    <Y>202</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_lsjeqn</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>lsjeqn</KeyOfEn>
+    <Name>lsjeqn</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>415</X>
+    <Y>969</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_lsjequnian</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>lsjequnian</KeyOfEn>
+    <Name>lsjequnian</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>134</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>602</X>
+    <Y>966</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ShiPinJiaGong</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ShiPinJiaGong</KeyOfEn>
+    <Name>食品加工</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>279</X>
+    <Y>738</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ShouJi</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ShouJi</KeyOfEn>
+    <Name>手机</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>130</UIWidth>
+    <UIHeight>24</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>622</X>
+    <Y>483</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_SuoShuXingYeLingYu</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>SuoShuXingYeLingYu</KeyOfEn>
+    <Name>所属行业(领域）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>370</UIWidth>
+    <UIHeight>22</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>281</X>
+    <Y>780</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_TongXunDiZhi</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>TongXunDiZhi</KeyOfEn>
+    <Name>通讯地址</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>289</UIWidth>
+    <UIHeight>27</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>276</X>
+    <Y>573</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_WangZhanDiZhi</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>WangZhanDiZhi</KeyOfEn>
+    <Name>网站地址</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>476</UIWidth>
+    <UIHeight>29</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>276</X>
+    <Y>700</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_WenJiao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>WenJiao</KeyOfEn>
+    <Name>文教(体育、娱乐)用品</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>539</X>
+    <Y>740</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_xsfzrdh</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>xsfzrdh</KeyOfEn>
+    <Name>xsfzrdh</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>84</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>450</X>
+    <Y>1087</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_xsfzrsj</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>xsfzrsj</KeyOfEn>
+    <Name>xsfzrsj</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>81</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>542</X>
+    <Y>1087</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_xsfzrxm</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>xsfzrxm</KeyOfEn>
+    <Name>xsfzrxm</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>76</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>271</X>
+    <Y>1086</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_xsfzryx</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>xsfzryx</KeyOfEn>
+    <Name>xsfzryx</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>641</X>
+    <Y>1089</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_xsfzrzw</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>xsfzrzw</KeyOfEn>
+    <Name>xsfzrzw</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>76</UIWidth>
+    <UIHeight>26</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>362</X>
+    <Y>1086</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_YiYao</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>YiYao</KeyOfEn>
+    <Name>医药</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>679</X>
+    <Y>742</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_YouBian</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>YouBian</KeyOfEn>
+    <Name>邮编</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>111</UIWidth>
+    <UIHeight>27</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>635</X>
+    <Y>574</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zcjeqn</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zcjeqn</KeyOfEn>
+    <Name>zcjeqn</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>143</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>415</X>
+    <Y>932</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zcjequnian</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zcjequnian</KeyOfEn>
+    <Name>zcjequnian</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>137</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>599</X>
+    <Y>930</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ZhengFuXieDiaoJieJue</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZhengFuXieDiaoJieJue</KeyOfEn>
+    <Name>政府协调解决</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>269</X>
+    <Y>127</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ZhengFuYuYiZhongShi</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZhengFuYuYiZhongShi</KeyOfEn>
+    <Name>政府予以重视</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>372</X>
+    <Y>127</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ZhengFuZuoChuJieDa</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZhengFuZuoChuJieDa</KeyOfEn>
+    <Name>政府作出解答</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>167</X>
+    <Y>126</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ZhuDaoChanPin</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZhuDaoChanPin</KeyOfEn>
+    <Name>主导产品</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>473</UIWidth>
+    <UIHeight>50</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey>1</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>273</X>
+    <Y>610</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_QiChe</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>QiChe</KeyOfEn>
+    <Name>汽车(摩托车、游艇)</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>464</X>
+    <Y>761</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_Qing8718BangZhuJieJue</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>Qing8718BangZhuJieJue</KeyOfEn>
+    <Name>请8718帮助解决</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>578</X>
+    <Y>127</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_QiTa</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>QiTa</KeyOfEn>
+    <Name>其他</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>692</X>
+    <Y>129</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_QiTaXingYe</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>QiTaXingYe</KeyOfEn>
+    <Name>其他行业</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>680</X>
+    <Y>761</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_QiYeQuanCheng</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>QiYeQuanCheng</KeyOfEn>
+    <Name>企业全称</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>161</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>273</X>
+    <Y>419</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zjldh</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zjldh</KeyOfEn>
+    <Name>zjldh</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>81</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>452</X>
+    <Y>1128</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zjlsj</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zjlsj</KeyOfEn>
+    <Name>zjlsj</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>80</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>543</X>
+    <Y>1130</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zjlxm</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zjlxm</KeyOfEn>
+    <Name>zjlxm</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>74</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>272</X>
+    <Y>1127</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zjlyx</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zjlyx</KeyOfEn>
+    <Name>zjlyx</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>99</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>643</X>
+    <Y>1127</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zjlzw</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zjlzw</KeyOfEn>
+    <Name>zjlzw</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>77</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>362</X>
+    <Y>1126</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ZuZhiJiGouDaiMa</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZuZhiJiGouDaiMa</KeyOfEn>
+    <Name>组织机构代码</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>173</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>573</X>
+    <Y>420</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_baifenbi</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>baifenbi</KeyOfEn>
+    <Name>baifenbi</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>454</X>
+    <Y>518</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zysrqunian</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zysrqunian</KeyOfEn>
+    <Name>zysrqunian</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>136</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>600</X>
+    <Y>849</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_BiaoTi</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>BiaoTi</KeyOfEn>
+    <Name>标题</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>592</UIWidth>
+    <UIHeight>26</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>161</X>
+    <Y>89</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_zysrqn</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>zysrqn</KeyOfEn>
+    <Name>zysrqn</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>415</X>
+    <Y>849</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_RDT</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>0</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_ZhuYaoShiChang</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>ZhuYaoShiChang</KeyOfEn>
+    <Name>主要市场</Name>
+    <DefVal />
+    <UIContralType>3</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>30</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>ZhuYaoShiChang</UIBindKey>
+    <UIRefKey>No</UIRefKey>
+    <UIRefKeyText>Name</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>0</X>
+    <Y>0</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_xsq</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>xsq</KeyOfEn>
+    <Name>xsq</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>xsq</UIBindKey>
+    <UIRefKey>No</UIRefKey>
+    <UIRefKeyText>Name</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>277</X>
+    <Y>451</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_OID</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_jjlx1</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>jjlx1</KeyOfEn>
+    <Name>jjlx1</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>jjlx1</UIBindKey>
+    <UIRefKey>No</UIRefKey>
+    <UIRefKeyText>Name</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>277</X>
+    <Y>516</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_jd</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>jd</KeyOfEn>
+    <Name>jd</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>jd</UIBindKey>
+    <UIRefKey>No</UIRefKey>
+    <UIRefKeyText>Name</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>593</X>
+    <Y>451</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>QiYeKunNanDengJiBiao_DuiShengChanFaZhanHuoZhuanXingShengJiDeYingXiang</MyPK>
+    <FK_MapData>QiYeKunNanDengJiBiao</FK_MapData>
+    <KeyOfEn>DuiShengChanFaZhanHuoZhuanXingShengJiDeYingXiang</KeyOfEn>
+    <Name>对生产发展或转型升级的影响</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>587</UIWidth>
+    <UIHeight>59</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey>1</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>426</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>164</X>
+    <Y>277</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_GroupField>
+    <OID>426</OID>
+    <Lab>企业困难(问题)登记表</Lab>
+    <EnName>QiYeKunNanDengJiBiao</EnName>
+    <Idx>1</Idx>
+    <GUID />
+  </Sys_GroupField>
+  <Sys_Enum>
+    <MyPK>jd_CH_0</MyPK>
+    <Lab>未定义</Lab>
+    <EnumKey>jd</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>jjlx1_CH_0</MyPK>
+    <Lab>内资</Lab>
+    <EnumKey>jjlx1</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>xsq_CH_0</MyPK>
+    <Lab>未绑定</Lab>
+    <EnumKey>xsq</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>ZhuYaoShiChang_CH_0</MyPK>
+    <Lab>国外</Lab>
+    <EnumKey>ZhuYaoShiChang</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>ZhuYaoShiChang_CH_1</MyPK>
+    <Lab>国内</Lab>
+    <EnumKey>ZhuYaoShiChang</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>ZhuYaoShiChang_CH_2</MyPK>
+    <Lab>内外并重</Lab>
+    <EnumKey>ZhuYaoShiChang</EnumKey>
+    <IntKey>2</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+</NewDataSet>

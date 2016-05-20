@@ -1,0 +1,2143 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_GroupField>
+    <OID>157</OID>
+    <Lab>立项申请书</Lab>
+    <EnName>LXSQS</EnName>
+    <Idx>1</Idx>
+    <GUID />
+  </Sys_GroupField>
+  <Sys_MapData>
+    <No>LXSQS</No>
+    <Name>立项申请书</Name>
+    <EnPK />
+    <PTable>LXSQS</PTable>
+    <Url />
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>2200</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>600</TableWidth>
+    <DBURL>0</DBURL>
+    <Tag />
+    <FrmType>1</FrmType>
+    <FK_FrmSort>05</FK_FrmSort>
+    <FK_FormTree>05</FK_FormTree>
+    <AppType>0</AppType>
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <AtPara>@MaxLeft=39@MaxEnd=1294@MaxRight=809@IsHaveCA=0@MaxTop=8.18</AtPara>
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2014-12-22 15:33:30</Ver>
+    <FormRunType>1</FormRunType>
+    <FK_Flow />
+    <ParentMapData />
+    <RightViewWay>0</RightViewWay>
+    <RightViewTag />
+    <RightDeptWay>0</RightDeptWay>
+    <RightDeptTag />
+  </Sys_MapData>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DF_FKYWRTZ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DF_FKYWRTZ</KeyOfEn>
+    <Name>土地复垦义务人投资</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>87.27</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <X>313.18</X>
+    <Y>370</Y>
+    <GUID />
+    <Tag />
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DF_QT_QTZJ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DF_QT_QTZJ</KeyOfEn>
+    <Name>其他资金</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>121.82</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <X>558.45</X>
+    <Y>369.64</Y>
+    <GUID />
+    <Tag />
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DF_TDFKF</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DF_TDFKF</KeyOfEn>
+    <Name>土地复垦费（万元）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>121</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>328</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DF_DFLCXZF</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DF_DFLCXZF</KeyOfEn>
+    <Name>地方留成新增费资金（万元）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>81</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>599</X>
+    <Y>248</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DF_ZYFPXZF</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DF_ZYFPXZF</KeyOfEn>
+    <Name>中央分配的新增费资金（万元）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>82</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>319</X>
+    <Y>249</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DFZJ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DFZJ</KeyOfEn>
+    <Name>地方资金（万元）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>208</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_ZTZ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_ZTZ</KeyOfEn>
+    <Name>项目总投资（万元）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>121</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>279</X>
+    <Y>211</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DF_GDKKF</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DF_GDKKF</KeyOfEn>
+    <Name>耕地开垦费（万元）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>121</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>279</X>
+    <Y>289</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JBXX_XZQMC</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JBXX_XZQMC</KeyOfEn>
+    <Name>项目所在地</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>239.09</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>170.27</X>
+    <Y>129.45</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_FK</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_FK</KeyOfEn>
+    <Name>复垦规模（公顷）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>446</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_GBZ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_GBZ</KeyOfEn>
+    <Name>计划建成高标准基本农田规模</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>46</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>636</X>
+    <Y>487</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_JBNTZL</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_JBNTZL</KeyOfEn>
+    <Name>基本农田整理规模（公顷）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>80</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>320</X>
+    <Y>447</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_KF</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_KF</KeyOfEn>
+    <Name>开发规模（公顷）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>122</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>279</X>
+    <Y>488</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_KYYZBPH</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_KYYZBPH</KeyOfEn>
+    <Name>计划可用于占补平衡面积（公顷）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>66</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>333</X>
+    <Y>568</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_XZGD</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_XZGD</KeyOfEn>
+    <Name>新增耕地面积（公顷）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>121</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>528</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_ZHGD</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_ZHGD</KeyOfEn>
+    <Name>灾毁耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>122</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>279</X>
+    <Y>530</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_ZL</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_ZL</KeyOfEn>
+    <Name>整理规模（公顷）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>561</X>
+    <Y>407</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_ZMJ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_ZMJ</KeyOfEn>
+    <Name>建设总规模（公顷）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>280</X>
+    <Y>407</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_PFWH1</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_PFWH1</KeyOfEn>
+    <Name>文号_1</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>90</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>442.64</X>
+    <Y>50.82</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_PFWH2</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_PFWH2</KeyOfEn>
+    <Name>申请编号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>67</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>544.64</X>
+    <Y>49.91</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_PFWH3</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_PFWH3</KeyOfEn>
+    <Name>文号_3</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>60</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>619.09</X>
+    <Y>48.91</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_GM_GBZJSTJ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_GM_GBZJSTJ</KeyOfEn>
+    <Name>建设条件</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>Demo_JSTJ</UIBindKey>
+    <UIRefKey>No</UIRefKey>
+    <UIRefKeyText>Name</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>294</X>
+    <Y>610</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_GBCYJ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>GBCYJ</KeyOfEn>
+    <Name>耕保处意见</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>514</UIWidth>
+    <UIHeight>75</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>166</X>
+    <Y>925</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JBXX_XMMC</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JBXX_XMMC</KeyOfEn>
+    <Name>项目名称</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>515</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>166</X>
+    <Y>167</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_LXR</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>LXR</KeyOfEn>
+    <Name>联系人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>195</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>205</X>
+    <Y>1050</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_LXRDH</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>LXRDH</KeyOfEn>
+    <Name>联系人电话</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>114</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>567</X>
+    <Y>1051</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_OID</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_RDT</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_RQ1</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>RQ1</KeyOfEn>
+    <Name>日期</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>114</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>567</X>
+    <Y>750</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_RQ2</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>RQ2</KeyOfEn>
+    <Name>日期</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>113</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>567</X>
+    <Y>886</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_RQ3</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>RQ3</KeyOfEn>
+    <Name>日期</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>114</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>566</X>
+    <Y>1007</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_SQDW</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>SQDW</KeyOfEn>
+    <Name>申请单位</Name>
+    <DefVal>@WebUser.FK_DeptName</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>233.91</UIWidth>
+    <UIHeight>25.73</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>169</X>
+    <Y>84</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_STDXZZGBMY</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>STDXZZGBMY</KeyOfEn>
+    <Name>市土地行政主管部门意见</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>513</UIWidth>
+    <UIHeight>90</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>167</X>
+    <Y>791</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_XSRMZFQSYJ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>XSRMZFQSYJ</KeyOfEn>
+    <Name>县（市）人民政府请示意见</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>515</UIWidth>
+    <UIHeight>90</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>167</X>
+    <Y>646</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DF_ZXBCGDZJ</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DF_ZXBCGDZJ</KeyOfEn>
+    <Name>自行补充耕地资金（万元）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>82</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>599</X>
+    <Y>291</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>LXSQS_JH_TZ_DF_TDCRCR</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <KeyOfEn>JH_TZ_DF_TDCRCR</KeyOfEn>
+    <Name>用于农业土地开发的土地出让收入（万元）</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>157</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>280</X>
+    <Y>330</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapExt>
+    <MyPK>LXSQS_ActiveDDL_FK_City_FK_Xian</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <ExtType>ActiveDDL</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>FK_City</AttrOfOper>
+    <AttrsOfActive>FK_Xian</AttrsOfActive>
+    <Doc>select No,Name from fk_Xian  where FK_City=~@key~</Doc>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>LXSQS_ActiveDDL_FK_SF_FK_City</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <ExtType>ActiveDDL</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>FK_SF</AttrOfOper>
+    <AttrsOfActive>FK_City</AttrsOfActive>
+    <Doc>select No,Name from fk_city  where FK_SF=~@key~</Doc>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>LXSQS_DDLFullCtrl_FK_SF</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <ExtType>DDLFullCtrl</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>FK_SF</AttrOfOper>
+    <AttrsOfActive />
+    <Doc>select NO,name from fk_sf where name like ~%山东%~</Doc>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>LXSQS_PopVal_JBXX_XZQMC</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>JBXX_XZQMC</AttrOfOper>
+    <AttrsOfActive />
+    <Doc>/AppDemoLigerUI/SelectVal.aspx</Doc>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <AtPara>@PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_FrmLine>
+    <MyPK>LE_1_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>76</X1>
+    <Y1>1294</Y1>
+    <X2>76</X2>
+    <Y2>1294</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_10_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>598</Y1>
+    <X2>719</X2>
+    <Y2>598</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_11_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>809</X1>
+    <Y1>581</Y1>
+    <X2>809</X2>
+    <Y2>581</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_12_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>494</X1>
+    <Y1>140</Y1>
+    <X2>494</X2>
+    <Y2>140</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_13_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>39</X1>
+    <Y1>11</Y1>
+    <X2>721</X2>
+    <Y2>11</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_14_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>200</Y1>
+    <X2>720</X2>
+    <Y2>200</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_15_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>8.18</Y1>
+    <X2>40</X2>
+    <Y2>86</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_16_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>162</X1>
+    <Y1>240</Y1>
+    <X2>720</X2>
+    <Y2>240</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_17_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>720</X1>
+    <Y1>10.91</Y1>
+    <X2>720</X2>
+    <Y2>86</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_18_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>39</X1>
+    <Y1>919</Y1>
+    <X2>720</X2>
+    <Y2>919</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_19_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>46</Y1>
+    <X2>721</X2>
+    <Y2>46</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_2_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>1041</Y1>
+    <X2>41</X2>
+    <Y2>1041</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_20_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>1039</Y1>
+    <X2>719</X2>
+    <Y2>1039</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_21_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>161</X1>
+    <Y1>478</Y1>
+    <X2>720</X2>
+    <Y2>478</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_22_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>122</X1>
+    <Y1>80</Y1>
+    <X2>122</X2>
+    <Y2>80</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_23_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>82</Y1>
+    <X2>40</X2>
+    <Y2>1080</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_24_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>778</Y1>
+    <X2>720</X2>
+    <Y2>778</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_25_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>639</Y1>
+    <X2>719</X2>
+    <Y2>639</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_26_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>160</X1>
+    <Y1>438</Y1>
+    <X2>719</X2>
+    <Y2>438</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_27_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>39</X1>
+    <Y1>399</Y1>
+    <X2>719</X2>
+    <Y2>399</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_28_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>159</Y1>
+    <X2>719</X2>
+    <Y2>159</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_29_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>39.82</X1>
+    <Y1>77.91</Y1>
+    <X2>719.82</X2>
+    <Y2>77.91</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_3_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>1079</Y1>
+    <X2>720</X2>
+    <Y2>1079</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_4_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>160</X1>
+    <Y1>520</Y1>
+    <X2>720</X2>
+    <Y2>520</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_5_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>138</X1>
+    <Y1>586</Y1>
+    <X2>138</X2>
+    <Y2>586</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_6_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>118</Y1>
+    <X2>719</X2>
+    <Y2>118</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_7_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>161</X1>
+    <Y1>559</Y1>
+    <X2>719</X2>
+    <Y2>559</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_8_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>720</X1>
+    <Y1>80</Y1>
+    <X2>720</X2>
+    <Y2>1079</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_9_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>161</X1>
+    <Y1>78.18</Y1>
+    <X2>161</X2>
+    <Y2>1079</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLab>
+    <MyPK>LB_1_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>土地整治项目立项申请书</Text>
+    <X>285.73</X>
+    <Y>17</Y>
+    <FontSize>19</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_10_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>中央分配的新增费资金（万元）</Text>
+    <X>165</X>
+    <Y>250</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_11_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>地方留成新增费资金（万元）</Text>
+    <X>440</X>
+    <Y>252</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_12_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>耕地开垦费（万元）</Text>
+    <X>166</X>
+    <Y>290</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_13_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>自行补充耕地资金（万元）</Text>
+    <X>439</X>
+    <Y>294</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_14_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>用于农业土地开发的@土地出让收入（万元）</Text>
+    <X>168</X>
+    <Y>325</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_15_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>土地复垦费（万元）</Text>
+    <X>440</X>
+    <Y>332</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_16_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>土地复垦义务人投资（万元）</Text>
+    <X>167</X>
+    <Y>371</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_17_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>其他资金（万元）</Text>
+    <X>441</X>
+    <Y>373</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_18_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>计划建设信息</Text>
+    <X>51</X>
+    <Y>493</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_19_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>建设总规模（公顷）</Text>
+    <X>166</X>
+    <Y>411</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_2_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>[</Text>
+    <X>535</X>
+    <Y>50</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_20_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>基本农田整理规模（公顷）</Text>
+    <X>166</X>
+    <Y>448</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_21_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>开发规模（公顷）</Text>
+    <X>167</X>
+    <Y>492</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_22_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>高标准基本农田建设条件</Text>
+    <X>166</X>
+    <Y>610</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_23_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>灾毁耕地面积（公顷）</Text>
+    <X>165</X>
+    <Y>534</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_24_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>整理规模（公顷）</Text>
+    <X>441</X>
+    <Y>411</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_25_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>复垦规模（公顷）</Text>
+    <X>440</X>
+    <Y>452</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_26_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>计划建成高标准基本农田规模（公顷）</Text>
+    <X>440</X>
+    <Y>493</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_27_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>新增耕地面积（公顷）</Text>
+    <X>439</X>
+    <Y>534</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_28_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>计划可用于占补平衡面积（公顷）</Text>
+    <X>165</X>
+    <Y>570</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_29_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>县（市）人民@政府请示意见</Text>
+    <X>52</X>
+    <Y>683</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_3_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>号</Text>
+    <X>685.82</X>
+    <Y>51.91</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_30_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>市国土资源局@主管部门意见</Text>
+    <X>52</X>
+    <Y>826</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_31_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>备注</Text>
+    <X>84</X>
+    <Y>1053</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_32_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>联系人</Text>
+    <X>166</X>
+    <Y>1055</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_33_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>联系电话</Text>
+    <X>514</X>
+    <Y>1055</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_34_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>日期</Text>
+    <X>536</X>
+    <Y>753</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_35_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>日期</Text>
+    <X>537</X>
+    <Y>889</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_36_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>省厅耕保处意见</Text>
+    <X>52</X>
+    <Y>967</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_37_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>日期</Text>
+    <X>537</X>
+    <Y>1010</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_38_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>]</Text>
+    <X>611</X>
+    <Y>49</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_39_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>(*双击文本框)</Text>
+    <X>417.73</X>
+    <Y>130.91</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_4_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>申请单位</Text>
+    <X>59.27</X>
+    <Y>91.55</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_5_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>项目所在地</Text>
+    <X>54.55</X>
+    <Y>132.09</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_6_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>项目名称</Text>
+    <X>53</X>
+    <Y>169</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_7_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>计划投资信息</Text>
+    <X>52</X>
+    <Y>296</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_8_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>项目总投资（万元）</Text>
+    <X>167</X>
+    <Y>214</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_9_LXSQS</MyPK>
+    <FK_MapData>LXSQS</FK_MapData>
+    <Text>地方资金（万元）</Text>
+    <X>439</X>
+    <Y>211</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+</NewDataSet>

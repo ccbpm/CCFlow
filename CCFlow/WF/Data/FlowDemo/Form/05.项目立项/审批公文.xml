@@ -1,0 +1,972 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_MapData>
+    <No>SPGW</No>
+    <Name>审批公文</Name>
+    <EnPK />
+    <PTable>SPGW</PTable>
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>2200</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>600</TableWidth>
+    <DBURL>0</DBURL>
+    <Tag />
+    <FrmType>1</FrmType>
+    <FK_FrmSort>107</FK_FrmSort>
+    <FK_FormTree>107</FK_FormTree>
+    <AppType>0</AppType>
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <AtPara />
+    <GUID />
+    <FormRunType>1</FormRunType>
+    <URL />
+    <SearchKeys />
+    <FK_Flow />
+    <IsSearchKey>0</IsSearchKey>
+    <DTSearchWay>0</DTSearchWay>
+    <DTSearchKey />
+    <ParentMapData />
+    <Idx>100</Idx>
+  </Sys_MapData>
+  <Sys_FrmLine>
+    <MyPK>Line140201170110</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>78.91</X1>
+    <Y1>1361.36</Y1>
+    <X2>756.18</X2>
+    <Y2>1361.36</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140201170111</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>80.45</X1>
+    <Y1>1521.55</Y1>
+    <X2>759.55</X2>
+    <Y2>1521.55</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140201170113</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>79.82</X1>
+    <Y1>1003.91</Y1>
+    <X2>758.91</X2>
+    <Y2>1003.91</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140201170127</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>417.73</X1>
+    <Y1>1267.91</Y1>
+    <X2>417.73</X2>
+    <Y2>1267.91</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140211121110</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>198</X1>
+    <Y1>480.36</Y1>
+    <X2>198</X2>
+    <Y2>1523.36</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140211121112</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>80.64</X1>
+    <Y1>638.27</Y1>
+    <X2>756.09</X2>
+    <Y2>638.27</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140211121117</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>252.27</X1>
+    <Y1>510</Y1>
+    <X2>252.27</X2>
+    <Y2>510</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140211121122</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>80</X1>
+    <Y1>481.45</Y1>
+    <X2>758.64</X2>
+    <Y2>481.45</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140211121144</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>80</X1>
+    <Y1>122.09</Y1>
+    <X2>758.18</X2>
+    <Y2>122.09</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140211121150</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>757.73</X1>
+    <Y1>121.82</Y1>
+    <X2>757.73</X2>
+    <Y2>1522.45</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140211121155</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>79.64</X1>
+    <Y1>120.91</Y1>
+    <X2>79.64</X2>
+    <Y2>1521.55</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140212121226</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>78.82</X1>
+    <Y1>811.73</Y1>
+    <X2>757</X2>
+    <Y2>811.73</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140212121239</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>77.82</X1>
+    <Y1>1185.55</Y1>
+    <X2>757.73</X2>
+    <Y2>1185.55</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLab>
+    <MyPK>Lab140212111322</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>山东省国土资源厅文件</Text>
+    <X>283.19</X>
+    <Y>3.63</Y>
+    <FontSize>24</FontSize>
+    <FontColor>#FFDA0028</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212111601</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>规划处审核</Text>
+    <X>107.73</X>
+    <Y>708.19</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212111704</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>日期</Text>
+    <X>534.09</X>
+    <Y>781.82</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212111808</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>地籍管理处审核</Text>
+    <X>95.9</X>
+    <Y>895.45</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212111906</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>日期</Text>
+    <X>526.82</X>
+    <Y>971.82</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212112127</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>财务处审核</Text>
+    <X>103.18</X>
+    <Y>1072.92</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212112223</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>日期</Text>
+    <X>529.54</X>
+    <Y>1149.28</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212115947</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>办公室审核</Text>
+    <X>107.73</X>
+    <Y>1251.63</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212120017</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>日期</Text>
+    <X>523.18</X>
+    <Y>1330.72</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212120052</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>厅长审批</Text>
+    <X>104.09</X>
+    <Y>1430.91</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140212120108</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>日期</Text>
+    <X>529.55</X>
+    <Y>1483.64</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217010942</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>审批人</Text>
+    <X>244.09</X>
+    <Y>1489.73</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217011112</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>审批人</Text>
+    <X>241.36</X>
+    <Y>1331.36</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217011247</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>审核人</Text>
+    <X>235.91</X>
+    <Y>1149.36</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217011427</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>审核人</Text>
+    <X>235.91</X>
+    <Y>969.91</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217011605</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>审核人</Text>
+    <X>233.18</X>
+    <Y>775.91</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217011941</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>省厅耕保处意见</Text>
+    <X>103.18</X>
+    <Y>551.64</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217012032</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>审核人</Text>
+    <X>235.91</X>
+    <Y>613.45</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217012059</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>时间</Text>
+    <X>531.36</X>
+    <Y>613.45</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217012530</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>关于申请</Text>
+    <X>192.27</X>
+    <Y>88.18</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140217012554</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <Text>立项申请的批复</Text>
+    <X>525.91</X>
+    <Y>87.27</Y>
+    <FontSize>13</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_MapAttr>
+    <MyPK>SPGW_BGSRQ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>BGSRQ</KeyOfEn>
+    <Name>日期</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>168.18</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>574.09</X>
+    <Y>1324.36</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_BGSYJ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>BGSYJ</KeyOfEn>
+    <Name>办公室审核</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>537.27</UIWidth>
+    <UIHeight>105</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>210.45</X>
+    <Y>1194.99</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_Context</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>Context</KeyOfEn>
+    <Name>批复内容</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>600.91</UIWidth>
+    <UIHeight>270</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>145</X>
+    <Y>161.82</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_CWCRQ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>CWCRQ</KeyOfEn>
+    <Name>日期</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>173.63</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>572.27</X>
+    <Y>1145.09</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_CWCYJ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>CWCYJ</KeyOfEn>
+    <Name>财务处审核</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>528.18</UIWidth>
+    <UIHeight>120</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>210.45</X>
+    <Y>1016.28</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_DJGLCRQ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>DJGLCRQ</KeyOfEn>
+    <Name>日期</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>168.18</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>574.28</X>
+    <Y>969.46</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_DJGLCYJ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>DJGLCYJ</KeyOfEn>
+    <Name>地籍管理处意见</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>530.91</UIWidth>
+    <UIHeight>120</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>208.64</X>
+    <Y>822.36</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_GHCRQ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>GHCRQ</KeyOfEn>
+    <Name>日期</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>172.73</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>572.54</X>
+    <Y>777.46</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_GHCYJ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>GHCYJ</KeyOfEn>
+    <Name>规划处意见</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>520</UIWidth>
+    <UIHeight>120</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>213.18</X>
+    <Y>647.46</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_GBCRQ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>GBCRQ</KeyOfEn>
+    <Name>时间</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>175.45</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>570.91</X>
+    <Y>609.82</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_PiFuWenHao</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>PiFuWenHao</KeyOfEn>
+    <Name>批复文号</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>166.37</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>500.45</X>
+    <Y>46.36</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_SQDW</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>SQDW</KeyOfEn>
+    <Name>申请单位</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>195.45</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>86.82</X>
+    <Y>130.73</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_STGBCYJ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>STGBCYJ</KeyOfEn>
+    <Name>省厅耕保处意见</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>542.73</UIWidth>
+    <UIHeight>105</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>203.18</X>
+    <Y>487.72</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_TZRQ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>TZRQ</KeyOfEn>
+    <Name>日期</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>167.27</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>575</X>
+    <Y>1484</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_TZYJ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>TZYJ</KeyOfEn>
+    <Name>厅长审批</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>521.82</UIWidth>
+    <UIHeight>90</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>221.36</X>
+    <Y>1376.09</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_TXR</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>TXR</KeyOfEn>
+    <Name>TXR</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>188.18</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>690</GroupID>
+    <IsSigan>1</IsSigan>
+    <X>292.27</X>
+    <Y>1486.55</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_GHCR</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>GHCR</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>191.82</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>690</GroupID>
+    <IsSigan>1</IsSigan>
+    <X>285.91</X>
+    <Y>775.45</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_BGSR</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>BGSR</KeyOfEn>
+    <Name>审批人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>191.82</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>690</GroupID>
+    <IsSigan>1</IsSigan>
+    <X>288.36</X>
+    <Y>1326.82</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_PFRQ</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>PFRQ</KeyOfEn>
+    <Name>批复日期</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>168.18</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>690</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>576.63</X>
+    <Y>445.1</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_JBXX_XMMC</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>JBXX_XMMC</KeyOfEn>
+    <Name>JBXX_XMMC</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>263.64</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>690</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>254.09</X>
+    <Y>87.27</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_GBCR</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>GBCR</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198.18</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>690</GroupID>
+    <IsSigan>1</IsSigan>
+    <X>280.45</X>
+    <Y>611.55</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_DJGLCR</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>DJGLCR</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198.18</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>690</GroupID>
+    <IsSigan>1</IsSigan>
+    <X>282.73</X>
+    <Y>967.55</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_CWCR</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>CWCR</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>197.27</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>690</GroupID>
+    <IsSigan>1</IsSigan>
+    <X>283.73</X>
+    <Y>1145</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>SPGW_OID</MyPK>
+    <FK_MapData>SPGW</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>0</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_GroupField>
+    <OID>690</OID>
+    <Lab>审批公文</Lab>
+    <EnName>SPGW</EnName>
+    <Idx>1</Idx>
+    <GUID />
+  </Sys_GroupField>
+</NewDataSet>

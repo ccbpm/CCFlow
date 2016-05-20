@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+  <Item AttrKey="RateVal"  AttrName="" Exp="(SUM(FZ)/SUM(FM))*100"   For="BP.ZF1.RDZs"   Desc="" />
+  <Item AttrKey="Rate"  AttrName="" Exp="(SUM(FZ)/SUM(FM))*100"   For="BP.ZF1.RDEs"   Desc="" />
+  
+  <Item AttrKey="RateVal"  AttrName="" Exp="(SUM(FZ)/SUM(FM))*100"   For="BP.ZF1.RDEs"   Desc="" />
+  <Item AttrKey="RateValTZ"  AttrName="" Exp="(SUM(FZOfTZ)/SUM(FM))*100"   For="BP.ZF1.RDEs"   Desc="" />
+
+  <Item AttrKey="RateOfTZ"  AttrName="" Exp=" CASE  WHEN SUM(NumOfSQ)=0 THEN 0 ELSE  round ( SUM(NumOfAdjust)/SUM(NumOfSQ)*100, 4)  END " 
+  ExpApp=" case when @NumOfSQ@=0 then 0 else  @NumOfAdjust@/@NumOfSQ@*100 end "  For="BP.ZF1.DDETZs"   Desc="调整率" />
+  
+  <Item AttrKey="RateOfTZ"  AttrName="" Exp="(SUM(NumOfAdjust) /DSWF.IsZeroAsVal( SUM(NumOfSQ), 1 )  )*100" 
+ ExpApp="  @NumOfAdjust@/@NumOfSQ@*100"  Condition=" AND NumOfSQ > 0 "  For="BP.ZF1.DDETZs_del"   Desc="调整率" />
+  
+</NewDataSet>

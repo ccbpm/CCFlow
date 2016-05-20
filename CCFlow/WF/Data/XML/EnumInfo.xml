@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 流程管理  -->
+  <Item No="01" CH="流程管理" RU="Process Management" EN="Flow Manage" Url="" Img="/WF/Img/Pub/Bill.gif" Enable="1" />
+  <Item No="0102" CH="流程报表" RU="Поток заявлений" EN="Flow Report" Url="/WF/Comm/Search.aspx?EnsName=BP.WF.DataOfFlows" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0102" CH="流程查询" RU="Процесс запроса" EN="Flow Search" Url="/WF/Comm/Search.aspx?EnsName=BP.WF.DataOfFlows" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0102" CH="流程自检" RU="Процесс самоопределения --" EN="Flow Check" Url="../SelfTest.aspx" Img="/WF/Img/Pub/Table.gif" Enable="0" />
+  <Item No="0102" CH="单据查询" RU="Инструменты запросы" EN="Bill Search" Url="/WF/Comm/Search.aspx?EnsName=BP.WF.Bills" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0102" CH="节点查询分析" RU="Запрос узла анализ" EN="Node Search" Url="../FlowList.aspx" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <!--单据管理-->
+  <Item No="02" CH="单据与单据" RU="Договоры и документы" EN="Bill AND Bill" Img="/WF/Img/Pub/Bill.gif" Enable="1" />
+  <Item No="0201" CH="查询" RU="Запрос" EN="Search" Url="/WF/Comm/Search.aspx?EnsName=BP.WF.Bills" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0201" CH="分析" RU="Анализ" EN="feinxi" Url="/WF/Comm/Group.aspx?EnsName=BP.WF.Bills" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  
+  <!-- 流程数据查询  -->
+  <Item No="03" CH="流程考核" RU="Процесс оценки" EN="FlowCheck" Url="" Img="/WF/Img/Pub/Bill.gif" Enable="1" />
+  <Item No="0301" CH="流程质量考核" RU="Оценка качества процесса" EN="Check" Img="/WF/Img/Pub/Bill.gif" Enable="1" />
+  <Item No="030101" CH="查询" RU="Запрос" EN="Search" Url="/WF/Comm/Search.aspx?EnsName=BP.WF.DataOfQLs" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="030101" CH="分析" RU="Анализ" EN="feinxi" Url="/WF/Comm/Group.aspx?EnsName=BP.WF.DataOfQLs" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0302" CH="时效考核" RU="Испытание на старение" EN="check" Img="/WF/Img/Pub/Bill.gif" Enable="1" />
+  <Item No="030201" CH="查询" RU="Запрос" EN="Search" Url="/WF/Comm/Search.aspx?EnsName=BP.WF.DataOfQLs" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="030201" CH="分析" RU="Анализ" EN="feinxi" Url="/WF/Comm/Group.aspx?EnsName=BP.WF.DataOfQLs" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <!-- 系统维护  -->
+  <Item No="09" CH="系统维护" RU="Система технического обслуживания" EN="System" Url="" Img="/WF/Img/Pub/Bill.gif" Enable="1" DFor="admin" />
+  <Item No="0902" CH="岗位维护" RU="Обслуживание рабочих мест" EN="Stations" Url="/WF/Comm/Search.aspx?EnsName=BP.Port.Stations" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0902" CH="部门维护" RU="Подразделения по поддержанию" EN="Depts" Url="/WF/Comm/Search.aspx?EnsName=BP.Port.Depts" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0902" CH="操作员维护" RU="Оператор обслуживание" EN="Users" Url="/WF/Comm/Search.aspx?EnsName=BP.Port.Emps&amp;IsReadonly=1" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0902" CH="管理员工具" RU="Инструменты для веб-мастеров" EN="Admin Tools" Url="/WF/Comm/Sys/AdminTools.aspx" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0902" CH="用户工具" RU="Пользователь инструменты" EN="User Tools" Url="/WF/Comm/Sys/UserTools.aspx" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0902" CH="单据维护" RU="Документ обслуживание" EN="Bill" Url="/WF/Comm/Search.aspx?EnsName=BP.WF.BillTemplates&amp;IsReadonly=1" Img="/WF/Img/Pub/Table.gif" Enable="1" />
+  <Item No="0902" CH="流程说明书" Url="../FlowHelp.aspx" DFor="admin" Img="/WF/Img/Pub/Table.gif" Enable="1" RU="Руководство процессами" EN="Flow hand Bill" />
+</NewDataSet>

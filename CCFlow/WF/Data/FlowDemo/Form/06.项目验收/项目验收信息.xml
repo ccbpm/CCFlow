@@ -1,0 +1,3901 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_MapData>
+    <No>YSXX</No>
+    <Name>项目验收信息</Name>
+    <EnPK />
+    <PTable>GT_YSXX</PTable>
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>2600</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>600</TableWidth>
+    <DBURL>0</DBURL>
+    <Tag />
+    <FrmType>1</FrmType>
+    <FK_FrmSort>109</FK_FrmSort>
+    <FK_FormTree>109</FK_FormTree>
+    <AppType>0</AppType>
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <AtPara />
+    <GUID />
+    <FormRunType>1</FormRunType>
+    <URL />
+    <SearchKeys />
+    <FK_Flow />
+    <IsSearchKey>0</IsSearchKey>
+    <DTSearchWay>0</DTSearchWay>
+    <DTSearchKey />
+    <ParentMapData />
+    <Idx>100</Idx>
+  </Sys_MapData>
+  <Sys_FrmLine>
+    <MyPK>Line140101190103</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>79</X1>
+    <Y1>840</Y1>
+    <X2>800</X2>
+    <Y2>840</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190113</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>80</X1>
+    <Y1>840</Y1>
+    <X2>80</X2>
+    <Y2>1079</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190117</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>81</X1>
+    <Y1>281</Y1>
+    <X2>801</X2>
+    <Y2>281</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190118</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>801</X1>
+    <Y1>839</Y1>
+    <X2>801</X2>
+    <Y2>1078</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190122</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>520</Y1>
+    <X2>828</X2>
+    <Y2>520</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190124</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>80</Y1>
+    <X2>832</X2>
+    <Y2>80</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190127</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>80</X1>
+    <Y1>280</Y1>
+    <X2>80</X2>
+    <Y2>439</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190132</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>79</X1>
+    <Y1>1079</Y1>
+    <X2>802</X2>
+    <Y2>1079</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190135</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>39</X1>
+    <Y1>240</Y1>
+    <X2>828</X2>
+    <Y2>240</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190145</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>79</X1>
+    <Y1>439</Y1>
+    <X2>800</X2>
+    <Y2>439</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140101190156</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>800</X1>
+    <Y1>280</Y1>
+    <X2>800</X2>
+    <Y2>440</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140102190208</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>1479</Y1>
+    <X2>836</X2>
+    <Y2>1479</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140102190229</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>120</X1>
+    <Y1>1002</Y1>
+    <X2>758</X2>
+    <Y2>1002</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140102190242</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>120</X1>
+    <Y1>1001</Y1>
+    <X2>120</X2>
+    <Y2>1061</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140102190244</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>120</X1>
+    <Y1>1061</Y1>
+    <X2>757</X2>
+    <Y2>1061</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140102190248</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>758</X1>
+    <Y1>1001</Y1>
+    <X2>758</X2>
+    <Y2>1061</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140102190257</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>1159</Y1>
+    <X2>835</X2>
+    <Y2>1159</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140102190259</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>37</X1>
+    <Y1>1798</Y1>
+    <X2>841</X2>
+    <Y2>1798</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>Line140103190335</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>42</X1>
+    <Y1>2240</Y1>
+    <X2>840</X2>
+    <Y2>2240</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLab>
+    <MyPK>Lab140119012234</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>验收基本信息</Text>
+    <X>37</X>
+    <Y>39</Y>
+    <FontSize>22</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119012445</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>验收单位</Text>
+    <X>120</X>
+    <Y>102</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119012506</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>验收文号</Text>
+    <X>487</X>
+    <Y>97</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119012526</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>验收日期</Text>
+    <X>122</X>
+    <Y>140</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119012547</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目验收编号</Text>
+    <X>472</X>
+    <Y>137</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119012606</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目实际投资信息</Text>
+    <X>36</X>
+    <Y>198</Y>
+    <FontSize>22</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119012707</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>实际总投资额(万元)</Text>
+    <X>138</X>
+    <Y>251</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119012734</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>地方资金(万元)</Text>
+    <X>526</X>
+    <Y>254</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013008</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>中央分配的新增费资金(万元)</Text>
+    <X>88</X>
+    <Y>293</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013142</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>地方留成新增费资金(万元)</Text>
+    <X>429</X>
+    <Y>295</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013250</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>耕地开垦费(万元)</Text>
+    <X>140</X>
+    <Y>332</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013330</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>自行补充耕地资金(万元)</Text>
+    <X>438</X>
+    <Y>334</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013417</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>用于农业土地开发的土地出让收入(万元)</Text>
+    <X>82</X>
+    <Y>373</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013520</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土地复垦费(万元)</Text>
+    <X>466</X>
+    <Y>377</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013626</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土地复垦义务人投资(万元)</Text>
+    <X>100</X>
+    <Y>410</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013721</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>其他资金(万元)</Text>
+    <X>479</X>
+    <Y>414</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119013854</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目实际建设任务信息</Text>
+    <X>29</X>
+    <Y>478</Y>
+    <FontSize>22</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014013</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>实际建设总规模(公顷)</Text>
+    <X>121</X>
+    <Y>534</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014053</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>整理规模(公顷)</Text>
+    <X>471</X>
+    <Y>538</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014202</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>基本农田整理规模(公顷)</Text>
+    <X>110</X>
+    <Y>570</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014218</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>复垦规模(公顷)</Text>
+    <X>473</X>
+    <Y>574</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014232</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>开发规模(公顷)</Text>
+    <X>155</X>
+    <Y>611</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014457</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>高标准农田规模(公顷)</Text>
+    <X>444</X>
+    <Y>617</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014529</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>建设条件</Text>
+    <X>179</X>
+    <Y>649</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014555</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>整治后耕地面积(公顷)</Text>
+    <X>443</X>
+    <Y>655</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014634</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>实际新增其他农用地面积(公顷)</Text>
+    <X>82</X>
+    <Y>689</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014717</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>整治前建设用地所占面积(公顷)</Text>
+    <X>418</X>
+    <Y>692</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014802</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>整治后建设用地所占面积(公顷)</Text>
+    <X>80</X>
+    <Y>734</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014839</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>减少建设用地而增加耕地面积(公顷)</Text>
+    <X>407</X>
+    <Y>735</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014923</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>恢复耕地面积(公顷)</Text>
+    <X>134</X>
+    <Y>772</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119014947</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>实际新增耕地面积(公顷)</Text>
+    <X>110</X>
+    <Y>814</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119020205</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>中央分配的新增费资金@新增耕地面积(公顷)</Text>
+    <X>114</X>
+    <Y>848</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119020304</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>用于农业土地开发的土地出让@收入新增耕地面积(公顷)</Text>
+    <X>412</X>
+    <Y>850</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119020355</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>地方留成新增费资金@新增耕地面积(公顷)</Text>
+    <X>111.09</X>
+    <Y>889.45</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119020455</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土地新增土地复垦义务人投资@新增耕地面积(公顷)</Text>
+    <X>411.36</X>
+    <Y>887.55</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119020549</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土地复垦费新增耕地面积(公顷)</Text>
+    <X>79.27</X>
+    <Y>932.73</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119020612</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>其他资金新增耕地面积(公顷)</Text>
+    <X>414</X>
+    <Y>932</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119020654</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>占补平衡面积(公顷)</Text>
+    <X>124</X>
+    <Y>971</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119020924</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>耕地开垦费新增耕地面积(公顷)</Text>
+    <X>128</X>
+    <Y>1023</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119021008</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>自行补充耕地资金@新增耕地面积(公顷)</Text>
+    <X>446</X>
+    <Y>1017</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119021736</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目工程量完成信息</Text>
+    <X>39</X>
+    <Y>1112</Y>
+    <FontSize>22</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022000</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土地平整面积(公顷)</Text>
+    <X>92</X>
+    <Y>1172</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022028</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>农用防护林工程量(株)</Text>
+    <X>81</X>
+    <Y>1213</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022043</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>蓄水池(座)</Text>
+    <X>137</X>
+    <Y>1252</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022052</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>农用桥、涵(座)</Text>
+    <X>113</X>
+    <Y>1292</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022103</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>高雅输配电线路(千米)</Text>
+    <X>82</X>
+    <Y>1331</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022117</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>田间道路工程量(千米)</Text>
+    <X>89</X>
+    <Y>1370</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022226</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土方工程量(立方米)</Text>
+    <X>453</X>
+    <Y>1179</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022246</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>泵站(座)</Text>
+    <X>503</X>
+    <Y>1218</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022307</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>农用井(口)</Text>
+    <X>496</X>
+    <Y>1253</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022317</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>灌、排(渠)、管道(千米)</Text>
+    <X>439</X>
+    <Y>1293</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022327</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>低压输电线路(千米)</Text>
+    <X>458</X>
+    <Y>1333</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119022935</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目实际成效信息</Text>
+    <X>42</X>
+    <Y>1430</Y>
+    <FontSize>22</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023213</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>新增和改善农田灌溉面积(公顷)</Text>
+    <X>42</X>
+    <Y>1493</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023234</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>新增和改善节水灌溉面积(公顷)</Text>
+    <X>42</X>
+    <Y>1535</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023250</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>废弃居民点复垦面积(公顷)</Text>
+    <X>58</X>
+    <Y>1577</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023305</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目区建设前耕地平均质量等级</Text>
+    <X>40</X>
+    <Y>1619</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023322</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>新增粮食产能(公斤)</Text>
+    <X>96</X>
+    <Y>1650</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023340</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>迁村并点减少的村庄数量(个)</Text>
+    <X>52</X>
+    <Y>1690</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023506</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>防涝面积(公顷)</Text>
+    <X>470</X>
+    <Y>1499</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023516</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>水土流失治理面积(公顷)</Text>
+    <X>432</X>
+    <Y>1532</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023531</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>工矿废弃地复垦面积(公顷)</Text>
+    <X>423</X>
+    <Y>1572</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023555</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目区建设后耕地平均质量等级</Text>
+    <X>402</X>
+    <Y>1614</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023617</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>新增纯收入(元)</Text>
+    <X>469</X>
+    <Y>1654</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119023626</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目区受益人数(人)</Text>
+    <X>453</X>
+    <Y>1694</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119024042</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土地整治权属管理信息</Text>
+    <X>35</X>
+    <Y>1755</Y>
+    <FontSize>22</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119024317</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>权属调整类型&amp;nbsp;</Text>
+    <X>176</X>
+    <Y>1826</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025008</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>农村集体土地所有权@涉及的土地面积</Text>
+    <X>93</X>
+    <Y>1890</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025110</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>国有土地所有权@涉及的土地面积</Text>
+    <X>468</X>
+    <Y>1887</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025154</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土地承包经营权@涉及的土地面积</Text>
+    <X>108</X>
+    <Y>1934</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025224</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>建设用地使用权@涉及的土地面积</Text>
+    <X>469</X>
+    <Y>1933</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025306</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>权属调整涉及的总面积(公顷)</Text>
+    <X>51</X>
+    <Y>1978</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025345</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>权属调整实施主体</Text>
+    <X>461</X>
+    <Y>1981</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025435</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>权属调整涉及的土地@所有权总面积(公顷)</Text>
+    <X>91</X>
+    <Y>2009</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025526</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>权属调整涉及的土地@使用权总面积(公顷)</Text>
+    <X>452</X>
+    <Y>2008</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025628</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>权属调整涉及的土地比例(%)</Text>
+    <X>51</X>
+    <Y>2055</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025657</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>土地权属调整比例(%)</Text>
+    <X>442</X>
+    <Y>2057</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025727</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>整治前田地数量(个)</Text>
+    <X>93</X>
+    <Y>2091</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025752</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>整治后土地数量(个)</Text>
+    <X>453</X>
+    <Y>2092</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119025857</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>田地归并度(%)</Text>
+    <X>117</X>
+    <Y>2131</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119030012</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>项目办理人信息</Text>
+    <X>45</X>
+    <Y>2196</Y>
+    <FontSize>22</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119030104</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>信息填报人</Text>
+    <X>134</X>
+    <Y>2259</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119030131</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>省级负责人</Text>
+    <X>491</X>
+    <Y>2259</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119030157</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>信息填报人员联系电话</Text>
+    <X>76</X>
+    <Y>2297</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119030233</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>省级负责人联系电话</Text>
+    <X>450</X>
+    <Y>2297</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119030309</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>信息填报单位</Text>
+    <X>119</X>
+    <Y>2338</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>Lab140119030337</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <Text>信息审核单位</Text>
+    <X>484</X>
+    <Y>2338</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_TDCBJYQ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_TDCBJYQ</KeyOfEn>
+    <Name>土地承包经营权</Name>
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>591.36</X>
+    <Y>1812.55</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_DF_FKF</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_DF_FKF</KeyOfEn>
+    <Name>YS_TZ_DF_FKF</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>221.82</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>563.91</X>
+    <Y>372.18</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_QT_QTZJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_QT_QTZJ</KeyOfEn>
+    <Name>YS_TZ_QT_QTZJ</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>221.82</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>566.55</X>
+    <Y>408.55</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_DF_ZYFPXZF</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_DF_ZYFPXZF</KeyOfEn>
+    <Name>YS_TZ_DF_ZYFPXZF</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>157.27</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <X>239.09</X>
+    <Y>291.73</Y>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_ZhaiJiDi</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>ZhaiJiDi</KeyOfEn>
+    <Name>宅基地使用权</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>451</X>
+    <Y>1851</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_FuKenMianJi</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>FuKenMianJi</KeyOfEn>
+    <Name>复垦面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>559</X>
+    <Y>1567</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_ShiFouLiShiYiZhanYong</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>ShiFouLiShiYiZhanYong</KeyOfEn>
+    <Name>是否历史已占用</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>453</X>
+    <Y>972</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_ShiFouYiZhanYong</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>ShiFouYiZhanYong</KeyOfEn>
+    <Name>是否历史已占用</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>970</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_TuDiTaXiang</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>TuDiTaXiang</KeyOfEn>
+    <Name>土地他项权利</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>599</X>
+    <Y>1852</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_XiangMuYanShouBianHao</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>XiangMuYanShouBianHao</KeyOfEn>
+    <Name>项目验收编号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>559</X>
+    <Y>139</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_JBNTZL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_JBNTZL</KeyOfEn>
+    <Name>YS_GM_JBNTZL</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>162.73</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240.82</X>
+    <Y>567.82</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_JSJSYDZJGDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_JSJSYDZJGDMJ</KeyOfEn>
+    <Name>增加耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>173</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>588</X>
+    <Y>737</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_KF</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_KF</KeyOfEn>
+    <Name>开发规模</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>160</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240</X>
+    <Y>610</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_CRJXZGD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_CRJXZGD</KeyOfEn>
+    <Name>用于新增耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>562</X>
+    <Y>852</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_DFLCXZFXZGD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_DFLCXZFXZGD</KeyOfEn>
+    <Name>地方留成新增耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>159</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240</X>
+    <Y>886</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_FKYWRTZXZGD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_FKYWRTZXZGD</KeyOfEn>
+    <Name>土地新增耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>202</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>887</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_GDKKFXZGD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_GDKKFXZGD</KeyOfEn>
+    <Name>新增耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>301</X>
+    <Y>1021</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_KYYZBP</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_KYYZBP</KeyOfEn>
+    <Name>占补平衡面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>159</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>239</X>
+    <Y>969</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_QTZJXZGD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_QTZJXZGD</KeyOfEn>
+    <Name>其他资金新增耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>930</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_TDFKXZGD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_TDFKXZGD</KeyOfEn>
+    <Name>土地复垦费新增耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>161</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240</X>
+    <Y>929</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_ZXBCGDZJXZGD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_ZXBCGDZJXZGD</KeyOfEn>
+    <Name>自行新增耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>165</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>559</X>
+    <Y>1020</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGD_ZYZCZJXZGD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGD_ZYZCZJXZGD</KeyOfEn>
+    <Name>中央新增耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>163</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>239</X>
+    <Y>850</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZGDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZGDMJ</KeyOfEn>
+    <Name>实际耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>159</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240</X>
+    <Y>810</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_XZQTNYDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_XZQTNYDMJ</KeyOfEn>
+    <Name>其他农用地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>161</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>241</X>
+    <Y>687</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_ZGM</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_ZGM</KeyOfEn>
+    <Name>实际总规模</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>161</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>239</X>
+    <Y>530</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_ZHHFGDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_ZHHFGDMJ</KeyOfEn>
+    <Name>恢复耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>159</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240</X>
+    <Y>770</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_ZL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_ZL</KeyOfEn>
+    <Name>整理规模</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>559</X>
+    <Y>531</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_ZLHJSYDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_ZLHJSYDMJ</KeyOfEn>
+    <Name>后建设用地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>162</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>238</X>
+    <Y>731</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_ZLQJSYDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_ZLQJSYDMJ</KeyOfEn>
+    <Name>建设用地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>174</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>585</X>
+    <Y>689</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_ZZHGDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_ZZHGDMJ</KeyOfEn>
+    <Name>整治后耕地面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>197</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>562</X>
+    <Y>650</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_GBD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_GBD</KeyOfEn>
+    <Name>归并度</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>201</X>
+    <Y>2127</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_GYTDSYQ_TDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_GYTDSYQ_TDMJ</KeyOfEn>
+    <Name>国有土地所有权</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>1890</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_JSYDSYQ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_JSYDSYQ</KeyOfEn>
+    <Name>建设用地使用权(不包括宅基地)</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>267</X>
+    <Y>1851</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_JSYDSYQ_TDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_JSYDSYQ_TDMJ</KeyOfEn>
+    <Name>建设用地使用权</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>203</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>558</X>
+    <Y>1936</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_LX</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_LX</KeyOfEn>
+    <Name>权属调整</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>202</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>199</X>
+    <Y>1974</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_NCJTTDSYQ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_NCJTTDSYQ</KeyOfEn>
+    <Name>农村集体土地所有权</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>268</X>
+    <Y>1812</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_NCJTTDSYQ_TDMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_NCJTTDSYQ_TDMJ</KeyOfEn>
+    <Name>农村集体土地所有权</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>202</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>199</X>
+    <Y>1891</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_SSZT</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_SSZT</KeyOfEn>
+    <Name>权属调整主体</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>1975</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_SUYQZMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_SUYQZMJ</KeyOfEn>
+    <Name>权属调整土地所有权</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>200</X>
+    <Y>2015</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_SYQZMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_SYQZMJ</KeyOfEn>
+    <Name>权属调整使用权</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>2015</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_TDBL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_TDBL</KeyOfEn>
+    <Name>土地比例</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>199</X>
+    <Y>2052</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_JMFQFK</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_JMFQFK</KeyOfEn>
+    <Name>居民点复垦面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>199</X>
+    <Y>1573</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_JSCZS</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_JSCZS</KeyOfEn>
+    <Name>减少村庄数量</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>199</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>200</X>
+    <Y>1688</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_JSGGMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_JSGGMJ</KeyOfEn>
+    <Name>节水灌溉面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>199</X>
+    <Y>1531</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_JSHGDZLDJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_JSHGDZLDJ</KeyOfEn>
+    <Name>后平均质量等级</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>202</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>558</X>
+    <Y>1610</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_JSQGDZLDJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_JSQGDZLDJ</KeyOfEn>
+    <Name>平均质量等级</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>198</X>
+    <Y>1612</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_NTFLMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_NTFLMJ</KeyOfEn>
+    <Name>防涝面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>561</X>
+    <Y>1492</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_NTGGMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_NTGGMJ</KeyOfEn>
+    <Name>农田灌溉面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>198</X>
+    <Y>1489</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_RJXZCSR</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_RJXZCSR</KeyOfEn>
+    <Name>新增纯收入</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>1649</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_STLSZL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_STLSZL</KeyOfEn>
+    <Name>水土流失治理面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>1530</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_XMJSSYR</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_XMJSSYR</KeyOfEn>
+    <Name>项目区受益人数</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>202</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>1690</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_CX_XZLSCN</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_CX_XZLSCN</KeyOfEn>
+    <Name>新增粮食产能</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>199</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>201</X>
+    <Y>1649</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_BZ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_BZ</KeyOfEn>
+    <Name>泵站</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>1217</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_DYSPDXL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_DYSPDXL</KeyOfEn>
+    <Name>低压输电线路</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>197</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>561</X>
+    <Y>1330</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_GD</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_GD</KeyOfEn>
+    <Name>灌排管道</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>561</X>
+    <Y>1289</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_GYSPDXL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_GYSPDXL</KeyOfEn>
+    <Name>高雅输配电线路</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>202</X>
+    <Y>1329</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_NTFHLGCL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_NTFHLGCL</KeyOfEn>
+    <Name>农用防护林工程量</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>200</X>
+    <Y>1209</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_NYJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_NYJ</KeyOfEn>
+    <Name>农用井</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>559</X>
+    <Y>1253</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_NYQ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_NYQ</KeyOfEn>
+    <Name>农用桥涵</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>199</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>200</X>
+    <Y>1288</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_PZMJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_PZMJ</KeyOfEn>
+    <Name>土地平整面积</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>200</X>
+    <Y>1169</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_TFGCL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_TFGCL</KeyOfEn>
+    <Name>土方工程量</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>197</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>1176</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_TJDLGC</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_TJDLGC</KeyOfEn>
+    <Name>田间道路工程量</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>199</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>201</X>
+    <Y>1369</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GCL_XS</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GCL_XS</KeyOfEn>
+    <Name>蓄水池</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>199</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>200</X>
+    <Y>1250</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_FK</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_FK</KeyOfEn>
+    <Name>复垦规模</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>561</X>
+    <Y>571</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_GBL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_GBL</KeyOfEn>
+    <Name>高标准农田规模</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>610</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_GM_GBLJSTJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_GM_GBLJSTJ</KeyOfEn>
+    <Name>建设条件</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>159</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240</X>
+    <Y>648</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_TBDW</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>TBDW</KeyOfEn>
+    <Name>填报单位</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>204</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>197</X>
+    <Y>2334</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_TBR</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>TBR</KeyOfEn>
+    <Name>填报人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>198</X>
+    <Y>2255</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_FZR</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>FZR</KeyOfEn>
+    <Name>负责人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>202</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>561</X>
+    <Y>2255</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_GuoYouTuDi</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>GuoYouTuDi</KeyOfEn>
+    <Name>国有土地所有权</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>449</X>
+    <Y>1812</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_LXDH</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>LXDH</KeyOfEn>
+    <Name>联系电话</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>202</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>197</X>
+    <Y>2296</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_LXDH2</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>LXDH2</KeyOfEn>
+    <Name>联系电话2</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>201</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>561</X>
+    <Y>2295</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_OID</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_SHDW</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>SHDW</KeyOfEn>
+    <Name>审核单位</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>203</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>559</X>
+    <Y>2334</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_DF_FKYWRTZ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_DF_FKYWRTZ</KeyOfEn>
+    <Name>土地复垦投资</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>161</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240</X>
+    <Y>408</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_DF_GDKKF</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_DF_GDKKF</KeyOfEn>
+    <Name>耕地开垦费</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>159</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>240</X>
+    <Y>327</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_DF_ZXBCGDZJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_DF_ZXBCGDZJ</KeyOfEn>
+    <Name>自行补充耕地资金</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>224</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>565</X>
+    <Y>332</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_TDCBJYQ1</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_TDCBJYQ1</KeyOfEn>
+    <Name>土地承包经营权</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>199</X>
+    <Y>1936</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_TZBL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_TZBL</KeyOfEn>
+    <Name>调整比例</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>2053</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_ZZHTKSL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_ZZHTKSL</KeyOfEn>
+    <Name>后土地数量</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>199</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>560</X>
+    <Y>2089</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_QSGL_ZZQTKSL</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_QSGL_ZZQTKSL</KeyOfEn>
+    <Name>前田地数量</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>199</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>199</X>
+    <Y>2086</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_DF_CRJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_DF_CRJ</KeyOfEn>
+    <Name>农业土地开发收入</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>111</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>288</X>
+    <Y>369</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_DF_DFLCXZF</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_DF_DFLCXZF</KeyOfEn>
+    <Name>地方留成资金</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>226</UIWidth>
+    <UIHeight>26</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>564</X>
+    <Y>292</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_DFZJ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_DFZJ</KeyOfEn>
+    <Name>地方资金</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>627</X>
+    <Y>250</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_TZ_ZTZ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_TZ_ZTZ</KeyOfEn>
+    <Name>实际总投资额</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>255</X>
+    <Y>247</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_YSDW</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_YSDW</KeyOfEn>
+    <Name>验收单位</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>216</UIWidth>
+    <UIHeight>27</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>182</X>
+    <Y>98</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_YSRQ</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_YSRQ</KeyOfEn>
+    <Name>验收日期</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>215</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>182</X>
+    <Y>133</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>YSXX_YS_YSWH</MyPK>
+    <FK_MapData>YSXX</FK_MapData>
+    <KeyOfEn>YS_YSWH</KeyOfEn>
+    <Name>验收文号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>198</UIWidth>
+    <UIHeight>26</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>240</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>559</X>
+    <Y>98</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_GroupField>
+    <OID>240</OID>
+    <Lab>01.验收信息</Lab>
+    <EnName>YSXX</EnName>
+    <Idx>1</Idx>
+    <GUID />
+  </Sys_GroupField>
+</NewDataSet>

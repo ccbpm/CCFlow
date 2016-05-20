@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 扩展  -->
+  <FieldExt111 No="Back"     CH="返回"   DFor="TB,DDL,Checkbox" URL="Do.aspx?DoType=DobackToF" />
+    <FieldExt No="PageLoadFull"  CH="装载填充"   DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=34" />
+  <FieldExt11 No="AutoFull"      CH="数据获取"   DFor="TB,DDL,Checkbox" URL="AutoFull.aspx?s=3" />
+  <FieldExt11 No="ActiveDDL"     CH="级联下拉框" DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+    <FieldExt11 No="InputCheck"    CH="脚本验证"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+    <FieldExt No="TBFullCtrl"    CH="文本框自动完成"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+  <FieldExt11 No="DDLFullCtrl"   CH="下拉框自动完成"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+
+  <!-- 为精英修改移动到字段属性里.  -->
+    <FieldExt11 No="AutoFullDLL"   CH="动态填充下拉框"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+    <FieldExt11 No="Link"   CH="字段超连接"  DFor="TB" URL="MapExt.aspx?s=3" />
+    <FieldExt11 No="PopVal"        CH="Pop返回值" DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+    <FieldExt No="AotuGenerNo"   CH="自动生成编号" DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+  <FieldExt11 No="RegularExpression"   CH="正则表达式/事件" DFor="TB" URL="MapExt.aspx?s=3" />
+
+  <FieldExt No="Func"          CH="功能执行"  DFor="TB,DDL,Checkbox" URL="MapExt.aspx?s=3" />
+
+  <FieldExt No="WordFrm"          CH="Word表单属性"  URL="MapExt.aspx?s=3" />
+  <FieldExt No="ExcelFrm"          CH="Excel表单属性"  URL="MapExt.aspx?s=3" />
+
+
+  <ExpFunc No="Word"        CH="导出Word模板"  />
+  <ExpFunc No="PDF"         CH="导出PDF模板"  />
+  <ExpFunc No="Excel"       CH="导出Excel模板"  />
+  <ExpFunc No="Aspx"        CH="导出aspx表单模板"  />
+  <ExpFunc No="php"         CH="导出php表单模板"  />
+  <ExpFunc No="jsp"         CH="导出jsp表单模板"  />
+    
+  <TBEvent No="kepress"     CH="Pop返回值"  />
+  <TBEvent No="PopVal"      CH="Pop返回值"  />
+
+  
+  <!--<InputCheck No="100" DFor="String" CH="文本框只能输入数字代码(小数点也不能输入)"
+              AlertCH="您必须输入只能输入数字代码" />
+  <TBEvent DFor="100" No="kepress"  CH="" />-->
+
+ <![CDATA[
+ &lt; < 小于号 
+&gt; > 大于号 
+&amp; & 和 
+&apos; ' 单引号 
+&quot; " 双引号
+单引号是&apos;  ，双引号是&quot; 其实还有：&是&amp;，>是&gt; ， <是&lt; ，空格是&nbsp; 等。
+ ]]>
+
+  <InputCheck No="103" DFor="String" CH="E-mail"  />
+  <TBEvent DFor="103" EventName="onblur" Func="isEmail(this.value);" />
+
+  <InputCheck No="104" DFor="String" CH="检查输入的手机号码格式"  />
+  <TBEvent DFor="104" EventName="onblur" Func="checkMobilePhone(this.value);" />
+
+  <InputCheck No="105" DFor="String" CH="检查输入的固定电话号码是否正确"  />
+  <TBEvent DFor="105" EventName="onblur" Func="checkTelephone(this.value);" />
+
+  <InputCheck No="106" DFor="String" CH="检查输入的身份证号是否正确"  />
+  <TBEvent DFor="106" EventName="onblur" Func="checkCard(this.value);" />
+  
+  <!--<InputCheck No="101" DFor="String" CH="座机号码" />
+  <InputCheck No="102" DFor="String" CH="手机号码"  />
+  <InputCheck No="103" DFor="String" CH="E-mail"  />
+  <InputCheck No="104" DFor="String" CH="URL"  />
+  <InputCheck No="105" DFor="String" CH="手机号码"  />
+  <InputCheck No="106" DFor="String" CH="身份证号"  />
+  <InputCheck No="107" DFor="String" CH="必须是汉字"  />
+  <InputCheck No="108" DFor="String" CH="必须是英文"  />
+  <InputCheck No="109" DFor="String" CH="必须是数字"  />
+  <InputCheck No="110" DFor="String" CH="是否是英文数字下划线格式(例如:用户名)"  />
+  <InputCheck No="200" DFor="Int" CH="取值范围"
+                JS="this.value=this.value.replace(/\D/g,'')" />
+
+  <InputCheck No="300" DFor="Data" CH="日期输入不能为空"
+              JS="this.value=this.value.replace(/\D/g,'')" />-->
+  
+</NewDataSet>

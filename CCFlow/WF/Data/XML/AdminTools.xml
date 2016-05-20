@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <AdminTools>
+    <ICON> ../../Images/System/Admin.gif </ICON>
+    <URL> ../UIEns.aspx?EnsName=BP.Port.Emps</URL>
+    <Name>用户维护</Name>
+    <DESC> 用户增加、删除、修改系统用户。</DESC>
+    <DFor>管理员</DFor>
+    <Enable>0</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON> ../../Images/System/Admin.gif </ICON>
+    <URL> ../Sys/SystemClass.aspx</URL>
+    <Name>系统实体报表</Name>
+    <DESC> 列出系统的报表的实体，您可以得到整体的数据结构。</DESC>
+    <DFor>管理员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON> ../../Images/System/Admin.gif </ICON>
+    <URL>  ../Sys/DBRpt.aspx </URL>
+    <Name>数据体检</Name>
+    <DESC> 检查出错误的不符合输入规范的数据。</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON> ../../Images/System/Admin.gif </ICON>
+    <URL> DTS.aspx </URL>
+    <Name>调度</Name>
+    <DESC> 他就是手工的执行系统的调度。</DESC>
+    <DFor>管理员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON> ../../Images/System/Admin.gif </ICON>
+    <URL> ResetUserPass.aspx</URL>
+    <Name>重新设置用户密码</Name>
+    <DESC> 如果用户丢掉了密码，管理员就可以根据用户提供的用户编号，把密码恢复为pub.。</DESC>
+    <DFor>管理员</DFor>
+    <Enable>0</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../Sys/DBIO.aspx</URL>
+    <Name>数据迁徙</Name>
+    <DESC> 为了解决各种数据库相互转换的问题。适应oracle, access, sqlserver sybase 数据转换的需要。</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif</ICON>
+    <URL> ../Sys/Sys_Check.aspx</URL>
+    <Name>用户部门和岗位检测</Name>
+    <DESC>对操作员进行维护时可能产生了无用的用户部门和岗位信息，这些信息要及时清理，否则会对系统的正常运行造成影响！</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../Sys/DeleteFlow.aspx</URL>
+    <Name>清空流程系统数据</Name>
+    <DESC>清空流程系统里所有数据表里的数据</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../Sys/Log.aspx</URL>
+    <Name>日志管理</Name>
+    <DESC> 系统中的日志</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../Sys/Cash.aspx</URL>
+    <Name>内存管理</Name>
+    <DESC> 内存管理</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../Sys/TestHost.aspx</URL>
+    <Name>系统性能测试</Name>
+    <DESC> 系统性能测试</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../Sys/ConnView.aspx</URL>
+    <Name>数据库连接管理</Name>
+    <DESC> 系统性能测试</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../Group.aspx?EnsName=BP.WF.RunRecords</URL>
+    <Name>流程性能分组分析</Name>
+    <DESC>用来分析每个节点运行性能</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../Contrast.aspx?EnsName=BP.WF.RunRecords&amp;ContrastObj=FK_Node</URL>
+    <Name>流程性能对比分析</Name>
+    <DESC>用来分析每个节点运行性能</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+
+  <AdminTools>
+    <ICON>../../Images/System/Admin.gif </ICON>
+    <URL> ../MethodLink.aspx</URL>
+    <Name>方法执行</Name>
+    <DESC>方法执行</DESC>
+    <DFor>开发人员</DFor>
+    <Enable>1</Enable>
+  </AdminTools>
+</NewDataSet>

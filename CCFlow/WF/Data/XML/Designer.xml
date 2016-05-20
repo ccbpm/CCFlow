@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 系统设置菜单树  -->
+  <Menu No="01" Name="" CH="系统设置"  W="700" H="800" Url=""  Icon="../Images/TreeMenu/System.png" />
+  <Menu No="0103" Name="" CH="表结构"  W="700" H="800" Url="/WF/Comm/Sys/SystemClass.aspx"  Icon="" />
+  <Menu No="0102" Name="" CH="系统枚举值"  W="700" H="800" Url="/WF/Comm/Sys/EnumList.aspx" Icon=""  />
+  
+  <Menu No="0103" Name="" CH="数据源"  W="700" H="800" Url="/WF/Comm/Sys/SFTableList.aspx" Icon=""  />
+  <Menu No="0103" Name="" CH="编码表"  W="700" H="800" Url="/WF/Comm/Sys/SFTableList.aspx" Icon=""  />
+
+  <Menu No="0103" Name="" CH="JS校验库"  W="700" H="800" Url="/WF/Comm/Sys/FuncLib.aspx"  Icon="" />
+  <Menu No="0103" Name="" CH="功能执行"  W="700" H="800" Url="/WF/Comm/MethodLink.aspx"  Icon="" />
+  <Menu No="0103" Name="" CH="预先审批权规则设置"  W="700" H="800" Url="/WF/Admin/GetTask.aspx"  Icon="" />
+  <Menu No="0103" Name="" CH="文件上传"  W="700" H="800" Url="/WF/Admin/FileUploadEUI.aspx"  Icon="" />
+  
+  <Menu No="02" Name="" CH="组织结构"  W="700" H="800" Url=""    Icon="../Images/TreeMenu/Org.png"  />
+  <Menu No="0201" Name="" CH="部门维护"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.WF.Port.Depts"  Icon="" />
+  <Menu No="0202" Name="" CH="岗位维护"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.WF.Port.Stations" Icon=""  />
+  <Menu No="0203" Name="" CH="操作员维护"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.WF.Port.Emps" Icon=""  />
+
+  <!--<Menu No="0103" Name="" CH="全局变量"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.Sys.GloVars" Icon=""  />-->
+  <!--<Menu No="0101" Name="" CH="全局设置"  W="700" H="800" Url="/WF/Comm/Sys/EditWebConfig.aspx" Icon=""  />-->
+
+  <!--<Menu No="03" Name="" CH="项目管理(需要引用BP.Prj)"  W="700" H="800" Url=""    Icon="../Images/TreeMenu/Org.png"  />
+  <Menu No="0301" Name="" CH="项目维护"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.PRJ.Prjs"  Icon="" />
+  <Menu No="0302" Name="" CH="资料树节点访问规则"  W="700" H="800" Url="/PRJ/NodeAccess.aspx"  Icon="" />-->
+
+     <!--流程数据-->  
+  <!--<FlowData No="01" Name="" CH="流程优化"  W="700" H="800" Url="" Icon="../Images/TreeMenu/FlowOrg.png"  />
+  <FlowData No="0101" Name="" CH="流程查询"  W="700" H="800" Url="/WF/FlowSearch.aspx" Icon=""  />
+  <FlowData No="0102" Name="" CH="节点查询"  W="700" H="800" Url="/WF/FlowSearch.aspx" Icon=""  />
+  <FlowData No="0103" Name="" CH="成本分析"  W="700" H="800" Url="/WF/FlowSearch.aspx" Icon=""  />-->
+
+    <FlowData No="01" Name="" CH="系统设置"  W="700" H="800" Url=""  Icon="../Images/TreeMenu/System.png" />
+    <FlowData No="0103" Name="" CH="表结构"  W="700" H="800" Url="/WF/Comm/Sys/SystemClass.aspx"  Icon="" />
+    <FlowData No="0102" Name="" CH="系统枚举值"  W="700" H="800" Url="/WF/Comm/Sys/EnumList.aspx" Icon=""  />
+  
+    <FlowData No="0103" Name="" CH="数据源管理"  W="700" H="800" Url="/WF/Comm/Search.aspx?EnsName=BP.Sys.SFDBSrcs" Icon=""  />
+    <FlowData No="0103" Name="" CH="编码表管理"  W="700" H="800" Url="/WF/Comm/Search.aspx?EnsName=BP.Sys.SFTables" Icon=""  />
+
+  <!--<FlowData No="0103" Name="" CH="数据源管理"  W="700" H="800" Url="/WF/Comm/Sys/SFTableList.aspx" Icon=""  />-->
+    <FlowData No="0103" Name="" CH="JS校验库"  W="700" H="800" Url="/WF/Comm/Sys/FuncLib.aspx"  Icon="" />
+    <FlowData No="0103" Name="" CH="功能执行"  W="700" H="800" Url="/WF/Comm/MethodLink.aspx"  Icon="" />
+    <FlowData No="0103" Name="" CH="预先审批权设置"  W="700" H="800" Url="/WF/Admin/GetTask.aspx"  Icon="" />
+    <FlowData No="0103" Name="" CH="文件上传"  W="700" H="800" Url="/WF/Admin/FileUploadEUI.aspx"  Icon="" />
+
+  <!--  模块菜单  -->
+  <FlowData No="02" Name="" CH="BPM模块菜单"  W="700" H="800" Url=""  Icon="../Images/TreeMenu/System.png" />
+  <FlowData No="0201" Name="" CH="菜单结构"  W="700" H="800" Url="/GPM/Default.aspx?RefNo=CCFlowBPM"  Icon="" />
+  <FlowData No="0201" Name="" CH="登录GPM系统"  W="700" H="800" Url="/GPM/Default.aspx?RefNo=CCFlowBPM"  Icon="" />
+
+  <!--<FlowData No="02" Name="" CH="组织结构"  W="700" H="800" Url=""    Icon="../Images/TreeMenu/Org.png"  />
+    <FlowData No="0201" Name="" CH="部门维护"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.WF.Port.Depts"  Icon="" />
+    <FlowData No="0202" Name="" CH="岗位维护"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.WF.Port.Stations" Icon=""  />
+    <FlowData No="0203" Name="" CH="操作员维护"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.WF.Port.Emps" Icon=""  />-->
+
+    <!--
+    如果您想使用项目管理类的流程，请引用如下链接.
+    
+    <FlowData No="03" Name="" CH="项目管理(需要引用BP.Prj)"  W="700" H="800" Url=""    Icon="../Images/TreeMenu/Org.png"  />
+    <FlowData No="0301" Name="" CH="项目维护"  W="700" H="800" Url="/WF/Comm/PanelEns.aspx?EnsName=BP.PRJ.Prjs"  Icon="" />
+    <FlowData No="0302" Name="" CH="资料树节点访问规则"  W="700" H="800" Url="/PRJ/NodeAccess.aspx"  Icon="" />-->
+    
+</NewDataSet>

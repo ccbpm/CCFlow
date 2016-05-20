@@ -1,0 +1,1031 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_MapData>
+    <No>Demo_HK01</No>
+    <Name>开行考察工作单-飞行部</Name>
+    <EnPK />
+    <PTable>Demo_HK01</PTable>
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>600</TableWidth>
+    <DBURL>0</DBURL>
+    <Tag />
+    <FrmType>1</FrmType>
+    <FK_FrmSort>04</FK_FrmSort>
+    <FK_FormTree>04</FK_FormTree>
+    <AppType>0</AppType>
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <AtPara />
+    <Idx>100</Idx>
+    <GUID />
+    <FormRunType>1</FormRunType>
+    <URL />
+    <SearchKeys />
+    <FK_Flow />
+    <IsSearchKey>0</IsSearchKey>
+    <DTSearchWay>0</DTSearchWay>
+    <DTSearchKey />
+    <ParentMapData />
+  </Sys_MapData>
+  <Sys_FrmLine>
+    <MyPK>LE_1_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>676</X1>
+    <Y1>78</Y1>
+    <X2>676</X2>
+    <Y2>680</Y2>
+    <BorderWidth>3</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_10_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>42</X1>
+    <Y1>120</Y1>
+    <X2>677</X2>
+    <Y2>120</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_11_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>122</X1>
+    <Y1>80</Y1>
+    <X2>122</X2>
+    <Y2>278</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_12_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>243</X1>
+    <Y1>79</Y1>
+    <X2>243</X2>
+    <Y2>121</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_13_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>322</X1>
+    <Y1>79</Y1>
+    <X2>322</X2>
+    <Y2>121</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_14_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>403</X1>
+    <Y1>79</Y1>
+    <X2>403</X2>
+    <Y2>119</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_15_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>481</X1>
+    <Y1>79</Y1>
+    <X2>481</X2>
+    <Y2>121</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_16_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>43</X1>
+    <Y1>279</Y1>
+    <X2>673</X2>
+    <Y2>279</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_2_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>43</X1>
+    <Y1>319</Y1>
+    <X2>678</X2>
+    <Y2>319</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_3_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>401</X1>
+    <Y1>280</Y1>
+    <X2>401</X2>
+    <Y2>556</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_4_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>517</X1>
+    <Y1>280</Y1>
+    <X2>517</X2>
+    <Y2>557</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_5_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>43</X1>
+    <Y1>557</Y1>
+    <X2>677</X2>
+    <Y2>557</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_6_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>121</X1>
+    <Y1>559</Y1>
+    <X2>121</X2>
+    <Y2>675</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_7_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>39</X1>
+    <Y1>678</Y1>
+    <X2>679</X2>
+    <Y2>678</Y2>
+    <BorderWidth>3</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_8_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>41</X1>
+    <Y1>75</Y1>
+    <X2>41</X2>
+    <Y2>676</Y2>
+    <BorderWidth>3</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_9_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>40</X1>
+    <Y1>77</Y1>
+    <X2>676</X2>
+    <Y2>77</Y2>
+    <BorderWidth>3</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmImg>
+    <MyPK>Img_1_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <ImgAppType>0</ImgAppType>
+    <X>399</X>
+    <Y>18</Y>
+    <H>60</H>
+    <W>200</W>
+    <ImgURL>/CCFormDesigner;component/Img/LogoBig.png</ImgURL>
+    <ImgPath />
+    <LinkURL />
+    <LinkTarget>_blank</LinkTarget>
+    <GUID />
+    <Tag0 />
+    <SrcType>0</SrcType>
+    <IsEdit>0</IsEdit>
+    <Name />
+    <EnPK />
+  </Sys_FrmImg>
+  <Sys_FrmLab>
+    <MyPK>LB_1_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>开航考察工作单-飞行(测试)</Text>
+    <X>40</X>
+    <Y>36</Y>
+    <FontSize>25</FontSize>
+    <FontColor>#FF1312FF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_10_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>考@察@项@目</Text>
+    <X>72</X>
+    <Y>153</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_11_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>1&amp;nbsp;使用机场（包括目的地机场、技术经停机场和备降机场）地形、地貌特征和净空条件。@2&amp;nbsp;使用机场起降方法、进离港程序、等待程序、限制噪音程序和宵禁规定等运行限制及特殊管制规定。@3&amp;nbsp;使用机场跑道、滑行道、停机位及灯光、助航等设备装备及保障情况。@4&amp;nbsp;使用机场通信、气象、航行情报保障能力。@5&amp;nbsp;地面供油设施、设备装备情况及保障能力。@6&amp;nbsp;国际运行沿途各国的空中交通管制及特殊限制规定。</Text>
+    <X>132</X>
+    <Y>140</Y>
+    <FontSize>12</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_12_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>详细考察情况</Text>
+    <X>554</X>
+    <Y>288</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_13_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>是否符合要求</Text>
+    <X>417</X>
+    <Y>289</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_14_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>谈判和/或了解事项</Text>
+    <X>107</X>
+    <Y>289</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_15_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>1&amp;nbsp;跟踪使用机场的落地许可的批复。</Text>
+    <X>80</X>
+    <Y>332</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_16_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>2&amp;nbsp;气象资料、航行通告的提供。</Text>
+    <X>81</X>
+    <Y>371</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_2_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>3&amp;nbsp;领航计划报的拍发。</Text>
+    <X>80</X>
+    <Y>413</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_3_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>4&amp;nbsp;飞行动态监控、信息传递流程。</Text>
+    <X>83</X>
+    <Y>453</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_4_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>5&amp;nbsp;加注燃油程序、燃油规格及价格，燃油冻结的考虑。</Text>
+    <X>81</X>
+    <Y>490</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_5_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>6&amp;nbsp;签派代理及延伸服务内容、形式、费用。</Text>
+    <X>81</X>
+    <Y>527</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_6_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>索取资料@备注</Text>
+    <X>50</X>
+    <Y>590</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_7_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>考察单位</Text>
+    <X>59</X>
+    <Y>92</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_8_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>考察责任人</Text>
+    <X>256</X>
+    <Y>92</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_9_Demo_HK01</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <Text>考察时间</Text>
+    <X>417</X>
+    <Y>90</Y>
+    <FontSize>11</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_BeiZhu</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>BeiZhu</KeyOfEn>
+    <Name>备注</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>548</UIWidth>
+    <UIHeight>101</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>124</X>
+    <Y>562</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_IsOK1</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>IsOK1</KeyOfEn>
+    <Name>是否符合要求</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>415</X>
+    <Y>331</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_IsOK2</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>IsOK2</KeyOfEn>
+    <Name>是否符合要求</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>413</X>
+    <Y>370</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_IsOK3</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>IsOK3</KeyOfEn>
+    <Name>是否符合要求</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>415</X>
+    <Y>411</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_IsOK4</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>IsOK4</KeyOfEn>
+    <Name>是否符合要求</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>415</X>
+    <Y>450</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_IsOk5</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>IsOk5</KeyOfEn>
+    <Name>是否符合要求</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>413</X>
+    <Y>492</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_IsOK6</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>IsOK6</KeyOfEn>
+    <Name>是否符合要求</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>411</X>
+    <Y>529</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_KaoChaDanWei</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>KaoChaDanWei</KeyOfEn>
+    <Name>考察单位</Name>
+    <DefVal>@WebUser.FK_DeptName</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>114</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>126</X>
+    <Y>89</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_KaoChaShiJian</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>KaoChaShiJian</KeyOfEn>
+    <Name>考察时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>488</X>
+    <Y>87</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_KaoChaZeRenRen</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>KaoChaZeRenRen</KeyOfEn>
+    <Name>考察责任人</Name>
+    <DefVal>@WebUser.Name</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>76</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>325</X>
+    <Y>88</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_TB120205120946_1</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>TB120205120946_1</KeyOfEn>
+    <Name />
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>152</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>520</X>
+    <Y>366</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_TB120205120954_1</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>TB120205120954_1</KeyOfEn>
+    <Name />
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>152</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>519</X>
+    <Y>405</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_TB120205121003_1</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>TB120205121003_1</KeyOfEn>
+    <Name />
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>152</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>520</X>
+    <Y>447</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_TB120205121010_1</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>TB120205121010_1</KeyOfEn>
+    <Name />
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>152</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>519</X>
+    <Y>486</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_TB120205121014_1</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>TB120205121014_1</KeyOfEn>
+    <Name />
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>152</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>519</X>
+    <Y>525</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_XiangXiQingKuang</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>XiangXiQingKuang</KeyOfEn>
+    <Name>详细情况</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>152</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>0</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>521</X>
+    <Y>328</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_OID</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_HK01_RDT</MyPK>
+    <FK_MapData>Demo_HK01</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <IDX>999</IDX>
+    <GroupID>436</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+  </Sys_MapAttr>
+  <Sys_GroupField>
+    <OID>436</OID>
+    <Lab>开行考察工作单-飞行</Lab>
+    <EnName>Demo_HK01</EnName>
+    <Idx>1</Idx>
+    <GUID />
+  </Sys_GroupField>
+</NewDataSet>

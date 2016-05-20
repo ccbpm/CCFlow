@@ -1,0 +1,79 @@
+﻿#pageloading
+{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background: white url('../images/loading.gif') no-repeat center;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    filter: Alpha(Opacity=50);
+}
+#show
+{
+    overflow: hidden;
+    z-index: 5px;
+    position: absolute;
+    top: 0px;
+    display: none;
+    margin: 3px;
+    overflow-x: scroll auto;
+    overflow-y: scroll auto;
+}
+.pressure-contet-list
+{
+    width: 532px;
+    margin: 0px 25px 10px 15px;
+    border: #7bc0e9 1px solid;
+    border-top: 0px;
+    overflow: hidden;
+    height: 400px;
+}
+.showcenterdivtable
+{
+    width: 100%;
+    border: solid 0px #dae3e6;
+    text-align: left;
+    float: left;
+    line-height: 20px;
+}
+.showcenterdivtablename
+{
+    width: 80px;
+    height: 25px;
+    text-align: right;
+}
+.showcenterdivtablecontent
+{
+    width: 275px;
+    text-align: left;
+}
+.inputtablecontent
+{
+    border: solid 1px #dae3e6;
+    height: 18px;
+    width: 260px;
+    border-radius: 3px 3px 3px 3px;
+    height: 25px;
+}
+.inputtablecontentremark
+{
+    height: 100px;
+    margin-top: 5px;
+    border: solid 1px #dae3e6;
+    width: 357px;
+    margin-bottom: 5px;
+    border-radius: 4px 4px 4px 4px;
+}
+/*****颜色为蓝色的字体******/
+.sl2, a.sl2
+{
+    color: #336699;
+    font-family: Arial;
+}
+a.sl2:hover
+{
+    color: #3366CC;
+    font-family: Arial;
+    text-decoration: underline;
+}

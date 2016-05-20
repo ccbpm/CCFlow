@@ -1,0 +1,61 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="CCFlow.WF.App.Setting.Site" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>个人设置</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="/DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+ <form id="form1" runat="server" >
+ <table border="1" width='100%' >
+ <caption class="CaptionMsgLong" >个人信息设置</caption>
+ <tr>
+ <td valign="top"  style="padding:5px;"  >
+
+ <ul style="line-height:28px;">
+ <%
+     BP.WF.XML.Tools tools = new BP.WF.XML.Tools();
+     tools.RetrieveAll();
+     if (tools.Count == 0)
+         return;
+
+     string refNo = this.Request.QueryString["RefNo"];
+     if (refNo == null || refNo == "Per")
+         refNo = "Default";
+
+     foreach (BP.WF.XML.Tool tool in tools)
+     {
+         string msg = "";
+         if (tool.No == refNo)
+             msg = "<li><b>" + tool.Name + "</b> </li>";
+         else
+             msg = "<li><a href='"+tool.Url+"?RefNo=" + tool.No + "' >" + tool.Name + "</a></li>";
+        
+         %> <%=msg%> <%
+     }
+        if (BP.Web.WebUser.No == "admin")
+        {
+              %> <a href='?RefNo=AdminSet' >网站设置</a> <%
+        }
+       %>
+     </ul>
+<%--
+ <asp:ContentPlaceHolder ID="Left" runat="server"/>--%>
+
+ </td>
+
+ <td valign="top"  style="width:70%; padding:5px;" >
+
+   <asp:ContentPlaceHolder ID="ContentPlaceHolder2" runat="server"/>
+
+ </td>
+            </tr>
+        </table>
+
+        </form>
+         
+</body>
+</html>

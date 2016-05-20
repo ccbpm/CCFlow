@@ -1,0 +1,101 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/WF/WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.OneFlow.WF_OneFlow_MasterPage" Codebehind="MasterPage.master.cs" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+   <meta http-equiv="Page-Enter" content="revealTrans(duration=0.5, transition=8)" />
+<%--
+    <script language="JavaScript" src="MsgAlert.js"></script>--%>
+    <script type="text/javascript" >
+        function RSize() {
+            if (document.body.scrollWidth > (window.screen.availWidth - 100)) {
+                window.dialogWidth = (window.screen.availWidth - 100).toString() + "px"
+            } else {
+                window.dialogWidth = (document.body.scrollWidth + 50).toString() + "px"
+            }
+
+            if (document.body.scrollHeight > (window.screen.availHeight - 70)) {
+                window.dialogHeight = (window.screen.availHeight - 50).toString() + "px"
+            } else {
+                window.dialogHeight = (document.body.scrollHeight + 115).toString() + "px"
+            }
+            window.dialogLeft = ((window.screen.availWidth - document.body.clientWidth) / 2).toString() + "px"
+            window.dialogTop = ((window.screen.availHeight - document.body.clientHeight) / 2).toString() + "px"
+        }
+        function NoSubmit(ev) {
+            if (window.event.srcElement.tagName == "TEXTAREA")
+                return true;
+
+            if (ev.keyCode == 13) {
+                window.event.keyCode = 9;
+                ev.keyCode = 9;
+                return true;
+            }
+            return true;
+        }
+        function DelDraft(workid,nodeID) {
+            if (window.confirm('您确定要删除草稿吗？') == false)
+                return;
+            var url = "Do.aspx?DoType=DelDraft&WorkID=" + workid+'&FK_Node='+nodeID;
+            WinShowModalDialog(url, 'dd');
+            window.location.href = window.location.href;
+        }
+    </script>
+    <meta content="MSHTML 6.00.2800.1106" name=GENERATOR>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+
+<table style="width:100%">
+<tr>
+<td width="3%" valign=top style=" background-color:#FFFFFF">
+<img src="../../DataUser/Icon/LogBiger_CCS.png" border=0 />
+<br />
+<fieldset>
+<%
+    string fk_flow = this.Request.QueryString["FK_Flow"];
+    BP.WF.Flow fl = new BP.WF.Flow(fk_flow);
+%>
+<legend><h3>流程:<%=fl.Name %></h3></legend>
+<ul>
+<% if (string.IsNullOrEmpty(fk_flow) == false)
+   { %>
+<li><a href='Archive.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/Save.png' class=Icon>查询</a></li>
+<li><a href='MyFlow.aspx?FK_Flow=<%=fk_flow %>' ><img src='./../Img/New.png' class=Icon>新建</a></li>
+<li><a href='Draft.aspx?FK_Flow=<%=fk_flow %>' ><img src='./../Img/WFState/Draft.png' class=Icon>草稿</a></li>
+<li><a href='Working.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/EmpWorks.gif' class=Icon>待办</a></li>
+<li><a href='HungUp.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName&IsHungUp=1' ><img src='./../Img/WFState/HungUp.png' class=Icon>挂起</a></li>
+<li><a href='Runing.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/Runing.png' class=Icon>运行中</a></li>
+<li><a href='CC.aspx?FK_Flow=<%=fk_flow %>&GroupBy=Rec' ><img src='./../Img/CCSta/CC.gif' class=Icon>抄送</a></li>
+<li><a href='Cancel.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/Action/FlowOverByCoercion.png' class=Icon>撤销</a></li>
+<li><a href='Archive.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/Save.png' class=Icon>归档</a></li>
+<%}
+   else
+   { %>
+<li><a href='Start.aspx?FK_Flow=<%=fk_flow %>' >发起列表</a></li>
+<li><a href='Working.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' >待办</a></li>
+<li><a href='Working.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' >挂起</a></li>
+<li><a href='Runing.aspx?FK_Flow=<%=fk_flow %>&GroupBy=RecName' >运行中</a></li>
+ <%} %>
+<%--<li><a href='Archive.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/HungUp.png' class=Icon>切换</a></li>--%>
+</ul>
+</fieldset>
+<%--
+<fieldset>
+<legend><h3>全部流程</h3></legend>
+<ul>
+<li><a href='Start.aspx?FK_Flow=<%=fk_flow %>' >发起列表</a></li>
+<li><a href='Working.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' >待办</a></li>
+<li><a href='Working.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' >挂起</a></li>
+<li><a href='Runing.aspx?FK_Flow=<%=fk_flow %>&GroupBy=RecName' >运行中</a></li>
+<li><a href='Working.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' >抄送</a></li>
+</ul> 
+</fieldset>
+--%>
+
+
+</td>
+        <td valign=top>
+   <asp:ContentPlaceHolder ID="Right" runat="server">
+        </asp:ContentPlaceHolder>
+        </td>
+        </tr>
+        </table>
+</asp:Content>
+

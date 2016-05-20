@@ -1,0 +1,28 @@
+﻿<controls:ChildWindow x:Class="CCForm.FrmLab"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+           Width="400" Height="300" 
+           Title="标签属性" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+    <Grid x:Name="LayoutRoot" Margin="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="166*" />
+            <ColumnDefinition Width="72*" />
+            <ColumnDefinition Width="140*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="1" Grid.Column="2" />
+        <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1" />
+        <sdk:Label Content="标签文本(@符号表示换行.)" Height="28" HorizontalAlignment="Left" Margin="12,10,0,0" Name="label1" VerticalAlignment="Top" Width="195" Grid.ColumnSpan="2" />
+        <TextBox Height="167" HorizontalAlignment="Left" 
+                 Margin="10,28,0,0" Name="TB_Text" VerticalAlignment="Top" 
+                 Width="356" Grid.ColumnSpan="3" TextWrapping="Wrap" />
+        <sdk:Label Content="字体大小" Height="28" HorizontalAlignment="Left" Margin="13,200,0,0" Name="label4" VerticalAlignment="Top" Width="50" Grid.RowSpan="2" />
+        <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,196,36,0" Name="DDL_FrontSize" VerticalAlignment="Top" Width="66" />
+        <sdk:Label Grid.ColumnSpan="3" Height="28" HorizontalAlignment="Left" Margin="139,200,0,0" Name="label2" VerticalAlignment="Top" Width="228" Content="说明:用工具栏可改变字体的颜色,风格." Grid.RowSpan="2" />
+    </Grid>
+</controls:ChildWindow>

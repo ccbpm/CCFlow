@@ -1,0 +1,30 @@
+﻿<Button x:Class="Toolbar.ToolbarBtn"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+	Width="30" Height="30" Opacity="0.75">
+    <Button.Resources>
+		<Storyboard x:Name="Activate">
+			<DoubleAnimation BeginTime="0:0:0" Duration="0:0:0.2" 
+                             Storyboard.TargetProperty="Width"
+								 To="30"/>
+			<DoubleAnimation BeginTime="0:0:0" Duration="0:0:0.2" 
+                             Storyboard.TargetProperty="Height"
+								 To="30"/>
+			<DoubleAnimation BeginTime="0:0:0" Duration="0:0:0.2" 
+                             Storyboard.TargetProperty="Opacity"
+								 To="1.0"/>
+		</Storyboard>
+        
+		<Storyboard x:Name="Deactivate">
+			<DoubleAnimation BeginTime="0:0:0" Duration="0:0:0.2" 
+                             Storyboard.TargetProperty="Width"
+								 To="30"/>
+			<DoubleAnimation BeginTime="0:0:0" Duration="0:0:0.2" 
+                             Storyboard.TargetProperty="Height"
+								 To="30"/>
+			<DoubleAnimation BeginTime="0:0:0" Duration="0:0:0.2" 
+                             Storyboard.TargetProperty="Opacity"
+								 To="0.75"/>
+		</Storyboard>
+	</Button.Resources>
+</Button>

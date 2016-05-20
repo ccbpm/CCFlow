@@ -1,0 +1,54 @@
+﻿
+.Btn
+{
+    border: 0;
+    background: #4D77A7;
+    color: #FFF;
+    font-size: 12px;
+    padding: 6px 10px;
+    margin: 5px;
+}
+#divCCForm
+{
+    position: relative !important;
+    background-color: white;
+    margin: 0 auto;
+}
+.Message
+{
+
+    margin: 0 auto;
+    background: white;
+    display: table;
+}
+#topBar
+{
+    margin: 0 auto;
+    background: white;
+    text-align: left;
+}
+.topBar
+{
+    margin: 0 auto;
+    background: white;
+    text-align: left;
+    border-bottom: 1px solid #4D77A7;
+}
+
+.flowInfo
+{
+    margin: 0 auto;
+    background: white;
+    display: table;
+}
+.childThread
+{
+    margin: 0 auto;
+    background: white;
+    display: table;
+}
+.pub2Class
+{
+    margin: 0 auto;
+    display: table;
+}

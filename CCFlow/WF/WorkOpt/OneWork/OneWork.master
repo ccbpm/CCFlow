@@ -1,0 +1,50 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="CCFlow.WF.OneWork.WF_WorkOpt_OneWork"
+    CodeBehind="OneWork.master.cs" %>
+
+<%@ Register Src="../../Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+        <script type="text/javascript">
+            function RSize() {
+                if (document.body.scrollWidth > (window.screen.availWidth - 100)) {
+                    window.dialogWidth = (window.screen.availWidth - 100).toString() + "px"
+                } else {
+                    window.dialogWidth = (document.body.scrollWidth + 50).toString() + "px"
+                }
+
+                if (document.body.scrollHeight > (window.screen.availHeight - 70)) {
+                    window.dialogHeight = (window.screen.availHeight - 50).toString() + "px"
+                } else {
+                    window.dialogHeight = (document.body.scrollHeight + 115).toString() + "px"
+                }
+                window.dialogLeft = ((window.screen.availWidth - document.body.clientWidth) / 2).toString() + "px"
+                window.dialogTop = ((window.screen.availHeight - document.body.clientHeight) / 2).toString() + "px"
+            }
+        </script>
+    </asp:ContentPlaceHolder>
+    <base target="_self" />
+</head>
+<body class="easyui-layout">
+    <form id="form1" runat="server">
+    <div data-options="region:'north',split:false,noheader:true,border:false" style="height: 35px;overflow-y:hidden;
+    ">
+        <ul class="hornavlist">
+            <uc1:Pub ID="Pub1" runat="server" />
+        </ul>
+    </div>
+    <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>

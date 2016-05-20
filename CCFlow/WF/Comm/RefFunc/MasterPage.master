@@ -1,0 +1,94 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="CCFlow.WF.Comm.RefFunc.MasterPage"
+    CodeBehind="MasterPage.master.cs" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Untitled Page</title>
+    <link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        $(window).resize(function () {
+
+        });
+        function SelectAll(cb_selectAll) {
+            var arrObj = document.all;
+            if (cb_selectAll.checked) {
+                for (var i = 0; i < arrObj.length; i++) {
+                    if (typeof arrObj[i].type != "undefined" && arrObj[i].type == 'checkbox') {
+                        arrObj[i].checked = true;
+                    }
+                }
+            } else {
+                for (var i = 0; i < arrObj.length; i++) {
+                    if (typeof arrObj[i].type != "undefined" && arrObj[i].type == 'checkbox')
+                        arrObj[i].checked = false;
+                }
+            }
+        }
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+        <base target="_self" />
+    </asp:ContentPlaceHolder>
+    <meta http-equiv="Page-Enter" content="blendTrans(Duration=0.5)" />
+    <script language="JavaScript" src="../JScript.js"></script>
+    <script language="JavaScript" src="../JS/Calendar/WdatePicker.js" defer="defer"></script>
+    <script language="JavaScript" src="../Menu.js"></script>
+    <script language="JavaScript" src="../ShortKey.js"></script>
+    <script language="javascript">
+        var currShow;
+
+        function ShowEn(url, wName, h, w) {
+            var s = "dialogWidth=" + parseInt(w) + "px;dialogHeight=" + parseInt(h) + "px;resizable:yes";
+            var val = window.showModalDialog(url, null, s);
+            window.location.href = window.location.href;
+        }
+
+        function ImgClick() {
+        }
+
+        function OpenAttrs(ensName) {
+            var url = '../Sys/EnsAppCfg.aspx?EnsName=' + ensName;
+            var s = 'dialogWidth=680px;dialogHeight=480px;status:no;center:1;resizable:yes'.toString();
+            val = window.showModalDialog(url, null, s);
+            window.location.href = window.location.href;
+        }
+
+        //在右侧框架中显示指定url的页面
+        function OpenUrlInRightFrame(ele, url) {
+            if (ele != null && ele != undefined) {
+                //if (currShow == $(ele).text()) return;
+
+                currShow = $(ele).parents('li').text();//有回车符
+                
+                $.each($(ele).parents('ul').children('li'), function (i, e) {
+                    $(e).children('div').css('font-weight', $(e).text() == currShow ? 'bold' : 'normal');
+                });
+
+                if (url.indexOf('?') == -1)
+                    url += '?1=1';
+
+                $('#rightFrame').empty();
+                $('#rightFrame').append('<iframe scrolling="auto" frameborder="0"  src="' + url + '&s=' + Math.random() + '" style="width:100%;height:100%;"></iframe>');
+            }
+        }
+    </script>
+    <base target="_self" />
+</head>
+<body class="easyui-layout" leftmargin="0" topmargin="0" onkeypress="javascript:Esc();">
+    <form id="aspnetForm" runat="server">
+    <div id="leftFrame" data-options="region:'west',title:'功能列表',split:true" style="width: 200px;
+        padding: 5px">
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    <div id="rightFrame" data-options="region:'center',noheader:true">
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder2" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>

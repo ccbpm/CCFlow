@@ -1,0 +1,282 @@
+/*  Table 风格  */
+body
+{
+    font-size: 12px;
+}
+ 
+.MasterPage
+{
+	background-color: #FFFFFF;
+	font-family: 宋体;
+	font-size: 12px;
+	border-left-style: double;
+	border-right-style: double;
+}
+
+.Caption
+{
+	font: caption;
+	color: black;
+}
+
+.TitleLeft
+{
+	border-right: infobackground thin groove;
+	padding-right: 0px;
+	border-top: infobackground thin groove;
+	padding-left: 1px;
+	padding-bottom: 0px;
+	margin: 0px 0px 0px 1px;
+	border-left: infobackground thin groove;
+	padding-top: 0px;
+	border-bottom: infobackground thin groove;
+	background-color: activeborder;
+	text-align: left;
+}
+.ToolBar
+{
+    background-color: #CCCCFF;
+}
+
+.Title
+{
+    border: thin none #C0C0C0;
+    padding: inherit;
+    margin: inherit;
+    background-color: #eee;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+}
+
+.TitleMsg
+{
+	border-style: none;
+	padding-right: 5px;
+	padding-left: 5px;
+	font-size: 12px;
+	padding-bottom: 5px;
+	margin: 5px;
+	padding-top: 5px;
+	line-height: 12pt;
+	letter-spacing: 0pc;
+	background-color: infobackground;
+}
+ 
+.Idx
+{
+	background-color:#eee;
+	font-size:12px;
+	border:1px solid #ccc;
+	text-align: center;
+}
+ 
+
+/* 在输入信息字段名称，单元格式的风格 */
+.FDesc
+{
+	padding: 4px;
+    text-align: left;
+    font-size: 12px;
+    margin: 4px;
+    background-color: #f4f4f4;
+	border: lightgrey 1px solid;
+	border-top:none;
+}
+
+/* 文本框 */
+.TB
+{
+	font-size: 12px;
+    text-align: left;
+    float: left;
+    clear: left;
+    width:100%;
+    border-width:0px;
+}
+    
+
+
+/* 数值类型文本框 */
+.TBNum
+{
+    font-size: 12px;
+    text-align: right;
+    float: left;
+    clear: left;
+    width:90%;
+    border-width:0px;
+}
+ 
+/* 只读文本框 */
+ .TBReadonly
+{
+    border-style: dashed;
+    font-size: 12px;
+    text-align: left;
+    float: left;
+    clear: left;
+    width: 100%;
+    border-width: 1px;
+    background-color: #F7F7F7;
+}
+
+/* 数值只读文本框 */
+.TBNumReadonly
+{
+	font-size: 12px;
+	background-color: infobackground;
+	border-right: black thin;
+	border-top: black thin;
+	border-left: black thin;
+	border-bottom: black thin;
+	vertical-align: bottom;
+	text-align:right;
+}
+
+/* Table 中的 TR */
+.TR
+{
+}
+
+/* Table 中的 数据汇总TR 在一个表格中的最后一列,合计,小计... */
+.TRSum
+{
+    font-size: 12px;
+    background-color: #C0C0C0;
+}
+
+/* Table 中的 TD 单元格 */
+.TD
+{
+	border: lightgrey 1px solid;
+    border-width: 1px;
+    border-color: #999999 #C0C0C0 #C0C0C0 #C0C0C0;
+    padding: 1px;
+    margin: 1px;
+    text-align: left;
+}
+
+/* Table 中的 数字 TD 单元格 */
+.TDNum
+{
+    border: lightgrey 1px solid;
+    border-width: 1px;
+    border-color: #999999 #C0C0C0 #C0C0C0 #C0C0C0;
+    padding: 1px;
+    margin: 1px;
+	text-align: right;
+}
+
+/* Table 中的 TD 大文本输出 */
+.BigDoc
+{
+    border: lightgrey 1px solid;
+    border-width: 1px;
+    border-color: #999999 #C0C0C0 #C0C0C0 #C0C0C0;
+    padding: 1px;
+    margin: 1px;
+    text-align: left;
+}
+
+/* 内部标签风格 */
+fieldset
+{
+    table-layout: auto;
+    padding: 9px;
+    text-align:left;
+}
+
+legend
+{
+    color: green;
+    font-style: inherit;
+    font-weight: bold;
+}
+
+/* Table 中的 字段分组风格 */
+.ToolBar, Toolbar
+{
+    background-color: #d8edff;
+    font-family: Verdana;
+    font-size: 12px;
+    height: 18px;
+    line-height: 20px;
+    padding: 2px;
+}
+
+/* Table 中的 标题分组风格 */
+.GroupTitle
+{
+	background-color: #d8edff;
+	font-family: Verdana;
+	font-size: 12px;
+	height: 18px;
+	line-height: 20px;
+	padding: 2px;
+	font-weight:bolder;
+}
+
+/* Table 中的 字段分组风格 */
+.GroupField
+{
+	background-color: #E1E1E1;
+	font-size: medium;
+	font-weight: bold;
+	font-style: normal;
+	font-variant: normal;
+	text-transform: capitalize;
+	color: #000000;
+	border-left: 10px;
+	border-right: 10px;
+	border-top: 10px;
+	border-bottom: 10px;
+	border-width: 5px;
+	font-size: small;
+	vertical-align: middle;
+	padding: 1px;
+}
+
+/* Table 中的 TD 居中风格 */
+.TDCenter
+{
+    background-color: #E1E1E1;
+    font-size: medium;
+    font-weight: bold;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: capitalize;
+    color: #000000;
+    border-left: 10px;
+    border-right: 10px;
+    border-top: 10px;
+    border-bottom: 10px;
+    border-width: 5px;
+    font-size: small;
+    vertical-align: middle;
+    padding: 1px;
+}
+
+/*整体图片风格*/
+Img
+{
+    border:0px;
+}
+
+/* ICON 风格.*/
+.Icon
+{
+    border:0px;
+    width:16px;
+    height:16px;
+}
+    
+.Btn
+{
+    border: 0;
+    background: #4D77A7;
+    color: #FFF;
+    font-size: 12px;
+    padding: 6px 10px;
+    margin: 3px 3px 3px 3px;
+}

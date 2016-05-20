@@ -1,0 +1,23 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="CCFlow.SDKFlowDemo.SDK.Site" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+        <script language="JavaScript" src="/WF/SDKComponents/CCFlowSDK.js" type="text/javascript"></script>
+    </asp:ContentPlaceHolder>
+    <link href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+</head>
+<body bgcolor="#f7f9ff" leftmargin="0" topmargin="0">
+    <form id="form1" name="aspnetForm" runat="server">
+    <div style="width:800px; text-align:center; margin:auto;" >
+    
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>

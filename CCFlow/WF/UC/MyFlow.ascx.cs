@@ -875,7 +875,7 @@ namespace CCFlow.WF.UC
                         this.Response.Redirect("StartGuideEntities.aspx?FK_Flow=" + this.currFlow.No, true);
                         return;
                     case StartGuideWay.BySelfUrl: //按照定义的url.
-                        this.Response.Redirect(this.currFlow.StartGuidePara1, true);
+                        this.Response.Redirect( this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" + BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null), true);
                         break;
                     case StartGuideWay.ByFrms: //选择表单.
                         this.Response.Redirect("./WorkOpt/StartGuideFrms.aspx?FK_Flow=" + this.currFlow.No, true);

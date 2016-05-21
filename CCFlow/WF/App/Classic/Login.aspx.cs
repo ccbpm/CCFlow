@@ -92,6 +92,12 @@ public partial class App_Login : BP.Web.WebPage
             if (WebUser.No != null)
                 WebUser.Exit();
 
+            if (user.ToLower() == "guest")
+            {
+                this.Alert("guest 用户不能登录内部用户的处理程序. ");
+                return;
+            }
+
             Emp em = new Emp();
             em.No = user;
             if (em.RetrieveFromDBSources() == 0)

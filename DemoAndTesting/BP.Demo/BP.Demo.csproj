@@ -61,6 +61,8 @@
     <Compile Include="Demo\FlowEvent\NE101.cs" />
     <Compile Include="Demo\Emp.cs" />
     <Compile Include="Demo\AnQuanItem.cs" />
+    <Compile Include="Demo\License\License.cs" />
+    <Compile Include="Demo\License\People.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Demo\Resume.cs">
       <SubType>Code</SubType>

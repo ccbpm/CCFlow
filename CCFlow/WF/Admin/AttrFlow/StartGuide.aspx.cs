@@ -97,13 +97,12 @@ namespace CCFlow.WF.Admin.AttrFlow
                 en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
             }
 
-             BP.WF.Template.FrmNodes fns=new BP.WF.Template.FrmNodes( int.Parse( this.FK_Flow+"01"));
-             if (fns.Count >= 2)
-             {
-                 if (this.RB_FrmList.Checked)
-                     en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
-             }
-
+            BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
+            if (fns.Count >= 2)
+            {
+                if (this.RB_FrmList.Checked)
+                    en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
+            }
             en.Update();
             en.DirectUpdate();
 

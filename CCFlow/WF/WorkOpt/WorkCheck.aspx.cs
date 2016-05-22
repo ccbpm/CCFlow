@@ -320,7 +320,17 @@ namespace CCFlow.WF.WorkOpt
                                 else
                                 {
                                     //用户签名信息，显示签名or图片
-                                    string sigantrueHtml = wcDesc.SigantureEnabel == true ? BP.WF.Glo.GenerUserSigantureHtml(tk.EmpFrom, tk.EmpFromT) : BP.WF.Glo.GenerUserImgSmallerHtml(tk.EmpFrom, tk.EmpFromT);
+                                    string sigantrueHtml = "";
+
+                                    if (wcDesc.SigantureEnabel)
+                                    {
+                                        sigantrueHtml = BP.WF.Glo.GenerUserSigantureHtml(tk.EmpFrom, tk.EmpFromT);
+                                    }
+                                    else
+                                    {
+                                        sigantrueHtml = BP.WF.Glo.GenerUserImgSmallerHtml(tk.EmpFrom, tk.EmpFromT);
+                                    }
+
                                     //审核组件附件数据
                                     FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
                                     QueryObject obj_Ath = new QueryObject(athDBs);

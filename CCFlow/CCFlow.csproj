@@ -121,6 +121,7 @@
     <Content Include="SDKFlowDemo\GuestApp\Runing.aspx" />
     <Content Include="SDKFlowDemo\SDK\SDKComponents\F159\S15901.aspx" />
     <Content Include="SDKFlowDemo\SDK\SDKComponents\F160\S16001.aspx" />
+    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx" />
     <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.aspx" />
     <Content Include="SDKFlowDemo\UnitTesting\Testing.aspx" />
     <Content Include="Service References\CloundWS\configuration.svcinfo" />
@@ -3332,6 +3333,13 @@
     </Compile>
     <Compile Include="SDKFlowDemo\TestCase\BatchSelfFrm.aspx.designer.cs">
       <DependentUpon>BatchSelfFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx.cs">
+      <DependentUpon>StartGuideSelfUrlEntity.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx.designer.cs">
+      <DependentUpon>StartGuideSelfUrlEntity.aspx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\TestCase\iframePage.aspx.cs">
       <DependentUpon>iframePage.aspx</DependentUpon>

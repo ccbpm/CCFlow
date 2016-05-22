@@ -60,10 +60,10 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddCaptionLeft("为字段[" + this.RefNo + "]设置正则表达式." + BP.WF.Glo.GenerHelpCCForm("正则表达式", "http://ccform.mydoc.io/?v=5769&t=36728", "ss"));
 
             this.Pub1.AddTR();
-            this.Pub1.AddTDGroupTitle( "序");
-            this.Pub1.AddTDGroupTitle( "事件");
-            this.Pub1.AddTDGroupTitle( "事件内容");
-            this.Pub1.AddTDGroupTitle( "提示信息");
+            this.Pub1.AddTDGroupTitle("序");
+            this.Pub1.AddTDGroupTitle("事件");
+            this.Pub1.AddTDGroupTitle("事件内容");
+            this.Pub1.AddTDGroupTitle("提示信息");
             this.Pub1.AddTREnd();
 
             #region 绑定事件
@@ -113,7 +113,14 @@ namespace CCFlow.WF.MapDef
             BindRegularExpressionEdit_ClickSave("onsubmit");
             #endregion
 
-            this.Response.Redirect("RegularExpression.aspx?s=3&FK_MapData=" + this.FK_MapData + "&RefNo=" + this.RefNo + "&OperAttrKey=" + this.OperAttrKey, true);
+            if (this.RefNo.Contains(",") == true)
+            {
+                this.WinCloseWithMsg("批量设置保存成功...");
+            }
+            else
+            {
+                this.Response.Redirect("RegularExpression.aspx?s=3&FK_MapData=" + this.FK_MapData + "&RefNo=" + this.RefNo + "&OperAttrKey=" + this.OperAttrKey, true);
+            }
         }
         public int BindRegularExpressionEditExt(int idx, string myEvent)
         {
@@ -151,20 +158,27 @@ namespace CCFlow.WF.MapDef
         }
         public void BindRegularExpressionEdit_ClickSave(string myEvent)
         {
-            MapExt me = new MapExt();
-            me.FK_MapData = this.FK_MapData;
-            me.ExtType = this.ExtType;
-            me.Tag = myEvent;
-            me.AttrOfOper = this.RefNo;
-            me.MyPK = this.FK_MapData + "_" + this.RefNo + "_" + me.ExtType + "_" + me.Tag;
-            me.Delete();
 
-            me.Doc = this.Pub1.GetTextBoxByID("TB_Doc_" + myEvent).Text;
-            me.Tag1 = this.Pub1.GetTextBoxByID("TB_Tag1_" + myEvent).Text;
-            if (me.Doc.Trim().Length == 0)
-                return;
+            string[] fields = this.RefNo.Split(',');
+            foreach (string filed in fields)
+            {
+                if (string.IsNullOrEmpty(filed))
+                    continue;
 
-            me.Insert();
+                MapExt me = new MapExt();
+                me.FK_MapData = this.FK_MapData;
+                me.ExtType = this.ExtType;
+                me.Tag = myEvent;
+                me.AttrOfOper = filed;
+                me.MyPK = this.FK_MapData + "_" + filed + "_" + me.ExtType + "_" + me.Tag;
+                me.Delete();
+
+                me.Doc = this.Pub1.GetTextBoxByID("TB_Doc_" + myEvent).Text;
+                me.Tag1 = this.Pub1.GetTextBoxByID("TB_Tag1_" + myEvent).Text;
+                if (me.Doc.Trim().Length == 0)
+                    return;
+                me.Insert();
+            }
         }
         public void BindReTemplete()
         {
@@ -196,11 +210,21 @@ namespace CCFlow.WF.MapDef
             var btn = new LinkBtn(false, NamesOfBtn.Save, "保存");
             btn.Click += new EventHandler(btn_SaveReTemplete_Click);
 
+
             this.Pub1.AddTDBegin("colspan=2");
             //this.Pub1.AddTD("colspan=1 width='80'", btn);
             this.Pub1.Add(btn);
             this.Pub1.AddSpace(2);
-            this.Pub1.Add("<a class='easyui-linkbutton' data-options=\"iconCls:'icon-back'\" href='RegularExpression.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + this.ExtType + "&OperAttrKey=" + this.OperAttrKey + "&DoType=New'>返回</a>");
+
+            if (this.RefNo != null && this.RefNo.Contains(","))
+            {
+
+            }
+            else
+            {
+                this.Pub1.Add("<a class='easyui-linkbutton' data-options=\"iconCls:'icon-back'\" href='RegularExpression.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + this.ExtType + "&OperAttrKey=" + this.OperAttrKey + "&DoType=New'>返回</a>");
+            }
+
             this.Pub1.AddTDEnd();
             this.Pub1.AddTREnd();
             this.Pub1.AddTableEnd();
@@ -217,8 +241,17 @@ namespace CCFlow.WF.MapDef
 
             //删除现有的逻辑.
             BP.Sys.MapExts exts = new BP.Sys.MapExts();
-            exts.Delete(MapExtAttr.AttrOfOper, this.RefNo,
-                MapExtAttr.ExtType, BP.Sys.MapExtXmlList.RegularExpression);
+
+
+            string[] strs = this.RefNo.Split(',');
+            foreach (string field in strs)
+            {
+                if (string.IsNullOrEmpty(field)==true)
+                    continue;
+
+                exts.Delete(MapExtAttr.AttrOfOper, field, MapExtAttr.ExtType, BP.Sys.MapExtXmlList.RegularExpression);
+            }
+       
 
             // 开始装载.
             foreach (RegularExpressionDtl dtl in reDtls)
@@ -226,18 +259,33 @@ namespace CCFlow.WF.MapDef
                 if (dtl.ItemNo != lb.SelectedItem.Value)
                     continue;
 
-                BP.Sys.MapExt ext = new BP.Sys.MapExt();
-                ext.MyPK = this.FK_MapData + "_" + this.RefNo + "_" + MapExtXmlList.RegularExpression + "_" + dtl.ForEvent;
-                ext.FK_MapData = this.FK_MapData;
-                ext.AttrOfOper = this.RefNo;
-                ext.Doc = dtl.Exp; //表达公式.
-                ext.Tag = dtl.ForEvent; //时间.
-                ext.Tag1 = dtl.Msg;  //消息
-                ext.ExtType = MapExtXmlList.RegularExpression; // 表达公式 .
-                ext.Insert();
-                newMyPk = ext.MyPK;
+                foreach (string field in strs)
+                {
+                    if (string.IsNullOrEmpty(field) == true)
+                        continue;
+
+                    BP.Sys.MapExt ext = new BP.Sys.MapExt();
+                    ext.MyPK = this.FK_MapData + "_" + field + "_" + MapExtXmlList.RegularExpression + "_" + dtl.ForEvent;
+                    ext.FK_MapData = this.FK_MapData;
+                    ext.AttrOfOper = field;
+                    ext.Doc = dtl.Exp; //表达公式.
+                    ext.Tag = dtl.ForEvent; //时间.
+                    ext.Tag1 = dtl.Msg;  //消息
+                    ext.ExtType = MapExtXmlList.RegularExpression; // 表达公式 .
+                    ext.Insert();
+                    newMyPk = ext.MyPK;
+                }
             }
-            this.Response.Redirect("RegularExpression.aspx?FK_MapData=" + this.FK_MapData + "&RefNo="+this.RefNo+"&ExtType=" + this.ExtType + "&MyPK=" + newMyPk + "&OperAttrKey=" + this.OperAttrKey + "&DoType=New", true);
+
+            if (this.RefNo != null && this.RefNo.Contains(","))
+            {
+                this.WinCloseWithMsg("已经保存成功.");
+                return;
+            }
+            else
+            {
+                this.Response.Redirect("RegularExpression.aspx?FK_MapData=" + this.FK_MapData + "&RefNo=" + this.RefNo + "&ExtType=" + this.ExtType + "&MyPK=" + newMyPk + "&OperAttrKey=" + this.OperAttrKey + "&DoType=New", true);
+            }
         }
     }
 }

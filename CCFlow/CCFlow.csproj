@@ -1384,14 +1384,11 @@
     <Content Include="WF\MapDef\MapExt\AotuGenerNo.aspx" />
     <Content Include="WF\MapDef\MapExt\AutoFull.aspx" />
     <Content Include="WF\MapDef\MapExt\AutoFullDLL.aspx" />
-    <Content Include="WF\MapDef\MapExt\AutoFullDLL_old.aspx" />
     <Content Include="WF\MapDef\MapExt\DDLFullCtrl.aspx" />
-    <Content Include="WF\MapDef\MapExt\DDLFullCtrl_old.aspx" />
     <Content Include="WF\MapDef\MapExt\ExcelFrm.aspx" />
     <Content Include="WF\MapDef\MapExt\InitScript.aspx" />
     <Content Include="WF\MapDef\MapExt\List.aspx" />
     <Content Include="WF\MapDef\MapExt\PageLoadFull.aspx" />
-    <Content Include="WF\MapDef\MapExt\PopVal_Old.aspx" />
     <Content Include="WF\MapDef\MapExt\PopVal.aspx" />
     <Content Include="WF\MapDef\MapExt\RadioBtns.aspx" />
     <Content Include="WF\MapDef\MapExt\RegularExpression.aspx" />
@@ -1400,6 +1397,7 @@
     <Content Include="WF\MapDef\MapExt\TBFullCtrl_List.aspx" />
     <Content Include="WF\MapDef\MapExt\TBFullCtrl_old.aspx" />
     <Content Include="WF\MapDef\MapExt\WordFrm.aspx" />
+    <Content Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx" />
     <Content Include="WF\MapDef\SFSQL.aspx" />
     <Content Include="WF\MapDef\EditSQL.aspx" />
     <Content Include="WF\MapDef\SFWS.aspx" />
@@ -2447,7 +2445,6 @@
     <Content Include="WF\Login.aspx" />
     <Content Include="WF\MapDef\Action.aspx" />
     <Content Include="WF\MapDef\Attachment.aspx" />
-    <Content Include="WF\MapDef\MapExt\AutoFull_old.aspx" />
     <Content Include="WF\MapDef\CCForm\CCForm.asmx" />
     <Content Include="WF\MapDef\CCForm\Frm.aspx" />
     <Content Include="WF\MapDef\CCForm\TableToFree.aspx" />
@@ -4921,26 +4918,12 @@
     <Compile Include="WF\MapDef\MapExt\AutoFullDLL.aspx.designer.cs">
       <DependentUpon>AutoFullDLL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\AutoFullDLL_old.aspx.cs">
-      <DependentUpon>AutoFullDLL_old.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\AutoFullDLL_old.aspx.designer.cs">
-      <DependentUpon>AutoFullDLL_old.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\MapDef\MapExt\DDLFullCtrl.aspx.cs">
       <DependentUpon>DDLFullCtrl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\MapDef\MapExt\DDLFullCtrl.aspx.designer.cs">
       <DependentUpon>DDLFullCtrl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\DDLFullCtrl_old.aspx.cs">
-      <DependentUpon>DDLFullCtrl_old.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\DDLFullCtrl_old.aspx.designer.cs">
-      <DependentUpon>DDLFullCtrl_old.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\MapExt\ExcelFrm.aspx.cs">
       <DependentUpon>ExcelFrm.aspx</DependentUpon>
@@ -4969,13 +4952,6 @@
     </Compile>
     <Compile Include="WF\MapDef\MapExt\PageLoadFull.aspx.designer.cs">
       <DependentUpon>PageLoadFull.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\PopVal_Old.aspx.cs">
-      <DependentUpon>PopVal_Old.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\PopVal_Old.aspx.designer.cs">
-      <DependentUpon>PopVal_Old.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\MapExt\PopVal.aspx.cs">
       <DependentUpon>PopVal.aspx</DependentUpon>
@@ -5032,6 +5008,13 @@
     </Compile>
     <Compile Include="WF\MapDef\MapExt\WordFrm.aspx.designer.cs">
       <DependentUpon>WordFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.cs">
+      <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.designer.cs">
+      <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\Rpt\RptGuide.Master.cs">
       <DependentUpon>RptGuide.Master</DependentUpon>
@@ -6925,13 +6908,6 @@
     </Compile>
     <Compile Include="WF\MapDef\Attachment.aspx.designer.cs">
       <DependentUpon>Attachment.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\AutoFull_old.aspx.cs">
-      <DependentUpon>AutoFull_old.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\AutoFull_old.aspx.designer.cs">
-      <DependentUpon>AutoFull_old.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\CCForm\CCForm.asmx.cs">
       <DependentUpon>CCForm.asmx</DependentUpon>

@@ -28,6 +28,7 @@ namespace ccbpm
         [WebMethod]
         public bool WriteShortMessage(string smsEntityJson)
         {
+
             return true;
         }
         #endregion 短消息写入接口.

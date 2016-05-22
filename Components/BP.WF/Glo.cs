@@ -3101,7 +3101,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string GenerUserImgSmallerHtml(string userNo, string userName)
         {
-            return "<img src='" + CCFlowAppPath + "DataUser/UserICON/" + userNo + "Smaller.png' border=0 width='15px' height='15px' style='padding-right:5px;vertical-align:middle;'  onerror=\"src='" + CCFlowAppPath + "DataUser/UserICON/DefaultSmaller.png'\" />" + userName;
+            return "<img src='" + CCFlowAppPath + "DataUser/UserICON/" + userNo + "Smaller.png' border=0  style='height:15px;width:15px;padding-right:5px;vertical-align:middle;'  onerror=\"src='" + CCFlowAppPath + "DataUser/UserICON/DefaultSmaller.png'\" />" + userName;
         }
         /// <summary>
         /// 产生用户大图片

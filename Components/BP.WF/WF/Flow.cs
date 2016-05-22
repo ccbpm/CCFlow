@@ -322,7 +322,7 @@ namespace BP.WF
             {
                 string str = this.GetValStringByKey(FlowAttr.StartGuidePara1);
                 if (str.Contains("?") == false)
-                    str = "?1=2";
+                    str = str + "?1=2";
                 return str.Replace("~", "'");
             }
             set

@@ -2219,22 +2219,17 @@ namespace BP.WF
 
             if (toND.IsGuestNode == true)
             {
-                string htmlInfo = string.Format("@发送给{0}如下{1}位处理人,{2}.", this.nextStationName,
-                    this.HisRememberMe.NumOfObjs.ToString(),   this.HisGenerWorkFlow.GuestNo+ " " + this.HisGenerWorkFlow.GuestName);
+                string htmlInfo = string.Format("@发送给如下{0}位处理人,{1}.",this.HisRememberMe.NumOfObjs.ToString(),   this.HisGenerWorkFlow.GuestNo+ " " + this.HisGenerWorkFlow.GuestName);
 
-                string textInfo = string.Format("@发送给{0}如下{1}位处理人,{2}.", this.nextStationName,
-                    this.HisRememberMe.NumOfObjs.ToString(), this.HisGenerWorkFlow.GuestName);
+                string textInfo = string.Format("@发送给如下{0}位处理人,{1}.",this.HisRememberMe.NumOfObjs.ToString(), this.HisGenerWorkFlow.GuestName);
 
                 this.addMsg(SendReturnMsgFlag.ToEmps, textInfo, htmlInfo);
-
             }
             else
             {
-                string htmlInfo = string.Format("@发送给{0}如下{1}位处理人,{2}.", this.nextStationName,
-                  this.HisRememberMe.NumOfObjs.ToString(), this.HisRememberMe.EmpsExt);
+                string htmlInfo = string.Format("@发送给如下{0}位处理人,{1}.",this.HisRememberMe.NumOfObjs.ToString(), this.HisRememberMe.EmpsExt);
 
-                string textInfo = string.Format("@发送给{0}如下{1}位处理人,{2}.", this.nextStationName,
-                    this.HisRememberMe.NumOfObjs.ToString(), this.HisRememberMe.ObjsExt);
+                string textInfo = string.Format("@发送给如下{0}位处理人,{1}.",this.HisRememberMe.NumOfObjs.ToString(), this.HisRememberMe.ObjsExt);
 
                 this.addMsg(SendReturnMsgFlag.ToEmps, textInfo, htmlInfo);
             }

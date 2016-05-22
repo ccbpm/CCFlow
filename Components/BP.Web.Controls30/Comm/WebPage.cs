@@ -46,6 +46,10 @@ namespace BP.Web
                         || para == ""
                         || para.Contains("=") == false)
                         continue;
+                    
+                    if (para == "1=1")
+                        continue;
+
                     urlExt += "&" + para;
                 }
                 return urlExt;

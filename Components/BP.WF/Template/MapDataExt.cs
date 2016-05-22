@@ -1017,7 +1017,6 @@ namespace BP.WF.Template
                 #region 方法 - 基本功能.
                 RefMethod rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
-                rm.GroupName = "基本功能";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
                 rm.Visable = true;
@@ -1027,17 +1026,24 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "表单事件"; // "设计表单";
-                rm.GroupName = "基本功能";
                 rm.ClassMethodName = this.ToString() + ".DoEvent";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "批量设置验证规则";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
-                rm.GroupName = "基本功能";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -1046,7 +1052,6 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "内置JavaScript脚本"; // "设计表单";
-                rm.GroupName = "基本功能";
                 rm.ClassMethodName = this.ToString() + ".DoInitScript";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Script.png";
                 rm.Visable = true;
@@ -1056,7 +1061,6 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "导出XML表单模版"; // "设计表单";
-                rm.GroupName = "基本功能";
                 rm.ClassMethodName = this.ToString() + ".DoExp";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Export.png";
                 rm.Visable = true;
@@ -1137,6 +1141,15 @@ namespace BP.WF.Template
         #endregion
 
         #region 方法.
+        /// <summary>
+        /// 批量设置正则表达式规则.
+        /// </summary>
+        /// <returns></returns>
+        public string DoRegularExpressionBatch()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
+                   this.No + "&t=" + DataType.CurrentDataTime;
+        }
         /// <summary>
         /// 排序字段顺序
         /// </summary>

@@ -856,7 +856,7 @@
     <Folder Include="Images\MenuItem\.svn\tmp\text-base\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\trunk\Components\BP.SL\BP.SL.csproj">
+    <ProjectReference Include="..\BP.SL\BP.SL.csproj">
       <Project>{107F990E-3963-4D97-AAE4-8DCCBD24FCD0}</Project>
       <Name>BP.SL</Name>
     </ProjectReference>

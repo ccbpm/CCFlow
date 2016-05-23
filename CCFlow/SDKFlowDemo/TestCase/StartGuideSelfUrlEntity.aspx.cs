@@ -55,8 +55,11 @@ namespace CCFlow.app
             if (this.SFZ == null || this.SFZ.Length < 15)
                 return;
 
-            People pl = new People(this.SFZ);
+            People pl = new People();
+            pl.No = this.SFZ;
+            pl.RetrieveFromDBSources();
 
+                
             this.TB_Name.Text = pl.Name;
             this.TB_SFZ.Text = pl.No;
             this.TB_Tel.Text = pl.Tel;
@@ -131,6 +134,7 @@ namespace CCFlow.app
 
             People pe = new People();
             pe.No = sfz;
+
             if (pe.RetrieveFromDBSources() == 0)
             {
                 this.Response.Write("没有查询到该身份证号的数据，您可以完善信息执行保存....");

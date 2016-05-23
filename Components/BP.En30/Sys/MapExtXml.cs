@@ -66,6 +66,12 @@ namespace BP.Sys
         public const string WordFrm = "WordFrm";
         public const string ExcelFrm = "ExcelFrm";
 
+        /// <summary>
+        /// 特别字段特殊用户权限
+        /// </summary>
+        public const string SepcFiledsSepcUsers = "SepcFiledsSepcUsers";
+
+
     }
 	public class MapExtXml:XmlEnNoName
 	{

@@ -3890,6 +3890,54 @@ namespace BP.WF
 
         #region 其他方法。
         /// <summary>
+        /// 获得一个表单的动态权限字段
+        /// </summary>
+        /// <param name="exts"></param>
+        /// <param name="nd"></param>
+        /// <param name="en"></param>
+        /// <param name="md"></param>
+        /// <param name="attrs"></param>
+        /// <returns></returns>
+        public static string GenerActiveFiels(MapExts exts, Node nd, Entity en, MapData md, MapAttrs attrs)
+        {
+            string strs = "";
+            foreach (MapExt me in exts)
+            {
+                if (me.ExtType != MapExtXmlList.SepcFiledsSepcUsers)
+                    continue;
+                bool isCando = false;
+                if (me.Tag1 != "")
+                {
+                    string tag1 = me.Tag1 + ",";
+                    if (tag1.Contains(BP.Web.WebUser.No + ","))
+                    {
+                        //根据设置的人员计算.
+                        isCando = true;
+                    }
+                }
+
+                if (me.Tag2 != "")
+                {
+                    //根据sql判断.
+                    string sql = me.Tag2.Clone() as string;
+                    sql = BP.WF.Glo.DealExp(sql, en, null);
+                    if (BP.DA.DBAccess.RunSQLReturnValFloat(sql) > 0)
+                        isCando = true;
+                }
+
+                if (me.Tag3 != "" && BP.Web.WebUser.FK_Dept == me.Tag3)
+                {
+                    //根据部门编号判断.
+                    isCando = true;
+                }
+
+                if (isCando == false)
+                    continue;
+                strs += me.Doc;
+            }
+            return strs;
+        }
+        /// <summary>
         /// 转到消息显示界面.
         /// </summary>
         /// <param name="info"></param>
@@ -4145,6 +4193,7 @@ namespace BP.WF
             return true;
         }
         #endregion 其他方法。
+
 
         
     }

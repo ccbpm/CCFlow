@@ -324,11 +324,13 @@ namespace BP.Web.UC
                 this.Copy(en, en.PKVal.ToString());
             return ens;
         }
-        public Entity Copy(Entity en)
-        {
-            return Copy(en, null);
-        }
-        public Entity Copy(Entity en, string pk)
+        /// <summary>
+        /// copy实体
+        /// </summary>
+        /// <param name="en"></param>
+        /// <param name="pk"></param>
+        /// <returns></returns>
+        public Entity Copy(Entity en, string pk=null)
         {
             return this.Copy(en, pk, en.EnMap);
         }

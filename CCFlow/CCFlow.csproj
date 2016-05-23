@@ -140,6 +140,8 @@
     <Content Include="WF\Admin\AttrNode\PushMessage.aspx" />
     <Content Include="WF\Admin\AttrNode\PushMessageEntity.aspx" />
     <Content Include="WF\Admin\AttrNode\SDKComponents.aspx" />
+    <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
+    <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\FrmAttr.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.aspx" />
@@ -3624,6 +3626,20 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\SDKComponents.aspx.designer.cs">
       <DependentUpon>SDKComponents.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx.cs">
+      <DependentUpon>SepcFiledsSepcUsers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx.designer.cs">
+      <DependentUpon>SepcFiledsSepcUsers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx.cs">
+      <DependentUpon>SepcFiledsSepcUsersDtl.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx.designer.cs">
+      <DependentUpon>SepcFiledsSepcUsersDtl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\SubFlows.aspx.cs">
       <DependentUpon>SubFlows.aspx</DependentUpon>

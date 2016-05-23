@@ -620,9 +620,11 @@ function OnDbClick(oFuncTree) {
         onExpand: function (node) {
             if (node.attributes.LazyLoad) {
                 $("#" + oFuncTree.Id).tree('select', node.target);
-                var chilren = $("#" + oFuncTree.Id).tree('getChildren', node.target);
-                if (chilren && chilren.length == 1 && chilren[0].text == "加载中...") {
-                    $("#" + oFuncTree.Id).tree("remove", chilren[0].target);
+                var children = $("#" + oFuncTree.Id).tree('getChildren', node.target);
+                if (children && children.length >= 1) {
+                    if (children[0].text == "加载中...") {
+                        $("#" + oFuncTree.Id).tree("remove", children[0].target);
+                    }
 
                     if (node.attributes.Inherits) {
                         $.each(node.attributes.Inherits, function () {

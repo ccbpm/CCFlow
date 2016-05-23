@@ -782,7 +782,6 @@ namespace BP.WF.Template
 
                 #endregion 基础功能.
 
-
                 #region 字段相关功能（不显示在菜单里）
                 rm = new RefMethod();
                 rm.Title = "可退回的节点(当退回规则设置可退回指定的节点时,该设置有效.)"; // "设计表单";
@@ -852,7 +851,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
                 #endregion 字段相关功能（不显示在菜单里）
-              
 
                 #region 考核.
                 rm = new RefMethod();
@@ -871,7 +869,6 @@ namespace BP.WF.Template
                 rm.GroupName = "考核规则";
                 map.AddRefMethod(rm);
                 #endregion 考核.
-
 
                 #region 实验中的功能
                 rm = new RefMethod();
@@ -907,6 +904,14 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "特别字段特殊用户权限";
+                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
                 #endregion 实验中的功能
 
                 this._enMap = map;
@@ -932,7 +937,6 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/CHOvertimeRole.aspx?FK_Node=" + this.NodeID;
         }
         #endregion 考核规则.
-
 
         #region 基础设置.
         /// <summary>
@@ -1001,6 +1005,16 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/FindWorker/NodeCCRole.aspx?FK_Node=" + this.NodeID;
         }
         #endregion 
+
+        /// <summary>
+        /// 特别用户特殊字段权限.
+        /// </summary>
+        /// <returns></returns>
+        public string DoSpecFieldsSpecUsers()
+        {
+            return Glo.CCFlowAppPath + "WF/Admin/AttrNode/SepcFiledsSepcUsers.aspx?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+                   this.NodeID + "&FK_Node="+this.NodeID+"&t=" + DataType.CurrentDataTime;
+        }
 
         /// <summary>
         /// 节点运行模式.

@@ -44,12 +44,12 @@ INSERT INTO Demo_BanJi(No,Name,BZR) VALUES('005','一年级5班','孙钱');
 INSERT INTO Demo_BanJi(No,Name,BZR) VALUES('006','一年级6班','刘备');
 
 DELETE FROM Demo_Student;
-INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0001','光头强','123','山东.济南.高新区','88890089','s001@ccflow.org','001',8,1)
-INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0002','二狗子','123','山东.济南.高新区','88890080','s002@ccflow.org','001',8,1)
-INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0003','大马猴','123','山东.济南.高新区','88890081','s003@ccflow.org','001',8,1)
-INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0004','大白','123','山东.济南.高新区','888900892','s004@ccflow.org','001',8,1)
-INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0005','翠花','123','山东.济南.高新区','888900892','s004@ccflow.org','001',8,0)
-INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0006','嘟嘟','123','山东.济南.高新区','888900892','s004@ccflow.org','001',8,0)
+INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0001','光头强','123','山东.济南.高新区','88890089','s001@ccflow.org','001',8,1);
+INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0002','二狗子','123','山东.济南.高新区','88890080','s002@ccflow.org','001',8,1);
+INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0003','大马猴','123','山东.济南.高新区','88890081','s003@ccflow.org','001',8,1);
+INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0004','大白','123','山东.济南.高新区','888900892','s004@ccflow.org','001',8,1);
+INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0005','翠花','123','山东.济南.高新区','888900892','s004@ccflow.org','001',8,0);
+INSERT INTO Demo_Student(No,Name,PWD,Addr,Tel,Email,FK_BanJi,Age,XB) VALUES('0006','嘟嘟','123','山东.济南.高新区','888900892','s004@ccflow.org','001',8,0);
 
 
 DELETE FROM Demo_StudentKeMu;

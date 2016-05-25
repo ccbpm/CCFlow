@@ -36,9 +36,7 @@
                 while (strObjectName != "") {
                     var v = document.all.DWebSignSeal.VerifyDoc(strObjectName);
                     strObjectName = document.all.DWebSignSeal.FindSeal(strObjectName, 0);
-
                     SetSealType(v);
-
                 }
             } catch (e) {
                 //alert("控件没有安装，请刷新本页面，控件会自动下载。\r\n或者下载安装程序安装。" +e);
@@ -50,6 +48,7 @@
             var v = document.getElementById('ContentPlaceHolder1_UCEn1_DDL_' + ddlID).value;
             if (v == null) {
                 alert('没有找到ID=' + ddlID + '的下拉框控件.');
+                return;
             }
             return v;
         }
@@ -59,6 +58,7 @@
             var v = document.getElementById('ContentPlaceHolder1_UCEn1_TB_' + tbID).value;
             if (v == null) {
                 alert('没有找到ID=' + tbID + '的文本框控件.');
+                return;
             }
             return v;
         }
@@ -68,8 +68,19 @@
             var v = document.getElementById('ContentPlaceHolder1_UCEn1_CB_' + cbID).value;
             if (v == null) {
                 alert('没有找到ID=' + cbID + '的文本框控件.');
+                return;
             }
             return v;
+        }
+
+        // 获取 单选按钮的 值.
+        function ReqRadio(keyofEn, enumIntVal) {
+            var v = document.getElementById('ContentPlaceHolder1_UCEn1_RB_' + keyofEn + '_' + enumIntVal);
+            if (v == null) {
+                alert('没有找到字段名=' + keyofEn + '值=' + enumKey + '的控件.');
+                return;
+            }
+            return v.checked;
         }
 
         /// 获取DDL Obj

@@ -2,7 +2,7 @@
 <link href="CSSTab.css" rel="stylesheet" type="text/css" />
 <%
     string enName = "ND" + this.Request.QueryString["FK_Node"];
-    FrmWorkCheck fwc = new FrmWorkCheck();
+    BP.WF.Template.FrmWorkCheck fwc = new BP.WF.Template.FrmWorkCheck();
     string src = "/WF/CCForm/AttachmentUpload.aspx?FID=" + this.Request.QueryString["FID"];
     src += "&WorkID=" + this.Request.QueryString["WorkID"];
     src += "&FK_Node=" + this.Request.QueryString["FK_Node"];

@@ -1386,6 +1386,7 @@
     <Content Include="WF\MapDef\MapExt\AotuGenerNo.aspx" />
     <Content Include="WF\MapDef\MapExt\AutoFull.aspx" />
     <Content Include="WF\MapDef\MapExt\AutoFullDLL.aspx" />
+    <Content Include="WF\MapDef\MapExt\BodyAttr.aspx" />
     <Content Include="WF\MapDef\MapExt\DDLFullCtrl.aspx" />
     <Content Include="WF\MapDef\MapExt\ExcelFrm.aspx" />
     <Content Include="WF\MapDef\MapExt\InitScript.aspx" />
@@ -4933,6 +4934,13 @@
     </Compile>
     <Compile Include="WF\MapDef\MapExt\AutoFullDLL.aspx.designer.cs">
       <DependentUpon>AutoFullDLL.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\BodyAttr.aspx.cs">
+      <DependentUpon>BodyAttr.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\BodyAttr.aspx.designer.cs">
+      <DependentUpon>BodyAttr.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\MapExt\DDLFullCtrl.aspx.cs">
       <DependentUpon>DDLFullCtrl.aspx</DependentUpon>

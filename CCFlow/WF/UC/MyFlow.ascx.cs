@@ -1158,38 +1158,38 @@ namespace CCFlow.WF.UC
                 toolbar = this.ToolBar2;
             }
 
-            try
-            {
+            //try
+            //{
                 //初始化控件.
                 this.InitToolbar(isAskFor, appPath, gwf);
                 this.BindWork(currND, currWK);
                 this.Session["Ect"] = null;
-            }
-            catch (Exception ex)
-            {
-                #region 解决开始节点数据库字段变化修复数据库问题 。
-                string rowUrl = this.Request.RawUrl;
-                if (rowUrl.IndexOf("rowUrl") > 1)
-                {
-                }
-                else
-                {
-                    this.Response.Redirect(rowUrl + "&rowUrl=1", true);
-                    return;
-                }
-                #endregion
+            //}
+            //catch (Exception ex)
+            //{
+            //    #region 解决开始节点数据库字段变化修复数据库问题 。
+            //    string rowUrl = this.Request.RawUrl;
+            //    if (rowUrl.IndexOf("rowUrl") > 1)
+            //    {
+            //    }
+            //    else
+            //    {
+            //        this.Response.Redirect(rowUrl + "&rowUrl=1", true);
+            //        return;
+            //    }
+            //    #endregion
 
-                this.FlowMsg.DivInfoBlock(ex.Message);
-                string Ect = this.Session["Ect"] as string;
-                if (Ect == null)
-                    Ect = "0";
-                if (int.Parse(Ect) < 2)
-                {
-                    this.Session["Ect"] = int.Parse(Ect) + 1;
-                    return;
-                }
-                return;
-            }
+            //    this.FlowMsg.DivInfoBlock(ex.Message);
+            //    string Ect = this.Session["Ect"] as string;
+            //    if (Ect == null)
+            //        Ect = "0";
+            //    if (int.Parse(Ect) < 2)
+            //    {
+            //        this.Session["Ect"] = int.Parse(Ect) + 1;
+            //        return;
+            //    }
+            //    return;
+            //}
             #endregion 处理ctrl显示
         }
         #endregion

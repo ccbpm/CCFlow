@@ -42,14 +42,42 @@
          <td><%=attr.MyDataTypeStr%></td>
 <td><%=attr.LGTypeT %></td>
 <td>无</td>
+        </tr>
+  <% } %>
+
+<tr>
+<th>序号</th>
+<th colspan="3">电子公章ID/名称</th>
+<th>操作</th>
+</tr>
+
+<%
+    BP.Sys.FrmImgs imgs = new BP.Sys.FrmImgs(fk_mapdata);
+    foreach (BP.Sys.FrmImg img in imgs)
+    {
+        if (img.HisImgAppType == BP.Sys.ImgAppType.Img)
+             continue;
+        if (img.IsEdit == 1)
+            continue;
+
+        idx++;
+        
+        %>
+        <tr>
+        <td class="Idx"> <%=idx %></td>
+        <td colspan=3>
+        <input  type="checkbox" id="<%=img.MyPK %>" name="<%=img.MyPK %>"   value="<%=img.MyPK %>"  />  <%=img.MyPK%>  - <%=img.Name%>
+        </td>
+
+        <td>无 </td>
 
         </tr>
         <%
-   }
+    }
 %>
 
 <tr>
-<td colspan="6">    
+<td colspan="6">
 
 <input type="button"  value="设置特别权限"  onclick="Save('<%=fk_mapdata %>','<%=fk_node %>')" />
  <%--   <asp:Button ID="Btn_Save" runat="server" Text="批量设置" />--%>
@@ -71,7 +99,7 @@
     foreach (BP.Sys.MapExt item in exts)
     {
         %>
-       <li> <a href="javascript:OpenIt('<%=fk_mapdata %>','<%=fk_node %>','<%=item.MyPK %>')">设置:<%=item.Doc %></a></li>
+       <li> <a href="javascript:OpenIt('<%=fk_mapdata %>','<%=fk_node %>','<%=item.MyPK %>')">设置:<%=item.Doc %></a>  - <%=item.Tag1 %>-<%=item.Tag2 %>-<%=item.Tag3 %></li>
         <%
     }
      %>

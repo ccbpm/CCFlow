@@ -28,6 +28,9 @@
 <tr>
 
 <td valign="top">
+
+<fieldset>
+<legend> 列表值 </legend>
 <ul>
 <%foreach (BP.Sys.SysEnum item in ses)
 	{
@@ -41,6 +44,9 @@
    <%} %>
 <%} %>
 </ul>
+</fieldset>
+
+
 </td>
 
 <td  valign="top"> 
@@ -49,14 +55,26 @@
 <%
     
  %>
-    <asp:RadioButton ID="RB_0" runat="server"  GroupName="xx" Text="不设置" />
-    <asp:RadioButton ID="RB_1" runat="server"  GroupName="xx" Text="执行JS脚本" />
-    <asp:RadioButton ID="RB_2" runat="server"  GroupName="xx" Text="联动其他的控件使其属性该表(可见，只读)" />
 
-    <div id="JS" >
+ <fieldset>
+ <legend><asp:RadioButton ID="RB_0" runat="server"  GroupName="xx" Text="不设置" /> </legend>
+ 
+ 默认的选择项，不设置任何脚本与交互。   
+    </fieldset>
+
+    <fieldset>
+ <legend><asp:RadioButton ID="RB_1" runat="server"  GroupName="xx" Text="执行JS脚本" /></legend>
+ 默认的选择项，不设置任何脚本与交互。   
+  <div id="JS" >
        <textarea rows="3" cols="50"> 
        </textarea>
     </div>
+    </fieldset>
+
+
+    <fieldset>
+ <legend>
+    <asp:RadioButton ID="RB_2" runat="server"  GroupName="xx" Text="联动其他的控件使其属性该表(可见，只读)" /></legend>
 
     <div id="Fields" >
     <table> 
@@ -88,6 +106,8 @@
       <%} %>
     </table>
     </div>
+
+     </fieldset>
 
 
 </td>

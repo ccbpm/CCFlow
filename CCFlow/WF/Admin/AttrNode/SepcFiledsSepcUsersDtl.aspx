@@ -10,11 +10,10 @@
     string mypk=this.Request.QueryString["MyPK"];
 
     BP.Sys.MapExt me = new BP.Sys.MapExt();
-
     if (mypk != null)
     {
         me.MyPK = mypk;
-        me.Retrieve();
+        me.RetrieveFromDBSources();
         this.TB_Emps.Text = me.Tag1;
         this.TB_SQL.Text = me.Tag2;
     }

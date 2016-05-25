@@ -2443,6 +2443,9 @@ namespace CCFlow.WF.UC
             }
             #endregion 判断是否是手机.
 
+            //获得活动的控件.
+            string activeFilds = BP.WF.Glo.GenerActiveFiels(mes, null, en, md, mattrs);
+
             #region 输出Ele
             FrmEles eles = this.mapData.FrmEles;
             if (eles.Count >= 1)
@@ -2721,11 +2724,10 @@ namespace CCFlow.WF.UC
                 string sql = "";
 
                 //重新加载 可能有缓存
-                img.Retrieve("MyPk", img.MyPK);
+                img.RetrieveFromDBSources(); 
                 //0.不可以修改，从数据表中取，1可以修改，使用组合获取并保存数据
-                if (img.IsEdit == 1 && this.IsReadonly == false)
+                if ((img.IsEdit == 1 && this.IsReadonly == false) || activeFilds.Contains(img.MyPK + ","))
                 {
-
                     #region 加载签章
                     //如果设置了部门与岗位的集合进行拆分
                     if (!string.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
@@ -2772,7 +2774,6 @@ namespace CCFlow.WF.UC
                             break;
                         }
                     }
-
                     #endregion 加载签章
 
                     imgSrc = CCFlowAppPath + "DataUser/Seal/" + fk_dept + "_" + stationNo + ".png";
@@ -2815,14 +2816,13 @@ namespace CCFlow.WF.UC
                     objQuery.AddWhere(FrmEleAttr.FK_MapData, img.EnPK);
                     objQuery.addAnd();
                     objQuery.AddWhere(FrmEleAttr.EleID, this.HisEn.GetValStrByKey("OID"));
-                    objQuery.DoQuery();
-                    if (objQuery.GetCount() == 0)
+
+                    if (objQuery.DoQuery() == 0)
                     {
                         FrmEleDBs imgdbs = new FrmEleDBs();
                         QueryObject objQuerys = new QueryObject(imgdbs);
                         objQuerys.AddWhere(FrmEleAttr.EleID, this.HisEn.GetValStrByKey("OID"));
-                        int count = objQuerys.DoQuery();
-                        if (count > 0)
+                        if (objQuerys.DoQuery() > 0)
                         {
                             foreach (FrmEleDB single in imgdbs)
                             {
@@ -2831,8 +2831,8 @@ namespace CCFlow.WF.UC
                                     single.FK_MapData = img.EnPK;
                                     single.MyPK = img.EnPK + "_" + this.HisEn.GetValStrByKey("OID") + "_" + img.EnPK;
                                     single.RefPKVal = img.EnPK;
-                                    single.DirectInsert();
-                                    realDB = single;
+                                  //  single.DirectInsert();
+                                  //  realDB = single; cut by zhoupeng .没有看明白.
                                     break;
                                 }
                             }
@@ -2846,20 +2846,22 @@ namespace CCFlow.WF.UC
                     {
                         realDB = imgDb;
                     }
-                    imgSrc = realDB.Tag1;
-                    //如果没有查到记录，控件不显示。说明没有走盖章的一步
-                    x = img.X + wtX;
-                    this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                    this.Add("\t\n<img src='" + imgSrc + "' onerror='javascript:this.src='" + appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png';' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
-                    this.Add("\t\n</DIV>");
+
+                    if (realDB != null)
+                    {
+                        imgSrc = realDB.Tag1;
+                        //如果没有查到记录，控件不显示。说明没有走盖章的一步
+                        x = img.X + wtX;
+                        this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
+                        this.Add("\t\n<img src='" + imgSrc + "' onerror='javascript:this.src='" + appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png';' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
+                        this.Add("\t\n</DIV>");
+                    }
                 }
                 #endregion
             }
             #endregion 输出竖线与标签
 
             #region 输出数据控件.
-
-            string activeFilds = BP.WF.Glo.GenerActiveFiels(mes, null, en, md, mattrs);
             TB tb = new TB();
             //DDL ddl = new DDL();
             //CheckBox cb = new CheckBox();

@@ -1060,6 +1060,16 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "表单body属性"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoBodyAttr";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Script.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "导出XML表单模版"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoExp";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Export.png";
@@ -1218,6 +1228,14 @@ namespace BP.WF.Template
         public string DoInitScript()
         {
             return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/InitScript.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+        }
+        /// <summary>
+        /// 表单属性.
+        /// </summary>
+        /// <returns></returns>
+        public string DoBodyAttr()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
         }
         /// <summary>
         /// 表单事件

@@ -153,6 +153,10 @@ namespace BP.Sys
         /// 应用类型
         /// </summary>
         public const string AppType = "AppType";
+        /// <summary>
+        /// 表单body属性.
+        /// </summary>
+        public const string BodyAttr = "BodyAttr";
 
         #region 报表属性(参数的方式存储).
         /// <summary>
@@ -1636,6 +1640,22 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.AppType, value);
             }
         }
+        /// <summary>
+        /// 表单body属性.
+        /// </summary>
+        public string BodyAttr
+        {
+            get
+            {
+                string str= this.GetValStrByKey(MapDataAttr.BodyAttr);
+                str = str.Replace("~", "'");
+                return str;
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.BodyAttr, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -1826,6 +1846,9 @@ namespace BP.Sys
 
 
                 map.AddTBString(MapDataAttr.DBSrc, "local", "数据源", true, false, 0, 100, 20);
+
+                map.AddTBString(MapDataAttr.BodyAttr, null, "表单Body属性", true, false, 0, 100, 20);
+
                 #endregion 基础信息.
 
                 #region 设计者信息.

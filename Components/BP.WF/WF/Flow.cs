@@ -320,10 +320,17 @@ namespace BP.WF
         {
             get
             {
-                string str = this.GetValStringByKey(FlowAttr.StartGuidePara1);
-                if (str.Contains("?") == false)
-                    str = str + "?1=2";
-                return str.Replace("~", "'");
+                if (this.StartGuideWay == Template.StartGuideWay.BySelfUrl)
+                {
+                    string str = this.GetValStringByKey(FlowAttr.StartGuidePara1);
+                    if (str.Contains("?") == false)
+                        str = str + "?1=2";
+                    return str.Replace("~", "'");
+                }
+                else
+                {
+                    return this.GetValStringByKey(FlowAttr.StartGuidePara1);
+                }
             }
             set
             {

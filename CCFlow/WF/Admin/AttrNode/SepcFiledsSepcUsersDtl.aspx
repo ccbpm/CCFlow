@@ -18,18 +18,22 @@
         this.TB_Emps.Text = me.Tag1;
         this.TB_SQL.Text = me.Tag2;
     }
+    else
+    {
+        me.Doc= this.Request.QueryString["Fields"];
+    }
      %>
 
 <tr>
-<th> 选择的字段集合 </th>
+<th> 激活的字段集合 </th>
 </tr>
 
 <tr>
-<td> <%=this.Request.QueryString["Fields"]%>  <%=me.Doc %></td>
+<td> <%=me.Doc %></td>
 </tr>
 
 <tr>
-<th> 以下用户有权限启用字段 </th>
+<th> 以下用户有权限启用字段(输入人员编号，多个人员用逗号分开,比如:zhangsan,lisi,wangwu,) </th>
 </tr>
 
 <tr>
@@ -40,7 +44,7 @@
 
 
 <tr>
-<th> 以下SQL表达式有权限启用字段 </th>
+<th> 以下SQL表达式有权限启用字段(设置一个SQL,支持ccbpm表达式,返回一行一列，该值大于零就成立。) </th>
 </tr>
 
 <tr>
@@ -51,7 +55,7 @@
 
 
 <tr>
-<th> 指定部门人员的权限 </th>
+<th> 指定部门人员的权限(设置一个字符，是部门编号，多个部门使用逗号分开，比如：003,004, 表示该部门下的所有人员都可以激活该字段集合。) </th>
 </tr>
 
 <tr>
@@ -69,10 +73,10 @@
 
 
 <tr>
-<th>   
+<td>   
     <asp:Button ID="Btn_Save" runat="server" Text="保存" onclick="Btn_Save_Click" />
     <asp:Button ID="Btn_Del" runat="server" Text="删除" onclick="Btn_Del_Click" />
-    </th>
+    </td>
 </tr>
 
 </table>

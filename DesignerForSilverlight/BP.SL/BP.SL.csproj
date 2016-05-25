@@ -84,9 +84,7 @@
     <Compile Include="Glo.cs" />
     <Compile Include="WF\FrmNode.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Base\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Common\OutputChildWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

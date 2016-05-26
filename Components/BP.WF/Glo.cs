@@ -832,17 +832,20 @@ namespace BP.WF
                 frmSort.Insert();
             }
 
+            //删除这个数据, 没有找到，初始化这些数据失败的原因.
+            BP.DA.DBAccess.RunSQL("DELETE FROM PORT_DEPTSTATION");
+
             string sqlscript = "";
             if (Glo.OSModel == BP.Sys.OSModel.OneOne)
             {
-                /*如果是WorkFlow模式*/
+                /*如果是OneOne模式*/
                 sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_WorkFlow.sql";
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
             }
 
             if (Glo.OSModel == BP.Sys.OSModel.OneMore)
             {
-                /*如果是BPM模式*/
+                /*如果是OneMore模式*/
                 sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\GPM\\SQLScript\\Port_Inc_CH_BPM.sql";
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
             }

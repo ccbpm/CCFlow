@@ -51,13 +51,21 @@
         .haveIt
         {
             color: Blue;
-             font-weight:bolder;
+            font-weight: bolder;
         }
         li
         {
-            line-height: 20px;
             height: 20px;
+            line-height:20px;
             margin-top: 3px;
+        }
+        .op
+        {
+            float: right;
+        }
+        .left
+        {
+            float: left;
         }
     </style>
 </asp:Content>
@@ -133,23 +141,23 @@
 
                 string extUrl = "";
                 if (fl.IsBatchStart)
-                    extUrl = "<div style='float:right;'><a href='/WF/BatchStart.aspx?FK_Flow=" + fl.No + "' >批量发起</a>|<a href='/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "'>查询</a>|<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + fl.No + "&DoType=Chart&T=" + timeKey + "','sd');\"  >图</a></div>";
+                    extUrl = "<div class='op'><a href='/WF/BatchStart.aspx?FK_Flow=" + fl.No + "' >批量发起</a>|<a href='/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "'>查询</a>|<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + fl.No + "&DoType=Chart&T=" + timeKey + "','sd');\"  >图</a></div>";
                 else
-                    extUrl = "<div style='float:right;'><a  href='/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "'>查询</a>|<a href=\"javascript:WinOpen('/WF/Admin/CCBPMDesigner/truck/Truck.htm?FK_Flow=" + fl.No + "&WorkID=null&FID=null&DoType=Chart&T=" + timeKey + "','sd');\"  >流程图</a></div>";
+                    extUrl = "<div class='op'><a  href='/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "'>查询</a>|<a href=\"javascript:WinOpen('/WF/Admin/CCBPMDesigner/truck/Truck.htm?FK_Flow=" + fl.No + "&WorkID=null&FID=null&DoType=Chart&T=" + timeKey + "','sd');\"  >流程图</a></div>";
 
                 if (isHaveIt)
                 {
                     if (BP.WF.Glo.IsWinOpenStartWork == 1)
                     {
-                        sBuilder.Append("<li><b><a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01&T=" + timeKey + "');\" >" + fl.Name + "</a></b>" + extUrl + "</li>");
+                        sBuilder.Append("<li><b class='left'><a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01&T=" + timeKey + "');\" >" + fl.Name + "</a></b>" + extUrl + "</li>");
                     }
                     else if (BP.WF.Glo.IsWinOpenStartWork == 2)
                     {
-                        sBuilder.Append("<li><b><a href=\"javascript:WinOpenIt('/WF/OneFlow/MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01&T=" + timeKey + "');\" >" + fl.Name + "</a></b>" + extUrl + "</li>");
+                        sBuilder.Append("<li><b class='left'><a href=\"javascript:WinOpenIt('/WF/OneFlow/MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01&T=" + timeKey + "');\" >" + fl.Name + "</a></b>" + extUrl + "</li>");
                     }
                     else
                     {
-                        sBuilder.Append("<li><b><a href='MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=ND" + int.Parse(fl.No) + "01' >" + fl.Name + "</a></b>" + extUrl + "</li>");
+                        sBuilder.Append("<li><b class='left'><a href='MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=ND" + int.Parse(fl.No) + "01' >" + fl.Name + "</a></b>" + extUrl + "</li>");
                     }
                 }
                 else

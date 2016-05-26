@@ -764,6 +764,8 @@ namespace CCFlow.WF.FlowFormTree
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;
                         break;
+                     case FrmEnableRole.Disable: // 如果禁用了，就continue出去..
+                        continue;
                     default:
                         throw new Exception("@没有判断的规则."+frmNode.FrmEnableRole);
                 }
@@ -774,12 +776,15 @@ namespace CCFlow.WF.FlowFormTree
                     if (frmNode.FK_Frm != md.No)
                         continue;
 
+                    #warning 这里有错误, 如果是节点表单的话，就没有这个值，没有这个值就绑定不到表单树，代国强解决.
+                    if (md.FK_FormTree == "")
+                        md.FK_FormTree = "01";
+
                     foreach (SysFormTree formTree in formTrees)
                     {
                         if (md.FK_FormTree != formTree.No)
                             continue;
-
-                        if (!appFlowFormTree.Contains("No", formTree.No))
+                        if (appFlowFormTree.Contains("No", formTree.No)==false)
                         {
                             BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
                             nodeFolder.No = formTree.No;
@@ -812,6 +817,7 @@ namespace CCFlow.WF.FlowFormTree
                 }
             }
             #endregion
+
             //扩展工具，显示位置为表单树类型
             NodeToolbars extToolBars = new NodeToolbars();
             QueryObject info = new QueryObject(extToolBars);

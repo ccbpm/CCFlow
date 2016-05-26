@@ -67,7 +67,6 @@ namespace CCFlow.WF.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             switch (this.DoType)
             {
                 case "Up":
@@ -88,7 +87,6 @@ namespace CCFlow.WF.Admin
                     break;
             }
         }
-
 
         #region 绑定表单.
         public void SelectedFrm()
@@ -246,15 +244,33 @@ namespace CCFlow.WF.Admin
             string text = "";
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
             FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
-            if (fns.Count == 0)
+
+            #region 如果没有ndFrm 就增加上.
+            bool isHaveNDFrm = false;
+            foreach (FrmNode fn in fns)
             {
-                text = "<ul>";
-                text += "<li>1，当前没有任何独立表单绑定到该节点上。";
-                text += "<li>2，请您执行绑定表单：<a href=\"javascript:BindFrms('" + this.FK_Node + "','" + this.FK_Flow + "');\"  >绑定表单</a></li>";
-                text += "</ul>";
-                this.Pub1.AddFieldSet("提示", text);
-                return;
+                if (fn.FK_Frm == "ND" + this.FK_Node)
+                {
+                    isHaveNDFrm = true;
+                    break;
+                }
             }
+            if (isHaveNDFrm ==false)
+            {
+                FrmNode fn = new FrmNode();
+                fn.FK_Flow = this.FK_Flow;
+                fn.FK_Frm = "ND" + this.FK_Node;
+                fn.FK_Node = this.FK_Node;
+
+                fn.FrmEnableRole = FrmEnableRole.Disable; //就是默认不启用.
+                fn.FrmSln = 0;
+                fn.IsEdit = true;
+                fn.IsEnableLoadData = true;
+                fn.Insert();
+                fns.AddEntity(fn);
+            }
+            #endregion 如果没有ndFrm 就增加上.
+
 
             string tfModel = SystemConfig.AppSettings["TreeFrmModel"];
             
@@ -292,30 +308,21 @@ namespace CCFlow.WF.Admin
             int idx = 1;
             foreach (FrmNode fn in fns)
             {
+                MapData md = new MapData();
+                md.No = fn.FK_Frm;
+                if (md.RetrieveFromDBSources() == 0)
+                {
+                    fn.Delete();  //说明该表单不存在了，就需要把这个删除掉.
+                    continue;
+                }
+
                 this.Pub1.AddTR();
                 this.Pub1.AddTDIdx(idx++);
                 this.Pub1.AddTD(fn.FK_Frm);
-
-                MapData md = new MapData();
-                md.No = fn.FK_Frm;
-                try
-                {
-                    md.Retrieve();
-                }
-                catch
-                {
-                    //说明该表单不存在了，就需要把这个删除掉.
-                    fn.Delete();
-                }
-
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
-
                 DDL ddl = new DDL();
-                //ddl.ID = "DDL_FrmType_" + fn.FK_Frm;
-                //ddl.BindSysEnum("FrmType", (int)fn.HisFrmType);
-                //this.Pub1.AddTD(fn.HisFrmTypeText);
 
-                //获取当前独立表单中的所有字段     add by 海南  zqp
+                //获取当前独立表单中的所有字段  add by 海南  zqp
                 if (tfModel == "1")
                 {
                     //获取它的字段集合
@@ -362,8 +369,6 @@ namespace CCFlow.WF.Admin
                 //this.Pub1.AddTD(ddl);
 
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FlowFrm/FrmEnableRole.aspx?FK_Node="+fn.FK_Node+"&FK_MapData="+fn.FK_Frm+"')\">设置(" + fn.FrmEnableRoleText + ")</a>");
-
-
 
                 CheckBox cb = new CheckBox();
                 cb.ID = "CB_IsEdit_" + md.No;

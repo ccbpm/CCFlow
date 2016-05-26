@@ -61,12 +61,22 @@ ul
 <ul>
 <li>请配置一个SQL语句该语句支持cc表达式,并且返回一行一列，如果该值大于0，这个表单就启用，否则就不启用。</li>
 </ul>
-
 <asp:TextBox ID="TB_SQL" runat="server" TextMode="MultiLine" Rows="4"  Columns="80" >
 </asp:TextBox>
-  
 
 </fieldset>
+
+
+<fieldset>
+<legend><asp:RadioButton ID="RB_5" runat="server" Text="不启用（禁用它）" GroupName="xxx" /></legend>
+<ul>
+<li>这个是节点表单的默认值</li>
+<li>如果其他表单暂时不启用，就设置该规则。</li>
+</ul>
+
+</fieldset>
+
+
  </td>
 </tr>
 

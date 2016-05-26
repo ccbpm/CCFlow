@@ -58,6 +58,9 @@ namespace CCFlow.WF.Admin.FlowFrm
                        this.RB_4.Checked = true;
                        this.TB_SQL.Text = fn.FrmEnableExp;
                        break;
+                   case BP.WF.Template.FrmEnableRole.Disable:
+                       this.RB_5.Checked = true;
+                       break;
                    default:
                        throw new Exception("@没有判断的模式.");
                }
@@ -86,6 +89,10 @@ namespace CCFlow.WF.Admin.FlowFrm
                 fn.FrmEnableRole = BP.WF.Template.FrmEnableRole.BySQL;
                 fn.FrmEnableExp = this.TB_SQL.Text;
             }
+
+            if (this.RB_5.Checked)
+                fn.FrmEnableRole = BP.WF.Template.FrmEnableRole.Disable;
+
             fn.Update();
 
             BP.Sys.PubClass.WinClose(fn.FrmEnableRoleText);

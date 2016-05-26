@@ -168,10 +168,10 @@ namespace CCFlow.WF.Admin
             #endregion 数据库类型.
 
             #region 安装模式.
-            this.Pub1.AddFieldSet("ccflow的运行模式,手工修改 web.config 中的 OSModel 进行配置. ");
+            this.Pub1.AddFieldSet("ccflow 的运行模式,手工修改 web.config 中的 OSModel 进行配置. ");
             rb = new RadioButton();
-            rb.Text = "集成模式";
-            rb.ID = "RB_WorkFlow";
+            rb.Text = "OneOne模式一个人一个部门多岗位";
+            rb.ID = "RB_OneOne";
             rb.GroupName = "model";
             if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
                 rb.Checked = true;
@@ -179,8 +179,8 @@ namespace CCFlow.WF.Admin
             this.Pub1.Add(rb);
 
             rb = new RadioButton();
-            rb.Text = "BPM工作模式";
-            rb.ID = "RB_BMP";
+            rb.Text = "OneMore一个人多部门多岗位.";
+            rb.ID = "RB_OneMore";
             rb.GroupName = "model";
             if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
                 rb.Checked = true;
@@ -250,9 +250,11 @@ namespace CCFlow.WF.Admin
             this.Pub1.Add(btn);
 
             this.Pub1.AddBR();
-            this.Pub1.AddBR("1,安装期间请耐心等待,不要关闭界面.");
+            this.Pub1.AddBR("1,安装期间请耐心等待,不要关闭界面,如果您选择demo模式，系统将会装载200多个demo流程模版导致安装过程变慢。");
             this.Pub1.AddBR("2,如果您是用VS打开的请不要用F5运行它,会导致安装变慢，调试模式安装会很慢。");
             this.Pub1.AddBR("3.如果安装错误,请删除数据库表并重新安装,或者把安装遇到的问题反馈给ccflow开发团队. <a href='http://bbs.ccflow.org' target=_blank >ccflow 技术论坛</a>");
+            this.Pub1.AddBR("4,任何时间的安装失败，都要删除数据库重新建，然后反馈最新的程序进行重安装。");
+
         }
         void btn_Click(object sender, EventArgs e)
         {

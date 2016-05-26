@@ -570,7 +570,6 @@ INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('2202','吉林省�
 INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('2203','吉林省四平市','四平','2','22','DB');
 
 
-
 DELETE FROM Demo_AnQuanItem;
 INSERT INTO Demo_AnQuanItem (No,Name) VALUES('01','生产设备的安全防护设施是否完好');
 INSERT INTO Demo_AnQuanItem (No,Name) VALUES('02','局部通风机是否正常稳定运转');

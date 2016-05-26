@@ -95,7 +95,6 @@ INSERT INTO Port_EmpStation (FK_Emp,FK_Station) VALUES('zhoutianjiao','08')  ;
 INSERT INTO Port_EmpStation (FK_Emp,FK_Station) VALUES('guoxiangbin','04');
 INSERT INTO Port_EmpStation (FK_Emp,FK_Station) VALUES('fuhui','09') ; 
 
-
 -- 财务部;
 INSERT INTO Port_EmpStation (FK_Emp,FK_Station) VALUES('yangyilei','05')   ;
 INSERT INTO Port_EmpStation (FK_Emp,FK_Station) VALUES('guobaogeng','10')  ;
@@ -107,6 +106,7 @@ INSERT INTO Port_EmpStation (FK_Emp,FK_Station) VALUES('liyan','11')  ;
 
 -- 部门与岗位的对应关系.
 DELETE FROM  Port_DeptStation;
+
 INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES('100','01');
 INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES('1001','02');
 INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES('1001','07');
@@ -122,13 +122,3 @@ INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES('1004','10');
 
 INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES('1005','06');
 INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES('1005','11');
-
-
- 
-
- 
-
-
-
-
- 

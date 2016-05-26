@@ -207,8 +207,8 @@ INSERT INTO GPM_InfoPush(No,Name,Url,GetSQL,WebPath) VALUES ('News','未读新�
 INSERT INTO GPM_InfoPush(No,Name,Url,GetSQL,WebPath) VALUES ('Notice','未读公告','http://sina.com.cn','SELECT COUNT(*) FROM PORT_EMP','/DataUser/BP.GPM.InfoPush/Notice.gif');
 INSERT INTO GPM_InfoPush(No,Name,Url,GetSQL,WebPath) VALUES ('Ontheway','在途工作','http://sina.com.cn','SELECT COUNT(*) FROM PORT_EMP','/DataUser/BP.GPM.InfoPush/Ontheway.gif');
 
-DELETE FROM SYS_GloVar;
-INSERT INTO SYS_GloVar(No,Name,Val,GroupKey,Note) VALUES ('ColsOfApp','SSO界面应用系统列数','2','APP','SSO界面应用系统列数。');
-INSERT INTO SYS_GloVar(No,Name,Val,GroupKey,Note) VALUES ('ColsOfSSO','SSO界面信息列数','3','SSO','SSO界面信息列数,单点登陆界面中的列数。');
-INSERT INTO SYS_GloVar(No,Name,Val,GroupKey,Note) VALUES ('UnitFullName','单位全称','济南驰骋信息技术有限公司','Glo','');
-INSERT INTO SYS_GloVar(No,Name,Val,GroupKey,Note) VALUES ('UnitSimpleName','单位简称','驰骋软件','Glo','');
+DELETE FROM Sys_GloVar;
+INSERT INTO Sys_GloVar(No,Name,Val,GroupKey,Note) VALUES ('ColsOfApp','SSO界面应用系统列数','2','APP','SSO界面应用系统列数。');
+INSERT INTO Sys_GloVar(No,Name,Val,GroupKey,Note) VALUES ('ColsOfSSO','SSO界面信息列数','3','SSO','SSO界面信息列数,单点登陆界面中的列数。');
+INSERT INTO Sys_GloVar(No,Name,Val,GroupKey,Note) VALUES ('UnitFullName','单位全称','济南驰骋信息技术有限公司','Glo','');
+INSERT INTO Sys_GloVar(No,Name,Val,GroupKey,Note) VALUES ('UnitSimpleName','单位简称','驰骋软件','Glo','');

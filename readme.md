@@ -1,30 +1,41 @@
-产品名称: 驰骋.net工作流引擎.
-英文名称: ChiCheng Workflow Engine  
-简    称: CCFlow    版本: ccflow6  官方网站: http://ccflow.org
-开发历史: 2003-2016年.         性质: 100%开源,无任何功能限制.
-许可协议: GPL URL: http://www.gnu.org/licenses/gpl.html
-源 代 码: http://git.oschina.net/chichengsoft/ccflow/tree/develop
-运行环境: BS结构. windows xp, windows server. win7 IIS6.0以上. .net4.0. Office2007 (如果需要单据打印.)
-开发语言: VS2010, .net4.0 c#.net. 客户端: FireFox 3.0以上. IE7+,或者使用IE内核的浏览器.
-组成部分: 流程图形设计器(有:cs版本与bs版本)/流程前台运行程序(BS结构)/流程服务(CS)/web的方式的表单设计器/BRP工具
-基本功能: 图形化流程设计/智能表单web定义免程序开发/级联下拉框/流程轨迹/单据自定义打印/邮件短信工作到达通知/自动任务分配/支持sdk模式开发/简洁集成/消息侦听/丰富事件接口/报表定义/工作量分析/绩效考核/手机访问/支持sqlserve,oracle,mysql,informix数据库
+
+#CCFlow基本信息.
+
+1.产品名称: 驰骋.net工作流引擎.
+2.英文名称: ChiCheng Workflow Engine  
+3.简    称: CCFlow    版本: ccflow6  官方网站: http://ccflow.org
+4.开发历史: 2003-2016年.         性质: 100%开源,无任何功能限制.
+5.许可协议: GPL URL: http://www.gnu.org/licenses/gpl.html
+6.运行环境: BS结构. windows xp, windows server. win7 IIS6.0以上. .net4.0. Office2007 (如果需要单据打印.)
+7.开发语言: VS2010, .net4.0 c#.net. 客户端: FireFox 3.0以上. IE7+,或者使用IE内核的浏览器.
+8.组成部分: 流程图形设计器(有:cs版本与bs版本)/流程前台运行程序(BS结构)/流程服务(CS)/web的方式的表单设计器/BRP工具
+9.基本功能: 图形化流程设计/智能表单web定义免程序开发/级联下拉框/流程轨迹/单据自定义打印/邮件短信工作到达通知/自动任务分配/支持sdk模式开发/简洁集成/消息侦听/丰富事件接口/报表定义/工作量分析/绩效考核/手机访问/支持sqlserve,oracle,mysql,informix数据库
 CCFlow功能: 懂管理就会开发基本流程,为单位流程管理系统,会SQL就能达到中级开发水平解决复杂的逻辑问题与其它系统耦合,有程基础就可以使用sdk做高级的开发.
-支持数据库: sqlserver系列版本， oracle 系列版本， informix 系列版本, mysql系列版本
-http://git.oschina.net/chichengsoft/ccflow/tree/develop
+10.支持数据库: sqlserver系列版本， oracle 系列版本， informix 系列版本, mysql系列版本
+10.http://git.oschina.net/chichengsoft/ccflow/tree/develop
+
+#基础功能
+
+1.流程引擎设计支持所见即所得的设计：节点设计、表单设计、单据设计、报表定义设计、以及用户菜单设计。
+2.流程模式简洁只有4种容易理解、线性流程、同表单分合流、异表单分合流、父子流程，没有复杂的概念。
+3.支持流程的基础功能：前进、后退、转向、转发、撤销、抄送、挂起、草稿、任务池共享，也支持高级功能取回审批、项目组、外部用户等等。
+
  
 
-程序运行组件清单. 
-*****************************************************************
+#下载方法:
+
+请参考: http://git.oschina.net/chichengsoft/ccflow/wikis/pages 
+
+
+#程序运行组件清单. 
 1. .net 4.0
 2, owc11.exe 用于生成数据图形分析。
 3, SaveAsPDFandXPS.exe 生成pdf文件的组件.【选装】
-4, iewebcontrols.msi  控件.
-5, vs2010 开发环境(不进行二次开发不必要安装)
-*****************************************************************
+4, vs2010 开发环境(不进行二次开发不必要安装)
 
-ccflow 开源程序文件清单:
-*****************************************************************
- 组件目录 
+
+# ccflow 开源程序文件清单:  
+
 D:\ccflow.git\Components  组件目录.
 D:\ccflow.git\Components\BP.En30   -- 底层基类.
 D:\ccflow.git\Components\BP.Web.Controls30   --bs控件层.
@@ -37,10 +48,9 @@ D:\ccflow.git\DemoAndTesting  - 单元测试&Demo
 D:\ccflow.git\DesignerForSilverlight - 流程设计器，表单设计器.
 
 
- 
-关于: ccflow前台目录结构.
-=========================================================================
+# ccflow前台目录结构.
    1.1 前台程序.(不建议用户修改，如果修改请提交给我们，否则您就没有办法升级.)
+
 D:\ccflow.git\CCFlow\WF\ --前台程序.
 D:\ccflow.git\CCFlow\WF\Comm  --通用功能层.
 D:\ccflow.git\CCFlow\WF\Data  -- 应用程序数据目录. 包含一些xml,等等。
@@ -87,9 +97,7 @@ D:\ccflow.git\CCFlow\DataUser\XML 用户系统配置文件。
    1.3 权限控制系统. 
 D:\ccflow.git\CCFlow\GPM
 
-*****************************************************************
-
-如何学习好ccflow?
+*** 如何学习好ccflow?
 ===================================================
 1, 多看视频与文档.
    1, ccflow提供的视频是4.0的视频，有一些功能对应不上您可以看文档，文档是最新的。

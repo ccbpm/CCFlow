@@ -28,111 +28,116 @@ CCFlow¹¦ÄÜ: ¶®¹ÜÀí¾Í»á¿ª·¢»ù±¾Á÷³Ì,Îªµ¥Î»Á÷³Ì¹ÜÀíÏµÍ³,»áSQL¾ÍÄÜ´ïµ½ÖĞ¼¶¿ª·¢Ë®Æ½½
 
 
 #³ÌĞòÔËĞĞ×é¼şÇåµ¥. 
+
 1. .net 4.0
 2, owc11.exe ÓÃÓÚÉú³ÉÊı¾İÍ¼ĞÎ·ÖÎö¡£
-3, SaveAsPDFandXPS.exe Éú³ÉpdfÎÄ¼şµÄ×é¼ş.¡¾Ñ¡×°¡¿
-4, vs2010 ¿ª·¢»·¾³(²»½øĞĞ¶ş´Î¿ª·¢²»±ØÒª°²×°)
+3. SaveAsPDFandXPS.exe Éú³ÉpdfÎÄ¼şµÄ×é¼ş.¡¾Ñ¡×°¡¿
+4. vs2010 ¿ª·¢»·¾³(²»½øĞĞ¶ş´Î¿ª·¢²»±ØÒª°²×°)
 
 
 # ccflow ¿ªÔ´³ÌĞòÎÄ¼şÇåµ¥:  
 
-D:\ccflow.git\Components  ×é¼şÄ¿Â¼.
-D:\ccflow.git\Components\BP.En30   -- µ×²ã»ùÀà.
-D:\ccflow.git\Components\BP.Web.Controls30   --bs¿Ø¼ş²ã.
-D:\ccflow.git\Components\BP.WF  --¹¤×÷Á÷³ÌÒıÇæ²ã
-D:\ccflow.git\DLL  -- µÚÈı·½×é¼şÖĞĞèÒªµ÷ÓÃdll.
-D:\ccflow.git\Docs - ÎÄµµ
-D:\ccflow.git\CCFlow  -- BS¹¤×÷Á÷³ÌÒıÇæÇ°Ì¨.  
-D:\ccflow.git\CCFlowServices - Á÷³Ì·şÎñ³ÌĞò. 
-D:\ccflow.git\DemoAndTesting  - µ¥Ôª²âÊÔ&Demo
-D:\ccflow.git\DesignerForSilverlight - Á÷³ÌÉè¼ÆÆ÷£¬±íµ¥Éè¼ÆÆ÷.
+1. D:\ccflow.git\Components  ×é¼şÄ¿Â¼.
+2. D:\ccflow.git\Components\BP.En30   -- µ×²ã»ùÀà.
+3. D:\ccflow.git\Components\BP.Web.Controls30   --bs¿Ø¼ş²ã.
+4. D:\ccflow.git\Components\BP.WF  --¹¤×÷Á÷³ÌÒıÇæ²ã
+5. D:\ccflow.git\DLL  -- µÚÈı·½×é¼şÖĞĞèÒªµ÷ÓÃdll.
+6. D:\ccflow.git\Docs - ÎÄµµ
+7. D:\ccflow.git\CCFlow  -- BS¹¤×÷Á÷³ÌÒıÇæÇ°Ì¨.  
+8. D:\ccflow.git\CCFlowServices - Á÷³Ì·şÎñ³ÌĞò. 
+9. D:\ccflow.git\DemoAndTesting  - µ¥Ôª²âÊÔ&Demo
+10. D:\ccflow.git\DesignerForSilverlight - Á÷³ÌÉè¼ÆÆ÷£¬±íµ¥Éè¼ÆÆ÷.
 
 
 # ccflowÇ°Ì¨Ä¿Â¼½á¹¹.
-   1.1 Ç°Ì¨³ÌĞò.(²»½¨ÒéÓÃ»§ĞŞ¸Ä£¬Èç¹ûĞŞ¸ÄÇëÌá½»¸øÎÒÃÇ£¬·ñÔòÄú¾ÍÃ»ÓĞ°ì·¨Éı¼¶.)
+   
+Ç°Ì¨³ÌĞò.(²»½¨ÒéÓÃ»§ĞŞ¸Ä£¬Èç¹ûĞŞ¸ÄÇëÌá½»¸øÎÒÃÇ£¬·ñÔòÄú¾ÍÃ»ÓĞ°ì·¨Éı¼¶.)
 
-D:\ccflow.git\CCFlow\WF\ --Ç°Ì¨³ÌĞò.
-D:\ccflow.git\CCFlow\WF\Comm  --Í¨ÓÃ¹¦ÄÜ²ã.
-D:\ccflow.git\CCFlow\WF\Data  -- Ó¦ÓÃ³ÌĞòÊı¾İÄ¿Â¼. °üº¬Ò»Ğ©xml,µÈµÈ¡£
-D:\ccflow.git\CCFlow\WF\Data\Install Óë°²×°ÓĞ¹ØÏµµÄÎÄ¼ş
-D:\ccflow.git\CCFlow\WF\Data\JSLib  ÏµÍ³javascript º¯Êı¿â¡£
-D:\ccflow.git\CCFlow\WF\Data\Language ÓïÑÔ°ü(ÍêÉÆÖĞ)
-D:\ccflow.git\CCFlow\WF\Data\Node  csÁ÷³ÌÉè¼ÆÆ÷½ÚµãÀàĞÍ£¨csÁ÷³ÌÉè¼ÆÆ÷²»ÔÚ·¢Õ¹£©
-D:\ccflow.git\CCFlow\WF\Data\XML  xmlÅäÖÃÎÄ¼ş²»½ö½öccflowÊ¹ÓÃ,bp¿ò¼ÜÒ²Ê¹ÓÃËü¡£
-D:\ccflow.git\CCFlow\WF\UC  --ÓÃ»§¿Ø¼ş.
-D:\ccflow.git\CCFlow\WF\DocFlow -- ¹«ÎÄÁ÷³Ì(Ä¿Ç°»¹²»ÊÇºÜÍêÉÆ)
-D:\ccflow.git\CCFlow\OA -- Í¨ÓÃoa ×é¼ş(Ä¿Ç°»¹²»ÊÇºÜÍêÉÆ)
-D:\ccflow.git\CCFlow\SDKFlowDemo -- sdk¿ª·¢Ä£Ê½µÄ°¸Àı.
-D:\ccflow.git\CCFlow\WF\WAP -- ÊÖ»ú·ÃÎÊÇ°Ì¨´úÂëÄ¿Â¼. (ËµÃ÷:¶ÔC¼¶ÓÃ»§ÓĞĞ§)
-D:\ccflow.git\CCFlow\WF -- ccflowÇ°Ì¨Ó¦ÓÃ³ÌĞò²ã(Ö÷ÒªµÄ¹¦ÄÜ¶¼ÊÇÔÚÕâ¸öÄ¿Â¼ÀïÃæ)
-D:\ccflow.git\CCFlow\WF\Admin - ¶ÔccflowµÄ¹ÜÀí±ÈÈçÉè¼Æ·½ÏòÌõ¼ş.±¨±í¶¨Òå...
-D:\ccflow.git\CCFlow\WF\Admin\XAP CCFlowDesigner.xapÁ÷³ÌÉè¼ÆÆ÷£¬CCForm.xap±íµ¥Éè¼ÆÆ÷¡£   
-D:\ccflow.git\CCFlow\WF\MapDef - ±íµ¥¶¨Òå.
-D:\ccflow.git\CCFlow\WF\Admin\CCBPMDesigner -- H5µÄÁ÷³ÌÉè¼ÆÆ÷.
-D:\ccflow.git\CCFlow\WF\Admin\CCFormDesigner -- H5µÄ±íµ¥Éè¼ÆÆ÷.
+1. D:\ccflow.git\CCFlow\WF\ --Ç°Ì¨³ÌĞò.
+2. D:\ccflow.git\CCFlow\WF\Comm  --Í¨ÓÃ¹¦ÄÜ²ã.
+3. D:\ccflow.git\CCFlow\WF\Data  -- Ó¦ÓÃ³ÌĞòÊı¾İÄ¿Â¼. °üº¬Ò»Ğ©xml,µÈµÈ¡£
+4. D:\ccflow.git\CCFlow\WF\Data\Install Óë°²×°ÓĞ¹ØÏµµÄÎÄ¼ş
+5. D:\ccflow.git\CCFlow\WF\Data\JSLib  ÏµÍ³javascript º¯Êı¿â¡£
+6. D:\ccflow.git\CCFlow\WF\Data\Language ÓïÑÔ°ü(ÍêÉÆÖĞ)
+7. D:\ccflow.git\CCFlow\WF\Data\Node  csÁ÷³ÌÉè¼ÆÆ÷½ÚµãÀàĞÍ£¨csÁ÷³ÌÉè¼ÆÆ÷²»ÔÚ·¢Õ¹£©
+8. D:\ccflow.git\CCFlow\WF\Data\XML  xmlÅäÖÃÎÄ¼ş²»½ö½öccflowÊ¹ÓÃ,bp¿ò¼ÜÒ²Ê¹ÓÃËü¡£
+9. D:\ccflow.git\CCFlow\WF\UC  --ÓÃ»§¿Ø¼ş.
+10. D:\ccflow.git\CCFlow\WF\DocFlow -- ¹«ÎÄÁ÷³Ì(Ä¿Ç°»¹²»ÊÇºÜÍêÉÆ)
+11. D:\ccflow.git\CCFlow\OA -- Í¨ÓÃoa ×é¼ş(Ä¿Ç°»¹²»ÊÇºÜÍêÉÆ)
+12. D:\ccflow.git\CCFlow\SDKFlowDemo -- sdk¿ª·¢Ä£Ê½µÄ°¸Àı.
+13. D:\ccflow.git\CCFlow\WF\WAP -- ÊÖ»ú·ÃÎÊÇ°Ì¨´úÂëÄ¿Â¼. (ËµÃ÷:¶ÔC¼¶ÓÃ»§ÓĞĞ§)
+14. D:\ccflow.git\CCFlow\WF -- ccflowÇ°Ì¨Ó¦ÓÃ³ÌĞò²ã(Ö÷ÒªµÄ¹¦ÄÜ¶¼ÊÇÔÚÕâ¸öÄ¿Â¼ÀïÃæ)
+15. D:\ccflow.git\CCFlow\WF\Admin - ¶ÔccflowµÄ¹ÜÀí±ÈÈçÉè¼Æ·½ÏòÌõ¼ş.±¨±í¶¨Òå...
+16. D:\ccflow.git\CCFlow\WF\Admin\XAP CCFlowDesigner.xapÁ÷³ÌÉè¼ÆÆ÷£¬CCForm.xap±íµ¥Éè¼ÆÆ÷¡£   
+17. D:\ccflow.git\CCFlow\WF\MapDef - ±íµ¥¶¨Òå.
+18. D:\ccflow.git\CCFlow\WF\Admin\CCBPMDesigner -- H5µÄÁ÷³ÌÉè¼ÆÆ÷.
+19. D:\ccflow.git\CCFlow\WF\Admin\CCFormDesigner -- H5µÄ±íµ¥Éè¼ÆÆ÷.
 
 
-   1.2 Ç°Ì¨µÄÓÃ»§Êı¾İÎÄ¼ş£¬ÓÃ»§¿ÉÒÔ¸ü¸Ä.
-D:\ccflow.git\CCFlow\DataUser --ÓÃ»§ÎÄ¼ş.
-D:\ccflow.git\CCFlow\DataUser\Seal -- µç×Ó¸ÇÕÂÍ¼Æ¬.
-D:\ccflow.git\CCFlow\DataUser\UploadFile - ÉÏ´«¸½¼ş
-D:\ccflow.git\CCFlow\DataUser\Style -- ¸öĞÔ»¯·ç¸ñÎÄ¼ş.
-D:\ccflow.git\CCFlow\DataUser\CyclostyleFile -- µ¥¾İÄ£°æÎÄ¼ş.
-D:\ccflow.git\CCFlow\DataUser\EmailTemplete -ÓÊ¼şÄ£°æÎÄ¼ş.
-D:\ccflow.git\CCFlow\DataUser\ICON --ICON
-D:\ccflow.git\CCFlow\DataUser\TaoHong --¹«ÎÄÌ×ºì.
-D:\ccflow.git\CCFlow\DataUser\Bill  µ¥¾İ´òÓ¡Éú³ÉÊı¾İ.
-D:\ccflow.git\CCFlow\DataUser\CyclostyleFile µ¥¾İÄ£°åÊı¾İ
-D:\ccflow.git\CCFlow\DataUser\DtlTemplete  µ¼ÈëÃ÷Ï¸±íÄ£°åÎÄ¼ş.
-D:\ccflow.git\CCFlow\DataUser\EmailTemplete  ×Ô¶¨ÒåÓÊ¼ş·¢ËÍ¸ñÊ½ÎÄ¼ş.
-D:\ccflow.git\CCFlow\DataUser\JSLib ÓÃ»§×Ô¶¨Òåº¯Êı¿â
-D:\ccflow.git\CCFlow\DataUser\JSLibData ÓÃ»§×Ô¶¨Òåº¯ÊıÉú³ÉÎÄ¼ş¡£
-D:\ccflow.git\CCFlow\DataUser\Log ÏµÍ³ÈÕÖ¾ÎÄ¼ş
-D:\ccflow.git\CCFlow\DataUser\ReturnLog ÍË»ØÈÕÖ¾ÎÄ¼ş.
-D:\ccflow.git\CCFlow\DataUser\Siganture Ç©ÃûÎÄ¼ş.
-D:\ccflow.git\CCFlow\DataUser\Style ÓÃ»§×Ô¶¨Òå·ç¸ñÎÄ¼ş¡£
-D:\ccflow.git\CCFlow\DataUser\UploadFile ±íµ¥¸½¼şÉÏ´«ÎÄ¼ş£¬µ¥¸½¼ş£¬Óë¶à¸½¼ş¡£
-D:\ccflow.git\CCFlow\DataUser\XML ÓÃ»§ÏµÍ³ÅäÖÃÎÄ¼ş¡£
+  '1.2 Ç°Ì¨µÄÓÃ»§Êı¾İÎÄ¼ş£¬ÓÃ»§¿ÉÒÔ¸ü¸Ä.'
 
-   1.3 È¨ÏŞ¿ØÖÆÏµÍ³. 
-D:\ccflow.git\CCFlow\GPM
+1. D:\ccflow.git\CCFlow\DataUser --ÓÃ»§ÎÄ¼ş.
+2. D:\ccflow.git\CCFlow\DataUser\Seal -- µç×Ó¸ÇÕÂÍ¼Æ¬.
+3. D:\ccflow.git\CCFlow\DataUser\UploadFile - ÉÏ´«¸½¼ş
+4. D:\ccflow.git\CCFlow\DataUser\Style -- ¸öĞÔ»¯·ç¸ñÎÄ¼ş.
+5. D:\ccflow.git\CCFlow\DataUser\CyclostyleFile -- µ¥¾İÄ£°æÎÄ¼ş.
+6. D:\ccflow.git\CCFlow\DataUser\EmailTemplete -ÓÊ¼şÄ£°æÎÄ¼ş.
+7. D:\ccflow.git\CCFlow\DataUser\ICON --ICON
+8. D:\ccflow.git\CCFlow\DataUser\TaoHong --¹«ÎÄÌ×ºì.
+9. D:\ccflow.git\CCFlow\DataUser\Bill  µ¥¾İ´òÓ¡Éú³ÉÊı¾İ.
+10. D:\ccflow.git\CCFlow\DataUser\CyclostyleFile µ¥¾İÄ£°åÊı¾İ
+11. D:\ccflow.git\CCFlow\DataUser\DtlTemplete  µ¼ÈëÃ÷Ï¸±íÄ£°åÎÄ¼ş.
+12. D:\ccflow.git\CCFlow\DataUser\EmailTemplete  ×Ô¶¨ÒåÓÊ¼ş·¢ËÍ¸ñÊ½ÎÄ¼ş.
+13. D:\ccflow.git\CCFlow\DataUser\JSLib ÓÃ»§×Ô¶¨Òåº¯Êı¿â
+14. D:\ccflow.git\CCFlow\DataUser\JSLibData ÓÃ»§×Ô¶¨Òåº¯ÊıÉú³ÉÎÄ¼ş¡£
+15. D:\ccflow.git\CCFlow\DataUser\Log ÏµÍ³ÈÕÖ¾ÎÄ¼ş
+16. D:\ccflow.git\CCFlow\DataUser\ReturnLog ÍË»ØÈÕÖ¾ÎÄ¼ş.
+17. D:\ccflow.git\CCFlow\DataUser\Siganture Ç©ÃûÎÄ¼ş.
+18. D:\ccflow.git\CCFlow\DataUser\Style ÓÃ»§×Ô¶¨Òå·ç¸ñÎÄ¼ş¡£
+19. D:\ccflow.git\CCFlow\DataUser\UploadFile ±íµ¥¸½¼şÉÏ´«ÎÄ¼ş£¬µ¥¸½¼ş£¬Óë¶à¸½¼ş¡£
+20. D:\ccflow.git\CCFlow\DataUser\XML ÓÃ»§ÏµÍ³ÅäÖÃÎÄ¼ş¡£
+
+   '1.3 È¨ÏŞ¿ØÖÆÏµÍ³. D:\ccflow.git\CCFlow\GPM '
+
+
 
 *** ÈçºÎÑ§Ï°ºÃccflow?
-===================================================
-1, ¶à¿´ÊÓÆµÓëÎÄµµ.
+
+1.  ¶à¿´ÊÓÆµÓëÎÄµµ.
    1, ccflowÌá¹©µÄÊÓÆµÊÇ4.0µÄÊÓÆµ£¬ÓĞÒ»Ğ©¹¦ÄÜ¶ÔÓ¦²»ÉÏÄú¿ÉÒÔ¿´ÎÄµµ£¬ÎÄµµÊÇ×îĞÂµÄ¡£
    2, ccflowÌá¹©ÁËÁ½¸öÖØÒªµÄÎÄµµ<<³Û³Ò¹¤×÷Á÷ÒıÇæ-Á÷³ÌÉè¼ÆÆ÷²Ù×÷ÊÖ²á-CCFlow6.doc>> <<³Û³Ò¹¤×÷Á÷ÒıÇæ-±íµ¥Éè¼ÆÆ÷²Ù×÷ÊÖ²á-CCFlow6.doc>> ÕâÊÇÄúÕÆÎÕccflowµÄ»ù´¡.
    
-2, ¼ÓÈëÈºÀïÓëccflow°®ºÃÕß½»Á÷.
+2. ¼ÓÈëÈºÀïÓëccflow°®ºÃÕß½»Á÷.
    Çë´ò¿ªhttp://ccflow.org ÍøÕ¾,ÕÒµ½qqÈº¼ÓÈëÀïÃæ, °Ñ²»Ã÷°×µÄÎÊÌâ£¬Ìá½»µ½ÈºÂÛÌ³Àï£¬»áÓĞÈË»Ø´ğÄãµÄÎÊÌâ.
 
-3, ÓĞÎÊÌâ·´À¡µ½bbs,  http://bbs.ccflow.org/invite.aspx?invitecode=NPVNLIL , ×¢Òâ²»ÒªÊ¡µô×¢²áÑûÇëÂë.    
+3. ÓĞÎÊÌâ·´À¡µ½bbs,  http://bbs.ccflow.org/invite.aspx?invitecode=NPVNLIL , ×¢Òâ²»ÒªÊ¡µô×¢²áÑûÇëÂë.    
 
-4, Èç¹ûÄúÃÇÏîÄ¿¹¤ÆÚ½ôÕÅ²¢ÇÒÓĞ³ä×ãµÄ·ÑÓÃ£¬½¨Òé³ÉÎªccflowµÄvipÓÃ»§£¬Äú»áµÃµ½ÏÖ³¡µÄ¼¼ÊõÖ§³ÖÓëÏµÍ³ÅàÑµ¡£
+4. Èç¹ûÄúÃÇÏîÄ¿¹¤ÆÚ½ôÕÅ²¢ÇÒÓĞ³ä×ãµÄ·ÑÓÃ£¬½¨Òé³ÉÎªccflowµÄvipÓÃ»§£¬Äú»áµÃµ½ÏÖ³¡µÄ¼¼ÊõÖ§³ÖÓëÏµÍ³ÅàÑµ¡£
 
 
 
-ÈçºÎ°²×°²¢ÉèÖÃccflow¿ª·¢»·¾³?
-===================================================
-  °²×°ÉèÖÃCCFLOWÇ°£¬ÎªÁË±£Ö¤ÏÔÊ¾Ğ§¹û£¬ÇëÈ·ÈÏÒÑ¾­°²×°ÁË D:\ccflow.git\Tools ÏÂÃæµÄiewebcontrols.msi¼°owc11.exe   office×é¼ş
+*** ÈçºÎ°²×°²¢ÉèÖÃccflow¿ª·¢»·¾³?
+ 
+1. °²×°ÉèÖÃCCFLOWÇ°£¬ÎªÁË±£Ö¤ÏÔÊ¾Ğ§¹û£¬ÇëÈ·ÈÏÒÑ¾­°²×°ÁË D:\ccflow.git\Tools ÏÂÃæµÄiewebcontrols.msi¼°owc11.exe   office×é¼ş
 
-  °²×°Î¢Èísilverlight£¬Ä¿Ç°Î¢ÈíÒø¹âµÄ°æ±¾Îª4.0£¬¿ÉÒÔ´Ó  http://www.microsoft.com/silverlight/   ÏÂÔØ²¢°²×° ,Èç¹ûÄã±¾»úÉÏÊÇ4.0ÒÔÏÂµÄ°æ±¾ÇëÉ¾³ıËüÔÚ°²×°Ëü¡£
+2. °²×°Î¢Èísilverlight£¬Ä¿Ç°Î¢ÈíÒø¹âµÄ°æ±¾Îª4.0£¬¿ÉÒÔ´Ó  http://www.microsoft.com/silverlight/   ÏÂÔØ²¢°²×° ,Èç¹ûÄã±¾»úÉÏÊÇ4.0ÒÔÏÂµÄ°æ±¾ÇëÉ¾³ıËüÔÚ°²×°Ëü¡£
 
-  ÇëÑÏ¸ñ°´ÈçÏÂ²½ÖèÈ¥°²×°,²»ÒªÌøÔ¾,·ñÔò»áµ¼ÖÂ°²×°Ê§°Ü.
 
-0, È·ÈÏÉı¼¶µ½IE7 ÒÔÉÏ£¬²¢ÇÒ×öÈçÏÂÉèÖÃ.
-   1, ²Ëµ¥->¹¤¾ß->Internet Ñ¡Ïî-> ÒşË½ -> °Ñ´ò¿ªµ¯³ö´°¿Ú×èÖ¹³ÌĞò ¹Ø±ÕÉÏ£¬·ñÔòÒ»Ğ©¹¦ÄÜ¾Í²»ÄÜÊ¹ÓÃ.
-   2, ²Ëµ¥->¹¤¾ß->Internet Ñ¡Ïî-> ³£¹æ -> ä¯ÀÀÀúÊ·¼ÇÂ¼ÉèÖÃ-> Ñ¡ÖĞ () Ã¿´Î·ÃÎÊ´ËÍøÒ³Ê±. µ¥Ñ¡°´Å¥. µãÈ·¶¨£¬ÒÔ±ÜÃâ»º´æ¶Ô³ÌĞòÓĞÓ°Ïì¡£ 
-   3, È·ÈÏÄãÊÇÒÔadministrator ³¬¼¶ÓÃ»§½øĞĞ°²×°µÄ¡£
+  'ÇëÑÏ¸ñ°´ÈçÏÂ²½ÖèÈ¥°²×°,²»ÒªÌøÔ¾,·ñÔò»áµ¼ÖÂ°²×°Ê§°Ü.'
 
-1£¬Ê¹ÓÃ svnÏÂÔØÔ´³ÌĞò,Çë²é¿´ÈçÏÂÁ¬½Ó.
+0. È·ÈÏÉı¼¶µ½IE7 ÒÔÉÏ£¬²¢ÇÒ×öÈçÏÂÉèÖÃ.
+   1.1. ²Ëµ¥->¹¤¾ß->Internet Ñ¡Ïî-> ÒşË½ -> °Ñ´ò¿ªµ¯³ö´°¿Ú×èÖ¹³ÌĞò ¹Ø±ÕÉÏ£¬·ñÔòÒ»Ğ©¹¦ÄÜ¾Í²»ÄÜÊ¹ÓÃ.
+   1.2. ²Ëµ¥->¹¤¾ß->Internet Ñ¡Ïî-> ³£¹æ -> ä¯ÀÀÀúÊ·¼ÇÂ¼ÉèÖÃ-> Ñ¡ÖĞ () Ã¿´Î·ÃÎÊ´ËÍøÒ³Ê±. µ¥Ñ¡°´Å¥. µãÈ·¶¨£¬ÒÔ±ÜÃâ»º´æ¶Ô³ÌĞòÓĞÓ°Ïì¡£ 
+   1.3. È·ÈÏÄãÊÇÒÔadministrator ³¬¼¶ÓÃ»§½øĞĞ°²×°µÄ¡£
+
+1. Ê¹ÓÃ svnÏÂÔØÔ´³ÌĞò,Çë²é¿´ÈçÏÂÁ¬½Ó.
    http://svn.ccflow.org:88/svn/ccflow  UserName ccflowlover Password:ccflowlover
    Èç¹ûÄã²»»áÊ¹ÓÃsvnÇë¿´ÕâÀï: http://hi.baidu.com/ccflow/blog/item/427ceff4ff96d03bbc3109b9.html
    ½¨Òé°Ñccflow·ÅÔÚ D:\ÏÂÃæ,  ccflowµÄËµÃ÷Êé¶¼ÒÔ´ËÄ¿Â¼ËµÃ÷, ÒÔ·½±ãÄú¶¨Î»³ÌĞòÎÄ¼ş.
    ÌØ±ğÌáÊ¾: Èç¹û²»·ÅÖÃÔÚD:\ccflow ÏÂ£¬Äú¿ÉÄÜ»áÓöµ½dll ÎÄ¼şÒıÓÃÕÒ²»µ½Â·¾¶µÄÎÊÌâ¡£
 
 
-2, ´ò¿ª½â¾ö·½°¸ÎÄ¼ş²¢±àÒëËü. CCFlow6 ½â¾ö·½°¸µÄÎ»ÖÃ: D:\ccflow.git\CCFlow6.sln, ÉèÖÃ \WF\Admin\DBInstall.aspxÎªÆğÊ¼Ò³.
+2. ´ò¿ª½â¾ö·½°¸ÎÄ¼ş²¢±àÒëËü. CCFlow6 ½â¾ö·½°¸µÄÎ»ÖÃ: D:\ccflow.git\CCFlow6.sln, ÉèÖÃ \WF\Admin\DBInstall.aspxÎªÆğÊ¼Ò³.
 
    ETC: Èç¹û²»ÄÜÕı³£´ò¿ªÇë°´ÈçÏÂ²½Öè¼ì²é.
    1, ÄúµÄvsÊÇ·ñÊÇ2010°æ±¾£¿
@@ -140,15 +145,16 @@ D:\ccflow.git\CCFlow\GPM
    3, °²×°:Silverlight_4_Toolkit_April_2010.msi
 
 
-3, ´´½¨¿Õ°×Êı¾İ¿â.
+3. ´´½¨¿Õ°×Êı¾İ¿â.
 
     1, ½¨Á¢Êı¾İ¿â(²»¹ÜÄãÓÃµÄÊ²Ã´Êı¾İ¿â,oracle,informix,sqlserverÏµÁĞ),ÏÈ´´½¨Ò»¸ö¿Õ°×µÄÊı¾İ¿âÃû³ÆÎª: CCFlow6
 
     2, Çë¿´ÏÂÃæµÚ5²½Öè, ÎªÊı¾İ¿âÅäÖÃÁ´½Ó.
 
 
-4, ĞŞ¸Ä D:\ccflow.git\CCFlow\web.config Appsetting ½ÚµãÖĞµÄÊı¾İ¿âÁ¬½Ó¡£
+4. ĞŞ¸Ä D:\ccflow.git\CCFlow\web.config Appsetting ½ÚµãÖĞµÄÊı¾İ¿âÁ¬½Ó¡£
     ÈçÏÂ£º¡¾Èç¹ûÊ¹ÓÃµÄÊÇMSSQLÊı¾İ¿â£¬ĞŞ¸ÄÊı¾İ¿âµÄÁ´½ÓµÄÓÃ»§ÃûºÍÃÜÂë¼´¿É¡¿
+
   <appSettings>
   <add key="IsDebug" value="0" />
   <add key="SysLanguage" value="CH" />
@@ -157,26 +163,25 @@ D:\ccflow.git\CCFlow\GPM
   <add key="InitConnNum" value="10" />
   <!-- Êı¾İ¿âÁ¬½Óurl. -->
   <add key="AppCenterDSN" value="Password=123;Persist Security Info=True;User ID=sa;Initial Catalog=ccflow;Data Source=.;Timeout=2" />
-
   <!--ccflow Ö§³ÖµÄÊı¾İ¿âÀàĞÍ, MSSQL, Oracle, DB2, MySQL,InforMix  ×¢ÒâÇø·Ö´óĞ¡Ğ´. »¹Òª¼ì²é´ËÊı¾İ¿âÓÃ»§ÊÇ·ñ¾ßÓĞ×ã¹»µÄÈ¨ÏŞ¿ÉÒÔ´´½¨±í¡¢ÊÓÍ¼¡¢´æ´¢¹ı³Ì¡¢º¯Êı¡£ -->
   <add key="AppCenterDBType" value="MSSQL" />
 
 
-5, ½¨Á¢ÍøÕ¾Ó¦ÓÃ:
+5. ½¨Á¢ÍøÕ¾Ó¦ÓÃ:
 
-   5.1, ¿ªÊ¼->> ÔËĞĞ->> ÊäÈë inetmgr ´ò¿ªIIS¹ÜÀíÆ÷.
+   5.1. ¿ªÊ¼->> ÔËĞĞ->> ÊäÈë inetmgr ´ò¿ªIIS¹ÜÀíÆ÷.
 
-   5.2, È·ÈÏÄúµÄ»úÆ÷ÒÑ¾­°²×°ÉÏÁË.net4.0, ²¢ÇÒ£¬ÆôÓÃÁËËü:
+   5.2. È·ÈÏÄúµÄ»úÆ÷ÒÑ¾­°²×°ÉÏÁË.net4.0, ²¢ÇÒ£¬ÆôÓÃÁËËü:
 
       For Win7ÓÃ»§: °ÑÊó±êµãÔÚInternetĞÅÏ¢·şÎñ(IIS)¹ÜÀíÆ÷µÄ¸ù½Úµã£¬ÕÒµ½ IIS ·Ö×éÖĞµÄ [IASPI ºÍCGIµÄÏŞÖÆ] Í¼±ê£¬È·ÈÏASP.NET v4.0 Ïà¹ØµÄdllÊÇ·ñ±»ÔÊĞí.
       For Win2003ÓÃ»§: Internet ĞÅÏ¢·şÎñÊ÷ÉÏÕÒµ½ Web·şÎñÀ©Õ¹. È·ÈÏ ASP.NET v4.0.*** ÊÇ´æÔÚ»òÕß±»ÔÊĞí?
 
       Èç¹ûÃ»ÓĞÕÒµ½ ASP.NET v4.0 ÔòÊÇÄúÃ»ÓĞ°²×°.net4.0 Framework, ÇëÏÂÔØ°²×°½â¾ö.
 
-   5.3, ½¨Á¢ÍøÕ¾, ÍøÕ¾Ãû³ÆÎªCCFlow6  Ö÷Ä¿Â¼Îª: D:\ccflow.git\CCFlow , Ó¦ÓÃ³ÌĞò³ØÎª ASP.NET v4.0 Classic. (½¨Òéµ¥¶À½¨Á¢Ò»¸öÓ¦ÓÃ³ÌĞò³Ø.)
+   5.3. ½¨Á¢ÍøÕ¾, ÍøÕ¾Ãû³ÆÎªCCFlow6  Ö÷Ä¿Â¼Îª: D:\ccflow.git\CCFlow , Ó¦ÓÃ³ÌĞò³ØÎª ASP.NET v4.0 Classic. (½¨Òéµ¥¶À½¨Á¢Ò»¸öÓ¦ÓÃ³ÌĞò³Ø.)
 
 
-6, Æô¶¯Á÷³ÌÉè¼ÆÆ÷
+6. Æô¶¯Á÷³ÌÉè¼ÆÆ÷
    BS°æ±¾Á÷³ÌÉè¼ÆÆ÷Â·¾¶, Silverlight  °æ±¾. 
    http://localhost Èç¹ûÔÚ´ò²»¿ªÁ÷³ÌÉè¼ÆÆ÷£¬Çë²Î¿¼ÏÂÃæµÄ³£¼ûÎÊÌâ£¬»áÓĞ¶àÖÖÇé¿öµ¼ÖÂÉè¼ÆÆ÷²»ÄÜÔËĞĞ.
    
@@ -187,12 +192,12 @@ D:\ccflow.git\CCFlow\GPM
    4,  Èç¹ûÖĞÍ¾°²×°Ê§°Ü£¬ÄúĞèÒªÉ¾³ıÊı¾İ¿âÖØĞÂ½¨Á¢£¬ÖØĞÂ°²×°.   
 
 
-6, Æô¶¯Á÷³Ì·şÎñ: ÓÃÀ´·¢¶ÌĞÅÓëÓÊ¼şµÄ·şÎñ. 
+7. Æô¶¯Á÷³Ì·şÎñ: ÓÃÀ´·¢¶ÌĞÅÓëÓÊ¼şµÄ·şÎñ. 
     D:\ccflow.git\CCFlowServices\bin\Release\CCFlowServices.exe 
     °ÑËûÔÚ×ÀÃæÉÏ´´½¨Ò»¸ö¿ì½İ·½Ê½.
 
 
-7, ¿ÉÑ¡²½Öè:
+7. ¿ÉÑ¡²½Öè:
    1, ÔÚ½â¾ö·½°¸Àï£¬°Ñµ¥Ôª²âÊÔÉèÖÃÎªÆô¶¯ÏîÄ¿£¬È»ºóÖ´ĞĞÍêÃ¿¸öµ¥Ôª²âÊÔ£¬¿´µ±Ç°µÄ°æ±¾ÊÇ·ñÓĞÎÊÌâ.
    2, ²é¿´bbsÉÏµÄ×îĞÂ¸üĞÂËµÃ÷ http://bbs.ccflow.org
 
@@ -200,18 +205,18 @@ D:\ccflow.git\CCFlow\GPM
 
 °²×°¹ı³ÌÖĞ¾­³£Óöµ½µÄÎÊÌâ:
 =======================================================================
-1, ÔÚinternet ĞÅÏ¢·şÎñ(iis) ÖĞ£¬ web ·şÎñÀ©Õ¹ asp.net v4.xxxxxx µÄdll Ã»ÓĞ±»ÔÊĞí.
+1. ÔÚinternet ĞÅÏ¢·şÎñ(iis) ÖĞ£¬ web ·şÎñÀ©Õ¹ asp.net v4.xxxxxx µÄdll Ã»ÓĞ±»ÔÊĞí.
 
    1.1 Èç¹ûÕÒ²»µ½£¬¾ÍÊÇÃ»ÓĞ°²×°iisµÄ³ÌĞòÀ©Õ¹¹¦ÄÜ¡£
    1.2 ¿ØÖÆÃæ°å-> ³ÌĞòºÍ¹¦ÄÜ-> ÔÚ×ó±ßÓĞ´ò¿ª»òÕß¹Ø±Õwindows¹¦ÄÜ. °Ñ Internet information services. Óë Internet ĞÅÏ¢·şÎñ È«²¿Ñ¡ÔñÉÏ.
 
-2, Ã»ÓĞ×¢²á asp.net µ½iis ÉÏ. ĞèÒªÖ´ĞĞÈçÏÂÃüÁî.
+2. Ã»ÓĞ×¢²á asp.net µ½iis ÉÏ. ĞèÒªÖ´ĞĞÈçÏÂÃüÁî.
    cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319   (32Î»)
    cd C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319 (64Î»)
    aspnet_regiis.exe -ua
    aspnet_regiis.exe -i
 
-3, Ã»ÓĞÅäÖÃmime ÀàĞÍ, µ¼ÖÂÁ÷³Ì¹ì¼£Í¼,Á÷³ÌÉè¼ÆÆ÷²»ÄÜ±»Ê¹ÓÃ. ´¦Àí·½·¨.
+3. Ã»ÓĞÅäÖÃmime ÀàĞÍ, µ¼ÖÂÁ÷³Ì¹ì¼£Í¼,Á÷³ÌÉè¼ÆÆ÷²»ÄÜ±»Ê¹ÓÃ. ´¦Àí·½·¨.
 
   windows XP »ò win2003 server ÓÃ»§:
     ´ò¿ªIIS->Õ¾µãÊôĞÔ->HTTPÍ·->MIMEÀàĞÍ->ĞÂ½¨£º 
@@ -248,11 +253,7 @@ D:\ccflow.git\CCFlow\GPM
    2, web.config ÖĞµÄ Êı¾İ¿âÀàĞÍÉèÖÃ´íÎó.
        <add key="AppCenterDBType" value="MSSQL" />
 
-8, Èç¹û³öÏÖ:
-    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files¡±µÄĞ´·ÃÎÊÈ¨ÏŞ¡£µÄ´íÎóÌáÊ¾.
- 
-   ½â¾ö°ì·¨:
-   °Ñ¡°IIS_IUSERS¡±ºÍÄã×Ô¼ºµÄÏµÍ³ÓÃ»§¸³ÓèËü²Ù×÷ C£º\WINDOWS\TEMPÎÄ¼ş¼ĞµÄÈ¨Àû£¬ÖØĞÂÆô¶¯IIS£¬²¢³¢ÊÔÔÙ´ÎÔËĞĞWebÓ¦ÓÃ³ÌĞò¡£
+8, Èç¹û³öÏÖ:C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files¡±µÄĞ´·ÃÎÊÈ¨ÏŞ¡£µÄ´íÎóÌáÊ¾.  ½â¾ö°ì·¨:  °Ñ¡°IIS_IUSERS¡±ºÍÄã×Ô¼ºµÄÏµÍ³ÓÃ»§¸³ÓèËü²Ù×÷ C£º\WINDOWS\TEMPÎÄ¼ş¼ĞµÄÈ¨Àû£¬ÖØĞÂÆô¶¯IIS£¬²¢³¢ÊÔÔÙ´ÎÔËĞĞWebÓ¦ÓÃ³ÌĞò¡£
    
 
 9. Èç¹ûÒÔÉÏ·½Ê½¶¼²»×àĞ§.
@@ -262,25 +263,25 @@ D:\ccflow.git\CCFlow\GPM
    
    ÖØĞÂ°²×°£¬¾ÍÓĞ¿ÉÄÜ½â¾ö£¬´ËÊ±¿ÉÒÔÑ°ÇóÄãµÄÍ¬ÊÂ½â¾ö¡£
 
-10, Èç¹ûsl¹¤×÷Õı³££¬½øÈëÁ÷³ÌÉè¼ÆÆ÷µÄµÇÂ¼½çÃæ£¬µ«ÊÇadminµÇÂ¼²»½øÈ¥£¬ÌáÊ¾´íÎó¡£
+10. Èç¹ûsl¹¤×÷Õı³££¬½øÈëÁ÷³ÌÉè¼ÆÆ÷µÄµÇÂ¼½çÃæ£¬µ«ÊÇadminµÇÂ¼²»½øÈ¥£¬ÌáÊ¾´íÎó¡£
 
     Ô­Òò:ÓĞ¿ÉÄÜÊÇ: *.asmx ÎÄ¼ş½âÎöµÄ·½Ê½²»¶Ô£¬²»ÊÇ Framework 4.0.
 
     ´¦Àí·½·¨: ÔÚIISµÄ¡°´¦Àí³ÌĞòÓ³Éä¡±£¬Ìí¼Ó½Å±¾Ó³Éä *.asmx     %windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
 
 
-11£¬VS2010+IE8 µ÷ÊÔÌáÊ¾ ¡°ÕÒ²»µ½ÔªËØ¡±
-    1)  Open RegEdit //´ò¿ª×¢²á±í±à¼­Æ÷
-    2)  Browse to HKEY_LOCALMACHINE -> SOFTWARE -> Microsoft -> Internet Explorer -> Main
-    3)  Set TabProcGrowth to 0 //ÉèÖÃ TabProcGrowth µÄÖµÎª 0
+11.VS2010+IE8 µ÷ÊÔÌáÊ¾ ¡°ÕÒ²»µ½ÔªËØ¡±
+    1.  Open RegEdit //´ò¿ª×¢²á±í±à¼­Æ÷
+    2.  Browse to HKEY_LOCALMACHINE -> SOFTWARE -> Microsoft -> Internet Explorer -> Main
+    3.  Set TabProcGrowth to 0 //ÉèÖÃ TabProcGrowth µÄÖµÎª 0
 
-12.³¬Á¬½ÓÆô¶¯×ÓÁ÷³ÌÎÊÌâ£ºÖµ²»ÄÜÎªnull;MyFlow.aspx?1=1&FromNode=105&FromWorkID=@OID&FK_Flow=005&FK_Node=501
+12. ³¬Á¬½ÓÆô¶¯×ÓÁ÷³ÌÎÊÌâ£ºÖµ²»ÄÜÎªnull;MyFlow.aspx?1=1&FromNode=105&FromWorkID=@OID&FK_Flow=005&FK_Node=501
 
-13.µ±Ç°ccflowµÄ¹¤×÷Ä£Ê½Îª¼¯³ÉÄ£Ê½£¬ÄúÃ»ÓĞ°²×°»òÕß³É¹¦ÅäÖÃCCGPM,ccflowµÄBPM¹¤×÷Ä£Ê½£¬±ØĞëÒÀÀµCCGPM²ÅÄÜÔËĞĞ¡£
+13. µ±Ç°ccflowµÄ¹¤×÷Ä£Ê½Îª¼¯³ÉÄ£Ê½£¬ÄúÃ»ÓĞ°²×°»òÕß³É¹¦ÅäÖÃCCGPM,ccflowµÄBPM¹¤×÷Ä£Ê½£¬±ØĞëÒÀÀµCCGPM²ÅÄÜÔËĞĞ¡£
     1£©Èç¹ûĞèÒª¼¯³ÉÄ£Ê½£¬ÇëÏÈ°²×°CCGPM£¬È»ºó°²×°ccflow;
     2) »òÕß¸ÄÎª¼òµ¥Ä£Ê½£ºÇëÔÚweb.config ÎÄ¼şÖĞ°ÑOSModel ¸ÄÎª0
 
-14, ÔÚmysql,oracleµÄ°²×°µÄÊ±ºò»áÔ½µ½´óĞ¡Ğ´Ãô¸ĞÎÊÌâ.
+14. ÔÚmysql,oracleµÄ°²×°µÄÊ±ºò»áÔ½µ½´óĞ¡Ğ´Ãô¸ĞÎÊÌâ,ÎÒÃÇĞèÒª±»°²×°µÄmysqlÊı¾İ¿â²»ÒªÇø·Ö´óĞ¡Ğ´.
 
 
 ================================ ×£ÄúÊ¹ÓÃccflowË³Àû ===============

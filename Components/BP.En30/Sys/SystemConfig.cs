@@ -847,6 +847,16 @@ namespace BP.Sys
                 return AppSettings["AgentID"];
             }
         }
+        /// <summary>
+        /// 消息链接网址
+        /// </summary>
+        public static string WX_MessageUrl
+        {
+            get
+            {
+                return AppSettings["WeiXin_MessageUrl"];
+            }
+        }
         #endregion
 
         #region 钉钉配置相关

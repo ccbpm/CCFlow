@@ -160,9 +160,11 @@ CCFlow功能: 懂管理就会开发基本流程,为单位流程管理系统,会S
    1. 开始->> 运行->> 输入 inetmgr 打开IIS管理器.
    2. 确认您的机器已经安装上了.net4.0, 并且，启用了它:
 
-      For Win7用户: 把鼠标点在Internet信息服务(IIS)管理器的根节点，找到 IIS 分组中的 [IASPI 和CGI的限制] 图标，确认ASP.NET v4.0 相关的dll是否被允许.
+        
+        For Win7用户: 把鼠标点在Internet信息服务(IIS)管理器的根节点，找到 IIS 分组中的 [IASPI 和CGI的限制] 图标，确认ASP.NET v4.0 相关的dll是否被允许.
  
-      For Win2003用户: Internet 信息服务树上找到 Web服务扩展. 确认 ASP.NET v4.0.*** 是存在或者被允许? 如果没有找到 ASP.NET v4.0 则是您没有安装.net4.0 Framework, 请下载安装解决.
+        For Win2003用户: Internet 信息服务树上找到 Web服务扩展. 确认 ASP.NET v4.0.*** 是存在或者被允许? 如果没有找到 ASP.NET v4.0 则是您没有安装.net4.0 Framework, 请下载安装解决.
+
 
 
    3. 建立网站, 网站名称为CCFlow6  主目录为: D:\ccflow.git\CCFlow , 应用程序池为 ASP.NET v4.0 Classic. (建议单独建立一个应用程序池.)
@@ -185,10 +187,11 @@ CCFlow功能: 懂管理就会开发基本流程,为单位流程管理系统,会S
 
 7. 启动流程服务: 用来发短信与邮件的服务. 
 
-    D:\ccflow.git\CCFlowServices\bin\Release\CCFlowServices.exe  把他在桌面上创建一个快捷方式.
+     D:\ccflow.git\CCFlowServices\bin\Release\CCFlowServices.exe  
+     把他在桌面上创建一个快捷方式.
 
 
-7. 可选步骤:
+8. 可选步骤:
 
    1. 在解决方案里，把单元测试设置为启动项目，然后执行完每个单元测试，看当前的版本是否有问题.
    2. 查看bbs上的最新更新说明 http://bbs.ccflow.org
@@ -204,23 +207,25 @@ CCFlow功能: 懂管理就会开发基本流程,为单位流程管理系统,会S
 
 2. 没有注册 asp.net 到iis 上. 需要执行如下命令.
 
-      cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319   (32位)
 
-      cd C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319 (64位)
+         cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319   (32位)
+         cd C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319 (64位)
+         aspnet_regiis.exe -ua
+         aspnet_regiis.exe -i
 
-      aspnet_regiis.exe -ua
-
-      aspnet_regiis.exe -i
 
 3. 没有配置mime 类型, 导致流程轨迹图,流程设计器不能被使用. 处理方法.
 
-      windows XP 或 win2003 server 用户:
-      打开IIS->站点属性->HTTP头->MIME类型->新建： 
-      扩展名： .xap     MIME类型：  xapapplication/x-silverlight  
-      扩展名： .xaml   MIME类型：  application/xaml+xml
+
+        windows XP 或 win2003 server 用户:
+        打开IIS->站点属性->HTTP头->MIME类型->新建： 
+        扩展名： .xap     MIME类型：  xapapplication/x-silverlight  
+        扩展名： .xaml   MIME类型：  application/xaml+xml
+
 
   Win7 用户:
 
+    
     1， 启用iis7.
         控制面板-> 程序和功能-> 在左边有打开或者关闭windows功能.
         把 Internet information services. 与 Internet 信息服务 全部选择上。
@@ -235,13 +240,13 @@ CCFlow功能: 懂管理就会开发基本流程,为单位流程管理系统,会S
 
 4. 出现用户名及密码错误，请在web.config 文件中.
 
+    
     <identity impersonate="true" userName="administrator" password="jiaozi"/> 
     中的 impersonate="true" 修改成 impersonate="false" 或者填写正确的密码, 
     也可以把  impersonate="false" 
 
 
 5. silverlight 版本不是 4.0以及4.0以上，请先卸了，重新安装。
-
 
 6. 造成流程设计器不能正常打开的原因:有可能是c:\windows\temp 目录访问权限有限制, 修改一下该目录的访问权限，比如everyone都可以读写试一下(不建议你这样)。
 

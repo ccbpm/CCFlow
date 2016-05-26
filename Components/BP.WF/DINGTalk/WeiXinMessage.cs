@@ -45,5 +45,54 @@ namespace BP.WF.WXin
             }
             return null;
         }
+
+        /// <summary>
+        /// 发送新闻消息
+        /// </summary>
+        /// <param name="msgNews">消息实体类</param>
+        /// <returns>发送消息结果</returns>
+        public static MessageErrorModel PostMsgOfNews(WX_Msg_News msgNews)
+        {
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + msgNews.Access_Token;
+            try
+            {
+                StringBuilder append_Json = new StringBuilder();
+                append_Json.Append("{");
+                append_Json.Append("\"msgtype\":\"news\"");
+                //按人员
+                if (!string.IsNullOrEmpty(msgNews.touser)) append_Json.Append(",\"touser\":\"" + msgNews.touser + "\"");
+                //按部门
+                if (!string.IsNullOrEmpty(msgNews.toparty)) append_Json.Append(",\"toparty\":\"" + msgNews.toparty + "\"");
+                //标签
+                if (!string.IsNullOrEmpty(msgNews.totag)) append_Json.Append(",\"totag\":\"" + msgNews.totag + "\"");
+
+                append_Json.Append(",\"agentid\":\"" + msgNews.agentid + "\"");
+                append_Json.Append(",\"news\":{");
+
+                append_Json.Append("\"articles\":[");
+                foreach (News_Articles item in msgNews.articles)
+                {
+                    append_Json.Append("{");
+                    append_Json.Append("\"title\":\"" + item.title + "\"");
+                    append_Json.Append(",\"description\":\"" + item.description + "\"");
+                    string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
+                    + "&redirect_uri=http://demo.ccflow.org:8006/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=Start#wechat_redirect";
+                    append_Json.Append(",\"url\":\"" + New_Url + "\"");
+                    append_Json.Append(",\"picurl\":\"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg\"");
+                    append_Json.Append("},");
+                }
+                append_Json.Remove(append_Json.Length - 1, 1);
+
+                append_Json.Append("]}");
+                append_Json.Append("}");
+                string str = new HttpWebResponseUtility().HttpResponsePost_Json(url, append_Json.ToString());
+                MessageErrorModel postVal = FormatToJson.ParseFromJson<MessageErrorModel>(str);
+                return postVal;
+            }
+            catch (Exception ex)
+            {
+            }
+            return null;
+        }
     }
 }

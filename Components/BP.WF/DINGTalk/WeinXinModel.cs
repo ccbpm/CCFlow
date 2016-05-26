@@ -61,6 +61,10 @@ namespace BP.WF.WXin
         /// 必须：是- 企业应用的id，整型。可在应用的设置页面查看 
         /// </summary>
         public string agentid { get; set; }
+        /// <summary>
+        /// 必须：否- ccflow 业务ID
+        /// </summary>
+        public string WorkID { get; set; }
     }
 
     /// <summary>
@@ -270,10 +274,18 @@ namespace BP.WF.WXin
         {
             get { return "news"; }
         }
+
+        private List<News_Articles> _Articles = new List<News_Articles>();
         /// <summary>
         /// 必须：是- 图文消息，一个图文消息支持1到8条图文
         /// </summary>
-        public List<News_Articles> articles { get; set; }
+        public List<News_Articles> articles
+        {
+            get
+            {
+                return _Articles;
+            }
+        }
     }
 
     /// <summary>

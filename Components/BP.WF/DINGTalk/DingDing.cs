@@ -504,7 +504,7 @@ namespace BP.WF
             obj.addOr();
             obj.AddWhere(MonitorAttr.FID, WorkID);
             obj.DoQuery();
-            string toUsers = "manager8613";
+            string toUsers = "";
             foreach (Monitor empWork in empWorks)
             {
                 if (toUsers.Length > 0)

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BP.Tools;
+using BP.WF.Data;
+using BP.En;
 
 namespace BP.WF.WXin
 {
@@ -75,10 +77,8 @@ namespace BP.WF.WXin
                     append_Json.Append("{");
                     append_Json.Append("\"title\":\"" + item.title + "\"");
                     append_Json.Append(",\"description\":\"" + item.description + "\"");
-                    string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
-                    + "&redirect_uri=http://demo.ccflow.org:8006/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=Start#wechat_redirect";
-                    append_Json.Append(",\"url\":\"" + New_Url + "\"");
-                    append_Json.Append(",\"picurl\":\"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg\"");
+                    if (!string.IsNullOrEmpty(item.url)) append_Json.Append(",\"url\":\"" + item.url + "\"");
+                    if (!string.IsNullOrEmpty(item.picurl)) append_Json.Append(",\"picurl\":\"" + item.picurl + "\"");
                     append_Json.Append("},");
                 }
                 append_Json.Remove(append_Json.Length - 1, 1);
@@ -91,6 +91,69 @@ namespace BP.WF.WXin
             }
             catch (Exception ex)
             {
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 发送待办消息
+        /// </summary>
+        /// <param name="WorkID">业务编号</param>
+        /// <param name="sender">发送人</param>
+        /// <returns></returns>
+        public static MessageErrorModel PostEmpWorksMsgOfNews(long WorkID, string sender)
+        {
+            //企业应用必须存在
+            string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
+            if (agentId != null)
+            {
+                string accessToken = new BP.WF.WXin.WeiXin().getAccessToken(); //获取 AccessToken
+
+                //当前业务
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                gwf.WorkID = WorkID;
+                gwf.RetrieveFromDBSources();
+                //接收人
+                Monitors empWorks = new Monitors();
+                QueryObject obj = new QueryObject(empWorks);
+                obj.AddWhere(MonitorAttr.WorkID, WorkID);
+                obj.addOr();
+                obj.AddWhere(MonitorAttr.FID, WorkID);
+                obj.DoQuery();
+                string toUsers = "";
+                foreach (Monitor empWork in empWorks)
+                {
+                    if (toUsers.Length > 0)
+                        toUsers += "|";
+                    toUsers += empWork.FK_Emp;
+                }
+                if (toUsers.Length == 0)
+                    return null;
+
+                News_Articles newArticle = new News_Articles();
+                newArticle.title = gwf.Title;
+
+                string msgConten = "流程名称：" + gwf.FlowName + "\n";
+                msgConten += "发 起 人：" + gwf.StarterName + "\n";
+                msgConten += "发起人部门：" + gwf.DeptName + "\n";
+                msgConten += "当前节点：" + gwf.NodeName + "\n";
+                msgConten += "发 送 人：" + sender + "\n";
+                newArticle.description = msgConten;
+
+                string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
+                    + "&redirect_uri=http://demo.ccflow.org:8006/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=empwork_" + WorkID + "#wechat_redirect";
+                newArticle.url = New_Url;
+
+                //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
+                newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/" + BP.Sys.SystemConfig.SysNo + "/LogBig.png";
+
+                WX_Msg_News wxMsg = new WX_Msg_News();
+                wxMsg.Access_Token = accessToken;
+                wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
+                wxMsg.touser = toUsers;
+                wxMsg.articles.Add(newArticle);
+                //执行发送
+                return WeiXinMessage.PostMsgOfNews(wxMsg);
             }
             return null;
         }

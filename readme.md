@@ -1,24 +1,24 @@
 
 #CCFlow基本信息.
 
-1.产品名称: 驰骋.net工作流引擎.
-2.英文名称: ChiCheng Workflow Engine  
-3.简    称: CCFlow    版本: ccflow6  官方网站: http://ccflow.org
-4.开发历史: 2003-2016年.         性质: 100%开源,无任何功能限制.
-5.许可协议: GPL URL: http://www.gnu.org/licenses/gpl.html
-6.运行环境: BS结构. windows xp, windows server. win7 IIS6.0以上. .net4.0. Office2007 (如果需要单据打印.)
-7.开发语言: VS2010, .net4.0 c#.net. 客户端: FireFox 3.0以上. IE7+,或者使用IE内核的浏览器.
-8.组成部分: 流程图形设计器(有:cs版本与bs版本)/流程前台运行程序(BS结构)/流程服务(CS)/web的方式的表单设计器/BRP工具
-9.基本功能: 图形化流程设计/智能表单web定义免程序开发/级联下拉框/流程轨迹/单据自定义打印/邮件短信工作到达通知/自动任务分配/支持sdk模式开发/简洁集成/消息侦听/丰富事件接口/报表定义/工作量分析/绩效考核/手机访问/支持sqlserve,oracle,mysql,informix数据库
+1. 产品名称: 驰骋.net工作流引擎.
+2. 英文名称: ChiCheng Workflow Engine  
+3. 简    称: CCFlow    版本: ccflow6  官方网站: http://ccflow.org
+4. 开发历史: 2003-2016年.         性质: 100%开源,无任何功能限制.
+5. 许可协议: GPL URL: http://www.gnu.org/licenses/gpl.html
+6. 运行环境: BS结构. windows xp, windows server. win7 IIS6.0以上. .net4.0. Office2007 (如果需要单据打印.)
+7. 开发语言: VS2010, .net4.0 c#.net. 客户端: FireFox 3.0以上. IE7+,或者使用IE内核的浏览器.
+8. 组成部分: 流程图形设计器(有:cs版本与bs版本)/流程前台运行程序(BS结构)/流程服务(CS)/web的方式的表单设计器/BRP工具
+9. 基本功能: 图形化流程设计/智能表单web定义免程序开发/级联下拉框/流程轨迹/单据自定义打印/邮件短信工作到达通知/自动任务分配/支持sdk模式开发/简洁集成/消息侦听/丰富事件接口/报表定义/工作量分析/绩效考核/手机访问/支持sqlserve,oracle,mysql,informix数据库
 CCFlow功能: 懂管理就会开发基本流程,为单位流程管理系统,会SQL就能达到中级开发水平解决复杂的逻辑问题与其它系统耦合,有程基础就可以使用sdk做高级的开发.
-10.支持数据库: sqlserver系列版本， oracle 系列版本， informix 系列版本, mysql系列版本
-10.http://git.oschina.net/chichengsoft/ccflow/tree/develop
+10. 支持数据库: sqlserver系列版本， oracle 系列版本， informix 系列版本, mysql系列版本
+10. http://git.oschina.net/chichengsoft/ccflow/tree/develop
 
 #基础功能
 
-1.流程引擎设计支持所见即所得的设计：节点设计、表单设计、单据设计、报表定义设计、以及用户菜单设计。
-2.流程模式简洁只有4种容易理解、线性流程、同表单分合流、异表单分合流、父子流程，没有复杂的概念。
-3.支持流程的基础功能：前进、后退、转向、转发、撤销、抄送、挂起、草稿、任务池共享，也支持高级功能取回审批、项目组、外部用户等等。
+1. 流程引擎设计支持所见即所得的设计：节点设计、表单设计、单据设计、报表定义设计、以及用户菜单设计。
+2. 流程模式简洁只有4种容易理解、线性流程、同表单分合流、异表单分合流、父子流程，没有复杂的概念。
+3. 支持流程的基础功能：前进、后退、转向、转发、撤销、抄送、挂起、草稿、任务池共享，也支持高级功能取回审批、项目组、外部用户等等。
 
  
 

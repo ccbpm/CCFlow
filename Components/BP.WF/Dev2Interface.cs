@@ -3765,6 +3765,13 @@ namespace BP.WF
         public static bool Flow_IsCanStartThisFlow(string flowNo, string userNo)
         {
             Node nd = new Node(int.Parse(flowNo + "01"));
+            if (nd.IsGuestNode == true)
+            {
+                if (BP.Web.WebUser.No != "Guest")
+                    throw new Exception("@当前节点是来宾处理节点，但是目前您{"+BP.Web.WebUser.No+"}不是来宾帐号。");
+                return true;
+            }
+
             Paras ps = new Paras();
             string dbstr = SystemConfig.AppCenterDBVarStr;
             int num = 0;

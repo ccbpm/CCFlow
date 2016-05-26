@@ -125,8 +125,9 @@ namespace BP.WF
         public static string UpdataCCFlowVer()
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
-            string val = "20160501";
+            string val = "20160526";
             string updataNote = "";
+            updataNote += "20160526.升级FrmEnableRole状态.";
             updataNote += "20160501.升级todosta状态.";
             updataNote += "20160420.升级表单属性.";
             updataNote += "20160226.新版流程FlowJson字段判断..";
@@ -274,6 +275,7 @@ namespace BP.WF
                 sql = "DELETE FROM Sys_Enum WHERE EnumKey IN ('CodeStruct'";
                 sql += ",'DBSrcType'";
                 sql += ",'WebOfficeEnable'";
+                sql += ",'FrmEnableRole'";
                 sql += ",'BlockModel'";
                 sql += ",'CCRole','FWCType','SelectAccepterEnable','NodeFormType','StartGuideWay','" + FlowAttr.StartLimitRole + "','BillFileType','EventDoType','FormType','BatchRole','StartGuideWay','NodeFormType','FormRunType')";
                 BP.DA.DBAccess.RunSQL(sql);
@@ -3622,8 +3624,10 @@ namespace BP.WF
                         ps.SQL = "SELECT TOP 1 RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
                         break;
                     case DBType.Oracle:
-                    case DBType.MySQL:
                         ps.SQL = "SELECT  RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        break;
+                    case DBType.MySQL:
+                        ps.SQL = "SELECT  RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
                         break;
                     default:
                         break;

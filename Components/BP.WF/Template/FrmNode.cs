@@ -129,7 +129,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 按SQL表达式
         /// </summary>
-        BySQL
+        BySQL,
+        /// <summary>
+        /// 不启用
+        /// </summary>
+        Disable
     }
     /// <summary>
     /// 节点表单
@@ -283,7 +287,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 工作流程
+        /// 表单ID
         /// </summary>
         public string FK_Frm
         {
@@ -383,11 +387,16 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmNodeAttr.FrmEnableRole, (int)value);
             }
         }
+        /// <summary>
+        /// 启用规则.
+        /// </summary>
         public string FrmEnableRoleText
         {
             get
             {
-                
+                if (this.FrmEnableRole == Template.FrmEnableRole.WhenHaveFrmPara && this.FK_Frm == "ND" + this.FK_Node)
+                    return "不启用";
+
                 SysEnum se = new SysEnum(FrmNodeAttr.FrmEnableRole, this.FrmEnableRoleInt);
                 return se.Lab;
             }
@@ -515,7 +524,6 @@ namespace BP.WF.Template
                 map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", true, true, 1, 32, 32);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点编号", true, false);
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);
-
                 map.AddTBString(FrmNodeAttr.FrmType, "0", "表单类型", true, true, 1, 20, 20);
 
                 //菜单在本节点的权限控制.

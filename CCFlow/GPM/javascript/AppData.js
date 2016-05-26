@@ -121,6 +121,17 @@ ccflow.Data = function (url) {
         };
         queryData(tUrl, params, callback, scope);
     }
+    //根据用户账号、工号、姓名或手机号
+    this.searchByEmpNoOrName = function (objSearch, pageNumber, pageSize, callback, scope) {
+        var tUrl = this.url;
+        var params = {
+            method: "searchbyempnoorname",
+            objSearch: objSearch,
+            pageNumber: pageNumber,
+            pageSize: pageSize
+        };
+        queryData(tUrl, params, callback, scope);
+    }
     //获取所有权限组
     this.getEmpGroups = function (callback, scope) {
         var tUrl = this.url;
@@ -465,6 +476,35 @@ ccflow.Data = function (url) {
         };
         queryData(tUrl, params, callback, scope);
     }
+    //禁用人员
+    this.disableDeptEmp = function (emps, callback, scope) {
+        var tUrl = this.url;
+        var params = {
+            method: "disabledeptemp",
+            emps: emps
+        };
+        queryData(tUrl, params, callback, scope);
+    }
+    //获取已禁用用户列表
+    this.generDisableEmps = function (pageNumber, pageSize, callback, scope) {
+        var tUrl = this.url;
+        var params = {
+            method: "generdisableemps",
+            pageNumber: pageNumber,
+            pageSize: pageSize
+        };
+        queryData(tUrl, params, callback, scope);
+    }
+    //调整人员主部门
+    this.replaceEmpBelongDept = function (FK_Dept, FK_Emp, callback, scope) {
+        var tUrl = this.url;
+        var params = {
+            method: "replaceempbelongdept",
+            FK_Dept: FK_Dept,
+            FK_Emp: FK_Emp
+        };
+        queryData(tUrl, params, callback, scope);
+    }
     //新增部门--qin 15/7/6
     this.appendData = function (deptSort, deptNo, callback, scope) {
         var tUrl = this.url;
@@ -522,13 +562,14 @@ ccflow.Data = function (url) {
         queryData(tUrl, params, callback, scope);
     }
     //保存数据
-    this.saveDeptInfo = function (deptNo, deptName, deptLeader, stationTreeNodesStr, deptDutyTreeNodesStr, callback, scope) {
+    this.saveDeptInfo = function (deptNo, deptParentNo, deptName, deptLeader, stationTreeNodesStr, deptDutyTreeNodesStr, callback, scope) {
         var tUrl = this.url;
         var params = {
             method: "saveDeptInfoMet",
             deptName: encodeURI(deptName),
             deptLeader: encodeURI(deptLeader),
             deptNo: deptNo,
+            deptParentNo: deptParentNo,
             stationStr: stationTreeNodesStr,
             dutyStr: deptDutyTreeNodesStr
         };
@@ -595,7 +636,7 @@ ccflow.Data = function (url) {
         queryData(tUrl, params, callback, scope);
     }
     //关联人员
-    this.getOtherEmps = function (pageNumber, pageSize, deptNo, callback, scope) {
+    this.getOtherDeptEmps = function (pageNumber, pageSize, deptNo, callback, scope) {
         var tUrl = this.url;
         var params = {
             method: "getOtherEmpsMet",

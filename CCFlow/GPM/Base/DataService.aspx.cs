@@ -13,6 +13,8 @@ using BP.DA;
 using BP.Web;
 using BP.GPM;
 using BP.GPM.Utility;
+using BP.WF.DINGTalk;
+using BP.WF;
 
 namespace GMP2.GPM
 {
@@ -71,6 +73,9 @@ namespace GMP2.GPM
                     break;
                 case "getempsbynoorname"://根据用户名或编号模糊查找用户
                     s_responsetext = GetEmpsByNoOrName();
+                    break;
+                case "searchbyempnoorname"://根据用户账号、工号、姓名或手机号
+                    s_responsetext = SearchByEmpNoOrName();
                     break;
                 case "getempgroups"://查找所有权限组
                     s_responsetext = GetEmpGroups();
@@ -198,6 +203,15 @@ namespace GMP2.GPM
                     break;
                 case "deletedeptemp"://删除部门人员
                     s_responsetext = DeleteDeptEmp();
+                    break;
+                case "disabledeptemp"://禁用人员
+                    s_responsetext = DisableDeptEmp();
+                    break;
+                case "generdisableemps"://获取已禁用用户列表
+                    s_responsetext = GenerDisableEmps();
+                    break;
+                case "replaceempbelongdept"://调整人员所属主部门
+                    s_responsetext = ReplaceEmpbelongDept();
                     break;
                 case "appendDataMet"://新增部门
                     s_responsetext = appendDataMet();
@@ -472,28 +486,50 @@ namespace GMP2.GPM
             {
 
                 //添加部门人员
+                Emp emp = new Emp();
+                emp.Name = infoStrArrary[0];
+                emp.No = infoStrArrary[1];
+                emp.EmpNo = infoStrArrary[2];
+                emp.FK_Duty = infoStrArrary[3];
+                emp.Tel = infoStrArrary[4];
+                emp.Email = infoStrArrary[5];
+                emp.Leader = infoStrArrary[6];
+                emp.FK_Dept = deptNo;
+                //如果启用钉钉通讯录同步，新增人员
+                if (BP.WF.Glo.IsEnable_DingDing == true)
+                {
+                    DingDing ding = new DingDing();
+                    CreateUser_PostVal postVal = ding.GPM_Ding_CreateEmp(emp);
+                    //新增成功，或在钉钉已经存在此用户
+                    if (postVal.errcode == "0" || postVal.errcode == "60102")
+                        emp.No = postVal.userid;
+                    else
+                        return "err:" + postVal.errcode + "-钉钉-" + postVal.errmsg;
+                }
+                //如果用户账号为空，则分配一个。
+                if (string.IsNullOrWhiteSpace(emp.No) || string.IsNullOrEmpty(emp.No))
+                {
+                    //检查随机是否与现有数据重复
+                    while (true)
+                    {
+                        Emp tempEmp = new Emp();
+                        tempEmp.No = BP.DA.DBAccess.GenerOID("GPM_Emp_Random_No").ToString();
+                        if (tempEmp.RetrieveFromDBSources() == 0)
+                        {
+                            emp.No = tempEmp.No;
+                            break;
+                        }
+                    }
+                }
+                emp.Insert();
 
-                Emp e = new Emp();
-
-                e.Name = infoStrArrary[0];
-                e.No = infoStrArrary[1];
-                e.EmpNo = infoStrArrary[2];
-                e.FK_Duty = infoStrArrary[3];
-                e.Tel = infoStrArrary[4];
-                e.Email = infoStrArrary[5];
-                e.Leader = infoStrArrary[6];
-                e.FK_Dept = deptNo;
-
-                e.Insert();
-
-                DeptEmp de = new DeptEmp();
-                de.FK_Emp = e.No;
-                de.FK_Dept = e.FK_Dept;
-                de.FK_Duty = e.FK_Duty;
-                de.DutyLevel = int.Parse(infoStrArrary[7]);
-                de.Leader = e.Leader;
-
-                de.DirectSave();
+                DeptEmp deptEmp = new DeptEmp();
+                deptEmp.FK_Emp = emp.No;
+                deptEmp.FK_Dept = emp.FK_Dept;
+                deptEmp.FK_Duty = emp.FK_Duty;
+                deptEmp.DutyLevel = string.IsNullOrEmpty(infoStrArrary[7]) == true ? 0 : int.Parse(infoStrArrary[7]);
+                deptEmp.Leader = emp.Leader;
+                deptEmp.DirectSave();
 
                 string[] empStationStrArray = empStationStr.Split(',');
                 foreach (string item in empStationStrArray)
@@ -501,13 +537,12 @@ namespace GMP2.GPM
                     if (string.IsNullOrEmpty(item))
                         continue;
 
-                    DeptEmpStation des = new DeptEmpStation();
-                    des.FK_Dept = e.FK_Dept;
-                    des.FK_Station = item;
-                    des.FK_Emp = e.No;
-                    des.DirectSave();
+                    DeptEmpStation deptEmpStation = new DeptEmpStation();
+                    deptEmpStation.FK_Dept = emp.FK_Dept;
+                    deptEmpStation.FK_Station = item;
+                    deptEmpStation.FK_Emp = emp.No;
+                    deptEmpStation.DirectSave();
                 }
-
                 return "true";
             }
             catch (Exception)
@@ -575,15 +610,37 @@ namespace GMP2.GPM
                 if (string.IsNullOrEmpty(emps))
                     return "false";
 
-                emps = emps.Substring(0, emps.Length - 1);
-
                 string[] noArrary = emps.Split(',');
-
                 foreach (string item in noArrary)
                 {
                     if (string.IsNullOrEmpty(item))
                         continue;
 
+                    Emp emp = new Emp(item);
+                    //如果启用钉钉通讯录同步，编辑人员所属部门
+                    if (BP.WF.Glo.IsEnable_DingDing == true)
+                    {
+                        //编辑之前人员所属部门集合
+                        DeptEmps deptEmps = new DeptEmps();
+                        deptEmps.RetrieveByAttr(DeptEmpAttr.FK_Emp, item);
+                        //删除当前后剩余部门集合
+                        List<string> list_DeptIds = new List<string>();
+                        foreach (DeptEmp deptEmp in deptEmps)
+                        {
+                            //排除当前部门
+                            if (deptEmp.FK_Dept == deptNo)
+                                continue;
+                            list_DeptIds.Add(deptEmp.FK_Dept);
+                        }
+                        //修改人员的归属部门
+                        if (list_DeptIds.Count > 0)
+                        {
+                            DingDing ding = new DingDing();
+                            Ding_Post_ReturnVal postVal = ding.GPM_Ding_EditEmp(emp, list_DeptIds);
+                            if (postVal == null || postVal.errcode != "0")
+                                return "false";
+                        }
+                    }
 
                     DeptEmp de = new DeptEmp();
                     de.Delete(DeptEmpAttr.FK_Emp, item, DeptEmpAttr.FK_Dept, deptNo);
@@ -594,12 +651,38 @@ namespace GMP2.GPM
                     de = new DeptEmp();
                     bool isExit = de.RetrieveByAttr(DeptEmpAttr.FK_Emp, item);
 
-                    if (!isExit)//如果port_DeptEmp不存在FK_Emp为ed[0]的数据，则从port_emp表里直接删除
+                    //如果port_DeptEmp存在FK_Emp为ed[0]的数据，则判断是否删除的port_emp中的FK_Dept
+                    if (isExit)
                     {
-                        Emp e = new Emp();
-                        e.Delete(EmpAttr.No, item);
+                        //如果是删除的主部门，则修改主部门
+                        if (emp.FK_Dept == deptNo)
+                        {
+                            emp.FK_Dept = de.FK_Dept;
+                            emp.Update();
+                        }
                     }
-
+                    else
+                    {
+                        //如果port_DeptEmp不存在FK_Emp为ed[0]的数据，则从port_emp表里直接删除
+                        //如果启用钉钉通讯录同步,删除人员
+                        if (BP.WF.Glo.IsEnable_DingDing == true)
+                        {
+                            DingDing ding = new DingDing();
+                            Ding_Post_ReturnVal postVal = ding.GPM_Ding_DeleteEmp(item);
+                            //在钉钉找不到该用户
+                            if (!(postVal.errcode == "0" || postVal.errcode == "60121"))
+                            {
+                                DeptEmp deptEmp = new DeptEmp();
+                                deptEmp.FK_Emp =emp.No;
+                                deptEmp.FK_Duty = emp.FK_Duty;
+                                deptEmp.FK_Dept = deptNo;
+                                deptEmp.Insert();
+                                return "false";
+                            }
+                        }
+                        //从CCGPM中删除
+                        emp.Delete();
+                    }
                 }
                 return "true";
             }
@@ -607,6 +690,87 @@ namespace GMP2.GPM
             {
                 return "false";
             }
+        }
+
+        /// <summary>
+        /// 禁用人员
+        /// </summary>
+        /// <returns></returns>
+        private string DisableDeptEmp()
+        {
+            try
+            {
+                string emps = getUTF8ToString("emps");
+                string[] noArrary = emps.Split(',');
+                foreach (string item in noArrary)
+                {
+                    if (string.IsNullOrEmpty(item))
+                        continue;
+                    if (item.ToLower() == "admin")
+                        continue;
+                    //如果port_DeptEmp不存在FK_Emp为ed[0]的数据，则从port_emp表里直接删除
+                    //如果启用钉钉通讯录同步,删除人员
+                    if (BP.WF.Glo.IsEnable_DingDing == true)
+                    {
+                        DingDing ding = new DingDing();
+                        Ding_Post_ReturnVal postVal = ding.GPM_Ding_DeleteEmp(item);
+                        //在钉钉找不到该用户
+                        if (!(postVal.errcode == "0" || postVal.errcode == "60121"))
+                            return postVal.errcode + "-" + postVal.errmsg;
+                    }
+                    DeptEmp de = new DeptEmp();
+                    de.Delete(DeptEmpAttr.FK_Emp, item);
+
+                    DeptEmpStation des = new DeptEmpStation();
+                    des.Delete(DeptEmpStationAttr.FK_Emp, item);
+                    //禁用用户
+                    Emp emp = new Emp(item);
+                    emp.Pass = "FE4A-D402-451C-B9ED-C1A0";
+                    emp.FK_Dept = "";
+                    emp.Update();
+                }
+                return "true";
+            }
+            catch (Exception)
+            {
+                return "false";
+            }
+        }
+
+        /// <summary>
+        /// 获取禁用人员列表
+        /// </summary>
+        /// <returns></returns>
+        private string GenerDisableEmps()
+        {
+            string pageNumber = getUTF8ToString("pageNumber");
+            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+            //每页多少行
+            string pageSize = getUTF8ToString("pageSize");
+            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+
+            Emps emps = new Emps();
+            QueryObject obj = new QueryObject(emps);
+            obj.AddWhere("FK_Dept is null or FK_Dept =''");
+            obj.addOrderBy(EmpAttr.Name);
+            int total = obj.GetCount();
+            obj.DoQuery(EmpAttr.No, iPageSize, iPageNumber);
+            return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(emps, total);
+        }
+
+        /// <summary>
+        /// 调整人员所属主部门
+        /// </summary>
+        /// <returns></returns>
+        private string ReplaceEmpbelongDept()
+        {
+            string fk_Dept = getUTF8ToString("FK_Dept");
+            string fk_Emp = getUTF8ToString("FK_Emp");
+            Emp emp = new Emp(fk_Emp);
+            emp.FK_Dept = fk_Dept;
+            if (emp.Update() > 0)
+                return "true";
+            return "false";
         }
         private string GetManagerDept()
         {
@@ -799,48 +963,59 @@ namespace GMP2.GPM
         private string appendDataMet()
         {
             string deptNo = getUTF8ToString("deptNo");
+            string deptSort = getUTF8ToString("deptSort");
+
             if (string.IsNullOrEmpty(deptNo))
             {
                 return "false";
             }
-            string deptSort = getUTF8ToString("deptSort");
 
             try
             {
-                string sql = "select max(No) maxNo from port_dept";
-                int maxNo = int.Parse(DBAccess.RunSQLReturnTable(sql).Rows[0][0].ToString());
-
-                Dept d = new Dept();
-
-                string parentNo = "";
+                //string sql = "select MAX(CAST(No as int)) maxNo from port_dept";
+                //int maxNo = int.Parse(DBAccess.RunSQLReturnTable(sql).Rows[0][0].ToString());
+                Dept dept = new Dept();
+                dept.RetrieveByAttr(DeptAttr.No, deptNo);
+                Dept newDept = null;
                 if (deptSort == "peer")//同级部门
                 {
-                    d.RetrieveByAttr(DeptAttr.No, deptNo);
-                    if (d.ParentNo == "0")//有且只有一个根节点
+                    if (dept.ParentNo == "0")//有且只有一个根节点
                         return "false";
 
-                    parentNo = d.ParentNo;
+                    newDept = dept.DoCreateSameLevelNode() as Dept;
                 }
                 if (deptSort == "son")
-                    parentNo = deptNo;
+                    newDept = dept.DoCreateSubNode() as Dept;
 
-                if (parentNo == "")
-                    return "false";
+                //添加部门
+                dept = new Dept();
+                dept.No = newDept.No;
+                dept.Name = "新增部门" + newDept.No;
+                dept.ParentNo = newDept.ParentNo;
+                //如果启用钉钉通讯录同步
+                if (BP.WF.Glo.IsEnable_DingDing == true)
+                {
+                    //钉钉同一级部门不允许同名，需特殊处理。
+                    string temp = string.Format("{0:MMddHHmmssffff}", DateTime.Now);
+                    dept.Name = "新增部门" + temp;
 
+                    DingDing ding = new DingDing();
+                    CreateDepartMent_PostVal postVal = ding.GPM_Ding_CreateDept(dept);
+                    if (postVal != null && postVal.errcode == "0")
+                        dept.No = postVal.id;
+                    else
+                        return "false";
+                }
+                dept.DirectSave();
 
-                d = new Dept();
-                d.No = (maxNo + 1).ToString();
-                d.Name = "新增部门" + (maxNo + 1).ToString();
-                d.ParentNo = parentNo;
-                d.DirectSave();
-
-                DeptManager ed = new DeptManager();//给新增部门赋予当前人权限
-                ed.MyPK = WebUser.No + "_" + d.No;
-                ed.FK_Dept = d.No;
+                //给新增部门赋予当前人权限
+                DeptManager ed = new DeptManager();
+                ed.MyPK = WebUser.No + "_" + dept.No;
+                ed.FK_Dept = dept.No;
                 ed.FK_Emp = WebUser.No;
                 ed.DirectSave();
 
-                return d.No;
+                return dept.No;
             }
             catch (Exception)
             {
@@ -874,8 +1049,17 @@ namespace GMP2.GPM
                 Emps es = new Emps();
                 count = es.RetrieveByAttr(EmpAttr.FK_Dept, deptNo);
                 if (count != 0)//表明有emps         禁止删除操作
-                    return "false";
+                    return "err:此部门下还有人员不允许删除。";
 
+                //如果启用钉钉通讯录同步
+                if (BP.WF.Glo.IsEnable_DingDing == true)
+                {
+                    DingDing ding = new DingDing();
+                    Ding_Post_ReturnVal postVal = ding.GPM_Ding_DeleteDept(deptNo);
+                    //60003钉钉部门不存在
+                    if (postVal.errcode != "0" && postVal.errcode != "60003")
+                        return "err:" + postVal.errcode + "-钉钉-" + postVal.errmsg;
+                }
                 Dept dept = new Dept(deptNo);
                 dept.Delete();//只是一个空的部门，删除后要执行一下代码
 
@@ -925,7 +1109,15 @@ namespace GMP2.GPM
 
                 if (floatWay == "down")//下移
                     dept.DoDown();
-                
+
+                //如果启用钉钉通讯录同步，编辑部门顺序
+                if (BP.WF.Glo.IsEnable_DingDing == true)
+                {
+                    DingDing ding = new DingDing();
+                    Ding_Post_ReturnVal postVal = ding.GPM_Ding_EditDept(dept);
+                    if (postVal.errcode != "0")
+                        return "false";
+                }
                 return "true";
             }
             catch (Exception)
@@ -940,7 +1132,12 @@ namespace GMP2.GPM
         private string checkDeptInfoMet()
         {
             string selectedNodeId = getUTF8ToString("selectedNodeId");
-
+            //如果启用钉钉通讯录同步，则根目录不允许修改
+            if (BP.WF.Glo.IsEnable_DingDing == true)
+            {
+                if (selectedNodeId == "1")
+                    return "err:钉钉不允许修改根目录。";
+            }
             try
             {
                 StringBuilder sb = new StringBuilder();
@@ -1036,6 +1233,13 @@ namespace GMP2.GPM
                 }
 
                 sb.Append("]}]");
+                //部门树
+                string treeJson = GetDeptTreeJson(selectedNodeId);
+                if (treeJson != "[]")
+                {
+                    sb.Append(",depttree:");
+                    sb.Append(treeJson);
+                }
                 sb.Append("}");
                 return sb.ToString();
             }
@@ -1053,142 +1257,156 @@ namespace GMP2.GPM
         private string saveDeptInfoMet()
         {
             string deptNo = getUTF8ToString("deptNo");//部门编号
-
-            if (string.IsNullOrEmpty(deptNo))
-                return "false";
-
+            string deptParentNo = getUTF8ToString("deptParentNo");//部门父节点编号
             string deptName = getUTF8ToString("deptName");//名称
             string deptLeader = getUTF8ToString("deptLeader");//领导
             string deptStationStr = getUTF8ToString("stationStr");//岗位
             string deptDutyStr = getUTF8ToString("dutyStr");//职务
 
+            if (string.IsNullOrEmpty(deptNo))
+                return "false";
 
             try
             {
                 Dept dept = new Dept();
                 dept.RetrieveByAttr(DeptAttr.No, deptNo);
 
-                //获取原先配置的岗位信息
+                #region 获取原先配置的岗位信息,计算出排除的岗位，然后看排除的岗位下是否有本部的人,有的话不允许排除此岗位
                 string beforeStationStr = "";
-                DeptStations dss = new DeptStations();
-                dss.RetrieveByAttr(DeptStationAttr.FK_Dept, deptNo);
-
-                Stations ss;//岗位集合
-                StationTypes sts = new StationTypes();//岗位类型
-                sts.RetrieveAll();
-
-                foreach (StationType item in sts)
+                DeptStations deptStations = new DeptStations();
+                deptStations.RetrieveByAttr(DeptStationAttr.FK_Dept, deptNo);
+                foreach (DeptStation ds in deptStations)
                 {
-                    ss = new Stations();
-                    ss.RetrieveByAttr(StationAttr.FK_StationType, item.No);
-                    foreach (Station sta in ss)//在此处返回已选项目
-                    {
-                        foreach (DeptStation ds in dss)
-                        {
-                            if (ds.FK_Station == sta.No)
-                            {
-                                beforeStationStr += sta.No + ",";
-                                break;
-                            }
-                        }
-                    }
+                    if (beforeStationStr.Contains(ds.FK_Station + ","))
+                        continue;
+                    beforeStationStr += ds.FK_Station + ",";
                 }
-
-                string[] deptStations = deptStationStr.Split(',');
-                string[] beforedeptStations = null;
-
-                if (!string.IsNullOrEmpty(beforeStationStr))
+                //传入岗位集合
+                string[] strDeptStations_Arrary = deptStationStr.Split(',');
+                //修改前包含岗位
+                string[] beforedeptStations_Arrary = beforeStationStr.Split(',');
+                //不能排除的岗位
+                List<string> unDelDeptStation_List = new List<string>();
+                if (beforedeptStations_Arrary.Length > 0)
                 {
-                    beforedeptStations = beforeStationStr.Split(',');
-
-
-                    foreach (string befDeptSta in beforedeptStations)
+                    foreach (string beforeDeptSta in beforedeptStations_Arrary)
                     {
+                        //排除为空
+                        if (string.IsNullOrEmpty(beforeDeptSta) || string.IsNullOrWhiteSpace(beforeDeptSta))
+                            continue;
+
                         bool isExit = false;
-
-                        foreach (string item in deptStations)
+                        foreach (string item in strDeptStations_Arrary)
                         {
-                            if (befDeptSta == item)
+                            if (beforeDeptSta == item)
                             {
-                                isExit = true;//如果已经存在
+                                isExit = true;
                                 break;
                             }
                         }
-
-                        if (!isExit && !string.IsNullOrEmpty(befDeptSta))//表名新修改的岗位不包含以前所选，可能会造成人员的误删
-                            return "false";
+                        //说明已移除，判断该部门和岗位下是否有人
+                        if (isExit == false)
+                        {
+                            DeptEmpStations deptEmpStations = new DeptEmpStations();
+                            deptEmpStations.Retrieve(DeptEmpStationAttr.FK_Dept, deptNo, DeptEmpStationAttr.FK_Station, beforeDeptSta);
+                            //部门岗位下包括人，不允许排除
+                            if (deptEmpStations != null && deptEmpStations.Count > 0)
+                                unDelDeptStation_List.Add(beforeDeptSta);
+                        }
                     }
                 }
+                #endregion
 
-
-                //获取原先配置的职务信息
+                #region 获取原先配置的职务信息
                 string beforeDutyStr = "";
-                DeptDutys dds = new DeptDutys();
-                dds.RetrieveByAttr(DeptDutyAttr.FK_Dept, deptNo);
-
-                Dutys dutys = new Dutys();
-                dutys.RetrieveAll();
-
-                foreach (Duty item in dutys)
+                DeptDutys deptDutys = new DeptDutys();
+                deptDutys.RetrieveByAttr(DeptDutyAttr.FK_Dept, deptNo);
+                foreach (DeptDuty dd in deptDutys)
                 {
-                    foreach (DeptDuty dd in dds)
-                    {
-                        if (dd.FK_Duty == item.No)//选择已有项
-                        {
-                            beforeDutyStr += item.No + ",";
-                            break;
-                        }
-                    }
+                    if (beforeDutyStr.Contains(dd.FK_Duty + ","))
+                        continue;
+                    beforeDutyStr += dd.FK_Duty + ",";
                 }
 
-                string[] deptDutys = deptDutyStr.Split(',');
+                //传入值，部门所选职务
+                string[] strDeptDutys_Arrary = deptDutyStr.Split(',');
+                //原有职务
+                string[] beforeDeptDutys_Arrary = beforeDutyStr.Split(',');
+                //不允许删除的职务
+                List<string> unDelDeptDutys_List = new List<string>();
 
-                string[] beforeDeptDutys = null;
-                if (!string.IsNullOrEmpty(beforeDutyStr))
+                if (beforeDutyStr.Length > 0)
                 {
-                    beforeDeptDutys = beforeDutyStr.Split(',');
-
-                    foreach (string befDeptDuty in beforeDeptDutys)
+                    foreach (string beforeDeptDuty in beforeDeptDutys_Arrary)
                     {
-                        bool isExit = false;
+                        //排除为空
+                        if (string.IsNullOrEmpty(beforeDeptDuty) || string.IsNullOrWhiteSpace(beforeDeptDuty))
+                            continue;
 
-                        foreach (string item in deptDutys)
+                        bool isExit = false;
+                        foreach (string item in strDeptDutys_Arrary)
                         {
-                            if (befDeptDuty == item)
+                            if (beforeDeptDuty == item)
                             {
                                 isExit = true;//如果已经存在
                                 break;
                             }
                         }
-
-                        if (!isExit && !string.IsNullOrEmpty(befDeptDuty))//表名新修改的职务不包含以前所选，可能会造成人员的误删
-                            return "false";
+                        //表名新修改的职务不包含以前所选，可能会造成人员的误删
+                        if (isExit == false)
+                        {
+                            DeptEmps deptEmps = new DeptEmps();
+                            deptEmps.Retrieve(DeptEmpAttr.FK_Dept, deptNo, DeptEmpAttr.FK_Duty, beforeDeptDuty);
+                            //部门职务下包括人，不允许排除
+                            if (deptEmps != null && deptEmps.Count > 0)
+                                unDelDeptDutys_List.Add(beforeDeptDuty);
+                        }
                     }
                 }
-
-                //？？？？？？
-
+                #endregion
 
                 #region 更新部门信息
                 dept.Name = deptName;
                 dept.Leader = deptLeader;
-                dept.Update();
+                //变更部门父节点
+                if (deptParentNo != "0")
+                {
+                    dept.ParentNo = deptParentNo;
+                }
+                //如果启用钉钉通讯录同步，编辑部门
+                if (BP.WF.Glo.IsEnable_DingDing == true)
+                {
+                    DingDing ding = new DingDing();
+                    Ding_Post_ReturnVal postVal = ding.GPM_Ding_EditDept(dept);
+                    if (postVal.errcode != "0")
+                        return "false";
+                }
+                if (dept.Update() > 0)
+                    dept.GenerNameOfPath();
                 #endregion
 
                 #region    更新岗位对应
                 //删除所有部门编号为deptNo记录
                 DBAccess.RunSQL("DELETE Port_DeptStation WHERE FK_Dept='" + deptNo + "'");
-
-                foreach (string item in deptStations)
+                foreach (string item in strDeptStations_Arrary)
                 {
                     if (string.IsNullOrEmpty(item))
                         continue;
 
                     DeptStation ds = new DeptStation();
-
                     ds.FK_Station = item;
                     ds.FK_Dept = deptNo;
+                    ds.DirectSave();
+                }
+                //把不允许排除的追加
+                foreach (string item in unDelDeptStation_List)
+                {
+                    if (string.IsNullOrEmpty(item))
+                        continue;
 
+                    DeptStation ds = new DeptStation();
+                    ds.FK_Station = item;
+                    ds.FK_Dept = deptNo;
                     ds.DirectSave();
                 }
                 #endregion
@@ -1196,8 +1414,7 @@ namespace GMP2.GPM
                 #region    更新职务对应
                 //删除FK_Dept为deptNo的所有的记录
                 DBAccess.RunSQL("DELETE Port_DeptDuty WHERE FK_Dept='" + deptNo + "'");
-
-                foreach (string item in deptDutys)
+                foreach (string item in strDeptDutys_Arrary)
                 {
                     if (string.IsNullOrEmpty(item))
                         continue;
@@ -1208,55 +1425,17 @@ namespace GMP2.GPM
 
                     dd.DirectSave();
                 }
-                #endregion
 
-                #region  老版本的组织结构只是更新了以上三个表的信息，并未对对应的emp进行更新，若不需要此部分，注释。
-                //如果岗位和职务发生变化 Port_DeptEmp Port_DeptEmpStation要及时更新
-                //如果部门已经不存在此职务 Port_DeptEmp Port_DeptEmpStation要删除  
-
-                //DeptEmps des = new DeptEmps();
-                //des.RetrieveByAttr(DeptEmpAttr.FK_Dept, deptNo);
-
-                //foreach (DeptEmp item in des)
-                //{
-                //    bool isCanDel = false;k
-                //    foreach (string arr in deptDutys)
-                //    {
-                //        if (item.FK_Duty == arr)//不可以删除
-                //        {
-                //            isCanDel = true;
-                //            break;
-                //        }
-                //    }
-                //    if (!isCanDel)
-                //    {
-                //        DeptEmp de = new DeptEmp();
-                //        de.Delete(DeptEmpAttr.FK_Dept, deptNo, DeptEmpAttr.FK_Duty, item.FK_Duty);
-                //    }
-                //}
-
-                //删除DeptEmpStation不存在的station
-                //DeptEmpStations dess = new DeptEmpStations();
-                //dess.RetrieveByAttr(DeptEmpAttr.FK_Dept, deptNo);
-
-                //foreach (DeptEmpStation item in dess)
-                //{
-                //    bool isCanDel = false;
-                //    foreach (string arr in deptStations)
-                //    {
-                //        if (item.FK_Station == arr)//不可以删除
-                //        {
-                //            isCanDel = true;
-                //            break;
-                //        }
-                //    }
-                //    if (!isCanDel)
-                //    {
-                //        DeptEmpStation de = new DeptEmpStation();
-                //        de.Delete(DeptEmpStationAttr.FK_Dept, deptNo, DeptEmpStationAttr.FK_Station, item.FK_Station);
-                //    }
-                //}
-
+                //把不允许排除的追加
+                foreach (string item in unDelDeptDutys_List)
+                {
+                    if (string.IsNullOrEmpty(item))
+                        continue;
+                    DeptDuty dd = new DeptDuty();
+                    dd.FK_Dept = deptNo;
+                    dd.FK_Duty = item;
+                    dd.DirectSave();
+                }
                 #endregion
 
                 return "true";
@@ -1389,13 +1568,13 @@ namespace GMP2.GPM
             if (string.IsNullOrEmpty(empNo))
                 return "";
 
-            Emp en = new Emp(empNo);
+            Emp emp = new Emp(empNo);
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("{setName:[\"" + en.Name + "\"]");
-            sb.Append(",setNo:[\"" + en.No + "\"]");
-            sb.Append(",setZgbh:[\"" + en.EmpNo + "\"]");
-
+            sb.Append("{setName:[\"" + emp.Name + "\"]");
+            sb.Append(",setNo:[\"" + emp.No + "\"]");
+            sb.Append(",setZgbh:[\"" + emp.EmpNo + "\"]");
+            sb.Append(",FK_Dept:[\"" + emp.FK_Dept + "\"]");
 
             DeptDutys dds = new DeptDutys();
             dds.RetrieveByAttr(DeptDutyAttr.FK_Dept, deptNo);
@@ -1427,14 +1606,15 @@ namespace GMP2.GPM
             }
 
             sb.Append(",setZw:[" + setZw + "]");//下拉框
-            sb.Append(",setTel:[\"" + en.Tel + "\"]");
-            sb.Append(",setEamil:[\"" + en.Email + "\"]");
-            sb.Append(",setLeader:[\"" + en.Leader + "\"]");
+            sb.Append(",setTel:[\"" + emp.Tel + "\"]");
+            sb.Append(",setEamil:[\"" + emp.Email + "\"]");
+            sb.Append(",setLeader:[\"" + emp.Leader + "\"]");
 
             DeptEmp de = new DeptEmp();
-            de.RetrieveByAttr(DeptEmpAttr.FK_Emp, empNo);
+            de.Retrieve(DeptEmpAttr.FK_Emp, empNo, DeptEmpAttr.FK_Dept, deptNo);
             sb.Append(",setZwlb:[\"" + de.DutyLevel.ToString() + "\"]");
 
+            #region 拥有岗位
             sb.Append(",yygw:[");
 
             //拥有岗位
@@ -1495,8 +1675,40 @@ namespace GMP2.GPM
                 }
                 sb.Append("]},"); count += 1;
             }
-            sb.Append("]}");
-            sb.Append("]}");
+            sb.Append("]}]");
+            #endregion
+
+            #region 归属部门
+            DeptEmps deptEmps = new DeptEmps();
+            deptEmps.RetrieveByAttr(DeptEmpAttr.FK_Emp, empNo);
+            if (deptEmps.Count == 0)
+            {
+                //特殊情况处理，一般不会出现
+                DeptEmp deptEmp = new DeptEmp();
+                deptEmp.FK_Dept = deptNo;
+                deptEmp.FK_Emp = empNo;
+                deptEmp.Insert();
+                deptEmps.AddEntity(deptEmp);
+            }
+            //部门集合
+            Depts depts = new Depts();
+            QueryObject obj = new QueryObject(depts);
+            string strDepts = "";
+            foreach (DeptEmp deptEmp in deptEmps)
+            {
+                strDepts += "'" + deptEmp.FK_Dept + "',";
+            }
+            //根据部门与用户关联表获取部门编号，查找所有部门
+            strDepts = strDepts.Remove(strDepts.Length - 1);
+            obj.AddWhere("No in (" + strDepts + ")");
+            obj.addOrderBy(DeptAttr.NameOfPath);
+            obj.DoQuery();
+            string deptEmpsJson = BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(depts);
+            sb.Append(",BlongDepts:");
+            sb.Append(deptEmpsJson);
+            #endregion
+
+            sb.Append("}");
 
             return sb.ToString();
         }
@@ -1538,28 +1750,37 @@ namespace GMP2.GPM
 
                 string[] infoArray = info.Split(',');//所有信息都在数组内，开始更新操作
 
-                Emp e = new Emp();
-                e.RetrieveByAttr(EmpAttr.No, selectEmpNo);
+                Emp emp = new Emp();
+                emp.RetrieveByAttr(EmpAttr.No, selectEmpNo);
 
-                e.Name = infoArray[0];
-                e.EmpNo = infoArray[1];
-                e.FK_Duty = infoArray[2];
-                e.Tel = infoArray[3];
-                e.Email = infoArray[4];
-                e.Leader = infoArray[5];
+                emp.Name = infoArray[0];
+                emp.EmpNo = infoArray[1];
+                emp.FK_Duty = infoArray[2];
+                emp.Tel = infoArray[3];
+                emp.Email = infoArray[4];
+                emp.Leader = infoArray[5];
 
-                e.Update();
+                //如果启用钉钉通讯录同步，编辑人员
+                if (BP.WF.Glo.IsEnable_DingDing == true)
+                {
+                    DingDing ding = new DingDing();
+                    Ding_Post_ReturnVal postVal = ding.GPM_Ding_EditEmp(emp);
+                    if (postVal.errcode != "0")
+                        return "err:" + postVal.errcode + "-钉钉-" + postVal.errmsg;
+                }
+                //更新CCGPM中人员
+                emp.Update();
 
                 DBAccess.RunSQL("DELETE Port_DeptEmp WHERE FK_Dept='" + selectedNodeId + "' AND FK_Emp='" + selectEmpNo + "'");
-                DeptEmp de = new DeptEmp();
+                DeptEmp deptEmp = new DeptEmp();
 
-                de.FK_Emp = selectEmpNo;
-                de.FK_Dept = selectedNodeId;
-                de.Leader = infoArray[5];
-                de.FK_Duty = infoArray[2];
-                de.DutyLevel = int.Parse(infoArray[6]);
+                deptEmp.FK_Emp = selectEmpNo;
+                deptEmp.FK_Dept = selectedNodeId;
+                deptEmp.Leader = infoArray[5];
+                deptEmp.FK_Duty = infoArray[2];
+                deptEmp.DutyLevel = int.Parse(infoArray[6]);
 
-                de.Insert();
+                deptEmp.Insert();
 
                 return "true";
             }
@@ -1697,8 +1918,8 @@ namespace GMP2.GPM
             string pageSize = getUTF8ToString("pageSize");
             int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
 
-            string sql = " (select a.No,a.Name,b.name deptName from port_emp a,port_dept b where a. no not in("
-                  + "select fk_emp from  Port_DeptEmp where fk_dept='" + deptNo + "') and a.fk_dept =b.no ) dbSor ";
+            string sql = " (select a.No,a.Name,b.name deptName from port_emp a,port_dept b where a.fk_dept =b.no and a. no not in("
+                  + "select fk_emp from  Port_DeptEmp where fk_dept='" + deptNo + "')) dbSor ";
 
             return DBPaging(sql, iPageNumber, iPageSize, "No", "No");
         }
@@ -1725,25 +1946,69 @@ namespace GMP2.GPM
                     if (string.IsNullOrEmpty(item))
                         continue;
 
-                    Emp e = new Emp(item);
-                    e.FK_Dept = deptNo;
-                    e.Update();
+                    Emp emp = new Emp();
+                    emp.No = item;
+                    emp.RetrieveFromDBSources();
+                    //如果部门为空则为禁用用户，在此启用
+                    if (emp.FK_Dept == null || emp.FK_Dept == "")
+                    {
+                        emp.FK_Dept = deptNo;
+                        emp.Pass = "123";
+                        emp.DirectUpdate();
+
+                        DeptEmp deptEmp = new DeptEmp();
+                        bool bExit = deptEmp.RetrieveByAttrAnd(DeptEmpAttr.FK_Dept, deptNo, DeptEmpAttr.FK_Emp, item);
+                        if (!bExit)
+                        {
+                            deptEmp = new DeptEmp();
+                            deptEmp.MyPK = deptNo + "-" + item;
+                            deptEmp.FK_Dept = deptNo;
+                            deptEmp.FK_Emp = item;
+                            deptEmp.FK_Duty = emp.FK_Duty;
+                            deptEmp.Leader = emp.Leader;
+                            deptEmp.Insert();
+                        }
+                    }
+                    //如果启用钉钉通讯录同步，编辑人员所属部门
+                    if (BP.WF.Glo.IsEnable_DingDing == true)
+                    {
+                        //编辑之前人员所属部门集合
+                        DeptEmps deptEmps = new DeptEmps();
+                        deptEmps.RetrieveByAttr(DeptEmpAttr.FK_Emp, item);
+                        //部门集合
+                        List<string> list_DeptIds = new List<string>();
+                        foreach (DeptEmp deptEmp in deptEmps)
+                        {
+                            if (deptEmp.FK_Dept == deptNo)
+                                continue;
+
+                            list_DeptIds.Add(deptEmp.FK_Dept);
+                        }
+                        //追加当前部门编号
+                        list_DeptIds.Add(deptNo);
+
+                        DingDing ding = new DingDing();
+                        Ding_Post_ReturnVal postVal = ding.GPM_Ding_EditEmp(emp, list_DeptIds);
+                        if (postVal == null || postVal.errcode != "0")
+                            return "Ding:" + postVal.errcode + "-" + postVal.errmsg;
+                    }
+                    //更新CCGPM中人员信息
+                    //emp.FK_Dept = deptNo;//不修改主部门，只关联部门
+                    //emp.Update();
 
                     DeptEmp de = new DeptEmp();
                     bool isExit = de.RetrieveByAttrAnd(DeptEmpAttr.FK_Dept, deptNo, DeptEmpAttr.FK_Emp, item);
-
                     if (!isExit)
                     {
                         de = new DeptEmp();
                         de.MyPK = deptNo + "-" + item;
                         de.FK_Dept = deptNo;
                         de.FK_Emp = item;
-                        de.FK_Duty = e.FK_Duty;
-                        de.Leader = e.Leader;
+                        de.FK_Duty = emp.FK_Duty;
+                        de.Leader = emp.Leader;
                         de.Insert();
                     }
                 }
-
                 return "true";
             }
             catch (Exception)
@@ -1760,8 +2025,14 @@ namespace GMP2.GPM
             string empNo = getUTF8ToString("empNo");
             try
             {
+                string appNo = BP.Sys.SystemConfig.AppSettings["CCPortal.AppNo"];
                 Emp e = new Emp(empNo);
                 e.Pass = "123";
+                //OA系统需要加密
+                if (!string.IsNullOrEmpty(appNo) && appNo == "CCOA")
+                {
+                    e.Pass = BP.Tools.Cryptography.EncryptString(e.Pass);
+                }
                 e.Update();
 
                 return "true";
@@ -1842,24 +2113,37 @@ namespace GMP2.GPM
 
             return DataTableConvertJson.DataTable2Json(DTable, totalCount);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
         #endregion
 
+        /// <summary>
+        /// 获取部门树
+        /// </summary>
+        /// <returns></returns>
+        private string GetDeptTreeJson(string hidenDeptId)
+        {
+            Depts depts = new Depts();
+            //不需要隐藏部门，返回全部
+            if (string.IsNullOrEmpty(hidenDeptId))
+            {
+                depts.RetrieveAll();
+                return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(depts, "0");
+            }
 
-        //--------------------------------------------------------------------------------------------------------------------        //--------------------------------------------------------------------------------------------------------------------
+            Dept dept = new Dept();
+            dept.RetrieveByAttr(DeptAttr.No, hidenDeptId);
+            //不能排除根目录
+            if (dept.ParentNo == "0")
+                return "[]";
 
+            QueryObject obj = new QueryObject(depts);
+            obj.AddWhereNotIn(DeptAttr.No, hidenDeptId);
+            obj.DoQuery();
+            if (depts.Count == 0)
+                return "[]";
+            return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(depts, "0");
+        }
+
+        //--------------------------------------------------------------------------------------------------------------------
         #region  按岗位分配菜单
         /// <summary>
         /// 获取所有岗位
@@ -2393,6 +2677,39 @@ namespace GMP2.GPM
 
             qo.DoQuery();
             return TranslateEntitiesToGridJsonOnlyData(emps);
+        }
+
+        /// <summary>
+        /// 根据用户账号、工号、姓名或手机号
+        /// </summary>
+        /// <returns></returns>
+        private string SearchByEmpNoOrName()
+        {
+
+            string objSearch = getUTF8ToString("objSearch");
+            string pageNumber = getUTF8ToString("pageNumber");
+            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+            //每页多少行
+            string pageSize = getUTF8ToString("pageSize");
+            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+
+            Emps emps = new Emps();
+            BP.En.QueryObject qo = new QueryObject(emps);
+            qo.AddWhere("FK_Dept IS NOT NULL AND FK_Dept NOT IN ('')");
+            qo.addAnd();
+            qo.addLeftBracket();
+            qo.AddWhere(EmpAttr.No, " LIKE ", "'%" + objSearch + "%'");
+            qo.addOr();
+            qo.AddWhere(EmpAttr.Name, " LIKE ", "'%" + objSearch + "%'");
+            qo.addOr();
+            qo.AddWhere(EmpAttr.EmpNo, " LIKE ", "'%" + objSearch + "%'");
+            qo.addOr();
+            qo.AddWhere(EmpAttr.Tel, " LIKE ", "'%" + objSearch + "%'");
+            qo.addRightBracket();
+            int total = qo.GetCount();
+
+            qo.DoQuery(EmpAttr.No, iPageSize, iPageNumber);
+            return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(emps, total);
         }
 
         /// <summary>
@@ -3400,7 +3717,6 @@ namespace GMP2.GPM
                     appSend.Append(",\"text\":\"" + item.Name + "\"");
 
                     BP.GPM.Menu menu = item as BP.GPM.Menu;
-
                     //节点图标
                     string ico = "icon-" + menu.MenuType;
 

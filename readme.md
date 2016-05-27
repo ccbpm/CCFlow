@@ -261,9 +261,9 @@ CCFlow功能: 懂管理就会开发基本流程,为单位流程管理系统,会S
 
 9. 如果以上方式都不奏效.
 
-     cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319
-     aspnet_regiis.exe -ua
-     aspnet_regiis.exe -i
+        cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319
+        aspnet_regiis.exe -ua
+        aspnet_regiis.exe -i
 
    重新安装，就有可能解决，此时可以寻求你的同事解决。
 

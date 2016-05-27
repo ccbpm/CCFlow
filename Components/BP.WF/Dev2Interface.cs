@@ -2466,7 +2466,8 @@ namespace BP.WF
         public static void Port_Login(string userNo, string sid)
         {
             if (WebUser.No == userNo)
-                return;
+                return; 
+
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
                 Paras ps = new Paras();
@@ -2582,7 +2583,8 @@ namespace BP.WF
                 }
                 return sid;
             }
-            return "xxxxxxxx";
+
+            throw new Exception("@没有判断的数据源模式...");
         }
         /// <summary>
         /// 验证用户的合法性

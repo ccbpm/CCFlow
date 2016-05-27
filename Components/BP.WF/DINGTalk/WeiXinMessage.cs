@@ -141,11 +141,11 @@ namespace BP.WF.WXin
                 newArticle.description = msgConten;
 
                 string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
-                    + "&redirect_uri=http://demo.ccflow.org:8006/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=empwork_" + WorkID + "#wechat_redirect";
+                    + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=empwork_" + WorkID + "#wechat_redirect";
                 newArticle.url = New_Url;
 
                 //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
-                newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/" + BP.Sys.SystemConfig.SysNo + "/LogBig.png";
+                //newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/" + BP.Sys.SystemConfig.SysNo + "/LogBig.png";
 
                 WX_Msg_News wxMsg = new WX_Msg_News();
                 wxMsg.Access_Token = accessToken;

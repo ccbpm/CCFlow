@@ -758,7 +758,7 @@ namespace BP.WF.Data
 
                 rm = new RefMethod();
                 rm.Title = "删除";
-                rm.ClassMethodName = this.ToString() + ".DoDel";
+                rm.ClassMethodName = this.ToString() + ".DoDelete";
                 rm.Warning = "您确定要删除吗？";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Delete.gif";
                 rm.IsForEns = false;

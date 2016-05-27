@@ -100,5 +100,95 @@ namespace BP.WF.WXin
             }
         }
         #endregion
+
+        /// <summary>
+        /// 下载人员头像
+        /// </summary>
+        public bool DownLoadUserIcon(string savePath)
+        {
+            if (Directory.Exists(savePath) == false)
+                Directory.CreateDirectory(savePath);
+
+            DeptMent_GetList deptMentList = GetDeptMentList();
+            if (deptMentList != null && deptMentList.errcode == "0")
+            {
+                foreach (DeptMentInfo deptMent in deptMentList.department)
+                {
+                    UsersBelongDept users = GetUserListByDeptID(deptMent.id);
+                    if (users != null && users.errcode == "0")
+                    {
+                        foreach (UserInfoBelongDept userInfo in users.userlist)
+                        {
+                            if (userInfo.avatar != null)
+                            {
+                                //大图标
+                                string headimgurl = userInfo.avatar;
+                                string userIcon = savePath + "\\" + userInfo.userid + "Biger.png";
+                                BP.DA.DataType.HttpDownloadFile(headimgurl, userIcon);
+
+                                //小图标
+                                string iconSize = userInfo.avatar.Substring(headimgurl.LastIndexOf('/'));
+                                if (iconSize == "/")
+                                    headimgurl = userInfo.avatar + "64";
+                                else
+                                    headimgurl = userInfo.avatar.Substring(0, headimgurl.LastIndexOf('/')) + "64";
+                                userIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
+                                BP.DA.DataType.HttpDownloadFile(headimgurl, userIcon);
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 获取部门集合
+        /// </summary>
+        public DeptMent_GetList GetDeptMentList()
+        {
+            string access_token = getAccessToken();
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=" + access_token;
+            try
+            {
+                string str = new HttpWebResponseUtility().HttpResponseGet(url);
+                DeptMent_GetList departMentList = FormatToJson.ParseFromJson<DeptMent_GetList>(str);
+
+                //部门集合
+                if (departMentList != null)
+                    return departMentList;
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex.Message);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取指定部门下的人员
+        /// </summary>
+        /// <param name="FK_Dept">部门编号</param>
+        /// <returns></returns>
+        public UsersBelongDept GetUserListByDeptID(string FK_Dept)
+        {
+            string access_token = getAccessToken();
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=" + access_token + "&department_id=" + FK_Dept + "&status=0";
+            try
+            {
+                string str = new HttpWebResponseUtility().HttpResponseGet(url);
+                UsersBelongDept users = FormatToJson.ParseFromJson<UsersBelongDept>(str);
+
+                //人员集合
+                if (users != null)
+                    return users;
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex.Message);
+            }
+            return null;
+        }
     }
 }

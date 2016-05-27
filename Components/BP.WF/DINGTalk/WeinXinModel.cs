@@ -386,4 +386,118 @@ namespace BP.WF.WXin
         public string show_cover_pic { get; set; }
     }
     #endregion
+
+    #region 组织结构
+
+    /// <summary>
+    /// 部门列表
+    /// </summary>
+    public class DeptMent_GetList
+    {
+        /// <summary>
+        /// 返回码
+        /// </summary>
+        public string errcode { get; set; }
+        /// <summary>
+        /// 对返回码的文本描述内容
+        /// </summary>
+        public string errmsg { get; set; }
+        /// <summary>
+        /// 部门列表数据
+        /// </summary>
+        public List<DeptMentInfo> department { get; set; }
+    }
+
+    /// <summary>
+    /// 部门信息
+    /// </summary>
+    public class DeptMentInfo
+    {
+        /// <summary>
+        ///  部门id 
+        /// </summary>
+        public string id { get; set; }
+        /// <summary>
+        /// 部门名称 
+        /// </summary>
+        public string name { get; set; }
+        /// <summary>
+        ///  父亲部门id。根部门为1 
+        /// </summary>
+        public string parentid { get; set; }
+        /// <summary>
+        ///  在父部门中的次序值。order值小的排序靠前
+        /// </summary>
+        public string order { get; set; }
+    }
+
+    /// <summary>
+    /// 部门下的人员
+    /// </summary>
+    public class UsersBelongDept
+    {
+        /// <summary>
+        /// 返回码
+        /// </summary>
+        public string errcode { get; set; }
+        /// <summary>
+        /// 对返回码的文本描述内容
+        /// </summary>
+        public string errmsg { get; set; }
+        /// <summary>
+        /// 成员列表
+        /// </summary>
+        public List<UserInfoBelongDept> userlist { get; set; }
+    }
+    /// <summary>
+    /// 部门人员详情
+    /// </summary>
+    public class UserInfoBelongDept
+    {
+        /// <summary>
+        /// 成员UserID。对应管理端的帐号
+        /// </summary>
+        public string userid { get; set; }
+        /// <summary>
+        /// 成员名称
+        /// </summary>
+        public string name { get; set; }
+        /// <summary>
+        /// 成员所属部门
+        /// </summary>
+        public object department { get; set; }
+        /// <summary>
+        /// 职位信息
+        /// </summary>
+        public string position { get; set; }
+        /// <summary>
+        /// 手机号码
+        /// </summary>
+        public string mobile { get; set; }
+        /// <summary>
+        /// 性别。0表示未定义，1表示男性，2表示女性
+        /// </summary>
+        public string gender { get; set; }
+        /// <summary>
+        /// 邮箱
+        /// </summary>
+        public string email { get; set; }
+        /// <summary>
+        /// 微信号
+        /// </summary>
+        public string weixinid { get; set; }
+        /// <summary>
+        /// 头像url。注：如果要获取小图将url最后的"/0"改成"/64"即可
+        /// </summary>
+        public string avatar { get; set; }
+        /// <summary>
+        /// 关注状态: 1=已关注，2=已冻结，4=未关注 
+        /// </summary>
+        public string status { get; set; }
+        /// <summary>
+        /// 扩展属性
+        /// </summary>
+        public string extattr { get; set; }
+    }
+    #endregion
 }

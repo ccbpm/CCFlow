@@ -194,10 +194,12 @@
     <Compile Include="DINGTalk\DingDing.cs" />
     <Compile Include="DINGTalk\DingModel.cs" />
     <Compile Include="DINGTalk\DingTalk_Message.cs" />
+    <Compile Include="DINGTalk\WeiXinMessage.cs" />
     <Compile Include="DTS\ChangeUserNo.cs" />
     <Compile Include="DTS\DeleteBlankGroupField.cs" />
     <Compile Include="DTS\OrgInit_Ding.cs" />
     <Compile Include="DTS\OrgInit_NameOfPath.cs" />
+    <Compile Include="DTS\OrgInit_WeiXinUserIcon.cs" />
     <Compile Include="Service References\CCInterface\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

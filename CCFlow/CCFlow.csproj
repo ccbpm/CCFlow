@@ -1371,6 +1371,7 @@
     <Content Include="WF\Data\ImpTableField.txt" />
     <Content Include="WF\Draft.aspx" />
     <Content Include="WF\ErrorPage.aspx" />
+    <Content Include="WF\FlowCheck\MyFlow.aspx" />
     <Content Include="WF\FlowRpt.aspx" />
     <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Img\redo.png" />
@@ -4995,6 +4996,20 @@
     <Compile Include="WF\ErrorPage.aspx.designer.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\FlowCheck\MyFlow.aspx.cs">
+      <DependentUpon>MyFlow.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\FlowCheck\MyFlow.aspx.designer.cs">
+      <DependentUpon>MyFlow.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\FlowCheck\Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\FlowCheck\Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
     <Compile Include="WF\FlowRpt.aspx.cs">
       <DependentUpon>FlowRpt.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7833,6 +7848,7 @@
     <None Include="WF\Data\Install\License_EH.rtf" />
     <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Data\Templete\SysFields.txt" />
+    <Content Include="WF\FlowCheck\Site.Master" />
     <None Include="WF\Img\Arr\Thumbs.db" />
     <None Include="WF\Img\FileType\Thumbs.db" />
     <Content Include="WF\MapDef\CCForm\HanderMapExt.ashx" />

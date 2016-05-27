@@ -11,6 +11,7 @@
     
 <!-- 重写toolbar 预留的send 与save 两个方法。-->
 <script type="text/javascript">
+
     function Save() {
         alert('这是调用 嵌入式表单 的 Save 方法激活的的存盘。');
         return true;
@@ -27,21 +28,35 @@
         string fid = this.Request.QueryString["FID"];
       %>
     <div>
-    请假申请单.
-    sds
-    dsc
-    dsdsd
+
+
+    <table>
+    <tr>
+    <td>请假人 </td>
+    <td> </td>
+
+    <td>所在部门 </td>
+    <td> </td>
+    </tr>
+
+        <td>日期从 </td>
+    <td> </td>
+
+    <td>到 </td>
+    <td> </td>
+    </tr>
+
+    </table>
+
         <uc1:FrmCheck ID="FrmCheck1" runat="server" />
     </div>
 
     <% if (fk_node == "102")
        {
            %>
-           asdfasd
-           a
-           sdfasdfasdfasd
+
+
            <%
-           
        } %>
     
     <uc2:DocMultiAth ID="DocMultiAth1" runat="server" />

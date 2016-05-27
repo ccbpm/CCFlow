@@ -56,7 +56,6 @@ namespace CCFlow.SDKFlowDemo.QingJia
         {
             if (this.IsPostBack == false)
             {
-
                 //查询出来数据给表单赋值。
                 BP.Demo.SDK.QingJia en = new BP.Demo.SDK.QingJia();
                 en.OID = (int)this.WorkID;
@@ -105,7 +104,6 @@ namespace CCFlow.SDKFlowDemo.QingJia
             try
             {
                 //编写我的业务逻辑....
-
 
                 //调用发送api, 返回发送对象.
                 objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);

@@ -105,13 +105,21 @@ namespace CCFlow.SDKFlowDemo.QingJia
              * 
              */
 
-            /***发送后，流程转向问题 BY HZM ******/
-            if ( en.QingJiaTianShu >10)
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID,1803, null);
+         //   objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 0, null, ht);
+
+            ///***发送后，流程转向问题 BY HZM ******/
+            if (en.QingJiaTianShu > 10)
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 1803, "zhangsan,lisi,");
             else
                 objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 1899, null);
 
-            /***修改结束******/
+
+            BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 102, "zhangsna,lisi", false);
+            BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 103, "wangwu,zhaoliu", false);
+            BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 105, "wsxx,dd", false);
+
+
+            ///***修改结束******/
 
 
             BP.Demo.SDK.ND018Rpt rpt = new BP.Demo.SDK.ND018Rpt();

@@ -56,7 +56,7 @@ namespace BP.Demo.FlowEvent
                     //  throw new Exception("不符合流程发送条件,阻止向下运行.");
                     //this.JumpToEmps = "zhangsan,lisi";
                     //this.JumpToNode = new Node(102);
-                  
+                    //this.WorkID;
                     return "SendWhen事件已经执行成功。";
                 default:
                     break;

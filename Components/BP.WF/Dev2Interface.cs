@@ -4935,7 +4935,6 @@ namespace BP.WF
         public static Int64 Node_CreateStartNodeWork(string flowNo, Hashtable htWork = null, DataSet workDtls = null,
             string flowStarter = null, string title = null, Int64 parentWorkID = 0, string parentFlowNo = null, int parentNDFrom = 0)
         {
-
             // 给全局变量赋值.
             BP.WF.Glo.SendHTOfTemp = htWork;
 
@@ -4949,6 +4948,7 @@ namespace BP.WF
                 flowStarter = WebUser.No;
 
             Flow fl = new Flow(flowNo);
+            Node nd = new Node(fl.StartNodeID);
 
             #region 处理流程标题.
             if (string.IsNullOrEmpty(title) == false && fl.TitleRole != "@OutPara")
@@ -4965,80 +4965,9 @@ namespace BP.WF
             }
             #endregion 处理流程标题.
 
-            Node nd = new Node(fl.StartNodeID);
-
             // 下一个工作人员。
             Emp emp = new Emp(flowStarter);
             Work wk = fl.NewWork(flowStarter);
-            Int64 workID = wk.OID;
-
-
-            #region 为开始工作创建待办
-            GenerWorkFlow gwf = new GenerWorkFlow();
-            gwf.WorkID = workID;
-            int i = gwf.RetrieveFromDBSources();
-            if (i == 0)
-            {
-                gwf.FlowName = fl.Name;
-                gwf.FK_Flow = flowNo;
-                gwf.FK_FlowSort = fl.FK_FlowSort;
-
-                gwf.FK_Dept = emp.FK_Dept;
-                gwf.DeptName = emp.FK_DeptText;
-                gwf.FK_Node = fl.StartNodeID;
-
-                gwf.NodeName = nd.Name;
-                gwf.WFState = WFState.Runing;
-
-                if (string.IsNullOrEmpty(title))
-                    gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
-                else
-                    gwf.Title = title;
-
-                gwf.Starter = emp.No;
-                gwf.StarterName = emp.Name;
-                gwf.RDT = DataType.CurrentDataTime;
-
-                if (htWork != null && htWork.ContainsKey("PRI") == true)
-                    gwf.PRI = int.Parse(htWork["PRI"].ToString());
-
-                if (htWork != null && htWork.ContainsKey("SDTOfNode") == true)
-                    /*节点应完成时间*/
-                    gwf.SDTOfNode = htWork["SDTOfNode"].ToString();
-
-                if (htWork != null && htWork.ContainsKey("SDTOfFlow") == true)
-                    /*流程应完成时间*/
-                    gwf.SDTOfNode = htWork["SDTOfFlow"].ToString();
-
-                gwf.PWorkID = parentWorkID;
-                gwf.PFlowNo = parentFlowNo;
-                gwf.PNodeID = parentNDFrom;
-                gwf.Insert();
-
-                // 产生工作列表.
-                GenerWorkerList gwl = new GenerWorkerList();
-                gwl.WorkID = wk.OID;
-                gwl.FK_Emp = emp.No;
-                gwl.FK_EmpText = emp.Name;
-
-                gwl.FK_Node = nd.NodeID;
-                gwl.FK_NodeText = nd.Name;
-                gwl.FID = 0;
-
-                gwl.FK_Flow = fl.No;
-                gwl.FK_Dept = emp.FK_Dept;
-
-                gwl.SDT = DataType.CurrentDataTime;
-                gwl.DTOfWarning = DataType.CurrentDataTime;
-                gwl.RDT = DataType.CurrentDataTime;
-                gwl.IsEnable = true;
-
-                gwl.IsPass = false;
-                //     gwl.Sender = WebUser.No;
-                gwl.PRI = gwf.PRI;
-                gwl.Insert();
-            }
-            #endregion 为开始工作创建待办
 
             #region 给各个属性-赋值
             if (htWork != null)
@@ -5060,11 +4989,12 @@ namespace BP.WF
                         default:
                             break;
                     }
-
                     wk.SetValByKey(str, htWork[str]);
                 }
+                //将参数保存到业务表
+                wk.DirectUpdate();
             }
-            wk.OID = workID;
+
             if (workDtls != null)
             {
                 //保存从表
@@ -5100,11 +5030,85 @@ namespace BP.WF
             }
             #endregion 赋值
 
+            #region 为开始工作创建待办
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = wk.OID;
+            int i = gwf.RetrieveFromDBSources();
+
+            gwf.FlowName = fl.Name;
+            gwf.FK_Flow = flowNo;
+            gwf.FK_FlowSort = fl.FK_FlowSort;
+
+            gwf.FK_Dept = emp.FK_Dept;
+            gwf.DeptName = emp.FK_DeptText;
+            gwf.FK_Node = fl.StartNodeID;
+
+            gwf.NodeName = nd.Name;
+            gwf.WFSta = WFSta.Runing;
+            gwf.WFState = WFState.Runing;
+
+            if (string.IsNullOrEmpty(title))
+                gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
+            else
+                gwf.Title = title;
+
+            gwf.Starter = emp.No;
+            gwf.StarterName = emp.Name;
+            gwf.RDT = DataType.CurrentDataTime;
+
+            if (htWork != null && htWork.ContainsKey("PRI") == true)
+                gwf.PRI = int.Parse(htWork["PRI"].ToString());
+
+            if (htWork != null && htWork.ContainsKey("SDTOfNode") == true)
+                /*节点应完成时间*/
+                gwf.SDTOfNode = htWork["SDTOfNode"].ToString();
+
+            if (htWork != null && htWork.ContainsKey("SDTOfFlow") == true)
+                /*流程应完成时间*/
+                gwf.SDTOfNode = htWork["SDTOfFlow"].ToString();
+
+            gwf.PWorkID = parentWorkID;
+            gwf.PFlowNo = parentFlowNo;
+            gwf.PNodeID = parentNDFrom;
+            if (i == 0)
+                gwf.Insert();
+            else
+                gwf.Update();
+
+            // 产生工作列表.
+            GenerWorkerList gwl = new GenerWorkerList();
+            gwl.WorkID = wk.OID;
+            if (gwl.RetrieveFromDBSources() == 0)
+            {
+                gwl.FK_Emp = emp.No;
+                gwl.FK_EmpText = emp.Name;
+
+                gwl.FK_Node = nd.NodeID;
+                gwl.FK_NodeText = nd.Name;
+                gwl.FID = 0;
+
+                gwl.FK_Flow = fl.No;
+                gwl.FK_Dept = emp.FK_Dept;
+
+                gwl.SDT = DataType.CurrentDataTime;
+                gwl.DTOfWarning = DataType.CurrentDataTime;
+                gwl.RDT = DataType.CurrentDataTime;
+                gwl.IsEnable = true;
+
+                gwl.IsPass = false;
+                //     gwl.Sender = WebUser.No;
+                gwl.PRI = gwf.PRI;
+                gwl.Insert();
+            }
+            #endregion 为开始工作创建待办
+
             // 执行对报表的数据表WFState状态的更新,让它为runing的状态. 
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,Title=" + dbstr + "Title,FK_Dept=" + dbstr + "FK_Dept,PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID WHERE OID=" + dbstr + "OID";
+            ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Title=" + dbstr 
+                + "Title,FK_Dept=" + dbstr + "FK_Dept,PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID WHERE OID=" + dbstr + "OID";
             ps.Add("WFState", (int)WFState.Runing);
+            ps.Add("WFSta", (int)WFSta.Runing);
             ps.Add("Title", gwf.Title);
             ps.Add("FK_Dept", gwf.FK_Dept);
 
@@ -5131,7 +5135,7 @@ namespace BP.WF
                     ps = new Paras();
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
                     ps.Add(GenerWorkerListAttr.Paras, paras);
-                    ps.Add(GenerWorkerListAttr.WorkID, workID);
+                    ps.Add(GenerWorkerListAttr.WorkID, wk.OID);
                     ps.Add(GenerWorkerListAttr.FK_Node, nd.NodeID);
                     DBAccess.RunSQL(ps);
                 }

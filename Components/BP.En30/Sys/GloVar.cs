@@ -215,6 +215,9 @@ namespace BP.Sys
 
 
         #region 公共属性.
+        /// <summary>
+        /// 公共假期
+        /// </summary>
         private static string _Holidays = null;
         /// <summary>
         /// 一个月份的假期.
@@ -240,6 +243,8 @@ namespace BP.Sys
             }
         }
         #endregion
+
+
 
     }
     /// <summary>

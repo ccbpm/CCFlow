@@ -11,6 +11,48 @@ namespace BP.Sys
     /// </summary>
     public class Glo
     {
+        #region 公共变量.
+        /// <summary>
+        /// 部门版本号
+        /// </summary>
+        public static string DeptsVersion
+        {
+            get
+            {
+                GloVar en = new GloVar();
+                en.No = "DeptsVersion";
+                if (en.RetrieveFromDBSources() == 0)
+                {
+                    en.Name = "部门版本号";
+                    en.Val = BP.DA.DataType.CurrentDataTime;
+                    en.GroupKey = "Glo";
+                    en.Insert();
+                }
+                return en.Val;
+            }
+        }
+        /// <summary>
+        /// 人员版本号
+        /// </summary>
+        public static string UsersVersion
+        {
+            get
+            {
+                GloVar en = new GloVar();
+                en.No = "UsersVersion";
+                if (en.RetrieveFromDBSources() == 0)
+                {
+                    en.Name = "人员版本号";
+                    en.Val = BP.DA.DataType.CurrentDataTime;
+                    en.GroupKey = "Glo";
+                    en.Insert();
+                }
+                return en.Val;
+            }
+        }
+        #endregion 公共变量.
+
+
         #region 写入系统日志(写入的文件:\DataUser\Log\*.*)
         /// <summary>
         /// 写入一条消息

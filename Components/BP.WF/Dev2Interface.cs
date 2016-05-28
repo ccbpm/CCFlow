@@ -4919,21 +4919,7 @@ namespace BP.WF
 
             return wk.OID;
         }
-        /// <summary>
-        /// 发起工作
-        /// 创建后可以创办人形成一个待办.
-        /// </summary>
-        /// <param name="flowNo">流程编号</param>
-        /// <param name="ht">表单参数，可以为null。</param>
-        /// <param name="workDtls">表单明细表参数，可以为null。</param>
-        /// <param name="flowStarter">流程发起人，如果为null就是当前人员。</param>
-        /// <param name="title">创建工作时的标题，如果为null，就按设置的规则生成。</param>
-        /// <returns>为开始节点创建工作后产生的WorkID.</returns>
-        public static Int64 Node_CreateStartNodeWork(string flowNo, Hashtable ht = null, DataSet workDtls = null,
-            string flowStarter = null, string title = null)
-        {
-            return Node_CreateStartNodeWork(flowNo, ht, workDtls, flowStarter, title, 0, null, 0);
-        }
+        
         /// <summary>
         /// 创建开始节点工作
         /// 创建后可以创办人形成一个待办.

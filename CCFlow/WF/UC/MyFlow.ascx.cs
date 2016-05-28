@@ -1205,11 +1205,6 @@ namespace CCFlow.WF.UC
                 this.ToMsg("<font color=red>数据已经被非法篡改，请通知管理员解决问题。</font>", "Info");
                 return;
             }
-
-            if (this.IsPostBack == true)
-                this.UCEn1.IsLoadData = false;
-            else
-                this.UCEn1.IsLoadData = true;
  
             switch (nd.HisNodeWorkType)
             {
@@ -1335,6 +1330,7 @@ namespace CCFlow.WF.UC
                         if (gwf.WFState == WFState.Runing || gwf.WFState == WFState.Blank || gwf.WFState == WFState.Draft)
                             isLoadData = true;
 
+                        this.UCEn1.IsLoadData = isLoadData;
                         this.UCEn1.BindCCForm(wk, nd.NodeFrmID, false, 0, isLoadData); 
                         if (wk.WorkEndInfo.Length > 2)
                             this.Pub3.Add(wk.WorkEndInfo);

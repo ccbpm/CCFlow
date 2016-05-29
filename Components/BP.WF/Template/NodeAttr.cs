@@ -257,6 +257,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsAllowRepeatEmps = "IsAllowRepeatEmps";
         /// <summary>
+        /// 是否启动自动运行？
+        /// </summary>
+        public const string AutoRunEnable = "AutoRunEnable";
+        /// <summary>
+        /// 自动运行参数
+        /// </summary>
+        public const string AutoRunParas = "AutoRunParas";
+        /// <summary>
         /// 属性
         /// </summary>
         public const string FrmAttr = "FrmAttr";
@@ -357,6 +365,10 @@ namespace BP.WF.Template
         /// icon头像
         /// </summary>
         public const string ICON = "ICON";
+        /// <summary>
+        /// 自定义参数字段
+        /// </summary>
+        public const string SelfParas = "SelfParas";
         #endregion
 
         #region 父子流程

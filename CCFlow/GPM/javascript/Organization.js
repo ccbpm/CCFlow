@@ -11,11 +11,16 @@ var FK_Emp = "";
 function hasAuthority() {
     var curNode = getCurNode();
     if (curNode) {
-        if (curNode.attributes["authority"] == "no")
-            return false; //不为空，但是没有权限
-        return true; //唯一合法的情况
-    }
-    return false; //为空
+        if (curNode.attributes["authority"] == "no") {
+            alert("没有授权"); return false;
+        }  //不为空，但是没有权限
+        else {
+            return true;
+        } //唯一合法的情况
+    } else {
+        alert("没有授权");
+        return false;
+    }  //为空
 }
 //新增部门  
 function append(deptSort) {

@@ -12,13 +12,13 @@ function hasAuthority() {
     var curNode = getCurNode();
     if (curNode) {
         if (curNode.attributes["authority"] == "no") {
-            alert("没有授权"); return false;
+            $.messager.alert("警告", "您没有权限处理当前操作！", "warning"); return false;
         }  //不为空，但是没有权限
         else {
             return true;
         } //唯一合法的情况
     } else {
-        alert("没有授权");
+        $.messager.alert("警告", "您没有权限处理当前操作！", "warning");
         return false;
     }  //为空
 }
@@ -941,7 +941,7 @@ function DisableEmpApp() {
             });
         } else {
             $.messager.alert("提示", "您没有选中数据!");
-        } 
+        }
     }
 }
 

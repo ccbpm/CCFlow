@@ -840,28 +840,30 @@ function refreshGrid() {
 }
 
 function EditEmpApp() {
-    var rowData = $('#empAppGrid').datagrid('getSelected');
+    if (hasAuthority()) {
+        var rowData = $('#empAppGrid').datagrid('getSelected');
 
-    if (rowData == null) {
-        $.messager.alert("提示", "您没有选中数据!");
-        return;
+        if (rowData == null) {
+            $.messager.alert("提示", "您没有选中数据!");
+            return;
+        }
+        $('#empInfo').dialog({
+            title: "人员信息",
+            width: 680,
+            height: 500,
+            closed: false,
+            modal: true,
+            iconCls: 'icon-edit',
+            resizable: true
+        });
+        if (rowData.No) {
+            FK_Emp = rowData.No;
+        } else {
+            FK_Emp = rowData.NO;
+        }
+        //初始化
+        initializeEmpTabs();
     }
-    $('#empInfo').dialog({
-        title: "人员信息",
-        width: 680,
-        height: 500,
-        closed: false,
-        modal: true,
-        iconCls: 'icon-edit',
-        resizable: true
-    });
-    if (rowData.No) {
-        FK_Emp = rowData.No;
-    } else {
-        FK_Emp = rowData.NO;
-    }
-    //初始化
-    initializeEmpTabs();
 }
 
 //归属部门树
@@ -879,63 +881,67 @@ function ShowDeptTree() {
 
 //删除
 function DeleteEmpApp() {
-    var rows = $('#empAppGrid').datagrid('getChecked');
-    if (rows.length != 0) {
-        $.messager.confirm('警告', '确定删除选中数据?', function (y) {
-            if (y) {
-                var emps = "";
-                $.each(rows, function (i, row) {
-                    if (row.No) {
-                        emps += row.No + ","
-                    } else {
-                        emps += row.NO + ","
-                    }
-                });
-                //执行删除
-                Application.data.deleteDeptEmp(curNodeId, emps, function (js, scope) {
-                    //加载列表
-                    LoadDataGridAdmin(1, 20);
-                }, this);
-            }
-        });
-    }
-    else {
-        $.messager.alert("提示", "您没有选中数据!");
+    if (hasAuthority()) {
+        var rows = $('#empAppGrid').datagrid('getChecked');
+        if (rows.length != 0) {
+            $.messager.confirm('警告', '确定删除选中数据?', function (y) {
+                if (y) {
+                    var emps = "";
+                    $.each(rows, function (i, row) {
+                        if (row.No) {
+                            emps += row.No + ","
+                        } else {
+                            emps += row.NO + ","
+                        }
+                    });
+                    //执行删除
+                    Application.data.deleteDeptEmp(curNodeId, emps, function (js, scope) {
+                        //加载列表
+                        LoadDataGridAdmin(1, 20);
+                    }, this);
+                }
+            });
+        }
+        else {
+            $.messager.alert("提示", "您没有选中数据!");
+        }
     }
 }
 
 //禁用用户
 function DisableEmpApp() {
-    var rows = $('#empAppGrid').datagrid('getChecked');
-    if (rows.length != 0) {
-        $.messager.confirm('警告', '禁用所选人员，点击“确定”将解除所有部门和岗位授权?', function (y) {
-            if (y) {
-                var emps = "";
-                $.each(rows, function (i, row) {
-                    if (row.No) {
-                        emps += row.No + ","
-                    } else {
-                        emps += row.NO + ","
+    if (hasAuthority()) {
+        var rows = $('#empAppGrid').datagrid('getChecked');
+        if (rows.length != 0) {
+            $.messager.confirm('警告', '禁用所选人员，点击“确定”将解除所有部门和岗位授权?', function (y) {
+                if (y) {
+                    var emps = "";
+                    $.each(rows, function (i, row) {
+                        if (row.No) {
+                            emps += row.No + ","
+                        } else {
+                            emps += row.NO + ","
+                        }
+                    });
+                    //管理员不允许禁用
+                    if (emps.indexOf("admin,") > -1) {
+                        $.messager.alert("提示", "管理员不允许被禁用!");
+                        return;
                     }
-                });
-                //管理员不允许禁用
-                if (emps.indexOf("admin,") > -1) {
-                    $.messager.alert("提示", "管理员不允许被禁用!");
-                    return;
+                    //执行禁用
+                    Application.data.disableDeptEmp(emps, function (js, scope) {
+                        if (js == "true") {
+                            //加载列表
+                            LoadDataGridAdmin(1, 20);
+                        } else {
+                            $.messager.alert("提示", "禁用失败" + js);
+                        }
+                    }, this);
                 }
-                //执行禁用
-                Application.data.disableDeptEmp(emps, function (js, scope) {
-                    if (js == "true") {
-                        //加载列表
-                        LoadDataGridAdmin(1, 20);
-                    } else {
-                        $.messager.alert("提示", "禁用失败" + js);
-                    }
-                }, this);
-            }
-        });
-    } else {
-        $.messager.alert("提示", "您没有选中数据!");
+            });
+        } else {
+            $.messager.alert("提示", "您没有选中数据!");
+        } 
     }
 }
 

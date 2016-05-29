@@ -1858,6 +1858,8 @@
     <Content Include="WF\Img\Action\AskforHelp.png" />
     <Content Include="WF\Img\Action\Skip.png" />
     <Content Include="WF\Img\Action\ForwardAskfor.png" />
+    <Content Include="WF\SDKComponents\TrackChart.ascx" />
+    <Content Include="WF\SDKComponents\TrackList.ascx" />
     <Content Include="WF\SDKComponents\TruakOnly.ascx" />
     <Content Include="WF\Start.aspx" />
     <Content Include="WF\MapDef\BatchEdit.aspx" />
@@ -5853,6 +5855,20 @@
     </Compile>
     <Compile Include="WF\FlowSearch.aspx.designer.cs">
       <DependentUpon>FlowSearch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\SDKComponents\TrackChart.ascx.cs">
+      <DependentUpon>TrackChart.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\SDKComponents\TrackChart.ascx.designer.cs">
+      <DependentUpon>TrackChart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\SDKComponents\TrackList.ascx.cs">
+      <DependentUpon>TrackList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\SDKComponents\TrackList.ascx.designer.cs">
+      <DependentUpon>TrackList.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\SDKComponents\TruakOnly.ascx.cs">
       <DependentUpon>TruakOnly.ascx</DependentUpon>

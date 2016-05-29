@@ -1158,38 +1158,38 @@ namespace CCFlow.WF.UC
                 toolbar = this.ToolBar2;
             }
 
-            //try
-            //{
+            try
+            {
                 //初始化控件.
                 this.InitToolbar(isAskFor, appPath, gwf);
                 this.BindWork(currND, currWK);
                 this.Session["Ect"] = null;
-            //}
-            //catch (Exception ex)
-            //{
-            //    #region 解决开始节点数据库字段变化修复数据库问题 。
-            //    string rowUrl = this.Request.RawUrl;
-            //    if (rowUrl.IndexOf("rowUrl") > 1)
-            //    {
-            //    }
-            //    else
-            //    {
-            //        this.Response.Redirect(rowUrl + "&rowUrl=1", true);
-            //        return;
-            //    }
-            //    #endregion
+            }
+            catch (Exception ex)
+            {
+                #region 解决开始节点数据库字段变化修复数据库问题 。
+                string rowUrl = this.Request.RawUrl;
+                if (rowUrl.IndexOf("rowUrl") > 1)
+                {
+                }
+                else
+                {
+                    this.Response.Redirect(rowUrl + "&rowUrl=1", true);
+                    return;
+                }
+                #endregion
 
-            //    this.FlowMsg.DivInfoBlock(ex.Message);
-            //    string Ect = this.Session["Ect"] as string;
-            //    if (Ect == null)
-            //        Ect = "0";
-            //    if (int.Parse(Ect) < 2)
-            //    {
-            //        this.Session["Ect"] = int.Parse(Ect) + 1;
-            //        return;
-            //    }
-            //    return;
-            //}
+                this.FlowMsg.DivInfoBlock(ex.Message);
+                string Ect = this.Session["Ect"] as string;
+                if (Ect == null)
+                    Ect = "0";
+                if (int.Parse(Ect) < 2)
+                {
+                    this.Session["Ect"] = int.Parse(Ect) + 1;
+                    return;
+                }
+                return;
+            }
             #endregion 处理ctrl显示
         }
         #endregion
@@ -1217,7 +1217,7 @@ namespace CCFlow.WF.UC
                         /* 这种情况是分流节点向退回到了分河流。*/
                         this.FlowMsg.AddFieldSet("分流节点退回信息");
 
-                        BP.WF.ReturnWork rw = new ReturnWork();
+                        ReturnWork rw = new ReturnWork();
                         rw.Retrieve(ReturnWorkAttr.WorkID, this.WorkID, ReturnWorkAttr.ReturnToNode, nd.NodeID);
                         this.FlowMsg.Add(rw.NoteHtml);
                         this.FlowMsg.AddHR();
@@ -1252,6 +1252,7 @@ namespace CCFlow.WF.UC
                 default:
                     break;
             }
+
             if (nd.IsStartNode)
             {
                 /*判断是否来与子流程.*/
@@ -1300,7 +1301,7 @@ namespace CCFlow.WF.UC
                 case NodeFormType.WebOffice:
                 case NodeFormType.FixForm:
                     Frms frms = nd.HisFrms;
-                    if (frms.Count == 0 && nd.HisFormType == NodeFormType.FreeForm)
+                    if (nd.HisFormType == NodeFormType.FreeForm)
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /* 添加保存表单函数，以便自定义按钮调用，执行表单的保存前后事件。 */
@@ -1337,7 +1338,7 @@ namespace CCFlow.WF.UC
                         this.UCEn1.Add("</div>");
 
                     }
-                    else if (frms.Count == 0 && nd.HisFormType == NodeFormType.FixForm)
+                    else if (nd.HisFormType == NodeFormType.FixForm)
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /*傻瓜表单*/
@@ -1407,7 +1408,7 @@ namespace CCFlow.WF.UC
                         if (this.FID == 0)
                             fid = this.WorkID;
 
-                        if (frms.Count == 1)
+                        if (frms.Count == 1 )
                         {
                             /* 仅仅只有一个独立表单的情况。 */
                             Frm frm = (Frm)frms[0];
@@ -2212,7 +2213,6 @@ namespace CCFlow.WF.UC
             }
             return;
         }
-
 
         public void ToMsg(string msg, string type)
         {

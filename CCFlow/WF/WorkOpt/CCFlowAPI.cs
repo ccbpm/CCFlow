@@ -378,9 +378,7 @@ public class CCFlowAPI : CCForm
     {
         try
         {
-            Emp emp = new Emp(userNo);
-            BP.Web.WebUser.SignInOfGener(emp);
-
+            BP.WF.Dev2Interface.Port_Login(userNo, sid);
             System.Data.DataSet ds = new System.Data.DataSet();
             DataTable table = BP.WF.Dev2Interface.DB_FlowCompleteGroup(userNo);
             ds.Tables.Add(table);
@@ -478,29 +476,23 @@ public class CCFlowAPI : CCForm
         return BP.DA.DataType.ToJson(ds.Tables[0]);
         //return Connector.ToXml(ds);
     }
+   
     /// <summary>
     /// 获取当前操作员可以发起的流程集合
     /// </summary>
-    /// <param name="userNo">人员编号</param>
-    /// <returns>可以发起的xml</returns>
+    /// <param name="userNo">用户编号</param>
+    /// <param name="sid">SID</param>
+    /// <returns>json</returns>
     [WebMethod(EnableSession = true)]
-    public string DB_GenerCanStartFlowsOfDataTable(string userNo)
+    public string DB_GenerCanStartFlowsOfDataTable(string userNo, string sid = null)
     {
-        if (BP.Web.WebUser.No != userNo)
-            BP.WF.Dev2Interface.Port_Login(userNo);
-
+        BP.WF.Dev2Interface.Port_Login(userNo, sid);
         System.Data.DataSet ds = new System.Data.DataSet();
         ds.Tables.Add(BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(userNo));
-
-        //DataType.WriteFile("c:\\DB_GenerCanStartFlowsOfDataTable发起.xml", Connector.ToXml(ds));
-        //ds.WriteXml("c:\\aa.xml");
-        //string strs = BP.DA.DataType.ReadTextFile("c:\\aa.xml");
-        //return strs;
         return BP.DA.DataType.ToJson(ds.Tables[0]);
-        //return Connector.ToXml(ds);
     }
     /// <summary>
-    /// 
+    /// 获取当前操作员可以发起的流程集合
     /// </summary>
     /// <param name="userNo"></param>
     /// <returns></returns>
@@ -509,16 +501,9 @@ public class CCFlowAPI : CCForm
     {
         if (BP.Web.WebUser.No != userNo)
             BP.WF.Dev2Interface.Port_Login(userNo);
-
         System.Data.DataSet ds = new System.Data.DataSet();
         ds.Tables.Add(BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(userNo));
         return BP.DA.DataType.ToJson(ds.Tables[0]);
-
-
-        //ds.WriteXml("c:\\aa.xml");
-        //string strs = BP.DA.DataType.ReadTextFile("c:\\aa.xml");
-        //return strs;
-        // return Connector.ToXml(ds);
     }
     /// <summary>
     /// 待办列表
@@ -548,7 +533,7 @@ public class CCFlowAPI : CCForm
         System.Data.DataSet ds = new System.Data.DataSet();
         ds.Tables.Add(BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable());
         return BP.DA.DataType.ToJson(ds.Tables[0]);
-        //// ds.WriteXml("c:\\DB_GenerEmpWorksOfDataTable待办.xml");
+        //// ds.WriteXml("c:\\DB_GenerEmpWorksOfDataTable待办.xml");s
         //string str = Connector.ToXml(ds);
         ////  BP.DA.DataType.WriteFile("c:\\aaa.xml", str);
         //return str;

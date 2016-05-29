@@ -681,6 +681,34 @@ namespace BP.WF
 
         #region 基本属性
         /// <summary>
+        /// 是否启动自动运行？
+        /// </summary>
+        public bool AutoRunEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.AutoRunEnable);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.AutoRunEnable, value);
+            }
+        }
+        /// <summary>
+        /// 自动运行参数
+        /// </summary>
+        public string AutoRunParas
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeAttr.AutoRunParas);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.AutoRunParas, value);
+            }
+        }
+        /// <summary>
         /// 审核组件
         /// </summary>
         public BP.WF.Template.FrmWorkCheckSta FrmWorkCheckSta
@@ -2040,6 +2068,9 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsCanHidReturn, value);
             }
         }
+        /// <summary>
+        /// 是否可以退回？
+        /// </summary>
         public bool IsCanReturn
         {
             get
@@ -2494,6 +2525,10 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.DocLeftWord, null, "公文左边词语(多个用@符合隔开)", true, false, 0, 200, 10);
                 map.AddTBString(NodeAttr.DocRightWord, null, "公文右边词语(多个用@符合隔开)", true, false, 0, 200, 10);
 
+
+                // 启动自动运行. 2013-01-04
+                map.AddTBInt(NodeAttr.AutoRunEnable, 0, "是否启动自动运行？", true, false);
+                map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行参数", true, false, 0, 500, 10);
 
                 #region 与参数有关系的属性。
                 //map.AddDDLSysEnum(FrmEventAttr.MsgCtrl, 0, "消息发送控制", true, true, FrmEventAttr.MsgCtrl,

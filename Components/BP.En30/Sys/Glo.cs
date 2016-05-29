@@ -32,6 +32,26 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 部门数量 - 用于显示ccim的下载进度.
+        /// </summary>
+        public static int DeptsCount
+        {
+            get
+            {
+                return BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(No) as Num FROM Port_Dept");
+            }
+        }
+        /// <summary>
+        /// 人员数量 - 用于显示ccim的下载进度.
+        /// </summary>
+        public static int EmpsCount
+        {
+            get
+            {
+                return BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(a.No) as Num FROM Port_Emp a, Port_Dept b WHERE A.FK_Dept=B.No AND A.No NOT IN ('admin','Guest')");
+            }
+        }
+        /// <summary>
         /// 人员版本号
         /// </summary>
         public static string UsersVersion
@@ -135,6 +155,5 @@ namespace BP.Sys
                 return System.Web.HttpContext.Current.Request; 
             }
         }
-
     }
 }

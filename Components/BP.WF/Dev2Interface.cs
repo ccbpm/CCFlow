@@ -4363,18 +4363,18 @@ namespace BP.WF
 
                 // 处理字符串.
                 string[] vals = str.Split('`');
-                int nodeid = int.Parse(vals[0]);
-                var subFlow = vals[1];
-                int todomodel = int.Parse(vals[2]);
+                int nodeid = int.Parse(vals[0]);  // 节点ID.
+                var subFlow = vals[1]; // 调用的子流程.
+                int todomodel = int.Parse(vals[2]); //处理模式.
 
                 TransferCustom tc = new TransferCustom();
-                tc.Idx = idx;
-                tc.FK_Node = nodeid;
-                tc.WorkID = workid;
-                tc.Worker = vals[3];
-                tc.SubFlowNo = subFlow;
+                tc.Idx = idx;  //顺序.
+                tc.FK_Node = nodeid; // 节点.
+                tc.WorkID = workid; //工作ID.
+                tc.Worker = vals[3]; //工作人员.
+                tc.SubFlowNo = subFlow; //子流程.
                 tc.MyPK = tc.FK_Node + "_" + tc.WorkID + "_" + idx;
-                tc.TodolistModel = (TodolistModel)todomodel;
+                tc.TodolistModel = (TodolistModel)todomodel; //处理模式.
                 tc.Save();
                 idx++;
 
@@ -4425,6 +4425,108 @@ namespace BP.WF
             }
             gwf.TransferCustomType = runType;
             gwf.Update();
+        }
+        /// <summary>
+        /// 设置流程运行模式
+        /// 启用新的接口原来的接口参数格式太复杂,仍然保留.
+        /// 标准格式:@NodeID=节点ID;Worker=操作人员1,操作人员2,操作人员n,TodolistModel=多人处理模式;SubFlowNo=可发起的子流程编号;SDT=应完成时间;
+        /// 标准简洁格式:@NodeID=节点ID;Worker=操作人员1,操作人员2,操作人员n;@NodeID=节点ID2;Worker=操作人员1,操作人员2,操作人员n;
+        /// 完整格式: @NodeID=101;Worker=zhangsan,lisi;@TodolistModel=1;SubFlowNo=001;SDT=2015-12-12;@NodeID=102;Worker=zhangsan,lisi;@TodolistModel=1;SubFlowNo=001;SDT=2015-12-12;
+        /// 简洁格式: @NodeID=101;Worker=zhangsan,lisi;@NodeID=102;Worker=wagnwu,zhaoliu;
+        /// </summary>
+        /// <param name="flowNo"></param>
+        /// <param name="workid"></param>
+        /// <param name="runType"></param>
+        /// <param name="paras">格式为:@节点编号1;处理人员1,处理人员2,处理人员n(可选);应处理时间(可选)</param>
+        public static void Flow_SetFlowTransferCustomV201605(string flowNo, Int64 workid, TransferCustomType runType, string paras)
+        {
+            #region 更新状态.
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = workid;
+            if (gwf.RetrieveFromDBSources() == 0)
+            {
+                gwf.WFSta = WFSta.Runing;
+                gwf.WFState = WFState.Blank;
+
+                gwf.Starter = WebUser.No;
+                gwf.StarterName = WebUser.Name;
+
+                gwf.FK_Flow = flowNo;
+                BP.WF.Flow fl = new Flow(flowNo);
+                gwf.FK_FlowSort = fl.FK_FlowSort;
+                gwf.FK_Dept = WebUser.FK_Dept;
+
+                gwf.TransferCustomType = runType;
+                gwf.Insert();
+                return;
+            }
+            gwf.TransferCustomType = runType;
+            gwf.Update();
+            if (runType == TransferCustomType.ByCCBPMDefine)
+                return;  // 如果是按照设置的模式运行，就要更改状态后退出它.
+            #endregion 
+
+            //删除以前存储的参数.
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_TransferCustom WHERE WorkID=" + workid);
+
+            //保存参数.
+            // 参数格式为 格式为:@节点编号1;处理人员1,处理人员2,处理人员n;应处理时间(可选)
+            // 例如1: @101;zhangsan,lisi,wangwu;2016-05-12;@102;liming,xiaohong,xiaozhang;2016-05-12
+            // 例如2: @101;zhangsan,lisi,wangwu;@102;liming,xiaohong,xiaozhang;2016-05-12
+
+            string[] strs = paras.Split('@');
+            int idx = 0, cidx = 0;
+            foreach (string str in strs)
+            {
+                if (string.IsNullOrEmpty(str))
+                    continue;
+
+                if (str.Contains(";") == false)
+                    continue;
+
+                // 处理字符串.
+                string[] vals = str.Split(';');
+                int nodeid = int.Parse(vals[0]);  // 节点ID.
+                var subFlow = vals[1]; // 调用的子流程.
+                int todomodel = int.Parse(vals[2]); //处理模式.
+
+                TransferCustom tc = new TransferCustom();
+                tc.Idx = idx;  //顺序.
+                tc.FK_Node = nodeid; // 节点.
+                tc.WorkID = workid; //工作ID.
+                tc.Worker = vals[3]; //工作人员.
+                tc.SubFlowNo = subFlow; //子流程.
+                tc.MyPK = tc.FK_Node + "_" + tc.WorkID + "_" + idx;
+                tc.TodolistModel = (TodolistModel)todomodel; //处理模式.
+                tc.Save();
+                idx++;
+
+                //设置抄送
+                string[] ccs = vals[4].Split(',');
+                string[] ccNames = vals[5].Split(',');
+                SelectAccper sa = new SelectAccper();
+                sa.Delete(SelectAccperAttr.FK_Node, nodeid, SelectAccperAttr.WorkID, workid, SelectAccperAttr.AccType, 1);
+
+                cidx = 0;
+                for (int i = 0; i < ccs.Length; i++)
+                {
+                    if (string.IsNullOrWhiteSpace(ccs[i]) || ccs[i] == "0")
+                        continue;
+
+                    sa = new SelectAccper();
+                    sa.MyPK = nodeid + "_" + workid + "_" + ccs[i];
+                    sa.FK_Emp = ccs[i].Trim();
+                    sa.EmpName = ccNames[i].Trim();
+                    sa.FK_Node = nodeid;
+                    sa.WorkID = workid;
+                    sa.AccType = 1;
+                    sa.Idx = cidx;
+                    sa.Insert();
+                    cidx++;
+                }
+            }
+
+          
         }
 
         #region 与流程有关的接口

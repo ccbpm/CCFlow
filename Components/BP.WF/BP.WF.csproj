@@ -238,7 +238,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Template\SelectInfo.cs" />
     <Compile Include="Template\BtnLabExtWebOffice.cs" />
     <Compile Include="Template\TruckViewPower.cs" />
     <Compile Include="Template\FlowExt.cs" />

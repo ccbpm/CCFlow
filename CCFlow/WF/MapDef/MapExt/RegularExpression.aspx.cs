@@ -249,7 +249,7 @@ namespace CCFlow.WF.MapDef
                 if (string.IsNullOrEmpty(field)==true)
                     continue;
 
-                exts.Delete(MapExtAttr.AttrOfOper, field, MapExtAttr.ExtType, BP.Sys.MapExtXmlList.RegularExpression);
+                exts.Delete(MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.AttrOfOper, field, MapExtAttr.ExtType, BP.Sys.MapExtXmlList.RegularExpression);
             }
        
 

@@ -37,7 +37,7 @@ namespace BP.WF.Template
         {
             get
             {
-                string str= this.GetValStringByKey(FlowAttr.FlowMark);
+                string str = this.GetValStringByKey(FlowAttr.FlowMark);
                 if (str == "")
                     return this.No;
                 return str;
@@ -57,13 +57,13 @@ namespace BP.WF.Template
             get
             {
                 return (StartGuideWay)this.GetValIntByKey(FlowAttr.StartGuideWay);
-                
+
             }
             set
             {
                 this.SetValByKey(FlowAttr.StartGuideWay, (int)value);
             }
-        
+
         }
         /// <summary>
         /// 前置导航参数1
@@ -79,7 +79,7 @@ namespace BP.WF.Template
             {
                 this.SetValByKey(FlowAttr.StartGuidePara1, value);
             }
-             
+
         }
         /// <summary>
         /// 前置导航参数2
@@ -168,7 +168,6 @@ namespace BP.WF.Template
         /// 是否自动装载上一笔数据
         /// </summary>
         public bool IsLoadPriData
-
         {
             get
             {
@@ -179,7 +178,7 @@ namespace BP.WF.Template
                 this.SetValByKey(FlowAttr.IsLoadPriData, value);
             }
         }
-        #endregion        
+        #endregion
         /// <summary>
         /// 设计者编号
         /// </summary>
@@ -314,7 +313,7 @@ namespace BP.WF.Template
                 //map.SetHelperBaidu(FlowAttr.IsAutoSendSubFlowOver, "ccflow 是否检查所有子流程完成后父流程自动发送到下一步");
                 map.AddBoolean(FlowAttr.IsGuestFlow, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
                 map.SetHelperUrl(FlowAttr.IsGuestFlow, "http://ccbpm.mydoc.io/?v=5404&t=17039");
-               
+
                 //批量发起 add 2013-12-27. 
                 map.AddBoolean(FlowAttr.IsBatchStart, false, "是否可以批量发起流程？(如果是就要设置发起的需要填写的字段,多个用逗号分开)", true, true, true);
                 map.AddTBString(FlowAttr.BatchStartFields, null, "发起字段s", true, false, 0, 500, 10, true);
@@ -526,7 +525,7 @@ namespace BP.WF.Template
                 //rm.ClassMethodName = this.ToString() + ".DoFeatureSetUI()";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //map.AddRefMethod(rm);
- 
+
                 rm = new RefMethod();
                 rm.Title = "流程事件&消息"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
@@ -548,11 +547,11 @@ namespace BP.WF.Template
                 //rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 //rm.ClassMethodName = this.ToString() + ".DoFlowFormTree()";
                 //map.AddRefMethod(rm);
-            
 
-              
 
-              
+
+
+
                 #endregion 流程设置.
 
                 #region 实验中的功能
@@ -613,7 +612,7 @@ namespace BP.WF.Template
                 #endregion 流程模版管理.
 
                 #region 开发接口.
-             
+
 
                 rm = new RefMethod();
                 rm.Title = "与业务表数据同步";
@@ -631,7 +630,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
-                 
+
                 rm = new RefMethod();
                 rm.Title = "SKD开发接口";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/API.png";
@@ -736,10 +735,12 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.GroupName = "流程维护";
                 rm.Title = "重命名节点表单字段";
-              //  rm.Warning = "您确定要处理吗？";
+                //  rm.Warning = "您确定要处理吗？";
                 rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
+
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 map.AddRefMethod(rm);
 
@@ -917,7 +918,7 @@ namespace BP.WF.Template
         }
         public string DoDataManger_Search()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow="+this.No+"&WFSta=all";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
         public string DoDataManger_Group()
         {
@@ -926,7 +927,7 @@ namespace BP.WF.Template
 
         public string DoDataManger_InstanceGrowOneFlow()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow="+this.No;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
         }
 
         public string DoDataManger_InstanceWarning()
@@ -976,7 +977,7 @@ namespace BP.WF.Template
         }
         public string DoDRptContrast()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Rpt/Contrast.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt"; 
+            return SystemConfig.CCFlowWebPath + "WF/Rpt/Contrast.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
         }
         #endregion 报表设计.
 
@@ -988,11 +989,28 @@ namespace BP.WF.Template
         /// <param name="FieldNew"></param>
         /// <param name="FieldNewName"></param>
         /// <returns></returns>
-        public string DoChangeFieldName(string fieldOld, string fieldNew, string FieldNewName)
+        public string DoChangeFieldName(string fieldOld, string fieldNew, string FieldNewName, string thisFlowOnly)
+        {
+
+            if (thisFlowOnly == "1")
+                return DoChangeFieldNameOne(this, fieldOld, fieldNew, FieldNewName);
+
+            FlowExts fls = new FlowExts();
+            fls.RetrieveAll();
+
+            string resu = "";
+            foreach (FlowExt item in fls)
+            {
+                resu += "   ====   " + DoChangeFieldNameOne(item, fieldOld, fieldNew, FieldNewName);
+
+            }
+            return resu;
+        }
+        public string DoChangeFieldNameOne(FlowExt flow, string fieldOld, string fieldNew, string FieldNewName)
         {
             string result = "开始执行对字段:" + fieldOld + " ，进行重命名。";
             result += "<br> ===============================================================   ";
-            Nodes nds = new Nodes(this.No);
+            Nodes nds = new Nodes(flow.No);
             foreach (Node nd in nds)
             {
                 result += " @ 执行节点:" + nd.Name + " 结果如下. <br>";
@@ -1002,12 +1020,14 @@ namespace BP.WF.Template
             }
 
             result += "@ 执行Rpt结果如下. <br>";
-            MapDataExt rptMD = new MapDataExt("ND" + int.Parse(this.No) + "Rpt");
-            result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
+            MapDataExt rptMD = new MapDataExt("ND" + int.Parse(flow.No) + "Rpt");           
+                result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
 
             result += "@ 执行MyRpt结果如下. <br>";
-            rptMD = new MapDataExt("ND" + int.Parse(this.No) + "MyRpt");
-            result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
+            rptMD = new MapDataExt("ND" + int.Parse(flow.No) + "MyRpt");
+         
+            if (rptMD.Retrieve() > 0)               
+                  result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
 
             return result;
         }
@@ -1017,7 +1037,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFlowFields()
         {
-            return Glo.CCFlowAppPath + "WF/Admin/AttrFlow/FlowFields.aspx?FK_Flow="+this.No;
+            return Glo.CCFlowAppPath + "WF/Admin/AttrFlow/FlowFields.aspx?FK_Flow=" + this.No;
         }
         /// <summary>
         /// 与业务表数据同步
@@ -1084,7 +1104,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTruckRight()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/TruckViewPower.aspx?FK_Flow="+this.No;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/TruckViewPower.aspx?FK_Flow=" + this.No;
         }
         /// <summary>
         /// 批量发起字段
@@ -1273,7 +1293,7 @@ namespace BP.WF.Template
                 return "<font color=red>会滚期间出现错误</font><hr>" + ex.Message;
             }
         }
-         /// <summary>
+        /// <summary>
         /// 重新产生标题，根据新的规则.
         /// </summary>
         public string DoGenerFlowEmps()
@@ -1294,7 +1314,7 @@ namespace BP.WF.Template
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (emps.Contains("," + dr[0].ToString()+","))
+                    if (emps.Contains("," + dr[0].ToString() + ","))
                         continue;
                 }
 
@@ -1348,7 +1368,7 @@ namespace BP.WF.Template
 
             return "全部生成成功,影响数据(" + wks.Count + ")条";
         }
-        
+
         /// <summary>
         /// 重新产生标题，根据新的规则.
         /// </summary>
@@ -1442,9 +1462,9 @@ namespace BP.WF.Template
                 BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.No, workid, true);
                 return "删除成功 workid=" + workid + "  理由:" + note;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return "删除失败:"+ex.Message;
+                return "删除失败:" + ex.Message;
             }
         }
         /// <summary>
@@ -1570,7 +1590,7 @@ namespace BP.WF.Template
             //更新流程版本
             Flow.UpdateVer(this.No);
 
-           #region 校验 flowmark 是不是唯一.
+            #region 校验 flowmark 是不是唯一.
             if (this.FlowMark.Length > 0)
             {
                 /*校验该标记是否重复.*/
@@ -1579,7 +1599,7 @@ namespace BP.WF.Template
                 foreach (Flow myfl in fls)
                 {
                     if (myfl.No != this.No)
-                        throw new Exception("@该流程标记{"+this.FlowMark+"}已经存在.");
+                        throw new Exception("@该流程标记{" + this.FlowMark + "}已经存在.");
                 }
             }
             #endregion 校验 flowmark 是不是唯一.
@@ -1615,7 +1635,7 @@ namespace BP.WF.Template
                     throw new Exception("@业务表配置无效，您配置业务数据表[" + fl.DTSBTable + "]在数据中不存在，请检查拼写错误如果是跨数据库请加上用户名比如: for sqlserver: HR.dbo.Emps, For oracle: HR.Emps");
                 }
 
-                sql = "select " + fl.DTSBTablePK + " from " + fl.DTSBTable+" where 1=2";
+                sql = "select " + fl.DTSBTablePK + " from " + fl.DTSBTable + " where 1=2";
                 try
                 {
                     DBAccess.RunSQLReturnValInt(sql, 0);

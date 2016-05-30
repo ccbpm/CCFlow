@@ -63,14 +63,20 @@ namespace BP.WF.Template
         public const string HisDeptStrs = "HisDeptStrs";
         public const string HisEmps = "HisEmps";
         public const string GroupStaNDs = "GroupStaNDs";
-        public const string FJOpen11 = "FJOpen";
-        public const string IsCanReturn = "IsCanReturn";
         public const string IsHandOver = "IsHandOver";
         public const string IsCanDelFlow = "IsCanDelFlow";
         /// <summary>
         /// 是否可以原路返回
         /// </summary>
         public const string IsBackTracking = "IsBackTracking";
+        /// <summary>
+        /// 退回原因(多个原因使用@符号分开.)
+        /// </summary>
+        public const string ReturnReasonsItems = "ReturnReasonsItems";
+        /// <summary>
+        /// 退回提示
+        /// </summary>
+        public const string ReturnAlert = "ReturnAlert";
         /// <summary>
         /// 是否启用投递路径自动记忆功能?
         /// </summary>

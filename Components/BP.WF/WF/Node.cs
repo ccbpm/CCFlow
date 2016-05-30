@@ -1238,13 +1238,27 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 退回信息字段.
+        /// 被退回节点退回信息地步.
         /// </summary>
-        public string ReturnField_del
+        public string ReturnAlert
         {
             get
             {
-                return this.GetValStrByKey(BtnAttr.ReturnField);
+                return this.GetValStrByKey(NodeAttr.ReturnAlert);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.ReturnAlert, value);
+            }
+        }
+        /// <summary>
+        /// 退回原因
+        /// </summary>
+        public string ReturnReasonsItems
+        {
+            get
+            {
+                return this.GetValStrByKey(NodeAttr.ReturnReasonsItems);
             }
         }
         /// <summary>
@@ -2426,7 +2440,12 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.Doc, null, "描述", true, false, 0, 100, 10);
                 map.AddBoolean(NodeAttr.IsTask, true, "允许分配工作否?", true, true);
 
+                //退回相关.
                 map.AddTBInt(NodeAttr.ReturnRole, 2, "退回规则", true, true);
+                map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 50, 10, true);
+                map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 50, 10, true);
+
+
                 map.AddTBInt(NodeAttr.DeliveryWay, 0, "访问规则", true, true);
                 map.AddTBInt(NodeAttr.IsExpSender, 1, "本节点接收人不允许包含上一步发送人", true, true);
 

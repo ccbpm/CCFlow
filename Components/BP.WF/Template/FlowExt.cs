@@ -594,7 +594,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 实验中的功能
 
-
                 #region 流程模版管理.
                 rm = new RefMethod();
                 rm.Title = "模版导入";
@@ -614,13 +613,7 @@ namespace BP.WF.Template
                 #endregion 流程模版管理.
 
                 #region 开发接口.
-                rm = new RefMethod();
-                rm.Title = "字段视图";
-                rm.Icon = Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Field.png";
-                rm.ClassMethodName = this.ToString() + ".DoFlowFields()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "开发接口";
-                map.AddRefMethod(rm);
+             
 
                 rm = new RefMethod();
                 rm.Title = "与业务表数据同步";
@@ -739,6 +732,26 @@ namespace BP.WF.Template
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
+                //带有参数的方法.
+                rm = new RefMethod();
+                rm.GroupName = "流程维护";
+                rm.Title = "重命名节点表单字段";
+              //  rm.Warning = "您确定要处理吗？";
+                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
+                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "节点表单字段视图";
+                rm.Icon = Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Field.png";
+                rm.ClassMethodName = this.ToString() + ".DoFlowFields()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "流程维护";
+                map.AddRefMethod(rm);
+
+
                 rm = new RefMethod();
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Delete.gif";
                 rm.Title = "删除全部流程数据"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
@@ -843,7 +856,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "数据订阅";
+                rm.Title = "数据订阅-实验中";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/RptOrder.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_RptOrder()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -968,6 +981,36 @@ namespace BP.WF.Template
         #endregion 报表设计.
 
         #region 开发接口.
+        /// <summary>
+        /// 批量重命名字段.
+        /// </summary>
+        /// <param name="FieldOld"></param>
+        /// <param name="FieldNew"></param>
+        /// <param name="FieldNewName"></param>
+        /// <returns></returns>
+        public string DoChangeFieldName(string fieldOld, string fieldNew, string FieldNewName)
+        {
+            string result = "开始执行对字段:" + fieldOld + " ，进行重命名。";
+            result += "<br> ===============================================================   ";
+            Nodes nds = new Nodes(this.No);
+            foreach (Node nd in nds)
+            {
+                result += " @ 执行节点:" + nd.Name + " 结果如下. <br>";
+                result += "<br> ------------------------------------------------------------------------ ";
+                MapDataExt md = new MapDataExt("ND" + nd.NodeID);
+                result += "\t\n @" + md.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
+            }
+
+            result += "@ 执行Rpt结果如下. <br>";
+            MapDataExt rptMD = new MapDataExt("ND" + int.Parse(this.No) + "Rpt");
+            result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
+
+            result += "@ 执行MyRpt结果如下. <br>";
+            rptMD = new MapDataExt("ND" + int.Parse(this.No) + "MyRpt");
+            result += "\t\n@ " + rptMD.DoChangeFieldName(fieldOld, fieldNew, FieldNewName);
+
+            return result;
+        }
         /// <summary>
         /// 字段视图
         /// </summary>

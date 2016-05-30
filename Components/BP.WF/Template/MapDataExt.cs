@@ -983,12 +983,9 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20,true);
-
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20,false);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
-
                 map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false,true);
-
 
                 //增加参数字段.
                 map.AddTBAtParas(4000);
@@ -1033,14 +1030,12 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "批量设置验证规则";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
                 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
@@ -1048,7 +1043,6 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "内置JavaScript脚本"; // "设计表单";
@@ -1077,6 +1071,18 @@ namespace BP.WF.Template
                 rm.RefAttrLinkLabel = "导出到xml";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
+
+
+                //带有参数的方法.
+                rm = new RefMethod();
+                rm.Title = "重命名字段";
+                rm.Warning = "您确定要处理吗？";
+                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
+                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
+                map.AddRefMethod(rm);
+
                 #endregion 方法 - 基本功能.
 
 
@@ -1110,7 +1116,6 @@ namespace BP.WF.Template
                 rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
                 #endregion 方法 - 开发接口.
-
 
 
                 //rm = new RefMethod();
@@ -1151,6 +1156,65 @@ namespace BP.WF.Template
         #endregion
 
         #region 方法.
+        /// <summary>
+        /// 替换名称
+        /// </summary>
+        /// <param name="fieldOldName">旧名称</param>
+        /// <param name="newField">新字段</param>
+        /// <param name="newFieldName">新字段名称</param>
+        /// <returns></returns>
+        public string DoChangeFieldName(string fieldOld, string newField, string newFieldName)
+        {
+            MapAttr attrOld = new MapAttr();
+            attrOld.KeyOfEn = fieldOld;
+            attrOld.FK_MapData = this.No;
+            attrOld.MyPK = attrOld.FK_MapData + "_" + attrOld.KeyOfEn;
+            if (attrOld.RetrieveFromDBSources() == 0)
+                return "@旧字段输入错误[" + attrOld.KeyOfEn + "].";
+
+            //检查是否存在该字段？
+            MapAttr attrNew = new MapAttr();
+            attrNew.KeyOfEn = newField;
+            attrNew.FK_MapData = this.No;
+            attrNew.MyPK = attrNew.FK_MapData + "_" + attrNew.KeyOfEn;
+            if (attrNew.RetrieveFromDBSources() == 1)
+                return "@该字段[" + attrNew.KeyOfEn + "]已经存在.";
+
+            //删除旧数据.
+            attrOld.Delete();
+
+            //copy这个数据,增加上它.
+            attrNew.Copy(attrOld);
+            attrNew.KeyOfEn = newField;
+            attrNew.FK_MapData = this.No;
+            attrNew.Name = newFieldName;
+            attrNew.Insert();
+
+            //更新处理他的相关业务逻辑.
+             MapExts exts = new MapExts(this.No);
+             foreach (MapExt item in exts)
+             {
+                 item.MyPK = item.MyPK.Replace("_" + newFieldName, "_" + newField);
+
+                 if  (item.AttrOfOper == fieldOld)
+                     item.AttrOfOper =  newField;
+
+                 if (item.AttrsOfActive == fieldOld)
+                     item.AttrsOfActive = newField;
+
+                 item.Tag = item.Tag.Replace(fieldOld, newField);
+                 item.Tag1 = item.Tag1.Replace(fieldOld, newField);
+                 item.Tag2 = item.Tag2.Replace(fieldOld, newField);
+                 item.Tag3 = item.Tag3.Replace(fieldOld, newField);
+
+                 item.AtPara = item.AtPara.Replace(fieldOld, newField);
+                 item.Doc = item.Doc.Replace(fieldOld, newField);
+                 item.Update();
+             }
+
+            return "执行成功";
+
+        }
         /// <summary>
         /// 批量设置正则表达式规则.
         /// </summary>

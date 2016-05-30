@@ -1194,22 +1194,31 @@ namespace BP.WF.Template
              MapExts exts = new MapExts(this.No);
              foreach (MapExt item in exts)
              {
-                 item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
+                  
+                     if (item.MyPK.Contains("_" + fieldOld) == true)
+                         item.Delete();
+                     else
+                         continue;
+                          
+                     item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
 
-                 if  (item.AttrOfOper == fieldOld)
-                     item.AttrOfOper =  newField;
+                     if (item.AttrOfOper == fieldOld)
+                         item.AttrOfOper = newField;
 
-                 if (item.AttrsOfActive == fieldOld)
-                     item.AttrsOfActive = newField;
+                     if (item.AttrsOfActive == fieldOld)
+                         item.AttrsOfActive = newField;
 
-                 item.Tag = item.Tag.Replace(fieldOld, newField);
-                 item.Tag1 = item.Tag1.Replace(fieldOld, newField);
-                 item.Tag2 = item.Tag2.Replace(fieldOld, newField);
-                 item.Tag3 = item.Tag3.Replace(fieldOld, newField);
+                     item.Tag = item.Tag.Replace(fieldOld, newField);
+                     item.Tag1 = item.Tag1.Replace(fieldOld, newField);
+                     item.Tag2 = item.Tag2.Replace(fieldOld, newField);
+                     item.Tag3 = item.Tag3.Replace(fieldOld, newField);
 
-                 item.AtPara = item.AtPara.Replace(fieldOld, newField);
-                 item.Doc = item.Doc.Replace(fieldOld, newField);
-                 item.Update();
+                     item.AtPara = item.AtPara.Replace(fieldOld, newField);
+                     item.Doc = item.Doc.Replace(fieldOld, newField);
+
+                     item.Insert();
+                 
+                 
              }
 
             return "执行成功";

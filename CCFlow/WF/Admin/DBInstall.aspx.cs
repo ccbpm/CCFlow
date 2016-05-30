@@ -28,7 +28,6 @@ namespace CCFlow.WF.Admin
             this.Pub1.AddBR();
             this.Pub1.AddBR();
 
-
             if (this.Request.QueryString["DoType"] == "OK")
             {
                 this.Pub1.AddFieldSet("提示");
@@ -255,6 +254,7 @@ namespace CCFlow.WF.Admin
             this.Pub1.AddBR("3.如果安装错误,请删除数据库表并重新安装,或者把安装遇到的问题反馈给ccflow开发团队. <a href='http://bbs.ccflow.org' target=_blank >ccflow 技术论坛</a>");
             this.Pub1.AddBR("4,任何时间的安装失败，都要删除数据库重新建，然后反馈最新的程序进行重安装。");
             this.Pub1.AddBR("5,<font color=red>系统在运行的时候不区分大小写，如果在mysql,oracle上安装错误，请数据库服务上做配置。</font>");
+            this.Pub1.AddBR("6,<font color=red>当前的数据库连接用户，需要有创建删除视图与表的权限，否则安装失败。</font>");
 
         }
         void btn_Click(object sender, EventArgs e)

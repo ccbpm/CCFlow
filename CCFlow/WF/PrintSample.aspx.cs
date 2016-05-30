@@ -735,6 +735,8 @@ namespace CCFlow.WF
                                 msgInfo += rw.NoteHtml;
                                 msgInfo += "</fieldset>";
                             }
+                            msgInfo += "<br>" + currND.ReturnAlert;
+
                             this.FlowMsg.AlertMsg_Info("流程退回提示", msgInfo);
                             //gwf.WFState = WFState.Runing;
                             //gwf.DirectUpdate();

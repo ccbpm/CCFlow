@@ -1402,18 +1402,6 @@ namespace BP.Web
             DataSet ds = new DataSet();
             try
             {
-                //using (StringReader strRdr = new StringReader(xml))
-                //using (XmlReader rdr = XmlReader.Create(strRdr))
-                //{
-                //    ds.ReadXml(rdr);
-                //}
-                //// READ XML
-                // using (StringReader strRdr = new StringReader(xml))
-                // using (XmlReader rdr = XmlReader.Create(strRdr))
-                //{
-                //    ds.ReadXml(rdr);
-                //}
-                // READ JSON
                 ds = FormatToJson.JsonToDataSet(xml);
             }
             catch (Exception ex)
@@ -1450,10 +1438,8 @@ namespace BP.Web
             sqls += "@UPDATE Sys_MapAttr SET UIIsLine=0 WHERE FK_MapData='" + fk_mapdata + "' AND UIIsLine is null";
             #endregion 处理数据库兼容的问题
 
-
             //执行它，这些SQL 都是用@符号隔开的。
             RunSQLs(sqls, UserNo, SID);
-
 
             MapData md = new MapData();
             md.No = fk_mapdata;
@@ -1498,6 +1484,7 @@ namespace BP.Web
 
             if (string.IsNullOrEmpty(str))
                 return null;
+
             return str;
         }
 

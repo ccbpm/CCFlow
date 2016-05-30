@@ -50,9 +50,7 @@
             <td style="width: 50%;" valign="top">
 
             <fieldset>
-            <legend>控件状态 </legend>
-
-             <a href="javascript:ShowHidden('state')">设置状态: </a>
+            <legend><a href="javascript:ShowHidden('state')">控件状态: </a> </legend>
             <div id="state" style=" display:none;color:Gray">
             <ul>
             <li>禁用:不使用控件，在表单上不可见。  </li>
@@ -67,9 +65,9 @@
             </fieldset>
 
              <fieldset>
-            <legend>显示方式</legend>
+            <legend><a href="javascript:ShowHidden('style')">显示方式:</a> </legend>
 
-            <a href="javascript:ShowHidden('style')">控件显示个风格: </a>
+            
             <div id="style" style="display:none;color:Gray">
             <ul>
             <li>目前仅仅支持表格方式. </li>
@@ -83,9 +81,8 @@
             </fieldset>
 
               <fieldset>
-            <legend>标题(显示控件头部) </legend>
-
-             <a href="javascript:ShowHidden('title')">控件标题:</a>
+            <legend><a href="javascript:ShowHidden('title')">标题(显示控件头部):</a></legend>
+             
             <div id="title" style=" display:none;color:Gray">
             <ul>
              <li>该文字显示到父子流程控件的头部，用来提示该控件的作用。</li>
@@ -97,9 +94,9 @@
             </fieldset>
 
           <fieldset>
-            <legend>可手工启动的子流程 </legend>
-            <a href="javascript:ShowHidden('xx')">设置可以手工启动的流程编号:</a>
+            <legend><a href="javascript:ShowHidden('xx')">可手工启动的子流程</a> </legend>
             <div id="xx" style=" display:none;color:Gray">
+            设置可以手工启动的流程编号:
             <ul>
             <li>单个流程设置格式为:001  </li>
             <li>多个流程用逗号分开比如: 001,002  </li>

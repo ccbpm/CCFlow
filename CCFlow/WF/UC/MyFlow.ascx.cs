@@ -1090,7 +1090,28 @@ namespace CCFlow.WF.UC
                                 msgInfo += rw.NoteHtml;
                                 msgInfo += "</fieldset>";
                             }
-                            this.FlowMsg.AlertMsg_Info("流程退回提示", msgInfo);
+
+                            string str = currND.ReturnAlert;
+                            if (str != "")
+                            {
+                                str = str.Replace("~", "'");
+                                str = str.Replace("@PWorkID", this.WorkID.ToString());
+                                str = str.Replace("@PNodeID", currND.NodeID.ToString());
+                                str = str.Replace("@FK_Node", currND.NodeID.ToString());
+
+                                str = str.Replace("@PFlowNo", this.FK_Flow);
+                                str = str.Replace("@FK_Flow", this.FK_Flow);
+                                str = str.Replace("@PWorkID", this.WorkID.ToString());
+
+
+                                str = str.Replace("@WorkID", this.WorkID.ToString());
+                                str = str.Replace("@OID", this.WorkID.ToString());
+                                this.FlowMsg.AlertMsg_Info("退回信息", msgInfo + "<br>" + str+"<br>");
+                            }
+                            else
+                            {
+                                this.FlowMsg.AlertMsg_Info("退回信息", msgInfo);
+                            }
                             //gwf.WFState = WFState.Runing;
                             //gwf.DirectUpdate();
                         }

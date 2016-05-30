@@ -93,6 +93,9 @@
                             msgInfo += rw.NoteHtml;
                             msgInfo += "</fieldset>";
                         }
+
+                        msgInfo += "<br>" + node.ReturnAlert;
+                        
                         this.FlowMsg.AlertMsg_Info("流程退回提示", msgInfo);
                         isInfo = true;
 

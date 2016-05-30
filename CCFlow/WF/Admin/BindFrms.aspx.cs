@@ -318,7 +318,11 @@ namespace CCFlow.WF.Admin
 
                 this.Pub1.AddTR();
                 this.Pub1.AddTDIdx(idx++);
-                this.Pub1.AddTD(fn.FK_Frm);
+
+                if (fn.FK_Frm=="ND"+this.FK_Node)
+                     this.Pub1.AddTD(fn.FK_Frm);
+                else
+
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
                 DDL ddl = new DDL();
 

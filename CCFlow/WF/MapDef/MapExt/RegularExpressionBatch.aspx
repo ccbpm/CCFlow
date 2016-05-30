@@ -4,7 +4,7 @@
  
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-<table>
+<table style=" width:100%">
 <caption>批量设置控件的正则表达式</caption>
 <tr>
 <th>序号</th>

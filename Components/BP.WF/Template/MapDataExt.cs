@@ -1161,7 +1161,7 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="fieldOldName">旧名称</param>
         /// <param name="newField">新字段</param>
-        /// <param name="newFieldName">新字段名称</param>
+        /// <param name="newFieldName">新字段名称(可以为空)</param>
         /// <returns></returns>
         public string DoChangeFieldName(string fieldOld, string newField, string newFieldName)
         {
@@ -1187,18 +1187,21 @@ namespace BP.WF.Template
             attrNew.Copy(attrOld);
             attrNew.KeyOfEn = newField;
             attrNew.FK_MapData = this.No;
-            attrNew.Name = newFieldName;
+
+            if (newFieldName !="" )
+               attrNew.Name = newFieldName;
+
             attrNew.Insert();
 
             //更新处理他的相关业务逻辑.
              MapExts exts = new MapExts(this.No);
              foreach (MapExt item in exts)
              {
-                  
-                     if (item.MyPK.Contains("_" + fieldOld) == true)
-                         item.Delete();
-                     else
-                         continue;
+                 //bool isHave = item.MyPK.Contains("_" + fieldOld);
+                  //   if ( == true)
+                  ////       item.Delete();
+                  //   else
+                  //       continue;
                           
                      item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
 
@@ -1216,7 +1219,7 @@ namespace BP.WF.Template
                      item.AtPara = item.AtPara.Replace(fieldOld, newField);
                      item.Doc = item.Doc.Replace(fieldOld, newField);
 
-                     item.Insert();
+                     item.Save();
                  
                  
              }

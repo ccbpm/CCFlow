@@ -719,6 +719,45 @@ namespace BP.WF
         /// </summary>
         public static void DoInstallDataBase(string lang, bool isInstallFlowDemo,bool isInstallCCIM)
         {
+            #region 检查当前数据库用户的权限(是否可以删除，创建视图表.)。
+            try
+            {
+                //恐怕反复执行.
+                if (BP.DA.DBAccess.IsExitsObject("TestView"))
+                    BP.DA.DBAccess.RunSQL("DROP VIEW TestView");
+
+                if (BP.DA.DBAccess.IsExitsObject("WF_Flow"))
+                    BP.DA.DBAccess.RunSQL("DROP TABLE WF_Flow");
+
+                // 能否删除表？创建表？
+                BP.WF.Flow fl = new Flow();
+                fl.CheckPhysicsTable();
+
+                //能否创建视图？
+                string sql = "CREATE VIEW WFText AS SELECT No,Name from wf_flow ";
+
+                BP.DA.DBAccess.RunSQL("DROP VIEW TestView");
+                BP.DA.DBAccess.RunSQL("DROP TABLE WF_Flow");
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("@当前的用户没有创建，删除表与视图的权限，所以执行安装失败，请给与相关的权限在执行安装。");
+            }
+            #endregion 检查当前数据库用户的权限。
+
+
+            #region 检查是否是空白的数据库。
+            if (BP.DA.DBAccess.IsExitsObject("WF_Emp")
+                 || BP.DA.DBAccess.IsExitsObject("WF_Flow")
+                 || BP.DA.DBAccess.IsExitsObject("Port_Emp")
+                || BP.DA.DBAccess.IsExitsObject("CN_City"))
+            {
+                throw new Exception("@当前的数据库好像是一个安装执行失败的数据库，里面包含了一些cc的表，所以您需要删除这个数据库然后执行重新安装。");
+            }
+            #endregion 检查是否是空白的数据库。
+
+
+
             ArrayList al = null;
             string info = "BP.En.Entity";
             al = BP.En.ClassFactory.GetObjects(info);
@@ -1015,21 +1054,6 @@ namespace BP.WF
             //    nd.HisWork.CheckPhysicsTable();
             #endregion 执行补充的sql, 让外键的字段长度都设置成100.
 
-            #region 安装ccim.
-            Glo.DoInstallCCIM();
-            #endregion
-
-        }
-        /// <summary>
-        /// 安装CCIM
-        /// </summary>
-        /// <param name="lang"></param>
-        /// <param name="yunXingHuanjing"></param>
-        /// <param name="isDemo"></param>
-        public static void DoInstallCCIM()
-        {
-          //  string sqlscript = SystemConfig.PathOfWebApp + "\\WF\\Data\\Install\\SQLScript\\CCIM_" + BP.Sys.SystemConfig.AppCenterDBType + ".sql";
-           // BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
         }
         public static void KillProcess(string processName) //杀掉进程的方法
         {

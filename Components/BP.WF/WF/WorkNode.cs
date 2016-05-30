@@ -651,8 +651,37 @@ namespace BP.WF
                 //判断下一个节点是否是外部用户处理人节点？
                 if (town.HisNode.IsGuestNode)
                 {
-                    wl.GuestNo = this.HisGenerWorkFlow.GuestNo;
-                    wl.GuestName = this.HisGenerWorkFlow.GuestName;
+                    if (this.HisGenerWorkFlow.GuestNo != "")
+                    {
+                        wl.GuestNo = this.HisGenerWorkFlow.GuestNo;
+                        wl.GuestName = this.HisGenerWorkFlow.GuestName;
+                    }
+                    else
+                    {
+                        /*这种情况是，不是外部用户发起的流程。*/
+                        if (town.HisNode.HisDeliveryWay == DeliveryWay.BySQL)
+                        {
+                            string mysql = town.HisNode.DeliveryParas.Clone() as string;
+                            DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(Glo.DealExp(mysql, this.rptGe, null));
+
+                            wl.GuestNo = mydt.Rows[0][0].ToString();
+                            wl.GuestName = mydt.Rows[0][1].ToString();
+
+                            this.HisGenerWorkFlow.GuestNo = wl.GuestNo;
+                            this.HisGenerWorkFlow.GuestName = wl.GuestName;
+                        }
+                        else if (town.HisNode.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormEmpsField)
+                        {
+                            wl.GuestNo = this.HisWork.GetValStrByKey(town.HisNode.DeliveryParas);
+                            wl.GuestName = "外部用户";
+                            this.HisGenerWorkFlow.GuestNo = wl.GuestNo;
+                            this.HisGenerWorkFlow.GuestName = wl.GuestName;
+                        }
+                        else
+                        {
+                            throw new Exception("@当前节点["+this.town.HisNode.Name+"]是中间节点，并且是外部用户处理节点，您需要正确的设置，这个外部用户接受人规则。");
+                        }
+                    }
 
                     //wl.FK_Emp = wl.GuestNo;
                     //wl.GuestName = wl.GuestName;

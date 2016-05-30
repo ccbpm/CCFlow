@@ -1194,7 +1194,7 @@ namespace BP.WF.Template
              MapExts exts = new MapExts(this.No);
              foreach (MapExt item in exts)
              {
-                 item.MyPK = item.MyPK.Replace("_" + newFieldName, "_" + newField);
+                 item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
 
                  if  (item.AttrOfOper == fieldOld)
                      item.AttrOfOper =  newField;

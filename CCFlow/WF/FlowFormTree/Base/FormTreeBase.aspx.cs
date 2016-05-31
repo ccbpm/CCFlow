@@ -81,13 +81,13 @@ namespace CCFlow.WF.FlowFormTree
         }
         #endregion 参数.
 
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (BP.Web.WebUser.No == null)
                 return;
 
             string method = string.Empty;
+
             //返回值
             string s_responsetext = string.Empty;
             if (!string.IsNullOrEmpty(Request["method"]))
@@ -101,7 +101,6 @@ namespace CCFlow.WF.FlowFormTree
                 case "getflowformtree"://获取表单树
                     s_responsetext = GetFlowFormTree();
                     break;
-
                 case "saveblank":
                     s_responsetext = SaveBlank();
                     break;
@@ -141,7 +140,10 @@ namespace CCFlow.WF.FlowFormTree
             Response.Write(s_responsetext);
             Response.End();
         }
-
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
         private string SaveBlank()
         {
             try
@@ -771,6 +773,35 @@ namespace CCFlow.WF.FlowFormTree
                 }
                 #endregion
 
+                #region 检查是否有没有目录的表单?
+                bool isHave = false;
+                foreach (MapData md in mds)
+                {
+                    if (md.FK_FormTree == "")
+                    {
+                        isHave = true;
+                        break;
+                    }
+                }
+
+                string treeNo = "0";
+                if (isHave && mds.Count == 1)
+                {
+                    treeNo = "0";
+                }
+                else if (isHave == true)
+                {
+                    foreach (MapData md in mds)
+                    {
+                        if (md.FK_FormTree != "")
+                        {
+                            treeNo = md.FK_FormTree;
+                            break;
+                        }
+                    }
+                }
+                #endregion 检查是否有没有目录的表单?
+
                 foreach (MapData md in mds)
                 {
                     if (frmNode.FK_Frm != md.No)
@@ -778,7 +809,7 @@ namespace CCFlow.WF.FlowFormTree
 
                     #warning 这里有错误, 如果是节点表单的话，就没有这个值，没有这个值就绑定不到表单树，代国强解决.
                     if (md.FK_FormTree == "")
-                        md.FK_FormTree = "01";
+                        md.FK_FormTree = treeNo;
 
                     foreach (SysFormTree formTree in formTrees)
                     {

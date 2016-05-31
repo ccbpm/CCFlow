@@ -4212,6 +4212,36 @@ namespace BP.WF
             }
             return true;
         }
+
+        /// <summary>
+        /// 复制表单权限-从一个节点到另一个节点.
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="currNodeID">当前节点</param>
+        /// <param name="fromNodeID">从节点</param>
+        public static void CopyFrmSlnFromNodeToNode(string fk_flow, string frmID, int currNodeID, int fromNodeID)
+        {
+            #region 处理字段.
+            //删除现有的.
+            FrmFields frms = new FrmFields();
+            frms.Delete(FrmFieldAttr.FK_Node, currNodeID, FrmFieldAttr.FK_MapData, frmID);
+
+            //查询出来,指定的权限方案.
+            frms.Retrieve(FrmFieldAttr.FK_Node, fromNodeID, FrmFieldAttr.FK_MapData, frmID);
+
+            //开始复制.
+            foreach (FrmField item in frms)
+            {
+                item.MyPK = frmID + "_" + fk_flow + "_" + currNodeID + "_" + item.KeyOfEn;
+                item.FK_Node = currNodeID;
+                item.Insert(); // 插入数据库.
+            }
+            #endregion 处理字段.
+
+
+
+        }
         #endregion 其他方法。
 
 

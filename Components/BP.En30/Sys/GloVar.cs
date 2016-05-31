@@ -279,7 +279,7 @@ namespace BP.Sys
             {
                 if (cfg.No == key)
                     return cfg.Val;
-            }
+            }   
 
             throw new Exception("error key=" + key);
         }

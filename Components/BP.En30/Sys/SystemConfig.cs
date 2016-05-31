@@ -462,19 +462,19 @@ namespace BP.Sys
         /// </summary>
         public static void DoClearCash()
         {
-           // HttpRuntime.UnloadAppDomain();
+            // HttpRuntime.UnloadAppDomain();
             BP.DA.Cash.Map_Cash.Clear();
             BP.DA.Cash.SQL_Cash.Clear();
             BP.DA.Cash.EnsData_Cash.Clear();
             BP.DA.Cash.EnsData_Cash_Ext.Clear();
             BP.DA.Cash.BS_Cash.Clear();
             BP.DA.Cash.Bill_Cash.Clear();
-            BP.DA.CashEntity.DCash.Clear();  
+            BP.DA.CashEntity.DCash.Clear();
 
             try
             {
-             //   System.Web.HttpContext.Current.Session.Clear();
-               // System.Web.HttpContext.Current.Application.Clear();
+                //   System.Web.HttpContext.Current.Session.Clear();
+                // System.Web.HttpContext.Current.Application.Clear();
             }
             catch
             {
@@ -835,6 +835,16 @@ namespace BP.Sys
             get
             {
                 return AppSettings["EncodingAESKey"];
+            }
+        }
+        /// <summary>
+        /// 进入应用后的欢迎提示
+        /// </summary>
+        public static bool WeiXin_AgentWelCom
+        {
+            get
+            {
+                return GetValByKeyBoolen("WeiXin_AgentWelCom", false);
             }
         }
         /// <summary>

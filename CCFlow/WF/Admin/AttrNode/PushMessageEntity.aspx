@@ -34,7 +34,8 @@
     <asp:RadioButton ID="RB_SMS_2" runat="server"  Text="表单上的字段作为接受对象(手机号/微信号/丁丁号/CCIM人员ID)" GroupName="xx"/>
        <asp:DropDownList ID="DDL_SMS_Fields" runat="server">
        </asp:DropDownList>
-
+   <asp:RadioButton ID="RB_SMS_3" runat="server"  Text="其他节点的处理人(未完成)"  GroupName="xx"/>
+    <br />
  <fieldset style=" border:0px;">
             <legend><a href="javascript:ShowHidden('sms')">短信发送内容模版:</a></legend>
             <div id="sms" style="display:none;color:Gray">

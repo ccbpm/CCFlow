@@ -66,22 +66,10 @@ namespace CCFlow.WF.MapDef
                     this.Copy();
                     return;
                 case "CopyIt": //编辑sln.
-                    FrmFields fss = new FrmFields();
-                    fss.Delete(FrmFieldAttr.FK_MapData, this.FK_MapData,
-                        FrmFieldAttr.FK_Flow, this.FK_Flow,
-                        FrmFieldAttr.FK_Node, this.FK_Node);
+                    BP.WF.Glo.CopyFrmSlnFromNodeToNode(this.FK_Flow, this.FK_MapData,
+                        int.Parse(this.FK_Node),
+                        int.Parse(this.Request.QueryString["FromSln"]));
 
-                    fss = new FrmFields(this.FK_MapData,int.Parse(this.Request.QueryString["FromSln"]));
-                    //fss.Retrieve(FrmFieldAttr.FK_MapData, this.FK_MapData,
-                    //    FrmFieldAttr.FK_Node, this.Request.QueryString["FromSln"]);
-
-                    foreach (FrmField sl in fss)
-                    {
-                        sl.FK_Node = int.Parse(this.FK_Node);
-                        sl.FK_Flow = this.FK_Flow;
-                        sl.MyPK = this.FK_MapData + "_" +this.FK_Flow+"_"+ this.FK_Node + "_" + sl.KeyOfEn;
-                        sl.Insert();
-                    }
                     this.WinClose();
                     return;
                 default:

@@ -11,6 +11,7 @@ using BP.DA;
 using BP.Web;
 using BP;
 using BP.WF.Template;
+using BP.WF;
 
 namespace CCFlow.WF.MapDef
 {
@@ -100,6 +101,7 @@ namespace CCFlow.WF.MapDef
                 this.WinClose();
                 return;
             }
+
             if (this.DoType == "DeleteDtl")
             {
                 MapDtl dtl = new MapDtl();
@@ -109,7 +111,6 @@ namespace CCFlow.WF.MapDef
                 return;
             }
             #endregion 功能执行.
-
 
             MapData md = new MapData(this.FK_MapData);
             FrmField sln = new FrmField();
@@ -126,12 +127,78 @@ namespace CCFlow.WF.MapDef
                     BindFJ();
                     break;
                 case "Field": //字段方案.
-                default:
                     this.Title = "表单字段权限";
                     this.BindSln();
                     break;
+                case "Copy": //字段方案.
+                    this.Title = "从其它节点复制权限";
+                    this.BindCopy();
+                    break;
+                case "DoCopy": //字段方案.
+                    this.Title = "执行复制权限方案";
+                    this.DoCopy();
+                    break;
+                default:
+                    this.Title = "没有涉及到的类型:"+this.DoType;
+                    break;
             }
         }
+        /// <summary>
+        /// 执行copy.
+        /// </summary>
+        public void DoCopy()
+        {
+            // 从节点.
+            int fromNode = int.Parse(this.Request.QueryString["FromNode"]);
+
+            //调用copy方法，执行copy.
+            BP.WF.Glo.CopyFrmSlnFromNodeToNode(this.FK_Flow, this.FK_MapData, int.Parse(this.FK_Node), fromNode);
+
+            this.Pub2.AddFieldSet("提示", "执行copy成功.");
+        }
+        public void BindCopy()
+        {
+
+            FrmNodes fns = new FrmNodes();
+            fns.Retrieve(FrmNodeAttr.FK_Flow, this.FK_Flow, FrmNodeAttr.FK_Frm, this.FK_MapData);
+
+            bool isHave = false;
+
+            this.Pub2.AddHR();
+            this.Pub2.AddH3("点击选择要copy的节点.");
+            this.Pub2.AddUL();
+            foreach (FrmNode fn in fns)
+            {
+                if (fn.FK_Frm != this.FK_MapData)
+                    continue;
+
+                if (fn.FK_Node.ToString() == this.FK_Node)
+                    continue;
+
+                if (fn.FrmSln == 0)
+                    continue;
+
+                BP.WF.Node nd = new BP.WF.Node(fn.FK_Node);
+
+                string lab = "第" + nd.Step + "步:" + nd.NodeID + " - " + nd.Name;
+                this.Pub2.AddLi("<a href='Sln.aspx?FK_MapData=" + this.FK_MapData + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=DoCopy&FromNode=" + fn.FK_Node + "' >" + lab + "</a>");
+                isHave = true;
+            }
+            this.Pub2.AddULEnd();
+
+            this.Pub2.AddFieldSet("执行须知");
+            this.Pub2.AddUL();
+            this.Pub2.AddLi("1, 您将要执行权限方案的copy, 如果copy成功系统将会把您指定的该表单上的定义权限完全copy到当前节点上来.");
+            this.Pub2.AddLi("2, copy到现在节点的权限包括：附件、字段、明细表.");
+            this.Pub2.AddLi("3, copy到将执行覆盖操作,以前的设置将会被删除重新覆盖.");
+            this.Pub2.AddLi("4, 其他表单的权限，之后同表单，并且权限方案为自定义，才能被列出来。");
+            this.Pub2.AddULEnd();
+            this.Pub2.AddFieldSetEnd(); 
+
+            if (isHave == false)
+                this.Pub2.AddFieldSet("提示", " <font color=red>没有对应的表单绑定</font>.");
+        }
+
         public void BindDtl()
         {
             BP.Sys.MapDtls dtls = new BP.Sys.MapDtls();
@@ -167,11 +234,9 @@ namespace CCFlow.WF.MapDef
                     this.Pub2.AddTD();
                 else
                     this.Pub2.AddTD("<a href=\"javascript:DeleteDtl('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.No + "')\">删除</a>");
-
                 this.Pub2.AddTREnd();
             }
             this.Pub2.AddTableEnd();
-
         }
 
         public void BindFJ()
@@ -195,7 +260,6 @@ namespace CCFlow.WF.MapDef
             {
                 if (item.FK_Node != 0)
                     continue;
-
                 idx++;
                 this.Pub2.AddTR();
                 this.Pub2.AddTDIdx(idx);
@@ -215,6 +279,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub2.AddTREnd();
             }
             this.Pub2.AddTableEnd();
+ 
         }
         /// <summary>
         /// 绑定方案
@@ -390,13 +455,14 @@ namespace CCFlow.WF.MapDef
 
             if (dtNodes.Rows.Count >= 1)
             {
-                btn = new Button();
-                btn.ID = "Btn_Copy";
-                btn.Click += new EventHandler(btn_Field_Click);
-                btn.Text = " Copy From Node ";
-                btn.Attributes["onclick"] = "CopyIt('" + this.FK_MapData + "','"+this.FK_Flow+"','" + this.FK_Node + "')";
-                this.Pub2.Add(btn); //删除定义..
+                //btn = new Button();
+                //btn.ID = "Btn_Copy";
+                ////btn.Click += new EventHandler(btn_Field_Click);
+                //btn.Text = " Copy From Node ";
+                //btn.Attributes["onclick"] = "";
+                this.Pub2.Add("<input type=button value='从其他节点上赋值权限' onclick=\"javascript:CopyIt('" + this.FK_MapData + "','" + this.FK_Flow + "','" + this.FK_Node + "')\">"); //删除定义..
             }
+           
         }
 
         void btn_Field_Click(object sender, EventArgs e)
@@ -407,7 +473,7 @@ namespace CCFlow.WF.MapDef
                 FrmFields fss1 = new FrmFields();
                 fss1.Delete(FrmFieldAttr.FK_MapData, this.FK_MapData,
                     FrmFieldAttr.FK_Node, int.Parse(this.FK_Node));
-                this.Response.Redirect("Sln.aspx?FK_Flow="+this.FK_Flow+"&FK_Node=" + this.FK_Node + "&FK_MapData=" + this.FK_MapData + "&IsOk=1", true);
+                this.Response.Redirect("Sln.aspx?FK_Flow="+this.FK_Flow+"&FK_Node=" + this.FK_Node + "&FK_MapData=" + this.FK_MapData + "&IsOk=1&DoType=Field", true);
                 return;
             }
 
@@ -484,7 +550,7 @@ namespace CCFlow.WF.MapDef
                 sln.MyPK = this.FK_MapData + "_"+this.FK_Flow+"_" + this.FK_Node + "_" + attr.KeyOfEn;
                 sln.Insert();
             }
-            this.Response.Redirect("Sln.aspx?FK_Flow="+this.FK_Flow+"&FK_Node=" + this.FK_Node + "&FK_MapData=" + this.FK_MapData + "&IsOk=1", true);
+            this.Response.Redirect("Sln.aspx?FK_Flow="+this.FK_Flow+"&FK_Node=" + this.FK_Node + "&FK_MapData=" + this.FK_MapData + "&IsOk=1&DoType=Field", true);
         }
     }
 }

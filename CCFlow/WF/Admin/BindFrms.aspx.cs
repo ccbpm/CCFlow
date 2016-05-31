@@ -271,9 +271,7 @@ namespace CCFlow.WF.Admin
             }
             #endregion 如果没有ndFrm 就增加上.
 
-
             string tfModel = SystemConfig.AppSettings["TreeFrmModel"];
-            
             this.Pub1.AddTable("width=100%");
             this.Pub1.AddCaption("设置节点:(" + nd.Name + ")绑定表单");
             this.Pub1.AddTR();
@@ -318,14 +316,14 @@ namespace CCFlow.WF.Admin
 
                 this.Pub1.AddTR();
                 this.Pub1.AddTDIdx(idx++);
+                this.Pub1.AddTD(fn.FK_Frm); 
 
                 if (fn.FK_Frm=="ND"+this.FK_Node)
-                     this.Pub1.AddTD(fn.FK_Frm);
+                     this.Pub1.AddTDB("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
                 else
+                     this.Pub1.AddTD("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
 
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
                 DDL ddl = new DDL();
-
                 //获取当前独立表单中的所有字段  add by 海南  zqp
                 if (tfModel == "1")
                 {

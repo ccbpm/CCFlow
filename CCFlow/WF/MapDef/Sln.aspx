@@ -18,10 +18,15 @@
         var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         window.location.href = window.location.href;
     }
-    function CopyIt(fk_mapdata,fk_flow, nodeID) {
-        var url = 'SlnDo.aspx?DoType=Copy&FK_MapData=' + fk_mapdata + '&FK_Flow=' + fk_flow + '&FK_Node=' + nodeID;
-        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-        window.location.href = window.location.href;
+    function CopyIt(fk_mapdata, fk_flow, nodeID) {
+        var myurl = 'Sln.aspx?DoType=Copy&FK_MapData=' + fk_mapdata + '&FK_Flow=' + fk_flow + '&FK_Node=' + nodeID;
+        alert(myurl);
+      //  var url =   'Sln.aspx?DoType=Copy&FK_MapData=Demo_Inc01&FK_Flow=004&FK_Node=402';
+       window.location.href = myurl;
+
+//        var url = 'SlnDo.aspx?DoType=Copy&FK_MapData=' + fk_mapdata + '&FK_Flow=' + fk_flow + '&FK_Node=' + nodeID;
+//        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+//        window.location.href = window.location.href;
     }
 
     var IsNoteNull=false;
@@ -91,7 +96,6 @@
     }
 
 
-
     //编辑Dtl的原始属性.
     function EditDtlYuanShi(fk_mapdata, dtlKey) {
         var url = 'MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlKey + '&DoType=Edit';
@@ -122,5 +126,21 @@
 </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
+<h3>
+<div style=" float:left;"> 
+权限控制类型： <a href="?FK_MapData=<%=this.FK_MapData %>&FK_Node=<%=this.FK_Node %>&DoType=Field&FK_Flow=<%=this.FK_Flow %>">字段</a> 
+ -  <a href="?FK_MapData=<%=this.FK_MapData %>&FK_Node=<%=this.FK_Node %>&DoType=FJ&FK_Flow=<%=this.FK_Flow %>">附件</a> 
+ -  <a href="?FK_MapData=<%=this.FK_MapData %>&FK_Node=<%=this.FK_Node %>&DoType=Dtl&FK_Flow=<%=this.FK_Flow %>">明细表</a> 
+ </div>
+ <%
+            string url = "<a href=\"Sln.aspx?DoType=Copy&FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "\" ><img src='/WF/Img/Btn/Copy.gif' border=0 />从其他节点Copy权限设置</a>";
+             %>
+             <div  style=" float:right"><%=url %></div>
+
+             <br />
+ </h3>
+
     <uc1:Pub ID="Pub2" runat="server" />
+
 </asp:Content>

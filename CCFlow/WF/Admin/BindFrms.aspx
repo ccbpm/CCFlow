@@ -12,7 +12,7 @@
     }
 
     function WinField(fk_mapdata, nodeid, fk_flow) {
-        var url = "../MapDef/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow;
+        var url = "../MapDef/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';
         WinOpen(url);
     }
 

@@ -1406,6 +1406,7 @@
     <Content Include="WF\MapDef\SFSQL.aspx" />
     <Content Include="WF\MapDef\EditSQL.aspx" />
     <Content Include="WF\MapDef\SFWS.aspx" />
+    <Content Include="WF\MapDef\SlnCopy.aspx" />
     <Content Include="WF\Messages.aspx" />
     <Content Include="WF\MessagesReplay.aspx" />
     <Content Include="WF\OneFlow\Archive.aspx" />
@@ -5209,6 +5210,13 @@
     <Compile Include="WF\MapDef\SFWS.aspx.designer.cs">
       <DependentUpon>SFWS.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\MapDef\SlnCopy.aspx.cs">
+      <DependentUpon>SlnCopy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\SlnCopy.aspx.designer.cs">
+      <DependentUpon>SlnCopy.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Messages.aspx.cs">
       <DependentUpon>Messages.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7954,7 +7962,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>5853</DevelopmentServerPort>
+          <DevelopmentServerPort>8158</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -179,7 +179,7 @@ namespace BP.Demo.License
 
                 #region 字段
                 /*关于字段属性的增加 */
-                map.AddTBStringPK(PeopleAttr.No, null, "编号", true, false, 1, 20, 30);
+                map.AddTBStringPK(PeopleAttr.No, null, "编号", true, false, 1, 60, 30);
                 map.AddTBString(PeopleAttr.Name, null, "名称", true, false, 0, 999, 30);
 
                 map.AddTBString(PeopleAttr.Addr, null, "地址", true, false, 0, 999, 30);

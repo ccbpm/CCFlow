@@ -124,6 +124,7 @@
     <Compile Include="UnitTesting\SendCase\StarterFlowByERS.cs" />
     <Compile Include="UnitTesting\SendCase\Test001.cs" />
     <Compile Include="UnitTesting\TestCaseTemplete.cs" />
+    <Compile Include="UnitTesting\SendMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Components\BP.En30\BP.En30.csproj">

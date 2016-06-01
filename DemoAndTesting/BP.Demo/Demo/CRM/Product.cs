@@ -16,8 +16,10 @@ namespace BP.Demo.CRM
         public const string Addr = "Addr";
 
         public const string Price = "Price";
-
-
+        /// <summary>
+        /// 运行的节点
+        /// </summary>
+        public const string RunNodes = "RunNodes";
 		#endregion
 	}
 	/// <summary>
@@ -38,6 +40,20 @@ namespace BP.Demo.CRM
             set
             {
                 this.SetValByKey(ProductAttr.Addr, value);
+            }
+        }
+        /// <summary>
+        /// 采购这种产品需要运行的审批节点
+        /// </summary>
+        public string RunNodes
+        {
+            get
+            {
+                return this.GetValStringByKey(ProductAttr.RunNodes);
+            }
+            set
+            {
+                this.SetValByKey(ProductAttr.RunNodes, value);
             }
         }
         #endregion
@@ -93,6 +109,8 @@ namespace BP.Demo.CRM
                 map.AddTBString(ProductAttr.Name, null, "名称", true, false, 0, 50, 200);
                 map.AddTBString(ProductAttr.Addr, null, "生产地址", true, false, 0, 50, 200);
                 map.AddTBFloat(ProductAttr.Price, 0, "价格", true, false);
+
+                map.AddTBString(ProductAttr.RunNodes, null, "运行的节点", true, false, 0, 50, 200);
                 #endregion
 
                 this._enMap = map;

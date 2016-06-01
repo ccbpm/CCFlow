@@ -56,32 +56,15 @@
     <Paras>@StartNodeX=332@StartNodeY=44@EndNodeX=200@EndNodeY=350</Paras>
     <DRCtrlType>0</DRCtrlType>
     <StartLimitWhen>0</StartLimitWhen>
-    <Ver>2016-05-13 19:45:55</Ver>
+    <Ver>2016-06-01 20:17:40</Ver>
     <DType>0</DType>
     <AtPara />
   </WF_Flow>
   <WF_Node>
     <NodeID>5501</NodeID>
-    <Name>学生填写请假申请单</Name>
-    <FWCSta>0</FWCSta>
-    <FWCShowModel>1</FWCShowModel>
-    <FWCType>0</FWCType>
-    <FWCNodeName />
-    <FWCAth>0</FWCAth>
-    <FWCTrackEnable>1</FWCTrackEnable>
-    <FWCListEnable>1</FWCListEnable>
-    <FWCIsShowAllStep>0</FWCIsShowAllStep>
-    <FWCOpLabel>审核</FWCOpLabel>
-    <FWCDefInfo>同意</FWCDefInfo>
-    <SigantureEnabel>0</SigantureEnabel>
-    <FWCIsFullInfo>1</FWCIsFullInfo>
-    <FWC_X>5</FWC_X>
-    <FWC_Y>5</FWC_Y>
-    <FWC_H>300</FWC_H>
-    <FWC_W>400</FWC_W>
-    <FWCFields />
     <Step>1</Step>
     <FK_Flow>055</FK_Flow>
+    <Name>学生填写请假申请单</Name>
     <Tip />
     <DeliveryWay>0</DeliveryWay>
     <IsExpSender>1</IsExpSender>
@@ -181,6 +164,21 @@
     <OutTimeDeal>0</OutTimeDeal>
     <DoOutTime />
     <DoOutTimeCond />
+    <FWCSta>0</FWCSta>
+    <FWCShowModel>1</FWCShowModel>
+    <FWCType>0</FWCType>
+    <FWCNodeName />
+    <FWCAth>0</FWCAth>
+    <FWCTrackEnable>1</FWCTrackEnable>
+    <FWCListEnable>1</FWCListEnable>
+    <FWCIsShowAllStep>0</FWCIsShowAllStep>
+    <FWCOpLabel>审核</FWCOpLabel>
+    <FWCDefInfo>同意</FWCDefInfo>
+    <SigantureEnabel>0</SigantureEnabel>
+    <FWCIsFullInfo>1</FWCIsFullInfo>
+    <FWC_H>300</FWC_H>
+    <FWC_W>400</FWC_W>
+    <FWCFields />
     <SFSta>0</SFSta>
     <SFShowModel>1</SFShowModel>
     <SFCaption />
@@ -235,6 +233,8 @@
     <WAlertRole>0</WAlertRole>
     <WAlertWay>0</WAlertWay>
     <Doc />
+    <ReturnReasonsItems />
+    <ReturnAlert />
     <IsCanRpt>1</IsCanRpt>
     <IsCanOver>0</IsCanOver>
     <IsSecret>0</IsSecret>
@@ -244,25 +244,25 @@
     <IsCCFlow>0</IsCCFlow>
     <HisStas>@12</HisStas>
     <HisDeptStrs>@12</HisDeptStrs>
-    <HisToNDs>@5502</HisToNDs>
+    <HisToNDs>02</HisToNDs>
     <HisBillIDs />
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@5501</GroupStaNDs>
+    <GroupStaNDs>01</GroupStaNDs>
     <X>129</X>
     <Y>72</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
-    <CCIsStations>0</CCIsStations>
-    <CCIsDepts>0</CCIsDepts>
-    <CCIsEmps>0</CCIsEmps>
-    <CCIsSQLs>0</CCIsSQLs>
-    <CCCtrlWay>0</CCCtrlWay>
-    <CCSQL />
-    <CCTitle />
-    <CCDoc />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <CheckNodes />
+    <SelfParas />
+    <SelectorDBShowWay>0</SelectorDBShowWay>
+    <SelectorModel>0</SelectorModel>
+    <SelectorP1 />
+    <SelectorP2 />
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
     <OfficeSaveLab>保存</OfficeSaveLab>
@@ -277,34 +277,22 @@
     <OfficeInsertFlowEnable>0</OfficeInsertFlowEnable>
     <OfficeDownEnable>0</OfficeDownEnable>
     <OfficeTHEnable>0</OfficeTHEnable>
-    <CheckNodes />
+    <CCIsStations>0</CCIsStations>
+    <CCIsDepts>0</CCIsDepts>
+    <CCIsEmps>0</CCIsEmps>
+    <CCIsSQLs>0</CCIsSQLs>
+    <CCCtrlWay>0</CCCtrlWay>
+    <CCSQL />
+    <CCTitle />
+    <CCDoc />
+    <FWC_X>5</FWC_X>
+    <FWC_Y>5</FWC_Y>
   </WF_Node>
   <WF_Node>
     <NodeID>5502</NodeID>
-    <Name>班主任审批</Name>
-    <SelectorDBShowWay>0</SelectorDBShowWay>
-    <SelectorModel>0</SelectorModel>
-    <SelectorP1 />
-    <SelectorP2 />
-    <FWCSta>0</FWCSta>
-    <FWCShowModel>1</FWCShowModel>
-    <FWCType>0</FWCType>
-    <FWCNodeName />
-    <FWCAth>0</FWCAth>
-    <FWCTrackEnable>1</FWCTrackEnable>
-    <FWCListEnable>1</FWCListEnable>
-    <FWCIsShowAllStep>0</FWCIsShowAllStep>
-    <FWCOpLabel>审核</FWCOpLabel>
-    <FWCDefInfo>同意</FWCDefInfo>
-    <SigantureEnabel>0</SigantureEnabel>
-    <FWCIsFullInfo>1</FWCIsFullInfo>
-    <FWC_X>5</FWC_X>
-    <FWC_Y>5</FWC_Y>
-    <FWC_H>300</FWC_H>
-    <FWC_W>400</FWC_W>
-    <FWCFields />
     <Step>2</Step>
     <FK_Flow>055</FK_Flow>
+    <Name>班主任审批</Name>
     <Tip />
     <DeliveryWay>3</DeliveryWay>
     <IsExpSender>1</IsExpSender>
@@ -404,6 +392,21 @@
     <OutTimeDeal>0</OutTimeDeal>
     <DoOutTime />
     <DoOutTimeCond />
+    <FWCSta>0</FWCSta>
+    <FWCShowModel>1</FWCShowModel>
+    <FWCType>0</FWCType>
+    <FWCNodeName />
+    <FWCAth>0</FWCAth>
+    <FWCTrackEnable>1</FWCTrackEnable>
+    <FWCListEnable>1</FWCListEnable>
+    <FWCIsShowAllStep>0</FWCIsShowAllStep>
+    <FWCOpLabel>审核</FWCOpLabel>
+    <FWCDefInfo>同意</FWCDefInfo>
+    <SigantureEnabel>0</SigantureEnabel>
+    <FWCIsFullInfo>1</FWCIsFullInfo>
+    <FWC_H>300</FWC_H>
+    <FWC_W>400</FWC_W>
+    <FWCFields />
     <SFSta>0</SFSta>
     <SFShowModel>1</SFShowModel>
     <SFCaption />
@@ -458,6 +461,8 @@
     <WAlertRole>0</WAlertRole>
     <WAlertWay>0</WAlertWay>
     <Doc />
+    <ReturnReasonsItems />
+    <ReturnAlert />
     <IsCanRpt>1</IsCanRpt>
     <IsCanOver>0</IsCanOver>
     <IsSecret>0</IsSecret>
@@ -467,25 +472,25 @@
     <IsCCFlow>0</IsCCFlow>
     <HisStas />
     <HisDeptStrs />
-    <HisToNDs>@5599</HisToNDs>
+    <HisToNDs>99</HisToNDs>
     <HisBillIDs />
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@5502@5503@5599</GroupStaNDs>
+    <GroupStaNDs>020399</GroupStaNDs>
     <X>202</X>
     <Y>177</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
-    <CCIsStations>0</CCIsStations>
-    <CCIsDepts>0</CCIsDepts>
-    <CCIsEmps>0</CCIsEmps>
-    <CCIsSQLs>0</CCIsSQLs>
-    <CCCtrlWay>0</CCCtrlWay>
-    <CCSQL />
-    <CCTitle />
-    <CCDoc />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <CheckNodes />
+    <SelfParas />
+    <SelectorDBShowWay>0</SelectorDBShowWay>
+    <SelectorModel>0</SelectorModel>
+    <SelectorP1 />
+    <SelectorP2 />
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
     <OfficeSaveLab>保存</OfficeSaveLab>
@@ -500,34 +505,22 @@
     <OfficeInsertFlowEnable>0</OfficeInsertFlowEnable>
     <OfficeDownEnable>0</OfficeDownEnable>
     <OfficeTHEnable>0</OfficeTHEnable>
-    <CheckNodes />
+    <CCIsStations>0</CCIsStations>
+    <CCIsDepts>0</CCIsDepts>
+    <CCIsEmps>0</CCIsEmps>
+    <CCIsSQLs>0</CCIsSQLs>
+    <CCCtrlWay>0</CCCtrlWay>
+    <CCSQL />
+    <CCTitle />
+    <CCDoc />
+    <FWC_X>5</FWC_X>
+    <FWC_Y>5</FWC_Y>
   </WF_Node>
   <WF_Node>
     <NodeID>5503</NodeID>
-    <Name>教务处备案</Name>
-    <SelectorDBShowWay>0</SelectorDBShowWay>
-    <SelectorModel>0</SelectorModel>
-    <SelectorP1 />
-    <SelectorP2 />
-    <FWCSta>0</FWCSta>
-    <FWCShowModel>1</FWCShowModel>
-    <FWCType>0</FWCType>
-    <FWCNodeName />
-    <FWCAth>0</FWCAth>
-    <FWCTrackEnable>1</FWCTrackEnable>
-    <FWCListEnable>1</FWCListEnable>
-    <FWCIsShowAllStep>0</FWCIsShowAllStep>
-    <FWCOpLabel>审核</FWCOpLabel>
-    <FWCDefInfo>同意</FWCDefInfo>
-    <SigantureEnabel>0</SigantureEnabel>
-    <FWCIsFullInfo>1</FWCIsFullInfo>
-    <FWC_X>5</FWC_X>
-    <FWC_Y>5</FWC_Y>
-    <FWC_H>300</FWC_H>
-    <FWC_W>400</FWC_W>
-    <FWCFields />
     <Step>3</Step>
     <FK_Flow>055</FK_Flow>
+    <Name>教务处备案</Name>
     <Tip />
     <DeliveryWay>3</DeliveryWay>
     <IsExpSender>1</IsExpSender>
@@ -627,6 +620,21 @@
     <OutTimeDeal>0</OutTimeDeal>
     <DoOutTime />
     <DoOutTimeCond />
+    <FWCSta>0</FWCSta>
+    <FWCShowModel>1</FWCShowModel>
+    <FWCType>0</FWCType>
+    <FWCNodeName />
+    <FWCAth>0</FWCAth>
+    <FWCTrackEnable>1</FWCTrackEnable>
+    <FWCListEnable>1</FWCListEnable>
+    <FWCIsShowAllStep>0</FWCIsShowAllStep>
+    <FWCOpLabel>审核</FWCOpLabel>
+    <FWCDefInfo>同意</FWCDefInfo>
+    <SigantureEnabel>0</SigantureEnabel>
+    <FWCIsFullInfo>1</FWCIsFullInfo>
+    <FWC_H>300</FWC_H>
+    <FWC_W>400</FWC_W>
+    <FWCFields />
     <SFSta>0</SFSta>
     <SFShowModel>1</SFShowModel>
     <SFCaption />
@@ -681,6 +689,8 @@
     <WAlertRole>0</WAlertRole>
     <WAlertWay>0</WAlertWay>
     <Doc />
+    <ReturnReasonsItems />
+    <ReturnAlert />
     <IsCanRpt>1</IsCanRpt>
     <IsCanOver>0</IsCanOver>
     <IsSecret>0</IsSecret>
@@ -695,20 +705,20 @@
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@5502@5503@5599</GroupStaNDs>
+    <GroupStaNDs>020399</GroupStaNDs>
     <X>376</X>
     <Y>374</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
-    <CCIsStations>0</CCIsStations>
-    <CCIsDepts>0</CCIsDepts>
-    <CCIsEmps>0</CCIsEmps>
-    <CCIsSQLs>0</CCIsSQLs>
-    <CCCtrlWay>0</CCCtrlWay>
-    <CCSQL />
-    <CCTitle />
-    <CCDoc />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <CheckNodes />
+    <SelfParas />
+    <SelectorDBShowWay>0</SelectorDBShowWay>
+    <SelectorModel>0</SelectorModel>
+    <SelectorP1 />
+    <SelectorP2 />
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
     <OfficeSaveLab>保存</OfficeSaveLab>
@@ -723,30 +733,22 @@
     <OfficeInsertFlowEnable>0</OfficeInsertFlowEnable>
     <OfficeDownEnable>0</OfficeDownEnable>
     <OfficeTHEnable>0</OfficeTHEnable>
-    <CheckNodes />
+    <CCIsStations>0</CCIsStations>
+    <CCIsDepts>0</CCIsDepts>
+    <CCIsEmps>0</CCIsEmps>
+    <CCIsSQLs>0</CCIsSQLs>
+    <CCCtrlWay>0</CCCtrlWay>
+    <CCSQL />
+    <CCTitle />
+    <CCDoc />
+    <FWC_X>5</FWC_X>
+    <FWC_Y>5</FWC_Y>
   </WF_Node>
   <WF_Node>
     <NodeID>5599</NodeID>
-    <Name>反馈给学生</Name>
-    <FWCSta>0</FWCSta>
-    <FWCShowModel>1</FWCShowModel>
-    <FWCType>0</FWCType>
-    <FWCNodeName />
-    <FWCAth>0</FWCAth>
-    <FWCTrackEnable>1</FWCTrackEnable>
-    <FWCListEnable>1</FWCListEnable>
-    <FWCIsShowAllStep>0</FWCIsShowAllStep>
-    <FWCOpLabel>审核</FWCOpLabel>
-    <FWCDefInfo>同意</FWCDefInfo>
-    <SigantureEnabel>0</SigantureEnabel>
-    <FWCIsFullInfo>1</FWCIsFullInfo>
-    <FWC_X>5</FWC_X>
-    <FWC_Y>5</FWC_Y>
-    <FWC_H>300</FWC_H>
-    <FWC_W>400</FWC_W>
-    <FWCFields />
     <Step>99</Step>
     <FK_Flow>055</FK_Flow>
+    <Name>反馈给学生</Name>
     <Tip />
     <DeliveryWay>3</DeliveryWay>
     <IsExpSender>1</IsExpSender>
@@ -846,6 +848,21 @@
     <OutTimeDeal>0</OutTimeDeal>
     <DoOutTime />
     <DoOutTimeCond />
+    <FWCSta>0</FWCSta>
+    <FWCShowModel>1</FWCShowModel>
+    <FWCType>0</FWCType>
+    <FWCNodeName />
+    <FWCAth>0</FWCAth>
+    <FWCTrackEnable>1</FWCTrackEnable>
+    <FWCListEnable>1</FWCListEnable>
+    <FWCIsShowAllStep>0</FWCIsShowAllStep>
+    <FWCOpLabel>审核</FWCOpLabel>
+    <FWCDefInfo>同意</FWCDefInfo>
+    <SigantureEnabel>0</SigantureEnabel>
+    <FWCIsFullInfo>1</FWCIsFullInfo>
+    <FWC_H>300</FWC_H>
+    <FWC_W>400</FWC_W>
+    <FWCFields />
     <SFSta>0</SFSta>
     <SFShowModel>1</SFShowModel>
     <SFCaption />
@@ -900,6 +917,8 @@
     <WAlertRole>0</WAlertRole>
     <WAlertWay>0</WAlertWay>
     <Doc />
+    <ReturnReasonsItems />
+    <ReturnAlert />
     <IsCanRpt>1</IsCanRpt>
     <IsCanOver>0</IsCanOver>
     <IsSecret>0</IsSecret>
@@ -909,25 +928,25 @@
     <IsCCFlow>0</IsCCFlow>
     <HisStas />
     <HisDeptStrs />
-    <HisToNDs>@5503</HisToNDs>
+    <HisToNDs>03</HisToNDs>
     <HisBillIDs />
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@5502@5503@5599</GroupStaNDs>
+    <GroupStaNDs>020399</GroupStaNDs>
     <X>282</X>
     <Y>266</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
-    <CCIsStations>0</CCIsStations>
-    <CCIsDepts>0</CCIsDepts>
-    <CCIsEmps>0</CCIsEmps>
-    <CCIsSQLs>0</CCIsSQLs>
-    <CCCtrlWay>0</CCCtrlWay>
-    <CCSQL />
-    <CCTitle />
-    <CCDoc />
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <CheckNodes />
+    <SelfParas />
+    <SelectorDBShowWay>0</SelectorDBShowWay>
+    <SelectorModel>0</SelectorModel>
+    <SelectorP1 />
+    <SelectorP2 />
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
     <OfficeSaveLab>保存</OfficeSaveLab>
@@ -942,7 +961,16 @@
     <OfficeInsertFlowEnable>0</OfficeInsertFlowEnable>
     <OfficeDownEnable>0</OfficeDownEnable>
     <OfficeTHEnable>0</OfficeTHEnable>
-    <CheckNodes />
+    <CCIsStations>0</CCIsStations>
+    <CCIsDepts>0</CCIsDepts>
+    <CCIsEmps>0</CCIsEmps>
+    <CCIsSQLs>0</CCIsSQLs>
+    <CCCtrlWay>0</CCCtrlWay>
+    <CCSQL />
+    <CCTitle />
+    <CCDoc />
+    <FWC_X>5</FWC_X>
+    <FWC_Y>5</FWC_Y>
   </WF_Node>
   <WF_Direction>
     <MyPK>055_5501_5502_0</MyPK>
@@ -972,32 +1000,32 @@
     <Dots />
   </WF_Direction>
   <WF_LabNote>
-    <MyPK>1053</MyPK>
-    <Name>在节点的基本属性里设置是外部用户节点</Name>
-    <FK_Flow>055</FK_Flow>
-    <X>318</X>
-    <Y>229</Y>
-  </WF_LabNote>
-  <WF_LabNote>
-    <MyPK>1054</MyPK>
+    <MyPK>1049</MyPK>
     <Name>在节点的基本属性里设置是外部用户节点</Name>
     <FK_Flow>055</FK_Flow>
     <X>171</X>
     <Y>42</Y>
   </WF_LabNote>
   <WF_LabNote>
-    <MyPK>1055</MyPK>
-    <Name>绑定了郭祥斌处理</Name>
-    <FK_Flow>055</FK_Flow>
-    <X>78</X>
-    <Y>210</Y>
-  </WF_LabNote>
-  <WF_LabNote>
-    <MyPK>1056</MyPK>
+    <MyPK>1050</MyPK>
     <Name>绑定了周朋处理</Name>
     <FK_Flow>055</FK_Flow>
     <X>245</X>
     <Y>409</Y>
+  </WF_LabNote>
+  <WF_LabNote>
+    <MyPK>1051</MyPK>
+    <Name>在节点的基本属性里设置是外部用户节点</Name>
+    <FK_Flow>055</FK_Flow>
+    <X>318</X>
+    <Y>229</Y>
+  </WF_LabNote>
+  <WF_LabNote>
+    <MyPK>1052</MyPK>
+    <Name>绑定了郭祥斌处理</Name>
+    <FK_Flow>055</FK_Flow>
+    <X>61</X>
+    <Y>207</Y>
   </WF_LabNote>
   <WF_NodeStation>
     <FK_Node>5501</FK_Node>
@@ -1028,14 +1056,15 @@
     <FrmType>0</FrmType>
     <AppType>1</AppType>
     <DBSrc>local</DBSrc>
+    <BodyAttr />
     <Note />
     <Designer />
     <DesignerUnit />
     <DesignerContact />
-    <AtPara>@MaxLeft=81@MaxEnd=623@MaxRight=721@IsHaveCA=0@MaxTop=-2</AtPara>
+    <AtPara>@MaxLeft=81@MaxEnd=622@MaxRight=721@IsHaveCA=0@MaxTop=-1</AtPara>
     <Idx>100</Idx>
     <GUID />
-    <Ver>2016-05-13 17:57:13</Ver>
+    <Ver>2016-06-01 20:29:55</Ver>
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenEnable>0</OfficeOpenEnable>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
@@ -1064,13 +1093,13 @@
     <OfficeIsParent>1</OfficeIsParent>
     <OfficeTHEnable>0</OfficeTHEnable>
     <OfficeTHTemplate />
-    <FormRunType>1</FormRunType>
     <FK_Flow />
     <ParentMapData />
     <RightViewWay>0</RightViewWay>
     <RightViewTag />
     <RightDeptWay>0</RightDeptWay>
     <RightDeptTag />
+    <FormRunType>1</FormRunType>
     <DBURL>0</DBURL>
   </Sys_MapData>
   <Sys_MapData>
@@ -1090,14 +1119,15 @@
     <FrmType>0</FrmType>
     <AppType>1</AppType>
     <DBSrc>local</DBSrc>
+    <BodyAttr />
     <Note />
     <Designer />
     <DesignerUnit />
     <DesignerContact />
-    <AtPara>@MaxLeft=81@MaxEnd=623@MaxRight=721@IsHaveCA=0@MaxTop=-2</AtPara>
+    <AtPara>@MaxLeft=80@MaxEnd=622@MaxRight=722@IsHaveCA=0@MaxTop=-1</AtPara>
     <Idx>100</Idx>
     <GUID />
-    <Ver>2016-05-13 17:59:25</Ver>
+    <Ver>2016-06-01 20:29:37</Ver>
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenEnable>0</OfficeOpenEnable>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
@@ -1126,13 +1156,13 @@
     <OfficeIsParent>1</OfficeIsParent>
     <OfficeTHEnable>0</OfficeTHEnable>
     <OfficeTHTemplate />
-    <FormRunType>1</FormRunType>
     <FK_Flow />
     <ParentMapData />
     <RightViewWay>0</RightViewWay>
     <RightViewTag />
     <RightDeptWay>0</RightDeptWay>
     <RightDeptTag />
+    <FormRunType>1</FormRunType>
     <DBURL>0</DBURL>
   </Sys_MapData>
   <Sys_MapData>
@@ -1152,14 +1182,15 @@
     <FrmType>1</FrmType>
     <AppType>0</AppType>
     <DBSrc>local</DBSrc>
+    <BodyAttr />
     <Note />
     <Designer />
     <DesignerUnit />
     <DesignerContact />
-    <AtPara>@MaxLeft=81@MaxEnd=623@MaxRight=721@IsHaveCA=0@MaxTop=-2</AtPara>
+    <AtPara>@MaxLeft=80@MaxEnd=622@MaxRight=719@IsHaveCA=0@MaxTop=-1</AtPara>
     <Idx>100</Idx>
     <GUID />
-    <Ver>2016-05-13 17:59:50</Ver>
+    <Ver>2016-06-01 20:29:26</Ver>
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenEnable>0</OfficeOpenEnable>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
@@ -1188,13 +1219,13 @@
     <OfficeIsParent>1</OfficeIsParent>
     <OfficeTHEnable>0</OfficeTHEnable>
     <OfficeTHTemplate />
-    <FormRunType>1</FormRunType>
     <FK_Flow />
     <ParentMapData />
     <RightViewWay>0</RightViewWay>
     <RightViewTag />
     <RightDeptWay>0</RightDeptWay>
     <RightDeptTag />
+    <FormRunType>1</FormRunType>
     <DBURL>0</DBURL>
   </Sys_MapData>
   <Sys_MapData>
@@ -1214,14 +1245,15 @@
     <FrmType>0</FrmType>
     <AppType>1</AppType>
     <DBSrc>local</DBSrc>
+    <BodyAttr />
     <Note />
     <Designer />
     <DesignerUnit />
     <DesignerContact />
-    <AtPara>@MaxLeft=81@MaxEnd=623@MaxRight=721@IsHaveCA=0@MaxTop=-2</AtPara>
+    <AtPara>@MaxLeft=80@MaxEnd=622@MaxRight=719@IsHaveCA=0@MaxTop=-1</AtPara>
     <Idx>100</Idx>
     <GUID />
-    <Ver>2016-05-13 17:59:37</Ver>
+    <Ver>2016-06-01 20:28:44</Ver>
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenEnable>0</OfficeOpenEnable>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
@@ -1250,13 +1282,13 @@
     <OfficeIsParent>1</OfficeIsParent>
     <OfficeTHEnable>0</OfficeTHEnable>
     <OfficeTHTemplate />
-    <FormRunType>1</FormRunType>
     <FK_Flow />
     <ParentMapData />
     <RightViewWay>0</RightViewWay>
     <RightViewTag />
     <RightDeptWay>0</RightDeptWay>
     <RightDeptTag />
+    <FormRunType>1</FormRunType>
     <DBURL>0</DBURL>
   </Sys_MapData>
   <Sys_MapData>
@@ -1276,6 +1308,7 @@
     <FrmType>1</FrmType>
     <AppType>0</AppType>
     <DBSrc>local</DBSrc>
+    <BodyAttr />
     <Note />
     <Designer />
     <DesignerUnit />
@@ -1283,7 +1316,7 @@
     <AtPara>@IsHaveCA=0</AtPara>
     <Idx>100</Idx>
     <GUID />
-    <Ver>2016-05-17 12:01:00</Ver>
+    <Ver>2016-05-30 18:12:51</Ver>
     <OfficeOpenLab>打开本地</OfficeOpenLab>
     <OfficeOpenEnable>0</OfficeOpenEnable>
     <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
@@ -1312,13 +1345,13 @@
     <OfficeIsParent>1</OfficeIsParent>
     <OfficeTHEnable>0</OfficeTHEnable>
     <OfficeTHTemplate />
-    <FormRunType>1</FormRunType>
     <FK_Flow />
     <ParentMapData />
     <RightViewWay>0</RightViewWay>
     <RightViewTag />
     <RightDeptWay>0</RightDeptWay>
     <RightDeptTag />
+    <FormRunType>1</FormRunType>
     <DBURL>0</DBURL>
   </Sys_MapData>
   <Sys_MapAttr>
@@ -1326,57 +1359,94 @@
     <FK_MapData>ND5501</FK_MapData>
     <KeyOfEn>Dao</KeyOfEn>
     <Name>到</Name>
+    <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>6</MyDataType>
     <LGType>0</LGType>
     <UIWidth>80</UIWidth>
     <UIHeight>23</UIHeight>
+    <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>1</UIVisible>
     <UIIsEnable>1</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <GroupID>263</GroupID>
-    <X>353</X>
+    <UIIsInput>0</UIIsInput>
+    <GroupID>279</GroupID>
+    <X>335</X>
     <Y>89</Y>
+    <GUID />
+    <Tag />
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND5501_QingJiaTianShu</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <KeyOfEn>QingJiaTianShu</KeyOfEn>
     <Name>请假天数</Name>
+    <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
+    <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>1</UIVisible>
     <UIIsEnable>1</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <GroupID>263</GroupID>
+    <UIIsInput>0</UIIsInput>
+    <GroupID>279</GroupID>
     <X>542</X>
     <Y>89</Y>
+    <GUID />
+    <Tag />
+    <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND5501_QingJiaYuanYin</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <KeyOfEn>QingJiaYuanYin</KeyOfEn>
     <Name>请假原因</Name>
+    <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>625</UIWidth>
-    <UIHeight>90</UIHeight>
+    <UIWidth>577</UIWidth>
+    <UIHeight>64</UIHeight>
+    <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>1</UIVisible>
     <UIIsEnable>1</UIIsEnable>
     <UIIsLine>0</UIIsLine>
-    <GroupID>263</GroupID>
-    <X>88</X>
-    <Y>145</Y>
+    <UIIsInput>0</UIIsInput>
+    <GroupID>279</GroupID>
+    <X>139</X>
+    <Y>127</Y>
+    <GUID />
+    <Tag />
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5501_SQRSJH</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <KeyOfEn>SQRSJH</KeyOfEn>
+    <Name>申请人手机号</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>331</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <GroupID>279</GroupID>
+    <X>188</X>
+    <Y>209</Y>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND5501_GuestName</MyPK>
@@ -1387,7 +1457,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
+    <UIWidth>127</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
@@ -1399,10 +1469,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>0</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
-    <X>324.09</X>
-    <Y>48</Y>
+    <X>330.09</X>
+    <Y>50</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -1430,9 +1500,9 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>0</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
-    <X>133.64</X>
+    <X>139.64</X>
     <Y>48.18</Y>
     <GUID />
     <Tag />
@@ -1461,7 +1531,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -1492,7 +1562,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -1523,7 +1593,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>542</X>
     <Y>47</Y>
@@ -1554,10 +1624,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
-    <X>171</X>
-    <Y>88</Y>
+    <X>168</X>
+    <Y>87</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -1585,7 +1655,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -1616,7 +1686,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -1647,7 +1717,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -1678,69 +1748,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5501_RDT</MyPK>
-    <FK_MapData>ND5501</FK_MapData>
-    <KeyOfEn>RDT</KeyOfEn>
-    <Name>接受时间</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>7</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>263</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag>1</Tag>
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5501_Rec</MyPK>
-    <FK_MapData>ND5501</FK_MapData>
-    <KeyOfEn>Rec</KeyOfEn>
-    <Name>发起人</Name>
-    <DefVal>@WebUser.No</DefVal>
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -1771,13 +1779,75 @@
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>174.83</X>
     <Y>54.4</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5501_RDT</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>接受时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>279</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5501_Rec</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>发起人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>20</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>279</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
   </Sys_MapAttr>
@@ -1802,7 +1872,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -1830,8 +1900,8 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <GroupID>1030</GroupID>
-    <X>353</X>
+    <GroupID>1054</GroupID>
+    <X>335</X>
     <Y>89</Y>
     <GUID />
     <Tag />
@@ -1855,7 +1925,7 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <X>542</X>
     <Y>89</Y>
     <GUID />
@@ -1871,10 +1941,8 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>625</UIWidth>
-    <UIHeight>90</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
+    <UIWidth>577</UIWidth>
+    <UIHeight>64</UIHeight>
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
@@ -1882,15 +1950,36 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <Idx>0</Idx>
-    <GroupID>1030</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>88</X>
-    <Y>145</Y>
+    <GroupID>1054</GroupID>
+    <X>139</X>
+    <Y>127</Y>
     <GUID />
     <Tag />
-    <EditType>0</EditType>
-    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5502_SQRSJH</MyPK>
+    <FK_MapData>ND5502</FK_MapData>
+    <KeyOfEn>SQRSJH</KeyOfEn>
+    <Name>申请人手机号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>331</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <GroupID>1054</GroupID>
+    <X>188</X>
+    <Y>209</Y>
+    <GUID />
+    <Tag />
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
@@ -1902,7 +1991,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
+    <UIWidth>127</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
@@ -1914,10 +2003,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>0</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
-    <X>324.09</X>
-    <Y>48</Y>
+    <X>330.09</X>
+    <Y>50</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -1945,9 +2034,9 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>0</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
-    <X>133.64</X>
+    <X>139.64</X>
     <Y>48.18</Y>
     <GUID />
     <Tag />
@@ -1976,7 +2065,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2007,7 +2096,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2038,7 +2127,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>542</X>
     <Y>47</Y>
@@ -2069,10 +2158,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
-    <X>171</X>
-    <Y>88</Y>
+    <X>168</X>
+    <Y>87</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -2100,7 +2189,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2131,7 +2220,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2162,7 +2251,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2193,69 +2282,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5502_RDT</MyPK>
-    <FK_MapData>ND5502</FK_MapData>
-    <KeyOfEn>RDT</KeyOfEn>
-    <Name>接受时间</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>7</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1030</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag>1</Tag>
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5502_Rec</MyPK>
-    <FK_MapData>ND5502</FK_MapData>
-    <KeyOfEn>Rec</KeyOfEn>
-    <Name>发起人</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2286,13 +2313,75 @@
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>174.83</X>
     <Y>54.4</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5502_RDT</MyPK>
+    <FK_MapData>ND5502</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>接受时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>1054</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5502_Rec</MyPK>
+    <FK_MapData>ND5502</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>发起人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>20</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>1054</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
   </Sys_MapAttr>
@@ -2317,10 +2406,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1032</GroupID>
+    <GroupID>1056</GroupID>
     <IsSigan>1</IsSigan>
-    <X>194</X>
-    <Y>326</Y>
+    <X>221</X>
+    <Y>330</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -2336,7 +2425,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>550</UIWidth>
+    <UIWidth>560</UIWidth>
     <UIHeight>70</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>4000</MaxLen>
@@ -2348,10 +2437,10 @@
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1032</GroupID>
+    <GroupID>1056</GroupID>
     <IsSigan>0</IsSigan>
-    <X>148</X>
-    <Y>248</Y>
+    <X>155</X>
+    <Y>253</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -2379,10 +2468,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1032</GroupID>
+    <GroupID>1056</GroupID>
     <IsSigan>0</IsSigan>
-    <X>479</X>
-    <Y>328</Y>
+    <X>500</X>
+    <Y>332</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -2410,7 +2499,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1030</GroupID>
+    <GroupID>1054</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2438,8 +2527,8 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <GroupID>1038</GroupID>
-    <X>353</X>
+    <GroupID>1062</GroupID>
+    <X>335</X>
     <Y>89</Y>
     <GUID />
     <Tag />
@@ -2463,7 +2552,7 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <X>542</X>
     <Y>89</Y>
     <GUID />
@@ -2479,10 +2568,8 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>625</UIWidth>
-    <UIHeight>90</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
+    <UIWidth>577</UIWidth>
+    <UIHeight>64</UIHeight>
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
@@ -2490,15 +2577,36 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <Idx>0</Idx>
-    <GroupID>1038</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>88</X>
-    <Y>145</Y>
+    <GroupID>1062</GroupID>
+    <X>139</X>
+    <Y>127</Y>
     <GUID />
     <Tag />
-    <EditType>0</EditType>
-    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5503_SQRSJH</MyPK>
+    <FK_MapData>ND5503</FK_MapData>
+    <KeyOfEn>SQRSJH</KeyOfEn>
+    <Name>申请人手机号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>331</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <GroupID>1062</GroupID>
+    <X>188</X>
+    <Y>209</Y>
+    <GUID />
+    <Tag />
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
@@ -2510,7 +2618,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
+    <UIWidth>127</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
@@ -2522,10 +2630,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>0</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
-    <X>324.09</X>
-    <Y>48</Y>
+    <X>330.09</X>
+    <Y>50</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -2553,9 +2661,9 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>0</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
-    <X>133.64</X>
+    <X>139.64</X>
     <Y>48.18</Y>
     <GUID />
     <Tag />
@@ -2584,7 +2692,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2615,7 +2723,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2646,7 +2754,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>542</X>
     <Y>47</Y>
@@ -2677,10 +2785,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
-    <X>171</X>
-    <Y>88</Y>
+    <X>168</X>
+    <Y>87</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -2708,7 +2816,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2739,7 +2847,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2770,7 +2878,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2801,69 +2909,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5503_RDT</MyPK>
-    <FK_MapData>ND5503</FK_MapData>
-    <KeyOfEn>RDT</KeyOfEn>
-    <Name>接受时间</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>7</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1038</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag>1</Tag>
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5503_Rec</MyPK>
-    <FK_MapData>ND5503</FK_MapData>
-    <KeyOfEn>Rec</KeyOfEn>
-    <Name>发起人</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -2894,13 +2940,75 @@
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>174.83</X>
     <Y>54.4</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5503_RDT</MyPK>
+    <FK_MapData>ND5503</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>接受时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>1062</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5503_Rec</MyPK>
+    <FK_MapData>ND5503</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>发起人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>20</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>1062</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
   </Sys_MapAttr>
@@ -2925,10 +3033,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1040</GroupID>
+    <GroupID>1064</GroupID>
     <IsSigan>1</IsSigan>
-    <X>194</X>
-    <Y>326</Y>
+    <X>221</X>
+    <Y>330</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -2944,7 +3052,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>550</UIWidth>
+    <UIWidth>560</UIWidth>
     <UIHeight>70</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>4000</MaxLen>
@@ -2956,10 +3064,10 @@
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1040</GroupID>
+    <GroupID>1064</GroupID>
     <IsSigan>0</IsSigan>
-    <X>148</X>
-    <Y>248</Y>
+    <X>155</X>
+    <Y>253</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -2987,10 +3095,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1040</GroupID>
+    <GroupID>1064</GroupID>
     <IsSigan>0</IsSigan>
-    <X>479</X>
-    <Y>328</Y>
+    <X>500</X>
+    <Y>332</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -3018,7 +3126,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1038</GroupID>
+    <GroupID>1062</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3026,31 +3134,6 @@
     <Tag>1</Tag>
     <EditType>1</EditType>
     <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5599_QingJiaTianShu</MyPK>
-    <FK_MapData>ND5599</FK_MapData>
-    <KeyOfEn>QingJiaTianShu</KeyOfEn>
-    <Name>请假天数</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>2</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <GroupID>1034</GroupID>
-    <X>542</X>
-    <Y>89</Y>
-    <GUID />
-    <Tag />
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
@@ -3071,9 +3154,84 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <GroupID>1034</GroupID>
-    <X>353</X>
+    <GroupID>1058</GroupID>
+    <X>335</X>
     <Y>89</Y>
+    <GUID />
+    <Tag />
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5599_SQRSJH</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
+    <KeyOfEn>SQRSJH</KeyOfEn>
+    <Name>申请人手机号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>331</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <GroupID>1058</GroupID>
+    <X>188</X>
+    <Y>209</Y>
+    <GUID />
+    <Tag />
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5599_QingJiaTianShu</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
+    <KeyOfEn>QingJiaTianShu</KeyOfEn>
+    <Name>请假天数</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <GroupID>1058</GroupID>
+    <X>542</X>
+    <Y>89</Y>
+    <GUID />
+    <Tag />
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5599_QingJiaYuanYin</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
+    <KeyOfEn>QingJiaYuanYin</KeyOfEn>
+    <Name>请假原因</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>577</UIWidth>
+    <UIHeight>64</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <GroupID>1058</GroupID>
+    <X>139</X>
+    <Y>127</Y>
     <GUID />
     <Tag />
     <AtPara />
@@ -3087,7 +3245,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
+    <UIWidth>127</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
@@ -3099,10 +3257,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>0</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
-    <X>324.09</X>
-    <Y>48</Y>
+    <X>330.09</X>
+    <Y>50</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -3130,134 +3288,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>0</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
-    <X>133.64</X>
+    <X>139.64</X>
     <Y>48.18</Y>
-    <GUID />
-    <Tag />
-    <EditType>0</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5599_QingJiaYuanYin</MyPK>
-    <FK_MapData>ND5599</FK_MapData>
-    <KeyOfEn>QingJiaYuanYin</KeyOfEn>
-    <Name>请假原因</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>625</UIWidth>
-    <UIHeight>90</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>0</Idx>
-    <GroupID>1034</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>88</X>
-    <Y>145</Y>
-    <GUID />
-    <Tag />
-    <EditType>0</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5599_RDT</MyPK>
-    <FK_MapData>ND5599</FK_MapData>
-    <KeyOfEn>RDT</KeyOfEn>
-    <Name>接受时间</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>7</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1034</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag>1</Tag>
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5599_Rec</MyPK>
-    <FK_MapData>ND5599</FK_MapData>
-    <KeyOfEn>Rec</KeyOfEn>
-    <Name>发起人</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>20</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1034</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND5599_Title</MyPK>
-    <FK_MapData>ND5599</FK_MapData>
-    <KeyOfEn>Title</KeyOfEn>
-    <Name>标题</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>251</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>200</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>0</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>1</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1034</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>174.83</X>
-    <Y>54.4</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -3285,7 +3319,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3316,7 +3350,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3347,7 +3381,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>542</X>
     <Y>47</Y>
@@ -3378,10 +3412,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
-    <X>171</X>
-    <Y>88</Y>
+    <X>168</X>
+    <Y>87</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -3409,7 +3443,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3440,7 +3474,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3471,7 +3505,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3502,13 +3536,44 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5599_Title</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
+    <KeyOfEn>Title</KeyOfEn>
+    <Name>标题</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>251</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>200</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>1058</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>174.83</X>
+    <Y>54.4</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
   </Sys_MapAttr>
@@ -3533,10 +3598,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1036</GroupID>
+    <GroupID>1060</GroupID>
     <IsSigan>1</IsSigan>
-    <X>194</X>
-    <Y>326</Y>
+    <X>221</X>
+    <Y>330</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -3552,7 +3617,7 @@
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>550</UIWidth>
+    <UIWidth>560</UIWidth>
     <UIHeight>70</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>4000</MaxLen>
@@ -3564,10 +3629,10 @@
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1036</GroupID>
+    <GroupID>1060</GroupID>
     <IsSigan>0</IsSigan>
-    <X>148</X>
-    <Y>248</Y>
+    <X>155</X>
+    <Y>253</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -3595,10 +3660,10 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1036</GroupID>
+    <GroupID>1060</GroupID>
     <IsSigan>0</IsSigan>
-    <X>479</X>
-    <Y>328</Y>
+    <X>500</X>
+    <Y>332</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -3626,7 +3691,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>1034</GroupID>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3637,18 +3702,18 @@
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>ND55Rpt_AtPara</MyPK>
-    <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>AtPara</KeyOfEn>
-    <Name>参数</Name>
+    <MyPK>ND5599_RDT</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>接受时间</Name>
     <DefVal />
     <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
+    <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>4000</MaxLen>
+    <MaxLen>300</MaxLen>
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
@@ -3657,7 +3722,38 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>0</GroupID>
+    <GroupID>1058</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND5599_Rec</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>发起人</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>20</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>1058</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3668,10 +3764,10 @@
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>ND55Rpt_BillNo</MyPK>
+    <MyPK>ND55Rpt_CFlowNo</MyPK>
     <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>BillNo</KeyOfEn>
-    <Name>单据编号</Name>
+    <KeyOfEn>CFlowNo</KeyOfEn>
+    <Name>延续流程编号</Name>
     <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
@@ -3679,69 +3775,7 @@
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>100</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>0</GroupID>
-    <IsSigan>0</IsSigan>
-    <X>5</X>
-    <Y>5</Y>
-    <GUID />
-    <Tag />
-    <EditType>1</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND55Rpt_BZR_Checker</MyPK>
-    <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>BZR_Checker</KeyOfEn>
-    <Name>审核人</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>100</UIWidth>
-    <UIHeight>23</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>50</MaxLen>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1032</GroupID>
-    <IsSigan>1</IsSigan>
-    <X>194</X>
-    <Y>326</Y>
-    <GUID />
-    <Tag />
-    <EditType>0</EditType>
-    <ColSpan>1</ColSpan>
-    <AtPara />
-  </Sys_MapAttr>
-  <Sys_MapAttr>
-    <MyPK>ND55Rpt_BZR_Note</MyPK>
-    <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>BZR_Note</KeyOfEn>
-    <Name>班主任审批</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>550</UIWidth>
-    <UIHeight>70</UIHeight>
-    <MinLen>0</MinLen>
-    <MaxLen>4000</MaxLen>
+    <MaxLen>3</MaxLen>
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
@@ -3749,27 +3783,27 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1032</GroupID>
+    <Idx>288</Idx>
+    <GroupID>0</GroupID>
     <IsSigan>0</IsSigan>
-    <X>148</X>
-    <Y>248</Y>
+    <X>5</X>
+    <Y>5</Y>
     <GUID />
     <Tag />
-    <EditType>0</EditType>
+    <EditType>1</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>ND55Rpt_BZR_RDT</MyPK>
+    <MyPK>ND55Rpt_CWorkID</MyPK>
     <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>BZR_RDT</KeyOfEn>
-    <Name>审核时间</Name>
-    <DefVal />
+    <KeyOfEn>CWorkID</KeyOfEn>
+    <Name>延续流程WorkID</Name>
+    <DefVal>0</DefVal>
     <UIContralType>0</UIContralType>
-    <MyDataType>7</MyDataType>
+    <MyDataType>2</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>120</UIWidth>
+    <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
@@ -3780,25 +3814,25 @@
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
-    <Idx>999</Idx>
-    <GroupID>1032</GroupID>
+    <Idx>289</Idx>
+    <GroupID>0</GroupID>
     <IsSigan>0</IsSigan>
-    <X>479</X>
-    <Y>328</Y>
+    <X>5</X>
+    <Y>5</Y>
     <GUID />
     <Tag />
-    <EditType>0</EditType>
+    <EditType>1</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>ND55Rpt_CDT</MyPK>
+    <MyPK>ND55Rpt_SysSendEmps</MyPK>
     <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>CDT</KeyOfEn>
-    <Name>活动时间</Name>
+    <KeyOfEn>SysSendEmps</KeyOfEn>
+    <Name>审批的老师</Name>
     <DefVal />
     <UIContralType>0</UIContralType>
-    <MyDataType>7</MyDataType>
+    <MyDataType>1</MyDataType>
     <LGType>0</LGType>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
@@ -3807,17 +3841,110 @@
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>296</Idx>
+    <GroupID>0</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>329.55</X>
+    <Y>305.45</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND55Rpt_Title</MyPK>
+    <FK_MapData>ND55Rpt</FK_MapData>
+    <KeyOfEn>Title</KeyOfEn>
+    <Name>标题</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>251</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>200</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
     <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>279</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>174.83</X>
+    <Y>54.4</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND55Rpt_WFSta</MyPK>
+    <FK_MapData>ND55Rpt</FK_MapData>
+    <KeyOfEn>WFSta</KeyOfEn>
+    <Name>状态</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>1000</MaxLen>
+    <UIBindKey>WFSta</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
     <UIIsEnable>0</UIIsEnable>
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>0</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
-    <Tag>1</Tag>
+    <Tag />
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND55Rpt_WFState</MyPK>
+    <FK_MapData>ND55Rpt</FK_MapData>
+    <KeyOfEn>WFState</KeyOfEn>
+    <Name>流程状态</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>1000</MaxLen>
+    <UIBindKey>WFState</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>280</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
     <EditType>1</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
@@ -3843,7 +3970,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>353</X>
     <Y>89</Y>
@@ -3874,7 +4001,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3905,7 +4032,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3936,7 +4063,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3967,7 +4094,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -3998,7 +4125,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4029,7 +4156,7 @@
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4060,7 +4187,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4091,7 +4218,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4122,7 +4249,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4184,7 +4311,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4215,7 +4342,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4339,7 +4466,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4370,7 +4497,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4432,7 +4559,7 @@
     <UIIsLine>1</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4467,6 +4594,37 @@
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND55Rpt_PRI</MyPK>
+    <FK_MapData>ND55Rpt</FK_MapData>
+    <KeyOfEn>PRI</KeyOfEn>
+    <Name>优先级</Name>
+    <DefVal>2</DefVal>
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>200</MaxLen>
+    <UIBindKey>PRI</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>301</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>174.76</X>
+    <Y>56.19</Y>
     <GUID />
     <Tag />
     <EditType>1</EditType>
@@ -4556,7 +4714,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>280</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4587,7 +4745,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>542</X>
     <Y>47</Y>
@@ -4618,7 +4776,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>171</X>
     <Y>88</Y>
@@ -4649,7 +4807,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>542</X>
     <Y>89</Y>
@@ -4680,7 +4838,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>88</X>
     <Y>145</Y>
@@ -4711,7 +4869,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4742,7 +4900,7 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
@@ -4753,50 +4911,50 @@
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>ND55Rpt_Title</MyPK>
+    <MyPK>ND55Rpt_AtPara</MyPK>
     <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>Title</KeyOfEn>
-    <Name>标题</Name>
+    <KeyOfEn>AtPara</KeyOfEn>
+    <Name>参数</Name>
     <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>1</MyDataType>
     <LGType>0</LGType>
-    <UIWidth>251</UIWidth>
+    <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>200</MaxLen>
+    <MaxLen>4000</MaxLen>
     <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>0</UIVisible>
     <UIIsEnable>0</UIIsEnable>
-    <UIIsLine>1</UIIsLine>
+    <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>263</GroupID>
+    <GroupID>0</GroupID>
     <IsSigan>0</IsSigan>
-    <X>174.83</X>
-    <Y>54.4</Y>
+    <X>5</X>
+    <Y>5</Y>
     <GUID />
     <Tag />
-    <EditType>0</EditType>
+    <EditType>1</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>ND55Rpt_WFSta</MyPK>
+    <MyPK>ND55Rpt_BillNo</MyPK>
     <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>WFSta</KeyOfEn>
-    <Name>状态</Name>
+    <KeyOfEn>BillNo</KeyOfEn>
+    <Name>单据编号</Name>
     <DefVal />
-    <UIContralType>1</UIContralType>
-    <MyDataType>2</MyDataType>
-    <LGType>1</LGType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>1000</MaxLen>
-    <UIBindKey>WFSta</UIBindKey>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>1</UIVisible>
@@ -4815,19 +4973,19 @@
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>ND55Rpt_WFState</MyPK>
+    <MyPK>ND55Rpt_BZR_Checker</MyPK>
     <FK_MapData>ND55Rpt</FK_MapData>
-    <KeyOfEn>WFState</KeyOfEn>
-    <Name>流程状态</Name>
+    <KeyOfEn>BZR_Checker</KeyOfEn>
+    <Name>审核人</Name>
     <DefVal />
-    <UIContralType>1</UIContralType>
-    <MyDataType>2</MyDataType>
-    <LGType>1</LGType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>1000</MaxLen>
-    <UIBindKey>WFState</UIBindKey>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
     <UIRefKey />
     <UIRefKeyText />
     <UIVisible>1</UIVisible>
@@ -4835,12 +4993,105 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <Idx>999</Idx>
-    <GroupID>706</GroupID>
+    <GroupID>282</GroupID>
+    <IsSigan>1</IsSigan>
+    <X>194</X>
+    <Y>326</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND55Rpt_BZR_Note</MyPK>
+    <FK_MapData>ND55Rpt</FK_MapData>
+    <KeyOfEn>BZR_Note</KeyOfEn>
+    <Name>班主任审批</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>550</UIWidth>
+    <UIHeight>70</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>282</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>148</X>
+    <Y>248</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND55Rpt_BZR_RDT</MyPK>
+    <FK_MapData>ND55Rpt</FK_MapData>
+    <KeyOfEn>BZR_RDT</KeyOfEn>
+    <Name>审核时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>282</GroupID>
+    <IsSigan>0</IsSigan>
+    <X>479</X>
+    <Y>328</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <ColSpan>1</ColSpan>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND55Rpt_CDT</MyPK>
+    <FK_MapData>ND55Rpt</FK_MapData>
+    <KeyOfEn>CDT</KeyOfEn>
+    <Name>活动时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <Idx>999</Idx>
+    <GroupID>279</GroupID>
     <IsSigan>0</IsSigan>
     <X>5</X>
     <Y>5</Y>
     <GUID />
-    <Tag />
+    <Tag>1</Tag>
     <EditType>1</EditType>
     <ColSpan>1</ColSpan>
     <AtPara />
@@ -4873,56 +5124,56 @@
     <Lang>CH</Lang>
   </Sys_Enum>
   <Sys_GroupField>
-    <OID>263</OID>
+    <OID>279</OID>
     <Lab>开始节点</Lab>
     <EnName>ND5501</EnName>
     <Idx>1</Idx>
     <GUID />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>706</OID>
+    <OID>280</OID>
     <Lab>流程信息</Lab>
     <EnName>ND55Rpt</EnName>
     <Idx>1</Idx>
     <GUID />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>1030</OID>
+    <OID>1054</OID>
     <Lab>开始节点</Lab>
     <EnName>ND5502</EnName>
     <Idx>1</Idx>
     <GUID />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>1032</OID>
+    <OID>1056</OID>
     <Lab>班主任审批</Lab>
     <EnName>ND5502</EnName>
     <Idx>2</Idx>
     <GUID />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>1034</OID>
+    <OID>1058</OID>
     <Lab>开始节点</Lab>
     <EnName>ND5599</EnName>
     <Idx>1</Idx>
     <GUID />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>1036</OID>
+    <OID>1060</OID>
     <Lab>班主任审批</Lab>
     <EnName>ND5599</EnName>
     <Idx>2</Idx>
     <GUID />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>1038</OID>
+    <OID>1062</OID>
     <Lab>开始节点</Lab>
     <EnName>ND5503</EnName>
     <Idx>1</Idx>
     <GUID />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>1040</OID>
+    <OID>1064</OID>
     <Lab>班主任审批</Lab>
     <EnName>ND5503</EnName>
     <Idx>2</Idx>
@@ -4933,12 +5184,12 @@
     <FK_MapData>ND5502</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>719.09</X1>
-    <Y1>40</Y1>
-    <X2>719.09</X2>
-    <Y2>358</Y2>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
     <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
+    <BorderColor>#FF6F6F6F</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
@@ -4946,12 +5197,12 @@
     <FK_MapData>ND5503</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>719.09</X1>
-    <Y1>40</Y1>
-    <X2>719.09</X2>
-    <Y2>358</Y2>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
     <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
+    <BorderColor>#FF6F6F6F</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
@@ -4959,12 +5210,12 @@
     <FK_MapData>ND5599</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>719.09</X1>
-    <Y1>40</Y1>
-    <X2>719.09</X2>
-    <Y2>358</Y2>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
     <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
+    <BorderColor>#FF6F6F6F</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
@@ -4972,10 +5223,10 @@
     <FK_MapData>ND5502</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81</X1>
-    <Y1>242.82</Y1>
-    <X2>721</X2>
-    <Y2>242.82</Y2>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>358</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -4985,10 +5236,10 @@
     <FK_MapData>ND5503</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81</X1>
-    <Y1>242.82</Y1>
-    <X2>721</X2>
-    <Y2>242.82</Y2>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>358</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -4998,10 +5249,10 @@
     <FK_MapData>ND5599</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81</X1>
-    <Y1>242.82</Y1>
-    <X2>721</X2>
-    <Y2>242.82</Y2>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>358</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5011,10 +5262,10 @@
     <FK_MapData>ND5502</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>83.36</X1>
-    <Y1>40.91</Y1>
-    <X2>717.91</X2>
-    <Y2>40.91</Y2>
+    <X1>81.82</X1>
+    <Y1>40</Y1>
+    <X2>81.82</X2>
+    <Y2>358</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5024,10 +5275,10 @@
     <FK_MapData>ND5503</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>83.36</X1>
-    <Y1>40.91</Y1>
-    <X2>717.91</X2>
-    <Y2>40.91</Y2>
+    <X1>81.82</X1>
+    <Y1>40</Y1>
+    <X2>81.82</X2>
+    <Y2>358</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5037,10 +5288,10 @@
     <FK_MapData>ND5599</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>83.36</X1>
-    <Y1>40.91</Y1>
-    <X2>717.91</X2>
-    <Y2>40.91</Y2>
+    <X1>81.82</X1>
+    <Y1>40</Y1>
+    <X2>81.82</X2>
+    <Y2>358</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5050,10 +5301,10 @@
     <FK_MapData>ND5502</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
+    <X1>82</X1>
+    <Y1>239.82</Y1>
+    <X2>722</X2>
+    <Y2>239.82</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5063,10 +5314,10 @@
     <FK_MapData>ND5503</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
+    <X1>82</X1>
+    <Y1>239.82</Y1>
+    <X2>717</X2>
+    <Y2>239.82</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5076,10 +5327,10 @@
     <FK_MapData>ND5599</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
+    <X1>82</X1>
+    <Y1>239.82</Y1>
+    <X2>717</X2>
+    <Y2>239.82</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5089,10 +5340,10 @@
     <FK_MapData>ND5502</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81.82</X1>
-    <Y1>40</Y1>
-    <X2>81.82</X2>
-    <Y2>359</Y2>
+    <X1>82.36</X1>
+    <Y1>39.91</Y1>
+    <X2>716.91</X2>
+    <Y2>39.91</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5102,10 +5353,10 @@
     <FK_MapData>ND5503</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81.82</X1>
-    <Y1>40</Y1>
-    <X2>81.82</X2>
-    <Y2>359</Y2>
+    <X1>82.36</X1>
+    <Y1>39.91</Y1>
+    <X2>716.91</X2>
+    <Y2>39.91</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5115,10 +5366,10 @@
     <FK_MapData>ND5599</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81.82</X1>
-    <Y1>40</Y1>
-    <X2>81.82</X2>
-    <Y2>359</Y2>
+    <X1>82.36</X1>
+    <Y1>39.91</Y1>
+    <X2>716.91</X2>
+    <Y2>39.91</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
@@ -5128,12 +5379,12 @@
     <FK_MapData>ND5502</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
     <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
+    <BorderColor>#FF6F6F6F</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
@@ -5141,12 +5392,12 @@
     <FK_MapData>ND5503</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
     <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
+    <BorderColor>#FF6F6F6F</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
@@ -5154,12 +5405,25 @@
     <FK_MapData>ND5599</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
     <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
+    <BorderColor>#FF6F6F6F</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_7_ND5502</MyPK>
+    <FK_MapData>ND5502</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>83</X1>
+    <Y1>199</Y1>
+    <X2>717</X2>
+    <Y2>199</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>#FF6F6F6F</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
@@ -5167,12 +5431,12 @@
     <FK_MapData>ND5503</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81</X1>
-    <Y1>360</Y1>
-    <X2>720</X2>
-    <Y2>360</Y2>
+    <X1>83</X1>
+    <Y1>199</Y1>
+    <X2>717</X2>
+    <Y2>199</Y2>
     <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
+    <BorderColor>#FF6F6F6F</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
@@ -5180,16 +5444,54 @@
     <FK_MapData>ND5599</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81</X1>
-    <Y1>360</Y1>
-    <X2>720</X2>
-    <Y2>360</Y2>
+    <X1>83</X1>
+    <Y1>199</Y1>
+    <X2>717</X2>
+    <Y2>199</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>#FF6F6F6F</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_8_ND5503</MyPK>
+    <FK_MapData>ND5503</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>80</X1>
+    <Y1>359</Y1>
+    <X2>719</X2>
+    <Y2>359</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>ND5501_34179d9b-fb0a-4da3-b71d-e18f93571fb7</MyPK>
+    <MyPK>LE_8_ND5599</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>80</X1>
+    <Y1>359</Y1>
+    <X2>719</X2>
+    <Y2>359</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ND5501_36ea5b12-ccfc-4020-835e-b70e3a8af9b6</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>#FF6F6F6F</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ND5501_6fa6f815-f6f3-4bbf-a585-dd8acf4c5804</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <X>0</X>
     <Y>0</Y>
@@ -5201,43 +5503,7 @@
     <BorderColor>Black</BorderColor>
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>ND5501_8bd567b3-a618-4904-9190-d6ba779bc58d</MyPK>
-    <FK_MapData>ND5501</FK_MapData>
-    <X>0</X>
-    <Y>0</Y>
-    <X1>81</X1>
-    <Y1>242.82</Y1>
-    <X2>721</X2>
-    <Y2>242.82</Y2>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>ND5501_8e4b97f3-acf1-4d45-852e-7a0c634c60c7</MyPK>
-    <FK_MapData>ND5501</FK_MapData>
-    <X>0</X>
-    <Y>0</Y>
-    <X1>83.36</X1>
-    <Y1>40.91</Y1>
-    <X2>717.91</X2>
-    <Y2>40.91</Y2>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>ND5501_abe44b5b-f3a0-4702-ba1f-fcb8ec05ccea</MyPK>
-    <FK_MapData>ND5501</FK_MapData>
-    <X>0</X>
-    <Y>0</Y>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>ND5501_b0cc211f-1e0c-4b2f-8b58-2d59c48a5e4e</MyPK>
+    <MyPK>ND5501_87df2113-e1dd-4624-8570-80cc89f41ea4</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <X>0</X>
     <Y>0</Y>
@@ -5249,26 +5515,62 @@
     <BorderColor>Black</BorderColor>
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>ND5501_f6e052dc-4fd2-4891-accf-10384186e7bb</MyPK>
+    <MyPK>ND5501_a48cd83c-b5d6-4e50-8e93-334ab7e6e3e2</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
+    <X1>81</X1>
+    <Y1>242.82</Y1>
+    <X2>721</X2>
+    <Y2>242.82</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ND5501_e85a963e-ea3f-43fc-b4e9-95bed6570598</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>82.36</X1>
+    <Y1>39.91</Y1>
+    <X2>716.91</X2>
+    <Y2>39.91</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ND5501_f8306317-26f1-43f0-af2e-9d5dee58780e</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>#FF6F6F6F</BorderColor>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ND5501LE1</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <X>0</X>
+    <Y>0</Y>
+    <X1>83</X1>
+    <Y1>199</Y1>
+    <X2>717</X2>
+    <Y2>199</Y2>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>#FF6F6F6F</BorderColor>
   </Sys_FrmLine>
   <Sys_FrmLine>
     <MyPK>ND5502LE1</MyPK>
     <FK_MapData>ND5502</FK_MapData>
     <X>0</X>
     <Y>0</Y>
-    <X1>81</X1>
-    <Y1>360</Y1>
-    <X2>720</X2>
-    <Y2>360</Y2>
+    <X1>80</X1>
+    <Y1>359</Y1>
+    <X2>719</X2>
+    <Y2>359</Y2>
     <BorderWidth>2</BorderWidth>
     <BorderColor>Black</BorderColor>
   </Sys_FrmLine>
@@ -5276,9 +5578,9 @@
     <MyPK>LB_1_ND5502</MyPK>
     <FK_MapData>ND5502</FK_MapData>
     <Text>学号</Text>
-    <X>94.54</X>
-    <Y>52.64</Y>
-    <FontSize>11</FontSize>
+    <X>97.54</X>
+    <Y>49.64</Y>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5291,9 +5593,9 @@
     <MyPK>LB_1_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
     <Text>学号</Text>
-    <X>94.54</X>
-    <Y>52.64</Y>
-    <FontSize>11</FontSize>
+    <X>97.54</X>
+    <Y>49.64</Y>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5306,10 +5608,25 @@
     <MyPK>LB_1_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
     <Text>学号</Text>
-    <X>94.54</X>
-    <Y>52.64</Y>
-    <FontSize>11</FontSize>
+    <X>97.54</X>
+    <Y>49.64</Y>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_10_ND5502</MyPK>
+    <FK_MapData>ND5502</FK_MapData>
+    <Text>用于接受短信提醒</Text>
+    <X>559</X>
+    <Y>210</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF888888</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
     <FontWeight />
@@ -5320,9 +5637,9 @@
   <Sys_FrmLab>
     <MyPK>LB_10_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>请假原因</Text>
-    <X>90.2</X>
-    <Y>123</Y>
+    <Text>请假时间从</Text>
+    <X>90</X>
+    <Y>88</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5335,9 +5652,9 @@
   <Sys_FrmLab>
     <MyPK>LB_10_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>班@主@任@审@批</Text>
-    <X>100</X>
-    <Y>247</Y>
+    <Text>申请人手机号</Text>
+    <X>92.8</X>
+    <Y>210</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5350,9 +5667,9 @@
   <Sys_FrmLab>
     <MyPK>LB_11_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>审核人</Text>
-    <X>154</X>
-    <Y>326</Y>
+    <Text>到</Text>
+    <X>310.8</X>
+    <Y>88</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5365,9 +5682,69 @@
   <Sys_FrmLab>
     <MyPK>LB_11_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
+    <Text>审核人</Text>
+    <X>151</X>
+    <Y>331</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_12_ND5503</MyPK>
+    <FK_MapData>ND5503</FK_MapData>
+    <Text>请假天数</Text>
+    <X>464.2</X>
+    <Y>90</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_12_ND5599</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
+    <Text>班主任@审批</Text>
+    <X>98</X>
+    <Y>258</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_13_ND5503</MyPK>
+    <FK_MapData>ND5503</FK_MapData>
+    <Text>请假@原因</Text>
+    <X>100.2</X>
+    <Y>137</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_13_ND5599</MyPK>
+    <FK_MapData>ND5599</FK_MapData>
     <Text>日期</Text>
-    <X>422</X>
-    <Y>329</Y>
+    <X>446</X>
+    <Y>335</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5383,7 +5760,7 @@
     <Text>学生姓名</Text>
     <X>265</X>
     <Y>50.91</Y>
-    <FontSize>11</FontSize>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5395,9 +5772,9 @@
   <Sys_FrmLab>
     <MyPK>LB_2_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>班@主@任@审@批</Text>
-    <X>100</X>
-    <Y>247</Y>
+    <Text>申请人手机号</Text>
+    <X>92.8</X>
+    <Y>210</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5410,11 +5787,11 @@
   <Sys_FrmLab>
     <MyPK>LB_2_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>学生姓名</Text>
-    <X>265</X>
-    <Y>50.91</Y>
-    <FontSize>11</FontSize>
-    <FontColor>#FF000000</FontColor>
+    <Text>用于接受短信提醒</Text>
+    <X>559</X>
+    <Y>210</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF888888</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
     <FontWeight />
@@ -5425,7 +5802,7 @@
   <Sys_FrmLab>
     <MyPK>LB_3_ND5502</MyPK>
     <FK_MapData>ND5502</FK_MapData>
-    <Text>学生请假申请单</Text>
+    <Text>学生请假申请单-班主任审批(内部用户)</Text>
     <X>80.67</X>
     <Y>4.27</Y>
     <FontSize>23</FontSize>
@@ -5440,9 +5817,9 @@
   <Sys_FrmLab>
     <MyPK>LB_3_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>日期</Text>
-    <X>422</X>
-    <Y>329</Y>
+    <Text>审核人</Text>
+    <X>151</X>
+    <Y>331</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5455,10 +5832,10 @@
   <Sys_FrmLab>
     <MyPK>LB_3_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>学生请假申请单</Text>
-    <X>80.67</X>
-    <Y>4.27</Y>
-    <FontSize>23</FontSize>
+    <Text>学生姓名</Text>
+    <X>265</X>
+    <Y>50.91</Y>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5471,7 +5848,7 @@
     <MyPK>LB_4_ND5502</MyPK>
     <FK_MapData>ND5502</FK_MapData>
     <Text>请假类型</Text>
-    <X>462.2</X>
+    <X>466.2</X>
     <Y>49</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
@@ -5485,10 +5862,10 @@
   <Sys_FrmLab>
     <MyPK>LB_4_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>学生姓名</Text>
-    <X>265</X>
-    <Y>50.91</Y>
-    <FontSize>11</FontSize>
+    <Text>班主任@审批</Text>
+    <X>98</X>
+    <Y>258</Y>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5500,10 +5877,10 @@
   <Sys_FrmLab>
     <MyPK>LB_4_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>请假类型</Text>
-    <X>462.2</X>
-    <Y>49</Y>
-    <FontSize>14</FontSize>
+    <Text>学生请假申请单-反馈给请假人(来宾用户)</Text>
+    <X>80.67</X>
+    <Y>4.27</Y>
+    <FontSize>23</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5530,10 +5907,10 @@
   <Sys_FrmLab>
     <MyPK>LB_5_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>学生请假申请单</Text>
-    <X>80.67</X>
-    <Y>4.27</Y>
-    <FontSize>23</FontSize>
+    <Text>日期</Text>
+    <X>446</X>
+    <Y>335</Y>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5545,9 +5922,9 @@
   <Sys_FrmLab>
     <MyPK>LB_5_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>请假时间从</Text>
-    <X>90</X>
-    <Y>88</Y>
+    <Text>请假类型</Text>
+    <X>466.2</X>
+    <Y>49</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5561,8 +5938,8 @@
     <MyPK>LB_6_ND5502</MyPK>
     <FK_MapData>ND5502</FK_MapData>
     <Text>到</Text>
-    <X>323.8</X>
-    <Y>90</Y>
+    <X>310.8</X>
+    <Y>88</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5575,11 +5952,11 @@
   <Sys_FrmLab>
     <MyPK>LB_6_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>请假类型</Text>
-    <X>462.2</X>
-    <Y>49</Y>
+    <Text>用于接受短信提醒</Text>
+    <X>559</X>
+    <Y>210</Y>
     <FontSize>14</FontSize>
-    <FontColor>#FF000000</FontColor>
+    <FontColor>#FF888888</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
     <FontWeight />
@@ -5590,9 +5967,9 @@
   <Sys_FrmLab>
     <MyPK>LB_6_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>到</Text>
-    <X>323.8</X>
-    <Y>90</Y>
+    <Text>请假时间从</Text>
+    <X>90</X>
+    <Y>88</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5620,9 +5997,9 @@
   <Sys_FrmLab>
     <MyPK>LB_7_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>请假时间从</Text>
-    <X>90</X>
-    <Y>88</Y>
+    <Text>学生姓名</Text>
+    <X>265</X>
+    <Y>50.91</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5635,9 +6012,9 @@
   <Sys_FrmLab>
     <MyPK>LB_7_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>请假天数</Text>
-    <X>464.2</X>
-    <Y>90</Y>
+    <Text>到</Text>
+    <X>310.8</X>
+    <Y>88</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5650,9 +6027,9 @@
   <Sys_FrmLab>
     <MyPK>LB_8_ND5502</MyPK>
     <FK_MapData>ND5502</FK_MapData>
-    <Text>请假原因</Text>
-    <X>90.2</X>
-    <Y>123</Y>
+    <Text>请假@原因</Text>
+    <X>100.2</X>
+    <Y>137</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5665,10 +6042,10 @@
   <Sys_FrmLab>
     <MyPK>LB_8_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>到</Text>
-    <X>323.8</X>
-    <Y>90</Y>
-    <FontSize>14</FontSize>
+    <Text>学生请假申请单-教务处备案(内部用户)</Text>
+    <X>80.67</X>
+    <Y>4.27</Y>
+    <FontSize>23</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5680,9 +6057,24 @@
   <Sys_FrmLab>
     <MyPK>LB_8_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>请假原因</Text>
-    <X>90.2</X>
-    <Y>123</Y>
+    <Text>请假天数</Text>
+    <X>464.2</X>
+    <Y>90</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_9_ND5502</MyPK>
+    <FK_MapData>ND5502</FK_MapData>
+    <Text>申请人手机号</Text>
+    <X>92.8</X>
+    <Y>210</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5695,9 +6087,9 @@
   <Sys_FrmLab>
     <MyPK>LB_9_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
-    <Text>请假天数</Text>
-    <X>464.2</X>
-    <Y>90</Y>
+    <Text>请假类型</Text>
+    <X>466.2</X>
+    <Y>49</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5710,9 +6102,9 @@
   <Sys_FrmLab>
     <MyPK>LB_9_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
-    <Text>审核人</Text>
-    <X>154</X>
-    <Y>326</Y>
+    <Text>请假@原因</Text>
+    <X>100.2</X>
+    <Y>137</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5723,12 +6115,12 @@
     <GUID />
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>ND5501_Lab20160513163714_1</MyPK>
+    <MyPK>ND5501_Lab20160530181251_31</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <Text>学号</Text>
-    <X>94.54</X>
-    <Y>52.64</Y>
-    <FontSize>11</FontSize>
+    <X>97.54</X>
+    <Y>49.64</Y>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5736,12 +6128,12 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>ND5501_Lab20160513163714_2</MyPK>
+    <MyPK>ND5501_Lab20160530181251_32</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <Text>学生姓名</Text>
     <X>265</X>
     <Y>50.91</Y>
-    <FontSize>11</FontSize>
+    <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
@@ -5749,9 +6141,9 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>ND5501_Lab20160513163714_7</MyPK>
+    <MyPK>ND5501_Lab20160530181251_33</MyPK>
     <FK_MapData>ND5501</FK_MapData>
-    <Text>学生请假申请单</Text>
+    <Text>学生请假申请单-学生填写(外部用户)</Text>
     <X>80.67</X>
     <Y>4.27</Y>
     <FontSize>23</FontSize>
@@ -5762,10 +6154,10 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>ND5501LB1</MyPK>
+    <MyPK>ND5501_Lab20160530181251_34</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <Text>请假类型</Text>
-    <X>462.2</X>
+    <X>466.2</X>
     <Y>49</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
@@ -5775,7 +6167,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>ND5501LB2</MyPK>
+    <MyPK>ND5501_Lab20160530181251_35</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <Text>请假时间从</Text>
     <X>90</X>
@@ -5788,11 +6180,11 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>ND5501LB3</MyPK>
+    <MyPK>ND5501_Lab20160530181251_36</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <Text>到</Text>
-    <X>323.8</X>
-    <Y>90</Y>
+    <X>310.8</X>
+    <Y>88</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5801,7 +6193,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>ND5501LB4</MyPK>
+    <MyPK>ND5501_Lab20160530181251_37</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <Text>请假天数</Text>
     <X>464.2</X>
@@ -5814,13 +6206,39 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>ND5501LB5</MyPK>
+    <MyPK>ND5501_Lab20160530181251_38</MyPK>
     <FK_MapData>ND5501</FK_MapData>
-    <Text>请假原因</Text>
-    <X>90.2</X>
-    <Y>123</Y>
+    <Text>请假@原因</Text>
+    <X>100.2</X>
+    <Y>137</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>ND5501LB1</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <Text>申请人手机号</Text>
+    <X>92.8</X>
+    <Y>210</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>ND5501LB2</MyPK>
+    <FK_MapData>ND5501</FK_MapData>
+    <Text>用于接受短信提醒</Text>
+    <X>559</X>
+    <Y>210</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF888888</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontStyle>Normal</FontStyle>
     <IsBold>0</IsBold>
@@ -5830,8 +6248,8 @@
     <MyPK>ND5502_LABBZRChecker</MyPK>
     <FK_MapData>ND5502</FK_MapData>
     <Text>审核人</Text>
-    <X>154</X>
-    <Y>326</Y>
+    <X>151</X>
+    <Y>331</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5842,9 +6260,9 @@
   <Sys_FrmLab>
     <MyPK>ND5502_LABBZRNote</MyPK>
     <FK_MapData>ND5502</FK_MapData>
-    <Text>班@主@任@审@批</Text>
-    <X>100</X>
-    <Y>247</Y>
+    <Text>班主任@审批</Text>
+    <X>98</X>
+    <Y>258</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5856,8 +6274,8 @@
     <MyPK>ND5502_LABBZRRDT</MyPK>
     <FK_MapData>ND5502</FK_MapData>
     <Text>日期</Text>
-    <X>422</X>
-    <Y>329</Y>
+    <X>446</X>
+    <Y>335</Y>
     <FontSize>14</FontSize>
     <FontColor>#FF000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -5869,8 +6287,8 @@
     <MyPK>Img_1_ND5502</MyPK>
     <FK_MapData>ND5502</FK_MapData>
     <ImgAppType>0</ImgAppType>
-    <X>583.26</X>
-    <Y>-1.55</Y>
+    <X>582.26</X>
+    <Y>-0.55</Y>
     <H>40</H>
     <W>137</W>
     <ImgURL>/CCFormDesigner;component/Img/Logo/CCFlow/LogoBig.png</ImgURL>
@@ -5888,8 +6306,8 @@
     <MyPK>Img_1_ND5503</MyPK>
     <FK_MapData>ND5503</FK_MapData>
     <ImgAppType>0</ImgAppType>
-    <X>583.26</X>
-    <Y>-1.55</Y>
+    <X>582.26</X>
+    <Y>-0.55</Y>
     <H>40</H>
     <W>137</W>
     <ImgURL>/CCFormDesigner;component/Img/Logo/CCFlow/LogoBig.png</ImgURL>
@@ -5907,8 +6325,8 @@
     <MyPK>Img_1_ND5599</MyPK>
     <FK_MapData>ND5599</FK_MapData>
     <ImgAppType>0</ImgAppType>
-    <X>583.26</X>
-    <Y>-1.55</Y>
+    <X>582.26</X>
+    <Y>-0.55</Y>
     <H>40</H>
     <W>137</W>
     <ImgURL>/CCFormDesigner;component/Img/Logo/CCFlow/LogoBig.png</ImgURL>
@@ -5923,11 +6341,11 @@
     <EnPK />
   </Sys_FrmImg>
   <Sys_FrmImg>
-    <MyPK>ND5501_I20160513163714_1</MyPK>
+    <MyPK>ND5501_I20160530181251_4</MyPK>
     <FK_MapData>ND5501</FK_MapData>
     <ImgAppType>0</ImgAppType>
-    <X>583.26</X>
-    <Y>-1.55</Y>
+    <X>582.26</X>
+    <Y>-0.55</Y>
     <H>40</H>
     <W>137</W>
     <ImgURL>/CCFormDesigner;component/Img/Logo/CCFlow/LogoBig.png</ImgURL>

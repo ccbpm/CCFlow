@@ -172,7 +172,7 @@ namespace BP.WF
             sms.HisEmailSta = MsgSta.UnRun;
 
             sms.Sender=WebUser.No;
-            sms.SendTo = userNo;
+            sms.SendToEmpNo = userNo;
 
             sms.Title = msgTitle;
             sms.DocOfEmail = msgDoc;
@@ -203,7 +203,7 @@ namespace BP.WF
             SMS sms = new SMS();
             sms.Sender = WebUser.No;
             sms.RDT = BP.DA.DataType.CurrentDataTimess;
-            sms.SendTo = guestNo;
+            sms.SendToEmpNo = guestNo;
 
             // 邮件信息
             sms.HisEmailSta = MsgSta.UnRun;
@@ -348,20 +348,6 @@ namespace BP.WF
         /// 发送给
         /// </summary>
         public string SendToEmpNo
-        {
-            get
-            {
-                return this.GetValStringByKey(SMSAttr.SendTo);
-            }
-            set
-            {
-                SetValByKey(SMSAttr.SendTo, value);
-            }
-        }
-        /// <summary>
-        /// 发送给 
-        /// </summary>
-        public string SendTo
         {
             get
             {

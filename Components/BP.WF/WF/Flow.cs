@@ -4031,6 +4031,7 @@ namespace BP.WF
 
 
             #region 处理消息推送, edit  by zhoupeng for dengzhou gov project. 2016.05.01
+
             //有一些事件没有消息，直接return ;
             switch (doType)
             {
@@ -4045,16 +4046,29 @@ namespace BP.WF
                     return str;
             }
 
+            /* 如果当前消息机制没有设置，并且不等于 SendSuccess ReturnAfter 两个事件，就返回. 
+             * 特殊判断  SendSuccess  ReturnAfter 是因为他们有默认消息.
+             */
             //获取设置的消息.
-            if (currNode.HisPushMsgs.Count == 0 
-                && (doType!= EventListOfNode.SendSuccess || doType!= EventListOfNode.ReturnAfter) )
-                return str;
+            if (currNode.HisPushMsgs.Count == 0 )
+            {
+                if (doType!= EventListOfNode.SendSuccess )
+                {
+                    /*放过.*/
+                }
+                else if (doType != EventListOfNode.ReturnAfter)
+                {
+                    /*放过.*/
+                }
+                else
+                {
+                    return str;
+                }
+            }
 
             //执行消息的发送.
             PushMsgs pms = currNode.HisPushMsgs;
-
             string msgAlert="";
-            bool isHave = false;
             foreach (PushMsg item in pms)
             {
                 if (item.FK_Event != doType)
@@ -4063,13 +4077,13 @@ namespace BP.WF
                     continue;
 
                 //执行发送消息.
-                msgAlert += item.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
-                isHave = true;
+                item.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
             }
-
+            if (pms.Count != 0)
+                return str+ msgAlert;
+              
             #region 处理默认值 SendSuccess . ReturnAfter
-            if (isHave == false &&
-                (doType == EventListOfNode.SendSuccess ||doType == EventListOfNode.ReturnAfter))
+            if (doType == EventListOfNode.SendSuccess ||doType == EventListOfNode.ReturnAfter)
             {
                 /*如果没有执行到，并且是发送成功后的信息，就执行默认的消息发送。*/
                 PushMsg pm = new Template.PushMsg();
@@ -4078,163 +4092,12 @@ namespace BP.WF
                 pm.MailPushWay = 1; /*默认: 让其使用消息提醒.*/
                 pm.SMSPushWay = 0;  /*默认:不让其使用短信提醒.*/
 
-                msgAlert += pm.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
+                return str + pm.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
             }
             #endregion 处理默认值 SendSuccess. ReturnAfter
 
-
             #endregion 处理消息推送.
 
-            if (1 == 1)
-            {
-                /* 以下的功能不再用了. */
-                return str + msgAlert;
-            }
-
-            //获得消息实体,
-            FrmEvent nev = fes.GetEntityByKey(FrmEventAttr.FK_Event, doType) as FrmEvent;
-            if (nev == null)
-            {
-                nev = new FrmEvent();
-                nev.FK_Event = doType;
-            }
-
-            //定义是否发送短信。
-            bool isSendEmail = false;
-            bool isSendSMS = false;
-
-            //处理参数.
-            Row r = en.Row;
-            try
-            {
-                //系统参数.
-                r.Add("FK_MapData", en.ClassID);
-            }
-            catch
-            {
-                r["FK_MapData"] = en.ClassID;
-            }
-            if (atPara != null)
-            {
-                AtPara ap = new AtPara(atPara);
-                foreach (string s in ap.HisHT.Keys)
-                {
-                    try
-                    {
-                        r.Add(s, ap.GetValStrByKey(s));
-                    }
-                    catch
-                    {
-                        r[s] = ap.GetValStrByKey(s);
-                    }
-                }
-            }
-
-            //分模式处理数据.
-            switch (nev.MsgCtrl)
-            {
-                case MsgCtrl.BySet: /*按照设置计算.*/
-                    isSendEmail = nev.MailEnable;
-                    isSendSMS = nev.SMSEnable;
-                    break;
-                case MsgCtrl.BySDK: /*按照设置计算.*/
-                case MsgCtrl.ByFrmIsSendMsg: /*按照设置计算.*/
-                    if (r.ContainsKey("IsSendEmail") == true)
-                        isSendEmail = r.GetBoolenByKey("IsSendEmail");
-                    if (r.ContainsKey("IsSendSMS") == true)
-                        isSendSMS = r.GetBoolenByKey("IsSendSMS");
-                    break;
-                default:
-                    break;
-            }
-
-            // 判断是否发送消息？
-            if (isSendSMS == false && isSendEmail == false)
-                return str;
-
-            Int64 workid = Int64.Parse(en.PKVal.ToString());
-            string title = "";
-            try
-            {
-                title = en.GetValStrByKey("Title");
-            }
-            catch
-            {
-            }
-
-            string hostUrl = Glo.HostURL;
-            string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DataType.CurrentDataTime;
-            string openWorkURl = hostUrl + "WF/Do.aspx?DoType=OF&SID=" + sid;
-            openWorkURl = openWorkURl.Replace("//", "/");
-            openWorkURl = openWorkURl.Replace("//", "/");
-
-            // 定义消息变量.
-            string mailTitleTmp = "";
-            string mailDocTmp = "";
-            if (isSendEmail)
-            {
-                // 标题.
-                mailTitleTmp = nev.MailTitle;
-                mailTitleTmp = mailTitleTmp.Replace("{Title}", title);
-                mailTitleTmp = mailTitleTmp.Replace("@WebUser.No", WebUser.No);
-                mailTitleTmp = mailTitleTmp.Replace("@WebUser.Name", WebUser.Name);
-
-                // 内容.
-                mailDocTmp = nev.MailDoc;
-                mailDocTmp = mailDocTmp.Replace("{Url}", openWorkURl);
-                mailDocTmp = mailDocTmp.Replace("{Title}", title);
-
-                mailDocTmp = mailDocTmp.Replace("@WebUser.No", WebUser.No);
-                mailDocTmp = mailDocTmp.Replace("@WebUser.Name", WebUser.Name);
-
-                /*如果仍然有没有替换下来的变量.*/
-                if (mailDocTmp.Contains("@"))
-                    mailDocTmp = Glo.DealExp(mailDocTmp, en, null);
-            }
-
-            string smsDocTmp = "";
-            if (isSendSMS)
-            {
-                smsDocTmp = nev.SMSDoc.Clone() as string;
-
-                smsDocTmp = smsDocTmp.Replace("{Title}", title);
-                smsDocTmp = smsDocTmp.Replace("{Url}", openWorkURl);
-                smsDocTmp = smsDocTmp.Replace("@WebUser.No", WebUser.No);
-                smsDocTmp = smsDocTmp.Replace("@WebUser.Name", WebUser.Name);
-
-                /*如果仍然有没有替换下来的变量.*/
-                if (smsDocTmp.Contains("@") == true)
-                    smsDocTmp = Glo.DealExp(smsDocTmp, en, null);
-            }
-
-            //获得要发送人的ids.
-            string toEmpIDs = "";
-            switch (doType)
-            {
-                case EventListOfNode.SendSuccess:
-                    toEmpIDs = objs.VarAcceptersID;
-                    break;
-                case EventListOfNode.ReturnAfter: // 如果是退回,就找到退回的当事人.
-                    toEmpIDs = objs.VarAcceptersID;
-                    break;
-                default:
-                    break;
-            }
-
-            // 执行发送消息.
-            string[] emps = toEmpIDs.Split(',');
-            foreach (string emp in emps)
-            {
-                if (string.IsNullOrEmpty(emp))
-                    continue;
-
-                string mailDocReal = mailDocTmp.Clone() as string;
-                mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
-
-                //发送消息.
-                BP.WF.Dev2Interface.Port_SendMsg(emp, mailTitleTmp, mailDocReal, smsDocTmp, en.PKVal.ToString(),
-                    doType, this.No, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), 0, isSendEmail, isSendSMS);
-            }
             return str;
         }
         public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, Node jumpToNode=null, string jumpToEmp=null)

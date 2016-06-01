@@ -2661,83 +2661,8 @@ namespace BP.WF
             string para = "@FK_Flow=" + flowNo + "@WorkID=" + workID + "@FK_Node=" + nodeID + "@Sender=" + BP.Web.WebUser.No;
             BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, para);
         }
-        /// <summary>
-        /// 发送消息
-        /// </summary>
-        /// <param name="sendTo">发送给</param>
-        /// <param name="mailTitle">标题</param>
-        /// <param name="mailDoc">内容</param>
-        /// <param name="smsInfo">短信信息</param>
-        /// <param name="msgFlag">消息标记</param>
-        /// <param name="msgType">消息类型</param>
-        /// <param name="flowNo">流程编号</param>
-        /// <param name="nodeID">节点编号</param>
-        /// <param name="workID">工作ID</param>
-        /// <param name="fid">FID</param>
-        /// <param name="isEmail">是否发送邮件</param>
-        /// <param name="isSMS">是否发送短信</param>
-        public static void Port_SendMsg(string sendTo, string mailTitle, string mailDoc, string smsInfo, string msgFlag, string msgType,
-            string flowNo, int nodeID, Int64 workID, Int64 fid, bool isEmail, bool isSMS)
-        {
-            SMS sms = new SMS();
-            sms.MyPK = DBAccess.GenerGUID();
-            sms.HisEmailSta = MsgSta.UnRun;
-            sms.Sender = WebUser.No;
-            sms.SendTo = sendTo;
-
-            //邮件标题.
-            sms.Title = mailTitle;
-            sms.DocOfEmail = mailDoc;
-            if (isEmail == true)
-                sms.HisEmailSta = MsgSta.UnRun;
-            else
-                sms.HisEmailSta = MsgSta.Disable;
-
-            //短信属性.
-            if (isSMS == true)
-                sms.HisMobileSta = MsgSta.UnRun;
-            else
-                sms.HisMobileSta = MsgSta.Disable;
-
-            sms.MobileInfo = smsInfo; //短信信息.
-
-            // 其他属性.
-            sms.Sender = BP.Web.WebUser.No;
-            sms.RDT = BP.DA.DataType.CurrentDataTime;
-
-            sms.MsgFlag = msgFlag; // 消息标志.
-            sms.MsgType = msgType; // 消息类型.
-            sms.Insert();
-        }
-        /// <summary>
-        /// 发送消息
-        /// </summary>
-        /// <param name="mobileNum">手机号吗</param>
-        /// <param name="mobileInfo">短信信息</param>
-        /// <param name="emailAddress">邮件</param>
-        /// <param name="emilTitle">标题</param>
-        /// <param name="emailBody">邮件内容</param>
-        /// <param name="msgFlag">消息标记，可以为空。</param>
-        public static void Port_SendMsg(string mobileNum, string mobileInfo, string emailAddress, string emilTitle, string emailBody, string msgFlag, string msgType)
-        {
-            BP.WF.SMS.SendMsg(mobileNum, mobileInfo, emailAddress, emilTitle, emailBody, msgFlag, msgType, null);
-        }
-        /// <summary>
-        /// 发送消息
-        /// </summary>
-        /// <param name="mobileNum">手机号吗</param>
-        /// <param name="mobileInfo">短信信息</param>
-        /// <param name="emailAddress">邮件</param>
-        /// <param name="emilTitle">标题</param>
-        /// <param name="emailBody">邮件内容</param>
-        /// <param name="msgFlag">消息标记，可以为空。</param>
-        /// <param name="msgType">消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...)</param>
-        public static void Port_SendMsg(string mobileNum, string mobileInfo, string emailAddress, string emilTitle, string emailBody,
-            string msgFlag, string msgType, string guestNo)
-        {
-            BP.WF.SMS.SendMsg(mobileNum, mobileInfo, emailAddress, emilTitle, emailBody, msgFlag, msgType, guestNo);
-        }
-     
+      
+      
         /// <summary>
         /// 发送邮件
         /// </summary>
@@ -2749,7 +2674,7 @@ namespace BP.WF
         /// <param name="sender">发送人</param>
         /// <param name="msgPK">消息唯一标记，防止发送重复.</param>
         public static void Port_SendEmail(string mailAddress, string emilTitle, string emailBody,
-            string msgType, string msgGroupFlag=null, string sender = null, string msgPK = null)
+            string msgType, string msgGroupFlag=null, string sender = null, string msgPK = null, string sendToEmpNo=null)
         {
             if (string.IsNullOrEmpty(mailAddress))
                 return;
@@ -2773,6 +2698,8 @@ namespace BP.WF
             else
                 sms.Sender = sender;
 
+            sms.SendToEmpNo = sendToEmpNo;
+
             //邮件地址.
             sms.Email = mailAddress;
 
@@ -2790,10 +2717,8 @@ namespace BP.WF
             sms.MsgType = msgType;   // 消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...).
             sms.Insert();
         }
-       
-      
         /// <summary>
-        /// 发送短信消息
+        /// 发送短信
         /// </summary>
         /// <param name="tel">电话</param>
         /// <param name="smsDoc">短信内容</param>
@@ -2803,7 +2728,8 @@ namespace BP.WF
         /// <param name="msgPK">唯一标志,防止发送重复.</param>
         /// <param name="sendEmpNo">发送给人员.</param>
         /// <param name="atParas">参数.</param>
-        public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag, string sender = null, string msgPK = null, string sendEmpNo = null, string atParas=null)
+        public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag, 
+            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas=null)
         {
             if (string.IsNullOrEmpty(tel))
                 return;
@@ -2814,7 +2740,6 @@ namespace BP.WF
                 /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
                 if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
                     return;
-
                 sms.MyPK = msgPK;
             }
             else
@@ -2830,12 +2755,11 @@ namespace BP.WF
             else
                 sms.Sender = sender;
 
-            //发送给人员.
-            sms.SendTo = sendEmpNo;
+            //发送给人员ID , 有可能这个人员空的.
+            sms.SendToEmpNo = sendToEmpNo;
 
             sms.Mobile = tel;
             sms.MobileInfo = smsDoc;
-
 
             // 其他属性.
             sms.RDT = BP.DA.DataType.CurrentDataTime;
@@ -2843,6 +2767,8 @@ namespace BP.WF
             sms.MsgType = msgType; // 消息类型.
 
             sms.MsgFlag = msgGroupFlag; // 消息分组标志,用于批量删除.
+
+            // 先保留本机一份.
             sms.Insert();
         }
         /// <summary>

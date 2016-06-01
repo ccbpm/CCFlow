@@ -77,7 +77,9 @@ namespace BP.GPM
     /// </summary>
     public class Bar : EntityNoName
     {
-
+        /// <summary>
+        /// 控制权限
+        /// </summary>
         public override UAC HisUAC
         {
             get

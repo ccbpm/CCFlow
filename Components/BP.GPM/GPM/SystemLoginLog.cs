@@ -81,7 +81,6 @@ namespace BP.GPM
                 this.SetValByKey(SystemLoginLogAttr.FK_App, value);
             }
         }
-
         /// <summary>
         /// 内容
         /// </summary>

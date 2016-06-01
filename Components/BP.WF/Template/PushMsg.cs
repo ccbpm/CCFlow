@@ -100,6 +100,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string SMSField = "SMSField";
         /// <summary>
+        /// 接受短信的节点.
+        /// </summary>
+        public const string SMSNodes = "SMSNodes";
+        /// <summary>
         /// 推送方式
         /// </summary>
         public const string SMSPushWay = "SMSPushWay";
@@ -111,6 +115,11 @@ namespace BP.WF.Template
         /// 邮件推送方式
         /// </summary>
         public const string MailPushWay = "MailPushWay";
+        /// <summary>
+        /// 推送邮件的节点s
+        /// </summary>
+        public const string MailNodes = "MailNodes";
+
     }
 	/// <summary>
 	/// 消息推送
@@ -292,6 +301,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// Email节点s
+        /// </summary>
+        public string MailNodes
+        {
+            get
+            {
+                return this.GetValStringByKey(PushMsgAttr.MailNodes);
+            }
+            set
+            {
+                this.SetValByKey(PushMsgAttr.MailNodes, value);
+            }
+        }
+        /// <summary>
         /// 邮件标题
         /// </summary>
         public string MailTitle_Real
@@ -392,6 +415,17 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(PushMsgAttr.SMSField, value);
+            }
+        }
+        public string SMSNodes
+        {
+            get
+            {
+                return this.GetValStringByKey(PushMsgAttr.SMSNodes);
+            }
+            set
+            {
+                this.SetValByKey(PushMsgAttr.SMSNodes, value);
             }
         }
         /// <summary>
@@ -547,6 +581,7 @@ namespace BP.WF.Template
                 map.AddTBInt(PushMsgAttr.SMSPushWay, 0, "短信发送方式", true, true);
                 map.AddTBString(PushMsgAttr.SMSField, null, "短信字段", true, false, 0, 100, 10);
                 map.AddTBStringDoc(PushMsgAttr.SMSDoc, null, "短信内容模版", true, false, true);
+                map.AddTBString(PushMsgAttr.SMSNodes, null, "SMS节点s", true, false, 0, 100, 10);
                 #endregion 短信.
 
                 #region 邮件.
@@ -554,8 +589,8 @@ namespace BP.WF.Template
                 map.AddTBString(PushMsgAttr.MailAddress, null, "邮件字段", true, false, 0, 100, 10);
                 map.AddTBString(PushMsgAttr.MailTitle, null, "邮件标题模版", true, false, 0, 200, 20, true);
                 map.AddTBStringDoc(PushMsgAttr.MailDoc, null, "邮件内容模版", true, false, true);
+                map.AddTBString(PushMsgAttr.MailNodes, null, "Mail节点s", true, false, 0, 100, 10);
                 #endregion 邮件.
-
 
                 this._enMap = map;
                 return this._enMap;

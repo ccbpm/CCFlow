@@ -718,11 +718,10 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "节点消息"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoMessage";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Event.png";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Message24.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-             
 
                 rm = new RefMethod();
                 rm.Title = "父子流程";

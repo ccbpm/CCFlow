@@ -22,7 +22,6 @@
   <Item No="ReturnAfter" CH="当节点退回后" EN="When the node returned after" EventType="Node" IsHaveMsg="1" />
   <Item No="UndoneBefore" CH="当节点撤销发送前" EN="When a node before sending cancellation" EventType="Node" IsHaveMsg="0" />
   <Item No="UndoneAfter" CH="当节点撤销发送后" EN="When the node after sending cancellation" EventType="Node" IsHaveMsg="1" />
-
   <Item No="WhenReadWork" CH="工作打开后" EN="工作打开后" EventType="Node" IsHaveMsg="0" />
 
 

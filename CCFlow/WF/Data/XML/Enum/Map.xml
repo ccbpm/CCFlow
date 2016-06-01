@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" standalone="yes"?>
 <NewDataSet>
 
-  <Item Key="UploadFileCheck" Name="多附件文件上传控制"
+<Item Key="UploadFileCheck" Name="多附件文件上传控制"
 CH="@0=不控制@1=上传附件个数不能为0@2=每个类别下面的个数不能为0"
 EN=""
 JP=""

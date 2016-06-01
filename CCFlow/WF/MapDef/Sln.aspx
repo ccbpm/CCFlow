@@ -20,13 +20,7 @@
     }
     function CopyIt(fk_mapdata, fk_flow, nodeID) {
         var myurl = 'Sln.aspx?DoType=Copy&FK_MapData=' + fk_mapdata + '&FK_Flow=' + fk_flow + '&FK_Node=' + nodeID;
-        alert(myurl);
-      //  var url =   'Sln.aspx?DoType=Copy&FK_MapData=Demo_Inc01&FK_Flow=004&FK_Node=402';
        window.location.href = myurl;
-
-//        var url = 'SlnDo.aspx?DoType=Copy&FK_MapData=' + fk_mapdata + '&FK_Flow=' + fk_flow + '&FK_Node=' + nodeID;
-//        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-//        window.location.href = window.location.href;
     }
 
     var IsNoteNull=false;

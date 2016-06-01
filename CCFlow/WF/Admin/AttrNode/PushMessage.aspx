@@ -50,6 +50,7 @@
         myen.MailPushWay = 1;
        // ens.AddEntity(myen);
     }
+    
 
     int idx = 0;
     foreach (BP.WF.Template.PushMsg en in ens)

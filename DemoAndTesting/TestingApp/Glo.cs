@@ -23,17 +23,15 @@ namespace SMSServices
         #endregion 调度相关的方法
 
         #region 向CCIM发送消息
-        //产生消息,userid是为了保证写入消息的唯一性，receiveid才是真正的接收者
         /// <summary>
-        /// 
+        /// 产生消息,senderEmpNo是为了保证写入消息的唯一性，receiveid才是真正的接收者
         /// </summary>
         /// <param name="userid"></param>
         /// <param name="now"></param>
         /// <param name="msg"></param>
         /// <param name="receiveid"></param>
-        public static void SendMessage(string userid, string now, string msg, string receiveid)
+        public static void SendMessage(string senderEmpNo, string now, string msg, string sendToEmpNo)
         {
-
             //保存系统通知消息
             StringBuilder strHql1 = new StringBuilder();
             //加密处理
@@ -52,13 +50,14 @@ namespace SMSServices
             strHql1.Append("-16777216,");
             strHql1.Append("15,");
             strHql1.Append("-1,");
-            strHql1.Append("'").Append(userid).Append("')");
+            strHql1.Append("'");
+            strHql1.Append(senderEmpNo).Append("')");
 
             BP.DA.DBAccess.RunSQL(strHql1.ToString());
 
             //取出刚保存的msgID
             string msgID;
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT MsgID FROM CCIM_RecordMsg WHERE sendID='SYSTEM' AND msgDateTime='" + now + "' AND SendUserID='" + userid + "'");
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT MsgID FROM CCIM_RecordMsg WHERE sendID='SYSTEM' AND msgDateTime='" + now + "' AND SendUserID='" + senderEmpNo + "'");
 
             foreach (DataRow dr in dt.Rows)
             {
@@ -69,7 +68,7 @@ namespace SMSServices
                 strHql2.Append("Insert into CCIM_RecordMsgUser ([MsgId],[ReceiveID]) values(");
 
                 strHql2.Append(msgID).Append(",");
-                strHql2.Append("'").Append(receiveid).Append("')");
+                strHql2.Append("'").Append(sendToEmpNo).Append("')");
 
                 BP.DA.DBAccess.RunSQL(strHql2.ToString());
             }

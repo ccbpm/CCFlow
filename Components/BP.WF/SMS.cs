@@ -596,14 +596,13 @@ namespace BP.WF
 
         protected override void afterInsert()
         {
-
             CCInterface.PortalInterfaceSoapClient soap = null;
             if (this.HisEmailSta == MsgSta.UnRun)
             {
                 /*发送邮件*/
                 soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                 soap.SendToEmail(this.MyPK, this.Email, this.Title,this.DocOfEmail);
-                 return;
+                soap.SendToEmail(this.MyPK, this.Email, this.Title, this.DocOfEmail);
+                return;
             }
 
             if (this.HisMobileSta == MsgSta.UnRun)

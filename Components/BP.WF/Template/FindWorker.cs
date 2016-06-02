@@ -444,19 +444,12 @@ namespace BP.WF.Template
                 //区别集成与BPM模式
                 if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
                 {
-                    sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                    sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ";
-                    sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
-                    sql += ")";
-                    sql += "AND No IN ";
-                    sql += "(";
-                    sql += "SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ";
-                    sql += "( SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node2 )";
-                    sql += ") ORDER BY No ";
+                    sql = " SELECT a.No,a.Name FROM Port_Emp A, WF_NodeDept B, WF_NodeStation C, Port_EmpStation D ";
+                    sql += " WHERE A.FK_Dept=B.FK_Dept AND A.No=D.FK_Emp AND C.FK_Station=D.FK_Station AND B.FK_Node=C.FK_Node ";
+                    sql += " AND B.FK_Node=" + dbStr + "FK_Node";
 
                     ps = new Paras();
-                    ps.Add("FK_Node1", town.HisNode.NodeID);
-                    ps.Add("FK_Node2", town.HisNode.NodeID);
+                    ps.Add("FK_Node", town.HisNode.NodeID);
                     ps.SQL = sql;
                     dt = DBAccess.RunSQLReturnTable(ps);
                 }
@@ -480,7 +473,7 @@ namespace BP.WF.Template
             }
             #endregion 按部门与岗位的交集计算.
 
-            #region 判断节点部门里面是否设置了部门，如果设置了，就按照它的部门处理。
+            #region 判断节点部门里面是否设置了部门，如果设置了就按照它的部门处理。
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDept)
             {
                 ps = new Paras();
@@ -490,46 +483,28 @@ namespace BP.WF.Template
                 dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count > 0)
                     return dt;
+
                 if (flowAppType == FlowAppType.Normal)
                 {
                     ps = new Paras();
-                    ps.SQL = "SELECT No,Name FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
-                    ps.SQL += " OR ";
-                    ps.SQL += " No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node2 ) )";
-                    ps.SQL += " ORDER BY No";
-                    ps.Add("FK_Node1", town.HisNode.NodeID);
-                    ps.Add("FK_Node2", town.HisNode.NodeID);
-
+                    ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                    ps.Add("FK_Node", town.HisNode.NodeID);
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count > 0 && town.HisNode.HisWhenNoWorker != WhenNoWorker.Skip)
-                    {
                         return dt;
-                    }
                     else
-                    {
-                        //IsFindWorker = false;
-                        //  ps.SQL = "SELECT No,Name FROM Port_Emp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node )";
                         throw new Exception("@按部门确定接受人的范围,没有找到人员.");
-                    }
                 }
 
                 if (flowAppType == FlowAppType.PRJ)
                 {
-                    sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                    sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ";
-                    sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
-                    sql += ")";
-                    sql += "AND NO IN ";
-                    sql += "(";
-                    sql += "SELECT FK_Emp FROM Prj_EmpPrjStation WHERE FK_Station IN ";
-                    sql += "( SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node2) AND FK_Prj=" + dbStr + "FK_Prj ";
-                    sql += ")";
-                    sql += " ORDER BY No";
+                    sql =  " SELECT A.No,A.Name FROM Port_Emp A, WF_NodeDept B, Prj_EmpPrjStation C, WF_NodeStation D ";
+                    sql += "  WHERE A.FK_Dept=B.FK_Dept AND A.No=C.FK_Emp AND C.FK_Station=D.FK_Station AND B.FK_Node=D.FK_Node ";
+                    sql += "  AND C.FK_Prj=" + dbStr + "FK_Prj  AND D.FK_Node=" + dbStr + "FK_Node";
 
                     ps = new Paras();
-                    ps.Add("FK_Node1", town.HisNode.NodeID);
-                    ps.Add("FK_Node2", town.HisNode.NodeID);
                     ps.Add("FK_Prj", prjNo);
+                    ps.Add("FK_Node", town.HisNode.NodeID);
                     ps.SQL = sql;
 
                     dt = DBAccess.RunSQLReturnTable(ps);
@@ -591,14 +566,18 @@ namespace BP.WF.Template
 
                 ps = new Paras();
 
-                sql = "SELECT a.FK_Emp as No FROM Port_EmpDept A , Port_EmpStation B, WF_NodeStation C  ";
-                sql += " WHERE A.FK_Emp=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+dbStr+"FK_Node ";
-                sql += " AND A.FK_Dept IN ( SELECT FK_Dept from Port_EmpDept WHERE FK_Emp=" + dbStr + "FK_Emp ) ";
-
-                ps.SQL = sql;
-                ps.Add("FK_Node", town.HisNode.NodeID);
+                sql = "SELECT No,Name FROM Port_Emp WHERE No=" + dbStr + "FK_Emp ";
                 ps.Add("FK_Emp", WebUser.No);
                 dt = DBAccess.RunSQLReturnTable(ps);
+
+                //sql = "SELECT a.FK_Emp as No FROM Port_EmpDept A , Port_EmpStation B, WF_NodeStation C  ";
+                //sql += " WHERE A.FK_Emp=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+dbStr+"FK_Node ";
+                //sql += " AND A.FK_Dept IN ( SELECT FK_Dept from Port_EmpDept WHERE FK_Emp=" + dbStr + "FK_Emp ) ";
+                //ps.SQL = sql;
+                //ps.Add("FK_Node", town.HisNode.NodeID);
+                //ps.Add("FK_Emp", WebUser.No);
+                //dt = DBAccess.RunSQLReturnTable(ps);
+
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
@@ -912,12 +891,12 @@ namespace BP.WF.Template
 
                 if (deptNo == "1")
                 {
-                    sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Emp!=" + dbStr + "FK_Emp ) ";
+                    sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE No!=" + dbStr + "FK_Emp ) ";
                 }
                 else
                 {
                     BP.Port.Dept deptP = new BP.Port.Dept(deptNo);
-                    sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Emp!=" + dbStr + "FK_Emp AND FK_Dept = '" + deptP.ParentNo + "')";
+                    sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE No!=" + dbStr + "FK_Emp AND FK_Dept = '" + deptP.ParentNo + "')";
                 }
 
                 ps = new Paras();
@@ -925,7 +904,6 @@ namespace BP.WF.Template
                 ps.Add("FK_Node", town.HisNode.NodeID);
                 ps.Add("FK_Emp", empNo);
                 dt = DBAccess.RunSQLReturnTable(ps);
-
 
                 if (dt.Rows.Count == 0)
                     return null;

@@ -15,7 +15,7 @@ namespace BP.WF
     /// 0,集成该基类的子类,可以重写事件的方法与基类交互.
     /// 1,一个子类必须与一个流程模版绑定.
     /// 2,基类里有很多流程运行过程中的变量，这些变量可以辅助开发者在编写复杂的业务逻辑的时候使用.
-    /// 3,该基类有一个子类模版，位于:D:\ccflow\value-added\CCFlow\WF\Admin\AttrFlow\F001Templepte.cs .
+    /// 3,该基类有一个子类模版，位于:\CCFlow\WF\Admin\AttrFlow\F001Templepte.cs .
     /// </summary>
     abstract public class FlowEventBase
     {

@@ -65,7 +65,6 @@ namespace BP.WF
             {
                 //  url = string.Format("/{0}webservices/webservice.*", AppName != string.Empty ? AppName + "/" : string.Empty);
             //    url = new Uri(App.Current.Host.Source, "../").ToString() + "service/Service?wsdl";
-
             }
 
             url = url.Replace("//", "/");
@@ -817,9 +816,10 @@ namespace BP.WF
             catch
             {
             }
+
             if (DBAccess.IsExitsObject("Port_EmpDept") == false)
             {
-                string sql = "CREATE VIEW Port_EmpDept as SELECT No as FK_Emp, FK_Dept FROM Port_Emp";
+                string sql = " CREATE VIEW Port_EmpDept as SELECT No as FK_Emp, FK_Dept FROM Port_Emp ";
                 BP.DA.DBAccess.RunSQL(sql);
             }
             #endregion 创建视图.

@@ -238,7 +238,7 @@ namespace CCFlow.WF.Admin
                 fk_sort = fl.FK_FlowSort;
                 this.Pub1.AddTD("<a href='GetTask.aspx?RefNo=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01' >" + fl.Name + "</a>");
 
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/ChartTrack.aspx.aspx?FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
                 this.Pub1.AddTD(fl.Note);
                 this.Pub1.AddTREnd();
             }

@@ -1362,6 +1362,7 @@
     <Content Include="WF\Data\XML\BPMMenu.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="WF\Data\XML\Ens\Search.xml" />
     <Content Include="WF\Data\XML\SysDataType.xml" />
     <Content Include="WF\Data\XML\TaoHong.xml" />
     <Content Include="WF\Data\XML\XmlDB.xml" />

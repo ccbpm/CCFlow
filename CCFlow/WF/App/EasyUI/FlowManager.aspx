@@ -204,7 +204,7 @@
                    { display: '发起日期', name: 'RDT' },
                    { display: '轨迹图', name: 'NODE', render: function (rowdata, rowindex) {
                        var op = null;
-                       op = "<a href=\"javascript:OpenIt('../WF/WorkOpt/OneWork/ChartTrack.aspx.aspx?WorkID=" + rowdata.WORKID + "&FK_Flow=" + rowdata.FK_FLOW + "&FID=" + rowdata.FID + "'); \" >打开</a>";
+                       op = "<a href=\"javascript:OpenIt('../WF/WorkOpt/OneWork/ChartTrack.aspx?WorkID=" + rowdata.WORKID + "&FK_Flow=" + rowdata.FK_FLOW + "&FID=" + rowdata.FID + "'); \" >打开</a>";
 
                        return op;
                    }

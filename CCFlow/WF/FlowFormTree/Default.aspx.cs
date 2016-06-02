@@ -346,7 +346,7 @@ namespace CCFlow.WF.SheetTree
             {
                 //extMenuHTML += "<div data-options=\"plain:true,iconCls:'icon-tag'\" onclick=\"addTab('ycfj','已传附件','/app/function/office/iofficefj.aspx?WorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "');\">已传附件</div>";
                 //项目备案数据
-                //extMenuHTML += "<div data-options=\"plain:true,iconCls:'icon-tag'\" onclick=\"addTab('basj','备案数据','/DataBak.aspx.aspx?WorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "');\">备案数据</div>";
+                //extMenuHTML += "<div data-options=\"plain:true,iconCls:'icon-tag'\" onclick=\"addTab('basj','备案数据','/DataBak.aspx?WorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "');\">备案数据</div>";
             }
             else
             {
@@ -354,7 +354,7 @@ namespace CCFlow.WF.SheetTree
                 //一键签名
                 //toolsDefault += "<a id=\"ycfj\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-note'\" onclick=\"EventFactory('Sign')\">一键签名</a>";
                 //备案数据
-                //toolsDefault += "<a id=\"DataBak\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-tag'\" onclick=\"addTab('basj','备案数据','/DataBak.aspx.aspx?WorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "');\">备案数据</a>";
+                //toolsDefault += "<a id=\"DataBak\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-tag'\" onclick=\"addTab('basj','备案数据','/DataBak.aspx?WorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "');\">备案数据</a>";
             }
             //扩展工具，显示位置为工具栏类型
             NodeToolbars extToolBars = new NodeToolbars();

@@ -26,7 +26,7 @@ function callBack(jsonData, scope) {
 
                    },
                      { display: '流程图', render: function (rowdata, rowindex) {
-                         var h = "../../WorkOpt/OneWork/ChartTrack.aspx.aspx?FK_Flow=" + rowdata.NO + "&DoType=Chart&T=" + strTimeKey;
+                         var h = "../../WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + rowdata.NO + "&DoType=Chart&T=" + strTimeKey;
                          return "<a href='javascript:void(0);' onclick=OpenFlowPicture('" + rowdata.NO + "','" + rowdata.NAME + "')>打开</a>";
                         }
                       },

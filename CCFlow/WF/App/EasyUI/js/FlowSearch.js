@@ -45,7 +45,7 @@ function callBack(jsonData, scope) {
 
 //打开流程图
 function OpenEasyUiFlowPicture(flowNo, flowName) {
-    var pictureUrl = "../../WorkOpt/OneWork/ChartTrack.aspx.aspx?FK_Flow=" + flowNo + "&DoType=Chart&T=" + dateNow;
+    var pictureUrl = "../../WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + flowNo + "&DoType=Chart&T=" + dateNow;
     $("#opengrid").dialog({
         height: 500,
         width: 800,

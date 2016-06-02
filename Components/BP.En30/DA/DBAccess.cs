@@ -147,6 +147,10 @@ namespace BP.DA
             byte[] bytes = new byte[fs.Length];
             fs.Read(bytes, 0, Convert.ToInt32(fs.Length));
 
+            // bug 的提示者 http://bbs.ccflow.org/showtopic-3958.aspx
+            fs.Close();
+            fs.Dispose();
+
             //执行保存.
             SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
         }

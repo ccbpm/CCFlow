@@ -28,9 +28,13 @@ namespace ccbpm
         /// <param name="msgInfo">短消息</param>
         /// <returns>是否发送成功</returns>
         [WebMethod]
-        public bool SendToWebServices(string msgPK,string tel, string msgInfo)
+        public bool SendToWebServices(string msgPK, string tel, string msgInfo, string sendToEmpNo=null)
         {
             BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
+
+            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+
             return true;
         }
         /// <summary>
@@ -45,6 +49,9 @@ namespace ccbpm
         public bool SendToDingDing(string mypk, string userNo, string tel, string msgInfo)
         {
             BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
+
+            if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
+                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -59,6 +66,10 @@ namespace ccbpm
         public bool SendToWeiXin(string mypk, string userNo, string tel, string msgInfo)
         {
             BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
+
+            if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
+                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+
             return true;
         }
         /// <summary>
@@ -68,11 +79,15 @@ namespace ccbpm
         /// <param name="email">邮件地址</param>
         /// <param name="title">标题</param>
         /// <param name="maildoc">内容</param>
+        /// <param name="sendToEmpNo">接收人编号</param>
         /// <returns>是否发送成功</returns>
         [WebMethod]
-        public bool SendToEmail(string mypk, string email, string title, string maildoc)
+        public bool SendToEmail(string mypk, string email, string title, string maildoc, string sendToEmpNo = null)
         {
             BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
+
+            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -86,6 +101,10 @@ namespace ccbpm
         public bool SendToCCIM(string mypk, string userNo, string msg)
         {
             BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
+
+            if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
+                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDataTime);
+
             return true;
         }
         #endregion 发送消息接口.

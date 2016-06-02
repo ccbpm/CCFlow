@@ -46,8 +46,38 @@ public partial class DataUser_Do : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-
-        #region 从表校验 
+        try
+        {
+            switch (this.DoType)
+            {
+                case "SetHeJi":
+                    string sql = "UPDATE ND101 SET HeJi=(SELECT SUM(XiaoJi) FROM ND101Dtl1 WHERE RefPK=" + this.OID + ") WHERE OID=" + this.OID;
+                    BP.DA.DBAccess.RunSQL(sql);
+                    //把合计转化成大写.
+                    float hj = BP.DA.DBAccess.RunSQLReturnValFloat("SELECT HeJi FROM ND101 WHERE OID=" + this.OID, 0);
+                    sql = "UPDATE ND101 SET DaXie='" + BP.DA.DataType.ParseFloatToCash(hj) + "' WHERE OID=" + this.OID;
+                    BP.DA.DBAccess.RunSQL(sql);
+                    break;
+                case "OutOK":
+                    /*在这是里处理您的业务过程。*/
+                    return;
+                default:
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            string info = "error:" + ex.StackTrace + " message:" + ex.Message;
+            //info = System.Text.Encoding.UTF8.GetString(info);
+            this.Response.Write(info);
+        }
+    }
+    /// <summary>
+    /// 从表校验.
+    /// </summary>
+    public void CheckDtl()
+    {
+        #region 从表校验
         try
         {
             string getworkid = Request.QueryString["getworkid"];//WrokID
@@ -56,7 +86,6 @@ public partial class DataUser_Do : System.Web.UI.Page
             string onValue = Request.QueryString["onValue"];//从表下拉框值
             string sqlParas = string.Empty;
             decimal strRows = 0;
-
 
             string rowsSql = "select *from " + dtlTable + " where RefPK ='" + getworkid + "'";
             int count = BP.DA.DBAccess.RunSQLReturnCOUNT(rowsSql);
@@ -97,33 +126,6 @@ public partial class DataUser_Do : System.Web.UI.Page
         }
 
         #endregion
-
-
-        try
-        {
-            switch (this.DoType)
-            {
-                case "SetHeJi":
-                    string sql = "UPDATE ND101 SET HeJi=(SELECT SUM(XiaoJi) FROM ND101Dtl1 WHERE RefPK=" + this.OID + ") WHERE OID=" + this.OID;
-                    BP.DA.DBAccess.RunSQL(sql);
-                    //把合计转化成大写.
-                    float hj = BP.DA.DBAccess.RunSQLReturnValFloat("SELECT HeJi FROM ND101 WHERE OID=" + this.OID, 0);
-                    sql = "UPDATE ND101 SET DaXie='" + BP.DA.DataType.ParseFloatToCash(hj) + "' WHERE OID=" + this.OID;
-                    BP.DA.DBAccess.RunSQL(sql);
-                    break;
-                case "OutOK":
-                    /*在这是里处理您的业务过程。*/
-                    return;
-                default:
-                    break;
-            }
-        }
-        catch (Exception ex)
-        {
-            string info = "error:" + ex.StackTrace + " message:" + ex.Message;
-            //info = System.Text.Encoding.UTF8.GetString(info);
-            this.Response.Write(info);
-        }
     }
 
 }

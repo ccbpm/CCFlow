@@ -284,7 +284,7 @@ namespace BP.WF
                 string title = string.Format("工作退回：流程:{0}.工作:{1},退回人:{2},需您处理",
                     this.HisNode.FlowName, this.ReturnToNode.Name, WebUser.Name);
 
-                BP.WF.Dev2Interface.Port_SendMsg(returnToEmp.No, title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnWork, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
+                BP.WF.Dev2Interface.Port_SendMsg(returnToEmp.No, title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
             }
 
             //退回后事件
@@ -599,7 +599,7 @@ namespace BP.WF
             this.AddToTrack(ActionType.Return, toEmp, toEmpName,
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
 
-            BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnWork, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
+            BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
 
             gwf.WFState = WFState.ReturnSta;
             gwf.FK_Node = this.ReturnToNode.NodeID;
@@ -675,7 +675,7 @@ namespace BP.WF
             // 加入track.
             this.AddToTrack(ActionType.Return, toEmp, toEmpName,
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
-            BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnWork, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
+            BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
 
             gwf.WFState = WFState.ReturnSta;
             gwf.Update();
@@ -1170,7 +1170,7 @@ namespace BP.WF
                       wn.HisNode.FlowName, wn.HisNode.Name, WebUser.Name);
 
                 BP.WF.Dev2Interface.Port_SendMsg(wn.HisWork.Rec, title, msg,
-                    "RESub" + backtoNodeID + "_" + this.WorkID, BP.WF.SMSMsgType.ToDo, nd.FK_Flow, nd.NodeID, this.WorkID, this.FID);
+                    "RESub" + backtoNodeID + "_" + this.WorkID, BP.WF.SMSMsgType.SendSuccess, nd.FK_Flow, nd.NodeID, this.WorkID, this.FID);
             }
             return wn;
         }

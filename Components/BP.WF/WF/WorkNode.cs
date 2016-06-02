@@ -7180,7 +7180,7 @@ namespace BP.WF
                     msgTemp = Glo.DealExp(msgTemp, this.HisWork, null);
 
                 BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, title, mailDoc,
-                    "WKAlt" + wl.FK_Node + "_" + wl.WorkID, BP.WF.SMSMsgType.ToDo, wl.FK_Flow, wl.FK_Node, wl.WorkID, wl.FID);
+                    "WKAlt" + wl.FK_Node + "_" + wl.WorkID, BP.WF.SMSMsgType.SendSuccess, wl.FK_Flow, wl.FK_Node, wl.WorkID, wl.FID);
             }
         }
         /// <summary>

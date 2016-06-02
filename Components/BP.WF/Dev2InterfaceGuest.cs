@@ -81,7 +81,6 @@ namespace BP.WF
                 htPara.Add(StartFlowParaNameList.PEmp, parentEmp);
 
 
-
             Emp empStarter = new Emp(BP.Web.WebUser.No);
             Work wk = fl.NewWork(empStarter,htPara);
             Int64 workID = wk.OID;
@@ -172,6 +171,61 @@ namespace BP.WF
             // 设置流程信息
             if (parentWorkID != 0)
                 BP.WF.Dev2Interface.SetParentInfo(flowNo, workID, parentFlowNo, parentWorkID,parentNodeID,parentEmp);
+
+            #region 处理generworkid
+            // 设置父流程信息.
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = wk.OID;
+            int i = gwf.RetrieveFromDBSources();
+
+            //将流程信息提前写入wf_GenerWorkFlow,避免查询不到
+            gwf.FlowName = fl.Name;
+            gwf.FK_Flow = flowNo;
+            gwf.FK_FlowSort = fl.FK_FlowSort;
+            gwf.FK_Dept = WebUser.FK_Dept;
+            gwf.DeptName = WebUser.FK_DeptName;
+            gwf.FK_Node = fl.StartNodeID;
+            gwf.NodeName = nd.Name;
+            gwf.WFState = WFState.Runing;
+            if (string.IsNullOrEmpty(title))
+                gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
+            else
+                gwf.Title = title;
+            gwf.Starter = WebUser.No;
+            gwf.StarterName = WebUser.Name;
+            gwf.RDT = DataType.CurrentDataTime;
+            gwf.PWorkID = parentWorkID;
+           // gwf.PFID = parentFID;
+            gwf.PFlowNo = parentFlowNo;
+            gwf.PNodeID = parentNodeID;
+            if (i == 0)
+                gwf.Insert();
+            else
+                gwf.Update();
+
+            //插入待办.
+            GenerWorkerList gwl = new GenerWorkerList();
+            gwl.WorkID = wk.OID;
+            gwl.FK_Node = nd.NodeID;
+            gwl.FK_Emp = WebUser.No;
+            i = gwl.RetrieveFromDBSources();
+
+            gwl.FK_EmpText = WebUser.Name;
+            gwl.FK_NodeText = nd.Name;
+            gwl.FID = 0;
+            gwl.FK_Flow = fl.No;
+            gwl.FK_Dept = WebUser.FK_Dept;
+            gwl.SDT = DataType.CurrentDataTime;
+            gwl.DTOfWarning = DataType.CurrentDataTime;
+            gwl.RDT = DataType.CurrentDataTime;
+            gwl.IsEnable = true;
+            gwl.IsPass = false;
+            gwl.PRI = gwf.PRI;
+            if (i == 0)
+                gwl.Insert();
+            else
+                gwl.Update();
+            #endregion
 
             return wk.OID;
         }

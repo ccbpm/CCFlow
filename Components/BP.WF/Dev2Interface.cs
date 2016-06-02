@@ -5253,9 +5253,7 @@ namespace BP.WF
 
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             int currNodeId = Dev2Interface.Node_GetCurrentNodeID(fk_flow, workID);
-
             BP.WF.Dev2Interface.Node_SaveWork(fk_flow, currNodeId, workID, htWork, workDtls);
 
             // 变量.

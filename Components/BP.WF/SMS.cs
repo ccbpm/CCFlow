@@ -25,7 +25,7 @@ namespace BP.WF
         /// <summary>
         /// 待办消息
         /// </summary>
-        public const string ToDo = "ToDo";
+        public const string SendSuccess = "SendSuccess";
         /// <summary>
         /// 其他
         /// </summary>
@@ -33,7 +33,7 @@ namespace BP.WF
         /// <summary>
         /// 退回消息
         /// </summary>
-        public const string ReturnWork = "ReturnWork";
+        public const string ReturnAfter = "ReturnAfter";
         /// <summary>
         /// 移交消息
         /// </summary>

@@ -724,7 +724,6 @@ namespace BP.WF.Template
 
             #endregion 生成相关的变量？
 
-           
             //求发送给的人员ID.
             string toEmpIDs = "";
 
@@ -775,7 +774,8 @@ namespace BP.WF.Template
                         BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
 
                         //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, "ToDo", "WKAlt" + currNode.NodeID + "_" + workid);
+                        BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event,
+                            "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No,null,emp);
                     }
                     return "@已向:{" + toEmpIDs + "}发送提醒邮件，由 " + this.FK_Event + " 发出.";
                 }
@@ -786,7 +786,7 @@ namespace BP.WF.Template
                     string emailAddress = r[this.MailAddress] as string;
 
                     //发送邮件
-                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, "ToDo", "WKAlt" + currNode.NodeID + "_" + workid);
+                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, "ToDo", "WKAlt" + currNode.NodeID + "_" + workid,BP.Web.WebUser.No,null,null);
                     return "@已向:{" + emailAddress + "}发送提醒邮件，由 " + this.FK_Event + " 发出.";
                 }
             }
@@ -814,7 +814,7 @@ namespace BP.WF.Template
                         BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
 
                         //发送邮件.
-                        BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, "ToDo", "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, emp);
+                        BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, emp);
                     }
                     return "@已向:{" + toEmpIDs + "}发送提醒邮件，由 SendSuccess 发出.";
                 }
@@ -825,7 +825,7 @@ namespace BP.WF.Template
                     string emailAddress = r[this.MailAddress] as string;
 
                     //发送邮件
-                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, "ToDo", "WKAlt" + objs.VarToNodeID + "_" + workid);
+                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid,BP.Web.WebUser.No,null,null);
 
                     return "@已向:{" + emailAddress + "}发送提醒邮件，由 SendSuccess 发出.";
                 }
@@ -860,6 +860,9 @@ namespace BP.WF.Template
             smsDocTmp = smsDocTmp.Replace("{Url}", openWorkURl);
             smsDocTmp = smsDocTmp.Replace("@WebUser.No", WebUser.No);
             smsDocTmp = smsDocTmp.Replace("@WebUser.Name", WebUser.Name);
+
+            smsDocTmp = smsDocTmp.Replace("@WorkID", en.PKVal.ToString());
+            smsDocTmp = smsDocTmp.Replace("@OID", en.PKVal.ToString());
 
             /*如果仍然有没有替换下来的变量.*/
             if (smsDocTmp.Contains("@") == true)
@@ -905,9 +908,6 @@ namespace BP.WF.Template
             if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
                 || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
             {
-                string msgType = "ToDo";
-                if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
-                    msgType = "Return";
 
                 /*发送成功事件.*/
                 if (this.SMSPushWay == 1)
@@ -925,7 +925,7 @@ namespace BP.WF.Template
                         BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
 
                         //发送短信.
-                        Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, msgType, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null);
+                        Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, null, emp, null);
                     }
                     return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
                 }
@@ -936,7 +936,7 @@ namespace BP.WF.Template
                     string tel = r[this.SMSField] as string;
                     //发送短信.
 
-                    BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, msgType, "WKAlt" + currNode.NodeID + "_" + workid);
+                    BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid);
                     return "@已向:{" + tel + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
                 }
             }
@@ -968,9 +968,9 @@ namespace BP.WF.Template
                     return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 SendSuccess 发出.";
                 }
 
-                if (this.MailPushWay == 2)
+                if (this.SMSPushWay == 2)
                 {
-                    /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
+                    /*如果向指定的字段作为发送短信的发送对象, 从字段里取数据. */
                     string tel = r[this.SMSField] as string;
                     if (tel != null || tel.Length > 6)
                     {

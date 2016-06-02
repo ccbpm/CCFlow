@@ -72,7 +72,7 @@ namespace BP.UnitTesting
         public override void Do()
         {
             //测试请假流程，在没有设置任何消息机制的情况下，发送默认的消息。
-           // this.Test002();
+             this.Test002();
 
             //测试学生请假流程.
              this.Test055();
@@ -149,8 +149,8 @@ namespace BP.UnitTesting
                     if (sms.HisMobileSta != MsgSta.Disable)
                         throw new Exception("@应该是 短消息 禁用状态，但是目前状态是:" + sms.HisMobileSta);
 
-                    if (sms.SendToEmpNo != "liping")
-                        throw new Exception("@应该是 liping 是接受人ID，但是目前是:" + sms.SendToEmpNo);
+                    if (sms.SendToEmpNo != "guoxiangbin")
+                        throw new Exception("@应该是 guoxiangbin 是接受人ID，但是目前是:" + sms.SendToEmpNo);
 
                     if (sms.Sender != BP.Web.WebUser.No)
                         throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sms.Sender);
@@ -228,15 +228,38 @@ namespace BP.UnitTesting
             }
             #endregion 检查是否有消息产生.
 
-            //第2步.
-            this.Step2();
+
+            /*
+             * 让 zhanghaicheng 登录，走申请-总经理审批-人力资源备案.
+             */
+
+            //让 zhanghaicheng 登录,
+            BP.WF.Dev2Interface.Port_Login("zhanghaicheng");
+            //创建空白工作, 发起开始节点.
+            workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow);
+            //让zhanghaicheng发送.
+            BP.WF.Dev2Interface.Node_SendWork(fk_flow, workID, null, null);
+
+            //让 zhoupeng 登录.
+            BP.WF.Dev2Interface.Port_Login("zhoupeng");
+            //删除消息. 
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS");
+            //让zhoupeng发送, 发送到人力资源备案. 并且人力资源有短消息提醒.
+            BP.WF.Dev2Interface.Node_SendWork(fk_flow, workID, null, null);
+
+            //检查是否有消息存在.
+            smss = new SMSs();
+            smss.RetrieveAllFromDBSource();
+            if (smss.Count == 0)
+                throw new Exception("@执行了发送，应该产生消息，而没有产生，应该产生一条短消息.");
+
         }
         /// <summary>
         /// 步骤1 让 zhoupeng 登录去处理.
         /// </summary>
         public void Step2()
         {
-            //让 zhouepng 登录.
+            //让 liping 登录.
             BP.WF.Dev2Interface.Port_Login("liping");
 
             // 执行退回，看看是否有退回的消息？

@@ -122,7 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\Cfg.txt" />
-    <Content Include="Data\Img\log.jpg" />
     <Content Include="Data\Language\Btn.xml" />
     <Content Include="Data\Language\Comm.xml" />
     <Content Include="Data\Language\Cond.aspx.xml" />
@@ -231,8 +230,7 @@
   <ItemGroup>
     <Folder Include="DataUser\Log\" />
     <Folder Include="Data\FlowDesc\" />
-    <Folder Include="Data\Img_CCS\" />
-    <Folder Include="Data\Img_ML\" />
+    <Folder Include="Data\Img\" />
     <Folder Include="Data\Xml\" />
     <Folder Include="WF\Data\Install\SQLScript\" />
     <Folder Include="WF\Data\JSLib\onchange\" />

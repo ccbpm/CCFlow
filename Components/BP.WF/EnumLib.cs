@@ -40,7 +40,11 @@ namespace BP.WF
         /// <summary>
         /// 写入微信.
         /// </summary>
-        ToWeiXin
+        ToWeiXin,
+        /// <summary>
+        /// 写入CCIM
+        /// </summary>
+        CCIM
     }
     /// <summary>
     /// 加签模式

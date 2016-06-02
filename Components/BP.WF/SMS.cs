@@ -225,7 +225,7 @@ namespace BP.WF
                     smsEns.AddEntity(sms);
                     string json = BP.Tools.Entitis2Json.ConvertEntities2ListJson(smsEns);
                     CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                    soap.WriteShortMessage(json);
+                   // soap.WriteShortMessage(json);
                     break;
                 case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
                     throw new Exception("没有实现");
@@ -592,6 +592,48 @@ namespace BP.WF
             {
                 return false;
             }
+        }
+
+        protected override void afterInsert()
+        {
+
+            CCInterface.PortalInterfaceSoapClient soap = null;
+            if (this.HisEmailSta == MsgSta.UnRun)
+            {
+                /*发送邮件*/
+                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                 soap.SendToEmail(this.MyPK, this.Email, this.Title,this.DocOfEmail);
+                 return;
+            }
+
+            if (this.HisMobileSta == MsgSta.UnRun)
+            {
+                switch (BP.WF.Glo.ShortMessageWriteTo)
+                {
+                    case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
+                        break;
+                    case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
+                        soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                        soap.SendToWebServices(this.MyPK, this.Mobile, this.MobileInfo);
+                        break;
+                    case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
+                        soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                        soap.SendToDingDing(this.MyPK, this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                        break;
+                    case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信.
+                       soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                        soap.SendToWeiXin(this.MyPK,this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                        break;
+                    case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
+                        soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                        soap.SendToWeiXin(this.MyPK,  this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            base.afterInsert();
         }
          
     }

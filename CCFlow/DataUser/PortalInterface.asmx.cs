@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Collections;
 using System.Web;
 using System.Web.Services;
 using BP.DA;
@@ -17,22 +18,77 @@ namespace ccbpm
     // [System.Web.Script.Services.ScriptService]
     public class PortalInterface : System.Web.Services.WebService
     {
-        #region 短消息写入接口.
-        /// <summary>
-        /// 该方法是调用发送短消息的接口。
-        /// 需要与web.config中 ShortMessageWriteTo 配置才能起作用。
-        /// 一般来说，它用于写入到手机短信接口.
-        /// </summary>
-        /// <param name="smsEntityJson"></param>
-        /// <returns></returns>
-        [WebMethod]
-        public bool WriteShortMessage(string smsEntityJson)
-        {
 
+        #region 发送消息接口. 需要与web.config中 ShortMessageWriteTo 配置才能起作用。
+        /// <summary>
+        /// 发送短信接口(二次开发需要重写这个接口)
+        /// </summary>
+        /// <param name="msgPK">消息主键，是对应的Sys_SMS的MyPK。</param>
+        /// <param name="tel">手机号码</param>
+        /// <param name="msgInfo">短消息</param>
+        /// <returns>是否发送成功</returns>
+        [WebMethod]
+        public bool SendToWebServices(string msgPK,string tel, string msgInfo)
+        {
+            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
             return true;
         }
-        #endregion 短消息写入接口.
-
+        /// <summary>
+        /// 发送丁丁的接口
+        /// </summary>
+        /// <param name="msgPK">消息主键，是对应的Sys_SMS的MyPK。</param>
+        /// <param name="userNo">内部用户</param>
+        /// <param name="tel">电话</param>
+        /// <param name="msgInfo">消息内容</param>
+        /// <returns>是否发送成功</returns>
+        [WebMethod]
+        public bool SendToDingDing(string mypk, string userNo, string tel, string msgInfo)
+        {
+            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
+            return true;
+        }
+        /// <summary>
+        /// 发送微信的接口
+        /// </summary>
+        /// <param name="mypk">消息主键，是对应的Sys_SMS的MyPK。</param>
+        /// <param name="userNo"></param>
+        /// <param name="tel"></param>
+        /// <param name="msgInfo"></param>
+        /// <returns>是否发送成功</returns>
+        [WebMethod]
+        public bool SendToWeiXin(string mypk, string userNo, string tel, string msgInfo)
+        {
+            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
+            return true;
+        }
+        /// <summary>
+        /// 发送邮件接口
+        /// </summary>
+        /// <param name="mypk">消息主键，是对应的Sys_SMS的MyPK。</param>
+        /// <param name="email">邮件地址</param>
+        /// <param name="title">标题</param>
+        /// <param name="maildoc">内容</param>
+        /// <returns>是否发送成功</returns>
+        [WebMethod]
+        public bool SendToEmail(string mypk, string email, string title, string maildoc)
+        {
+            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
+            return true;
+        }
+        /// <summary>
+        /// 发送到CCIM即时通讯
+        /// </summary>
+        /// <param name="mypk">主键</param>
+        /// <param name="email">邮件</param>
+        /// <param name="title">标题</param>
+        /// <param name="maildoc">内容</param>
+        /// <returns>返回发送结果</returns>
+        public bool SendToCCIM(string mypk, string userNo, string msg)
+        {
+            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
+            return true;
+        }
+        #endregion 发送消息接口.
 
         #region 组织结构.
         /// <summary>

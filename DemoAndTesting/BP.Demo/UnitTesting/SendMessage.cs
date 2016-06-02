@@ -59,8 +59,8 @@ namespace BP.UnitTesting
         public SendMessage()
         {
             this.Title = "消息发送机制测试";
-            this.DescIt = "流程:002请假流程.";
-            this.EditState = EditState.UnOK; //已经能过.
+            this.DescIt = "流程:002请假流程(内部人员),055学生请假流程(内外部人员都有).";
+            this.EditState = EditState.Editing; //已经能过.
         }
 
         /// <summary>
@@ -71,26 +71,115 @@ namespace BP.UnitTesting
         /// </summary>
         public override void Do()
         {
-            #region 定义变量.
-            fk_flow = "002";
-            userNo = "liyan";
-            fl = new Flow(fk_flow);
-            #endregion 定义变量.
+            //测试请假流程，在没有设置任何消息机制的情况下，发送默认的消息。
+           // this.Test002();
 
-            //执行第1步骤. 让liyan 发起流程.
-            this.Step1();
-
-            //执行第2步骤. 让 liping 处理.
-           // this.Step2();
+            //测试学生请假流程.
+             this.Test055();
 
             //执行第3步骤. 让liyan 结束.
             //this.Step3();
         }
         /// <summary>
-        /// 步骤1 让zhanghaicheng 发起流程.
+        /// 测试学生请假流程.
         /// </summary>
-        public void Step1()
+        public void Test055()
         {
+            //先执行一次流程检查.
+            BP.WF.Flow fl = new Flow("055");
+            fl.DoCheck();
+
+            //让客户登录 0001登录，光头强.
+            BP.WF.Dev2InterfaceGuest.Port_Login("0001", "光头强");
+            //删除消息. 
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS");
+
+            //创建workid.
+            workID = BP.WF.Dev2InterfaceGuest.Node_CreateBlankWork("055", null, null, BP.Web.GuestUser.No, BP.Web.GuestUser.Name);
+
+            //生成参数格式，把他传入给流程引擎，让其向这个手机写入消息。
+            Hashtable ht = new Hashtable();
+            ht.Add("SQRSJH","18660153393");
+
+            //向下发送.
+            SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork("055", workID, ht, null);
+
+            string empNo = objs.VarAcceptersID;
+            if (empNo != "guoxiangbin")
+                throw new Exception("@应该发送给guoxiangbin 处理但是发送到了:"+ empNo);
+
+            //退出外部用户登录.
+            BP.WF.Dev2InterfaceGuest.Port_LoginOunt();
+
+            #region 检查消息发送的结果.
+
+            //系统设置了向下一步接受人员发送邮件，向指定字段的作为手机号发送短信。
+            BP.WF.SMSs smss = new SMSs();
+            smss.RetrieveAllFromDBSource();
+            if (smss.Count != 2)
+                throw new Exception("@应该产生 2 条，现在产生了"+smss.Count+"条。");
+
+            foreach (BP.WF.SMS sms in smss)
+            {
+                if (sms.MsgType == SMSMsgType.SendSuccess)
+                {
+                    /*发送成功是使用邮件提醒.*/
+                    if (sms.HisEmailSta != MsgSta.UnRun)
+                        throw new Exception("@应该是邮件启用状态，但是目前状态是:" + sms.HisEmailSta);
+
+                    if (sms.HisMobileSta != MsgSta.Disable)
+                        throw new Exception("@应该是 短消息 禁用状态，但是目前状态是:" + sms.HisMobileSta);
+
+                    if (sms.SendToEmpNo != "guoxiangbin")
+                        throw new Exception("@应该是 guoxiangbin 是接受人ID，但是目前是:" + sms.SendToEmpNo);
+
+                    if (sms.Sender != BP.Web.WebUser.No)
+                        throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sms.Sender);
+
+                    if (sms.IsRead != 0)
+                        throw new Exception("@应该是 IsRead=0 ，但是目前是:" + sms.IsRead);
+                }
+
+                if (sms.MsgType == SMSMsgType.SendSuccess)
+                {
+                    /*发送成功是使用邮件提醒.*/
+                    if (sms.HisEmailSta != MsgSta.UnRun)
+                        throw new Exception("@应该是邮件启用状态，但是目前状态是:" + sms.HisEmailSta);
+
+                    if (sms.HisMobileSta != MsgSta.Disable)
+                        throw new Exception("@应该是 短消息 禁用状态，但是目前状态是:" + sms.HisMobileSta);
+
+                    if (sms.SendToEmpNo != "liping")
+                        throw new Exception("@应该是 liping 是接受人ID，但是目前是:" + sms.SendToEmpNo);
+
+                    if (sms.Sender != BP.Web.WebUser.No)
+                        throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sms.Sender);
+
+                    if (sms.IsRead != 0)
+                        throw new Exception("@应该是 IsRead=0 ，但是目前是:" + sms.IsRead);
+                }
+
+            }
+            #endregion 检查消息发送的结果.
+
+
+            //给发起人赋值.
+            starterEmp = new Port.Emp(empNo);
+
+            //让 userNo 登录.
+            BP.WF.Dev2Interface.Port_Login(empNo);
+
+
+        }
+        /// <summary>
+        /// 测试默认的请假流程发送与退回.
+        /// </summary>
+        public void Test002()
+        {
+            //流程编号.
+            string fk_flow = "002";
+            userNo = "liyan";
+
             //给发起人赋值.
             starterEmp = new Port.Emp(userNo);
 
@@ -100,15 +189,12 @@ namespace BP.UnitTesting
             //检查201节点是否有短消息？
             PushMsgs msgs = new PushMsgs(201);
             if (msgs.Count > 0)
-            {
-                throw new Exception("@测试模版变化");
-            }
-
+                throw new Exception("@测试模版变化，以下的测试将会不正确。");
 
             //创建空白工作, 发起开始节点.
             workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow);
 
-            //删除消息.
+            //删除消息. 
             BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS");
 
             //执行发送工作.
@@ -127,9 +213,23 @@ namespace BP.UnitTesting
             {
                 if (sm.HisEmailSta != MsgSta.UnRun)
                     throw new Exception("@应该是邮件启用状态，但是目前状态是:"+sm.HisEmailSta);
+
+                if (sm.MsgType != SMSMsgType.SendSuccess)
+                    throw new Exception("@应该是 SendSuccess 的类型，但是目前状态是:" + sm.MsgType);
+
+                if (sm.SendToEmpNo != "liping")
+                    throw new Exception("@应该是 liping 是接受人ID，但是目前是:" + sm.SendToEmpNo);
+
+                if (sm.Sender != BP.Web.WebUser.No)
+                    throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sm.Sender);
+
+                if (sm.IsRead != 0)
+                    throw new Exception("@应该是 IsRead=0 ，但是目前是:" + sm.IsRead);
             }
-            #endregion 检查是否有消息产生
-             
+            #endregion 检查是否有消息产生.
+
+            //第2步.
+            this.Step2();
         }
         /// <summary>
         /// 步骤1 让 zhoupeng 登录去处理.
@@ -137,289 +237,42 @@ namespace BP.UnitTesting
         public void Step2()
         {
             //让 zhouepng 登录.
-            BP.WF.Dev2Interface.Port_Login("zhoupeng");
+            BP.WF.Dev2Interface.Port_Login("liping");
 
-            //让他向下发送.
-            objs = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workID);
+            // 执行退回，看看是否有退回的消息？
+            BP.WF.Dev2Interface.Node_ReturnWork(fk_flow, workID, 0, 202, 201, "测试退回", false);
 
-            #region 第1步: 检查发送对象.
-            //从获取的发送对象里获取到下一个工作者. zhangyifan(张一帆)、zhoushengyu(周升雨).
-            if (objs.VarAcceptersID != "zhanghaicheng")
-                throw new Exception("@下一步的接受人不正确, 应当是: zhanghaicheng.现在是:" + objs.VarAcceptersID);
+            #region 检查是否有消息产生.
+            BP.WF.SMSs smss = new SMSs();
+            smss.RetrieveAllFromDBSource();
+            if (smss.Count == 0)
+                throw new Exception("@执行了发送，应该产生消息，而没有产生。");
 
-            if (objs.VarToNodeID != 2399)
-                throw new Exception("@应该是 2399 节点. 现在是:" + objs.VarToNodeID);
+            if (smss.Count != 2)
+                throw new Exception("@应该产生 2 条，现在产生了"+smss.Count+"条。");
 
-            if (objs.VarWorkID != workID)
-                throw new Exception("@主线程的workid不应该变化:" + objs.VarWorkID);
-
-            if (objs.VarCurrNodeID != 2302)
-                throw new Exception("@当前节点的编号不能变化,现在是:" + objs.VarCurrNodeID);
-
-            if (objs.VarTreadWorkIDs != null)
-                throw new Exception("@不应当获得子线程WorkID.");
-
-            #endregion 第1步: 检查发送对象.
-
-            #region 第2步: 检查流程引擎表.
-            //检查待办是否存在。
-            sql = "SELECT * FROM WF_EmpWorks WHERE WorkID=" + workID + " AND FK_Emp='" + objs.VarAcceptersID + "'";
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count == 0)
-                throw new Exception("@不应该找不到当前人员的待办.");
-
-            gwf = new GenerWorkFlow(workID);
-
-            if (gwf.FK_Dept != starterEmp.FK_Dept)
-                throw new Exception("@发起人的部门有变化，应当是" + starterEmp.FK_Dept + ",现在是:" + gwf.FK_Dept);
-
-            if (gwf.Starter != starterEmp.No)
-                throw new Exception("@发起人的 No 有变化，应当是" + starterEmp.No + ",现在是:" + gwf.Starter);
-
-            //判断当前点.
-            if (gwf.FK_Node != 2399)
-                throw new Exception("@当前点应该是 2399 现在是:" + gwf.FK_Node);
-
-            //判断当前点.
-            if (gwf.FID != 0)
-                throw new Exception("@当前点应该是 FID=0  现在是:" + gwf.FID);
-
-            //判断PWorkID，没有谁调用它，应当是 0. 
-            if (gwf.PWorkID != 0)
-                throw new Exception("@没有谁调用它, 当前点应该是 PWorkID=0  现在是:" + gwf.PWorkID);
-
-            //判断 WFState . 
-            if (gwf.WFState != WFState.Runing)
-                throw new Exception("@应当是 WFState=Runing 现在是:" + gwf.WFState.ToString());
-
-            //检查开始节点 发送人的WF_GenerWorkerList 的.
-            gwl = new GenerWorkerList();
-            gwl.FK_Emp = Web.WebUser.No;
-            gwl.FK_Node = 2302;
-            gwl.WorkID = workID;
-            gwl.Retrieve();
-
-            // 没有分合流应当是 0 .
-            if (gwl.FID != 0)
-                throw new Exception("@没有分合流应当是 0.");
-
-            if (gwl.IsEnable == false)
-                throw new Exception("@应该是启用的状态 ");
-
-            if (gwl.IsPass == false)
-                throw new Exception("@应该是通过的状态 ");
-
-            //if (gwl.Sender.Contains("zhanghaicheng")==false)
-            //    throw new Exception("@应该是 包含当前状态 . ");
-
-            //检查接受人的 WF_GenerWorkerList 的.
-            gwl = new GenerWorkerList();
-            gwl.FK_Emp = objs.VarAcceptersID;
-            gwl.FK_Node = 2399;
-            gwl.WorkID = workID;
-            gwl.Retrieve();
-
-            // 没有分合流应当是 0 .
-            if (gwl.FID != 0)
-                throw new Exception("@没有分合流应当是 0.");
-
-            if (gwl.IsEnable == false)
-                throw new Exception("@应该是启用的状态 ");
-
-            if (gwl.IsPass == true)
-                throw new Exception("@应该是未通过的状态 ");
-
-            //if (gwl.Sender.Contains(WebUser.No)==false)
-            //    throw new Exception("@应该是 当前人发送的，现在是: " + gwl.Sender);
-            #endregion 第2步: 检查流程引擎表.
-
-            #region 第3步: 检查节点数据表.
-            sql = "SELECT * FROM ND2301 WHERE OID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 1)
-                throw new Exception("@发起流程出错误,不应该找不到开始节点的数据.");
-            foreach (DataColumn dc in dt.Columns)
+            foreach (BP.WF.SMS sm in smss)
             {
-                string val = dt.Rows[0][dc.ColumnName].ToString();
-                switch (dc.ColumnName)
-                {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
-                    case WorkAttr.Emps:
-                        if (val.Contains("zhanghaicheng") == false)
-                            throw new Exception("应当包含当前人员,现在是:" + val);
-                        break;
-                    case WorkAttr.FID:
-                        if (val != "0")
-                            throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
-                    case WorkAttr.Rec:
-                        if (val != objs.VarAcceptersID)
-                            throw new Exception("应当 Rec=zhanghaicheng,现在是:" + val);
-                        break;
+                if (sm.MsgType != "ReturnAfter")
+                    continue;
 
-                    default:
-                        break;
-                }
+                if (sm.HisEmailSta != MsgSta.UnRun)
+                    throw new Exception("@应该是邮件启用状态，但是目前状态是:" + sm.HisEmailSta);
+
+                if (sm.MsgType != SMSMsgType.ReturnAfter)
+                    throw new Exception("@应该是 ReturnWork 的类型，但是目前状态是:" + sm.MsgType);
+
+                if (sm.SendToEmpNo != "liyan")
+                    throw new Exception("@应该是 liyan 是接受人ID，但是目前是:" + sm.SendToEmpNo);
+
+                if (sm.Sender != BP.Web.WebUser.No)
+                    throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sm.Sender);
+
+                if (sm.IsRead != 0)
+                    throw new Exception("@应该是 IsRead=0 ，但是目前是:" + sm.IsRead);
             }
-
-            //检查节点2的数据.
-            sql = "SELECT * FROM ND2302 WHERE OID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 1)
-                throw new Exception("@发起流程出错误,不应该找不到 ND2302 的数据.");
-            foreach (DataColumn dc in dt.Columns)
-            {
-                string val = dt.Rows[0][dc.ColumnName].ToString();
-                switch (dc.ColumnName)
-                {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
-                    case WorkAttr.Emps:
-                        if (val.Contains(WebUser.No) == false)
-                            throw new Exception("应当包含当前人员,现在是:" + val);
-                        break;
-                    case WorkAttr.FID:
-                        if (val != "0")
-                            throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
-                    case WorkAttr.Rec:
-                        if (val != "zhoupeng")
-                            throw new Exception("应当 Rec= zhoupeng,现在是:" + val);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            //检查节点3的数据.
-            sql = "SELECT * FROM ND2399 WHERE OID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 1)
-                throw new Exception("@发起流程出错误,不应该找不到 ND2399 的数据.");
-            foreach (DataColumn dc in dt.Columns)
-            {
-                string val = dt.Rows[0][dc.ColumnName].ToString();
-                switch (dc.ColumnName)
-                {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
-                    case WorkAttr.Emps:
-                        if (val.Contains("zhanghaicheng") == false)
-                            throw new Exception("应当包含当前人员,现在是:" + val);
-                        break;
-                    case WorkAttr.FID:
-                        if (val != "0")
-                            throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
-                    case WorkAttr.Rec:
-                        if (val != objs.VarAcceptersID)
-                            throw new Exception("应当 Rec= " + objs.VarAcceptersID + ",现在是:" + val);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            //检查流程表的数据.
-            sql = "SELECT * FROM " + fl.PTable + " WHERE OID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 1)
-                throw new Exception("@流程报表数据被删除了.");
-            foreach (DataColumn dc in dt.Columns)
-            {
-                string val = dt.Rows[0][dc.ColumnName].ToString();
-                switch (dc.ColumnName)
-                {
-                    case GERptAttr.FID:
-                        if (val != "0")
-                            throw new Exception("@应当是0");
-                        break;
-                    case GERptAttr.FK_Dept:
-                        BP.Port.Emp emp = new Port.Emp("zhanghaicheng");
-                        if (val != emp.FK_Dept)
-                            throw new Exception("@应当是" + emp.FK_Dept + ", 现在是:" + val);
-                        break;
-                    case GERptAttr.FK_NY:
-                        if (val != DataType.CurrentYearMonth)
-                            throw new Exception("@应当是" + DataType.CurrentYearMonth + ", 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowDaySpan:
-                        if (val != "0")
-                            throw new Exception("@应当是 0 , 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowEmps:
-                        if (BP.WF.Glo.UserInfoShowModel != UserInfoShowModel.UserNameOnly)
-                        {
-                            if (val.Contains(WebUser.No) == false)
-                                throw new Exception("@应当是包含当前人员, 现在是:" + val);
-                        }
-                        break;
-                    case GERptAttr.FlowEnder:
-                        if (val != WebUser.No)
-                            throw new Exception("@应当是 当前人员, 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowEnderRDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("@应当是 当前日期, 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowEndNode:
-                        if (val != "2399")
-                            throw new Exception("@应当是 2399, 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowStarter:
-                        if (val == WebUser.No)
-                            throw new Exception("@应当是  WebUser.No, 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowStartRDT:
-                        if (string.IsNullOrEmpty(val))
-                            throw new Exception("@应当不能为空,现在是:" + val);
-                        break;
-                    case GERptAttr.Title:
-                        if (string.IsNullOrEmpty(val))
-                            throw new Exception("@不能为空title" + val);
-                        break;
-                    case GERptAttr.WFState:
-                        if (int.Parse(val) != (int)WFState.Runing)
-                            throw new Exception("@应当是  WFState.Runing 现在是" + val);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            #endregion 第3步: 检查节点数据表.
+            #endregion 检查是否有消息产生.
+             
         }
         /// <summary>
         /// 步骤3 让zhanghaicheng 结束流程.
@@ -431,235 +284,6 @@ namespace BP.UnitTesting
 
             //让他向下发送.
             objs = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workID);
-
-            #region 第1步: 检查发送对象.
-            //从获取的发送对象里获取到下一个工作者. zhangyifan(张一帆)、zhoushengyu(周升雨).
-            if (objs.VarAcceptersID != null)
-                throw new Exception("@接受人员应当为空." + objs.VarAcceptersID);
-
-            if (objs.VarToNodeID != 0)
-                throw new Exception("@应当是 0  现在是:" + objs.VarToNodeID);
-
-            if (objs.VarWorkID != workID)
-                throw new Exception("@主线程的workid不应该变化:" + objs.VarWorkID);
-
-            if (objs.VarCurrNodeID != 2399)
-                throw new Exception("@当前节点的编号不能变化,现在是:" + objs.VarCurrNodeID);
-
-            if (objs.VarTreadWorkIDs != null)
-                throw new Exception("@不应当获得子线程WorkID.");
-
-            #endregion 第1步: 检查发送对象.
-
-            #region 第2步: 检查流程引擎表.
-            //检查待办是否存在。
-            sql = "SELECT * FROM WF_EmpWorks WHERE WorkID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 0)
-                throw new Exception("@不应该有待办.");
-
-
-            sql = "SELECT * FROM WF_GenerWorkFlow WHERE WorkID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 0)
-                throw new Exception("@流程信息未删除.");
-
-            sql = "SELECT * FROM WF_GenerWorkerList  WHERE WorkID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 0)
-                throw new Exception("@工作人员信息未删除..");
-            #endregion 第2步: 检查流程引擎表.
-
-            #region 第3步: 检查节点数据表.
-            sql = "SELECT * FROM ND2301 WHERE OID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 1)
-                throw new Exception("@发起流程出错误,不应该找不到开始节点的数据.");
-            foreach (DataColumn dc in dt.Columns)
-            {
-                string val = dt.Rows[0][dc.ColumnName].ToString();
-                switch (dc.ColumnName)
-                {
-                    case GERptAttr.Title:
-                        if (string.IsNullOrEmpty(val))
-                            throw new Exception("@流程走完后标题丢失了");
-                        break;
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
-                    case WorkAttr.Emps:
-                        if (val.Contains(WebUser.No) == false)
-                            throw new Exception("应当包含当前人员,现在是:" + val);
-                        break;
-                    case WorkAttr.FID:
-                        if (val != "0")
-                            throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
-                    case WorkAttr.Rec:
-                        if (val != "zhanghaicheng")
-                            throw new Exception("应当 Rec=zhanghaicheng,现在是:" + val);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            //检查节点2的数据.
-            sql = "SELECT * FROM ND2302 WHERE OID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 1)
-                throw new Exception("@发起流程出错误,不应该找不到 ND2302 的数据.");
-            foreach (DataColumn dc in dt.Columns)
-            {
-                string val = dt.Rows[0][dc.ColumnName].ToString();
-                switch (dc.ColumnName)
-                {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
-                    case WorkAttr.Emps:
-                        if (val.Contains("zhoupeng") == false)
-                            throw new Exception("应当包含当前人员,现在是:" + val);
-                        break;
-                    case WorkAttr.Rec:
-                        if (val != "zhoupeng")
-                            throw new Exception("应当 Rec= zhoupeng,现在是:" + val);
-                        break;
-                    case WorkAttr.FID:
-                        if (val != "0")
-                            throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            //检查节点3的数据.
-            sql = "SELECT * FROM ND2399 WHERE OID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 1)
-                throw new Exception("@发起流程出错误,不应该找不到 ND2399 的数据.");
-            foreach (DataColumn dc in dt.Columns)
-            {
-                string val = dt.Rows[0][dc.ColumnName].ToString();
-                switch (dc.ColumnName)
-                {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
-                    case WorkAttr.Emps:
-                        if (val.Contains(WebUser.No) == false)
-                            throw new Exception("应当包含当前人员,现在是:" + val);
-                        break;
-                    case WorkAttr.FID:
-                        if (val != "0")
-                            throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
-                    case WorkAttr.Rec:
-                        if (val != "zhanghaicheng")
-                            throw new Exception("应当 Rec= zhanghaicheng,现在是:" + val);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            BP.Port.Emp emp = new Port.Emp("zhanghaicheng");
-
-            //检查流程表的数据.
-            sql = "SELECT * FROM " + fl.PTable + " WHERE OID=" + workID;
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 1)
-                throw new Exception("@流程报表数据被删除了.");
-            foreach (DataColumn dc in dt.Columns)
-            {
-                string val = dt.Rows[0][dc.ColumnName].ToString();
-                switch (dc.ColumnName)
-                {
-                    case GERptAttr.FID:
-                        if (val != "0")
-                            throw new Exception("@应当是0");
-                        break;
-                    case GERptAttr.FK_Dept:
-                        if (val != emp.FK_Dept)
-                            throw new Exception("@发起人的部门发生了变化，应当是(" + emp.FK_Dept + "),现在是:" + val);
-                        break;
-                    case GERptAttr.FK_NY:
-                        if (val != DataType.CurrentYearMonth)
-                            throw new Exception("@应当是" + DataType.CurrentYearMonth + ", 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowDaySpan:
-                        if (val != "0")
-                            throw new Exception("@应当是 0 , 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowEmps:
-                        if (BP.WF.Glo.UserInfoShowModel != UserInfoShowModel.UserNameOnly)
-                        {
-                            if (val.Contains("zhanghaicheng") == false || val.Contains("zhoupeng") == false)
-                                throw new Exception("@应当包含的人员，现在不存在, 现在是:" + val);
-                        }
-                        break;
-                    case GERptAttr.FlowEnder:
-                        if (val != "zhanghaicheng")
-                            throw new Exception("@应当是 zhanghaicheng , 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowEnderRDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("@应当是 当前日期, 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowEndNode:
-                        if (val != "2399")
-                            throw new Exception("@应当是 2399, 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowStarter:
-                        if (val != "zhanghaicheng")
-                            throw new Exception("@应当是 zhanghaicheng, 现在是:" + val);
-                        break;
-                    case GERptAttr.FlowStartRDT:
-                        if (string.IsNullOrEmpty(val))
-                            throw new Exception("@应当不能为空,现在是:" + val);
-                        break;
-                    case GERptAttr.Title:
-                        if (string.IsNullOrEmpty(val))
-                            throw new Exception("@不能为空title" + val);
-                        break;
-                    case GERptAttr.WFState:
-                        if (int.Parse(val) != (int)WFState.Complete)
-                            throw new Exception("@应当是  WFState.Complete 现在是" + val);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            #endregion 第3步: 检查节点数据表.
         }
     }
 }

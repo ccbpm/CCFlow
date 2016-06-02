@@ -23,7 +23,7 @@ namespace BP.UnitTesting.AttrFlow
         {
             this.Title = "产生单据编号";
             this.DescIt = "流程: 以demo 流程023 为例测试产生单据编号。";
-            this.EditState = EditState.Editing;
+            this.EditState = EditState.Passed;
         }
 
         #region 全局变量

@@ -23,7 +23,7 @@ namespace BP.UnitTesting.SendCase
         {
             this.Title = "一人处理多个子线程流程(任务维度流程)";
             this.DescIt = "流程:122，一个人处理多个子线程的case, 带有任务维度的流程。";
-            this.EditState = EditState.Editing;
+            this.EditState = EditState.UnOK;
         }
 
         #region 变量

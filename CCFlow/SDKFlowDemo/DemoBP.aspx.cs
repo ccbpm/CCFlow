@@ -210,7 +210,6 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
     {
         #region  直接插入一条数据.
         BP.Port.Emp emp = new BP.Port.Emp();
-        emp.Retrieve();
         emp.CheckPhysicsTable();
         /*  检查物理表是否与Map一致 
          *  1，如果没有这个物理表则创建。

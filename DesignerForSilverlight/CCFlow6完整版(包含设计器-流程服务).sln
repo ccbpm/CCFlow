@@ -1,40 +1,40 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlow", "CCFlow\CCFlow.csproj", "{AB063F5D-5166-4D77-96BB-93E981EDBB0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlow", "..\CCFlow\CCFlow.csproj", "{AB063F5D-5166-4D77-96BB-93E981EDBB0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.WF", "Components\BP.WF\BP.WF.csproj", "{04147518-E5E6-4B01-A797-094B8BA9CFD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.WF", "..\Components\BP.WF\BP.WF.csproj", "{04147518-E5E6-4B01-A797-094B8BA9CFD5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DemoAndTesting", "DemoAndTesting", "{0D2A1AE1-885C-495C-A42C-F3B91E01B031}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DemoAndTesting", "..\DemoAndTesting", "{0D2A1AE1-885C-495C-A42C-F3B91E01B031}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.Demo", "DemoAndTesting\BP.Demo\BP.Demo.csproj", "{8E48D1DF-CEED-4F0C-B863-3359B2A99134}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.Demo", "..\DemoAndTesting\BP.Demo\BP.Demo.csproj", "{8E48D1DF-CEED-4F0C-B863-3359B2A99134}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlowServices", "CCFlowServices\CCFlowServices.csproj", "{6E005D96-857E-4FD3-BF33-D1413769F191}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlowServices", "..\CCFlowServices\CCFlowServices.csproj", "{6E005D96-857E-4FD3-BF33-D1413769F191}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndustrialAutomationWorkflow", "DemoAndTesting\IndustrialAutomationWorkflow\IndustrialAutomationWorkflow.csproj", "{DE74097A-0A7F-4BEB-9FDB-421FE865A955}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndustrialAutomationWorkflow", "..\DemoAndTesting\IndustrialAutomationWorkflow\IndustrialAutomationWorkflow.csproj", "{DE74097A-0A7F-4BEB-9FDB-421FE865A955}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AB063F5D-5166-4D77-96BB-93E981EDBB0B} = {AB063F5D-5166-4D77-96BB-93E981EDBB0B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.En30", "Components\BP.En30\BP.En30.csproj", "{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.En30", "..\Components\BP.En30\BP.En30.csproj", "{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.Web.Controls30", "Components\BP.Web.Controls30\BP.Web.Controls30.csproj", "{B04D173B-69F6-4BF3-8EA4-8DB2FC7F33F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.Web.Controls30", "..\Components\BP.Web.Controls30\BP.Web.Controls30.csproj", "{B04D173B-69F6-4BF3-8EA4-8DB2FC7F33F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designer", "Designer", "{B9141FC1-47C7-4D9A-8EDB-DC52D4A50A71}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BPFramework", "BPFramework", "{71D045FC-85CE-4EFC-A2C7-1253F043CD68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingApp", "DemoAndTesting\TestingApp\TestingApp.csproj", "{49C541E8-CD69-4018-8EC5-9434D33E2735}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingApp", "..\DemoAndTesting\TestingApp\TestingApp.csproj", "{49C541E8-CD69-4018-8EC5-9434D33E2735}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.GPM", "Components\BP.GPM\BP.GPM.csproj", "{BA60EE39-F64F-49CB-80AB-6BB108EA4154}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.GPM", "..\Components\BP.GPM\BP.GPM.csproj", "{BA60EE39-F64F-49CB-80AB-6BB108EA4154}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlowDesigner", "DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj", "{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlowDesigner", "..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj", "{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlowDesignerSingle", "DesignerForSilverlight\CCFlowDesignerSingle\CCFlowDesignerSingle.csproj", "{1D0E0295-4702-46E2-9766-1A33EE418465}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlowDesignerSingle", "..\DesignerForSilverlight\CCFlowDesignerSingle\CCFlowDesignerSingle.csproj", "{1D0E0295-4702-46E2-9766-1A33EE418465}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFormDesigner", "DesignerForSilverlight\CCFormDesigner\CCFormDesigner.csproj", "{83D53118-9A8D-4970-9A88-A2909B13FF64}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFormDesigner", "..\DesignerForSilverlight\CCFormDesigner\CCFormDesigner.csproj", "{83D53118-9A8D-4970-9A88-A2909B13FF64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.SL", "DesignerForSilverlight\BP.SL\BP.SL.csproj", "{107F990E-3963-4D97-AAE4-8DCCBD24FCD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.SL", "..\DesignerForSilverlight\BP.SL\BP.SL.csproj", "{107F990E-3963-4D97-AAE4-8DCCBD24FCD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

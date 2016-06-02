@@ -601,7 +601,7 @@ namespace BP.WF
             {
                 /*发送邮件*/
                 soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                soap.SendToEmail(this.MyPK, this.Email, this.Title, this.DocOfEmail);
+                soap.SendToEmail(this.MyPK, this.Email, this.Title, this.DocOfEmail, this.SendToEmpNo);
                 return;
             }
 
@@ -613,7 +613,7 @@ namespace BP.WF
                         break;
                     case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                         soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                        soap.SendToWebServices(this.MyPK, this.Mobile, this.MobileInfo);
+                        soap.SendToWebServices(this.MyPK, this.Mobile, this.MobileInfo, this.SendToEmpNo);
                         break;
                     case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
                         soap = BP.WF.Glo.GetPortalInterfaceSoapClient();

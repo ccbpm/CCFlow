@@ -124,7 +124,7 @@ namespace BP.WF
         public static string UpdataCCFlowVer()
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
-            string val = "20160526";
+            string val = "20160562";
             string updataNote = "";
             updataNote += "20160526.升级FrmEnableRole状态.";
             updataNote += "20160501.升级todosta状态.";
@@ -238,6 +238,35 @@ namespace BP.WF
                 BP.DA.DBAccess.RunSQL(sql);
                 #endregion
 
+                #region 创建 Port_EmpDept 视图兼容旧版本.
+                //创建视图.
+                try
+                {
+                    BP.DA.DBAccess.RunSQL("DROP TABLE Port_EmpDept");
+                }
+                catch
+                {
+                }
+
+                try
+                {
+                    BP.DA.DBAccess.RunSQL("DROP VIEW Port_EmpDept");
+                }
+                catch
+                {
+                }
+
+                if (DBAccess.IsExitsObject("Port_EmpDept") == false)
+                {
+                    if (SystemConfig.OSModel == Sys.OSModel.OneOne)
+                        sql = " CREATE VIEW Port_EmpDept as SELECT No as FK_Emp, FK_Dept FROM Port_Emp ";
+                    else
+                        sql = " CREATE VIEW Port_EmpDept as SELECT FK_Emp, FK_Dept FROM Port_DeptEmpStation ";
+
+                    BP.DA.DBAccess.RunSQL(sql);
+                }
+                #endregion 创建视图.
+
                 #region  增加week字段,方便按周统计.
                 BP.WF.GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.CheckPhysicsTable();
@@ -300,7 +329,6 @@ namespace BP.WF
                 {
                 }
                 #endregion
-
 
                 //#region  更新CA签名(2015-03-03)。
                 //BP.Tools.WFSealData sealData = new Tools.WFSealData();
@@ -730,7 +758,6 @@ namespace BP.WF
             #endregion 检查是否是空白的数据库。
 
 
-
             ArrayList al = null;
             string info = "BP.En.Entity";
             al = BP.En.ClassFactory.GetObjects(info);
@@ -809,6 +836,7 @@ namespace BP.WF
             catch
             {
             }
+
             try
             {
                 BP.DA.DBAccess.RunSQL("DROP VIEW Port_EmpDept");
@@ -819,7 +847,12 @@ namespace BP.WF
 
             if (DBAccess.IsExitsObject("Port_EmpDept") == false)
             {
-                string sql = " CREATE VIEW Port_EmpDept as SELECT No as FK_Emp, FK_Dept FROM Port_Emp ";
+                string sql = "";
+                if (SystemConfig.OSModel == Sys.OSModel.OneOne)
+                    sql = " CREATE VIEW Port_EmpDept as SELECT No as FK_Emp, FK_Dept FROM Port_Emp ";
+                else
+                    sql = " CREATE VIEW Port_EmpDept as SELECT FK_Emp, FK_Dept FROM Port_DeptEmpStation ";
+
                 BP.DA.DBAccess.RunSQL(sql);
             }
             #endregion 创建视图.
@@ -4238,13 +4271,74 @@ namespace BP.WF
                 item.Insert(); // 插入数据库.
             }
             #endregion 处理字段.
+        }
+        /// <summary>
+        /// 产生消息,senderEmpNo是为了保证写入消息的唯一性，receiveid才是真正的接收者.
+        /// 如果插入失败.
+        /// </summary>
+        /// <param name="fromEmpNo">发送人</param>
+        /// <param name="now">发送时间</param>
+        /// <param name="msg">消息内容</param>
+        /// <param name="sendToEmpNo">接受人</param>
+        public static void SendMessageToCCIM(string fromEmpNo, string sendToEmpNo, string msg, string now)
+        {
+            if (fromEmpNo == null )
+                fromEmpNo = "";
 
+            if (sendToEmpNo == null || sendToEmpNo == "")
+                return;
 
+            //    throw new Exception("@接受人不能为空");
 
+            string dbStr = SystemConfig.AppCenterDBVarStr;
+            //保存系统通知消息
+            StringBuilder strHql1 = new StringBuilder();
+            //加密处理
+            msg = BP.Tools.SecurityDES.Encrypt(msg);
+
+            Paras ps = new Paras();
+            string sql = "INSERT INTO CCIM_RecordMsg (OID,SendID,MsgDateTime,MsgContent,ImageInfo,FontName,FontSize,FontBold,FontColor,InfoClass,GroupID,SendUserID) VALUES (";
+            sql += dbStr + "OID,";
+            sql += "'SYSTEM',";
+            sql += dbStr + "MsgDateTime,";
+            sql += dbStr + "MsgContent,";
+            sql += dbStr + "ImageInfo,";
+            sql += dbStr + "FontName,";
+            sql += dbStr + "FontSize,";
+            sql += dbStr + "FontBold,";
+            sql += dbStr + "FontColor,";
+            sql += dbStr + "InfoClass,";
+            sql += dbStr + "GroupID,";
+            sql += dbStr + "SendUserID)";
+            ps.SQL = sql;
+
+            Int64 messgeID = BP.DA.DBAccess.GenerOID("RecordMsgUser");
+
+            ps.Add("OID", messgeID);
+            ps.Add("MsgDateTime", now);
+            ps.Add("MsgContent", msg);
+            ps.Add("ImageInfo", "");
+            ps.Add("FontName", "宋体");
+            ps.Add("FontSize", 10);
+            ps.Add("FontBold", 0);
+            ps.Add("FontColor", -16777216);
+            ps.Add("InfoClass", 15);
+            ps.Add("GroupID", -1);
+            ps.Add("SendUserID", fromEmpNo);
+            BP.DA.DBAccess.RunSQL(ps);
+
+            //保存消息发送对象,这个是消息的接收人表.
+            ps = new Paras();
+            ps.SQL = "INSERT INTO CCIM_RecordMsgUser (OID,MsgId,ReceiveID) VALUES ( ";
+            ps.SQL += dbStr + "OID,";
+            ps.SQL += dbStr + "MsgId,";
+            ps.SQL += dbStr + "ReceiveID)";
+
+            ps.Add("OID", messgeID);
+            ps.Add("MsgId", messgeID);
+            ps.Add("ReceiveID", sendToEmpNo);
+            BP.DA.DBAccess.RunSQL(ps);
         }
         #endregion 其他方法。
-
-
-        
     }
 }

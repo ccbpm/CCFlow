@@ -613,6 +613,20 @@ namespace BP.Sys
                 return AppSettings["ThirdPartySoftWareKey"];
             }
         }
+        /// <summary>
+        /// 是否启用CCIM?
+        /// </summary>
+        public static bool IsEnableCCIM
+        {
+            get
+            {
+                if (AppSettings["IsEnableCCIM"] == "1")
+                    return true;
+                else
+                    return false;
+            }
+        }
+        
         public static bool IsEnableNull
         {
             get

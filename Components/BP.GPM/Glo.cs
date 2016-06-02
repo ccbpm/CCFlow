@@ -193,8 +193,8 @@ namespace BP.GPM
         /// <param name="isDemo"></param>
         public static void DoInstallCCIM(string lang, string dbTypes)
         {
-            string sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\CCIM_"+BP.Sys.SystemConfig.AppCenterDBType+".sql";
-            BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
+          //  string sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\CCIM_"+BP.Sys.SystemConfig.AppCenterDBType+".sql";
+           // BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
         }
 
         /// <summary>

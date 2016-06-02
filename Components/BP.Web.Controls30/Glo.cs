@@ -137,6 +137,7 @@ namespace BP.Web.Controls
             }
         }
         #endregion
+
         public void DownFileByPath(string filepath, string filename)
         {
             if (null == filepath || filepath.Trim().Length < 1) return;

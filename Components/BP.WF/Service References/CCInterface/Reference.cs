@@ -18,7 +18,7 @@ namespace BP.WF.CCInterface {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToWebServices", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToWebServices(string msgPK, string tel, string msgInfo);
+        bool SendToWebServices(string msgPK, string tel, string msgInfo, string sendToEmpNo);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToDingDing", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -30,7 +30,7 @@ namespace BP.WF.CCInterface {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToEmail", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToEmail(string mypk, string email, string title, string maildoc);
+        bool SendToEmail(string mypk, string email, string title, string maildoc, string sendToEmpNo);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CheckUserNoPassWord", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -124,8 +124,8 @@ namespace BP.WF.CCInterface {
                 base(binding, remoteAddress) {
         }
         
-        public bool SendToWebServices(string msgPK, string tel, string msgInfo) {
-            return base.Channel.SendToWebServices(msgPK, tel, msgInfo);
+        public bool SendToWebServices(string msgPK, string tel, string msgInfo, string sendToEmpNo) {
+            return base.Channel.SendToWebServices(msgPK, tel, msgInfo, sendToEmpNo);
         }
         
         public bool SendToDingDing(string mypk, string userNo, string tel, string msgInfo) {
@@ -136,8 +136,8 @@ namespace BP.WF.CCInterface {
             return base.Channel.SendToWeiXin(mypk, userNo, tel, msgInfo);
         }
         
-        public bool SendToEmail(string mypk, string email, string title, string maildoc) {
-            return base.Channel.SendToEmail(mypk, email, title, maildoc);
+        public bool SendToEmail(string mypk, string email, string title, string maildoc, string sendToEmpNo) {
+            return base.Channel.SendToEmail(mypk, email, title, maildoc, sendToEmpNo);
         }
         
         public int CheckUserNoPassWord(string userNo, string password) {

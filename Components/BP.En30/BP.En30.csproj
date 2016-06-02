@@ -217,6 +217,7 @@
     <Compile Include="Tools\RMB.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\SecurityDES.cs" />
     <Compile Include="Tools\StringExpressionCalculate.cs">
       <SubType>Code</SubType>
     </Compile>

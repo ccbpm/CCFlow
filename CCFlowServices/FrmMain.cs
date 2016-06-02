@@ -958,7 +958,7 @@ namespace SMSServices
             #region 发送邮件.
             if (string.IsNullOrEmpty(sms.Email))
             {
-                BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(sms.SendTo);
+                BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(sms.SendToEmpNo);
                 sms.Email = emp.Email;
             }
 

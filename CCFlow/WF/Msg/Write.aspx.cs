@@ -100,7 +100,7 @@ namespace CCFlow.WF.Msg
             TextBox tb = new TextBox();
             tb.ID = "TB_Emps";
             tb.Columns = 80;
-            tb.Text = msg.SendTo;
+            tb.Text = msg.SendToEmpNo;
             tb.Attributes["Width"] = "100%";
             this.Pub1.AddTD(tb);
             this.Pub1.AddTREnd();
@@ -162,14 +162,14 @@ namespace CCFlow.WF.Msg
                 if (str == null || str == "")
                     continue;
 
-                msg.SendTo = str;
+                msg.SendToEmpNo = str;
                 msg.MyPK = DBAccess.GenerOID().ToString();
                 msg.Insert();
             }
 
             BP.DA.Paras ps = new BP.DA.Paras();
             ps.Add("Sender", WebUser.No);
-            ps.Add("Receivers", msg.SendTo);
+            ps.Add("Receivers", msg.SendToEmpNo);
             ps.Add("Title", msg.Title);
             ps.Add("Context", msg.DocOfEmail);
             try

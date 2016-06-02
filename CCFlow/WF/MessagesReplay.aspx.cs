@@ -131,7 +131,7 @@ namespace CCFlow.WF
                 sms.MyPK = DBAccess.GenerGUID();
                 sms.RDT = DataType.CurrentDataTime;  
                 sms.Sender = WebUser.No;
-                sms.SendTo = sms.Sender;
+                sms.SendToEmpNo = sms.Sender;
 
                 sms.Title = title;
                 sms.DocOfEmail = doc;
@@ -159,7 +159,7 @@ namespace CCFlow.WF
                     sms.MyPK = DBAccess.GenerGUID();
                     sms.RDT = DataType.CurrentDataTime;  
                     sms.Sender = WebUser.No;
-                    sms.SendTo = emp;
+                    sms.SendToEmpNo = emp;
                     sms.Title = title;
                     sms.DocOfEmail = doc;
                     //sms.MsgType = SMSMsgType.ToDo;

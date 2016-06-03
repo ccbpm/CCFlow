@@ -595,43 +595,52 @@ namespace BP.WF
         }
         protected override void afterInsert()
         {
-            if (BP.WF.Glo.IsEnableSysMessage == false)
-                return;
-
-            CCInterface.PortalInterfaceSoapClient soap = null;
-            if (this.HisEmailSta == MsgSta.UnRun)
+            try
             {
-                /*发送邮件*/
-                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                soap.SendToEmail(this.MyPK, this.Email, this.Title, this.DocOfEmail, this.SendToEmpNo);
-                return;
-            }
 
-            if (this.HisMobileSta == MsgSta.UnRun)
-            {
-                switch (BP.WF.Glo.ShortMessageWriteTo)
+                if (BP.WF.Glo.IsEnableSysMessage == false)
+                    return;
+
+                CCInterface.PortalInterfaceSoapClient soap = null;
+                if (this.HisEmailSta == MsgSta.UnRun)
                 {
-                    case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
-                        break;
-                    case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
-                        soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                        soap.SendToWebServices(this.MyPK, this.Mobile, this.MobileInfo, this.SendToEmpNo);
-                        break;
-                    case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
-                        soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                        soap.SendToDingDing(this.MyPK, this.SendToEmpNo, this.Mobile, this.MobileInfo);
-                        break;
-                    case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信.
-                       soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                        soap.SendToWeiXin(this.MyPK,this.SendToEmpNo, this.Mobile, this.MobileInfo);
-                        break;
-                    case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
-                        soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                        soap.SendToWeiXin(this.MyPK,  this.SendToEmpNo, this.Mobile, this.MobileInfo);
-                        break;
-                    default:
-                        break;
+                    /*发送邮件*/
+                    soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                    soap.SendToEmail(this.MyPK, this.Email, this.Title, this.DocOfEmail, this.SendToEmpNo);
+                    return;
                 }
+
+                if (this.HisMobileSta == MsgSta.UnRun)
+                {
+                    switch (BP.WF.Glo.ShortMessageWriteTo)
+                    {
+                        case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
+                            break;
+                        case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
+                            soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                            soap.SendToWebServices(this.MyPK, this.Mobile, this.MobileInfo, this.SendToEmpNo);
+                            break;
+                        case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
+                            soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                            soap.SendToDingDing(this.MyPK, this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                            break;
+                        case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信.
+                            soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                            soap.SendToWeiXin(this.MyPK, this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                            break;
+                        case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
+                            soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                            soap.SendToWeiXin(this.MyPK, this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                BP.DA.Log.DebugWriteError("消息机制没有配置成功."+ex.Message);
+
             }
 
             base.afterInsert();

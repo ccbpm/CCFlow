@@ -571,6 +571,7 @@ namespace BP.WF
             SmtpClient client = new SmtpClient();
             client.Credentials = new System.Net.NetworkCredential(SystemConfig.GetValByKey("SendEmailAddress", "ccflow.cn@gmail.com"),
                 SystemConfig.GetValByKey("SendEmailPass", "ccflow123"));
+
             //上述写你的邮箱和密码
             client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
             client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
@@ -580,7 +581,6 @@ namespace BP.WF
                 client.EnableSsl = true;  //经过ssl加密.
             else
                 client.EnableSsl = false; //经过ssl加密.
-
 
             try
             {
@@ -597,7 +597,6 @@ namespace BP.WF
         {
             try
             {
-
                 if (BP.WF.Glo.IsEnableSysMessage == false)
                     return;
 

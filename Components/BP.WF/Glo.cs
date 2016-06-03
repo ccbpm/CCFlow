@@ -3369,9 +3369,12 @@ namespace BP.WF
         {
             get
             {
-                string baseUrl = BP.Sys.SystemConfig.AppSettings["HostURL"];
-                
+                if (BP.Sys.SystemConfig.IsBSsystem)
+                {
+                    /* 如果是BS 就要求 路径.*/
+                }
 
+                string baseUrl = BP.Sys.SystemConfig.AppSettings["HostURL"];
                 if (string.IsNullOrEmpty(baseUrl) == true)
                     baseUrl = "http://127.0.0.1/";
 

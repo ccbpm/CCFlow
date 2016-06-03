@@ -103,6 +103,7 @@ namespace BP.WF
             int i = wl.Retrieve(GenerWorkerListAttr.FID, fid,
                 GenerWorkerListAttr.WorkID, this.WorkID,
                 GenerWorkerListAttr.FK_Node, fk_node);
+
             //if (i == 0)
             //    throw new Exception("系统错误，没有找到应该找到的数据。");
 

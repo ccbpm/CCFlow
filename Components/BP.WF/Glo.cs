@@ -742,6 +742,33 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 检查是否可以安装系统
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsCanInstall()
+        {
+            try
+            {
+                string sql = "CREATE TABLE AA (XXX,DDD)";
+                BP.DA.DBAccess.RunSQL(sql);
+
+                sql = "CREATE TABLE AAVIEW AS SELECT * FROM AA";
+                BP.DA.DBAccess.RunSQL(sql);
+
+                sql = "DROP VIEW AAVIEW";
+                BP.DA.DBAccess.RunSQL(sql);
+
+                sql = "DROP TABLE AA";
+                BP.DA.DBAccess.RunSQL(sql);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
         /// 安装包
         /// </summary>
         public static void DoInstallDataBase(string lang, bool isInstallFlowDemo,bool isInstallCCIM)
@@ -756,7 +783,6 @@ namespace BP.WF
             //    throw new Exception("@当前的数据库好像是一个安装执行失败的数据库，里面包含了一些cc的表，所以您需要删除这个数据库然后执行重新安装。");
             //}
             #endregion 检查是否是空白的数据库。
-
 
             ArrayList al = null;
             string info = "BP.En.Entity";

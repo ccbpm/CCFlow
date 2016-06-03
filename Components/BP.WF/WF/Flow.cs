@@ -4013,7 +4013,7 @@ namespace BP.WF
         /// <param name="atPara">参数</param>
         /// <param name="objs">发送对象，可选</param>
         /// <returns>执行结果</returns>
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs, Node jumpToNode=null, string jumpToEmps=null)
+        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs, Node jumpToNode = null, string jumpToEmps = null)
         {
             if (currNode == null)
                 return null;
@@ -4031,8 +4031,7 @@ namespace BP.WF
 
 
             #region 处理消息推送, edit  by zhoupeng for dengzhou gov project. 2016.05.01
-
-            //有一些事件没有消息，直接return ;
+            //有一些事件没有消息，直接 return ;
             switch (doType)
             {
                 case EventListOfNode.WorkArrive:
@@ -4045,58 +4044,24 @@ namespace BP.WF
                 default:
                     return str;
             }
-
-            /* 如果当前消息机制没有设置，并且不等于 SendSuccess ReturnAfter 两个事件，就返回. 
-             * 特殊判断  SendSuccess  ReturnAfter 是因为他们有默认消息.
-             */
-            //获取设置的消息.
-            if (currNode.HisPushMsgs.Count == 0 )
-            {
-                if (doType!= EventListOfNode.SendSuccess )
-                {
-                    /*放过.*/
-                }
-                else if (doType != EventListOfNode.ReturnAfter)
-                {
-                    /*放过.*/
-                }
-                else
-                {
-                    return str;
-                }
-            }
-
+           
             //执行消息的发送.
             PushMsgs pms = currNode.HisPushMsgs;
-            string msgAlert="";
+            string msgAlert = ""; //生成的提示信息.
             foreach (PushMsg item in pms)
             {
                 if (item.FK_Event != doType)
                     continue;
+
                 if (item.SMSPushWay == 0 && item.MailPushWay == 0)
-                    continue;
+                    continue; /* 如果都没有消息设置，就放过.*/
 
                 //执行发送消息.
                 item.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
             }
-            if (pms.Count != 0)
-                return str+ msgAlert;
-              
-            #region 处理默认值 SendSuccess . ReturnAfter
-            if (doType == EventListOfNode.SendSuccess ||doType == EventListOfNode.ReturnAfter)
-            {
-                /*如果没有执行到，并且是发送成功后的信息，就执行默认的消息发送。*/
-                PushMsg pm = new Template.PushMsg();
-                pm.FK_Event = doType;
-
-                pm.MailPushWay = 1; /*默认: 让其使用消息提醒.*/
-                pm.SMSPushWay = 0;  /*默认:不让其使用短信提醒.*/
-
-                return str + pm.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
-            }
-            #endregion 处理默认值 SendSuccess. ReturnAfter
-
+            return str + msgAlert;
             #endregion 处理消息推送.
+
 
             return str;
         }

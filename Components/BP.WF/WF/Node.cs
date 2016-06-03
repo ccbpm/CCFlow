@@ -257,7 +257,38 @@ namespace BP.WF
                 PushMsgs obj = this.GetRefObject("PushMsg") as PushMsgs;
                 if (obj == null)
                 {
-                    obj = new PushMsgs(this.NodeID);
+                     obj = new PushMsgs(this.NodeID);
+
+                    //检查是否有默认的发送？如果没有就增加上他。
+                     bool isHaveSend = false;
+                     bool isHaveReturn = false;
+                     foreach (PushMsg item in obj)
+                     {
+                         if (item.FK_Event == EventListOfNode.SendSuccess)
+                             isHaveSend = true;
+
+                         if (item.FK_Event == EventListOfNode.ReturnAfter)
+                             isHaveReturn = true;
+                     }
+
+                     if (isHaveSend == false)
+                     {
+                         PushMsg pm = new PushMsg();
+                         pm.FK_Event = EventListOfNode.SendSuccess;
+                         pm.MailPushWay = 1; /*默认: 让其使用消息提醒.*/
+                         pm.SMSPushWay = 0;  /*默认:不让其使用短信提醒.*/
+                         obj.AddEntity(pm);
+                     }
+
+                     if (isHaveReturn == false)
+                     {
+                         PushMsg pm = new PushMsg();
+                         pm.FK_Event = EventListOfNode.ReturnAfter;
+                         pm.MailPushWay = 1; /*默认: 让其使用消息提醒.*/
+                         pm.SMSPushWay = 0;  /*默认:不让其使用短信提醒.*/
+                         obj.AddEntity(pm);
+                     }
+
                     this.SetRefObject("PushMsg", obj);
                 }
                 return obj;

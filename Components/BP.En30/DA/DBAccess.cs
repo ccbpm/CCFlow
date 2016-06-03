@@ -2413,12 +2413,18 @@ namespace BP.DA
             return RunSQLReturnTable(sql, ens);
         }
         private static bool lockRunSQLReTable = false;
+        /// <summary>
+        /// 运行SQL
+        /// </summary>
+        /// <param name="sql">带有参数的SQL语句</param>
+        /// <param name="paras">参数</param>
+        /// <returns>返回执行结果</returns>
         public static DataTable RunSQLReturnTable(string sql, Paras paras)
         {
             if (string.IsNullOrEmpty(sql))
             {
                 int SZJFG = 00;
-                throw new Exception("要执行的 sql =null ");
+                throw new Exception("要执行的 sql = null ");
             }
             try
             {

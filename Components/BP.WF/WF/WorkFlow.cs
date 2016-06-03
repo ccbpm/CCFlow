@@ -137,8 +137,17 @@ namespace BP.WF
         {
             try
             {
-                //设置产生的工作流程为.
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
+                BP.WF.Node nd =new Node(gwf.FK_Node);
+                Work wk = nd.HisWork;
+                wk.OID = this.WorkID;
+                wk.RetrieveFromDBSources();
+
+                //调用结束前事件.
+                this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverBefore, nd, wk, null,null, null);
+
+                //设置产生的工作流程为.
                 gwf.WFState = BP.WF.WFState.Delete;
                 gwf.Update();
 
@@ -147,8 +156,17 @@ namespace BP.WF
                 wn.AddToTrack(ActionType.DeleteFlowByFlag, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name,
                         msg);
 
+                //更新-流程数据表的状态. 
                 string sql = "UPDATE  " + this.HisFlow.PTable + " SET WFState=" + (int)WFState.Delete + " WHERE OID=" + this.WorkID;
                 DBAccess.RunSQL(sql);
+
+                //删除他的工作者，不让其有待办.
+                sql = "DELETE FROM WF_GenerWorkerList WHERE WorkID="+this.WorkID;
+                DBAccess.RunSQL(sql);
+
+                //调用结束后事件.
+                this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter, nd, wk, null, null, null);
+
             }
             catch (Exception ex)
             {
@@ -1068,9 +1086,10 @@ namespace BP.WF
         /// <returns></returns>
         public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt)
         {
-            if(null == currNode){
+            if( null == currNode){
                 return null;
             }
+
             //调用结束前事件.
             this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverBefore, currNode, rpt, null);
 
@@ -1200,7 +1219,7 @@ namespace BP.WF
             //执行最后一个子流程发送后的检查，不管是否成功，都要结束该流程。
             msg += this.LetParentFlowAutoSendNextSetp();
 
-            //   string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            //string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
             #region 处理审核问题,更新审核组件插入的审核意见中的 到节点，到人员。
             ps = new Paras();
@@ -1215,7 +1234,6 @@ namespace BP.WF
             ps.Add(TrackAttr.WorkID, this.WorkID);
             BP.DA.DBAccess.RunSQL(ps);
             #endregion 处理审核问题.
-
 
             //if (string.IsNullOrEmpty(msg) == true)
             //    msg = "流程成功结束.";

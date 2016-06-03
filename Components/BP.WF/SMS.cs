@@ -593,9 +593,11 @@ namespace BP.WF
                 return false;
             }
         }
-
         protected override void afterInsert()
         {
+            if (BP.WF.Glo.IsEnableSysMessage == false)
+                return;
+
             CCInterface.PortalInterfaceSoapClient soap = null;
             if (this.HisEmailSta == MsgSta.UnRun)
             {

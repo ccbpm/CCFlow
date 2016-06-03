@@ -141,6 +141,9 @@ namespace BP.WF.Template
                 this.SetValByKey(PushMsgAttr.FK_Event, value);
             }
         }
+        /// <summary>
+        /// 推送方式.
+        /// </summary>
         public int PushWay
         {
             get
@@ -211,6 +214,9 @@ namespace BP.WF.Template
                 this.SetValByKey(PushMsgAttr.MailPushWay, value);
             }
         }
+        /// <summary>
+        /// 推送方式Name
+        /// </summary>
         public string MailPushWayText
         {
             get
@@ -786,7 +792,7 @@ namespace BP.WF.Template
                     string emailAddress = r[this.MailAddress] as string;
 
                     //发送邮件
-                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, "ToDo", "WKAlt" + currNode.NodeID + "_" + workid,BP.Web.WebUser.No,null,null);
+                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event , "WKAlt" + currNode.NodeID + "_" + workid,BP.Web.WebUser.No,null,null);
                     return "@已向:{" + emailAddress + "}发送提醒邮件，由 " + this.FK_Event + " 发出.";
                 }
             }
@@ -874,16 +880,15 @@ namespace BP.WF.Template
             string toEmpIDs = "";
             #endregion 处理当前的内容.
 
-
-            #region 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
-            if (this.MailPushWay == 3)
+            #region 如果发送给指定的节点处理人,就计算出来直接退回,任何方式的处理人都是一致的.
+            if (this.SMSPushWay == 3)
             {
                 GenerWorkerLists gwls = new GenerWorkerLists();
                 gwls.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.IsEnable, 1);
 
                 foreach (GenerWorkerList gwl in gwls)
                 {
-                    if (this.MailNodes.Contains(gwl.FK_Node.ToString()) == false)
+                    if (this.SMSNodes.Contains(gwl.FK_Node.ToString()) == false)
                         continue;
 
                     // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
@@ -908,7 +913,6 @@ namespace BP.WF.Template
             if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
                 || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
             {
-
                 /*发送成功事件.*/
                 if (this.SMSPushWay == 1)
                 {
@@ -930,7 +934,7 @@ namespace BP.WF.Template
                     return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 " + this.FK_Event + " 发出.";
                 }
 
-                if (this.MailPushWay == 2)
+                if (this.SMSPushWay == 2)
                 {
                     /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
                     string tel = r[this.SMSField] as string;
@@ -963,7 +967,7 @@ namespace BP.WF.Template
                         BP.WF.Port.WFEmp empEn = new Port.WFEmp(empID);
 
                         //发送短信.
-                        Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, "ToDo", "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, null);
+                        Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, null);
                     }
                     return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 SendSuccess 发出.";
                 }
@@ -975,7 +979,7 @@ namespace BP.WF.Template
                     if (tel != null || tel.Length > 6)
                     {
                         //发送短信.
-                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, "ToDo", "WKAlt" + objs.VarToNodeID + "_" + workid);
+                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid);
                         return "@已向:{" + tel + "}发送提醒手机短信，由 SendSuccess 发出.";
                     }
                 }

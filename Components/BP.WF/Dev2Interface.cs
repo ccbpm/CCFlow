@@ -3573,7 +3573,11 @@ namespace BP.WF
             flowNo = TurnFlowMarkToFlowNo(flowNo);
 
             WorkFlow wf = new WorkFlow(flowNo, workID);
-            return wf.DoFlowOver(ActionType.FlowOver, msg, null, null);
+            Node nd = new Node( wf.HisGenerWorkFlow.FK_Node);
+            GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt");
+            rpt.OID = workID;
+            rpt.RetrieveFromDBSources();
+            return wf.DoFlowOver(ActionType.FlowOver, msg, nd, rpt);
         }
         /// <summary>
         /// 执行流程结束:强制的流程结束.

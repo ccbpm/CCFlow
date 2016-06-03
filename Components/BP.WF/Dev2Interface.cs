@@ -1175,7 +1175,7 @@ namespace BP.WF
         public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, string fk_flow)
         {
             //执行 todolist 调度.
-            DTS_GenerWorkFlowTodoSta();
+             DTS_GenerWorkFlowTodoSta();
 
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
@@ -7540,16 +7540,18 @@ namespace BP.WF
         /// <summary>
         /// 更新时间状态, 交付给 huangzhimin.
         /// 作用：按照当前的时间，每天两次更新WF_GenerWorkFlow 的 TodoSta 状态字段。
-        /// 该字段： 0=正常, 1=预警, 2=逾期, 3=按时完成 , 4=逾期完成.
+        /// 该字段： 0=正常(绿牌), 1=预警(黄牌), 2=逾期(红牌), 3=按时完成(绿牌) , 4=逾期完成(红牌).
         /// 该方法作用是，每天，中午时间段，与下午时间段，执行更新这两个状态，仅仅更新两次。
         /// </summary>
         public static void DTS_GenerWorkFlowTodoSta()
         {
             // 中午的更新, 与发送邮件通知.
+            bool isPM=false;
 
             #region 求出是否可以更新状态.
-            if (DateTime.Now.Hour >= 0 && DateTime.Now.Hour < 12 )
+            if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 12 )
             {
+                isPM=true;
                 string timeKey = "DTSTodoStaPM" + DateTime.Now.ToString("yyMMdd");
                 Paras ps = new Paras();
                 ps.SQL = "SELECT Val FROM Sys_GloVar WHERE No='" + timeKey + "'";
@@ -7572,7 +7574,8 @@ namespace BP.WF
                 }
             }
 
-            if (DateTime.Now.Hour >= 13 && DateTime.Now.Hour < 24)
+            //下午时间段.
+            if (DateTime.Now.Hour >= 13 && DateTime.Now.Hour < 18 )
             {
                 string timeKey = "DTSTodoStaAM" + DateTime.Now.ToString("yyMMdd");
                 Paras ps = new Paras();
@@ -7597,14 +7600,87 @@ namespace BP.WF
             }
             #endregion 求出是否可以更新状态.
 
-            string  timeDT = DateTime.Now.ToString("yyyy-MM-dd");
+            //系统期望的是，每一个人仅发一条信息.  “您有xx个预警工作，yy个预期工作，请及时处理。”
 
-            //更新预警状态.
-            string sql = "UPDATE WF_GenerWorkFlow  SET TodoSta=1 ";
-            sql += " WHERE WorkID IN (SELECT WorkID FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ) ";
-            sql += " AND WF_GenerWorkFlow.WFState!=3 ";
-            sql += " AND WF_GenerWorkFlow.TodoSta=0 ";
-            int i= BP.DA.DBAccess.RunSQL(sql);
+            DataTable dtEmps=new DataTable();
+            dtEmps.Columns.Add( "EmpNo", typeof(string));
+            dtEmps.Columns.Add( "WarningNum", typeof(int));
+            dtEmps.Columns.Add( "OverTimeNum", typeof(int));
+
+            string  timeDT = DateTime.Now.ToString("yyyy-MM-dd");
+            string sql = "";
+
+            
+            //查询出预警的工作.
+            sql = " SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 0 as DBType FROM WF_GenerWorkerlist A WHERE a.DTOfWarning =< '" + timeDT + "' AND a.SDT <= '" + timeDT + "' AND A.IsPass=0  ";
+            sql+="  UNION ";
+            sql += "SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 1 as DBType FROM WF_GenerWorkerlist A WHERE  a.SDT >'" + timeDT + "' AND A.IsPass=0 ";
+
+
+            sql = "SELECT * FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ORDER BY FK_Node,FK_Emp ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            //初始化人员.
+            string emps = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+               //  dtEmps.Rows
+                
+            }
+          
+
+            // 向预警的人员发消息.
+            Node nd = new Node();
+            BP.WF.Port.WFEmp emp = new Port.WFEmp();
+            foreach (DataRow dr in dt.Rows)
+            {
+                Int64 workid = Int64.Parse(dr["WorkID"].ToString());
+                int fk_node  = int.Parse(dr["FK_Node"].ToString());
+                string fk_emp = dr["FK_Emp"].ToString();
+
+                if (nd.NodeID != fk_node)
+                {
+                    nd.NodeID = fk_node;
+                    nd.Retrieve();
+                }
+
+                if (nd.HisCHWay != CHWay.ByTime)
+                    continue; //非按照时效考核.
+
+                 if (nd.WAlertRole == CHAlertRole.None)
+                    continue; 
+
+                //如果仅仅提醒一次.
+                if (nd.WAlertRole == CHAlertRole.OneDayOneTime && isPM==true)
+                {
+
+                }else
+                {
+                    continue;
+                }
+
+                if (emp.No != fk_emp)
+                {
+                    emp.No = fk_emp;
+                    emp.Retrieve();
+                }
+
+            //    BP.WF.Dev2Interface.Port_SendSMS
+            }
+
+
+
+            if (dt.Rows.Count >= 1)
+            {
+                //更新预警状态.
+                sql = "UPDATE WF_GenerWorkFlow  SET TodoSta=1 ";
+                sql += " WHERE WorkID IN (SELECT WorkID FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ) ";
+                sql += " AND WF_GenerWorkFlow.WFState!=3 ";
+                sql += " AND WF_GenerWorkFlow.TodoSta=0 ";
+                int i = BP.DA.DBAccess.RunSQL(sql);
+            }
+
+
 
             //更新逾期期状态.
             sql = "UPDATE WF_GenerWorkFlow  SET TodoSta=2 ";

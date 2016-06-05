@@ -200,7 +200,6 @@
     <Compile Include="DTS\OrgInit_Ding.cs" />
     <Compile Include="DTS\OrgInit_NameOfPath.cs" />
     <Compile Include="DTS\OrgInit_WeiXinUserIcon.cs" />
-    <Compile Include="DTS\GenerFrmHelpLink.cs" />
     <Compile Include="Service References\CCInterface\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

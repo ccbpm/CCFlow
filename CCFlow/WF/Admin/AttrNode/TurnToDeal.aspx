@@ -51,7 +51,7 @@
                                 <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
                             </ul>
                         </div>
-                        <asp:TextBox ID="TB_SpecMsg" runat="server" Width="95%"></asp:TextBox>
+                        <asp:TextBox ID="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3  Width="95%"></asp:TextBox>
                     </fieldset>
                     <fieldset>
                         <legend>

@@ -511,6 +511,7 @@ namespace CCFlow.WF.WorkOpt
                                             break;
                                     }
                                     #endregion
+
                                     count += 1;
                                     empcheck += tk.EmpFrom;
                                 }
@@ -567,7 +568,6 @@ namespace CCFlow.WF.WorkOpt
                                             }
                                         }
                                     }
-
                                 }
                             }
                             #endregion 检查是否有调用子流程的情况。如果有就输出调用子流程信息.
@@ -893,6 +893,8 @@ namespace CCFlow.WF.WorkOpt
                 }
             }
             #endregion 处理审核意见框.
+
+            this.Pub1.AddTableEnd();
         }
         private bool CanEditor(string fileType)
         {

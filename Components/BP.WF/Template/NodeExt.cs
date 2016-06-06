@@ -748,19 +748,16 @@ namespace BP.WF.Template
                 rm.Title = "发送后转向"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoTurnToDeal";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Msg.gif";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Turnto.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "发送阻塞规则"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoBlockModel";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Msg.gif";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/BlockModel.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
-              
-
 
                 rm = new RefMethod();
                 rm.Title = "消息收听"; // "调用事件接口";
@@ -874,7 +871,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "超时处理规则";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/CH.png";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/OvertimeRole.png";
                 rm.ClassMethodName = this.ToString() + ".DoCHOvertimeRole";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "考核规则";

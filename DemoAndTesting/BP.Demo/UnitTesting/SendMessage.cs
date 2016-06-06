@@ -7,6 +7,7 @@ using BP.WF.Data;
 using BP.WF.Template;
 using BP.En;
 using BP.DA;
+using BP.Sys;
 using BP.Web;
 using System.Data;
 using BP.UnitTesting;
@@ -71,15 +72,106 @@ namespace BP.UnitTesting
         /// </summary>
         public override void Do()
         {
-            //测试请假流程，在没有设置任何消息机制的情况下，发送默认的消息。
-             this.Test002();
+            //预警.
+            BP.WF.Dev2Interface.DTS_GenerWorkFlowTodoSta();
+
+
+            //测试发送短消息是否。
+            this.Test001_liyan_Start();
 
             //测试学生请假流程.
-             this.Test055();
+            this.Test055();
 
-            //执行第3步骤. 让liyan 结束.
-            //this.Step3();
+            //测试请假流程，在没有设置任何消息机制的情况下，发送默认的消息, zhanghaicheng登录，
+            this.Test002();
+
+            // 测试工作到达短消息
+            this.Test002_zhoupeng_liping();
+
+          
         }
+        /// <summary>
+        /// 测试让liyan发起，发送并产生一个发送成功后的短消息.
+        /// </summary>
+        public void Test001_liyan_Start()
+        {
+            //删除消息. 
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS");
+
+            // 让zhoupeng登录.
+            BP.WF.Dev2Interface.Port_Login("liyan");
+
+            //创建空白工作, 发起开始节点.
+            workID = BP.WF.Dev2Interface.Node_CreateBlankWork("001");
+
+            //执行发送工作.
+            BP.WF.Dev2Interface.Node_SendWork("001", workID, null, null);
+
+
+            #region 检查消息是否 符合预期.
+            BP.WF.SMSs smss = new SMSs();
+            smss.RetrieveAllFromDBSource();
+            if (smss.Count != 1)
+                throw new Exception("@应该产生 1 条，现在产生了" + smss.Count + "条。");
+
+            foreach (BP.WF.SMS item in smss)
+            {
+                if (item.MsgType == EventListOfNode.SendSuccess)
+                {
+                    if (item.HisMobileSta != MsgSta.UnRun)
+                        throw new Exception("@应该在工作到达的事件里产生一条短信息.");
+                }
+                else
+                {
+                    throw new Exception("@短消息的标记错误."+item.MsgType);
+                }
+            }
+            #endregion 检查消息是否 符合预期.
+
+        }
+        /// <summary>
+        /// 测试工作到达短消息
+        /// </summary>
+        public void Test002_zhoupeng_liping()
+        {
+            //删除消息. 
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS");
+
+            // 让zhoupeng登录.
+            BP.WF.Dev2Interface.Port_Login("zhoupeng");
+
+            //创建空白工作, 发起开始节点.
+            workID = BP.WF.Dev2Interface.Node_CreateBlankWork("002");
+        
+            //执行发送工作.
+            BP.WF.Dev2Interface.Node_SendWork("002", workID, null, null);
+
+            #region 检查消息是否 符合预期.
+            BP.WF.SMSs smss = new SMSs();
+            smss.RetrieveAllFromDBSource();
+            if (smss.Count == 0)
+                throw new Exception("@执行了发送，应该产生消息，而没有产生。");
+            if (smss.Count != 2)
+                throw new Exception("@应该产生2 条，现在产生了" + smss.Count + "条。");
+
+            foreach (BP.WF.SMS item in smss)
+            {
+                if (item.MsgType == EventListOfNode.SendSuccess)
+                {
+                    if (item.HisEmailSta != MsgSta.UnRun)
+                        throw new Exception("@应该在发送成功的事件里产生一条邮件信息.");
+                }
+
+                if (item.MsgType == EventListOfNode.WorkArrive)
+                {
+                    if (item.HisMobileSta != MsgSta.UnRun)
+                        throw new Exception("@应该在工作到达的事件里产生一条短信息.");
+                }
+            }
+            #endregion 检查消息是否 符合预期.
+
+        }
+
         /// <summary>
         /// 测试学生请假流程.
         /// </summary>
@@ -107,72 +199,40 @@ namespace BP.UnitTesting
             string empNo = objs.VarAcceptersID;
             if (empNo != "guoxiangbin")
                 throw new Exception("@应该发送给guoxiangbin 处理但是发送到了:"+ empNo);
-
-            //退出外部用户登录.
-            BP.WF.Dev2InterfaceGuest.Port_LoginOunt();
-
             #region 检查消息发送的结果.
 
             //系统设置了向下一步接受人员发送邮件，向指定字段的作为手机号发送短信。
             BP.WF.SMSs smss = new SMSs();
             smss.RetrieveAllFromDBSource();
-            if (smss.Count != 2)
-                throw new Exception("@应该产生 2 条，现在产生了"+smss.Count+"条。");
+            if (smss.Count != 1)
+                throw new Exception("@应该产生 1 条，现在产生了"+smss.Count+"条。");
 
             foreach (BP.WF.SMS sms in smss)
             {
-                if (sms.MsgType == SMSMsgType.SendSuccess)
-                {
-                    /*发送成功是使用邮件提醒.*/
-                    if (sms.HisEmailSta != MsgSta.UnRun)
-                        throw new Exception("@应该是邮件启用状态，但是目前状态是:" + sms.HisEmailSta);
+                if (sms.MsgType != SMSMsgType.SendSuccess)
+                    throw new Exception("@应该是 SendSuccess 禁用状态,现在是:" + sms.MsgType);
 
-                    if (sms.HisMobileSta != MsgSta.Disable)
-                        throw new Exception("@应该是 短消息 禁用状态，但是目前状态是:" + sms.HisMobileSta);
+                if (sms.HisMobileSta != MsgSta.UnRun)
+                    throw new Exception("@应该是 短消息 禁用状态，但是目前状态是:" + sms.HisMobileSta);
 
-                    if (sms.SendToEmpNo != "guoxiangbin")
-                        throw new Exception("@应该是 guoxiangbin 是接受人ID，但是目前是:" + sms.SendToEmpNo);
+                if (sms.Sender != BP.Web.WebUser.No)
+                    throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sms.Sender);
 
-                    if (sms.Sender != BP.Web.WebUser.No)
-                        throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sms.Sender);
-
-                    if (sms.IsRead != 0)
-                        throw new Exception("@应该是 IsRead=0 ，但是目前是:" + sms.IsRead);
-                }
-
-                if (sms.MsgType == SMSMsgType.SendSuccess)
-                {
-                    /*发送成功是使用邮件提醒.*/
-                    if (sms.HisEmailSta != MsgSta.UnRun)
-                        throw new Exception("@应该是邮件启用状态，但是目前状态是:" + sms.HisEmailSta);
-
-                    if (sms.HisMobileSta != MsgSta.Disable)
-                        throw new Exception("@应该是 短消息 禁用状态，但是目前状态是:" + sms.HisMobileSta);
-
-                    if (sms.SendToEmpNo != "guoxiangbin")
-                        throw new Exception("@应该是 guoxiangbin 是接受人ID，但是目前是:" + sms.SendToEmpNo);
-
-                    if (sms.Sender != BP.Web.WebUser.No)
-                        throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sms.Sender);
-
-                    if (sms.IsRead != 0)
-                        throw new Exception("@应该是 IsRead=0 ，但是目前是:" + sms.IsRead);
-                }
-
+                if (sms.IsRead != 0)
+                    throw new Exception("@应该是 IsRead=0 ，但是目前是:" + sms.IsRead);
             }
             #endregion 检查消息发送的结果.
 
-
             //给发起人赋值.
             starterEmp = new Port.Emp(empNo);
-
             //让 userNo 登录.
             BP.WF.Dev2Interface.Port_Login(empNo);
-
-
         }
         /// <summary>
         /// 测试默认的请假流程发送与退回.
+        /// zhanghaicheng登录，
+        /// zhoupeng 审批.
+        /// liping 核实.
         /// </summary>
         public void Test002()
         {
@@ -212,7 +272,7 @@ namespace BP.UnitTesting
             foreach (BP.WF.SMS sm in smss)
             {
                 if (sm.HisEmailSta != MsgSta.UnRun)
-                    throw new Exception("@应该是邮件启用状态，但是目前状态是:"+sm.HisEmailSta);
+                    throw new Exception("@应该是邮件启用状态，但是目前状态是:" + sm.HisEmailSta);
 
                 if (sm.MsgType != SMSMsgType.SendSuccess)
                     throw new Exception("@应该是 SendSuccess 的类型，但是目前状态是:" + sm.MsgType);
@@ -228,9 +288,8 @@ namespace BP.UnitTesting
             }
             #endregion 检查是否有消息产生.
 
-
             /*
-             * 让 zhanghaicheng 登录，走申请-总经理审批-人力资源备案.
+             * 让 zhanghaicheng 登录，走申请 __>> 总经理审批 __>> 人力资源备案.
              */
 
             //让 zhanghaicheng 登录,
@@ -242,10 +301,18 @@ namespace BP.UnitTesting
 
             //让 zhoupeng 登录.
             BP.WF.Dev2Interface.Port_Login("zhoupeng");
+
             //删除消息. 
             BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS");
+
             //让zhoupeng发送, 发送到人力资源备案. 并且人力资源有短消息提醒.
-            BP.WF.Dev2Interface.Node_SendWork(fk_flow, workID, null, null);
+            SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workID, null, null);
+
+            //到达HR节点ID.
+            int nodeIDOfHR = objs.VarToNodeID;
+            PushMsgs pms = new PushMsgs(nodeIDOfHR);
+            if (pms.Count != 1)
+                throw new Exception("@请假流程的消息机制模版, 人力资源部审批，设置的短消息到达，被改变。");
 
             //检查是否有消息存在.
             smss = new SMSs();
@@ -253,60 +320,21 @@ namespace BP.UnitTesting
             if (smss.Count == 0)
                 throw new Exception("@执行了发送，应该产生消息，而没有产生，应该产生一条短消息.");
 
-        }
-        /// <summary>
-        /// 步骤1 让 zhoupeng 登录去处理.
-        /// </summary>
-        public void Step2()
-        {
-            //让 liping 登录.
-            BP.WF.Dev2Interface.Port_Login("liping");
-
-            // 执行退回，看看是否有退回的消息？
-            BP.WF.Dev2Interface.Node_ReturnWork(fk_flow, workID, 0, 202, 201, "测试退回", false);
-
-            #region 检查是否有消息产生.
-            BP.WF.SMSs smss = new SMSs();
-            smss.RetrieveAllFromDBSource();
-            if (smss.Count == 0)
-                throw new Exception("@执行了发送，应该产生消息，而没有产生。");
-
-            if (smss.Count != 2)
-                throw new Exception("@应该产生 2 条，现在产生了"+smss.Count+"条。");
-
-            foreach (BP.WF.SMS sm in smss)
+            //遍历消息.
+            foreach (BP.WF.SMS item in smss)
             {
-                if (sm.MsgType != "ReturnAfter")
-                    continue;
+                if (item.MsgType == "WorkArrive")
+                {
+                    if (item.SendToEmpNo != "liping")
+                        throw new Exception("@应该是 liping 现在是:" + item.SendToEmpNo);
 
-                if (sm.HisEmailSta != MsgSta.UnRun)
-                    throw new Exception("@应该是邮件启用状态，但是目前状态是:" + sm.HisEmailSta);
+                    if (item.Sender != "zhoupeng")
+                        throw new Exception("@应该是 zhoupeng 现在是:" + item.SendToEmpNo);
 
-                if (sm.MsgType != SMSMsgType.ReturnAfter)
-                    throw new Exception("@应该是 ReturnWork 的类型，但是目前状态是:" + sm.MsgType);
-
-                if (sm.SendToEmpNo != "liyan")
-                    throw new Exception("@应该是 liyan 是接受人ID，但是目前是:" + sm.SendToEmpNo);
-
-                if (sm.Sender != BP.Web.WebUser.No)
-                    throw new Exception("@应该 Sender= " + BP.Web.WebUser.No + " ，但是目前是:" + sm.Sender);
-
-                if (sm.IsRead != 0)
-                    throw new Exception("@应该是 IsRead=0 ，但是目前是:" + sm.IsRead);
+                    if (item.HisMobileSta != MsgSta.UnRun)
+                        throw new Exception("@ MsgSta 状态写入不正确 UnRun 现在是:" + item.SendToEmpNo);
+                }
             }
-            #endregion 检查是否有消息产生.
-             
-        }
-        /// <summary>
-        /// 步骤3 让zhanghaicheng 结束流程.
-        /// </summary>
-        public void Step3()
-        {
-            //让 zhanghaicheng 登录.
-            BP.WF.Dev2Interface.Port_Login("zhanghaicheng");
-
-            //让他向下发送.
-            objs = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workID);
         }
     }
 }

@@ -491,7 +491,7 @@ namespace CCFlow.WF.SDKComponents.Base
                 try
                 {
                     //处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
-                    BP.WF.Glo.DealBuinessAfterSendWork(this.FK_Flow, this.WorkID, this.DoFunc, WorkIDs, this.CFlowNo, 0, null);
+                    BP.WF.Glo.DealBuinessAfterSendWork(this.FK_Flow, this.WorkID, this.DoFunc, WorkIDs);
                 }
                 catch (Exception ex)
                 {
@@ -569,7 +569,7 @@ namespace CCFlow.WF.SDKComponents.Base
                 try
                 {
                     //处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
-                    BP.WF.Glo.DealBuinessAfterSendWork(this.FK_Flow, this.WorkID, this.DoFunc, WorkIDs, this.CFlowNo, 0, null);
+                    BP.WF.Glo.DealBuinessAfterSendWork(this.FK_Flow, this.WorkID, this.DoFunc, WorkIDs);
                 }
                 catch (Exception ex)
                 {

@@ -338,7 +338,7 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
             try
             {
                 //处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
-                Glo.DealBuinessAfterSendWork(this.FK_Flow, this.WorkID, this.DoFunc, WorkIDs, this.CFlowNo, 0, null);
+                Glo.DealBuinessAfterSendWork(this.FK_Flow, this.WorkID, this.DoFunc, WorkIDs);
             }
             catch (Exception ex)
             {

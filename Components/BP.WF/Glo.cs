@@ -1720,10 +1720,12 @@ namespace BP.WF
         /// 如果处理失败，就会抛出异常.
         /// </summary>
         public static void DealBuinessAfterSendWork(string fk_flow, Int64 workid,
-            string doFunc, string WorkIDs, string cFlowNo, int cNodeID, string cEmp)
+            string doFunc, string WorkIDs, string cFlowNo,int cNodeID, string cEmp)
         {
             if (doFunc == "SetParentFlow")
             {
+               // GenerWorkFlow gwfParent = new GenerWorkFlow(workid);
+
                 /* 如果需要设置子父流程信息.
                  * 应用于合并审批,当多个子流程合并审批,审批后发起一个父流程.
                  */

@@ -597,8 +597,6 @@ namespace BP.WF
         {
             try
             {
-                if (BP.WF.Glo.IsEnableSysMessage == false)
-                    return;
 
                 CCInterface.PortalInterfaceSoapClient soap = null;
                 if (this.HisEmailSta == MsgSta.UnRun)

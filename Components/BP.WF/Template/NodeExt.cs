@@ -787,7 +787,6 @@ namespace BP.WF.Template
                     rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                     map.AddRefMethod(rm);
                 }
-
                 #endregion 基础功能.
 
                 #region 字段相关功能（不显示在菜单里）

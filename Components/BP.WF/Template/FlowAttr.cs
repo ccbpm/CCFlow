@@ -387,7 +387,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 按系统的URL-(子父流程)多条模式
         /// </summary>
-        BySystemUrlMulti = 2,
+        SubFlowGuide = 2,
         /// <summary>
         /// 按系统的URL-(实体记录)单条模式
         /// </summary>
@@ -395,7 +395,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 按系统的URL-(实体记录)多条模式
         /// </summary>
-        BySystemUrlMultiEntity = 4,
+        SubFlowGuideEntity = 4,
         /// <summary>
         /// 历史数据
         /// </summary>

@@ -4057,7 +4057,7 @@ namespace BP.WF
                     continue; /* 如果都没有消息设置，就放过.*/
 
                 //执行发送消息.
-                item.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
+                msgAlert += item.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
             }
             return str + msgAlert;
             #endregion 处理消息推送.

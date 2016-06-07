@@ -556,27 +556,18 @@ namespace BP.WF
             #region 检查是否有此表.
             if (BP.DA.DBAccess.IsExitsObject(ptable))
             {
-                try
+                if (DBAccess.IsExitsTableCol(ptable, "Tag") == false)
                 {
                     //增加特殊的列。
                     DBAccess.RunSQL("ALTER TABLE  " + ptable + " ADD Tag NVARCHAR(4000) DEFAULT '' NULL");
                 }
-                catch
-                {
-                }
                 return;
             }
-
             #endregion 检查是否有此表.
 
-            try
-            {
-                /*如果不存在指定的表,就创建它.*/
+            if (DBAccess.IsExitsObject("WF_Track") ==true)
                 BP.DA.DBAccess.RunSQL("DROP TABLE WF_Track");
-            }
-            catch
-            {
-            }
+
 
             Track tk = new Track();
             tk.CheckPhysicsTable();

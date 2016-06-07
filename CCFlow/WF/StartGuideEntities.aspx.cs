@@ -289,11 +289,11 @@ namespace CCFlow.WF
             //必要的系统约定参数.
             switch (fl.StartGuideWay)
             {
-                case StartGuideWay.BySystemUrlMulti:
+                case StartGuideWay.SubFlowGuide:
                 case StartGuideWay.BySQLOne:
                     url += "&DoFunc=SetParentFlow&WorkIDs=" + cWorkID + "&CFlowNo=" + fl.StartGuidePara3;
                     break;
-                case StartGuideWay.BySystemUrlMultiEntity:
+                case StartGuideWay.SubFlowGuideEntity:
                 case StartGuideWay.BySystemUrlOneEntity:
                     url += "&DoFunc=" + fl.StartGuideWay.ToString() + "&Nos=" + cWorkID + "&StartGuidePara3=" + fl.StartGuidePara3;
                     break;

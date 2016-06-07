@@ -858,8 +858,8 @@ namespace CCFlow.WF.UC
                 {
                     case StartGuideWay.None:
                         break;
-                    case StartGuideWay.BySystemUrlMulti:
-                    case StartGuideWay.BySystemUrlMultiEntity:
+                    case StartGuideWay.SubFlowGuide:
+                    case StartGuideWay.SubFlowGuideEntity:
                         this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No, true);
                         break;
                     case StartGuideWay.ByHistoryUrl: // 历史数据.
@@ -1297,7 +1297,7 @@ namespace CCFlow.WF.UC
                     /*如果需要设置父流程信息。*/
                     string cFlowNo = this.CFlowNo;
                     string[] workids = this.WorkIDs.Split(',');
-                    int count = workids.Length - 1;
+                    int count = workids.Length ;
                     this.Pub1.AddFieldSet("分组审阅", "一共选择了(" + count + ")个子流程被合并审阅,分别是:" + this.WorkIDs);
                 }
             }

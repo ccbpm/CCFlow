@@ -18,7 +18,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <uc1:Pub ID="Pub1" runat="server" />
-    <hr>
+    <br />
+    <%--<hr style=" background-color:White">--%>
     <uc1:Pub ID="Pub2" runat="server" />
 
 </asp:Content>

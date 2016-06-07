@@ -508,8 +508,8 @@ namespace CCFlow.WF
                 {
                     case StartGuideWay.None:
                         break;
-                    case StartGuideWay.BySystemUrlMulti:
-                    case StartGuideWay.BySystemUrlMultiEntity:
+                    case StartGuideWay.SubFlowGuide:
+                    case StartGuideWay.SubFlowGuideEntity:
                         this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No, true);
                         break;
                     case StartGuideWay.ByHistoryUrl: // 历史数据.

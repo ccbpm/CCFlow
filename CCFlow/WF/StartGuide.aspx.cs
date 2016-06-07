@@ -36,40 +36,45 @@ namespace CCFlow.WF
             if (this.DoType != null)
                 return;
 
-            this.Pub1.Add("<b>请输入关键字:</b>");
+            this.Pub1.Add("<br><b>&nbsp;&nbsp;请输入关键字:&nbsp;</b>");
             TextBox tb = new TextBox();
             tb.ID = "TB_Key";
             tb.Text = this.SKey;
             this.Pub1.Add(tb);
             this.Pub1.AddTD();
 
-            ImageButton imgbtn = new ImageButton();
-            imgbtn.ID = "imgbtn1";
-            imgbtn.ImageUrl = "./Img/Search.gif";
-            imgbtn.Click += new ImageClickEventHandler(btn_Click);
-            this.Pub1.Add(imgbtn);
-            //Button btn = new Button();
-            //btn.ID = "Btn1";
-            //btn.Text = "查询";
-            //btn.Attributes.Add("CssClass", "Img");
-            //btn.Click += new EventHandler(btn_Click);
-            //this.Pub1.Add(btn);
-            this.Pub1.AddTD();
-            //Button button = new Button();
-            //button.ID = "Btn_Sav2";
-            //button.Text = "启动流程";
-            //button.Click += new EventHandler(btn_Start_Click);
-            //this.Pub1.Add(button);
-            ImageButton imgbtnsav = new ImageButton();
-            imgbtnsav.ID = "imgbtn2";
-            imgbtn.ImageUrl = "./Img/Start.gif";
+            //ImageButton imgbtn = new ImageButton();
+            //imgbtn.ID = "imgbtn1";
+            //imgbtn.ImageUrl = "./Img/Search.gif";
+            //imgbtn.Click += new ImageClickEventHandler(btn_Click);
+            //this.Pub1.Add(imgbtn);
 
-            imgbtnsav.Click += new ImageClickEventHandler(btn_Start_Click);
-            this.Pub1.Add(imgbtnsav);
+            Button btn = new Button();
+            btn.ID = "Btn1";
+            btn.Text = "查询";
+         //   btn.Attributes.Add("CssClass", "Img");
+            btn.Click += new EventHandler(btn_Click);
+            this.Pub1.Add(btn);
+            this.Pub1.AddTD();
+
+            Flow fl = new Flow(this.FK_Flow);
+            if (fl.StartGuideWay == StartGuideWay.SubFlowGuide)
+            {
+                Button button = new Button();
+                button.ID = "Btn_Sav2";
+                button.Text = "启动流程";
+                button.Click += new EventHandler(btn_Start_Click);
+                this.Pub1.Add(button);
+            }
+
+            //ImageButton imgbtnsav = new ImageButton();
+            //imgbtnsav.ID = "imgbtn2";
+            //imgbtn.ImageUrl = "./Img/Start.gif";
+            //imgbtnsav.Click += new ImageClickEventHandler(btn_Start_Click);
+            //this.Pub1.Add(imgbtnsav);
 
             #region 显示数据.
             string key = this.Pub1.GetTextBoxByID("TB_Key").Text.Trim();
-            Flow fl = new Flow(this.FK_Flow);
             string sql = "";
             if (this.SKey == null)
             {
@@ -106,6 +111,9 @@ namespace CCFlow.WF
                     else
                         this.BindTableOne(dt);
                     break;
+                case StartGuideWay.SubFlowGuide: //子父流程.
+                    this.BindTableMulti(dt);
+                    break;
                 default:
                     this.BindTableMulti(dt);
                     break;
@@ -120,22 +128,7 @@ namespace CCFlow.WF
         void btn_Click(object sender, EventArgs e)
         {
             string key = this.Pub1.GetTextBoxByID("TB_Key").Text.Trim();
-            //if (string.IsNullOrEmpty(key))
-            //{
-            //    this.Alert("请输入关键字...");
-            //    return;
-            //}
             this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.FK_Flow + "&SKey=" + key, true);
-
-            //Flow fl = new Flow(this.FK_Flow);
-            //string sql = fl.StartGuidePara1.Clone() as string;
-            //sql = sql.Replace("@Key", key);
-            //sql = sql.Replace("~", "'");
-            //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            //if (fl.StartGuideWay == StartGuideWay.BySystemUrlOne)
-            //    this.BindTableOne(dt);
-            //else
-            //    this.BindTableMulti(dt);
         }
         /// <summary>
         /// 初始化数据
@@ -314,17 +307,19 @@ namespace CCFlow.WF
                 return;
             }
 
+            cWorkID = cWorkID.Substring(0, cWorkID.Length - 1);
+
             Flow fl = new Flow(this.FK_Flow);
             string url = "MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
 
             //必要的系统约定参数.
             switch (fl.StartGuideWay)
             {
-                case StartGuideWay.BySystemUrlMulti:
+                case StartGuideWay.SubFlowGuide:
                 case StartGuideWay.BySQLOne:
                     url += "&DoFunc=SetParentFlow&WorkIDs=" + cWorkID + "&CFlowNo=" + fl.StartGuidePara3;
                     break;
-                case StartGuideWay.BySystemUrlMultiEntity:
+                case StartGuideWay.SubFlowGuideEntity:
                 case StartGuideWay.BySystemUrlOneEntity:
                     url += "&DoFunc=" + fl.StartGuideWay.ToString() + "&Nos=" + cWorkID + "&StartGuidePara3=" + fl.StartGuidePara3;
                     break;

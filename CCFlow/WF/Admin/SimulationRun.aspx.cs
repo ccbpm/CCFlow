@@ -61,7 +61,7 @@ namespace CCFlow.WF.Admin
 
                 TextBox tb = new TextBox();
                 tb.ID = "TB_" + emp.No;
-                tb.Width = 300;
+                tb.Width = 900;
                 this.Pub1.AddTD(tb);
                 this.Pub1.AddTREnd();
             }

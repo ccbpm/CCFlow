@@ -25,6 +25,7 @@ namespace CCFlow.WF.Admin.AttrFlow
             }
         }
         #endregion 属性.
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (this.IsPostBack==false)
@@ -53,6 +54,11 @@ namespace CCFlow.WF.Admin.AttrFlow
                         break;
                     case BP.WF.Template.StartGuideWay.ByFrms:
                         this.RB_FrmList.Checked = true;
+                        break;
+                    case BP.WF.Template.StartGuideWay.SubFlowGuide: //子父流程多条模式- 合卷审批.
+                           this.RB_SubFlow.Checked = true;
+                           this.TB_SubFlow1.Value = en.StartGuidePara1;
+                           this.TB_SubFlow2.Value = en.StartGuidePara2;
                         break;
                     default:
                         break;
@@ -89,13 +95,23 @@ namespace CCFlow.WF.Admin.AttrFlow
                 en.StartGuideWay = BP.WF.Template.StartGuideWay.BySelfUrl;
             }
 
-            //单挑模式.
+            //单条模式.
             if (this.RB_BySQLOne.Checked)
             {
                 en.StartGuidePara1 = this.TB_BySQLOne1.Value;  //查询语句.
                 en.StartGuidePara2 = this.TB_BySQLOne2.Value;  //列表语句.
                 en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
             }
+
+            //多条-子父流程-合卷审批.
+            if (this.RB_SubFlow.Checked)
+            {
+                en.StartGuidePara1 = this.TB_SubFlow1.Value;  //查询语句.
+                en.StartGuidePara2 = this.TB_SubFlow2.Value;  //列表语句.
+                en.StartGuideWay = BP.WF.Template.StartGuideWay.SubFlowGuide;
+            }
+
+
 
             BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
             if (fns.Count >= 2)

@@ -25,9 +25,7 @@
                     <legend>
                         <asp:RadioButton ID="RB_None" Text="无（默认）" GroupName="xzgz" runat="server" Checked="true" /></legend>
                     <font color="gray">不设置任何前置导航，发起流程直接进入开始节点表单。</font>
-
                 </fieldset>
-
 
                 <%--  <fieldset>
                         <legend>
@@ -106,6 +104,35 @@
                     </div>
  
                     </font><Textarea id="TB_BySQLOne2" rows="3"  runat="server" style="width:98%; height: 51px"></Textarea><br />
+                </fieldset>
+
+                 <fieldset>
+                    <legend>
+                        <asp:RadioButton ID="RB_SubFlow" Text="子流程实例列表模式-多条" runat="server" GroupName="xzgz" /></legend>
+                    
+                    <a href="javascript:ShowHidden('SubFlowParas1')">查询参数:</a>
+                    <div id="SubFlowParas1" style="display:none;color:gray">
+                    <ul >
+                      <li>比如:SELECT No, Name, No as EmpNo,Name as EmpName,Email FROM WF_Emp WHERE No LIKE '%@key%' </li>
+                      <li>初始化列表参数，该查询语句必须有No,Name两个列，注意显示数量限制。</li>
+                      <li>很多场合下需要用到父子流程，在启动子流程的时候需要选择一个父流程。</li>
+                      <li>实例:SELECT a.WorkID as No, a.Title as Name, a.Starter, a.WorkID As PWorkID, '011' as PFlowNo, a.FK_Node as PNodeID FROM WF_GenerWorkflow a, WF_GenerWorkerlist b WHERE A.WorkID=b.WorkID  AND B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.FK_Flow='011' AND a.Title Like '%@Key%'</li>
+                    </ul>
+                    </div>
+
+                    <Textarea id="TB_SubFlow1"  rows="3"  runat="server" style="width:98%; height: 51px"></Textarea><br />
+
+                    <a href="javascript:ShowHidden('subflow2')">初始化列表参数:</a>
+                    <div id="subflow2" style="display:none;color:gray">
+                    <ul>
+                     <li>比如:SELECT top 15 No,Name ,No as EmpNo,Name as EmpName ,Email FROM WF_Emp  </li>
+                    <li>或者:SELECT  No,Name ,No as EmpNo,Name as EmpName ,Email FROM WF_Emp WHERE ROWID < 15  </li>
+                    <li>该数据源必须有No,Name两个列, 其他的列要与开始节点表单字段对应。</li>
+                    <li>注意查询的数量，避免太多影响效率。</li>
+                    </ul>
+                    </div>
+ 
+                    </font><Textarea id="TB_SubFlow2" rows="3"  runat="server" style="width:98%; height: 51px"></Textarea><br />
                 </fieldset>
 
 

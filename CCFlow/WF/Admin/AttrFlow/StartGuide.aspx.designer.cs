@@ -85,6 +85,33 @@ namespace CCFlow.WF.Admin.AttrFlow {
         protected global::System.Web.UI.HtmlControls.HtmlTextArea TB_BySQLOne2;
         
         /// <summary>
+        /// RB_SubFlow 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RB_SubFlow;
+        
+        /// <summary>
+        /// TB_SubFlow1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea TB_SubFlow1;
+        
+        /// <summary>
+        /// TB_SubFlow2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea TB_SubFlow2;
+        
+        /// <summary>
         /// RB_FrmList 控件。
         /// </summary>
         /// <remarks>

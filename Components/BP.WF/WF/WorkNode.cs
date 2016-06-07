@@ -4110,7 +4110,9 @@ namespace BP.WF
                     }
 
                     recDtlLog += "@删除到达明细表:" + dtl.No + ",数据, 并开始遍历明细表,执行一行行的copy.";
-                    DBAccess.RunSQL("DELETE FROM " + toDtl.PTable + " WHERE RefPK=" + dbStr + "RefPK", "RefPK", this.WorkID.ToString());
+
+                    if (BP.DA.DBAccess.IsExitsObject(toDtl.PTable))
+                        DBAccess.RunSQL("DELETE FROM " + toDtl.PTable + " WHERE RefPK=" + dbStr + "RefPK", "RefPK", this.WorkID.ToString());
 
                     // copy数量.
                     int deBugNumCopy = 0;

@@ -1720,18 +1720,20 @@ namespace BP.WF
         /// 如果处理失败，就会抛出异常.
         /// </summary>
         public static void DealBuinessAfterSendWork(string fk_flow, Int64 workid,
-            string doFunc, string WorkIDs, string cFlowNo,int cNodeID, string cEmp)
+            string doFunc, string WorkIDs)
         {
+            
             if (doFunc == "SetParentFlow")
             {
-               // GenerWorkFlow gwfParent = new GenerWorkFlow(workid);
-
                 /* 如果需要设置子父流程信息.
                  * 应用于合并审批,当多个子流程合并审批,审批后发起一个父流程.
                  */
+
+                GenerWorkFlow gwfParent = new GenerWorkFlow(workid);
+
                 string[] workids = WorkIDs.Split(',');
                 string okworkids = ""; //成功发送后的workids.
-                GenerWorkFlow gwf = new GenerWorkFlow();
+                GenerWorkFlow gwfSubFlow = new GenerWorkFlow();
                 foreach (string id in workids)
                 {
                     if (string.IsNullOrEmpty(id))
@@ -1739,44 +1741,41 @@ namespace BP.WF
 
                     // 把数据copy到里面,让子流程也可以得到父流程的数据。
                     Int64 workidC = Int64.Parse(id);
+                    gwfSubFlow.WorkID = workidC;
+                    gwfSubFlow.RetrieveFromDBSources();
 
                     //设置当前流程的ID
-                    BP.WF.Dev2Interface.SetParentInfo(cFlowNo, workidC, fk_flow, workid, cNodeID, cEmp);
-
-                    // 判断是否可以执行，不能执行也要发送下去.
-                    gwf.WorkID = workidC;
-                    if (gwf.RetrieveFromDBSources() == 0)
-                        continue;
+                    BP.WF.Dev2Interface.SetParentInfo(gwfSubFlow.FK_Flow, workidC, gwfParent.FK_Flow, gwfParent.WorkID, gwfParent.FK_Node, WebUser.No);
 
                     // 是否可以执行？
-                    if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwf.FK_Flow, gwf.FK_Node, workidC, WebUser.No) == false)
-                        continue;
-
-                    //执行向下发送.
-                    try
+                    if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(gwfSubFlow.FK_Flow, gwfSubFlow.FK_Node, workidC, WebUser.No) == true)
                     {
-                        BP.WF.Dev2Interface.Node_SendWork(cFlowNo, workidC);
-                        okworkids += workidC;
-                    }
-                    catch (Exception ex)
-                    {
-                        #region 如果有一个发送失败，就撤销子流程与父流程.
-                        //首先把主流程撤销发送.
-                        BP.WF.Dev2Interface.Flow_DoUnSend(fk_flow, workid);
-
-                        //把已经发送成功的子流程撤销发送.
-                        string[] myokwokid = okworkids.Split(',');
-                        foreach (string okwokid in myokwokid)
+                        //执行向下发送.
+                        try
                         {
-                            if (string.IsNullOrEmpty(id))
-                                continue;
-
-                            // 把数据copy到里面,让子流程也可以得到父流程的数据。
-                            workidC = Int64.Parse(id);
-                            BP.WF.Dev2Interface.Flow_DoUnSend(cFlowNo, workidC);
+                            BP.WF.Dev2Interface.Node_SendWork(gwfSubFlow.FK_Flow, workidC);
+                            okworkids += workidC;
                         }
-                        #endregion 如果有一个发送失败，就撤销子流程与父流程.
-                        throw new Exception("@在执行子流程(" + gwf.Title + ")发送时出现如下错误:" + ex.Message);
+                        catch (Exception ex)
+                        {
+                            #region 如果有一个发送失败，就撤销子流程与父流程.
+                            //首先把主流程撤销发送.
+                            BP.WF.Dev2Interface.Flow_DoUnSend(fk_flow, workid);
+
+                            //把已经发送成功的子流程撤销发送.
+                            string[] myokwokid = okworkids.Split(',');
+                            foreach (string okwokid in myokwokid)
+                            {
+                                if (string.IsNullOrEmpty(id))
+                                    continue;
+
+                                // 把数据copy到里面,让子流程也可以得到父流程的数据。
+                                workidC = Int64.Parse(id);
+                                BP.WF.Dev2Interface.Flow_DoUnSend(gwfSubFlow.FK_Flow, gwfSubFlow.WorkID);
+                            }
+                            #endregion 如果有一个发送失败，就撤销子流程与父流程.
+                            throw new Exception("@在执行子流程(" + gwfSubFlow.Title + ")发送时出现如下错误:" + ex.Message);
+                        }
                     }
                 }
             }

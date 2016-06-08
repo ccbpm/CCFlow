@@ -133,7 +133,7 @@ namespace BP
 
             #region 设置菜单项可见性和选中状态
             //方向条件
-            var menu = MuContentMenu.Items[0] as MenuItem;
+            var menu = MuContentMenu.Items[0] as Liquid.MenuItem;
 
             if (null != menu)
             {
@@ -142,7 +142,7 @@ namespace BP
             }
 
             //原路返回
-            menu = MuContentMenu.Items[1] as MenuItem;
+            menu = MuContentMenu.Items[1] as Liquid.MenuItem;
 
             if (null != menu)
             {
@@ -152,7 +152,7 @@ namespace BP
             }
 
             //是否折线
-            menu = MuContentMenu.Items[2] as MenuItem;
+            menu = MuContentMenu.Items[2] as Liquid.MenuItem;
 
             if (null != menu)
             {
@@ -180,14 +180,14 @@ namespace BP
                     break;
                 case "menuIsCanBack":
                     this.Visibility = Visibility.Collapsed;
-                    var subMenu = MuContentMenu.Items[1] as MenuItem;
+                    var subMenu = MuContentMenu.Items[1] as Liquid.MenuItem;
                     subMenu.IsChecked = !subMenu.IsChecked;
                     relatedDirection.IsCanBack = subMenu.IsChecked;
                     _container.IsNeedSave = true;
                     break;
                 case "menuIsPolyline":
                     this.Visibility = Visibility.Collapsed;
-                    subMenu = MuContentMenu.Items[2] as MenuItem;
+                    subMenu = MuContentMenu.Items[2] as Liquid.MenuItem;
                     subMenu.IsChecked = !subMenu.IsChecked;
                     relatedDirection.LineType = subMenu.IsChecked ? DirectionLineType.Polyline : DirectionLineType.Line;
                     _container.IsNeedSave = true;   

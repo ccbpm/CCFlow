@@ -309,9 +309,24 @@ namespace BP
                     if (dtFormSort != null)
                         BindFormTree(dtFormSort, flowTree.Tables["Sys_MapData"]);
 
+
+                    //特殊处理树解构.
                     DataTable dtDept = flowTree.Tables["Port_Dept"];
+                    foreach (DataRow dr in dtDept.Rows)
+                    {
+                        dr["No"] = "Dept"+dr["No"];
+                        dr["ParentNo"] = "Dept" + dr["ParentNo"];
+                    }
+
+                    DataTable dtEmp = flowTree.Tables["Port_Emp"];
+                    foreach (DataRow dr in dtEmp.Rows)
+                    {
+                       // dr["No"] = "Dept" + dr["No"];
+                        dr["FK_Dept"] = "Dept" + dr["FK_Dept"];
+                    }
+
                     if (dtDept != null)
-                        BingTreeOrg(dtDept, flowTree.Tables["Port_Emp"]);
+                        BingTreeDept(dtDept, dtEmp);
                 }
                 catch (System.Exception ee)
                 {
@@ -326,7 +341,6 @@ namespace BP
         }
 
         #region FlowTree
-
         internal void BindFlowAndFlowSort()
         {
             initLeftTree(new bool[] { true, false, false });
@@ -702,6 +716,7 @@ namespace BP
 
                 //绑定表单
                 if (form != null)
+                {
                     foreach (DataRow d in form.Rows)
                     {
                         var node = new TreeNode();
@@ -717,11 +732,12 @@ namespace BP
                             }
                         }
                     }
+                }
 
                 // 完成绑定后，展开最后的FlowSort
                 foreach (TreeNode node in this.tvwForm.Nodes)
                 {
-                    if (node.ID == Glo.FK_FormSort)
+                    if (node.ID == BP.Glo.FK_FormSort)
                     {
                         node.IsExpanded = true;
                         node.Expand();
@@ -856,13 +872,13 @@ namespace BP
 
         #region GPMTree
         bool isGMPTreeInited;
-        public void BingTreeOrg()
+        public void BingTreeDept()
         {
             this.SetSelectedTool("Wait");
             initLeftTree(new bool[] { false, false, true });
         }
 
-        void BingTreeOrg(DataTable dtDept, DataTable dtEmp)
+        void BingTreeDept(DataTable dtDept, DataTable dtEmp)
         {
             try
             {
@@ -874,7 +890,7 @@ namespace BP
                 {   //构造根节点 
 
                     string parentNo = dr["ParentNo"];
-                    if (parentNo != "0")
+                    if (parentNo != "Dept0")
                         continue;
 
                     rootId = dr["No"];
@@ -1759,7 +1775,7 @@ namespace BP
                     break;
                 case "tbiOrg"://流程优化
                     if (!isGMPTreeInited)
-                        this.BingTreeOrg();
+                        this.BingTreeDept();
                     break;
                 case "tbiSysManger"://系统维护
                     if (Glo.Platform == BP.Platform.CCFlow)

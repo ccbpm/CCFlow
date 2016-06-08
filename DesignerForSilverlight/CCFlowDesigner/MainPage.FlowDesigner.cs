@@ -504,14 +504,15 @@ namespace BP
         /// <param name="para">Title、Url/Fk_MapData</param>
         public void OpenBPForm(BPFormType type, params string[] para)
         {
-            if (null == para || 3 != para.Length)
+           
+            if (null == para ||  para.Length!=3)
                 return;
+
             string title = para[0];
 
             if (Glo.UrlOrForm)
             {
                 string url = para[1];
-
                 url = Glo.BPMHost + url;
                 Glo.OpenMax(url, title);
             }
@@ -562,7 +563,7 @@ namespace BP
                 }
                 catch (System.Exception e)
                 {
-                    BP.Glo.ShowException(e);
+                    BP.Glo.ShowException(e, para.ToString());
                 }
             }
         }

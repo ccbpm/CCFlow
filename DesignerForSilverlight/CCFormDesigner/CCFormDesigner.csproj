@@ -286,11 +286,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Service References\FF_j\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="SessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -490,98 +485,6 @@
     <None Include="Service References\FF\CCForm.FF.UploadFileResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.AttachmentFilesResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.CfgKeyResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.CopyFrmResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.DealPKResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.DoTypeResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.FtpMethodResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.GenerFrmResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.GetXmlDataResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.InitFrmResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.LetUserLoginResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.LoadFrmTempleteFileResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.LoadFrmTempleteResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.ParseStringToPinyinResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RequestSFTableV1Response.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLReturnJsonResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLReturnStringResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLReturnTable2DataTableResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLReturnTableResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLReturnTableSResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLReturnValFloatResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLReturnValIntResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.RunSQLsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.SaveEnResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.SaveEnumFieldResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.SaveEnumResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.SaveFKFieldResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.SaveFrmResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.SaveImageAsFileResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCForm.FF_j.UploadFileResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\FF_j\CCFormSoap.wsdl" />
-    <None Include="Service References\FF_j\CCFormSoapImplService.wsdl" />
     <Resource Include="Img\FrmEle.png" />
     <Resource Include="Img\FrmEleDef.png" />
     <Resource Include="Img\Logo\SQ\LogoBig.png" />
@@ -619,12 +522,6 @@
     <Resource Include="Img\Edit.png" />
     <Resource Include="Img\Exp.png" />
     <Resource Include="Img\SubFlow.png" />
-    <None Include="Service References\FF_j\configuration91.svcinfo" />
-    <None Include="Service References\FF_j\configuration.svcinfo" />
-    <None Include="Service References\FF_j\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="ServiceReferences.ClientConfig" />
     <Resource Include="Img\Alignment_Center.png" />
     <Resource Include="Img\Alignment_Down.png" />
@@ -684,7 +581,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\FF\" />
-    <WCFMetadataStorage Include="Service References\FF_j\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BP.SL\BP.SL.csproj">

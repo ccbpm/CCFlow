@@ -1007,19 +1007,17 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
                     case "AdminLogin":
                         try
                         {
-                            if (BP.Sys.SystemConfig.IsDebug == true)
-                                return null;
-
                             BP.Port.Emp emp = new BP.Port.Emp();
                             emp.No = v1;
                             emp.RetrieveFromDBSources();
 
-                            if (emp.CheckPass(v2))
+                            if (BP.WF.Glo.GetPortalInterfaceSoapClient().CheckUserNoPassWord(emp.No, v2) == 1)
                             {
                                 BP.Web.WebUser.SignInOfGener(emp);
                                 return BP.WF.Dev2Interface.Port_GetSID(v1);
                             }
-                            return "error:用户名或密码错误";
+                            else
+                                return "error:用户名密码错误.";
                         }
                         catch (Exception ex)
                         {

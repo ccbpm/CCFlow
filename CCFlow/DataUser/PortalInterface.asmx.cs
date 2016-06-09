@@ -18,7 +18,6 @@ namespace ccbpm
     // [System.Web.Script.Services.ScriptService]
     public class PortalInterface : System.Web.Services.WebService
     {
-
         #region 发送消息接口. 需要与web.config中 ShortMessageWriteTo 配置才能起作用。
         /// <summary>
         /// 发送短信接口(二次开发需要重写这个接口)
@@ -30,10 +29,10 @@ namespace ccbpm
         [WebMethod]
         public bool SendToWebServices(string msgPK, string tel, string msgInfo, string sendToEmpNo=null)
         {
-            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
+            //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
 
-            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+            //if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //    BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
 
             return true;
         }
@@ -98,6 +97,7 @@ namespace ccbpm
         /// <param name="title">标题</param>
         /// <param name="maildoc">内容</param>
         /// <returns>返回发送结果</returns>
+        [WebMethod]
         public bool SendToCCIM(string mypk, string userNo, string msg)
         {
             BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);

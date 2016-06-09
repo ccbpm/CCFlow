@@ -32,6 +32,10 @@ namespace BP.WF.CCInterface {
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         bool SendToEmail(string mypk, string email, string title, string maildoc, string sendToEmpNo);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToCCIM", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        bool SendToCCIM(string mypk, string userNo, string msg);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CheckUserNoPassWord", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         int CheckUserNoPassWord(string userNo, string password);
@@ -138,6 +142,10 @@ namespace BP.WF.CCInterface {
         
         public bool SendToEmail(string mypk, string email, string title, string maildoc, string sendToEmpNo) {
             return base.Channel.SendToEmail(mypk, email, title, maildoc, sendToEmpNo);
+        }
+        
+        public bool SendToCCIM(string mypk, string userNo, string msg) {
+            return base.Channel.SendToCCIM(mypk, userNo, msg);
         }
         
         public int CheckUserNoPassWord(string userNo, string password) {

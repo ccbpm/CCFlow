@@ -627,7 +627,7 @@ namespace BP.WF
                             break;
                         case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToCCIM(this.MyPK, this.SendToEmpNo,this.MobileInfo);
+                            soap.SendToCCIM(this.MyPK, this.SendToEmpNo,this.MobileInfo,WebUser.No);
                             break;
                         default:
                             break;

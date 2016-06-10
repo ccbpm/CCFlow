@@ -98,13 +98,13 @@ namespace ccbpm
         /// <param name="maildoc">内容</param>
         /// <returns>返回发送结果</returns>
         [WebMethod]
-        public bool SendToCCIM(string mypk, string userNo, string msg)
+        public bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo)
         {
             BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
 
             if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
                 BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDataTime);
-
+              //BP.CCIM.Glo.SendMsg(userNo, sourceUserNo, msg);
             return true;
         }
         #endregion 发送消息接口.

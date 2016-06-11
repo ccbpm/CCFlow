@@ -4318,7 +4318,7 @@ namespace BP.WF
             if (sendToEmpNo == null || sendToEmpNo == "")
                 return;
 
-            //    throw new Exception("@接受人不能为空");
+            // throw new Exception("@接受人不能为空");
 
             string dbStr = SystemConfig.AppCenterDBVarStr;
             //保存系统通知消息

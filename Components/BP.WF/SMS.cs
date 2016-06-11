@@ -637,12 +637,9 @@ namespace BP.WF
             catch(Exception ex)
             {
                 BP.DA.Log.DebugWriteError("消息机制没有配置成功."+ex.Message);
-
             }
-
             base.afterInsert();
         }
-         
     }
 	/// <summary>
 	/// 消息s

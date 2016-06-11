@@ -224,8 +224,4 @@ namespace BP.Sys
             BP.DA.DBAccess.RunSQL(ps);
         }
     }
-
-
-       
-    }
 }

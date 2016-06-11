@@ -43,7 +43,7 @@
                             <td>
                                 <%=idx %>
                             </td>
-                            <td><a href="javascript:WinOpen('/WF/MyFlow.aspx?WorkID=<%=dr["WorkID"] %>&FK_Flow=<%=dr["FK_Flow"] %>&FK_Node=<%=dr["FK_Node"] %>&FID=<%=dr["FID"] %>')">
+                            <td><a href="javascript:void(0)" onclick="window.open('/WF/MyFlow.aspx?WorkID=<%=dr["WorkID"] %>&FK_Flow=<%=dr["FK_Flow"] %>&FK_Node=<%=dr["FK_Node"] %>&FID=<%=dr["FID"] %>')">
                                     <%=dr["Title"] %></a>
                             </td>
                             <td> <%=dr["FlowName"] %> </td>

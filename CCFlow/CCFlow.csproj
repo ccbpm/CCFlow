@@ -13,7 +13,8 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|ClientBin|False,{1D0E0295-4702-46E2-9766-1A33EE418465}|..\DesignerForSilverlight\CCFlowDesignerSingle\CCFlowDesignerSingle.csproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -111,15 +112,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CCFlowDesignerSingleTestPage.aspx" />
-    <Content Include="CCFlowDesignerSingleTestPage.html" />
-    <Content Include="CCFlowDesignerTestPage.aspx" />
-    <Content Include="CCFlowDesignerTestPage.html" />
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="ClientBin\CCFlowDesigner.xap" />
-    <Content Include="ClientBin\CCFlowDesignerSingle.xap" />
     <Content Include="GPM\Loginin.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />

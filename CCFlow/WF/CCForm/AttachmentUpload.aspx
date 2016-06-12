@@ -30,11 +30,11 @@
 
         function OpenFileView(pkVal, delPKVal) {
             var url = 'FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=<%=FK_FrmAttachment %>&FK_FrmAttachmentExt=<%=FK_FrmAttachmentExt %>&FK_Flow=<%=FK_Flow %>&FK_Node=<%=FK_Node %>&WorkID=<%=WorkID %>&IsCC=<%=IsCC %>';
-            window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, fullscreen=yes,resizable=yes,location=no, status=no');
         }
         function OpenView(pkVal, delPKVal) {
             var url = 'FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=<%=FK_FrmAttachment %>&FK_FrmAttachmentExt=<%=FK_FrmAttachmentExt %>&FK_Flow=<%=FK_Flow %>&FK_Node=<%=FK_Node %>&WorkID=<%=WorkID %>&IsCC=<%=IsCC %>';
-            window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes,fullscreen=yes,resizable=yes,location=no, status=no');
         }
 
         // 上传Img.

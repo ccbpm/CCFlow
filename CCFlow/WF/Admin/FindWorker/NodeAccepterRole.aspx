@@ -799,6 +799,7 @@
                                     <asp:TextBox ID="TB_ByDtlAsSubThreadEmps" runat="server" Width="98%" Rows="3" Height="63px" TextMode="MultiLine"></asp:TextBox>
                                     <ul>
                                         <li>此方法与分合流相关，只有当前节点是子线程才有意义。 </li>
+                                        <li>当前参数为明细表的字段列，如果不填写，就默认为 UserNo 。</li>
                                     </ul>
                                 </td>
                             </tr>

@@ -1370,7 +1370,6 @@
     <Content Include="WF\Data\ImpTableField.txt" />
     <Content Include="WF\Draft.aspx" />
     <Content Include="WF\ErrorPage.aspx" />
-    <Content Include="WF\FlowCheck\MyFlow.aspx" />
     <Content Include="WF\FlowRpt.aspx" />
     <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Img\redo.png" />
@@ -1390,6 +1389,7 @@
     <Content Include="WF\MapDef\MapExt\DDLFullCtrl.aspx" />
     <Content Include="WF\MapDef\MapExt\ExcelFrm.aspx" />
     <Content Include="WF\MapDef\MapExt\InitScript.aspx" />
+    <Content Include="WF\MapDef\MapExt\InputCheck.aspx" />
     <Content Include="WF\MapDef\MapExt\List.aspx" />
     <Content Include="WF\MapDef\MapExt\PageLoadFull.aspx" />
     <Content Include="WF\MapDef\MapExt\PopVal.aspx" />
@@ -1400,7 +1400,6 @@
     <Content Include="WF\MapDef\MapExt\TBFullCtrl_List.aspx" />
     <Content Include="WF\MapDef\MapExt\TBFullCtrl_old.aspx" />
     <Content Include="WF\MapDef\MapExt\WordFrm.aspx" />
-    <Content Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx" />
     <Content Include="WF\MapDef\SFSQL.aspx" />
     <Content Include="WF\MapDef\EditSQL.aspx" />
     <Content Include="WF\MapDef\SFWS.aspx" />
@@ -1858,8 +1857,6 @@
     <Content Include="WF\Img\Action\AskforHelp.png" />
     <Content Include="WF\Img\Action\Skip.png" />
     <Content Include="WF\Img\Action\ForwardAskfor.png" />
-    <Content Include="WF\SDKComponents\TrackChart.ascx" />
-    <Content Include="WF\SDKComponents\TrackList.ascx" />
     <Content Include="WF\SDKComponents\TruakOnly.ascx" />
     <Content Include="WF\Start.aspx" />
     <Content Include="WF\MapDef\BatchEdit.aspx" />
@@ -2222,7 +2219,9 @@
     <Content Include="WF\Data\XML\Menu.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\RegularExpression.xml" />
+    <Content Include="WF\Data\XML\RegularExpression.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="WF\Data\XML\SDK.xml" />
     <Content Include="WF\Data\XML\UserTools.xml" />
     <Content Include="WF\Data\XML\WebConfigDesc.xml">
@@ -5005,13 +5004,6 @@
     <Compile Include="WF\ErrorPage.aspx.designer.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FlowCheck\MyFlow.aspx.cs">
-      <DependentUpon>MyFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowCheck\MyFlow.aspx.designer.cs">
-      <DependentUpon>MyFlow.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\FlowCheck\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -5103,6 +5095,13 @@
     <Compile Include="WF\MapDef\MapExt\InitScript.aspx.designer.cs">
       <DependentUpon>InitScript.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\MapDef\MapExt\InputCheck.aspx.cs">
+      <DependentUpon>InputCheck.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\InputCheck.aspx.designer.cs">
+      <DependentUpon>InputCheck.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\MapDef\MapExt\List.aspx.cs">
       <DependentUpon>List.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -5172,13 +5171,6 @@
     </Compile>
     <Compile Include="WF\MapDef\MapExt\WordFrm.aspx.designer.cs">
       <DependentUpon>WordFrm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.cs">
-      <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.designer.cs">
-      <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\Rpt\RptGuide.Master.cs">
       <DependentUpon>RptGuide.Master</DependentUpon>
@@ -5869,20 +5861,6 @@
     </Compile>
     <Compile Include="WF\FlowSearch.aspx.designer.cs">
       <DependentUpon>FlowSearch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TrackChart.ascx.cs">
-      <DependentUpon>TrackChart.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TrackChart.ascx.designer.cs">
-      <DependentUpon>TrackChart.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TrackList.ascx.cs">
-      <DependentUpon>TrackList.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\TrackList.ascx.designer.cs">
-      <DependentUpon>TrackList.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\SDKComponents\TruakOnly.ascx.cs">
       <DependentUpon>TruakOnly.ascx</DependentUpon>

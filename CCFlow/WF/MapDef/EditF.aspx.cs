@@ -566,7 +566,10 @@ namespace CCFlow.WF.MapDef
                 html += " - <a href=\"javascript:WinOpen('./MapExt/AotuGenerNo.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "')\">自动生成编号</a>";
 
                 this.Pub1.AddTD(html);
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/AutoFull.aspx?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>");
+                //this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/AutoFull.aspx?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>");
+                html = "<a href=\"javascript:WinOpen('./MapExt/AutoFull.aspx?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>";
+                html += " - <a href=\"javascript:WinOpen('./MapExt/InputCheck.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.MyPK + "')\">脚本验证</a>";
+                this.Pub1.AddTD(html);
                 this.Pub1.AddTREnd();
             }
             #endregion pop返回值.

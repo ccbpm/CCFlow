@@ -16,7 +16,7 @@ public class CCFlowWebService : System.Web.Services.WebService
 {
     /// <summary>
     /// 方法用途:检查用户名与密码是否正确.
-    /// 调用位置:D:\ccflow\VisualFlow\WF\UC\Login.ascx.cs
+    /// 调用位置: \WF\UC\Login.ascx.cs
     /// 实现的意义:重写这个方法的意义是您可以修改实现逻辑，实现您自己的校验方式。
     /// 比如：
     /// 1，用户不存在怎么办？
@@ -33,7 +33,6 @@ public class CCFlowWebService : System.Web.Services.WebService
         emp.No = userNo;
         if (emp.RetrieveFromDBSources() == 0)
             return false; /*不存在*/
-        
 
         #region 校验用户是否被禁用了。
         /* 检查用户是否被禁用*/

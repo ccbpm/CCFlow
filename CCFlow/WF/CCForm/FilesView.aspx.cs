@@ -300,7 +300,7 @@ namespace CCFlow.WF.CCForm
             #endregion 处理权限控制.
 
             BP.Sys.FrmAttachmentDBs dbs = LoadAttach(athDesc);
-            this.Pub1.AddTable("style='width:100%;overflow:hidden;padding:0px;margin:0px;display:block;'");
+            this.Pub1.AddTable("style='width:100%;padding:0px;margin:0px;display:block;text-align:center'");
             int idx = 0;
             bool isHave = false;
             bool isRedirect = false;
@@ -347,8 +347,6 @@ namespace CCFlow.WF.CCForm
                 if (db.Idx !=0)
                     isHave = true;
 
-
-
                 count++;
             }
 
@@ -374,7 +372,7 @@ namespace CCFlow.WF.CCForm
 
                 string url = athDesc.SaveTo + this.WorkID + "/" + db.UploadGUID + "." + db.FileName;
               //  url = "";
-                this.Pub1.Add("<img src='" + url + "' border=0 />");
+                this.Pub1.Add("<img src='" + url + "' onload=\"AutoResizeImage(800,600,this)\" border=0  />");
                 this.Pub1.Add("</div>");
                 this.Pub1.AddTDEnd();
 

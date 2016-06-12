@@ -603,7 +603,7 @@ namespace BP.WF
                 {
                     /*发送邮件*/
                     soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                    soap.SendToEmail(this.MyPK, this.Email, this.Title, this.DocOfEmail, this.SendToEmpNo);
+                    soap.SendToEmail(this.MyPK,WebUser.No,this.SendToEmpNo, this.Email, this.Title, this.DocOfEmail );
                     return;
                 }
 
@@ -615,19 +615,19 @@ namespace BP.WF
                             break;
                         case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToWebServices(this.MyPK, this.Mobile, this.MobileInfo, this.SendToEmpNo);
+                            soap.SendToWebServices(this.MyPK,WebUser.No, this.SendToEmpNo ,this.Mobile, this.MobileInfo);
                             break;
                         case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToDingDing(this.MyPK, this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                            soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo , this.Mobile, this.MobileInfo);
                             break;
                         case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToWeiXin(this.MyPK, this.SendToEmpNo, this.Mobile, this.MobileInfo);
+                            soap.SendToWeiXin(this.MyPK, WebUser.No, this.SendToEmpNo , this.Mobile, this.MobileInfo);
                             break;
                         case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToCCIM(this.MyPK, this.SendToEmpNo,this.MobileInfo,WebUser.No);
+                            soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo ,this.MobileInfo);
                             break;
                         default:
                             break;
@@ -646,6 +646,9 @@ namespace BP.WF
 	/// </summary> 
     public class SMSs : Entities
     {
+        /// <summary>
+        /// 获得实体
+        /// </summary>
         public override Entity GetNewEntity
         {
             get

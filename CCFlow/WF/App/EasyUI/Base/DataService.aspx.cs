@@ -274,7 +274,7 @@ namespace CCFlow.AppDemoLigerUI.Base
             {
                 column.ColumnName = column.ColumnName.ToUpper();
             }
-            string strFlows = BP.GPM.Utility.CommonDbOperator.GetGridTreeDataString(dt, "PARENTNO", "NO", "0", true);
+            string strFlows = BP.GPM.Utility.CommonDbOperator.GetGridTreeDataString(dt, "PARENTNO", "NO", "ST0", true);
             if (strFlows.Length > 2)
                 strFlows = strFlows.Remove(strFlows.Length - 2, 2);
             return strFlows;

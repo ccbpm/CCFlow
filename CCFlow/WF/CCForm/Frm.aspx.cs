@@ -581,7 +581,7 @@ namespace CCFlow.WF.CCForm
                 {
                     if (md.IsHaveCA)
                     {
-                        //#region 检查是否有ca签名.
+                        #region 检查是否有ca签名.
                         //if (md.IsHaveCA == true)
                         //{
                         //    if (string.IsNullOrEmpty(sealName))
@@ -611,7 +611,7 @@ namespace CCFlow.WF.CCForm
 
                         //    //this.TB_SealData.Text = en.GetValStringByKey("SealData");
                         //}
-                        //#endregion 检查是否有ca签名.
+                        #endregion 检查是否有ca签名.
                     }
                 }
                 this.AddJSEvent(en);

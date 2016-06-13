@@ -59,7 +59,7 @@
                 $.jBox("iframe:" + url, {
                     title: '选择窗',
                     width: 760,
-                    height: 550,
+                    height: 450,
                     buttons: { '确定': 'ok' },
                     submit: function (v, h, f) {
                         var iframeWin = h[0].firstChild.contentWindow;

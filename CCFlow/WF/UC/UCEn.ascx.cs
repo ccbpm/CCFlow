@@ -1332,7 +1332,7 @@ namespace CCFlow.WF.UC
                                 continue;
 
                             ddlOper.Attributes["onchange"] = "Change('" + enName + "');DDLFullCtrl(this.value,\'" + ddlOper.ClientID + "\', \'" + me.MyPK + "\')";
-                            if (me.Tag != ""  )
+                            if (me.Tag != "")
                             {
                                 /* 下拉框填充范围. */
                                 string[] strs = me.Tag.Split('$');
@@ -1444,7 +1444,7 @@ namespace CCFlow.WF.UC
                                     string txt = tbAuto.Text.Trim();
                                     if (string.IsNullOrEmpty(txt))
                                         continue;
-                                   
+
                                     //获取要填充 ddll 的SQL.
                                     string sql = myCtl[1].Replace("~", "'");
                                     sql = sql.Replace("@Key", txt);
@@ -1560,7 +1560,7 @@ namespace CCFlow.WF.UC
                 }
                 #endregion 在处理其它。
 
-            
+
 
 
             }
@@ -1580,12 +1580,18 @@ namespace CCFlow.WF.UC
                     if (tb == null)
                         continue;
                     scriptCheckFrm += "\t\n try{  ";
-                    scriptCheckFrm += "\t\n var element = document.getElementById('" + tb.ClientID + "');";
+                    scriptCheckFrm += "\t\n  var element = document.getElementById('" + tb.ClientID + "');";
                     //验证输入的正则格式
                     string regFilter = me.Doc;
-                    if (regFilter.LastIndexOf("/g") < 0 && regFilter.LastIndexOf('/') < 0)
-                        regFilter = "'" + regFilter + "'";
+                    if (regFilter.StartsWith("/"))
+                        regFilter = regFilter.TrimStart('/');
+                    if (regFilter.EndsWith("g"))
+                        regFilter = regFilter.TrimEnd('g');
+                    if (regFilter.EndsWith("/"))
+                        regFilter = regFilter.TrimEnd('/');
 
+                    regFilter = "'" + regFilter + "'";
+                    //scriptCheckFrm += "\t\n  debugger ";
                     scriptCheckFrm += "\t\n isPass = EleSubmitCheck(element," + regFilter + ",'" + me.Tag1 + "');";
                     //scriptCheckFrm += "\t\n var reg =new RegExp(" + regFilter + ");   isPass = reg.test(element.value); ";
                     scriptCheckFrm += "\t\n  if(isPass == false){";
@@ -1594,7 +1600,7 @@ namespace CCFlow.WF.UC
                     scriptCheckFrm += "\t\n    erroMsg += '" + me.Tag1 + ";';";
                     scriptCheckFrm += "\t\n  }";
                     scriptCheckFrm += "\t\n } catch(e) { ";
-                    scriptCheckFrm += "\t\n  alert(e.name  + e.message);  return false;";
+                    scriptCheckFrm += "\t\n  alert('" + me.AttrOfOper + "'+e.name +':'+ e.message);  return false;";
                     scriptCheckFrm += "\t\n } ";
                 }
             }
@@ -1602,6 +1608,41 @@ namespace CCFlow.WF.UC
             scriptCheckFrm += "\t\n     alert(erroMsg);";
             scriptCheckFrm += "\t\n  } ";
             scriptCheckFrm += "\t\n return alloweSave; } ";
+
+            //打开表单后的必填提示
+            scriptCheckFrm += "\t\n function FormOnLoadCheckIsNull(){ ";
+            foreach (MapExt me in mes)
+            {
+                if (me.ExtType == MapExtXmlList.RegularExpression)
+                {
+                    if (me.Tag != "onsubmit")
+                        continue;
+
+                    TB tb = this.GetTBByID("TB_" + me.AttrOfOper);
+                    if (tb == null)
+                        continue;
+                    //验证输入的正则格式
+                    string regFilter = me.Doc;
+                    if (regFilter.StartsWith("/"))
+                        regFilter = regFilter.TrimStart('/');
+                    if (regFilter.EndsWith("g"))
+                        regFilter = regFilter.TrimEnd('g');
+                    if (regFilter.EndsWith("/"))
+                        regFilter = regFilter.TrimEnd('/');
+
+                    regFilter = "'" + regFilter + "'";
+
+                    scriptCheckFrm += "\t\n try{  ";
+                    scriptCheckFrm += "\t\n var element = document.getElementById('" + tb.ClientID + "');";
+                    //验证输入的正则格式
+                    scriptCheckFrm += "\t\n if(element && element.readOnly == true) return;";
+                    scriptCheckFrm += "\t\n   EleSubmitCheck(element," + regFilter + ",'" + me.Tag1 + "');";
+                    scriptCheckFrm += "\t\n } catch(e) { ";
+                    scriptCheckFrm += "\t\n } ";
+                }
+            }
+            scriptCheckFrm += "\t\n } ";
+
             scriptCheckFrm += "\t\n</script>";
             this.Add(scriptCheckFrm);
             #endregion
@@ -2724,7 +2765,7 @@ namespace CCFlow.WF.UC
                 string sql = "";
 
                 //重新加载 可能有缓存
-                img.RetrieveFromDBSources(); 
+                img.RetrieveFromDBSources();
                 //0.不可以修改，从数据表中取，1可以修改，使用组合获取并保存数据
                 if ((img.IsEdit == 1 && this.IsReadonly == false) || activeFilds.Contains(img.MyPK + ","))
                 {
@@ -2831,8 +2872,8 @@ namespace CCFlow.WF.UC
                                     single.FK_MapData = img.EnPK;
                                     single.MyPK = img.EnPK + "_" + this.HisEn.GetValStrByKey("OID") + "_" + img.EnPK;
                                     single.RefPKVal = img.EnPK;
-                                  //  single.DirectInsert();
-                                  //  realDB = single; cut by zhoupeng .没有看明白.
+                                    //  single.DirectInsert();
+                                    //  realDB = single; cut by zhoupeng .没有看明白.
                                     break;
                                 }
                             }
@@ -2925,7 +2966,7 @@ namespace CCFlow.WF.UC
                     string v = en.GetValStrByKey(attr.KeyOfEn);
 
                     //如果为空，默认使用当前登录人签名
-                    if (string.IsNullOrEmpty(v) && activeFilds.Contains(attr.KeyOfEn+",") )
+                    if (string.IsNullOrEmpty(v) && activeFilds.Contains(attr.KeyOfEn + ","))
                         v = WebUser.No;
 
                     //如果为只读并且为空，显示为未签名
@@ -2955,14 +2996,14 @@ namespace CCFlow.WF.UC
                         if (info.DoQuery() > 0)
                         {
                             isEdit = true;//可编辑，如果值为空显示可编辑图片
-                            if (string.IsNullOrEmpty(v)) 
+                            if (string.IsNullOrEmpty(v))
                                 v = "siganture";
                         }
                         else
                         {
                             isEdit = false;
                             //不可编辑，如果值为空显示不可编辑图片
-                            if (string.IsNullOrEmpty(v)) 
+                            if (string.IsNullOrEmpty(v))
                                 v = "sigan-readonly";
                         }
                     }
@@ -3176,9 +3217,9 @@ namespace CCFlow.WF.UC
 
                                 fSize = attr.Para_FontSize;
                                 if (fSize == 0)
-                                    tb.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";
+                                    ddl1.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";
                                 else
-                                    tb.Attributes["style"] = "width: " + attr.UIWidth + "px; text-align: left; height: " + attr.UIHeight + "px;";
+                                    ddl1.Attributes["style"] = "width: " + attr.UIWidth + "px; text-align: left; height: " + attr.UIHeight + "px;";
 
                                 string val = en.GetValStrByKey(attr.KeyOfEn);
                                 string text = en.GetValStrByKey(attr.KeyOfEn + "T");
@@ -3237,14 +3278,14 @@ namespace CCFlow.WF.UC
                                     tb.Attributes["maxlength"] = attr.MaxLen.ToString();
                                     tb.Rows = attr.UIRows;
 
-                                    if ( (attr.UIIsEnable && isReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ",")  )
+                                    if ((attr.UIIsEnable && isReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
                                     {
                                         tb.CssClass = "TBDoc";
                                         tb.Attributes["onclick"] = "ShowHelpDiv('" + tb.ID + "','" + appPath + "','" + attr.KeyOfEn + "','" + enName + "','wordhelp');";
                                     }
                                     else
                                     {
-                                            tb.CssClass = "TBReadonly";
+                                        tb.CssClass = "TBReadonly";
                                     }
                                     this.Add(tb);
                                 }
@@ -3252,7 +3293,7 @@ namespace CCFlow.WF.UC
                             case BP.DA.DataType.AppDate:
                                 tb.ShowType = TBType.Date;
                                 tb.Text = en.GetValStrByKey(attr.KeyOfEn);
-                                if ((attr.UIIsEnable && this.IsReadonly == false) ||  activeFilds.Contains(attr.KeyOfEn + ","))
+                                if ((attr.UIIsEnable && this.IsReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
                                 {
                                     tb.Attributes["onfocus"] = "WdatePicker();";
                                     tb.Attributes["class"] = "TB";
@@ -3279,7 +3320,7 @@ namespace CCFlow.WF.UC
                                     tb.Attributes["class"] = "TBcalendar";
                                     tb.Attributes["onfocus"] = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});";
 
-                                    if (tb.Text == "" && attr.DefValReal == "@RDT" )
+                                    if (tb.Text == "" && attr.DefValReal == "@RDT")
                                         tb.Text = BP.DA.DataType.CurrentData;
 
                                 }
@@ -3290,7 +3331,7 @@ namespace CCFlow.WF.UC
                                 if (fSize == 0)
                                     tb.Attributes["style"] = "width: " + attr.UIWidth + "px; text-align: left; height: 19px;";
                                 else
-                                    tb.Attributes["style"] = "font-size: " + fSize + "px;width: " + fSize*10 + "px; text-align: left; height: " + fSize + "px;";
+                                    tb.Attributes["style"] = "font-size: " + fSize + "px;width: " + fSize * 10 + "px; text-align: left; height: " + fSize + "px;";
 
                                 this.Add(tb);
                                 break;
@@ -3302,7 +3343,7 @@ namespace CCFlow.WF.UC
                                 cb.Checked = attr.DefValOfBool;
                                 cb.Enabled = attr.UIIsEnable;
                                 cb.Checked = en.GetValBooleanByKey(attr.KeyOfEn);
-                                if ((cb.Enabled == false && activeFilds.Contains(attr.KeyOfEn + ",")==false ) || isReadonly == true)
+                                if ((cb.Enabled == false && activeFilds.Contains(attr.KeyOfEn + ",") == false) || isReadonly == true)
                                 {
                                     cb.Enabled = false;
                                 }
@@ -3354,7 +3395,7 @@ namespace CCFlow.WF.UC
                                     tb.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: right; height: " + fSize + "px;";
 
                                 tb.Text = en.GetValStrByKey(attr.KeyOfEn);
-                                if ( (attr.UIIsEnable && isReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
+                                if ((attr.UIIsEnable && isReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
                                 {
                                     //增加验证
                                     tb.Attributes.Add("onkeyup", @"Change('" + attr.FK_MapData + "');");
@@ -3380,7 +3421,7 @@ namespace CCFlow.WF.UC
                                     tb.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: right; height: " + fSize + "px;";
 
 
-                                if ((attr.UIIsEnable && isReadonly == false ) || activeFilds.Contains(attr.KeyOfEn + ","))
+                                if ((attr.UIIsEnable && isReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
                                 {
                                     //增加验证
                                     tb.Attributes.Add("onkeyup", @"Change('" + attr.FK_MapData + "');");
@@ -3409,7 +3450,7 @@ namespace CCFlow.WF.UC
                                 this.Add(tb);
                                 break;
                             case BP.DA.DataType.AppRate:
-                                if ( (attr.UIIsEnable && isReadonly == false) ||  activeFilds.Contains(attr.KeyOfEn + ","))
+                                if ((attr.UIIsEnable && isReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
                                     tb.Attributes["class"] = "TBNum";
                                 else
                                     tb.Attributes["class"] = "TBReadonly";
@@ -3448,7 +3489,7 @@ namespace CCFlow.WF.UC
                             }
                             else
                             {
-                                ddle.Items.Add( new ListItem(en.GetValRefTextByKey( attr.KeyOfEn ), en.GetValStringByKey( attr.KeyOfEn ) ));
+                                ddle.Items.Add(new ListItem(en.GetValRefTextByKey(attr.KeyOfEn), en.GetValStringByKey(attr.KeyOfEn)));
                                 ddle.Enabled = false;
                             }
                             this.Add(ddle);
@@ -3465,7 +3506,7 @@ namespace CCFlow.WF.UC
                         ddlFK.ID = "DDL_" + attr.KeyOfEn;
                         ddlFK.Attributes["tabindex"] = attr.Idx.ToString();
                         this.Add(ddlFK);
-                        if (ddlFK.Enabled ||  activeFilds.Contains(attr.KeyOfEn + ",") )
+                        if (ddlFK.Enabled || activeFilds.Contains(attr.KeyOfEn + ","))
                         {
                             EntitiesNoName ens = attr.HisEntitiesNoName;
                             ens.RetrieveAll();
@@ -3549,9 +3590,9 @@ namespace CCFlow.WF.UC
 
                             fSize = attr.Para_FontSize;
                             if (fSize == 0)
-                                tb.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";
+                                ddlFK.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";
                             else
-                                tb.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: left; height: " + fSize + "px;";
+                                ddlFK.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: left; height: " + fSize + "px;";
 
                             string val = en.GetValStrByKey(attr.KeyOfEn);
                             string text = en.GetValRefTextByKey(attr.KeyOfEn);

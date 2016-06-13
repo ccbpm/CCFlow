@@ -109,7 +109,7 @@ namespace BP.WF
                 return BP.DA.DBAccess.RunSQLReturnValInt(ps);
             }
         }
-       
+
         /// <summary>
         /// 抄送数量
         /// </summary>
@@ -1030,9 +1030,9 @@ namespace BP.WF
             foreach (DataRow row in sortTable.Rows)
             {
                 DataRow newRow = table.NewRow();
-                newRow["No"] = row["No"];
+                newRow["No"] = "ST" + row["No"];
                 newRow["Name"] = row["Name"];
-                newRow["ParentNo"] = row["ParentNo"];
+                newRow["ParentNo"] = "ST" + row["ParentNo"];
                 newRow["ICON"] = "icon-tree_folder";
                 table.Rows.Add(newRow);
             }
@@ -1041,7 +1041,7 @@ namespace BP.WF
             {
                 if (string.IsNullOrEmpty(row["ParentNo"].ToString()))
                 {
-                    row["ParentNo"] = row["FK_FlowSort"];
+                    row["ParentNo"] = "ST" + row["FK_FlowSort"];
                 }
                 if (string.IsNullOrEmpty(row["ICON"].ToString()))
                 {
@@ -1175,7 +1175,7 @@ namespace BP.WF
         public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, string fk_flow)
         {
             //执行 todolist 调度.
-             DTS_GenerWorkFlowTodoSta();
+            DTS_GenerWorkFlowTodoSta();
 
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
@@ -2089,7 +2089,7 @@ namespace BP.WF
         /// <param name="fk_flow">流程编号</param>
         /// <param name="isMyStarter">是否仅仅查询我发起的在途流程</param>
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
-        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter=false)
+        public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false)
         {
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
@@ -2100,7 +2100,7 @@ namespace BP.WF
                 WF.Port.WFEmp emp = new Port.WFEmp(userNo);
                 if (string.IsNullOrEmpty(fk_flow))
                 {
-                    if (isMyStarter ==true )
+                    if (isMyStarter == true)
                     {
                         ps.SQL = "SELECT DISTINCT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND A.FK_Flow IN " + emp.AuthorFlows;
                         ps.Add("Starter", userNo);
@@ -2127,7 +2127,7 @@ namespace BP.WF
                         ps.Add("FK_Flow", fk_flow);
                         ps.Add("FK_Emp", userNo);
                     }
-                 
+
                 }
             }
             else
@@ -2466,7 +2466,7 @@ namespace BP.WF
         public static void Port_Login(string userNo, string sid)
         {
             if (WebUser.No == userNo)
-                return; 
+                return;
 
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
@@ -2661,8 +2661,8 @@ namespace BP.WF
             string para = "@FK_Flow=" + flowNo + "@WorkID=" + workID + "@FK_Node=" + nodeID + "@Sender=" + BP.Web.WebUser.No;
             BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, para);
         }
-      
-      
+
+
         /// <summary>
         /// 发送邮件
         /// </summary>
@@ -2674,7 +2674,7 @@ namespace BP.WF
         /// <param name="sender">发送人</param>
         /// <param name="msgPK">消息唯一标记，防止发送重复.</param>
         public static void Port_SendEmail(string mailAddress, string emilTitle, string emailBody,
-            string msgType, string msgGroupFlag=null, string sender = null, string msgPK = null, string sendToEmpNo=null)
+            string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null)
         {
             if (string.IsNullOrEmpty(mailAddress))
                 return;
@@ -2728,8 +2728,8 @@ namespace BP.WF
         /// <param name="msgPK">唯一标志,防止发送重复.</param>
         /// <param name="sendEmpNo">发送给人员.</param>
         /// <param name="atParas">参数.</param>
-        public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag, 
-            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas=null)
+        public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
+            string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null)
         {
             if (string.IsNullOrEmpty(tel))
                 return;
@@ -2838,7 +2838,7 @@ namespace BP.WF
         /// <param name="tag">参数:用@符号隔开比如, @PWorkID=101@PFlowNo=003</param>
         /// <param name="cFlowInfo">子流程信息</param>
         public static void WriteTrack(string flowNo, int nodeFrom, Int64 workid, Int64 fid, string msg, ActionType at, string tag,
-            string cFlowInfo, string optionMsg=null, string empNoTo=null, string empNameTo=null)
+            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null)
         {
             if (at == ActionType.CallChildenFlow)
                 if (string.IsNullOrEmpty(cFlowInfo) == true)
@@ -3573,7 +3573,7 @@ namespace BP.WF
             flowNo = TurnFlowMarkToFlowNo(flowNo);
 
             WorkFlow wf = new WorkFlow(flowNo, workID);
-            Node nd = new Node( wf.HisGenerWorkFlow.FK_Node);
+            Node nd = new Node(wf.HisGenerWorkFlow.FK_Node);
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt");
             rpt.OID = workID;
             rpt.RetrieveFromDBSources();
@@ -3700,7 +3700,7 @@ namespace BP.WF
             if (nd.IsGuestNode == true)
             {
                 if (BP.Web.WebUser.No != "Guest")
-                    throw new Exception("@当前节点是来宾处理节点，但是目前您{"+BP.Web.WebUser.No+"}不是来宾帐号。");
+                    throw new Exception("@当前节点是来宾处理节点，但是目前您{" + BP.Web.WebUser.No + "}不是来宾帐号。");
                 return true;
             }
 
@@ -3880,9 +3880,9 @@ namespace BP.WF
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "SELECT c.RunModel,c.IsGuestNode, a.GuestNo, a.TaskSta, a.WFState, IsPass FROM WF_GenerWorkFlow a, WF_GenerWorkerlist b, WF_Node c WHERE a.FK_Node=" + dbstr + "FK_Node  AND b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.FK_Emp=" + dbstr + "FK_Emp AND b.IsEnable=1 AND a.WorkID=" + dbstr + "WorkID ";
-            ps.Add("FK_Node",nodeID);
+            ps.Add("FK_Node", nodeID);
             ps.Add("FK_Emp", userNo);
-            ps.Add("WorkID",workID);
+            ps.Add("WorkID", workID);
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             if (dt.Rows.Count == 0)
                 return false;
@@ -4394,7 +4394,7 @@ namespace BP.WF
             gwf.Update();
             if (runType == TransferCustomType.ByCCBPMDefine)
                 return;  // 如果是按照设置的模式运行，就要更改状态后退出它.
-            #endregion 
+            #endregion
 
             //删除以前存储的参数.
             BP.DA.DBAccess.RunSQL("DELETE FROM WF_TransferCustom WHERE WorkID=" + workid);
@@ -4456,7 +4456,7 @@ namespace BP.WF
                 }
             }
 
-          
+
         }
 
         #region 与流程有关的接口
@@ -4951,7 +4951,7 @@ namespace BP.WF
 
             return wk.OID;
         }
-        
+
         /// <summary>
         /// 创建开始节点工作
         /// 创建后可以创办人形成一个待办.
@@ -5137,7 +5137,7 @@ namespace BP.WF
             // 执行对报表的数据表WFState状态的更新,让它为runing的状态. 
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Title=" + dbstr 
+            ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Title=" + dbstr
                 + "Title,FK_Dept=" + dbstr + "FK_Dept,PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID WHERE OID=" + dbstr + "OID";
             ps.Add("WFState", (int)WFState.Runing);
             ps.Add("WFSta", (int)WFSta.Runing);
@@ -6311,7 +6311,7 @@ namespace BP.WF
             }
 
 
-            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, workid, gwf.FID, askForNote, ActionType.AskforHelp, "", null,null,emp.No,emp.Name);
+            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, workid, gwf.FID, askForNote, ActionType.AskforHelp, "", null, null, emp.No, emp.Name);
 
             Flow fl = new Flow(gwf.FK_Flow);
             BP.WF.Dev2Interface.Port_SendMsg(askForEmp, gwf.Title, askForNote, "AK" + gwf.FK_Node + "_" + gwf.WorkID, SMSMsgType.AskFor, gwf.FK_Flow, gwf.FK_Node, workid, gwf.FID);
@@ -7546,12 +7546,12 @@ namespace BP.WF
         public static void DTS_GenerWorkFlowTodoSta()
         {
             // 中午的更新, 与发送邮件通知.
-            bool isPM=false;
+            bool isPM = false;
 
             #region 求出是否可以更新状态.
-            if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 12 )
+            if (DateTime.Now.Hour >= 9 && DateTime.Now.Hour < 12)
             {
-                isPM=true;
+                isPM = true;
                 string timeKey = "DTSTodoStaPM" + DateTime.Now.ToString("yyMMdd");
                 Paras ps = new Paras();
                 ps.SQL = "SELECT Val FROM Sys_GloVar WHERE No='" + timeKey + "'";
@@ -7575,7 +7575,7 @@ namespace BP.WF
             }
 
             //下午时间段.
-            if (DateTime.Now.Hour >= 13 && DateTime.Now.Hour < 18 )
+            if (DateTime.Now.Hour >= 13 && DateTime.Now.Hour < 18)
             {
                 string timeKey = "DTSTodoStaAM" + DateTime.Now.ToString("yyMMdd");
                 Paras ps = new Paras();
@@ -7602,18 +7602,18 @@ namespace BP.WF
 
             //系统期望的是，每一个人仅发一条信息.  “您有xx个预警工作，yy个预期工作，请及时处理。”
 
-            DataTable dtEmps=new DataTable();
-            dtEmps.Columns.Add( "EmpNo", typeof(string));
-            dtEmps.Columns.Add( "WarningNum", typeof(int));
-            dtEmps.Columns.Add( "OverTimeNum", typeof(int));
+            DataTable dtEmps = new DataTable();
+            dtEmps.Columns.Add("EmpNo", typeof(string));
+            dtEmps.Columns.Add("WarningNum", typeof(int));
+            dtEmps.Columns.Add("OverTimeNum", typeof(int));
 
-            string  timeDT = DateTime.Now.ToString("yyyy-MM-dd");
+            string timeDT = DateTime.Now.ToString("yyyy-MM-dd");
             string sql = "";
 
-            
+
             //查询出预警的工作.
             sql = " SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 0 as DBType FROM WF_GenerWorkerlist A WHERE a.DTOfWarning =< '" + timeDT + "' AND a.SDT <= '" + timeDT + "' AND A.IsPass=0  ";
-            sql+="  UNION ";
+            sql += "  UNION ";
             sql += "SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 1 as DBType FROM WF_GenerWorkerlist A WHERE  a.SDT >'" + timeDT + "' AND A.IsPass=0 ";
 
 
@@ -7624,10 +7624,10 @@ namespace BP.WF
             string emps = "";
             foreach (DataRow dr in dt.Rows)
             {
-               //  dtEmps.Rows
-                
+                //  dtEmps.Rows
+
             }
-          
+
 
             // 向预警的人员发消息.
             Node nd = new Node();
@@ -7635,7 +7635,7 @@ namespace BP.WF
             foreach (DataRow dr in dt.Rows)
             {
                 Int64 workid = Int64.Parse(dr["WorkID"].ToString());
-                int fk_node  = int.Parse(dr["FK_Node"].ToString());
+                int fk_node = int.Parse(dr["FK_Node"].ToString());
                 string fk_emp = dr["FK_Emp"].ToString();
 
                 if (nd.NodeID != fk_node)
@@ -7647,14 +7647,15 @@ namespace BP.WF
                 if (nd.HisCHWay != CHWay.ByTime)
                     continue; //非按照时效考核.
 
-                 if (nd.WAlertRole == CHAlertRole.None)
-                    continue; 
+                if (nd.WAlertRole == CHAlertRole.None)
+                    continue;
 
                 //如果仅仅提醒一次.
-                if (nd.WAlertRole == CHAlertRole.OneDayOneTime && isPM==true)
+                if (nd.WAlertRole == CHAlertRole.OneDayOneTime && isPM == true)
                 {
 
-                }else
+                }
+                else
                 {
                     continue;
                 }
@@ -7665,7 +7666,7 @@ namespace BP.WF
                     emp.Retrieve();
                 }
 
-            //    BP.WF.Dev2Interface.Port_SendSMS
+                //    BP.WF.Dev2Interface.Port_SendSMS
             }
 
 
@@ -7716,7 +7717,7 @@ namespace BP.WF
 
                     /*查找一天预警1次的消息记录，并执行推送。*/
                     string sql = "SELECT A.WorkID, A.Title, A.FlowName, A.TodoSta, B.FK_Emp, b.FK_EmpText, C.WAlertWay  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C  ";
-                   sql += " WHERE A.WorkID=B.WorkID AND A.FK_Node=C.NodeID AND a.TodoSta=1 AND ( C.WAlertRole=1 OR C.WAlertRole=2 ) ";
+                    sql += " WHERE A.WorkID=B.WorkID AND A.FK_Node=C.NodeID AND a.TodoSta=1 AND ( C.WAlertRole=1 OR C.WAlertRole=2 ) ";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -7733,14 +7734,14 @@ namespace BP.WF
                         {
                             string titleMail = "";
                             string docMail = "";
-                          //  BP.WF.Dev2Interface.Port_SendEmail(emp.Email, titleMail, "");
+                            //  BP.WF.Dev2Interface.Port_SendEmail(emp.Email, titleMail, "");
                         }
 
                         if (way == CHAlertWay.BySMS)
                         {
                             string titleMail = "";
                             string docMail = "";
-                             //BP.WF.Dev2Interface.Port_SendMsg(emp.Email, titleMail, "");
+                            //BP.WF.Dev2Interface.Port_SendMsg(emp.Email, titleMail, "");
                         }
                     }
                 }

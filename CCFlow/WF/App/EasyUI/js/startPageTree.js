@@ -12,7 +12,7 @@ function StartListUrl(url) {
 //打开窗体
 function WinOpenIt(tabid, text, url) {
     if (ccflow.config.IsWinOpenStartWork == 1) {
-        window.parent.f_addTab(tabid + strTimeKey, text, url);
+        window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
     } else {
         var winWidth = 850;
         var winHeight = 680;
@@ -166,7 +166,11 @@ function ShowEasyUiTitleDiv(tabid, text, url) {
             if (ccflow.config.IsWinOpenStartWork == 0) {
                 WinOpenIt(tabid, text, url);
             } else {
-                window.parent.f_addTab(tabid + strTimeKey, text, url);
+                if (window.parent && window.parent.f_addTab) {
+                    window.parent.f_addTab(tabid + strTimeKey, text, url);
+                } else {
+                    WinOpenIt(tabid, text, url);
+                }
             }
         } else {
             //打开层

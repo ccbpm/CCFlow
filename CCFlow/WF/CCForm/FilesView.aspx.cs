@@ -204,7 +204,6 @@ namespace CCFlow.WF.CCForm
         /// </summary>
         private void RenderPic(string type)
         {
-
             #region 处理权限控制.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
             athDesc.MyPK = this.FK_FrmAttachment;
@@ -308,7 +307,7 @@ namespace CCFlow.WF.CCForm
             foreach (FrmAttachmentDB db in dbs)
             {
 
-                if (!DataType.IsImgExt(db.FileExts))
+                if (DataType.IsImgExt(db.FileExts)==false)
                     continue;
 
                 if (!string.IsNullOrEmpty(type))

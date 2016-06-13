@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <NewDataSet>
   <WF_Flow>
-    <No>044</No>
+    <No>045</No>
     <FK_FlowSort>02</FK_FlowSort>
     <Name>具有两段同表单分合流Demo</Name>
     <IsOK>1</IsOK>
@@ -76,7 +76,7 @@
     <SelectorDBShowWay>0</SelectorDBShowWay>
     <Name>下达填写计划</Name>
     <Step>1</Step>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <CheckNodes />
     <DeliveryWay>0</DeliveryWay>
     <IsTask>1</IsTask>
@@ -201,7 +201,7 @@
     <SelectorDBShowWay>0</SelectorDBShowWay>
     <Name>成员填写计划</Name>
     <Step>2</Step>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <CheckNodes />
     <DeliveryWay>0</DeliveryWay>
     <IsTask>1</IsTask>
@@ -326,7 +326,7 @@
     <SelectorDBShowWay>0</SelectorDBShowWay>
     <Name>汇总整理计划</Name>
     <Step>3</Step>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <CheckNodes />
     <DeliveryWay>0</DeliveryWay>
     <IsTask>1</IsTask>
@@ -451,7 +451,7 @@
     <SelectorDBShowWay>0</SelectorDBShowWay>
     <Name>修改计划</Name>
     <Step>4</Step>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <CheckNodes />
     <DeliveryWay>13</DeliveryWay>
     <IsTask>1</IsTask>
@@ -576,7 +576,7 @@
     <SelectorDBShowWay>0</SelectorDBShowWay>
     <Name>计划汇总</Name>
     <Step>99</Step>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <CheckNodes />
     <DeliveryWay>0</DeliveryWay>
     <IsTask>1</IsTask>
@@ -661,7 +661,7 @@
   </WF_Node>
   <WF_Direction>
     <MyPK>4401_4402_0</MyPK>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <Node>4401</Node>
     <ToNode>4402</ToNode>
     <DirType>0</DirType>
@@ -670,7 +670,7 @@
   </WF_Direction>
   <WF_Direction>
     <MyPK>4402_4403_0</MyPK>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <Node>4402</Node>
     <ToNode>4403</ToNode>
     <DirType>0</DirType>
@@ -679,7 +679,7 @@
   </WF_Direction>
   <WF_Direction>
     <MyPK>4403_4404_0</MyPK>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <Node>4403</Node>
     <ToNode>4404</ToNode>
     <DirType>0</DirType>
@@ -688,7 +688,7 @@
   </WF_Direction>
   <WF_Direction>
     <MyPK>4404_4499_0</MyPK>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <Node>4404</Node>
     <ToNode>4499</ToNode>
     <DirType>0</DirType>
@@ -698,7 +698,7 @@
   <WF_LabNote>
     <MyPK>044_294_168_1</MyPK>
     <Name>具有两段分合流的同表单分合流。</Name>
-    <FK_Flow>044</FK_Flow>
+    <FK_Flow>045</FK_Flow>
     <X>294</X>
     <Y>168</Y>
   </WF_LabNote>

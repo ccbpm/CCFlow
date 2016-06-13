@@ -493,7 +493,7 @@ namespace CCFlow.WF.Admin
 
             Button btn = new Button();
             btn.ID = "Save";
-            btn.Text = "保存设置";
+            btn.Text = "保存";
             btn.CssClass = "Btn";
             btn.Click += new EventHandler(btn_SavePowerOrders_Click);
             this.Pub1.Add(btn);

@@ -96,7 +96,7 @@ public partial class CCFlow_Comm_Sys_EnConfig : BP.Web.WebPageAdmin
         this.UCSys1.AddTD();
 
         Button btn = new Button();
-        btn.Text = "保存设置";
+        btn.Text = "保存";
         btn.ID = "Btn_Save";
         btn.CssClass = "Btn";
         btn.Click += new EventHandler(btn_Click);

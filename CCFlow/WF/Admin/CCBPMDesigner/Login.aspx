@@ -399,15 +399,15 @@
 				<input runat="server" type="password" placeholder="密码" required="" class="password" id="TB_Password" />
 			</div>
 			<div>
-				<input type="submit" value="登录" /> 
+				<input type="submit" value="H5版(Beta)" /> 
 			</div>
 
              <div>
-              <input type="button" value="切换到5.0版本" onclick="javascript:window.location.href='../XAP/Designer.aspx'" />
+              <input type="button" value="Silverlight版" onclick="javascript:window.location.href='../XAP/Designer.aspx'" />
 			</div>
 		</form>
 		<div class="button">
-			<a href="http://ccbpm.mydoc.io/" target="_blank" > <img src="../../Img/Help.png" />帮助</a>
+			<a href="http://ccbpm.mydoc.io/" target="_blank" > <img src="../../Img/Help.png" alt="" />帮助</a>
 		</div>
 	</section>
     </div>

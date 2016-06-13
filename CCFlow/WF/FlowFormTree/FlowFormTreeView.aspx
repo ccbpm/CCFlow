@@ -422,7 +422,9 @@
             //初始工具栏
             var args = new RequestArgs();
             //表单树
-            Application.data.getFlowFormTree(args.FK_Flow, args.FK_Node, function (js) {
+            var urlExt = urlExtFrm();
+            var url = "Base/FormTreeBase.aspx?1=1" + urlExt;
+            Application.data.getFlowFormTree(url, function (js) {
                 var isSelect = false;
                 var pushData = eval('(' + js + ')');
                 //加载类别树

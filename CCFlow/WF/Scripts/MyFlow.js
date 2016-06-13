@@ -1,5 +1,9 @@
 ﻿$(function () {
     SetHegiht();
+    //打开表单检查正则表达式
+    if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
+        FormOnLoadCheckIsNull();
+    }
 });
 
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.
@@ -327,6 +331,4 @@ function printFrom() {
     //  LODOP.PREVIEW();
    
     LODOP.PREVIEW();
-   
-  
-}    
+}

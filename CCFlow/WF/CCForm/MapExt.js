@@ -702,9 +702,7 @@ function EleSubmitCheck(ele, filter, message) {
     if (ele == null) return;
     if (CheckInput(ele.value, filter) == true) {
         ele.title = "";
-        ele.style.border = "1";
-        ele.style.backgroundColor = "White";
-        ele.style.borderBottomColor = "Black";
+        ele.className = "TB";
         return true;
     }
     else {

@@ -4839,6 +4839,10 @@ namespace BP.WF
                 if (md.HisFrmType == FrmType.Url)
                     continue;
 
+                //如果使用默认方案,就return出去.
+                if (item.FrmSln == 0)
+                    continue;
+
                 //检查是否有？
                 bool isHave = false;
                 foreach (FrmField myff in ffs)
@@ -4883,7 +4887,6 @@ namespace BP.WF
                     continue;
                 }
 
-
                 // 检查数据是否完整.
                 foreach (FrmField ff in ffs)
                 {
@@ -4894,7 +4897,7 @@ namespace BP.WF
                     string val = string.Empty;
                     val = dt.Rows[0][ff.KeyOfEn].ToString();
 
-                    if (ff.IsNotNull == true && Glo.IsEnableCheckFrmTreeIsNull == true)
+                    if (ff.IsNotNull == true )
                     {
                         /*如果是检查不能为空 */
                         if (string.IsNullOrEmpty(val) == true || val.Trim() == "")
@@ -4910,7 +4913,7 @@ namespace BP.WF
                 }
             }
             if (err != "")
-                throw new Exception("在提交前检查到如下必输字段填写不完整:" + err);
+                throw new Exception("@在提交前检查到如下必输字段填写不完整:" + err);
 
             return true;
         }

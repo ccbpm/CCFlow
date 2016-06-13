@@ -347,6 +347,7 @@ namespace BP.WF.Template
         }
         /// <summary>
         /// 对应的解决方案
+        /// 0=默认方案.1=自定义方案
         /// </summary>
         public int FrmSln
         {

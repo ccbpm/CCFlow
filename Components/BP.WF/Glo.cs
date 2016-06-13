@@ -530,19 +530,24 @@ namespace BP.WF
                 #endregion
 
                 #region 重新生成view WF_EmpWorks,  2013-08-06.
-                try
-                {
-                    BP.DA.DBAccess.RunSQL("DROP VIEW WF_EmpWorks");
-                    BP.DA.DBAccess.RunSQL("DROP VIEW V_FlowStarter");
-                    BP.DA.DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
-                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCH");
-                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCHYF");
-                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCHWeek");
-                }
-                catch
-                {
-                }
 
+                if (DBAccess.IsExitsObject("WF_EmpWorks")==true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW WF_EmpWorks");
+
+                if (DBAccess.IsExitsObject("V_FlowStarter") == true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_FlowStarter");
+
+                if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
+
+                if (DBAccess.IsExitsObject("V_TOTALCH") == true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCH");
+
+                if (DBAccess.IsExitsObject("V_TOTALCHYF") == true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCHYF");
+
+                if (DBAccess.IsExitsObject("V_TOTALCHWeek") == true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCHWeek");
 
                 string sqlscript = "";
                 //执行必须的sql.
@@ -840,15 +845,17 @@ namespace BP.WF
                         en.CheckPhysicsTable();
                         break;
                 }
+
+                en.CheckPhysicsTable();
                 en.PKVal = "123";
+
                 try
                 {
-                    en.RetrieveFromDBSources();
+                    en.RetrieveFromDBSources(); 
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
-                    Log.DebugWriteWarning(ex.Message);
-                    en.CheckPhysicsTable();
+                    BP.DA.Log.DefaultLogWriteLine(LogType.Error, "@查询失败: ens = " + en.ToString());
                 }
             }
 

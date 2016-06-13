@@ -9,7 +9,7 @@
 
 
 
-public partial class AppDemo_Lef1t {
+public partial class AppClassic_Left {
     
     /// <summary>
     /// Head1 控件。

@@ -954,7 +954,8 @@ namespace CCFlow.WF
                     string cFlowNo = this.CFlowNo;
                     string[] workids = this.WorkIDs.Split(',');
                     int count = workids.Length - 1;
-                    this.UCEn1.AddFieldSet("分组审阅", "一共选择了(" + count + ")个子流程被合并审阅,分别是:" + this.WorkIDs);
+                    //this.UCEn1.AddFieldSet("分组审阅", "一共选择了(" + count + ")个子流程被合并审阅,分别是:" + this.WorkIDs);//ID提示没有意义
+                    this.UCEn1.AddFieldSet("分组审阅", "一共选择了(" + count + ")个子流程被合并审阅。");
                 }
             }
 

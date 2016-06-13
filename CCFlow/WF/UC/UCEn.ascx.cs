@@ -1583,14 +1583,9 @@ namespace CCFlow.WF.UC
                     scriptCheckFrm += "\t\n  var element = document.getElementById('" + tb.ClientID + "');";
                     //验证输入的正则格式
                     string regFilter = me.Doc;
-                    if (regFilter.StartsWith("/"))
-                        regFilter = regFilter.TrimStart('/');
-                    if (regFilter.EndsWith("g"))
-                        regFilter = regFilter.TrimEnd('g');
-                    if (regFilter.EndsWith("/"))
-                        regFilter = regFilter.TrimEnd('/');
+                    if (regFilter.LastIndexOf("/g") < 0 && regFilter.LastIndexOf('/') < 0)
+                        regFilter = "'" + regFilter + "'";
 
-                    regFilter = "'" + regFilter + "'";
                     //scriptCheckFrm += "\t\n  debugger ";
                     scriptCheckFrm += "\t\n isPass = EleSubmitCheck(element," + regFilter + ",'" + me.Tag1 + "');";
                     //scriptCheckFrm += "\t\n var reg =new RegExp(" + regFilter + ");   isPass = reg.test(element.value); ";
@@ -1623,14 +1618,8 @@ namespace CCFlow.WF.UC
                         continue;
                     //验证输入的正则格式
                     string regFilter = me.Doc;
-                    if (regFilter.StartsWith("/"))
-                        regFilter = regFilter.TrimStart('/');
-                    if (regFilter.EndsWith("g"))
-                        regFilter = regFilter.TrimEnd('g');
-                    if (regFilter.EndsWith("/"))
-                        regFilter = regFilter.TrimEnd('/');
-
-                    regFilter = "'" + regFilter + "'";
+                    if (regFilter.LastIndexOf("/g") < 0 && regFilter.LastIndexOf('/') < 0)
+                        regFilter = "'" + regFilter + "'";
 
                     scriptCheckFrm += "\t\n try{  ";
                     scriptCheckFrm += "\t\n var element = document.getElementById('" + tb.ClientID + "');";

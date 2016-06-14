@@ -11,6 +11,12 @@
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+
+    <style type="text/css">
+    .icon-reddot{
+	 background:url('../../Img/OK.png') no-repeat center center;
+     }
+     </style>
     <script language="javascript" type="text/javascript">
         $(function () {
             //绑定树单击事件
@@ -88,7 +94,7 @@
                 
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_1").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
 
             }
@@ -96,7 +102,7 @@
                 onclickSJ(2);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_2").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
 
             }
@@ -104,14 +110,14 @@
                 onclickSJ(3);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_3").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByDeptAndStation.ClientID%>").checked) {
                 onclickSJ(4);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_4").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByStationAndEmpDept.ClientID%>").checked) {
@@ -125,91 +131,91 @@
                 onclickSJ(6);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_6").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByStationOnly.ClientID%>").checked) {
                 onclickSJ(7);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_7").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByStarter.ClientID%>").checked) {
                 onclickSJ(8);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_8").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByPreviousNodeEmp.ClientID%>").checked) {
                 onclickSJ(9);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_9").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_BySpecNodeEmp.ClientID%>").checked) {
                 onclickSJ(10);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_10").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_BySQL.ClientID%>").checked) {
                 onclickSJ(11);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_11").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_BySQLAsSubThreadEmpsAndData.ClientID%>").checked) {
                 onclickSJ(12);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_12").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_BySelected.ClientID%>").checked) {
                 onclickSJ(13);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_13").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByPreviousNodeFormEmpsField.ClientID%>").checked) {
                 onclickSJ(14);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_14").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByDtlAsSubThreadEmps.ClientID%>").checked) {
                 onclickSJ(15);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_15").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByFEE.ClientID%>").checked) {
                 onclickSJ(16);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_16").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_BySetDeptAsSubthread.ClientID%>").checked) {
                 onclickSJ(17);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_17").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
             if (document.getElementById("<%=RB_ByCCFlowBPM.ClientID%>").checked) {
                 onclickSJ(18);
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_18").target,
-                    iconCls: 'icon-right'
+                    iconCls: 'icon-reddot'
                 });
             }
 

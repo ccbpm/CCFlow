@@ -22,17 +22,16 @@ namespace CCFlow.WF.Admin.XAP
     [System.Web.Script.Services.ScriptService]
     public class WSDesigner : System.Web.Services.WebService
     {
-
-        OSModel model = BP.Sys.OSModel.OneMore;
-        // 如果用户安装时选择不安装案例,则流程树、表单树和组织结构表都不存在根节点，此时需要手动添加根节点，
-        // 流程设计器初始化时调用
-        // 此功能应该添加到安装时，因为每次流程树加载都需要执行一次检查
+        /// <summary>
+        /// 检查树结构是否符合需求
+        /// </summary>
+        /// <returns></returns>
         private bool TreeRootCheck()
         {
             try
             {
                 // 流程树根节点校验
-                string tmp = "SELECT Name FROM WF_FlowSort where ParentNo =0";
+                string tmp = "SELECT Name FROM WF_FlowSort where ParentNo='0'";
                 tmp = DBAccess.RunSQLReturnString(tmp);
                 if (string.IsNullOrEmpty(tmp))
                 {
@@ -41,148 +40,35 @@ namespace CCFlow.WF.Admin.XAP
                 }
 
                 // 表单树根节点校验
-                tmp = "SELECT Name FROM Sys_FormTree WHERE ParentNo =0";
+                tmp = "SELECT Name FROM Sys_FormTree WHERE ParentNo = '0' ";
                 tmp = DBAccess.RunSQLReturnString(tmp);
                 if (string.IsNullOrEmpty(tmp))
                 {
-                    tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,TreeNo,Idx,IsDir) values('01','表单树',0,'',0,0)";
+                    tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,TreeNo,Idx,IsDir) values('001','表单树',0,'',0,0)";
                     DBAccess.RunSQLReturnString(tmp);
                 }
 
-                // 组织结构校验
-                model = (OSModel)Enum.Parse(typeof(OSModel), this.GetConfig("OSModel"), true);
+                BP.GPM.Depts rootDepts = new BP.GPM.Depts("0");
 
-                if (model == OSModel.OneMore)
+
+                if (rootDepts == null || rootDepts.Count == 0)
                 {
-                    BP.GPM.Depts rootDepts = new BP.GPM.Depts("0");
-                    if (rootDepts == null || rootDepts.Count == 0)
-                    {
-                        BP.GPM.Dept rootDept = new BP.GPM.Dept();
-                        rootDept.Name = "集团总部";
-                        rootDept.ParentNo = "0";
-                        rootDept.Idx = 0;
-                        rootDept.Insert();
-                    }
-                }
-                
-                if (model == BP.Sys.OSModel.OneOne)
-                {
-                    BP.Port.Depts rootDepts = new BP.Port.Depts("0");
-                    if (rootDepts == null || rootDepts.Count == 0)
-                    {
-                        BP.GPM.Dept rootDept = new BP.GPM.Dept();
-                        rootDept.Name = "集团总部";
-                        rootDept.ParentNo = "0";
-                        rootDept.Idx = 0;
-                        rootDept.Insert();
-                    }
+                    if (BP.DA.DBAccess.IsView("Port_Dept") == true)
+                        return false;
+
+                    BP.GPM.Dept rootDept = new BP.GPM.Dept();
+                    rootDept.Name = "集团总部";
+                    rootDept.ParentNo = "0";
+                    rootDept.Idx = 0;
+                    rootDept.Insert();
                 }
                 return true;
             }
             catch (Exception e)
             {
-                throw new Exception("流程树根节点检查错误", e);
+                BP.DA.Log.DefaultLogWriteLineError("@检查树结构出现错误:" + e.Message);
+                return false;
             }
-        }
-
-        /// <summary>
-        /// 流程设计器树控件数据源
-        /// </summary>
-        /// <param name="paras"></param>
-        /// <returns></returns>
-        [WebMethod]
-        public string GetFlowDesignerTree_Delete(params bool[] paras)
-        {
-            if ( TreeRootCheck()==false)
-                throw new Exception("设计器根节点自动修复错误,请手动为流程树、表单树和组织结构数据添加根节点");
-
-            string result = string.Empty;
-            string sqls = string.Empty;
-            List<string> tableNames = new List<string>();
-            bool isBegin = true;
-
-            // 是否加载流程树
-            if (paras.Length > 0 && paras[0])
-            {
-                tableNames.AddRange(new string[]{
-                      "WF_FlowSort",
-                      "WF_Flow"
-                  });
-
-                sqls += "@SELECT * FROM WF_FlowSort ORDER BY No,Idx";
-                sqls += "@SELECT No,Name,FK_FlowSort,Idx FROM WF_Flow ORDER BY FK_FlowSort,Idx,No";
-                isBegin = false;
-            }
-
-            // 是否加载表单树
-            if (paras.Length > 1 && paras[1])
-            {
-                tableNames.AddRange(new string[]{ 
-                    "Sys_FormTree", 
-                    "Sys_MapData" 
-                });
-
-                if (!isBegin)
-                {
-                    sqls += "@";
-                }
-
-                isBegin = false;
-                sqls += "SELECT No,Name,ParentNo FROM Sys_FormTree ORDER BY Idx ASC,No ASC";
-                sqls += "@SELECT No,Name,FK_FormTree FROM Sys_MapData WHERE AppType=" + (int)AppType.Application
-                    + " AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC ,No ASC";
-            }
-
-            // 是否加载组织结构树
-            if (paras.Length > 2 && paras[2])
-            {
-                tableNames.AddRange(new string[]{ 
-                    "Port_Dept", 
-                    "Port_Emp"
-                });
-
-                if (!isBegin)
-                {
-                    sqls += "@";
-                }
-
-                if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
-                {
-                    if (model == BP.Sys.OSModel.OneMore)
-                    {
-                        sqls += "SELECT No,Name,ParentNo,TreeNo FROM Port_Dept ORDER BY Idx ASC,No ASC";
-                        sqls += "@SELECT  No,Name,FK_Dept  FROM Port_Emp ";
-                    }
-                    else
-                    {
-                        sqls += "SELECT No,Name,ParentNo FROM Port_Dept ORDER BY No ASC";
-                        sqls += "@SELECT No, Name , FK_Dept  FROM Port_Emp ";
-                    }
-                }
-            }
-
-            DataSet ds = RunSQLReturnDataSet(sqls);
-            if (tableNames.Count == ds.Tables.Count)
-                for (int i = 0; i < ds.Tables.Count; i++)
-                {
-                    ds.Tables[i].TableName = tableNames[i];
-                }
-
-
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                var ws = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = ws.GetDepts();
-                dt.TableName = "Port_Dept";
-                ds.Tables.Add(dt);
-
-                DataTable dtEmp = ws.GetEmps();
-                dtEmp.TableName = "Port_Emp";
-                ds.Tables.Add(dtEmp);
-            }
-
-            result = Connector.ToXml(ds);
-            return result;
         }
         /// <summary>
         /// 流程设计器树控件数据源
@@ -193,7 +79,12 @@ namespace CCFlow.WF.Admin.XAP
         public string GetFlowDesignerTree(params bool[] paras)
         {
             if (TreeRootCheck() == false)
-                throw new Exception("设计器根节点自动修复错误,请手动为流程树、表单树和组织结构数据添加根节点");
+            {
+                string error = "@检查树结构出现如下问题,有可能出现的问题如下.";
+                error += "\t\n 1, 流程树WF_FlowSort、表单树WF_FlowSort, 没有ParentNo =0 的根节点，请检查。";
+                error += "\t\n 2, 也许您集成了ccbpm的组织结构，但是组织结构部门表里没有ParentNo =0 的根节点，请检查。";
+                throw new Exception( error);
+            }
 
             string sql = "";
             DataSet myds = new DataSet();

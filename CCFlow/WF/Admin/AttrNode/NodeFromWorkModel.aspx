@@ -78,7 +78,7 @@
                         </td>
                         <td>
 
-                            [<a href="javascript:WinOpen('../CCFormDesigner/FormDesigner.aspx?FK_MapData=ND<%=nodeIDstr %>');">
+                            [<a href="javascript:alert('开发中，敬请期待。');WinOpen('../CCFormDesigner/FormDesigner.aspx?FK_MapData=ND<%=nodeIDstr %>');">
                                 设计自由表单(Html5)</a>]
 
                                  [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
@@ -86,7 +86,7 @@
 
                                   [<a href="javascript:WinOpen('../AttrNode/SortingMapAttrs.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
                                 手机表单</a>]
-                                 - [设计傻瓜表单]
+                                 - [<a href="javascript:alert('我们在以后会启用。');">设计傻瓜表单</a>]
                         </td>
                     </tr>
                     <tr>
@@ -111,7 +111,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <a href="javascript:WinOpen('/WF/Comm/RefFunc/UIEn.aspx?EnName=FrmWorkCheck&PK=<%=nodeID%>')">
+                            <a href="javascript:WinOpen('/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=<%=nodeID%>')">
                                 设置审核组件属性</a>
 
                                

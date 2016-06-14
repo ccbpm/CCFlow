@@ -29,7 +29,7 @@
         }
         // 审核组件
         function OpenAuditModule(nodeID) {
-            var url = "/WF/Comm/RefFunc/UIEn.aspx?EnName=FrmWorkCheck&PK=" + nodeID;
+            var url = "/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" + nodeID;
             window.open(url, 'OpenFreeFrm', 'height=470, width=840, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
         }
 
@@ -103,12 +103,12 @@
             height: 16px;
         }
     </style>
-    <link href="../Img/Menu/Designer.css" rel="stylesheet" type="text/css" />
+    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <%
         string flowNo = this.Request.QueryString["FK_Flow"];
-        BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
+        BP.WF.Nodes nds = new BP.WF.Nodes(flowNo);
         BP.WF.Flow fl = new BP.WF.Flow(flowNo);
         
         //获得节点传递过来的要突出选择的节点。

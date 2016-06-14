@@ -293,51 +293,47 @@ namespace BP
             System.Exception exc = null;
             _service.GetFlowDesignerTreeCompleted -= _service_GetFlowFormTreeCompleted;
             if (e.Error != null)
-                exc = e.Error;
-            else
             {
-                try
-                {
-                    DataSet flowTree = new DataSet();
-                    flowTree.FromXml(e.Result);
-
-                    DataTable dtFlowSort = flowTree.Tables["WF_FlowSort"];
-                    if (dtFlowSort != null)
-                        BindFlowAndFlowSort(dtFlowSort, flowTree.Tables["WF_Flow"]);
-
-                    DataTable dtFormSort = flowTree.Tables["Sys_FormTree"];
-                    if (dtFormSort != null)
-                        BindFormTree(dtFormSort, flowTree.Tables["Sys_MapData"]);
-
-
-                    //特殊处理树解构.
-                    DataTable dtDept = flowTree.Tables["Port_Dept"];
-                    foreach (DataRow dr in dtDept.Rows)
-                    {
-                        dr["No"] = "Dept"+dr["No"];
-                        dr["ParentNo"] = "Dept" + dr["ParentNo"];
-                    }
-
-                    DataTable dtEmp = flowTree.Tables["Port_Emp"];
-                    foreach (DataRow dr in dtEmp.Rows)
-                    {
-                       // dr["No"] = "Dept" + dr["No"];
-                        dr["FK_Dept"] = "Dept" + dr["FK_Dept"];
-                    }
-
-                    if (dtDept != null)
-                        BingTreeDept(dtDept, dtEmp);
-                }
-                catch (System.Exception ee)
-                {
-                    exc = ee;
-                }
+                Glo.ShowException(e.Error);
+                return;
             }
 
-            this.SetSelectedTool("Arrow");
+            try
+            {
+                DataSet flowTree = new DataSet();
+                flowTree.FromXml(e.Result);
 
-            if (exc != null)
-                Glo.ShowException(exc);
+                DataTable dtFlowSort = flowTree.Tables["WF_FlowSort"];
+                if (dtFlowSort != null)
+                    BindFlowAndFlowSort(dtFlowSort, flowTree.Tables["WF_Flow"]);
+
+                DataTable dtFormSort = flowTree.Tables["Sys_FormTree"];
+                if (dtFormSort != null)
+                    BindFormTree(dtFormSort, flowTree.Tables["Sys_MapData"]);
+
+                //特殊处理树解构.
+                DataTable dtDept = flowTree.Tables["Port_Dept"];
+                foreach (DataRow dr in dtDept.Rows)
+                {
+                    dr["No"] = "Dept" + dr["No"];
+                    dr["ParentNo"] = "Dept" + dr["ParentNo"];
+                }
+
+                DataTable dtEmp = flowTree.Tables["Port_Emp"];
+                foreach (DataRow dr in dtEmp.Rows)
+                {
+                    dr["FK_Dept"] = "Dept" + dr["FK_Dept"];
+                }
+
+                if (dtDept != null)
+                    BingTreeDept(dtDept, dtEmp);
+
+                this.SetSelectedTool("Arrow");
+            }
+            catch (System.Exception ee)
+            {
+                Glo.ShowException(ee);
+            }
         }
 
         #region FlowTree
@@ -917,7 +913,7 @@ namespace BP
                     subNode.Title = dr["Name"];
                     subNode.Name = subId;
                     subNode.ID = subId;
-                    subNode.Icon = "../Images/MenuItem/Post.png";
+                    subNode.Icon = "../Images/MenuItem/Depts.png";
                     subNode.isDept = true;
                     rootNode.Nodes.Add(subNode);
                     nodeGpm.Nodes.Add(subNode);
@@ -984,6 +980,9 @@ namespace BP
             }
             if (node.isDept)
             {
+                MessageBox.Show("部门信息不提供维护功能，仅仅提供查看。\t\n如果您使用了ccbpm的权限管理系统，请使用它来维护。\\如果您集成了自己的组织架构，请使用自己的组织架构来维护。", "提示", MessageBoxButton.OK);
+                return;
+
                 if (Glo.OsModel == OSModel.OneMore)
                 {
                     url = "/WF/Comm/Search.aspx?EnsName=BP.GPM.Depts&FK_Dept={0}&No={0}";
@@ -992,11 +991,15 @@ namespace BP
                 {
                     url = "/WF/Comm/Search.aspx?EnsName=BP.Port.Depts&FK_Dept={0}&No={0}";
                 }
+                url = url.Replace("=Dept", "=");
                 url = string.Format(url, node.ID);
                 Glo.OpenWindow(url, "部门信息");
             }
             else
             {
+                MessageBox.Show("人员信息不提供维护功能，仅仅提供查看。\t\n如果您使用了ccbpm的权限管理系统，请使用它来维护。\\如果您集成了自己的组织架构，请使用自己的组织架构来维护。", "提示", MessageBoxButton.OK);
+                return;
+
                 if (Glo.OsModel == OSModel.OneMore)
                 {
                     url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.GPM.Emps&PK={0}";
@@ -1260,6 +1263,9 @@ namespace BP
                         break;
                     case "Btn_ToolBarDeleteFlow":
                         DeleteFlow(SelectedContainer.FlowID);
+                        break;
+                    case "ToolBarSystem":
+                        Glo.OpenGPM();
                         break;
                     case "Btn_ToolBarHelp":
                         Glo.OpenHelp();
@@ -1781,10 +1787,12 @@ namespace BP
                     if (Glo.Platform == BP.Platform.CCFlow)
                     {
                         Glo.OpenWindow("/GPM/Default.aspx?RefNo=CCFlowBPM", "系统维护");
+                      //  MessageBox.Show("JFlow的系统维护尚未提供", "提示", MessageBoxButton.OK);
                     }
                     else
                     {
-                        Glo.OpenWindow("/WF/GPM/Default.jsp?RefNo=CCFlowBPM", "系统维护");
+                        MessageBox.Show("JFlow的系统维护尚未提供", "提示", MessageBoxButton.OK);
+                        //Glo.OpenWindow("/WF/GPM/Default.jsp?RefNo=CCFlowBPM", "系统维护");
                     }
                     this.tbcLeft.SelectedIndex = 0;
                     break;

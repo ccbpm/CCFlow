@@ -386,7 +386,10 @@ namespace BP
         public static void OpenHelp()
         {
             Glo.OpenWindow("http://online.ccflow.org/","");
-
+        }
+        public static void OpenGPM()
+        {
+            Glo.OpenWindow("http://online.ccflow.org/", "");
         }
         /// <summary>
         /// 设置打开网页窗口的属性
@@ -586,10 +589,12 @@ namespace BP
             BP.SL.LoggerHelper.Write(e);
 
             if (string.IsNullOrEmpty(error))
-                MessageBox.Show(e.Message);
+            {
+                MessageBox.Show("错误:" + e.Message + " \t\n " + e.StackTrace, e.Message, MessageBoxButton.OK);
+            }
             else
             {
-                MessageBox.Show(error + ":" + e.Message + "\t\n@详细请查看异常日志");
+                MessageBox.Show(error + ":" + e.StackTrace + "\t\n@详细请查看异常日志", e.Message, MessageBoxButton.OK);
             }
         }
 

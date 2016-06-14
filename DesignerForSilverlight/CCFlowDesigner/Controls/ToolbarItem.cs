@@ -45,7 +45,7 @@ namespace BP.Controls
                 //new ToolbarItem(){No="ToolBarFrmLab", Name="表单库"},
                 //new ToolbarItem(){No="ToolBarReleaseToFTP", Name="共享流程"}, 
                 new ToolbarItem(){No="ToolBarFlowUI", Name="节点样式"},
-
+                new ToolbarItem(){No="ToolBarSystem", Name="系统维护"},
                 new ToolbarItem(){No="ToolBarHelp", Name="帮助", IsEnable = true},
                 
             };

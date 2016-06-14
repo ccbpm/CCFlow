@@ -397,6 +397,7 @@
     <Resource Include="Images\Icons\JFlow\Welcome.png" />
     <Resource Include="Images\Icons\LZGov\Icon.png" />
     <Resource Include="Images\Icons\LZGov\Welcome.png" />
+    <Resource Include="Images\MenuItem\Depts.png" />
     <Content Include="Images\people.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -692,9 +693,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\MenuItem\Report.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\MenuItem\Post.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Content Include="Images\ToolBarHelp.png">

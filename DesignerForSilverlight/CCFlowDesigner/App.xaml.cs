@@ -84,7 +84,6 @@ namespace BP
                 if (queryString.ContainsKey("SID"))
                     Glo.SID = queryString["SID"];
 
-
                 if (string.IsNullOrEmpty(workId) == false)
                     ui = new BP.Viewer(fk_flow, workId);
                 else

@@ -29,7 +29,7 @@
                     </liquidMenu:MenuItem>
                     <liquidMenu:MenuItem ID="menuNodeIcon" Text="更换图标" Visibility="Visible"  />
                   
-                    <liquidMenu:MenuItem ID="menuDesignNodeFixModel" Text="设计节点表单-傻瓜模式" Icon="../Images/MenuItem/deFrm.png" />
+                    <!--<liquidMenu:MenuItem ID="menuDesignNodeFixModel" Text="设计节点表单-傻瓜模式" Icon="../Images/MenuItem/deFrm.png" />-->
                     <liquidMenu:MenuItem ID="menuDesignNodeFreeModel" Text="设计节点表单-自由模式" Icon="../Images/MenuItem/deFrm.png" />
 
                     <!--<liquidMenu:MenuItem ID="menuDesignFlowFrm" Text="表单库" Icon="../Images/MenuItem/deFrm.png" />-->

@@ -38,14 +38,14 @@ namespace BP.Controls
                 new ToolbarItem(){No="ToolBarCheck", Name="检查"},
                 new ToolbarItem(){No="ToolBarRun", Name="运行"},
                 new ToolbarItem(){No="ToolBarEditFlow", Name="属性"},
-                new ToolbarItem(){No="ToolBarEditFlowNew", Name="属性(New)"},
+                new ToolbarItem(){No="ToolBarEditFlowNew", Name="属性New"},
                 new ToolbarItem(){No="ToolBarDeleteFlow", Name="删除"},
                 new ToolbarItem(){No="ToolBarGenerateModel", Name="导出"},
                 new ToolbarItem(){No="ToolBarShareModel", Name="模板库", IsEnable = true},
                 //new ToolbarItem(){No="ToolBarFrmLab", Name="表单库"},
                 //new ToolbarItem(){No="ToolBarReleaseToFTP", Name="共享流程"}, 
                 new ToolbarItem(){No="ToolBarFlowUI", Name="节点样式"},
-                new ToolbarItem(){No="ToolBarSystem", Name="系统维护"},
+                //new ToolbarItem(){No="ToolBarSystem", Name="系统维护"},
                 new ToolbarItem(){No="ToolBarHelp", Name="帮助", IsEnable = true},
                 
             };

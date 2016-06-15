@@ -264,7 +264,7 @@ namespace BP
                         string s = dt.Rows[0][0].ToString();
                         if (s.Equals(Glo.SID) == false)
                         {
-                            throw new System.Exception("@用户名或者密码错误.");
+                            throw new System.Exception("@用户名或者SID错误, UserNo="+Glo.UserNo+" SID="+Glo.SID);
                         }
                         else
                         {
@@ -1774,10 +1774,8 @@ namespace BP
             switch (tbItem.Name)
             {
                 case "tbiFlowLibrary"://流程树
-
                     break;
                 case "tbiFormLibrary"://表单库
-
                     break;
                 case "tbiOrg"://流程优化
                     if (!isGMPTreeInited)

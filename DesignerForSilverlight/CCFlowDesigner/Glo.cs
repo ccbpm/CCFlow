@@ -630,6 +630,7 @@ namespace BP
                         MainPage.Instance.LoginCompleted();
                 };
             }
+
             login.Show();
         }
 

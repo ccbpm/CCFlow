@@ -586,7 +586,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         if (fn.Retrieve(FrmNodeAttr.FK_Frm, fk_frm,
                             FrmNodeAttr.FK_Node, fk_Node) == 1)
                         {
-                            fn.IsEdit = !isReadonly;
+                          //  fn.IsEdit = !isReadonly;
                             fn.IsPrint = isPrint;
                             fn.FK_Flow = fk_flow;
                             fn.Update();
@@ -597,7 +597,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         fn.FK_Frm = fk_frm;
                         fn.FK_Flow = fk_flow;
                         fn.FK_Node = int.Parse(fk_Node);
-                        fn.IsEdit = !isReadonly;
+                       // fn.IsEdit = !isReadonly;
                         fn.IsPrint = isPrint;
                         fn.Idx = 100;
                         fn.FK_Flow = fk_flow;
@@ -610,7 +610,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             md.Name = fm.Name;
                             md.EnPK = "OID";
                             md.Insert();
-
                         }
 
                         MapAttr attr = new MapAttr();

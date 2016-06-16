@@ -208,7 +208,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
 
                     FrmNode fnNode = new FrmNode();
                     fnNode.FK_Frm = myfrm.No;
-                    fnNode.IsEdit = true;
+                   // fnNode.IsEdit = true;
                     fnNode.IsPrint = false;
                     switch (nd.HisFormType)
                     {

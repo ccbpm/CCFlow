@@ -536,7 +536,7 @@
                                         <asp:RadioButton ID="RB_ByDept" Text="按节点绑定的部门计算" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=StaGrade')">
+                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
                                             设置/更改部门(<%=ndepts.Count %>)</a></div>
                                 </th>
                             </tr>
@@ -554,7 +554,7 @@
                                         <asp:RadioButton ID="RB_ByBindEmp" Text="按节点绑定的人员计算" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeEmps&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=StaGrade')">
+                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeEmps&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
                                             设置/更改处理人(<%=nEmps.Count %>)</a></div>
                                 </th>
                             </tr>
@@ -573,7 +573,7 @@
                                     </div>
                                     <div style="float: right">
                                         <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
-                                            设置与更改岗位(<%=nss.Count%>)</a> |<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=1005101248&ShowWay=StaGrade')">
+                                            设置与更改岗位(<%=nss.Count%>)</a> |<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=1005101248&ShowWay=FK_StationType')">
                                                 设置与更改部门(<%=ndepts.Count%>)</a>
                                     </div>
                                 </th>
@@ -593,7 +593,7 @@
                                     </div>
                                     <div style="float: right">
                                         <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
-                                            设置与更改岗位(<%=nss.Count %>)</a> |<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=StaGrade')">
+                                            设置与更改岗位(<%=nss.Count %>)</a> |<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
                                                 设置与更改部门(<%=ndepts.Count %>)</a>
                                     </div>
                                 </th>
@@ -835,7 +835,7 @@
                                     </div>
                                     <div style="float: right">
                                        
-                                         <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=StaGrade')">
+                                         <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
                                                 设置与更改部门(<%=ndepts.Count %>)</a>
                                     </div>
                                 </th>

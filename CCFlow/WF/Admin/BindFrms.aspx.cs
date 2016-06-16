@@ -264,7 +264,7 @@ namespace CCFlow.WF.Admin
 
                 fn.FrmEnableRole = FrmEnableRole.Disable; //就是默认不启用.
                 fn.FrmSln = 0;
-                fn.IsEdit = true;
+              //  fn.IsEdit = true;
                 fn.IsEnableLoadData = true;
                 fn.Insert();
                 fns.AddEntity(fn);
@@ -284,7 +284,7 @@ namespace CCFlow.WF.Admin
             }
 
             this.Pub1.AddTDTitle("启用规则");
-            this.Pub1.AddTDTitle("可编辑否？");
+           // this.Pub1.AddTDTitle("可编辑否？");
             this.Pub1.AddTDTitle("可打印否？");
             this.Pub1.AddTDTitle("是否启用<br>装载填充事件");
             this.Pub1.AddTDTitle("权限控制<br>方案");
@@ -373,10 +373,10 @@ namespace CCFlow.WF.Admin
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FlowFrm/FrmEnableRole.aspx?FK_Node="+fn.FK_Node+"&FK_MapData="+fn.FK_Frm+"')\">设置(" + fn.FrmEnableRoleText + ")</a>");
 
                 CheckBox cb = new CheckBox();
-                cb.ID = "CB_IsEdit_" + md.No;
-                cb.Text = "可编辑否？";
-                cb.Checked = fn.IsEdit;
-                this.Pub1.AddTD(cb);
+                //cb.ID = "CB_IsEdit_" + md.No;
+                //cb.Text = "可编辑否？";
+                //cb.Checked = fn.IsEdit;
+                //this.Pub1.AddTD(cb);
 
                 cb = new CheckBox();
                 cb.ID = "CB_IsPrint_" + md.No;
@@ -394,6 +394,8 @@ namespace CCFlow.WF.Admin
                 ddl.ID = "DDL_Sln_" + md.No;
                 ddl.Items.Add(new ListItem("默认方案", "0"));
                 ddl.Items.Add(new ListItem("自定义", this.FK_Node.ToString()));
+                ddl.Items.Add(new ListItem("不可编辑", "1")); //让其不可编辑.
+
                 ddl.SetSelectItem(fn.FrmSln); //设置权限控制方案.
                 this.Pub1.AddTD(ddl);
 
@@ -513,7 +515,7 @@ namespace CCFlow.WF.Admin
             FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
             foreach (FrmNode fn in fns)
             {
-                fn.IsEdit = this.Pub1.GetCBByID("CB_IsEdit_" + fn.FK_Frm).Checked;
+              //  fn.IsEdit = this.Pub1.GetCBByID("CB_IsEdit_" + fn.FK_Frm).Checked;
                 fn.IsPrint = this.Pub1.GetCBByID("CB_IsPrint_" + fn.FK_Frm).Checked;
 
                 //是否启
@@ -535,7 +537,6 @@ namespace CCFlow.WF.Admin
                 //权限控制方案.
                 fn.FrmSln = this.Pub1.GetDDLByID("DDL_Sln_" + fn.FK_Frm).SelectedItemIntVal;
                 fn.WhoIsPK = (WhoIsPK)this.Pub1.GetDDLByID("DDL_WhoIsPK_" + fn.FK_Frm).SelectedItemIntVal;
-
 
 
                 fn.FK_Flow = this.FK_Flow;

@@ -157,6 +157,7 @@ namespace CCFlow.WF.Admin.UC
             help += "<ul>";
             help += "<li>在文本框里设置一个查询SQL，它返回一行一列。比如: SELECT COUNT(*) AS Num FROM MyTable WHERE NAME='@MyFieldName'。 </li>";
             help += "<li>该SQL参数支持系统的表达式，什么是ccflow的表达式请查看说明书。</li>";
+            help += "<li>当前登录信息变量: @WebUser.No,  @WebUser.Name, @WebUser.FK_Dept.</li>";
             help += "<li>系统就会获取该返回的值把它转化为decimal类型</li>";
             help += "<li>如果该值大于零，该条件就是成立的否则不成立。</li>";
             help += "</ul>";

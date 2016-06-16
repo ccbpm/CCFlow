@@ -100,7 +100,13 @@ namespace CCFlow.WF.SDKComponents
 
                 //输出标题.
                 BP.WF.Flow fl = new Flow(str);
-                html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'><a href=\"javascript:OpenIt('../MyFlow.aspx?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID="+this.FID+"')\"  >[启动流程]</a></style>";
+
+                if (sf.SFSta== FrmSubFlowSta.Enable)
+                   html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'><a href=\"javascript:OpenIt('../MyFlow.aspx?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID="+this.FID+"')\"  >[启动流程]</a></style>";
+
+                if (sf.SFSta == FrmSubFlowSta.Readonly)
+                    html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div></style>";
+
                 this.AddTR();
                 this.AddTD(" class=TRSum colspan=6", html);
                 this.AddTREnd();

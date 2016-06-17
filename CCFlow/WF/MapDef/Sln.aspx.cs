@@ -290,7 +290,13 @@ namespace CCFlow.WF.MapDef
             FrmFields fss = new FrmFields(this.FK_MapData,int.Parse(this.FK_Node) );
            
             // 处理好.
-            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            MapAttrs attrs = new MapAttrs();
+            //增加排序
+            QueryObject obj = new QueryObject(attrs);
+            obj.AddWhere(MapAttrAttr.FK_MapData,this.FK_MapData);
+            obj.addOrderBy(MapAttrAttr.Y,MapAttrAttr.X);
+            obj.DoQuery();
+
             this.Pub2.AddTable("80%");
             this.Pub2.AddTR();
             this.Pub2.AddTDTitle("Idx");
@@ -477,7 +483,14 @@ namespace CCFlow.WF.MapDef
                 return;
             }
 
-            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            //表单属性
+            MapAttrs attrs = new MapAttrs();
+            //增加排序
+            QueryObject obj = new QueryObject(attrs);
+            obj.AddWhere(MapAttrAttr.FK_MapData, this.FK_MapData);
+            obj.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);
+            obj.DoQuery();
+
             // 查询出来解决方案.
              FrmFields fss = new  FrmFields();
              fss.Delete(FrmFieldAttr.FK_MapData, this.FK_MapData, FrmFieldAttr.FK_Node, int.Parse(this.FK_Node));

@@ -10,6 +10,7 @@ using BP.En;
 using BP.DA;
 using BP.Port;
 using BP.WF.Template;
+using BP.Demo.BPFramework;
 
 public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
 {
@@ -87,6 +88,8 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         st.No = "sssss";
         st.Name = "xcxcvasd";
         st.Insert();
+
+        Student en = new Student("sssss");
 
     }
     /// <summary>

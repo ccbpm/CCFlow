@@ -189,20 +189,20 @@ namespace CCFlow.WF.Admin
             this.Pub1.AddFieldSetEnd();
             #endregion 安装模式.
 
-            this.Pub1.AddFieldSet("是否需要安装CCIM(驰骋即时通讯系统)");
-            rb = new RadioButton();
-            rb.Text = "是";
-            rb.ID = "RB_CCIM_Y";
-            rb.Checked = true;
-            rb.GroupName = "ccim";
-            this.Pub1.Add(rb);
-            rb = new RadioButton();
-            rb.Text = "否";
-            rb.ID = "RB_CCIM_N";
-            rb.GroupName = "ccim";
-            this.Pub1.Add(rb);
-            this.Pub1.AddBR();
-            this.Pub1.AddFieldSetEnd();
+            //this.Pub1.AddFieldSet("是否需要安装CCIM(驰骋即时通讯系统)");
+            //rb = new RadioButton();
+            //rb.Text = "是";
+            //rb.ID = "RB_CCIM_Y";
+            //rb.Checked = true;
+            //rb.GroupName = "ccim";
+            //this.Pub1.Add(rb);
+            //rb = new RadioButton();
+            //rb.Text = "否";
+            //rb.ID = "RB_CCIM_N";
+            //rb.GroupName = "ccim";
+            //this.Pub1.Add(rb);
+            //this.Pub1.AddBR();
+            //this.Pub1.AddFieldSetEnd();
 
 
             //this.Pub1.AddFieldSet("应用环境模拟.");
@@ -267,14 +267,14 @@ namespace CCFlow.WF.Admin
             //是否要安装demo.
             bool isDemo = this.Pub1.GetRadioButtonByID("RB_DemoOn").Checked;
 
-            //是否安装ccim
-            bool isInstallCCIM = this.Pub1.GetRadioButtonByID("RB_CCIM_Y").Checked;
+            ////是否安装ccim
+            //bool isInstallCCIM = this.Pub1.GetRadioButtonByID("RB_CCIM_Y").Checked;
 
             //运行GPM的安装.
             BP.GPM.Glo.DoInstallDataBase(lang, "Inc");
 
             //运行ccflow的安装
-            BP.WF.Glo.DoInstallDataBase(lang, isDemo, isInstallCCIM);
+            BP.WF.Glo.DoInstallDataBase(lang, isDemo);
 
             //执行ccflow的升级。
             BP.WF.Glo.UpdataCCFlowVer();

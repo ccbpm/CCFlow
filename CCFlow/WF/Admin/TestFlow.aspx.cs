@@ -211,7 +211,7 @@ namespace CCFlow.WF.Admin
             catch (Exception ex)
             {
                 this.Ucsys1.AddMsgOfWarning("错误原因",
-                        "<h2>您没有正确的设置开始节点的访问规则，请查看流程设计操作手册。</h2> 系统错误提示:" + ex.StackTrace + " - " + ex.Message +"<br><h3>也有可能你你切换了OSModel导致的，什么是OSModel,请查看 http://ccbpm.myflow.io .</h3>");
+                        "<h2>您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员，请查看流程设计操作手册。</h2> 系统错误提示:" + ex.StackTrace + " - " + ex.Message + "<br><h3>也有可能你你切换了OSModel导致的，什么是OSModel,请查看在线帮助文档 <a href='http://ccbpm.mydoc.io' target=_blank>http://ccbpm.mydoc.io</a>  .</h3>");
                 return;
             }
 
@@ -227,7 +227,7 @@ namespace CCFlow.WF.Admin
             cball.Text = "选择全部";
             this.Ucsys1.AddTDTitle(cball);
             //this.Ucsys1.AddTDTitle("极速模式");
-            this.Ucsys1.AddTDTitle("LigerUI模式");
+            this.Ucsys1.AddTDTitle("EasyUI模式");
             this.Ucsys1.AddTDTitle("经典模式");
            this.Ucsys1.AddTDTitle("手机模式");
             //this.Ucsys1.AddTDTitle("SDK");

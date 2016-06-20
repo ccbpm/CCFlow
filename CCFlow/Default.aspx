@@ -18,7 +18,7 @@
 	<body   >
 
   <center>
-  <table style="text-align:center; border:1px; width:70%;" >
+  <table style="text-align:center; border:1px; width:70%; " >
   <caption style="CaptionMsgLong"    >驰骋工作流程引擎ccbpm测试导航</caption>
   <tr>
   <th>多看文档少走弯路，学好ccflow受益一生。</th>

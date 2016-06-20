@@ -67,6 +67,10 @@ namespace CCFlow.WF.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            //注册这个枚举，防止第一次运行出错.
+            BP.Sys.SysEnums ses = new SysEnums("FrmEnableRole");
+
             switch (this.DoType)
             {
                 case "Up":

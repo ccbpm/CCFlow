@@ -13,8 +13,7 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>
-    </SilverlightApplicationList>
+    <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|ClientBin|False</SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -40,56 +39,56 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FtpSupport">
-      <HintPath>..\DLL\FtpSupport.dll</HintPath>
+      <HintPath>..\RefDLL\FtpSupport.dll</HintPath>
     </Reference>
     <Reference Include="FusionCharts">
-      <HintPath>..\DLL\FusionCharts.dll</HintPath>
+      <HintPath>..\RefDLL\FusionCharts.dll</HintPath>
     </Reference>
     <Reference Include="IBM.Data.Informix">
-      <HintPath>..\DLL\IBM.Data.Informix.dll</HintPath>
+      <HintPath>..\RefDLL\IBM.Data.Informix.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions">
-      <HintPath>..\DLL\Microsoft.Expression.Interactions.dll</HintPath>
+      <HintPath>..\RefDLL\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.JScript" />
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\DLL\Office12\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <HintPath>..\RefDLL\Office12\Microsoft.Office.Interop.Excel.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\DLL\Office12\Microsoft.Office.Interop.Word.dll</HintPath>
+      <HintPath>..\RefDLL\Office12\Microsoft.Office.Interop.Word.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Vbe.Interop, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\DLL\Office12\Microsoft.Vbe.Interop.dll</HintPath>
+      <HintPath>..\RefDLL\Office12\Microsoft.Vbe.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.UI.WebControls, Version=1.0.2.226, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLL\Microsoft.Web.UI.WebControls.dll</HintPath>
+      <HintPath>..\RefDLL\Microsoft.Web.UI.WebControls.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
-      <HintPath>..\DLL\MySql.Data.dll</HintPath>
+      <HintPath>..\RefDLL\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLL\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\DLL\Office12\Office.dll</HintPath>
+      <HintPath>..\RefDLL\Office12\Office.dll</HintPath>
     </Reference>
     <Reference Include="Silverlight.DataSetConnector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLL\Silverlight.DataSetConnector.dll</HintPath>
+      <HintPath>..\RefDLL\Silverlight.DataSetConnector.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.DirectoryServices" />
@@ -115,6 +114,7 @@
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="ClientBin\CCFlowDesigner.xap" />
     <Content Include="GPM\Loginin.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />
@@ -145,6 +145,7 @@
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\FrmAttr.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\Img\CC.png" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuidEntity.aspx" />
     <Content Include="crossdomain.xml">
@@ -1370,8 +1371,10 @@
     <Content Include="WF\Data\ImpTableField.txt" />
     <Content Include="WF\Draft.aspx" />
     <Content Include="WF\ErrorPage.aspx" />
+    <Content Include="WF\FlowCheck\MyFlow.aspx" />
     <Content Include="WF\FlowRpt.aspx" />
     <Content Include="WF\Focus.aspx" />
+    <Content Include="WF\Img\CC.png" />
     <Content Include="WF\Img\redo.png" />
     <Content Include="WF\Img\Tree\Add.gif" />
     <Content Include="WF\Img\Tree\Cut.gif" />
@@ -1389,7 +1392,6 @@
     <Content Include="WF\MapDef\MapExt\DDLFullCtrl.aspx" />
     <Content Include="WF\MapDef\MapExt\ExcelFrm.aspx" />
     <Content Include="WF\MapDef\MapExt\InitScript.aspx" />
-    <Content Include="WF\MapDef\MapExt\InputCheck.aspx" />
     <Content Include="WF\MapDef\MapExt\List.aspx" />
     <Content Include="WF\MapDef\MapExt\PageLoadFull.aspx" />
     <Content Include="WF\MapDef\MapExt\PopVal.aspx" />
@@ -1400,6 +1402,7 @@
     <Content Include="WF\MapDef\MapExt\TBFullCtrl_List.aspx" />
     <Content Include="WF\MapDef\MapExt\TBFullCtrl_old.aspx" />
     <Content Include="WF\MapDef\MapExt\WordFrm.aspx" />
+    <Content Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx" />
     <Content Include="WF\MapDef\SFSQL.aspx" />
     <Content Include="WF\MapDef\EditSQL.aspx" />
     <Content Include="WF\MapDef\SFWS.aspx" />
@@ -1857,6 +1860,8 @@
     <Content Include="WF\Img\Action\AskforHelp.png" />
     <Content Include="WF\Img\Action\Skip.png" />
     <Content Include="WF\Img\Action\ForwardAskfor.png" />
+    <Content Include="WF\SDKComponents\TrackChart.ascx" />
+    <Content Include="WF\SDKComponents\TrackList.ascx" />
     <Content Include="WF\SDKComponents\TruakOnly.ascx" />
     <Content Include="WF\Start.aspx" />
     <Content Include="WF\MapDef\BatchEdit.aspx" />
@@ -2219,9 +2224,7 @@
     <Content Include="WF\Data\XML\Menu.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\RegularExpression.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="WF\Data\XML\RegularExpression.xml" />
     <Content Include="WF\Data\XML\SDK.xml" />
     <Content Include="WF\Data\XML\UserTools.xml" />
     <Content Include="WF\Data\XML\WebConfigDesc.xml">
@@ -5004,6 +5007,13 @@
     <Compile Include="WF\ErrorPage.aspx.designer.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\FlowCheck\MyFlow.aspx.cs">
+      <DependentUpon>MyFlow.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\FlowCheck\MyFlow.aspx.designer.cs">
+      <DependentUpon>MyFlow.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\FlowCheck\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -5095,13 +5105,6 @@
     <Compile Include="WF\MapDef\MapExt\InitScript.aspx.designer.cs">
       <DependentUpon>InitScript.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\InputCheck.aspx.cs">
-      <DependentUpon>InputCheck.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\InputCheck.aspx.designer.cs">
-      <DependentUpon>InputCheck.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\MapDef\MapExt\List.aspx.cs">
       <DependentUpon>List.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -5171,6 +5174,13 @@
     </Compile>
     <Compile Include="WF\MapDef\MapExt\WordFrm.aspx.designer.cs">
       <DependentUpon>WordFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.cs">
+      <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.designer.cs">
+      <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\Rpt\RptGuide.Master.cs">
       <DependentUpon>RptGuide.Master</DependentUpon>
@@ -5861,6 +5871,20 @@
     </Compile>
     <Compile Include="WF\FlowSearch.aspx.designer.cs">
       <DependentUpon>FlowSearch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\SDKComponents\TrackChart.ascx.cs">
+      <DependentUpon>TrackChart.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\SDKComponents\TrackChart.ascx.designer.cs">
+      <DependentUpon>TrackChart.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\SDKComponents\TrackList.ascx.cs">
+      <DependentUpon>TrackList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\SDKComponents\TrackList.ascx.designer.cs">
+      <DependentUpon>TrackList.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\SDKComponents\TruakOnly.ascx.cs">
       <DependentUpon>TruakOnly.ascx</DependentUpon>
@@ -7897,7 +7921,7 @@
     <Folder Include="WF\Admin\CCFormDesigner\lib\sets\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />
-    <Folder Include="WF\Data\FlowDemo\" />
+    <Folder Include="WF\Data\FlowDemo\Flow\" />
     <Folder Include="WF\Data\JSLib\onchange\" />
     <Folder Include="WF\Data\JSLib\ondblclick\" />
     <Folder Include="WF\Data\JSLib\onkeyup\" />

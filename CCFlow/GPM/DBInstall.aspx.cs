@@ -137,11 +137,7 @@ public partial class WF_Admin_DBInstall : System.Web.UI.Page
         string lang = "CH";
         string hj = "Inc";
 
-
-     //   BP.Sys.FrmSubFlow frs = new BP.Sys.FrmSubFlow();
-
-
-
+        // BP.Sys.FrmSubFlow frs = new BP.Sys.FrmSubFlow();
         //if (this.Pub1.GetRadioButtonByID("RB_Inc").Checked)
         //    hj = "Inc";
         //if (this.Pub1.GetRadioButtonByID("RB_Gov").Checked)

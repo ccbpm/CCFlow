@@ -22,54 +22,7 @@ namespace CCFlow.WF.Admin.XAP
     [System.Web.Script.Services.ScriptService]
     public class WSDesigner : System.Web.Services.WebService
     {
-        /// <summary>
-        /// 检查树结构是否符合需求
-        /// </summary>
-        /// <returns></returns>
-        private bool TreeRootCheck()
-        {
-            try
-            {
-                // 流程树根节点校验
-                string tmp = "SELECT Name FROM WF_FlowSort where ParentNo='0'";
-                tmp = DBAccess.RunSQLReturnString(tmp);
-                if (string.IsNullOrEmpty(tmp))
-                {
-                    tmp = "INSERT INTO WF_FlowSort(No,Name,ParentNo,TreeNo,idx,IsDir) values('01','流程树',0,'',0,0)";
-                    DBAccess.RunSQLReturnString(tmp);
-                }
-
-                // 表单树根节点校验
-                tmp = "SELECT Name FROM Sys_FormTree WHERE ParentNo = '0' ";
-                tmp = DBAccess.RunSQLReturnString(tmp);
-                if (string.IsNullOrEmpty(tmp))
-                {
-                    tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,TreeNo,Idx,IsDir) values('001','表单树',0,'',0,0)";
-                    DBAccess.RunSQLReturnString(tmp);
-                }
-
-                BP.GPM.Depts rootDepts = new BP.GPM.Depts("0");
-
-
-                if (rootDepts == null || rootDepts.Count == 0)
-                {
-                    if (BP.DA.DBAccess.IsView("Port_Dept") == true)
-                        return false;
-
-                    BP.GPM.Dept rootDept = new BP.GPM.Dept();
-                    rootDept.Name = "集团总部";
-                    rootDept.ParentNo = "0";
-                    rootDept.Idx = 0;
-                    rootDept.Insert();
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                BP.DA.Log.DefaultLogWriteLineError("@检查树结构出现错误:" + e.Message);
-                return false;
-            }
-        }
+       
         /// <summary>
         /// 流程设计器树控件数据源
         /// </summary>
@@ -78,14 +31,10 @@ namespace CCFlow.WF.Admin.XAP
         [WebMethod]
         public string GetFlowDesignerTree(params bool[] paras)
         {
-            if (TreeRootCheck() == false)
-            {
-                string error = "@检查树结构出现如下问题,有可能出现的问题如下.";
-                error += "\t\n 1, 流程树WF_FlowSort、表单树WF_FlowSort, 没有ParentNo =0 的根节点，请检查。";
-                error += "\t\n 2, 也许您集成了ccbpm的组织结构，但是组织结构部门表里没有ParentNo =0 的根节点，请检查。";
-                throw new Exception( error);
-            }
 
+            //检查树结构是否符合要求.
+            BP.WF.Glo.CheckTreeRoot(); 
+              
             string sql = "";
             DataSet myds = new DataSet();
 
@@ -218,7 +167,6 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
                     for (int i = 0; i < rows.Length; i++)
                     {
                         DataRow row = rows[i];
-
 
                         string jNo = row[idCol] as string;
                         string jText = row[txtCol] as string;
@@ -1603,7 +1551,6 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
                 return "Error: Occured on upload the file. Error Message is :\n" + exception.Message;
             }
         }
-
         /// <summary>
         /// 
         /// </summary>

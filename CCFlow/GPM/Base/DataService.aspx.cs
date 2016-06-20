@@ -496,7 +496,7 @@ namespace GMP2.GPM
                 emp.Leader = infoStrArrary[6];
                 emp.FK_Dept = deptNo;
                 //如果启用钉钉通讯录同步，新增人员
-                if (BP.WF.Glo.IsEnable_DingDing == true)
+                if (BP.GPM.Glo.IsEnable_DingDing == true)
                 {
                     DingDing ding = new DingDing();
                     CreateUser_PostVal postVal = ding.GPM_Ding_CreateEmp(emp);
@@ -618,7 +618,7 @@ namespace GMP2.GPM
 
                     Emp emp = new Emp(item);
                     //如果启用钉钉通讯录同步，编辑人员所属部门
-                    if (BP.WF.Glo.IsEnable_DingDing == true)
+                    if (BP.GPM.Glo.IsEnable_DingDing == true)
                     {
                         //编辑之前人员所属部门集合
                         DeptEmps deptEmps = new DeptEmps();
@@ -665,7 +665,7 @@ namespace GMP2.GPM
                     {
                         //如果port_DeptEmp不存在FK_Emp为ed[0]的数据，则从port_emp表里直接删除
                         //如果启用钉钉通讯录同步,删除人员
-                        if (BP.WF.Glo.IsEnable_DingDing == true)
+                        if (BP.GPM.Glo.IsEnable_DingDing == true)
                         {
                             DingDing ding = new DingDing();
                             Ding_Post_ReturnVal postVal = ding.GPM_Ding_DeleteEmp(item);
@@ -710,7 +710,7 @@ namespace GMP2.GPM
                         continue;
                     //如果port_DeptEmp不存在FK_Emp为ed[0]的数据，则从port_emp表里直接删除
                     //如果启用钉钉通讯录同步,删除人员
-                    if (BP.WF.Glo.IsEnable_DingDing == true)
+                    if (BP.GPM.Glo.IsEnable_DingDing == true)
                     {
                         DingDing ding = new DingDing();
                         Ding_Post_ReturnVal postVal = ding.GPM_Ding_DeleteEmp(item);
@@ -993,7 +993,7 @@ namespace GMP2.GPM
                 dept.Name = "新增部门" + newDept.No;
                 dept.ParentNo = newDept.ParentNo;
                 //如果启用钉钉通讯录同步
-                if (BP.WF.Glo.IsEnable_DingDing == true)
+                if (BP.GPM.Glo.IsEnable_DingDing == true)
                 {
                     //钉钉同一级部门不允许同名，需特殊处理。
                     string temp = string.Format("{0:MMddHHmmssffff}", DateTime.Now);
@@ -1052,7 +1052,7 @@ namespace GMP2.GPM
                     return "err:此部门下还有人员不允许删除。";
 
                 //如果启用钉钉通讯录同步
-                if (BP.WF.Glo.IsEnable_DingDing == true)
+                if (BP.GPM.Glo.IsEnable_DingDing == true)
                 {
                     DingDing ding = new DingDing();
                     Ding_Post_ReturnVal postVal = ding.GPM_Ding_DeleteDept(deptNo);
@@ -1111,7 +1111,7 @@ namespace GMP2.GPM
                     dept.DoDown();
 
                 //如果启用钉钉通讯录同步，编辑部门顺序
-                if (BP.WF.Glo.IsEnable_DingDing == true)
+                if (BP.GPM.Glo.IsEnable_DingDing == true)
                 {
                     DingDing ding = new DingDing();
                     Ding_Post_ReturnVal postVal = ding.GPM_Ding_EditDept(dept);
@@ -1133,7 +1133,7 @@ namespace GMP2.GPM
         {
             string selectedNodeId = getUTF8ToString("selectedNodeId");
             //如果启用钉钉通讯录同步，则根目录不允许修改
-            if (BP.WF.Glo.IsEnable_DingDing == true)
+            if (BP.GPM.Glo.IsEnable_DingDing == true)
             {
                 if (selectedNodeId == "1")
                     return "err:钉钉不允许修改根目录。";
@@ -1374,7 +1374,7 @@ namespace GMP2.GPM
                     dept.ParentNo = deptParentNo;
                 }
                 //如果启用钉钉通讯录同步，编辑部门
-                if (BP.WF.Glo.IsEnable_DingDing == true)
+                if (BP.GPM.Glo.IsEnable_DingDing == true)
                 {
                     DingDing ding = new DingDing();
                     Ding_Post_ReturnVal postVal = ding.GPM_Ding_EditDept(dept);
@@ -1761,7 +1761,7 @@ namespace GMP2.GPM
                 emp.Leader = infoArray[5];
 
                 //如果启用钉钉通讯录同步，编辑人员
-                if (BP.WF.Glo.IsEnable_DingDing == true)
+                if (BP.GPM.Glo.IsEnable_DingDing == true)
                 {
                     DingDing ding = new DingDing();
                     Ding_Post_ReturnVal postVal = ding.GPM_Ding_EditEmp(emp);
@@ -1970,7 +1970,7 @@ namespace GMP2.GPM
                         }
                     }
                     //如果启用钉钉通讯录同步，编辑人员所属部门
-                    if (BP.WF.Glo.IsEnable_DingDing == true)
+                    if (BP.GPM.Glo.IsEnable_DingDing == true)
                     {
                         //编辑之前人员所属部门集合
                         DeptEmps deptEmps = new DeptEmps();

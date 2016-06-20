@@ -1,11 +1,9 @@
 
 ### CCFlow基本信息.###
-1. **产品名称:**驰骋.net工作流引擎.  **简    称** CCFlow   ** 版本:** ccflow6 
-2. **英文名称:** ChiCheng Workflow Engine  
-3. **官方网站:** [http://ccflow.org](http://ccflow.org "官方网站")
-4. **开发历史:** 2003-2016年.         **性质:** 100%开源,无任何功能限制.
+1. **产品名称:**驰骋.net工作流引擎.  **简    称** CCFlow   **版本:** ccflow6  **英文名称:** ChiCheng Workflow Engine  
+2. **官方网站:** [http://ccflow.org](http://ccflow.org "官方网站")  **开发历史:** 2003-2016年.         **性质:** 100%开源,无任何功能限制.
 5. **许可协议:** GPL  URL: http://www.gnu.org/licenses/gpl.html
-6. **运行环境:** BS结构. windows xp, windows server. win7 IIS6.0以上. .net4.0. Office2007 (如果需要单据打印.)
+6. **运行环境:** 设计器BS结构, IIS6.0+, .net4.0. Office2007 (如果需要单据打印.) 支持CS调用.
 7. **开发语言:** VS2010, .net4.0 c#.net. **客户端:** FireFox 3.0以上. IE7+,或者使用IE内核的浏览器.
 8. **组成部分:** 流程图形设计器(有:cs版本与bs版本)/流程前台运行程序(BS结构)/流程服务(CS)/web的方式的表单设计器/BRP工具
 9. **基本功能:** 图形化流程设计/智能表单web定义免程序开发/级联下拉框/流程轨迹/单据自定义打印/邮件短信工作到达通知/自动任务分配/支持sdk模式开发/简洁集成/消息侦听/丰富事件接口/报表定义/工作量分析/绩效考核/手机访问/支持sqlserve,oracle,mysql,informix数据库

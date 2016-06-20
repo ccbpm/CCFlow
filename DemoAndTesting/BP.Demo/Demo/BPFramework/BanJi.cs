@@ -69,6 +69,7 @@ namespace BP.Demo.BPFramework
 			{
 				if (this._enMap!=null) 
 					return this._enMap;
+
 				Map map = new Map();
 
 				#region »ù±¾ÊôĞÔ 

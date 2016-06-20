@@ -260,8 +260,7 @@ namespace BP.Demo.BPFramework
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true,StudentAttr.XB,"@0=女@1=男");
 
                 //外键字段.
-                map.AddDDLEntities(StudentAttr.FK_BanJi, null, 
-                    "班级", new BP.Demo.BPFramework.BanJis(), true);
+                map.AddDDLEntities(StudentAttr.FK_BanJi, null,"班级", new BP.Demo.BPFramework.BanJis(), true);
 
 
                 map.AddMyFile("简历");

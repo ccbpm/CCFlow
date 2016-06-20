@@ -35,7 +35,7 @@ namespace BP.WF.DTS
         {
             get
             {
-                if(Glo.IsEnable_DingDing == true)
+                if( Glo.IsEnable_DingDing == true)
                     return true;
                 return false;
             }

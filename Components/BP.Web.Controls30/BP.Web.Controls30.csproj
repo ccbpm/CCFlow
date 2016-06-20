@@ -105,12 +105,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.Excel">
-      <HintPath>..\..\DLL\Interop.Excel.dll</HintPath>
+      <HintPath>..\..\RefDLL\Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Web.UI.WebControls, Version=1.0.2.226, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\value-added\DLL\Microsoft.Web.UI.WebControls.dll</HintPath>
+    <Reference Include="Microsoft.Web.UI.WebControls">
+      <HintPath>..\..\RefDLL\Microsoft.Web.UI.WebControls.dll</HintPath>
     </Reference>
     <Reference Include="office, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

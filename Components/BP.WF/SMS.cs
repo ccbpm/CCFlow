@@ -216,24 +216,7 @@ namespace BP.WF
             sms.MobileInfo = mobileInfo;
             sms.MsgFlag = msgFlag; // 消息标志.
 
-            switch (BP.WF.Glo.ShortMessageWriteTo)
-            {
-                case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
-                    break;
-                case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
-                    SMSs smsEns = new SMSs();
-                    smsEns.AddEntity(sms);
-                    string json = BP.Tools.Entitis2Json.ConvertEntities2ListJson(smsEns);
-                    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                   // soap.WriteShortMessage(json);
-                    break;
-                case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
-                    throw new Exception("没有实现");
-                case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入weixin.
-                    throw new Exception("没有实现");
-                default:
-                    break;
-            }
+         
 
 
             if (string.IsNullOrEmpty(msgFlag))

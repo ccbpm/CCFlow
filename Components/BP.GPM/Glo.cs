@@ -11,7 +11,38 @@ namespace BP.GPM
 {
     public class Glo
     {
-     
+        /// <summary>
+        /// 钉钉是否启用
+        /// </summary>
+        public static bool IsEnable_DingDing
+        {
+            get
+            {
+                //如果两个参数都不为空说明启用
+                string corpid = BP.Sys.SystemConfig.Ding_CorpID;
+                string corpsecret = BP.Sys.SystemConfig.Ding_CorpSecret;
+                if (string.IsNullOrEmpty(corpid) || string.IsNullOrEmpty(corpsecret))
+                    return false;
+
+                return true;
+            }
+        }
+        /// <summary>
+        /// 微信是否启用
+        /// </summary>
+        public static bool IsEnable_WeiXin
+        {
+            get
+            {
+                //如果两个参数都不为空说明启用
+                string corpid = BP.Sys.SystemConfig.WX_CorpID;
+                string corpsecret = BP.Sys.SystemConfig.WX_AppSecret;
+                if (string.IsNullOrEmpty(corpid) || string.IsNullOrEmpty(corpsecret))
+                    return false;
+
+                return true;
+            }
+        }
         /// <summary>
         /// 安装包
         /// </summary>

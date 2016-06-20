@@ -347,7 +347,7 @@ namespace BP.WF.Template
         }
         /// <summary>
         /// 对应的解决方案
-        /// 0=默认方案.1=自定义方案
+        /// 0=默认方案.节点编号=自定义方案, 1=不可编辑.
         /// </summary>
         public int FrmSln
         {
@@ -430,15 +430,25 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmNodeAttr.FK_Flow, value);
             }
         }
+        /// <summary>
+        /// 是否可以编辑？
+        /// </summary>
         public bool IsEdit
         {
             get
             {
-                return this.GetValBooleanByKey(FrmNodeAttr.IsEdit);
+                if (this.FrmSln == 1)
+                    return true;
+                return false;
             }
-            set
+        }
+        public int IsEditInt
+        {
+            get
             {
-                this.SetValByKey(FrmNodeAttr.IsEdit, value);
+                if (this.IsEdit)
+                    return 1;
+                return 0;
             }
         }
         public bool IsPrint
@@ -450,13 +460,6 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(FrmNodeAttr.IsPrint, value);
-            }
-        }
-        public int IsEditInt
-        {
-            get
-            {
-                return this.GetValIntByKey(FrmNodeAttr.IsEdit);
             }
         }
         public int IsPrintInt
@@ -504,7 +507,11 @@ namespace BP.WF.Template
             if (i == 0)
             {
                 this.IsPrint = false;
-                this.IsEdit = false;
+
+                //不可以编辑.
+                this.FrmSln = 1;
+
+               // this.IsEdit = false;
                 return;
                 throw new Exception("@表单关联信息已被删除。");
             }
@@ -528,7 +535,7 @@ namespace BP.WF.Template
                 map.AddTBString(FrmNodeAttr.FrmType, "0", "表单类型", true, true, 1, 20, 20);
 
                 //菜单在本节点的权限控制.
-                map.AddTBInt(FrmNodeAttr.IsEdit, 1, "是否可以更新", true, false);
+               // map.AddTBInt(FrmNodeAttr.IsEdit, 1, "是否可以更新", true, false);
                 map.AddTBInt(FrmNodeAttr.IsPrint, 0, "是否可以打印", true, false);
                 map.AddTBInt(FrmNodeAttr.IsEnableLoadData, 0, "是否启用装载填充事件", true, false);
 

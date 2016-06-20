@@ -135,15 +135,19 @@ namespace BP.GPM
 
                 //比如:\\驰骋集团\\南方分公司\\财务部
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", false, false, 0, 300, 30);
-
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", false, false, 0, 100, 30);
-                map.AddTBString(DeptAttr.TreeNo, null, "树编号", false, false, 0, 100, 30);
-                map.AddTBString(DeptAttr.Leader, null, "领导", false, false, 0, 100, 30);
 
-                //比如: 财务部，生产部，人力资源部.
+                // 01,0101,010101.
+                map.AddTBString(DeptAttr.TreeNo, null, "树编号", false, false, 0, 100, 30);
+
+                //部门领导.
+                map.AddTBString(DeptAttr.Leader, null, "领导", false, false, 0, 100, 30);
                 map.AddTBString(DeptAttr.Tel, null, "联系电话", false, false, 0, 100, 30);
 
+                //顺序号.
                 map.AddTBInt(DeptAttr.Idx, 0, "Idx", false, false);
+
+                //是否是目录
                 map.AddTBInt(DeptAttr.IsDir, 0, "是否是目录", false, false);
 
               //  map.AddDDLEntities(DeptAttr. null, "部门类型", new DeptTypes(), true);

@@ -26,70 +26,15 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
     public class FlowDesignerSvr : System.Web.Services.WebService
     {
         OSModel model = BP.Sys.OSModel.OneOne;
-        // 如果用户安装时选择不安装案例,则流程树、表单树和组织结构表都不存在根节点，此时需要手动添加根节点，
-        // 流程设计器初始化时调用
-        // 此功能应该添加到安装时，因为每次流程树加载都需要执行一次检查
-        private bool TreeRootCheck()
-        {
-            try
-            {
-                // 流程树根节点校验
-                string tmp = "SELECT Name FROM WF_FlowSort where ParentNo =0";
-                tmp = DBAccess.RunSQLReturnString(tmp);
-                if (string.IsNullOrEmpty(tmp))
-                {
-                    tmp = "INSERT INTO WF_FlowSort(No,Name,ParentNo,TreeNo,idx,IsDir) values('99','流程树','0','',0,0)";
-                    DBAccess.RunSQLReturnString(tmp);
-                }
-
-                // 表单树根节点校验
-                tmp = "SELECT Name FROM Sys_FormTree where ParentNo =0";
-                tmp = DBAccess.RunSQLReturnString(tmp);
-                if (string.IsNullOrEmpty(tmp))
-                {
-                    tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,TreeNo,idx,IsDir) values('99','表单树','0','',0,0)";
-                    DBAccess.RunSQLReturnString(tmp);
-                }
-
-                // 组织结构校验
-                model = (OSModel)Enum.Parse(typeof(OSModel), this.GetConfig("OSModel"), true);
-                if (model == BP.Sys.OSModel.OneOne)
-                {
-                    BP.GPM.Depts rootDepts = new BP.GPM.Depts("0");
-                    if (rootDepts == null || rootDepts.Count == 0)
-                    {
-                        BP.GPM.Dept rootDept = new BP.GPM.Dept();
-                        rootDept.Name = "集团总部";
-                        rootDept.No = "0";
-                        rootDept.Idx = 0;
-                        rootDept.Insert();
-                    }
-                }
-                else if (model == BP.Sys.OSModel.OneOne)
-                {
-                    BP.Port.Depts rootDepts = new BP.Port.Depts("0");
-                    if (rootDepts == null || rootDepts.Count == 0)
-                    {
-                        BP.GPM.Dept rootDept = new BP.GPM.Dept();
-                        rootDept.Name = "集团总部";
-                        rootDept.No = "0";
-                        rootDept.Idx = 0;
-                        rootDept.Insert();
-                    }
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("流程树根节点检查错误", e);
-            }
-        }
+       
 
         StringBuilder sbJson = new StringBuilder();
         [WebMethod]
         public string GetFlowTree()
         {
-            TreeRootCheck();
+            
+            BP.WF.Glo.CheckTreeRoot();
+
             string sql = @"
 SELECT No ,ParentNo,Name, Idx, 1 IsParent FROM WF_FlowSort
 union 
@@ -110,7 +55,6 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
 
             return sTmp;
         }
-      
 
         /// <summary>
         /// 根据DataTable生成Json树结构

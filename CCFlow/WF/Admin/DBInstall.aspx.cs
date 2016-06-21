@@ -261,18 +261,10 @@ namespace CCFlow.WF.Admin
         {
 
             string lang = "CH";
-            // 首先安装GPM.
-            BP.GPM.Glo.DoInstallDataBase(lang, "Inc");
-
+          
             //是否要安装demo.
             bool isDemo = this.Pub1.GetRadioButtonByID("RB_DemoOn").Checked;
-
-            ////是否安装ccim
-            //bool isInstallCCIM = this.Pub1.GetRadioButtonByID("RB_CCIM_Y").Checked;
-
-            //运行GPM的安装.
-            BP.GPM.Glo.DoInstallDataBase(lang, "Inc");
-
+         
             //运行ccflow的安装
             BP.WF.Glo.DoInstallDataBase(lang, isDemo);
 

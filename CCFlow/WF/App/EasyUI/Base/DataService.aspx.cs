@@ -266,7 +266,7 @@ namespace CCFlow.AppDemoLigerUI.Base
             DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(WebUser.No);
             return GetEasyUIJson(dt);
         }
-
+        
         private string GetStartFlowTreeEUI()
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsTree(WebUser.No);
@@ -274,10 +274,12 @@ namespace CCFlow.AppDemoLigerUI.Base
             {
                 column.ColumnName = column.ColumnName.ToUpper();
             }
-            string strFlows = BP.GPM.Utility.CommonDbOperator.GetGridTreeDataString(dt, "PARENTNO", "NO", "ST0", true);
-            if (strFlows.Length > 2)
-                strFlows = strFlows.Remove(strFlows.Length - 2, 2);
-            return strFlows;
+            throw new Exception("@取消了GPM.");
+
+            //string strFlows = BP.GPM.Utility.CommonDbOperator.GetGridTreeDataString(dt, "PARENTNO", "NO", "ST0", true);
+            //if (strFlows.Length > 2)
+            //    strFlows = strFlows.Remove(strFlows.Length - 2, 2);
+            //return strFlows;
         }
         /// <summary>
         /// 获取历史发起

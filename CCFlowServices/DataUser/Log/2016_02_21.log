@@ -1,4 +1,0 @@
------------------------------------------------------------------------------------------------------
-21日11时15分56秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
-21日11时16分01秒Info:System');"SQL=alter table GPM.dbo.RecordMsg alter column  SendUserID nvarchar(900),异常信息:找不到对象 "GPM.dbo.RecordMsg"，因为它不存在或者您没有所需的权限。
-21日11时16分05秒Info:System');"SQL=alter table GPM.dbo.RecordMsg alter column  SendUserID nvarchar(900),异常信息:找不到对象 "GPM.dbo.RecordMsg"，因为它不存在或者您没有所需的权限。

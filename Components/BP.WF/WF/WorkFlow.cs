@@ -56,7 +56,7 @@ namespace BP.WF
         public bool IsCanDoCurrentWork(string empId)
         {
             WorkNode wn = this.GetCurrentWorkNode();
-            return BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(wn.HisNode.NodeID, wn.WorkID, empId);
+            return BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork( wn.HisNode.FK_Flow, wn.HisNode.NodeID, wn.WorkID, empId);
             #region 使用dev2InterFace 中的算法
             //return true;
             // 找到当前的工作节点
@@ -84,7 +84,7 @@ namespace BP.WF
                     return true;
             }
             return false;
-            #endregion
+            #endregion 
         }
         #endregion
 

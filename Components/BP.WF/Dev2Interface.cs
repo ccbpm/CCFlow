@@ -3808,7 +3808,7 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         /// <param name="userNo">用户编号</param>
         /// <returns>是否可以处理当前工作</returns>
-        public static bool Flow_IsCanDoCurrentWork(string fk_flow, Int64 workID, string userNo)
+        public static bool Flow_IsCanDoCurrentWork111(string fk_flow, Int64 workID, string userNo)
         {
             try
             {
@@ -3827,7 +3827,7 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         /// <param name="userNo">操作员编号</param>
         /// <returns>是否可以处理当前的工作</returns>
-        public static bool Flow_IsCanDoCurrentWork(int nodeID, Int64 workID, string userNo)
+        public static bool Flow_IsCanDoCurrentWork_del(int nodeID, Int64 workID, string userNo)
         {
             Node nd = new Node(nodeID);
             return Flow_IsCanDoCurrentWork(nd.FK_Flow, nodeID, workID, userNo);
@@ -3867,7 +3867,6 @@ namespace BP.WF
 
             if (userNo == "admin")
                 return true;
-
 
             #region 判断是否是开始节点.
             /* 判断是否是开始节点 . */
@@ -3909,11 +3908,7 @@ namespace BP.WF
                     return false;
             }
 
-
             int i = int.Parse(dt.Rows[0][0].ToString());
-            //TaskSta TaskStai = (TaskSta)int.Parse(dt.Rows[0][1].ToString());
-            //if (TaskStai == TaskSta.Sharing)
-            //    return false; /*如果是共享状态，没有申请下来，就不能审批.*/
 
             RunModel rm = (RunModel)i;
             switch (rm)
@@ -6242,7 +6237,7 @@ namespace BP.WF
             BP.WF.GenerWorkFlow gwf = new GenerWorkFlow(workid);
 
             //检查当前人员是否开可以执行当前的工作?
-            if (Flow_IsCanDoCurrentWork(gwf.FK_Node, gwf.WorkID, WebUser.No) == false)
+            if (Flow_IsCanDoCurrentWork( gwf.FK_Flow,  gwf.FK_Node, gwf.WorkID, WebUser.No) == false)
                 throw new Exception("@当前的工作已经被别人处理或者您没有处理该工作的权限.");
 
             //检查被加签的人是否在当前的队列中.

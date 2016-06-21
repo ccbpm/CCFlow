@@ -15,10 +15,6 @@ namespace BP.WF.Port
         /// 父节点编号
         /// </summary>
         public const string ParentNo = "ParentNo";
-        ///// <summary>
-        ///// 隶属单位
-        ///// </summary>
-        //public const string FK_Unit = "FK_Unit";
     }
 	/// <summary>
 	/// 部门

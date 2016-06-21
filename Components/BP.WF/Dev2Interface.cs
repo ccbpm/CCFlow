@@ -3738,21 +3738,22 @@ namespace BP.WF
                 switch (nd.HisDeliveryWay)
                 {
                     case DeliveryWay.ByStation:
-                        var obj = BP.DA.DataType.GetPortalInterfaceSoapClientInstance();
-                        DataTable mydt = obj.GetEmpHisStations(BP.Web.WebUser.No);
-                        string mystas = BP.DA.DBAccess.GenerWhereInPKsString(mydt);
-                        ps.SQL = "SELECT COUNT(FK_Node) AS Num FROM WF_NodeStation WHERE FK_Node=" + dbstr + "FK_Node AND FK_Station IN(" + mystas + ")";
-                        ps.Add("FK_Node", nd.NodeID);
-                        num = DBAccess.RunSQLReturnValInt(ps);
+                        //var obj = BP.DA.DataType.GetPortalInterfaceSoapClientInstance();
+                        //DataTable mydt = obj.GetEmpHisStations(BP.Web.WebUser.No);
+                        //string mystas = BP.DA.DBAccess.GenerWhereInPKsString(mydt);
+                        //ps.SQL = "SELECT COUNT(FK_Node) AS Num FROM WF_NodeStation WHERE FK_Node=" + dbstr + "FK_Node AND FK_Station IN(" + mystas + ")";
+                        //ps.Add("FK_Node", nd.NodeID);
+                        //num = DBAccess.RunSQLReturnValInt(ps);
                         break;
                     case DeliveryWay.ByDept:
-                        var objMy = BP.DA.DataType.GetPortalInterfaceSoapClientInstance();
-                        DataTable mydtDept = objMy.GetEmpHisDepts(BP.Web.WebUser.No);
-                        string dtps = BP.DA.DBAccess.GenerWhereInPKsString(mydtDept);
+                        //var objMy = BP.DA.DataType.GetPortalInterfaceSoapClientInstance();
+                        //DataTable mydtDept = objMy.GetEmpHisDepts(BP.Web.WebUser.No);
+                        //string dtps = BP.DA.DBAccess.GenerWhereInPKsString(mydtDept);
 
-                        ps.SQL = "SELECT COUNT(FK_Node) as Num FROM WF_NodeDept WHERE FK_Dept IN (" + dtps + ") B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node";
-                        ps.Add("FK_Node", nd.NodeID);
-                        num = DBAccess.RunSQLReturnValInt(ps);
+                        //ps.SQL = "SELECT COUNT(FK_Node) as Num FROM WF_NodeDept WHERE FK_Dept IN (" + dtps + ") B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node";
+                        //ps.Add("FK_Node", nd.NodeID);
+                        //num = DBAccess.RunSQLReturnValInt(ps);
+                        throw new Exception("@目前取消支持.");
                         break;
                     case DeliveryWay.ByBindEmp:
                         ps.SQL = "SELECT COUNT(*) AS Num FROM WF_NodeEmp WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node";
@@ -3797,40 +3798,7 @@ namespace BP.WF
                 return false;
 
             string sql = "select * from WF_Generworkflow where WorkID='" + workID + "'";
-
-
             return DBAccess.RunSQLReturnCOUNT(sql) > 0;
-        }
-        /// <summary>
-        /// 是否可以处理当前工作
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="workID">工作ID</param>
-        /// <param name="userNo">用户编号</param>
-        /// <returns>是否可以处理当前工作</returns>
-        public static bool Flow_IsCanDoCurrentWork111(string fk_flow, Int64 workID, string userNo)
-        {
-            try
-            {
-                GenerWorkFlow gwf = new GenerWorkFlow(workID);
-                return Flow_IsCanDoCurrentWork(fk_flow, gwf.FK_Node, workID, userNo);
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        /// <summary>
-        /// 检查是否可以处理当前的工作？
-        /// </summary>
-        /// <param name="nodeID">节点ID</param>
-        /// <param name="workID">工作ID</param>
-        /// <param name="userNo">操作员编号</param>
-        /// <returns>是否可以处理当前的工作</returns>
-        public static bool Flow_IsCanDoCurrentWork_del(int nodeID, Int64 workID, string userNo)
-        {
-            Node nd = new Node(nodeID);
-            return Flow_IsCanDoCurrentWork(nd.FK_Flow, nodeID, workID, userNo);
         }
         /// <summary>
         /// 检查指定节点上的所有子流程是否完成？

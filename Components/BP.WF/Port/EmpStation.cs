@@ -26,6 +26,7 @@ namespace BP.WF.Port
 	/// </summary>
     public class EmpStation : Entity
     {
+        #region 基本属性
         /// <summary>
         /// UI界面上的访问控制
         /// </summary>
@@ -38,9 +39,6 @@ namespace BP.WF.Port
                 return uac;
             }
         }
-
-
-        #region 基本属性
         /// <summary>
         /// 工作人员ID
         /// </summary>

@@ -1784,7 +1784,9 @@ namespace BP
                 case "tbiSysManger"://系统维护
                     if (Glo.Platform == BP.Platform.CCFlow)
                     {
-                        Glo.OpenWindow("/GPM/Default.aspx?RefNo=CCFlowBPM", "系统维护");
+                        MessageBox.Show("我们已经取消了ccflow对GPM的依赖,系统的维护请转到H5版本的流程设计器找到系统维护标签页.", 
+                            "提示", MessageBoxButton.OK);
+                       // Glo.OpenWindow("/GPM/Default.aspx?RefNo=CCFlowBPM", "系统维护");
                       //  MessageBox.Show("JFlow的系统维护尚未提供", "提示", MessageBoxButton.OK);
                     }
                     else

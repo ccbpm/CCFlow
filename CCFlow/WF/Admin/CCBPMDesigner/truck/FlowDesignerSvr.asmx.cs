@@ -546,7 +546,38 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
                           " WHERE WorkID=" +
                           workid + (string.IsNullOrWhiteSpace(fid) || fid == "0" ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT ASC";
                     dt = DBAccess.RunSQLReturnTable(sql);
+
+                    //判断轨迹数据中，最后一步是否是撤销或退回状态的，如果是，则删除最后2条数据
+                    if (dt.Rows.Count > 0)
+                    {
+                        if (Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.UnSend))
+                        {
+                            if (dt.Rows.Count > 1)
+                            {
+                                dt.Rows.RemoveAt(0);
+                                dt.Rows.RemoveAt(0);
+                            }
+                            else
+                            {
+                                dt.Rows.RemoveAt(0);
+                            }
+                        }
+                    }
+
                     dt.TableName = "TRACK";
+                    ds.Tables.Add(dt);
+
+                    //获取预先计算的节点处理人，以及处理时间,added by liuxc,2016-4-15
+                    sql = "SELECT wsa.FK_Node,wsa.FK_Emp,wsa.EmpName,wsa.TSpanDay,wsa.TSpanHour,wsa.ADT,wsa.SDT FROM WF_SelectAccper AS wsa WHERE wsa.WorkID = " + workid;
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    dt.TableName = "POSSIBLE";
+                    ds.Tables.Add(dt);
+
+                    //获取节点处理人数据，及处理/查看信息
+                    sql = "SELECT wgw.FK_Emp,wgw.FK_Node,wgw.FK_EmpText,wgw.RDT,wgw.IsRead,wgw.IsPass FROM WF_GenerWorkerlist AS wgw WHERE wgw.WorkID = " +
+                          workid + (string.IsNullOrWhiteSpace(fid) || fid == "0" ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid));
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    dt.TableName = "DISPOSE";
                     ds.Tables.Add(dt);
                 }
                 else

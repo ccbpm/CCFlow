@@ -24,6 +24,7 @@
         var dragBorderPointStart;
         var dragTextPointStart;
         var dragTrackTextPointStart;
+        var dragPossibleTextPointStart;
 
         //定义样式变量，可在此统一修改流程样式
         var STYLE_FONT_SIZE_NODE = 14;
@@ -33,6 +34,7 @@
         var STYLE_NODE_HEIGHT = 50;
         var STYLE_NODE_COLOR_FORE = 'none';
         var STYLE_NODE_COLOR_FORE_HOVER = 'blue';
+        var STYLE_NODE_COLOR_FORE_TRACK = 'red';    //走过节点名称颜色
         var STYLE_NODE_DEFAULT_ICON_PATH = '/WF/Admin/ClientBin/NodeIcon/';
         var STYLE_NODE_DEFAULT_ICON = 'Default.jpg';
         var STYLE_NODE_BORDER_RADIUS = 5;
@@ -40,6 +42,7 @@
         var STYLE_NODE_BORDER_COLOR_END = 'red';
         var STYLE_NODE_BORDER_COLOR = 'black';
         var STYLE_NODE_BORDER_COLOR_HOVER = 'blue';
+        var STYLE_NODE_BORDER_COLOR_TRACK = 'red';  //走过节点边框颜色
         var STYLE_NODE_BORDER_WIDTH_NORMAL = 1;
         var STYLE_NODE_BORDER_WIDTH_HOVER = 2;
 
@@ -51,10 +54,11 @@
         var STYLE_LINE_WIDTH = 2;
         var STYLE_LINE_TRACK_COLOR = 'red';
         var STYLE_NODE_TRACK_FONT_SIZE = 14;
-        var STYLE_NODE_TRACK_FORE_COLOR = 'none';
+        var STYLE_NODE_TRACK_FORE_COLOR = 'red';    //轨迹信息颜色
         //var DATA_USER_ICON_PATH = '/ccflow5/DataUser/UserIcon/';
         var DATA_USER_ICON_PATH = '/DataUser/UserIcon/';
         var DATA_USER_ICON_DEFAULT = 'Default.png';
+        var DATA_MULTI_USER_ICON_DEFAULT = '../../Img/Multiplayer.png';
 
         var fk_Flow;
         var work_ID;
@@ -65,7 +69,7 @@
 
 
             work_ID = uh["WorkID"];
-           
+
 
             fid = uh["FID"];
             var data = "{fk_flow:'" + fk_Flow + "',workid:'" + work_ID + "',fid:'" + fid + "'}";
@@ -172,13 +176,30 @@
 
                 //在节点右侧绘制流程轨迹中当前节点的处理人/处理时间
                 if (rNode.isTrackNode) {
-                    rNode.rTrackText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, rNode.currTrack.type == "FROM" ? (rNode.currTrack.track.EMPFROMT + '\n' + rNode.currTrack.track.RDT.substr(5, 11)) : rNode.currTrack.track.EMPTOT);
+                    //判断此节点是否是多人处理
+                    if (rNode.currTrack.track.EMPTOT.indexOf('多人接受') > -1) {
+                        alert(rNode.currTrack.track.EMPTOT);
+                        this.ICON = DATA_MULTI_USER_ICON_DEFAULT;
+                        rNode.rIcon.attr("src", this.ICON);
+                    }
+
+                    rNode.rTrackText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, rNode.currTrack.type == "FROM" ? (rNode.currTrack.track.EMPFROMT + '\n' + getChineseDateTime(rNode.currTrack.track.RDT)) : rNode.currTrack.track.EMPTOT);
                     rNode.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                     rNode.rTrackText.toFront();
                 }
+                else {
+                    //检索是否有计算出节点处理人，以及可能处理时间，有则显示出来，added by liuxc,2016-4-15
+                    rNode.rPossible = datas.POSSIBLE.findByField("FK_NODE", this.ID);
 
-                rNode.rBorder.attr({ "stroke": nodeBorderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
-                rNode.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE, "font-size": STYLE_FONT_SIZE_NODE });
+                    if (rNode.rPossible) {
+                        rNode.rPossibleText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, "处理人：" + rNode.rPossible.EMPNAME + (rNode.rPossible.ADT && rNode.rPossible.ADT.length >= 16 ? ('\n到达：' + rNode.rPossible.ADT) : ''));
+                        rNode.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
+                        rNode.rPossibleText.toFront();
+                    }
+                }
+
+                rNode.rBorder.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_BORDER_COLOR_TRACK : nodeBorderColor), "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
+                rNode.rText.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "font-size": STYLE_FONT_SIZE_NODE });
                 rNode.rIcon.attr("title", this.NAME);
 
                 //增加节点图片的鼠标滑过/移开效果
@@ -220,12 +241,15 @@
                         else if (node.rTrackText) { //added by liuxc,2016-03-16
                             node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER });
                         }
+                        else if (node.rPossibleText) { //added by liuxc,2016-04-15
+                            node.rPossibleText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER });
+                        }
                     }
                 }, function () {
                     var node = rFlow.getNodeByRIconId(this.id);
                     if (node != null) {
-                        node.rBorder.attr({ "stroke": node.rBorderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
-                        node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE });
+                        node.rBorder.attr({ "stroke": node.currTrack ? STYLE_NODE_BORDER_COLOR_TRACK : node.rBorderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
+                        node.rText.attr({ "stroke": node.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE });
 
                         if (node.isTrackNode && node.currTrack.type == "FROM") {
                             node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR });
@@ -235,6 +259,9 @@
                         }
                         else if (node.rTrackText) { //added by liuxc,2016-03-16
                             node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR });
+                        }
+                        else if (node.rPossibleText) { //added by liuxc,2016-04-15
+                            node.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR });
                         }
                     }
                 });
@@ -285,6 +312,17 @@
             return newstr;
         }
 
+        function getChineseDateTime(time) {
+            /// <summary>获取指定时间字符串的中文日期时间表示形式</summary>
+            /// <param name="time" Type="String">时间字符串</param>
+            if (!time || time.length < 10) {
+                return '';
+            }
+
+            var d = new Date(time.replace(/-/g, "/"));
+            return d.getFullYear() + "年" + d.getMonth() + "月" + d.getDate() + "日 " + d.getHours() + "时" + d.getMinutes() + "分";
+        }
+
         function iconDrag() {
             this.ox = this.attr("x");
             this.oy = this.attr("y");
@@ -301,6 +339,9 @@
             else if (dragNode.rTrackText) { //added by liuxc,2016-03-16
                 dragTrackTextPointStart = { x: dragNode.rTrackText.attr("x"), y: dragNode.rTrackText.attr("y") };
             }
+            else if (dragNode.rPossibleText) { //added by liuxc,2016-04-15
+                dragPossibleTextPointStart = { x: dragNode.rPossibleText.attr("x"), y: dragNode.rPossibleText.attr("y") };
+            }
         }
 
         function iconMove(dx, dy) {
@@ -316,6 +357,9 @@
             }
             else if (dragNode.rTrackText) { //added by liuxc,2016-03-16
                 dragNode.rTrackText.attr({ x: dragTrackTextPointStart.x + dx, y: dragTrackTextPointStart.y + dy });
+            }
+            else if (dragNode.rPossibleText) { //added by liuxc,2016-04-15
+                dragNode.rPossibleText.attr({ x: dragPossibleTextPointStart.x + dx, y: dragPossibleTextPointStart.y + dy });
             }
 
             //重绘与该节点相连的连接线
@@ -392,6 +436,8 @@
             this.isTrackNode = false;
             this.tracks = null;
             this.currTrack = null;
+            this.rPossibleText = null;
+            this.rPossible = null;
         }
 
         function RLabel(sPk, sLabelName, iX, iY) {
@@ -449,7 +495,7 @@
 
             $.each(tracks, function () {
                 if (this.NDFROM == nodeId) {
-                    ts.push({track: this, type: "FROM"});
+                    ts.push({ track: this, type: "FROM" });
                 }
                 else if (this.NDTO == nodeId) {
                     ts.push({ track: this, type: "TO" });
@@ -593,12 +639,12 @@
     </script>
 </head>
 <body>
-<div id="holder">
-</div>
-<div id="trackinfo" style="display: none; position: absolute; width: 480px; height: auto;
-    background-color: #fff">
-    <table id="tracktable" class="Table" cellpadding="0" cellspacing="0" border="1" style="width: 100%">
-    </table>
-</div>
+    <div id="holder">
+    </div>
+    <div id="trackinfo" style="display: none; position: absolute; width: 480px; height: auto;
+        background-color: #fff">
+        <table id="tracktable" class="Table" cellpadding="0" cellspacing="0" border="1" style="width: 100%">
+        </table>
+    </div>
 </body>
 </html>

@@ -13,8 +13,7 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>
-    </SilverlightApplicationList>
+    <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|ClientBin|False,{83D53118-9A8D-4970-9A88-A2909B13FF64}|..\DesignerForSilverlight\CCFormDesigner\CCFormDesigner.csproj|ClientBin|False</SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -112,10 +111,15 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CCFlowDesignerTestPage.aspx" />
+    <Content Include="CCFlowDesignerTestPage.html" />
+    <Content Include="CCFormDesignerTestPage.aspx" />
+    <Content Include="CCFormDesignerTestPage.html" />
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="GPM\Loginin.aspx" />
+    <Content Include="ClientBin\CCFlowDesigner.xap" />
+    <Content Include="ClientBin\CCFormDesigner.xap" />
     <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Runing.aspx" />
@@ -161,152 +165,6 @@
     <Content Include="Default.aspx" />
     <Content Include="Default.htm" />
     <Content Include="Global.asax" />
-    <Content Include="GPM\AppList.aspx" />
-    <Content Include="GPM\AppMenu.aspx" />
-    <Content Include="GPM\AppMenuToEmp.aspx" />
-    <Content Include="GPM\Base\DataService.aspx" />
-    <Content Include="GPM\DBInstall.aspx" />
-    <Content Include="GPM\Default.aspx" />
-    <Content Include="GPM\Dev2Interface.asmx" />
-    <Content Include="GPM\EmpAppMenu.aspx" />
-    <Content Include="GPM\EmpForMenus.aspx" />
-    <Content Include="GPM\EmpGroupForMenus.aspx" />
-    <Content Include="GPM\Exit.aspx" />
-    <Content Include="GPM\Images\Banal.jpg" />
-    <Content Include="GPM\Images\bird.png" />
-    <Content Include="GPM\Images\folder.gif" />
-    <Content Include="GPM\Images\func.gif" />
-    <Content Include="GPM\Images\logo.png" />
-    <Content Include="GPM\Images\Menu.png" />
-    <Content Include="GPM\Images\Menu\application.png" />
-    <Content Include="GPM\Images\Menu\archive.png" />
-    <Content Include="GPM\Images\Menu\collaboration.png" />
-    <Content Include="GPM\Images\Menu\credit_card.png" />
-    <Content Include="GPM\Images\Menu\customers.png" />
-    <Content Include="GPM\Images\Menu\desktop_2.png" />
-    <Content Include="GPM\Images\Menu\feed.png" />
-    <Content Include="GPM\Images\Menu\forward.png" />
-    <Content Include="GPM\Images\Menu\my_account.png" />
-    <Content Include="GPM\Images\Menu\shipping.png" />
-    <Content Include="GPM\Images\Menu\sitemap.png" />
-    <Content Include="GPM\Images\Menu\sysset.png" />
-    <Content Include="GPM\Images\Menu\user1.png" />
-    <Content Include="GPM\Images\Menu\window.png" />
-    <Content Include="GPM\javascript\AppData.js" />
-    <Content Include="GPM\javascript\AppList.js" />
-    <Content Include="GPM\javascript\AppMenuToEmp.js" />
-    <Content Include="GPM\javascript\CC.MessageLib.js" />
-    <Content Include="GPM\javascript\EmpForMenus.js" />
-    <Content Include="GPM\javascript\EmpGroupForMenus.js" />
-    <Content Include="GPM\javascript\LeftMenu.js" />
-    <Content Include="GPM\javascript\StationForMenus.js" />
-    <Content Include="GPM\javascript\SystemMenus.js" />
-    <Content Include="GPM\jquery\easytemplate.js" />
-    <Content Include="GPM\jquery\jquery-1.7.2.min.js" />
-    <Content Include="GPM\jquery\jquery.easyui.min.js" />
-    <Content Include="GPM\jquery\jquery.min.js" />
-    <Content Include="GPM\jquery\locale\easyui-lang-zh_CN.js" />
-    <Content Include="GPM\ManagerDept.aspx" />
-    <Content Include="GPM\Pub.ascx" />
-    <Content Include="GPM\SQLScript\CCIM.sql" />
-    <Content Include="GPM\SQLScript\GO.sql" />
-    <Content Include="GPM\SQLScript\MSSQL_GPM_VIEW.sql" />
-    <Content Include="GPM\SQLScript\InitPublicData.sql" />
-    <Content Include="GPM\SQLScript\MySQL_GPM_VIEW.sql" />
-    <Content Include="GPM\SQLScript\Port_Inc_CH_BPM.sql" />
-    <Content Include="GPM\SQLScript\Oracle_GPM_VIEW.sql" />
-    <Content Include="GPM\StationForMenus.aspx" />
-    <Content Include="GPM\SystemLoginLog.aspx" />
-    <Content Include="GPM\themes\default\accordion.css" />
-    <Content Include="GPM\themes\default\calendar.css" />
-    <Content Include="GPM\themes\default\combo.css" />
-    <Content Include="GPM\themes\default\combobox.css" />
-    <Content Include="GPM\themes\default\datagrid.css" />
-    <Content Include="GPM\themes\default\datebox.css" />
-    <Content Include="GPM\themes\default\dialog.css" />
-    <Content Include="GPM\themes\default\easyui.css" />
-    <Content Include="GPM\themes\default\images\accordion_arrows.png" />
-    <Content Include="GPM\themes\default\images\blank.gif" />
-    <Content Include="GPM\themes\default\images\calendar_arrows.png" />
-    <Content Include="GPM\themes\default\images\combo_arrow.png" />
-    <Content Include="GPM\themes\default\images\datagrid_icons.png" />
-    <Content Include="GPM\themes\default\images\datebox_arrow.png" />
-    <Content Include="GPM\themes\default\images\layout_arrows.png" />
-    <Content Include="GPM\themes\default\images\linkbutton_bg.png" />
-    <Content Include="GPM\themes\default\images\loading.gif" />
-    <Content Include="GPM\themes\default\images\menu_arrows.png" />
-    <Content Include="GPM\themes\default\images\messager_icons.png" />
-    <Content Include="GPM\themes\default\images\pagination_icons.png" />
-    <Content Include="GPM\themes\default\images\panel_tools.png" />
-    <Content Include="GPM\themes\default\images\searchbox_button.png" />
-    <Content Include="GPM\themes\default\images\slider_handle.png" />
-    <Content Include="GPM\themes\default\images\spinner_arrows.png" />
-    <Content Include="GPM\themes\default\images\tabs_icons.png" />
-    <Content Include="GPM\themes\default\images\tree_icons.png" />
-    <Content Include="GPM\themes\default\images\validatebox_warning.png" />
-    <Content Include="GPM\themes\default\layout.css" />
-    <Content Include="GPM\themes\default\linkbutton.css" />
-    <Content Include="GPM\themes\default\menu.css" />
-    <Content Include="GPM\themes\default\menubutton.css" />
-    <Content Include="GPM\themes\default\messager.css" />
-    <Content Include="GPM\themes\default\pagination.css" />
-    <Content Include="GPM\themes\default\panel.css" />
-    <Content Include="GPM\themes\default\progressbar.css" />
-    <Content Include="GPM\themes\default\propertygrid.css" />
-    <Content Include="GPM\themes\default\searchbox.css" />
-    <Content Include="GPM\themes\default\slider.css" />
-    <Content Include="GPM\themes\default\spinner.css" />
-    <Content Include="GPM\themes\default\splitbutton.css" />
-    <Content Include="GPM\themes\default\tabs.css" />
-    <Content Include="GPM\themes\default\tooltip.css" />
-    <Content Include="GPM\themes\default\tree.css" />
-    <Content Include="GPM\themes\default\validatebox.css" />
-    <Content Include="GPM\themes\default\window.css" />
-    <Content Include="GPM\themes\icon.css" />
-    <Content Include="GPM\themes\icons\add.gif" />
-    <Content Include="GPM\themes\icons\back.png" />
-    <Content Include="GPM\themes\icons\blank.gif" />
-    <Content Include="GPM\themes\icons\cancel.png" />
-    <Content Include="GPM\themes\icons\collaboration.png" />
-    <Content Include="GPM\themes\icons\config.gif" />
-    <Content Include="GPM\themes\icons\cut.png" />
-    <Content Include="GPM\themes\icons\delete.gif" />
-    <Content Include="GPM\themes\icons\down.gif" />
-    <Content Include="GPM\themes\icons\edit_add.png" />
-    <Content Include="GPM\themes\icons\edit_remove.png" />
-    <Content Include="GPM\themes\icons\filesave.png" />
-    <Content Include="GPM\themes\icons\gongneng.gif" />
-    <Content Include="GPM\themes\icons\help.png" />
-    <Content Include="GPM\themes\icons\home.png" />
-    <Content Include="GPM\themes\icons\kongzhidian.png" />
-    <Content Include="GPM\themes\icons\loading.gif" />
-    <Content Include="GPM\themes\icons\mini_add.png" />
-    <Content Include="GPM\themes\icons\mini_edit.png" />
-    <Content Include="GPM\themes\icons\mini_refresh.png" />
-    <Content Include="GPM\themes\icons\mulu.png" />
-    <Content Include="GPM\themes\icons\new.png" />
-    <Content Include="GPM\themes\icons\no.png" />
-    <Content Include="GPM\themes\icons\ok.png" />
-    <Content Include="GPM\themes\icons\pencil.png" />
-    <Content Include="GPM\themes\icons\person.png" />
-    <Content Include="GPM\themes\icons\print.png" />
-    <Content Include="GPM\themes\icons\redo.png" />
-    <Content Include="GPM\themes\icons\reload.png" />
-    <Content Include="GPM\themes\icons\reset.gif" />
-    <Content Include="GPM\themes\icons\rights.gif" />
-    <Content Include="GPM\themes\icons\save_close.png" />
-    <Content Include="GPM\themes\icons\search.gif" />
-    <Content Include="GPM\themes\icons\search.png" />
-    <Content Include="GPM\themes\icons\seasons.png" />
-    <Content Include="GPM\themes\icons\sum.png" />
-    <Content Include="GPM\themes\icons\tip.png" />
-    <Content Include="GPM\themes\icons\tree_folder.gif" />
-    <Content Include="GPM\themes\icons\undo.png" />
-    <Content Include="GPM\themes\icons\up.gif" />
-    <Content Include="GPM\themes\icons\xitong.png" />
-    <Content Include="GPM\themes\icons\xitongleibie.png" />
-    <Content Include="GPM\WhoCanUseApp.aspx" />
-    <Content Include="GPM\WhoCanViewInfoPush.aspx" />
     <Content Include="SDKFlowDemo\App\DictList.aspx" />
     <Content Include="SDKFlowDemo\App\DictList.htm" />
     <Content Include="SDKFlowDemo\App\DictListWelcome.htm" />
@@ -2817,133 +2675,6 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\AppList.aspx.cs">
-      <DependentUpon>AppList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\AppList.aspx.designer.cs">
-      <DependentUpon>AppList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\AppMenu.aspx.cs">
-      <DependentUpon>AppMenu.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\AppMenu.aspx.designer.cs">
-      <DependentUpon>AppMenu.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\AppMenuToEmp.aspx.cs">
-      <DependentUpon>AppMenuToEmp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\AppMenuToEmp.aspx.designer.cs">
-      <DependentUpon>AppMenuToEmp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Base\DataService.aspx.cs">
-      <DependentUpon>DataService.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Base\DataService.aspx.designer.cs">
-      <DependentUpon>DataService.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\DBInstall.aspx.cs">
-      <DependentUpon>DBInstall.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\DBInstall.aspx.designer.cs">
-      <DependentUpon>DBInstall.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Dev2Interface.asmx.cs">
-      <DependentUpon>Dev2Interface.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GPM\EmpAppMenu.aspx.cs">
-      <DependentUpon>EmpAppMenu.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\EmpAppMenu.aspx.designer.cs">
-      <DependentUpon>EmpAppMenu.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\EmpForMenus.aspx.cs">
-      <DependentUpon>EmpForMenus.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\EmpForMenus.aspx.designer.cs">
-      <DependentUpon>EmpForMenus.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\EmpGroupForMenus.aspx.cs">
-      <DependentUpon>EmpGroupForMenus.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\EmpGroupForMenus.aspx.designer.cs">
-      <DependentUpon>EmpGroupForMenus.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Exit.aspx.cs">
-      <DependentUpon>Exit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Loginin.aspx.cs">
-      <DependentUpon>Loginin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Loginin.aspx.designer.cs">
-      <DependentUpon>Loginin.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\ManagerDept.aspx.cs">
-      <DependentUpon>ManagerDept.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\ManagerDept.aspx.designer.cs">
-      <DependentUpon>ManagerDept.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\StationForMenus.aspx.cs">
-      <DependentUpon>StationForMenus.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\StationForMenus.aspx.designer.cs">
-      <DependentUpon>StationForMenus.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\SystemLoginLog.aspx.cs">
-      <DependentUpon>SystemLoginLog.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\SystemLoginLog.aspx.designer.cs">
-      <DependentUpon>SystemLoginLog.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\WhoCanUseApp.aspx.cs">
-      <DependentUpon>WhoCanUseApp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\WhoCanUseApp.aspx.designer.cs">
-      <DependentUpon>WhoCanUseApp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\WhoCanViewInfoPush.aspx.cs">
-      <DependentUpon>WhoCanViewInfoPush.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\WhoCanViewInfoPush.aspx.designer.cs">
-      <DependentUpon>WhoCanViewInfoPush.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="GPM\WinOpen.master.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GPM\WinOpen.master.designer.cs">
-      <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SDKFlowDemo\App\DictList.aspx.cs">
@@ -7855,8 +7586,6 @@
     <Content Include="WF\Admin\EventEntity\Site.Master" />
     <Content Include="WF\App\Simple\SiteMenu.Master" />
     <Content Include="WF\Admin\Condition.Master" />
-    <None Include="GPM\themes\default\images\Thumbs.db" />
-    <Content Include="GPM\WinOpen.master" />
     <Content Include="WF\Admin\CCFormDesigner\Site.Master" />
     <Content Include="WF\Admin\CreateFlowGuide\Site.Master" />
     <Content Include="WF\CCForm\CCFormHeader.ashx" />
@@ -7931,10 +7660,6 @@
     <ProjectReference Include="..\Components\BP.En30\BP.En30.csproj">
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Components\BP.GPM\BP.GPM.csproj">
-      <Project>{BA60EE39-F64F-49CB-80AB-6BB108EA4154}</Project>
-      <Name>BP.GPM</Name>
     </ProjectReference>
     <ProjectReference Include="..\Components\BP.Web.Controls30\BP.Web.Controls30.csproj">
       <Project>{B04D173B-69F6-4BF3-8EA4-8DB2FC7F33F4}</Project>

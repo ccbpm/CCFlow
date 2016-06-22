@@ -234,15 +234,20 @@ functrees.push({
     AttrCols: ["TType"],
     ServiceCount: 1,
     Nodes: [
-			{ Type: "Node", Id: "BasicSetting", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder",
+			{ Type: "Node", Id: "OneOne", ParentId: null, Name: "基础设置OneOne", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder",
 			    Nodes: [
-						{ Type: "Node", Id: "Integration", ParentId: "BasicSetting", Name: "集成设置", TType: "INTEGRATION", IconCls: "icon-Guide", Url: "../Org/Integration.aspx" },
-						{ Type: "Node", Id: "DeptTypies", ParentId: "BasicSetting", Name: "部门类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.DeptTypes" },
-						{ Type: "Node", Id: "Duties", ParentId: "BasicSetting", Name: "职务管理", TType: "DUTIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.Dutys" },
-						{ Type: "Node", Id: "Stations", ParentId: "BasicSetting", Name: "岗位管理", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Search.aspx?EnsName=BP.GPM.Stations" },
-						{ Type: "Node", Id: "OrgManage", ParentId: "BasicSetting", Name: "数据导入", TType: "ORGMANAGE", IconCls: "icon-Excel", Url: "http://ccflow.org/ToolsInitOrg.aspx" }
+						{ Type: "Node", Id: "OneOneDeptTypies", ParentId: "OneOne", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
+						{ Type: "Node", Id: "OneOneStations", ParentId: "OneOne", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
 					  ]
 			},
+            { Type: "Node", Id: "BasicSetting", ParentId: null, Name: "基础设置OneMore", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder",
+            			    Nodes: [
+						{Type: "Node", Id: "DeptTypies", ParentId: "BasicSetting", Name: "部门类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.DeptTypes" },
+						{ Type: "Node", Id: "Duties", ParentId: "BasicSetting", Name: "职务维护", TType: "DUTIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.Dutys" },
+						{ Type: "Node", Id: "DeptTypies", ParentId: "BasicSetting", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
+						{ Type: "Node", Id: "Stations", ParentId: "BasicSetting", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
+					  ]
+            			},
 			{ Type: "Service", ServiceMethod: "GetStructureTree", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "0",
 			    ColDefine: "TType", Defines: [
 											{ Value: "DEPT", ColDefine: "ParentNo",
@@ -264,21 +269,12 @@ functrees.push({
     Id: "sysTree",
     Name: "系统维护",
     Nodes: [
-			{ Type: "Node", Id: "MenuRole", ParentId: null, Name: "菜单权限", Opened: true, IconCls: "icon-tree_folder",
-			    Nodes: [
-						{ Type: "Node", Id: "SysConfig", ParentId: "MenuRole", Name: "系统维护", IconCls: "icon-table", Url: "../../../GPM/AppList.aspx" },
-						{ Type: "Node", Id: "RoleGroup", ParentId: "MenuRole", Name: "权限组维护", IconCls: "icon-table", Url: "../../Comm/SearchEUI.aspx?EnsName=BP.GPM.Groups" },
-						{ Type: "Node", Id: "MenuForRole", ParentId: "MenuRole", Name: "按菜单分配权限", IconCls: "icon-Menu", Url: "../../../GPM/AppMenuToEmp.aspx" },
-						{ Type: "Node", Id: "UserForRole", ParentId: "MenuRole", Name: "按用户分配权限", IconCls: "icon-User", Url: "../../../GPM/EmpForMenus.aspx" },
-						{ Type: "Node", Id: "StationForRole", ParentId: "MenuRole", Name: "按岗位分配权限", IconCls: "icon-Station", Url: "../../../GPM/StationForMenus.aspx" },
-						{ Type: "Node", Id: "GroupForRole", ParentId: "MenuRole", Name: "按权限组分配权限", IconCls: "icon-Group", Url: "../../../GPM/EmpGroupForMenus.aspx" }
-					  ]
-			},
+			 
 			{ Type: "Node", Id: "BasicSetting2", ParentId: null, Name: "基础设置", Opened: true, IconCls: "icon-tree_folder",
 			    Nodes: [
 						{ Type: "Node", Id: "HolidaySetting", ParentId: "BasicSetting2", Name: "节假日设置", IconCls: "icon-Config", Url: "../../Comm/Sys/Holiday.aspx" },
 						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "表结构", IconCls: "icon-Config", Url: "../../Comm/Sys/SystemClass.aspx" },
-						{ Type: "Node", Id: "SysVal", ParentId: "BasicSetting2", Name: "系统变量", IconCls: "icon-Config", Url: "javascript:void(0)" },
+//						{ Type: "Node", Id: "SysVal", ParentId: "BasicSetting2", Name: "系统变量", IconCls: "icon-Config", Url: "javascript:void(0)" },
 						{ Type: "Node", Id: "FlowPrevSetting", ParentId: "BasicSetting2", Name: "流程预先审批设置", IconCls: "icon-Config", Url: "../GetTask.aspx" },
 						{ Type: "Node", Id: "FuncDown", ParentId: "BasicSetting2", Name: "功能执行", IconCls: "icon-Config", Url: "../../Comm/MethodLink.aspx" }
 					  ]

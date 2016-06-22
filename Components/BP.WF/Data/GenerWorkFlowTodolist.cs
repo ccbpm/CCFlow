@@ -182,6 +182,7 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("V_Todolist", "流程统计");
+                map.EnType = EnType.View;
 
                 map.AddMyPK();
 
@@ -194,7 +195,6 @@ namespace BP.WF.Data
                 map.AddTBInt(GenerWorkFlowTodolistAttr.TodoSta2, 0, "逾期中", true, true);
                 map.AddTBInt(GenerWorkFlowTodolistAttr.TodoSta3, 0, "正常办结", true, true);
                 map.AddTBInt(GenerWorkFlowTodolistAttr.TodoSta4, 0, "超期办结", true, true);
-
                  
                 //map.AddSearchAttr(GenerWorkFlowTodolistAttr.FK_Flow);
                  

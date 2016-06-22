@@ -2589,34 +2589,28 @@ namespace BP.WF
         /// <summary>
         /// 验证用户的合法性
         /// </summary>
-        /// <param name="UserNo">用户编号</param>
+        /// <param name="userNo">用户编号</param>
         /// <param name="SID">密钥</param>
         /// <returns>是否匹配</returns>
-        public static bool Port_CheckUserLogin(string UserNo, string SID)
+        public static bool Port_CheckUserLogin(string userNo, string SID)
         {
-
-#warning 为了调试，暂时都返回true.
-            return true;
-
-            if (string.IsNullOrEmpty(UserNo))
+            if (string.IsNullOrEmpty(userNo))
                 return false;
             if (string.IsNullOrEmpty(SID))
                 return false;
 
-            //随后改成动态sid
-            if (UserNo == "admin" && SID.ToUpper() == "33273D4A-35C8-4AE8-BDD9-0085EA648CCB")
-                return true;
+            Paras ps = new Paras();
+            ps.SQL = "SELECT SID FROM Port_Emp WHERE No="+SystemConfig.AppCenterDBVarStr+"No";
+            ps.Add("No", userNo);
 
-            BP.Port.Emp emp = new BP.Port.Emp(UserNo);
-            bool bHave = emp.RetrieveByAttr(BP.Port.EmpAttr.No, UserNo);
-            //用户编号不存在
-            if (bHave == false)
+            string mysid = DBAccess.RunSQLReturnStringIsNull(ps, null);
+            if (mysid == null)
+                throw new Exception("@没有取得用户("+userNo+")的SID.");
+
+            if (mysid == SID)
+                return true;
+            else
                 return false;
-
-            //用户匹配正确
-            if (emp.SID.Equals(SID))
-                return true;
-            return false;
         }
         /// <summary>
         /// 设置SID
@@ -2635,7 +2629,6 @@ namespace BP.WF
             else
                 return false;
         }
-
         /// <summary>
         /// 发送邮件与消息(如果传入4大流程参数将会增加一个工作链接)
         /// </summary>
@@ -3854,7 +3847,6 @@ namespace BP.WF
             if (dt.Rows.Count == 0)
                 return false;
 
-
             //判断是否是待办.
             int isPass = int.Parse(dt.Rows[0]["IsPass"].ToString());
             if (isPass != 0)
@@ -3896,6 +3888,7 @@ namespace BP.WF
             }
             return true;
         }
+      
         /// <summary>
         /// 检查当前人员是否有权限处理当前的工作.
         /// </summary>

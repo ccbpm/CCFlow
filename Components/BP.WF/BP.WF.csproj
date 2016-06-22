@@ -187,7 +187,6 @@
     <Compile Include="Data\MyDeptEmp.cs" />
     <Compile Include="Data\CH.cs" />
     <Compile Include="Data\CHExt.cs" />
-    <Compile Include="Data\GenerWorkFlowTodolist.cs" />
     <Compile Include="Dev2InterfaceGuest.cs">
       <SubType>Code</SubType>
     </Compile>

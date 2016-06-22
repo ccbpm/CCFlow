@@ -33,21 +33,6 @@ namespace BP.WF.Port
                 return uac;
             }
         }
-        public new string Name
-        {
-            get
-            {
-                return this.GetValStrByKey("Name");
-            }
-        }
-        public int Grade
-        {
-            get
-            {
-                return this.No.Length / 2;
-            }
-
-        }
         #endregion
 
         #region 构造方法
@@ -78,9 +63,12 @@ namespace BP.WF.Port
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetCodeStruct("2");; // 最大级别是7.
 
-                map.AddTBStringPK(StationAttr.No, null, null, true, false, 2, 2, 2);
-                map.AddTBString(StationAttr.Name, null, null, true, false, 2, 50, 250);
-                map.AddDDLEntities(StationAttr.FK_StationType, null, "岗位类型", new BP.GPM.StationTypes(), true);
+                map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 2, 2, 2);
+                map.AddTBString(StationAttr.Name, null, "名称", true, false, 2, 50, 250);
+                map.AddDDLEntities(StationAttr.FK_StationType, null, "岗位类型", new StationTypes(), true);
+
+                //查询条件.
+                map.AddSearchAttr(StationAttr.FK_StationType);
 
                 this._enMap = map;
                 return this._enMap;

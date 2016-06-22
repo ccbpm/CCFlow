@@ -929,7 +929,7 @@ namespace BP.WF
             }
 
             //删除这个数据, 没有找到，初始化这些数据失败的原因.
-            BP.DA.DBAccess.RunSQL("DELETE FROM PORT_DEPTSTATION");
+            BP.DA.DBAccess.RunSQL("DELETE FROM Port_DeptStation");
 
             string sqlscript = "";
             if (Glo.OSModel == BP.Sys.OSModel.OneOne)
@@ -1053,8 +1053,10 @@ namespace BP.WF
                 //修复视图.
                 Flow.RepareV_FlowData_View();
                 
-            }else{
-                 
+            }
+
+            if (isInstallFlowDemo == false)
+            {
                 //创建一个空白的流程，不然，整个结构就出问题。
                 FlowSorts fss = new FlowSorts();
                 fss.RetrieveAll();
@@ -1079,8 +1081,6 @@ namespace BP.WF
                 s1 = (FlowSort)fs.DoCreateSubNode();
                 s1.Name = "人力资源类";
                 s1.Update();
-
-                
             }
             #endregion 装载demo.flow
 

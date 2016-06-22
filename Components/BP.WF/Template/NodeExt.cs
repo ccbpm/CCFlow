@@ -696,14 +696,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "表单方案";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Form.png";
-
-                rm.ClassMethodName = this.ToString() + ".DoSheet";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+             
 
 
                  rm = new RefMethod();
@@ -728,12 +721,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "手机表单字段顺序";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Mobile.png";
-                rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+             
 
                 rm = new RefMethod();
                 rm.Title = "流程完成条件"; // "流程完成条件";
@@ -857,6 +845,36 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 字段相关功能（不显示在菜单里）
 
+
+                #region 表单设置.
+                rm = new RefMethod();
+                rm.Title = "表单方案";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Form.png";
+                rm.ClassMethodName = this.ToString() + ".DoSheet";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "表单设置";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "手机表单字段顺序";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/telephone.png";
+                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Mobile.png";
+                rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "表单设置";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "特别字段特别用户权限";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/SpecUserSpecFields.png";
+                rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "表单设置";
+                map.AddRefMethod(rm);
+                #endregion 表单设置.
+
+
                 #region 考核.
                 rm = new RefMethod();
                 rm.Title = "设置考核规则";
@@ -909,14 +927,7 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "特别字段特殊用户权限";
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
-
+            
                 #endregion 实验中的功能
 
                 this._enMap = map;

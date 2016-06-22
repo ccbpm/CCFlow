@@ -72,11 +72,9 @@ namespace BP.WF
         public const string DoNode = "DoNode";
         public const string Start = "Start";
         public const string Start5 = "Start5";
-        public const string JiSu = "JiSu";
+        public const string StartSimple = "StartSimple";
         public const string Amaze = "Amaze";
         public const string StartLigerUI = "StartLigerUI";
-        public const string StartSmall = "StartSmall";
-        public const string StartSmallSingle = "StartSmallSingle";
         public const string MyWork = "MyWork";
         public const string Login = "Login";
         public const string FlowSearch = "FlowSearch";
@@ -87,14 +85,9 @@ namespace BP.WF
         public const string MyFlow = "MyFlow";
         public const string FlowFX = "FlowFX";
         public const string DealWork = "DealWork";
-        public const string DealWorkInSmall = "DealWorkInSmall";
-        public const string DealWorkInSmallSingle = "DealWorkInSmallSingle";
         public const string Tools = "Tools";
         public const string ToolsSmall = "ToolsSmall";
         public const string Runing = "Runing";
-        public const string EmpWorksSmall = "EmpWorksSmall";
-        public const string EmpWorksSmallSingle = "EmpWorksSmallSingle";
-        public const string RuningSmall = "RuningSmall";
         /// <summary>
         /// 工作处理器
         /// </summary>

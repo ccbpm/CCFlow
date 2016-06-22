@@ -226,6 +226,7 @@ namespace CCFlow.WF.CCForm
                         {
                             isHave = true;
                             attrsExp.Add(attr);
+                            continue;
                         }
 
                         if (dc.ColumnName.ToLower() == attr.Key.ToLower())

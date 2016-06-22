@@ -240,12 +240,12 @@ functrees.push({
 						{ Type: "Node", Id: "OneOneStations", ParentId: "OneOne", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
 					  ]
 			},
-            { Type: "Node", Id: "BasicSetting", ParentId: null, Name: "基础设置OneMore", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder",
+            { Type: "Node", Id: "OneMore", ParentId: null, Name: "基础设置OneMore", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder",
             			    Nodes: [
-						{Type: "Node", Id: "DeptTypies", ParentId: "BasicSetting", Name: "部门类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.DeptTypes" },
-						{ Type: "Node", Id: "Duties", ParentId: "BasicSetting", Name: "职务维护", TType: "DUTIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.Dutys" },
-						{ Type: "Node", Id: "DeptTypies", ParentId: "BasicSetting", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
-						{ Type: "Node", Id: "Stations", ParentId: "BasicSetting", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
+						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "部门类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.DeptTypes" },
+						{ Type: "Node", Id: "Duties", ParentId: "OneMore", Name: "职务维护", TType: "DUTIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.Dutys" },
+						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
+						{ Type: "Node", Id: "Stations", ParentId: "OneMore", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
 					  ]
             			},
 			{ Type: "Service", ServiceMethod: "GetStructureTree", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "0",

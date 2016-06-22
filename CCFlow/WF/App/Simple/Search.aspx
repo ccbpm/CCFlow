@@ -3,8 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>流程查询</title>
-    <link href="../../Comm/Style/Table.css" rel="stylesheet" type="text/css" />
+
+    <%--<link href="../../Comm/Style/Table.css" rel="stylesheet" type="text/css" />
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+--%>
     <script type="text/javascript">
         function WinOpen(url) {
             var newWindow = window.open(url, 'z',

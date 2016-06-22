@@ -8,7 +8,7 @@
 </head >
 <body >
 
-<div style=" float:left;vertical-align:middle">
+<div style="vertical-align:middle">
    <form id="form1" runat="server">
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>

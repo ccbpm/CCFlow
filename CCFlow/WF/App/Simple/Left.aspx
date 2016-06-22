@@ -37,19 +37,22 @@
     </ul>
     </fieldset>
 
+    <% if (BP.Web.WebUser.No == "admin")
+       { %>
     <fieldset>
     <legend>系统管理</legend>
     <ul>
     <li><a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Depts">部门维护</a></li>
     <li><a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Stations">岗位维护</a></li>
     <li><a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Emps">人员维护</a></li>
-
     <li><a href="/WF/Comm/Sys/EnumList.aspx">枚举数据管理</a></li>
     <li><a href="/WF/Comm/Sys/SFTableList.aspx">字典表</a></li>
-
-
     </ul>
     </fieldset>
+
+    <%} %>
+
+
      
     </form>
 </body>

@@ -163,7 +163,7 @@
         </td>
             <td>
                 <asp:Button class="easyui-linkbutton" ID="Btn_Save" runat="server" Text="保存" OnClick="BtnSave_Click" />
-                | <a href="../TestFlow.aspx?FK_Flow=<%=this.FK_Flow %>&Lang=CH" target=_blank >运行测试</a>
+                | <a href="../TestFlow.aspx?FK_Flow=<%=this.FK_Flow %>&SID=<%=BP.Web.WebUser.SID %>&Lang=CH" target="_blank" >运行测试</a>
             </td>
 
         </tr>

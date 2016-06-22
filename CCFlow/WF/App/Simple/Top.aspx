@@ -4,24 +4,24 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-<br>
+<table  style="  width:100%;">
+<tr>
+<td> <%=BP.Sys.SystemConfig.SysName %></td>
 
-<div style="float:left;vertical-align:middle">
-<%=BP.Sys.SystemConfig.SysName %>
- </div>
+<td style=" text-align:right"> 
 
-<h4>
-<div style="float:right;vertical-align:middle">
  <% if (BP.Web.WebUser.No == null)
       { %>
     [<a href="Login.aspx" >登陆</a>] -  [<a href='/WF/Admin/Xap/Designer.aspx' target="_blank"  >进入流程设计器</a>]
    <% }
       else
       { %>
-    [您好:<%=BP.Web.WebUser.No%>,<%=BP.Web.WebUser.Name%>] - [<a href="Login.aspx">重登陆</a>] -[<a href="Login.aspx?DoType=Out">退出</a>]- [<a href='/WF/Admin/Xap/Designer.aspx' target="_blank"  >进入流程设计器</a>]
+      [您好:<%=BP.Web.WebUser.No%>,<%=BP.Web.WebUser.Name%>] - [<a href="Login.aspx">重登陆</a>] -[<a href="Login.aspx?DoType=Out">退出</a>]- [<a href='/WF/Admin/Xap/Designer.aspx' target="_blank"  >进入流程设计器</a>]
     <%} %>
- </div>
-</h4>
+</td>
+</tr>
+</table>
+ 
 
 
 </asp:Content>

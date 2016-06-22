@@ -24,6 +24,13 @@ namespace CCFlow.WF.Admin.AttrFlow
                 return this.Request.QueryString["FK_Flow"];
             }
         }
+        public string SID
+        {
+            get
+            {
+                return BP.Web.WebUser.SID;
+            }
+        }
         #endregion 属性.
 
         protected void Page_Load(object sender, EventArgs e)

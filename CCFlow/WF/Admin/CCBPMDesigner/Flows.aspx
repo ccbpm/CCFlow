@@ -143,7 +143,7 @@
         </tr>
         <%
             //类别.
-            BP.WF.FlowSorts flowSorts = new BP.WF.FlowSorts();
+            BP.WF.Template.FlowSorts flowSorts = new BP.WF.Template.FlowSorts();
             flowSorts.RetrieveAll();
 
             //流程.
@@ -182,7 +182,7 @@
             System.Data.DataTable dt
                 = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow, WFSta, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState!=0 GROUP BY FK_Flow,WFSta ");
 
-            foreach (BP.WF.FlowSort flowSort in flowSorts)
+            foreach (BP.WF.Template.FlowSort flowSort in flowSorts)
             {
         %>
         <tr class="GroupField">

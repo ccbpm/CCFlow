@@ -101,7 +101,7 @@
         </tr>
         <%
             //类别.
-            BP.WF.FlowSorts flowSorts = new BP.WF.FlowSorts();
+            BP.WF.Template.FlowSorts flowSorts = new BP.WF.Template.FlowSorts();
             flowSorts.RetrieveAll();
 
             //流程.
@@ -184,9 +184,9 @@
             //按时
             System.Data.DataTable dtThisMouthBJ = BP.DA.DBAccess.RunSQLReturnTable("SELECT  FK_Flow,COUNT(distinct WorkID) Num FROM WF_CH WHERE FK_NY ='" +
                 dTime.ToString("yyyy-MM") + "' AND CHSta IN(0,1) GROUP BY FK_Flow ");
-               
 
-            foreach (BP.WF.FlowSort flowSort in flowSorts)
+
+            foreach (BP.WF.Template.FlowSort flowSort in flowSorts)
             {
         %>
         <tr>

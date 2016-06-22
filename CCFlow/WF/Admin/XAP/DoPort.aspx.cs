@@ -131,8 +131,8 @@ namespace CCFlow.WF.Admin.XAP
                         case "BP.WF.Template.NodeExt":
                             this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.NodeExts&PK=" + this.PK, true);
                             return;
-                        case "BP.WF.FlowSort":
-                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.FlowSorts&PK=" + this.PK, true);
+                        case "BP.WF.Template.FlowSort":
+                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSorts&PK=" + this.PK, true);
                             return;
                         default:
                             throw new Exception("err");

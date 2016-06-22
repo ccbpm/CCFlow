@@ -144,8 +144,11 @@ namespace BP.Web.Port
             }
 
 
-            if (this.Request.QueryString["IsMobile"] != null)
+            if (this.Request.QueryString["IsMobile"] =="1" )
                 BP.Web.WebUser.UserWorkDev = UserWorkDev.Mobile;
+            else
+                BP.Web.WebUser.UserWorkDev = UserWorkDev.PC;
+
 
             string nodeID = int.Parse(this.FK_Flow + "01").ToString();
             switch (this.DoWhat)

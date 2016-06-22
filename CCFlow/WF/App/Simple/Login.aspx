@@ -17,6 +17,8 @@
   <br>
   密码： <asp:TextBox ID="TB_Pass" runat="server"></asp:TextBox>  <asp:Button ID="Button1" runat="server" Text=" 登录 " 
     onclick="Button1_Click" />
+
+    <font  color=gray> 默认密码为:123 或者 pub</font>
     <br>
     <br>
     </fieldset>

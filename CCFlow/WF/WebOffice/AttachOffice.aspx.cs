@@ -143,7 +143,6 @@ namespace CCFlow.WF.WebOffice
                 return nodeInfo.Name + ": " + WebUser.Name + "    时间:" + DateTime.Now.ToString("YYYY-MM-dd HH:mm:ss");
             }
         }
-
         private bool _isCheck = false;
         public bool IsCheck
         {

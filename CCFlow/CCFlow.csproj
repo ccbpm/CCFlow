@@ -13,7 +13,8 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|ClientBin|False,{83D53118-9A8D-4970-9A88-A2909B13FF64}|..\DesignerForSilverlight\CCFormDesigner\CCFormDesigner.csproj|ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -111,15 +112,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CCFlowDesignerTestPage.aspx" />
-    <Content Include="CCFlowDesignerTestPage.html" />
-    <Content Include="CCFormDesignerTestPage.aspx" />
-    <Content Include="CCFormDesignerTestPage.html" />
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="ClientBin\CCFlowDesigner.xap" />
-    <Content Include="ClientBin\CCFormDesigner.xap" />
     <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Runing.aspx" />
@@ -135,7 +130,6 @@
       <LastGenOutput>Reference1.cs</LastGenOutput>
     </Content>
     <Content Include="Service References\CloundWS\WS.disco" />
-    <Content Include="Silverlight.js" />
     <Content Include="WF\Activex\GDCASign\readme.txt" />
     <Content Include="WF\Admin\AttrFlow\Limit.aspx" />
     <Content Include="WF\Admin\AttrNode\BlockModel.aspx" />
@@ -754,6 +748,10 @@
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Info.aspx" />
+    <Content Include="WF\Admin\Org\Integration.aspx" />
+    <Content Include="WF\Admin\Org\IntegrationAD.aspx" />
+    <Content Include="WF\Admin\Org\IntegrationDB.aspx" />
+    <Content Include="WF\Admin\Org\IntegrationWS.aspx" />
     <Content Include="WF\Admin\Org\Working.png" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\Templete\Uploade.aspx" />
@@ -4031,6 +4029,34 @@
     </Compile>
     <Compile Include="WF\Admin\Info.aspx.designer.cs">
       <DependentUpon>Info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Org\Integration.aspx.cs">
+      <DependentUpon>Integration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\Org\Integration.aspx.designer.cs">
+      <DependentUpon>Integration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Org\IntegrationAD.aspx.cs">
+      <DependentUpon>IntegrationAD.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\Org\IntegrationAD.aspx.designer.cs">
+      <DependentUpon>IntegrationAD.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Org\IntegrationDB.aspx.cs">
+      <DependentUpon>IntegrationDB.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\Org\IntegrationDB.aspx.designer.cs">
+      <DependentUpon>IntegrationDB.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Org\IntegrationWS.aspx.cs">
+      <DependentUpon>IntegrationWS.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\Org\IntegrationWS.aspx.designer.cs">
+      <DependentUpon>IntegrationWS.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Org\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

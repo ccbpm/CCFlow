@@ -178,13 +178,11 @@ functrees.push({
 											{ Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../../MapDef/CCForm/Frm.aspx?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID", LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
                                                 { Type: "Node", Id: "RelatedFunction", ParentId: null, Name: "相关功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
-						                                { Type: "Node", Id: "FormHome", ParentId: "RelatedFunction", Name: "表单主页", TType: "NORMAL", DType: "-1", IconCls: "icon-Home", Inherits: ["fk_frm"], Url: "../CCFormDesigner/Home.aspx?FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "FormPreview", ParentId: "RelatedFunction", Name: "表单预览", TType: "NORMAL", DType: "-1", IconCls: "icon-Glasses", Inherits: ["fk_frm"], Url: "../../CCForm/Frm.aspx?FK_MapData=@@fk_frm&IsTest=1" },
 						                                { Type: "Node", Id: "FormField", ParentId: "RelatedFunction", Name: "表单字段", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../CCFormDesigner/FiledsList.aspx?FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "PageLoadFull", ParentId: "RelatedFunction", Name: "装载填充", TType: "NORMAL", DType: "-1", IconCls: "icon-LoadFull", Inherits: ["fk_frm"], Url: "../../MapDef/MapExt/PageLoadFull.aspx?s=34&FK_MapData=@@fk_frm&ExtType=PageLoadFull" },
 						                                { Type: "Node", Id: "InitScript", ParentId: "RelatedFunction", Name: "内置JS脚本", TType: "NORMAL", DType: "-1", IconCls: "icon-JavaScript", Inherits: ["fk_frm"], Url: "../../MapDef/MapExt/InitScript.aspx?s=34&FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "FormAction", ParentId: "RelatedFunction", Name: "表单事件", TType: "NORMAL", DType: "-1", IconCls: "icon-Event", Inherits: ["fk_frm"], Url: "../Action.aspx?FK_MapData=@@fk_frm" },
-//						                                { Type: "Node", Id: "BasicData", ParentId: "RelatedFunction", Name: "原始数据", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../CCFormDesigner/BasicData.aspx?FK_MapData=@@fk_frm", },
 						                                { Type: "Node", Id: "Imp", ParentId: "RelatedFunction", Name: "模版导入", TType: "NORMAL", DType: "-1", IconCls: "icon-redo", Inherits: ["fk_frm"], Url: "../CCFormDesigner/Imp.aspx?FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "Exp", ParentId: "RelatedFunction", Name: "模版导出", TType: "NORMAL", DType: "-1", IconCls: "icon-unredo", Inherits: ["fk_frm"], Url: "../CCFormDesigner/Exp.aspx?FK_MapData=@@fk_frm" }
                                                         ]
@@ -196,6 +194,12 @@ functrees.push({
 						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "分组分析", TType: "NORMAL", DType: "-1", IconCls: "icon-Group", Inherits: ["fk_frm"], Url: "../../Comm/Group.aspx?EnsName=@@fk_frm" },
 						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "代码事例", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_frm"], Url: "../CCFormDesigner/APICode.aspx?FK_MapData=@@fk_frm" }
 
+                                                        ]
+                                                },
+                                                { Type: "Node", Id: "TestFrmFunc", ParentId: null, Name: "实验中的功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
+                                                    Nodes: [
+						                                { Type: "Node", Id: "FormHome", ParentId: "TestFrmFunc", Name: "表单主页", TType: "NORMAL", DType: "-1", IconCls: "icon-Home", Inherits: ["fk_frm"], Url: "../CCFormDesigner/Home.aspx?FK_MapData=@@fk_frm" },
+                                                        { Type: "Node", Id: "BasicData", ParentId: "TestFrmFunc", Name: "原始数据", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../CCFormDesigner/BasicData.aspx?FK_MapData=@@fk_frm", },
                                                         ]
                                                 }
                                            ]

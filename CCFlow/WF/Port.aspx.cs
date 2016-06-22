@@ -22,6 +22,9 @@ namespace BP.Web.Port
     public partial class Port : System.Web.UI.Page
     {
         #region 必须传递参数
+        /// <summary>
+        /// 执行的内容
+        /// </summary>
         public string DoWhat
         {
             get
@@ -29,6 +32,9 @@ namespace BP.Web.Port
                 return this.Request.QueryString["DoWhat"];
             }
         }
+        /// <summary>
+        /// 当前的用户
+        /// </summary>
         public string UserNo
         {
             get
@@ -36,6 +42,9 @@ namespace BP.Web.Port
                 return this.Request.QueryString["UserNo"];
             }
         }
+        /// <summary>
+        /// 用户的安全校验码(请参考集成章节)
+        /// </summary>
         public string SID
         {
             get
@@ -78,47 +87,32 @@ namespace BP.Web.Port
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-
             Response.AddHeader("P3P", "CP=CAO PSA OUR");
-            if (this.UserNo != null && this.SID != null)
+
+            #region 安全性校验.
+            if (this.UserNo==null || this.SID==null || this.DoWhat==null)
             {
-                try
-                {
-                    string uNo = "";
-                    if (this.UserNo == "admin")
-                        uNo = "zhoupeng";
-                    else
-                        uNo = this.UserNo;
+                this.ToErrorPage("@必要的参数没有传入，请参考接口规则。");
+                return ;
+            }
 
 
-                    if (BP.WF.Dev2Interface.Port_CheckUserLogin(uNo, this.SID) == false)
-                    {
-                        this.Response.Write("非法的访问，请与管理员联系。sid=" + this.SID);
+              if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
+              {
+                        this.Response.Write("非法的访问，请与管理员联系。SID=" + this.SID);
                         return;
-                    }
-                    else
-                    {
-                        Emp emL = new Emp(this.UserNo);
-                        WebUser.Token = this.Session.SessionID;
-                        WebUser.SignInOfGenerLang(emL, SystemConfig.SysLanguage);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("@有可能您没有配置好ccflow的安全验证机制:" + ex.Message);
-                }
-            }
-            else
-            {
-                if (BP.Web.WebUser.No != "admin")
-                    throw new Exception("非法的登录用户.");
-            }
+              }
+ 
 
-            Emp em = new Emp(this.UserNo);
-            WebUser.Token = this.Session.SessionID;
-            WebUser.SignInOfGenerLang(em, SystemConfig.SysLanguage);
+                  if (BP.Web.WebUser.No !=this.UserNo)
+                  {
+                      BP.WF.Dev2Interface.Port_SigOut();
+                      BP.WF.Dev2Interface.Port_Login(this.UserNo,true);
+                  }
+                  #endregion 安全性校验.
 
-            string paras = "";
+
+                  string paras = "";
             foreach (string str in this.Request.QueryString)
             {
                 string val = this.Request.QueryString[str];
@@ -137,11 +131,8 @@ namespace BP.Web.Port
                     case DoWhatList.Start:
                     case DoWhatList.Start5:
                     case DoWhatList.JiSu:
-                    case DoWhatList.StartSmall:
                     case DoWhatList.FlowFX:
                     case DoWhatList.DealWork:
-                    case DoWhatList.DealWorkInSmall:
-                    //   case DoWhatList.CallMyFlow:
                     case "FK_Flow":
                     case "WorkID":
                     case "FK_Node":
@@ -155,15 +146,8 @@ namespace BP.Web.Port
 
             if (this.IsPostBack == false)
             {
-                if (this.IsCanLogin() == false)
-                {
-                    this.ShowMsg("<fieldset><legend>安全验证错误</legend> 系统无法执行您的请求，可能是您的登陆时间太长，请重新登陆。<br>如果您要取消安全验证请修改web.config 中IsDebug 中的值设置成1。</fieldset>");
-                    return;
-                }
-
-                BP.Port.Emp emp = new BP.Port.Emp(this.UserNo);
-                BP.Web.WebUser.SignInOfGener(emp); //开始执行登陆。
-
+                
+              
                 if (this.Request.QueryString["IsMobile"] != null)
                     BP.Web.WebUser.UserWorkDev = UserWorkDev.Mobile;
 
@@ -205,26 +189,11 @@ namespace BP.Web.Port
                         else
                             this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
                         break;
-                    case DoWhatList.StartSmall: // 发起工作　小窗口
-                        if (this.FK_Flow == null)
-                            this.Response.Redirect("Start.aspx?FK_Flow=" + this.FK_Flow + paras, true);
-                        else
-                            this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + paras, true);
-                        break;
-                    case DoWhatList.StartSmallSingle: //发起工作单独小窗口
-                        if (this.FK_Flow == null)
-                            this.Response.Redirect("Start.aspx?FK_Flow=" + this.FK_Flow + paras + "&IsSingle=1&FK_Node=" + nodeID, true);
-                        else
-                            this.Response.Redirect("MyFlowSmallSingle.aspx?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
-                        break;
                     case DoWhatList.Runing: // 在途中工作
                         this.Response.Redirect("Runing.aspx?FK_Flow=" + this.FK_Flow, true);
                         break;
                     case DoWhatList.Tools: // 工具栏目。
                         this.Response.Redirect("Tools.aspx", true);
-                        break;
-                    case DoWhatList.ToolsSmall: // 小工具栏目.
-                        this.Response.Redirect("Tools.aspx?RefNo=" + this.Request["RefNo"], true);
                         break;
                     case DoWhatList.EmpWorks: // 我的工作小窗口.
                         if (this.FK_Flow == null || this.FK_Flow == "")
@@ -267,12 +236,10 @@ namespace BP.Web.Port
                         break;
                     case DoWhatList.DealWork:
                         if (this.FK_Flow == null || this.WorkID == null)
-                            throw new Exception("@参数 FK_Flow 或者 WorkID 为Null 。");
-                        this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);
-                        break;
-                    case DoWhatList.DealWorkInSmall:
-                        if (this.FK_Flow == null || this.WorkID == null)
-                            throw new Exception("@参数 FK_Flow 或者 WorkID 为Null 。");
+                        {
+                            this.ToErrorPage("@参数 FK_Flow 或者 WorkID 为Null 。");
+                            return;
+                        }
                         this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);
                         break;
                     default:
@@ -293,7 +260,7 @@ namespace BP.Web.Port
         {
             if (BP.Sys.SystemConfig.AppSettings["IsAuth"] == "1")
             {
-                if (this.SID != this.GetKey())
+                if (this.SID != this.GetSID())
                 {
                     if (SystemConfig.IsDebug)
                         return true;
@@ -303,9 +270,9 @@ namespace BP.Web.Port
             }
             return true;
         }
-        public string GetKey()
+        public string GetSID()
         {
-            return BP.DA.DBAccess.RunSQLReturnString("SELECT SID From Port_Emp WHERE no='" + this.UserNo + "'");
+            return BP.DA.DBAccess.RunSQLReturnString("SELECT SID From Port_Emp WHERE No='" + this.UserNo + "'");
         }
 
         #region Web 窗体设计器生成的代码

@@ -102,15 +102,18 @@ namespace BP.Web.Port
                 return;
             }
 
-
             if (BP.Web.WebUser.No != this.UserNo)
             {
                 BP.WF.Dev2Interface.Port_SigOut();
                 BP.WF.Dev2Interface.Port_Login(this.UserNo, true);
             }
+            if (this.Request.QueryString["IsMobile"] == "1")
+                BP.Web.WebUser.UserWorkDev = UserWorkDev.Mobile;
+            else
+                BP.Web.WebUser.UserWorkDev = UserWorkDev.PC;
             #endregion 安全性校验.
 
-
+            #region 生成参数串.
             string paras = "";
             foreach (string str in this.Request.QueryString)
             {
@@ -142,12 +145,8 @@ namespace BP.Web.Port
                         break;
                 }
             }
+            #endregion 生成参数串.
 
-
-            if (this.Request.QueryString["IsMobile"] =="1" )
-                BP.Web.WebUser.UserWorkDev = UserWorkDev.Mobile;
-            else
-                BP.Web.WebUser.UserWorkDev = UserWorkDev.PC;
 
 
             string nodeID = int.Parse(this.FK_Flow + "01").ToString();

@@ -902,6 +902,7 @@
     <Content Include="WF\CCForm\FrmExcel.aspx" />
     <Content Include="WF\CCForm\Img\loading.gif" />
     <Content Include="WF\CCForm\FrmWord.aspx" />
+    <Content Include="WF\CCForm\Port.aspx" />
     <Content Include="WF\CH.aspx" />
     <Content Include="WF\CH\ByDepts.aspx" />
     <Content Include="WF\CH\ByEmps.aspx" />
@@ -1211,6 +1212,7 @@
     <Content Include="SDKFlowDemo\SDK\Site.Master" />
     <Content Include="SDKFlowDemo\WinOpen.master" />
     <None Include="Service References\CloundWS\WS.wsdl" />
+    <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
     <Content Include="WF\Data\XML\BPMMenu.xml">
@@ -4494,6 +4496,13 @@
     </Compile>
     <Compile Include="WF\CCForm\FrmWord.aspx.designer.cs">
       <DependentUpon>FrmWord.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\CCForm\Port.aspx.cs">
+      <DependentUpon>Port.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\CCForm\Port.aspx.designer.cs">
+      <DependentUpon>Port.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CH.aspx.cs">
       <DependentUpon>CH.aspx</DependentUpon>

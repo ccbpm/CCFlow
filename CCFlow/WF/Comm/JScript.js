@@ -1,7 +1,7 @@
+ï»¿
 
 
-
-/* Table ÌØĞ§·ç¸ñ */
+/* Table ç‰¹æ•ˆé£æ ¼ */
 function TROver(ctrl) {
     ctrl.style.backgroundColor = 'LightSteelBlue';
 }
@@ -39,7 +39,7 @@ function TBOnblur(ctrl) {
     ctrl.className = s;
 }
 
-/* Ä¬ÈÏÖ²ÎÊÌâ */
+/* é»˜è®¤æ¤é—®é¢˜ */
 function OpenHelperTBNo(appPath, EnsName, ctl) {
     var url = appPath + '/Comm/DataHelp.htm?' + appPath + '/Comm/HelperOfTBNo.aspx?EnsName=' + EnsName;
     var str = window.showModalDialog(url, '', 'dialogHeight: 550px; dialogWidth:950px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no');
@@ -73,33 +73,33 @@ function WinShowModalDialog(url, winName) {
 
 function WinShowModalDialog(url, winName, w, h) {
     var explorer = window.navigator.userAgent;
-    if (explorer.indexOf("Chrome") >= 0) {//¹È¸èµÄ
+    if (explorer.indexOf("Chrome") >= 0) {//è°·æ­Œçš„
         window.open(url, "sd", "scrollbars=yes,resizable=yes,center=yes,minimize=yes,maximize=yes,height= 600px,width= 550px, top=50px, left= 650px");
     }
-    else {//IE,»ğºü
+    else {//IE,ç«ç‹
         var v = window.showModalDialog(url, '', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 550px; dialogTop: 50px; dialogLeft: 650px;');
     }
     return;
 }
-function WinShowModalDialog_Accepter(url) {//14.12.11   ÇØ Ñ¡ÔñÆ÷ ×¢Òâ²ÎÊıµÄÉèÖÃ
+function WinShowModalDialog_Accepter(url) {//14.12.11   ç§¦ é€‰æ‹©å™¨ æ³¨æ„å‚æ•°çš„è®¾ç½®
     var explorer = window.navigator.userAgent;
-    //    if (explorer.indexOf("Chrome") >= 0) {//¹È¸èµÄ
+    //    if (explorer.indexOf("Chrome") >= 0) {//è°·æ­Œçš„
     window.open(url, "sd", "scrollbars=yes,resizable=yes,center=yes,minimize=yes,resizable=no,maximize=yes,height= 600px,width= 550px, top=50px, left= 650px");
     //    }
-    //    else {//IE,»ğºü
+    //    else {//IE,ç«ç‹
     //        var v = window.showModalDialog(url, '', 'scrollbars=yes;resizable=yes;center=yes;resizable:no;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 550px; dialogTop: 50px; dialogLeft: 650px;');
     //    }
     return;
 }
 //function ReturnVal(ctrl, url, winName) {
-//    //update by dgq 2013-4-12 ÅĞ¶ÏÓĞÃ»ÓĞ£¿
+//    //update by dgq 2013-4-12 åˆ¤æ–­æœ‰æ²¡æœ‰ï¼Ÿ
 //    if (ctrl && ctrl.value != "") {
 //        if (url.indexOf('?') > 0)
 //            url = url + '&CtrlVal=' + ctrl.value;
 //        else
 //            url = url + '?CtrlVal=' + ctrl.value;
 //    }
-//    //ĞŞ¸Ä±êÌâ¿ØÖÆ²»½øĞĞ±£´æ
+//    //ä¿®æ”¹æ ‡é¢˜æ§åˆ¶ä¸è¿›è¡Œä¿å­˜
 //    if (typeof self.parent.TabFormExists != 'undefined') {
 //        var bExists = self.parent.TabFormExists();
 //        if (bExists) {
@@ -108,18 +108,18 @@ function WinShowModalDialog_Accepter(url) {//14.12.11   ÇØ Ñ¡ÔñÆ÷ ×¢Òâ²ÎÊıµÄÉèÖÃ
 //    }
 
 //    //OpenJbox();
-//    if (window.ActiveXObject) {//Èç¹ûÊÇIEä¯ÀÀÆ÷£¬Ö´ĞĞÏÂÁĞ·½·¨
+//    if (window.ActiveXObject) {//å¦‚æœæ˜¯IEæµè§ˆå™¨ï¼Œæ‰§è¡Œä¸‹åˆ—æ–¹æ³•
 //        var v = window.showModalDialog(url, winName, 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
 //        if (v == null || v == '' || v == 'NaN') {
 //            return;
 //        }
 //        ctrl.value = v;
 //    }
-//    else {//Èç¹ûÊÇchrome£¬Ö´ĞĞÏÂÁĞ·½·¨a
+//    else {//å¦‚æœæ˜¯chromeï¼Œæ‰§è¡Œä¸‹åˆ—æ–¹æ³•a
 //        try {
 //            //OpenJbox();
 //            $.jBox("iframe:" + url, {
-//                title: '±êÌâ',
+//                title: 'æ ‡é¢˜',
 //                width: 800,
 //                height: 350,
 //                buttons: { 'Sure': 'ok' },
@@ -132,7 +132,7 @@ function WinShowModalDialog_Accepter(url) {//14.12.11   ÇØ Ñ¡ÔñÆ÷ ×¢Òâ²ÎÊıµÄÉèÖÃ
 //            alert(e);
 //        }
 //    }
-//    //ĞŞ¸Ä±êÌâ£¬Ê§È¥½¹µãÊ±½øĞĞ±£´æ
+//    //ä¿®æ”¹æ ‡é¢˜ï¼Œå¤±å»ç„¦ç‚¹æ—¶è¿›è¡Œä¿å­˜
 //    if (typeof self.parent.TabFormExists != 'undefined') {
 //        var bExists = self.parent.TabFormExists();
 //        if (bExists) {
@@ -175,7 +175,7 @@ function WinOpenAndBrowser(url) {
     }
     else {
         if (Sys.ie) {
-            alert(encodeURI("´ËÄ£Ê½²»Ö§³ÖIE10Ò»ÏÂ°æ±¾£¬ÈçĞèÊ¹ÓÃÇëÉı¼¶IE»òÕßÊ¹ÓÃchromeä¯ÀÀÆ÷£¬Ğ»Ğ»"));
+            alert(encodeURI("æ­¤æ¨¡å¼ä¸æ”¯æŒIE10ä¸€ä¸‹ç‰ˆæœ¬ï¼Œå¦‚éœ€ä½¿ç”¨è¯·å‡çº§IEæˆ–è€…ä½¿ç”¨chromeæµè§ˆå™¨ï¼Œè°¢è°¢"));
         }
     }
 }
@@ -194,8 +194,8 @@ function Esc() {
     return true;
 }
 
-/************************************************ Ğ£ÑéÀà top *********************************************************/
-/* ÓÃÀ´ÑéÖ¤ ÊäÈëµÄÊÇ²»ÊÇÒ»¸öÊı×Ö£® onkeypress */
+/************************************************ æ ¡éªŒç±» top *********************************************************/
+/* ç”¨æ¥éªŒè¯ è¾“å…¥çš„æ˜¯ä¸æ˜¯ä¸€ä¸ªæ•°å­—ï¼ onkeypress */
 function VirtyInt(ctrl) {
 
 }
@@ -241,11 +241,11 @@ function VirtyNum(ctrl) {
                 event.keyCode = 0;
         }
     }
-    //·Ç0-9£¬²¢ÇÒ²»Îª¶ººÅ»ò¼õºÅ
+    //é0-9ï¼Œå¹¶ä¸”ä¸ä¸ºé€—å·æˆ–å‡å·
     if ((key < 48 || key > 57) && key != 45 && key != 46) {
         event.keyCode = 0;
     }
-    //Êı×Ö0-9
+    //æ•°å­—0-9
     if (event.keyCode >= 48 && event.keyCode <= 57)
         return true;
 
@@ -281,14 +281,14 @@ function VirtyNum(ctrl, type) {
         }
     }
     if (type == 'int') {
-        //¸ººÅÖ»ÄÜÓĞÒ»¸ö
+        //è´Ÿå·åªèƒ½æœ‰ä¸€ä¸ª
         if (ctrl.value.indexOf('-') > 0 && event.keyCode == 45)
             return false;
-        //²»ÄÜ°üº¬Ğ¡Êıµã
+        //ä¸èƒ½åŒ…å«å°æ•°ç‚¹
         if (event.keyCode == 46)
             return false;
     }
-    
+
     if (type == 'float') {
         if (ctrl.value.indexOf('.') > 0 && event.keyCode == 46)
             return false;
@@ -303,7 +303,7 @@ function VirtyNum(ctrl, type) {
         return false;
     if (event.keyCode == 8)
         return true;
-  
+
     //   alert(event.keyCode);
     var txtval = ctrl.value;
     var key = event.keyCode;
@@ -320,11 +320,11 @@ function VirtyNum(ctrl, type) {
                 event.keyCode = 0;
         }
     }
-    //·Ç0-9£¬
+    //é0-9ï¼Œ
     if ((key < 48 || key > 57) && key != 45 && key != 46) {
         event.keyCode = 0;
     }
-    //Êı×Ö0-9
+    //æ•°å­—0-9
     if (event.keyCode >= 48 && event.keyCode <= 57)
         return true;
 
@@ -376,9 +376,9 @@ function outputCents(amount) {
     amount = Math.round(((amount) - Math.floor(amount)) * 100);
     return (amount < 10 ? '.0' + amount : '.' + amount);
 }
-/************************************************ Ğ£ÑéÀàEnd *********************************************************/
+/************************************************ æ ¡éªŒç±»End *********************************************************/
 
-/* ÏÔÊ¾ÈÕÆÚ */
+/* æ˜¾ç¤ºæ—¥æœŸ */
 function ShowDateTime(appPath, ctrl) {
     url = appPath + '/Comm/Pub/CalendarHelp.htm';
     val = window.showModalDialog(url, '', 'dialogHeight: 335px; dialogWidth: 340px; center: yes; help: no');
@@ -387,7 +387,7 @@ function ShowDateTime(appPath, ctrl) {
     ctrl.value = val;
 }
 
-/* Ä¬ÈÏÖ²ÎÊÌâ */
+/* é»˜è®¤æ¤é—®é¢˜ */
 function DefaultVal1(appPath, ctrl, className, attrKey, empId) {
     if (event.button != 2)
         return;
@@ -399,7 +399,7 @@ function DefaultVal1(appPath, ctrl, className, attrKey, empId) {
     ctrl.value = str;
 }
 
-/* Ä¬ÈÏÖ²ÎÊÌâ¡¡ */
+/* é»˜è®¤æ¤é—®é¢˜ã€€ */
 function RefEns(appPath, ctrl, className, attrKey) {
     if (event.button != 2)
         return;
@@ -418,7 +418,7 @@ function GetCookieVal(offset) {
         endstr = document.cookie.length;
     return unescape(document.cookie.substring(offset, endstr));
 }
-// µÃµ½cooke .Èç¹ûÊÇNull , ·µ»ØµÄval
+// å¾—åˆ°cooke .å¦‚æœæ˜¯Null , è¿”å›çš„val
 function GetCookie(name, isNullReVal) {
     var arg = name + "=";
     var alen = arg.length;
@@ -435,7 +435,7 @@ function GetCookie(name, isNullReVal) {
     return isNullReVal;
 }
 
-// ÉèÖÃcook
+// è®¾ç½®cook
 function SetCookie(name, value) {
     var argv = SetCookie.arguments;
     var argc = SetCookie.arguments.length;
@@ -534,7 +534,7 @@ function ReinitIframe(frmID, tdID) {
     }
     return;
 }
-/* ÉèÖÃÑ¡¿ò cb1.Attributes["onclick"] = "SetSelected(this,'" + ctlIDs + "')"; */
+/* è®¾ç½®é€‰æ¡† cb1.Attributes["onclick"] = "SetSelected(this,'" + ctlIDs + "')"; */
 function SetSelected(cb, ids) {
     //alert(ids);
     var arrmp = ids.split(',');
@@ -562,13 +562,13 @@ function SetSelected(cb, ids) {
 }
 
 
-/* ÊäÈëµÄÊÇ·ñÊÇ×Ö¶ÎÀàĞÍ */
+/* è¾“å…¥çš„æ˜¯å¦æ˜¯å­—æ®µç±»å‹ */
 function IsDigit(s) {
     if (s.value == '' || s.value == ' ')
         return true;
     var patrn = new RegExp("^[a-zA-Z][a-zA-Z0-9_]*$");
     if (!patrn.exec(s.value)) {
-        alert("ÇëÊäÈë×ÖÄ¸»òÊı×Ö£¬µÚÒ»¸ö×Ö·û±ØĞëÊÇ×ÖÄ¸£¡")
+        alert("è¯·è¾“å…¥å­—æ¯æˆ–æ•°å­—ï¼Œç¬¬ä¸€ä¸ªå­—ç¬¦å¿…é¡»æ˜¯å­—æ¯ï¼")
         s.value = "";
         return false;
     }
@@ -588,7 +588,7 @@ function parseVal2Float(ctrl) {
 
 function TBHelp(ctrl, appPath, attrKey, enName) {
     //alert("woshiduohangwenbenkuang:" + ctrl + "-" + appPath + "-" + attrKey + "-" + enName);
-    //Ë«»÷¶àĞĞÎÄ±¾¿ò  woshiduohangwenbenkuang:TB_WTMS-/-WTMS-ND1101
+    //åŒå‡»å¤šè¡Œæ–‡æœ¬æ¡†  woshiduohangwenbenkuang:TB_WTMS-/-WTMS-ND1101
 
     var url = "/WF/Comm/HelperOfTBEUI.aspx?AttrKey=" + attrKey + "&WordsSort=3" + "&FK_MapData=" + enName + "&id=" + ctrl;
     var explorer = window.navigator.userAgent;
@@ -610,11 +610,11 @@ function WorkCheckTBHelp(ctrl, op) {
 
     document.getElementsByTagName("iframe")[0].contentDocument.body.children[0][5].innerHTML = str;
 }
-//Êı×ÖÇ©Ãû
+//æ•°å­—ç­¾å
 function SigantureAct(ele, UserNo, FK_MapData, KeyOfEn, WorkID) {
     if (ele) {
         var imgSrc = ele.src;
-        //ĞŞ¸ÄÊı¾İ
+        //ä¿®æ”¹æ•°æ®
         var json_data = {
             "method": "sigantureact",
             "imgSrc": imgSrc,
@@ -630,7 +630,7 @@ function SigantureAct(ele, UserNo, FK_MapData, KeyOfEn, WorkID) {
 
         }
         var localHref = GetLocalWFPreHref();
-        //ĞŞ¸ÄÊı¾İ
+        //ä¿®æ”¹æ•°æ®
         $.ajax({
             type: "get",
             url: localHref + "/WF/Comm/HelperOfSiganture.aspx",
@@ -645,14 +645,14 @@ function SigantureAct(ele, UserNo, FK_MapData, KeyOfEn, WorkID) {
                 //HideLoading();
             },
             error: function () {
-                //ÇëÇó³ö´í´¦Àí
-                alert("Êı×ÖÇ©Ãû³ö´í£¬ÇëÁªÏµ¹ÜÀíÔ±¼ì²é±íµ¥ÊôĞÔÉèÖÃ¡£");
+                //è¯·æ±‚å‡ºé”™å¤„ç†
+                alert("æ•°å­—ç­¾åå‡ºé”™ï¼Œè¯·è”ç³»ç®¡ç†å‘˜æ£€æŸ¥è¡¨å•å±æ€§è®¾ç½®ã€‚");
             }
         });
     }
 }
 
-//»ñÈ¡WFÖ®Ç°Â·¾¶
+//è·å–WFä¹‹å‰è·¯å¾„
 function GetLocalWFPreHref() {
     var url = window.location.href;
     if (url.indexOf('/WF/') >= 0) {

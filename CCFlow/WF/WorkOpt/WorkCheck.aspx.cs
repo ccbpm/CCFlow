@@ -277,244 +277,194 @@ namespace CCFlow.WF.WorkOpt
 
                             if (tk.HisActionType == ActionType.WorkCheck)
                             {
-                                #region 显示出来队列流程中未审核的那些人.
-                                if (nd.TodolistModel == TodolistModel.Order)
-                                {
-                                    /* 如果是队列流程就要显示出来未审核的那些人.*/
-                                    string empsNodeOrder = "";  //记录当前节点队列访问未执行的人员
-                                    GenerWorkerLists gwls = new GenerWorkerLists(this.WorkID);
-                                    foreach (GenerWorkerList item in gwls)
-                                    {
-                                        if (item.FK_Node == nd.NodeID)
-                                        {
-                                            empsNodeOrder += item.FK_Emp;
-                                        }
-                                    }
+                                //用户签名信息，显示签名or图片
+                                string sigantrueHtml = "";
 
-                                    foreach (SelectAccper accper in accepts)
-                                    {
-                                        if (empsorder.Contains(accper.FK_Emp) == true)
-                                            continue;
-                                        if (empsNodeOrder.Contains(accper.FK_Emp) == false)
-                                            continue;
-                                        if (tk.EmpFrom == accper.FK_Emp)
+                                if (wcDesc.SigantureEnabel)
+                                {
+                                    sigantrueHtml = BP.WF.Glo.GenerUserSigantureHtml(tk.EmpFrom, tk.EmpFromT);
+                                }
+                                else
+                                {
+                                    sigantrueHtml = BP.WF.Glo.GenerUserImgSmallerHtml(tk.EmpFrom, tk.EmpFromT);
+                                }
+
+                                //审核组件附件数据
+                                FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
+                                QueryObject obj_Ath = new QueryObject(athDBs);
+                                obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, tk.NDFrom + "_FrmWorkCheck");
+                                obj_Ath.addAnd();
+                                obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                                obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
+                                obj_Ath.DoQuery();
+
+                                /*审核信息,首先输出它.*/
+
+                                #region 根据类型加载标题  表格  自由
+                                //意见输入框
+                                PostBackTextBox tb = new PostBackTextBox();
+                                tb.ID = "TB_Doc";
+                                tb.TextMode = TextBoxMode.MultiLine;
+                                tb.OnBlur += new EventHandler(btn_Save_Click);
+                                tb.Style["width"] = "98%";
+                                tb.Style["border-style"] = "solid";
+                                tb.Rows = 3;
+                                if (DoType != null && DoType == "View")
+                                {
+                                    tb.ReadOnly = true;
+                                }
+                                tb.Text = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.NodeID);
+                                if (tb.Text == "同意")
+                                    tb.Text = "";
+
+                                switch (wcDesc.HisFrmWorkShowModel)//可编辑框全局唯一
+                                {
+                                    #region 表格模式
+                                    case FrmWorkShowModel.Table:
+                                        if (ndfrom != tk.NDFrom)
                                         {
-                                            /* 审核信息,首先输出它.*/
-                                            this.Pub1.Add(tk.MsgHtml);
-                                            this.Pub1.Add("<img src='../Img/Mail_Read.png' border=0/>" + tk.ActionTypeText);
-                                            this.Pub1.Add(tk.RDT);
-                                            this.Pub1.Add(BP.WF.Glo.GenerUserImgSmallerHtml(tk.EmpFrom, tk.EmpFromT));
-                                            this.Pub1.AddHR();
-                                            empcheck += tk.EmpFrom;
+                                            this.Pub1.AddTable("style='padding:0px;width:100%;table-layout: fixed;' leftMargin=0 topMargin=0");
+
+                                            this.Pub1.AddTR(" style='background-color: #E2F6FB' ");
+                                            this.Pub1.AddTD(nd.FWCNodeName);
+                                            this.Pub1.AddTREnd();
+
+                                            ndfrom = tk.NDFrom;
+                                        }
+
+
+
+                                        //审核组件配置字段
+                                        FrmWorkCheck frmWorkCheck = new FrmWorkCheck(tk.NDFrom);
+                                        //存在审核组件配置字段，则不显示审核意见框
+                                        if (!string.IsNullOrEmpty(frmWorkCheck.FWCFields))
+                                        {
+                                            AtPara ap = new AtPara(tk.Msg.Replace(";", "@"));
+                                            //字段生成表单
+                                            Attrs fwcAttrs = new Attrs(frmWorkCheck.FWCFields);
+                                            this.Pub1.AddTR();
+                                            this.Pub1.AddTDBegin();
+                                            this.Pub1.BindAttrsForHtml(fwcAttrs, ap);
+                                            this.Pub1.AddTDEnd();
+                                            this.Pub1.AddTREnd();
+                                        }
+                                        else
+                                        {
+                                            //审核意见
+                                            this.Pub1.AddTR();
+                                            #region
+
+                                            if (tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
+                                                wcDesc.HisFrmWorkCheckType == FWCType.Check || (
+                                                (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
+                                                ))
+                                            {
+                                                isExitTb_doc = false;
+
+                                                this.Pub1.AddTDBegin();
+
+                                                this.Pub1.Add("<div style='float:left'>" + wcDesc.FWCOpLabel + "</div><div style='float:left'><a href=javascript:TBHelp('WorkCheck_Doc','ND" + NodeID + "')" + "><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>"
+                    + "<div style='float:right' onmouseover='UploadFileChange()'>" + uploadJS.ToString() + "</div>");
+
+                                                this.Pub1.Add("<div style='float:left;width:100%;'>");
+                                                this.Pub1.Add(tb);
+                                                this.Pub1.Add("</div>");
+
+                                                this.Pub1.AddTDEnd();
+                                            }
+                                            else
+                                            {
+                                                this.Pub1.Add("<td style='WORD-WRAP: break-word;min-height:80px;'>" + tk.MsgHtml + "</td>");
+                                            }
+                                            #endregion
+
+                                            this.Pub1.AddTREnd();
+                                        }
+                                        //附件
+                                        AddTDOfFrmAttachMent(athDBs, tk);
+                                        //签名与日期
+                                        this.Pub1.AddTR();
+                                        this.Pub1.Add("<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + sigantrueHtml + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;&nbsp;&nbsp;" + tk.RDT + "</td>");
+                                        this.Pub1.AddTREnd();
+                                        break;
+                                    #endregion
+
+                                    #region 自由模式
+                                    case FrmWorkShowModel.Free:
+                                        if (ndfrom != tk.NDFrom)
+                                        {
+                                            this.Pub1.AddTable(" style='padding:0px;width:100%;table-layout: fixed;' leftMargin=0 topMargin=0");
+                                            //处理节点名称分组列，合并多少行
+                                            //不严格的计算，利用浏览器的容错，渲染时自动匹配
+                                            int rowspan = 3 * tks.Count;
+
+                                            this.Pub1.AddTR();
+                                            this.Pub1.Add("<td  rowspan='" + rowspan + "' style='width:20px;border:1px solid #D6DDE6;'>"
+                                                + nd.FWCNodeName + "</td>");
+                                            this.Pub1.AddTREnd();
+
+                                            ndfrom = tk.NDFrom;
+                                        }
+
+
+                                        //审核组件配置字段
+                                        frmWorkCheck = new FrmWorkCheck(tk.NDFrom);
+                                        //存在审核组件配置字段，则不显示审核意见框
+                                        if (!string.IsNullOrEmpty(frmWorkCheck.FWCFields))
+                                        {
+                                            AtPara ap = new AtPara(tk.Msg.Replace(";", "@"));
+                                            //字段生成表单.
+                                            Attrs fwcAttrs = new Attrs(frmWorkCheck.FWCFields);
+                                            this.Pub1.AddTDBegin();
+                                            this.Pub1.BindAttrsForHtml(fwcAttrs, ap);
+                                            this.Pub1.AddTDEnd();
+                                            this.Pub1.AddTREnd();
                                         }
                                         else
                                         {
                                             this.Pub1.AddTR();
-                                            if (accper.AccType == 0)
-                                                this.Pub1.Add(" <font style='color:Red;' >执行</font>");
-                                            else
-                                                this.Pub1.Add(" <font style='color:Red;' >抄送</font>");
-                                            this.Pub1.Add("无");
-                                            this.Pub1.Add(" <font style='color:Red;' >" + BP.WF.Glo.GenerUserImgSmallerHtml(accper.FK_Emp, accper.EmpName) + "</font>");
-                                            this.Pub1.Add(" <font style='color:Red;' >" + accper.Info + "</font>");
-                                            this.Pub1.AddHR();
-                                            empsorder += accper.FK_Emp;
-                                        }
-                                    }
-                                }
-                                #endregion 显示出来队列流程中未审核的那些人.
-                                else
-                                {
-                                    //用户签名信息，显示签名or图片
-                                    string sigantrueHtml = "";
-
-                                    if (wcDesc.SigantureEnabel)
-                                    {
-                                        sigantrueHtml = BP.WF.Glo.GenerUserSigantureHtml(tk.EmpFrom, tk.EmpFromT);
-                                    }
-                                    else
-                                    {
-                                        sigantrueHtml = BP.WF.Glo.GenerUserImgSmallerHtml(tk.EmpFrom, tk.EmpFromT);
-                                    }
-
-                                    //审核组件附件数据
-                                    FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
-                                    QueryObject obj_Ath = new QueryObject(athDBs);
-                                    obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, tk.NDFrom + "_FrmWorkCheck");
-                                    obj_Ath.addAnd();
-                                    obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
-                                    obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
-                                    obj_Ath.DoQuery();
-
-                                    /*审核信息,首先输出它.*/
-
-                                    #region 根据类型加载标题  表格  自由
-                                    //意见输入框
-                                    PostBackTextBox tb = new PostBackTextBox();
-                                    tb.ID = "TB_Doc";
-                                    tb.TextMode = TextBoxMode.MultiLine;
-                                    tb.OnBlur += new EventHandler(btn_Save_Click);
-                                    tb.Style["width"] = "98%";
-                                    tb.Style["border-style"] = "solid";
-                                    tb.Rows = 3;
-                                    if (DoType != null && DoType == "View")
-                                    {
-                                        tb.ReadOnly = true;
-                                    }
-                                    tb.Text = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.NodeID);
-                                    if (tb.Text == "同意")
-                                        tb.Text = "";
-
-                                    switch (wcDesc.HisFrmWorkShowModel)//可编辑框全局唯一
-                                    {
-                                        #region 表格模式
-                                        case FrmWorkShowModel.Table:
-                                            if (ndfrom != tk.NDFrom)
+                                            if (tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
+                                             wcDesc.HisFrmWorkCheckType == FWCType.Check || (
+                                             (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog
+                                             || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
+                                             || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
+                                             ))
                                             {
-                                                this.Pub1.AddTable("style='padding:0px;width:100%;table-layout: fixed;' leftMargin=0 topMargin=0");
-
-                                                this.Pub1.AddTR(" style='background-color: #E2F6FB' ");
-                                                this.Pub1.AddTD(nd.FWCNodeName);
-                                                this.Pub1.AddTREnd();
-
-                                                ndfrom = tk.NDFrom;
-                                            }
-
-
-
-                                            //审核组件配置字段
-                                            FrmWorkCheck frmWorkCheck = new FrmWorkCheck(tk.NDFrom);
-                                            //存在审核组件配置字段，则不显示审核意见框
-                                            if (!string.IsNullOrEmpty(frmWorkCheck.FWCFields))
-                                            {
-                                                AtPara ap = new AtPara(tk.Msg.Replace(";", "@"));
-                                                //字段生成表单
-                                                Attrs fwcAttrs = new Attrs(frmWorkCheck.FWCFields);
-                                                this.Pub1.AddTR();
-                                                this.Pub1.AddTDBegin();
-                                                this.Pub1.BindAttrsForHtml(fwcAttrs, ap);
-                                                this.Pub1.AddTDEnd();
-                                                this.Pub1.AddTREnd();
-                                            }
-                                            else
-                                            {
-                                                //审核意见
-                                                this.Pub1.AddTR();
-                                                #region
-
-                                                if (this.FK_Node == tk.NDFrom && isExitTb_doc && (
-                                                    wcDesc.HisFrmWorkCheckType == FWCType.Check || (
-                                                    (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
-                                                    ))
-                                                {
-                                                    isExitTb_doc = false;
-
-                                                    this.Pub1.AddTDBegin();
-
-                                                    this.Pub1.Add("<div style='float:left'>" + wcDesc.FWCOpLabel + "</div><div style='float:left'><a href=javascript:TBHelp('WorkCheck_Doc','ND" + NodeID + "')" + "><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>"
-                        + "<div style='float:right' onmouseover='UploadFileChange()'>" + uploadJS.ToString() + "</div>");
-
-                                                    this.Pub1.Add("<div style='float:left;width:100%;'>");
-                                                    this.Pub1.Add(tb);
-                                                    this.Pub1.Add("</div>");
-
-                                                    this.Pub1.AddTDEnd();
-                                                }
-                                                else
-                                                {
-                                                    this.Pub1.Add("<td style='WORD-WRAP: break-word;min-height:80px;'>" + tk.MsgHtml + "</td>");
-                                                }
-                                                #endregion
-
-                                                this.Pub1.AddTREnd();
-                                            }
-                                            //附件
-                                            AddTDOfFrmAttachMent(athDBs, tk);
-                                            //签名与日期
-                                            this.Pub1.AddTR();
-                                            this.Pub1.Add("<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + sigantrueHtml + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;&nbsp;&nbsp;" + tk.RDT + "</td>");
-                                            this.Pub1.AddTREnd();
-                                            break;
-                                        #endregion
-
-                                        #region 自由模式
-                                        case FrmWorkShowModel.Free:
-                                            if (ndfrom != tk.NDFrom)
-                                            {
-                                                this.Pub1.AddTable(" style='padding:0px;width:100%;table-layout: fixed;' leftMargin=0 topMargin=0");
-                                                //处理节点名称分组列，合并多少行
-                                                //不严格的计算，利用浏览器的容错，渲染时自动匹配
-                                                int rowspan = 3 * tks.Count;
-
-                                                this.Pub1.AddTR();
-                                                this.Pub1.Add("<td  rowspan='" + rowspan + "' style='width:20px;border:1px solid #D6DDE6;'>"
-                                                    + nd.FWCNodeName + "</td>");
-                                                this.Pub1.AddTREnd();
-
-                                                ndfrom = tk.NDFrom;
-                                            }
-
-
-                                            //审核组件配置字段
-                                            frmWorkCheck = new FrmWorkCheck(tk.NDFrom);
-                                            //存在审核组件配置字段，则不显示审核意见框
-                                            if (!string.IsNullOrEmpty(frmWorkCheck.FWCFields))
-                                            {
-                                                AtPara ap = new AtPara(tk.Msg.Replace(";", "@"));
-                                                //字段生成表单.
-                                                Attrs fwcAttrs = new Attrs(frmWorkCheck.FWCFields);
-                                                this.Pub1.AddTDBegin();
-                                                this.Pub1.BindAttrsForHtml(fwcAttrs, ap);
-                                                this.Pub1.AddTDEnd();
-                                                this.Pub1.AddTREnd();
-                                            }
-                                            else
-                                            {
-                                                this.Pub1.AddTR();
-                                                   if (this.FK_Node == tk.NDFrom && isExitTb_doc && (
-                                                    wcDesc.HisFrmWorkCheckType == FWCType.Check || (
-                                                    (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog 
-                                                    || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
-                                                    || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
-                                                    ))
-                                                {
                                                 //if (this.FK_Node == tk.NDFrom && isExitTb_doc)
                                                 //{
-                                                    isExitTb_doc = false;
-                                                    this.Pub1.AddTDBegin();
+                                                isExitTb_doc = false;
+                                                this.Pub1.AddTDBegin();
 
-                                                    this.Pub1.Add("<div style='float:left'>" + wcDesc.FWCOpLabel + "</div><div style='float:left'><a href=javascript:TBHelp('WorkCheck_Doc','ND" + NodeID + "')" + "><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>"
-                        + "<div style='float:right' onmouseover='UploadFileChange()'>" + uploadJS.ToString() + "</div>");
+                                                this.Pub1.Add("<div style='float:left'>" + wcDesc.FWCOpLabel + "</div><div style='float:left'><a href=javascript:TBHelp('WorkCheck_Doc','ND" + NodeID + "')" + "><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>"
+                    + "<div style='float:right' onmouseover='UploadFileChange()'>" + uploadJS.ToString() + "</div>");
 
-                                                    this.Pub1.Add("<div style='float:left;width:100%;'>");
-                                                    this.Pub1.Add(tb);
-                                                    this.Pub1.Add("</div>");
+                                                this.Pub1.Add("<div style='float:left;width:100%;'>");
+                                                this.Pub1.Add(tb);
+                                                this.Pub1.Add("</div>");
 
-                                                    this.Pub1.AddTDEnd();
-                                                }
-                                                else
-                                                {
-                                                    this.Pub1.Add("<td style='WORD-WRAP: break-word;min-height:80px;'>" + tk.MsgHtml + "</td>");
-                                                }
-                                                this.Pub1.AddTREnd();
+                                                this.Pub1.AddTDEnd();
                                             }
-                                            //附件
-                                            AddTDOfFrmAttachMent(athDBs, tk);
-                                            this.Pub1.AddTR();
-                                            this.Pub1.Add("<td style=' text-align:right;height:35px;line-height:35px;'>签名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + sigantrueHtml + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;&nbsp;&nbsp;" + tk.RDT + "</td>");
+                                            else
+                                            {
+                                                this.Pub1.Add("<td style='WORD-WRAP: break-word;min-height:80px;'>" + tk.MsgHtml + "</td>");
+                                            }
                                             this.Pub1.AddTREnd();
+                                        }
+                                        //附件
+                                        AddTDOfFrmAttachMent(athDBs, tk);
+                                        this.Pub1.AddTR();
+                                        this.Pub1.Add("<td style=' text-align:right;height:35px;line-height:35px;'>签名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + sigantrueHtml + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;&nbsp;&nbsp;" + tk.RDT + "</td>");
+                                        this.Pub1.AddTREnd();
 
-                                            //this.Pub1.AddTableEnd();
-                                            break;
-                                        #endregion
-                                        default:
-                                            break;
-                                    }
+                                        //this.Pub1.AddTableEnd();
+                                        break;
                                     #endregion
-
-                                    count += 1;
-                                    empcheck += tk.EmpFrom;
+                                    default:
+                                        break;
                                 }
+                                #endregion
+                                count += 1;
+                                empcheck += tk.EmpFrom;
                             }
 
                             #region 检查是否有调用子流程的情况。如果有就输出调用子流程信息. (手机部分的翻译暂时不考虑).
@@ -830,7 +780,7 @@ namespace CCFlow.WF.WorkOpt
 
                     this.Pub1.AddTable("  border=1 style='padding:0px;width:100%;' leftMargin=0 topMargin=0");
                     //配置字段解析
-                    if (!string.IsNullOrEmpty(wcDesc.FWCFields)==false)
+                    if (!string.IsNullOrEmpty(wcDesc.FWCFields))
                     {
                         this.Pub1.AddTR();
                         //不需要常用词汇

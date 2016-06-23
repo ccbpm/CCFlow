@@ -146,10 +146,8 @@ public partial class AppDemo_GuestApp_Default1 : System.Web.UI.Page
                         case DoWhatList.MyWork:
                         case DoWhatList.Start:
                         case DoWhatList.Start5:
-                        case DoWhatList.StartSmall:
                         case DoWhatList.FlowFX:
                         case DoWhatList.DealWork:
-                        case DoWhatList.DealWorkInSmall:
                         case "FK_Flow":
                         case "WorkID":
                         case "FK_Node":

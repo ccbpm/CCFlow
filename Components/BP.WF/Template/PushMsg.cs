@@ -973,7 +973,7 @@ namespace BP.WF.Template
                         //发送短信.
                         Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, empID, null);
                     }
-                    return "@已向:{" + toEmpIDs + "}发送提醒手机短信，由 SendSuccess 发出.";
+                    return "@已向:{" + toEmpIDs + "}发送提醒手机短信.";
                 }
 
                 if (this.SMSPushWay == 2)
@@ -984,7 +984,7 @@ namespace BP.WF.Template
                     {
                         //发送短信.
                         BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid);
-                        return "@已向:{" + tel + "}发送提醒手机短信，由 SendSuccess 发出.";
+                        return "@已向:{" + tel + "}发送提醒手机短信.";
                     }
                 }
             }

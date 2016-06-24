@@ -74,12 +74,18 @@ namespace CCFlow.WF.MapDef
             if (i==0 && this.FK_Node != 0)
             {
                 /*这里处理 独立表单解决方案, 如果有FK_Node 就说明该节点需要单独控制该附件的属性. */
-
-                // 查询出来原来的数据.
-                ath.FK_MapData = this.FK_MapData;
-                ath.NoOfObj = this.Ath;
-                ath.FK_Node = this.FK_Node;
-
+                MapData mapData = new MapData();
+                mapData.RetrieveByAttr(MapDataAttr.No, this.FK_MapData);
+                if (mapData.AppType == "0")
+                {
+                    FrmAttachment souceAthMent = new FrmAttachment();
+                    // 查询出来原来的数据.
+                    int rowCount = souceAthMent.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, this.Ath, FrmAttachmentAttr.FK_Node, "0");
+                    if (rowCount > 0)
+                    {
+                        ath.Copy(souceAthMent);
+                    }
+                }
                 if (this.FK_Node == 0)
                     ath.MyPK = this.FK_MapData + "_" + this.Ath;
                 else

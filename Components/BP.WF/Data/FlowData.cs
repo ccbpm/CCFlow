@@ -40,7 +40,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FlowStarter = "FlowStarter";
         /// <summary>
-        /// 流程发起日期
+        /// 流程发起时间
         /// </summary>
         public const string FlowStartRDT = "FlowStartRDT";
         /// <summary>
@@ -60,7 +60,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FlowEnder = "FlowEnder";
         /// <summary>
-        /// 流程结束日期
+        /// 流程最后处理时间
         /// </summary>
         public const string FlowEnderRDT = "FlowEnderRDT";
         /// <summary>
@@ -92,6 +92,9 @@ namespace BP.WF.Data
                 this.SetValByKey(FlowDataAttr.FlowStarter, value);
             }
         }
+        /// <summary>
+        /// 流程发起时间
+        /// </summary>
         public string FlowStartRDT
         {
             get
@@ -118,7 +121,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 流程结束时间
+        /// 流程最后处理时间
         /// </summary>
         public string FlowEnderRDT
         {
@@ -197,11 +200,11 @@ namespace BP.WF.Data
                 map.AddDDLEntities(FlowDataAttr.FK_Dept, null, "部门", new Port.Depts(), false);
                 map.AddTBString(FlowDataAttr.Title, null, "标题", true, true, 0, 100, 100,true);
                 map.AddTBString(FlowDataAttr.FlowStarter, null, "发起人", true, true, 0, 100, 100);
-                map.AddTBDateTime(FlowDataAttr.FlowStartRDT, null, "发起日期", true, true);
+                map.AddTBDateTime(FlowDataAttr.FlowStartRDT, null, "发起时间", true, true);
                 map.AddDDLSysEnum(FlowDataAttr.WFState, 0, "流程状态", true, true, "WFStateApp");
                 map.AddDDLEntities(FlowDataAttr.FK_NY, null, "年月", new BP.Pub.NYs(), false);
                 map.AddDDLEntities(FlowDataAttr.FK_Flow, null, "流程", new Flows(), false);
-                map.AddTBDateTime(FlowDataAttr.FlowEnderRDT, null, "结束日期", true, true);
+                map.AddTBDateTime(FlowDataAttr.FlowEnderRDT, null, "最后处理时间", true, true);
                 map.AddTBInt(FlowDataAttr.FlowEndNode, 0, "结束节点", true, true);
                 map.AddTBInt(FlowDataAttr.FlowDaySpan, 0, "跨度(天)", true, true);
                 map.AddTBInt(FlowDataAttr.MyNum, 1, "个数", true, true);

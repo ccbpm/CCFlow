@@ -241,7 +241,7 @@ function GenerPageKVs() {
 //}
 /* 自动填充 */
 function DDLFullCtrl(e, ddlChild, fk_mapExt) {
-    
+
     GenerPageKVs();
     var url = GetLocalWFPreHref();
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
@@ -336,8 +336,8 @@ function DDLAnsc(e, ddlChild, fk_mapExt) {
                 //此处修改，去掉直接选中上次的结果，避免错误数据的产生，edited by liuxc,2015-10-22
                 $("#" + ddlChild).prepend("<option value='' selected='selected' >*请选择</option");
                 $("#" + ddlChild).val('');
-//                $("#" + ddlChild).append("<option value='" + oldVal + "' selected='selected' >*请选择</option");
-//                $("#" + ddlChild).attr("value", oldVal);
+                //                $("#" + ddlChild).append("<option value='" + oldVal + "' selected='selected' >*请选择</option");
+                //                $("#" + ddlChild).attr("value", oldVal);
 
                 var chg = $("#" + ddlChild).attr("onchange");
 
@@ -690,11 +690,11 @@ function EleInputCheck2(ele, filter, message) {
     }
 }
 
-function EleSubmitCheck(ele,message) {
-        ele.title = message;
-        ele.style.border = "2";
-        ele.style.backgroundColor = "#FFDEAD";
-        ele.style.borderBottomColor = "Red";
+function EleSubmitCheck(ele, message) {
+    ele.title = message;
+    ele.style.border = "2";
+    ele.style.backgroundColor = "#FFDEAD";
+    ele.style.borderBottomColor = "Red";
 }
 
 //保存检查
@@ -720,7 +720,7 @@ function TB_ClickNum(ele, defVal) {
         ele.value = defVal;
         return;
     }
-    
+
     //赋值
     if (ele.value == "0") ele.value = "";
     if (ele.value == "0.00") ele.value = "";
@@ -728,7 +728,7 @@ function TB_ClickNum(ele, defVal) {
     var pointNum = ele.value.split('.');
     if (pointNum) {
         if (pointNum.length > 2) {
-            ele.value = pointNum[0] +"."+ pointNum[1];
+            ele.value = pointNum[0] + "." + pointNum[1];
         }
     }
 }

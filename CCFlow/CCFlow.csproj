@@ -1169,6 +1169,7 @@
     <Content Include="WF\Comm\JS\jquery-1.7.2.min.js" />
     <Content Include="WF\Comm\JS\SearchEasyUI.js" />
     <Content Include="WF\Comm\JS\SearchEasyUIReadOnly.js" />
+    <Content Include="WF\Comm\JS\TBHelpDiv.js" />
     <Content Include="WF\Comm\JS\Tree.js" />
     <Content Include="WF\Comm\JS\TreeEns.js" />
     <Content Include="WF\Comm\Port\DeptTree.aspx" />

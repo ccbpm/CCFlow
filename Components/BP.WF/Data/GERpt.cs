@@ -37,7 +37,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FlowStarter = "FlowStarter";
         /// <summary>
-        /// 发起日期
+        /// 发起时间
         /// </summary>
         public const string FlowStartRDT = "FlowStartRDT";
         /// <summary>
@@ -57,7 +57,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FlowEnder = "FlowEnder";
         /// <summary>
-        /// 最后活动日期
+        /// 最后处理时间
         /// </summary>
         public const string FlowEnderRDT = "FlowEnderRDT";
         /// <summary>
@@ -275,7 +275,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 流程发起日期
+        /// 流程发起时间
         /// </summary>
         public string FlowStartRDT
         {
@@ -303,7 +303,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 流程结束时间
+        /// 流程最后处理时间
         /// </summary>
         public string FlowEnderRDT
         {

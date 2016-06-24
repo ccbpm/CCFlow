@@ -273,10 +273,10 @@ namespace BP.WF
                 map.AddDDLEntities(FlowDataAttr.FK_Dept, null, "部门", new Port.Depts(), false);
                 map.AddTBString(FlowDataAttr.Title, null, "标题", true, true, 0, 100, 100);
                 map.AddTBString(FlowDataAttr.FlowStarter, null, "发起人", true, true, 0, 100, 100);
-                map.AddTBDateTime(FlowDataAttr.FlowStartRDT, null, "发起日期", true, true);
+                map.AddTBDateTime(FlowDataAttr.FlowStartRDT, null, "发起时间", true, true);
                 map.AddDDLEntities(FlowDataAttr.FK_NY, null, "年月", new BP.Pub.NYs(), false);
                 map.AddDDLEntities(FlowDataAttr.FK_Flow, null, "流程", new Flows(), false);
-                map.AddTBDateTime(FlowDataAttr.FlowEnderRDT, null, "结束日期", true, true);
+                map.AddTBDateTime(FlowDataAttr.FlowEnderRDT, null, "最后处理时间", true, true);
                 map.AddTBInt(FlowDataAttr.FlowEndNode, 0, "结束节点", true, true);
                 map.AddTBInt(FlowDataAttr.FlowDaySpan, 0, "跨度(天)", true, true);
                 map.AddTBInt(FlowDataAttr.MyNum, 1, "个数", true, true);

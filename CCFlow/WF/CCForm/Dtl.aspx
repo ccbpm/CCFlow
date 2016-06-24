@@ -64,10 +64,10 @@
         function SetChange(value) {
 
             isChange = value;
-            
+
 
             //$("#<%=isChange.ClientID %>").val(value);
-         
+
         }
 
         function DtlOpt(workId, fk_mapdtl, FID) {
@@ -162,8 +162,8 @@
 </head>
 <body onkeypress="Esc()" style="font-size: smaller;" class="easyui-layout" onblur="SetVal();"
     onload="SetVal();" topmargin="0" leftmargin="0">
-    <div style="display:none;" id="msgTitle">
-    请稍后....
+    <div style="display: none;" id="msgTitle">
+        请稍后....
     </div>
     <form id="form1" runat="server">
     <div id="mainPanle" region="center" border="false" style="position: fixed">

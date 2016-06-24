@@ -242,9 +242,9 @@ namespace BP.Demo.SDK
 
                 map.AddTBString(ND112RptAttr.FlowEmps, null, "参与人", false, true, 0, 50, 10);
                 map.AddTBString(ND112RptAttr.FlowEnder, null, "最后节点处理人", false, true, 0, 50, 10);
-                map.AddTBString(ND112RptAttr.FlowEnderRDT, null, "最后处理日期", false, true, 0, 50, 10);
+                map.AddTBString(ND112RptAttr.FlowEnderRDT, null, "最后处理时间", false, true, 0, 50, 10);
                 map.AddTBString(ND112RptAttr.FlowStarter, null, "流程发起人", false, true, 0, 50, 10);
-                map.AddTBString(ND112RptAttr.FlowStartRDT, null, "流程发起日期", false, true, 0, 50, 10);
+                map.AddTBString(ND112RptAttr.FlowStartRDT, null, "流程发起时间", false, true, 0, 50, 10);
                 map.AddTBString(ND112RptAttr.GuestNo, null, "客户编号", false, true, 0, 50, 10);
                 map.AddTBString(ND112RptAttr.GuestName, null, "客户名称", false, true, 0, 50, 10);
 

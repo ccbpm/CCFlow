@@ -306,7 +306,7 @@
             var newstr = '';
 
             for (var i = 0; i < str.length; i++) {
-                newstr += (i + 1) % rowWordsCount == 0 ? (str[i] + '\n') : str[i];
+                newstr += (i + 1) % rowWordsCount == 0 ? (str.charAt(i) + '\n') : str.charAt(i);
             }
 
             return newstr;
@@ -405,7 +405,7 @@
                     /// <summary>根据绘制的节点中的ICON对象的id获取该结点使用Raphael绘制的对象</summary>
                     /// <param name="raphaelid" Type="Int">流程编号</param>
                     for (i in this.nodes) {
-                        if (this.nodes[i].rIcon.id == raphaelid) {
+                        if (this.nodes[i] && this.nodes[i].rIcon && this.nodes[i].rIcon.id == raphaelid) {
                             return this.nodes[i];
                         }
                     }

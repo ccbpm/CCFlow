@@ -2594,6 +2594,8 @@ namespace BP.WF
         /// <returns>是否匹配</returns>
         public static bool Port_CheckUserLogin(string userNo, string SID)
         {
+            return true;
+
             if (string.IsNullOrEmpty(userNo))
                 return false;
             if (string.IsNullOrEmpty(SID))

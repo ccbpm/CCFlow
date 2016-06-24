@@ -442,6 +442,9 @@ namespace BP.WF.Template
                 return false;
             }
         }
+        /// <summary>
+        /// 是否可以编辑？
+        /// </summary>
         public int IsEditInt
         {
             get
@@ -451,6 +454,9 @@ namespace BP.WF.Template
                 return 0;
             }
         }
+        /// <summary>
+        /// 是否可以打印
+        /// </summary>
         public bool IsPrint
         {
             get
@@ -462,6 +468,9 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmNodeAttr.IsPrint, value);
             }
         }
+        /// <summary>
+        /// 是否可以打印
+        /// </summary>
         public int IsPrintInt
         {
             get
@@ -469,7 +478,9 @@ namespace BP.WF.Template
                 return this.GetValIntByKey(FrmNodeAttr.IsPrint);
             }
         }
-
+        /// <summary>
+        /// 汇总
+        /// </summary>
         public string HuiZong
         {
             get

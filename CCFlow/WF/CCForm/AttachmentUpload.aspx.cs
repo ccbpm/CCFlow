@@ -12,6 +12,7 @@ using BP.DA;
 using BP.WF.Template;
 using BP.WF;
 using System.Text;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace CCFlow.WF.CCForm
 {
@@ -204,7 +205,7 @@ namespace CCFlow.WF.CCForm
 
 
                 #region 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
-                if (result==0 && string.IsNullOrEmpty(this.FK_Flow) == false 
+                if (result == 0 && string.IsNullOrEmpty(this.FK_Flow) == false
                     && this.FK_FrmAttachment.Contains("DocMultiAth"))
                 {
                     /*如果没有查询到它,就有可能是公文多附件被删除了.*/
@@ -270,8 +271,8 @@ namespace CCFlow.WF.CCForm
                     }
                     else
                     {
-                         result = athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData,
-                             FrmAttachmentAttr.FK_Node, this.FK_Node, FrmAttachmentAttr.NoOfObj, this.Ath);
+                        result = athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData,
+                            FrmAttachmentAttr.FK_Node, this.FK_Node, FrmAttachmentAttr.NoOfObj, this.Ath);
 
                         if (result == 0) /*如果没有定义，就获取默认的.*/
                             athDesc.RetrieveFromDBSources();
@@ -575,79 +576,100 @@ namespace CCFlow.WF.CCForm
                 this.Pub1.AddTR("style='border:0px'");
 
                 this.Pub1.AddTDTitleExt("序号");
-                this.Pub1.AddTDTitleExt("文件名");
-                this.Pub1.AddTDTitleExt("大小KB");
-                this.Pub1.AddTDTitleExt("上传时间");
                 if (athDesc.Sort.Contains(","))
                 {
                     string sortColumn = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(0, athDesc.Sort.IndexOf("@")) : "类别";
                     if (sortColumn == "") sortColumn = "类别";
                     this.Pub1.AddTD("style='background:#f4f4f4; font-size:12px; padding:3px;'", sortColumn);
                 }
+                this.Pub1.AddTDTitleExt("文件名");
+                this.Pub1.AddTDTitleExt("大小KB");
+                this.Pub1.AddTDTitleExt("上传时间");
                 this.Pub1.AddTDTitleExt("上传人");
                 this.Pub1.AddTDTitleExt("操作");
                 this.Pub1.AddTREnd();
             }
 
             int i = 0;
-            StringBuilder picHtml = new StringBuilder();
-            foreach (FrmAttachmentDB db in dbs)
+            string[] fileSorts = new string[] { "" };
+            bool haveAuthSort = false;
+            bool bSort_Add_TD = false;
+            if (athDesc.Sort.Contains(","))
             {
-                i++;
-                this.Pub1.AddTR();
-                this.Pub1.AddTDIdx(i);
+                haveAuthSort = true;
+                //追加一个空项
+                if (!athDesc.Sort.EndsWith(",")) athDesc.Sort = athDesc.Sort + ",";
+                fileSorts = athDesc.Sort.Split(',');
+            }
 
-                // this.Pub1.AddTDIdx(i++);
-                if (athDesc.IsDownload)
+            foreach (string sort in fileSorts)
+            {
+                bSort_Add_TD = true;
+                foreach (FrmAttachmentDB db in dbs)
                 {
-                    if (athDesc.IsWoEnableWF && CanEditor(db.FileExts))
-                    {
-                        this.Pub1.AddTD("<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" + this.WorkID + "','" + db.MyPK + "','" + this.FK_MapData + "','" + this.Ath + "','" + this.FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
-                    }
-                    else if (db.FileExts.ToUpper() == "TXT" || db.FileExts.ToUpper() == "JPG" || db.FileExts.ToUpper() == "JPEG" || db.FileExts.ToUpper() == "GIF" || db.FileExts.ToUpper() == "PNG" || db.FileExts.ToUpper() == "BMP" || db.FileExts.ToUpper() == "PDF" || db.FileExts.ToUpper() == "CEB")
-                    {
-                        this.Pub1.AddTD("<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                    if (haveAuthSort == true && db.Sort != sort) 
+                        continue;
 
+                    i++;
+                    this.Pub1.AddTR();
+                    this.Pub1.AddTDIdx(i);
+                    if (athDesc.Sort.Contains(","))
+                    {
+                        if (bSort_Add_TD == true)
+                        {
+                            bSort_Add_TD = false;
+                            int rowSpan = GetSortLenth_FromDB(sort, dbs);
+                            this.Pub1.AddTD("rowspan=" + rowSpan, db.Sort);
+                        }
+                    }
+                    if (athDesc.IsDownload)
+                    {
+                        if (athDesc.IsWoEnableWF && CanEditor(db.FileExts))
+                        {
+                            this.Pub1.AddTD("<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" + this.WorkID + "','" + db.MyPK + "','" + this.FK_MapData + "','" + this.Ath + "','" + this.FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                        }
+                        else if (db.FileExts.ToUpper() == "TXT" || db.FileExts.ToUpper() == "JPG" || db.FileExts.ToUpper() == "JPEG" || db.FileExts.ToUpper() == "GIF" || db.FileExts.ToUpper() == "PNG" || db.FileExts.ToUpper() == "BMP" || db.FileExts.ToUpper() == "PDF" || db.FileExts.ToUpper() == "CEB")
+                        {
+                            this.Pub1.AddTD("<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+
+                        }
+                        else
+                        {
+                            this.Pub1.AddTD("<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK + "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                        }
                     }
                     else
-                    {
-                        this.Pub1.AddTD("<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK + "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
-                    }
-                }
-                else
-                    this.Pub1.AddTD("<img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName);
+                        this.Pub1.AddTD("<img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName);
 
-                this.Pub1.AddTD(db.FileSize);
-                this.Pub1.AddTD(db.RDT);
-                //文件类别
-                if (athDesc.Sort.Contains(","))
-                    this.Pub1.AddTD(db.Sort);
-                this.Pub1.AddTD(db.RecName);
+                    this.Pub1.AddTD(db.FileSize);
+                    this.Pub1.AddTD(db.RDT);
+                    this.Pub1.AddTD(db.RecName);
 
-                //输出操作部分.
-                this.Pub1.AddTDBegin();
-                if (athDesc.IsDownload)
-                    this.Pub1.Add("<a href=\"javascript:Down('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">下载</a>");
-                if (this.IsReadonly != "1")
-                {
-                    string op = null;
-                    if (isDel == true)
+                    //输出操作部分.
+                    this.Pub1.AddTDBegin();
+                    if (athDesc.IsDownload)
+                        this.Pub1.Add("<a href=\"javascript:Down('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">下载</a>");
+                    if (this.IsReadonly != "1")
                     {
-                        if (athDesc.IsDelete == true)
-                            op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
-                        else if (athDesc.IsDeleteInt == 2)
+                        string op = null;
+                        if (isDel == true)
                         {
-                            if (db.Rec.Equals(WebUser.No))
+                            if (athDesc.IsDelete == true)
                                 op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
+                            else if (athDesc.IsDeleteInt == 2)
+                            {
+                                if (db.Rec.Equals(WebUser.No))
+                                    op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
+                            }
+
                         }
 
+                        this.Pub1.Add(op);
                     }
+                    this.Pub1.AddTDEnd();
 
-                    this.Pub1.Add(op);
+                    this.Pub1.AddTREnd();
                 }
-                this.Pub1.AddTDEnd();
-
-                this.Pub1.AddTREnd();
             }
             if (i == 0)
             {
@@ -662,6 +684,31 @@ namespace CCFlow.WF.CCForm
                 this.Pub1.AddTD("&nbsp&nbsp");
                 this.Pub1.AddTREnd();
             }
+            //追加打包下载功能
+            if (athDesc.IsDownload && dbs.Count > 0)
+            {
+                this.Pub1.AddTR();
+                if (athDesc.Sort.Contains(","))
+                    this.Pub1.AddTDBegin("colspan=7");
+                else
+                    this.Pub1.AddTDBegin("colspan=6");
+
+                //超链接
+                BP.Web.Controls.BPHyperLink hLink = new BP.Web.Controls.BPHyperLink();
+                hLink.ID = "H_LINK_Btn";
+                hLink.Target = "_blank";
+                this.Pub1.Add(hLink);
+
+                Button btn = new Button();
+                btn.Text = "打包下载";
+                btn.ID = "Btn_DownLoad_Zip";
+                btn.CssClass = "Btn";
+                btn.Click += new EventHandler(btn_DownLoad_Zip);
+                this.Pub1.Add(btn);
+
+                this.Pub1.AddTDEnd();
+                this.Pub1.AddTREnd();
+            }
 
             AddFileUpload(isUpdate, athDesc);
             this.Pub1.AddTableEnd();
@@ -669,15 +716,79 @@ namespace CCFlow.WF.CCForm
             #endregion 生成表头表体.
         }
 
+        void btn_DownLoad_Zip(object sender, EventArgs e)
+        {
+            try
+            {
+                BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
+                dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment,
+                        FrmAttachmentDBAttr.RefPKVal, this.PKVal);
+
+                if (dbs.Count == 0)
+                {
+                    this.Alert("文件不存在，不需打包下载。");
+                    return;
+                }
+
+                string zipName = this.WorkID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff");
+                string basePath = Server.MapPath("//DataUser//Temp");
+                string tempPath = basePath + "//" + WebUser.No;
+                string zipPath = basePath + "//" + WebUser.No;
+                string zipFile = zipPath + "//" + zipName + ".zip";
+
+                //删除临时文件，保证一个用户只能存一份，减少磁盘占用空间
+                if (System.IO.Directory.Exists(tempPath) == true)
+                    System.IO.Directory.Delete(tempPath, true);
+                //根据路径创建文件夹
+                if (System.IO.Directory.Exists(zipPath) == false)
+                    System.IO.Directory.CreateDirectory(zipPath);
+                //copy文件临时文件夹
+                tempPath = tempPath + "//" + this.WorkID;
+                if (System.IO.Directory.Exists(tempPath) == false)
+                    System.IO.Directory.CreateDirectory(tempPath);
+
+                foreach (FrmAttachmentDB db in dbs)
+                {
+                    string copyToPath = tempPath;
+                    if (!File.Exists(db.FileFullName)) continue;
+
+                    if (!string.IsNullOrEmpty(db.Sort))
+                    {
+                        copyToPath = tempPath + "//" + db.Sort;
+                        if (System.IO.Directory.Exists(copyToPath) == false) 
+                            System.IO.Directory.CreateDirectory(copyToPath);
+                    }
+                    //新文件目录
+                    copyToPath = copyToPath + "//" + db.FileName;
+                    File.Copy(db.FileFullName, copyToPath, true);
+                }
+                //执行压缩
+                (new FastZip()).CreateZip(zipFile, tempPath, true, "");
+                //删除临时文件夹
+                System.IO.Directory.Delete(tempPath, true);
+                //显示出下载超链接
+                BP.Web.Controls.BPHyperLink hLink = (BP.Web.Controls.BPHyperLink)this.Pub1.FindControl("H_LINK_Btn");
+                if (hLink != null)
+                {
+                    hLink.Text = "如果没有弹出下载文件，请点击此处进行下载。";
+                    hLink.NavigateUrl = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
+                }
+                //BP.PubClass.DownloadFile(zipFile, this.WorkID + ".zip");
+            }
+            catch (Exception ex)
+            {
+                //this.Alert(ex.Message);
+            }
+        }
         private void AddFileUpload(bool isUpdate, FrmAttachment athDesc)
         {
             if (isUpdate == true && this.IsReadonly != "1")
             {
                 this.Pub1.AddTR();
-                if (athDesc.IsNote)
-                    this.Pub1.AddTDBegin("colspan=8");
-                else
+                if (athDesc.Sort.Contains(","))
                     this.Pub1.AddTDBegin("colspan=7");
+                else
+                    this.Pub1.AddTDBegin("colspan=6");
 
 
                 #region  增加大附件上传
@@ -787,7 +898,7 @@ namespace CCFlow.WF.CCForm
                     {
                         string sortColumn = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(0, athDesc.Sort.IndexOf("@")) : "类别";
                         string[] strs = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(athDesc.Sort.LastIndexOf("@") + 1).Split(',') : athDesc.Sort.Split(',');
-                        
+
                         BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
                         ddl.ID = "ddl";
                         int ddlIdex = 0;
@@ -867,6 +978,21 @@ namespace CCFlow.WF.CCForm
             {
                 return false;
             }
+        }
+        /// <summary>
+        /// 获取一类的个数
+        /// </summary>
+        /// <param name="sort">类别</param>
+        /// <param name="DBs">数据集</param>
+        /// <returns></returns>
+        private int GetSortLenth_FromDB(string sort, FrmAttachmentDBs DBs)
+        {
+            int sortLength = 0;
+            foreach (FrmAttachmentDB db in DBs)
+            {
+                if (db.Sort == sort) sortLength++;
+            }
+            return sortLength;
         }
 
         protected void btn_Click(object sender, EventArgs e)
@@ -994,14 +1120,17 @@ namespace CCFlow.WF.CCForm
                 if (athDesc.Sort.Contains(","))
                 {
                     string[] strs = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(athDesc.Sort.LastIndexOf("@") + 1).Split(',') : athDesc.Sort.Split(',');
-                    string strIndex = this.Pub1.GetDDLByID("ddl").SelectedItemStringVal;
-                    int selectedIndex = string.IsNullOrEmpty(strIndex) ? 0 : int.Parse(strIndex);
-                    dbUpload.Sort = strs[selectedIndex];
+                    BP.Web.Controls.DDL ddl = this.Pub1.GetDDLByID("ddl");
+                    dbUpload.Sort = strs[0];
+                    if (ddl != null)
+                    {
+                        int selectedIndex = string.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
+                        dbUpload.Sort = strs[selectedIndex];
+                    }
                 }
                 dbUpload.UploadGUID = guid;
                 dbUpload.Insert();
-
-                this.Response.Redirect("AttachmentUpload.aspx?FK_FrmAttachment=" + this.FK_FrmAttachment + "&FK_Node=" + this.FK_Node + "&PKVal=" + this.PKVal, true);
+                //this.Response.Redirect("AttachmentUpload.aspx?FK_FrmAttachment=" + this.FK_FrmAttachment + "&FK_Node=" + this.FK_Node + "&PKVal=" + this.PKVal, true);
             }
             else
             {
@@ -1012,7 +1141,7 @@ namespace CCFlow.WF.CCForm
                     string strIndex = this.Pub1.GetDDLByID("ddl").SelectedItemStringVal;
                     int selectedIndex = string.IsNullOrEmpty(strIndex) ? 0 : int.Parse(strIndex);
                     string fileType = strs[selectedIndex];
-                                        
+
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.NodeID = this.FK_Node.ToString();
                     dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;

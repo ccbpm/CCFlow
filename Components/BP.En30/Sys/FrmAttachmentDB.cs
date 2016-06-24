@@ -408,8 +408,7 @@ namespace BP.Sys
 
 
                 //这个值在上传时候产生.
-                map.AddTBString(FrmAttachmentDBAttr.UploadGUID, null, "上传GUID", 
-                    true, false, 0, 50, 20);
+                map.AddTBString(FrmAttachmentDBAttr.UploadGUID, null, "上传GUID", true, false, 0, 200, 20);
 
                 this._enMap = map;
                 return this._enMap;

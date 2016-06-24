@@ -5933,7 +5933,7 @@ namespace BP.WF
                                 bill.FK_Dept = this.rptGe.GetValStrByKey("FK_Dept");
                                 try
                                 {
-                                    bill.Insert();
+                                    bill.Save();
                                 }
                                 catch
                                 {

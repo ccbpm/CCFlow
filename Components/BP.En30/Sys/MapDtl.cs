@@ -1652,6 +1652,7 @@ namespace BP.Sys
                 if (attr.UIIsEnable && attr.UIContralType == UIContralType.TB)
                     isHaveEnable = true;
             }
+
             this.InitExtMembers();
 
             //更新MapData中的名称
@@ -1682,13 +1683,10 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_GroupField WHERE EnName='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapM2M WHERE FK_MapData='" + this.No + "'";
             DBAccess.RunSQLs(sql);
-            try
-            {
-                BP.DA.DBAccess.RunSQL("DROP TABLE " + this.PTable);
-            }
-            catch
-            {
-            }
+
+            if (DBAccess.IsExitsObject(this.PTable))
+                DBAccess.RunSQL("DROP TABLE " + this.PTable);
+
             return base.beforeDelete();
         }
     }

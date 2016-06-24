@@ -1813,7 +1813,7 @@ namespace BP.Sys
                 map.CodeStruct = "4";
 
                 #region 基础信息.
-                map.AddTBStringPK(MapDataAttr.No, null, "编号", true, false, 1, 100, 100);
+                map.AddTBStringPK(MapDataAttr.No, null, "编号", true, false, 1, 200, 100);
                 map.AddTBString(MapDataAttr.Name, null, "描述", true, false, 0, 500, 20);
 
                 map.AddTBString(MapDataAttr.EnPK, null, "实体主键", true, false, 0, 200, 20);
@@ -2803,27 +2803,16 @@ namespace BP.Sys
             DBAccess.RunSQLs(sql);
             #endregion 删除相关的数据。
 
+            
             #region 删除物理表。
-            try
-            {
-                BP.DA.DBAccess.RunSQL("DROP TABLE " + this.PTable);
-            }
-            catch
-            {
-            }
+            //如果存在物理表.
+            if (DBAccess.IsExitsObject(this.PTable))
+                DBAccess.RunSQL("DROP TABLE " + this.PTable);
 
             MapDtls dtls = new MapDtls(this.No);
             foreach (MapDtl dtl in dtls)
-            {
-                try
-                {
-                    DBAccess.RunSQL("DROP TABLE " + dtl.PTable);
-                }
-                catch
-                {
-                }
                 dtl.Delete();
-            }
+
             #endregion
 
             return base.beforeDelete();

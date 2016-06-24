@@ -1212,7 +1212,6 @@ namespace BP.DA
         public static void CreatIndex(DBUrlType mydburl, string table, string pk)
         {
             string idxName = table + "ID";
-
             if (BP.DA.DBAccess.IsExitsObject(idxName) == true)
                 return;
 
@@ -1237,6 +1236,7 @@ namespace BP.DA
         }
         public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2)
         {
+
             //try
             //{
             //    DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + ")");
@@ -2916,7 +2916,7 @@ namespace BP.DA
                     sql = "SELECT * FROM sysconstraints c inner join systables t on c.tabid = t.tabid where t.tabname = lower(?) and constrtype = 'P'";
                     break;
                 default:
-                    throw new Exception("ssseerr ");
+                    throw new Exception("@没有判断的数据库类型.");
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql, ps);

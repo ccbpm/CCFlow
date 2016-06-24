@@ -1680,87 +1680,87 @@ namespace BP.WF
         /// <returns></returns>
         public static string RepareV_FlowData_View()
         {
-            string err = "";
-            Flows fls = new Flows();
-            fls.RetrieveAllFromDBSource();
-
-            if (fls.Count == 0)
-                return null;
-
-            string sql = "";
-            sql = "CREATE VIEW V_FlowData (FK_FlowSort,FK_Flow,OID,FID,Title,WFState,CDT,FlowStarter,FlowStartRDT,FK_Dept,FK_NY,FlowDaySpan,FlowEmps,FlowEnder,FlowEnderRDT,FlowEndNode,MyNum, PWorkID,PFlowNo,BillNo,ProjNo) ";
-            //     sql += "\t\n /*  WorkFlow Data " + DateTime.Now.ToString("yyyy-MM-dd") + " */ ";
-            sql += " AS ";
-            foreach (Flow fl in fls)
-            {
-                if (fl.IsCanStart == false)
-                    continue;
-
-
-                string mysql = "\t\n SELECT '" + fl.FK_FlowSort + "' AS FK_FlowSort,'" + fl.No + "' AS FK_Flow,OID,FID,Title,WFState,CDT,FlowStarter,FlowStartRDT,FK_Dept,FK_NY,FlowDaySpan,FlowEmps,FlowEnder,FlowEnderRDT,FlowEndNode,1 as MyNum,PWorkID,PFlowNo,BillNo,ProjNo FROM " + fl.PTable + " WHERE WFState >1 ";
-                try
-                {
-                    DBAccess.RunSQLReturnTable(mysql);
-                }
-                catch (Exception ex)
-                {
-                    continue;
-                    try
-                    {
-                        fl.DoCheck();
-                        DBAccess.RunSQLReturnTable(mysql);
-                    }
-                    catch (Exception ex1)
-                    {
-                        err += ex1.Message;
-                        continue;
-                    }
-                }
-
-                if (fls.Count == 1)
-                    break;
-
-                sql += mysql;
-                sql += "\t\n UNION ";
-            }
-            if (sql.Contains("SELECT") == false)
-                return null;
-
-            if (fls.Count > 1)
-                sql = sql.Substring(0, sql.Length - 6);
-
-            if (sql.Length > 20)
-            {
-
-                #region 删除 V_FlowData
-                try
-                {
-                    DBAccess.RunSQL("DROP VIEW V_FlowData");
-                }
-                catch
-                {
-                    try
-                    {
-                        DBAccess.RunSQL("DROP table V_FlowData");
-                    }
-                    catch
-                    {
-                    }
-                }
-                #endregion 删除 V_FlowData
-
-                #region 创建视图.
-                try
-                {
-                    DBAccess.RunSQL(sql);
-                }
-                catch
-                {
-                }
-                #endregion 创建视图.
-
-            }
             return null;
+            //string err = "";
+            //Flows fls = new Flows();
+            //fls.RetrieveAllFromDBSource();
+
+            //if (fls.Count == 0)
+            //    return null;
+
+            //string sql = "";
+            //sql = "CREATE VIEW V_FlowData (FK_FlowSort,FK_Flow,OID,FID,Title,WFState,CDT,FlowStarter,FlowStartRDT,FK_Dept,FK_NY,FlowDaySpan,FlowEmps,FlowEnder,FlowEnderRDT,FlowEndNode,MyNum, PWorkID,PFlowNo,BillNo,ProjNo) ";
+            ////     sql += "\t\n /*  WorkFlow Data " + DateTime.Now.ToString("yyyy-MM-dd") + " */ ";
+            //sql += " AS ";
+            //foreach (Flow fl in fls)
+            //{
+            //    if (fl.IsCanStart == false)
+            //        continue;
+
+
+            //    string mysql = "\t\n SELECT '" + fl.FK_FlowSort + "' AS FK_FlowSort,'" + fl.No + "' AS FK_Flow,OID,FID,Title,WFState,CDT,FlowStarter,FlowStartRDT,FK_Dept,FK_NY,FlowDaySpan,FlowEmps,FlowEnder,FlowEnderRDT,FlowEndNode,1 as MyNum,PWorkID,PFlowNo,BillNo,ProjNo FROM " + fl.PTable + " WHERE WFState >1 ";
+            //    try
+            //    {
+            //        DBAccess.RunSQLReturnTable(mysql);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        continue;
+            //        try
+            //        {
+            //            fl.DoCheck();
+            //            DBAccess.RunSQLReturnTable(mysql);
+            //        }
+            //        catch (Exception ex1)
+            //        {
+            //            err += ex1.Message;
+            //            continue;
+            //        }
+            //    }
+
+            //    if (fls.Count == 1)
+            //        break;
+
+            //    sql += mysql;
+            //    sql += "\t\n UNION ";
+            //}
+            //if (sql.Contains("SELECT") == false)
+            //    return null;
+
+            //if (fls.Count > 1)
+            //    sql = sql.Substring(0, sql.Length - 6);
+
+            //if (sql.Length > 20)
+            //{
+            //    #region 删除 V_FlowData
+            //    try
+            //    {
+            //        DBAccess.RunSQL("DROP VIEW V_FlowData");
+            //    }
+            //    catch
+            //    {
+            //        try
+            //        {
+            //            DBAccess.RunSQL("DROP table V_FlowData");
+            //        }
+            //        catch
+            //        {
+            //        }
+            //    }
+            //    #endregion 删除 V_FlowData
+
+            //    #region 创建视图.
+            //    try
+            //    {
+            //        DBAccess.RunSQL(sql);
+            //    }
+            //    catch
+            //    {
+            //    }
+            //    #endregion 创建视图.
+
+            //}
+            //return null;
         }
         /// <summary>
         /// 校验流程
@@ -3514,9 +3514,7 @@ namespace BP.WF
                 BP.WF.Rpt.MapRpt rpt = new Rpt.MapRpt();
                 rpt.No = mapRpt;
                 rpt.RetrieveFromDBSources();
-
                 rpt.FK_Flow = this.No;
-                rpt.ParentMapData = "ND" + int.Parse(this.No) + "Rpt";
                 rpt.ResetIt();
                 rpt.Update();
             }
@@ -6703,17 +6701,17 @@ namespace BP.WF
 
             // Flow.RepareV_FlowData_View();
 
-            //删除权限管理
-            if (BP.WF.Glo.OSModel == OSModel.OneMore)
-            {
-                try
-                {
-                    DBAccess.RunSQL("DELETE FROM GPM_Menu WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
-                }
-                catch
-                {
-                }
-            }
+            ////删除权限管理
+            //if (BP.WF.Glo.OSModel == OSModel.OneMore)
+            //{
+            //    try
+            //    {
+            //        DBAccess.RunSQL("DELETE FROM GPM_Menu WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
+            //    }
+            //    catch
+            //    {
+            //    }
+            //}
         }
         #endregion
     }

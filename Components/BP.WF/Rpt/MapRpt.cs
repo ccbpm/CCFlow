@@ -64,10 +64,6 @@ namespace BP.WF.Rpt
         /// </summary>
         public const string Note = "Note";
         /// <summary>
-        /// 继承的报表FK_MapData
-        /// </summary>
-        public const string ParentMapData = "ParentMapData";
-        /// <summary>
         /// 流程编号
         /// </summary>
         public const string FK_Flow = "FK_Flow";
@@ -419,18 +415,7 @@ namespace BP.WF.Rpt
         {
             get
             {
-                string s = this.GetValStrByKey(MapRptAttr.FK_Flow);
-                if (s == "" || s == null)
-                {
-                    s = this.ParentMapData;
-                    if (string.IsNullOrEmpty(s))
-                        throw new Exception("@错误报表" + this.No + "," + this.Name + " , 字段ParentMapData:" + this.ParentMapData + " 不应当为空.");
-                    s = s.Replace("ND", "");
-                    s = s.Replace("Rpt", "");
-                    s = s.PadLeft(3, '0');
-                    return s;
-                }
-                return s;
+               return this.GetValStrByKey(MapRptAttr.FK_Flow);
             }
             set
             {
@@ -465,19 +450,6 @@ namespace BP.WF.Rpt
                 this.SetValByKey(MapRptAttr.Note, value);
             }
         }
-        public string ParentMapData
-        {
-            get
-            {
-                return this.GetValStrByKey(MapRptAttr.ParentMapData);
-            }
-            set
-            {
-                this.SetValByKey(MapRptAttr.ParentMapData, value);
-            }
-        }
-        
-       
         public Entities _HisEns = null;
         public new Entities HisEns
         {
@@ -592,8 +564,6 @@ namespace BP.WF.Rpt
              //   map.AddTBString(MapRptAttr.DTSearchKey, null, "时间查询字段", true, false, 0, 200, 20);
                 map.AddTBString(MapRptAttr.Note, null, "备注", true, false, 0, 500, 20);
             
-                map.AddTBString(MapRptAttr.ParentMapData, null, "ParentMapData", true, false, 0, 128, 20);
-
 
                 #region 权限控制. 2014-12-18
                 map.AddTBInt(MapRptAttr.RightViewWay, 0, "报表查看权限控制方式", true, false);
@@ -641,12 +611,13 @@ namespace BP.WF.Rpt
             md.RptDTSearchKey = "";
             md.RptSearchKeys = "*FK_Dept*WFSta*FK_NY*";
 
-            MapData pmd = new MapData(this.ParentMapData);
-            this.PTable = pmd.PTable;
+            Flow fl = new Flow(this.FK_Flow);
+            this.PTable = fl.PTable;
             this.Update();
 
             string keys = "'OID','FK_Dept','FlowStarter','WFState','Title','FlowStartRDT','FlowEmps','FlowDaySpan','FlowEnder','FlowEnderRDT','FK_NY','FlowEndNode','WFSta'";
-            MapAttrs attrs = new MapAttrs(this.ParentMapData);
+            MapAttrs attrs = new MapAttrs("ND"+int.Parse(this.FK_Flow)+"Rpt" );
+
             attrs.Delete(MapAttrAttr.FK_MapData, this.No); // 删除已经有的字段。
             foreach (MapAttr attr in attrs)
             {
@@ -675,30 +646,6 @@ namespace BP.WF.Rpt
         /// </summary>
         public MapRpts()
         {
-        }
-        /// <summary>
-        /// 报表设计s
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        public MapRpts(string fk_flow)
-        {
-            string fk_Mapdata = "ND" + int.Parse(fk_flow) + "Rpt";
-            int i = this.Retrieve(MapRptAttr.ParentMapData, fk_Mapdata);
-            if (i == 0)
-            {
-                MapData mapData = new MapData(fk_Mapdata);
-                mapData.No = "ND" + int.Parse(fk_flow) + "MyRpt";
-                mapData.Name = "我的流程";
-                mapData.Note = "系统自动生成.";
-                mapData.Insert();
-
-                MapRpt rpt = new MapRpt(mapData.No);
-                rpt.ParentMapData = fk_Mapdata;
-                rpt.ResetIt();
-
-
-                rpt.Update();
-            }
         }
         /// <summary>
         /// 得到它的 Entity

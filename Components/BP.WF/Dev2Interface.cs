@@ -4138,13 +4138,14 @@ namespace BP.WF
             ps.Add(GenerWorkFlowAttr.WorkID, workid);
             int num = DBAccess.RunSQL(ps);
 
+
             if (fl.HisDataStoreModel == DataStoreModel.ByCCFlow)
             {
-                ps = new Paras();
-                ps.SQL = "UPDATE ND" + int.Parse(flowNo + "01") + " SET Title=" + dbstr + "Title WHERE OID=" + dbstr + "WorkID";
-                ps.Add(GenerWorkFlowAttr.Title, title);
-                ps.Add(GenerWorkFlowAttr.WorkID, workid);
-                DBAccess.RunSQL(ps);
+                //ps = new Paras();
+                //ps.SQL = "UPDATE ND" + int.Parse(flowNo + "01") + " SET Title=" + dbstr + "Title WHERE OID=" + dbstr + "WorkID";
+                //ps.Add(GenerWorkFlowAttr.Title, title);
+                //ps.Add(GenerWorkFlowAttr.WorkID, workid);
+                //DBAccess.RunSQL(ps);
             }
 
             if (num == 0)

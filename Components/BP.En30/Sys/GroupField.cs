@@ -118,7 +118,6 @@ namespace BP.Sys
         {
             //if (this.IsExit(GroupFieldAttr.EnName, this.EnName, GroupFieldAttr.Lab, this.Lab) == true)
             //    throw new Exception("@已经在("+this.EnName+")里存在("+this.Lab+")的分组了。");
-
             try
             {
                 string sql = "SELECT MAX(IDX) FROM " + this.EnMap.PhysicsTable + " WHERE EnName='" + this.EnName + "'";

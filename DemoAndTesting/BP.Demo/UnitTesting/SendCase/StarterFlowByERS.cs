@@ -69,8 +69,6 @@ namespace BP.UnitTesting.SendCase
             string toEmps = "zhanghaicheng,zhangyifan";
             string belontToDept = "2";
 
-            
-
             #region 检查接受人的待办工作.
             sql = "SELECT * FROM WF_EmpWorks WHERE WorkID=" + this.workid;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

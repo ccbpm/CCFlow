@@ -525,18 +525,18 @@ namespace BP.WF
 
                 #region 执行报表设计。
                 Flows fls = new Flows();
-                fls.RetrieveAll();
-                foreach (Flow fl in fls)
-                {
-                    try
-                    {
-                        MapRpts rpts = new MapRpts(fl.No);
-                    }
-                    catch
-                    {
-                        fl.DoCheck();
-                    }
-                }
+                //fls.RetrieveAll();
+                //foreach (Flow fl in fls)
+                //{
+                //    try
+                //    {
+                //        MapRpts rpts = new MapRpts(fl.No);
+                //    }
+                //    catch
+                //    {
+                //        fl.DoCheck();
+                //    }
+                //}
                 #endregion
 
                 #region 升级站内消息表 2013-10-20
@@ -863,7 +863,6 @@ namespace BP.WF
 
                 en.CheckPhysicsTable();
                 en.PKVal = "123";
-
                 try
                 {
                     en.RetrieveFromDBSources(); 
@@ -873,7 +872,6 @@ namespace BP.WF
                     BP.DA.Log.DefaultLogWriteLine(LogType.Error, "@查询失败: ens = " + en.ToString());
                 }
             }
-
 
             #region 创建 Port_EmpDept 视图兼容旧版本.
             //创建视图.

@@ -119,7 +119,7 @@ namespace BP.WF.Template
                 Map map = new Map("Sys_MapData", "表单库");
                 map.Java_SetCodeStruct("4");
 
-                map.AddTBStringPK(FrmAttr.No, null, null, true, true, 1, 4, 4);
+                map.AddTBStringPK(FrmAttr.No, null, null, true, true, 1, 200, 4);
                 map.AddTBString(FrmAttr.Name, null, null, true, false, 0, 50, 10);
                 map.AddTBString(FrmAttr.FK_Flow, null, "独立表单属性:FK_Flow", true, false, 0, 50, 10);
              //   map.AddDDLSysEnum(FrmAttr.FormRunType, 0, "独立表单属性:运行类型", true, false, FrmAttr.FormRunType);

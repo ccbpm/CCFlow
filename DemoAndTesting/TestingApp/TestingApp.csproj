@@ -269,10 +269,6 @@
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Components\BP.GPM\BP.GPM.csproj">
-      <Project>{BA60EE39-F64F-49CB-80AB-6BB108EA4154}</Project>
-      <Name>BP.GPM</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Components\BP.WF\BP.WF.csproj">
       <Project>{51C1DADA-1B9A-41CC-B731-FDE1196778F2}</Project>
       <Name>BP.WF</Name>

@@ -553,22 +553,6 @@ namespace BP.WF
         {
             string ptable = "ND" + int.Parse(fk_flow) + "Track";
 
-            #region 检查是否有此表.
-            if (BP.DA.DBAccess.IsExitsObject(ptable))
-            {
-                if (DBAccess.IsExitsTableCol(ptable, "Tag") == false)
-                {
-                    //增加特殊的列。
-                    DBAccess.RunSQL("ALTER TABLE  " + ptable + " ADD Tag NVARCHAR(4000) DEFAULT '' NULL");
-                }
-                return;
-            }
-            #endregion 检查是否有此表.
-
-            if (DBAccess.IsExitsObject("WF_Track") ==true)
-                BP.DA.DBAccess.RunSQL("DROP TABLE WF_Track");
-
-
             Track tk = new Track();
             tk.CheckPhysicsTable();
 

@@ -179,6 +179,8 @@
     
     </style>
     <script language="javascript" type="text/javascript">
+        osModel = '<%=BP.Sys.SystemConfig.OSModel %>';
+
         $(function () {
             var content = createFrame('Welcome.aspx');
             $('#tabs').tabs('add', {

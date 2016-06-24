@@ -26,7 +26,7 @@ break;
 default:    //未设置Value值，则表示此项
 ......
 }
-此项规则设置，可以进行多级嵌套设置，即Defines元素中再包含ColDefine设置，Service类型节点特有属性；(9)Id:节点node.id值，Node类型节点特有属性；(10)ParentId:节点的父节点node.id，根节点的父节点id请设置为null，Node类型节点特有属性；(11)Name:节点node.text值，Node类型节点特有属性；(12)MethodParams:Service类型获取WebService数据时，向WebService发送的参数对象，对象中的每个参数，在WebService端可以用Request["参数名"]获取；(12)Opened:节点加载后是否是展开状态；
+此项规则设置，可以进行多级嵌套设置，即Defines元素中再包含ColDefine设置，Service类型节点特有属性；(9)Id:节点node.id值，Node类型节点特有属性；(10)ParentId:节点的父节点node.id，根节点的父节点id请设置为null，Node类型节点特有属性；(11)Name:节点node.text值，Node类型节点特有属性；(12)MethodParams:Service类型获取WebService数据时，向WebService发送的参数对象，对象中的每个参数，在WebService端可以用Request["参数名"]获取；(13)Opened:节点加载后是否是展开状态；(14)OSModel:组织结构数据模式，OneOne或OneMore，如果不设置此属性，则支持两种模式
 3.Defines数组下元素：(1)Value:规则判断值；(2)ColDefine:规则判断所用的字段名称；(3)Defines:具体规则设置，见上方规则设置说明；(4)IconCls:节点图标对应的css样式名称；(5)MenuId:节点右链菜单的id，为easyui-menu；(6)Url:节点双击在右侧tab页打开的网页Url，支持node属性值、node.attributes属性值、WebUser属性值以及JS表达式计算结果的自动替换；(7)LazyLoad:是否使用惰性加载，设置true时，在展开当前规则所表示的节点时，加载此规则下Nodes下面的列表，此列表也支持向WebService动态获取；(8)InheritForChild:当前规则所表示的节点数据中，需要向下级传递参数的设置数组，比如设置：[{From: "@@id", To: "fk_flow"}]，表示将当前节点数据中的@@id对应的数据传递给此节点以下的子节点node.attributes.fk_flow属性，以供以下节点使用，此设置为数组，可设置多个；(9)Nodes:惰性加载，展开节点时，加载的节点数据设置；(10)Opened:节点加载后是否是展开状态；(11)Inherits:当前/规则所表示的节点，可以从上级获取的属性数组，这些属性必须在上级节点中的InheritForChild中设置过，比如设置：["fk_flow", "fk_node"]，表示此节点将从上级的节点中继承fk_flow和fk_node这两个属性，保存在node.attributes对象里，需要注意的是：只有节点上设置了Inherits属性，这个节点才能继承设置过的上级节点属性，不设置，不能获得；
 */
 //1.流程库
@@ -238,13 +238,13 @@ functrees.push({
     AttrCols: ["TType"],
     ServiceCount: 1,
     Nodes: [
-			{ Type: "Node", Id: "OneOne", ParentId: null, Name: "基础设置OneOne", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder",
+			{ Type: "Node", Id: "OneOne", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneOne",
 			    Nodes: [
 						{ Type: "Node", Id: "OneOneDeptTypies", ParentId: "OneOne", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
 						{ Type: "Node", Id: "OneOneStations", ParentId: "OneOne", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
 					  ]
 			},
-            { Type: "Node", Id: "OneMore", ParentId: null, Name: "基础设置OneMore", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder",
+            { Type: "Node", Id: "OneMore", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneMore",
             			    Nodes: [
 						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "部门类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.DeptTypes" },
 						{ Type: "Node", Id: "Duties", ParentId: "OneMore", Name: "职务维护", TType: "DUTIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.Dutys" },
@@ -293,6 +293,7 @@ functrees.push({
 });
 
 var tabsId = null;
+var osModel = 'OneMore';
 
 //定义功能树对象，便于之后的操作
 function FuncTrees(sTabsId) {
@@ -359,6 +360,11 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
     /// <param name="oParentNode" type="Object">节点定义对象的父级对象</param>
     /// <param name="oFuncTree" type="Object">树对象</param>
 
+    //check OSModel, added by liuxc,2016-06-24
+    if(oNode.OSModel && oNode.OSModel != osModel){
+        return;
+    }
+
     if (oNode.Type == "Service") {
         var params = { method: oNode.ServiceMethod };
 
@@ -405,6 +411,11 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
 
             if (roots.length > 0) {
                 for (var i = 0; i < roots.length; i++) {
+                    //check OSModel, added by liuxc,2016-06-24
+                    if(roots[i].OSModel && roots[i].OSModel != osModel){
+                        continue;
+                    }
+
                     //此处增加判断，如果当前已经存在要添加的节点，则去除存在的节点，重新加载，考虑到刷新时的逻辑
                     var existedNodes;
                     if (oParentNode == null) {
@@ -842,6 +853,11 @@ function LoadServiceSubNode(aServiceNodes, oNode, oParentNode, oServiceNode, oFu
     var subs = Find(aServiceNodes, oServiceNode.ColParentId, oNode.Id);
 
     $.each(subs, function (sidx, sub) {
+        //check OSModel, added by liuxc,2016-06-24
+        if(oNode.OSModel && oNode.OSModel != osModel){
+            return true;
+        }
+
         var subNode = {
             Type: "Node",
             Id: this[oServiceNode.ColId],
@@ -907,6 +923,11 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
     //生成附加属性
     if (oNode.Type == "Service") {
         return;
+    }
+    
+    //check OSModel, added by liuxc,2016-06-24
+    if(oNode.OSModel && oNode.OSModel != osModel){
+        return true;
     }
 
     var attrs = { MenuId: oNode.MenuId, Url: oNode.Url, Target: oNode.Target, LazyLoad: oNode.LazyLoad, ColDefine: oNode.ColDefine, DefineValue: oNode[oNode.ColDefine], InheritForChild: GetNewInheritForChild(oNode.InheritForChild), Inherits: oNode.Inherits, Node: oNode };

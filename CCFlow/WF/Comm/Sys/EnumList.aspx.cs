@@ -14,7 +14,6 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
     {
         SysEnumMain sem = new SysEnumMain(this.RefNo);
 
-        //this.UCSys1.AddTable("width='70%'");
         this.UCSys1.AddTableNormal();
         this.UCSys1.AddTRGroupTitle(3,
                                     "<a href='EnumList.aspx?T=" +
@@ -22,13 +21,8 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
                                     "'>列表</a> - <a href='EnumList.aspx?DoType=New&T=" +
                                     DateTime.Now.ToString("yyyyMMddHHmmssfff") +
                                     "'>新建</a> - 编辑：<b>" + sem.Name + "</b>");
-        //this.UCSys1.AddCaption("<a href=EnumList.aspx ><img src='./../../Img/Btn/Home.gif' border=0>枚举值列表</a> -<a href='EnumList.aspx?DoType=New' ><img src='./../../Img/Btn/New.gif' border=0/>新建</a>- <img src='./../../Img/Btn/Edit.gif' border />编辑:" + sem.No + " " + sem.Name);
 
         this.UCSys1.AddTR();
-        //Button btn = new Button();
-        //btn.ID = "Btn_Save";
-        //btn.CssClass = "Btn";
-        //btn.Text = "  Save  ";
         LinkBtn btn = new LinkBtn(false, NamesOfBtn.Save, "保存");
         btn.Click += new EventHandler(btn_Click);
         this.UCSys1.AddTDGroupTitle("colspan=3", btn);
@@ -42,7 +36,7 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
         this.UCSys1.AddTREnd();
 
         SysEnums ses = new SysEnums();
-        ses.Retrieve(SysEnumAttr.EnumKey, this.RefNo);
+        ses.Retrieve(SysEnumAttr.EnumKey, this.RefNo, SysEnumAttr.IntKey);
 
         this.UCSys1.AddTRSum();
         this.UCSys1.AddTD("style='text-align:right; width:60px'", "编号");
@@ -79,8 +73,8 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
         }
 
         myNum++;
-
-        for (int i = myNum; i < 20; i++)
+        //每次追加10个
+        for (int i = myNum; i < 10 + myNum; i++)
         {
             this.UCSys1.AddTR();
             this.UCSys1.AddTD(i);
@@ -152,8 +146,12 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
 
     void btn_Click(object sender, EventArgs e)
     {
+        //原有个数
+        SysEnums souceSes = new SysEnums();
+        souceSes.Retrieve(SysEnumAttr.EnumKey, this.RefNo, SysEnumAttr.IntKey);
+
         SysEnums ses = new SysEnums();
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < souceSes.Count + 10; i++)
         {
             TextBox tb = this.UCSys1.GetTextBoxByID("TB_" + i);
             if (tb == null)
@@ -269,8 +267,6 @@ public partial class CCFlow_Comm_Sys_EnumList : BP.Web.WebPageAdmin
 
             //this.UCSys1.AddFieldSet("<a href='EnumList.aspx' ><img src='./../../Img/Btn/Home.gif' border=0/>返回列表</a> - 删除确认");
             SysEnumMain m = new SysEnumMain(this.RefNo);
-            //this.UCSys1.AddH2("<a href='EnumList.aspx?RefNo=" + this.RefNo + "&DoType=DelReal' >删除:" + m.Name + " 确认.</a>");
-            //this.UCSys1.AddFieldSetEnd();
             this.UCSys1.AddEasyUiLinkButton("确定删除：" + m.Name + "？", "EnumList.aspx?RefNo=" + this.RefNo + "&DoType=DelReal&T=" + DateTime.Now.ToString("yyyyMMddHHmmssfff"),
                                             "icon-delete");
             this.UCSys1.AddSpace(1);

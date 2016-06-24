@@ -78,7 +78,7 @@ namespace BP.Pub
                 {
                     /* 如果等于空格， 直接替换原来的 str */
                     line = line.Replace("\\" + str + ch, "");
-                    str = "sssssssssssssssssss"; 
+                    str = "sssssssssssssssssss";
                 }
                 else
                     str += ch.ToString();
@@ -627,25 +627,30 @@ namespace BP.Pub
                         case "RMBDX":
                             return DA.DataType.ParseFloatToCash(float.Parse(val));
                         case "Siganture":
-                            string path = BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\" + val + ".jpg";
-                            //定义rtf中图片字符串
-                            StringBuilder pict = new StringBuilder();
+                            string path = BP.Sys.SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
                             //获取要插入的图片
-                            System.Drawing.Image img = System.Drawing.Image.FromFile(path);
+                            if (File.Exists(path) == true)
+                            {
+                                //定义rtf中图片字符串
+                                StringBuilder pict = new StringBuilder();
+                                System.Drawing.Image img = System.Drawing.Image.FromFile(path);
 
-                            //将要插入的图片转换为16进制字符串
-                            string imgHexString = GetImgHexString(img, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            //生成rtf中图片字符串
-                            pict.AppendLine();
-                            pict.Append(@"{\pict");
-                            pict.Append(@"\jpegblip");
-                            pict.Append(@"\picscalex100");
-                            pict.Append(@"\picscaley100");
-                            pict.Append(@"\picwgoal" + img.Size.Width * 15);
-                            pict.Append(@"\pichgoal" + img.Size.Height * 15);
-                            pict.Append(imgHexString + "}");
-                            pict.AppendLine();
-                            return pict.ToString();
+                                //将要插入的图片转换为16进制字符串
+                                string imgHexString = GetImgHexString(img, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                //生成rtf中图片字符串
+                                pict.AppendLine();
+                                pict.Append(@"{\pict");
+                                pict.Append(@"\jpegblip");
+                                pict.Append(@"\picscalex100");
+                                pict.Append(@"\picscaley100");
+                                pict.Append(@"\picwgoal" + img.Size.Width * 5);
+                                pict.Append(@"\pichgoal" + img.Size.Height * 5);
+                                pict.Append(imgHexString + "}");
+                                pict.AppendLine();
+                                return pict.ToString();
+                            }
+                            //图片不存在显示中文名，否则显示原值
+                            return DBAccess.RunSQLReturnStringIsNull("SELECT Name FROM Port_Emp WHERE No='" + val + "'", val);
                         //替换rtf模板文件中的签名图片标识为图片字符串
                         // str = str.Replace(imgMark, pict.ToString());
                         case "BoolenText":

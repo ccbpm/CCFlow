@@ -80,29 +80,26 @@ namespace CCFlow.WF.CCForm
         private void BindExpImp()
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);
-            if (this.Request.QueryString["Flag"] == "ExpTemplete")
-            {
-                string file = this.Request.PhysicalApplicationPath + "DataUser\\DtlTemplete\\" + this.FK_MapDtl + ".xlsx";
-                if (System.IO.File.Exists(file) == false)
-                {
-                    this.WinCloseWithMsg("设计错误：流程设计人员没有把该导入的从表模版放入" + file);
-                    return;
-                }
-                BP.Sys.PubClass.OpenExcel(file, dtl.Name + ".xlsx");
-                this.WinClose();
-                return;
-            }
 
             if (this.Request.QueryString["Flag"] == "ExpTemplete")
             {
-                string file = this.Request.PhysicalApplicationPath + "DataUser\\DtlTemplete\\" + this.FK_MapDtl + ".xls";
-                if (System.IO.File.Exists(file) == false)
+                string file = this.Request.PhysicalApplicationPath + "DataUser\\DtlTemplete\\" + this.FK_MapDtl + ".xlsx";
+                if (System.IO.File.Exists(file))
                 {
-                    this.WinCloseWithMsg("设计错误：流程设计人员没有把该导入的从表模版放入" + file);
+                    BP.Sys.PubClass.OpenExcel(file, dtl.Name + ".xlsx");
+                    this.WinClose();
                     return;
                 }
-                BP.Sys.PubClass.OpenExcel(file, dtl.Name + ".xls");
-                this.WinClose();
+
+                file = this.Request.PhysicalApplicationPath + "DataUser\\DtlTemplete\\" + this.FK_MapDtl + ".xls";
+                if (System.IO.File.Exists(file))
+                {
+                    BP.Sys.PubClass.OpenExcel(file, dtl.Name + ".xls");
+                    this.WinClose();
+                    return;
+                }
+
+                this.WinCloseWithMsg("设计错误：流程设计人员没有把该导入的从表模版放入" + file);
                 return;
             }
 

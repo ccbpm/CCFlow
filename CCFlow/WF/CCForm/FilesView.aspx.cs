@@ -122,7 +122,7 @@ namespace CCFlow.WF.CCForm
         protected void Page_Load(object sender, EventArgs e)
         {
             FrmAttachmentDB downDB = new FrmAttachmentDB();
-            if ( this.DoType.Equals("view") || DoType.Equals("ViewPic"))
+            if (this.DoType.Equals("view") || DoType.Equals("ViewPic"))
             {
                 if (!string.IsNullOrEmpty(DelPKVal))
                 {
@@ -283,7 +283,7 @@ namespace CCFlow.WF.CCForm
                     else
                     {
                         int result = athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData,
-                             FrmAttachmentAttr.FK_Node, this.FK_Node, FrmAttachmentAttr.NoOfObj, this.Ath);
+                             FrmAttachmentAttr.FK_Node, this.FK_Node, FrmAttachmentAttr.NoOfObj, athDesc.NoOfObj);
 
                         if (result == 0) /*如果没有定义，就获取默认的.*/
                             athDesc.RetrieveFromDBSources();
@@ -307,7 +307,7 @@ namespace CCFlow.WF.CCForm
             foreach (FrmAttachmentDB db in dbs)
             {
 
-                if (DataType.IsImgExt(db.FileExts)==false)
+                if (DataType.IsImgExt(db.FileExts) == false)
                     continue;
 
                 if (!string.IsNullOrEmpty(type))
@@ -343,7 +343,7 @@ namespace CCFlow.WF.CCForm
                 }
 
 
-                if (db.Idx !=0)
+                if (db.Idx != 0)
                     isHave = true;
 
                 count++;
@@ -362,21 +362,19 @@ namespace CCFlow.WF.CCForm
                 if (!athDesc.SaveTo.EndsWith("/"))
                     athDesc.SaveTo += "/";
 
-              //s  image.ImageUrl = athDesc.SaveTo + this.WorkID + "/" + db.MyPK + "." + db.FileName;
-               // this.Pub1.AddTD("style='width:80%;margin-left:5%;display:block;text-align:center;overflow:scroll' align='center' valign='middle'" ,image);
                 this.Pub1.AddTDBegin();
 
                 this.Pub1.Add("<div style='width:80%;margin:0 auto;'>");
-               // image.Attributes["style"]="width:800px;heght:600px;";
 
                 string url = athDesc.SaveTo + this.WorkID + "/" + db.UploadGUID + "." + db.FileName;
-              //  url = "";
+                if (db.MyNote == "从证照库导入")
+                    url = athDesc.SaveTo + db.UploadGUID + "." + db.FileName;
                 this.Pub1.Add("<img src='" + url + "' onload=\"AutoResizeImage(800,600,this)\" border=0  />");
                 this.Pub1.Add("</div>");
                 this.Pub1.AddTDEnd();
 
-                if (athDesc.IsOrder && count >1)
-                { 
+                if (athDesc.IsOrder && count > 1)
+                {
                     this.Pub1.AddTR();
                     idx++;
 
@@ -398,8 +396,8 @@ namespace CCFlow.WF.CCForm
                     this.Pub1.AddTDBegin();
 
                     this.Pub1.Add("<div style='width:80%;margin:0 auto;text-align:center;'>");
-                   
-               
+
+
                     if (idx == count)
                         this.Pub1.Add(db.FileName + "&nbsp;&nbsp;<a href='FilesView.aspx?DoType=UP&Idx=" + idx + "&DelPKVal=" + db.MyPK + "&FK_FrmAttachment=" + this.FK_FrmAttachment + "&PKVal=" + this.PKVal + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FK_FrmAttachmentExt=" + this.FK_FrmAttachmentExt + "&IsCC=" + this.IsCC + "&Ath=" + this.Ath + "'>上移</a>&nbsp;&nbsp;<a href='FilesView.aspx?DoType=ViewPic&DelPKVal=" + db.MyPK + "'  target='_balnk'>查看原图</a>");
                     else if (idx == 1)
@@ -411,7 +409,7 @@ namespace CCFlow.WF.CCForm
                     this.Pub1.AddTREnd();
                 }
                 else
-                { 
+                {
                     this.Pub1.AddTR();
 
                     this.Pub1.Add("<div style='width:80%;margin:0 auto;text-align:center'>");
@@ -428,7 +426,7 @@ namespace CCFlow.WF.CCForm
 
 
             if (isRedirect)
-                this.Response.Redirect(this.Request.RawUrl,true);
+                this.Response.Redirect(this.Request.RawUrl, true);
         }
 
 
@@ -438,9 +436,9 @@ namespace CCFlow.WF.CCForm
 
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly)
             {
-                 dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment,
-                    FrmAttachmentDBAttr.RefPKVal, this.PKVal, FrmAttachmentDBAttr.Rec, BP.Web.WebUser.No);
-                 return dbs;
+                dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment,
+                   FrmAttachmentDBAttr.RefPKVal, this.PKVal, FrmAttachmentDBAttr.Rec, BP.Web.WebUser.No);
+                return dbs;
             }
 
             if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)

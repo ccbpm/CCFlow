@@ -263,7 +263,7 @@ namespace CCFlow.WF.WorkOpt
                 bill.FK_Dept = rtf.HisGEEntity.GetValStrByKey("FK_Dept");
                 try
                 {
-                    bill.Insert();
+                    bill.Save();
                 }
                 catch
                 {

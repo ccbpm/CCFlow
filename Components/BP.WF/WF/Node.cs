@@ -2551,7 +2551,7 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 4000, 10);
                 map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 4000, 10);
                 map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 400, 10);
-                map.AddTBString(NodeAttr.HisBillIDs, null, "单据IDs", false, false, 0, 200, 10);
+                map.AddTBString(NodeAttr.HisBillIDs, null, "单据IDs", false, false, 0, 300, 10);
                 //  map.AddTBString(NodeAttr.HisEmps, null, "HisEmps", false, false, 0, 3000, 10);
                 map.AddTBString(NodeAttr.HisSubFlows, null, "HisSubFlows", false, false, 0, 50, 10);
                 map.AddTBString(NodeAttr.PTable, null, "物理表", false, false, 0, 100, 10);

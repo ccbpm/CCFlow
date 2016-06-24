@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Data;
 using BP.DA;
 using BP.En;
@@ -9,45 +9,45 @@ using BP.Port;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// ½ÚµãÊôĞÔ.
+    /// èŠ‚ç‚¹å±æ€§.
     /// </summary>
     public class NodeExt : Entity
     {
-        #region Ë÷Òı
+        #region ç´¢å¼•
         /// <summary>
-        /// »ñÈ¡½ÚµãµÄ°ïÖúĞÅÏ¢url
+        /// è·å–èŠ‚ç‚¹çš„å¸®åŠ©ä¿¡æ¯url
         /// <para></para>
         /// <para>added by liuxc,2014-8-19</para> 
         /// </summary>
-        /// <param name="sysNo">°ïÖúÍøÕ¾ÖĞËùÊôÏµÍ³No</param>
-        /// <param name="searchTitle">°ïÖúÖ÷Ìâ±êÌâ</param>
+        /// <param name="sysNo">å¸®åŠ©ç½‘ç«™ä¸­æ‰€å±ç³»ç»ŸNo</param>
+        /// <param name="searchTitle">å¸®åŠ©ä¸»é¢˜æ ‡é¢˜</param>
         /// <returns></returns>
         private string this[string sysNo, string searchTitle]
         {
             get
             {
                 if (string.IsNullOrWhiteSpace(sysNo) || string.IsNullOrWhiteSpace(searchTitle))
-                    return "javascript:alert('´Ë´¦»¹Ã»ÓĞ°ïÖúĞÅÏ¢£¡')";
+                    return "javascript:alert('æ­¤å¤„è¿˜æ²¡æœ‰å¸®åŠ©ä¿¡æ¯ï¼')";
 
                 return string.Format("http://online.ccflow.org/KM/Tree.aspx?no={0}&st={1}", sysNo, Uri.EscapeDataString(searchTitle));
             }
         }
         #endregion
 
-        #region ³£Á¿
+        #region å¸¸é‡
         /// <summary>
-        /// CCFlowÁ÷³ÌÒıÇæ
+        /// CCFlowæµç¨‹å¼•æ“
         /// </summary>
         private const string SYS_CCFLOW = "001";
         /// <summary>
-        /// CCForm±íµ¥ÒıÇæ
+        /// CCFormè¡¨å•å¼•æ“
         /// </summary>
         private const string SYS_CCFORM = "002";
         #endregion
 
-        #region ÊôĞÔ.
+        #region å±æ€§.
         /// <summary>
-        /// ³¬Ê±´¦Àí·½Ê½
+        /// è¶…æ—¶å¤„ç†æ–¹å¼
         /// </summary>
         public OutTimeDeal HisOutTimeDeal
         {
@@ -61,7 +61,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ·ÃÎÊ¹æÔò
+        /// è®¿é—®è§„åˆ™
         /// </summary>
         public ReturnRole HisReturnRole
         {
@@ -75,7 +75,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ·ÃÎÊ¹æÔò
+        /// è®¿é—®è§„åˆ™
         /// </summary>
         public DeliveryWay HisDeliveryWay
         {
@@ -89,7 +89,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ²½Öè
+        /// æ­¥éª¤
         /// </summary>
         public int Step
         {
@@ -103,7 +103,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ½ÚµãID
+        /// èŠ‚ç‚¹ID
         /// </summary>
         public int NodeID
         {
@@ -117,7 +117,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ³¬Ê±´¦ÀíÄÚÈİ
+        /// è¶…æ—¶å¤„ç†å†…å®¹
         /// </summary>
         public string DoOutTime
         {
@@ -131,7 +131,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ³¬Ê±´¦ÀíÌõ¼ş
+        /// è¶…æ—¶å¤„ç†æ¡ä»¶
         /// </summary>
         public string DoOutTimeCond
         {
@@ -145,7 +145,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ½ÚµãÃû³Æ
+        /// èŠ‚ç‚¹åç§°
         /// </summary>
         public string Name
         {
@@ -159,7 +159,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// Á÷³Ì±àºÅ
+        /// æµç¨‹ç¼–å·
         /// </summary>
         public string FK_Flow
         {
@@ -173,7 +173,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// Á÷³ÌÃû³Æ
+        /// æµç¨‹åç§°
         /// </summary>
         public string FlowName
         {
@@ -187,7 +187,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ½ÓÊÜÈËsql
+        /// æ¥å—äººsql
         /// </summary>
         public string DeliveryParas
         {
@@ -201,7 +201,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// ÊÇ·ñ¿ÉÒÔÍË»Ø
+        /// æ˜¯å¦å¯ä»¥é€€å›
         /// </summary>
         public bool ReturnEnable
         {
@@ -211,7 +211,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// Ö÷¼ü
+        /// ä¸»é”®
         /// </summary>
         public override string PK
         {
@@ -220,11 +220,11 @@ namespace BP.WF.Template
                 return "NodeID";
             }
         }
-        #endregion ÊôĞÔ.
+        #endregion å±æ€§.
 
-        #region ³õÊÔ»¯È«¾ÖµÄ Node
+        #region åˆè¯•åŒ–å…¨å±€çš„ Node
         /// <summary>
-        /// ·ÃÎÊ¿ØÖÆ
+        /// è®¿é—®æ§åˆ¶
         /// </summary>
         public override UAC HisUAC
         {
@@ -239,22 +239,22 @@ namespace BP.WF.Template
         }
         #endregion
 
-        #region ¹¹Ôìº¯Êı
+        #region æ„é€ å‡½æ•°
         /// <summary>
-        /// ½Úµã
+        /// èŠ‚ç‚¹
         /// </summary>
         public NodeExt() { }
         /// <summary>
-        /// ½Úµã
+        /// èŠ‚ç‚¹
         /// </summary>
-        /// <param name="nodeid">½ÚµãID</param>
+        /// <param name="nodeid">èŠ‚ç‚¹ID</param>
         public NodeExt(int nodeid)
         {
             this.NodeID = nodeid;
             this.Retrieve();
         }
         /// <summary>
-        /// ÖØĞ´»ùÀà·½·¨
+        /// é‡å†™åŸºç±»æ–¹æ³•
         /// </summary>
         public override Map EnMap
         {
@@ -264,433 +264,433 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map();
-                //map µÄ»ù ´¡ĞÅÏ¢.
+                //map çš„åŸº ç¡€ä¿¡æ¯.
                 map.PhysicsTable = "WF_Node";
-                map.EnDesc = "½Úµã";
+                map.EnDesc = "èŠ‚ç‚¹";
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
 
-                #region  »ù´¡ÊôĞÔ
-                map.AddTBIntPK(NodeAttr.NodeID, 0, "½ÚµãID", true, true);
+                #region  åŸºç¡€å±æ€§
+                map.AddTBIntPK(NodeAttr.NodeID, 0, "èŠ‚ç‚¹ID", true, true);
                 map.SetHelperUrl(NodeAttr.NodeID, "http://ccbpm.mydoc.io/?v=5404&t=17901");
-                map.AddTBInt(NodeAttr.Step, 0, "²½Öè(ÎŞ¼ÆËãÒâÒå)", true, false);
+                map.AddTBInt(NodeAttr.Step, 0, "æ­¥éª¤(æ— è®¡ç®—æ„ä¹‰)", true, false);
                 map.SetHelperUrl(NodeAttr.Step, "http://ccbpm.mydoc.io/?v=5404&t=17902");
-                //map.SetHelperAlert(NodeAttr.Step, "ËüÓÃÓÚ½ÚµãµÄÅÅĞò£¬ÕıÈ·µÄÉèÖÃ²½Öè¿ÉÒÔÈÃÁ÷³ÌÈİÒ×¶ÁĞ´."); //Ê¹ÓÃalertµÄ·½Ê½ÏÔÊ¾°ïÖúĞÅÏ¢.
-                map.AddTBString(NodeAttr.FK_Flow, null, "Á÷³Ì±àºÅ", false, false, 3, 3, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17023");
-                map.AddTBString(NodeAttr.Name, null, "Ãû³Æ", true, true, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
-                map.AddTBString(NodeAttr.Tip, null, "²Ù×÷ÌáÊ¾", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
+                //map.SetHelperAlert(NodeAttr.Step, "å®ƒç”¨äºèŠ‚ç‚¹çš„æ’åºï¼Œæ­£ç¡®çš„è®¾ç½®æ­¥éª¤å¯ä»¥è®©æµç¨‹å®¹æ˜“è¯»å†™."); //ä½¿ç”¨alertçš„æ–¹å¼æ˜¾ç¤ºå¸®åŠ©ä¿¡æ¯.
+                map.AddTBString(NodeAttr.FK_Flow, null, "æµç¨‹ç¼–å·", false, false, 3, 3, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17023");
+                map.AddTBString(NodeAttr.Name, null, "åç§°", true, true, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
+                map.AddTBString(NodeAttr.Tip, null, "æ“ä½œæç¤º", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
 
 
-                map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "Ë­Ö´ĞĞËü",true, true, NodeAttr.WhoExeIt, "@0=²Ù×÷Ô±Ö´ĞĞ@1=»úÆ÷Ö´ĞĞ@2=»ìºÏÖ´ĞĞ");
+                map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "è°æ‰§è¡Œå®ƒ",true, true, NodeAttr.WhoExeIt, "@0=æ“ä½œå‘˜æ‰§è¡Œ@1=æœºå™¨æ‰§è¡Œ@2=æ··åˆæ‰§è¡Œ");
                 map.SetHelperUrl(NodeAttr.WhoExeIt, "http://ccbpm.mydoc.io/?v=5404&t=17913");
 
-                map.AddDDLSysEnum(NodeAttr.TurnToDeal, 0, "·¢ËÍºó×ªÏò",
-                 true, true, NodeAttr.TurnToDeal, "@0=ÌáÊ¾ccflowÄ¬ÈÏĞÅÏ¢@1=ÌáÊ¾Ö¸¶¨ĞÅÏ¢@2=×ªÏòÖ¸¶¨µÄurl@3=°´ÕÕÌõ¼ş×ªÏò");
+                map.AddDDLSysEnum(NodeAttr.TurnToDeal, 0, "å‘é€åè½¬å‘",
+                 true, true, NodeAttr.TurnToDeal, "@0=æç¤ºccflowé»˜è®¤ä¿¡æ¯@1=æç¤ºæŒ‡å®šä¿¡æ¯@2=è½¬å‘æŒ‡å®šçš„url@3=æŒ‰ç…§æ¡ä»¶è½¬å‘");
                 map.SetHelperUrl(NodeAttr.TurnToDeal, "http://ccbpm.mydoc.io/?v=5404&t=17914");
-                map.AddTBString(NodeAttr.TurnToDealDoc, null, "×ªÏò´¦ÀíÄÚÈİ", true, false, 0, 1000, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17914");
-                map.AddDDLSysEnum(NodeAttr.ReadReceipts, 0, "ÒÑ¶Á»ØÖ´", true, true, NodeAttr.ReadReceipts,
-                    "@0=²»»ØÖ´@1=×Ô¶¯»ØÖ´@2=ÓÉÉÏÒ»½Úµã±íµ¥×Ö¶Î¾ö¶¨@3=ÓÉSDK¿ª·¢Õß²ÎÊı¾ö¶¨");
+                map.AddTBString(NodeAttr.TurnToDealDoc, null, "è½¬å‘å¤„ç†å†…å®¹", true, false, 0, 1000, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17914");
+                map.AddDDLSysEnum(NodeAttr.ReadReceipts, 0, "å·²è¯»å›æ‰§", true, true, NodeAttr.ReadReceipts,
+                    "@0=ä¸å›æ‰§@1=è‡ªåŠ¨å›æ‰§@2=ç”±ä¸Šä¸€èŠ‚ç‚¹è¡¨å•å­—æ®µå†³å®š@3=ç”±SDKå¼€å‘è€…å‚æ•°å†³å®š");
                 map.SetHelperUrl(NodeAttr.ReadReceipts, "http://ccbpm.mydoc.io/?v=5404&t=17915");
 
-                map.AddDDLSysEnum(NodeAttr.CondModel, 0, "·½ÏòÌõ¼ş¿ØÖÆ¹æÔò", true, true, NodeAttr.CondModel,
-                 "@0=ÓÉÁ¬½ÓÏßÌõ¼ş¿ØÖÆ@1=ÈÃÓÃ»§ÊÖ¹¤Ñ¡Ôñ");
-                map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //Ôö¼Ó°ïÖú
+                map.AddDDLSysEnum(NodeAttr.CondModel, 0, "æ–¹å‘æ¡ä»¶æ§åˆ¶è§„åˆ™", true, true, NodeAttr.CondModel,
+                 "@0=ç”±è¿æ¥çº¿æ¡ä»¶æ§åˆ¶@1=è®©ç”¨æˆ·æ‰‹å·¥é€‰æ‹©");
+                map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //å¢åŠ å¸®åŠ©
 
-                // ³·Ïú¹æÔò.
-                map.AddDDLSysEnum(NodeAttr.CancelRole,(int)CancelRole.OnlyNextStep, "³·Ïú¹æÔò", true, true,
-                    NodeAttr.CancelRole,"@0=ÉÏÒ»²½¿ÉÒÔ³·Ïú@1=²»ÄÜ³·Ïú@2=ÉÏÒ»²½Óë¿ªÊ¼½Úµã¿ÉÒÔ³·Ïú@3=Ö¸¶¨µÄ½Úµã¿ÉÒÔ³·Ïú");
+                // æ’¤é”€è§„åˆ™.
+                map.AddDDLSysEnum(NodeAttr.CancelRole,(int)CancelRole.OnlyNextStep, "æ’¤é”€è§„åˆ™", true, true,
+                    NodeAttr.CancelRole,"@0=ä¸Šä¸€æ­¥å¯ä»¥æ’¤é”€@1=ä¸èƒ½æ’¤é”€@2=ä¸Šä¸€æ­¥ä¸å¼€å§‹èŠ‚ç‚¹å¯ä»¥æ’¤é”€@3=æŒ‡å®šçš„èŠ‚ç‚¹å¯ä»¥æ’¤é”€");
                 map.SetHelperUrl(NodeAttr.CancelRole, "http://ccbpm.mydoc.io/?v=5404&t=17919");
 
-                // ½Úµã¹¤×÷Åú´¦Àí. edit by peng, 2014-01-24.    by huangzhimin ²ÉÓÃ¹¦ÄÜ×¨Ìâ·½Ê½£¬ÒÆÖÁ×ó²àÁĞ±í
-                //map.AddDDLSysEnum(NodeAttr.BatchRole, (int)BatchRole.None, "¹¤×÷Åú´¦Àí", true, true, NodeAttr.BatchRole, "@0=²»¿ÉÒÔÅú´¦Àí@1=ÅúÁ¿ÉóºË@2=·Ö×éÅúÁ¿ÉóºË");
-                //map.AddTBInt(NodeAttr.BatchListCount, 12, "Åú´¦ÀíÊıÁ¿", true, false);
-                ////map.SetHelperUrl(NodeAttr.BatchRole, this[SYS_CCFLOW, "½Úµã¹¤×÷Åú´¦Àí"]); //Ôö¼Ó°ïÖú
+                // èŠ‚ç‚¹å·¥ä½œæ‰¹å¤„ç†. edit by peng, 2014-01-24.    by huangzhimin é‡‡ç”¨åŠŸèƒ½ä¸“é¢˜æ–¹å¼ï¼Œç§»è‡³å·¦ä¾§åˆ—è¡¨
+                //map.AddDDLSysEnum(NodeAttr.BatchRole, (int)BatchRole.None, "å·¥ä½œæ‰¹å¤„ç†", true, true, NodeAttr.BatchRole, "@0=ä¸å¯ä»¥æ‰¹å¤„ç†@1=æ‰¹é‡å®¡æ ¸@2=åˆ†ç»„æ‰¹é‡å®¡æ ¸");
+                //map.AddTBInt(NodeAttr.BatchListCount, 12, "æ‰¹å¤„ç†æ•°é‡", true, false);
+                ////map.SetHelperUrl(NodeAttr.BatchRole, this[SYS_CCFLOW, "èŠ‚ç‚¹å·¥ä½œæ‰¹å¤„ç†"]); //å¢åŠ å¸®åŠ©
                 //map.SetHelperUrl(NodeAttr.BatchRole, "http://ccbpm.mydoc.io/?v=5404&t=17920");
                 //map.SetHelperUrl(NodeAttr.BatchListCount, "http://ccbpm.mydoc.io/?v=5404&t=17920");
-                //map.AddTBString(NodeAttr.BatchParas, null, "Åú´¦Àí²ÎÊı", true, false, 0, 300, 10, true);
+                //map.AddTBString(NodeAttr.BatchParas, null, "æ‰¹å¤„ç†å‚æ•°", true, false, 0, 300, 10, true);
                 //map.SetHelperUrl(NodeAttr.BatchParas, "http://ccbpm.mydoc.io/?v=5404&t=17920");
 
 
-                map.AddBoolean(NodeAttr.IsTask, true, "ÔÊĞí·ÖÅä¹¤×÷·ñ?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17904");
-                map.AddBoolean(NodeAttr.IsRM, true, "ÊÇ·ñÆôÓÃÍ¶µİÂ·¾¶×Ô¶¯¼ÇÒä¹¦ÄÜ?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
+                map.AddBoolean(NodeAttr.IsTask, true, "å…è®¸åˆ†é…å·¥ä½œå¦?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17904");
+                map.AddBoolean(NodeAttr.IsRM, true, "æ˜¯å¦å¯ç”¨æŠ•é€’è·¯å¾„è‡ªåŠ¨è®°å¿†åŠŸèƒ½?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
 
-                map.AddTBDateTime("DTFrom", "ÉúÃüÖÜÆÚ´Ó", true, true);
-                map.AddTBDateTime("DTTo", "ÉúÃüÖÜÆÚµ½", true, true);
+                map.AddTBDateTime("DTFrom", "ç”Ÿå‘½å‘¨æœŸä»", true, true);
+                map.AddTBDateTime("DTTo", "ç”Ÿå‘½å‘¨æœŸåˆ°", true, true);
 
-                map.AddBoolean(NodeAttr.IsBUnit, false, "ÊÇ·ñÊÇ½ÚµãÄ£°æ£¨ÒµÎñµ¥Ôª£©?", true, true, true, "http://ccbpm.mydoc.io/?v=5404&t=17904");
+                map.AddBoolean(NodeAttr.IsBUnit, false, "æ˜¯å¦æ˜¯èŠ‚ç‚¹æ¨¡ç‰ˆï¼ˆä¸šåŠ¡å•å…ƒï¼‰?", true, true, true, "http://ccbpm.mydoc.io/?v=5404&t=17904");
 
                 
-                map.AddTBString(NodeAttr.FocusField, null, "½¹µã×Ö¶Î", true, false, 0, 50, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17932");
-                map.AddDDLSysEnum(NodeAttr.SaveModel, 0, "±£´æ·½Ê½", true, true);
+                map.AddTBString(NodeAttr.FocusField, null, "ç„¦ç‚¹å­—æ®µ", true, false, 0, 50, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17932");
+                map.AddDDLSysEnum(NodeAttr.SaveModel, 0, "ä¿å­˜æ–¹å¼", true, true);
                 map.SetHelperUrl(NodeAttr.SaveModel, "http://ccbpm.mydoc.io/?v=5404&t=17934");
 
-                map.AddBoolean(NodeAttr.IsGuestNode, false, "ÊÇ·ñÊÇÍâ²¿ÓÃ»§Ö´ĞĞµÄ½Úµã(·Ç×éÖ¯½á¹¹ÈËÔ±²ÎÓë´¦Àí¹¤×÷µÄ½Úµã)?", true, true, true);
+                map.AddBoolean(NodeAttr.IsGuestNode, false, "æ˜¯å¦æ˜¯å¤–éƒ¨ç”¨æˆ·æ‰§è¡Œçš„èŠ‚ç‚¹(éç»„ç»‡ç»“æ„äººå‘˜å‚ä¸å¤„ç†å·¥ä½œçš„èŠ‚ç‚¹)?", true, true, true);
 
-                map.AddTBString(NodeAttr.SelfParas, null, "×Ô¶¨Òå²ÎÊı", true, false, 0, 500, 10, true);
-                #endregion  »ù´¡ÊôĞÔ
+                map.AddTBString(NodeAttr.SelfParas, null, "è‡ªå®šä¹‰å‚æ•°", true, false, 0, 500, 10, true);
+                #endregion  åŸºç¡€å±æ€§
                  
-                #region ·ÖºÏÁ÷×ÓÏß³ÌÊôĞÔ
-                map.AddDDLSysEnum(NodeAttr.RunModel, 0, "½ÚµãÀàĞÍ",
-                    true, true, NodeAttr.RunModel, "@0=ÆÕÍ¨@1=ºÏÁ÷@2=·ÖÁ÷@3=·ÖºÏÁ÷@4=×ÓÏß³Ì");
+                #region åˆ†åˆæµå­çº¿ç¨‹å±æ€§
+                map.AddDDLSysEnum(NodeAttr.RunModel, 0, "èŠ‚ç‚¹ç±»å‹",
+                    true, true, NodeAttr.RunModel, "@0=æ™®é€š@1=åˆæµ@2=åˆ†æµ@3=åˆ†åˆæµ@4=å­çº¿ç¨‹");
 
-                map.SetHelperUrl(NodeAttr.RunModel, "http://ccbpm.mydoc.io/?v=5404&t=17940"); //Ôö¼Ó°ïÖú.
+                map.SetHelperUrl(NodeAttr.RunModel, "http://ccbpm.mydoc.io/?v=5404&t=17940"); //å¢åŠ å¸®åŠ©.
         
-                //×ÓÏß³ÌÀàĞÍ.
-                map.AddDDLSysEnum(NodeAttr.SubThreadType, 0, "×ÓÏß³ÌÀàĞÍ", true, true, NodeAttr.SubThreadType, "@0=Í¬±íµ¥@1=Òì±íµ¥");
-                map.SetHelperUrl(NodeAttr.SubThreadType, "http://ccbpm.mydoc.io/?v=5404&t=17944"); //Ôö¼Ó°ïÖú
+                //å­çº¿ç¨‹ç±»å‹.
+                map.AddDDLSysEnum(NodeAttr.SubThreadType, 0, "å­çº¿ç¨‹ç±»å‹", true, true, NodeAttr.SubThreadType, "@0=åŒè¡¨å•@1=å¼‚è¡¨å•");
+                map.SetHelperUrl(NodeAttr.SubThreadType, "http://ccbpm.mydoc.io/?v=5404&t=17944"); //å¢åŠ å¸®åŠ©
 
 
-                map.AddTBDecimal(NodeAttr.PassRate, 100, "Íê³ÉÍ¨¹ıÂÊ", true, false);
-                map.SetHelperUrl(NodeAttr.PassRate, "http://ccbpm.mydoc.io/?v=5404&t=17945"); //Ôö¼Ó°ïÖú.
+                map.AddTBDecimal(NodeAttr.PassRate, 100, "å®Œæˆé€šè¿‡ç‡", true, false);
+                map.SetHelperUrl(NodeAttr.PassRate, "http://ccbpm.mydoc.io/?v=5404&t=17945"); //å¢åŠ å¸®åŠ©.
 
-                // Æô¶¯×ÓÏß³Ì²ÎÊı 2013-01-04
-                map.AddDDLSysEnum(NodeAttr.SubFlowStartWay, (int)SubFlowStartWay.None, "×ÓÏß³ÌÆô¶¯·½Ê½", true, true,
-                    NodeAttr.SubFlowStartWay, "@0=²»Æô¶¯@1=Ö¸¶¨µÄ×Ö¶ÎÆô¶¯@2=°´Ã÷Ï¸±íÆô¶¯");
-                map.AddTBString(NodeAttr.SubFlowStartParas, null, "Æô¶¯²ÎÊı", true, false, 0, 100, 10, true);
-                map.SetHelperUrl(NodeAttr.SubFlowStartWay, "http://ccbpm.mydoc.io/?v=5404&t=17946"); //Ôö¼Ó°ïÖú
+                // å¯åŠ¨å­çº¿ç¨‹å‚æ•° 2013-01-04
+                map.AddDDLSysEnum(NodeAttr.SubFlowStartWay, (int)SubFlowStartWay.None, "å­çº¿ç¨‹å¯åŠ¨æ–¹å¼", true, true,
+                    NodeAttr.SubFlowStartWay, "@0=ä¸å¯åŠ¨@1=æŒ‡å®šçš„å­—æ®µå¯åŠ¨@2=æŒ‰æ˜ç»†è¡¨å¯åŠ¨");
+                map.AddTBString(NodeAttr.SubFlowStartParas, null, "å¯åŠ¨å‚æ•°", true, false, 0, 100, 10, true);
+                map.SetHelperUrl(NodeAttr.SubFlowStartWay, "http://ccbpm.mydoc.io/?v=5404&t=17946"); //å¢åŠ å¸®åŠ©
 
-                //´ı°ì´¦ÀíÄ£Ê½.
-                map.AddDDLSysEnum(NodeAttr.TodolistModel, (int)TodolistModel.QiangBan, "´ı°ì´¦ÀíÄ£Ê½", true, true, NodeAttr.TodolistModel,
-                    "@0=ÇÀ°ìÄ£Ê½@1=Ğ­×÷Ä£Ê½@2=¶ÓÁĞÄ£Ê½@3=¹²ÏíÄ£Ê½");
-                map.SetHelperUrl(NodeAttr.TodolistModel, "http://ccbpm.mydoc.io/?v=5404&t=17947"); //Ôö¼Ó°ïÖú.
+                //å¾…åŠå¤„ç†æ¨¡å¼.
+                map.AddDDLSysEnum(NodeAttr.TodolistModel, (int)TodolistModel.QiangBan, "å¾…åŠå¤„ç†æ¨¡å¼", true, true, NodeAttr.TodolistModel,
+                    "@0=æŠ¢åŠæ¨¡å¼@1=åä½œæ¨¡å¼@2=é˜Ÿåˆ—æ¨¡å¼@3=å…±äº«æ¨¡å¼");
+                map.SetHelperUrl(NodeAttr.TodolistModel, "http://ccbpm.mydoc.io/?v=5404&t=17947"); //å¢åŠ å¸®åŠ©.
                 
 
-                //·¢ËÍ×èÈûÄ£Ê½.
-                //map.AddDDLSysEnum(NodeAttr.BlockModel, (int)BlockModel.None, "·¢ËÍ×èÈûÄ£Ê½", true, true, NodeAttr.BlockModel,
-                //    "@0=²»×èÈû@1=µ±Ç°½ÚµãÓĞÎ´Íê³ÉµÄ×ÓÁ÷³ÌÊ±@2=°´Ô¼¶¨¸ñÊ½×èÈûÎ´Íê³É×ÓÁ÷³Ì@3=°´ÕÕSQL×èÈû@4=°´ÕÕ±í´ïÊ½×èÈû");
-                //map.SetHelperUrl(NodeAttr.BlockModel, "http://ccbpm.mydoc.io/?v=5404&t=17948"); //Ôö¼Ó°ïÖú.
+                //å‘é€é˜»å¡æ¨¡å¼.
+                //map.AddDDLSysEnum(NodeAttr.BlockModel, (int)BlockModel.None, "å‘é€é˜»å¡æ¨¡å¼", true, true, NodeAttr.BlockModel,
+                //    "@0=ä¸é˜»å¡@1=å½“å‰èŠ‚ç‚¹æœ‰æœªå®Œæˆçš„å­æµç¨‹æ—¶@2=æŒ‰çº¦å®šæ ¼å¼é˜»å¡æœªå®Œæˆå­æµç¨‹@3=æŒ‰ç…§SQLé˜»å¡@4=æŒ‰ç…§è¡¨è¾¾å¼é˜»å¡");
+                //map.SetHelperUrl(NodeAttr.BlockModel, "http://ccbpm.mydoc.io/?v=5404&t=17948"); //å¢åŠ å¸®åŠ©.
 
-                //map.AddTBString(NodeAttr.BlockExp, null, "×èÈû±í´ïÊ½", true, false, 0, 700, 10,true);
+                //map.AddTBString(NodeAttr.BlockExp, null, "é˜»å¡è¡¨è¾¾å¼", true, false, 0, 700, 10,true);
                 //map.SetHelperUrl(NodeAttr.BlockExp, "http://ccbpm.mydoc.io/?v=5404&t=17948");
 
-                //map.AddTBString(NodeAttr.BlockAlert, null, "±»×èÈûÊ±ÌáÊ¾ĞÅÏ¢", true, false, 0, 700, 10, true);
+                //map.AddTBString(NodeAttr.BlockAlert, null, "è¢«é˜»å¡æ—¶æç¤ºä¿¡æ¯", true, false, 0, 700, 10, true);
                 //map.SetHelperUrl(NodeAttr.BlockAlert, "http://ccbpm.mydoc.io/?v=5404&t=17948");
 
 
-                map.AddBoolean(NodeAttr.IsAllowRepeatEmps, false, "ÊÇ·ñÔÊĞí×ÓÏß³Ì½ÓÊÜÈËÔ±ÖØ¸´(½öµ±·ÖÁ÷µãÏò×ÓÏß³Ì·¢ËÍÊ±ÓĞĞ§)?", true, true, false);
+                map.AddBoolean(NodeAttr.IsAllowRepeatEmps, false, "æ˜¯å¦å…è®¸å­çº¿ç¨‹æ¥å—äººå‘˜é‡å¤(ä»…å½“åˆ†æµç‚¹å‘å­çº¿ç¨‹å‘é€æ—¶æœ‰æ•ˆ)?", true, true, false);
 
-                map.AddBoolean(NodeAttr.AutoRunEnable, false, "ÊÇ·ñÆôÓÃ×Ô¶¯ÔËĞĞ£¿(½öµ±·ÖÁ÷µãÏò×ÓÏß³Ì·¢ËÍÊ±ÓĞĞ§)", true, true, true);
-                map.AddTBString(NodeAttr.AutoRunParas, null, "×Ô¶¯ÔËĞĞSQL", true, false, 0, 100, 10, true);
+                map.AddBoolean(NodeAttr.AutoRunEnable, false, "æ˜¯å¦å¯ç”¨è‡ªåŠ¨è¿è¡Œï¼Ÿ(ä»…å½“åˆ†æµç‚¹å‘å­çº¿ç¨‹å‘é€æ—¶æœ‰æ•ˆ)", true, true, true);
+                map.AddTBString(NodeAttr.AutoRunParas, null, "è‡ªåŠ¨è¿è¡ŒSQL", true, false, 0, 100, 10, true);
 
-                #endregion ·ÖºÏÁ÷×ÓÏß³ÌÊôĞÔ
+                #endregion åˆ†åˆæµå­çº¿ç¨‹å±æ€§
 
-                #region ×Ô¶¯Ìø×ª¹æÔò
-                map.AddBoolean(NodeAttr.AutoJumpRole0, false, "´¦ÀíÈË¾ÍÊÇ·¢ÆğÈË", true, true, false);
-                map.SetHelperUrl(NodeAttr.AutoJumpRole0, "http://ccbpm.mydoc.io/?v=5404&t=17949"); //Ôö¼Ó°ïÖú
+                #region è‡ªåŠ¨è·³è½¬è§„åˆ™
+                map.AddBoolean(NodeAttr.AutoJumpRole0, false, "å¤„ç†äººå°±æ˜¯å‘èµ·äºº", true, true, false);
+                map.SetHelperUrl(NodeAttr.AutoJumpRole0, "http://ccbpm.mydoc.io/?v=5404&t=17949"); //å¢åŠ å¸®åŠ©
 
-                map.AddBoolean(NodeAttr.AutoJumpRole1, false, "´¦ÀíÈËÒÑ¾­³öÏÖ¹ı", true, true, false);
-                map.AddBoolean(NodeAttr.AutoJumpRole2, false, "´¦ÀíÈËÓëÉÏÒ»²½ÏàÍ¬", true, true, false);
-                map.AddDDLSysEnum(NodeAttr.WhenNoWorker, 0, "ÕÒ²»µ½´¦ÀíÈË´¦Àí¹æÔò",
-       true, true, NodeAttr.WhenNoWorker, "@0=ÌáÊ¾´íÎó@1=×Ô¶¯×ªµ½ÏÂÒ»²½");
+                map.AddBoolean(NodeAttr.AutoJumpRole1, false, "å¤„ç†äººå·²ç»å‡ºç°è¿‡", true, true, false);
+                map.AddBoolean(NodeAttr.AutoJumpRole2, false, "å¤„ç†äººä¸ä¸Šä¸€æ­¥ç›¸åŒ", true, true, false);
+                map.AddDDLSysEnum(NodeAttr.WhenNoWorker, 0, "æ‰¾ä¸åˆ°å¤„ç†äººå¤„ç†è§„åˆ™",
+       true, true, NodeAttr.WhenNoWorker, "@0=æç¤ºé”™è¯¯@1=è‡ªåŠ¨è½¬åˆ°ä¸‹ä¸€æ­¥");
                 #endregion
 
-                #region  ¹¦ÄÜ°´Å¥×´Ì¬
-                map.AddTBString(BtnAttr.SendLab, "·¢ËÍ", "·¢ËÍ°´Å¥±êÇ©", true, false, 0, 50, 10);
+                #region  åŠŸèƒ½æŒ‰é’®çŠ¶æ€
+                map.AddTBString(BtnAttr.SendLab, "å‘é€", "å‘é€æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
                 map.SetHelperUrl(BtnAttr.SendLab, "http://ccbpm.mydoc.io/?v=5404&t=16219");
-                map.AddTBString(BtnAttr.SendJS, "", "°´Å¥JSº¯Êı", true, false, 0, 999, 10);
-                //map.SetHelperBaidu(BtnAttr.SendJS, "ccflow ·¢ËÍÇ°Êı¾İÍêÕûĞÔÅĞ¶Ï"); //Ôö¼Ó°ïÖú.
+                map.AddTBString(BtnAttr.SendJS, "", "æŒ‰é’®JSå‡½æ•°", true, false, 0, 999, 10);
+                //map.SetHelperBaidu(BtnAttr.SendJS, "ccflow å‘é€å‰æ•°æ®å®Œæ•´æ€§åˆ¤æ–­"); //å¢åŠ å¸®åŠ©.
                 map.SetHelperUrl(BtnAttr.SendJS, "http://ccbpm.mydoc.io/?v=5404&t=17967");
 
-                map.AddTBString(BtnAttr.SaveLab, "±£´æ", "±£´æ°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.SaveEnable, true, "ÊÇ·ñÆôÓÃ", true, true);
-                map.SetHelperUrl(BtnAttr.SaveLab, "http://ccbpm.mydoc.io/?v=5404&t=24366"); //Ôö¼Ó°ïÖú
+                map.AddTBString(BtnAttr.SaveLab, "ä¿å­˜", "ä¿å­˜æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.SaveEnable, true, "æ˜¯å¦å¯ç”¨", true, true);
+                map.SetHelperUrl(BtnAttr.SaveLab, "http://ccbpm.mydoc.io/?v=5404&t=24366"); //å¢åŠ å¸®åŠ©
 
-                map.AddTBString(BtnAttr.ThreadLab, "×ÓÏß³Ì", "×ÓÏß³Ì°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.ThreadEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
-                map.SetHelperUrl(BtnAttr.ThreadLab, "http://ccbpm.mydoc.io/?v=5404&t=16263"); //Ôö¼Ó°ïÖú
+                map.AddTBString(BtnAttr.ThreadLab, "å­çº¿ç¨‹", "å­çº¿ç¨‹æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ThreadEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
+                map.SetHelperUrl(BtnAttr.ThreadLab, "http://ccbpm.mydoc.io/?v=5404&t=16263"); //å¢åŠ å¸®åŠ©
 
-                map.AddDDLSysEnum(NodeAttr.ThreadKillRole, (int)ThreadKillRole.None, "×ÓÏß³ÌÉ¾³ı·½Ê½", true, true,
-           NodeAttr.ThreadKillRole, "@0=²»ÄÜÉ¾³ı@1=ÊÖ¹¤É¾³ı@2=×Ô¶¯É¾³ı",true);
-                //map.SetHelperUrl(NodeAttr.ThreadKillRole, ""); //Ôö¼Ó°ïÖú
+                map.AddDDLSysEnum(NodeAttr.ThreadKillRole, (int)ThreadKillRole.None, "å­çº¿ç¨‹åˆ é™¤æ–¹å¼", true, true,
+           NodeAttr.ThreadKillRole, "@0=ä¸èƒ½åˆ é™¤@1=æ‰‹å·¥åˆ é™¤@2=è‡ªåŠ¨åˆ é™¤",true);
+                //map.SetHelperUrl(NodeAttr.ThreadKillRole, ""); //å¢åŠ å¸®åŠ©
                
 
-                map.AddTBString(BtnAttr.SubFlowLab, "×ÓÁ÷³Ì", "×ÓÁ÷³Ì°´Å¥±êÇ©", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.SubFlowLab, "å­æµç¨‹", "å­æµç¨‹æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
                 map.SetHelperUrl(BtnAttr.SubFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=16262");
-                map.AddDDLSysEnum(BtnAttr.SubFlowCtrlRole, 0, "¿ØÖÆ¹æÔò", true, true, BtnAttr.SubFlowCtrlRole, "@0=ÎŞ@1=²»¿ÉÒÔÉ¾³ı×ÓÁ÷³Ì@2=¿ÉÒÔÉ¾³ı×ÓÁ÷³Ì");
+                map.AddDDLSysEnum(BtnAttr.SubFlowCtrlRole, 0, "æ§åˆ¶è§„åˆ™", true, true, BtnAttr.SubFlowCtrlRole, "@0=æ— @1=ä¸å¯ä»¥åˆ é™¤å­æµç¨‹@2=å¯ä»¥åˆ é™¤å­æµç¨‹");
 
-                map.AddTBString(BtnAttr.JumpWayLab, "Ìø×ª", "Ìø×ª°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(NodeAttr.JumpWay, 0, "Ìø×ª¹æÔò", true, true, NodeAttr.JumpWay);
-                map.AddTBString(NodeAttr.JumpToNodes, null, "¿ÉÌø×ªµÄ½Úµã", true, false, 0, 200, 10, true);
-                map.SetHelperUrl(NodeAttr.JumpWay, "http://ccbpm.mydoc.io/?v=5404&t=16261"); //Ôö¼Ó°ïÖú.
+                map.AddTBString(BtnAttr.JumpWayLab, "è·³è½¬", "è·³è½¬æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(NodeAttr.JumpWay, 0, "è·³è½¬è§„åˆ™", true, true, NodeAttr.JumpWay);
+                map.AddTBString(NodeAttr.JumpToNodes, null, "å¯è·³è½¬çš„èŠ‚ç‚¹", true, false, 0, 200, 10, true);
+                map.SetHelperUrl(NodeAttr.JumpWay, "http://ccbpm.mydoc.io/?v=5404&t=16261"); //å¢åŠ å¸®åŠ©.
 
-                map.AddTBString(BtnAttr.ReturnLab, "ÍË»Ø", "ÍË»Ø°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(NodeAttr.ReturnRole, 0,"ÍË»Ø¹æÔò",true, true, NodeAttr.ReturnRole);
-              //  map.AddTBString(NodeAttr.ReturnToNodes, null, "¿ÉÍË»Ø½Úµã", true, false, 0, 200, 10, true);
-                map.SetHelperUrl(NodeAttr.ReturnRole, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //Ôö¼Ó°ïÖú.
+                map.AddTBString(BtnAttr.ReturnLab, "é€€å›", "é€€å›æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(NodeAttr.ReturnRole, 0,"é€€å›è§„åˆ™",true, true, NodeAttr.ReturnRole);
+              //  map.AddTBString(NodeAttr.ReturnToNodes, null, "å¯é€€å›èŠ‚ç‚¹", true, false, 0, 200, 10, true);
+                map.SetHelperUrl(NodeAttr.ReturnRole, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //å¢åŠ å¸®åŠ©.
 
-                map.AddTBString(NodeAttr.ReturnAlert, null, "±»ÍË»ØºóĞÅÏ¢ÌáÊ¾", true, false, 0, 999, 10, true);
+                map.AddTBString(NodeAttr.ReturnAlert, null, "è¢«é€€å›åä¿¡æ¯æç¤º", true, false, 0, 999, 10, true);
 
 
-                map.AddBoolean(NodeAttr.IsBackTracking, false, "ÊÇ·ñ¿ÉÒÔÔ­Â··µ»Ø(ÆôÓÃÍË»Ø¹¦ÄÜ²ÅÓĞĞ§)", true, true, false);
-                map.AddTBString(BtnAttr.ReturnField, "", "ÍË»ØĞÅÏ¢ÌîĞ´×Ö¶Î", true, false, 0, 50, 10);
-                map.SetHelperUrl(NodeAttr.IsBackTracking, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //Ôö¼Ó°ïÖú.
+                map.AddBoolean(NodeAttr.IsBackTracking, false, "æ˜¯å¦å¯ä»¥åŸè·¯è¿”å›(å¯ç”¨é€€å›åŠŸèƒ½æ‰æœ‰æ•ˆ)", true, true, false);
+                map.AddTBString(BtnAttr.ReturnField, "", "é€€å›ä¿¡æ¯å¡«å†™å­—æ®µ", true, false, 0, 50, 10);
+                map.SetHelperUrl(NodeAttr.IsBackTracking, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //å¢åŠ å¸®åŠ©.
 
-                map.AddTBString(NodeAttr.ReturnReasonsItems, null, "ÍË»ØÔ­Òò", true, false, 0, 999, 10, true);
+                map.AddTBString(NodeAttr.ReturnReasonsItems, null, "é€€å›åŸå› ", true, false, 0, 999, 10, true);
 
-                map.AddTBString(BtnAttr.CCLab, "³­ËÍ", "³­ËÍ°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(NodeAttr.CCRole, 0, "³­ËÍ¹æÔò", true, true, NodeAttr.CCRole,
-                    "@@0=²»ÄÜ³­ËÍ@1=ÊÖ¹¤³­ËÍ@2=×Ô¶¯³­ËÍ@3=ÊÖ¹¤Óë×Ô¶¯@4=°´±íµ¥SysCCEmps×Ö¶Î¼ÆËã@5=ÔÚ·¢ËÍÇ°´ò¿ª³­ËÍ´°¿Ú");
-                map.SetHelperUrl(BtnAttr.CCLab, "http://ccbpm.mydoc.io/?v=5404&t=16259"); //Ôö¼Ó°ïÖú.
+                map.AddTBString(BtnAttr.CCLab, "æŠ„é€", "æŠ„é€æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(NodeAttr.CCRole, 0, "æŠ„é€è§„åˆ™", true, true, NodeAttr.CCRole,
+                    "@@0=ä¸èƒ½æŠ„é€@1=æ‰‹å·¥æŠ„é€@2=è‡ªåŠ¨æŠ„é€@3=æ‰‹å·¥ä¸è‡ªåŠ¨@4=æŒ‰è¡¨å•SysCCEmpså­—æ®µè®¡ç®—@5=åœ¨å‘é€å‰æ‰“å¼€æŠ„é€çª—å£");
+                map.SetHelperUrl(BtnAttr.CCLab, "http://ccbpm.mydoc.io/?v=5404&t=16259"); //å¢åŠ å¸®åŠ©.
 
                 // add 2014-04-05.
-                map.AddDDLSysEnum(NodeAttr.CCWriteTo, 0, "³­ËÍĞ´Èë¹æÔò",
-             true, true, NodeAttr.CCWriteTo, "@0=Ğ´Èë³­ËÍÁĞ±í@1=Ğ´Èë´ı°ì@2=Ğ´Èë´ı°ìÓë³­ËÍÁĞ±í", true);
-                map.SetHelperUrl(NodeAttr.CCWriteTo, "http://ccbpm.mydoc.io/?v=5404&t=17976"); //Ôö¼Ó°ïÖú.
+                map.AddDDLSysEnum(NodeAttr.CCWriteTo, 0, "æŠ„é€å†™å…¥è§„åˆ™",
+             true, true, NodeAttr.CCWriteTo, "@0=å†™å…¥æŠ„é€åˆ—è¡¨@1=å†™å…¥å¾…åŠ@2=å†™å…¥å¾…åŠä¸æŠ„é€åˆ—è¡¨", true);
+                map.SetHelperUrl(NodeAttr.CCWriteTo, "http://ccbpm.mydoc.io/?v=5404&t=17976"); //å¢åŠ å¸®åŠ©.
 
-                map.AddTBString(BtnAttr.ShiftLab, "ÒÆ½»", "ÒÆ½»°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.ShiftEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
-                map.SetHelperUrl(BtnAttr.ShiftLab, "http://ccbpm.mydoc.io/?v=5404&t=16257"); //Ôö¼Ó°ïÖú.note:none
+                map.AddTBString(BtnAttr.ShiftLab, "ç§»äº¤", "ç§»äº¤æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ShiftEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
+                map.SetHelperUrl(BtnAttr.ShiftLab, "http://ccbpm.mydoc.io/?v=5404&t=16257"); //å¢åŠ å¸®åŠ©.note:none
 
-                map.AddTBString(BtnAttr.DelLab, "É¾³ı", "É¾³ı°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.DelEnable, 0, "É¾³ı¹æÔò", true, true, BtnAttr.DelEnable);
-                map.SetHelperUrl(BtnAttr.DelLab, "http://ccbpm.mydoc.io/?v=5404&t=17992"); //Ôö¼Ó°ïÖú.
+                map.AddTBString(BtnAttr.DelLab, "åˆ é™¤", "åˆ é™¤æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.DelEnable, 0, "åˆ é™¤è§„åˆ™", true, true, BtnAttr.DelEnable);
+                map.SetHelperUrl(BtnAttr.DelLab, "http://ccbpm.mydoc.io/?v=5404&t=17992"); //å¢åŠ å¸®åŠ©.
 
-                map.AddTBString(BtnAttr.EndFlowLab, "½áÊøÁ÷³Ì", "½áÊøÁ÷³Ì°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.EndFlowEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
-                map.SetHelperUrl(BtnAttr.EndFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17989"); //Ôö¼Ó°ïÖú
+                map.AddTBString(BtnAttr.EndFlowLab, "ç»“æŸæµç¨‹", "ç»“æŸæµç¨‹æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.EndFlowEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
+                map.SetHelperUrl(BtnAttr.EndFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17989"); //å¢åŠ å¸®åŠ©
 
-                map.AddTBString(BtnAttr.PrintDocLab, "´òÓ¡µ¥¾İ", "´òÓ¡µ¥¾İ°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "´òÓ¡·½Ê½", true,
-                    true, BtnAttr.PrintDocEnable, "@0=²»´òÓ¡@1=´òÓ¡ÍøÒ³@2=´òÓ¡RTFÄ£°å@3=´òÓ¡WordÄ£°æ");
-                map.SetHelperUrl(BtnAttr.PrintDocEnable, "http://ccbpm.mydoc.io/?v=5404&t=17979"); //Ôö¼Ó°ïÖú
+                map.AddTBString(BtnAttr.PrintDocLab, "æ‰“å°å•æ®", "æ‰“å°å•æ®æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "æ‰“å°æ–¹å¼", true,
+                    true, BtnAttr.PrintDocEnable, "@0=ä¸æ‰“å°@1=æ‰“å°ç½‘é¡µ@2=æ‰“å°RTFæ¨¡æ¿@3=æ‰“å°Wordæ¨¡ç‰ˆ");
+                map.SetHelperUrl(BtnAttr.PrintDocEnable, "http://ccbpm.mydoc.io/?v=5404&t=17979"); //å¢åŠ å¸®åŠ©
 
-                // map.AddBoolean(BtnAttr.PrintDocEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
-                //map.AddTBString(BtnAttr.AthLab, "¸½¼ş", "¸½¼ş°´Å¥±êÇ©", true, false, 0, 50, 10);
-                //map.AddDDLSysEnum(NodeAttr.FJOpen, 0, this.ToE("FJOpen", "¸½¼şÈ¨ÏŞ"), true, true, 
-                //    NodeAttr.FJOpen, "@0=¹Ø±Õ¸½¼ş@1=²Ù×÷Ô±@2=¹¤×÷ID@3=Á÷³ÌID");
+                // map.AddBoolean(BtnAttr.PrintDocEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
+                //map.AddTBString(BtnAttr.AthLab, "é™„ä»¶", "é™„ä»¶æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                //map.AddDDLSysEnum(NodeAttr.FJOpen, 0, this.ToE("FJOpen", "é™„ä»¶æƒé™"), true, true, 
+                //    NodeAttr.FJOpen, "@0=å…³é—­é™„ä»¶@1=æ“ä½œå‘˜@2=å·¥ä½œID@3=æµç¨‹ID");
 
-                map.AddTBString(BtnAttr.TrackLab, "¹ì¼£", "¹ì¼£°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.TrackEnable, true, "ÊÇ·ñÆôÓÃ", true, true);
-                //map.SetHelperUrl(BtnAttr.TrackLab, this[SYS_CCFLOW, "¹ì¼£"]); //Ôö¼Ó°ïÖú
+                map.AddTBString(BtnAttr.TrackLab, "è½¨è¿¹", "è½¨è¿¹æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.TrackEnable, true, "æ˜¯å¦å¯ç”¨", true, true);
+                //map.SetHelperUrl(BtnAttr.TrackLab, this[SYS_CCFLOW, "è½¨è¿¹"]); //å¢åŠ å¸®åŠ©
                 map.SetHelperUrl(BtnAttr.TrackLab, "http://ccbpm.mydoc.io/?v=5404&t=24369");
 
-                map.AddTBString(BtnAttr.HungLab, "¹ÒÆğ", "¹ÒÆğ°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.HungEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
-                map.SetHelperUrl(BtnAttr.HungLab, "http://ccbpm.mydoc.io/?v=5404&t=16267"); //Ôö¼Ó°ïÖú.
+                map.AddTBString(BtnAttr.HungLab, "æŒ‚èµ·", "æŒ‚èµ·æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.HungEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
+                map.SetHelperUrl(BtnAttr.HungLab, "http://ccbpm.mydoc.io/?v=5404&t=16267"); //å¢åŠ å¸®åŠ©.
 
-                map.AddTBString(BtnAttr.SelectAccepterLab, "½ÓÊÜÈË", "½ÓÊÜÈË°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "¹¤×÷·½Ê½",
+                map.AddTBString(BtnAttr.SelectAccepterLab, "æ¥å—äºº", "æ¥å—äººæŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "å·¥ä½œæ–¹å¼",
           true, true, BtnAttr.SelectAccepterEnable);
-                map.SetHelperUrl(BtnAttr.SelectAccepterLab, "http://ccbpm.mydoc.io/?v=5404&t=16256"); //Ôö¼Ó°ïÖú
+                map.SetHelperUrl(BtnAttr.SelectAccepterLab, "http://ccbpm.mydoc.io/?v=5404&t=16256"); //å¢åŠ å¸®åŠ©
 
 
-                map.AddTBString(BtnAttr.SearchLab, "²éÑ¯", "²éÑ¯°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.SearchEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
-                //map.SetHelperUrl(BtnAttr.SearchLab, this[SYS_CCFLOW, "²éÑ¯"]); //Ôö¼Ó°ïÖú
+                map.AddTBString(BtnAttr.SearchLab, "æŸ¥è¯¢", "æŸ¥è¯¢æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.SearchEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
+                //map.SetHelperUrl(BtnAttr.SearchLab, this[SYS_CCFLOW, "æŸ¥è¯¢"]); //å¢åŠ å¸®åŠ©
                 map.SetHelperUrl(BtnAttr.SearchLab, "http://ccbpm.mydoc.io/?v=5404&t=24373");
 
-                map.AddTBString(BtnAttr.WorkCheckLab, "ÉóºË", "ÉóºË°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.WorkCheckEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                map.AddTBString(BtnAttr.WorkCheckLab, "å®¡æ ¸", "å®¡æ ¸æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.WorkCheckEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                map.AddTBString(BtnAttr.BatchLab, "Åú´¦Àí", "Åú´¦Àí°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.BatchEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
-                map.SetHelperUrl(BtnAttr.BatchLab, "http://ccbpm.mydoc.io/?v=5404&t=17920"); //Ôö¼Ó°ïÖú
+                map.AddTBString(BtnAttr.BatchLab, "æ‰¹å¤„ç†", "æ‰¹å¤„ç†æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.BatchEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
+                map.SetHelperUrl(BtnAttr.BatchLab, "http://ccbpm.mydoc.io/?v=5404&t=17920"); //å¢åŠ å¸®åŠ©
 
-                map.AddTBString(BtnAttr.AskforLab, "¼ÓÇ©", "¼ÓÇ©°´Å¥±êÇ©", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.AskforEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                map.AddTBString(BtnAttr.AskforLab, "åŠ ç­¾", "åŠ ç­¾æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.AskforEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
                 map.SetHelperUrl(BtnAttr.AskforLab, "http://ccbpm.mydoc.io/?v=5404&t=16258");
 
-                // add by ÖÜÅó 2014-11-21. ÈÃÓÃ»§¿ÉÒÔ×Ô¼º¶¨ÒåÁ÷×ª.
-                map.AddTBString(BtnAttr.TCLab, "Á÷×ª×Ô¶¨Òå", "Á÷×ª×Ô¶¨Òå", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.TCEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                // add by å‘¨æœ‹ 2014-11-21. è®©ç”¨æˆ·å¯ä»¥è‡ªå·±å®šä¹‰æµè½¬.
+                map.AddTBString(BtnAttr.TCLab, "æµè½¬è‡ªå®šä¹‰", "æµè½¬è‡ªå®šä¹‰", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.TCEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
                 map.SetHelperUrl(BtnAttr.TCEnable, "http://ccbpm.mydoc.io/?v=5404&t=17978");
 
-                //map.AddTBString(BtnAttr.AskforLabRe, "Ö´ĞĞ", "¼ÓÇ©°´Å¥±êÇ©", true, false, 0, 50, 10);
-                //map.AddBoolean(BtnAttr.AskforEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddTBString(BtnAttr.AskforLabRe, "æ‰§è¡Œ", "åŠ ç­¾æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                //map.AddBoolean(BtnAttr.AskforEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-               // map.SetHelperUrl(BtnAttr.AskforLab, this[SYS_CCFLOW, "¼ÓÇ©"]); //Ôö¼Ó°ïÖú
+               // map.SetHelperUrl(BtnAttr.AskforLab, this[SYS_CCFLOW, "åŠ ç­¾"]); //å¢åŠ å¸®åŠ©
 
 
-                // É¾³ıÁËÕâ¸öÄ£Ê½,ÈÃ±íµ¥·½°¸½øĞĞ¿ØÖÆÁË,±£ÁôÕâÁ½¸ö×Ö¶ÎÒÔ¼æÈİ.
-                map.AddTBString(BtnAttr.WebOfficeLab, "¹«ÎÄ", "ÎÄµµ°´Å¥±êÇ©", false, false, 0, 50, 10);
-                map.AddTBInt(BtnAttr.WebOfficeEnable, 0, "ÎÄµµÆôÓÃ·½Ê½", false, false);
+                // åˆ é™¤äº†è¿™ä¸ªæ¨¡å¼,è®©è¡¨å•æ–¹æ¡ˆè¿›è¡Œæ§åˆ¶äº†,ä¿ç•™è¿™ä¸¤ä¸ªå­—æ®µä»¥å…¼å®¹.
+                map.AddTBString(BtnAttr.WebOfficeLab, "å…¬æ–‡", "æ–‡æ¡£æŒ‰é’®æ ‡ç­¾", false, false, 0, 50, 10);
+                map.AddTBInt(BtnAttr.WebOfficeEnable, 0, "æ–‡æ¡£å¯ç”¨æ–¹å¼", false, false);
                 
                 //cut bye zhoupeng.
-                //map.AddTBString(BtnAttr.WebOfficeLab, "¹«ÎÄ", "ÎÄµµ°´Å¥±êÇ©", true, false, 0, 50, 10);
-                //map.AddDDLSysEnum(BtnAttr.WebOfficeEnable, 0, "ÎÄµµÆôÓÃ·½Ê½", true, true, BtnAttr.WebOfficeEnable,
-                //  "@0=²»ÆôÓÃ@1=°´Å¥·½Ê½@2=±êÇ©Ò³ÖÃºó·½Ê½@3=±êÇ©Ò³ÖÃÇ°·½Ê½");//edited by liuxc,2016-01-18,from xc
+                //map.AddTBString(BtnAttr.WebOfficeLab, "å…¬æ–‡", "æ–‡æ¡£æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                //map.AddDDLSysEnum(BtnAttr.WebOfficeEnable, 0, "æ–‡æ¡£å¯ç”¨æ–¹å¼", true, true, BtnAttr.WebOfficeEnable,
+                //  "@0=ä¸å¯ç”¨@1=æŒ‰é’®æ–¹å¼@2=æ ‡ç­¾é¡µç½®åæ–¹å¼@3=æ ‡ç­¾é¡µç½®å‰æ–¹å¼");//edited by liuxc,2016-01-18,from xc
                 //map.SetHelperUrl(BtnAttr.WebOfficeLab, "http://ccbpm.mydoc.io/?v=5404&t=17993");
 
-                // add by ÖÜÅó 2015-08-06. ÖØÒªĞÔ.
-                map.AddTBString(BtnAttr.PRILab, "ÖØÒªĞÔ", "ÖØÒªĞÔ", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PRIEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                // add by å‘¨æœ‹ 2015-08-06. é‡è¦æ€§.
+                map.AddTBString(BtnAttr.PRILab, "é‡è¦æ€§", "é‡è¦æ€§", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PRIEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                // add by ÖÜÅó 2015-08-06. ½ÚµãÊ±ÏŞ.
-                map.AddTBString(BtnAttr.CHLab, "½ÚµãÊ±ÏŞ", "½ÚµãÊ±ÏŞ", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.CHEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                // add by å‘¨æœ‹ 2015-08-06. èŠ‚ç‚¹æ—¶é™.
+                map.AddTBString(BtnAttr.CHLab, "èŠ‚ç‚¹æ—¶é™", "èŠ‚ç‚¹æ—¶é™", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.CHEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
 
-                // add by ÖÜÅó 2015-12-24. ½ÚµãÊ±ÏŞ.
-                map.AddTBString(BtnAttr.FocusLab, "¹Ø×¢", "¹Ø×¢", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.FocusEnable, true, "ÊÇ·ñÆôÓÃ", true, true);
+                // add by å‘¨æœ‹ 2015-12-24. èŠ‚ç‚¹æ—¶é™.
+                map.AddTBString(BtnAttr.FocusLab, "å…³æ³¨", "å…³æ³¨", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.FocusEnable, true, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
-                #endregion  ¹¦ÄÜ°´Å¥×´Ì¬
+                //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
+                #endregion  åŠŸèƒ½æŒ‰é’®çŠ¶æ€
 
-                #region ¿¼ºËÊôĞÔ
-               // // ¿¼ºËÊôĞÔ
-               // map.AddTBFloat(NodeAttr.TSpanDay, 0, "ÏŞÆÚ(Ìì)", true, false); //"ÏŞÆÚ(Ìì)".
-               // map.AddTBFloat(NodeAttr.TSpanHour, 8, "Ğ¡Ê±", true, false); //"ÏŞÆÚ(Ìì)".
+                #region è€ƒæ ¸å±æ€§
+               // // è€ƒæ ¸å±æ€§
+               // map.AddTBFloat(NodeAttr.TSpanDay, 0, "é™æœŸ(å¤©)", true, false); //"é™æœŸ(å¤©)".
+               // map.AddTBFloat(NodeAttr.TSpanHour, 8, "å°æ—¶", true, false); //"é™æœŸ(å¤©)".
 
-               // map.AddTBFloat(NodeAttr.WarningDay, 0, "¹¤×÷Ô¤¾¯(Ìì)", true, false);    // "¾¯¸æÆÚÏŞ(0²»¾¯¸æ)"
-               // map.AddTBFloat(NodeAttr.WarningHour, 0, "¹¤×÷Ô¤¾¯(Ğ¡Ê±)", true, false); // "¾¯¸æÆÚÏŞ(0²»¾¯¸æ)"
+               // map.AddTBFloat(NodeAttr.WarningDay, 0, "å·¥ä½œé¢„è­¦(å¤©)", true, false);    // "è­¦å‘ŠæœŸé™(0ä¸è­¦å‘Š)"
+               // map.AddTBFloat(NodeAttr.WarningHour, 0, "å·¥ä½œé¢„è­¦(å°æ—¶)", true, false); // "è­¦å‘ŠæœŸé™(0ä¸è­¦å‘Š)"
                // map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
-               // map.AddTBFloat(NodeAttr.TCent, 1, "¿Û·Ö(Ã¿ÑÓÆÚ1Ğ¡Ê±)", true, false); //"¿Û·Ö(Ã¿ÑÓÆÚ1Ìì¿Û)"
+               // map.AddTBFloat(NodeAttr.TCent, 1, "æ‰£åˆ†(æ¯å»¶æœŸ1å°æ—¶)", true, false); //"æ‰£åˆ†(æ¯å»¶æœŸ1å¤©æ‰£)"
                 
-               // //map.AddTBFloat(NodeAttr.MaxDeductCent, 0, "×î¸ß¿Û·Ö", true, false);   //"×î¸ß¿Û·Ö"
-               // //map.AddTBFloat(NodeAttr.SwinkCent, float.Parse("0.1"), "¹¤×÷µÃ·Ö", true, false); //"¹¤×÷µÃ·Ö".
+               // //map.AddTBFloat(NodeAttr.MaxDeductCent, 0, "æœ€é«˜æ‰£åˆ†", true, false);   //"æœ€é«˜æ‰£åˆ†"
+               // //map.AddTBFloat(NodeAttr.SwinkCent, float.Parse("0.1"), "å·¥ä½œå¾—åˆ†", true, false); //"å·¥ä½œå¾—åˆ†".
                // //map.AddTBString(NodeAttr.FK_Flows, null, "flow", false, false, 0, 100, 10);
 
-               // map.AddDDLSysEnum(NodeAttr.CHWay, 0, "¿¼ºË·½Ê½", true, true, NodeAttr.CHWay,"@0=²»¿¼ºË@1=°´Ê±Ğ§@2=°´¹¤×÷Á¿");
+               // map.AddDDLSysEnum(NodeAttr.CHWay, 0, "è€ƒæ ¸æ–¹å¼", true, true, NodeAttr.CHWay,"@0=ä¸è€ƒæ ¸@1=æŒ‰æ—¶æ•ˆ@2=æŒ‰å·¥ä½œé‡");
 
-               //// map.AddTBFloat(NodeAttr.Workload, 0, "¹¤×÷Á¿(µ¥Î»:Ğ¡Ê±)", true, false);
+               //// map.AddTBFloat(NodeAttr.Workload, 0, "å·¥ä½œé‡(å•ä½:å°æ—¶)", true, false);
 
-               // // ÊÇ·ñÖÊÁ¿¿¼ºËµã£¿
-               // map.AddBoolean(NodeAttr.IsEval, false, "ÊÇ·ñÖÊÁ¿¿¼ºËµã", true, true, true);
+               // // æ˜¯å¦è´¨é‡è€ƒæ ¸ç‚¹ï¼Ÿ
+               // map.AddBoolean(NodeAttr.IsEval, false, "æ˜¯å¦è´¨é‡è€ƒæ ¸ç‚¹", true, true, true);
 
 
-               // // È¥µôÁË, ÒÆ¶¯µ½ Ö÷Ìâ¹¦ÄÜ½çÃæ´¦ÀíÁË.
-               // map.AddDDLSysEnum(NodeAttr.OutTimeDeal, 0, "³¬Ê±´¦Àí", true, true, NodeAttr.OutTimeDeal,
-               // "@0=²»´¦Àí@1=×Ô¶¯ÏòÏÂÔË¶¯@2=×Ô¶¯Ìø×ªÖ¸¶¨µÄ½Úµã@3=×Ô¶¯ÒÆ½»¸øÖ¸¶¨µÄÈËÔ±@4=ÏòÖ¸¶¨µÄÈËÔ±·¢ÏûÏ¢@5=É¾³ıÁ÷³Ì@6=Ö´ĞĞSQL");
-               // map.AddTBString(NodeAttr.DoOutTime, null, "´¦ÀíÄÚÈİ", true, false, 0, 300, 10, true);
-               // map.AddTBString(NodeAttr.DoOutTimeCond, null, "Ö´ĞĞ³¬Ê±Ìõ¼ş", true, false, 0, 100, 10, true);
+               // // å»æ‰äº†, ç§»åŠ¨åˆ° ä¸»é¢˜åŠŸèƒ½ç•Œé¢å¤„ç†äº†.
+               // map.AddDDLSysEnum(NodeAttr.OutTimeDeal, 0, "è¶…æ—¶å¤„ç†", true, true, NodeAttr.OutTimeDeal,
+               // "@0=ä¸å¤„ç†@1=è‡ªåŠ¨å‘ä¸‹è¿åŠ¨@2=è‡ªåŠ¨è·³è½¬æŒ‡å®šçš„èŠ‚ç‚¹@3=è‡ªåŠ¨ç§»äº¤ç»™æŒ‡å®šçš„äººå‘˜@4=å‘æŒ‡å®šçš„äººå‘˜å‘æ¶ˆæ¯@5=åˆ é™¤æµç¨‹@6=æ‰§è¡ŒSQL");
+               // map.AddTBString(NodeAttr.DoOutTime, null, "å¤„ç†å†…å®¹", true, false, 0, 300, 10, true);
+               // map.AddTBString(NodeAttr.DoOutTimeCond, null, "æ‰§è¡Œè¶…æ—¶æ¡ä»¶", true, false, 0, 100, 10, true);
                // map.SetHelperUrl(NodeAttr.OutTimeDeal, "http://ccbpm.mydoc.io/?v=5404&t=18001");
-                #endregion ¿¼ºËÊôĞÔ
+                #endregion è€ƒæ ¸å±æ€§
 
-                #region ÉóºË×é¼şÊôĞÔ, ´Ë´¦±ä¸üÁËBP.Sys.FrmWorkCheck Ò²Òª±ä¸ü.
+                #region å®¡æ ¸ç»„ä»¶å±æ€§, æ­¤å¤„å˜æ›´äº†BP.Sys.FrmWorkCheck ä¹Ÿè¦å˜æ›´.
                 // BP.Sys.FrmWorkCheck
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "ÉóºË×é¼ş×´Ì¬",
-                    true, true, FrmWorkCheckAttr.FWCSta, "@0=½ûÓÃ@1=ÆôÓÃ@2=Ö»¶Á");
+                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "å®¡æ ¸ç»„ä»¶çŠ¶æ€",
+                    true, true, FrmWorkCheckAttr.FWCSta, "@0=ç¦ç”¨@1=å¯ç”¨@2=åªè¯»");
                 map.SetHelperUrl(FrmWorkCheckAttr.FWCSta, "http://ccbpm.mydoc.io/?v=5404&t=17936");
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "ÏÔÊ¾·½Ê½",
-                    true, true, FrmWorkCheckAttr.FWCShowModel, "@0=±í¸ñ·½Ê½@1=×ÔÓÉÄ£Ê½"); //´ËÊôĞÔÔİÊ±Ã»ÓĞÓÃ.
+                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "æ˜¾ç¤ºæ–¹å¼",
+                    true, true, FrmWorkCheckAttr.FWCShowModel, "@0=è¡¨æ ¼æ–¹å¼@1=è‡ªç”±æ¨¡å¼"); //æ­¤å±æ€§æš‚æ—¶æ²¡æœ‰ç”¨.
                 map.SetHelperUrl(FrmWorkCheckAttr.FWCShowModel, "http://ccbpm.mydoc.io/?v=5404&t=17937");
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCType, (int)FWCType.Check, "¹¤×÷·½Ê½", true, true,
-                    FrmWorkCheckAttr.FWCType, "@0=ÉóºË×é¼ş@1=ÈÕÖ¾×é¼ş@2=ÖÜ±¨×é¼ş@3=ÔÂ±¨×é¼ş");
+                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCType, (int)FWCType.Check, "å·¥ä½œæ–¹å¼", true, true,
+                    FrmWorkCheckAttr.FWCType, "@0=å®¡æ ¸ç»„ä»¶@1=æ—¥å¿—ç»„ä»¶@2=å‘¨æŠ¥ç»„ä»¶@3=æœˆæŠ¥ç»„ä»¶");
                 map.SetHelperUrl(FrmWorkCheckAttr.FWCType, "http://ccbpm.mydoc.io/?v=5404&t=17938");
-                // add by stone 2015-03-19. Èç¹ûÎª¿Õ£¬¾ÍÈ¥½ÚµãÃû³ÆÏÔÊ¾µ½²½ÖèÀï.
-                map.AddTBString(FrmWorkCheckAttr.FWCNodeName, null, "½ÚµãÒâ¼ûÃû³Æ", true, false, 0, 100, 10);
+                // add by stone 2015-03-19. å¦‚æœä¸ºç©ºï¼Œå°±å»èŠ‚ç‚¹åç§°æ˜¾ç¤ºåˆ°æ­¥éª¤é‡Œ.
+                map.AddTBString(FrmWorkCheckAttr.FWCNodeName, null, "èŠ‚ç‚¹æ„è§åç§°", true, false, 0, 100, 10);
 
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCAth, (int)FWCAth.None, "¸½¼şÉÏ´«", true, true,
-                   FrmWorkCheckAttr.FWCAth, "@0=²»ÆôÓÃ@1=¶à¸½¼ş@2=µ¥¸½¼ş(Ôİ²»Ö§³Ö)@3=Í¼Æ¬¸½¼ş(Ôİ²»Ö§³Ö)");
+                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCAth, (int)FWCAth.None, "é™„ä»¶ä¸Šä¼ ", true, true,
+                   FrmWorkCheckAttr.FWCAth, "@0=ä¸å¯ç”¨@1=å¤šé™„ä»¶@2=å•é™„ä»¶(æš‚ä¸æ”¯æŒ)@3=å›¾ç‰‡é™„ä»¶(æš‚ä¸æ”¯æŒ)");
                 map.SetHelperAlert(FrmWorkCheckAttr.FWCAth,
-                    "ÔÚÉóºËÆÚ¼ä£¬ÊÇ·ñÆôÓÃÉÏ´«¸½¼ş£¿ÆôÓÃÊ²Ã´ÑùµÄ¸½¼ş£¿×¢Òâ£º¸½¼şµÄÊôĞÔÔÚ½Úµã±íµ¥ÀïÅäÖÃ¡£"); //Ê¹ÓÃalertµÄ·½Ê½ÏÔÊ¾°ïÖúĞÅÏ¢.
+                    "åœ¨å®¡æ ¸æœŸé—´ï¼Œæ˜¯å¦å¯ç”¨ä¸Šä¼ é™„ä»¶ï¼Ÿå¯ç”¨ä»€ä¹ˆæ ·çš„é™„ä»¶ï¼Ÿæ³¨æ„ï¼šé™„ä»¶çš„å±æ€§åœ¨èŠ‚ç‚¹è¡¨å•é‡Œé…ç½®ã€‚"); //ä½¿ç”¨alertçš„æ–¹å¼æ˜¾ç¤ºå¸®åŠ©ä¿¡æ¯.
 
-                map.AddBoolean(FrmWorkCheckAttr.FWCTrackEnable, true, "¹ì¼£Í¼ÊÇ·ñÏÔÊ¾£¿", true, true, false);
-                map.AddBoolean(FrmWorkCheckAttr.FWCListEnable, true, "ÀúÊ·ÉóºËĞÅÏ¢ÊÇ·ñÏÔÊ¾£¿(·ñ,½ö³öÏÖÒâ¼û¿ò)", true, true, true);
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowAllStep, false, "ÔÚ¹ì¼£±íÀïÊÇ·ñÏÔÊ¾ËùÓĞµÄ²½Öè£¿", true, true,true);
-                map.AddBoolean(FrmWorkCheckAttr.SigantureEnabel, false, "Ê¹ÓÃÍ¼Æ¬Ç©Ãû(ÔÚĞÅÏ¢ÌîĞ´µ×²¿ÏÔÊ¾ÎÄ×ÖOrÍ¼Æ¬Ç©Ãû)£¿", true, true, true);
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsFullInfo, true, "Èç¹ûÓÃ»§Î´ÉóºËÊÇ·ñ°´ÕÕÄ¬ÈÏÒâ¼ûÌî³ä£¿", true, true, true);
+                map.AddBoolean(FrmWorkCheckAttr.FWCTrackEnable, true, "è½¨è¿¹å›¾æ˜¯å¦æ˜¾ç¤ºï¼Ÿ", true, true, false);
+                map.AddBoolean(FrmWorkCheckAttr.FWCListEnable, true, "å†å²å®¡æ ¸ä¿¡æ¯æ˜¯å¦æ˜¾ç¤ºï¼Ÿ(å¦,ä»…å‡ºç°æ„è§æ¡†)", true, true, true);
+                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowAllStep, false, "åœ¨è½¨è¿¹è¡¨é‡Œæ˜¯å¦æ˜¾ç¤ºæ‰€æœ‰çš„æ­¥éª¤ï¼Ÿ", true, true,true);
+                map.AddBoolean(FrmWorkCheckAttr.SigantureEnabel, false, "ä½¿ç”¨å›¾ç‰‡ç­¾å(åœ¨ä¿¡æ¯å¡«å†™åº•éƒ¨æ˜¾ç¤ºæ–‡å­—Orå›¾ç‰‡ç­¾å)ï¼Ÿ", true, true, true);
+                map.AddBoolean(FrmWorkCheckAttr.FWCIsFullInfo, true, "å¦‚æœç”¨æˆ·æœªå®¡æ ¸æ˜¯å¦æŒ‰ç…§é»˜è®¤æ„è§å¡«å……ï¼Ÿ", true, true, true);
 
 
-                map.AddTBString(FrmWorkCheckAttr.FWCOpLabel, "ÉóºË", "²Ù×÷Ãû´Ê(ÉóºË/ÉóÔÄ/ÅúÊ¾)", true, false, 0, 50, 10);
-                map.AddTBString(FrmWorkCheckAttr.FWCDefInfo, "Í¬Òâ", "Ä¬ÈÏÉóºËĞÅÏ¢", true, false, 0, 50, 10);
+                map.AddTBString(FrmWorkCheckAttr.FWCOpLabel, "å®¡æ ¸", "æ“ä½œåè¯(å®¡æ ¸/å®¡é˜…/æ‰¹ç¤º)", true, false, 0, 50, 10);
+                map.AddTBString(FrmWorkCheckAttr.FWCDefInfo, "åŒæ„", "é»˜è®¤å®¡æ ¸ä¿¡æ¯", true, false, 0, 50, 10);
 
-                //map.AddTBFloat(FrmWorkCheckAttr.FWC_X, 5, "Î»ÖÃX", true, false);
-                //map.AddTBFloat(FrmWorkCheckAttr.FWC_Y, 5, "Î»ÖÃY", true, false);
+                //map.AddTBFloat(FrmWorkCheckAttr.FWC_X, 5, "ä½ç½®X", true, false);
+                //map.AddTBFloat(FrmWorkCheckAttr.FWC_Y, 5, "ä½ç½®Y", true, false);
                 
-                // ¸ß¶ÈÓë¿í¶È, Èç¹ûÊÇ×ÔÓÉ±íµ¥¾Í²»Òª±ä»¯¸ÃÊôĞÔ.
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_H, 300, "¸ß¶È", true, false);
-                map.SetHelperAlert(FrmWorkCheckAttr.FWC_H, "Èç¹ûÊÇ×ÔÓÉ±íµ¥¾Í²»Òª±ä»¯¸ÃÊôĞÔ,Îª0£¬Ôò±êÊ¶Îª100%,Ó¦ÓÃµÄ×é¼şÄ£Ê½."); //Ôö¼Ó°ïÖú
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_W, 400, "¿í¶È", true, false);
-                map.SetHelperAlert(FrmWorkCheckAttr.FWC_W, "Èç¹ûÊÇ×ÔÓÉ±íµ¥¾Í²»Òª±ä»¯¸ÃÊôĞÔ,Îª0£¬Ôò±êÊ¶Îª100%,Ó¦ÓÃµÄ×é¼şÄ£Ê½."); //Ôö¼Ó°ïÖú
+                // é«˜åº¦ä¸å®½åº¦, å¦‚æœæ˜¯è‡ªç”±è¡¨å•å°±ä¸è¦å˜åŒ–è¯¥å±æ€§.
+                map.AddTBFloat(FrmWorkCheckAttr.FWC_H, 300, "é«˜åº¦", true, false);
+                map.SetHelperAlert(FrmWorkCheckAttr.FWC_H, "å¦‚æœæ˜¯è‡ªç”±è¡¨å•å°±ä¸è¦å˜åŒ–è¯¥å±æ€§,ä¸º0ï¼Œåˆ™æ ‡è¯†ä¸º100%,åº”ç”¨çš„ç»„ä»¶æ¨¡å¼."); //å¢åŠ å¸®åŠ©
+                map.AddTBFloat(FrmWorkCheckAttr.FWC_W, 400, "å®½åº¦", true, false);
+                map.SetHelperAlert(FrmWorkCheckAttr.FWC_W, "å¦‚æœæ˜¯è‡ªç”±è¡¨å•å°±ä¸è¦å˜åŒ–è¯¥å±æ€§,ä¸º0ï¼Œåˆ™æ ‡è¯†ä¸º100%,åº”ç”¨çš„ç»„ä»¶æ¨¡å¼."); //å¢åŠ å¸®åŠ©
                 
-                map.AddTBStringDoc(FrmWorkCheckAttr.FWCFields, null, "ÉóÅú¸ñÊ½»¯×Ö¶Î", true, false,true);
-                #endregion ÉóºË×é¼şÊôĞÔ.
+                map.AddTBStringDoc(FrmWorkCheckAttr.FWCFields, null, "å®¡æ‰¹æ ¼å¼åŒ–å­—æ®µ", true, false,true);
+                #endregion å®¡æ ¸ç»„ä»¶å±æ€§.
 
-                #region ¹«ÎÄ°´Å¥ del by zhoupeng. °´ÕÕĞÂ²ıµÄ±ê×¼ĞŞ¸Ä.
-                //map.AddTBString(BtnAttr.OfficeOpenLab, "´ò¿ª±¾µØ", "´ò¿ª±¾µØ±êÇ©", true, false, 0, 50, 10);
+                #region å…¬æ–‡æŒ‰é’® del by zhoupeng. æŒ‰ç…§æ–°æ˜Œçš„æ ‡å‡†ä¿®æ”¹.
+                //map.AddTBString(BtnAttr.OfficeOpenLab, "æ‰“å¼€æœ¬åœ°", "æ‰“å¼€æœ¬åœ°æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeOpenLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeOpenEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeOpenEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddTBString(BtnAttr.OfficeOpenTemplateLab, "´ò¿ªÄ£°å", "´ò¿ªÄ£°å±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficeOpenTemplateLab, "æ‰“å¼€æ¨¡æ¿", "æ‰“å¼€æ¨¡æ¿æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeOpenTemplateLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeOpenTemplateEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeOpenTemplateEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddTBString(BtnAttr.OfficeSaveLab, "±£´æ", "±£´æ±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficeSaveLab, "ä¿å­˜", "ä¿å­˜æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeSaveLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeSaveEnable, true, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeSaveEnable, true, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddTBString(BtnAttr.OfficeAcceptLab, "½ÓÊÜĞŞ¶©", "½ÓÊÜĞŞ¶©±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficeAcceptLab, "æ¥å—ä¿®è®¢", "æ¥å—ä¿®è®¢æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeAcceptLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeAcceptEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeAcceptEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddTBString(BtnAttr.OfficeRefuseLab, "¾Ü¾øĞŞ¶©", "¾Ü¾øĞŞ¶©±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficeRefuseLab, "æ‹’ç»ä¿®è®¢", "æ‹’ç»ä¿®è®¢æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeRefuseLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeRefuseEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeRefuseEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddTBString(BtnAttr.OfficeOverLab, "Ì×ºì", "Ì×ºì°´Å¥±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficeOverLab, "å¥—çº¢", "å¥—çº¢æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeOverLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeOverEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeOverEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
                
 
-                //map.AddTBString(BtnAttr.OfficePrintLab, "´òÓ¡", "´òÓ¡°´Å¥±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficePrintLab, "æ‰“å°", "æ‰“å°æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficePrintLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficePrintEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficePrintEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddTBString(BtnAttr.OfficeSealLab, "Ç©ÕÂ", "Ç©ÕÂ°´Å¥±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficeSealLab, "ç­¾ç« ", "ç­¾ç« æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeSealLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeSealEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeSealEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddTBString(BtnAttr.OfficeDownLab, "ÏÂÔØ", "ÏÂÔØ°´Å¥±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficeDownLab, "ä¸‹è½½", "ä¸‹è½½æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeDownLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeDownEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeDownEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddTBString(BtnAttr.OfficeInsertFlowLab, "²åÈëÁ÷³Ì", "²åÈëÁ÷³Ì±êÇ©", true, false, 0, 50, 10);
+                //map.AddTBString(BtnAttr.OfficeInsertFlowLab, "æ’å…¥æµç¨‹", "æ’å…¥æµç¨‹æ ‡ç­¾", true, false, 0, 50, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeInsertFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17998");
-                //map.AddBoolean(BtnAttr.OfficeInsertFlowEnable, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeInsertFlowEnable, false, "æ˜¯å¦å¯ç”¨", true, true);
 
-                //map.AddBoolean(BtnAttr.OfficeNodeInfo, false, "ÊÇ·ñ¼ÇÂ¼½ÚµãĞÅÏ¢", true, true);
-                //map.AddBoolean(BtnAttr.OfficeReSavePDF, false, "ÊÇ·ñ¸Ã×Ô¶¯±£´æÎªPDF", true, true);
+                //map.AddBoolean(BtnAttr.OfficeNodeInfo, false, "æ˜¯å¦è®°å½•èŠ‚ç‚¹ä¿¡æ¯", true, true);
+                //map.AddBoolean(BtnAttr.OfficeReSavePDF, false, "æ˜¯å¦è¯¥è‡ªåŠ¨ä¿å­˜ä¸ºPDF", true, true);
 
 
-                //map.AddBoolean(BtnAttr.OfficeIsMarks, true, "ÊÇ·ñ½øÈëÁôºÛÄ£Ê½", true, true);
-                //map.AddTBString(BtnAttr.OfficeTemplate, "", "Ö¸¶¨ÎÄµµÄ£°å", true, false, 0, 100, 10);
+                //map.AddBoolean(BtnAttr.OfficeIsMarks, true, "æ˜¯å¦è¿›å…¥ç•™ç—•æ¨¡å¼", true, true);
+                //map.AddTBString(BtnAttr.OfficeTemplate, "", "æŒ‡å®šæ–‡æ¡£æ¨¡æ¿", true, false, 0, 100, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeTemplate, "http://ccbpm.mydoc.io/?v=5404&t=17998");
 
-                //map.AddBoolean(BtnAttr.OfficeMarksEnable, true, "ÊÇ·ñ²é¿´ÓÃ»§ÁôºÛ", true, true, true);
+                //map.AddBoolean(BtnAttr.OfficeMarksEnable, true, "æ˜¯å¦æŸ¥çœ‹ç”¨æˆ·ç•™ç—•", true, true, true);
 
-                //map.AddBoolean(BtnAttr.OfficeIsParent, true, "ÊÇ·ñÊ¹ÓÃ¸¸Á÷³ÌµÄÎÄµµ", true, true);
+                //map.AddBoolean(BtnAttr.OfficeIsParent, true, "æ˜¯å¦ä½¿ç”¨çˆ¶æµç¨‹çš„æ–‡æ¡£", true, true);
 
-                //map.AddBoolean(BtnAttr.OfficeTHEnable, false, "ÊÇ·ñ×Ô¶¯Ì×ºì", true, true);
-                //map.AddTBString(BtnAttr.OfficeTHTemplate, "", "×Ô¶¯Ì×ºìÄ£°å", true, false, 0, 200, 10);
+                //map.AddBoolean(BtnAttr.OfficeTHEnable, false, "æ˜¯å¦è‡ªåŠ¨å¥—çº¢", true, true);
+                //map.AddTBString(BtnAttr.OfficeTHTemplate, "", "è‡ªåŠ¨å¥—çº¢æ¨¡æ¿", true, false, 0, 200, 10);
                 //map.SetHelperUrl(BtnAttr.OfficeTHTemplate, "http://ccbpm.mydoc.io/?v=5404&t=17998");
 
                 //if (Glo.IsEnableZhiDu)
                 //{
-                //    map.AddTBString(BtnAttr.OfficeFengXianTemplate, "", "·çÏÕµãÄ£°å", true, false, 0, 100, 10);
-                //    map.AddTBString(BtnAttr.OfficeInsertFengXian, "²åÈë·çÏÕµã", "²åÈë·çÏÕµã±êÇ©", true, false, 0, 50, 10);
-                //    map.AddBoolean(BtnAttr.OfficeInsertFengXianEnabel, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //    map.AddTBString(BtnAttr.OfficeFengXianTemplate, "", "é£é™©ç‚¹æ¨¡æ¿", true, false, 0, 100, 10);
+                //    map.AddTBString(BtnAttr.OfficeInsertFengXian, "æ’å…¥é£é™©ç‚¹", "æ’å…¥é£é™©ç‚¹æ ‡ç­¾", true, false, 0, 50, 10);
+                //    map.AddBoolean(BtnAttr.OfficeInsertFengXianEnabel, false, "æ˜¯å¦å¯ç”¨", true, true);
                 //}
 
-                //map.AddTBString(BtnAttr.OfficeDownLab, "ÏÂÔØ", "ÏÂÔØ°´Å¥±êÇ©", true, false, 0, 50, 10);
-                //map.AddBoolean(BtnAttr.OfficeIsDown, false, "ÊÇ·ñÆôÓÃ", true, true);
+                //map.AddTBString(BtnAttr.OfficeDownLab, "ä¸‹è½½", "ä¸‹è½½æŒ‰é’®æ ‡ç­¾", true, false, 0, 50, 10);
+                //map.AddBoolean(BtnAttr.OfficeIsDown, false, "æ˜¯å¦å¯ç”¨", true, true);
                 #endregion
 
-                #region ÒÆ¶¯ÉèÖÃ.
-                map.AddDDLSysEnum(NodeAttr.MPhone_WorkModel, 0, "ÊÖ»ú¹¤×÷Ä£Ê½", true, true, NodeAttr.MPhone_WorkModel, "@0=Ô­ÉúÌ¬@1=ä¯ÀÀÆ÷@2=½ûÓÃ");
-                map.AddDDLSysEnum(NodeAttr.MPhone_SrcModel, 0, "ÊÖ»úÆÁÄ»Ä£Ê½", true, true, NodeAttr.MPhone_SrcModel, "@0=Ç¿ÖÆºáÆÁ@1=Ç¿ÖÆÊúÆÁ@2=ÓÉÖØÁ¦¸ĞÓ¦¾ö¶¨");
+                #region ç§»åŠ¨è®¾ç½®.
+                map.AddDDLSysEnum(NodeAttr.MPhone_WorkModel, 0, "æ‰‹æœºå·¥ä½œæ¨¡å¼", true, true, NodeAttr.MPhone_WorkModel, "@0=åŸç”Ÿæ€@1=æµè§ˆå™¨@2=ç¦ç”¨");
+                map.AddDDLSysEnum(NodeAttr.MPhone_SrcModel, 0, "æ‰‹æœºå±å¹•æ¨¡å¼", true, true, NodeAttr.MPhone_SrcModel, "@0=å¼ºåˆ¶æ¨ªå±@1=å¼ºåˆ¶ç«–å±@2=ç”±é‡åŠ›æ„Ÿåº”å†³å®š");
 
-                map.AddDDLSysEnum(NodeAttr.MPad_WorkModel, 0, "Æ½°å¹¤×÷Ä£Ê½", true, true, NodeAttr.MPad_WorkModel, "@0=Ô­ÉúÌ¬@1=ä¯ÀÀÆ÷@2=½ûÓÃ");
-                map.AddDDLSysEnum(NodeAttr.MPad_SrcModel, 0, "Æ½°åÆÁÄ»Ä£Ê½", true, true, NodeAttr.MPad_SrcModel, "@0=Ç¿ÖÆºáÆÁ@1=Ç¿ÖÆÊúÆÁ@2=ÓÉÖØÁ¦¸ĞÓ¦¾ö¶¨");
+                map.AddDDLSysEnum(NodeAttr.MPad_WorkModel, 0, "å¹³æ¿å·¥ä½œæ¨¡å¼", true, true, NodeAttr.MPad_WorkModel, "@0=åŸç”Ÿæ€@1=æµè§ˆå™¨@2=ç¦ç”¨");
+                map.AddDDLSysEnum(NodeAttr.MPad_SrcModel, 0, "å¹³æ¿å±å¹•æ¨¡å¼", true, true, NodeAttr.MPad_SrcModel, "@0=å¼ºåˆ¶æ¨ªå±@1=å¼ºåˆ¶ç«–å±@2=ç”±é‡åŠ›æ„Ÿåº”å†³å®š");
                 map.SetHelperUrl(NodeAttr.MPhone_WorkModel, "http://bbs.ccflow.org/showtopic-2866.aspx");
-                #endregion ÒÆ¶¯ÉèÖÃ.
+                #endregion ç§»åŠ¨è®¾ç½®.
 
-                //½Úµã¹¤¾ßÀ¸, Ö÷´Ó±íÓ³Éä.
+                //èŠ‚ç‚¹å·¥å…·æ , ä¸»ä»è¡¨æ˜ å°„.
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 
-                #region »ù´¡¹¦ÄÜ.
+                #region åŸºç¡€åŠŸèƒ½.
                 RefMethod rm = null;
 
                 rm = new RefMethod();
-                rm.Title = "½ÓÊÕÈË¹æÔò";
+                rm.Title = "æ¥æ”¶äººè§„åˆ™";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Menu/Sender.png";
                 rm.ClassMethodName = this.ToString() + ".DoAccepterRoleNew";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "³­ËÍÈË¹æÔò";
+                rm.Title = "æŠ„é€äººè§„åˆ™";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Menu/CC.png";
                 rm.ClassMethodName = this.ToString() + ".DoCCer";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -700,14 +700,14 @@ namespace BP.WF.Template
 
 
                  rm = new RefMethod();
-                rm.Title = "½ÚµãÊÂ¼ş"; // "µ÷ÓÃÊÂ¼ş½Ó¿Ú";
+                rm.Title = "èŠ‚ç‚¹äº‹ä»¶"; // "è°ƒç”¨äº‹ä»¶æ¥å£";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "½ÚµãÏûÏ¢"; // "µ÷ÓÃÊÂ¼ş½Ó¿Ú";
+                rm.Title = "èŠ‚ç‚¹æ¶ˆæ¯"; // "è°ƒç”¨äº‹ä»¶æ¥å£";
                 rm.ClassMethodName = this.ToString() + ".DoMessage";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Message24.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -715,7 +715,7 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
-                rm.Title = "¸¸×ÓÁ÷³Ì";
+                rm.Title = "çˆ¶å­æµç¨‹";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Menu/SubFlows.png";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlow";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -724,14 +724,14 @@ namespace BP.WF.Template
              
 
                 rm = new RefMethod();
-                rm.Title = "Á÷³ÌÍê³ÉÌõ¼ş"; // "Á÷³ÌÍê³ÉÌõ¼ş";
+                rm.Title = "æµç¨‹å®Œæˆæ¡ä»¶"; // "æµç¨‹å®Œæˆæ¡ä»¶";
                 rm.ClassMethodName = this.ToString() + ".DoCond";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "·¢ËÍºó×ªÏò"; // "µ÷ÓÃÊÂ¼ş½Ó¿Ú";
+                rm.Title = "å‘é€åè½¬å‘"; // "è°ƒç”¨äº‹ä»¶æ¥å£";
                 rm.ClassMethodName = this.ToString() + ".DoTurnToDeal";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Msg.gif";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Turnto.png";
@@ -739,14 +739,14 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "·¢ËÍ×èÈû¹æÔò"; // "µ÷ÓÃÊÂ¼ş½Ó¿Ú";
+                rm.Title = "å‘é€é˜»å¡è§„åˆ™"; // "è°ƒç”¨äº‹ä»¶æ¥å£";
                 rm.ClassMethodName = this.ToString() + ".DoBlockModel";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/BlockModel.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "ÏûÏ¢ÊÕÌı"; // "µ÷ÓÃÊÂ¼ş½Ó¿Ú";
+                rm.Title = "æ¶ˆæ¯æ”¶å¬"; // "è°ƒç”¨äº‹ä»¶æ¥å£";
                 rm.ClassMethodName = this.ToString() + ".DoListen";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Msg.gif";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -756,188 +756,188 @@ namespace BP.WF.Template
                 if (Glo.IsEnableZhiDu)
                 {
                     rm = new RefMethod();
-                    rm.Title = "¶ÔÓ¦ÖÆ¶ÈÕÂ½Ú"; // "¸öĞÔ»¯½ÓÊÜÈË´°¿Ú";
+                    rm.Title = "å¯¹åº”åˆ¶åº¦ç« èŠ‚"; // "ä¸ªæ€§åŒ–æ¥å—äººçª—å£";
                     rm.ClassMethodName = this.ToString() + ".DoZhiDu";
                     rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                     map.AddRefMethod(rm);
 
                     rm = new RefMethod();
-                    rm.Title = "·çÏÕµã"; // "¸öĞÔ»¯½ÓÊÜÈË´°¿Ú";
+                    rm.Title = "é£é™©ç‚¹"; // "ä¸ªæ€§åŒ–æ¥å—äººçª—å£";
                     rm.ClassMethodName = this.ToString() + ".DoFengXianDian";
                     rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                     map.AddRefMethod(rm);
 
                     rm = new RefMethod();
-                    rm.Title = "¸ÚÎ»Ö°Ôğ"; // "¸öĞÔ»¯½ÓÊÜÈË´°¿Ú";
+                    rm.Title = "å²—ä½èŒè´£"; // "ä¸ªæ€§åŒ–æ¥å—äººçª—å£";
                     rm.ClassMethodName = this.ToString() + ".DoGangWeiZhiZe";
                     rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                     map.AddRefMethod(rm);
                 }
-                #endregion »ù´¡¹¦ÄÜ.
+                #endregion åŸºç¡€åŠŸèƒ½.
 
-                #region ×Ö¶ÎÏà¹Ø¹¦ÄÜ£¨²»ÏÔÊ¾ÔÚ²Ëµ¥Àï£©
+                #region å­—æ®µç›¸å…³åŠŸèƒ½ï¼ˆä¸æ˜¾ç¤ºåœ¨èœå•é‡Œï¼‰
                 rm = new RefMethod();
-                rm.Title = "¿ÉÍË»ØµÄ½Úµã(µ±ÍË»Ø¹æÔòÉèÖÃ¿ÉÍË»ØÖ¸¶¨µÄ½ÚµãÊ±,¸ÃÉèÖÃÓĞĞ§.)"; // "Éè¼Æ±íµ¥";
+                rm.Title = "å¯é€€å›çš„èŠ‚ç‚¹(å½“é€€å›è§„åˆ™è®¾ç½®å¯é€€å›æŒ‡å®šçš„èŠ‚ç‚¹æ—¶,è¯¥è®¾ç½®æœ‰æ•ˆ.)"; // "è®¾è®¡è¡¨å•";
                 rm.ClassMethodName = this.ToString() + ".DoCanReturnNodes";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
-                //ÉèÖÃÏà¹Ø×Ö¶Î.
+                //è®¾ç½®ç›¸å…³å­—æ®µ.
                 rm.RefAttrKey = NodeAttr.ReturnRole;
-                rm.RefAttrLinkLabel = "ÉèÖÃ¿ÉÍË»ØµÄ½Úµã";
+                rm.RefAttrLinkLabel = "è®¾ç½®å¯é€€å›çš„èŠ‚ç‚¹";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "¿É³·ÏúµÄ½Úµã"; // "¿É³·Ïú·¢ËÍµÄ½Úµã";
+                rm.Title = "å¯æ’¤é”€çš„èŠ‚ç‚¹"; // "å¯æ’¤é”€å‘é€çš„èŠ‚ç‚¹";
                 rm.ClassMethodName = this.ToString() + ".DoCanCancelNodes";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
 
-                //ÉèÖÃÏà¹Ø×Ö¶Î.
+                //è®¾ç½®ç›¸å…³å­—æ®µ.
                 rm.RefAttrKey = NodeAttr.CancelRole;
                 rm.RefAttrLinkLabel = "";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "·¢ËÍ³É¹¦×ªÏòÌõ¼ş"; // "×ªÏòÌõ¼ş";
+                rm.Title = "å‘é€æˆåŠŸè½¬å‘æ¡ä»¶"; // "è½¬å‘æ¡ä»¶";
                 rm.ClassMethodName = this.ToString() + ".DoTurn";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
 
-                //ÉèÖÃÏà¹Ø×Ö¶Î.
+                //è®¾ç½®ç›¸å…³å­—æ®µ.
                 rm.RefAttrKey = NodeAttr.TurnToDealDoc;
                 rm.RefAttrLinkLabel = "";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "°ó¶¨rtf´òÓ¡¸ñÊ½Ä£°æ(µ±´òÓ¡·½Ê½Îª´òÓ¡RTF¸ñÊ½Ä£°æÊ±,¸ÃÉèÖÃÓĞĞ§)"; //"µ¥¾İ&µ¥¾İ";
+                rm.Title = "ç»‘å®šrtfæ‰“å°æ ¼å¼æ¨¡ç‰ˆ(å½“æ‰“å°æ–¹å¼ä¸ºæ‰“å°RTFæ ¼å¼æ¨¡ç‰ˆæ—¶,è¯¥è®¾ç½®æœ‰æ•ˆ)"; //"å•æ®&å•æ®";
                 rm.ClassMethodName = this.ToString() + ".DoBill";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
 
-                //ÉèÖÃÏà¹Ø×Ö¶Î.
+                //è®¾ç½®ç›¸å…³å­—æ®µ.
                 rm.RefAttrKey = NodeAttr.PrintDocEnable;
                 rm.RefAttrLinkLabel = "";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
                 if (BP.Sys.SystemConfig.CustomerNo == "HCBD")
                 {
-                    /* Îªº£³É°î´ïÉèÖÃµÄ¸öĞÔ»¯ĞèÇó. */
+                    /* ä¸ºæµ·æˆé‚¦è¾¾è®¾ç½®çš„ä¸ªæ€§åŒ–éœ€æ±‚. */
                     rm = new RefMethod();
-                    rm.Title = "DXReportÉèÖÃ";
+                    rm.Title = "DXReportè®¾ç½®";
                     rm.ClassMethodName = this.ToString() + ".DXReport";
                     rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
                     map.AddRefMethod(rm);
                 }
 
                 rm = new RefMethod();
-                rm.Title = "ÉèÖÃ×Ô¶¯³­ËÍ¹æÔò(µ±½ÚµãÎª×Ô¶¯³­ËÍÊ±,¸ÃÉèÖÃÓĞĞ§.)"; // "³­ËÍ¹æÔò";
+                rm.Title = "è®¾ç½®è‡ªåŠ¨æŠ„é€è§„åˆ™(å½“èŠ‚ç‚¹ä¸ºè‡ªåŠ¨æŠ„é€æ—¶,è¯¥è®¾ç½®æœ‰æ•ˆ.)"; // "æŠ„é€è§„åˆ™";
                 rm.ClassMethodName = this.ToString() + ".DoCCRole";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
-                //ÉèÖÃÏà¹Ø×Ö¶Î.
+                //è®¾ç½®ç›¸å…³å­—æ®µ.
                 rm.RefAttrKey = NodeAttr.CCRole;
-                rm.RefAttrLinkLabel = "×Ô¶¯³­ËÍÉèÖÃ";
+                rm.RefAttrLinkLabel = "è‡ªåŠ¨æŠ„é€è®¾ç½®";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-                #endregion ×Ö¶ÎÏà¹Ø¹¦ÄÜ£¨²»ÏÔÊ¾ÔÚ²Ëµ¥Àï£©
+                #endregion å­—æ®µç›¸å…³åŠŸèƒ½ï¼ˆä¸æ˜¾ç¤ºåœ¨èœå•é‡Œï¼‰
 
 
-                #region ±íµ¥ÉèÖÃ.
+                #region è¡¨å•è®¾ç½®.
                 rm = new RefMethod();
-                rm.Title = "±íµ¥·½°¸";
+                rm.Title = "è¡¨å•æ–¹æ¡ˆ";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Form.png";
                 rm.ClassMethodName = this.ToString() + ".DoSheet";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "±íµ¥ÉèÖÃ";
+                rm.GroupName = "è¡¨å•è®¾ç½®";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "ÊÖ»ú±íµ¥×Ö¶ÎË³Ğò";
+                rm.Title = "æ‰‹æœºè¡¨å•å­—æ®µé¡ºåº";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/telephone.png";
                 //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Mobile.png";
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "±íµ¥ÉèÖÃ";
+                rm.GroupName = "è¡¨å•è®¾ç½®";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "ÌØ±ğ×Ö¶ÎÌØ±ğÓÃ»§È¨ÏŞ";
+                rm.Title = "ç‰¹åˆ«å­—æ®µç‰¹åˆ«ç”¨æˆ·æƒé™";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/SpecUserSpecFields.png";
                 rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "±íµ¥ÉèÖÃ";
+                rm.GroupName = "è¡¨å•è®¾ç½®";
                 map.AddRefMethod(rm);
-                #endregion ±íµ¥ÉèÖÃ.
+                #endregion è¡¨å•è®¾ç½®.
 
 
-                #region ¿¼ºË.
+                #region è€ƒæ ¸.
                 rm = new RefMethod();
-                rm.Title = "ÉèÖÃ¿¼ºË¹æÔò";
+                rm.Title = "è®¾ç½®è€ƒæ ¸è§„åˆ™";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/CH.png";
                 rm.ClassMethodName = this.ToString() + ".DoCHRole";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "¿¼ºË¹æÔò";
+                rm.GroupName = "è€ƒæ ¸è§„åˆ™";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "³¬Ê±´¦Àí¹æÔò";
+                rm.Title = "è¶…æ—¶å¤„ç†è§„åˆ™";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/OvertimeRole.png";
                 rm.ClassMethodName = this.ToString() + ".DoCHOvertimeRole";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "¿¼ºË¹æÔò";
+                rm.GroupName = "è€ƒæ ¸è§„åˆ™";
                 map.AddRefMethod(rm);
-                #endregion ¿¼ºË.
+                #endregion è€ƒæ ¸.
 
-                #region ÊµÑéÖĞµÄ¹¦ÄÜ
+                #region å®éªŒä¸­çš„åŠŸèƒ½
                 rm = new RefMethod();
-                rm.Title = "ÅúÁ¿ÉèÖÃ½ÚµãÊôĞÔ";
+                rm.Title = "æ‰¹é‡è®¾ç½®èŠ‚ç‚¹å±æ€§";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Node.png";
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "ÊµÑéÖĞµÄ¹¦ÄÜ";
+                rm.GroupName = "å®éªŒä¸­çš„åŠŸèƒ½";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "ÉèÖÃ¶ÀÁ¢±íµ¥Ê÷È¨ÏŞ";
+                rm.Title = "è®¾ç½®ç‹¬ç«‹è¡¨å•æ ‘æƒé™";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 rm.ClassMethodName = this.ToString() + ".DoNodeFormTree";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "ÊµÑéÖĞµÄ¹¦ÄÜ";
+                rm.GroupName = "å®éªŒä¸­çš„åŠŸèƒ½";
                 map.AddRefMethod(rm);
 
 
                 rm = new RefMethod();
-                rm.Title = "¹¤×÷Åú´¦Àí¹æÔò";
+                rm.Title = "å·¥ä½œæ‰¹å¤„ç†è§„åˆ™";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 rm.ClassMethodName = this.ToString() + ".DoBatchStartFields()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "ÊµÑéÖĞµÄ¹¦ÄÜ";
+                rm.GroupName = "å®éªŒä¸­çš„åŠŸèƒ½";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "½ÚµãÔËĞĞÄ£Ê½(¿ª·¢ÖĞ)"; // "µ÷ÓÃÊÂ¼ş½Ó¿Ú";
+                rm.Title = "èŠ‚ç‚¹è¿è¡Œæ¨¡å¼(å¼€å‘ä¸­)"; // "è°ƒç”¨äº‹ä»¶æ¥å£";
                 rm.ClassMethodName = this.ToString() + ".DoRunModel";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "ÊµÑéÖĞµÄ¹¦ÄÜ";
+                rm.GroupName = "å®éªŒä¸­çš„åŠŸèƒ½";
                 map.AddRefMethod(rm);
 
             
-                #endregion ÊµÑéÖĞµÄ¹¦ÄÜ
+                #endregion å®éªŒä¸­çš„åŠŸèƒ½
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
 
-        #region ¿¼ºË¹æÔò.
+        #region è€ƒæ ¸è§„åˆ™.
         /// <summary>
-        /// ¿¼ºË¹æÔò
+        /// è€ƒæ ¸è§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoCHRole()
@@ -945,18 +945,18 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/CHRole.aspx?FK_Node=" + this.NodeID;
         }
         /// <summary>
-        /// ³¬Ê±´¦Àí¹æÔò
+        /// è¶…æ—¶å¤„ç†è§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoCHOvertimeRole()
         {
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/CHOvertimeRole.aspx?FK_Node=" + this.NodeID;
         }
-        #endregion ¿¼ºË¹æÔò.
+        #endregion è€ƒæ ¸è§„åˆ™.
 
-        #region »ù´¡ÉèÖÃ.
+        #region åŸºç¡€è®¾ç½®.
         /// <summary>
-        /// Åú´¦Àí¹æÔò
+        /// æ‰¹å¤„ç†è§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoBatchStartFields()
@@ -964,7 +964,7 @@ namespace BP.WF.Template
             return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/BatchStartFields.aspx?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node="+this.NodeID;
         }
         /// <summary>
-        /// ÅúÁ¿ĞŞ¸Ä½ÚµãÊôĞÔ
+        /// æ‰¹é‡ä¿®æ”¹èŠ‚ç‚¹å±æ€§
         /// </summary>
         /// <returns></returns>
         public string DoNodeAttrs()
@@ -972,7 +972,7 @@ namespace BP.WF.Template
             return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/NodeAttrs.aspx?NodeID=0&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
-        /// ±íµ¥·½°¸
+        /// è¡¨å•æ–¹æ¡ˆ
         /// </summary>
         /// <returns></returns>
         public string DoSheet()
@@ -980,7 +980,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeFromWorkModel.aspx?FK_Node=" + this.NodeID;
         }
         /// <summary>
-        /// ¸¸×ÓÁ÷³Ì
+        /// çˆ¶å­æµç¨‹
         /// </summary>
         /// <returns></returns>
         public string DoSubFlow()
@@ -988,7 +988,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/SubFlows.aspx?FK_Node=" + this.NodeID;
         }
         /// <summary>
-        /// ½ÓÊÜÈË¹æÔò
+        /// æ¥å—äººè§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoAccepterRoleNew()
@@ -996,7 +996,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/FindWorker/NodeAccepterRole.aspx?FK_Node=" + this.NodeID;
         }
         /// <summary>
-        /// ·¢ËÍ×èÈû¹æÔò
+        /// å‘é€é˜»å¡è§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoBlockModel()
@@ -1004,7 +1004,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/BlockModel.aspx?FK_Node=" + this.NodeID;
         }
         /// <summary>
-        /// ·¢ËÍºó×ªÏò¹æÔò
+        /// å‘é€åè½¬å‘è§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoTurnToDeal()
@@ -1013,7 +1013,7 @@ namespace BP.WF.Template
         }
         
         /// <summary>
-        /// ³­ËÍÈË¹æÔò
+        /// æŠ„é€äººè§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoCCer()
@@ -1023,7 +1023,7 @@ namespace BP.WF.Template
         #endregion 
 
         /// <summary>
-        /// ÌØ±ğÓÃ»§ÌØÊâ×Ö¶ÎÈ¨ÏŞ.
+        /// ç‰¹åˆ«ç”¨æˆ·ç‰¹æ®Šå­—æ®µæƒé™.
         /// </summary>
         /// <returns></returns>
         public string DoSpecFieldsSpecUsers()
@@ -1033,7 +1033,7 @@ namespace BP.WF.Template
         }
 
         /// <summary>
-        /// ½ÚµãÔËĞĞÄ£Ê½.
+        /// èŠ‚ç‚¹è¿è¡Œæ¨¡å¼.
         /// </summary>
         /// <returns></returns>
         public string DoRunModel()
@@ -1042,7 +1042,7 @@ namespace BP.WF.Template
                    this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
-        /// ÅÅĞò×Ö¶ÎË³Ğò
+        /// æ’åºå­—æ®µé¡ºåº
         /// </summary>
         /// <returns></returns>
         public string DoSortingMapAttrs()
@@ -1051,7 +1051,7 @@ namespace BP.WF.Template
                    this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
-        /// ¼¯ÍÅ²¿ÃÅÊ÷
+        /// é›†å›¢éƒ¨é—¨æ ‘
         /// </summary>
         /// <returns></returns>
         public string DoDepts()
@@ -1060,7 +1060,7 @@ namespace BP.WF.Template
             return null;
         }
         /// <summary>
-        /// ÉèÖÃ¶ÀÁ¢±íµ¥Ê÷È¨ÏŞ
+        /// è®¾ç½®ç‹¬ç«‹è¡¨å•æ ‘æƒé™
         /// </summary>
         /// <returns></returns>
         public string DoNodeFormTree()
@@ -1069,25 +1069,25 @@ namespace BP.WF.Template
                    this.NodeID + "&RefNo=" + DataType.CurrentDataTime;
         }
         /// <summary>
-        /// ÖÆ¶È
+        /// åˆ¶åº¦
         /// </summary>
         /// <returns></returns>
         public string DoZhiDu()
         {
-            PubClass.WinOpen(Glo.CCFlowAppPath + "ZhiDu/NodeZhiDuDtl.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "ÖÆ¶È", "Bill", 700, 400, 200, 300);
+            PubClass.WinOpen(Glo.CCFlowAppPath + "ZhiDu/NodeZhiDuDtl.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "åˆ¶åº¦", "Bill", 700, 400, 200, 300);
             return null;
         }
         /// <summary>
-        /// ·çÏÕµã
+        /// é£é™©ç‚¹
         /// </summary>
         /// <returns></returns>
         public string DoFengXianDian()
         {
-            PubClass.WinOpen(Glo.CCFlowAppPath + "ZhiDu/NodeFengXianDian.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "ÖÆ¶È", "Bill", 700, 400, 200, 300);
+            PubClass.WinOpen(Glo.CCFlowAppPath + "ZhiDu/NodeFengXianDian.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "åˆ¶åº¦", "Bill", 700, 400, 200, 300);
             return null;
         }
         /// <summary>
-        /// ½ÓÊÕÈË
+        /// æ¥æ”¶äºº
         /// </summary>
         /// <returns></returns>
         public string DoSelectAccepter()
@@ -1098,7 +1098,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/FindWorker/NodeAccepterRole.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
-        /// ÕÒÈË¹æÔò
+        /// æ‰¾äººè§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoAccepterRole()
@@ -1107,7 +1107,7 @@ namespace BP.WF.Template
 
             if (nd.HisDeliveryWay != DeliveryWay.ByCCFlowBPM)
                 return Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
-            //    return "½Úµã·ÃÎÊ¹æÔòÄúÃ»ÓĞÉèÖÃ°´ÕÕbpmÄ£Ê½£¬ËùÒÔÄúÄÜÖ´ĞĞ¸Ã²Ù×÷¡£ÒªÏëÖ´ĞĞ¸Ã²Ù×÷ÇëÑ¡Ôñ½ÚµãÊôĞÔÖĞ½Úµã¹æÔò·ÃÎÊÈ»ºóÑ¡Ôñ°´ÕÕbpmÄ£Ê½¼ÆËã£¬µã±£´æ°´Å¥¡£";
+            //    return "èŠ‚ç‚¹è®¿é—®è§„åˆ™æ‚¨æ²¡æœ‰è®¾ç½®æŒ‰ç…§bpmæ¨¡å¼ï¼Œæ‰€ä»¥æ‚¨èƒ½æ‰§è¡Œè¯¥æ“ä½œã€‚è¦æƒ³æ‰§è¡Œè¯¥æ“ä½œè¯·é€‰æ‹©èŠ‚ç‚¹å±æ€§ä¸­èŠ‚ç‚¹è§„åˆ™è®¿é—®ç„¶åé€‰æ‹©æŒ‰ç…§bpmæ¨¡å¼è®¡ç®—ï¼Œç‚¹ä¿å­˜æŒ‰é’®ã€‚";
 
             return Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
          //   return null;
@@ -1115,22 +1115,22 @@ namespace BP.WF.Template
         public string DoTurn()
         {
             return Glo.CCFlowAppPath + "WF/Admin/TurnTo.aspx?FK_Node=" + this.NodeID;
-            //, "½ÚµãÍê³É×ªÏò´¦Àí", "FrmTurn", 800, 500, 200, 300);
+            //, "èŠ‚ç‚¹å®Œæˆè½¬å‘å¤„ç†", "FrmTurn", 800, 500, 200, 300);
             //BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             //return nd.DoTurn();
         }
         /// <summary>
-        /// ³­ËÍ¹æÔò
+        /// æŠ„é€è§„åˆ™
         /// </summary>
         /// <returns></returns>
         public string DoCCRole()
         {
             return Glo.CCFlowAppPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.CC&PK=" + this.NodeID; 
-            //PubClass.WinOpen("./RefFunc/UIEn.aspx?EnName=BP.WF.CC&PK=" + this.NodeID, "³­ËÍ¹æÔò", "Bill", 800, 500, 200, 300);
+            //PubClass.WinOpen("./RefFunc/UIEn.aspx?EnName=BP.WF.CC&PK=" + this.NodeID, "æŠ„é€è§„åˆ™", "Bill", 800, 500, 200, 300);
             //return null;
         }
         /// <summary>
-        /// ¸öĞÔ»¯½ÓÊÜÈË´°¿Ú
+        /// ä¸ªæ€§åŒ–æ¥å—äººçª—å£
         /// </summary>
         /// <returns></returns>
         public string DoAccepter()
@@ -1138,7 +1138,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.Selector&PK=" + this.NodeID;
         }
         /// <summary>
-        /// ¿É´¥·¢µÄ×ÓÁ÷³Ì
+        /// å¯è§¦å‘çš„å­æµç¨‹
         /// </summary>
         /// <returns></returns>
         public string DoActiveFlows()
@@ -1146,7 +1146,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/ConditionSubFlow.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
-        /// ÍË»Ø½Úµã
+        /// é€€å›èŠ‚ç‚¹
         /// </summary>
         /// <returns></returns>
         public string DoCanReturnNodes()
@@ -1154,7 +1154,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/CanReturnNodes.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
-        /// ³·Ïú·¢ËÍµÄ½Úµã
+        /// æ’¤é”€å‘é€çš„èŠ‚ç‚¹
         /// </summary>
         /// <returns></returns>
         public string DoCanCancelNodes()
@@ -1178,7 +1178,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/Listen.aspx?CondType=0&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=";
         }
         /// <summary>
-        /// Ö´ĞĞÏûÏ¢ÊÕÌı
+        /// æ‰§è¡Œæ¶ˆæ¯æ”¶å¬
         /// </summary>
         /// <returns></returns>
         public string DoListen()
@@ -1198,7 +1198,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/Condition.aspx?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
         }
         /// <summary>
-        /// Éè¼ÆÉµ¹Ï±íµ¥
+        /// è®¾è®¡å‚»ç“œè¡¨å•
         /// </summary>
         /// <returns></returns>
         public string DoFormCol4()
@@ -1206,7 +1206,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/MapDef/MapDef.aspx?PK=ND" + this.NodeID;
         }
         /// <summary>
-        /// Éè¼Æ×ÔÓÉ±íµ¥
+        /// è®¾è®¡è‡ªç”±è¡¨å•
         /// </summary>
         /// <returns></returns>
         public string DoFormFree()
@@ -1214,7 +1214,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/MapDef/CCForm/Frm.aspx?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
-        /// °ó¶¨¶ÀÁ¢±íµ¥
+        /// ç»‘å®šç‹¬ç«‹è¡¨å•
         /// </summary>
         /// <returns></returns>
         public string DoFormTree()
@@ -1226,23 +1226,23 @@ namespace BP.WF.Template
         {
             int i = this.GetValIntByKey(NodeAttr.FormType);
 
-            // ÀàĞÍ.
+            // ç±»å‹.
             NodeFormType type = (NodeFormType)i;
             switch (type)
             {
                 case NodeFormType.FreeForm:
-                    PubClass.WinOpen(Glo.CCFlowAppPath + "WF/MapDef/CCForm/Frm.aspx?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "Éè¼Æ±íµ¥", "sheet", 1024, 768, 0, 0);
+                    PubClass.WinOpen(Glo.CCFlowAppPath + "WF/MapDef/CCForm/Frm.aspx?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "è®¾è®¡è¡¨å•", "sheet", 1024, 768, 0, 0);
                     break;
                 default:
                 case NodeFormType.FixForm:
-                    PubClass.WinOpen(Glo.CCFlowAppPath + "WF/MapDef/MapDef.aspx?PK=ND" + this.NodeID, "Éè¼Æ±íµ¥", "sheet", 800, 500, 210, 300);
+                    PubClass.WinOpen(Glo.CCFlowAppPath + "WF/MapDef/MapDef.aspx?PK=ND" + this.NodeID, "è®¾è®¡è¡¨å•", "sheet", 800, 500, 210, 300);
                     break;
             }
             return null;
         }
 
         /// <summary>
-        /// ÏûÏ¢
+        /// æ¶ˆæ¯
         /// </summary>
         /// <returns></returns>
         public string DoMessage()
@@ -1250,7 +1250,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/PushMessage.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
-        /// ÊÂ¼ş
+        /// äº‹ä»¶
         /// </summary>
         /// <returns></returns>
         public string DoAction()
@@ -1258,7 +1258,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/Action.aspx?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
-        /// µ¥¾İ´òÓ¡
+        /// å•æ®æ‰“å°
         /// </summary>
         /// <returns></returns>
         public string DoBill()
@@ -1266,7 +1266,7 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/Bill.aspx?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
-        /// ÉèÖÃ
+        /// è®¾ç½®
         /// </summary>
         /// <returns></returns>
         public string DoFAppSet()
@@ -1276,10 +1276,10 @@ namespace BP.WF.Template
         
         protected override bool beforeUpdate()
         {
-            //¸üĞÂÁ÷³Ì°æ±¾
+            //æ›´æ–°æµç¨‹ç‰ˆæœ¬
             Flow.UpdateVer(this.FK_Flow);
 
-            //°Ñ¹¤¾ßÀ¸µÄÅäÖÃ·ÅÈë sys_mapdataÀï.
+            //æŠŠå·¥å…·æ çš„é…ç½®æ”¾å…¥ sys_mapdataé‡Œ.
             ToolbarExcel te = new ToolbarExcel("ND" + this.NodeID);
             te.Copy(this);
             try
@@ -1290,7 +1290,7 @@ namespace BP.WF.Template
             {
             }
            
-            #region  ¼ì²é¿¼ºËÓâÆÚ´¦ÀíµÄÉèÖÃµÄÍêÕûĞÔ.
+            #region  æ£€æŸ¥è€ƒæ ¸é€¾æœŸå¤„ç†çš„è®¾ç½®çš„å®Œæ•´æ€§.
             //string doOutTime = this.GetValStrByKey(NodeAttr.DoOutTime);
             //switch (this.HisOutTimeDeal)
             //{
@@ -1298,7 +1298,7 @@ namespace BP.WF.Template
             //        string[] jumps = doOutTime.Split(',');
             //        if (jumps.Length  > 2)
             //        {
-            //            string msg = "×Ô¶¯Ìø×ªµ½ÏàÓ¦½Úµã,ÅäÖÃµÄÄÚÈİ²»ÕıÈ·,¸ñÊ½Ó¦¸ÃÎª: Node,EmpNo , ±ÈÈç: 101,zhoupeng  ÏÖÔÚÉèÖÃµÄ¸ñÊ½Îª:" + doOutTime;
+            //            string msg = "è‡ªåŠ¨è·³è½¬åˆ°ç›¸åº”èŠ‚ç‚¹,é…ç½®çš„å†…å®¹ä¸æ­£ç¡®,æ ¼å¼åº”è¯¥ä¸º: Node,EmpNo , æ¯”å¦‚: 101,zhoupeng  ç°åœ¨è®¾ç½®çš„æ ¼å¼ä¸º:" + doOutTime;
             //            throw new Exception(msg);
             //        }
             //        break;
@@ -1306,35 +1306,35 @@ namespace BP.WF.Template
             //    case OutTimeDeal.RunSQL:
             //    case OutTimeDeal.SendMsgToSpecUser:
             //        if (string.IsNullOrEmpty(doOutTime) == false)
-            //            throw new Exception("@ÔÚ¿¼ºËÓâÆÚ´¦Àí·½Ê½ÉÏ£¬ÄúÑ¡ÔñµÄÊÇ:" + this.HisOutTimeDeal + " ,µ«ÊÇÄúÃ»ÓĞÎª¸Ã¹æÔòÉèÖÃÄÚÈİ¡£");
+            //            throw new Exception("@åœ¨è€ƒæ ¸é€¾æœŸå¤„ç†æ–¹å¼ä¸Šï¼Œæ‚¨é€‰æ‹©çš„æ˜¯:" + this.HisOutTimeDeal + " ,ä½†æ˜¯æ‚¨æ²¡æœ‰ä¸ºè¯¥è§„åˆ™è®¾ç½®å†…å®¹ã€‚");
             //        break;
             //    default:
             //        break;
             //}
-            #endregion ¼ì²é¿¼ºËÓâÆÚ´¦ÀíµÄÉèÖÃµÄÍêÕûĞÔ
+            #endregion æ£€æŸ¥è€ƒæ ¸é€¾æœŸå¤„ç†çš„è®¾ç½®çš„å®Œæ•´æ€§
 
-            #region ´¦Àí½ÚµãÊı¾İ.
+            #region å¤„ç†èŠ‚ç‚¹æ•°æ®.
             Node nd = new Node(this.NodeID);
             if (nd.IsStartNode == true)
             {
-                /*´¦Àí°´Å¥µÄÎÊÌâ*/
-                //²»ÄÜÍË»Ø, ¼ÓÇ©£¬ÒÆ½»£¬ÍË»Ø, ×ÓÏß³Ì.
+                /*å¤„ç†æŒ‰é’®çš„é—®é¢˜*/
+                //ä¸èƒ½é€€å›, åŠ ç­¾ï¼Œç§»äº¤ï¼Œé€€å›, å­çº¿ç¨‹.
                 this.SetValByKey(BtnAttr.ReturnRole,(int)ReturnRole.CanNotReturn);
                 this.SetValByKey(BtnAttr.HungEnable, false);
-                this.SetValByKey(BtnAttr.ThreadEnable, false); //×ÓÏß³Ì.
+                this.SetValByKey(BtnAttr.ThreadEnable, false); //å­çº¿ç¨‹.
             }
 
             if (nd.HisRunModel == RunModel.HL || nd.HisRunModel == RunModel.FHL)
             {
-                /*Èç¹ûÊÇºÏÁ÷µã*/
+                /*å¦‚æœæ˜¯åˆæµç‚¹*/
             }
             else
             {
-                this.SetValByKey(BtnAttr.ThreadEnable, false); //×ÓÏß³Ì.
+                this.SetValByKey(BtnAttr.ThreadEnable, false); //å­çº¿ç¨‹.
             }
-            #endregion ´¦Àí½ÚµãÊı¾İ.
+            #endregion å¤„ç†èŠ‚ç‚¹æ•°æ®.
 
-            #region ´¦ÀíÏûÏ¢²ÎÊı×Ö¶Î.
+            #region å¤„ç†æ¶ˆæ¯å‚æ•°å­—æ®µ.
             //this.SetPara(NodeAttr.MsgCtrl, this.GetValIntByKey(NodeAttr.MsgCtrl));
             //this.SetPara(NodeAttr.MsgIsSend, this.GetValIntByKey(NodeAttr.MsgIsSend));
             //this.SetPara(NodeAttr.MsgIsReturn, this.GetValIntByKey(NodeAttr.MsgIsReturn));
@@ -1349,38 +1349,38 @@ namespace BP.WF.Template
             //this.SetPara(NodeAttr.MsgSMSDoc, this.GetValStrByKey(NodeAttr.MsgSMSDoc));
             #endregion
 
-            //´´½¨ÉóºË×é¼ş¸½¼ş
+            //åˆ›å»ºå®¡æ ¸ç»„ä»¶é™„ä»¶
             FrmAttachment workCheckAth = new FrmAttachment();
             bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, this.NodeID + "_FrmWorkCheck");
-            //²»°üº¬ÉóºË×é¼ş
+            //ä¸åŒ…å«å®¡æ ¸ç»„ä»¶
             if (isHave == false)
             {
                 workCheckAth = new FrmAttachment();
-                /*Èç¹ûÃ»ÓĞ²éÑ¯µ½Ëü,¾ÍÓĞ¿ÉÄÜÊÇÃ»ÓĞ´´½¨.*/
+                /*å¦‚æœæ²¡æœ‰æŸ¥è¯¢åˆ°å®ƒ,å°±æœ‰å¯èƒ½æ˜¯æ²¡æœ‰åˆ›å»º.*/
                 workCheckAth.MyPK = this.NodeID + "_FrmWorkCheck";
                 workCheckAth.FK_MapData = this.NodeID.ToString();
                 workCheckAth.NoOfObj = this.NodeID + "_FrmWorkCheck";
                 workCheckAth.Exts = "*.*";
 
-                //´æ´¢Â·¾¶.
+                //å­˜å‚¨è·¯å¾„.
                 workCheckAth.SaveTo = "/DataUser/UploadFile/";
-                workCheckAth.IsNote = false; //²»ÏÔÊ¾note×Ö¶Î.
-                workCheckAth.IsVisable = false; // ÈÃÆäÔÚform ÉÏ²»¿É¼û.
+                workCheckAth.IsNote = false; //ä¸æ˜¾ç¤ºnoteå­—æ®µ.
+                workCheckAth.IsVisable = false; // è®©å…¶åœ¨form ä¸Šä¸å¯è§.
 
-                //Î»ÖÃ.
+                //ä½ç½®.
                 workCheckAth.X = (float)94.09;
                 workCheckAth.Y = (float)333.18;
                 workCheckAth.W = (float)626.36;
                 workCheckAth.H = (float)150;
 
-                //¶à¸½¼ş.
+                //å¤šé™„ä»¶.
                 workCheckAth.UploadType = AttachmentUploadType.Multi;
-                workCheckAth.Name = "ÉóºË×é¼ş";
+                workCheckAth.Name = "å®¡æ ¸ç»„ä»¶";
                 workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=@IsWoEnableTemplete=1");
                 workCheckAth.Insert();
             }   
 
-            //Çå³ıËùÓĞµÄ»º´æ.
+            //æ¸…é™¤æ‰€æœ‰çš„ç¼“å­˜.
             BP.DA.CashEntity.DCash.Clear();
 
             return base.beforeUpdate();
@@ -1388,13 +1388,13 @@ namespace BP.WF.Template
         #endregion
     }
     /// <summary>
-    /// ½Úµã¼¯ºÏ
+    /// èŠ‚ç‚¹é›†åˆ
     /// </summary>
     public class NodeExts : Entities
     {
-        #region ¹¹Ôì·½·¨
+        #region æ„é€ æ–¹æ³•
         /// <summary>
-        /// ½Úµã¼¯ºÏ
+        /// èŠ‚ç‚¹é›†åˆ
         /// </summary>
         public NodeExts()
         {

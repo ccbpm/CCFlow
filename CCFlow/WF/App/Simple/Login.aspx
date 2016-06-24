@@ -9,6 +9,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
+    <div style="text-align:center">
 <h2>用户登录</h2>
    <fieldset>
     <legend> ccflow登录的API在Button事件后面 </legend>
@@ -31,6 +32,8 @@
      <li>3, 验证成功后，就调用ccflow的登录API。 </li>
     </ul>
     </fieldset>
+
+    </div>
     </form>
 </body>
 </html>

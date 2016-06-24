@@ -9,7 +9,7 @@
        BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(BP.Web.WebUser.No);
    // 输出集合.
    %>
-   <table border="1"  width="100%"  >
+   <table border="1"  style="  border-color:Black;  border-width:1px;"  >
     <caption>发起(列出当前人员可以发起的流程,<a href="Do.aspx?DoType=ViewStartSrc" target=_blank >查看源代码</a>)</caption>
    <tr>
    <th>序</th>

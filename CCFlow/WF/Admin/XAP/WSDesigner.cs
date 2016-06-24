@@ -22,7 +22,6 @@ namespace CCFlow.WF.Admin.XAP
     [System.Web.Script.Services.ScriptService]
     public class WSDesigner : System.Web.Services.WebService
     {
-       
         /// <summary>
         /// 流程设计器树控件数据源
         /// </summary>

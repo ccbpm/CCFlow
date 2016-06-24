@@ -23,70 +23,73 @@ namespace ccbpm
         /// 发送短信接口(二次开发需要重写这个接口)
         /// </summary>
         /// <param name="msgPK">消息主键，是对应的Sys_SMS的MyPK。</param>
+        /// <param name="sender">发送人(内部帐号，可以为空.)</param>
+        /// <param name="sendToEmpNo">发送给(内部帐号，可以为空.)</param>
         /// <param name="tel">手机号码</param>
         /// <param name="msgInfo">短消息</param>
         /// <returns>是否发送成功</returns>
         [WebMethod]
-        public bool SendToWebServices(string msgPK, string tel, string msgInfo, string sendToEmpNo=null)
+        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
 
-            //if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-            //    BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
-
+            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
         /// 发送丁丁的接口
         /// </summary>
         /// <param name="msgPK">消息主键，是对应的Sys_SMS的MyPK。</param>
-        /// <param name="userNo">内部用户</param>
+        /// <param name="sender">发送人(内部帐号，可以为空.)</param>
+        /// <param name="sendToEmpNo">发送给(内部帐号，可以为空.)</param>
         /// <param name="tel">电话</param>
         /// <param name="msgInfo">消息内容</param>
         /// <returns>是否发送成功</returns>
         [WebMethod]
-        public bool SendToDingDing(string mypk, string userNo, string tel, string msgInfo)
+        public bool SendToDingDing(string mypk,string sender, string sendToEmpNo, string tel, string msgInfo)
         {
-            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
+         //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
 
-            if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
-                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
         /// 发送微信的接口
         /// </summary>
         /// <param name="mypk">消息主键，是对应的Sys_SMS的MyPK。</param>
-        /// <param name="userNo"></param>
+        /// <param name="sender">发送人(内部帐号，可以为空.)</param>
+        /// <param name="sendToEmpNo">发送给(内部帐号，可以为空.)</param>
         /// <param name="tel"></param>
         /// <param name="msgInfo"></param>
         /// <returns>是否发送成功</returns>
         [WebMethod]
-        public bool SendToWeiXin(string mypk, string userNo, string tel, string msgInfo)
+        public bool SendToWeiXin(string mypk,string sender, string sendToEmpNo, string tel, string msgInfo)
         {
-            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
+           // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
 
-            if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
-                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msgInfo, BP.DA.DataType.CurrentDataTime);
-
+            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
         /// 发送邮件接口
         /// </summary>
         /// <param name="mypk">消息主键，是对应的Sys_SMS的MyPK。</param>
+        /// <param name="sender">发送人(内部帐号，可以为空.)</param>
+        /// <param name="sendToEmpNo">发送给(内部帐号，可以为空.)</param>
         /// <param name="email">邮件地址</param>
         /// <param name="title">标题</param>
         /// <param name="maildoc">内容</param>
         /// <param name="sendToEmpNo">接收人编号</param>
         /// <returns>是否发送成功</returns>
         [WebMethod]
-        public bool SendToEmail(string mypk, string email, string title, string maildoc, string sendToEmpNo = null)
+        public bool SendToEmail(string mypk, string sender, string sendToEmpNo, string email, string title, string maildoc)
         {
-            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
-
+           // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
             if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDataTime);
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -100,7 +103,7 @@ namespace ccbpm
         [WebMethod]
         public bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo)
         {
-            BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
+         //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
 
             if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
                 BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDataTime);
@@ -191,14 +194,14 @@ namespace ccbpm
         /// <summary>
         /// 获得岗位信息
         /// </summary>
-        /// <returns>返回No,Name,StaGrade至少三个列的岗位信息</returns>
+        /// <returns>返回No,Name,FK_StationType 至少三个列的岗位信息</returns>
         [WebMethod]
         public DataTable GetStations()
         {
             #region 简单 Demo
             try
             {
-                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT No,Name,StaGrade FROM Port_Station ORDER BY StaGrade,No");
+                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT No,Name,FK_StationType FROM Port_Station ORDER BY FK_StationType,No");
             }
             catch (Exception ex)
             {
@@ -209,14 +212,14 @@ namespace ccbpm
         /// <summary>
         /// 获得岗位信息
         /// </summary>
-        /// <returns>返回No,Name,StaGrade至少三个列的岗位信息</returns>
+        /// <returns>返回No,Name,FK_StationType至少三个列的岗位信息</returns>
         [WebMethod]
         public DataTable GetStation(string stationNo)
         {
             #region 简单 Demo
             try
             {
-                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT No,Name,StaGrade FROM Port_Station WHERE No='" + stationNo + "'");
+                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT No,Name,FK_StationType FROM Port_Station WHERE No='" + stationNo + "'");
             }
             catch (Exception ex)
             {
@@ -320,14 +323,14 @@ namespace ccbpm
         /// <summary>
         /// 获得人员他的岗位实体信息集合.
         /// </summary>
-        /// <returns>返回No,Name,StaGrade岗位信息</returns>
+        /// <returns>返回No,Name,FK_StationType岗位信息</returns>
         [WebMethod]
         public DataTable GetEmpHisStations(string empNo)
         {
             #region 简单 Demo
             try
             {
-                string sql = "SELECT No,Name,StaGrade FROM Port_Station WHERE No IN(SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + empNo + "')";
+                string sql = "SELECT No,Name,FK_StationType FROM Port_Station WHERE No IN(SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + empNo + "')";
                 return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable(sql);
             }
             catch (Exception ex)

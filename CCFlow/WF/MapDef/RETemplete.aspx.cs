@@ -9,8 +9,6 @@ using BP.Sys;
 using BP.WF.Template;
 using BP.WF.Template.XML;
 using BP.WF;
-using BP.Sys.XML;
-
 
 namespace CCFlow.WF.MapDef
 {

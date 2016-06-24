@@ -42,19 +42,6 @@ namespace CCFlow.WF.Rpt
 
             RptXmls xmls = new RptXmls();
             xmls.RetrieveAll();
-
-            BP.WF.Rpt.MapRpts rpts = new BP.WF.Rpt.MapRpts(this.FK_Flow);
-            foreach (BP.WF.Rpt.MapRpt rpt in rpts)
-            {
-                this.Pub1.AddFieldSet(rpt.Name);
-                this.Pub1.AddUL();
-                this.Pub1.Add("<li><a href='Search.aspx?RptNo=" + rpt.No + "&FK_Flow=" + this.FK_Flow + "' >查询</a></li>");
-                this.Pub1.Add("<li><a href='Group.aspx?RptNo=" + rpt.No + "&FK_Flow=" + this.FK_Flow + "' >分组分析</a></li>");
-                this.Pub1.Add("<li><a href='D3.aspx?RptNo=" + rpt.No + "&FK_Flow=" + this.FK_Flow + "' >交叉报表</a></li>");
-                this.Pub1.Add("<li><a href='Contrast.aspx?RptNo=" + rpt.No + "&FK_Flow=" + this.FK_Flow + "' >对比分析</a></li>");
-                this.Pub1.AddULEnd();
-                this.Pub1.AddFieldSetEnd();
-            }
         }
     }
 }

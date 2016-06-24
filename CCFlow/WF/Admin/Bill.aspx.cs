@@ -17,7 +17,6 @@ using BP.Port;
 using BP.Web.Controls;
 using BP.Web;
 using BP.Sys;
-using BP.WF.Template;
 namespace CCFlow.WF.Admin
 {
     public partial class WF_Admin_BillSet : BP.Web.WebPage

@@ -81,13 +81,7 @@ namespace CCFlow.SDKFlowDemo
 
         void btn_Loin_Exit_Click(object sender, EventArgs e)
         {
-            try
-            {
-                WebUser.Exit();
-            }
-            catch (Exception ex)
-            { 
-            }
+            WebUser.Exit();
             this.Response.Redirect("AuthorDemo.aspx");
         }
 

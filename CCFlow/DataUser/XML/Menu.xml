@@ -6,7 +6,7 @@
   <ClassicMenu No="Runing" CH="在途"   Url="../../Runing.aspx" Img="Img/Menu/Ruing.png" Enable="1" Title="我参与的工作，没有完成。" />
   <ClassicMenu No="Search" CH="查询"  Url="../../FlowRpt.aspx"  Img="Img/Menu/Search.png" Enable="1" Title="流程查询。" />
   <ClassicMenu No="Tools" CH="设置"   Url="../../Tools.aspx" Img="Img/Menu/Setting.png" Enable="1" Title="工具栏" />
-  <ClassicMenu No="Login" CH="切换"   Url="../../Login.aspx" Img="Img/Menu/Switch.png" Enable="1" Title="切换用户。" />
+  <ClassicMenu No="Login" CH="切换用户"   Url="../../Login.aspx" Img="Img/Menu/Switch.png" Enable="1" Title="切换用户。" />
   <ClassicMenu No="AdvFunc" CH="高级功能"   Url="AdvFunc.aspx" Img="Img/Menu/Sharing.png" Enable="1" Title="切换用户。" />
 
   <!-- 高级功能 -->

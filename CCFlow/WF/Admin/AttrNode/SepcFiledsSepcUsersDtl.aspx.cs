@@ -45,7 +45,7 @@ namespace CCFlow.WF.Admin.AttrNode
         /// <summary>
         /// 
         /// </summary>
-        public string MyPK
+        public new string MyPK
         {
             get
             {

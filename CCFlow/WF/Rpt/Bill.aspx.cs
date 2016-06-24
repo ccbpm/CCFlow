@@ -15,7 +15,7 @@ using BP.Sys;
 using BP.Port;
 using BP;
 using BP.Web.Comm;
-using BP.WF.Template;
+
 namespace CCFlow.WF.Rpt
 {
     public partial class WF_Rpt_Bill : BP.Web.WebPage

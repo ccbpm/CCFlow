@@ -16,7 +16,6 @@ using BP.Web;
 using BP.Web.Controls;
 using BP.Web.UC;
 using BP.Sys.XML;
-using BP.Sys.XML;
 using BP.Port;
 using BP.Web.Comm;
 using System.Collections.Specialized;

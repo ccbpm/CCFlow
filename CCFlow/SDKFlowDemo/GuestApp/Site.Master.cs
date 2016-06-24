@@ -29,7 +29,7 @@ namespace CCFlow.SDKFlowDemo.GuestApp
                 else
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "show", "show();", true);
             }
-            catch (Exception ex)
+            catch 
             {
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "hide", "hide();", true);
             }

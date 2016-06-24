@@ -185,6 +185,7 @@
                 idx = -1;
                 sBuilder.Append("</td>");
                 sBuilder.Append("</tr>");
+                break;
             }
             else
             {

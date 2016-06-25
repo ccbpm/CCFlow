@@ -13,21 +13,21 @@ function DesignerLoaded() {
 //右键打开流程
 function showFlow() {
     var node = $('#flowTree').tree('getSelected');
-    if (!node || node.attributes.IsParent != '0') return;
+    if (!node || node.attributes.ISPARENT != '0') return;
     OpenFlowToCanvas(node, node.id, node.text);
 }
 
 //打开流程到流程图
 function OpenFlowToCanvas(node, id, text) {
     $(".mymask").show();
-    if (node.attributes.DType == "2") {//BPMN模式
+    if (node.attributes.DTYPE == "2") {//BPMN模式
         addTab(id, text, "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=2", node.iconCls);
-    } else if (node.attributes.DType == "1") {//CCBPM
+    } else if (node.attributes.DTYPE == "1") {//CCBPM
         addTab(id, text, "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls);
     } else {
         if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
             var attrs = node.attributes;    //这样写，是为了不将attributes里面原有的属性丢失，edited by liuxc,2015-11-05
-            attrs.DType = "1";
+            attrs.DTYPE = "1";
             attrs.Url = "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
             $('#flowTree').tree('update', {
                 target: node.target,
@@ -46,7 +46,7 @@ function OpenFlowToCanvas(node, id, text) {
 function newFlow() {
     var currSort = $('#flowTree').tree('getSelected');
     var currSortId = "99";
-    if (currSort && currSort.attributes["IsParent"] != 0) {//edit by qin 2016/2/16
+    if (currSort && currSort.attributes["ISPARENT"] != 0) {//edit by qin 2016/2/16
         currSortId = $('#flowTree').tree('getSelected').id; //liuxc,20150323
     }
     var dgId = "iframDg";
@@ -78,7 +78,7 @@ function newFlow() {
                     data: [{
                         id: jdata.data.no,
                         text: jdata.data.name,
-                        attributes: { IsParent: '0', DType: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+                        attributes: { ISPARENT: '0', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
                         iconCls: 'icon-flow1',
                         checked: false
                     }]
@@ -86,7 +86,7 @@ function newFlow() {
                 var nodeData = {
                     id: jdata.data.no,
                     text: jdata.data.name,
-                    attributes: { IsParent: '0', DType: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+                    attributes: { ISPARENT: '0', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
                     iconCls: 'icon-flow1',
                     checked: false
                 };
@@ -107,8 +107,8 @@ function newFlow() {
 /// <param name="isSub" type="Boolean">是否是新建子级流程类别</param>
 function newFlowSort(isSub) {
     var currSort = $('#flowTree').tree('getSelected');
-    if (currSort == null || undefined == currSort.attributes.IsParent ||
-                currSort.attributes.IsParent != '1' || (currSort.attributes.IsRoot == '1' && isSub == false)) return;
+    if (currSort == null || undefined == currSort.attributes.ISPARENT ||
+                currSort.attributes.ISPARENT != '1' || (currSort.attributes.IsRoot == '1' && isSub == false)) return;
 
     var propName = (isSub ? '子级' : '同级') + '流程类别';
     OpenEasyUiSampleEditDialog(propName, '新建', null, function (val) {
@@ -135,7 +135,7 @@ function newFlowSort(isSub) {
                     data: [{
                         id: jdata.data,
                         text: val,
-                        attributes: { IsParent: '1', MenuId: "mFlowSort" },
+                        attributes: { ISPARENT: '1', MenuId: "mFlowSort" },
                         checked: false,
                         iconCls: 'icon-tree_folder',
                         state: 'open',
@@ -188,7 +188,7 @@ function editFlowSort() {
 function deleteFlowSort() {
     /// <summary>删除流程类别</summary>
     var currSort = $('#flowTree').tree('getSelected');
-    if (currSort == null || currSort.attributes.IsParent == undefined) return;
+    if (currSort == null || currSort.attributes.ISPARENT == undefined) return;
 
     OpenEasyUiConfirm("你确定要删除名称为“" + currSort.text + "”的流程类别吗？", function () {
         //传入后台参数
@@ -275,7 +275,7 @@ function SearchForm() {
 //导入流程
 function ImpFlow() {
     var currFlow = $('#flowTree').tree('getSelected');
-    if (currFlow == null || currFlow.attributes.IsParent != '0') {
+    if (currFlow == null || currFlow.attributes.ISPARENT != '0') {
         alert('没有获得当前的流程编号.');
         return;
     }
@@ -287,7 +287,7 @@ function ImpFlow() {
 //导出流程
 function ExpFlow() {
     var currFlow = $('#flowTree').tree('getSelected');
-    if (currFlow == null || currFlow.attributes.IsParent != '0') {
+    if (currFlow == null || currFlow.attributes.ISPARENT != '0') {
         alert('没有获得当前的流程编号.');
         return;
     }
@@ -323,7 +323,7 @@ function ExpFlowBySort() {
 function DeleteFlow() {
     /// <summary>删除流程</summary>
     var currFlow = $('#flowTree').tree('getSelected');
-    if (currFlow == null || currFlow.attributes.IsParent != '0')
+    if (currFlow == null || currFlow.attributes.ISPARENT != '0')
         return;
 
     OpenEasyUiConfirm("你确定要删除名称为“" + currFlow.text + "”的流程吗？", function () {
@@ -353,7 +353,7 @@ function DeleteFlow() {
 //流程属性
 function FlowProperty() {
     var currFlow = $('#flowTree').tree('getSelected');
-    if (currFlow == null || currFlow.attributes.IsParent != '0') return;
+    if (currFlow == null || currFlow.attributes.ISPARENT != '0') return;
 
     var fk_flow = currFlow.id;
     url = "../XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Flow&PK=" + fk_flow + "&Lang=CH";
@@ -370,17 +370,17 @@ function newFrm() {
 
     var url = "../CCFormDesigner/NewFrmGuide.aspx?Step=0";
     if (node.attributes) {
-        if (node.attributes.TType == "SRC") {
+        if (node.attributes.TTYPE == "SRC") {
             url += "&Src=" + node.id;
         }
-        else if (node.attributes.TType == "FORMTYPE") {
+        else if (node.attributes.TTYPE == "FORMTYPE") {
             //在表单类别上单击，则传递表单类别
             var pnode = $('#formTree').tree('getParent', node.target);
             if (pnode != null) {
                 url += "&FrmType=" + node.id;
 
                 while (pnode && pnode.attributes) {
-                    if (pnode.attributes.TType == "SRC") {
+                    if (pnode.attributes.TTYPE == "SRC") {
                         url += "&Src=" + pnode.id;
                         break;
                     }
@@ -423,7 +423,7 @@ function newSrcTable() {
 //数据源属性
 function srcProperty() {
     var srcNode = $('#formTree').tree('getSelected');
-    if (!srcNode || srcNode.attributes.TType != 'SRC') {
+    if (!srcNode || srcNode.attributes.TTYPE != 'SRC') {
         $.messager.alert('错误', '请选择数据源！', 'error');
         return;
     }
@@ -437,7 +437,7 @@ function srcProperty() {
 //数据源表属性
 function srcTableProperty() {
     var srcTableNode = $('#formTree').tree('getSelected');
-    if (!srcTableNode || srcTableNode.attributes.TType != 'SRCTABLE') {
+    if (!srcTableNode || srcTableNode.attributes.TTYPE != 'SRCTABLE') {
         $.messager.alert('错误', '请选择数据源表！', 'error');
         return;
     }
@@ -451,7 +451,7 @@ function srcTableProperty() {
 //数据源表数据查看/编辑
 function srcTableData() {
     var srcTableNode = $('#formTree').tree('getSelected');
-    if (!srcTableNode || srcTableNode.attributes.TType != 'SRCTABLE') {
+    if (!srcTableNode || srcTableNode.attributes.TTYPE != 'SRCTABLE') {
         $.messager.alert('错误', '请选择数据源表！', 'error');
         return;
     }
@@ -465,7 +465,7 @@ function srcTableData() {
 function openForm(id, text) {
     if (!id || !text) {
         var formNode = $('#formTree').tree('getSelected');
-        if (!formNode || formNode.attributes.TType != 'FORM') {
+        if (!formNode || formNode.attributes.TTYPE != 'FORM') {
             $.messager.alert('错误', '请选择表单！', 'error');
             return;
         }
@@ -532,7 +532,7 @@ function getSelected(sTreeId, sName, oChecks) {
 }
 
 function newDept() {
-    var node = getSelected(ORG_TREE, "部门", { TType: "DEPT" });
+    var node = getSelected(ORG_TREE, "部门", { TTYPE: "DEPT" });
     if (!node) return;
 
     var pnode = $("#" + ORG_TREE).tree("getParent", node.target);

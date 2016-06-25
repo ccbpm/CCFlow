@@ -33,18 +33,18 @@ default:    //未设置Value值，则表示此项
 functrees.push({
     Id: "flowTree",
     Name: "流程",
-    AttrCols: ["TType", "DType", "IsParent"],
+    AttrCols: ["TTYPE", "DTYPE", "ISPARENT"],
     ServiceCount: 1,
     Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFlowTree", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "F0",
-			    ColDefine: "TType", Defines: [
-											{ Value: "FLOWTYPE", ColDefine: "ParentNo",
+			{ Type: "Service", ServiceMethod: "GetFlowTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "F0",
+			    ColDefine: "TTYPE", Defines: [
+											{ Value: "FLOWTYPE", ColDefine: "PARENTNO",
 											    Defines: [
 															{ Value: "F0", IconCls: "icon-flowtree", MenuId: "mFlowRoot", Opened: true },
 															{ IconCls: "icon-tree_folder", MenuId: "mFlowSort" }
 														]
 											},
-											{ Value: "FLOW", ColDefine: "DType", Defines: [
+											{ Value: "FLOW", ColDefine: "DTYPE", Defines: [
                                                 { Value: "1", IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=2" },
                                                 { IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=1" }
                                             ], LazyLoad: true, Nodes: [
@@ -78,7 +78,7 @@ functrees.push({
                                     { Type: "Node", Id: "FlowRunning", ParentId: "JianK", Name: "逾期未完成实例", TType: "FLOWRUNNING", DType: "-1", IconCls: "icon-Warning", Url: "../FlowDB/InstanceWarning.aspx?FK_Flow=@@fk_flow" },
                                     { Type: "Node", Id: "FlowExpired", ParentId: "JianK", Name: "逾期已完成实例", TType: "FLOWEXPIRED", DType: "-1", IconCls: "icon-overtime", Url: "../FlowDB/InstanceOverTimeOneFlow.aspx?anaTime=mouth&FK_Flow=@@fk_flow" },
 						            { Type: "Node", Id: "DeleteLog", ParentId: "JianK", Name: "删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=@@fk_flow" },
-						            { Type: "Node", Id: "Rptorder", ParentId: "JianK", Name: "数据订阅", TType: "DELETELOG", DType: "-1", IconCls: "icon-RptOrder", Url: "../CCBPMDesigner/App/RptOrder.aspx?FK_Flow=@@fk_flow" }
+						            { Type: "Node", Id: "Rptorder", ParentId: "JianK", Name: "数据订阅", TType: "DATARECEIVE", DType: "-1", IconCls: "icon-RptOrder", Url: "../CCBPMDesigner/App/RptOrder.aspx?FK_Flow=@@fk_flow" }
 					              ]
                                                 },
                                                 { Type: "Node", Id: "DevAPI", ParentId: null, Name: "开发接口(API)", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
@@ -113,7 +113,7 @@ functrees.push({
                                                 { Type: "Node", Id: "BindForm", ParentId: null, Name: "绑定表单", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
                                                     Nodes: [
 						                                { Type: "Node", Id: "AddOneFrmToNodes", ParentId: "BindForm", Name: "加入表单", TType: "ADDTONODES", DType: "-1", IconCls: "", Inherits: ["fk_flow"], Url: "../AttrFlow/AddOneFrmToNodes.aspx?FK_Flow=@@fk_flow" },
-						                                { Type: "Service", ServiceMethod: "GetBindingForms", MethodParams: { fk_flow: "@@fk_flow" }, ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: null, IconCls: "icon-form", Url: "../AttrFlow/BindingForms.aspx?FK_MapData=`'@@id'.split('@')[0]`&FK_Flow=@@fk_flow" }
+						                                { Type: "Service", ServiceMethod: "GetBindingForms", MethodParams: { fk_flow: "@@fk_flow" }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null, IconCls: "icon-form", Url: "../AttrFlow/BindingForms.aspx?FK_MapData=`'@@id'.split('@')[0]`&FK_Flow=@@fk_flow" }
                                                         ]
                                                 }
                                             ]
@@ -163,13 +163,13 @@ functrees.push({
 functrees.push({
     Id: "formTree",
     Name: "表单",
-    AttrCols: ["TType"],
-    RootASC: { Field: "TType", Index: ["FORMTYPE", "SRCROOT", "FORMREF", "CLOUNDDATA"] },
+    AttrCols: ["TTYPE"],
+    RootASC: { Field: "TTYPE", Index: ["FORMTYPE", "SRCROOT", "FORMREF", "CLOUNDDATA"] },
     ServiceCount: 2,
     Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFormTree", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: null,
-			    ColDefine: "TType", Defines: [
-											{ Value: "FORMTYPE", ColDefine: "ParentNo",
+			{ Type: "Service", ServiceMethod: "GetFormTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null,
+			    ColDefine: "TTYPE", Defines: [
+											{ Value: "FORMTYPE", ColDefine: "PARENTNO",
 											    Defines: [
 															{ Value: null, IconCls: "icon-formtree", MenuId: "mFormRoot", Opened: true },
 															{ IconCls: "icon-tree_folder", MenuId: "mFormSort" }
@@ -209,8 +209,8 @@ functrees.push({
 			},
 			{ Type: "Node", Id: "SrcRoot", ParentId: null, Name: "数据源字典表", Opened: true, TType: "SRCROOT", IconCls: "icon-srctree", MenuId: "mSrcRoot",
 			    Nodes: [
-						{ Type: "Service", ServiceMethod: "GetSrcTree", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "SrcRoot",
-						    ColDefine: "TType", Defines: [
+						{ Type: "Service", ServiceMethod: "GetSrcTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "SrcRoot",
+						    ColDefine: "TTYPE", Defines: [
 											{ Value: "SRC", IconCls: "icon-src", MenuId: "mSrc", Url: "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.SFDBSrcs&No=@@id&t=" + Math.random() },
 											{ Value: "SRCTABLE", IconCls: "icon-srctable", MenuId: "mSrcTable", Url: "../../MapDef/Do.aspx?DoType=EditSFTable&RefNo=@@id&t=" + Math.random() }
 										  ]
@@ -235,7 +235,7 @@ functrees.push({
 functrees.push({
     Id: "OrgTree",
     Name: "组织结构",
-    AttrCols: ["TType"],
+    AttrCols: ["TTYPE"],
     ServiceCount: 1,
     Nodes: [
 			{ Type: "Node", Id: "OneOne", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneOne",
@@ -252,16 +252,16 @@ functrees.push({
 						{ Type: "Node", Id: "Stations", ParentId: "OneMore", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
 					  ]
             			},
-			{ Type: "Service", ServiceMethod: "GetStructureTree", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "0",
-			    ColDefine: "TType", Defines: [
-											{ Value: "DEPT", ColDefine: "ParentNo",
+			{ Type: "Service", ServiceMethod: "GetStructureTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "0",
+			    ColDefine: "TTYPE", Defines: [
+											{ Value: "DEPT", ColDefine: "PARENTNO",
 											    Defines: [
 															{ Value: "0", IconCls: "icon-tree_folder", MenuId: "mDeptRoot", InheritForChild: [{ From: "@@id", To: "fk_dept"}], Opened: true },
 															{ IconCls: "icon-dept", MenuId: "mDept", InheritForChild: [{ From: "@@id", To: "fk_dept"}] }
 														]
 											},
 											{ Value: "STATION", IconCls: "icon-station", MenuId: "mStation", Inherits: ["fk_dept"], InheritForChild: [{ From: "`'@@id'.split('|')[1]`", To: "fk_station"}], LazyLoad: true, Nodes: [
-                                                { Type: "Service", ServiceMethod: "GetEmpsFromStation", Inherits: ["fk_dept", "fk_station"], MethodParams: { fk_dept: "@@fk_dept", fk_station: "@@fk_station" }, ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: null, IconCls: "icon-user", MenuId: "mEmp", Url: "" }
+                                                { Type: "Service", ServiceMethod: "GetEmpsFromStation", Inherits: ["fk_dept", "fk_station"], MethodParams: { fk_dept: "@@fk_dept", fk_station: "@@fk_station" }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null, IconCls: "icon-user", MenuId: "mEmp", Url: "" }
                                             ]
 											}
 										  ]
@@ -601,7 +601,7 @@ function OnDbClick(oFuncTree) {
             //支持将url中的@@+字段格式自动替换成node节点及其属性、或WebUser中同名的属性值，或动态替换JS表达式
             if (node.attributes && node.attributes.Url) {
                 //流程树存在流程版本是否升级问题需要单独处理
-                if (oFuncTree.Id == "flowTree" && node.attributes.TType == "FLOW") {
+                if (oFuncTree.Id == "flowTree" && node.attributes.TTYPE == "FLOW") {
                     OpenFlowToCanvas(node, node.id, node.text);
                     return;
                 }

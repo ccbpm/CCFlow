@@ -169,15 +169,15 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
 
         private string GetFlowTreeTable()
         {
-            string sql = @"SELECT 'F'+No No,'F'+ParentNo ParentNo,Name, Idx, 1 IsParent,'FLOWTYPE' TType,-1 DType FROM WF_FlowSort
+            string sql = @"SELECT 'F'+No NO,'F'+ParentNo PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
-                           SELECT No, 'F'+FK_FlowSort as ParentNo,Name,Idx,0 IsParent,'FLOW' TType,DType FROM WF_Flow";
+                           SELECT NO, 'F'+FK_FlowSort as PARENTNO,NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                sql = @"SELECT 'F'||No No,'F'||ParentNo ParentNo,Name, Idx, 1 IsParent,'FLOWTYPE' TType,-1 DType FROM WF_FlowSort
+                sql = @"SELECT 'F'||No NO,'F'||ParentNo PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                         union 
-                        SELECT No, 'F'||FK_FlowSort as ParentNo,Name,Idx,0 IsParent,'FLOW' TType,DType FROM WF_Flow";
+                        SELECT NO, 'F'||FK_FlowSort as PARENTNO,NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -195,9 +195,9 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
             }
             else
             {
-                DataRow[] drs = dt.Select("Name='流程树'");
-                if (drs.Length > 0 && !Equals(drs[0]["ParentNo"], "F0"))
-                    drs[0]["ParentNo"] = "F0";
+                DataRow[] drs = dt.Select("NAME='流程树'");
+                if (drs.Length > 0 && !Equals(drs[0]["PARENTNO"], "F0"))
+                    drs[0]["PARENTNO"] = "F0";
             }
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
@@ -214,39 +214,39 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.MSSQL:
-                    sql.AppendLine("SELECT CAST(wn.NodeID AS VARCHAR) AS No,");
-                    sql.AppendLine("       ('(' + CAST(wn.NodeID AS VARCHAR) + ')' + wn.Name) AS Name,");
+                    sql.AppendLine("SELECT CAST(wn.NodeID AS VARCHAR) AS NO,");
+                    sql.AppendLine("       ('(' + CAST(wn.NodeID AS VARCHAR) + ')' + wn.Name) AS NAME,");
                     break;
                 case DBType.MySQL:
-                    sql.AppendLine("SELECT CAST(wn.NodeID AS CHAR) AS No,");
-                    sql.AppendLine("       CONCAT('(',wn.NodeID,')',wn.Name) AS Name,");
+                    sql.AppendLine("SELECT CAST(wn.NodeID AS CHAR) AS NO,");
+                    sql.AppendLine("       CONCAT('(',wn.NodeID,')',wn.Name) AS NAME,");
                     break;
                 case DBType.Informix:
-                    sql.AppendLine("SELECT CAST(wn.NodeID AS CHAR) AS No,");   //未证实
-                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS Name,");    //未证实 
+                    sql.AppendLine("SELECT CAST(wn.NodeID AS CHAR) AS NO,");   //未证实
+                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS NAME,");    //未证实 
                     break;
                 case DBType.Oracle:
-                    sql.AppendLine("SELECT to_char(wn.NodeID) AS No,");
-                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS Name,");
+                    sql.AppendLine("SELECT to_char(wn.NodeID) AS NO,");
+                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS NAME,");
                     break;
                 case DBType.DB2:
-                    sql.AppendLine("SELECT CHAR(wn.NodeID) AS No,");   //未证实
-                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS Name,");    //未证实，也可用CONCAT函数，但此函数只支持两两连接，且两个必须都是字符串
+                    sql.AppendLine("SELECT CHAR(wn.NodeID) AS NO,");   //未证实
+                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS NAME,");    //未证实，也可用CONCAT函数，但此函数只支持两两连接，且两个必须都是字符串
                     break;
                 case DBType.Access:
-                    sql.AppendLine("SELECT CStr(wn.NodeID) AS No,");
-                    sql.AppendLine("       ('(' & wn.NodeID & ')' & wn.Name) AS Name,"); //Access中的别名必须加AS操作符
+                    sql.AppendLine("SELECT CStr(wn.NodeID) AS NO,");
+                    sql.AppendLine("       ('(' & wn.NodeID & ')' & wn.Name) AS NAME,"); //Access中的别名必须加AS操作符
                     break;
                 case DBType.Sybase:
-                    sql.AppendLine("SELECT CONVERT(VARCHAR, wn.NodeID) AS No,");   //未证实
-                    sql.AppendLine("       ('(' + CONVERT(VARCHAR, wn.NodeID) + ')' + wn.Name) AS Name,"); //未证实
+                    sql.AppendLine("SELECT CONVERT(VARCHAR, wn.NodeID) AS NO,");   //未证实
+                    sql.AppendLine("       ('(' + CONVERT(VARCHAR, wn.NodeID) + ')' + wn.Name) AS NAME,"); //未证实
                     break;
             }
 
-            sql.AppendLine("       NULL AS ParentNo,");
-            sql.AppendLine("       'NODE' AS TType,");
-            sql.AppendLine("       -1 AS DType,");
-            sql.AppendLine("       0 AS IsParent");
+            sql.AppendLine("       NULL AS PARENTNO,");
+            sql.AppendLine("       'NODE' AS TTYPE,");
+            sql.AppendLine("       -1 AS DTYPE,");
+            sql.AppendLine("       0 AS ISPARENT");
             sql.AppendLine("FROM   WF_Node wn");
             sql.AppendLine("WHERE  wn.FK_Flow = '{0}'");
             sql.AppendLine("ORDER BY");
@@ -263,12 +263,12 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
                 return "[]";
 
             StringBuilder sql = new StringBuilder();
-            sql.AppendLine("SELECT wfn.FK_Frm No,");
-            sql.AppendLine("       smd.Name,");
-            sql.AppendLine("       NULL ParentNo,");
-            sql.AppendLine("       'FORM' TType,");
-            sql.AppendLine("       -1 DType,");
-            sql.AppendLine("       0 IsParent");
+            sql.AppendLine("SELECT wfn.FK_Frm NO,");
+            sql.AppendLine("       smd.NAME,");
+            sql.AppendLine("       NULL PARENTNO,");
+            sql.AppendLine("       'FORM' TTYPE,");
+            sql.AppendLine("       -1 DTYPE,");
+            sql.AppendLine("       0 ISPARENT");
             sql.AppendLine("FROM   WF_FrmNode wfn");
             sql.AppendLine("       INNER JOIN Sys_MapData smd");
             sql.AppendLine("            ON  smd.No = wfn.FK_Frm");
@@ -287,16 +287,16 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
 
         private string GetFormTreeTable()
         {
-            string sqls = "SELECT No ,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType, DBSrc FROM Sys_FormTree;" + Environment.NewLine
+            string sqls = "SELECT NO ,PARENTNO,NAME, IDX, 1 ISPARENT, 'FORMTYPE' TTYPE, DBSRC FROM Sys_FormTree;" + Environment.NewLine
                       +
-                      " SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData   where AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree);" + Environment.NewLine
+                      " SELECT NO, FK_FrmSort as PARENTNO,NAME,IDX,0 ISPARENT, 'FORM' TTYPE FROM Sys_MapData   where AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree);" + Environment.NewLine
                       +
-                      " SELECT ss.No,'' ParentNo,ss.Name,0 Idx, 1 IsParent, 'SRC' TType FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC;";
+                      " SELECT ss.NO,'' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC;";
 
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
             DataTable dt = ds.Tables[1].Clone();
 
-            DataRow[] rows = ds.Tables[0].Select("Name='表单库'");
+            DataRow[] rows = ds.Tables[0].Select("NAME='表单库'");
             DataRow rootRow;
 
             if (rows.Length == 0)
@@ -305,23 +305,23 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
             }
             else
             {
-                rootRow = dt.Rows.Add(rows[0]["No"], null, rows[0]["Name"], rows[0]["Idx"], rows[0]["IsParent"], rows[0]["TType"]);
+                rootRow = dt.Rows.Add(rows[0]["NO"], null, rows[0]["NAME"], rows[0]["IDX"], rows[0]["ISPARENT"], rows[0]["TTYPE"]);
             }
 
             foreach (DataRow row in ds.Tables[2].Rows)
             {
-                dt.Rows.Add("Src_" + row["No"], rootRow["No"], row["Name"], row["Idx"], row["IsParent"], row["TType"]);
+                dt.Rows.Add("SRC_" + row["NO"], rootRow["NO"], row["NAME"], row["IDX"], row["ISPARENT"], row["TTYPE"]);
 
-                rows = ds.Tables[0].Select("DBSrc='" + row["No"] + "' AND Name <> '表单库'");
+                rows = ds.Tables[0].Select("DBSRC='" + row["NO"] + "' AND NAME <> '表单库'");
 
                 foreach (DataRow dr in rows)
                 {
-                    if (Equals(dr["ParentNo"], rootRow["No"]))
+                    if (Equals(dr["PARENTNO"], rootRow["NO"]))
                     {
-                        dr["ParentNo"] = "Src_" + row["No"];
+                        dr["PARENTNO"] = "SRC_" + row["NO"];
                     }
 
-                    dt.Rows.Add(dr["No"], dr["ParentNo"], dr["Name"], dr["Idx"], dr["IsParent"], dr["TType"]);
+                    dt.Rows.Add(dr["NO"], dr["PARENTNO"], dr["NAME"], dr["IDX"], dr["ISPARENT"], dr["TTYPE"]);
                 }
             }
 
@@ -392,9 +392,9 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
 
         private string GetSrcTreeTable()
         {
-            string sqls = "SELECT ss.No,'SrcRoot' ParentNo,ss.Name,0 Idx, 1 IsParent, 'SRC' TType FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC;" + Environment.NewLine
+            string sqls = "SELECT ss.NO,'SrcRoot' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC;" + Environment.NewLine
                       +
-                      " SELECT st.No, st.FK_SFDBSrc AS ParentNo,st.Name,0 AS Idx, 0 IsParent, 'SRCTABLE' TType FROM Sys_SFTable st;;";
+                      " SELECT st.NO, st.FK_SFDBSrc AS PARENTNO,st.NAME,0 AS IDX, 0 ISPARENT, 'SRCTABLE' TTYPE FROM Sys_SFTable st;";
 
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
             DataTable dt = ds.Tables[0].Clone();
@@ -411,10 +411,10 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
         private string GetStructureTreeTable()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("No", typeof(string));
-            dt.Columns.Add("ParentNo", typeof(string));
-            dt.Columns.Add("Name", typeof(string));
-            dt.Columns.Add("TType", typeof(string));
+            dt.Columns.Add("NO", typeof(string));
+            dt.Columns.Add("PARENTNO", typeof(string));
+            dt.Columns.Add("NAME", typeof(string));
+            dt.Columns.Add("TTYPE", typeof(string));
 
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
             {

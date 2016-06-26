@@ -1352,13 +1352,13 @@ namespace BP.Web
         #endregion 产生 frm
 
         /// <summary>
-        /// 
+        /// 执行表单copy
         /// </summary>
         /// <param name="fromMapData"></param>
         /// <param name="fk_mapdata"></param>
         /// <param name="isClear">是否清除</param>
         /// <param name="isSetReadonly">是否设置为只读?</param>
-        /// <returns></returns>
+        /// <returns>执行结果</returns>
         [WebMethod(EnableSession = true)]
         public string CopyFrm(string fromMapData, string fk_mapdata, bool isClear, bool isSetReadonly)
         {
@@ -1371,16 +1371,9 @@ namespace BP.Web
             // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
             if (fk_mapdata.Contains("ND") == true)
             {
-                try
-                {
-                    string fk_node = fk_mapdata.Replace("ND", "");
-                    Node nd = new Node(int.Parse(fk_node));
-                    nd.RepareMap();
-                }
-                catch
-                {
-                    // 不处理异常。
-                }
+                string fk_node = fk_mapdata.Replace("ND", "");
+                Node nd = new Node(int.Parse(fk_node));
+                nd.RepareMap();
             }
             return null;
         }

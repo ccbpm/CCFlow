@@ -3919,9 +3919,12 @@ namespace CCFlow.WF.UC
             if (aths.Count > 0)
                 athDBs = new FrmAttachmentDBs(enName, en.PKVal.ToString());
 
+            // 附件.
+            string activeAths = BP.WF.Glo.GenerActiveAths(mes, null, en, md, mattrs);
+
             foreach (FrmAttachment ath in aths)
             {
-                if (ath.IsVisable == false)
+                if (ath.IsVisable == false && activeAths.Contains(ath.MyPK)==false)
                     continue;
 
                 if (ath.UploadType == AttachmentUploadType.Single)

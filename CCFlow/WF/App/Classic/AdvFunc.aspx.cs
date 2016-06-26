@@ -16,7 +16,7 @@ public partial class AppDemo_AdvFunc : System.Web.UI.Page
         int cols = 4; //定义显示列数 从0开始。
         decimal widthCell = 100 / cols;
         this.Pub1.AddTable("width=90% border=0");
-        this.Pub1.AddCaptionLeftTX("<div class='CaptionMsg' >高级功能</div>");
+        this.Pub1.AddCaptionLeft("<div class='CaptionMsg' >高级功能</div>");
         int idx = -1;
         bool is1 = false;
         foreach (BP.WF.XML.ClassicMenuAdvFunc en in ens)

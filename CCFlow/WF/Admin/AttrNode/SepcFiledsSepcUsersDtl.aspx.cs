@@ -52,13 +52,13 @@ namespace CCFlow.WF.Admin.AttrNode
                 return this.Request.QueryString["MyPK"];
             }
         }
+       
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+           
         }
-
         protected void Btn_Save_Click(object sender, EventArgs e)
         {
 
@@ -70,18 +70,9 @@ namespace CCFlow.WF.Admin.AttrNode
 
                 me.FK_MapData = this.FK_MapData;
                 me.Doc = this.Fields;
-                me.ExtType = "SepcFiledsSepcUsers";
+                me.ExtType = "Sepc"+this.DoType+"SepcUsers";
                 me.Tag = this.FK_Node;
-
                 me.Tag1 = this.TB_Emps.Text;
-                me.Tag2 = this.TB_SQL.Text;
-
-                //if (me.Tag.Length == 0)
-                //{
-                //    this.Alert("您没有设置人员,无法保存.");
-                //    return;
-                //}
-
                 me.Update();
             }
             else
@@ -90,22 +81,13 @@ namespace CCFlow.WF.Admin.AttrNode
 
                 me.FK_MapData = this.FK_MapData;
                 me.Doc = this.Fields;
-
                 me.Tag = this.FK_Node;
-
                 me.Tag1 = this.TB_Emps.Text;
-                me.Tag2 = this.TB_SQL.Text;
-
-                //if (me.Tag.Length == 0)
-                //{
-                //    this.Alert("您没有设置人员,无法保存.");
-                //    return;
-                //}
-                me.ExtType = "SepcFiledsSepcUsers";
+                me.ExtType = "Sepc" + this.DoType + "SepcUsers";
                 me.Insert();
             }
 
-            this.WinClose("ok");
+            this.WinClose("设置成功.");
         }
 
         protected void Btn_Del_Click(object sender, EventArgs e)
@@ -113,7 +95,7 @@ namespace CCFlow.WF.Admin.AttrNode
             BP.Sys.MapExt me = new MapExt();
             me.MyPK = this.MyPK;
             me.Delete();
-            this.WinClose("ok");
+            this.WinClose("删除成功.");
         }
     }
 }

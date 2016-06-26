@@ -202,8 +202,6 @@ namespace CCFlow.WF.CCForm
                 }
                 #endregion 判断是否是明细表的多附件。
 
-
-
                 #region 判断是否可以查询出来，如果查询不出来，就可能是公文流程。
                 if (result == 0 && string.IsNullOrEmpty(this.FK_Flow) == false
                     && this.FK_FrmAttachment.Contains("DocMultiAth"))

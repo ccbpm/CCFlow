@@ -552,6 +552,8 @@ namespace BP.WF
         public static void CreateOrRepairTrackTable(string fk_flow)
         {
             string ptable = "ND" + int.Parse(fk_flow) + "Track";
+            if (DBAccess.IsExitsObject(ptable) == true)
+                return;
 
             Track tk = new Track();
             tk.CheckPhysicsTable();

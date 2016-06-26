@@ -866,7 +866,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "特别字段特别用户权限";
+                rm.Title = "特别控件特别用户权限";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/SpecUserSpecFields.png";
                 rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;

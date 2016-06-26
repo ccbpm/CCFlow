@@ -3247,7 +3247,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string GenerUserSigantureHtml(string userNo, string userName)
         {
-            return "<img src='" + CCFlowAppPath + "DataUser/Siganture/" + userNo + ".jpg' title='" + userName + "' border=0 onerror=\"src='" + CCFlowAppPath + "DataUser/UserICON/DefaultSmaller.png'\" />";
+            return "<img src='" + CCFlowAppPath + "DataUser/Siganture/" + userNo + ".jpg' title='" + userName + "' border=0 onerror=\"src='" + CCFlowAppPath + "DataUser/UserIcon/DefaultSmaller.png'\" />";
         }
         /// <summary>
         /// 产生用户小图片
@@ -3255,7 +3255,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string GenerUserImgSmallerHtml(string userNo, string userName)
         {
-            return "<img src='" + CCFlowAppPath + "DataUser/UserICON/" + userNo + "Smaller.png' border=0  style='height:15px;width:15px;padding-right:5px;vertical-align:middle;'  onerror=\"src='" + CCFlowAppPath + "DataUser/UserICON/DefaultSmaller.png'\" />" + userName;
+            return "<img src='" + CCFlowAppPath + "DataUser/UserIcon/" + userNo + "Smaller.png' border=0  style='height:15px;width:15px;padding-right:5px;vertical-align:middle;'  onerror=\"src='" + CCFlowAppPath + "DataUser/UserIcon/DefaultSmaller.png'\" />" + userName;
         }
         /// <summary>
         /// 产生用户大图片
@@ -3263,7 +3263,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string GenerUserImgHtml(string userNo, string userName)
         {
-            return "<img src='" + CCFlowAppPath + "DataUser/UserICON/" + userNo + ".png'  style='padding-right:5px;width:60px;height:80px;border:0px;text-align:middle' onerror=\"src='" + CCFlowAppPath + "DataUser/UserICON/Default.png'\" /><br>" + userName;
+            return "<img src='" + CCFlowAppPath + "DataUser/UserIcon/" + userNo + ".png'  style='padding-right:5px;width:60px;height:80px;border:0px;text-align:middle' onerror=\"src='" + CCFlowAppPath + "DataUser/UserIcon/Default.png'\" /><br>" + userName;
         }
         /// <summary>
         /// 更新主表的SQL
@@ -4065,6 +4065,55 @@ namespace BP.WF
 
         #region 其他方法。
         /// <summary>
+        /// 获得一个表单的动态附件字段
+        /// </summary>
+        /// <param name="exts">扩展</param>
+        /// <param name="nd">节点</param>
+        /// <param name="en">实体</param>
+        /// <param name="md">map</param>
+        /// <param name="attrs">属性集合</param>
+        /// <returns>附件的主键</returns>
+        public static string GenerActiveAths(MapExts exts, Node nd, Entity en, MapData md, MapAttrs attrs)
+        {
+            string strs = "";
+            foreach (MapExt me in exts)
+            {
+                if (me.ExtType != MapExtXmlList.SepcAthSepcUsers)
+                    continue;
+
+                bool isCando = false;
+                if (me.Tag1 != "")
+                {
+                    string tag1 = me.Tag1 + ",";
+                    if (tag1.Contains(BP.Web.WebUser.No + ","))
+                    {
+                        //根据设置的人员计算.
+                        isCando = true;
+                    }
+                }
+
+                if (me.Tag2 != "")
+                {
+                    //根据sql判断.
+                    string sql = me.Tag2.Clone() as string;
+                    sql = BP.WF.Glo.DealExp(sql, en, null);
+                    if (BP.DA.DBAccess.RunSQLReturnValFloat(sql) > 0)
+                        isCando = true;
+                }
+
+                if (me.Tag3 != "" && BP.Web.WebUser.FK_Dept == me.Tag3)
+                {
+                    //根据部门编号判断.
+                    isCando = true;
+                }
+
+                if (isCando == false)
+                    continue;
+                strs += me.Doc;
+            }
+            return strs;
+        }
+        /// <summary>
         /// 获得一个表单的动态权限字段
         /// </summary>
         /// <param name="exts"></param>
@@ -4080,6 +4129,7 @@ namespace BP.WF
             {
                 if (me.ExtType != MapExtXmlList.SepcFiledsSepcUsers)
                     continue;
+
                 bool isCando = false;
                 if (me.Tag1 != "")
                 {

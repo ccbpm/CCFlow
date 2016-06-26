@@ -70,8 +70,10 @@ namespace BP.Sys
         /// 特别字段特殊用户权限
         /// </summary>
         public const string SepcFiledsSepcUsers = "SepcFiledsSepcUsers";
-
-
+        /// <summary>
+        /// 特别附件特别权限
+        /// </summary>
+        public const string SepcAthSepcUsers = "SepcAthSepcUsers";
     }
 	public class MapExtXml:XmlEnNoName
 	{

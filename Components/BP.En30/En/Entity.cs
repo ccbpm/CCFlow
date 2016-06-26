@@ -2661,105 +2661,30 @@ namespace BP.En
             }
             #endregion
 
-            #region 建立索引
-            try
+
+            #region 建立主键
+            if (DBAccess.IsExitsTabPK(this._enMap.PhysicsTable) == false)
             {
                 int pkconut = this.PKCount;
                 if (pkconut == 1)
                 {
+                    DBAccess.CreatePK(this._enMap.PhysicsTable, this.PKField, this._enMap.EnDBUrl.DBType);
                     DBAccess.CreatIndex(this._enMap.EnDBUrl.DBUrlType, this._enMap.PhysicsTable, this.PKField);
                 }
                 else if (pkconut == 2)
                 {
                     string pk0 = this.PKs[0];
                     string pk1 = this.PKs[1];
+                    DBAccess.CreatePK(this._enMap.PhysicsTable, pk0, pk1, this._enMap.EnDBUrl.DBType);
                     DBAccess.CreatIndex(this._enMap.EnDBUrl.DBUrlType, this._enMap.PhysicsTable, pk0, pk1);
                 }
                 else if (pkconut == 3)
                 {
-                    try
-                    {
-                        string pk0 = this.PKs[0];
-                        string pk1 = this.PKs[1];
-                        string pk2 = this.PKs[2];
-                        DBAccess.CreatIndex(this._enMap.EnDBUrl.DBUrlType, this._enMap.PhysicsTable, pk0, pk1, pk2);
-                    }
-                    catch
-                    {
-                    }
-                }
-                else if (pkconut == 4)
-                {
-                    try
-                    {
-                        string pk0 = this.PKs[0];
-                        string pk1 = this.PKs[1];
-                        string pk2 = this.PKs[2];
-                        string pk3 = this.PKs[3];
-                        DBAccess.CreatIndex(this._enMap.EnDBUrl.DBUrlType, this._enMap.PhysicsTable, pk0, pk1, pk2, pk3);
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.DefaultLogWriteLineError(ex.Message);
-                throw ex;
-                //throw new Exception("create pk error :"+ex.Message );
-            }
-            #endregion
-
-            #region 建立主键
-            if (DBAccess.IsExitsTabPK(this._enMap.PhysicsTable) == false)
-            {
-                try
-                {
-                    int pkconut = this.PKCount;
-                    if (pkconut == 1)
-                    {
-                        try
-                        {
-                            DBAccess.CreatePK(this._enMap.PhysicsTable, this.PKField, this._enMap.EnDBUrl.DBType);
-                            DBAccess.CreatIndex(this._enMap.EnDBUrl.DBUrlType, this._enMap.PhysicsTable, this.PKField);
-                        }
-                        catch (Exception ex)
-                        {
-                        }
-                    }
-                    else if (pkconut == 2)
-                    {
-                        try
-                        {
-                            string pk0 = this.PKs[0];
-                            string pk1 = this.PKs[1];
-                            DBAccess.CreatePK(this._enMap.PhysicsTable, pk0, pk1, this._enMap.EnDBUrl.DBType);
-                            DBAccess.CreatIndex(this._enMap.EnDBUrl.DBUrlType, this._enMap.PhysicsTable, pk0, pk1);
-                        }
-                        catch
-                        {
-                        }
-                    }
-                    else if (pkconut == 3)
-                    {
-                        try
-                        {
-                            string pk0 = this.PKs[0];
-                            string pk1 = this.PKs[1];
-                            string pk2 = this.PKs[2];
-                            DBAccess.CreatePK(this._enMap.PhysicsTable, pk0, pk1, pk2, this._enMap.EnDBUrl.DBType);
-                            DBAccess.CreatIndex(this._enMap.EnDBUrl.DBUrlType, this._enMap.PhysicsTable, pk0, pk1, pk2);
-                        }
-                        catch
-                        {
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.DefaultLogWriteLineError(ex.Message);
-                    throw ex;
+                    string pk0 = this.PKs[0];
+                    string pk1 = this.PKs[1];
+                    string pk2 = this.PKs[2];
+                    DBAccess.CreatePK(this._enMap.PhysicsTable, pk0, pk1, pk2, this._enMap.EnDBUrl.DBType);
+                    DBAccess.CreatIndex(this._enMap.EnDBUrl.DBUrlType, this._enMap.PhysicsTable, pk0, pk1, pk2);
                 }
             }
             #endregion

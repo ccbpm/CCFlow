@@ -123,8 +123,8 @@ namespace BP.WF.WXin
                             {
                                 //大图标
                                 string headimgurl = userInfo.avatar;
-                                string userIcon = savePath + "\\" + userInfo.userid + "Biger.png";
-                                BP.DA.DataType.HttpDownloadFile(headimgurl, userIcon);
+                                string UserIcon = savePath + "\\" + userInfo.userid + "Biger.png";
+                                BP.DA.DataType.HttpDownloadFile(headimgurl, UserIcon);
 
                                 //小图标
                                 string iconSize = userInfo.avatar.Substring(headimgurl.LastIndexOf('/'));
@@ -132,8 +132,8 @@ namespace BP.WF.WXin
                                     headimgurl = userInfo.avatar + "64";
                                 else
                                     headimgurl = userInfo.avatar.Substring(0, headimgurl.LastIndexOf('/')) + "64";
-                                userIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
-                                BP.DA.DataType.HttpDownloadFile(headimgurl, userIcon);
+                                UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
+                                BP.DA.DataType.HttpDownloadFile(headimgurl, UserIcon);
                             }
                         }
                     }

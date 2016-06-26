@@ -1912,6 +1912,7 @@ namespace BP.Sys
 
             if (ds.Tables.Contains("Sys_MapData") == false)
                 errMsg += "@缺少表:Sys_MapData";
+
             if (errMsg != "")
                 throw new Exception(errMsg);
 
@@ -1961,10 +1962,10 @@ namespace BP.Sys
             }
 
             if (isHave == false)
-                errMsg += "@缺少列:OID";
+                errMsg += "@表单模版缺少列:OID";
 
             if (errMsg != "")
-                throw new Exception("以下错误不可导入，可能的原因是非表单模板文件:" + errMsg);
+                throw new Exception("@以下错误不可导入，可能的原因是非表单模板文件:" + errMsg);
             #endregion
 
             // 定义在最后执行的sql.

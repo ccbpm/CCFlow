@@ -808,6 +808,29 @@ namespace BP.DA
                 return SystemConfig.AppCenterDBType;
             }
         }
+        public static string _connectionUserID = null;
+        /// <summary>
+        /// 连接用户的ID
+        /// </summary>
+        public static string ConnectionUserID
+        {
+            get
+            {
+                if (_connectionUserID == null)
+                {
+                    string[] strs = BP.Sys.SystemConfig.AppCenterDSN.Split(';');
+                    foreach (string str in strs)
+                    {
+                        if (str.Contains("user ") == true)
+                        {
+                            _connectionUserID = str.Split('=')[1];
+                            break;
+                        }
+                    }
+                }
+                return _connectionUserID;
+            }
+        }
         public static IDbConnection GetAppCenterDBConn
         {
             get
@@ -3037,7 +3060,7 @@ namespace BP.DA
                     case DBType.Oracle:
                         if (obj.IndexOf(".") != -1)
                             obj = obj.Split('.')[1];
-                        return IsExits("select tname from tab WHERE  tname = upper(:obj) ", ps);
+                        return IsExits("select object_name from all_objects WHERE  object_name = upper(:obj) and OWNER='" + DBAccess.ConnectionUserID.ToUpper() + "' ", ps);
                     case DBType.MSSQL:
                         return IsExits("SELECT name FROM sysobjects WHERE name = '" + obj + "'");
                     case DBType.Informix:

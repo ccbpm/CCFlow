@@ -733,6 +733,10 @@ namespace BP.WF
                 }
                 #endregion
 
+
+              
+
+
                 // 最后更新版本号，然后返回.
                 sql = "UPDATE Sys_Serial SET IntVal=" + val + " WHERE CfgKey='Ver'";
                 if (DBAccess.RunSQL(sql) == 0)
@@ -1106,6 +1110,17 @@ namespace BP.WF
             //foreach (Node nd in nds)
             //    nd.HisWork.CheckPhysicsTable();
             #endregion 执行补充的sql, 让外键的字段长度都设置成100.
+
+
+            #region 如果是第一次运行，就执行检查。
+            if (isInstallFlowDemo==true)
+            {
+                Flows fls = new Flows();
+                fls.RetrieveAll();
+                foreach (Flow fl in fls)
+                    fl.DoCheck();
+            }
+            #endregion 如果是第一次运行，就执行检查。
 
         }
         /// <summary>

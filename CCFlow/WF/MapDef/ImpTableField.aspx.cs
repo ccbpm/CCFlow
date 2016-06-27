@@ -104,7 +104,7 @@ namespace CCFlow.WF.MapDef
                     Pub1.AddLi("<div><a href='ImpTableField.aspx?Step=2&FK_MapData=" + this.FK_MapData + "&FK_SFDBSrc=" + item.No + "'><span class='nav'>" + item.No + "  -  " + item.Name + "</span></a></div>");
                 }
 
-                Pub1.AddLi("<div><a href=\"javascript:WinOpen('../../Comm/Sys/SFDBSrcNewGuide.aspx')\" ><img src='../Img/New.gif' align='middle' /><span class='nav'>新建数据源</span></a></div>");
+                Pub1.AddLi("<div><a href=\"javascript:WinOpen('../Comm/Sys/SFDBSrcNewGuide.aspx')\" ><img src='../Img/New.gif' align='middle' /><span class='nav'>新建数据源</span></a></div>");
 
                 Pub1.AddULEnd();
                 Pub1.AddTDEnd();
@@ -162,10 +162,10 @@ namespace CCFlow.WF.MapDef
                     cb = new CheckBox();
                     cb.ID = "CB_Col_" + dr["no"];
                     cb.Text = dr["no"].ToString();
-                    cb.Checked = this.SColumns == null ? false : this.SColumns.Contains(dr["name"] + ",");
+                    cb.Checked = this.SColumns == null ? false : this.SColumns.Contains(dr["no"] + ",");
 
                     //如果已经有该字段，就放弃.
-                    if (attrs.Contains(MapAttrAttr.KeyOfEn, dr["name"].ToString()))
+                    if (attrs.Contains(MapAttrAttr.KeyOfEn, dr["no"].ToString()))
                     {
                         continue;
                     }
@@ -218,7 +218,7 @@ namespace CCFlow.WF.MapDef
 
                 foreach (DataRow dr in tableColumns.Rows)
                 {
-                    if (this.SColumns.Contains(dr["name"] + ",") == false)
+                    if (this.SColumns.Contains(dr["no"] + ",") == false)
                         continue;
 
                     string typeString = dr["DBType"].ToString().ToLower();

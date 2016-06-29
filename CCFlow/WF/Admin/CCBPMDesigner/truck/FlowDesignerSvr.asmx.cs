@@ -568,13 +568,13 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
                     ds.Tables.Add(dt);
 
                     //获取预先计算的节点处理人，以及处理时间,added by liuxc,2016-4-15
-                    sql = "SELECT wsa.FK_Node,wsa.FK_Emp,wsa.EmpName,wsa.TSpanDay,wsa.TSpanHour,wsa.ADT,wsa.SDT FROM WF_SelectAccper AS wsa WHERE wsa.WorkID = " + workid;
+                    sql = "SELECT wsa.FK_Node,wsa.FK_Emp,wsa.EmpName,wsa.TSpanDay,wsa.TSpanHour,wsa.ADT,wsa.SDT FROM WF_SelectAccper wsa WHERE wsa.WorkID = " + workid;
                     dt = DBAccess.RunSQLReturnTable(sql);
                     dt.TableName = "POSSIBLE";
                     ds.Tables.Add(dt);
 
                     //获取节点处理人数据，及处理/查看信息
-                    sql = "SELECT wgw.FK_Emp,wgw.FK_Node,wgw.FK_EmpText,wgw.RDT,wgw.IsRead,wgw.IsPass FROM WF_GenerWorkerlist AS wgw WHERE wgw.WorkID = " +
+                    sql = "SELECT wgw.FK_Emp,wgw.FK_Node,wgw.FK_EmpText,wgw.RDT,wgw.IsRead,wgw.IsPass FROM WF_GenerWorkerlist wgw WHERE wgw.WorkID = " +
                           workid + (string.IsNullOrWhiteSpace(fid) || fid == "0" ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid));
                     dt = DBAccess.RunSQLReturnTable(sql);
                     dt.TableName = "DISPOSE";

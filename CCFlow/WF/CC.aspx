@@ -100,9 +100,8 @@
 --%>
      <td  > <%=BP.DA.DataType.ParseText2Html(doc) %></td>
      <td  ><%=BP.DA.DataType.ParseSysDate2DateTimeFriendly(rdt) %></td>
-     <td  ><a href="javascript:Replay('<%=mypk %>')">回复</a> </td>
+     <td  ><a href="javascript:WinOpen('WorkOpt/CCCheckNote.aspx?WorkID=<%=workid %>&FK_Flow=<%=flowNo %>&FID=0&FK_Node=<%=fk_node %>')">回复</a> </td>
      </tr>
-         
   <% } %>
 </table>
 <input type=checkbox  value="选择"   />选择 <input type="button" value="删除" />

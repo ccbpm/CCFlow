@@ -897,6 +897,7 @@ namespace BP.DA
 
         /// <summary>
         /// 同一个Connetion执行多条sql返回DataSet
+        /// edited by qin 16.6.30 oracle数据库执行多条sql语句异常的修复
         /// </summary>
         /// <param name="sqls"></param>
         /// <returns></returns>

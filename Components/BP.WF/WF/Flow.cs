@@ -6665,7 +6665,10 @@ namespace BP.WF
 
             //删除权限控制.
             sql += "@ DELETE FROM Sys_FrmSln WHERE FK_Flow='" + this.No + "'";
-
+            //考核表
+            sql += "@ DELETE FROM WF_CH WHERE FK_Flow='" + this.No + "'";
+            //删除抄送
+            sql += "@ DELETE FROM WF_CCList WHERE FK_Flow='" + this.No + "'";
             Nodes nds = new Nodes(this.No);
             foreach (Node nd in nds)
             {

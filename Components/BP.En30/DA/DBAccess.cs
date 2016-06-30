@@ -927,6 +927,9 @@ namespace BP.DA
                         DataTable dt = null;
                         for (int i = 0; i < sqlArray.Length; i++)
                         {
+                            if (string.IsNullOrWhiteSpace(sqlArray[i]))
+                                continue;
+                            
                             dt = DBAccess.RunSQLReturnTable(sqlArray[i]);
                             dt.TableName = "dt_" + i.ToString();
                             oratb.Tables.Add(dt);

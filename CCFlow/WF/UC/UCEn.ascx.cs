@@ -2959,7 +2959,7 @@ namespace CCFlow.WF.UC
                         v = WebUser.No;
 
                     //如果为只读并且为空，显示为未签名
-                    if (this.IsReadonly)
+                    if (this.IsReadonly && string.IsNullOrEmpty(v))
                         v = "sigan-readonly";
 
                     if (attr.PicType == PicType.ShouDong)

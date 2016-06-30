@@ -79,7 +79,7 @@ namespace BP.DA
                 {
                     cm.ExecuteNonQuery();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
@@ -87,7 +87,7 @@ namespace BP.DA
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
                         BP.DA.DBAccess.RunSQL(sql);
                     }
-                    throw new Exception("@缺少此字段,有可能系统自动修复."+ex.Message);
+                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
                 return;
             }
@@ -915,11 +915,30 @@ namespace BP.DA
                     ada.SelectCommand = cmd;
                 }
 
+                DataSet oratb = new DataSet();
+
+                switch (AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        ada.Fill(oratb);
+                        break;
+                    case DBType.Oracle:
+                        string[] sqlArray = sqls.Split(';');
+                        DataTable dt = null;
+                        for (int i = 0; i < sqlArray.Length; i++)
+                        {
+                            dt = DBAccess.RunSQLReturnTable(sqlArray[i]);
+                            dt.TableName = "dt_" + i.ToString();
+                            oratb.Tables.Add(dt);
+                        }
+                        break;
+                    default:
+                        throw new Exception("@发现未知的数据库连接类型！");
+                }
+
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
 
-                DataSet oratb = new DataSet();
-                ada.Fill(oratb);
                 return oratb;
             }
             catch (Exception ex)
@@ -1279,7 +1298,7 @@ namespace BP.DA
         }
         public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2, string pk3)
         {
-          //  DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + ")");
+            //  DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + ")");
         }
         public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2, string pk3, string pk4)
         {

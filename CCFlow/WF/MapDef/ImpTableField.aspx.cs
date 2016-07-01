@@ -71,9 +71,33 @@ namespace CCFlow.WF.MapDef
                 return _STable;
             }
         }
-        public string SColumns
+
+        private List<string> sCols = null;
+
+        /// <summary>
+        ///  获取当前选中列名集合
+        /// </summary>
+        public List<string> SColumns
         {
-            get { return this.Request.QueryString["SColumns"]; }
+            get
+            {
+                if (sCols != null)
+                    return sCols;
+
+                string cols = this.Request.QueryString["SColumns"]??"";
+                string[] arr = cols.Split(',');
+                sCols = new List<string>();
+
+                foreach(string s in arr)
+                {
+                    if (string.IsNullOrWhiteSpace(s))
+                        continue;
+
+                    sCols.Add(s);
+                }
+
+                return sCols;
+            }
         }
         #endregion 参数.
 
@@ -162,12 +186,12 @@ namespace CCFlow.WF.MapDef
                     cb = new CheckBox();
                     cb.ID = "CB_Col_" + dr["no"];
                     cb.Text = dr["no"].ToString();
-                    cb.Checked = this.SColumns == null ? false : this.SColumns.Contains(dr["no"] + ",");
+                    cb.Checked = this.SColumns.Count == 0 ? false : this.SColumns.Contains(dr["no"]);
 
-                    //如果已经有该字段，就放弃.
+                    //如果已经有该字段，则此字段不能再次选择
                     if (attrs.Contains(MapAttrAttr.KeyOfEn, dr["no"].ToString()))
                     {
-                        continue;
+                        cb.Enabled = false; //edited by liuxc,2016-07-01
                     }
 
                     this.Pub1.AddTR();
@@ -178,7 +202,6 @@ namespace CCFlow.WF.MapDef
                     this.Pub1.AddTD(Convert.ToInt32(dr["DBLength"]));
                     this.Pub1.AddTREnd();
                 }
-
 
                 this.Pub1.AddTableEnd();
                 this.Pub1.AddBR();
@@ -218,7 +241,7 @@ namespace CCFlow.WF.MapDef
 
                 foreach (DataRow dr in tableColumns.Rows)
                 {
-                    if (this.SColumns.Contains(dr["no"] + ",") == false)
+                    if (this.SColumns.Contains(dr["no"]) == false)
                         continue;
 
                     string typeString = dr["DBType"].ToString().ToLower();
@@ -262,7 +285,7 @@ namespace CCFlow.WF.MapDef
                     tb = new TB();
                     tb.ID = "TB_BindKey_" + dr["No"];
                     tb.Columns = 30;
-                    tb.Text = dr["name"].ToString();
+                    //tb.Text = dr["name"].ToString();
                     tb.Attributes["ondblclick"] = "OpenSelectBindKey(this)";
                     this.Pub1.AddTD(tb);
 

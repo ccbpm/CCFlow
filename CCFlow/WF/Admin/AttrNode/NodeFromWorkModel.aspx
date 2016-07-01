@@ -86,7 +86,11 @@
 
                                   [<a href="javascript:WinOpen('../AttrNode/SortingMapAttrs.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
                                 手机表单</a>]
-                                 - [<a href="javascript:alert('我们在以后会启用。');">设计傻瓜表单</a>]
+                                 <%--- [<a href="javascript:alert('我们在以后会启用。');">设计傻瓜表单</a>]--%>
+
+                                 [<a href="javascript:WinOpen('/WF/MapDef/MapDef.aspx?FK_MapData=ND<%=nodeIDstr %>&FK_Flow=<%=nd.FK_Flow %>&FK_Node=<%=nd.NodeID %>');">设计傻瓜表单</a>]
+
+                                 
                         </td>
                     </tr>
                     <tr>

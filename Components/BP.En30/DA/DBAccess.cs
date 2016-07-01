@@ -219,6 +219,7 @@ namespace BP.DA
                 return byteFile;
             }
 
+            //增加对oracle数据库的逻辑 qin
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 OracleConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as OracleConnection;

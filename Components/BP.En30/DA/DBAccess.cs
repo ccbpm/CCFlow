@@ -64,9 +64,9 @@ namespace BP.DA
                 cm.Connection = cn;
                 cm.CommandType = CommandType.Text;
                 if (cn.State == 0) cn.Open();
-                cm.CommandText = "UPDATE " + tableName + " SET " + saveToFileField + "=@file WHERE " + tablePK + " =@PKVal";
+                cm.CommandText = "UPDATE " + tableName + " SET " + saveToFileField + "=@FlowJsonFile WHERE " + tablePK + " =@PKVal";
 
-                SqlParameter spFile = new SqlParameter("@file", SqlDbType.Image);
+                SqlParameter spFile = new SqlParameter("@FlowJsonFile", SqlDbType.Image);
                 spFile.Value = bytes;
                 cm.Parameters.Add(spFile);
 

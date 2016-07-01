@@ -274,11 +274,9 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
             sql.AppendLine("            ON  smd.No = wfn.FK_Frm");
             sql.AppendLine("WHERE  wfn.FK_Flow = '{0}'");
             sql.AppendLine("       AND wfn.FK_Node = (");
-            sql.AppendLine("               SELECT TOP 1 wn.NodeID");
+            sql.AppendLine("               SELECT wn.NodeID");
             sql.AppendLine("               FROM   WF_Node wn");
-            sql.AppendLine("               WHERE  wn.FK_Flow = '{0}'");
-            sql.AppendLine("               ORDER BY");
-            sql.AppendLine("                      wn.Step ASC");
+            sql.AppendLine("               WHERE  wn.FK_Flow = '{0}' AND wn.NodePosType = 0");
             sql.AppendLine("           )");
 
             DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql.ToString(), fk_flow));
@@ -287,15 +285,14 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
 
         private string GetFormTreeTable()
         {
-            string sqls = "SELECT NO ,PARENTNO,NAME, IDX, 1 ISPARENT, 'FORMTYPE' TTYPE, DBSRC FROM Sys_FormTree;" + Environment.NewLine
-                      +
-                      " SELECT NO, FK_FrmSort as PARENTNO,NAME,IDX,0 ISPARENT, 'FORM' TTYPE FROM Sys_MapData   where AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree);" + Environment.NewLine
-                      +
-                      " SELECT ss.NO,'' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC;";
-
+            string sql1 = "SELECT NO ,PARENTNO,NAME, IDX, 1 ISPARENT, 'FORMTYPE' TTYPE, DBSRC FROM Sys_FormTree";
+            string sql2 = "SELECT NO, FK_FrmSort as PARENTNO,NAME,IDX,0 ISPARENT, 'FORM' TTYPE FROM Sys_MapData   where AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree)";
+            string sql3 = "SELECT ss.NO,'' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC";
+            string sqls = sql1 + ";" + Environment.NewLine
+                          + sql2 + ";" + Environment.NewLine
+                          + sql3 + ";";
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
             DataTable dt = ds.Tables[1].Clone();
-
             DataRow[] rows = ds.Tables[0].Select("NAME='表单库'");
             DataRow rootRow;
 
@@ -392,13 +389,12 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
 
         private string GetSrcTreeTable()
         {
-            string sqls = "SELECT ss.NO,'SrcRoot' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC;" + Environment.NewLine
-                      +
-                      " SELECT st.NO, st.FK_SFDBSrc AS PARENTNO,st.NAME,0 AS IDX, 0 ISPARENT, 'SRCTABLE' TTYPE FROM Sys_SFTable st;";
-
+            string sql1 = "SELECT ss.NO,'SrcRoot' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC";
+            string sql2 = "SELECT st.NO, st.FK_SFDBSrc AS PARENTNO,st.NAME,0 AS IDX, 0 ISPARENT, 'SRCTABLE' TTYPE FROM Sys_SFTable st";
+            string sqls = sql1 + ";" + Environment.NewLine + sql2 + " ;";
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
             DataTable dt = ds.Tables[0].Clone();
-
+            
             foreach (DataRow row in ds.Tables[0].Rows)
                 dt.Rows.Add(row.ItemArray);
 

@@ -35,7 +35,7 @@ namespace BP.WF
         {
             get
             {
-                return  Platform.CCFlow;
+                return Platform.CCFlow;
             }
         }
         /// <summary>
@@ -56,7 +56,7 @@ namespace BP.WF
             basicBinding.Security.Mode = BasicHttpSecurityMode.None;
 
             string url = "";
-            if (Glo.Platform ==  Platform.CCFlow)
+            if (Glo.Platform == Platform.CCFlow)
             {
                 url = "/DataUser/PortalInterface.asmx";
                 url = Glo.HostURL + url;
@@ -64,7 +64,7 @@ namespace BP.WF
             else
             {
                 //  url = string.Format("/{0}webservices/webservice.*", AppName != string.Empty ? AppName + "/" : string.Empty);
-            //    url = new Uri(App.Current.Host.Source, "../").ToString() + "service/Service?wsdl";
+                //    url = new Uri(App.Current.Host.Source, "../").ToString() + "service/Service?wsdl";
             }
 
             url = url.Replace("//", "/");
@@ -161,8 +161,8 @@ namespace BP.WF
              */
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
             string currVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
-            if (currVer == val)
-                return null; //不需要升级.
+            //if (currVer == val)
+            //    return null; //不需要升级.
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 
             string msg = "";
@@ -197,7 +197,7 @@ namespace BP.WF
                 sql += "@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.";
                 sql += "@MPhone_WorkModel=移动,与手机平板电脑相关的应用设置.";
                 sql += "@TSpanDay=考核,时效考核,质量考核.";
-             //   sql += "@OfficeOpen=公文按钮,只有当该节点是公文流程时候有效";
+                //   sql += "@OfficeOpen=公文按钮,只有当该节点是公文流程时候有效";
                 sql += "')";
                 BP.DA.DBAccess.RunSQL(sql);
 
@@ -233,7 +233,7 @@ namespace BP.WF
                 sql += "@RunModel=运行模式,分合流,父子流程";
                 sql += "@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.";
                 sql += "@MPhone_WorkModel=移动,与手机平板电脑相关的应用设置.";
-           //     sql += "@TSpanDay=考核,时效考核,质量考核.";
+                //     sql += "@TSpanDay=考核,时效考核,质量考核.";
                 //  sql += "@MsgCtrl=消息,流程消息信息.";
                 sql += "@OfficeOpen=公文按钮,只有当该节点是公文流程时候有效";
                 sql += "')";
@@ -289,7 +289,7 @@ namespace BP.WF
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    sql = "UPDATE WF_GenerWorkFlow SET WeekNum=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString()) + " WHERE WorkID="+dr[0].ToString();
+                    sql = "UPDATE WF_GenerWorkFlow SET WeekNum=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString()) + " WHERE WorkID=" + dr[0].ToString();
                     BP.DA.DBAccess.RunSQL(sql);
                 }
                 //查询.
@@ -300,7 +300,7 @@ namespace BP.WF
                 dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    sql = "UPDATE WF_CH SET Week=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString()) + " WHERE MyPK='" + dr[0].ToString()+"'";
+                    sql = "UPDATE WF_CH SET Week=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString()) + " WHERE MyPK='" + dr[0].ToString() + "'";
                     BP.DA.DBAccess.RunSQL(sql);
                 }
                 #endregion  增加week字段.
@@ -309,7 +309,7 @@ namespace BP.WF
                 SFDBSrc src = new SFDBSrc();
                 src.No = "local";
                 src.Name = "本机数据源(默认)";
-                if (src.RetrieveFromDBSources()==0)
+                if (src.RetrieveFromDBSources() == 0)
                     src.Insert();
                 #endregion 检查数据源.
 
@@ -357,12 +357,12 @@ namespace BP.WF
                 sft.CheckPhysicsTable();
                 sql = "UPDATE Sys_FormTree SET DBSrc='local'  WHERE DBSrc IS NULL OR DBSrc=''";
                 BP.DA.DBAccess.RunSQL(sql);
-             
+
 
                 //表单信息表.
                 MapDataExt mapext = new MapDataExt();
                 mapext.CheckPhysicsTable();
-                
+
                 TransferCustom tc = new TransferCustom();
                 tc.CheckPhysicsTable();
 
@@ -376,17 +376,17 @@ namespace BP.WF
                 DataTable columns = src.GetColumns("WF_Flow");
                 if (columns.Select("No='FlowJson'").Length == 0)
                 {
-                    switch(src.HisDBType)
+                    switch (src.HisDBType)
                     {
                         case DBType.MSSQL:
-                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson IMAGE NULL");
+                                DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson IMAGE NULL");
                             break;
                         case DBType.Oracle:
                         case DBType.Informix:
-                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson CLOB NULL");
+                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson BLOB NULL");
                             break;
                         case DBType.MySQL:
-                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson TEXT");
+                                DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson TEXT");
                             break;
                         default:
                             break;
@@ -475,7 +475,7 @@ namespace BP.WF
                 #region 执行sql．
                 BP.DA.DBAccess.RunSQL("delete  from Sys_Enum WHERE EnumKey in ('BillFileType','EventDoType','FormType','BatchRole','StartGuideWay','NodeFormType')");
                 DBAccess.RunSQL("UPDATE Sys_FrmSln SET FK_Flow =(SELECT FK_FLOW FROM WF_Node WHERE NODEID=Sys_FrmSln.FK_Node) WHERE FK_Flow IS NULL");
-               
+
                 try
                 {
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm+'_'+convert(varchar,FK_Node )+'_'+FK_Flow");
@@ -546,7 +546,7 @@ namespace BP.WF
 
                 #region 重新生成view WF_EmpWorks,  2013-08-06.
 
-                if (DBAccess.IsExitsObject("WF_EmpWorks")==true)
+                if (DBAccess.IsExitsObject("WF_EmpWorks") == true)
                     BP.DA.DBAccess.RunSQL("DROP VIEW WF_EmpWorks");
 
                 if (DBAccess.IsExitsObject("V_FlowStarter") == true)
@@ -658,7 +658,7 @@ namespace BP.WF
                     formTree.No = "0";
                     formTree.Name = "表单库";
                     formTree.ParentNo = "";
-                   // formTree.TreeNo = "0";
+                    // formTree.TreeNo = "0";
                     formTree.Idx = 0;
                     formTree.IsDir = true;
 
@@ -734,7 +734,7 @@ namespace BP.WF
                 #endregion
 
 
-              
+
 
 
                 // 最后更新版本号，然后返回.
@@ -749,8 +749,8 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                string err= "问题出处:" + ex.Message + "<hr>" + msg + "<br>详细信息:@" + ex.StackTrace + "<br>@<a href='../DBInstall.aspx' >点这里到系统升级界面。</a>";
-                BP.DA.Log.DebugWriteError("系统升级错误:"+err);
+                string err = "问题出处:" + ex.Message + "<hr>" + msg + "<br>详细信息:@" + ex.StackTrace + "<br>@<a href='../DBInstall.aspx' >点这里到系统升级界面。</a>";
+                BP.DA.Log.DebugWriteError("系统升级错误:" + err);
                 return "0";
                 //return "升级失败,详细请查看日志.\\DataUser\\Log\\";
             }
@@ -824,7 +824,7 @@ namespace BP.WF
                 string clsName = en.ToString();
 
                 //不安装CCIM的表.
-                if (clsName!=null && clsName.Contains("BP.CCIM"))
+                if (clsName != null && clsName.Contains("BP.CCIM"))
                     continue;
 
                 if (isInstallFlowDemo == false)
@@ -869,9 +869,9 @@ namespace BP.WF
                 en.PKVal = "123";
                 try
                 {
-                    en.RetrieveFromDBSources(); 
+                    en.RetrieveFromDBSources();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     BP.DA.Log.DefaultLogWriteLine(LogType.Error, "@查询失败: ens = " + en.ToString());
                 }
@@ -920,7 +920,7 @@ namespace BP.WF
             }
             #endregion 注册枚举类型
 
-            #region 3, 执行基本的 sql 
+            #region 3, 执行基本的 sql
             if (isInstallFlowDemo == false)
             {
                 SysFormTree frmSort = new SysFormTree();
@@ -952,7 +952,7 @@ namespace BP.WF
             #region 4, 创建视图与数据.
             //执行必须的sql.
 
-              sqlscript = "";
+            sqlscript = "";
             //执行必须的sql.
             switch (BP.Sys.SystemConfig.AppCenterDBType)
             {
@@ -1054,7 +1054,7 @@ namespace BP.WF
 
                 //修复视图.
                 Flow.RepareV_FlowData_View();
-                
+
             }
 
             if (isInstallFlowDemo == false)
@@ -1086,7 +1086,7 @@ namespace BP.WF
             }
             #endregion 装载demo.flow
 
-            #region 增加图片签名 
+            #region 增加图片签名
             if (isInstallFlowDemo == true)
             {
                 try
@@ -1113,7 +1113,7 @@ namespace BP.WF
 
 
             #region 如果是第一次运行，就执行检查。
-            if (isInstallFlowDemo==true)
+            if (isInstallFlowDemo == true)
             {
                 Flows fls = new Flows();
                 fls.RetrieveAll();
@@ -1673,8 +1673,8 @@ namespace BP.WF
                 str += GERptAttr.OID + ",";
                 str += GERptAttr.AtPara + ",";
                 str += GERptAttr.BillNo + ",";
-              //  str += GERptAttr.CFlowNo + ",";
-              //  str += GERptAttr.CWorkID + ",";
+                //  str += GERptAttr.CFlowNo + ",";
+                //  str += GERptAttr.CWorkID + ",";
                 str += GERptAttr.FID + ",";
                 str += GERptAttr.FK_Dept + ",";
                 str += GERptAttr.FK_NY + ",";
@@ -1700,8 +1700,8 @@ namespace BP.WF
                 str += GERptAttr.Title + ",";
                 str += GERptAttr.WFSta + ",";
                 str += GERptAttr.WFState + ",";
-                return str ;
-               // return typeof(GERptAttr).GetFields().Select(o => o.Name).ToList();
+                return str;
+                // return typeof(GERptAttr).GetFields().Select(o => o.Name).ToList();
             }
         }
         /// <summary>
@@ -1785,7 +1785,7 @@ namespace BP.WF
         /// <returns>null, 或者流程实体.</returns>
         public static string GetFlowEventEntityStringByFlowMark(string flowMark, string flowNo)
         {
-            FlowEventBase en =GetFlowEventEntityByFlowMark(  flowMark,   flowNo);
+            FlowEventBase en = GetFlowEventEntityByFlowMark(flowMark, flowNo);
             if (en == null)
                 return "";
             else
@@ -1813,7 +1813,7 @@ namespace BP.WF
             foreach (string key in Htable_FlowFEE.Keys)
             {
                 FlowEventBase fee = Htable_FlowFEE[key] as FlowEventBase;
-                if (fee.FlowMark == flowMark || fee.FlowMark==flowNo)
+                if (fee.FlowMark == flowMark || fee.FlowMark == flowNo)
                     return fee;
             }
             return null;
@@ -1828,7 +1828,7 @@ namespace BP.WF
         public static void DealBuinessAfterSendWork(string fk_flow, Int64 workid,
             string doFunc, string WorkIDs)
         {
-            
+
             if (doFunc == "SetParentFlow")
             {
                 /* 如果需要设置子父流程信息.
@@ -2161,7 +2161,7 @@ namespace BP.WF
                         continue;
 
                     billNo = billNo.Replace("{LSH" + i + "}", "");
-                    
+
                     sql = "SELECT COUNT(*) FROM " + flowPTable + " WHERE BillNo LIKE '" + billNo + "%'";
                     if (DBAccess.AppCenterDBType == DBType.MSSQL)
                     {
@@ -2360,7 +2360,7 @@ namespace BP.WF
                                     break;
                             }
 
-                            if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName)=="0")
+                            if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
                                 en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
                         }
                     }
@@ -3062,7 +3062,7 @@ namespace BP.WF
         #endregion 属性
 
         #region 其他配置.
-       
+
         /// <summary>
         /// 帮助
         /// </summary>
@@ -3363,7 +3363,7 @@ namespace BP.WF
                 return true;
             }
         }
-      
+
         /// <summary>
         /// 运行模式
         /// </summary>
@@ -3535,7 +3535,7 @@ namespace BP.WF
                     return userStyle;
             }
         }
-        #endregion 
+        #endregion
 
         #region 时间计算.
         /// <summary>
@@ -3561,10 +3561,10 @@ namespace BP.WF
                 return dt;
             }
 
-            int timeInt= int.Parse(dt.ToString("HHmm"));
+            int timeInt = int.Parse(dt.ToString("HHmm"));
 
             //判断是否在A区间, 如果是，就返回A区间的时间点.
-            if (Glo.AMFromInt >=timeInt)
+            if (Glo.AMFromInt >= timeInt)
                 return DataType.ParseSysDate2DateTime(dt.ToString("yyyy-MM-dd") + " " + Glo.AMFrom);
 
 
@@ -3599,22 +3599,22 @@ namespace BP.WF
             dt = SetToWorkTime(dt);
 
             //首先判断是否是在一天整的时间完成.
-            if (minutes == Glo.AMPMHours*60)
+            if (minutes == Glo.AMPMHours * 60)
             {
-                 /*如果需要在一天完成*/
-                dt = DataType.AddDays(dt, 1); 
+                /*如果需要在一天完成*/
+                dt = DataType.AddDays(dt, 1);
                 return dt;
             }
 
             //判断是否是AM.
             bool isAM = false;
-            int timeInt=int.Parse(dt.ToString("HHmm"));
+            int timeInt = int.Parse(dt.ToString("HHmm"));
             if (Glo.AMToInt > timeInt)
                 isAM = true;
 
             #region 如果是当天的情况.
             //如果规定的时间在 1天之内.
-            if (minutes/60/ Glo.AMPMHours < 1)
+            if (minutes / 60 / Glo.AMPMHours < 1)
             {
                 if (isAM == true)
                 {
@@ -3636,13 +3636,13 @@ namespace BP.WF
                         if (leftMuit - minutes >= 0)
                         {
                             /*说明还是在当天的时间内.*/
-                            DateTime mydt = DataType.ParseSysDateTime2DateTime( dt.ToString("yyyy-MM-dd") + " " + Glo.PMTo);
-                            return mydt.AddMinutes( minutes-leftMuit);
+                            DateTime mydt = DataType.ParseSysDateTime2DateTime(dt.ToString("yyyy-MM-dd") + " " + Glo.PMTo);
+                            return mydt.AddMinutes(minutes - leftMuit);
                         }
 
                         //说明要跨到第2天上去了.
                         dt = DataType.AddDays(dt, 1);
-                        return Glo.AddMinutes(dt.ToString("yyyy-MM-dd") + " " + Glo.AMFrom, minutes-leftMuit );
+                        return Glo.AddMinutes(dt.ToString("yyyy-MM-dd") + " " + Glo.AMFrom, minutes - leftMuit);
                     }
 
                     // 把当前的时间加上去.
@@ -3693,9 +3693,9 @@ namespace BP.WF
                     }
                     else
                     {
-                        
+
                         //剩余的分钟数 = 总分钟数 - 今天下午剩余的分钟数.
-                        int leftMin= minutes - (int)ts.TotalMinutes;
+                        int leftMin = minutes - (int)ts.TotalMinutes;
 
                         /*否则要计算到第2天上去了， 计算时间要从下一个有效的工作日上班时间开始. */
                         dt = DataType.AddDays(DataType.ParseSysDateTime2DateTime(dt.ToString("yyyy-MM-dd") + " " + Glo.AMFrom), 1);
@@ -3703,11 +3703,11 @@ namespace BP.WF
                         //递归调用,让其在次日的上班时间在增加，分钟数。
                         return Glo.AddMinutes(dt, leftMin);
                     }
-                     
+
                 }
             }
             #endregion 如果是当天的情况.
-             
+
             return dt;
         }
         /// <summary>
@@ -3730,10 +3730,10 @@ namespace BP.WF
         /// <returns>返回计算后的日期</returns>
         public static DateTime AddDayHoursSpan(string specDT, int day, int minutes)
         {
-            DateTime mydt = BP.DA.DataType.AddDays(specDT,day);
+            DateTime mydt = BP.DA.DataType.AddDays(specDT, day);
             return Glo.AddMinutes(mydt, minutes);
         }
-          /// <summary>
+        /// <summary>
         /// 在指定的日期上增加n天n小时，并考虑节假日
         /// </summary>
         /// <param name="sysdt">指定的日期</param>
@@ -3769,14 +3769,14 @@ namespace BP.WF
         /// <param name="fid">FID</param>
         /// <param name="title">标题</param>
         /// <param name="dtNow">计算的当前时间，如果为null,就取当前日期.</param>
-        public static void InitCH(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT,string sdt, DateTime dtNow)
+        public static void InitCH(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt, DateTime dtNow)
         {
             //开始节点不考核.
             if (nd.IsStartNode)
                 return;
 
             //如果设置为0 则不考核.
-            if (nd.TSpanDay == 0 && nd.TSpanHour==0)
+            if (nd.TSpanDay == 0 && nd.TSpanHour == 0)
                 return;
 
             if (dtNow == null)
@@ -3809,7 +3809,7 @@ namespace BP.WF
                     return;
 
                 prvRDT = dt.Rows[0][0].ToString();
-                sdt = dt.Rows[0][1].ToString(); 
+                sdt = dt.Rows[0][1].ToString();
             }
 
             #region 初始化基础数据.
@@ -3819,7 +3819,7 @@ namespace BP.WF
             ch.Title = title;
 
             int hh = (int)nd.TSpanHour;
-            float mm = (nd.TSpanHour - hh)*60;
+            float mm = (nd.TSpanHour - hh) * 60;
             ch.TSpan = nd.TSpanDay + "天" + hh + "时" + mm + "分";
             ch.FK_NY = dtNow.ToString("yyyy-MM");
 
@@ -3839,17 +3839,17 @@ namespace BP.WF
             ch.FK_EmpT = WebUser.Name;
 
             //求出是第几个周.
-           // ch.Week = (int)dtNow.w;
-            System.Globalization.CultureInfo myCI =  
-                        new System.Globalization.CultureInfo("zh-CN");            
-            ch.WeekNum  = myCI.Calendar.GetWeekOfYear(dtNow,System.Globalization.CalendarWeekRule.FirstDay,System.DayOfWeek.Monday);
+            // ch.Week = (int)dtNow.w;
+            System.Globalization.CultureInfo myCI =
+                        new System.Globalization.CultureInfo("zh-CN");
+            ch.WeekNum = myCI.Calendar.GetWeekOfYear(dtNow, System.Globalization.CalendarWeekRule.FirstDay, System.DayOfWeek.Monday);
 
             // mypk.
             ch.MyPK = nd.NodeID + "_" + workid + "_" + fid + "_" + WebUser.No;
             #endregion 初始化基础数据.
 
 
-           // 求出结算时间点 dtFrom.
+            // 求出结算时间点 dtFrom.
             DateTime dtFrom = BP.DA.DataType.ParseSysDateTime2DateTime(ch.DTFrom);
             dtFrom = Glo.SetToWorkTime(dtFrom);
 
@@ -3903,7 +3903,7 @@ namespace BP.WF
                     float hours = (float)ts.TotalHours - Glo.AMPMTimeSpan; // 得到实际用的时间.
 
                     // 实际使用时间.
-                    ch.UseMinutes += (int)hours*60;
+                    ch.UseMinutes += (int)hours * 60;
                 }
 
                 //求超过时限.
@@ -3911,7 +3911,7 @@ namespace BP.WF
 
                 //设置时限状态.
                 if (ch.OverMinutes > 0)
-                {   
+                {
                     /* 如果是正数，就说明它是一个超期完成的状态. */
                     if (ch.OverMinutes / 2 > nd.TSpanMinues)
                         ch.CHSta = CHSta.ChaoQi; //如果超过了时间的一半，就是超期.
@@ -3933,11 +3933,11 @@ namespace BP.WF
                 int dayInt = (int)day;
 
                 //求小时数.
-                float hour = (ch.UseMinutes - dayInt * Glo.AMPMHours*60f)/60f;
+                float hour = (ch.UseMinutes - dayInt * Glo.AMPMHours * 60f) / 60f;
                 int hourInt = (int)hour;
 
                 //求分钟数.
-                float minute = (hour - hourInt)*60;
+                float minute = (hour - hourInt) * 60;
 
                 //使用时间.
                 ch.UseTime = dayInt + "天" + hourInt + "时" + minute + "分";
@@ -3946,24 +3946,24 @@ namespace BP.WF
                 //求预期天数.
                 int overMinus = Math.Abs(ch.OverMinutes);
                 day = overMinus / 60f / Glo.AMPMHours;
-                  dayInt = (int)day;
+                dayInt = (int)day;
 
                 //求小时数.
-                  hour = (overMinus - dayInt * Glo.AMPMHours * 60f) / 60f;
-                  hourInt = (int)hour;
+                hour = (overMinus - dayInt * Glo.AMPMHours * 60f) / 60f;
+                hourInt = (int)hour;
 
                 //求分钟数.
-                  minute = (hour - hourInt) * 60;
+                minute = (hour - hourInt) * 60;
 
                 //使用时间.
-                if (ch.OverMinutes >0)
+                if (ch.OverMinutes > 0)
                     ch.OverTime = "预期:" + dayInt + "天" + hourInt + "小时" + (int)minute + "分";
                 else
                     ch.OverTime = "提前:" + dayInt + "天" + hourInt + "小时" + (int)minute + "分";
 
                 #endregion 计算出来可以识别的分钟数.
 
-                  //执行保存.
+                //执行保存.
                 try
                 {
                     ch.DirectInsert();
@@ -4469,7 +4469,7 @@ namespace BP.WF
         /// <param name="sendToEmpNo">接受人</param>
         public static void SendMessageToCCIM(string fromEmpNo, string sendToEmpNo, string msg, string now)
         {
-            if (fromEmpNo == null )
+            if (fromEmpNo == null)
                 fromEmpNo = "";
 
             if (sendToEmpNo == null || sendToEmpNo == "")

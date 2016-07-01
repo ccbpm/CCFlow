@@ -189,7 +189,7 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    if (!BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField))
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " image ";
@@ -218,6 +218,7 @@ namespace BP.DA
                 }
                 return byteFile;
             }
+
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 OracleConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as OracleConnection;
@@ -243,7 +244,7 @@ namespace BP.DA
                     if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " image ";
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " blob ";
                         BP.DA.DBAccess.RunSQL(sql);
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);

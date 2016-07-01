@@ -1065,9 +1065,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 string guid = BP.DA.DBAccess.GenerGUID();
-                string fileName = fu.FileName.Substring(0, fu.FileName.LastIndexOf('.'));
-                string ext = System.IO.Path.GetExtension(fu.FileName);
-                string realSaveTo = savePath + "/" + guid + "." + fileName + ext;
+                string realSaveTo = savePath + "/" + guid + "." + fu.FileName;
                 string saveTo = realSaveTo;
 
                 try

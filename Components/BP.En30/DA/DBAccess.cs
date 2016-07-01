@@ -92,6 +92,8 @@ namespace BP.DA
                 return;
             }
 
+            //修复for：jlow  oracle 异常： ORA-01745: 无效的主机/绑定变量名 edited by qin 16.7.1
+            //错误的引用oracle的关键字file
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 OracleConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as OracleConnection;
@@ -104,9 +106,9 @@ namespace BP.DA
                 cm.Connection = cn;
                 cm.CommandType = CommandType.Text;
                 if (cn.State == 0) cn.Open();
-                cm.CommandText = "UPDATE " + tableName + " SET " + saveToFileField + "=:file WHERE " + tablePK + " =:PKVal";
+                cm.CommandText = "UPDATE " + tableName + " SET " + saveToFileField + "=:FlowJsonFile WHERE " + tablePK + " =:PKVal";
 
-                OracleParameter spFile = new OracleParameter("file", OracleType.BFile);
+                OracleParameter spFile = new OracleParameter("FlowJsonFile", OracleType.Blob);
                 spFile.Value = bytes;
                 cm.Parameters.Add(spFile);
 
@@ -124,7 +126,8 @@ namespace BP.DA
                     if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+                        //修改数据类型   oracle 不存在image类型   edited by qin 16.7.1
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " blob ";
                         BP.DA.DBAccess.RunSQL(sql);
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
@@ -215,7 +218,57 @@ namespace BP.DA
                 }
                 return byteFile;
             }
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                OracleConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as OracleConnection;
+                if (cn.State != ConnectionState.Open)
+                    cn.Open();
 
+                string strSQL = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + "='" + pkVal + "'";
+
+                OracleDataReader dr = null;
+                OracleCommand cm = new  OracleCommand();
+                cm.Connection = cn;
+                cm.CommandText = strSQL;
+                cm.CommandType = CommandType.Text;
+
+
+                // 执行它.
+                try
+                {
+                    dr = cm.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " image ";
+                        BP.DA.DBAccess.RunSQL(sql);
+                    }
+                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                }
+
+                byte[] byteFile = null;
+                if (dr.Read())
+                {
+                    if (dr[0] == null || string.IsNullOrEmpty(dr[0].ToString()))
+                        return null;
+
+                    byteFile = (byte[])dr[0];
+                }
+                FileStream fs;
+
+                //如果文件不为空,就把流数据保存一个文件.
+                if (fullFileName != null)
+                {
+                    FileInfo fi = new System.IO.FileInfo(fullFileName);
+                    fs = fi.OpenWrite();
+                    fs.Write(byteFile, 0, byteFile.Length);
+                    fs.Close();
+                }
+                return byteFile;
+            }
             //最后仍然没有找到.
             throw new Exception("@没有判断的数据库类型.");
         }

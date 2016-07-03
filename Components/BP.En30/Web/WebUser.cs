@@ -141,7 +141,11 @@ namespace BP.Web
 
             WebUser.No = em.No;
             WebUser.Name = em.Name;
-            WebUser.Auth = auth;
+            if ( string.IsNullOrEmpty(auth)==false)
+                WebUser.Auth = auth;
+            else
+                WebUser.Auth = null;
+
 
             //登录模式？
             BP.Web.WebUser.UserWorkDev = Web.UserWorkDev.PC;

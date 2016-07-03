@@ -2496,6 +2496,7 @@ namespace BP.WF
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
             WebUser.SignInOfGener(emp, isRememberMe);
             WebUser.IsWap = false;
+            WebUser.Auth = ""; //设置授权人为空.
             return Port_GetSID(userNo);
         }
         /// <summary>

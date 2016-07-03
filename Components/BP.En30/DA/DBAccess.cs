@@ -1266,6 +1266,9 @@ namespace BP.DA
         /// <param name="pk">主键</param>
         public static void CreatePK(string tab, string pk, DBType db)
         {
+            if (tab == null || tab == "")
+                return;
+
             if (DBAccess.IsExitsObject(tab + "pk") == true)
                 return;
 
@@ -1283,6 +1286,9 @@ namespace BP.DA
         }
         public static void CreatePK(string tab, string pk1, string pk2, DBType db)
         {
+            if (tab == null || tab == "")
+                return;
+
             if (DBAccess.IsExitsObject(tab + "pk") == true)
                 return;
 
@@ -1300,6 +1306,9 @@ namespace BP.DA
         }
         public static void CreatePK(string tab, string pk1, string pk2, string pk3, DBType db)
         {
+            if (tab == null || tab == "")
+                return;
+
             if (DBAccess.IsExitsObject(tab + "pk") == true)
                 return;
 

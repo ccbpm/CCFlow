@@ -3143,7 +3143,7 @@ namespace BP.WF
                 attr.UIVisible = true;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 20;
+                attr.MaxLen = 32;
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -3181,7 +3181,7 @@ namespace BP.WF
                 attr.UIVisible = true;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 20;
+                attr.MaxLen = 32;
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -3634,7 +3634,7 @@ namespace BP.WF
                 attr.UIVisible = true;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 20;
+                attr.MaxLen = 32;
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -3672,7 +3672,7 @@ namespace BP.WF
                 attr.UIVisible = true;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 20;
+                attr.MaxLen = 32;
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -3924,7 +3924,7 @@ namespace BP.WF
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.GUID;
-                attr.Name = "GUID"; // 单据编号
+                attr.Name = "GUID"; // GUID
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
@@ -6128,9 +6128,9 @@ namespace BP.WF
                                 }
                                 gf.SetValByKey(dc.ColumnName, val);
                             }
-                            //  int oid = DBAccess.GenerOID();
-                            //  DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + gf.EnName + "' AND GroupID=" + gf.OID);
-                            gf.InsertAsOID(gf.OID);
+                            int oid = DBAccess.GenerOID();
+                            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + oid + " WHERE FK_MapData='" + gf.EnName + "' AND GroupID=" + gf.OID);
+                            gf.InsertAsOID(oid);
                         }
                         break;
                     case "WF_CCEmp": // 抄送.

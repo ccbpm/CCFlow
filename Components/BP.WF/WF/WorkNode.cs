@@ -5403,7 +5403,6 @@ namespace BP.WF
         /// <returns>返回执行结果</returns>
         public SendReturnObjs NodeSend(Node jumpToNode, string jumpToEmp)
         {
-
             DBAccess.DoTransactionCommit();
             if (this.HisNode.IsGuestNode) 
             {

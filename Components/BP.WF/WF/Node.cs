@@ -2951,7 +2951,7 @@ namespace BP.WF
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
                 attr.UIIsEnable = false;
-                attr.MaxLen = 20;
+                attr.MaxLen = 32;
                 attr.MinLen = 0;
                 attr.DefVal = "@WebUser.No";
                 attr.Insert();
@@ -2989,7 +2989,7 @@ namespace BP.WF
                 attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 20;
+                attr.MaxLen = 32;
                 attr.Insert();
             }
 
@@ -3226,7 +3226,7 @@ namespace BP.WF
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;
             attr.UIIsEnable = false;
-            attr.MaxLen = 20;
+            attr.MaxLen = 32;
             attr.MinLen = 0;
             attr.DefVal = "@WebUser.No";
             attr.Insert();

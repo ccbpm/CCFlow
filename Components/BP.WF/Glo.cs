@@ -735,8 +735,6 @@ namespace BP.WF
 
 
 
-
-
                 // 最后更新版本号，然后返回.
                 sql = "UPDATE Sys_Serial SET IntVal=" + val + " WHERE CfgKey='Ver'";
                 if (DBAccess.RunSQL(sql) == 0)
@@ -849,7 +847,6 @@ namespace BP.WF
                 {
                     continue;
                 }
-
                 switch (table)
                 {
                     case "WF_EmpWorks":
@@ -866,34 +863,21 @@ namespace BP.WF
                 }
 
                 en.CheckPhysicsTable();
-                en.PKVal = "123";
-                try
-                {
-                    en.RetrieveFromDBSources();
-                }
-                catch (Exception ex)
-                {
-                    BP.DA.Log.DefaultLogWriteLine(LogType.Error, "@查询失败: ens = " + en.ToString());
-                }
+                //en.PKVal = "123";
+                //try
+                //{
+                //    en.RetrieveFromDBSources();
+                //}
+                //catch (Exception ex)
+                //{
+                //    BP.DA.Log.DefaultLogWriteLine(LogType.Error, "@查询失败: ens = " + en.ToString());
+                //}
             }
 
             #region 创建 Port_EmpDept 视图兼容旧版本.
             //创建视图.
-            try
-            {
-                BP.DA.DBAccess.RunSQL("DROP TABLE Port_EmpDept");
-            }
-            catch
-            {
-            }
-
-            try
-            {
+            if (DBAccess.IsExitsObject("Port_EmpDept")==true)
                 BP.DA.DBAccess.RunSQL("DROP VIEW Port_EmpDept");
-            }
-            catch
-            {
-            }
 
             if (DBAccess.IsExitsObject("Port_EmpDept") == false)
             {
@@ -2169,7 +2153,6 @@ namespace BP.WF
                         sql = " SELECT isnull(convert(int,max(RIGHT(billno,len(billno)-len('" + billNo + "')-1))),0) FROM "
                             + flowPTable + " WHERE BillNo LIKE '" + billNo + "%'";
                     }
-
 
                     num = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0) + 1;
                     billNo = billNo + num.ToString().PadLeft(i, '0');

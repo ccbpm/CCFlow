@@ -43,6 +43,7 @@
                 <caption ><div class=CaptionMsg>授权待办</div></caption>
                 <tr>
                 <th>序 </th>
+                <th>授权人 </th>
                 <th>标题 </th>
                 <th>流程 </th>
                 <th>停留节点 </th>
@@ -59,6 +60,8 @@
 %>
 <tr>
 <td class="Idx" ><%=idx++ %></td>
+<td><%=em.Name%></td>
+
 <td> <a href="javascript:LogAs('<%=em.No %>')" > <%=dr["Title"] %> </a></td>
 <td><%=dr["FlowName"]%></td>
 <td><%=dr["NodeName"]%></td>

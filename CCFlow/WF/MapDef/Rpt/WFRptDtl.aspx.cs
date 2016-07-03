@@ -305,11 +305,9 @@ public partial class WF_MapDef_WFRptDtl : BP.Web.WebPage
                 attrFlow.LGType = FieldTypeS.FK;
                 attrFlow.UIVisible = true;
                 attrFlow.UIIsEnable = false;
-                attrFlow.MaxLen = 20;
+                attrFlow.MaxLen = 32;
                 attrFlow.MinLen = 0;
                 attrFlow.Insert();
-
-               
 
 
                 attrFlow = new BP.Sys.MapAttr();

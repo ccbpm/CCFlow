@@ -114,7 +114,7 @@ namespace CCFlow.WF.SDKComponents
                 //该流程的子流程信息.
                 GenerWorkFlows gwfs = new GenerWorkFlows();
                 gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID,
-                    GenerWorkFlowAttr.FK_Flow,str); //流程.
+                    GenerWorkFlowAttr.FK_Flow,str,GenerWorkFlowAttr.Starter, BP.Web.WebUser.No); //流程.
 
                 foreach (GenerWorkFlow item in gwfs)
                 {

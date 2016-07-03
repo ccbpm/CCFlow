@@ -175,6 +175,7 @@ namespace CCFlow.WF.WorkOpt
 
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = askFor;
+            emp.Name = askFor;
             bool i = emp.RetrieveByAttrOr(BP.Port.EmpAttr.No, askFor,BP.Port.EmpAttr.Name, askFor );
             if (i ==false )
             {
@@ -204,7 +205,7 @@ namespace CCFlow.WF.WorkOpt
             }
             catch (Exception ex)
             {
-                this.Pub2.AddMsgOfWarning("err", ex.Message);
+                this.Pub2.AddMsgOfWarning("err", ex.Message+" @选择的签人:"+askFor);
             }
         }
     }

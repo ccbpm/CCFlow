@@ -5,7 +5,7 @@
 
 <%
    //获取待办。
-   System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
+   System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No,null);
    // 输出结果
    %> 
    <table style="width:90%; border:1px" ><caption>待办 (<%=BP.WF.Dev2Interface.Todolist_EmpWorks %>) </caption>

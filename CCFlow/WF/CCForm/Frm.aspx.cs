@@ -444,7 +444,11 @@ namespace CCFlow.WF.CCForm
                     if (ii == 0 || this.HisFrmNode.FrmSln == 0)
                     {
                         /*说明没有配置,或者方案编号为默认就不用处理,*/
+                        if ( md.HisFrmType == FrmType.FreeFrm)
                         this.UCEn1.BindCCForm(en, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
+                        else
+                            this.UCEn1.BindColumn4(en, this.FK_MapData);
+
                     }
                     else
                     {

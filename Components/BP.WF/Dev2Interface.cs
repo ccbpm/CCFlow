@@ -3708,6 +3708,7 @@ namespace BP.WF
                 switch (nd.HisDeliveryWay)
                 {
                     case DeliveryWay.ByStation:
+                    case DeliveryWay.ByStationOnly:
                         ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeStation A, " + BP.WF.Glo.EmpStation + " B WHERE A.FK_Station= B.FK_Station AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
                         ps.Add("FK_Node", nd.NodeID);
                         ps.Add("FK_Emp", userNo);

@@ -161,8 +161,8 @@ namespace BP.WF
              */
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
             string currVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
-            //if (currVer == val)
-            //    return null; //不需要升级.
+            if (currVer == val)
+                return null; //不需要升级.
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 
             string msg = "";

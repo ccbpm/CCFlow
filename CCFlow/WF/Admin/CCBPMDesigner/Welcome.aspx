@@ -66,10 +66,10 @@
                             <img src="./Img/NewFlow.png" />新建表单</a></li>
                         <li><a href="../CCBPMDesigner/SearchFlow.aspx">
                             <img src="./Img/NewFlow.png" border="0" />关键字查询表单模版</a></li>
-                        <li><a href="">
+                        <li><a href="javascript:OpenTab('NewDbSrc','新建数据源','../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New','icon-new');">
                             <img src="./Img/NewFlow.png" />新建数据源</a></li>
-                        <li><a href="">
-                            <img src="./Img/NewFlow.png" />管理数据源</a></li>
+                        <li><a href="javascript:OpenTab('ManageDbSrcs','数据源管理','../../Comm/Sys/SFDBSrcNewGuide.aspx','icon-sheet');">
+                            <img src="./Img/NewFlow.png" />数据源管理</a></li>
                         <li><a href="">
                             <img src="./Img/NewFlow.png" />枚举列表</a></li>
                         <li><a href="">

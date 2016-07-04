@@ -406,7 +406,7 @@ function designFrm() {
 //新建数据源，added by liuxc,2015-10-7
 function newSrc() {
     //  var url = "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.SFDBSrcs";
-    var url = "../../Comm/Sys/SFDBSrcNewGuide.aspx?EnsName=BP.Sys.SFDBSrcs";
+    var url = "../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New";
     //OpenEasyUiDialog(url, "euiframeid", '新建数据源', 800, 495, 'icon-new');
     //todo:增加数据源后，在树上增加新结节的逻辑
     addTab("NewSrc", "新建数据源", url);
@@ -428,7 +428,7 @@ function srcProperty() {
         return;
     }
 
-    var url = '../../Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.SFDBSrcs&No=' + srcNode.id + '&t=' + Math.random();
+    var url = '../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=Edit&No=' + srcNode.id + '&t=' + Math.random();
     //OpenEasyUiDialog(url, "euiframeid", srcNode.text + ' 属性', 800, 495, 'icon-edit');
     //todo:数据源属性修改后，在树上的结节信息的相应变更逻辑
     addTab(srcNode.id, srcNode.text, url, srcNode.iconCls);

@@ -487,12 +487,12 @@ namespace CCFlow.WF
 
             fk_dept = fk_dept.Substring(0, fk_dept.Length - 1);
 
-            sql = "SELECT NO,NAME, ParentNo,'1' IsParent FROM PORT_DEPT WHERE  ParentNo=0";
+            sql = "SELECT NO,NAME, ParentNo,'1' IsParent FROM PORT_DEPT WHERE  ParentNo='0'";
             DataTable rootNodeDt = DBAccess.RunSQLReturnTable(sql);
             dt.Merge(rootNodeDt);
 
             sql = "SELECT NO,NAME,'" + rootNodeDt.Rows[0]["NO"] + "' ParentNo,'1' IsParent FROM PORT_DEPT WHERE NO IN (" +
-                fk_dept + ") AND ParentNo!=0";
+                fk_dept + ") AND ParentNo!='0'";
             dt.Merge(DBAccess.RunSQLReturnTable(sql));
 
             return dt;
@@ -504,7 +504,7 @@ namespace CCFlow.WF
         {
 
             string BindByEmpSql = string.Format("select No,Name,ParentNo,'1' IsParent  from Port_Dept  WHERE No IN (SELECT FK_Dept FROM " +
-                                              "Port_Emp WHERE No in(SELECT FK_EMP FROM WF_NodeEmp WHERE FK_Node={0})) or ParentNo=0 union " +
+                                              "Port_Emp WHERE No in(SELECT FK_EMP FROM WF_NodeEmp WHERE FK_Node={0})) or ParentNo='0' union " +
                                               "select No,Name,FK_Dept as ParentNo,'0' IsParent  from Port_Emp  WHERE No in (SELECT FK_EMP " +
                                               "FROM WF_NodeEmp WHERE FK_Node={0})", MySelector.NodeID);
             DdlEmpDt = DBAccess.RunSQLReturnTable(string.Format("select No,Name from Port_Emp  WHERE No in (SELECT FK_EMP " +
@@ -644,7 +644,7 @@ namespace CCFlow.WF
         public string BindByDept()
         {
             string BindByDeptSql = string.Format("SELECT  No,Name,ParentNo,'1' IsParent  FROM Port_Dept WHERE No IN (SELECT " +
-                                                 "FK_Dept FROM WF_NodeDept WHERE FK_Node={0}) or ParentNo=0 union SELECT No,Name,FK_Dept " +
+                                                 "FK_Dept FROM WF_NodeDept WHERE FK_Node={0}) or ParentNo='0' union SELECT No,Name,FK_Dept " +
                                                  "as ParentNo,'0' IsParent FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node={0})", MySelector.NodeID);
 
             DdlEmpDt = DBAccess.RunSQLReturnTable(string.Format("SELECT No,Name FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node={0})", MySelector.NodeID));

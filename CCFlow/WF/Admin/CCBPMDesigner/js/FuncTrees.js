@@ -211,7 +211,7 @@ functrees.push({
 			    Nodes: [
 						{ Type: "Service", ServiceMethod: "GetSrcTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "SrcRoot",
 						    ColDefine: "TTYPE", Defines: [
-											{ Value: "SRC", IconCls: "icon-src", MenuId: "mSrc", Url: "../../MapDef/SFDBSrcGuide.aspx?DoType=Edit&No=@@id&t=" + Math.random() },
+											{ Value: "SRC", IconCls: "icon-src", MenuId: "mSrc", Url: "../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=Edit&No=@@id&t=" + Math.random() },
 											{ Value: "SRCTABLE", IconCls: "icon-srctable", MenuId: "mSrcTable", Url: "../../MapDef/Do.aspx?DoType=EditSFTable&RefNo=@@id&t=" + Math.random() }
 										  ]
 						}

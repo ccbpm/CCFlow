@@ -99,6 +99,12 @@ namespace CCFlow.WF.Comm.Sys
 
             this.Title = (isEdit ? "修改" : "新建") + "数据源";
 
+            if(isEdit && src.No == "local")
+            {
+                Alert(src.Name + "不允许修改！");
+                return;
+            }
+
             DDL ddl;
             TB tb;
             SysEnums enums = new SysEnums();

@@ -853,6 +853,7 @@ namespace BP.WF
                     case "WF_GenerEmpWorkDtls":
                     case "WF_GenerEmpWorks":
                     case "V_FlowData":
+                    case "Port_EmpDept":
                         continue;
                     case "Sys_Enum":
                         en.CheckPhysicsTable();

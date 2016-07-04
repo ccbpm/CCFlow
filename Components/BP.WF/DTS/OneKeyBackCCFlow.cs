@@ -85,11 +85,7 @@ namespace BP.WF.DTS
             dt = DBAccess.RunSQLReturnTable("SELECT * FROM Port_EmpStation");
             dt.TableName = "Port_EmpStation";
             dsPort.Tables.Add(dt);
-
-            //Port_EmpDept
-            dt = DBAccess.RunSQLReturnTable("SELECT * FROM Port_EmpDept");
-            dt.TableName = "Port_EmpDept";
-            dsPort.Tables.Add(dt);
+            
 
             dsPort.WriteXml(path + "\\PortTables.xml");
             #endregion 备份表单相关数据.

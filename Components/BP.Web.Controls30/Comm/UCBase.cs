@@ -2315,7 +2315,10 @@ namespace BP.Web.UC
         {
             this.AddTD(attr, val.ToString());
         }
-
+        public void AddTH()
+        {
+            this.Add("\n<TH >&nbsp;</TH>");
+        }
         public void AddTH(string str)
         {
             this.Add("\n<TH >" + str + "</TH>");

@@ -551,7 +551,10 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStringByKey(FrmAttachmentAttr.Name);
+                string str= this.GetValStringByKey(FrmAttachmentAttr.Name);
+                if (string.IsNullOrEmpty(str) == true)
+                    str = "未命名";
+                return str;
             }
             set
             {

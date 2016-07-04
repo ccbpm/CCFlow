@@ -598,6 +598,8 @@ namespace BP.Sys
        
         #endregion 执行 ccform2.0 的保存.
 
+
+
         /// <summary>
         /// 升级逻辑.
         /// </summary>
@@ -676,6 +678,41 @@ namespace BP.Sys
             }
             #endregion 升级ccform控件.
         }
+
+        #region 傻瓜表单属性.
+        /// <summary>
+        /// 表格显示的列
+        /// </summary>
+        public int TableCol
+        {
+            get
+            {
+                return 4;
+
+                int i = this.GetValIntByKey(MapDataAttr.TableCol);
+                if (i == 0 || i == 1)
+                    return 4;
+                return i;
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.TableCol, value);
+            }
+        }
+        /// <summary>
+        /// 宽度
+        /// </summary>
+        public string TableWidth
+        {
+            get
+            {
+                int i = this.GetValIntByKey(MapDataAttr.TableWidth);
+                if (i <= 50)
+                    return "800px";
+                return i + "px";
+            }
+        }
+        #endregion
 
         #region weboffice文档属性(参数属性)
         /// <summary>
@@ -1575,57 +1612,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.FrmH, value);
             }
         }
-        /// <summary>
-        /// 表格显示的列
-        /// </summary>
-        public int TableCol
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapDataAttr.TableCol);
-                if (i == 0 || i == 1)
-                    return 4;
-                return i;
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.TableCol, value);
-            }
-        }
-        public string TableWidth
-        {
-            get
-            {
-                //switch (this.TableCol)
-                //{
-                //    case 2:
-                //        return
-                //        labCol = 25;
-                //        ctrlCol = 75;
-                //        break;
-                //    case 4:
-                //        labCol = 20;
-                //        ctrlCol = 30;
-                //        break;
-                //    case 6:
-                //        labCol = 15;
-                //        ctrlCol = 30;
-                //        break;
-                //    case 8:
-                //        labCol = 10;
-                //        ctrlCol = 15;
-                //        break;
-                //    default:
-                //        break;
-                //}
-
-
-                int i = this.GetValIntByKey(MapDataAttr.TableWidth);
-                if (i <= 50)
-                    return "100%";
-                return i + "px";
-            }
-        }
+       
         /// <summary>
         /// 应用类型.  0独立表单.1节点表单
         /// </summary>

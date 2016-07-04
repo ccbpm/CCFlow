@@ -411,17 +411,34 @@ namespace BP.WF.Rpt
         #endregion
 
         #region 属性
+        /// <summary>
+        /// 流程编号
+        /// </summary>
         public string FK_Flow
         {
             get
             {
-               return this.GetValStrByKey(MapRptAttr.FK_Flow);
+               string str= this.GetValStrByKey(MapRptAttr.FK_Flow);
+               if (str == "" || str == null)
+               {
+                   str = this.No.Replace("ND", "");
+                   str = str.Replace("MyRpt", "");
+                   str = str.PadLeft(3, '0');
+                   this.SetValByKey(MapRptAttr.FK_Flow, str);
+
+
+                   this.Update(MapRptAttr.FK_Flow, str);
+               }
+               return str;
             }
             set
             {
                 this.SetValByKey(MapRptAttr.FK_Flow, value);
             }
         }
+        /// <summary>
+        /// 物理表
+        /// </summary>
         public string PTable
         {
             get

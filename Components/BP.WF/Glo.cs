@@ -876,8 +876,21 @@ namespace BP.WF
 
             #region 创建 Port_EmpDept 视图兼容旧版本.
             //创建视图.
-            if (DBAccess.IsExitsObject("Port_EmpDept")==true)
+            try
+            {
+                BP.DA.DBAccess.RunSQL("DROP TABLE Port_EmpDept");
+            }
+            catch
+            {
+            }
+
+            try
+            {
                 BP.DA.DBAccess.RunSQL("DROP VIEW Port_EmpDept");
+            }
+            catch
+            {
+            }
 
             if (DBAccess.IsExitsObject("Port_EmpDept") == false)
             {

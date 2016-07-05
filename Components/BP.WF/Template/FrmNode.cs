@@ -438,8 +438,8 @@ namespace BP.WF.Template
             get
             {
                 if (this.FrmSln == 1)
-                    return true;
-                return false;
+                    return false;
+                return true;
             }
         }
         /// <summary>

@@ -7217,7 +7217,7 @@ namespace BP.WF
         /// </summary>
         private void CheckCompleteCondition_IntCompleteEmps()
         {
-            string sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND IsEnable=1";
+            string sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND IsPass=1";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             string emps = "@";
@@ -7230,7 +7230,12 @@ namespace BP.WF
                 emps = emps + dr[0].ToString() + "@";
                 flowEmps = flowEmps + dr[1] + "," + dr[0].ToString() + "@";
             }
-
+            //追加当前操作人
+            if (emps.Contains("@" + WebUser.No + "@") == false)
+            {
+                emps = emps + WebUser.No + "@";
+                flowEmps = flowEmps + WebUser.Name + "," + WebUser.No + "@";
+            }
             // 给他们赋值.
             this.rptGe.FlowEmps = flowEmps;
             this.HisGenerWorkFlow.Emps = emps;

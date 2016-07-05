@@ -127,8 +127,6 @@ td
     border-left-style: none;
 }
 
- 
-
 
 .TDNum
 {
@@ -181,18 +179,7 @@ input[type="button"], .Btn, input[type="submit"]
  
 caption
 {
-    vertical-align: top;
-    text-align: left;
-    height: 32px;
-    line-height: 32px;
-    font-size: 14px;
     background: url('/WF/Comm/Style/BG_Title.png') repeat-x;
-    height: 30px;
-    line-height: 30px;
-    padding-left: 10px;
-    font-family: ºÚÌå;
-    font-weight: bolder;
-    color: #333333;
 }
  
 .TBDoc

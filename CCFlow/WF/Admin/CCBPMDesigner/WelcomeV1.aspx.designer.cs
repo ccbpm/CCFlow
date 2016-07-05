@@ -7,36 +7,27 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace CCFlow.WF.MapDef {
+namespace CCFlow.WF.Admin.CCBPMDesigner {
     
     
-    public partial class WF_MapDef_MapDef {
+    public partial class Welcome {
         
         /// <summary>
-        /// UCCaption 控件。
+        /// form1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::WF_MapDef_Pub UCCaption;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// Left 控件。
+        /// ChartWorks1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::WF_MapDef_Pub Left;
-        
-        /// <summary>
-        /// Pub1 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::WF_MapDef_Pub Pub1;
+        protected global::CCFlow.WF.Admin.CCBPMDesigner.UC.ChartWorks ChartWorks1;
     }
 }

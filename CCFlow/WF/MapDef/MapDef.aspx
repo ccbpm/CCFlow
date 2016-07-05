@@ -16,7 +16,7 @@ body
     <script language="JavaScript" src="../Comm/JScript.js"></script>
     <script language="JavaScript" src="MapDef.js" type="text/javascript" ></script>
     <script language="JavaScript" src="./../Style/Verify.js"></script>
-   <script language="JavaScript" src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer" ></script>
+    <script language="JavaScript" src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer" ></script>
     <script language="javascript"  >
         function FrmEvent(mypk) {
             var url = 'FrmEvent.aspx?FK_MapData=' + mypk;
@@ -115,14 +115,14 @@ body
     
 	function Up(mypk,refoid,idx,t) {
         var url='Do.aspx?DoType=Up&MyPK='+mypk+'&RefNo='+refoid+'&ToIdx='+idx+'&T='+t;
-        var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
+        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no'); 
         //window.location.href ='MapDef.aspx?PK='+mypk+'&IsOpen=1';
         window.location.href = window.location.href ;
     }
     function Down(mypk,refoid,idx,t)
     {
         var url = 'Do.aspx?DoType=Down&MyPK=' + mypk + '&RefNo=' + refoid + '&ToIdx=' + idx + '&T=' + t;
-        var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
+        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no'); 
         window.location.href = window.location.href;
     }
     function GFDoUp(refoid)
@@ -386,13 +386,14 @@ body
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-                <table width='100%' height='100%' align="center" >
+                <table style="width:100%;height:auto;"  border="1px" >
+                <caption  >  <uc1:Pub ID="UCCaption" runat="server" /> </caption>
                  <tr>
-                  <td valign="top" align=left width='250px'  bgcolor="#ffffff">
+                  <td valign="top" align=left  bgcolor="#ffffff">
                    <uc1:Pub ID="Left" runat="server" />
                  </td>
 
-                  <td valign=top  style="width:900px" >
+                  <td valign=top  style="width:90%;" >
                    <uc1:Pub ID="Pub1" runat="server" />
                  </td>
 

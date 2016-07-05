@@ -37,7 +37,6 @@ public partial class WF_MapDef_Pub : BP.Web.UC.UCBase3
     protected void Page_Load(object sender, EventArgs e)
     {
     }
-
     public void ShowExtMenu()
     {
         this.Add("\t\n<div id='tabsJ'  align='center'>");

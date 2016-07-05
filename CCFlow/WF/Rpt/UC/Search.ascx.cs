@@ -73,6 +73,14 @@ namespace CCFlow.WF.Rpt
            //"<link href='" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Style/Table" + BP.Web.WebUser.Style + ".css' rel='stylesheet' type='text/css' />");
             currMapRpt = new MapRpt(this.RptNo);
             Entity en = this.HisEns.GetNewEntity;
+
+            string flowNo = this.currMapRpt.FK_Flow;
+            if (string.IsNullOrEmpty(flowNo))
+            {
+                this.currMapRpt.FK_Flow = this.FK_Flow;
+                this.currMapRpt.Update();
+            }
+
            Flow fl = new Flow(this.currMapRpt.FK_Flow);
 
            this.Page.Title = fl.Name;

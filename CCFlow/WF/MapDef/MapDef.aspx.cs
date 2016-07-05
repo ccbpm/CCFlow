@@ -67,6 +67,18 @@ namespace CCFlow.WF.MapDef
             xmls.RetrieveAll();
 
             #region bindleft
+            this.UCCaption.AddUL();
+            foreach (BP.WF.XML.MapMenu item in xmls)
+            {
+                this.UCCaption.Add("<li style='float:left;' ><a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" ><img src='" + item.Img + "' width='16px' /><b>" + item.Name + "</b></a></li>");
+            }
+            this.UCCaption.AddULEnd();
+            #endregion bindleft
+
+            return;
+
+
+            #region bindleft
             //this.Left.Add("<a href='http://ccflow.org' target=_blank ><img src='../../DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png' border=0/></a>");
             //this.Left.AddHR();
             this.Left.AddUL();
@@ -84,6 +96,7 @@ namespace CCFlow.WF.MapDef
             md = new MapData(this.FK_MapData);
             MapAttrs mattrs = new MapAttrs(md.No);
             int count = mattrs.Count;
+
             this.BindLeft();
 
             #region 计算出来列的宽度.
@@ -92,24 +105,25 @@ namespace CCFlow.WF.MapDef
             int width = (labCol + ctrlCol) * md.TableCol / 2;
             #endregion 计算出来列的宽度.
 
-            #region 生成表头.
-            this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;' align=left>");
-            this.Pub1.AddTR();
-            this.Pub1.AddTD("colspan=" + md.TableCol, "<div style='float:left' ><img src='../../DataUser/ICON/Smaller.png' border=0/></div><h3><div style='float:center' >" + md.Name + "</div></h3>");
-            this.Pub1.AddTREnd();
+            this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;' align='left' >");
 
-            this.Pub1.AddTR();
-            bool isLabel = true;
-            for (int i = 0; i < md.TableCol; i++)
-            {
-                if (isLabel)
-                    this.Pub1.AddTD("width='" + labCol + "px' align=center", i);
-                else
-                    this.Pub1.AddTD("width='" + ctrlCol + "px' align=center", i.ToString());
-                isLabel = !isLabel;
-            }
-            this.Pub1.AddTREnd();
-            #endregion 生成表头.
+            //#region 生成表头.
+            //this.Pub1.AddTR();
+            //this.Pub1.AddTD("colspan=" + md.TableCol, "<div style='float:left' ><img src='../../DataUser/ICON/Smaller.png' border=0/></div><h3><div style='float:center' >" + md.Name + "</div></h3>");
+            //this.Pub1.AddTREnd();
+
+            //this.Pub1.AddTR();
+            //bool isLabel = true;
+            //for (int i = 0; i < md.TableCol; i++)
+            //{
+            //    if (isLabel)
+            //        this.Pub1.AddTD("width='" + labCol + "px' align=center", i);
+            //    else
+            //        this.Pub1.AddTD("width='" + ctrlCol + "px' align=center", i.ToString());
+            //    isLabel = !isLabel;
+            //}
+            //this.Pub1.AddTREnd();
+            //#endregion 生成表头.
 
             /*
              * 根据 GroupField 循环出现菜单。
@@ -691,24 +705,24 @@ namespace CCFlow.WF.MapDef
             #endregion 增加从表
 
             #region 增加附件
-            foreach (FrmAttachment dtl in this.aths)
+            foreach (FrmAttachment ath in this.aths)
             {
-                if (dtl.IsUse)
+                if (ath.IsUse)
                     continue;
 
                 if (isJudgeRowIdx)
                 {
-                    if (dtl.RowIdx != rowIdx)
+                    if (ath.RowIdx != rowIdx)
                         continue;
                 }
 
-                if (dtl.GroupID == 0 && rowIdx == 0)
+                if (ath.GroupID == 0 && rowIdx == 0)
                 {
-                    dtl.GroupID = currGF.OID;
-                    dtl.RowIdx = 0;
-                    dtl.Update();
+                    ath.GroupID = currGF.OID;
+                    ath.RowIdx = 0;
+                    ath.Update();
                 }
-                else if (dtl.GroupID == currGF.OID)
+                else if (ath.GroupID == currGF.OID)
                 {
                 }
                 else
@@ -716,21 +730,23 @@ namespace CCFlow.WF.MapDef
                     continue;
                 }
 
-                dtl.IsUse = true;
+                ath.IsUse = true;
                 int myidx = rowIdx + 10;
                 this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + dtl.NoOfObj + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:AthDoUp('" + dtl.MyPK + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:AthDoDown('" + dtl.MyPK + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
+                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:AthDoUp('" + ath.MyPK + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:AthDoDown('" + ath.MyPK + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
                 this.Pub1.AddTREnd();
 
                 myidx++;
                 this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + dtl.MyPK + "' height='50px' width='1000px'>");
+                this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='" + md.TableWidth + "' >");
 
-                string src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + dtl.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + dtl.MyPK;
-                if (dtl.IsAutoSize)
-                    this.Pub1.Add("<iframe ID='F" + dtl.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
-                else
-                    this.Pub1.Add("<iframe ID='F" + dtl.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + dtl.W + "' height='" + dtl.H + "' scrolling=auto  /></iframe>");
+                string src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+                
+                //if (dtl.IsAutoSize)
+                //    this.Pub1.Add("<iframe ID='F" + dtl.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
+                //else
+
+                this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + ath.W + "' height='" + ath.H + "' scrolling=auto  /></iframe>");
 
                 this.Pub1.AddTDEnd();
                 this.Pub1.AddTREnd();

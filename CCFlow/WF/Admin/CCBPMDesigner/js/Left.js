@@ -27,7 +27,10 @@ function RefreshFlowJson() {
         action: 'ccbpm_flow_resetversion',
         FK_Flow: node.id
     }, function (jsonData) {
+        $(".mymask").show();
         addTab(node.id, node.text, "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+        //延时3秒
+        setTimeout(DesignerLoaded, 3000);
     });
 }
 

@@ -183,6 +183,19 @@ namespace BP.Sys
 
         #region 数据库访问方法
         /// <summary>
+        /// 运行SQL返回数值
+        /// </summary>
+        /// <param name="sql">一行一列的SQL</param>
+        /// <param name="isNullAsVal">如果为空，就返回制定的值.</param>
+        /// <returns>要返回的值</returns>
+        public int RunSQLReturnInt(string sql, int isNullAsVal)
+        {
+            DataTable dt = this.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
+                return isNullAsVal;
+            return int.Parse(dt.Rows[0][0].ToString());
+        }
+        /// <summary>
         /// 运行SQL
         /// </summary>
         /// <param name="sql"></param>

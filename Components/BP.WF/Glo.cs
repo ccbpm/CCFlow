@@ -185,6 +185,11 @@ namespace BP.WF
                 BP.WF.Template.Cond cnd = new Cond();
                 cnd.CheckPhysicsTable();
 
+                #region 升级数据源.
+                sql = "UPDATE Sys_SFTable SET FK_SFDBSrc='local' WHERE FK_SFDBSrc IS NULL OR FK_SFDBSrc=''";
+                BP.DA.DBAccess.RunSQL(sql);
+                #endregion 升级数据源
+
 
                 #region 标签Ext
                 sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeExt'";

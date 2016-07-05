@@ -515,10 +515,8 @@
             刷新</div>
     </div>
     <div id="mFlow" class="easyui-menu" style="width: 120px;">
-      
-
         <div onclick="showFlow()" data-options="iconCls:'icon-design'">设计流程图</div>
-
+        <div onclick="RefreshFlowJson()" data-options="iconCls:'icon-reset'">重置流程图</div>
         <div onclick="ImpFlow()" data-options="iconCls:'icon-redo'">导入流程模板</div>
         <div onclick="ExpFlow()" data-options="iconCls:'icon-unredo'">导出流程模板</div>
 

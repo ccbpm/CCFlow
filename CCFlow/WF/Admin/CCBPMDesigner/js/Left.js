@@ -17,6 +17,20 @@ function showFlow() {
     OpenFlowToCanvas(node, node.id, node.text);
 }
 
+//重新装载流程图
+function RefreshFlowJson() {
+    var node = $('#flowTree').tree('getSelected');
+    if (!node || node.attributes.ISPARENT != '0') return;
+    //首先关闭tab
+    closeTab(node.text);
+    $.post("./common/controller.ashx", {
+        action: 'ccbpm_flow_resetversion',
+        FK_Flow: node.id
+    }, function (jsonData) {
+        addTab(node.id, node.text, "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+    });
+}
+
 //打开流程到流程图
 function OpenFlowToCanvas(node, id, text) {
     $(".mymask").show();

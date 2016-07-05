@@ -104,6 +104,9 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
                 case "changenoderunmodel"://修改节点运行模式
                     s_responsetext = Node_ChangeRunModel();
                     break;
+                case "ccbpm_flow_resetversion"://重置流程版本为1.0
+                    s_responsetext = Flow_ResetFlowVersion();
+                    break;
             }
             if (string.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
@@ -176,6 +179,16 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
         private string Flow_SaveAs()
         {
             return "";
+        }
+
+        /// <summary>
+        /// 重置流程版本为1.0
+        /// </summary>
+        /// <returns></returns>
+        private string Flow_ResetFlowVersion()
+        {
+            DBAccess.RunSQL("UPDATE WF_FLOW SET DTYPE=0,FLOWJSON='' WHERE NO='" + this.FK_Flow + "'");
+            return "true";
         }
 
         /// <summary>

@@ -56,7 +56,7 @@ namespace BP.WF
         public bool IsCanDoCurrentWork(string empId)
         {
             WorkNode wn = this.GetCurrentWorkNode();
-            return BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork( wn.HisNode.FK_Flow, wn.HisNode.NodeID, wn.WorkID, empId);
+            return BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(wn.HisNode.FK_Flow, wn.HisNode.NodeID, wn.WorkID, empId);
             #region 使用dev2InterFace 中的算法
             //return true;
             // 找到当前的工作节点
@@ -84,7 +84,7 @@ namespace BP.WF
                     return true;
             }
             return false;
-            #endregion 
+            #endregion
         }
         #endregion
 
@@ -140,13 +140,13 @@ namespace BP.WF
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
-                BP.WF.Node nd =new Node(gwf.FK_Node);
+                BP.WF.Node nd = new Node(gwf.FK_Node);
                 Work wk = nd.HisWork;
                 wk.OID = this.WorkID;
                 wk.RetrieveFromDBSources();
 
                 //调用结束前事件.
-                this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverBefore, nd, wk, null,null, null);
+                this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverBefore, nd, wk, null, null, null);
 
                 //设置产生的工作流程为.
                 gwf.WFState = BP.WF.WFState.Delete;
@@ -162,7 +162,7 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
 
                 //删除他的工作者，不让其有待办.
-                sql = "DELETE FROM WF_GenerWorkerList WHERE WorkID="+this.WorkID;
+                sql = "DELETE FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID;
                 DBAccess.RunSQL(sql);
 
                 //调用结束后事件.
@@ -1087,7 +1087,8 @@ namespace BP.WF
         /// <returns></returns>
         public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt)
         {
-            if( null == currNode){
+            if (null == currNode)
+            {
                 return null;
             }
 
@@ -1165,14 +1166,16 @@ namespace BP.WF
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FID", this.WorkID);
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                string emps = "";
+                string emps = "@";
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (emps.Contains("@" + dr[0].ToString()) == true)
+                    if (emps.Contains("@" + dr[0].ToString() + "@") == true)
                         continue;
-                    emps += "@" + dr[0].ToString();
+                    emps += dr[0].ToString() + "@";
                 }
-                emps = emps + "@";
+                //追加当前操作人
+                if (emps.Contains("@" + WebUser.No + "@") == false)
+                    emps += WebUser.No + "@";
 
                 //更新流程注册信息.
                 ps = new Paras();
@@ -1706,12 +1709,12 @@ namespace BP.WF
         {
             bool isCan = false;
             // 判断岗位对应关系是不是能够执行.
-            string sql = "SELECT a.FK_Node FROM WF_NodeStation a,  "+BP.WF.Glo.EmpStation+" b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " AND b.FK_Emp='" + empId + "' )";
+            string sql = "SELECT a.FK_Node FROM WF_NodeStation a,  " + BP.WF.Glo.EmpStation + " b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " AND b.FK_Emp='" + empId + "' )";
             isCan = DBAccess.IsExits(sql);
             if (isCan)
                 return true;
             // 判断他的主要工作岗位能不能执行它.
-            sql = "select FK_Node from WF_NodeStation WHERE FK_Node=" + nodeId + " AND ( FK_Station in (select FK_Station from "+BP.WF.Glo.EmpStation+" WHERE FK_Emp='" + empId + "') ) ";
+            sql = "select FK_Node from WF_NodeStation WHERE FK_Node=" + nodeId + " AND ( FK_Station in (select FK_Station from " + BP.WF.Glo.EmpStation + " WHERE FK_Emp='" + empId + "') ) ";
             return DBAccess.IsExits(sql);
         }
         /// <summary>
@@ -1750,7 +1753,7 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable CanDoWorkEmps(int nodeId)
         {
-            string sql = "select a.FK_Node, b.EmpID from WF_NodeStation  a,  "+BP.WF.Glo.EmpStation+" b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " )";
+            string sql = "select a.FK_Node, b.EmpID from WF_NodeStation  a,  " + BP.WF.Glo.EmpStation + " b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " )";
             return DBAccess.RunSQLReturnTable(sql);
         }
         /// <summary>
@@ -2044,7 +2047,7 @@ namespace BP.WF
             wkNew.Insert();
 
             //删除撤销信息.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID="+this.WorkID+" AND FK_Node="+wk.FK_Node);
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + wk.FK_Node);
 
             return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wk.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
         }

@@ -69,11 +69,19 @@
             tabs.RetrieveAll();
 
             int idx = 0;
+            string icon = "";
             foreach (BP.Sys.SFTable tab in tabs)
             {
                 idx++;
                 
-                string icon = "./Img/DBSrcTable.png";
+                if (tab.No.Contains("BP.") == false)
+                {
+                     icon = "./Img/DBSrcTable.png";
+                }
+                else
+                {
+                     icon = "./Img/Form.png";
+                }
         
         %>
         <tr>
@@ -87,7 +95,7 @@
                 <%=tab.No %>
             </td>
             <td>
-                <img src='<%=icon %>'  height="17" width="17" />
+                <img src='<%=icon %>' height="17" width="17" />
                 <%=tab.Name %>
             </td>
             <td>

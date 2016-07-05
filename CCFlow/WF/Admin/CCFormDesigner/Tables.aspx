@@ -84,7 +84,7 @@
                 }
         
         %>
-        <tr>
+        <tr  onmouseover='TROver(this)' onmouseout='TROut(this)'>
             <td class="Idx">
                 <%=idx %>
             </td>

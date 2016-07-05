@@ -6,11 +6,28 @@
 
 <table>
 <tr>
+<th>序</th>
 <th>引用表单</th>
-<th>字段</th>
+<th>字段英文</th>
+<th>字段中文</th>
 </tr>
+<%
+    string RefNo = this.Request.QueryString["RefNo"];
+    BP.Sys.MapAttrs mapAttrs = new BP.Sys.MapAttrs();
+    mapAttrs.RetrieveByAttr(BP.Sys.MapAttrAttr.UIBindKey, RefNo);
+    int idx = 0;
+    foreach (BP.Sys.MapAttr attr in mapAttrs)
+    {
+        idx++;
+     %>
+<tr>
+<td><%=idx%></td>
+<td><%=attr.FK_MapData%></td>
+<td><%=attr.KeyOfEn%></td>
+<td><%=attr.Name%></td>
+</tr>
+<%
+    } %>
 
 </table>
-
-
 </asp:Content>

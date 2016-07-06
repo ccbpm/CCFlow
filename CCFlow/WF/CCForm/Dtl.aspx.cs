@@ -902,8 +902,20 @@ namespace CCFlow.WF.CCForm
                                                 EntitiesNoName ens = attr.HisEntitiesNoName;
                                                 ens.RetrieveAll();
                                                 ddl1.BindEntities(ens);
+
+                                                //如果没有选择到数据，就让其出现请选择Item.
                                                 if (ddl1.SetSelectItem(val) == false)
-                                                    ddl1.Items.Insert(0, new ListItem("请选择", val));
+                                                {
+                                                    if (ens.Count >= 1)
+                                                    {
+                                                        Entity en = ens[0] as Entity;
+                                                        if (en!=null && en.GetValStrByKey("Name").Contains("请选择") == false)
+                                                        {
+                                                            ddl1.Items.Insert(0, new ListItem("请选择", val));
+                                                        }
+                                                        ddl1.SelectedIndex = 0;
+                                                    }
+                                                }
                                             }
                                             else
                                             {
@@ -1286,9 +1298,20 @@ namespace CCFlow.WF.CCForm
                                             //   ddl1.Attributes["onchange"] = "SetChange(true);";
                                             EntitiesNoName ens = attr.HisEntitiesNoName;
                                             ens.RetrieveAll();
-                                            ;
-                                            if (ddl1.Bind(ens,val) == false)
-                                                ddl1.Items.Insert(0, new ListItem("请选择", val));
+
+                                            if (ddl1.Bind(ens, val) == false)
+                                            {
+
+                                                if (ens.Count >= 1)
+                                                {
+                                                    Entity en = ens[0] as Entity;
+                                                    if (en != null && en.GetValStrByKey("Name").Contains("请选择") == false)
+                                                    {
+                                                        ddl1.Items.Insert(0, new ListItem("请选择", val));
+                                                    }
+                                                }
+                                               // ddl1.Items.Insert(0, new ListItem("请选择", val));
+                                            }
                                         }
                                         else
                                         {
@@ -1308,7 +1331,19 @@ namespace CCFlow.WF.CCForm
 
                                             //ddlNormal.BindEntities(ens);
                                             if (ddlNormal.Bind(attr.HisDT, "No", "Name", val) == false)
-                                                ddlNormal.Items.Insert(0, new ListItem("请选择", val));
+                                            {
+
+                                                if (attr.HisDT.Rows.Count >= 1)
+                                                {
+                                                    DataRow dr = attr.HisDT.Rows[0];
+                                                    if (dr["Name"].ToString().Contains("请选择") == false)
+                                                    {
+                                                        ddlNormal.Items.Insert(0, new ListItem("请选择", val));
+                                                    }
+                                                }
+                                                ddlNormal.SelectedIndex = 0;
+                                                //ddlNormal.Items.Insert(0, new ListItem("请选择", val));
+                                            }
                                         }
                                         else
                                         {
@@ -1517,8 +1552,16 @@ namespace CCFlow.WF.CCForm
                                 ddlChild.Bind(dt, "No", "Name");
                                 if (ddlChild.SetSelectItem(valC) == false)
                                 {
-                                    ddlChild.Items.Insert(0, new ListItem("请选择" + valC, valC));
+                                    if (dt.Rows.Count >= 1)
+                                    {
+                                        DataRow dr=dt.Rows[0];
+                                        if (dr["Name"].ToString().Contains("请选择") == false)
+                                        {
+                                            ddlChild.Items.Insert(0, new ListItem("请选择", val));
+                                        }
+                                    }
                                     ddlChild.SelectedIndex = 0;
+                                    //ddlChild.Items.Insert(0, new ListItem("请选择" + valC, valC));
                                 }
                                 ddlChild.Attributes["onchange"] = " SetChange (true);";
                                 break;
@@ -1574,8 +1617,18 @@ namespace CCFlow.WF.CCForm
                                     ddlFull.Bind(autoFullTable, "No", "Name");
                                     if (ddlFull.SetSelectItem(valOld) == false)
                                     {
-                                        ddlFull.Items.Insert(0, new ListItem("请选择" + valOld, valOld));
+                                        if (autoFullTable.Rows.Count >= 1)
+                                        {
+                                            DataRow dr = autoFullTable.Rows[0];
+                                            if (dr["Name"].ToString().Contains("请选择") == false)
+                                            {
+                                                ddlFull.Items.Insert(0, new ListItem("请选择", valOld));
+                                            }
+                                        }
                                         ddlFull.SelectedIndex = 0;
+
+                                        //ddlFull.Items.Insert(0, new ListItem("请选择" + valOld, valOld));
+                                        //ddlFull.SelectedIndex = 0;
                                     }
                                 }
                                 ddlFull.Attributes["onchange"] = " SetChange (true);";

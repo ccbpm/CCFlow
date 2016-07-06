@@ -898,7 +898,7 @@
                 $("#A6").show();
             }, this);
             var urlExt = urlExtFrm();
-            addTab("trackid", "流程日志", "../WorkOpt/OneWork/TruckOnly.aspx?1=1" + urlExt);
+            //addTab("trackid", "流程日志", "../WorkOpt/OneWork/TruckOnly.aspx?1=1" + urlExt);
             //tab页操作事件
             tabCloseEven();
         });

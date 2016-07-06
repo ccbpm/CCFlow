@@ -8,50 +8,50 @@
   <InitField No="IsSendEmail" CH="是否发送邮件"  GroupName="节点表单字段" Note="此字段配合节点事件的消息推送实现"   />
   <InitField No="IsSendSMS"   CH="是否短信提醒"  GroupName="节点表单字段"   Note="此字段配合节点事件的消息推送实现"  />
   
-  
-    <MapMenu No="ExpImp" CH="导入/导出" JS="javascript:ExpImp(@MyPK,@FK_Flow);" Img="./Img/MapExt/ExpImp.png"
+  <!--./Img/MapExt/ExpImp.png-->
+    <MapMenu No="ExpImp" CH="导入/导出" JS="javascript:ExpImp(@MyPK,@FK_Flow);" Img="icon-copy"
            Note="导入或者导入表单模板。" />
-    
-  <MapMenu No="NewF" CH="新建字段"   JS="javascript:AddF(@MyPK);"  Img="./../Img/Btn/New.gif" 
+    <!--./../Img/Btn/New.gif-->
+  <MapMenu No="NewF" CH="新建字段"   JS="javascript:AddF(@MyPK);"  Img="icon-new" 
            Note="向表单中增加新字段。" />
-    
-  <MapMenu No="HidAttr" CH="隐藏字段" JS="javascript:HidAttr(@MyPK);" Img="./Img/MapExt/HiddenField.png"
+    <!--./Img/MapExt/HiddenField.png-->
+  <MapMenu No="HidAttr" CH="隐藏字段" JS="javascript:HidAttr(@MyPK);" Img="icon-hidden"
             Note="多用于计算、方向条件设置。" />
-
-    <MapMenu No="FGroup" CH="新建字段分组" JS="javascript:GroupFieldNew(@MyPK);" Img="./Img/MapExt/GroupBar.png"
+  <!--./Img/MapExt/GroupBar.png-->
+    <MapMenu No="FGroup" CH="新建字段分组" JS="javascript:GroupFieldNew(@MyPK);" Img="icon-groupbar"
              Note="把同类的字段分割开,让显示更有条理." />
     
   <!--<MapMenu No="CopyF" CH="复制字段"  JS="javascript:CopyFieldFromNode(@MyPK);"  Img="/WF/Img/Btn/Copy.gif"
-           Note="从其它表单中复制字段" />--> 
-    
-  <MapMenu No="DTable" CH="新建从表" JS="javascript:MapDtl(@MyPK);" Img="./Img/MapExt/Dtl.png"
-           Note="也称从表,如:报销费用清单."  /> 
-           
-  <MapMenu No="DM" CH="增加一对多"   JS="javascript:MapM2M(@MyPK);" Img="./../Img/Btn/ChoseCol.gif" 
+           Note="从其它表单中复制字段" />-->
+  <!--./Img/MapExt/Dtl.png-->
+  <MapMenu No="DTable" CH="新建从表" JS="javascript:MapDtl(@MyPK);" Img="icon-dtl"
+           Note="也称从表,如:报销费用清单."  />
+  <!--./../Img/Btn/ChoseCol.gif-->
+  <MapMenu No="DM" CH="增加一对多"   JS="javascript:MapM2M(@MyPK);" Img="icon-closecol" 
            Note="如:项目人员、选课." />
-
-    <MapMenu No="DMM" CH="增加一对多对多"   JS="javascript:MapM2MM(@MyPK);" Img="./../Img/Btn/ChoseCol.gif"
+  <!--./../Img/Btn/ChoseCol.gif-->
+    <MapMenu No="DMM" CH="增加一对多对多"   JS="javascript:MapM2MM(@MyPK);" Img="icon-closecol"
            Note="比如为人员集合的每个人设置岗位" />
-    
-  <MapMenu No="Ath" CH="新建附件组件"     JS="javascript:Ath(@MyPK);" Img="./Img/MapExt/Attachment.png" 
+  <!--./Img/MapExt/Attachment.png-->
+  <MapMenu No="Ath" CH="新建附件组件"     JS="javascript:Ath(@MyPK);" Img="icon-attachment" 
            Note="单个附件与多个附件类型的数据上传、浏览。"/>
-    
-  <MapMenu No="Frm" CH="设置框架"    JS="javascript:MapFrame(@MyPK);" Img="./Img/Frame.gif" 
+  <!--./Img/Frame.gif-->
+  <MapMenu No="Frm" CH="设置框架"    JS="javascript:MapFrame(@MyPK);" Img="icon-frame" 
            Note="框架嵌入自定义URL"/>
-
-  <MapMenu No="FrmEvent" CH="表单事件"    JS="javascript:FrmEvent(@MyPK);" Img="./Img/MapExt/Event.png"
+  <!--./Img/MapExt/event.png-->
+  <MapMenu No="FrmEvent" CH="表单事件"    JS="javascript:FrmEvent(@MyPK);" Img="icon-event"
              Note="可以实现特殊的应用需求."/>
-
-    <MapMenu No="MapExt" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="./Img/MapExt/DTS.gif"
+  <!--./Img/MapExt/DTS.gif-->
+    <MapMenu No="MapExt" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="icon-dts"
             Note="表单的业务逻辑，实现特殊的应用需求."/>
-
-  <MapMenu111 No="Sln" CH="权限控制方案"    JS="javascript:Sln(@MyPK);" Img="./Img/MapExt/DTS.gif"
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu111 No="Sln" CH="权限控制方案"    JS="javascript:Sln(@MyPK);" Img="icon-dts"
           Note="可以实现不用的节点对不同字段的权限访问."/>
-
-  <MapMenu No="MapExt" CH="表单属性"    JS="javascript:MapDataEdit(@MyPK);" Img="./Img/MapExt/DTS.gif"
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu No="MapExt" CH="表单属性"    JS="javascript:MapDataEdit(@MyPK);" Img="icon-dts"
             Note="更改表单的基础信息，映射的物理表，展示格式..."/>
-
-  <MapMenu No="BatchEdit" CH="批量修改"    JS="javascript:BatchEdit(@MyPK);" Img="./Img/MapExt/DTS.gif"
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu No="BatchEdit" CH="批量修改"    JS="javascript:BatchEdit(@MyPK);" Img="icon-dts"
             Note="批量修改字段属性..."/>
 
     <!--<MapMenu111 No="Ext" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="/WF/Img/Btn/DTS.gif" />-->

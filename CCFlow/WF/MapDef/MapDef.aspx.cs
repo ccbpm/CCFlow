@@ -67,12 +67,13 @@ namespace CCFlow.WF.MapDef
             xmls.RetrieveAll();
 
             #region bindleft
-            this.UCCaption.AddUL();
+            //this.UCCaption.AddUL();
             foreach (BP.WF.XML.MapMenu item in xmls)
             {
-                this.UCCaption.Add("<li style='float:left;' ><a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" ><img src='" + item.Img + "' width='16px' /><b>" + item.Name + "</b></a></li>");
+                //this.UCCaption.Add("<li style='float:left;' ><a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" ><img src='" + item.Img + "' width='16px' /><b>" + item.Name + "</b></a></li>");
+                this.UCCaption.Add("<a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'" + item.Img + "'\">" + item.Name + "</a>");
             }
-            this.UCCaption.AddULEnd();
+            //this.UCCaption.AddULEnd();
             #endregion bindleft
 
             return;
@@ -81,12 +82,12 @@ namespace CCFlow.WF.MapDef
             #region bindleft
             //this.Left.Add("<a href='http://ccflow.org' target=_blank ><img src='../../DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png' border=0/></a>");
             //this.Left.AddHR();
-            this.Left.AddUL();
-            foreach (BP.WF.XML.MapMenu item in xmls)
-            {
-                this.Left.AddLi("<a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" ><img src='" + item.Img + "' width='16px' /><b>" + item.Name + "</b></a><br><font color=green>" + item.Note + "</font>");
-            }
-            this.Left.AddULEnd();
+            //this.Left.AddUL();
+            //foreach (BP.WF.XML.MapMenu item in xmls)
+            //{
+            //    this.Left.AddLi("<a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" ><img src='" + item.Img + "' width='16px' /><b>" + item.Name + "</b></a><br><font color=green>" + item.Note + "</font>");
+            //}
+            //this.Left.AddULEnd();
             #endregion bindleft
         }
         public MapData md = null;
@@ -139,7 +140,7 @@ namespace CCFlow.WF.MapDef
                 if (gfs.Count == 1)
                     this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top' align:left style='height: 24px;align:left' ", "<div style='text-align:left; float:left'>&nbsp;<a href=\"javascript:GroupField('" + this.FK_MapData + "','" + gf.OID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'></div>");
                 else
-                    this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='height: 24px;align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 />&nbsp;<a href=\"javascript:GroupField('" + this.FK_MapData + "','" + gf.OID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" ><img src='../Img/Btn/Up.gif' class='Arrow' border=0/></a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" ><img src='../Img/Btn/Down.gif' class='Arrow' border=0/></a></div>");
+                    this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='height: 24px;align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 />&nbsp;<a href=\"javascript:GroupField('" + this.FK_MapData + "','" + gf.OID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                 this.Pub1.AddTREnd();
                 #endregion 输出分组栏.
 
@@ -691,7 +692,7 @@ namespace CCFlow.WF.MapDef
                 int myidx = rowIdx + 10;
                 this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
 
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a> <a href=\"javascript:DtlDoUp('" + dtl.No + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
+                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a> <a href=\"javascript:DtlDoUp('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
                 this.Pub1.AddTREnd();
 
                 myidx++;
@@ -733,7 +734,7 @@ namespace CCFlow.WF.MapDef
                 ath.IsUse = true;
                 int myidx = rowIdx + 10;
                 this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:AthDoUp('" + ath.MyPK + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:AthDoDown('" + ath.MyPK + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
+                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:AthDoUp('" + ath.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:AthDoDown('" + ath.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
                 this.Pub1.AddTREnd();
 
                 myidx++;
@@ -741,7 +742,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='" + md.TableWidth + "' >");
 
                 string src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
-                
+
                 //if (dtl.IsAutoSize)
                 //    this.Pub1.Add("<iframe ID='F" + dtl.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
                 //else
@@ -782,7 +783,7 @@ namespace CCFlow.WF.MapDef
                 m2m.IsUse = true;
                 int myidx = rowIdx + 10;
                 this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditM2M('" + this.FK_MapData + "','" + m2m.NoOfObj + "')\" >" + m2m.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:M2MDoUp('" + m2m.MyPK + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:M2MDoDown('" + m2m.MyPK + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
+                this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditM2M('" + this.FK_MapData + "','" + m2m.NoOfObj + "')\" >" + m2m.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:M2MDoUp('" + m2m.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:M2MDoDown('" + m2m.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
                 this.Pub1.AddTREnd();
 
                 myidx++;
@@ -862,7 +863,7 @@ namespace CCFlow.WF.MapDef
                 int myidx = rowIdx + 20;
                 this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                 // this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:DtlDoUp('" + dtl.No + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:FrameDoUp('" + fram.MyPK + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:FrameDoDown('" + fram.MyPK + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
+                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:FrameDoUp('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:FrameDoDown('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
                 this.Pub1.AddTREnd();
 
                 myidx++;
@@ -1044,15 +1045,15 @@ namespace CCFlow.WF.MapDef
             if (idx == 0)
             {
                 /*第一个。*/
-                return "<div " + divAttr + " >" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Right.gif' class='Arrow' alt='向右动顺序' border=0/></a></div>";
+                return "<div " + divAttr + " >" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-right',plain:true\" alt='向右动顺序'> </a></div>";
             }
 
             if (idx == count - 1)
             {
                 /*到数第一个。*/
-                return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Left.gif' alt='向左移动顺序' class='Arrow' border=0/></a>" + lab + "</div>";
+                return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-left',plain:true\" alt='向左动顺序'> </a>" + lab + "</div>";
             }
-            return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Left.gif' alt='向下移动顺序' class='Arrow' border=0/></a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Right.gif' alt='向右移动顺序' class='Arrow' border=0/></a></div>";
+            return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-left',plain:true\" alt='向左动顺序'> </a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-right',plain:true\" alt='向右动顺序'> </a></div>";
 
             //if (idx == 0)
             //{

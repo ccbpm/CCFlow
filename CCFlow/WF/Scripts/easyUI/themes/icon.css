@@ -502,3 +502,42 @@
 {
     background: url('icons/copy.png') no-repeat;
 }
+/*傻瓜表单按钮样式*/
+.icon-expimp
+{
+    background: url('../../../MapDef/Img/MapExt/ExpImp.png') no-repeat;
+}
+.icon-hidden
+{
+    background: url('../../../MapDef/Img/MapExt/HiddenField.png') no-repeat;
+}
+.icon-groupbar
+{
+    background: url('../../../MapDef/Img/MapExt/GroupBar.png') no-repeat;
+}
+.icon-dtl
+{
+    background: url('../../../MapDef/Img/MapExt/Dtl.png') no-repeat;
+}
+.icon-closecol
+{
+    background: url('../../../Img/Btn/ChoseCol.gif') no-repeat;
+}
+.icon-attachment
+{
+    background: url('../../../MapDef/Img/MapExt/Attachment.png') no-repeat;
+}
+.icon-frame
+{
+    background: url('../../../MapDef/Img/Frame.gif') no-repeat;
+}
+.icon-event
+{
+    background: url('../../../MapDef/Img/MapExt/event.png') no-repeat;
+}
+.icon-dts
+{
+    background: url('../../../MapDef/Img/MapExt/DTS.gif') no-repeat;
+}
+
+/**/

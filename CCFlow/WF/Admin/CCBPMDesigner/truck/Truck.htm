@@ -44,14 +44,14 @@
         var STYLE_NODE_BORDER_COLOR_HOVER = 'blue';
         var STYLE_NODE_BORDER_COLOR_TRACK = 'red';  //走过节点边框颜色
         var STYLE_NODE_BORDER_WIDTH_NORMAL = 1;
-        var STYLE_NODE_BORDER_WIDTH_HOVER = 2;
+        var STYLE_NODE_BORDER_WIDTH_HOVER = 1;
 
         var STYLE_LABEL_COLOR_FORE = 'none';
 
         var STYLE_LINE_COLOR = 'green';
         var STYLE_LINE_COLOR_HOVER = 'blue';
         var STYLE_LINE_HOVER_COLOR = 'blue';
-        var STYLE_LINE_WIDTH = 2;
+        var STYLE_LINE_WIDTH = 1;
         var STYLE_LINE_TRACK_COLOR = 'red';
         var STYLE_NODE_TRACK_FONT_SIZE = 14;
         var STYLE_NODE_TRACK_FORE_COLOR = 'red';    //轨迹信息颜色
@@ -178,7 +178,7 @@
                 if (rNode.isTrackNode) {
                     //判断此节点是否是多人处理
                     if (rNode.currTrack.track.EMPTOT.indexOf('多人接受') > -1) {
-                        alert(rNode.currTrack.track.EMPTOT);
+                        //alert(rNode.currTrack.track.EMPTOT);
                         this.ICON = DATA_MULTI_USER_ICON_DEFAULT;
                         rNode.rIcon.attr("src", this.ICON);
                     }

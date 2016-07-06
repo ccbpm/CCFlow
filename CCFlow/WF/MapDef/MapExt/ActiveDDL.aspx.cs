@@ -100,8 +100,8 @@ namespace CCFlow.WF.MapDef.MapExtUI
             ddl.BindEntitiesNoName(srcs);
 
             this.Pub1.AddTD(ddl);
-           // this.Pub1.AddTD("ccform允许从其他数据源中取数据,<a href=\"javascript:WinOpen('/WF/Comm/Search.aspx?EnsName=BP.Sys.SFDBSrcs')\" ><img src='/WF/Img/Setting.png' border=0/>设置/新建数据源</a>, <a href=\"javascript:window.localhost.href=window.localhost.href;\" >刷新数据源</a>");
-            this.Pub1.AddTD("ccform允许从其他数据源中取数据,<a href=\"javascript:WinOpen('/WF/Comm/Search.aspx?EnsName=BP.Sys.SFDBSrcs','d2')\" ><img src='/WF/Img/Setting.png' border=0/>设置/新建数据源</a>, <a href=\"javascript:window.localhost.href=window.localhost.href;\" >刷新数据源</a>");
+            // this.Pub1.AddTD("ccform允许从其他数据源中取数据,<a href=\"javascript:WinOpen('/WF/Comm/Sys/SFDBSrcNewGuide.aspx')\" ><img src='/WF/Img/Setting.png' border=0/>设置/新建数据源</a>, <a href=\"javascript:window.localhost.href=window.localhost.href;\" >刷新数据源</a>");
+            this.Pub1.AddTD("ccform允许从其他数据源中取数据,<a href=\"javascript:WinOpen('/WF/Comm/Sys/SFDBSrcNewGuide.aspx','d2')\" ><img src='/WF/Img/Setting.png' border=0/>设置/新建数据源</a>, <a href=\"javascript:window.localhost.href=window.localhost.href;\" >刷新数据源</a>");
 
             this.Pub1.AddTREnd();
 

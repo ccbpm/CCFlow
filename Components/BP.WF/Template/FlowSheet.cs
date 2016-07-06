@@ -695,7 +695,7 @@ namespace BP.WF.Template
         }
         public string DoDBSrc()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.aspx?EnsName=BP.Sys.SFDBSrcs";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.aspx";
         }
         public string DoBTable()
         {

@@ -704,7 +704,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoMangDBSrc()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.aspx?EnsName=BP.Sys.SFDBSrcs";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.aspx";
         }
         /// <summary>
         /// 创建表向导

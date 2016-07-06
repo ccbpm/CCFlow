@@ -104,7 +104,7 @@ namespace CCFlow.WF.MapDef
 
             ddl.Bind(srcs, en.FK_SFDBSrc);
             this.Ucsys1.AddTD(ddl);
-            this.Ucsys1.AddTD("选择数据源,点击这里<a href=\"javascript:WinOpen('/WF/Comm/Search.aspx?EnsName=BP.Sys.SFDBSrcs')\">创建</a>，<a href='SFSQL.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx='>刷新</a>。");
+            this.Ucsys1.AddTD("选择数据源,点击这里<a href=\"javascript:WinOpen('/WF/Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New')\">创建</a>，<a href='SFSQL.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx='>刷新</a>。");
             this.Ucsys1.AddTREnd();
 
 

@@ -164,8 +164,8 @@ functrees.push({
     Id: "formTree",
     Name: "表单",
     AttrCols: ["TTYPE"],
-    RootASC: { Field: "TTYPE", Index: ["FORMTYPE", "SRCROOT", "FORMREF", "CLOUNDDATA"] },
-    ServiceCount: 2,
+    RootASC: { Field: "TTYPE", Index: ["FORMTYPE", "FORMREF", "CLOUNDDATA"] },//"SRCROOT", 
+    ServiceCount: 1,//2
     Nodes: [
 			{ Type: "Service", ServiceMethod: "GetFormTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null,
 			    ColDefine: "TTYPE", Defines: [
@@ -207,16 +207,16 @@ functrees.push({
                                             { Value: "SRC", IconCls: "icon-src", MenuId: "mFormSrc" }
 										  ]
 			},
-			{ Type: "Node", Id: "SrcRoot", ParentId: null, Name: "数据源字典表", Opened: true, TType: "SRCROOT", IconCls: "icon-srctree", MenuId: "mSrcRoot",
-			    Nodes: [
-						{ Type: "Service", ServiceMethod: "GetSrcTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "SrcRoot",
-						    ColDefine: "TTYPE", Defines: [
-											{ Value: "SRC", IconCls: "icon-src", MenuId: "mSrc", Url: "../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=Edit&No=@@id&t=" + Math.random() },
-											{ Value: "SRCTABLE", IconCls: "icon-srctable", MenuId: "mSrcTable", Url: "../../MapDef/Do.aspx?DoType=EditSFTable&RefNo=@@id&t=" + Math.random() }
-										  ]
-						}
-					  ]
-			},
+//			{ Type: "Node", Id: "SrcRoot", ParentId: null, Name: "数据源字典表", Opened: true, TType: "SRCROOT", IconCls: "icon-srctree", MenuId: "mSrcRoot",
+//			    Nodes: [
+//						{ Type: "Service", ServiceMethod: "GetSrcTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "SrcRoot",
+//						    ColDefine: "TTYPE", Defines: [
+//											{ Value: "SRC", IconCls: "icon-src", MenuId: "mSrc", Url: "../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=Edit&No=@@id&t=" + Math.random() },
+//											{ Value: "SRCTABLE", IconCls: "icon-srctable", MenuId: "mSrcTable", Url: "../../MapDef/Do.aspx?DoType=EditSFTable&RefNo=@@id&t=" + Math.random() }
+//										  ]
+//						}
+//					  ]
+//			},
 			{ Type: "Node", Id: "FormRef", ParentId: null, Name: "表单相关", Opened: true, TType: "FORMREF", IconCls: "icon-tree_folder",
 			    Nodes: [
 						{ Type: "Node", Id: "Tabs", ParentId: "FormRef", Name: "数据源表", TType: "ENUMS", IconCls: "icon-srctable", Url: "../CCFormDesigner/Tables.aspx?t=" + Math.random() },

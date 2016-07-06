@@ -195,7 +195,7 @@ namespace CCForm
 
         private void Btn_DBSrc_Click(object sender, RoutedEventArgs e)
         {
-            string url = Glo.BPMHost + "/WF/Comm/Search.aspx?DoType=New&EnsName=BP.Sys.SFDBSrcs&PK=";
+            string url = Glo.BPMHost + "/WF/Comm/Sys/SFDBSrcNewGuide.aspx";
             if (Glo.Platform == Platform.JFlow)
                 url = url.Replace(".aspx", ".jsp");
 

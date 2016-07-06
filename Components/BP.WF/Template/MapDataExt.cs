@@ -969,7 +969,7 @@ namespace BP.WF.Template
 
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapDataAttr.FrmType, 1, "表单类型",
-                    true, false, MapDataAttr.FrmType, 
+                    true, false, MapDataAttr.FrmType,
                     "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
 
                 map.AddTBString(MapDataAttr.Url, null, "URL连接(对嵌入式表单有效)", true, false, 0, 500, 20, true);

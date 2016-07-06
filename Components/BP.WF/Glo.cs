@@ -322,6 +322,7 @@ namespace BP.WF
                 //删除枚举值,让其自动生成.
                 sql = "DELETE FROM Sys_Enum WHERE EnumKey IN ('CodeStruct'";
                 sql += ",'DBSrcType'";
+                sql += ",'FrmType'"; 
                 sql += ",'WebOfficeEnable'";
                 sql += ",'FrmEnableRole'";
                 sql += ",'BlockModel'";

@@ -51,13 +51,13 @@ namespace BP.Sys
     public enum FrmType
     {
         /// <summary>
-        /// 自由表单
-        /// </summary>
-        FreeFrm = 0,
-        /// <summary>
         /// 傻瓜表单
         /// </summary>
-        Column4Frm = 1,
+        Column4Frm = 0,
+        /// <summary>
+        /// 自由表单
+        /// </summary>
+        FreeFrm = 1,
         /// <summary>
         /// silverlight
         /// </summary>

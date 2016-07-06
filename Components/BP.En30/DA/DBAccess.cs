@@ -907,6 +907,7 @@ namespace BP.DA
                 }
             }
         }
+
         public static IDbDataAdapter GetAppCenterDBAdapter
         {
             get
@@ -1269,7 +1270,7 @@ namespace BP.DA
             if (tab == null || tab == "")
                 return;
 
-            if (DBAccess.IsExitsObject(tab + "pk") == true)
+            if (DBAccess.IsExitsTabPK(tab) == true)
                 return;
 
             string sql;
@@ -1289,7 +1290,7 @@ namespace BP.DA
             if (tab == null || tab == "")
                 return;
 
-            if (DBAccess.IsExitsObject(tab + "pk") == true)
+            if (DBAccess.IsExitsTabPK(tab) == true)
                 return;
 
             string sql;
@@ -1309,7 +1310,7 @@ namespace BP.DA
             if (tab == null || tab == "")
                 return;
 
-            if (DBAccess.IsExitsObject(tab + "pk") == true)
+            if (DBAccess.IsExitsTabPK(tab) == true)
                 return;
 
             string sql;
@@ -1720,6 +1721,47 @@ namespace BP.DA
         {
             return RunSQL_200705_MySQL(sql, new Paras());
         }
+
+        #region 处理mysql conn的缓存.
+        private static Hashtable _ConnHTOfMySQL = null;
+        public static Hashtable ConnHTOfMySQL
+        {
+            get
+            {
+                if (_ConnHTOfMySQL == null || _ConnHTOfMySQL.Count <=0 )
+                {
+                    _ConnHTOfMySQL = new Hashtable();
+                    int numConn = 10;
+                    for (int i = 0; i < numConn; i++)
+                    {
+                        MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN);
+                        conn.Open(); //打开连接.
+                        _ConnHTOfMySQL.Add("Conn" + i, conn);
+                    }
+                }
+                return _ConnHTOfMySQL;
+            }
+        }
+        public static MySqlConnection GetOneMySQLConn
+        {
+            get
+            {
+                foreach (MySqlConnection conn in _ConnHTOfMySQL)
+                {
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                        return conn;
+                    }
+                }
+                return null;
+                //foreach (MySqlConnection conn in _ConnHTOfMySQL)
+                //{
+                //}
+            }
+        }
+        #endregion 处理mysql conn的缓存.
+
         /// <summary>
         /// RunSQL_200705_MySQL
         /// </summary>
@@ -1728,7 +1770,7 @@ namespace BP.DA
         /// <returns></returns>
         private static int RunSQL_200705_MySQL(string sql, Paras paras)
         {
-
+             
             MySqlConnection connOfMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
             if (connOfMySQL.State != System.Data.ConnectionState.Open)
             {
@@ -3153,12 +3195,13 @@ namespace BP.DA
                     case DBType.Informix:
                         return IsExits("select tabname from systables where tabname = '" + obj.ToLower() + "'");
                     case DBType.MySQL:
-                        if (obj.IndexOf(".") != -1)
-                            obj = obj.Split('.')[1];
 
-                        // *** 屏蔽到下面的代码, 不需要从那个数据库里取，jflow 发现的bug  edit by :zhoupeng   2016.01.26 for fuzhou.
-                        return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE table_name = '" + obj + "' AND   TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
-                    //  return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE table_name = '" + obj + "'");
+                            /*如果不是检查的PK.*/
+                            if (obj.IndexOf(".") != -1)
+                                obj = obj.Split('.')[1];
+
+                            // *** 屏蔽到下面的代码, 不需要从那个数据库里取，jflow 发现的bug  edit by :zhoupeng   2016.01.26 for fuzhou.
+                            return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE table_name = '" + obj + "' AND TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
 
                     case DBType.Access:
                         //return false ; //IsExits("SELECT * FROM MSysObjects WHERE (((MSysObjects.Name) =  '"+obj+"' ))");

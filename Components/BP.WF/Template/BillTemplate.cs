@@ -208,7 +208,7 @@ namespace BP.WF.Template
                 
                 map.Java_SetCodeStruct("6");
 
-                map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, false, 1, 300, 6);
+                map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, false, 1, 190, 6);
                 map.AddTBString(BillTemplateAttr.Name, null, "Name", true, false, 0, 200, 20);
                 map.AddTBString(BillTemplateAttr.Url, null, "URL", true, false, 0, 200, 20);
                 map.AddTBInt(BillTemplateAttr.NodeID, 0, "NodeID", true, false);

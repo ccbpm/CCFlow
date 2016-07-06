@@ -580,10 +580,9 @@ namespace CCFlow.WF.WorkOpt.OneWork
                                 break;
                         }
                     }
+                    str += "</ul>";
+                    str += "</div>";
                 }
-
-                str += "</ul>";
-                str += "</div>";
 
                 str += "<br>";
                 str += "<br>";

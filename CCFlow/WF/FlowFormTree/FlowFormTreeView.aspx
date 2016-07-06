@@ -421,6 +421,7 @@
             $("#pageloading").show();
             //初始工具栏
             var args = new RequestArgs();
+            var i = 0;
             //表单树
             var urlExt = urlExtFrm();
             var url = "Base/FormTreeBase.aspx?1=1" + urlExt;
@@ -433,6 +434,16 @@
                     iconCls: 'tree-folder',
                     collapsed: true,
                     lines: true,
+                    formatter: function (node) {
+                        if (i == 0) {
+                            if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {
+                                i++;
+                                var url = "../CCForm/Frm.aspx?FK_MapData=" + node.id + "&IsEdit=0&IsPrint=0" + urlExt;
+                                addTab(node.id, node.text, url);
+                            }
+                        }
+                        return node.text;
+                    },
                     onClick: function (node) {
                         if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {/*普通表单和必填表单*/
                             var urlExt = urlExtFrm();

@@ -1688,7 +1688,17 @@ function onMouseDown(ev) {
         default:
             //alert("onMouseDown() - switch default - state is " + state);
     }
-
+    //改变状态
+    if (state != STATE_NONE) {
+        if (self.parent) {
+            if (typeof self.parent.TabFormExists != 'undefined') {
+                var bExists = self.parent.TabFormExists();
+                if (bExists) {
+                    self.parent.ChangTabFormTitle();
+                }
+            }
+        }
+    }
     draw();
 
     return false;
@@ -3384,7 +3394,7 @@ function save(showInfo) {
             }    
         }
     }
-    
+
     $.post("./common/controller.ashx", {
         action: 'save',
         diagram: serializedDiagram,
@@ -3396,7 +3406,16 @@ function save(showInfo) {
     }, function (data) {
         if (data == "true") {
             if (showInfo == true) {
-                Designer_ShowMsg("保存成功！");
+                if (self.parent) {
+                    if (typeof self.parent.TabFormExists != 'undefined') {
+                        var bExists = self.parent.TabFormExists();
+                        if (bExists) {
+                            self.parent.ChangTabFormTitleRemove();
+                        }
+                    }
+                } else {
+                    Designer_ShowMsg("保存成功！");
+                }
             }
         } else {
             Designer_ShowMsg('Unknown: ' + jsonData);

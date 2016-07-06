@@ -241,6 +241,52 @@
             }
             tabClose();
         }
+        //判断标签页是否存在
+        function TabFormExists() {
+            var currTab = $('#tabs').tabs('getSelected');
+            if (currTab) return true;
+
+            return false;
+        }
+        //修改标题
+        function ChangTabFormTitle() {
+            var tabText = "";
+            var p = $(document.getElementById("tabs")).find("li");
+            $.each(p, function (i, val) {
+                if (val.className == "tabs-selected") {
+                    tabText = $($(val).find("span")[0]).text();
+                }
+            });
+
+            var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+            if (lastChar != "*") {
+                $.each(p, function (i, val) {
+                    if (val.className == "tabs-selected") {
+                        tabText = $($(val).find("span")[0]).text(tabText + ' *');
+                    }
+                });
+            }
+        }
+
+        //修改标题
+        function ChangTabFormTitleRemove() {
+            var tabText = "";
+            var p = $(parent.document.getElementById("tabs")).find("li");
+            $.each(p, function (i, val) {
+                if (val.className == "tabs-selected") {
+                    tabText = $($(val).find("span")[0]).text();
+                }
+            });
+
+            var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+            if (lastChar == "*") {
+                $.each(p, function (i, val) {
+                    if (val.className == "tabs-selected") {
+                        $($(val).find("span")[0]).text(tabText.substring(0, tabText.length - 1));
+                    }
+                });
+            }
+        }
 
         function createFrame(url) {
             var s = '<iframe scrolling="auto" frameborder="0" Onblur="OnTabChange(this)"  src="' + url + '" style="width:100%;height:100%;"></iframe>';

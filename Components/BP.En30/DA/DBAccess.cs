@@ -229,7 +229,7 @@ namespace BP.DA
                 string strSQL = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + "='" + pkVal + "'";
 
                 OracleDataReader dr = null;
-                OracleCommand cm = new  OracleCommand();
+                OracleCommand cm = new OracleCommand();
                 cm.Connection = cn;
                 cm.CommandText = strSQL;
                 cm.CommandType = CommandType.Text;
@@ -986,7 +986,7 @@ namespace BP.DA
                         {
                             if (string.IsNullOrWhiteSpace(sqlArray[i]))
                                 continue;
-                            
+
                             dt = DBAccess.RunSQLReturnTable(sqlArray[i]);
                             dt.TableName = "dt_" + i.ToString();
                             oratb.Tables.Add(dt);
@@ -2448,36 +2448,35 @@ namespace BP.DA
             //  conn.Close();
             //  return dt;
 
-            MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN);
-            if (conn.State != ConnectionState.Open)
-                conn.Open();
-
-            MySqlDataAdapter ada = new MySqlDataAdapter(sql, conn);
-            ada.SelectCommand.CommandType = CommandType.Text;
-
-            // 加入参数
-            foreach (Para para in paras)
+            using (MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN))
             {
-                MySqlParameter myParameter = new MySqlParameter(para.ParaName, para.val);
-                myParameter.Size = para.Size;
-                ada.SelectCommand.Parameters.Add(myParameter);
-            }
+                using (MySqlDataAdapter ada = new MySqlDataAdapter(sql, conn))
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
 
-            try
-            {
-                DataTable oratb = new DataTable("otb");
-                ada.Fill(oratb);
-                ada.Dispose();
+                    ada.SelectCommand.CommandType = CommandType.Text;
 
-                conn.Close();
-                conn.Dispose();
-                return oratb;
-            }
-            catch (Exception ex)
-            {
-                ada.Dispose();
-                conn.Close();
-                throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+                    // 加入参数
+                    foreach (Para para in paras)
+                    {
+                        MySqlParameter myParameter = new MySqlParameter(para.ParaName, para.val);
+                        myParameter.Size = para.Size;
+                        ada.SelectCommand.Parameters.Add(myParameter);
+                    }
+
+                    try
+                    {
+                        DataTable oratb = new DataTable("otb");
+                        ada.Fill(oratb);
+                        return oratb;
+                    }
+                    catch (Exception ex)
+                    {
+                        conn.Close();
+                        throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+                    }
+                }
             }
         }
         /// <summary>

@@ -33,7 +33,7 @@
   <MapMenu No="FrmEvent" CH="表单事件"    JS="javascript:FrmEvent(@MyPK);" Img="./Img/MapExt/Event.png"
              Note="可以实现特殊的应用需求."/>
 
-    <MapMenu No="MapExt" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="./Img/MapExt/DTS.gif"
+    <MapMenu11 No="MapExt" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="./Img/MapExt/DTS.gif"
             Note="表单的业务逻辑，实现特殊的应用需求."/>
 
   <MapMenu111 No="Sln" CH="权限控制方案"    JS="javascript:Sln(@MyPK);" Img="./Img/MapExt/DTS.gif"

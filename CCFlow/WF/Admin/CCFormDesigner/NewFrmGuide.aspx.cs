@@ -97,6 +97,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             this.Pub1.AddFieldSet("<a class='title' href='?Step=1&FrmType=" + (int)BP.Sys.FrmType.FreeFrm + "&FK_FrmSort=" + this.FK_FrmSort + "&DBSrc=" + this.DBSrc + "' >创建自由表单</a>");
 
+
             this.Pub1.Add("<div class='con-list' style='float:left'>");
             this.Pub1.AddUL();
             this.Pub1.AddLi("自由表单是ccbpm推荐使用的表单.");
@@ -190,14 +191,17 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             this.Pub1.AddTable();
             this.Pub1.AddCaption("表单创建向导:填写表单基础信息");
 
+            int idx = 0;
             SysEnum se = new SysEnum(MapDataAttr.FrmType, this.FrmType);
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("表单类型");
             this.Pub1.AddTD(se.Lab);
             this.Pub1.AddTD("返回上一步可以更改");
             this.Pub1.AddTREnd();
 
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("数据源");
             BP.Sys.SFDBSrc srcs = new SFDBSrc(this.DBSrc);
             this.Pub1.AddTD(srcs.Name);
@@ -206,6 +210,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
 
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("创建路径");
             //更改绑定样式 qin
             //BP.Sys.SysFormTrees trees = new SysFormTrees();
@@ -223,6 +228,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
 
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("<font color='Red'>*</font>表单名称");
             TextBox tb = new TextBox();
             tb.ID = "TB_Name";
@@ -234,6 +240,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             this.Pub1.AddTREnd();
 
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("<font color='Red'>*</font>表单编号");
             tb = new TextBox();
             tb.ID = "TB_No";
@@ -243,6 +250,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             this.Pub1.AddTREnd();
 
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("<font color='Red'>*</font>数据表");
             tb = new TextBox();
             tb.ID = "TB_PTable";
@@ -254,6 +262,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             #region 快速填写.
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("快速填写");
             this.Pub1.AddTDBegin();
             RadioButton rb = new RadioButton();
@@ -279,6 +288,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             #region 表单生成方式.
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             if ((BP.Sys.FrmType)(this.FrmType) != BP.Sys.FrmType.Url)
             {
                 if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.FreeFrm ||
@@ -354,6 +364,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             #region 操作按钮放到table中，布局缩放不会乱
             this.Pub1.AddTR();
+            this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTDBegin(" colspan='3' ");
 
             Button btn = new Button();
@@ -404,6 +415,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 BP.Sys.PubClass.Alert("表单ID:" + md.No + "已经存在.");
                 return;
             }
+
             md.HisFrmTypeInt = this.FrmType; //表单类型.
 
             switch ((BP.Sys.FrmType)(this.FrmType))
@@ -474,18 +486,22 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 return;
             }
 
-
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm && this.Pub1.GetRadioButtonByID("RB_FrmGenerMode_2").Checked)
             {
                 this.Response.Redirect("../../MapDef/ImpTableField.aspx?DoType=New&FK_MapData=" + md.No);
                 return;
             }
 
-
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
             {
                 this.Response.Redirect("FormDesigner.aspx?FK_MapData=" + md.No);
             }
+
+            if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
+            {
+                this.Response.Redirect("/WF/MapDef/MapDef.aspx?FK_MapData=" + md.No);
+            }
+
         }
     }
 }

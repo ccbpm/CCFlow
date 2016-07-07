@@ -8,6 +8,10 @@
 <table  style="text-align:center;width:600px" >
 <tr>
 <td>
+
+    <div style='float:left' >数据库修复与安装.</div>
+     <div style='float:right' > <img src='../../DataUser/Icon/LogBiger.png' width="300px" border="0px" /> </div>
+
     <uc1:Pub ID="Pub1" runat="server" />
     </td>
     </tr>

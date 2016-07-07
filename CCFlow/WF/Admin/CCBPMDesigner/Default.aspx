@@ -592,7 +592,7 @@
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
         <div onclick="newFrm()" data-options="iconCls:'icon-add'">
-            新建/导入</div>
+            新建/导入表单</div>
         <div onclick="remove()" data-options="iconCls:'icon-new'">
             新建同级类别</div>
         <div onclick="remove()" data-options="iconCls:'icon-new'">

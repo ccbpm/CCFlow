@@ -24,7 +24,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             if (str != null)
             {
                 if (str == "0")
-                    BP.Sys.PubClass.Alert("系统升级错误，请查看日志文件\\DataUser/\\log");
+                    BP.Sys.PubClass.Alert("系统升级错误，请查看日志文件\\DataUser\\log\\*.*");
                 else
                     BP.Sys.PubClass.Alert("系统成功升级到:" + str + " ，系统升级不会破坏现有的数据。");
             }

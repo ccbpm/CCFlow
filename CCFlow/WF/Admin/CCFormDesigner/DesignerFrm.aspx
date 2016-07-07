@@ -18,7 +18,7 @@
         if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
         {
             /*傻瓜表单*/
-            this.Response.Redirect("../MapData/MapDef.aspx?FK_MapData=" + fk_mapdata, true);
+            this.Response.Redirect("../MapDef/MapDef.aspx?FK_MapData=" + fk_mapdata, true);
             return;
         }
 

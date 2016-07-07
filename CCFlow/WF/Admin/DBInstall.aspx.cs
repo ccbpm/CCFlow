@@ -23,10 +23,7 @@ namespace CCFlow.WF.Admin
             //BP.WF.Node nd = new BP.WF.Node();
             //nd.NodeFrmID
 
-            this.Pub1.AddH2(" <div style='float:left' >数据库修复与安装.</div> <div style='float:right' > <img src='../../DataUser/Icon/LogBiger.png' /> </div> ");
-            this.Pub1.AddBR();
-            this.Pub1.AddBR();
-            this.Pub1.AddBR();
+        
 
             if (this.Request.QueryString["DoType"] == "OK")
             {

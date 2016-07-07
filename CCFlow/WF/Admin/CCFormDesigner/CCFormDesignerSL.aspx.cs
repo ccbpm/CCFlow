@@ -12,6 +12,16 @@ namespace CCFlow.WF.Admin.CCFormDesigner
         protected void Page_Load(object sender, EventArgs e)
         {
 
+            //string fk_mapdata = this.Request.QueryString["FK_MapData"];
+            //BP.Sys.MapData md = new BP.Sys.MapData();
+            //md.No = fk_mapdata;
+            //md.Retrieve();
+
+            //if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
+            //{
+            //    this.Response.Redirect("/WF/MapDef/"
+            //}
+
         }
     }
 }

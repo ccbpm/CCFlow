@@ -3404,14 +3404,12 @@ function save(showInfo) {
         diagramId: currentDiagramId,
         direction: Node_Direction
     }, function (data) {
-        if (data == "true") {
-            if (showInfo == true) {
-                if (self.parent) {
-                    if (typeof self.parent.TabFormExists != 'undefined') {
-                        var bExists = self.parent.TabFormExists();
-                        if (bExists) {
-                            self.parent.ChangTabFormTitleRemove();
-                        }
+        if (data == "true" && showInfo == true) {
+            if (self.parent) {
+                if (typeof self.parent.TabFormExists != 'undefined') {
+                    var bExists = self.parent.TabFormExists();
+                    if (bExists) {
+                        self.parent.ChangTabFormTitleRemove();
                     }
                 } else {
                     Designer_ShowMsg("保存成功！");

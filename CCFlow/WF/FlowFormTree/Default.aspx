@@ -499,28 +499,32 @@
                         Application.data.checkAccepter(args.FK_Node, args.WorkID, args.FID, function (js) {
                             if (js == "byselected") {/*有用户选择接收人*/
                                 var url = "../WorkOpt/Accepter.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1";
-                                window.showModalDialog(url, "_blank", "scrollbars=yes;resizable=yes;center=yes;dialogWidth=700px;dialogHeight=600px;");
-                                SendCase();
-                                //$("<div id='selectaccepter'></div>").append($("<iframe width='100%' height='100%' frameborder=0 src='../WorkOpt/Accepter.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1'/>")).dialog({
-                                //    title: "选择接受人",
-                                //    width: 800,
-                                //    height: 630,
-                                //    autoOpen: true,
-                                //    modal: true,
-                                //    resizable: false,
-                                //    onClose: function () {
-                                //        $('#send').linkbutton({ disabled: false });
-                                //        $("#selectaccepter").remove();
-                                //    },
-                                //    buttons: [{
-                                //        text: '确定',
-                                //        iconCls: 'icon-ok',
-                                //        handler: function () {
-                                //            SendCase();
-                                //            $('#selectaccepter').dialog("close");
-                                //        }
-                                //    }]
-                                //});
+                                var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+                                if (isChrome) {
+                                    $("<div id='selectaccepter'></div>").append($("<iframe width='100%' height='100%' frameborder=0 src='" + url + "'/>")).dialog({
+                                        title: "选择接受人",
+                                        width: 800,
+                                        height: 630,
+                                        autoOpen: true,
+                                        modal: true,
+                                        resizable: false,
+                                        onClose: function () {
+                                            $('#send').linkbutton({ disabled: false });
+                                            $("#selectaccepter").remove();
+                                        },
+                                        buttons: [{
+                                            text: '确定',
+                                            iconCls: 'icon-ok',
+                                            handler: function () {
+                                                SendCase();
+                                                $('#selectaccepter').dialog("close");
+                                            }
+                                        }]
+                                    });
+                                } else {
+                                    window.showModalDialog(url, "_blank", "scrollbars=yes;resizable=yes;center=yes;dialogWidth=700px;dialogHeight=600px;");
+                                    SendCase();
+                                }
                             } else if (js == "byuserselected") {/*有用户选择方向*/
                                 $("<div id='selectToNode'></div>").append($("<iframe width='100%' height='100%' frameborder=0 src='../WorkOpt/ToNodes.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1'/>")).dialog({
                                     title: "选择方向",
@@ -934,7 +938,7 @@
                 } else if (window.opener.name && window.opener.name == "运行流程") { 
                     //测试运行流程，不进行刷新
                 } else {
-                    window.opener.location.href = window.opener.location.href;
+                    //window.opener.location.href = window.opener.location.href;
                 }
             }
             window.close();

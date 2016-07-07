@@ -555,9 +555,26 @@ namespace BP.WF
             if (DBAccess.IsExitsObject(ptable) == true)
                 return;
 
-            Track tk = new Track();
-            tk.CheckPhysicsTable();
+            //删除主键.
+            DBAccess.DropTablePK(ptable);
 
+            // 删除主键.
+            DBAccess.DropTablePK("WF_Track");
+
+            //创建表.
+            Track tk = new Track();
+            try
+            {
+                tk.CheckPhysicsTable();
+            }
+            catch(Exception ex)
+            {
+                BP.DA.Log.DebugWriteError(ex.Message+" @可以容忍的异常....");
+            }
+
+            // 删除主键.
+            DBAccess.DropTablePK("WF_Track");
+ 
             string sqlRename = "";
             switch (SystemConfig.AppCenterDBType)
             {
@@ -579,8 +596,15 @@ namespace BP.WF
                 default:
                     throw new Exception("@未涉及到此类型.");
             }
+
+            //重命名.
             DBAccess.RunSQL(sqlRename);
 
+            //删除主键.
+            DBAccess.DropTablePK(ptable);
+
+            //创建主键.
+            DBAccess.CreatePK(ptable, TrackAttr.MyPK, tk.EnMap.EnDBUrl.DBType);
         }
         /// <summary>
         /// 插入

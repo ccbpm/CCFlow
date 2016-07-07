@@ -672,22 +672,6 @@ namespace BP.WF.Template
         }
         #endregion
 
-        public static Boolean IsEditDtlModel
-        {
-            get
-            {
-                string s = BP.Web.WebUser.GetSessionByKey("IsEditDtlModel", "0");
-                if (s == "0")
-                    return false;
-                else
-                    return true;
-            }
-            set
-            {
-                BP.Web.WebUser.SetSessionByKey("IsEditDtlModel", "1");
-            }
-        }
-
         #region 属性
         /// <summary>
         /// 物理表
@@ -963,7 +947,7 @@ namespace BP.WF.Template
                 map.Java_SetCodeStruct("4");
 
                 #region 基本属性.
-                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 200, 20);
+                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 190, 20);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20);
 
@@ -1076,7 +1060,7 @@ namespace BP.WF.Template
                 //带有参数的方法.
                 rm = new RefMethod();
                 rm.Title = "重命名字段";
-                rm.Warning = "您确定要处理吗？";
+              //  rm.Warning = "您确定要处理吗？";
                 rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
@@ -1188,44 +1172,33 @@ namespace BP.WF.Template
             attrNew.KeyOfEn = newField;
             attrNew.FK_MapData = this.No;
 
-            if (newFieldName !="" )
-               attrNew.Name = newFieldName;
+            if (newFieldName != "")
+                attrNew.Name = newFieldName;
 
             attrNew.Insert();
 
             //更新处理他的相关业务逻辑.
-             MapExts exts = new MapExts(this.No);
-             foreach (MapExt item in exts)
-             {
-                 //bool isHave = item.MyPK.Contains("_" + fieldOld);
-                  //   if ( == true)
-                  ////       item.Delete();
-                  //   else
-                  //       continue;
-                          
-                     item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
+            MapExts exts = new MapExts(this.No);
+            foreach (MapExt item in exts)
+            {
+                item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
 
-                     if (item.AttrOfOper == fieldOld)
-                         item.AttrOfOper = newField;
+                if (item.AttrOfOper == fieldOld)
+                    item.AttrOfOper = newField;
 
-                     if (item.AttrsOfActive == fieldOld)
-                         item.AttrsOfActive = newField;
+                if (item.AttrsOfActive == fieldOld)
+                    item.AttrsOfActive = newField;
 
-                     item.Tag = item.Tag.Replace(fieldOld, newField);
-                     item.Tag1 = item.Tag1.Replace(fieldOld, newField);
-                     item.Tag2 = item.Tag2.Replace(fieldOld, newField);
-                     item.Tag3 = item.Tag3.Replace(fieldOld, newField);
+                item.Tag = item.Tag.Replace(fieldOld, newField);
+                item.Tag1 = item.Tag1.Replace(fieldOld, newField);
+                item.Tag2 = item.Tag2.Replace(fieldOld, newField);
+                item.Tag3 = item.Tag3.Replace(fieldOld, newField);
 
-                     item.AtPara = item.AtPara.Replace(fieldOld, newField);
-                     item.Doc = item.Doc.Replace(fieldOld, newField);
-
-                     item.Save();
-                 
-                 
-             }
-
+                item.AtPara = item.AtPara.Replace(fieldOld, newField);
+                item.Doc = item.Doc.Replace(fieldOld, newField);
+                item.Save();
+            }
             return "执行成功";
-
         }
         /// <summary>
         /// 批量设置正则表达式规则.
@@ -1340,7 +1313,6 @@ namespace BP.WF.Template
             return null;
         }
         #endregion 方法.
-
     }
     /// <summary>
     /// 表单属性s

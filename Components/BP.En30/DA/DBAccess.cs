@@ -1259,6 +1259,34 @@ namespace BP.DA
         #endregion
 
         #region 通过主应用程序在其他库上运行sql
+
+        /// <summary>
+        /// 删除表的主键
+        /// </summary>
+        /// <param name="table">表名称</param>
+        public static void DropTablePK(string table)
+        {
+            string pkName = DBAccess.GetTablePKName(table);
+            if (pkName == null)
+                return;
+
+            string sql = "";
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.Oracle:
+                case DBType.MSSQL:
+                    sql = "ALTER TABLE "+table+" DROP CONSTRAINT "+pkName;
+                    break;
+                case DBType.MySQL:
+                    sql = "ALTER TABLE " + table + " DROP primary key";
+                    break;
+                default:
+                    throw new Exception("@不支持的数据库类型." + SystemConfig.AppCenterDBType);
+                    break;
+            }
+            BP.DA.DBAccess.RunSQL(sql);
+        }
+
         #region pk
         /// <summary>
         /// 建立主键
@@ -1792,7 +1820,7 @@ namespace BP.DA
                 cmd.Dispose();
 
                 connOfMySQL.Close();
-                connOfMySQL.Dispose();
+             //   connOfMySQL.Dispose();
                 return i;
             }
             catch (System.Exception ex)
@@ -3049,28 +3077,29 @@ namespace BP.DA
                 return false;
             return true;
         }
+
         /// <summary>
-        /// 判断是否存在主键pk .
+        /// 获得table的主键
         /// </summary>
-        /// <param name="tab">物理表</param>
-        /// <returns>是否存在</returns>
-        public static bool IsExitsTabPK(string tab)
+        /// <param name="table">表名称</param>
+        /// <returns>主键名称、没有返回为空.</returns>
+        public static string GetTablePKName(string table)
         {
             BP.DA.Paras ps = new Paras();
-            ps.Add("Tab", tab);
+            ps.Add("Tab", table);
             string sql = "";
             switch (AppCenterDBType)
             {
                 case DBType.Access:
-                    return false;
+                    return null;
                 case DBType.MSSQL:
-                    sql = "SELECT column_name, table_name,CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE table_name =@Tab ";
+                    sql = "SELECT CONSTRAINT_NAME,column_name FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE table_name =@Tab ";
                     break;
                 case DBType.Oracle:
                     sql = "SELECT constraint_name, constraint_type,search_condition, r_constraint_name  from user_constraints WHERE table_name = upper(:tab) AND constraint_type = 'P'";
                     break;
                 case DBType.MySQL:
-                    sql = "SELECT column_name, table_name, CONSTRAINT_NAME from INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE table_name =@Tab and table_schema='" + SystemConfig.AppCenterDBDatabase + "' ";
+                    sql = "SELECT CONSTRAINT_NAME , column_name, table_name CONSTRAINT_NAME from INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE table_name =@Tab and table_schema='" + SystemConfig.AppCenterDBDatabase + "' ";
                     break;
                 case DBType.Informix:
                     sql = "SELECT * FROM sysconstraints c inner join systables t on c.tabid = t.tabid where t.tabname = lower(?) and constrtype = 'P'";
@@ -3080,10 +3109,21 @@ namespace BP.DA
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql, ps);
-            if (dt.Rows.Count >= 1)
-                return true;
-            else
+            if (dt.Rows.Count == 0)
+                return null;
+            return dt.Rows[0][0].ToString();
+        }
+        /// <summary>
+        /// 判断是否存在主键pk .
+        /// </summary>
+        /// <param name="tab">物理表</param>
+        /// <returns>是否存在</returns>
+        public static bool IsExitsTabPK(string tab)
+        {
+            if (DBAccess.GetTablePKName(tab) == null)
                 return false;
+            else
+                return true;
         }
         /// <summary>
         /// 是否是view

@@ -94,16 +94,29 @@
 <body id="body">
     <div id="actions">
         <a style="text-decoration: none;" href="javascript:save(true);" title="保存(Ctrl-S)">
-            <img src="assets/images/icon_Save.jpg" id="SaveImg" border="0" width="14" height="14" /><label for="SaveImg" class="toolbarText">保存</label> </a>
+            <img src="assets/images/icon_Save.jpg" id="SaveImg" border="0" width="14" height="14" />
+            <label for="SaveImg" class="toolbarText">保存</label> 
+         </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none;" href="javascript:FlowProperty();" title="属性">
-            <img src="Img/Menu/property.png"   id="FlowAttr"   border="0" width="14" height="14" alt="流程属性,设置整个流程信息." /><label for="FlowAttr" class="toolbarText">流程属性</label></a>
+            <img src="Img/Menu/property.png"   id="FlowAttr"   border="0" width="14" height="14" alt="流程属性,设置整个流程信息." />
+            <label for="FlowAttr" class="toolbarText">流程属性</label>
+        </a>
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+        <a style="text-decoration: none;" href="javascript:DesignMyRpt();" title="报表设计">
+            <img src="Img/DesignRpt.png"   id="Img1"   border="0" width="14" height="14" alt="报表设计" />
+            <label for="Img1" class="toolbarText">报表设计</label>
+        </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none;" href="javascript:Check_Flow();" title="检查流程">
-            <img src="Img/Menu/CheckFlow.png"  id="FlowCheck"  border="0" width="14" height="14"  alt="检查流程设计是否正确，自动修复数据表......" /><label for="FlowCheck" class="toolbarText">检查流程</label></a>
+            <img src="Img/Menu/CheckFlow.png"  id="FlowCheck"  border="0" width="14" height="14"  alt="检查流程设计是否正确，自动修复数据表......" />
+            <label for="FlowCheck" class="toolbarText">检查流程</label>
+        </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
-        <a style="text-decoration: none;" href="javascript:Run_Flow();"  title="运行流程">
-            <img src="Img/Menu/RunFlow.png"  id="FlowRun"   border="0" width="14" height="14"  alt="测试并运行流程." /><label for="FlowRun" class="toolbarText">运行流程</label> </a>
+        <a style="text-decoration: none;" href="javascript:Run_Flow();"  title="流程测试">
+            <img src="Img/Menu/RunFlow.png"  id="FlowRun"   border="0" width="14" height="14"  alt="测试并运行流程." />
+            <label for="FlowRun" class="toolbarText">流程测试</label> 
+        </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a  style="text-decoration: none;" href="javascript:action('connector-straight');" title="直线连接">
             <img src="Img/Menu/Line.gif" border="0" id="Line" /> <label for="Line" class="toolbarText">直线连接</label> </a>

@@ -337,7 +337,7 @@
             }
             var tabs = $('#tabs').tabs('tabs');
             if (tabs.length == 0) {
-                addTab("welcome", "首页", "WelCome.html", "");
+                addTab("welcome", "首页", "Welcome.aspx", "");
             }
         }
 

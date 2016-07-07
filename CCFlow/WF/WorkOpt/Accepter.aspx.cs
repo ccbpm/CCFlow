@@ -131,7 +131,16 @@ namespace CCFlow.WF
                 return this.Request.QueryString["FK_Flow"];
             }
         }
-
+        public string AccepterType
+        {
+            get
+            {
+                string type = this.getUTF8ToString("type");
+                if (string.IsNullOrEmpty(type))
+                    return "1";
+                return type;
+            }
+        }
         //private bool IsMultiple = false;
         /// <summary>
         /// 获取传入参数
@@ -363,15 +372,13 @@ namespace CCFlow.WF
                         num++;
                     }
                 }
-
                 if (tempToNodeID == 0)
                 {
                     this.WinCloseWithMsg("@流程设计错误：\n\n 当前节点的所有分支节点没有一个接受人员规则为按照选择接受。");
                     return;
                 }
 
-
-                this.Response.Redirect("Accepter.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + tempToNodeID + "&FID=" + this.FID + "&type=1&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "&IsWinOpen=" + this.IsWinOpen, true);
+                this.Response.Redirect("Accepter.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + tempToNodeID + "&FID=" + this.FID + "&type=" + this.AccepterType + "&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "&IsWinOpen=" + this.IsWinOpen, true);
                 return;
             }
 

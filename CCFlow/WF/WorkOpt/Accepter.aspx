@@ -246,7 +246,7 @@
             try {
                 window.opener.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
             } catch (e) {
-                //                window.parent.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
+                //window.parent.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
             }
 
             var params = {
@@ -265,7 +265,13 @@
                 CFlowNo: CFlowNo,
                 FK_Flow: FK_Flow
             };
-            queryData(params, function (js, scope) { }, this);
+            queryData(params, function (js, scope) {
+                var type = Application.common.getArgsFromHref("type");
+                //发送前打开人员选择器，选择人员后自动发送
+                if (type == "2") {
+                    send();
+                }
+            }, this);
 
             window.returnValue = 'ok';
             window.close();
@@ -404,11 +410,10 @@
         <div class="easyui-layout" data-options="fit:true">
             <div data-options="region:'north',split:true,border:false" style="height: 58px;">
                 <div id="tb" style="height: 27px; background-color: #E1ECFF;">
-                    <a id="copyTo" style="margin-left: 25px;" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-childline'"
-                        onclick="copyTo()">抄送</a> <a id="clear" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'"
-                            onclick="clearData()">重置</a><a id="isOk" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'"
-                                onclick="getChecked()">确定</a> <a id="delMeeting" href="#" class="easyui-linkbutton"
-                                    data-options="plain:true,iconCls:'icon-cancel'" onclick="cancelMet()">关闭</a>
+                    <a id="copyTo" style="margin-left: 25px;" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-childline'" onclick="copyTo()">抄送</a> 
+                    <a id="clear" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'" onclick="clearData()">重置</a>
+                    <a id="isOk" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="getChecked()">确定</a> 
+                    <a id="delMeeting" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'" onclick="cancelMet()">关闭</a>
                 </div>
                 <div style="height: 25px; background-color: #E1ECFF; padding-left: 300px;">
                     查询
@@ -428,10 +433,8 @@
             </div>
             <div data-options="region:'center',border:false" style="">
                 <div style="width: 28px; height: 99%; border: 1px solid #e1ecff; float: left; position: absolute;">
-                    <a href="#" style="margin-left: 0px; margin-top: 200px;" class="easyui-linkbutton"
-                        data-options="plain:true,iconCls:'icon-rightD'" onclick="addEmp();"></a><a href="#"
-                            class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-leftD'" style="margin-top: 20px;"
-                            onclick="delEmp();"></a>
+                    <a href="#" style="margin-left: 0px; margin-top: 200px;" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-rightD'" onclick="addEmp();"></a>
+                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-leftD'" style="margin-top: 20px;" onclick="delEmp();"></a>
                 </div>
                 <div style="float: left; overflow: auto; margin-left: 30px; position: relative;">
                     <ul class="easyui-tree" id="checkedTt" style="margin-left: 0px; margin-top: 5px;">
@@ -448,18 +451,14 @@
         data-options="iconCls:'icon-save',modal:true">
         <table cellpadding="5">
             <tr>
-                <td>
-                    标题:
-                </td>
+                <td>标题:</td>
                 <td>
                     <input class="easyui-textbox" type="text" id="cs_title" name="title" style="width: 380px;"
                         data-options="required:true" />
                 </td>
             </tr>
             <tr>
-                <td>
-                    消息内容:
-                </td>
+                <td>消息内容:</td>
                 <td>
                     <input class="easyui-textbox" id="cs_message" name="message" style="height: 260px;
                         width: 380px;" />

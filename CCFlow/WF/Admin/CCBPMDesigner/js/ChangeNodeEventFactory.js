@@ -35,6 +35,8 @@ ChangeNodeManager.prototype = {
         //imageframe change
         var imageFrame = STACK.figuresImagePrimitiveGetByFigureId(this.figureId);
         if (imageFrame != null) imageFrame.setUrl(figureSetsURL + "/Nodes/nodeHL_big.png");
+        //service
+        this.NodeRunModel(this.figure.CCBPM_OID, this.figure.name);
         draw();
         save(false);
     },

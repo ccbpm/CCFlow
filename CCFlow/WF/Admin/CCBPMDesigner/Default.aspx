@@ -319,8 +319,8 @@
         function EventListener_TabClose(title, index) {
             var disTab = $('#tabs').tabs('getTab', index);
             var curTab_Id = disTab.panel('options').id;
-            curTab_Id = Number(curTab_Id);
-            curTab_Id = String(curTab_Id);
+            //curTab_Id = Number(curTab_Id);
+            //curTab_Id = String(curTab_Id);
             var tabs = $('#tabs').tabs('tabs');
             for (var i = 0, j = tabs.length; i < j; i++) {
                 var othTab_Id = tabs[i].panel('options').id;

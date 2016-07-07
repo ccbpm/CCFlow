@@ -1146,6 +1146,32 @@ namespace BP.Sys
 
             return base.beforeInsert();
         }
+        /// <summary>
+        /// 插入之后
+        /// </summary>
+        protected override void afterInsert()
+        {
+            GroupField gf = new GroupField();
+            gf.EnName = this.FK_MapData;
+            gf.CtrlID = this.MyPK;
+            gf.CtrlType = "Ath";
+            gf.Lab = this.Name;
+            gf.Idx = 0;
+            gf.Insert(); //插入.
+
+            base.afterInsert();
+        }
+
+        /// <summary>
+        /// 删除之后.
+        /// </summary>
+        protected override void afterDelete()
+        {
+            GroupField gf = new GroupField();
+            gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
+
+            base.afterDelete();
+        }
     }
     /// <summary>
     /// 附件s

@@ -234,6 +234,32 @@ namespace BP.Sys
             this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
             return base.beforeUpdateInsertAction();
         }
+
+        /// <summary>
+        /// 插入之后增加一个分组.
+        /// </summary>
+        protected override void afterInsert()
+        {
+            GroupField gf = new GroupField();
+            gf.EnName = this.FK_MapData;
+            gf.CtrlID =  this.MyPK;
+            gf.CtrlType = "Frame";
+            gf.Lab = this.Name;
+            gf.Idx = 0;
+            gf.Insert(); //插入.
+
+            base.afterInsert();
+        }
+        /// <summary>
+        /// 删除之后的操作
+        /// </summary>
+        protected override void afterDelete()
+        {
+            GroupField gf = new GroupField();
+            gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
+
+            base.afterDelete();
+        }
         #endregion
     }
     /// <summary>

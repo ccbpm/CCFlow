@@ -23,6 +23,14 @@ namespace BP.Sys
         /// Idx
         /// </summary>
         public const string Idx = "Idx";
+        /// <summary>
+        /// 控件类型
+        /// </summary>
+        public const string CtrlType = "CtrlType";
+        /// <summary>
+        /// 控件ID
+        /// </summary>
+        public const string CtrlID = "CtrlID";
     }
     /// <summary>
     /// GroupField
@@ -64,6 +72,34 @@ namespace BP.Sys
                 this.SetValByKey(GroupFieldAttr.Idx, value);
             }
         }
+        /// <summary>
+        /// 控件类型
+        /// </summary>
+        public string CtrlType
+        {
+            get
+            {
+                return this.GetValStrByKey(GroupFieldAttr.CtrlType);
+            }
+            set
+            {
+                this.SetValByKey(GroupFieldAttr.CtrlType, value);
+            }
+        }
+        /// <summary>
+        /// 控件ID
+        /// </summary>
+        public string CtrlID
+        {
+            get
+            {
+                return this.GetValStrByKey(GroupFieldAttr.CtrlID);
+            }
+            set
+            {
+                this.SetValByKey(GroupFieldAttr.CtrlID, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -89,14 +125,18 @@ namespace BP.Sys
                 Map map = new Map("Sys_GroupField");
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "GroupField";
+                map.EnDesc = "傻瓜表单分组";
                 map.EnType = EnType.Sys;
 
                 map.AddTBIntPKOID();
-                map.AddTBString(GroupFieldAttr.Lab, null, "Lab", true, false, 0, 500, 20);
-                map.AddTBString(GroupFieldAttr.EnName, null, "主表", true, false, 0, 200, 20);
-                map.AddTBInt(GroupFieldAttr.Idx, 99, "Idx", true, false);
+                map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20);
+                map.AddTBString(GroupFieldAttr.EnName, null, "类", true, false, 0, 200, 20);
+                map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+
+                map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, false, 0, 50, 20);
+                map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, false, 0, 500, 20);
+                map.AddTBAtParas(3000);
 
                 this._enMap = map;
                 return this._enMap;

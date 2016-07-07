@@ -1614,6 +1614,15 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             this.InitExtMembers();
+
+            GroupField gf = new GroupField();
+            gf.EnName = this.FK_MapData;
+            gf.CtrlID = this.No;
+            gf.CtrlType = "Dtl";
+            gf.Lab = this.Name;
+            gf.Idx = 0;
+            gf.Insert(); //插入.
+
             return base.beforeInsert();
         }
         protected override bool beforeUpdateInsertAction()
@@ -1682,6 +1691,7 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_MapData WHERE No='" + this.No + "'";
             sql += "@DELETE FROM Sys_GroupField WHERE EnName='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapM2M WHERE FK_MapData='" + this.No + "'";
+            sql += "@DELETE FROM Sys_GroupField WHERE CtrlID='" + this.No + "'";
             DBAccess.RunSQLs(sql);
 
             if (DBAccess.IsExitsObject(this.PTable))

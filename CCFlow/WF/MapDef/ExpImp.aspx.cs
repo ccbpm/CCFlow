@@ -159,22 +159,22 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddULEnd();
             this.Pub1.AddFieldSetEnd();
 
-            this.Pub1.AddFieldSet("从互联网上导入");
-            this.Pub1.Add("ccflow流程模板与表单模板交流地址。<a href=\"javascript:alert('此功能在施工中，敬请期待。');\" >http://template.ccflow.org/</a>。");
+            //this.Pub1.AddFieldSet("从互联网上导入");
+            //this.Pub1.Add("ccflow流程模板与表单模板交流地址。<a href=\"javascript:alert('此功能在施工中，敬请期待。');\" >http://template.ccflow.org/</a>。");
 
             TextBox tb = new TextBox();
-            tb.Text = "";
-            tb.ID = "TB_Net";
-            tb.Columns = 50;
-            this.Pub1.AddBR(tb);
+            //tb.Text = "";
+            //tb.ID = "TB_Net";
+            //tb.Columns = 50;
+            //this.Pub1.AddBR(tb);
 
             Button btn = new Button();
-            btn.Text = "导入";
-            btn.ID = "Btn_Net";
-            btn.CssClass = "Btn";
-            btn.Click += new EventHandler(btn_Imp_Click);
-            this.Pub1.Add(btn);
-            this.Pub1.AddFieldSetEnd();
+            //btn.Text = "导入";
+            //btn.ID = "Btn_Net";
+            //btn.CssClass = "Btn";
+            //btn.Click += new EventHandler(btn_Imp_Click);
+            //this.Pub1.Add(btn);
+            //this.Pub1.AddFieldSetEnd();
 
             this.Pub1.AddFieldSet("从本机上导入");
             this.Pub1.Add("特别说明:执行导入系统将会清除当前表单信息。表单模板(*.xml)");

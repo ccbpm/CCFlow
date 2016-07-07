@@ -20,6 +20,7 @@ namespace CCFlow.WF.MapDef
         protected void Page_Load(object sender, EventArgs e)
         {
             this.Pub1.AddTable();
+            this.Pub1.AddCaption("批量修改字段");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("IDX");
 
@@ -38,12 +39,14 @@ namespace CCFlow.WF.MapDef
 
             MapAttrs attrs = new MapAttrs(this.FK_MapData);
             int idx = 0;
+            bool isH = false;
             foreach (MapAttr  attr in attrs)
             {
                 if (attr.IsPK)
                     continue;
 
-                this.Pub1.AddTR();
+                idx++;
+                this.Pub1.AddTR(isH =!isH);
                 this.Pub1.AddTDIdx(idx);
 
                 //描述.

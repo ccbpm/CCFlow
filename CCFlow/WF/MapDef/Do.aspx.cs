@@ -47,6 +47,9 @@ namespace CCFlow.WF.MapDef
             {
                 switch (this.DoType)
                 {
+                    case "FWCShowError":
+                        this.Response.Write("<h3>该表单非节点表单，所以无法编辑审核组件属性.</h3>");
+                        break;
                     case "EditSFTable":
                         BP.Sys.SFTable mysf1 = new SFTable(this.RefNo);
                         if (mysf1.SrcType == SrcType.TableOrView)

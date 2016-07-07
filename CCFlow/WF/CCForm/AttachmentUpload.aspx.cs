@@ -568,10 +568,10 @@ namespace CCFlow.WF.CCForm
                 return;
             }
 
-            this.Pub1.AddTable("border='0' cellspacing='0' cellpadding='0' style='width:" + athWidth + "px'");
+            this.Pub1.AddTable("border='0' cellspacing='0' cellpadding='0' style='width:100%;'");
             if (athDesc.IsShowTitle == true)
             {
-                this.Pub1.AddTR("style='border:0px'");
+                this.Pub1.AddTR("style='border:0px;'");
 
                 this.Pub1.AddTDTitleExt("序号");
                 if (athDesc.Sort.Contains(","))

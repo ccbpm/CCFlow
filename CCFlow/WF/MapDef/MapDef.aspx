@@ -59,8 +59,10 @@
             window.location.href = window.location.href;
         }
         function MapDataEdit(mypk) {
-            var url = 'EditMapData.aspx?FK_MapData=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 350px; dialogWidth: 500px;center: yes; help: no');
+            //var url = 'EditMapData.aspx?FK_MapData=' + mypk;
+
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapDataCol4&PK=' + mypk
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function CopyFieldFromNode(mypk) {
@@ -245,7 +247,7 @@
         }
         function Ath(mypk) {
             var url = 'Attachment.aspx?DoType=List&FK_MapData=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 800px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 

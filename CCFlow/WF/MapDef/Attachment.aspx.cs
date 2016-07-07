@@ -71,8 +71,15 @@ namespace CCFlow.WF.MapDef
                 ath.MyPK = this.FK_MapData + "_" + this.Ath+"_"+this.FK_Node;
 
             int i = ath.RetrieveFromDBSources();
+            if (i == 0)
+            {
+                ath.NoOfObj = "Ath1";
+                ath.Name = "我的附件";
+            }
+
             if (i==0 && this.FK_Node != 0)
             {
+
                 /*这里处理 独立表单解决方案, 如果有FK_Node 就说明该节点需要单独控制该附件的属性. */
                 MapData mapData = new MapData();
                 mapData.RetrieveByAttr(MapDataAttr.No, this.FK_MapData);

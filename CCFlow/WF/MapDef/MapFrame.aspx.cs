@@ -46,7 +46,7 @@ namespace CCFlow.WF.MapDef
                     BindList(md);
                     break;
                 case "New":
-                    int num = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM Sys_MapFrame WHERE FK_MapData='" + this.FK_MapData + "'") + 1;
+                    int num = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(MyPK) FROM Sys_MapFrame WHERE FK_MapData='" + this.FK_MapData + "'") + 1;
                     MapFrame dtl1 = new MapFrame();
                     dtl1.Name =   "框架"  + num;
                     dtl1.NoOfObj = "F" + num;

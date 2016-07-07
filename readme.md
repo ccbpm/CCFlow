@@ -1,4 +1,4 @@
-
+﻿
 ### CCFlow基本信息.###
 1. **产品名称:**驰骋.net工作流引擎.  **简    称** CCFlow   **版本:** ccflow6  **英文名称:** ChiCheng Workflow Engine  
 2. **官方网站:** [http://ccflow.org](http://ccflow.org "官方网站")  **开发历史:** 2003-2016年.         **性质:** 100%开源,无任何功能限制.
@@ -9,10 +9,10 @@
 9. **基本功能:** 图形化流程设计/智能表单web定义免程序开发/级联下拉框/流程轨迹/单据自定义打印/邮件短信工作到达通知/自动任务分配/支持sdk模式开发/简洁集成/消息侦听/丰富事件接口/报表定义/工作量分析/绩效考核/手机访问/支持sqlserve,oracle,mysql,informix数据库
 CCFlow功能: 懂管理就会开发基本流程,为单位流程管理系统,会SQL就能达到中级开发水平解决复杂的逻辑问题与其它系统耦合,有程基础就可以使用sdk做高级的开发.
 10. **支持数据库:** sqlserver系列版本， oracle 系列版本， informix 系列版本, mysql系列版本.
-10. **Git 地址:** http://git.oschina.net/chichengsoft/ccflow/tree/develop
-11. **下载地址** 请参考: http://git.oschina.net/chichengsoft/ccflow/wikis/pages
+10. **Git 地址:** http://git.oschina.net/opencc/ccflow/tree/develop
+11. **下载地址** 请参考: http://git.oschina.net/opencc/ccflow/wikis/pages
 12. **两个版本:**  ccflow是.net版本开发的. jflow使用Java开发是ccflow的影子版本。两个版本,代码&数据库解构,设计思想,功能,操作手册,完全相同. 流程表单模版完全通用。
-13. [JFlow的官方网站 ](http://jflow.cn "jflow官方网站."), git网站地址:[http://git.oschina.net/chichengsoft/ccflow/tree/develop](http://git.oschina.net/chichengsoft/ccflow/tree/develop "jflow在git上.")
+13. [JFlow的官方网站 ](http://jflow.cn "jflow官方网站."), git网站地址:[http://git.oschina.net/opencc/ccflow/tree/develop](http://git.oschina.net/opencc/ccflow/tree/develop "jflow在git上.")
 14. ccflow & JFlow 集成多众多的开发人员、流程设计人员、管理人员众多的智慧，成长过程中得到众多企业的帮助。
 15. ccflow帮助了成百上千家企业成功，众多的爱好者的贡献，成功客户案例，请打开官方网站查找.
 

@@ -27,38 +27,38 @@
         var dragPossibleTextPointStart;
 
         //定义样式变量，可在此统一修改流程样式
-        var STYLE_FONT_SIZE_NODE = 14;
-        var STYLE_FONT_SIZE_LABEL = 12;
+        var STYLE_CANVAS_COLOR = '#E7F1F9'; //画布背景颜色
+        var STYLE_FONT_SIZE_NODE = 14;  //节点名称字体大小
+        var STYLE_FONT_SIZE_LABEL = 12; //标签字体大小
 
-        var STYLE_NODE_WIDTH = 50;
-        var STYLE_NODE_HEIGHT = 50;
-        var STYLE_NODE_COLOR_FORE = 'none';
-        var STYLE_NODE_COLOR_FORE_HOVER = 'blue';
-        var STYLE_NODE_COLOR_FORE_TRACK = 'red';    //走过节点名称颜色
-        var STYLE_NODE_DEFAULT_ICON_PATH = '/WF/Admin/ClientBin/NodeIcon/';
-        var STYLE_NODE_DEFAULT_ICON = 'Default.jpg';
-        var STYLE_NODE_BORDER_RADIUS = 5;
-        var STYLE_NODE_BORDER_COLOR_FIRST = 'green';
-        var STYLE_NODE_BORDER_COLOR_END = 'red';
-        var STYLE_NODE_BORDER_COLOR = 'black';
-        var STYLE_NODE_BORDER_COLOR_HOVER = 'blue';
-        var STYLE_NODE_BORDER_COLOR_TRACK = 'red';  //走过节点边框颜色
-        var STYLE_NODE_BORDER_WIDTH_NORMAL = 1;
-        var STYLE_NODE_BORDER_WIDTH_HOVER = 1;
+        var STYLE_NODE_WIDTH = 50;  //节点宽度
+        var STYLE_NODE_HEIGHT = 50; //节点高度
+        var STYLE_NODE_COLOR_FORE = '#666';    //节点名称颜色
+        var STYLE_NODE_COLOR_FORE_HOVER = 'blue';   //节点名称鼠标悬停时颜色
+        var STYLE_NODE_COLOR_FORE_TRACK = 'green';    //走过的节点名称颜色
+        var STYLE_NODE_DEFAULT_ICON_PATH = '/WF/Admin/ClientBin/NodeIcon/'; //默认节点图标所在相对路径
+        var STYLE_NODE_DEFAULT_ICON = 'Default.jpg';    //默认节点图标文件名称
+        var STYLE_NODE_BORDER_RADIUS = 5;   //节点边框圆角大小
+        var STYLE_NODE_BORDER_COLOR_FIRST = 'green';    //开始节点边框颜色
+        var STYLE_NODE_BORDER_COLOR_END = 'red';    //结束节点边框颜色
+        var STYLE_NODE_BORDER_COLOR = 'black';  //节点边框颜色
+        var STYLE_NODE_BORDER_COLOR_HOVER = 'blue'; //节点边框鼠标悬停时颜色
+        var STYLE_NODE_BORDER_COLOR_TRACK = 'green';  //走过的节点边框颜色
+        var STYLE_NODE_BORDER_WIDTH_NORMAL = 2; //节点边框宽度
+        var STYLE_NODE_BORDER_WIDTH_HOVER = 2;  //节点边框鼠标悬停时的宽度
 
-        var STYLE_LABEL_COLOR_FORE = 'none';
+        var STYLE_LABEL_COLOR_FORE = 'none';    //标签字体颜色
 
-        var STYLE_LINE_COLOR = 'green';
-        var STYLE_LINE_COLOR_HOVER = 'blue';
-        var STYLE_LINE_HOVER_COLOR = 'blue';
-        var STYLE_LINE_WIDTH = 1;
-        var STYLE_LINE_TRACK_COLOR = 'red';
-        var STYLE_NODE_TRACK_FONT_SIZE = 14;
-        var STYLE_NODE_TRACK_FORE_COLOR = 'red';    //轨迹信息颜色
+        var STYLE_LINE_COLOR = '#666'; //连线颜色
+        var STYLE_LINE_HOVER_COLOR = 'blue';    //连线鼠标悬停时的颜色
+        var STYLE_LINE_WIDTH = 2;   //连线宽度
+        var STYLE_LINE_TRACK_COLOR = 'green'; //走过的连线颜色
+        var STYLE_NODE_TRACK_FONT_SIZE = 14;    //走过的节点轨迹信息字体大小
+        var STYLE_NODE_TRACK_FORE_COLOR = 'green';    //走过的节点轨迹信息字体颜色
         //var DATA_USER_ICON_PATH = '/ccflow5/DataUser/UserIcon/';
-        var DATA_USER_ICON_PATH = '/DataUser/UserIcon/';
-        var DATA_USER_ICON_DEFAULT = 'Default.png';
-        var DATA_MULTI_USER_ICON_DEFAULT = '../../Img/Multiplayer.png';
+        var DATA_USER_ICON_PATH = '/DataUser/UserIcon/';    //用户头像文件相对目录
+        var DATA_USER_ICON_DEFAULT = 'Default.png'; //默认用户头像文件名称
+        var DATA_MULTI_USER_ICON_DEFAULT = '../../Img/Multiplayer.png'; //多用户头像文件相对路径
 
         var fk_Flow;
         var work_ID;
@@ -66,11 +66,7 @@
         var uh = new UrlHerf(location.href);
         $(function () {
             fk_Flow = uh["FK_Flow"];
-
-
             work_ID = uh["WorkID"];
-
-
             fid = uh["FID"];
             var data = "{fk_flow:'" + fk_Flow + "',workid:'" + work_ID + "',fid:'" + fid + "'}";
 
@@ -98,6 +94,8 @@
         function drawStart(datas) {
             /// <summary>加载时绘制流程图/轨迹</summary>
             /// <param name="datas" Type="Object">绘制的数据，包含flow/nodes/labels/dirs/tracks，均为Array</param>
+
+            $('#holder').css('background-color', STYLE_CANVAS_COLOR);
 
             r = Raphael('holder', $(document).width(), $(document).height());
             var rNode, rDir, rBorder, rImage, rText, rLabel, rPath;
@@ -184,7 +182,7 @@
                     }
 
                     rNode.rTrackText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, rNode.currTrack.type == "FROM" ? (rNode.currTrack.track.EMPFROMT + '\n' + getChineseDateTime(rNode.currTrack.track.RDT)) : rNode.currTrack.track.EMPTOT);
-                    rNode.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
+                    rNode.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                     rNode.rTrackText.toFront();
                 }
                 else {
@@ -193,13 +191,13 @@
 
                     if (rNode.rPossible) {
                         rNode.rPossibleText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, "处理人：" + rNode.rPossible.EMPNAME + (rNode.rPossible.ADT && rNode.rPossible.ADT.length >= 16 ? ('\n到达：' + rNode.rPossible.ADT) : ''));
-                        rNode.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
+                        rNode.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                         rNode.rPossibleText.toFront();
                     }
                 }
 
                 rNode.rBorder.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_BORDER_COLOR_TRACK : nodeBorderColor), "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
-                rNode.rText.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "font-size": STYLE_FONT_SIZE_NODE });
+                rNode.rText.attr({ "stroke": (rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "fill": getFillTextColor(rNode.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE), "font-size": STYLE_FONT_SIZE_NODE });
                 rNode.rIcon.attr("title", this.NAME);
 
                 //增加节点图片的鼠标滑过/移开效果
@@ -207,10 +205,10 @@
                     var node = rFlow.getNodeByRIconId(this.id);
                     if (node != null) {
                         node.rBorder.attr({ "stroke": STYLE_NODE_BORDER_COLOR_HOVER, "stroke-width": STYLE_NODE_BORDER_WIDTH_HOVER });
-                        node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER });
+                        node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
 
                         if (node.isTrackNode && node.currTrack.type == "FROM") {
-                            node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER });
+                            node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
 
                             //组织节点的轨迹信息
                             var table = $('#tracktable');
@@ -239,29 +237,29 @@
                             $('#trackinfo').show();
                         }
                         else if (node.rTrackText) { //added by liuxc,2016-03-16
-                            node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER });
+                            node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
                         }
                         else if (node.rPossibleText) { //added by liuxc,2016-04-15
-                            node.rPossibleText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER });
+                            node.rPossibleText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
                         }
                     }
                 }, function () {
                     var node = rFlow.getNodeByRIconId(this.id);
                     if (node != null) {
                         node.rBorder.attr({ "stroke": node.currTrack ? STYLE_NODE_BORDER_COLOR_TRACK : node.rBorderColor, "stroke-width": STYLE_NODE_BORDER_WIDTH_NORMAL });
-                        node.rText.attr({ "stroke": node.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE });
+                        node.rText.attr({ "stroke": node.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE, "fill": getFillTextColor(node.currTrack ? STYLE_NODE_COLOR_FORE_TRACK : STYLE_NODE_COLOR_FORE) });
 
                         if (node.isTrackNode && node.currTrack.type == "FROM") {
-                            node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR });
+                            node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
 
                             $('#trackinfo').offset({ top: 0, left: 0 });
                             $('#trackinfo').hide();
                         }
                         else if (node.rTrackText) { //added by liuxc,2016-03-16
-                            node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR });
+                            node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
                         }
                         else if (node.rPossibleText) { //added by liuxc,2016-04-15
-                            node.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR });
+                            node.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
                         }
                     }
                 });
@@ -294,7 +292,7 @@
             $.each(datas.WF_LABNOTE, function () {
                 rLabel = new RLabel(this.MYPK, this.NAME, this.X, this.Y);
                 rLabel.rText = r.text(this.X, this.Y, this.NAME);
-                rLabel.rText.attr({ "stroke": STYLE_LABEL_COLOR_FORE, "font-size": STYLE_FONT_SIZE_LABEL, "text-anchor": "start" });
+                rLabel.rText.attr({ "stroke": STYLE_LABEL_COLOR_FORE, "fill": getFillTextColor(STYLE_LABEL_COLOR_FORE), "font-size": STYLE_FONT_SIZE_LABEL, "text-anchor": "start" });
                 rLabel.rText.toFront();
             });
         }
@@ -310,6 +308,12 @@
             }
 
             return newstr;
+        }
+
+        function getFillTextColor(strokeColor) {
+            /// <summary>获取指定字体绘制颜色的填充颜色</summary>
+            /// <param name="time" Type="String">字体绘制颜色</param>
+            return strokeColor == "none" ? "black" : strokeColor;
         }
 
         function getChineseDateTime(time) {

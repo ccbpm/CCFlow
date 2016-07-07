@@ -416,7 +416,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                 DateTime dtt = DataType.ParseSysDateTime2DateTime(dr[TrackAttr.RDT].ToString());
 
                 // this.AddTD(dtt.ToString("yy年MM月dd日HH:mm"));</br>
-                str += "<p class='date'>" + dtt.ToString("yy年MM月dd日") + " " + dtt.ToString("hh时mm分");
+                str += "<p class='date'>" + dtt.ToString("yy年MM月dd日") + " " + dtt.ToString("HH时mm分");
                 str += "</br>" + BP.DA.DataType.GetWeek((int)dtt.DayOfWeek);
                 str += "</br>" + BP.WF.Glo.GenerUserImgHtml(dr[TrackAttr.EmpFrom].ToString(), dr[TrackAttr.EmpFromT].ToString()) + "</p>";
                 str += "<p class='intro'>" + dr[TrackAttr.NDFromT].ToString() + "</p>";

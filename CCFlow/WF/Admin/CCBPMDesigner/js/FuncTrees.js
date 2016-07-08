@@ -637,6 +637,9 @@ function OnDbClick(oFuncTree) {
                     if (children[0].text == "加载中...") {
                         $("#" + oFuncTree.Id).tree("remove", children[0].target);
                     }
+                    else {
+                        return;
+                    }
 
                     if (node.attributes.Inherits) {
                         $.each(node.attributes.Inherits, function () {

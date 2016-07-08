@@ -892,6 +892,8 @@ namespace CCFlow.WF.CCForm
                 }
                 else
                 {
+                    // 让石家庄客户，来完善附件类别支持sql.
+
                     if (athDesc.Sort.Contains(","))
                     {
                         string sortColumn = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(0, athDesc.Sort.IndexOf("@")) : "类别";

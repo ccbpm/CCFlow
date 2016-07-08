@@ -185,7 +185,7 @@ namespace CCFlow.WF.MapDef
 
             this.Pub1.AddTR();
             this.Pub1.AddTDIdx(idx++);
-            this.Pub1.AddTD("colspan=3", "帮助:类别可以为空,设置的格式为:列头显示名称@类别名1,类别名2,类别名3(列头显示名称@ :可以不写，默认为：类别)");
+            this.Pub1.AddTD("colspan=3", "帮助:类别可以为空,设置的格式为:列头显示名称@类别名1,类别名2,类别名3(列头显示名称@ :可以不写，默认为：类别)<br>您还可以设置一个SQL语句:比如:SELECT xxx FORM MyTable 返回1列数据源. ");
             this.Pub1.AddTREnd();
 
             this.Pub1.AddTR();

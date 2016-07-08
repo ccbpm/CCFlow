@@ -185,16 +185,22 @@ namespace BP.Sys
         /// <summary>
         /// GroupFields
         /// </summary>
-        /// <param name="EnName">s</param>
-        public GroupFields(string EnName)
+        /// <param name="enName">名称</param>
+        public GroupFields(string enName)
         {
-            int i = this.Retrieve(GroupFieldAttr.EnName, EnName, GroupFieldAttr.Idx);
+            //QueryObject qo = new QueryObject(this);
+            //qo.AddWhere(GroupFieldAttr.EnName, enName);
+            //qo.addAnd();
+            //qo.AddWhereLen(GroupFieldAttr.CtrlID, " = " , 0, SystemConfig.AppCenterDBType);
+            //int i = qo.DoQuery();
+
+            int i = this.Retrieve(GroupFieldAttr.EnName, enName, GroupFieldAttr.Idx);
             if (i == 0)
             {
                 GroupField gf = new GroupField();
-                gf.EnName = EnName;
+                gf.EnName = enName;
                 MapData md = new MapData();
-                md.No = EnName;
+                md.No = enName;
                 if (md.RetrieveFromDBSources() == 0)
                     gf.Lab = "基础信息";
                 else
@@ -202,6 +208,9 @@ namespace BP.Sys
                 gf.Idx = 0;
                 gf.Insert();
                 this.AddEntity(gf);
+            }
+            else
+            {
             }
         }
         /// <summary>
@@ -213,6 +222,19 @@ namespace BP.Sys
             {
                 return new GroupField();
             }
+        }
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="enName"></param>
+        /// <returns></returns>
+        public int RetrieveFieldGroup(string enName)
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere(GroupFieldAttr.EnName, enName);
+            qo.addAnd();
+            qo.AddWhereLen(GroupFieldAttr.CtrlID, " = ", 0, SystemConfig.AppCenterDBType);
+            return qo.DoQuery();
         }
         #endregion
 

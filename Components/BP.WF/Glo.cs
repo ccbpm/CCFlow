@@ -168,6 +168,94 @@ namespace BP.WF
             string msg = "";
             try
             {
+                #region 升级傻瓜表单，检查 组件是否包含了 分组控件？
+
+                DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlType='' WHERE CtrlType IS NULL");
+                DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
+
+                // 从表.
+                MapDtls dtls = new MapDtls();
+                dtls.RetrieveAll();
+                foreach (MapDtl dtl in dtls)
+                {
+                    GroupField gf = new GroupField();
+                    if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) ==true)
+                        continue;
+
+                    gf.Lab = dtl.Name;
+                    gf.CtrlID = dtl.No;
+                    gf.CtrlType = "Dtl";
+                    gf.EnName = dtl.FK_MapData;
+                    gf.Insert();
+                }
+
+                // 框架.
+                MapFrames frams = new MapFrames();
+                frams.RetrieveAll();
+                foreach (MapFrame fram in dtls)
+                {
+                    GroupField gf = new GroupField();
+                    if (gf.IsExit(GroupFieldAttr.CtrlID, fram.MyPK) == true)
+                        continue;
+
+                    gf.Lab = fram.Name;
+                    gf.CtrlID = fram.MyPK;
+                    gf.CtrlType = "Frame";
+                    gf.EnName = fram.FK_MapData;
+                    gf.Insert();
+                }
+
+
+                // 附件.
+                FrmAttachments aths = new FrmAttachments();
+                aths.RetrieveAll();
+                foreach (FrmAttachment ath in aths)
+                {
+                    GroupField gf = new GroupField();
+                    if (gf.IsExit(GroupFieldAttr.CtrlID, ath.MyPK) == true)
+                        continue;
+
+                    gf.Lab = ath.Name;
+                    gf.CtrlID = ath.MyPK;
+                    gf.CtrlType = "Ath";
+                    gf.EnName = ath.FK_MapData;
+                    gf.Insert();
+                }
+
+                //审核组件.
+                BP.WF.Template.FrmWorkChecks checks = new FrmWorkChecks();
+                checks.RetrieveAll();
+                foreach (FrmWorkCheck check in checks)
+                {
+                    GroupField gf = new GroupField();
+                    if (gf.IsExit(GroupFieldAttr.CtrlID, "FWC" + check.NodeID) == true)
+                        continue;
+
+                    gf.Lab = check.Name;
+                    gf.CtrlID = "FWC"+check.NodeID.ToString();
+                    gf.CtrlType = "FWC";
+                    gf.EnName = "ND"+ check.NodeID;
+                    gf.Insert();
+                }
+
+                //审核组件.
+                BP.WF.Template.FrmSubFlows subflows = new FrmSubFlows();
+                checks.RetrieveAll();
+                foreach (FrmWorkCheck check in checks)
+                {
+                    GroupField gf = new GroupField();
+                    if (gf.IsExit(GroupFieldAttr.CtrlID, "FWC" + check.NodeID) == true)
+                        continue;
+
+                    gf.Lab = check.Name;
+                    gf.CtrlID = "FWC" + check.NodeID.ToString();
+                    gf.CtrlType = "FWC";
+                    gf.EnName = "ND" + check.NodeID;
+                    gf.Insert();
+                }
+
+                #endregion 升级傻瓜表单，检查 组件是否包含了 分组控件？
+
 
                 #region 表单方案中的不可编辑, 旧版本如果包含了这个列.
                 if (BP.DA.DBAccess.IsExitsTableCol("WF_FrmNode", "IsEdit") == true)
@@ -471,8 +559,8 @@ namespace BP.WF
                 SysFormTree ssft = new SysFormTree();
                 ssft.CheckPhysicsTable();
 
-                BP.Sys.FrmAttachment ath = new FrmAttachment();
-                ath.CheckPhysicsTable();
+                BP.Sys.FrmAttachment myath = new FrmAttachment();
+                myath.CheckPhysicsTable();
 
                 FrmField ffs = new FrmField();
                 ffs.CheckPhysicsTable();

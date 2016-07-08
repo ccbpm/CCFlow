@@ -637,7 +637,11 @@ namespace BP.En
         {
             try
             {
-                return this.Row.GetValByKey(key).ToString();
+                string s= this.Row.GetValByKey(key).ToString();
+                if (string.IsNullOrEmpty(s))
+                    return isNullAs;
+                else
+                    return s;
             }
             catch
             {

@@ -117,7 +117,8 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStrByKey(MapFrameAttr.H);
+                return  this.GetValStrByKey(MapFrameAttr.H, "700px");
+                 
             }
             set
             {
@@ -131,7 +132,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStrByKey(MapFrameAttr.W);
+                return this.GetValStrByKey(MapFrameAttr.W, "100%");
             }
             set
             {

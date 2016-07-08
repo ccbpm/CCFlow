@@ -745,7 +745,7 @@ namespace BP.En
         }
         public Int64 GetValInt64ByKey(string key)
         {
-            return Int64.Parse(this.GetValStringByKey(key));
+            return Int64.Parse(this.GetValStringByKey(key,"0"));
         }
         public int GetValIntByKey(string key, int IsZeroAs)
         {

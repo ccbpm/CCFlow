@@ -127,16 +127,16 @@ namespace CCFlow.WF.MapDef
                         dtlN.DtlSaveModel = (DtlSaveModel)this.Pub1.GetDDLByID("DDL_"+MapDtlAttr.DtlSaveModel).SelectedItemIntVal;
                         dtlN.DtlAddRecModel = (DtlAddRecModel)this.Pub1.GetDDLByID("DDL_" + MapDtlAttr.DtlAddRecModel).SelectedItemIntVal;
 
-                        GroupFields gfs1 = new GroupFields(this.FK_MapData);
-                        if (gfs1.Count == 1)
-                        {
-                            GroupField gf = (GroupField)gfs1[0];
-                            dtlN.GroupID = gf.OID;
-                        }
-                        else
-                        {
-                            dtlN.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
-                        }
+                        //GroupFields gfs1 = new GroupFields(this.FK_MapData);
+                        //if (gfs1.Count == 1)
+                        //{
+                        //    GroupField gf = (GroupField)gfs1[0];
+                        //    dtlN.GroupID = gf.OID;
+                        //}
+                        //else
+                        //{
+                        //    dtlN.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
+                        //}
                         dtlN.Insert();
                         if (btn.ID.Contains("AndClose"))
                         {
@@ -747,23 +747,23 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
             #endregion 超连接.
 
-            GroupFields gfs = new GroupFields(md.No);
-            if (gfs.Count > 1)
-            {
-                this.Pub1.AddTR1();
-                this.Pub1.AddTDIdx(idx++);
-                this.Pub1.AddTD("显示在分组");
-                ddl = new DDL();
-                ddl.ID = "DDL_GroupID";
-                ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, AddAllLocation.None);
-                ddl.SetSelectItem(dtl.GroupID);
-                this.Pub1.AddTD("colspan=2", ddl);
-                this.Pub1.AddTREnd();
-            }
-            if (gfs.Count > 1)
-                this.Pub1.AddTR();
-            else
-                this.Pub1.AddTR1();
+            //GroupFields gfs = new GroupFields(md.No);
+            //if (gfs.Count > 1)
+            //{
+            //    this.Pub1.AddTR1();
+            //    this.Pub1.AddTDIdx(idx++);
+            //    this.Pub1.AddTD("显示在分组");
+            //    ddl = new DDL();
+            //    ddl.ID = "DDL_GroupID";
+            //    ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, AddAllLocation.None);
+            //    ddl.SetSelectItem(dtl.GroupID);
+            //    this.Pub1.AddTD("colspan=2", ddl);
+            //    this.Pub1.AddTREnd();
+            //}
+            //if (gfs.Count > 1)
+            //    this.Pub1.AddTR();
+            //else
+            //    this.Pub1.AddTR1();
 
             this.Pub1.AddTRSum();
             this.Pub1.AddTD("");

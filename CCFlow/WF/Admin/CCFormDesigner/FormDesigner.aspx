@@ -88,7 +88,7 @@
 <body id="body">
     <div id="actions" class="actions" style="font-size: 12px;">
         <a style="text-decoration: none;" href="javascript:save(true);" title="保存(Ctrl-S)">
-            <img src="assets/images/icon_Save.jpg" id="SaveImg" border="0" width="16" height="16" />
+            <img src="assets/images/icon_save.jpg" id="SaveImg" border="0" width="16" height="16" />
             <label for="SaveImg" class="toolbarText">保存</label>
         </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />

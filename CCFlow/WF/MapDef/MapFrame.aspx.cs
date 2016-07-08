@@ -151,16 +151,16 @@ namespace CCFlow.WF.MapDef
                         dtlN.FK_MapData = this.FK_MapData;
                         dtlN.GroupID = 0;
                         dtlN.RowIdx = 0;
-                        GroupFields gfs1 = new GroupFields(this.FK_MapData);
-                        if (gfs1.Count == 1)
-                        {
-                            GroupField gf = (GroupField)gfs1[0];
-                            dtlN.GroupID = gf.OID;
-                        }
-                        else
-                        {
-                            dtlN.GroupID = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemIntVal;
-                        }
+                        //GroupFields gfs1 = new GroupFields(this.FK_MapData);
+                        //if (gfs1.Count == 1)
+                        //{
+                        //    GroupField gf = (GroupField)gfs1[0];
+                        //    dtlN.GroupID = gf.OID;
+                        //}
+                        //else
+                        //{
+                        //    dtlN.GroupID = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemIntVal;
+                        //}
 
                         dtlN.Insert();
 
@@ -306,7 +306,7 @@ namespace CCFlow.WF.MapDef
             tb.Text = dtl.W;
             tb.ShowType = TBType.TB;
             this.Pub1.AddTD(tb);
-            this.Pub1.AddTD();
+            this.Pub1.AddTD("比如: 400px , 100%");
             this.Pub1.AddTREnd();
 
             this.Pub1.AddTR();
@@ -317,7 +317,7 @@ namespace CCFlow.WF.MapDef
             tb.ShowType = TBType.TB;
             tb.Text = dtl.H;
             this.Pub1.AddTD(tb);
-            this.Pub1.AddTD();
+            this.Pub1.AddTD("比如: 600px , 800px");
             this.Pub1.AddTREnd();
 
             this.Pub1.AddTR1();
@@ -350,17 +350,16 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTDEnd();
             this.Pub1.AddTREnd();
 
-            GroupFields gfs = new GroupFields(md.No);
-
-            this.Pub1.AddTR();
-            this.Pub1.AddTDIdx(idx++);
-            this.Pub1.AddTD("显示在分组");
-            DDL ddl = new DDL();
-            ddl.ID = "DDL_GroupField";
-            ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, AddAllLocation.None);
-            ddl.SetSelectItem(dtl.GroupID);
-            this.Pub1.AddTD("colspan=2", ddl);
-            this.Pub1.AddTREnd();
+            //GroupFields gfs = new GroupFields(md.No);
+            //this.Pub1.AddTR();
+            //this.Pub1.AddTDIdx(idx++);
+            //this.Pub1.AddTD("显示在分组");
+            //DDL ddl = new DDL();
+            //ddl.ID = "DDL_GroupField";
+            //ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, AddAllLocation.None);
+            //ddl.SetSelectItem(dtl.GroupID);
+            //this.Pub1.AddTD("colspan=2", ddl);
+            //this.Pub1.AddTREnd();
 
 
             this.Pub1.AddTRSum();

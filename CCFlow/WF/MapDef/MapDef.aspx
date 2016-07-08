@@ -120,12 +120,12 @@
         }
         function GFDoUp(refoid) {
             var url = 'Do.aspx?DoType=GFDoUp&RefOID=' + refoid;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function GFDoDown(refoid) {
             var url = 'Do.aspx?DoType=GFDoDown&RefOID=' + refoid;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 

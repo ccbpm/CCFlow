@@ -175,16 +175,16 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTDEnd();
             this.Pub1.AddTREnd();
 
-            GroupFields gfs = new GroupFields(md.No);
-            this.Pub1.AddTR1();
-            this.Pub1.AddTDIdx(idx++);
-            this.Pub1.AddTD("显示在分组");
-            ddl = new DDL();
-            ddl.ID = "DDL_GroupField";
-            ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, AddAllLocation.None);
-            ddl.SetSelectItem(m2m.GroupID);
-            this.Pub1.AddTD("colspan=2", ddl);
-            this.Pub1.AddTREnd();
+            //GroupFields gfs = new GroupFields(md.No);
+            //this.Pub1.AddTR1();
+            //this.Pub1.AddTDIdx(idx++);
+            //this.Pub1.AddTD("显示在分组");
+            //ddl = new DDL();
+            //ddl.ID = "DDL_GroupField";
+            //ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, AddAllLocation.None);
+            //ddl.SetSelectItem(m2m.GroupID);
+            //this.Pub1.AddTD("colspan=2", ddl);
+            //this.Pub1.AddTREnd();
 
             this.Pub1.AddTRSum();
             this.Pub1.AddTDBegin("colspan=4 align=center");
@@ -242,8 +242,8 @@ namespace CCFlow.WF.MapDef
                 if (string.IsNullOrEmpty(m2m.NoOfObj))
                     m2m.NoOfObj = DataType.ParseStringToPinyin(m2m.Name);
 
-                GroupFields gfs = new GroupFields(m2m.FK_MapData);
-                m2m.GroupID = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemIntVal;
+                //GroupFields gfs = new GroupFields(m2m.FK_MapData);
+                //m2m.GroupID = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemIntVal;
                 m2m.HisM2MType = M2MType.M2M;
                 m2m.Save();
 

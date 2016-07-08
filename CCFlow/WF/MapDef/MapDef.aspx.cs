@@ -101,9 +101,11 @@ namespace CCFlow.WF.MapDef
             this.BindLeft();
 
             #region 计算出来列的宽度.
-            int labCol = 50;
-            int ctrlCol = 300;
-            int width = (labCol + ctrlCol) * md.TableCol / 2;
+            //int labCol = 50;
+           // int ctrlCol = 300;
+          //  int width = (labCol + ctrlCol) * md.TableCol / 2;
+         //   int width = md.FrmW; // (labCol + ctrlCol) * md.TableCol / 2;
+            int width = 800;
             #endregion 计算出来列的宽度.
 
             this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;' align='left' >");
@@ -131,6 +133,102 @@ namespace CCFlow.WF.MapDef
              */
             foreach (GroupField gf in gfs)
             {
+                #region 首先判断是否是框架分组？
+                switch (gf.CtrlType)
+                {
+                    case "Frame": // 框架 类型.
+                        #region 框架
+                        foreach (MapFrame fram in frams)
+                        {
+                            if (fram.MyPK != gf.CtrlID)
+                                continue;
+
+                            fram.IsUse = true;
+
+                            int myidx = rowIdx + 20;
+                            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                            this.Pub1.AddTREnd();
+
+                            myidx++;
+                            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + fram.MyPK + "'  >");
+
+                            string src = fram.URL; 
+                            if (src.Contains("?"))
+                                src += "&FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
+                            else
+                                src += "?FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
+
+                            this.Pub1.Add("<iframe ID='F" + fram.MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + fram.H + "'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>");
+                            this.Pub1.AddTDEnd();
+                            this.Pub1.AddTREnd();
+                        }
+                        #endregion 框架
+                        continue;
+                    case "Dtl": //增加从表.
+                        #region 增加从表
+                        foreach (MapDtl dtl in dtls)
+                        {
+                            if (dtl.No != gf.CtrlID)
+                                continue;
+
+                            dtl.IsUse = true;
+
+                           
+                            int myidx = rowIdx + 10;
+                            //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div>");
+                            //this.Pub1.AddTREnd();
+
+                            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            this.Pub1.Add("<TD colspan=" + md.TableCol + " class=GroupField  ><div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div>  <div style='text-align:left; float:left'></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a>  <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
+                            this.Pub1.AddTREnd();
+
+                            myidx++;
+                            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + dtl.No + "'   > ");
+                            string src = "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
+                            this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:"+dtl.W+"px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto' /></iframe>");
+                            this.Pub1.AddTDEnd();
+                            this.Pub1.AddTREnd();
+                        }
+                        #endregion 增加从表
+                        continue;
+                    case "Ath": //增加附件.
+                        #region 增加附件
+                        foreach (FrmAttachment ath in this.aths)
+                        {
+                            if (ath.MyPK != gf.CtrlID)
+                                continue;
+
+                            ath.IsUse = true;
+
+                            int myidx = rowIdx + 10;
+                            
+                            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                            this.Pub1.AddTREnd();
+
+                            myidx++;
+                            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='100%' >");
+
+                            string src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+
+                            this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ath.H + "' scrolling=auto  /></iframe>");
+
+                            this.Pub1.AddTDEnd();
+                            this.Pub1.AddTREnd();
+                        }
+                        #endregion 增加附件
+                        continue;
+                    default:
+                        break;
+                }
+                #endregion
+
+
                 rowIdx = 0;
                 string gfAttr = "";
                 currGF = gf;
@@ -621,29 +719,28 @@ namespace CCFlow.WF.MapDef
             #endregion 处理输入最小，最大验证.
 
             #region 处理iFrom 的自适应的问题。
-            string myjs = "\t\n<script type='text/javascript' >";
-            foreach (MapDtl dtl in dtls)
-            {
-                myjs += "\t\n window.setInterval(\"ReinitIframe('F" + dtl.No + "','TD" + dtl.No + "')\", 200);";
-            }
+           // string myjs = "\t\n<script type='text/javascript' >";
+            //foreach (MapDtl dtl in dtls)
+            //{
+            //    myjs += "\t\n window.setInterval(\"ReinitIframe('F" + dtl.No + "','TD" + dtl.No + "')\", 200);";
+            //}
 
-            foreach (MapM2M M2M in dot2dots)
-            {
-                if (M2M.ShowWay == FrmShowWay.FrmAutoSize)
-                    myjs += "\t\n window.setInterval(\"ReinitIframe('F" + M2M.NoOfObj + "','TD" + M2M.NoOfObj + "')\", 200);";
-            }
-            foreach (FrmAttachment ath in aths)
-            {
-                if (ath.IsAutoSize)
-                    myjs += "\t\n window.setInterval(\"ReinitIframe('F" + ath.MyPK + "','TD" + ath.MyPK + "')\", 200);";
-            }
-            foreach (MapFrame fr in frams)
-            {
-                myjs += "\t\n window.setInterval(\"ReinitIframe('F" + fr.MyPK + "','TD" + fr.MyPK + "')\", 200);";
-            }
-
-            myjs += "\t\n</script>";
-            this.Pub1.Add(myjs);
+            //foreach (MapM2M M2M in dot2dots)
+            //{
+            //    if (M2M.ShowWay == FrmShowWay.FrmAutoSize)
+            //        myjs += "\t\n window.setInterval(\"ReinitIframe('F" + M2M.NoOfObj + "','TD" + M2M.NoOfObj + "')\", 200);";
+            //}
+            //foreach (FrmAttachment ath in aths)
+            //{
+            //    if (ath.IsAutoSize)
+            //        myjs += "\t\n window.setInterval(\"ReinitIframe('F" + ath.MyPK + "','TD" + ath.MyPK + "')\", 200);";
+            //}
+            //foreach (MapFrame fr in frams)
+            //{
+            //    myjs += "\t\n window.setInterval(\"ReinitIframe('F" + fr.MyPK + "','TD" + fr.MyPK + "')\", 200);";
+            //}
+            //myjs += "\t\n</script>";
+            //this.Pub1.Add(myjs);
             #endregion 处理iFrom 的自适应的问题。
 
             #region 处理隐藏字段。
@@ -661,236 +758,238 @@ namespace CCFlow.WF.MapDef
 
         public void InsertObjects(bool isJudgeRowIdx)
         {
-            #region 增加从表
-            foreach (MapDtl dtl in dtls)
-            {
-                if (dtl.IsUse)
-                    continue;
+            return; 
 
-                if (isJudgeRowIdx)
-                {
-                    if (dtl.RowIdx != rowIdx)
-                        continue;
-                }
+            //#region 增加从表
+            //foreach (MapDtl dtl in dtls)
+            //{
+            //    if (dtl.IsUse)
+            //        continue;
 
-                if (dtl.GroupID == 0 && rowIdx == 0)
-                {
-                    dtl.GroupID = currGF.OID;
-                    dtl.RowIdx = 0;
-                    dtl.Update();
-                }
-                else if (dtl.GroupID == currGF.OID)
-                {
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (dtl.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                }
-                else
-                {
-                    continue;
-                }
+            //    if (dtl.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        dtl.GroupID = currGF.OID;
+            //        dtl.RowIdx = 0;
+            //        dtl.Update();
+            //    }
+            //    else if (dtl.GroupID == currGF.OID)
+            //    {
 
-                dtl.IsUse = true;
-                int myidx = rowIdx + 10;
-                this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
 
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a> <a href=\"javascript:DtlDoUp('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
-                this.Pub1.AddTREnd();
+            //    dtl.IsUse = true;
+            //    int myidx = rowIdx + 10;
+            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
 
-                myidx++;
-                this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + dtl.No + "' height='400px' width='" + this.md.TableWidth + "' > ");
-                string src = "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
-                this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "'  width='" + this.md.TableWidth + "' height='200px' scrolling=no  /></iframe>");
-                this.Pub1.AddTDEnd();
-                this.Pub1.AddTREnd();
-            }
-            #endregion 增加从表
+            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a> <a href=\"javascript:DtlDoUp('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
+            //    this.Pub1.AddTREnd();
 
-            #region 增加附件
-            foreach (FrmAttachment ath in this.aths)
-            {
-                if (ath.IsUse)
-                    continue;
+            //    myidx++;
+            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + dtl.No + "' height='400px' width='" + this.md.TableWidth + "' > ");
+            //    string src = "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
+            //    this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "'  width='" + this.md.TableWidth + "' height='200px' scrolling=no  /></iframe>");
+            //    this.Pub1.AddTDEnd();
+            //    this.Pub1.AddTREnd();
+            //}
+            //#endregion 增加从表
 
-                if (isJudgeRowIdx)
-                {
-                    if (ath.RowIdx != rowIdx)
-                        continue;
-                }
+            //#region 增加附件
+            //foreach (FrmAttachment ath in this.aths)
+            //{
+            //    if (ath.IsUse)
+            //        continue;
 
-                if (ath.GroupID == 0 && rowIdx == 0)
-                {
-                    ath.GroupID = currGF.OID;
-                    ath.RowIdx = 0;
-                    ath.Update();
-                }
-                else if (ath.GroupID == currGF.OID)
-                {
-                }
-                else
-                {
-                    continue;
-                }
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (ath.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                ath.IsUse = true;
-                int myidx = rowIdx + 10;
-                this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:AthDoUp('" + ath.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:AthDoDown('" + ath.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
-                this.Pub1.AddTREnd();
+            //    if (ath.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        ath.GroupID = currGF.OID;
+            //        ath.RowIdx = 0;
+            //        ath.Update();
+            //    }
+            //    else if (ath.GroupID == currGF.OID)
+            //    {
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
 
-                myidx++;
-                this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='" + md.TableWidth + "' >");
+            //    ath.IsUse = true;
+            //    int myidx = rowIdx + 10;
+            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:AthDoUp('" + ath.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:AthDoDown('" + ath.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
+            //    this.Pub1.AddTREnd();
 
-                string src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+            //    myidx++;
+            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='" + md.TableWidth + "' >");
 
-                //if (dtl.IsAutoSize)
-                //    this.Pub1.Add("<iframe ID='F" + dtl.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
-                //else
+            //    string src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
-                this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + ath.W + "' height='" + ath.H + "' scrolling=auto  /></iframe>");
+            //    //if (dtl.IsAutoSize)
+            //    //    this.Pub1.Add("<iframe ID='F" + dtl.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
+            //    //else
 
-                this.Pub1.AddTDEnd();
-                this.Pub1.AddTREnd();
-            }
-            #endregion 增加附件
+            //    this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + ath.W + "' height='" + ath.H + "' scrolling=auto  /></iframe>");
 
-            #region 增加M2M
-            foreach (MapM2M m2m in dot2dots)
-            {
-                if (m2m.IsUse)
-                    continue;
+            //    this.Pub1.AddTDEnd();
+            //    this.Pub1.AddTREnd();
+            //}
+            //#endregion 增加附件
 
-                if (isJudgeRowIdx)
-                {
-                    if (m2m.RowIdx != rowIdx)
-                        continue;
-                }
+            //#region 增加M2M
+            //foreach (MapM2M m2m in dot2dots)
+            //{
+            //    if (m2m.IsUse)
+            //        continue;
 
-                if (m2m.GroupID == 0 && rowIdx == 0)
-                {
-                    m2m.GroupID = currGF.OID;
-                    m2m.RowIdx = 0;
-                    m2m.Update();
-                }
-                else if (m2m.GroupID == currGF.OID)
-                {
-                }
-                else
-                {
-                    continue;
-                }
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (m2m.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                m2m.IsUse = true;
-                int myidx = rowIdx + 10;
-                this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditM2M('" + this.FK_MapData + "','" + m2m.NoOfObj + "')\" >" + m2m.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:M2MDoUp('" + m2m.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:M2MDoDown('" + m2m.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
-                this.Pub1.AddTREnd();
+            //    if (m2m.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        m2m.GroupID = currGF.OID;
+            //        m2m.RowIdx = 0;
+            //        m2m.Update();
+            //    }
+            //    else if (m2m.GroupID == currGF.OID)
+            //    {
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
 
-                myidx++;
-                string src = "";
-                if (m2m.HisM2MType == M2MType.M2M)
-                    src = "../CCForm/M2M.aspx?FK_MapData=" + this.FK_MapData + "&NoOfObj=" + m2m.NoOfObj + "&OID=0";
-                else
-                    src = "../CCForm/M2MM.aspx?FK_MapData=" + this.FK_MapData + "&NoOfObj=" + m2m.NoOfObj + "&OID=0";
+            //    m2m.IsUse = true;
+            //    int myidx = rowIdx + 10;
+            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+            //    this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditM2M('" + this.FK_MapData + "','" + m2m.NoOfObj + "')\" >" + m2m.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:M2MDoUp('" + m2m.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:M2MDoDown('" + m2m.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
+            //    this.Pub1.AddTREnd();
 
-                switch (m2m.ShowWay)
-                {
-                    case FrmShowWay.FrmAutoSize:
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
-                        //this.Pub1.Add("<TD colspan=4 ID='TD" + m2m.NoOfObj + "' width='100%'>");
-                        //this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%'   scrolling=no  /></iframe>");
-                        //this.Pub1.AddTDEnd();
-                        //this.Pub1.AddTREnd();
+            //    myidx++;
+            //    string src = "";
+            //    if (m2m.HisM2MType == M2MType.M2M)
+            //        src = "../CCForm/M2M.aspx?FK_MapData=" + this.FK_MapData + "&NoOfObj=" + m2m.NoOfObj + "&OID=0";
+            //    else
+            //        src = "../CCForm/M2MM.aspx?FK_MapData=" + this.FK_MapData + "&NoOfObj=" + m2m.NoOfObj + "&OID=0";
 
-                        myidx++;
-                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + m2m.NoOfObj + "' height='50px' width='1000px'>");
-                        this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
-                        this.Pub1.AddTDEnd();
-                        this.Pub1.AddTREnd();
-                        break;
-                    case FrmShowWay.FrmSpecSize:
-                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
-                        this.Pub1.Add("<TD colspan=" + md.TableCol + "ID='TD" + m2m.NoOfObj + "' height='" + m2m.H + "' width='" + m2m.W + "'  >");
-                        this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-                        this.Pub1.AddTDEnd();
-                        this.Pub1.AddTREnd();
-                        break;
-                    case FrmShowWay.Hidden:
-                        break;
-                    case FrmShowWay.WinOpen:
-                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
-                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%' >");
-                        this.Pub1.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
-                        this.Pub1.AddTDEnd();
-                        this.Pub1.AddTREnd();
-                        break;
-                    default:
-                        break;
-                }
+            //    switch (m2m.ShowWay)
+            //    {
+            //        case FrmShowWay.FrmAutoSize:
+            //            //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
+            //            //this.Pub1.Add("<TD colspan=4 ID='TD" + m2m.NoOfObj + "' width='100%'>");
+            //            //this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%'   scrolling=no  /></iframe>");
+            //            //this.Pub1.AddTDEnd();
+            //            //this.Pub1.AddTREnd();
 
-            }
-            #endregion 增加M2M
+            //            myidx++;
+            //            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+            //            this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + m2m.NoOfObj + "' height='50px' width='1000px'>");
+            //            this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
+            //            this.Pub1.AddTDEnd();
+            //            this.Pub1.AddTREnd();
+            //            break;
+            //        case FrmShowWay.FrmSpecSize:
+            //            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
+            //            this.Pub1.Add("<TD colspan=" + md.TableCol + "ID='TD" + m2m.NoOfObj + "' height='" + m2m.H + "' width='" + m2m.W + "'  >");
+            //            this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
+            //            this.Pub1.AddTDEnd();
+            //            this.Pub1.AddTREnd();
+            //            break;
+            //        case FrmShowWay.Hidden:
+            //            break;
+            //        case FrmShowWay.WinOpen:
+            //            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
+            //            this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%' >");
+            //            this.Pub1.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
+            //            this.Pub1.AddTDEnd();
+            //            this.Pub1.AddTREnd();
+            //            break;
+            //        default:
+            //            break;
+            //    }
 
-            #region 增加框架
-            foreach (MapFrame fram in frams)
-            {
-                if (fram.IsUse)
-                    continue;
+            //}
+            //#endregion 增加M2M
 
-                if (isJudgeRowIdx)
-                {
-                    if (fram.RowIdx != rowIdx)
-                        continue;
-                }
+            //#region 增加框架
+            //foreach (MapFrame fram in frams)
+            //{
+            //    if (fram.IsUse)
+            //        continue;
 
-                if (fram.GroupID == 0 && rowIdx == 0)
-                {
-                    fram.GroupID = currGF.OID;
-                    fram.RowIdx = 0;
-                    fram.Update();
-                }
-                else if (fram.GroupID == currGF.OID)
-                {
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (fram.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                }
-                else
-                {
-                    continue;
-                }
+            //    if (fram.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        fram.GroupID = currGF.OID;
+            //        fram.RowIdx = 0;
+            //        fram.Update();
+            //    }
+            //    else if (fram.GroupID == currGF.OID)
+            //    {
 
-                fram.IsUse = true;
-                int myidx = rowIdx + 20;
-                this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                // this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:DtlDoUp('" + dtl.No + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
-                this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:FrameDoUp('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:FrameDoDown('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
-                this.Pub1.AddTREnd();
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
 
-                myidx++;
-                this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                if (fram.IsAutoSize)
-                    this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + fram.MyPK + "' height='50px' width='1000px'>");
-                else
-                    this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + fram.MyPK + "' height='" + fram.H + "' width='" + fram.W + "' >");
+            //    fram.IsUse = true;
+            //    int myidx = rowIdx + 20;
+            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+            //    // this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:DtlDoUp('" + dtl.No + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
+            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:FrameDoUp('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:FrameDoDown('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
+            //    this.Pub1.AddTREnd();
+
+            //    myidx++;
+            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+            //    if (fram.IsAutoSize)
+            //        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + fram.MyPK + "' height='50px' width='1000px'>");
+            //    else
+            //        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + fram.MyPK + "' height='" + fram.H + "' width='" + fram.W + "' >");
 
 
-                string src = fram.URL; // "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + fram.No;
-                if (src.Contains("?"))
-                    src += "&FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
-                else
-                    src += "?FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
+            //    string src = fram.URL; // "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + fram.No;
+            //    if (src.Contains("?"))
+            //        src += "&FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
+            //    else
+            //        src += "?FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
 
-                if (fram.IsAutoSize)
-                    this.Pub1.Add("<iframe ID='F" + fram.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='100%' scrolling=no  /></iframe>");
-                else
-                    this.Pub1.Add("<iframe ID='F" + fram.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + fram.W + "' height='" + fram.H + "' scrolling=no  /></iframe>");
+            //    if (fram.IsAutoSize)
+            //        this.Pub1.Add("<iframe ID='F" + fram.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='100%' scrolling=no  /></iframe>");
+            //    else
+            //        this.Pub1.Add("<iframe ID='F" + fram.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + fram.W + "' height='" + fram.H + "' scrolling=no  /></iframe>");
 
-                //  this.Pub1.Add("<iframe ID='F" + fram.No + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + fram.W + "px' height='" + fram.H + "px' scrolling=no /></iframe>");
+            //    //  this.Pub1.Add("<iframe ID='F" + fram.No + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + fram.W + "px' height='" + fram.H + "px' scrolling=no /></iframe>");
 
-                this.Pub1.AddTDEnd();
-                this.Pub1.AddTREnd();
-            }
-            #endregion 增加从表
+            //    this.Pub1.AddTDEnd();
+            //    this.Pub1.AddTREnd();
+            //}
+            //#endregion 增加从表
         }
 
         #region varable.

@@ -256,7 +256,9 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD("字段分组");
             DDL ddlGroup = new DDL();
             ddlGroup.ID = "DDL_GroupID";
-            GroupFields gfs = new GroupFields(mapAttr.FK_MapData);
+            GroupFields gfs = new GroupFields();
+            gfs.RetrieveFieldGroup(mapAttr.FK_MapData);
+
             ddlGroup.Bind(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab);
             if (mapAttr.GroupID == 0)
                 mapAttr.GroupID = this.GroupField;

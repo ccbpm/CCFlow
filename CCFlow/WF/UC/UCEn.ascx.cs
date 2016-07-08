@@ -387,250 +387,252 @@ namespace CCFlow.WF.UC
         public string _tempAddDtls = "";
         public void InsertObjects2Col(bool isJudgeRowIdx, string pk, string fid)
         {
-            #region 从表
-            foreach (MapDtl dtl in dtls)
-            {
-                if (dtl.IsView == false)
-                    continue;
-
-                if (_tempAddDtls.Contains(dtl.No))
-                    continue;
-
-                //if (dtl.IsUse)
-                //    continue;
-
-                //if (isJudgeRowIdx)
-                //{
-                //    if (dtl.RowIdx != rowIdx)
-                //        continue;
-                //}
-
-                if (dtl.GroupID != currGF.OID)
-                    continue;
-
-                if (dtl.GroupID == 0 && rowIdx == 0)
-                {
-                    dtl.GroupID = currGF.OID;
-                    dtl.RowIdx = 0;
-                    dtl.Update();
-                }
-
-                dtl.IsUse = true;
-                rowIdx++;
-
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                this.Add("<TD colspan=2 ID='TD" + dtl.No + "' height='100px' width='100%' style='align:left'>");
-                string src = "";
-                try
-                {
-                    src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-                }
-                catch
-                {
-                    src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-                }
-
-                if (this.IsReadonly || dtl.IsReadonly)
-                    this.Add("<iframe ID='F" + dtl.No + "'  src='" + src +
-                             "&IsReadonly=1' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='100px' />");
-                else
-                {
-                    AddLoadFunction(dtl.No, "blur", "SaveDtl");
-                    //this.Add("<iframe ID='F" + dtl.No + "'   Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='100px' />");
-
-                    this.Add("<iframe ID='F" + dtl.No + "'  onload='" + dtl.No + "load();'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='100px' />");
-
-                }
+            return;
 
 
-                this.AddTDEnd();
-                this.AddTREnd();
-                _tempAddDtls += dtl.No;
+            //#region 从表
+            //foreach (MapDtl dtl in dtls)
+            //{
+            //    if (dtl.IsView == false)
+            //        continue;
 
-                // 下面使用Link 的方案.
-                //// myidx++;
-                //this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                //string src = "";
-                //try
-                //{
-                //    src = "/WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=1&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-                //}
-                //catch
-                //{
-                //    src = "/WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=1&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-                //}
-                //_tempAddDtls += dtl.No;
-                //this.Add("<TD colspan=2 class=FDesc ID='TD" + dtl.No + "'><a href='" + src + "'>" + dtl.Name + "</a></TD>");
-                //// this.Add("<iframe ID='F" + dtl.No + "' frameborder=0 Onblur=\"SaveDtl('" + dtl.No + "');\" style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' height='10px' scrolling=no  /></iframe>");
-                ////this.AddTDEnd();
-                //this.AddTREnd();
-            }
-            #endregion 从表
+            //    if (_tempAddDtls.Contains(dtl.No))
+            //        continue;
 
-            #region 框架表
-            foreach (MapFrame fram in frames)
-            {
-                if (fram.IsUse)
-                    continue;
+            //    //if (dtl.IsUse)
+            //    //    continue;
 
-                if (isJudgeRowIdx)
-                {
-                    if (fram.RowIdx != rowIdx)
-                        continue;
-                }
+            //    //if (isJudgeRowIdx)
+            //    //{
+            //    //    if (dtl.RowIdx != rowIdx)
+            //    //        continue;
+            //    //}
 
-                if (fram.GroupID == 0 && rowIdx == 0)
-                {
-                    fram.GroupID = currGF.OID;
-                    fram.RowIdx = 0;
-                    fram.Update();
-                }
-                else if (fram.GroupID == currGF.OID)
-                {
+            //    if (dtl.GroupID != currGF.OID)
+            //        continue;
 
-                }
-                else
-                {
-                    continue;
-                }
-                fram.IsUse = true;
-                rowIdx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                string src = fram.URL;
+            //    if (dtl.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        dtl.GroupID = currGF.OID;
+            //        dtl.RowIdx = 0;
+            //        dtl.Update();
+            //    }
 
-                if (src.Contains("?"))
-                    src += "&Table=" + fram.FK_MapData + "&WorkID=" + pk + "&FID=" + fid;
-                else
-                    src += "?Table=" + fram.FK_MapData + "&WorkID=" + pk + "&FID=" + fid;
-                this.Add("<TD colspan=2 class=FDesc ID='TD" + fram.NoOfObj + "'><a href='" + src + "'>" + fram.Name + "</a></TD>");
-                this.AddTREnd();
-            }
-            #endregion 从表
+            //    dtl.IsUse = true;
+            //    rowIdx++;
 
-            #region 附件
-            foreach (FrmAttachment ath in aths)
-            {
-                if (ath.IsUse)
-                    continue;
-                if (isJudgeRowIdx)
-                {
-                    if (ath.RowIdx != rowIdx)
-                        continue;
-                }
+            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+            //    this.Add("<TD colspan=2 ID='TD" + dtl.No + "' height='100px' width='100%' style='align:left'>");
+            //    string src = "";
+            //    try
+            //    {
+            //        src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+            //    }
+            //    catch
+            //    {
+            //        src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+            //    }
 
-                if (ath.GroupID == 0 && rowIdx == 0)
-                {
-                    ath.GroupID = currGF.OID;
-                    ath.RowIdx = 0;
-                    ath.Update();
-                }
-                else if (ath.GroupID == currGF.OID)
-                {
+            //    if (this.IsReadonly || dtl.IsReadonly)
+            //        this.Add("<iframe ID='F" + dtl.No + "'  src='" + src +
+            //                 "&IsReadonly=1' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='100px' />");
+            //    else
+            //    {
+            //        AddLoadFunction(dtl.No, "blur", "SaveDtl");
+            //        //this.Add("<iframe ID='F" + dtl.No + "'   Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='100px' />");
 
-                }
-                else
-                {
-                    continue;
-                }
-                ath.IsUse = true;
-                rowIdx++;
+            //        this.Add("<iframe ID='F" + dtl.No + "'  onload='" + dtl.No + "load();'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='100px' />");
 
-                string src = CCFlowAppPath + "WF/CCForm/AttachmentUpload.aspx?IsWap=1&PKVal=" + this.HisEn.PKVal + "&NoOfObj=" + ath.NoOfObj + "&FK_MapData=" + EnsName + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                this.Add("<TD colspan=2 class=FDesc ID='TD" + ath.NoOfObj + "'><a href='" + src + "'>" + ath.Name + "</a></TD>");
-                this.AddTREnd();
-            }
-            #endregion 附件
+            //    }
 
-            #region 多对多的关系
-            foreach (MapM2M m2m in m2ms)
-            {
-                if (m2m.IsUse)
-                    continue;
 
-                if (isJudgeRowIdx)
-                {
-                    if (m2m.RowIdx != rowIdx)
-                        continue;
-                }
+            //    this.AddTDEnd();
+            //    this.AddTREnd();
+            //    _tempAddDtls += dtl.No;
 
-                if (m2m.GroupID == 0 && rowIdx == 0)
-                {
-                    m2m.GroupID = currGF.OID;
-                    m2m.RowIdx = 0;
-                    m2m.Update();
-                }
-                else if (m2m.GroupID == currGF.OID)
-                {
+            //    // 下面使用Link 的方案.
+            //    //// myidx++;
+            //    //this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+            //    //string src = "";
+            //    //try
+            //    //{
+            //    //    src = "/WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=1&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+            //    //}
+            //    //catch
+            //    //{
+            //    //    src = "/WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=1&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+            //    //}
+            //    //_tempAddDtls += dtl.No;
+            //    //this.Add("<TD colspan=2 class=FDesc ID='TD" + dtl.No + "'><a href='" + src + "'>" + dtl.Name + "</a></TD>");
+            //    //// this.Add("<iframe ID='F" + dtl.No + "' frameborder=0 Onblur=\"SaveDtl('" + dtl.No + "');\" style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' height='10px' scrolling=no  /></iframe>");
+            //    ////this.AddTDEnd();
+            //    //this.AddTREnd();
+            //}
+            //#endregion 从表
 
-                }
-                else
-                {
-                    continue;
-                }
-                m2m.IsUse = true;
-                rowIdx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                if (m2m.ShowWay == FrmShowWay.FrmAutoSize)
-                    this.Add("<TD colspan=4 ID='TD" + m2m.NoOfObj + "' height='50px' width='100%'  >");
-                else
-                    this.Add("<TD colspan=4 ID='TD" + m2m.NoOfObj + "' height='" + m2m.H + "' width='" + m2m.W + "'  >");
+            //#region 框架表
+            //foreach (MapFrame fram in frames)
+            //{
+            //    if (fram.IsUse)
+            //        continue;
 
-                string src = "";
-                if (m2m.HisM2MType == M2MType.M2M)
-                    src = CCFlowAppPath + "WF/CCForm/M2M.aspx?NoOfObj=" + m2m.NoOfObj;
-                else
-                    src = CCFlowAppPath + "WF/CCForm/M2MM.aspx?NoOfObj=" + m2m.NoOfObj;
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (fram.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                string paras = this.RequestParas;
+            //    if (fram.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        fram.GroupID = currGF.OID;
+            //        fram.RowIdx = 0;
+            //        fram.Update();
+            //    }
+            //    else if (fram.GroupID == currGF.OID)
+            //    {
 
-                if (paras.Contains("FID=") == false)
-                    paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
+            //    fram.IsUse = true;
+            //    rowIdx++;
+            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+            //    string src = fram.URL;
 
-                if (paras.Contains("OID=") == false)
-                    paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
+            //    if (src.Contains("?"))
+            //        src += "&Table=" + fram.FK_MapData + "&WorkID=" + pk + "&FID=" + fid;
+            //    else
+            //        src += "?Table=" + fram.FK_MapData + "&WorkID=" + pk + "&FID=" + fid;
+            //    this.Add("<TD colspan=2 class=FDesc ID='TD" + fram.NoOfObj + "'><a href='" + src + "'>" + fram.Name + "</a></TD>");
+            //    this.AddTREnd();
+            //}
+            //#endregion 从表
 
-                src += "&r=q" + paras;
+            //#region 附件
+            //foreach (FrmAttachment ath in aths)
+            //{
+            //    if (ath.IsUse)
+            //        continue;
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (ath.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                if (src.Contains("FK_MapData") == false)
-                    src += "&FK_MapData=" + m2m.FK_MapData;
+            //    if (ath.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        ath.GroupID = currGF.OID;
+            //        ath.RowIdx = 0;
+            //        ath.Update();
+            //    }
+            //    else if (ath.GroupID == currGF.OID)
+            //    {
 
-                switch (m2m.ShowWay)
-                {
-                    case FrmShowWay.FrmAutoSize:
-                        if (m2m.IsEdit)
-                        {
-                            AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
-                            // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
+            //    ath.IsUse = true;
+            //    rowIdx++;
 
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "' onload='" + m2m.NoOfObj + "load();'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
+            //    string src = CCFlowAppPath + "WF/CCForm/AttachmentUpload.aspx?IsWap=1&PKVal=" + this.HisEn.PKVal + "&NoOfObj=" + ath.NoOfObj + "&FK_MapData=" + EnsName + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
+            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+            //    this.Add("<TD colspan=2 class=FDesc ID='TD" + ath.NoOfObj + "'><a href='" + src + "'>" + ath.Name + "</a></TD>");
+            //    this.AddTREnd();
+            //}
+            //#endregion 附件
 
-                        }
-                        else
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
-                        break;
-                    case FrmShowWay.FrmSpecSize:
-                        if (m2m.IsEdit)
-                        {
-                            // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-                            AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
+            //#region 多对多的关系
+            //foreach (MapM2M m2m in m2ms)
+            //{
+            //    if (m2m.IsUse)
+            //        continue;
 
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'   onload='" + m2m.NoOfObj + "load();' src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (m2m.RowIdx != rowIdx)
+            //            continue;
+            //    }
+            //    if (m2m.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        m2m.GroupID = currGF.OID;
+            //        m2m.RowIdx = 0;
+            //        m2m.Update();
+            //    }
+            //    else if (m2m.GroupID == currGF.OID)
+            //    {
 
-                        }
-                        else
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-                        break;
-                    case FrmShowWay.Hidden:
-                        break;
-                    case FrmShowWay.WinOpen:
-                        this.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
-                        break;
-                    default:
-                        break;
-                }
-            }
-            #endregion 多对多的关系
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
+            //    m2m.IsUse = true;
+            //    rowIdx++;
+            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+            //    if (m2m.ShowWay == FrmShowWay.FrmAutoSize)
+            //        this.Add("<TD colspan=4 ID='TD" + m2m.NoOfObj + "' height='50px' width='100%'  >");
+            //    else
+            //        this.Add("<TD colspan=4 ID='TD" + m2m.NoOfObj + "' height='" + m2m.H + "' width='" + m2m.W + "'  >");
+
+            //    string src = "";
+            //    if (m2m.HisM2MType == M2MType.M2M)
+            //        src = CCFlowAppPath + "WF/CCForm/M2M.aspx?NoOfObj=" + m2m.NoOfObj;
+            //    else
+            //        src = CCFlowAppPath + "WF/CCForm/M2MM.aspx?NoOfObj=" + m2m.NoOfObj;
+
+            //    string paras = this.RequestParas;
+
+            //    if (paras.Contains("FID=") == false)
+            //        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
+
+            //    if (paras.Contains("OID=") == false)
+            //        paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
+
+            //    src += "&r=q" + paras;
+
+            //    if (src.Contains("FK_MapData") == false)
+            //        src += "&FK_MapData=" + m2m.FK_MapData;
+
+            //    switch (m2m.ShowWay)
+            //    {
+            //        case FrmShowWay.FrmAutoSize:
+            //            if (m2m.IsEdit)
+            //            {
+            //                AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
+            //                // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
+
+            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "' onload='" + m2m.NoOfObj + "load();'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
+
+            //            }
+            //            else
+            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
+            //            break;
+            //        case FrmShowWay.FrmSpecSize:
+            //            if (m2m.IsEdit)
+            //            {
+            //                // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
+            //                AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
+
+            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "'   onload='" + m2m.NoOfObj + "load();' src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
+
+            //            }
+            //            else
+            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
+            //            break;
+            //        case FrmShowWay.Hidden:
+            //            break;
+            //        case FrmShowWay.WinOpen:
+            //            this.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //#endregion 多对多的关系
         }
         public MapExts mes = null;
         public bool IsLoadData = false;
@@ -696,6 +698,7 @@ namespace CCFlow.WF.UC
 
             //处理默认值.
             this.DealDefVal(mattrs);
+
             //处理装载前填充.
             this.LoadData(mattrs, en);
             string appPath = CCFlowAppPath; //this.Page.Request.ApplicationPath;
@@ -714,6 +717,50 @@ namespace CCFlow.WF.UC
 
             foreach (GroupField gf in gfs)
             {
+                #region 首先判断是否是框架分组？
+                switch (gf.CtrlType)
+                {
+                    case "Frame": //类型.
+                        #region 框架
+                        foreach (MapFrame fram in frames)
+                        {
+                            if (fram.MyPK != gf.CtrlID)
+                                continue;
+
+                            this.AddTR();
+                            //增加Group.
+                            this.AddTD("colspan=" + this.mapData.TableCol + " style='width:100%' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + fram.Name + "</div><div style='text-align:right; float:right'></div>");
+                            this.AddTREnd();
+
+                            this.AddTR();
+                            this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
+                            string paras = this.RequestParas;
+                            if (paras.Contains("FID=") == false)
+                                paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
+
+                            if (paras.Contains("WorkID=") == false)
+                                paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
+
+                            string src = fram.URL;
+                            if (src.Contains("?"))
+                                src += "&r=q" + paras;
+                            else
+                                src += "?r=q" + paras;
+                            this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='" + fram.H + "' scrolling=auto /></iframe>");
+                            this.AddTDEnd();
+                            this.AddTREnd();
+                        }
+
+                        #endregion 框架
+                        continue;
+                    case "Dtl": //类型.
+                        break;
+                    default:
+                        break;
+                }
+                #endregion
+
+
                 currGF = gf;
                 this.AddTR();
                 if (gfs.Count == 1)
@@ -1721,265 +1768,267 @@ namespace CCFlow.WF.UC
         }
         public void InsertObjects(bool isJudgeRowIdx)
         {
-            #region 从表
-            foreach (MapDtl dtl in dtls)
-            {
-                if (dtl.IsView == false || this.ctrlUseSta.Contains(dtl.No))
-                    continue;
+            return;
 
-                if (dtl.GroupID == 0)
-                {
-                    dtl.GroupID = currGF.OID;
-                    dtl.RowIdx = 0;
-                    dtl.Update();
-                }
+            //#region 从表
+            //foreach (MapDtl dtl in dtls)
+            //{
+            //    if (dtl.IsView == false || this.ctrlUseSta.Contains(dtl.No))
+            //        continue;
 
-                if (isJudgeRowIdx)
-                {
-                    if (dtl.RowIdx != rowIdx)
-                        continue;
-                }
+            //    if (dtl.GroupID == 0)
+            //    {
+            //        dtl.GroupID = currGF.OID;
+            //        dtl.RowIdx = 0;
+            //        dtl.Update();
+            //    }
 
-                if (dtl.GroupID == currGF.OID)
-                {
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (dtl.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                }
-                else
-                {
-                    continue;
-                }
+            //    if (dtl.GroupID == currGF.OID)
+            //    {
 
-                // dtl.IsUse = true;
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
 
-                this.ctrlUseSta += dtl.No;
+            //    // dtl.IsUse = true;
 
-                rowIdx++;
-                // myidx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + dtl.No + "' height='50px' width='100%' style='align:left'>");
-                string src = "";
-                try
-                {
-                    src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-                }
-                catch
-                {
-                    src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-                }
+            //    this.ctrlUseSta += dtl.No;
 
-                if (this.IsReadonly || dtl.IsReadonly)
-                    this.Add("<iframe ID='F" + dtl.No + "'  src='" + src +
-                             "&IsReadonly=1' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
-                else
-                {
-                    //this.Add("<iframe ID='F" + dtl.No + "'   Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' /></iframe>");
+            //    rowIdx++;
+            //    // myidx++;
+            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+            //    this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + dtl.No + "' height='50px' width='100%' style='align:left'>");
+            //    string src = "";
+            //    try
+            //    {
+            //        src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+            //    }
+            //    catch
+            //    {
+            //        src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+            //    }
 
-                    AddLoadFunction(dtl.No, "blur", "SaveDtl");
+            //    if (this.IsReadonly || dtl.IsReadonly)
+            //        this.Add("<iframe ID='F" + dtl.No + "'  src='" + src +
+            //                 "&IsReadonly=1' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
+            //    else
+            //    {
+            //        //this.Add("<iframe ID='F" + dtl.No + "'   Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' /></iframe>");
 
-                    this.Add("<iframe ID='F" + dtl.No + "'   onload='" + dtl.No + "load();'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
+            //        AddLoadFunction(dtl.No, "blur", "SaveDtl");
 
-                }
+            //        this.Add("<iframe ID='F" + dtl.No + "'   onload='" + dtl.No + "load();'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
 
-                this.AddTDEnd();
-                this.AddTREnd();
-            }
-            #endregion 从表
+            //    }
 
-            #region 多对多的关系
-            foreach (MapM2M m2m in m2ms)
-            {
-                if (this.ctrlUseSta.Contains("@" + m2m.MyPK))
-                    continue;
+            //    this.AddTDEnd();
+            //    this.AddTREnd();
+            //}
+            //#endregion 从表
 
-                if (isJudgeRowIdx)
-                {
-                    if (m2m.RowIdx != rowIdx)
-                        continue;
-                }
+            //#region 多对多的关系
+            //foreach (MapM2M m2m in m2ms)
+            //{
+            //    if (this.ctrlUseSta.Contains("@" + m2m.MyPK))
+            //        continue;
 
-                if (m2m.GroupID == 0 && rowIdx == 0)
-                {
-                    m2m.GroupID = currGF.OID;
-                    m2m.RowIdx = 0;
-                    m2m.Update();
-                }
-                else if (m2m.GroupID == currGF.OID)
-                {
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (m2m.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                }
-                else
-                {
-                    continue;
-                }
+            //    if (m2m.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        m2m.GroupID = currGF.OID;
+            //        m2m.RowIdx = 0;
+            //        m2m.Update();
+            //    }
+            //    else if (m2m.GroupID == currGF.OID)
+            //    {
 
-                this.ctrlUseSta += "@" + m2m.MyPK;
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
 
-
-                rowIdx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-
-                string src = CCFlowAppPath + "WF/CCForm/M2M.aspx?NoOfObj=" + m2m.NoOfObj;
-                string paras = this.RequestParas;
-                if (paras.Contains("FID=") == false)
-                    paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-
-                if (paras.Contains("OID=") == false)
-                    paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
-
-                src += "&r=q" + paras;
-                if (src.Contains("FK_MapData") == false)
-                    src += "&FK_MapData=" + m2m.FK_MapData;
-                switch (m2m.ShowWay)
-                {
-                    case FrmShowWay.FrmAutoSize:
-                        this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%'  >");
-                        if (m2m.HisM2MType == M2MType.M2M)
-                        {
-
-                            AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
+            //    this.ctrlUseSta += "@" + m2m.MyPK;
 
 
-                            //  this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'  onload='" + m2m.NoOfObj + "load();'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
+            //    rowIdx++;
+            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
 
-                        }
-                        else
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "' src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
-                        break;
-                    case FrmShowWay.FrmSpecSize:
-                        this.Add("<TD colspan=" + this.mapData.TableCol + "  ID='TD" + m2m.NoOfObj + "' height='" + m2m.H + "' width='" + m2m.W + "'  >");
-                        if (m2m.HisM2MType == M2MType.M2M)
-                        {
-                            AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
+            //    string src = CCFlowAppPath + "WF/CCForm/M2M.aspx?NoOfObj=" + m2m.NoOfObj;
+            //    string paras = this.RequestParas;
+            //    if (paras.Contains("FID=") == false)
+            //        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
 
-                            // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "' onload='" + m2m.NoOfObj + "load();'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
+            //    if (paras.Contains("OID=") == false)
+            //        paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
 
-                        }
-                        else
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-                        break;
-                    case FrmShowWay.Hidden:
-                        break;
-                    case FrmShowWay.WinOpen:
-                        this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%'  >");
-                        this.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
-                        break;
-                    default:
-                        break;
-                }
-            }
-            #endregion 多对多的关系
+            //    src += "&r=q" + paras;
+            //    if (src.Contains("FK_MapData") == false)
+            //        src += "&FK_MapData=" + m2m.FK_MapData;
+            //    switch (m2m.ShowWay)
+            //    {
+            //        case FrmShowWay.FrmAutoSize:
+            //            this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%'  >");
+            //            if (m2m.HisM2MType == M2MType.M2M)
+            //            {
 
-            #region 框架
-            foreach (MapFrame fram in frames)
-            {
-                if (this.ctrlUseSta.Contains("@" + fram.MyPK))
-                    continue;
+            //                AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
 
-                if (isJudgeRowIdx)
-                {
-                    if (fram.RowIdx != rowIdx)
-                        continue;
-                }
 
-                if (fram.GroupID == 0 && rowIdx == 0)
-                {
-                    fram.GroupID = currGF.OID;
-                    fram.RowIdx = 0;
-                    fram.Update();
-                }
-                else if (fram.GroupID == currGF.OID)
-                {
-                }
-                else
-                {
-                    continue;
-                }
+            //                //  this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
+            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "'  onload='" + m2m.NoOfObj + "load();'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
 
-                this.ctrlUseSta += "@" + fram.MyPK;
-                rowIdx++;
-                // myidx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                if (fram.IsAutoSize)
-                    this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + fram.NoOfObj + "' height='50px' width='100%'  >");
-                else
-                    this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
+            //            }
+            //            else
+            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "' src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
+            //            break;
+            //        case FrmShowWay.FrmSpecSize:
+            //            this.Add("<TD colspan=" + this.mapData.TableCol + "  ID='TD" + m2m.NoOfObj + "' height='" + m2m.H + "' width='" + m2m.W + "'  >");
+            //            if (m2m.HisM2MType == M2MType.M2M)
+            //            {
+            //                AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
 
-                string paras = this.RequestParas;
-                if (paras.Contains("FID=") == false)
-                    paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
+            //                // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
+            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "' onload='" + m2m.NoOfObj + "load();'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
 
-                if (paras.Contains("WorkID=") == false)
-                    paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
+            //            }
+            //            else
+            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
+            //            break;
+            //        case FrmShowWay.Hidden:
+            //            break;
+            //        case FrmShowWay.WinOpen:
+            //            this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%'  >");
+            //            this.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //#endregion 多对多的关系
 
-                string src = fram.URL;
-                if (src.Contains("?"))
-                    src += "&r=q" + paras;
-                else
-                    src += "?r=q" + paras;
+            //#region 框架
+            //foreach (MapFrame fram in frames)
+            //{
+            //    if (this.ctrlUseSta.Contains("@" + fram.MyPK))
+            //        continue;
 
-                if (fram.IsAutoSize)
-                {
-                    this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=auto /></iframe>");
-                }
-                else
-                {
-                    this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + fram.W + "' height='" + fram.H + "' scrolling=auto /></iframe>");
-                }
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (fram.RowIdx != rowIdx)
+            //            continue;
+            //    }
 
-                this.AddTDEnd();
-                this.AddTREnd();
-            }
-            #endregion 框架
+            //    if (fram.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        fram.GroupID = currGF.OID;
+            //        fram.RowIdx = 0;
+            //        fram.Update();
+            //    }
+            //    else if (fram.GroupID == currGF.OID)
+            //    {
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
 
-            #region 附件
-            foreach (BP.Sys.FrmAttachment ath in aths)
-            {
-                if (this.ctrlUseSta.Contains("@" + ath.MyPK))
-                    continue;
-                if (isJudgeRowIdx)
-                {
-                    if (ath.RowIdx != rowIdx)
-                        continue;
-                }
+            //    this.ctrlUseSta += "@" + fram.MyPK;
+            //    rowIdx++;
+            //    // myidx++;
+            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+            //    if (fram.IsAutoSize)
+            //        this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + fram.NoOfObj + "' height='50px' width='100%'  >");
+            //    else
+            //        this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
 
-                if (ath.GroupID == 0 && rowIdx == 0)
-                {
-                    ath.GroupID = currGF.OID;
-                    ath.RowIdx = 0;
-                    ath.Update();
-                }
-                else if (ath.GroupID == currGF.OID)
-                {
-                }
-                else
-                {
-                    continue;
-                }
-                this.ctrlUseSta += "@" + ath.MyPK;
-                rowIdx++;
-                // myidx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + ath.MyPK + "' height='50px' width='100%' style='align:left'>");
-                string src = "";
-                if (this.IsReadonly)
-                    src = CCFlowAppPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + this.HisEn.PKVal + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1" + this.RequestParas;
-                else
-                    src = CCFlowAppPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + this.HisEn.PKVal + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + EnName + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
+            //    string paras = this.RequestParas;
+            //    if (paras.Contains("FID=") == false)
+            //        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
 
-                if (ath.IsAutoSize)
-                {
-                    this.Add("<iframe ID='F" + ath.MyPK + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=auto /></iframe>");
-                }
-                else
-                {
-                    this.Add("<iframe ID='F" + ath.MyPK + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + ath.W + "' height='" + ath.H + "' scrolling=auto /></iframe>");
-                }
-                this.AddTDEnd();
-                this.AddTREnd();
-            }
-            #endregion 附件
+            //    if (paras.Contains("WorkID=") == false)
+            //        paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
+
+            //    string src = fram.URL;
+            //    if (src.Contains("?"))
+            //        src += "&r=q" + paras;
+            //    else
+            //        src += "?r=q" + paras;
+
+            //    if (fram.IsAutoSize)
+            //    {
+            //        this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=auto /></iframe>");
+            //    }
+            //    else
+            //    {
+            //        this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + fram.W + "' height='" + fram.H + "' scrolling=auto /></iframe>");
+            //    }
+
+            //    this.AddTDEnd();
+            //    this.AddTREnd();
+            //}
+            //#endregion 框架
+
+            //#region 附件
+            //foreach (BP.Sys.FrmAttachment ath in aths)
+            //{
+            //    if (this.ctrlUseSta.Contains("@" + ath.MyPK))
+            //        continue;
+            //    if (isJudgeRowIdx)
+            //    {
+            //        if (ath.RowIdx != rowIdx)
+            //            continue;
+            //    }
+
+            //    if (ath.GroupID == 0 && rowIdx == 0)
+            //    {
+            //        ath.GroupID = currGF.OID;
+            //        ath.RowIdx = 0;
+            //        ath.Update();
+            //    }
+            //    else if (ath.GroupID == currGF.OID)
+            //    {
+            //    }
+            //    else
+            //    {
+            //        continue;
+            //    }
+            //    this.ctrlUseSta += "@" + ath.MyPK;
+            //    rowIdx++;
+            //    // myidx++;
+            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+            //    this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + ath.MyPK + "' height='50px' width='100%' style='align:left'>");
+            //    string src = "";
+            //    if (this.IsReadonly)
+            //        src = CCFlowAppPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + this.HisEn.PKVal + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1" + this.RequestParas;
+            //    else
+            //        src = CCFlowAppPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + this.HisEn.PKVal + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + EnName + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
+
+            //    if (ath.IsAutoSize)
+            //    {
+            //        this.Add("<iframe ID='F" + ath.MyPK + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=auto /></iframe>");
+            //    }
+            //    else
+            //    {
+            //        this.Add("<iframe ID='F" + ath.MyPK + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + ath.W + "' height='" + ath.H + "' scrolling=auto /></iframe>");
+            //    }
+            //    this.AddTDEnd();
+            //    this.AddTREnd();
+            //}
+            //#endregion 附件
         }
         public void AddRichTextBox(Entity en, MapAttr attr)
         {

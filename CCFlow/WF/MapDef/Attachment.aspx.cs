@@ -259,18 +259,17 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
 
 
-            GroupFields gfs = new GroupFields(ath.FK_MapData);
-
-            this.Pub1.AddTR();
-            this.Pub1.AddTDIdx(idx++);
-            this.Pub1.AddTD("显示在分组");
-            ddl = new BP.Web.Controls.DDL();
-            ddl.ID = "DDL_GroupField";
-            ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, BP.Web.Controls.AddAllLocation.None);
-            ddl.SetSelectItem(ath.GroupID);
-            this.Pub1.AddTD("colspan=1", ddl);
-            this.Pub1.AddTD("对傻瓜表单有效");
-            this.Pub1.AddTREnd();
+            //GroupFields gfs = new GroupFields(ath.FK_MapData);
+            //this.Pub1.AddTR();
+            //this.Pub1.AddTDIdx(idx++);
+            //this.Pub1.AddTD("显示在分组");
+            //ddl = new BP.Web.Controls.DDL();
+            //ddl.ID = "DDL_GroupField";
+            //ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, BP.Web.Controls.AddAllLocation.None);
+            //ddl.SetSelectItem(ath.GroupID);
+            //this.Pub1.AddTD("colspan=1", ddl);
+            //this.Pub1.AddTD("对傻瓜表单有效");
+            //this.Pub1.AddTREnd();
 
             this.Pub1.AddTR();
             this.Pub1.AddTDIdx(idx++);
@@ -603,16 +602,16 @@ namespace CCFlow.WF.MapDef
             else
                 ath.MyPK = this.FK_MapData + "_" + ath.NoOfObj + "_" + this.FK_Node;
 
-            GroupFields gfs1 = new GroupFields(this.FK_MapData);
-            if (gfs1.Count == 1)
-            {
-                GroupField gf = (GroupField)gfs1[0];
-                ath.GroupID = gf.OID;
-            }
-            else
-            {
-                ath.GroupID = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemIntVal;
-            }
+            //GroupFields gfs1 = new GroupFields(this.FK_MapData);
+            //if (gfs1.Count == 1)
+            //{
+            //    GroupField gf = (GroupField)gfs1[0];
+            //    ath.GroupID = gf.OID;
+            //}
+            //else
+            //{
+            //    ath.GroupID = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemIntVal;
+            //}
 
             //对流程的特殊判断.  20160513 加载页面时添加了判断，此处没有添加，导致保存报错。 zqp
             if (ath.IsNodeSheet == true)

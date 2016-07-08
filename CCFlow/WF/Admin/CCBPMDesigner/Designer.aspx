@@ -94,7 +94,7 @@
 <body id="body">
     <div id="actions">
         <a style="text-decoration: none;" href="javascript:save(true);" title="保存(Ctrl-S)">
-            <img src="assets/images/icon_Save.jpg" id="SaveImg" border="0" width="14" height="14" />
+            <img src="assets/images/icon_save.jpg" id="SaveImg" border="0" width="14" height="14" />
             <label for="SaveImg" class="toolbarText">保存</label> 
          </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
@@ -232,8 +232,10 @@
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-form',name:'NodeFromWorkModel'">表单方案</div>
 
-        <div data-options="iconCls:'icon-form',name:'DesignerNodeFormSL'">设计节点表单</div>
-        <div data-options="iconCls:'icon-form',name:'DesignerNodeForm'">设计节点表单(测试版)</div>
+        <div data-options="iconCls:'icon-form',name:'DesignerNodeFormFix'">设计节点表单-傻瓜表单</div>
+        <div data-options="iconCls:'icon-form',name:'DesignerNodeFormSL'">设计节点表单-自由表单</div>
+
+        <div data-options="iconCls:'icon-form',name:'DesignerNodeForm'">设计节点表单(H5测试版)</div>
 
         <div class="menu-sep"></div> 
         <div data-options="iconCls:'icon-Sender',name:'NodeAccepterRole'">设置处理人(接受人)</div>

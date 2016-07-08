@@ -95,7 +95,7 @@ function newFlow() {
                     data: [{
                         id: jdata.data.no,
                         text: jdata.data.name,
-                        attributes: { ISPARENT: '0', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+                        attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
                         iconCls: 'icon-flow1',
                         checked: false
                     }]
@@ -103,7 +103,7 @@ function newFlow() {
                 var nodeData = {
                     id: jdata.data.no,
                     text: jdata.data.name,
-                    attributes: { ISPARENT: '0', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+                    attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
                     iconCls: 'icon-flow1',
                     checked: false
                 };

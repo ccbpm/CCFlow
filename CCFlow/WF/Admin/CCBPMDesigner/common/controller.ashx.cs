@@ -14,6 +14,7 @@ using BP.BPMN;
 using BP.Sys;
 using BP.En;
 using BP.WF.Template;
+using LitJson;
 using System.Collections.Generic;
 
 namespace CCFlow.WF.Admin.CCBPMDesigner.common
@@ -170,6 +171,58 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
                     drToNode.Insert();
                 }
             }
+
+            #region //保存节点坐标及标签
+            try
+            {
+                //清空标签
+                LabNote labelNode = new LabNote();
+                labelNode.Delete();
+
+                JsonData flowJsonData = JsonMapper.ToObject(diagram);
+                if (flowJsonData.IsObject == true)
+                {
+                    JsonData flow_Nodes = flowJsonData["s"]["figures"];
+                    for (int iNode = 0, jNode = flow_Nodes.Count; iNode < jNode; iNode++)
+                    {
+                        JsonData figure = flow_Nodes[iNode];
+                        //不存在不进行处理，继续循环
+                        if (figure == null || figure["CCBPM_Shape"] == null)
+                            continue;
+                        if (figure["CCBPM_Shape"].ToString() == "Node")
+                        {
+                            //节点坐标处理
+                            BP.WF.Node node = new BP.WF.Node();
+                            node.RetrieveByAttr(NodeAttr.NodeID, figure["CCBPM_OID"]);
+                            if (!string.IsNullOrEmpty(node.Name) && figure["rotationCoords"].Count > 0)
+                            {
+                                JsonData rotationCoord = figure["rotationCoords"][0];
+                                node.X = int.Parse(rotationCoord["x"].ToString());
+                                node.Y = int.Parse(rotationCoord["y"].ToString());
+                                node.DirectUpdate();
+                            }
+                        }
+                        else if (figure["CCBPM_Shape"].ToString() == "Text")
+                        {
+                            //流程标签处理
+                            JsonData primitives = figure["primitives"][0];
+                            JsonData vector = primitives["vector"][0];
+                            labelNode = new LabNote();
+                            labelNode.FK_Flow = flowNo;
+                            labelNode.Name = primitives["str"].ToString();
+                            labelNode.X = int.Parse(vector["x"].ToString());
+                            labelNode.Y = int.Parse(vector["y"].ToString());
+                            labelNode.Insert();
+                        }
+                    }
+                    return "true";
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            #endregion
+
             return "true";
         }
         /// <summary>

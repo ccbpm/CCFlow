@@ -22,6 +22,7 @@ $(function () {
         figureSets = figureSets_CCBPM;
         figureSetsURL = 'lib/sets/ccbpm';
         Conver_CCBPM_V1ToV2();
+        $("#nodeModel_Menu_For_CCBPM").show();
     } else if (CCPMB_Flow_V == "1") {
         figureSets = [];
         figureSets = figureSets_CCBPM;

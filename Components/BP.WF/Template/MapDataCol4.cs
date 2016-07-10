@@ -669,6 +669,35 @@ namespace BP.WF.Template
                 return obj;
             }
         }
+        /// <summary>
+        /// 是否是节点表单?
+        /// </summary>
+        public bool IsNodeFrm
+        {
+            get
+            {
+                if (this.No.Contains("ND") == false)
+                    return false;
+
+                if (this.No.Contains("Rpt") == true)
+                    return false;
+
+                if (this.No.Substring(0, 2) == "ND")
+                    return true;
+
+                return false;
+            }
+        }
+        /// <summary>
+        /// 节点ID.
+        /// </summary>
+        public int NodeID
+        {
+            get
+            {
+                return int.Parse( this.No.Replace("ND", ""));
+            }
+        }
         #endregion
 
         #region 属性
@@ -881,6 +910,9 @@ namespace BP.WF.Template
                 this.SetValByKey(MapDataAttr.TableCol, value);
             }
         }
+        /// <summary>
+        /// 表的宽度
+        /// </summary>
         public string TableWidth
         {
             get
@@ -1047,7 +1079,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "导出XML表单模版"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoExp";
@@ -1079,18 +1110,16 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
-                rm.Title = "审核组件"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoFWC";
-               // rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Export.png";
+                rm.Title = "表单检查"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
                 rm.Visable = true;
-                rm.RefAttrLinkLabel = "审核组件";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefAttrLinkLabel = "表单检查";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-
                 #endregion 方法 - 基本功能.
 
+                
 
                 //rm = new RefMethod();
                 //rm.Title = "扩展设置"; // "设计表单";
@@ -1155,30 +1184,229 @@ namespace BP.WF.Template
                 //rm.Target = "_blank";
                 //map.AddRefMethod(rm);
 
+
+                #region 节点表单属性.
+                rm = new RefMethod();
+                rm.Title = "审核组件"; // "设计表单";
+                rm.GroupName = "节点表单属性";
+                rm.ClassMethodName = this.ToString() + ".DoFWC";
+                rm.Visable = true;
+                rm.RefAttrLinkLabel = "审核组件";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "父子流程"; // "设计表单";
+                rm.GroupName = "节点表单属性";
+                rm.ClassMethodName = this.ToString() + ".DoSubFlow";
+                rm.Visable = true;
+                rm.RefAttrLinkLabel = "父子流程";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "子线程"; // "设计表单";
+                rm.GroupName = "节点表单属性";
+                rm.ClassMethodName = this.ToString() + ".DoThread";
+                rm.Visable = true;
+                rm.RefAttrLinkLabel = "子线程";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "轨迹图"; // "设计表单";
+                rm.GroupName = "节点表单属性";
+                rm.ClassMethodName = this.ToString() + ".DoTrack";
+                rm.Visable = true;
+                rm.RefAttrLinkLabel = "轨迹图";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+                #endregion
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
 
-        #region 方法.
-         /// <summary>
-        /// 批量设置正则表达式规则.
+        #region 节点表单方法.
+        /// <summary>
+        /// 执行旧版本的兼容性检查.
+        /// </summary>
+        public string CheckFixFrmForUpdateVer()
+        {
+            // 更新状态.
+            DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlType='' WHERE CtrlType IS NULL");
+            DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
+
+            string str = "";
+
+            //从表.
+            MapDtls dtls = new MapDtls(this.No);
+            foreach (MapDtl dtl in dtls)
+            {
+                GroupField gf = new GroupField();
+                if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) == true)
+                    continue;
+
+                gf.Lab = dtl.Name;
+                gf.CtrlID = dtl.No;
+                gf.CtrlType = "Dtl";
+                gf.EnName = dtl.FK_MapData;
+                gf.Insert();
+
+                str += "@为从表" + dtl.Name + " 增加了分组.";
+            }
+
+            // 框架.
+            MapFrames frams = new MapFrames(this.No);
+            foreach (MapFrame fram in frams)
+            {
+                GroupField gf = new GroupField();
+                if (gf.IsExit(GroupFieldAttr.CtrlID, fram.MyPK) == true)
+                    continue;
+
+                gf.Lab = fram.Name;
+                gf.CtrlID = fram.MyPK;
+                gf.CtrlType = "Frame";
+                gf.EnName = fram.FK_MapData;
+                gf.Insert();
+
+                str += "@为框架 " + fram.Name + " 增加了分组.";
+
+            }
+
+
+            // 附件.
+            FrmAttachments aths = new FrmAttachments(this.No);
+            foreach (FrmAttachment ath in aths)
+            {
+                GroupField gf = new GroupField();
+                if (gf.IsExit(GroupFieldAttr.CtrlID, ath.MyPK) == true)
+                    continue;
+
+                gf.Lab = ath.Name;
+                gf.CtrlID = ath.MyPK;
+                gf.CtrlType = "Ath";
+                gf.EnName = ath.FK_MapData;
+                gf.Insert();
+
+                str += "@为附件 " + ath.Name + " 增加了分组.";
+            }
+
+            if (this.IsNodeFrm == true)
+            {
+                int myNodeID = this.NodeID;
+
+                GroupField gf = new GroupField();
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "FWC" + myNodeID) == false)
+                {
+                    gf = new GroupField();
+                    gf.Lab = "审核信息";
+                    gf.CtrlID = "FWC" + myNodeID;
+                    gf.CtrlType = "FWC";
+                    gf.EnName = "ND" + myNodeID;
+                    gf.Insert();
+
+                    str += "@为审核组件增加了分组.";
+
+                }
+
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "SubFlow" + myNodeID) == false)
+                {
+                    gf = new GroupField();
+                    gf.Lab = "父子流程";
+                    gf.CtrlID = "SubFlow" + myNodeID;
+                    gf.CtrlType = "SubFlow";
+                    gf.EnName = "ND" + myNodeID;
+                    gf.Insert();
+
+                    str += "@为 父子流程 增加了分组.";
+
+                }
+
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "Thread" + myNodeID) == false)
+                {
+                    gf = new GroupField();
+                    gf.Lab = "子线程";
+                    gf.CtrlID = "Thread" + myNodeID;
+                    gf.CtrlType = "Thread";
+                    gf.EnName = "ND" + myNodeID;
+                    gf.Insert();
+
+                    str += "@为 子线程 增加了分组.";
+                }
+
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "Track" + myNodeID) == false)
+                {
+                    gf = new GroupField();
+                    gf.Lab = "轨迹图";
+                    gf.CtrlID = "Track" + myNodeID;
+                    gf.CtrlType = "Track";
+                    gf.EnName = "ND" + myNodeID;
+                    gf.Insert();
+
+                    str += "@为 轨迹图 增加了分组.";
+                }
+            }
+
+            if (str == "")
+                return "检查成功.";
+
+            return str+", @@@ 检查成功。";
+        }
+
+        /// <summary>
+        /// 审核组件.
         /// </summary>
         /// <returns></returns>
         public string DoFWC()
         {
             if (this.No.Contains("ND") == true)
-            {
-                //var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapDataCol4&PK=' + mypk
-                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" +
-                       this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
-            }
+                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" +this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
             else
-            {
                 return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
-            }
         }
+        /// <summary>
+        /// 子流程
+        /// </summary>
+        /// <returns></returns>
+        public string DoSubFlow()
+        {
+            if (this.No.Contains("ND") == true)
+                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+            else
+                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
+        }
+        /// <summary>
+        /// 轨迹属性.
+        /// </summary>
+        /// <returns></returns>
+        public string DoThread()
+        {
+            if (this.No.Contains("ND") == true)
+                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmThread&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+            else
+                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
+        }
+        /// <summary>
+        /// 轨迹图.
+        /// </summary>
+        /// <returns></returns>
+        public string DoTrack()
+        {
+            if (this.No.Contains("ND") == true)
+                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+            else
+                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
+        }
+        #endregion
+
+        #region 通用方法.
         /// <summary>
         /// 替换名称
         /// </summary>

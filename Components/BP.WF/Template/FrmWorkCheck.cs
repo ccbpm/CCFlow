@@ -88,6 +88,10 @@ namespace BP.WF.Template
     public class FrmWorkCheckAttr : EntityNoAttr
     {
         /// <summary>
+        /// 傻瓜表单审核标签
+        /// </summary>
+        public const string FWCLab = "FWCLab";
+        /// <summary>
         /// 是否可以审批
         /// </summary>
         public const string FWCSta = "FWCSta";
@@ -550,6 +554,9 @@ namespace BP.WF.Template
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
+                map.AddTBString(NodeAttr.FWCLab, "审核信息", "显示标签", true, true, 0, 200, 10,true);
+
+
 
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
                 map.AddDDLSysEnum(FrmWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",

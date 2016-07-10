@@ -1616,12 +1616,15 @@ namespace BP.Sys
             this.InitExtMembers();
 
             GroupField gf = new GroupField();
-            gf.EnName = this.FK_MapData;
-            gf.CtrlID = this.No;
-            gf.CtrlType = "Dtl";
-            gf.Lab = this.Name;
-            gf.Idx = 0;
-            gf.Insert(); //插入.
+            if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
+            {
+                gf.EnName = this.FK_MapData;
+                gf.CtrlID = this.No;
+                gf.CtrlType = "Dtl";
+                gf.Lab = this.Name;
+                gf.Idx = 0;
+                gf.Insert(); //插入.
+            }
 
             return base.beforeInsert();
         }

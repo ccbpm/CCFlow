@@ -1123,6 +1123,8 @@ namespace BP.Sys
                     continue;
                 if (attr.Key == attr.Desc)
                     continue;
+                if (attr.Field == attr.Desc)
+                    continue;
 
                 switch (attr.MyFieldType)
                 {

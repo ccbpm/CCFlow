@@ -1643,6 +1643,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.BodyAttr, value);
             }
         }
+      
         #endregion
 
         #region 构造方法
@@ -1873,6 +1874,7 @@ namespace BP.Sys
         }
         #endregion
 
+       
         /// <summary>
         /// 导入
         /// </summary>

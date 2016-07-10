@@ -234,7 +234,24 @@ namespace BP.Sys
             qo.AddWhere(GroupFieldAttr.EnName, enName);
             qo.addAnd();
             qo.AddWhereLen(GroupFieldAttr.CtrlID, " = ", 0, SystemConfig.AppCenterDBType);
-            return qo.DoQuery();
+            int num=qo.DoQuery();
+
+            if (num==0)
+            {
+                GroupField gf = new GroupField();
+                gf.EnName = enName;
+                MapData md = new MapData();
+                md.No = enName;
+                if (md.RetrieveFromDBSources() == 0)
+                    gf.Lab = "基础信息";
+                else
+                    gf.Lab = md.Name;
+                gf.Idx = 0;
+                gf.Insert();
+                this.AddEntity(gf);
+                return 1;
+            }
+            return num;
         }
         #endregion
 

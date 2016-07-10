@@ -1152,13 +1152,15 @@ namespace BP.Sys
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-            gf.EnName = this.FK_MapData;
-            gf.CtrlID = this.MyPK;
-            gf.CtrlType = "Ath";
-            gf.Lab = this.Name;
-            gf.Idx = 0;
-            gf.Insert(); //插入.
-
+            if (gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
+            {
+                gf.EnName = this.FK_MapData;
+                gf.CtrlID = this.MyPK;
+                gf.CtrlType = "Ath";
+                gf.Lab = this.Name;
+                gf.Idx = 0;
+                gf.Insert(); //插入.
+            }
             base.afterInsert();
         }
 

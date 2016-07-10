@@ -453,7 +453,6 @@ namespace BP.Sys
 
                 map.AddTBInt(MapM2MAttr.M2MType, (int)M2MType.M2M, "类型", false, false);
 
-
                 map.AddTBInt(MapM2MAttr.RowIdx, 99, "位置", false, false);
                 map.AddTBInt(MapM2MAttr.GroupID, 0, "分组ID", false, false);
 

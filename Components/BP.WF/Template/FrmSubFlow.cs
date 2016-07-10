@@ -551,6 +551,7 @@ namespace BP.WF.Template
         }
         #endregion
 
+        #region 重写方法.
         protected override bool beforeUpdateInsertAction()
         {
             //FrmAttachment workCheckAth = new FrmAttachment();
@@ -584,6 +585,7 @@ namespace BP.WF.Template
             //}   
             return base.beforeUpdateInsertAction();
         }
+        #endregion 重写方法.
     }
     /// <summary>
     /// 父子流程s
@@ -620,7 +622,7 @@ namespace BP.WF.Template
         }
         #endregion
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List   /// <summary>
+        #region 为了适应自动翻译成java的需要,把实体转换成List
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>

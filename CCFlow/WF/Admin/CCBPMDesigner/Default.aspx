@@ -171,12 +171,6 @@
    {
       background: url('../../../GPM/Images/Station.png');
     }
-        .icon-Group
-   {
-      background: url('../../../GPM/Images/Group.png');
-    }
-
-    
     </style>
     <script language="javascript" type="text/javascript">
         osModel = '<%=BP.Sys.SystemConfig.OSModel %>';

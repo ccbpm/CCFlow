@@ -130,6 +130,7 @@
       <LastGenOutput>Reference1.cs</LastGenOutput>
     </Content>
     <Content Include="Service References\CloundWS\WS.disco" />
+    <Content Include="Silverlight.js" />
     <Content Include="WF\Activex\GDCASign\readme.txt" />
     <Content Include="WF\Admin\AttrFlow\Limit.aspx" />
     <Content Include="WF\Admin\AttrNode\BlockModel.aspx" />
@@ -142,8 +143,8 @@
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.aspx" />
+    <Content Include="WF\Admin\CCBPMDesigner\Welcome.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\FrmAttr.aspx" />
-    <Content Include="WF\Admin\CCFormDesigner\Img\CC.png" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuidEntity.aspx" />
     <Content Include="crossdomain.xml">
@@ -455,7 +456,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\truck\FlowDesignerSvr.asmx" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\Truck.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Welcome.aspx" />
+    <Content Include="WF\Admin\CCBPMDesigner\WelcomeV1.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\WelCome.html" />
     <Content Include="WF\Admin\CCFormDesigner\APICode.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\assets\content-background.jpg" />
@@ -714,6 +715,8 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\SearchForm.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\TableRef.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\Tables.aspx" />
     <Content Include="WF\Admin\Clound\DictData.aspx" />
     <Content Include="WF\Admin\Clound\Login.aspx" />
     <Content Include="WF\Admin\Clound\PriFlow.aspx" />
@@ -1241,8 +1244,11 @@
     <Content Include="WF\Img\Tree\File.gif" />
     <Content Include="WF\Img\Tree\Root.gif" />
     <Content Include="WF\Img\undo.png" />
+    <Content Include="WF\MapDef\Designer.aspx" />
+    <Content Include="WF\MapDef\DesignerCol4.aspx" />
     <Content Include="WF\MapDef\ImpTableField.aspx" />
     <Content Include="WF\MapDef\ImpTableFieldSelectBindKey.aspx" />
+    <Content Include="WF\MapDef\Left.aspx" />
     <Content Include="WF\MapDef\MapExt\ActiveDDL.aspx" />
     <Content Include="WF\MapDef\MapExt\AotuGenerNo.aspx" />
     <Content Include="WF\MapDef\MapExt\AutoFull.aspx" />
@@ -3694,6 +3700,13 @@
     <Compile Include="WF\Admin\CCBPMDesigner\Welcome.aspx.designer.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Admin\CCBPMDesigner\WelcomeV1.aspx.cs">
+      <DependentUpon>WelcomeV1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCBPMDesigner\WelcomeV1.aspx.designer.cs">
+      <DependentUpon>WelcomeV1.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\APICode.aspx.cs">
       <DependentUpon>APICode.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3808,6 +3821,20 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\TableRef.aspx.cs">
+      <DependentUpon>TableRef.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\TableRef.aspx.designer.cs">
+      <DependentUpon>TableRef.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Tables.aspx.cs">
+      <DependentUpon>Tables.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Tables.aspx.designer.cs">
+      <DependentUpon>Tables.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Clound\DictData.aspx.cs">
       <DependentUpon>DictData.aspx</DependentUpon>
@@ -4802,6 +4829,20 @@
     <Compile Include="WF\Focus.aspx.designer.cs">
       <DependentUpon>Focus.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\MapDef\Designer.aspx.cs">
+      <DependentUpon>Designer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\Designer.aspx.designer.cs">
+      <DependentUpon>Designer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\MapDef\DesignerCol4.aspx.cs">
+      <DependentUpon>DesignerCol4.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\DesignerCol4.aspx.designer.cs">
+      <DependentUpon>DesignerCol4.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\MapDef\ImpTableField.aspx.cs">
       <DependentUpon>ImpTableField.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -4815,6 +4856,13 @@
     </Compile>
     <Compile Include="WF\MapDef\ImpTableFieldSelectBindKey.aspx.designer.cs">
       <DependentUpon>ImpTableFieldSelectBindKey.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\MapDef\Left.aspx.cs">
+      <DependentUpon>Left.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\Left.aspx.designer.cs">
+      <DependentUpon>Left.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\MapExt\ActiveDDL.aspx.cs">
       <DependentUpon>ActiveDDL.aspx</DependentUpon>
@@ -7726,7 +7774,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>8158</DevelopmentServerPort>
+          <DevelopmentServerPort>41466</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

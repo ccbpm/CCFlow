@@ -132,8 +132,8 @@ namespace CCFlow.WF.Comm.Sys
             ddl.SetSelectItem(srcType.ToString());
 
             ddl.Attributes["onchange"] = "location.href='./SFDBSrcNewGuide.aspx?DoType=" + DoType + "&IsChange=1&No=" + No + "&t=" + DateTimeSpan + "&SrcType=' + this.options[this.selectedIndex].value";
-            pub1.AddTD(ddl);
-            pub1.AddTD("style='width:340px'", "要创建的数据源类型.");
+            pub1.AddTD("style='width:200px'", ddl);
+            pub1.AddTD("要创建的数据源类型.");
             pub1.AddTREnd();
 
 
@@ -149,7 +149,7 @@ namespace CCFlow.WF.Comm.Sys
                 tb.Text = src.No;
 
             pub1.AddTD(tb);
-            pub1.AddTD("style='width:140px'", "比如：ERP, CRM, OA, HR需要英文或下划线数字的组合.");
+            pub1.AddTD("比如：ERP, CRM, OA, HR需要英文或下划线数字的组合.");
             pub1.AddTREnd();
 
             //名称
@@ -163,7 +163,7 @@ namespace CCFlow.WF.Comm.Sys
                 tb.Text = src.Name;
 
             pub1.AddTD(tb);
-            pub1.AddTD("style='width:140px'", "不能为空,中文描述.比如:ERP数据源.");
+            pub1.AddTD("不能为空,中文描述.比如:ERP数据源.");
             pub1.AddTREnd();
 
             switch ((DBSrcType)srcType)
@@ -173,7 +173,7 @@ namespace CCFlow.WF.Comm.Sys
                 case DBSrcType.MySQL:
                 case DBSrcType.Informix:
                     //数据库名称
-                    if (SrcType != (int)DBSrcType.Oracle)
+                    if (srcType != (int)DBSrcType.Oracle)
                     {
                         pub1.AddTR();
                         pub1.AddTDGroupTitle("数据库名称：");
@@ -185,12 +185,13 @@ namespace CCFlow.WF.Comm.Sys
                             tb.Text = src.DBName;
 
                         pub1.AddTD(tb);
+                        pub1.AddTD("连接数据库的名称.");
                         pub1.AddTREnd();
                     }
 
                     //数据库服务器IP地址/数据库实例名称
                     pub1.AddTR();
-                    pub1.AddTDGroupTitle(SrcType == (int)DBSrcType.Oracle ? "数据库实例名称：" : "数据库IP地址：");
+                    pub1.AddTDGroupTitle(srcType == (int)DBSrcType.Oracle ? "数据库实例名称：" : "数据库IP地址：");
 
                     tb = new TB();
                     tb.ID = "TB_" + SFDBSrcAttr.IP;
@@ -199,6 +200,7 @@ namespace CCFlow.WF.Comm.Sys
                         tb.Text = src.IP;
 
                     pub1.AddTD(tb);
+                    pub1.AddTD(srcType == (int) DBSrcType.Oracle ? "oracle数据库实例名称." : "数据库服务器的IP地址.");
                     pub1.AddTREnd();
 
                     //数据库登录帐号
@@ -212,6 +214,7 @@ namespace CCFlow.WF.Comm.Sys
                         tb.Text = src.UserID;
 
                     pub1.AddTD(tb);
+                    pub1.AddTD("数据库连接用户名.");
                     pub1.AddTREnd();
 
                     //数据库登录密码
@@ -225,6 +228,7 @@ namespace CCFlow.WF.Comm.Sys
                         tb.Text = src.Password;
 
                     pub1.AddTD(tb);
+                    pub1.AddTD("数据库连接用户的密码.");
                     pub1.AddTREnd();
                     break;
                 case DBSrcType.WebServices:
@@ -266,10 +270,10 @@ namespace CCFlow.WF.Comm.Sys
                 btn.OnClientClick = "return confirm('确定要删除本数据源吗？数据源一经使用，不允许删除！');";
                 btn.Click += new EventHandler(btnDelete_Click);
                 pub1.Add(btn);
-                pub1.AddSpace(1);
+                //pub1.AddSpace(1);
 
-                pub1.AddEasyUiLinkButton("测试连接", "../RefMethod.aspx?Index=0&EnsName=BP.Sys.SFDBSrcs&No=" + No +
-                                    "&r=" + DateTimeSpan, "icon-rights", false, "_blank");
+                //pub1.AddEasyUiLinkButton("测试连接", "../RefMethod.aspx?Index=0&EnsName=BP.Sys.SFDBSrcs&No=" + No +
+                //                    "&r=" + DateTimeSpan, "icon-rights", false, "_blank");
             }
 
             pub1.AddSpace(1);
@@ -326,7 +330,7 @@ namespace CCFlow.WF.Comm.Sys
         private void Alert(string msg)
         {
             Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "msg",
-                                                        "alert('" + msg.Replace("'", "\"") + "');", true);
+                                                        "alert('" + msg.Replace("'", "\"").Replace("\n","") + "');", true);
         }
 
         /// <summary>
@@ -396,6 +400,15 @@ namespace CCFlow.WF.Comm.Sys
                     break;
                 default:
                     break;
+            }
+
+            //测试是否连接成功，如果连接不成功，则不允许保存。
+            string testResult = src.DoConn();
+
+            if (testResult.IndexOf("连接配置成功") == -1)
+            {
+                Alert(testResult + ".保存失败！");
+                return;
             }
 
             src.Save();

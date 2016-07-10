@@ -165,7 +165,7 @@ namespace BP.Sys
                 switch (this.DBSrcType)
                 {
                     case Sys.DBSrcType.Localhost:
-                        return  SystemConfig.AppCenterDBType;
+                        return SystemConfig.AppCenterDBType;
                     case Sys.DBSrcType.SQLServer:
                         return DBType.MSSQL;
                     case Sys.DBSrcType.Oracle:
@@ -582,7 +582,7 @@ namespace BP.Sys
         {
             //目前还只是考虑到SqlServer数据库中建立链接服务器的功能，其他数据库还没有考虑
             //Oracle中有DBLink功能，但具体还没有研究；MySQL中的Federated引擎功能还不完善，貌似只能增加mysql的外链数据库，且效率可能不大好也
-            switch(this.DBSrcType)
+            switch (this.DBSrcType)
             {
                 case Sys.DBSrcType.Localhost:
                     if (DBAccess.AppCenterDBType != DBType.MSSQL)
@@ -650,7 +650,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string GetIsExitsSQL(DBType dbType, string objName, string dbName)
         {
-            switch(dbType)
+            switch (dbType)
             {
                 case DBType.MSSQL:
                     return string.Format("SELECT (CASE s.xtype WHEN 'U' THEN 'TABLE' WHEN 'V' THEN 'VIEW' WHEN 'P' THEN 'PROCEDURE' ELSE 'OTHER' END) OTYPE FROM sysobjects s WHERE s.name = '{0}'", objName);
@@ -820,7 +820,7 @@ namespace BP.Sys
                     case Sys.DBSrcType.MySQL:
                         return "Data Source=" + this.IP + ";Persist Security info=True;Initial Catalog=" + this.DBName + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
                     case Sys.DBSrcType.Informix:
-                    //return  "Host=" + this.IP + "; Service=; Server=; Database=" + this.DBName + "; User id=" + this.UserID + "; Password=" + this.Password + "; ";  //Service为监听客户端连接的服务名，Server为数据库实例名，这两项没提供
+                        return "Host=" + this.IP + "; Service=; Server=; Database=" + this.DBName + "; User id=" + this.UserID + "; Password=" + this.Password + "; ";  //Service为监听客户端连接的服务名，Server为数据库实例名，这两项没提供
                     default:
                         throw new Exception("@没有判断的类型.");
                 }
@@ -911,10 +911,40 @@ namespace BP.Sys
                 }
             }
 
+            if (this.DBSrcType == Sys.DBSrcType.Informix)
+            {
+                try
+                {
+                    IfxConnection conn = new IfxConnection();
+                    conn.ConnectionString = this.ConnString;
+                    conn.Open();
+                    conn.Close();
+                    return "恭喜您，该(" + this.Name + ")连接配置成功。";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+
             if (this.DBSrcType == Sys.DBSrcType.WebServices)
             {
-                BP.Sys.PubClass.WinOpen(this.IP + (this.IP.EndsWith(".asmx") ? "?wsdl" : this.IP.EndsWith(".svc") ? "?singleWsdl" : ""), 1000, 618);
-                return null;
+                string url = this.IP +
+                             (this.IP.EndsWith(".asmx") ? "?wsdl" : this.IP.EndsWith(".svc") ? "?singleWsdl" : "");
+
+                try
+                {
+                    HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
+                    myRequest.Method = "GET";　              //设置提交方式可以为＂ｇｅｔ＂，＂ｈｅａｄ＂等
+                    myRequest.Timeout = 30000;　             //设置网页响应时间长度
+                    myRequest.AllowAutoRedirect = false;//是否允许自动重定向
+                    HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
+                    return myResponse.StatusCode == HttpStatusCode.OK ? "连接配置成功。" : "连接配置失败。";//返回响应的状态
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
             }
 
             return "没有涉及到的连接测试类型...";
@@ -1238,41 +1268,41 @@ namespace BP.Sys
                 }
             }
 
-            switch(dbType)
+            switch (dbType)
             {
                 case Sys.DBSrcType.SQLServer:
-                    if(objType.ToLower() == "column")
+                    if (objType.ToLower() == "column")
                         RunSQL(string.Format("EXEC SP_RENAME '{0}', '{1}', 'COLUMN'", oldName, newName));
                     else
                         RunSQL(string.Format("EXEC SP_RENAME '{0}', '{1}'", oldName, newName));
                     break;
                 case Sys.DBSrcType.Oracle:
-                    if(objType.ToLower() == "column")
+                    if (objType.ToLower() == "column")
                         RunSQL(string.Format("ALTER TABLE {0} RENAME COLUMN {1} TO {2}", tableName, oldName, newName));
-                    else if(objType.ToLower() == "table")
+                    else if (objType.ToLower() == "table")
                         RunSQL(string.Format("ALTER TABLE {0} RENAME TO {1}", oldName, newName));
-                    else if(objType.ToLower() == "view")
+                    else if (objType.ToLower() == "view")
                         RunSQL(string.Format("RENAME {0} TO {1}", oldName, newName));
                     else
                         throw new Exception("@未涉及到的Oracle数据库改名逻辑。");
                     break;
                 case Sys.DBSrcType.MySQL:
-                    if(objType.ToLower() == "column")
+                    if (objType.ToLower() == "column")
                     {
                         string sql = string.Format("SELECT c.COLUMN_TYPE FROM information_schema.columns c WHERE c.TABLE_SCHEMA = '{0}' AND c.TABLE_NAME = '{1}' AND c.COLUMN_NAME = '{2}'", this.DBName, tableName, oldName);
 
                         DataTable dt = RunSQLReturnTable(sql);
-                        if(dt.Rows.Count > 0)
+                        if (dt.Rows.Count > 0)
                         {
                             RunSQL(string.Format("ALTER TABLE {0} CHANGE COLUMN {1} {2} {3}", tableName, oldName,
                                                  newName, dt.Rows[0][0]));
                         }
                     }
-                    else if(objType.ToLower() == "table")
+                    else if (objType.ToLower() == "table")
                     {
                         RunSQL(string.Format("ALTER TABLE `{0}`.`{1}` RENAME `{0}`.`{2}`", this.DBName, oldName, newName));
                     }
-                    else if(objType.ToLower() == "view")
+                    else if (objType.ToLower() == "view")
                     {
                         string sql = string.Format(
                             "SELECT t.VIEW_DEFINITION FROM information_schema.views t WHERE t.TABLE_SCHEMA = '{0}' AND t.TABLE_NAME = '{1}'",
@@ -1299,7 +1329,7 @@ namespace BP.Sys
                     throw new Exception("@没有涉及到的数据库类型。");
             }
         }
-        
+
 
         /// <summary>
         /// 获取表的字段信息
@@ -1425,7 +1455,7 @@ namespace BP.Sys
                 str += "如下表单使用了该数据源，您不能删除它。";
                 foreach (MapData md in mds)
                 {
-                    str += "@\t\n"+md.No + " - " + md.Name;
+                    str += "@\t\n" + md.No + " - " + md.Name;
                 }
             }
 
@@ -1441,7 +1471,7 @@ namespace BP.Sys
             }
 
             if (str != "")
-                throw new Exception("@删除数据源的时候检查，是否有引用，出现错误："+str);
+                throw new Exception("@删除数据源的时候检查，是否有引用，出现错误：" + str);
 
             return base.beforeDelete();
         }

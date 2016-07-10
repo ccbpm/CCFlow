@@ -112,23 +112,34 @@ namespace CCFlow.WF.Comm.Sys
 
             pub1.AddTableNormal();
 
+            this.pub1.AddTR();
+            this.pub1.AddTDGroupTitle("项目");
+            this.pub1.AddTDGroupTitle("数据");
+            this.pub1.AddTDGroupTitle("描述");
+            this.pub1.AddTREnd();
+
             pub1.AddTR();
-            pub1.AddTDGroupTitle("style='width:140px'", "类型：");
+            pub1.AddTDGroupTitle("style='width:140px'", "数据源类型：");
 
             ddl = new DDL();
             ddl.ID = "DDL_" + SFDBSrcAttr.DBSrcType;
 
+            if (isEdit == true)
+                ddl.Enabled = true;
+
             foreach (SysEnum en in enums)
                 ddl.Items.Add(new ListItem(en.Lab, en.IntKey.ToString(), en.IntKey != 0));
-
             ddl.SetSelectItem(srcType.ToString());
+
             ddl.Attributes["onchange"] = "location.href='./SFDBSrcNewGuide.aspx?DoType=" + DoType + "&IsChange=1&No=" + No + "&t=" + DateTimeSpan + "&SrcType=' + this.options[this.selectedIndex].value";
             pub1.AddTD(ddl);
+            pub1.AddTD("style='width:340px'", "要创建的数据源类型.");
             pub1.AddTREnd();
+
 
             //编号
             pub1.AddTR();
-            pub1.AddTDGroupTitle("编号(英文)：");
+            pub1.AddTDGroupTitle("编号：");
 
             tb = new TB();
             tb.ID = "TB_" + SFDBSrcAttr.No;
@@ -138,6 +149,7 @@ namespace CCFlow.WF.Comm.Sys
                 tb.Text = src.No;
 
             pub1.AddTD(tb);
+            pub1.AddTD("style='width:140px'", "比如：ERP, CRM, OA, HR需要英文或下划线数字的组合.");
             pub1.AddTREnd();
 
             //名称
@@ -151,6 +163,7 @@ namespace CCFlow.WF.Comm.Sys
                 tb.Text = src.Name;
 
             pub1.AddTD(tb);
+            pub1.AddTD("style='width:140px'", "不能为空,中文描述.比如:ERP数据源.");
             pub1.AddTREnd();
 
             switch ((DBSrcType)srcType)
@@ -225,9 +238,14 @@ namespace CCFlow.WF.Comm.Sys
 
                     if (isEdit)
                         tb.Text = src.IP;
-
-                    pub1.AddTD(tb);
+                    pub1.AddTD("colspan=2",tb);
                     pub1.AddTREnd();
+
+                    this.pub1.AddTR();
+                    this.pub1.AddTD();
+                    this.pub1.AddTD("colspan=2", "必须是全部路径,在发布到生产环境的时候注意修改.");
+                    this.pub1.AddTREnd();
+
                     break;
                 default:
                     throw new Exception("未涉及的数据源类型！");

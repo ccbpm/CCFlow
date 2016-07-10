@@ -92,6 +92,9 @@ namespace CCFlow.WF.Comm.Sys
                 this.Pub1.AddLi("<a href='/WF/MapDef/SFSQL.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&FromApp=SL'><b><img src='./Img/View.png' border=0  style='width:17px;height:17px;' />外部表SQL数据源</b></a> -  比如：配置一个SQL通过数据库连接或获取的外部数据，组成一个下拉框。");
                 this.Pub1.AddLi("<a href='/WF/MapDef/SFWS.aspx?DoType=AddSFWebServeces&MyPK=" + this.MyPK + "&FType=Class&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "&FromApp=SL'><b><img src='./Img/WS.png' border=0 />WebServices数据</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。");
 
+               // this.Pub1.AddLi("<a href='/WF/MapDef/SFWS.aspx?DoType=AddSFWebServeces&MyPK=" + this.MyPK + "&FType=Class&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "&FromApp=SL'><b><img src='./Img/WS.png' border=0 />WebServices数据</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。");
+
+
                //// Pub1.AddLi("<div><a href='SFGuide.aspx?Step=12&FK_SFDBsrc=local'><img src='../../Img/New.gif' align='middle' /><span>创建本地编码字典表</span></a></div>");
                // foreach (BP.Sys.SFDBSrc item in ens)
                // {

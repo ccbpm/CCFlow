@@ -1268,6 +1268,7 @@
     <Content Include="WF\MapDef\MapExt\TBFullCtrl_old.aspx" />
     <Content Include="WF\MapDef\MapExt\WordFrm.aspx" />
     <Content Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx" />
+    <Content Include="WF\MapDef\NodeFrmComponents.aspx" />
     <Content Include="WF\MapDef\SFSQL.aspx" />
     <Content Include="WF\MapDef\EditSQL.aspx" />
     <Content Include="WF\MapDef\SFWS.aspx" />
@@ -4996,6 +4997,13 @@
     </Compile>
     <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.designer.cs">
       <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\MapDef\NodeFrmComponents.aspx.cs">
+      <DependentUpon>NodeFrmComponents.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\NodeFrmComponents.aspx.designer.cs">
+      <DependentUpon>NodeFrmComponents.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\Rpt\RptGuide.Master.cs">
       <DependentUpon>RptGuide.Master</DependentUpon>

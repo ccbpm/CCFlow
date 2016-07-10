@@ -499,7 +499,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
             {
-                this.Response.Redirect("/WF/MapDef/MapDef.aspx?FK_MapData=" + md.No);
+                this.Response.Redirect("/WF/MapDef/MapDef.aspx?IsFirst=1&FK_MapData=" + md.No);
             }
 
         }

@@ -20,6 +20,19 @@ namespace CCFlow.WF.MapDef
 {
     public partial class WF_MapDef_MapDef : BP.Web.WebPage
     {
+        #region 属性.
+        /// <summary>
+        /// 是不是第一次进入，如果是就需要执行一个检查方法。
+        /// </summary>
+        public bool IsFirst
+        {
+            get
+            {
+                if (this.Request.QueryString["IsFirst"] == null)
+                    return false;
+                return true;
+            }
+        }
         public new string MyPK
         {
             get
@@ -61,6 +74,8 @@ namespace CCFlow.WF.MapDef
                 return false;
             }
         }
+        #endregion 属性.
+
         public void BindLeft()
         {
             BP.WF.XML.MapMenus xmls = new BP.WF.XML.MapMenus();
@@ -75,9 +90,7 @@ namespace CCFlow.WF.MapDef
             }
             //this.UCCaption.AddULEnd();
             #endregion bindleft
-
             return;
-
 
             #region bindleft
             //this.Left.Add("<a href='http://ccflow.org' target=_blank ><img src='../../DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png' border=0/></a>");
@@ -93,8 +106,18 @@ namespace CCFlow.WF.MapDef
         public MapData md = null;
         protected void Page_Load(object sender, EventArgs e)
         {
+
             string fk_node = this.Request.QueryString["FK_Node"];
             md = new MapData(this.FK_MapData);
+
+            //如果是第一次进入，就执行旧版本的升级检查.
+            if (this.IsFirst == true)
+            {
+                MapDataCol4 cols = new MapDataCol4(this.FK_MapData);
+                cols.CheckFixFrmForUpdateVer();
+            }
+                
+
             MapAttrs mattrs = new MapAttrs(md.No);
             int count = mattrs.Count;
 
@@ -128,6 +151,9 @@ namespace CCFlow.WF.MapDef
             //this.Pub1.AddTREnd();
             //#endregion 生成表头.
 
+            int myidx = 0;
+            string src = "";
+
             /*
              * 根据 GroupField 循环出现菜单。
              */
@@ -144,8 +170,7 @@ namespace CCFlow.WF.MapDef
                                 continue;
 
                             fram.IsUse = true;
-
-                            int myidx = rowIdx + 20;
+                             myidx = rowIdx + 20;
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                             this.Pub1.AddTREnd();
@@ -154,7 +179,7 @@ namespace CCFlow.WF.MapDef
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + fram.MyPK + "'  >");
 
-                            string src = fram.URL; 
+                            src = fram.URL;
                             if (src.Contains("?"))
                                 src += "&FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
                             else
@@ -172,14 +197,8 @@ namespace CCFlow.WF.MapDef
                         {
                             if (dtl.No != gf.CtrlID)
                                 continue;
-
                             dtl.IsUse = true;
-
-                           
-                            int myidx = rowIdx + 10;
-                            //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                            //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div>");
-                            //this.Pub1.AddTREnd();
+                            myidx = rowIdx + 10;
 
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.Add("<TD colspan=" + md.TableCol + " class=GroupField  ><div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div>  <div style='text-align:left; float:left'></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a>  <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
@@ -188,8 +207,8 @@ namespace CCFlow.WF.MapDef
                             myidx++;
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + dtl.No + "'   > ");
-                            string src = "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
-                            this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:"+dtl.W+"px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto' /></iframe>");
+                            src = "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
+                            this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl.W + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto' /></iframe>");
                             this.Pub1.AddTDEnd();
                             this.Pub1.AddTREnd();
                         }
@@ -204,8 +223,8 @@ namespace CCFlow.WF.MapDef
 
                             ath.IsUse = true;
 
-                            int myidx = rowIdx + 10;
-                            
+                            myidx = rowIdx + 10;
+
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                             this.Pub1.AddTREnd();
@@ -214,7 +233,7 @@ namespace CCFlow.WF.MapDef
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='100%' >");
 
-                            string src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+                            src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
                             this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ath.H + "' scrolling=auto  /></iframe>");
 
@@ -222,6 +241,81 @@ namespace CCFlow.WF.MapDef
                             this.Pub1.AddTREnd();
                         }
                         #endregion 增加附件
+                        continue;
+                    case "FWC": //审核组件.
+                        FrmWorkCheck fwc = new FrmWorkCheck(this.FK_MapData);
+                        if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
+                            continue;
+                        myidx = rowIdx + 10;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFWC('" + fwc.NodeID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTREnd();
+
+                        myidx++;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + fwc.No + "' height='" + fwc.FWC_H + "px' width='100%' >");
+
+                        src = "NodeFrmComponents.aspx?DoType=FWC&FK_MapData=" + fwc.NodeID;
+                        this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + fwc.FWC_H + "px' scrolling=auto  /></iframe>");
+                        this.Pub1.AddTDEnd();
+                        this.Pub1.AddTREnd();
+                        continue;
+                    case "SubFlow": //子线程.
+                        FrmSubFlow subflow = new FrmSubFlow(this.FK_MapData);
+                        if (subflow.HisFrmSubFlowSta == FrmSubFlowSta.Disable)
+                            continue;
+
+                        myidx = rowIdx + 10;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditSubFlow('" + subflow.NodeID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTREnd();
+
+                        myidx++;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + subflow.No + "' height='" + subflow.SF_H + "px' width='100%' >");
+
+                        src = "NodeFrmComponents.aspx?DoType=SubFlow&FK_MapData=" + subflow.NodeID;
+                        this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + subflow.SF_H + "px' scrolling=auto  /></iframe>");
+                        this.Pub1.AddTDEnd();
+                        this.Pub1.AddTREnd();
+                        continue;
+                    case "Track": //轨迹图.
+                        FrmTrack track = new FrmTrack(this.FK_MapData);
+                        if (track.FrmTrackSta == FrmTrackSta.Disable)
+                            continue;
+
+                        myidx = rowIdx + 10;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditTrack('" + track.NodeID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTREnd();
+
+                        myidx++;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + track.No + "' height='" + track.FrmTrack_H + "px' width='100%' >");
+
+                        src = "NodeFrmComponents.aspx?DoType=FrmTrack&FK_MapData=" + track.NodeID;
+                        this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + track.FrmTrack_H + "px' scrolling=auto  /></iframe>");
+                        this.Pub1.AddTDEnd();
+                        this.Pub1.AddTREnd();
+                        continue;
+                    case "Thread": //子线城.
+                        FrmThread thread = new FrmThread(this.FK_MapData);
+                        if (thread.FrmThreadSta == FrmThreadSta.Disable)
+                            continue;
+
+                        myidx = rowIdx + 10;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditTread('" + thread.NodeID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTREnd();
+
+                        myidx++;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + thread.No + "' height='" + thread.FrmThread_H + "px' width='100%' >");
+
+                        src = "NodeFrmComponents.aspx?DoType=FrmTread&FK_MapData=" + thread.NodeID;
+                        this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + thread.FrmThread_H + "px' scrolling=auto  /></iframe>");
+                        this.Pub1.AddTDEnd();
+                        this.Pub1.AddTREnd();
                         continue;
                     default:
                         break;
@@ -563,26 +657,7 @@ namespace CCFlow.WF.MapDef
                 }
             } // end循环分组.
 
-            #region 输出审核组件.
-            FrmWorkCheck fwc = new FrmWorkCheck(md.No);
-            if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Disable)
-            {
-                this.Pub1.AddTR();
-                this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top' align:left style='height: 24px;align:left' ", "<div style='text-align:left; float:left'>&nbsp;审核信息</div><div style='text-align:right; float:right'></div>");
-                this.Pub1.AddTREnd();
-
-                this.Pub1.AddTR();
-                this.Pub1.Add("<TD valign=top colspan=" + md.TableCol + " ID='TDFWC' height='150px' > ");
-                string src = "../WorkOpt/WorkCheck.aspx?s=2";
-                string paras = this.RequestParas;
-                if (paras.Contains("OID=") == false)
-                    paras += "&OID=123";
-                src += "&r=q" + paras;
-                this.Pub1.Add("<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "'  width='100%' height='150px' scrolling=auto  /></iframe>");
-                this.Pub1.AddTDEnd();
-                this.Pub1.AddTREnd();
-            }
-            #endregion
+            
 
             this.Pub1.AddTableEnd();
 

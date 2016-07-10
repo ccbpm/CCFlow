@@ -280,7 +280,7 @@ caption
     clear: left;
     width: 100%;
     border-width: 0px 0px 1px 0px;
-    background-color: #FAFAFA;
+    background-color: #F5FFCE;
     word-break: keep-all;
     border-style: dotted none;
 }
@@ -288,7 +288,7 @@ caption
 .TBNumReadonly
 {
     font-size: 12px;
-    background-color: infobackground;
+    background-color: #F5FFCE;
     border-right: black thin;
     border-top: black thin;
     border-left: black thin;

@@ -165,7 +165,7 @@ namespace CCFlow.WF.Admin.XAP
                     break;
                 case "MapDefFixModel": // 表单定义.
                 case "FormFixModel":
-                    this.Response.Redirect("../../MapDef/MapDef.aspx?FK_MapData=" + FK_MapData + "&FK_Flow=" + this.FK_Flow+"&FK_Node="+this.FK_Node, true);
+                    this.Response.Redirect("../../MapDef/MapDef.aspx?IsFirst=1&FK_MapData=" + FK_MapData + "&FK_Flow=" + this.FK_Flow+"&FK_Node="+this.FK_Node, true);
                     break;
                 case "MapDefFreeModel": // 表单定义.
                 case "FormFreeModel":

@@ -58,13 +58,7 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 800px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function MapDataEdit(mypk) {
-            //var url = 'EditMapData.aspx?FK_MapData=' + mypk;
-
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapDataCol4&PK=' + mypk
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
+       
         function CopyFieldFromNode(mypk) {
             var url = 'CopyFieldFromNode.aspx?DoType=AddF&FK_Node=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
@@ -209,6 +203,40 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
             window.location.href = window.location.href;
         }
+
+        // 子线城.
+        function EditFrmThread(mypk) {
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
+        // 轨迹图.
+        function EditTrack(mypk) {
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
+        //子流程.
+        function EditSubFlow(mypk) {
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+        /// 审核组件.
+        function EditFWC(mypk) {
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=' + mypk
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
+        function MapDataEdit(mypk) {
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapDataCol4&PK=' + mypk
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 850px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+
 
         function EditDtl(mypk, dtlKey) {
             var url = 'MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;

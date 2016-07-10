@@ -693,10 +693,10 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_SFDBSrc");
+
+                Map map = new Map("Sys_SFDBSrc", "数据源");
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "数据源";
                 map.EnType = EnType.Sys;
 
                 map.AddTBStringPK(SFDBSrcAttr.No, null, "数据源编号(必须是英文)", true, false, 1, 20, 20);
@@ -726,6 +726,7 @@ namespace BP.Sys
             }
         }
         #endregion
+
 
         /// <summary>
         /// 是表还是视图？
@@ -1415,6 +1416,33 @@ namespace BP.Sys
         {
             if (this.No == "local")
                 throw new Exception("@默认连接(local)不允许删除、更新.");
+
+            string str = "";
+            MapDatas mds = new MapDatas();
+            mds.Retrieve(MapDataAttr.DBSrc, this.No);
+            if (mds.Count != 0)
+            {
+                str += "如下表单使用了该数据源，您不能删除它。";
+                foreach (MapData md in mds)
+                {
+                    str += "@\t\n"+md.No + " - " + md.Name;
+                }
+            }
+
+            SFTables tabs = new SFTables();
+            tabs.Retrieve(SFTableAttr.FK_SFDBSrc, this.No);
+            if (tabs.Count != 0)
+            {
+                str += "如下 table 使用了该数据源，您不能删除它。";
+                foreach (SFTable tab in tabs)
+                {
+                    str += "@\t\n" + tab.No + " - " + tab.Name;
+                }
+            }
+
+            if (str != "")
+                throw new Exception("@删除数据源的时候检查，是否有引用，出现错误："+str);
+
             return base.beforeDelete();
         }
         protected override bool beforeUpdate()

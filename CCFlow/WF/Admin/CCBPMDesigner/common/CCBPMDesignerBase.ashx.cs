@@ -179,6 +179,12 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
                         union 
                         SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
             }
+            else if(BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = @"SELECT CONCAT('F', No) NO, CONCAT('F', ParentNo) PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+                           union 
+                           SELECT NO, CONCAT('F', FK_FlowSort) PARENTNO, CONCAT(NO, '.', NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
+            }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 

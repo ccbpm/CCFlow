@@ -977,6 +977,7 @@ namespace BP.DA
                 switch (AppCenterDBType)
                 {
                     case DBType.MSSQL:
+                    case DBType.MySQL:
                         ada.Fill(oratb);
                         break;
                     case DBType.Oracle:

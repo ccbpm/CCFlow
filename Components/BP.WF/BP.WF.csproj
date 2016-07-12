@@ -212,6 +212,7 @@
     <Compile Include="Template\MapDataCol4.cs" />
     <Compile Include="Template\FrmTrack.cs" />
     <Compile Include="Template\FrmThread.cs" />
+    <Compile Include="Template\FrmNodeComponent.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

@@ -1067,6 +1067,7 @@ namespace BP.Sys
         }
         private static void AddColNote(Entity en, string table, string col, string note)
         {
+            return;
             try
             {
                 string sql = "execute  sp_dropextendedproperty 'MS_Description','user',dbo,'table','" + table + "','column'," + col;
@@ -1091,6 +1092,8 @@ namespace BP.Sys
         /// <param name="en"></param>
         public static void AddCommentForTable_MS(Entity en)
         {
+            return;
+
             if (en.EnMap.EnType == EnType.View || en.EnMap.EnType == EnType.ThirdPartApp)
             {
                 return;

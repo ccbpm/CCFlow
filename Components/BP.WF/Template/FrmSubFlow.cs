@@ -32,6 +32,10 @@ namespace BP.WF.Template
     public class FrmSubFlowAttr : EntityNoAttr
     {
         /// <summary>
+        /// 标签
+        /// </summary>
+        public const string SFLab = "SFLab";
+        /// <summary>
         /// 状态
         /// </summary>
         public const string SFSta = "SFSta";
@@ -103,6 +107,8 @@ namespace BP.WF.Template
         /// 操作字段
         /// </summary>
         public const string SFFields = "SFFields";
+
+
     }
     /// <summary>
     /// 父子流程
@@ -110,6 +116,19 @@ namespace BP.WF.Template
     public class FrmSubFlow : Entity
     {
         #region 属性
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public string SFLab
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmSubFlowAttr.SFLab);
+            }
+        }
+        /// <summary>
+        /// 编号
+        /// </summary>
         public string No
         {
             get
@@ -501,6 +520,7 @@ namespace BP.WF.Template
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
+                map.AddTBString(FrmSubFlowAttr.SFLab, "子流程", "显示标签", true, false, 0, 200, 10, true);
 
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
@@ -513,27 +533,6 @@ namespace BP.WF.Template
                 map.AddTBString(FrmSubFlowAttr.SFCaption, null, "标题", true, false, 0, 100, 10,true);
                 map.AddTBString(FrmSubFlowAttr.SFDefInfo, null, "可启动的子流程", true, false, 0, 50, 10,true);
                 map.AddTBString(FrmSubFlowAttr.SFActiveFlows, null, "可触发的子流程", true, false, 0, 50, 10, true);
-
-
-                //map.AddDDLSysEnum(FrmSubFlowAttr.SFType, (int)SFType.Check, "父子流程", true, true,
-                //    FrmSubFlowAttr.SFType, "@0=父子流程@1=日志组件@2=周报组件@3=月报组件");
-
-                //map.AddTBString(FrmSubFlowAttr.SFCaption, null, "标题", true, false, 0, 100, 10);
-
-               // map.AddDDLSysEnum(FrmSubFlowAttr.SFAth, (int)SFAth.None, "附件上传", true, true,
-                 //  FrmSubFlowAttr.SFAth, "@0=不启用@1=多附件@2=单附件(暂不支持)@3=图片附件(暂不支持)");
-
-               // map.SetHelperAlert(FrmSubFlowAttr.SFAth,
-                 //   "在审核期间，是否启用上传附件？启用什么样的附件？注意：附件的属性在节点表单里配置。"); //使用alert的方式显示帮助信息.
-
-                //map.AddBoolean(FrmSubFlowAttr.SFTrackEnable, true, "轨迹图是否显示？", true, true, false);
-                //map.AddBoolean(FrmSubFlowAttr.SFListEnable, true, "历史审核信息是否显示？(否,历史信息仅出现意见框)", true, true, true);
-                //map.AddBoolean(FrmSubFlowAttr.SFIsShowAllStep, false, "在轨迹表里是否显示所有的步骤？", true, true);
-
-                //map.AddTBString(FrmSubFlowAttr.SFOpLabel, "审核", "操作名词(审核/审阅/批示)", true, false, 0, 50, 10);
-                //map.AddTBString(FrmSubFlowAttr.SFDefInfo, "同意", "默认审核信息", true, false, 0, 50, 10);
-                //map.AddBoolean(FrmSubFlowAttr.SigantureEnabel, false, "操作人是否显示为图片签名？", true, true);
-                //map.AddBoolean(FrmSubFlowAttr.SFIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
 
 
                 map.AddTBFloat(FrmSubFlowAttr.SF_X, 5, "位置X", true, false);

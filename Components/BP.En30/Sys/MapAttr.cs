@@ -1270,11 +1270,6 @@ namespace BP.Sys
                //// map.AddDDLSysEnum(MapAttrAttr.AutoFullWay, 0, "自动填写方式", true, false, MapAttrAttr.AutoFullWay,
                //  //   "@0=不设置@1=本表单中数据计算@2=利用SQL自动填充@3=本表单中外键列@4=对从表的列求值");
                // map.AddTBInt(MapAttrAttr.AutoFullWay, 0, "自动填写方式", true, false);
-
-
-                map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
-                map.AddTBInt(MapAttrAttr.GroupID, 0, "GroupID", true, false);
-
                 //      map.AddTBInt(MapAttrAttr.TabIdx, 0, "Tab顺序键", true, false);
 
                 // 是否是签字，操作员字段有效。2010-09-23 增加。 @0=无@1=图片签名@2=CA签名.
@@ -1290,6 +1285,11 @@ namespace BP.Sys
 
                 //单元格数量。2013-07-24 增加。
                 map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);
+
+                //显示的分组.
+                map.AddTBInt(MapAttrAttr.GroupID, 0, "显示的分组", true, false);
+                map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
+
 
                 //参数属性.
                 map.AddTBAtParas(4000); //
@@ -1518,7 +1518,7 @@ namespace BP.Sys
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(MapAttrAttr.FK_MapData, fk_map);
-            qo.addOrderBy(MapAttrAttr.Idx);
+            qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
             qo.DoQuery();
         }
         public int SearchMapAttrsYesVisable(string fk_map)

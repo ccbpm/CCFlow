@@ -4611,7 +4611,7 @@ namespace BP.WF
                 //首先删除垃圾数据.
                 geEn.Delete("FID", this.WorkID);
 
-                //循环子线城，然后插入数据.
+                //循环子线程，然后插入数据.
                 foreach (GenerWorkerList item in current_gwls)
                 {
                     geEn.PKVal = item.WorkID; //子线程的WorkID作为.

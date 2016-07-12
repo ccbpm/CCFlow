@@ -28,6 +28,10 @@ namespace BP.WF.Template
     public class FrmThreadAttr : EntityNoAttr
     {
         /// <summary>
+        /// 显示标签
+        /// </summary>
+        public const string FrmThreadLab = "FrmThreadLab";
+        /// <summary>
         /// 状态
         /// </summary>
         public const string FrmThreadSta = "FrmThreadSta";
@@ -178,6 +182,17 @@ namespace BP.WF.Template
                 return this.GetValStringByKey("Name");
             }
         }
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public string FrmThreadLab
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmThreadAttr.FrmThreadLab);
+            }
+        }
+        
         #endregion
 
         #region 构造方法
@@ -264,6 +279,9 @@ namespace BP.WF.Template
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
 
+                map.AddTBString(FrmThreadAttr.FrmThreadLab, "子线程", "显示标签", true, false, 0, 200, 10, true);
+
+
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
                 map.AddDDLSysEnum(FrmThreadAttr.FrmThreadSta, (int)FrmThreadSta.Disable, "组件状态",
@@ -272,7 +290,7 @@ namespace BP.WF.Template
                 map.AddTBFloat(FrmThreadAttr.FrmThread_X, 5, "位置X", true, false);
                 map.AddTBFloat(FrmThreadAttr.FrmThread_Y, 5, "位置Y", true, false);
 
-                map.AddTBFloat(FrmThreadAttr.FrmThread_H, 500, "高度", true, false);
+                map.AddTBFloat(FrmThreadAttr.FrmThread_H, 300, "高度", true, false);
                 map.AddTBFloat(FrmThreadAttr.FrmThread_W, 400, "宽度", true, false);
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
@@ -281,21 +299,7 @@ namespace BP.WF.Template
                 return this._enMap;
             }
         }
-        protected override bool beforeInsert()
-        {
-            GroupField gf = new GroupField();
-            if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
-            {
-                gf.EnName = "ND"+this.NodeID;
-                gf.CtrlID = "FrmThread" + this.No;
-                gf.CtrlType = "FrmThread";
-                gf.Lab = "轨迹";
-                gf.Idx = 0;
-                gf.Insert(); //插入.
-            }
-
-            return base.beforeInsert();
-        }
+      
         protected override bool beforeUpdateInsertAction()
         {
             return base.beforeUpdateInsertAction();

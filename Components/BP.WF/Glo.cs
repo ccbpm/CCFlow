@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20160515";
+        public static string Ver = "20160711";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -171,8 +171,6 @@ namespace BP.WF
             string msg = "";
             try
             {
-                
-
 
                 #region 表单方案中的不可编辑, 旧版本如果包含了这个列.
                 if (BP.DA.DBAccess.IsExitsTableCol("WF_FrmNode", "IsEdit") == true)
@@ -187,18 +185,33 @@ namespace BP.WF
                 #endregion
 
                 //执行升级 2016.04.08 
-                BP.WF.Template.Cond cnd = new Cond();
+                Cond cnd = new Cond();
                 cnd.CheckPhysicsTable();
 
                 #region 升级数据源.
                 sql = "UPDATE Sys_SFTable SET FK_SFDBSrc='local' WHERE FK_SFDBSrc IS NULL OR FK_SFDBSrc=''";
                 BP.DA.DBAccess.RunSQL(sql);
+
+                sql = "UPDATE Sys_MapAttr SET ColSpan=4 WHERE ColSpan>=3";
+                BP.DA.DBAccess.RunSQL(sql);
                 #endregion 升级数据源
 
-
                 #region 标签Ext
+
+                sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FrmNodeComponent'";
+                DBAccess.RunSQL(sql);
+    
+                sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FrmNodeComponent','";
+                sql += "@NodeID=审核组件,适用于sdk表单审核组件与ccform上的审核组件属性设置.";
+                sql += "@SFLab=父子流程组件,在该节点上配置与显示父子流程.";
+                sql += "@FrmThreadLab=子线程组件,对合流节点有效，用于配置与现实子线程运行的情况。";
+                sql += "@FrmTrackLab=轨迹组件,用于显示流程运行的轨迹图.";                
+                sql += "')";
+                DBAccess.RunSQL(sql);
+
+
                 sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeExt'";
-                BP.DA.DBAccess.RunSQL(sql);
+                DBAccess.RunSQL(sql);
                 sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeExt','";
                 sql += "@NodeID=基本配置";
                 sql += "@FWCSta=审核组件,适用于sdk表单审核组件与ccform上的审核组件属性设置.";

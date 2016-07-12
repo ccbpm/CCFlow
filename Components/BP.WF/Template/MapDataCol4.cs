@@ -14,661 +14,7 @@ namespace BP.WF.Template
     /// </summary>
     public class MapDataCol4 : EntityNoName
     {
-        #region 权限控制.
-        public override UAC HisUAC
-        {
-            get
-            {
-                UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
-                {
-                    uac.IsDelete = false;
-                    uac.IsUpdate = true;
-                    return uac;
-                }
-                uac.Readonly();
-                return uac;
-            }
-        }
-        #endregion 权限控制.
-
-        #region weboffice文档属性(参数属性)
-        /// <summary>
-        /// 是否启用锁定行
-        /// </summary>
-        public bool IsRowLock
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsRowLock, false);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsRowLock, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用打印
-        /// </summary>
-        public bool IsWoEnablePrint
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnablePrint);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnablePrint, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用只读
-        /// </summary>
-        public bool IsWoEnableReadonly
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableReadonly);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableReadonly, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用修订
-        /// </summary>
-        public bool IsWoEnableRevise
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableRevise);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableRevise, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用保存
-        /// </summary>
-        public bool IsWoEnableSave
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableSave);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableSave, value);
-            }
-        }
-        /// <summary>
-        /// 是否查看用户留痕
-        /// </summary>
-        public bool IsWoEnableViewKeepMark
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableViewKeepMark);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableViewKeepMark, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用weboffice
-        /// </summary>
-        public bool IsWoEnableWF
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableWF);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableWF, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否启用套红
-        /// </summary>
-        public bool IsWoEnableOver
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableOver);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableOver, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否启用签章
-        /// </summary>
-        public bool IsWoEnableSeal
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableSeal);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableSeal, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否启用公文模板
-        /// </summary>
-        public bool IsWoEnableTemplete
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableTemplete);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableTemplete, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否记录节点信息
-        /// </summary>
-        public bool IsWoEnableCheck
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableCheck);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableCheck, value);
-            }
-        }
-        /// <summary>
-        /// 是否插入流程图
-        /// </summary>
-        public bool IsWoEnableInsertFlow
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableInsertFlow);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableInsertFlow, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否插入风险点
-        /// </summary>
-        public bool IsWoEnableInsertFengXian
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableInsertFengXian);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableInsertFengXian, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否启用留痕模式
-        /// </summary>
-        public bool IsWoEnableMarks
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableMarks);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableMarks, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否插入风险点
-        /// </summary>
-        public bool IsWoEnableDown
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableDown);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableDown, value);
-            }
-        }
-
-        #endregion weboffice文档属性
-
-        #region 自动计算属性.
-        /// <summary>
-        /// 左边界.
-        /// </summary>
-        public float MaxLeft
-        {
-            get
-            {
-                return this.GetParaFloat(MapDataAttr.MaxLeft);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.MaxLeft, value);
-            }
-        }
-        /// <summary>
-        /// 右边界
-        /// </summary>
-        public float MaxRight
-        {
-            get
-            {
-                return this.GetParaFloat(MapDataAttr.MaxRight);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.MaxRight, value);
-            }
-        }
-        /// <summary>
-        /// 最高top
-        /// </summary>
-        public float MaxTop
-        {
-            get
-            {
-                return this.GetParaFloat(MapDataAttr.MaxTop);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.MaxTop, value);
-            }
-        }
-        /// <summary>
-        /// 最低
-        /// </summary>
-        public float MaxEnd
-        {
-            get
-            {
-                return this.GetParaFloat(MapDataAttr.MaxEnd);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.MaxEnd, value);
-            }
-        }
-        #endregion 自动计算属性.
-
-        #region 报表属性(参数方式存储).
-        /// <summary>
-        /// 是否关键字查询
-        /// </summary>
-        public bool RptIsSearchKey
-        {
-            get
-            {
-                return this.GetParaBoolen(MapDataAttr.RptIsSearchKey, true);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.RptIsSearchKey, value);
-            }
-        }
-        /// <summary>
-        /// 时间段查询方式
-        /// </summary>
-        public DTSearchWay RptDTSearchWay
-        {
-            get
-            {
-                return (DTSearchWay)this.GetParaInt(MapDataAttr.RptDTSearchWay);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.RptDTSearchWay, (int)value);
-            }
-        }
-        /// <summary>
-        /// 时间字段
-        /// </summary>
-        public string RptDTSearchKey
-        {
-            get
-            {
-                return this.GetParaString(MapDataAttr.RptDTSearchKey);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.RptDTSearchKey, value);
-            }
-        }
-        /// <summary>
-        /// 查询外键枚举字段
-        /// </summary>
-        public string RptSearchKeys
-        {
-            get
-            {
-                return this.GetParaString(MapDataAttr.RptSearchKeys,"*");
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.RptSearchKeys, value);
-            }
-        }
-        #endregion 报表属性(参数方式存储).
-
-        #region 外键属性
-        public string Ver
-        {
-            get
-            {
-                return this.GetValStringByKey(MapDataAttr.Ver);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.Ver, value);
-            }
-        }
-        /// <summary>
-        /// 顺序号
-        /// </summary>
-        public int Idx
-        {
-            get
-            {
-                return this.GetValIntByKey(MapDataAttr.Idx);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.Idx, value);
-            }
-        }
-        /// <summary>
-        /// 框架
-        /// </summary>
-        public MapFrames MapFrames
-        {
-            get
-            {
-                MapFrames obj = this.GetRefObject("MapFrames") as MapFrames;
-                if (obj == null)
-                {
-                    obj = new MapFrames(this.No);
-                    this.SetRefObject("MapFrames", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 分组字段
-        /// </summary>
-        public GroupFields GroupFields
-        {
-            get
-            {
-                GroupFields obj = this.GetRefObject("GroupFields") as GroupFields;
-                if (obj == null)
-                {
-                    obj = new GroupFields(this.No);
-                    this.SetRefObject("GroupFields", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 逻辑扩展
-        /// </summary>
-        public MapExts MapExts
-        {
-            get
-            {
-                MapExts obj = this.GetRefObject("MapExts") as MapExts;
-                if (obj == null)
-                {
-                    obj = new MapExts(this.No);
-                    this.SetRefObject("MapExts", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 事件
-        /// </summary>
-        public FrmEvents FrmEvents
-        {
-            get
-            {
-                FrmEvents obj = this.GetRefObject("FrmEvents") as FrmEvents;
-                if (obj == null)
-                {
-                    obj = new FrmEvents(this.No);
-                    this.SetRefObject("FrmEvents", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 一对多
-        /// </summary>
-        public MapM2Ms MapM2Ms
-        {
-            get
-            {
-                MapM2Ms obj = this.GetRefObject("MapM2Ms") as MapM2Ms;
-                if (obj == null)
-                {
-                    obj = new MapM2Ms(this.No);
-                    this.SetRefObject("MapM2Ms", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 从表
-        /// </summary>
-        public MapDtls MapDtls
-        {
-            get
-            {
-                MapDtls obj = this.GetRefObject("MapDtls") as MapDtls;
-                if (obj == null)
-                {
-                    obj = new MapDtls(this.No);
-                    this.SetRefObject("MapDtls", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 报表
-        /// </summary>
-        public FrmRpts FrmRpts
-        {
-            get
-            {
-                FrmRpts obj = this.GetRefObject("FrmRpts") as FrmRpts;
-                if (obj == null)
-                {
-                    obj = new FrmRpts(this.No);
-                    this.SetRefObject("FrmRpts", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 超连接
-        /// </summary>
-        public FrmLinks FrmLinks
-        {
-            get
-            {
-                FrmLinks obj = this.GetRefObject("FrmLinks") as FrmLinks;
-                if (obj == null)
-                {
-                    obj = new FrmLinks(this.No);
-                    this.SetRefObject("FrmLinks", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 按钮
-        /// </summary>
-        public FrmBtns FrmBtns
-        {
-            get
-            {
-                FrmBtns obj = this.GetRefObject("FrmBtns") as FrmBtns;
-                if (obj == null)
-                {
-                    obj = new FrmBtns(this.No);
-                    this.SetRefObject("FrmBtns", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 元素
-        /// </summary>
-        public FrmEles FrmEles
-        {
-            get
-            {
-                FrmEles obj = this.GetRefObject("FrmEles") as FrmEles;
-                if (obj == null)
-                {
-                    obj = new FrmEles(this.No);
-                    this.SetRefObject("FrmEles", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 线
-        /// </summary>
-        public FrmLines FrmLines
-        {
-            get
-            {
-                FrmLines obj = this.GetRefObject("FrmLines") as FrmLines;
-                if (obj == null)
-                {
-                    obj = new FrmLines(this.No);
-                    this.SetRefObject("FrmLines", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 标签
-        /// </summary>
-        public FrmLabs FrmLabs
-        {
-            get
-            {
-                FrmLabs obj = this.GetRefObject("FrmLabs") as FrmLabs;
-                if (obj == null)
-                {
-                    obj = new FrmLabs(this.No);
-                    this.SetRefObject("FrmLabs", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 图片
-        /// </summary>
-        public FrmImgs FrmImgs
-        {
-            get
-            {
-                FrmImgs obj = this.GetRefObject("FrmImgs") as FrmImgs;
-                if (obj == null)
-                {
-                    obj = new FrmImgs(this.No);
-                    this.SetRefObject("FrmImgs", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 附件
-        /// </summary>
-        public FrmAttachments FrmAttachments
-        {
-            get
-            {
-                FrmAttachments obj = this.GetRefObject("FrmAttachments") as FrmAttachments;
-                if (obj == null)
-                {
-                    obj = new FrmAttachments(this.No);
-                    this.SetRefObject("FrmAttachments", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 图片附件
-        /// </summary>
-        public FrmImgAths FrmImgAths
-        {
-            get
-            {
-                FrmImgAths obj = this.GetRefObject("FrmImgAths") as FrmImgAths;
-                if (obj == null)
-                {
-                    obj = new FrmImgAths(this.No);
-                    this.SetRefObject("FrmImgAths", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 单选按钮
-        /// </summary>
-        public FrmRBs FrmRBs
-        {
-            get
-            {
-                FrmRBs obj = this.GetRefObject("FrmRBs") as FrmRBs;
-                if (obj == null)
-                {
-                    obj = new FrmRBs(this.No);
-                    this.SetRefObject("FrmRBs", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 属性
-        /// </summary>
-        public MapAttrs MapAttrs
-        {
-            get
-            {
-                MapAttrs obj = this.GetRefObject("MapAttrs") as MapAttrs;
-                if (obj == null)
-                {
-                    obj = new MapAttrs(this.No);
-                    this.SetRefObject("MapAttrs", obj);
-                }
-                return obj;
-            }
-        }
+        #region 属性
         /// <summary>
         /// 是否是节点表单?
         /// </summary>
@@ -695,259 +41,28 @@ namespace BP.WF.Template
         {
             get
             {
-                return int.Parse( this.No.Replace("ND", ""));
+                return int.Parse(this.No.Replace("ND", ""));
             }
         }
         #endregion
 
-        #region 属性
-        /// <summary>
-        /// 物理表
-        /// </summary>
-        public string PTable
+        #region 权限控制.
+        public override UAC HisUAC
         {
             get
             {
-                string s = this.GetValStrByKey(MapDataAttr.PTable);
-                if (s == "" || s == null)
-                    return this.No;
-                return s;
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.PTable, value);
-            }
-        }
-        /// <summary>
-        /// URL
-        /// </summary>
-        public string Url
-        {
-            get
-            {
-                return this.GetValStrByKey(MapDataAttr.Url);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.Url, value);
-            }
-        }
-        public DBUrlType HisDBUrl
-        {
-            get
-            {
-                return DBUrlType.AppCenterDSN;
-            }
-        }
-        public AppType HisAppType
-        {
-            get
-            {
-                return (AppType)this.GetValIntByKey(MapDataAttr.AppType);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.AppType, (int)value);
-            }
-        }
-        /// <summary>
-        /// 备注
-        /// </summary>
-        public string Note
-        {
-            get
-            {
-                return this.GetValStrByKey(MapDataAttr.Note);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.Note, value);
-            }
-        }
-        /// <summary>
-        /// 是否有CA.
-        /// </summary>
-        public bool IsHaveCA
-        {
-            get
-            {
-                return this.GetParaBoolen("IsHaveCA", false);
-
-            }
-            set
-            {
-                this.SetPara("IsHaveCA", value);
-            }
-        }
-        /// <summary>
-        /// 类别，可以为空.
-        /// </summary>
-        public string FK_FrmSort
-        {
-            get
-            {
-                return this.GetValStrByKey(MapDataAttr.FK_FrmSort);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.FK_FrmSort, value);
-            }
-        }
-        /// <summary>
-        /// 类别，可以为空.
-        /// </summary>
-        public string FK_FormTree
-        {
-            get
-            {
-                return this.GetValStrByKey(MapDataAttr.FK_FormTree);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.FK_FormTree, value);
-            }
-        }
-        /// <summary>
-        /// 从表集合.
-        /// </summary>
-        public string Dtls
-        {
-            get
-            {
-                return this.GetValStrByKey(MapDataAttr.Dtls);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.Dtls, value);
-            }
-        }
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public string EnPK
-        {
-            get
-            {
-                string s = this.GetValStrByKey(MapDataAttr.EnPK);
-                if (string.IsNullOrEmpty(s))
-                    return "OID";
-                return s;
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.EnPK, value);
-            }
-        }
-        public Entities _HisEns = null;
-        public new Entities HisEns
-        {
-            get
-            {
-                if (_HisEns == null)
+                UAC uac = new UAC();
+                if (BP.Web.WebUser.No == "admin")
                 {
-                    _HisEns = BP.En.ClassFactory.GetEns(this.No);
+                    uac.IsDelete = false;
+                    uac.IsUpdate = true;
+                    return uac;
                 }
-                return _HisEns;
+                uac.Readonly();
+                return uac;
             }
         }
-        public Entity HisEn
-        {
-            get
-            {
-                return this.HisEns.GetNewEntity;
-            }
-        }
-        public float FrmW
-        {
-            get
-            {
-                return this.GetValFloatByKey(MapDataAttr.FrmW);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.FrmW, value);
-            }
-        }
-        ///// <summary>
-        ///// 表单控制方案
-        ///// </summary>
-        //public string Slns
-        //{
-        //    get
-        //    {
-        //        return this.GetValStringByKey(MapDataAttr.Slns);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(MapDataAttr.Slns, value);
-        //    }
-        //}
-        public float FrmH
-        {
-            get
-            {
-                return this.GetValFloatByKey(MapDataAttr.FrmH);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.FrmH, value);
-            }
-        }
-        /// <summary>
-        /// 表格显示的列
-        /// </summary>
-        public int TableCol
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapDataAttr.TableCol);
-                if (i == 0 || i == 1)
-                    return 4;
-                return i;
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.TableCol, value);
-            }
-        }
-        /// <summary>
-        /// 表的宽度
-        /// </summary>
-        public string TableWidth
-        {
-            get
-            {
-                //switch (this.TableCol)
-                //{
-                //    case 2:
-                //        return
-                //        labCol = 25;
-                //        ctrlCol = 75;
-                //        break;
-                //    case 4:
-                //        labCol = 20;
-                //        ctrlCol = 30;
-                //        break;
-                //    case 6:
-                //        labCol = 15;
-                //        ctrlCol = 30;
-                //        break;
-                //    case 8:
-                //        labCol = 10;
-                //        ctrlCol = 15;
-                //        break;
-                //    default:
-                //        break;
-                //}
-
-
-                int i = this.GetValIntByKey(MapDataAttr.TableWidth);
-                if (i <= 50)
-                    return "100%";
-                return i + "px";
-            }
-        }
-        #endregion
+        #endregion 权限控制.
 
         #region 构造方法
         /// <summary>
@@ -959,7 +74,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 表单属性
         /// </summary>
-        /// <param name="no">映射编号</param>
+        /// <param name="no">表单ID</param>
         public MapDataCol4(string no)
             : base(no)
         {
@@ -992,18 +107,16 @@ namespace BP.WF.Template
 
                 //数据源.
                 map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
-
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 #endregion 基本属性.
 
                 #region 设计者信息.
                 map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
-                map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20,true);
-                map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20,false);
+                map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
+                map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
-                map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false,true);
-
+                map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
                 //增加参数字段.
                 map.AddTBAtParas(4000);
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
@@ -1011,22 +124,6 @@ namespace BP.WF.Template
 
                 //查询条件.
                 map.AddSearchAttr(MapDataAttr.DBSrc);
-
-                //RefMethod rm = new RefMethod();
-                //rm.Title = "设计自由表单"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoDFrom";
-                //rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Form.png";
-                //rm.Visable = true;
-                //rm.Target = "_blank";
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "设计傻瓜表单"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoDFromCol4";
-                //rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Form.png";
-                //rm.Visable = true;
-                //rm.Target = "_blank";
-                //map.AddRefMethod(rm);
 
                 #region 方法 - 基本功能.
                 RefMethod rm = new RefMethod();
@@ -1053,7 +150,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-                
+
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
@@ -1092,11 +189,12 @@ namespace BP.WF.Template
                 //带有参数的方法.
                 rm = new RefMethod();
                 rm.Title = "重命名字段";
-                rm.Warning = "您确定要处理吗？";
                 rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/ReName.png";
+
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1114,21 +212,21 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
                 rm.Visable = true;
                 rm.RefAttrLinkLabel = "表单检查";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Check.png";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "节点表单组件"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoNodeFrmCompent";
+                rm.Visable = true;
+                rm.RefAttrLinkLabel = "节点表单组件";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Components.png";
+                map.AddRefMethod(rm);
                 #endregion 方法 - 基本功能.
 
-                
-
-                //rm = new RefMethod();
-                //rm.Title = "扩展设置"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoMapExt";
-                //rm.Icon = "/WF/Img/Setting.png";
-                //rm.Visable = true;
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Target = "_blank";
-                //map.AddRefMethod(rm);
 
                 #region 方法 - 开发接口.
                 rm = new RefMethod();
@@ -1152,81 +250,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 方法 - 开发接口.
 
-
-                //rm = new RefMethod();
-                //rm.Title = "Word表单属性"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoWordFrm";
-                //rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Btn/Word.gif";
-                //rm.Visable = true;
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Target = "_blank";
-                //rm.GroupName = "开发接口";
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "Excel表单属性"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoExcelFrm";
-                //rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Btn/Excel.gif";
-                //rm.Visable = true;
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Target = "_blank";
-                //rm.GroupName = "开发接口";
-                //map.AddRefMethod(rm);
-
-
-                //rm = new RefMethod();
-                //rm.Title = "数据源管理"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoDBSrc";
-                //rm.Icon = "/WF/Img/DB.png";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Visable = true;
-                //rm.RefAttrLinkLabel = "数据源管理";
-                //rm.Target = "_blank";
-                //map.AddRefMethod(rm);
-
-
-                #region 节点表单属性.
-                rm = new RefMethod();
-                rm.Title = "审核组件"; // "设计表单";
-                rm.GroupName = "节点表单属性";
-                rm.ClassMethodName = this.ToString() + ".DoFWC";
-                rm.Visable = true;
-                rm.RefAttrLinkLabel = "审核组件";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "父子流程"; // "设计表单";
-                rm.GroupName = "节点表单属性";
-                rm.ClassMethodName = this.ToString() + ".DoSubFlow";
-                rm.Visable = true;
-                rm.RefAttrLinkLabel = "父子流程";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "子线程"; // "设计表单";
-                rm.GroupName = "节点表单属性";
-                rm.ClassMethodName = this.ToString() + ".DoThread";
-                rm.Visable = true;
-                rm.RefAttrLinkLabel = "子线程";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "轨迹图"; // "设计表单";
-                rm.GroupName = "节点表单属性";
-                rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Visable = true;
-                rm.RefAttrLinkLabel = "轨迹图";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-                #endregion
-
                 this._enMap = map;
                 return this._enMap;
             }
@@ -1235,15 +258,44 @@ namespace BP.WF.Template
 
         #region 节点表单方法.
         /// <summary>
+        /// 节点表单组件
+        /// </summary>
+        /// <returns></returns>
+        public string DoNodeFrmCompent()
+        {
+            if (this.No.Contains("ND") == true)
+                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+            else
+                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
+        }
+        /// <summary>
         /// 执行旧版本的兼容性检查.
         /// </summary>
-        public string CheckFixFrmForUpdateVer()
+        public string DoCheckFixFrmForUpdateVer()
         {
             // 更新状态.
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlType='' WHERE CtrlType IS NULL");
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
 
             string str = "";
+
+             // 处理失去分组的字段.
+            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='"+this.No+"' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='"+this.No+"' AND "+SystemConfig.AppCenterDBLengthStr+"(CtrlID)=0)  ";
+            MapAttrs attrs = new MapAttrs();
+            attrs.RetrieveInSQL(sql);
+            if (attrs.Count != 0)
+            {
+                GroupField gf = new GroupField();
+                gf.Lab = "基本信息";
+                gf.EnName = this.No;
+                gf.Insert();
+                foreach (MapAttr attr in attrs)
+                {
+                    attr.GroupID = gf.OID;
+                    attr.Update();
+                }
+            }
+
 
             //从表.
             MapDtls dtls = new MapDtls(this.No);
@@ -1254,7 +306,7 @@ namespace BP.WF.Template
                     continue;
 
                 gf.Lab = dtl.Name;
-                gf.CtrlID = dtl.No;
+                gf.CtrlID =  dtl.No;
                 gf.CtrlType = "Dtl";
                 gf.EnName = dtl.FK_MapData;
                 gf.Insert();
@@ -1303,11 +355,11 @@ namespace BP.WF.Template
                 int myNodeID = this.NodeID;
 
                 GroupField gf = new GroupField();
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "FWC" + myNodeID) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "FWCND" + myNodeID) == false)
                 {
                     gf = new GroupField();
                     gf.Lab = "审核信息";
-                    gf.CtrlID = "FWC" + myNodeID;
+                    gf.CtrlID = "FWCND" + myNodeID;
                     gf.CtrlType = "FWC";
                     gf.EnName = "ND" + myNodeID;
                     gf.Insert();
@@ -1316,11 +368,11 @@ namespace BP.WF.Template
 
                 }
 
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "SubFlow" + myNodeID) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "SubFlowND" + myNodeID) == false)
                 {
                     gf = new GroupField();
                     gf.Lab = "父子流程";
-                    gf.CtrlID = "SubFlow" + myNodeID;
+                    gf.CtrlID = "SubFlowND" + myNodeID;
                     gf.CtrlType = "SubFlow";
                     gf.EnName = "ND" + myNodeID;
                     gf.Insert();
@@ -1329,11 +381,11 @@ namespace BP.WF.Template
 
                 }
 
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "Thread" + myNodeID) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "ThreadND" + myNodeID) == false)
                 {
                     gf = new GroupField();
                     gf.Lab = "子线程";
-                    gf.CtrlID = "Thread" + myNodeID;
+                    gf.CtrlID = "ThreadND" + myNodeID;
                     gf.CtrlType = "Thread";
                     gf.EnName = "ND" + myNodeID;
                     gf.Insert();
@@ -1341,11 +393,11 @@ namespace BP.WF.Template
                     str += "@为 子线程 增加了分组.";
                 }
 
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "Track" + myNodeID) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "TrackND" + myNodeID) == false)
                 {
                     gf = new GroupField();
                     gf.Lab = "轨迹图";
-                    gf.CtrlID = "Track" + myNodeID;
+                    gf.CtrlID = "TrackND" + myNodeID;
                     gf.CtrlType = "Track";
                     gf.EnName = "ND" + myNodeID;
                     gf.Insert();
@@ -1357,52 +409,7 @@ namespace BP.WF.Template
             if (str == "")
                 return "检查成功.";
 
-            return str+", @@@ 检查成功。";
-        }
-
-        /// <summary>
-        /// 审核组件.
-        /// </summary>
-        /// <returns></returns>
-        public string DoFWC()
-        {
-            if (this.No.Contains("ND") == true)
-                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" +this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
-            else
-                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
-        }
-        /// <summary>
-        /// 子流程
-        /// </summary>
-        /// <returns></returns>
-        public string DoSubFlow()
-        {
-            if (this.No.Contains("ND") == true)
-                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
-            else
-                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
-        }
-        /// <summary>
-        /// 轨迹属性.
-        /// </summary>
-        /// <returns></returns>
-        public string DoThread()
-        {
-            if (this.No.Contains("ND") == true)
-                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmThread&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
-            else
-                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
-        }
-        /// <summary>
-        /// 轨迹图.
-        /// </summary>
-        /// <returns></returns>
-        public string DoTrack()
-        {
-            if (this.No.Contains("ND") == true)
-                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
-            else
-                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
+            return str + ", @@@ 检查成功。";
         }
         #endregion
 
@@ -1494,7 +501,7 @@ namespace BP.WF.Template
             return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=&FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
-          /// <summary>
+        /// <summary>
         /// 设计表单
         /// </summary>
         /// <returns></returns>

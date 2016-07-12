@@ -32,11 +32,16 @@ namespace CCFlow.WF.MapDef
 
             this.Pub1.AddTDTitle("最小长度");
             this.Pub1.AddTDTitle("最大长度");
+
             //add by myflow-大连 2014-08-01
-            this.Pub1.AddTDTitle("排序");
+            this.Pub1.AddTDTitle("分组");
+            this.Pub1.AddTDTitle("最大长度");
+
+            GroupFields gfs = new GroupFields();
+            gfs.RetrieveFieldGroup(this.FK_MapData); 
+             
             //end
             this.Pub1.AddTREnd();
-
             MapAttrs attrs = new MapAttrs(this.FK_MapData);
             int idx = 0;
             bool isH = false;
@@ -77,6 +82,14 @@ namespace CCFlow.WF.MapDef
                 tb.Text = attr.MaxLen.ToString();
                 tb.Columns = 3;
                 this.Pub1.AddTD(tb);
+
+                //隶属分组
+                BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
+                ddl.ID = "DDL_Group_" + attr.KeyOfEn;
+                ddl.Bind(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab);
+                ddl.SetSelectItem(attr.GroupID);
+                this.Pub1.AddTD(ddl);
+
                 //add by myflow-大连 2014-08-01
                 //排序.
                 tb = new TextBox();
@@ -119,6 +132,9 @@ namespace CCFlow.WF.MapDef
                     int minLen = int.Parse(this.Pub1.GetTextBoxByID("TB_MinLen_" + attr.KeyOfEn).Text);
                     int maxLen = int.Parse(this.Pub1.GetTextBoxByID("TB_MaxLen_" + attr.KeyOfEn).Text);
                     idx = int.Parse(this.Pub1.GetTextBoxByID("TB_IDX_" + attr.KeyOfEn).Text);
+                    
+                    int groupID  =this.Pub1.GetDDLByID("DDL_Group_" + attr.KeyOfEn).SelectedItemIntVal;
+
                     if (attr.KeyOfEn != filed)
                     {
                         attr.Delete();
@@ -146,11 +162,17 @@ namespace CCFlow.WF.MapDef
 
                     if (attr.MaxLen != maxLen)
                         isChange = true;
+
                     if (attr.Idx != idx)
                         isChange = true;
+
+                    if (attr.GroupID != groupID)
+                        isChange = true;
+                    
                     if (isChange == false)
                         continue;
 
+                    attr.GroupID = groupID;
                     attr.MaxLen = maxLen;
                     attr.MinLen = minLen;
                     attr.Name = name;
@@ -167,11 +189,13 @@ namespace CCFlow.WF.MapDef
                 }
             }
 
-            if (string.IsNullOrEmpty(info) == false)
-                this.Pub2.AddFieldSet("保存成功信息", info);
+            this.Response.Redirect(this.Request.RawUrl);
 
-            if (string.IsNullOrEmpty(err) == false)
-                this.Pub2.AddFieldSet("保存失败信息", err);
+            //if (string.IsNullOrEmpty(info) == false)
+            //    this.Pub2.AddFieldSet("保存成功信息", info);
+
+            //if (string.IsNullOrEmpty(err) == false)
+            //    this.Pub2.AddFieldSet("保存失败信息", err);
             return;
         }
     }

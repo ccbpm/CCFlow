@@ -122,39 +122,7 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-
-        function FrameDoUp(MyPK) {
-            var url = 'Do.aspx?DoType=FrameDoUp&MyPK=' + MyPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-        function FrameDoDown(MyPK) {
-            var url = 'Do.aspx?DoType=FrameDoDown&MyPK=' + MyPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-
-        function DtlDoUp(MyPK) {
-            var url = 'Do.aspx?DoType=DtlDoUp&MyPK=' + MyPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-        function DtlDoDown(MyPK) {
-            var url = 'Do.aspx?DoType=DtlDoDown&MyPK=' + MyPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-
-        function M2MDoUp(MyPK) {
-            var url = 'Do.aspx?DoType=M2MDoUp&MyPK=' + MyPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-        function M2MDoDown(MyPK) {
-            var url = 'Do.aspx?DoType=M2MDoDown&MyPK=' + MyPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
+       
 
         function Del(mypk, refoid) {
             if (window.confirm('您确定要删除吗？') == false)
@@ -204,7 +172,7 @@
             window.location.href = window.location.href;
         }
 
-        // 子线城.
+        // 子线程.
         function EditFrmThread(mypk) {
             var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
@@ -218,18 +186,38 @@
             window.location.href = window.location.href;
         }
 
-        //子流程.
-        function EditSubFlow(mypk) {
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
-        }
+     
         /// 审核组件.
         function EditFWC(mypk) {
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=' + mypk
+            //http: //localhost:41466/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FrmNodeComponents&PK=7901&EnName=BP.WF.Template.FrmNodeComponent&tab=%E7%88%B6%E5%AD%90%E6%B5%81%E7%A8%8B%E7%BB%84%E4%BB%B6
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=审核组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
+        //子流程.
+        function EditSubFlow(mypk) {
+            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
+        //子线程.
+        function EditThread(mypk) {
+            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=子线程组件';
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
+        //轨迹组件.
+        function EditTrack(mypk) {
+            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=轨迹组件';
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
 
         function MapDataEdit(mypk) {
             var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapDataCol4&PK=' + mypk
@@ -279,17 +267,6 @@
             window.location.href = window.location.href;
         }
 
-        function AthDoUp(MyPK) {
-            var url = 'Do.aspx?DoType=AthDoUp&MyPK=' + MyPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-        function AthDoDown(MyPK) {
-            var url = 'Do.aspx?DoType=AthDoDown&MyPK=' + MyPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-
         function EditFrame(mypk, dtlKey) {
             var url = 'MapFrame.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapFrame=' + dtlKey;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
@@ -326,7 +303,6 @@
             }
         }
         window.onload = ResizeWindow();
-
     </script>
     <base target="_self" />
     <style type="text/css">

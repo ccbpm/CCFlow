@@ -253,10 +253,16 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD("合并单元格数");
             ddl = new DDL();
             ddl.ID = "DDL_ColSpan";
-            for (int i = 1; i < 12; i++)
-            {
-                ddl.Items.Add(new ListItem(i.ToString(),i.ToString()));
-            }
+
+            ddl.Items.Add(new ListItem("1", "1"));
+            ddl.Items.Add(new ListItem("3", "3"));
+            ddl.Items.Add(new ListItem("4", "4"));
+
+
+            //for (int i = 1; i < 12; i++)
+            //{
+            //    ddl.Items.Add(new ListItem(i.ToString(),i.ToString()));
+            //}
             ddl.SetSelectItem(mapAttr.ColSpan.ToString());
             this.Pub1.AddTD(ddl);
             this.Pub1.AddTD("对傻瓜表单有效");

@@ -114,9 +114,10 @@ namespace CCFlow.WF.MapDef
             if (this.IsFirst == true)
             {
                 MapDataCol4 cols = new MapDataCol4(this.FK_MapData);
-                cols.CheckFixFrmForUpdateVer();
+                cols.DoCheckFixFrmForUpdateVer();
+                this.Response.Redirect("MapDef.aspx?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&MyPK=" + this.MyPK + "&IsEditMapData=" + this.IsEditMapData, true);
+                return;
             }
-                
 
             MapAttrs mattrs = new MapAttrs(md.No);
             int count = mattrs.Count;
@@ -132,24 +133,6 @@ namespace CCFlow.WF.MapDef
             #endregion 计算出来列的宽度.
 
             this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;' align='left' >");
-
-            //#region 生成表头.
-            //this.Pub1.AddTR();
-            //this.Pub1.AddTD("colspan=" + md.TableCol, "<div style='float:left' ><img src='../../DataUser/ICON/Smaller.png' border=0/></div><h3><div style='float:center' >" + md.Name + "</div></h3>");
-            //this.Pub1.AddTREnd();
-
-            //this.Pub1.AddTR();
-            //bool isLabel = true;
-            //for (int i = 0; i < md.TableCol; i++)
-            //{
-            //    if (isLabel)
-            //        this.Pub1.AddTD("width='" + labCol + "px' align=center", i);
-            //    else
-            //        this.Pub1.AddTD("width='" + ctrlCol + "px' align=center", i.ToString());
-            //    isLabel = !isLabel;
-            //}
-            //this.Pub1.AddTREnd();
-            //#endregion 生成表头.
 
             int myidx = 0;
             string src = "";
@@ -244,11 +227,10 @@ namespace CCFlow.WF.MapDef
                         continue;
                     case "FWC": //审核组件.
                         FrmWorkCheck fwc = new FrmWorkCheck(this.FK_MapData);
-                        if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
-                            continue;
+                        
                         myidx = rowIdx + 10;
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFWC('" + fwc.NodeID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFWC('" + fwc.NodeID + "')\" >" + fwc.FWCLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                         this.Pub1.AddTREnd();
 
                         myidx++;
@@ -262,12 +244,10 @@ namespace CCFlow.WF.MapDef
                         continue;
                     case "SubFlow": //子线程.
                         FrmSubFlow subflow = new FrmSubFlow(this.FK_MapData);
-                        if (subflow.HisFrmSubFlowSta == FrmSubFlowSta.Disable)
-                            continue;
 
                         myidx = rowIdx + 10;
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditSubFlow('" + subflow.NodeID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='ImgSub" + subflow.NodeID + "'  border=0 /><a href=\"javascript:EditSubFlow('" + subflow.NodeID + "')\" >" + subflow.SFLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                         this.Pub1.AddTREnd();
 
                         myidx++;
@@ -281,12 +261,10 @@ namespace CCFlow.WF.MapDef
                         continue;
                     case "Track": //轨迹图.
                         FrmTrack track = new FrmTrack(this.FK_MapData);
-                        if (track.FrmTrackSta == FrmTrackSta.Disable)
-                            continue;
 
                         myidx = rowIdx + 10;
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditTrack('" + track.NodeID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditTrack('" + track.NodeID + "')\" >" + track.FrmTrackLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                         this.Pub1.AddTREnd();
 
                         myidx++;
@@ -298,14 +276,12 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
                         continue;
-                    case "Thread": //子线城.
+                    case "Thread": //子线程.
                         FrmThread thread = new FrmThread(this.FK_MapData);
-                        if (thread.FrmThreadSta == FrmThreadSta.Disable)
-                            continue;
 
                         myidx = rowIdx + 10;
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditTread('" + thread.NodeID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditThread('" + thread.NodeID + "')\" >" + thread.FrmThreadLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                         this.Pub1.AddTREnd();
 
                         myidx++;

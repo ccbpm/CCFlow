@@ -24,16 +24,16 @@ namespace CCFlow.WF.MapDef.Rpt
         {
             get
             {
-                //return this.Request.QueryString["FK_Flow"];
-                return "002";
+                return this.Request.QueryString["FK_Flow"];
+                //return "002";
             }
         }
         public string RptNo
         {
             get
             {
-                //return this.Request.QueryString["RptNo"];
-                return "ND2MyRpt";
+                return this.Request.QueryString["RptNo"];
+                //return "ND2MyRpt";
             }
         }
         public string FK_MapData
@@ -79,6 +79,9 @@ namespace CCFlow.WF.MapDef.Rpt
                     {
                         string savefile = GetCorrectFileName(TmpDir, Path.GetFileName(file));
                         fileUpload.PostedFile.SaveAs(savefile);
+
+                        //todo:增加自动生成配置XML操作
+
                     }
                 }
             }
@@ -142,12 +145,12 @@ namespace CCFlow.WF.MapDef.Rpt
                         }
                         else
                         {
-                            var sql = "SELECT sma.FK_MAPDATA,smd.NAME FK_MAPDATANAME, sma.KEYOFEN,sma.NAME,sma.LGTYPE,sma.UIBINDKEY,sma.UIREFKEY,sma.UIREFKEYTEXT,sma.GROUPID,sgf.LAB GROUPNAME FROM Sys_MapAttr sma"
-                                      +
-                                      " INNER JOIN (SELECT wfn.FK_Frm FK_MAPDATA FROM WF_FrmNode wfn WHERE wfn.FK_Flow = '{0}' AND wfn.IsEnable = 1 GROUP BY wfn.FK_Frm UNION SELECT smd2.No FK_MAPDATA FROM Sys_MapData smd2 WHERE smd2.No = 'ND{1}Rpt') t ON t.FK_MAPDATA = sma.FK_MapData"
-                                      + " INNER JOIN Sys_MapData smd ON smd.No = sma.FK_MapData"
-                                      + " LEFT JOIN Sys_GroupField AS sgf ON sgf.OID = sma.GroupID"
-                                      + " ORDER BY sma.GroupID,sma.Idx";
+                            string sql = "SELECT sma.FK_MAPDATA,smd.NAME FK_MAPDATANAME, sma.KEYOFEN,sma.NAME,sma.LGTYPE,sma.UIBINDKEY,sma.UIREFKEY,sma.UIREFKEYTEXT,sma.GROUPID,sgf.LAB GROUPNAME FROM Sys_MapAttr sma"
+                                         +
+                                         " INNER JOIN (SELECT wfn.FK_Frm FK_MAPDATA FROM WF_FrmNode wfn WHERE wfn.FK_Flow = '{0}' AND wfn.IsEnable = 1 GROUP BY wfn.FK_Frm UNION SELECT smd2.No FK_MAPDATA FROM Sys_MapData smd2 WHERE smd2.No = 'ND{1}Rpt') t ON t.FK_MAPDATA = sma.FK_MapData"
+                                         + " INNER JOIN Sys_MapData smd ON smd.No = sma.FK_MapData"
+                                         + " LEFT JOIN Sys_GroupField AS sgf ON sgf.OID = sma.GroupID"
+                                         + " ORDER BY sma.GroupID,sma.Idx";
 
                             DataTable dtAttrs = BP.DA.DBAccess.RunSQLReturnTable(string.Format(sql, FK_Flow, int.Parse(FK_Flow)));
                             resultString = "{\"success\": true, \"attrs\": " + BP.Tools.Json.ToJson(dtAttrs) +
@@ -230,6 +233,13 @@ namespace CCFlow.WF.MapDef.Rpt
                             try
                             {
                                 File.Move(filename, newFileName);
+
+                                //修改对应的配置XML文件
+                                string xml = TmpDir + "\\" + Path.GetFileNameWithoutExtension(filename) + ".xml";
+                                string newXml = TmpDir + "\\" + Path.GetFileNameWithoutExtension(newFileName) + ".xml";
+
+                                if (File.Exists(xml))
+                                    File.Move(xml, newXml);
 
                                 //判断如果当前改名的模板正在被使用，则将mapdata中的name也改成将改的模板名称
                                 if (Equals(MData.Name, Path.GetFileNameWithoutExtension(tmpName)))

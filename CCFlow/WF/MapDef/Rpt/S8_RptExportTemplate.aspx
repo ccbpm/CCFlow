@@ -24,7 +24,7 @@
     <script type="text/javascript">
         var rptNo = getQueryStringByName('RptNo');
         var flowNo = getQueryStringByName('FK_Flow');
-        var md = 'ND2Rpt'; //  getQueryStringByName('FK_MapData');
+        var md = getQueryStringByName('FK_MapData');
         var attrs;
         var currCellName;
         var currCellFieldInfo;
@@ -33,7 +33,7 @@
 
         function useTmp(obj) {
             var tmpName = $(obj).parent().parent().attr("data-tmp");
-            ajax({ method: 'use', RptNo: rptNo, tmp: encodeURIComponent(tmpName) }, function (msg) {
+            ajax({ method: 'use', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName) }, function (msg) {
                 var re = $.parseJSON(msg);
 
                 if (re.success) {
@@ -63,7 +63,7 @@
         function renameTmp(obj) {
             var tmpName = $(obj).parent().parent().attr("data-tmp");
             OpenEasyUiSampleEditDialog('模板文件', '重命名', tmpName.substring(0, tmpName.indexOf('.')), function (newName, oldName) {
-                ajax({ method: 'rename', RptNo: rptNo, tmp: encodeURIComponent(tmpName), newTmp: encodeURIComponent(newName) }, function (msg) {
+                ajax({ method: 'rename', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName), newTmp: encodeURIComponent(newName) }, function (msg) {
                     var re = $.parseJSON(msg);
 
                     if (re.success) {
@@ -77,7 +77,7 @@
 
         function setTmp(obj) {
             var tmpName = $(obj).parent().parent().attr("data-tmp");
-            ajax({ method: 'set', RptNo: rptNo, tmp: encodeURIComponent(tmpName) }, function (msg) {
+            ajax({ method: 'set', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName) }, function (msg) {
                 var re = $.parseJSON(msg);
 
                 if (re.success) {
@@ -209,7 +209,7 @@
                 return;
             }
 
-            ajax({ method: 'del', RptNo: rptNo, tmp: encodeURIComponent(tmpName) }, function (msg) {
+            ajax({ method: 'del', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName) }, function (msg) {
                 var re = $.parseJSON(msg);
 
                 if (re.success) {
@@ -277,7 +277,7 @@
                 re += '`' + $(this).attr('data-rowid') + '^' + $(this).attr('data-colid') + '^' + ns[0] + '^' + ns[2];
             });
 
-            ajax({ method: 'save', RptNo: rptNo, tmp: encodeURIComponent(tmpName), data: encodeURIComponent(re) }, function (msg) {
+            ajax({ method: 'save', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName), data: encodeURIComponent(re) }, function (msg) {
                 var re = $.parseJSON(msg);
 
                 if (re.success) {

@@ -650,7 +650,8 @@ namespace BP.Pub
                                 return pict.ToString();
                             }
                             //图片不存在显示中文名，否则显示原值
-                            return DBAccess.RunSQLReturnStringIsNull("SELECT Name FROM Port_Emp WHERE No='" + val + "'", val);
+                            string empName = DBAccess.RunSQLReturnStringIsNull("SELECT Name FROM Port_Emp WHERE No='" + val + "'", val);
+                            return this.GetCode(empName);
                         //替换rtf模板文件中的签名图片标识为图片字符串
                         // str = str.Replace(imgMark, pict.ToString());
                         case "BoolenText":

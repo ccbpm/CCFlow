@@ -32,7 +32,6 @@
         </tr>
     </table>
     <br />
-    <br />
     <cc1:LinkBtn ID="Btn_Save1" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-save'"
         Text="保存" OnClick="Btn_Save_Click" />
     <cc1:LinkBtn ID="Btn_SaveAndNext1" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-save'"

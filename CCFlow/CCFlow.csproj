@@ -82,6 +82,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\DLL\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\DLL\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\DLL\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -1244,11 +1253,8 @@
     <Content Include="WF\Img\Tree\File.gif" />
     <Content Include="WF\Img\Tree\Root.gif" />
     <Content Include="WF\Img\undo.png" />
-    <Content Include="WF\MapDef\Designer.aspx" />
-    <Content Include="WF\MapDef\DesignerCol4.aspx" />
     <Content Include="WF\MapDef\ImpTableField.aspx" />
     <Content Include="WF\MapDef\ImpTableFieldSelectBindKey.aspx" />
-    <Content Include="WF\MapDef\Left.aspx" />
     <Content Include="WF\MapDef\MapExt\ActiveDDL.aspx" />
     <Content Include="WF\MapDef\MapExt\AotuGenerNo.aspx" />
     <Content Include="WF\MapDef\MapExt\AutoFull.aspx" />
@@ -1257,6 +1263,7 @@
     <Content Include="WF\MapDef\MapExt\DDLFullCtrl.aspx" />
     <Content Include="WF\MapDef\MapExt\ExcelFrm.aspx" />
     <Content Include="WF\MapDef\MapExt\InitScript.aspx" />
+    <Content Include="WF\MapDef\MapExt\InputCheck.aspx" />
     <Content Include="WF\MapDef\MapExt\List.aspx" />
     <Content Include="WF\MapDef\MapExt\PageLoadFull.aspx" />
     <Content Include="WF\MapDef\MapExt\PopVal.aspx" />
@@ -1269,6 +1276,7 @@
     <Content Include="WF\MapDef\MapExt\WordFrm.aspx" />
     <Content Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx" />
     <Content Include="WF\MapDef\NodeFrmComponents.aspx" />
+    <Content Include="WF\MapDef\Rpt\S8_RptExportTemplate.aspx" />
     <Content Include="WF\MapDef\SFSQL.aspx" />
     <Content Include="WF\MapDef\EditSQL.aspx" />
     <Content Include="WF\MapDef\SFWS.aspx" />
@@ -4830,20 +4838,6 @@
     <Compile Include="WF\Focus.aspx.designer.cs">
       <DependentUpon>Focus.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Designer.aspx.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\Designer.aspx.designer.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MapDef\DesignerCol4.aspx.cs">
-      <DependentUpon>DesignerCol4.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\DesignerCol4.aspx.designer.cs">
-      <DependentUpon>DesignerCol4.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\MapDef\ImpTableField.aspx.cs">
       <DependentUpon>ImpTableField.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -4857,13 +4851,6 @@
     </Compile>
     <Compile Include="WF\MapDef\ImpTableFieldSelectBindKey.aspx.designer.cs">
       <DependentUpon>ImpTableFieldSelectBindKey.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MapDef\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\MapExt\ActiveDDL.aspx.cs">
       <DependentUpon>ActiveDDL.aspx</DependentUpon>
@@ -4920,6 +4907,13 @@
     </Compile>
     <Compile Include="WF\MapDef\MapExt\InitScript.aspx.designer.cs">
       <DependentUpon>InitScript.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\InputCheck.aspx.cs">
+      <DependentUpon>InputCheck.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\MapExt\InputCheck.aspx.designer.cs">
+      <DependentUpon>InputCheck.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\MapExt\List.aspx.cs">
       <DependentUpon>List.aspx</DependentUpon>
@@ -5011,6 +5005,13 @@
     </Compile>
     <Compile Include="WF\MapDef\Rpt\RptGuide.Master.designer.cs">
       <DependentUpon>RptGuide.Master</DependentUpon>
+    </Compile>
+    <Compile Include="WF\MapDef\Rpt\S8_RptExportTemplate.aspx.cs">
+      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\MapDef\Rpt\S8_RptExportTemplate.aspx.designer.cs">
+      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\MapDef\SFSQL.aspx.cs">
       <DependentUpon>SFSQL.aspx</DependentUpon>

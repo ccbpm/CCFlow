@@ -155,7 +155,7 @@ namespace CCFlow.WF.MapDef.Rpt
         {
             Save();
 
-            this.Response.Redirect("S6_Power.aspx?FK_MapData=" + this.FK_MapData + "&RptNo=" + this.RptNo + "&FK_Flow=" + this.FK_Flow + "&s=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff"), true);
+            this.Response.Redirect("S8_RptExportTemplate.aspx?FK_MapData=" + this.FK_MapData + "&RptNo=" + this.RptNo + "&FK_Flow=" + this.FK_Flow + "&s=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff"), true);
         }
 
         private void Save()

@@ -10,42 +10,33 @@
 namespace CCFlow.WF.MapDef.Rpt {
     
     
-    public partial class SearchCond {
+    public partial class S8_RptExportTemplate {
         
         /// <summary>
-        /// Pub2 控件。
+        /// form1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::WF_MapDef_Pub Pub2;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// Btn_Save1 控件。
+        /// fileUpload 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::BP.Web.Controls.LinkBtn Btn_Save1;
+        protected global::System.Web.UI.WebControls.FileUpload fileUpload;
         
         /// <summary>
-        /// Btn_SaveAndNext1 控件。
+        /// lbtnUpload 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::BP.Web.Controls.LinkBtn Btn_SaveAndNext1;
-        
-        /// <summary>
-        /// Btn_Cancel1 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::BP.Web.Controls.LinkBtn Btn_Cancel1;
+        protected global::BP.Web.Controls.LinkBtn lbtnUpload;
     }
 }

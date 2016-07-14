@@ -367,7 +367,7 @@ namespace CCFlow.WF.MapDef.Rpt
             }
             else
             {
-                rows = dtAttrs.Select(string.Format("NAME='{0}'", cellValue), "GROUPID ASC");
+                rows = dtAttrs.Select(string.Format("NAME='{0}' AND NAME <> ''", cellValue), "GROUPID ASC");
             }
 
             if (rows != null && rows.Length > 0)
@@ -415,10 +415,16 @@ namespace CCFlow.WF.MapDef.Rpt
                 for (var r = sheet.FirstRowNum; r <= sheet.LastRowNum; r++)
                 {
                     row = sheet.GetRow(r);
+
+                    if (row == null) continue;
+
                     s.Append(string.Format("<tr style='height:{0}pt;' data-rowid='{1}'>", row.HeightInPoints, r));
                     for (var c = row.FirstCellNum; c < row.LastCellNum; c++)
                     {
                         cell = row.GetCell(c);
+
+                        if (cell == null) continue;
+
                         range = GetMergedRegion(cell, mergedRanges);
                         cellValue = GetCellValue(cell, cell.CellType);
 

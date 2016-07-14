@@ -70,6 +70,10 @@
                         var name = re.msg;
                         $("#tmps tr[data-tmp='" + tmpName + "']").children(":eq(1)").children(":eq(0)").text(name);
                         $("#tmps tr[data-tmp='" + tmpName + "']").attr("data-tmp", name);
+
+                        if ($('#setDiv').attr('data-tmp').length > 0) {
+                            $('#setDiv').attr('data-tmp', name);
+                        }
                     }
                 });
             }, tmpName);
@@ -214,6 +218,10 @@
 
                 if (re.success) {
                     $("#tmps tr[data-tmp='" + tmpName + "']").remove();
+
+                    if ($('#setDiv').attr('data-tmp').length > 0) {
+                        closeSet();
+                    }
                 }
             });
         }
@@ -258,6 +266,7 @@
 
         function closeSet() {
             $('#excelDiv').html();
+            $('#setDiv').attr('data-tmp', '');
             $('#setDiv').hide();
 
             attrs = undefined;

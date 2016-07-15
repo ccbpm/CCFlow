@@ -9,7 +9,7 @@
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.
 function SaveSelfFrom() {
 
-// 不支持火狐浏览器。
+    // 不支持火狐浏览器。
     var frm = document.getElementById('SelfForm');
     if (frm == null) {
         alert('系统错误.');

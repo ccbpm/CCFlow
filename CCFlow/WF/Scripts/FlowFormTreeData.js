@@ -144,11 +144,12 @@ ccflowFormTree.Data = function (url) {
         queryData(tUrl, params, callback, scope);
     }
     //结束流程
-    this.endCase = function (flowId, workId, callback, scope) {
+    this.endCase = function (flowId, FK_Node, workId, callback, scope) {
         var tUrl = this.url;
         var params = {
             method: "endcase",
             flowId: flowId,
+            FK_Node: FK_Node,
             workId: workId
         };
         queryData(tUrl, params, callback, scope);

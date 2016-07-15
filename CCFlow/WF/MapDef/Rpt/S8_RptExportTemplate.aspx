@@ -32,6 +32,7 @@
         var beginIdx = 0;
 
         function useTmp(obj) {
+            /// <summary>使用此模板</summary>
             var tmpName = $(obj).parent().parent().attr("data-tmp");
             ajax({ method: 'use', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName) }, function (msg) {
                 var re = $.parseJSON(msg);
@@ -61,6 +62,7 @@
         }
 
         function renameTmp(obj) {
+            /// <summary>重命名模板文件</summary>
             var tmpName = $(obj).parent().parent().attr("data-tmp");
             OpenEasyUiSampleEditDialog('模板文件', '重命名', tmpName.substring(0, tmpName.indexOf('.')), function (newName, oldName) {
                 ajax({ method: 'rename', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName), newTmp: encodeURIComponent(newName) }, function (msg) {
@@ -80,6 +82,7 @@
         }
 
         function setTmp(obj) {
+            /// <summary>配置模板信息</summary>
             var tmpName = $(obj).parent().parent().attr("data-tmp");
             ajax({ method: 'set', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName) }, function (msg) {
                 var re = $.parseJSON(msg);
@@ -178,6 +181,8 @@
         }
 
         function getMapAttr(names) {
+            /// <summary>根据menu-item的name，获取对应的字段对象</summary>
+            /// <param name="names" type="String">name，格式如：ND2Rpt.FK_Dept</param>
             var ns = names.split('.');
             var attr;
 
@@ -191,23 +196,8 @@
             return attr;
         }
 
-        function getCellFieldInfoForToolTip(aFieldInfo) {
-            var tip = '';
-
-            if (aFieldInfo && aFieldInfo.length == 4) {
-                tip = '&nbsp;&nbsp;';
-
-                if (aFieldInfo[0] != 'ND' + parseInt(flowNo, 10) + 'Rpt') {
-                    tip += aFieldInfo[1] + '&nbsp;';
-                }
-
-                tip += aFieldInfo[2] + '[' + aFieldInfo[3] + ']';
-            }
-
-            return tip;
-        }
-
         function delTmp(obj) {
+            /// <summary>删除模板</summary>
             var tmpName = $(obj).parent().parent().attr("data-tmp");
             if (!confirm('你确定要删除“' + tmpName + '”模板吗？')) {
                 return;
@@ -227,19 +217,27 @@
         }
 
         function downTmp(obj) {
+            /// <summary>下载模板</summary>
             var tmpName = $(obj).parent().parent().attr("data-tmp");
             window.open('S8_RptExportTemplate.aspx?method=down&RptNo=' + rptNo + '&tmp=' + encodeURIComponent(tmpName), '_blank');
         }
 
         function beginSetIdx(isVertical) {
+            /// <summary>设置导出数据填充开始的行/列号</summary>
+            /// <param name="isVertical" type="Boolean">是否是垂直方向填充</param>
             isBeginIdx = isVertical ? 1 : 2;
         }
 
         function beginSetField() {
+            /// <summary>设置字段绑定</summary>
             isBeginIdx = 0;
         }
 
         function ajax(data, successFunction, errorFunction) {
+            /// <summary>与后台交互</summary>
+            /// <param name="data" type="Object">向后台发送的参数对象，格式如：{ method: 'save', FK_Flow: '002',...}</param>
+            /// <param name="successFunction" type="Function">交互成功后，运行的函数</param>
+            /// <param name="errorFunction" type="Function">交互失败后，运行的函数</param>
             var url = 'S8_RptExportTemplate.aspx?t=' + Math.random();
 
             $.ajax({
@@ -265,6 +263,7 @@
         }
 
         function closeSet() {
+            /// <summary>关闭模板配置界面</summary>
             $('#excelDiv').html();
             $('#setDiv').attr('data-tmp', '');
             $('#setDiv').hide();
@@ -277,6 +276,7 @@
         }
 
         function saveSet() {
+            /// <summary>保存模板配置信息</summary>
             var tmpName = $('#setDiv').attr('data-tmp');
             var re = isBeginIdx + '`' + beginIdx;
             var ns;
@@ -376,7 +376,7 @@
             </tr>
         </table>
         <br />
-        <div id="setDiv" style="width: 98%">
+        <div id="setDiv" style="width: 98%" data-tmp="">
             <a id="btnSave" class="easyui-linkbutton" href="javascript:void(0)" onclick="saveSet()"
                 data-options="plain:true,iconCls:'icon-save'">保存</a> <a id="btnSetField" class="easyui-linkbutton"
                     href="javascript:void(0)" onclick="beginSetField()" data-options="plain:true,iconCls:'icon-accept'">

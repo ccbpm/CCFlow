@@ -57,6 +57,14 @@ namespace CCFlow.WF.MapDef.Rpt
         public string Exts = ".xls.xlsx";
         #endregion 属性.
 
+        //获取所有字段信息
+        private string selectSql = "SELECT sma.FK_MAPDATA,smd.NAME FK_MAPDATANAME, sma.KEYOFEN,sma.NAME,sma.LGTYPE,sma.UIBINDKEY,sma.UIREFKEY,sma.UIREFKEYTEXT,sma.GROUPID,sgf.LAB GROUPNAME FROM Sys_MapAttr sma"
+                                         +
+                                         " INNER JOIN (SELECT wfn.FK_Frm FK_MAPDATA FROM WF_FrmNode wfn WHERE wfn.FK_Flow = '{0}' AND wfn.IsEnable = 1 GROUP BY wfn.FK_Frm UNION SELECT smd2.No FK_MAPDATA FROM Sys_MapData smd2 WHERE smd2.No = 'ND{1}Rpt') t ON t.FK_MAPDATA = sma.FK_MapData"
+                                         + " INNER JOIN Sys_MapData smd ON smd.No = sma.FK_MapData"
+                                         + " LEFT JOIN Sys_GroupField AS sgf ON sgf.OID = sma.GroupID"
+                                         + " ORDER BY sma.GroupID,sma.Idx";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             MData = new MapData(this.RptNo);
@@ -80,8 +88,17 @@ namespace CCFlow.WF.MapDef.Rpt
                         string savefile = GetCorrectFileName(TmpDir, Path.GetFileName(file));
                         fileUpload.PostedFile.SaveAs(savefile);
 
-                        //todo:增加自动生成配置XML操作
-
+                        try
+                        {
+                            //自动生成配置XML
+                            GenerAutoFieldBinding(fileUpload.PostedFile.InputStream, fileUpload.PostedFile.FileName);
+                        }
+                        catch(Exception ex)
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "msg",
+                                                                   "alert('解析模板时出现错误，请确保模板格式正确！错误信息：" + ex.Message +
+                                                                   "');", true);
+                        }
                     }
                 }
             }
@@ -145,17 +162,17 @@ namespace CCFlow.WF.MapDef.Rpt
                         }
                         else
                         {
-                            string sql = "SELECT sma.FK_MAPDATA,smd.NAME FK_MAPDATANAME, sma.KEYOFEN,sma.NAME,sma.LGTYPE,sma.UIBINDKEY,sma.UIREFKEY,sma.UIREFKEYTEXT,sma.GROUPID,sgf.LAB GROUPNAME FROM Sys_MapAttr sma"
-                                         +
-                                         " INNER JOIN (SELECT wfn.FK_Frm FK_MAPDATA FROM WF_FrmNode wfn WHERE wfn.FK_Flow = '{0}' AND wfn.IsEnable = 1 GROUP BY wfn.FK_Frm UNION SELECT smd2.No FK_MAPDATA FROM Sys_MapData smd2 WHERE smd2.No = 'ND{1}Rpt') t ON t.FK_MAPDATA = sma.FK_MapData"
-                                         + " INNER JOIN Sys_MapData smd ON smd.No = sma.FK_MapData"
-                                         + " LEFT JOIN Sys_GroupField AS sgf ON sgf.OID = sma.GroupID"
-                                         + " ORDER BY sma.GroupID,sma.Idx";
-
-                            DataTable dtAttrs = BP.DA.DBAccess.RunSQLReturnTable(string.Format(sql, FK_Flow, int.Parse(FK_Flow)));
-                            resultString = "{\"success\": true, \"attrs\": " + BP.Tools.Json.ToJson(dtAttrs) +
-                                           ", \"setinfo\": \"" + GetTemplateSetInfos(filename, dtAttrs) +
-                                           "\", \"menu\":\"" + GetMapAttrsMenu(dtAttrs) + "\"}";
+                            try
+                            {
+                                DataTable dtAttrs = BP.DA.DBAccess.RunSQLReturnTable(string.Format(selectSql, FK_Flow, int.Parse(FK_Flow)));
+                                resultString = "{\"success\": true, \"attrs\": " + BP.Tools.Json.ToJson(dtAttrs) +
+                                               ", \"setinfo\": \"" + GetTemplateSetInfos(filename, dtAttrs) +
+                                               "\", \"menu\":\"" + GetMapAttrsMenu(dtAttrs) + "\"}";
+                            }
+                            catch (Exception ex)
+                            {
+                                resultString = ReturnJson(false, ex.Message);
+                            }
                         }
 
                         break;
@@ -170,7 +187,7 @@ namespace CCFlow.WF.MapDef.Rpt
                             string data = HttpUtility.UrlDecode(Request.QueryString["data"] ?? "");
                             string[] items = data.Split('`');
 
-                            if(items.Length < 2)
+                            if (items.Length < 2)
                             {
                                 resultString = ReturnJson(false, "保存数据格式不正确！");
                             }
@@ -181,11 +198,11 @@ namespace CCFlow.WF.MapDef.Rpt
                                 string xml = TmpDir + "\\" + Path.GetFileNameWithoutExtension(filename) + ".xml";
                                 RptExportTemplate tmp = RptExportTemplate.FromXml(xml);
 
-                                if(isBeginIdx == 1)
+                                if (isBeginIdx == 1)
                                 {
                                     tmp.Direction = FillDirection.Vertical;
                                 }
-                                else if(isBeginIdx == 2)
+                                else if (isBeginIdx == 2)
                                 {
                                     tmp.Direction = FillDirection.Horizontal;
                                 }
@@ -194,10 +211,10 @@ namespace CCFlow.WF.MapDef.Rpt
                                 tmp.LastModify = DateTime.Now;
                                 tmp.Cells.Clear();
 
-                                if(items.Length > 2)
+                                if (items.Length > 2)
                                 {
                                     string[] subItems = null;
-                                    for(var i = 2;i<items.Length;i++)
+                                    for (var i = 2; i < items.Length; i++)
                                     {
                                         subItems = items[i].Split('^');
 
@@ -296,14 +313,74 @@ namespace CCFlow.WF.MapDef.Rpt
             }
         }
 
+        /// <summary>
+        /// 自动生成模板文件的字段与单元格对应关系，保存
+        /// </summary>
+        /// <param name="steam">模板文件流</param>
+        /// <param name="tmpFile">模板文件名</param>
+        private void GenerAutoFieldBinding(Stream steam, string tmpFile)
+        {
+            DataTable dtAttrs = BP.DA.DBAccess.RunSQLReturnTable(string.Format(selectSql, FK_Flow, int.Parse(FK_Flow)));
+            string xml = TmpDir + "\\" + Path.GetFileNameWithoutExtension(tmpFile) + ".xml";
+            RptExportTemplate tmp = RptExportTemplate.FromXml(xml);
+            string ext = Path.GetExtension(tmpFile).ToLower();
+            IWorkbook wb = null;
+            IRow row = null;
+            ICell cell = null;
+            DataRow[] rows = null;
+
+            if (ext.Equals(".xls"))
+                wb = new HSSFWorkbook(steam);
+            else
+                wb = new XSSFWorkbook(steam);
+
+            ISheet sheet = wb.GetSheetAt(0);
+
+            for (var r = sheet.FirstRowNum; r <= sheet.LastRowNum; r++)
+            {
+                row = sheet.GetRow(r);
+
+                if (row == null) continue;
+
+                for (var c = row.FirstCellNum; c < row.LastCellNum; c++)
+                {
+                    cell = row.GetCell(c);
+                    if (cell == null) continue;
+
+                    rows = dtAttrs.Select(string.Format("NAME='{0}' AND NAME <> ''", GetCellValue(cell, cell.CellType)), "GROUPID ASC");
+
+                    if (rows.Length > 0)
+                    {
+                        tmp.Cells.Add(new RptExportTemplateCell
+                                          {
+                                              RowIdx = r,
+                                              ColumnIdx = c,
+                                              FK_MapData = rows[0]["FK_MAPDATA"].ToString(),
+                                              KeyOfEn = rows[0]["KEYOFEN"].ToString()
+                                          });
+                    }
+                }
+            }
+
+            tmp.SaveXml(xml);
+            wb.Close();
+        }
+
+        /// <summary>
+        /// 根据字段集合生成字段选择菜单
+        /// </summary>
+        /// <param name="dtAttrs">字段集合</param>
+        /// <returns>返回easyui-menu的html代码</returns>
         private string GetMapAttrsMenu(DataTable dtAttrs)
         {
             StringBuilder s = new StringBuilder();
             Dictionary<string, List<DataRow>> mapdatas = new Dictionary<string, List<DataRow>>(); //fk_mapdata,attrs
+            Dictionary<int, List<DataRow>> groups = null;
             s.Append("<div id='mAttrs' class='easyui-menu' style='width:120px'>");
             s.Append("<div name='deleteField' iconCls='icon-delete'>删除字段</div>");
 
-            foreach(DataRow row in dtAttrs.Rows)
+            //将字段按照fk_mapdata分组
+            foreach (DataRow row in dtAttrs.Rows)
             {
                 if (!mapdatas.ContainsKey(row["FK_MAPDATA"].ToString()))
                     mapdatas.Add(row["FK_MAPDATA"].ToString(), new List<DataRow> { row });
@@ -311,27 +388,28 @@ namespace CCFlow.WF.MapDef.Rpt
                     mapdatas[row["FK_MAPDATA"].ToString()].Add(row);
             }
 
-            foreach(KeyValuePair<string,List<DataRow>> ke in mapdatas)
+            foreach (KeyValuePair<string, List<DataRow>> ke in mapdatas)
             {
                 s.Append(string.Format("<div name='{0}'><span>{1}[{0}]</span>", ke.Key, ke.Value[0]["FK_MAPDATANAME"]));
                 s.Append("<div>");
 
-                Dictionary<int, List<DataRow>> groups = new Dictionary<int, List<DataRow>>();
+                groups = new Dictionary<int, List<DataRow>>();
 
-                foreach(DataRow row in ke.Value)
+                //在fk_mapdata分组的字段集合中，再按照字段所处group进行分组
+                foreach (DataRow row in ke.Value)
                 {
                     if (!groups.ContainsKey((int)row["GROUPID"]))
                         groups.Add((int)row["GROUPID"], new List<DataRow> { row });
                     else
-                        groups[(int) row["GROUPID"]].Add(row);
+                        groups[(int)row["GROUPID"]].Add(row);
                 }
 
-                foreach(KeyValuePair<int, List<DataRow>> ke2 in groups)
+                foreach (KeyValuePair<int, List<DataRow>> ke2 in groups)
                 {
                     s.Append(string.Format("<div name='{0}'><span>{1}</span>", ke2.Key, ke2.Value[0]["GROUPNAME"] == null || ke2.Value[0]["GROUPNAME"] == DBNull.Value ? "未分组" : ke2.Value[0]["GROUPNAME"].ToString()));
                     s.Append("<div>");
 
-                    foreach(DataRow row2 in ke2.Value)
+                    foreach (DataRow row2 in ke2.Value)
                     {
                         s.Append(string.Format("<div name='{0}.{1}'>{1}[{2}]</div>", ke.Key, row2["KEYOFEN"], row2["NAME"]));
                     }
@@ -348,17 +426,24 @@ namespace CCFlow.WF.MapDef.Rpt
             return s.ToString();
         }
 
+        /// <summary>
+        /// 获取指定单元格的字段绑定信息，存储在td中的data-field属性中
+        /// </summary>
+        /// <param name="rowidx">单元格行号</param>
+        /// <param name="colidx">单元格列号</param>
+        /// <param name="cellValue">单元格值</param>
+        /// <param name="dtAttrs">字段集合</param>
+        /// <param name="tmp">模板对象</param>
+        /// <returns>返回data-field,data-tooltip属性的拼接字符串</returns>
         private string GetAutoFieldBinding(int rowidx, int colidx, string cellValue, DataTable dtAttrs, RptExportTemplate tmp)
         {
             DataRow[] rows = null;
 
             if (tmp.Cells.Count > 0)
             {
-                RptExportTemplateCell cell = null;
-
-                foreach(RptExportTemplateCell c in tmp.Cells)
+                foreach (RptExportTemplateCell c in tmp.Cells)
                 {
-                    if(c.RowIdx == rowidx && c.ColumnIdx == colidx)
+                    if (c.RowIdx == rowidx && c.ColumnIdx == colidx)
                     {
                         rows = dtAttrs.Select(string.Format("FK_MAPDATA='{0}' AND KEYOFEN='{1}'", c.FK_MapData, c.KeyOfEn));
                         break;
@@ -381,6 +466,12 @@ namespace CCFlow.WF.MapDef.Rpt
             return " data-field='' data-tooltip=''";
         }
 
+        /// <summary>
+        /// 解析excel模板，获取配置信息
+        /// </summary>
+        /// <param name="tmpFile">模板文件路径</param>
+        /// <param name="dtAttrs">字段集合</param>
+        /// <returns>返回table的html代码</returns>
         private string GetTemplateSetInfos(string tmpFile, DataTable dtAttrs)
         {
             string xml = TmpDir + "\\" + Path.GetFileNameWithoutExtension(tmpFile) + ".xml";
@@ -461,13 +552,18 @@ namespace CCFlow.WF.MapDef.Rpt
             return s.ToString();
         }
 
+        /// <summary>
+        /// 获取单元格的样式
+        /// </summary>
+        /// <param name="cell">单元格</param>
+        /// <returns></returns>
         private string GetCellStyle(ICell cell)
         {
-            var style = " style='font-family:{0};font-size:{1}pt;font-weight:{2};text-align:{3};vertical-align:{4};{5}{6}{7}{8}{9}'";
-            var st = cell.CellStyle;
+            //样式依次为：0.字体名称、1.字体大小、2.字体粗体比重、3.文本水平对齐方式、4.文本垂直对齐方式、5.单元格宽度、6、左边框、7.上边框、8.右边框、9.下边框
+            string style = " style='font-family:{0};font-size:{1}pt;font-weight:{2};text-align:{3};vertical-align:{4};{5}{6}{7}{8}{9}'";
+            ICellStyle st = cell.CellStyle;
 
-            var font = st.GetFont(cell.Sheet.Workbook);
-            XSSFColor c = new XSSFColor();
+            IFont font = st.GetFont(cell.Sheet.Workbook);
 
             return string.Format(style,
                                  font.FontName,
@@ -496,6 +592,12 @@ namespace CCFlow.WF.MapDef.Rpt
                                      : "");
         }
 
+        /// <summary>
+        /// 获取指定单元格所在的合并单元格区域对象
+        /// </summary>
+        /// <param name="cell">单元格</param>
+        /// <param name="ranges">合并单元格区域集合</param>
+        /// <returns></returns>
         private CellRangeAddress GetMergedRegion(ICell cell, List<CellRangeAddress> ranges)
         {
             if (!cell.IsMergedCell)
@@ -510,6 +612,12 @@ namespace CCFlow.WF.MapDef.Rpt
             return null;
         }
 
+        /// <summary>
+        /// 获取单元格值的字符串形式
+        /// </summary>
+        /// <param name="cell">单元格</param>
+        /// <param name="cellType">单元格值类型</param>
+        /// <returns></returns>
         private string GetCellValue(ICell cell, CellType cellType)
         {
             string s = string.Empty;
@@ -584,16 +692,16 @@ namespace CCFlow.WF.MapDef.Rpt
             return fullname;
         }
 
+        /// <summary>
+        /// 生成返给前台页面的JSON字符串信息
+        /// </summary>
+        /// <param name="success">是否操作成功</param>
+        /// <param name="msg">消息</param>
+        /// <returns></returns>
         private string ReturnJson(bool success, string msg)
         {
             return "{\"success\":" + success.ToString().ToLower() + ",\"msg\":\"" + msg.Replace("\"", "'") +
                    "\"}";
-        }
-
-        private class ReturnResult
-        {
-            public bool success { get; set; }
-            public string msg { get; set; }
         }
     }
 }

@@ -672,7 +672,7 @@
         //结束
         function Endflow() {
             var args = new RequestArgs();
-            Application.data.endCase(args.FK_Flow, args.WorkID, function (js) {
+            Application.data.endCase(args.FK_Flow, args.FK_Node, args.WorkID, function (js) {
                 //  $.messager.alert('提示', '流程结束！', 'info');
                 closeWin();
             }, this);

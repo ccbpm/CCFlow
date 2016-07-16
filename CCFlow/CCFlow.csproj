@@ -13,8 +13,7 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>
-    </SilverlightApplicationList>
+    <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|ClientBin|False,{1D0E0295-4702-46E2-9766-1A33EE418465}|..\DesignerForSilverlight\CCFlowDesignerSingle\CCFlowDesignerSingle.csproj|ClientBin|False,{83D53118-9A8D-4970-9A88-A2909B13FF64}|..\DesignerForSilverlight\CCFormDesigner\CCFormDesigner.csproj|ClientBin|False</SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -82,15 +81,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI">
-      <HintPath>..\DLL\NPOI.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OOXML">
-      <HintPath>..\DLL\NPOI.OOXML.dll</HintPath>
-    </Reference>
-    <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\DLL\NPOI.OpenXml4Net.dll</HintPath>
-    </Reference>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -124,6 +114,12 @@
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="ClientBin\CCFlowDesigner.xap" />
+    <Content Include="ClientBin\CCFlowDesignerSingle.xap" />
+    <Content Include="ClientBin\CCFormDesigner.xap" />
+    <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
+    <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
+    <Content Include="WF\Admin\ClientBin\CCFormDesigner.xap" />
     <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />
     <Content Include="SDKFlowDemo\GuestApp\Runing.aspx" />
@@ -1253,34 +1249,33 @@
     <Content Include="WF\Img\Tree\File.gif" />
     <Content Include="WF\Img\Tree\Root.gif" />
     <Content Include="WF\Img\undo.png" />
-    <Content Include="WF\MapDef\ImpTableField.aspx" />
-    <Content Include="WF\MapDef\ImpTableFieldSelectBindKey.aspx" />
-    <Content Include="WF\MapDef\MapExt\ActiveDDL.aspx" />
-    <Content Include="WF\MapDef\MapExt\AotuGenerNo.aspx" />
-    <Content Include="WF\MapDef\MapExt\AutoFull.aspx" />
-    <Content Include="WF\MapDef\MapExt\AutoFullDLL.aspx" />
-    <Content Include="WF\MapDef\MapExt\BodyAttr.aspx" />
-    <Content Include="WF\MapDef\MapExt\DDLFullCtrl.aspx" />
-    <Content Include="WF\MapDef\MapExt\ExcelFrm.aspx" />
-    <Content Include="WF\MapDef\MapExt\InitScript.aspx" />
-    <Content Include="WF\MapDef\MapExt\InputCheck.aspx" />
-    <Content Include="WF\MapDef\MapExt\List.aspx" />
-    <Content Include="WF\MapDef\MapExt\PageLoadFull.aspx" />
-    <Content Include="WF\MapDef\MapExt\PopVal.aspx" />
-    <Content Include="WF\MapDef\MapExt\RadioBtns.aspx" />
-    <Content Include="WF\MapDef\MapExt\RegularExpression.aspx" />
-    <Content Include="WF\MapDef\MapExt\TBFullCtrl.aspx" />
-    <Content Include="WF\MapDef\MapExt\TBFullCtrl_Dtl.aspx" />
-    <Content Include="WF\MapDef\MapExt\TBFullCtrl_List.aspx" />
-    <Content Include="WF\MapDef\MapExt\TBFullCtrl_old.aspx" />
-    <Content Include="WF\MapDef\MapExt\WordFrm.aspx" />
-    <Content Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx" />
-    <Content Include="WF\MapDef\NodeFrmComponents.aspx" />
-    <Content Include="WF\MapDef\Rpt\S8_RptExportTemplate.aspx" />
-    <Content Include="WF\MapDef\SFSQL.aspx" />
-    <Content Include="WF\MapDef\EditSQL.aspx" />
-    <Content Include="WF\MapDef\SFWS.aspx" />
-    <Content Include="WF\MapDef\SlnCopy.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Left.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFullDLL.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\DDLFullCtrl.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\ExcelFrm.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\List.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\PageLoadFull.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_Dtl.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_List.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_old.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFSQL.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditSQL.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFWS.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx" />
     <Content Include="WF\Messages.aspx" />
     <Content Include="WF\MessagesReplay.aspx" />
     <Content Include="WF\OneFlow\Archive.aspx" />
@@ -1305,12 +1300,12 @@
     <Content Include="WF\Rpt\OneFlow.aspx" />
     <Content Include="WF\Rpt\RptDoc.aspx" />
     <Content Include="WF\Rpt\SearchAdv.aspx" />
-    <Content Include="WF\MapDef\Rpt\Home.aspx" />
-    <Content Include="WF\MapDef\Rpt\S1_Edit.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\Home.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\S1_Edit.aspx" />
     <Content Include="WF\Rpt\SearchEUI.aspx" />
-    <Content Include="WF\MapDef\Rpt\Frm_ColsChose.aspx" />
-    <Content Include="WF\MapDef\Rpt\Frm_ColsLabel.aspx" />
-    <Content Include="WF\MapDef\Rpt\S4_ColsOrder.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\Frm_ColsChose.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\Frm_ColsLabel.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\S4_ColsOrder.aspx" />
     <Content Include="WF\Rpt\SearchEUIReadOnly.aspx" />
     <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
     <Content Include="WF\Scripts\ccflow.js" />
@@ -1738,17 +1733,17 @@
     <Content Include="WF\SDKComponents\TrackList.ascx" />
     <Content Include="WF\SDKComponents\TruakOnly.ascx" />
     <Content Include="WF\Start.aspx" />
-    <Content Include="WF\MapDef\BatchEdit.aspx" />
-    <Content Include="WF\MapDef\Rpt\S2_ColsChose.aspx" />
-    <Content Include="WF\MapDef\Rpt\S3_ColsLabel.aspx" />
-    <Content Include="WF\MapDef\Rpt\Do.aspx" />
-    <Content Include="WF\MapDef\Rpt\S5_SearchCond.aspx" />
-    <Content Include="WF\MapDef\Rpt\S6_Power.aspx" />
-    <Content Include="WF\MapDef\Rpt\S7_PowerOfDept.aspx" />
-    <Content Include="WF\MapDef\Sln.aspx" />
-    <Content Include="WF\MapDef\SlnDo.aspx" />
-    <Content Include="WF\MapDef\SlnDtl.aspx" />
-    <Content Include="WF\MapDef\UpdataEleXY.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\S2_ColsChose.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\S3_ColsLabel.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\Do.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\S5_SearchCond.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\S6_Power.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\S7_PowerOfDept.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Sln.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SlnDo.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SlnDtl.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\UpdataEleXY.aspx" />
     <Content Include="WF\PrintSample.aspx" />
     <Content Include="WF\Rpt\Contrast.aspx" />
     <Content Include="WF\Rpt\ContrastSingle.aspx" />
@@ -2125,8 +2120,8 @@
     <Content Include="WF\Comm\kindeditor\lang\zh_TW.js" />
     <Content Include="WF\Comm\kindeditor\license.txt" />
     <Content Include="WF\Img\Action\WorkCheck.png" />
-    <Content Include="WF\MapDef\EleBatch.aspx" />
-    <Content Include="WF\MapDef\RETemplete.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\EleBatch.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\RETemplete.aspx" />
     <Content Include="WF\WorkOpt\AccepterAdv.aspx" />
     <Content Include="WF\WorkOpt\Askfor.aspx" />
     <Content Include="WF\WorkOpt\AskForRe.aspx" />
@@ -2441,62 +2436,62 @@
     <Content Include="WF\KeySearch.aspx" />
     <Content Include="WF\Loading.htm" />
     <Content Include="WF\Login.aspx" />
-    <Content Include="WF\MapDef\Action.aspx" />
-    <Content Include="WF\MapDef\Attachment.aspx" />
-    <Content Include="WF\MapDef\CCForm\CCForm.asmx" />
-    <Content Include="WF\MapDef\CCForm\Frm.aspx" />
-    <Content Include="WF\MapDef\CCForm\TableToFree.aspx" />
-    <Content Include="WF\MapDef\CopyDtlField.aspx" />
-    <Content Include="WF\MapDef\CopyFieldFromNode.aspx" />
-    <Content Include="WF\MapDef\Do.aspx" />
-    <Content Include="WF\MapDef\EditEnum.aspx" />
-    <Content Include="WF\MapDef\EditF.aspx" />
-    <Content Include="WF\MapDef\EditMapData.aspx" />
-    <Content Include="WF\MapDef\EditTable.aspx" />
-    <Content Include="WF\MapDef\ExpImp.aspx" />
-    <Content Include="WF\MapDef\FrmEvent.aspx" />
-    <Content Include="WF\MapDef\GroupField.aspx" />
-    <Content Include="WF\MapDef\HidAttr.aspx" />
-    <Content Include="WF\MapDef\Img\Frame.gif" />
-    <Content Include="WF\MapDef\Img\MapExt\Attachment.png" />
-    <Content Include="WF\MapDef\Img\MapExt\Dtl.png" />
-    <Content Include="WF\MapDef\Img\MapExt\DTS.gif" />
-    <Content Include="WF\MapDef\Img\MapExt\Event.png" />
-    <Content Include="WF\MapDef\Img\MapExt\ExpImp.png" />
-    <Content Include="WF\MapDef\Img\MapExt\GroupBar.png" />
-    <Content Include="WF\MapDef\Img\MapExt\HiddenField.png" />
-    <Content Include="WF\MapDef\Img\Max.gif" />
-    <Content Include="WF\MapDef\Img\Min.gif" />
-    <Content Include="WF\MapDef\Img\Table.gif" />
-    <Content Include="WF\MapDef\Img\Tabs\tableftG.gif" />
-    <Content Include="WF\MapDef\Img\Tabs\tabrightG.gif" />
-    <Content Include="WF\MapDef\MapDef.aspx" />
-    <Content Include="WF\MapDef\MapDef.js" />
-    <Content Include="WF\MapDef\MapDefDtlFreeFrm.aspx" />
-    <Content Include="WF\MapDef\MapDtl.aspx" />
-    <Content Include="WF\MapDef\MapDtlDe.aspx" />
-    <Content Include="WF\MapDef\MapDtlMTR.aspx" />
-    <Content Include="WF\MapDef\MapExt.aspx" />
-    <Content Include="WF\MapDef\MapFrame.aspx" />
-    <Content Include="WF\MapDef\MapM2M.aspx" />
-    <Content Include="WF\MapDef\MapM2MM.aspx" />
-    <Content Include="WF\MapDef\Pub.ascx" />
-    <Content Include="WF\MapDef\Rpt\Card.aspx" />
-    <Content Include="WF\MapDef\Rpt\DeptPower.aspx" />
-    <Content Include="WF\MapDef\Rpt\WFRptDtl.aspx" />
-    <Content Include="WF\MapDef\SFTable.aspx" />
-    <Content Include="WF\MapDef\SFTableEditData.aspx" />
-    <Content Include="WF\MapDef\Style\Max.gif" />
-    <Content Include="WF\MapDef\Style\Min.gif" />
-    <Content Include="WF\MapDef\Style\SysDataType.xml" />
-    <Content Include="WF\MapDef\Style\XmlDB.xml" />
-    <Content Include="WF\MapDef\SysEnum.aspx" />
-    <Content Include="WF\MapDef\TabIdx.aspx" />
-    <Content Include="WF\MapDef\UC\CopyDtlField.ascx" />
-    <Content Include="WF\MapDef\UC\LeftBar.ascx" />
-    <Content Include="WF\MapDef\UC\MExt.ascx" />
-    <Content Include="WF\MapDef\UC\Rpt.ascx" />
-    <Content Include="WF\MapDef\ViewFrm.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Attachment.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\CCForm\CCForm.asmx" />
+    <Content Include="WF\Admin\FoolFormDesigner\CCForm\Frm.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\CCForm\TableToFree.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\CopyDtlField.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Do.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditEnum.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditF.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditMapData.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditTable.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\ExpImp.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\GroupField.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\HidAttr.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\Frame.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\MapExt\Attachment.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\MapExt\Dtl.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\MapExt\DTS.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\MapExt\Event.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\MapExt\ExpImp.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\MapExt\GroupBar.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\MapExt\HiddenField.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\Max.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\Min.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\Table.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\Tabs\tableftG.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Img\Tabs\tabrightG.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Designer.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDef.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDtl.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDtlMTR.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapFrame.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapM2M.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapM2MM.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Pub.ascx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\Card.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\DeptPower.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\WFRptDtl.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTable.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Style\Max.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Style\Min.gif" />
+    <Content Include="WF\Admin\FoolFormDesigner\Style\SysDataType.xml" />
+    <Content Include="WF\Admin\FoolFormDesigner\Style\XmlDB.xml" />
+    <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\TabIdx.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\UC\CopyDtlField.ascx" />
+    <Content Include="WF\Admin\FoolFormDesigner\UC\LeftBar.ascx" />
+    <Content Include="WF\Admin\FoolFormDesigner\UC\MExt.ascx" />
+    <Content Include="WF\Admin\FoolFormDesigner\UC\Rpt.ascx" />
+    <Content Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx" />
     <Content Include="WF\Msg\Msg.js" />
     <Content Include="WF\Msg\Read.aspx" />
     <Content Include="WF\Msg\SMS.aspx" />
@@ -4838,207 +4833,200 @@
     <Compile Include="WF\Focus.aspx.designer.cs">
       <DependentUpon>Focus.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\ImpTableField.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx.cs">
       <DependentUpon>ImpTableField.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\ImpTableField.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx.designer.cs">
       <DependentUpon>ImpTableField.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\ImpTableFieldSelectBindKey.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx.cs">
       <DependentUpon>ImpTableFieldSelectBindKey.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\ImpTableFieldSelectBindKey.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx.designer.cs">
       <DependentUpon>ImpTableFieldSelectBindKey.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\ActiveDDL.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Left.aspx.cs">
+      <DependentUpon>Left.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\Left.aspx.designer.cs">
+      <DependentUpon>Left.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL.aspx.cs">
       <DependentUpon>ActiveDDL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\ActiveDDL.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL.aspx.designer.cs">
       <DependentUpon>ActiveDDL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\AotuGenerNo.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx.cs">
       <DependentUpon>AotuGenerNo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\AotuGenerNo.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx.designer.cs">
       <DependentUpon>AotuGenerNo.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\AutoFull.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull.aspx.cs">
       <DependentUpon>AutoFull.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\AutoFull.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull.aspx.designer.cs">
       <DependentUpon>AutoFull.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\AutoFullDLL.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AutoFullDLL.aspx.cs">
       <DependentUpon>AutoFullDLL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\AutoFullDLL.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AutoFullDLL.aspx.designer.cs">
       <DependentUpon>AutoFullDLL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\BodyAttr.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx.cs">
       <DependentUpon>BodyAttr.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\BodyAttr.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx.designer.cs">
       <DependentUpon>BodyAttr.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\DDLFullCtrl.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\DDLFullCtrl.aspx.cs">
       <DependentUpon>DDLFullCtrl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\DDLFullCtrl.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\DDLFullCtrl.aspx.designer.cs">
       <DependentUpon>DDLFullCtrl.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\ExcelFrm.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\ExcelFrm.aspx.cs">
       <DependentUpon>ExcelFrm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\ExcelFrm.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\ExcelFrm.aspx.designer.cs">
       <DependentUpon>ExcelFrm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\InitScript.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.aspx.cs">
       <DependentUpon>InitScript.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\InitScript.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.aspx.designer.cs">
       <DependentUpon>InitScript.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\InputCheck.aspx.cs">
-      <DependentUpon>InputCheck.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\InputCheck.aspx.designer.cs">
-      <DependentUpon>InputCheck.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MapDef\MapExt\List.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\List.aspx.cs">
       <DependentUpon>List.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\List.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\List.aspx.designer.cs">
       <DependentUpon>List.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\PageLoadFull.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\PageLoadFull.aspx.cs">
       <DependentUpon>PageLoadFull.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\PageLoadFull.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\PageLoadFull.aspx.designer.cs">
       <DependentUpon>PageLoadFull.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\PopVal.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.aspx.cs">
       <DependentUpon>PopVal.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\PopVal.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.aspx.designer.cs">
       <DependentUpon>PopVal.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\RadioBtns.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.aspx.cs">
       <DependentUpon>RadioBtns.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\RadioBtns.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.aspx.designer.cs">
       <DependentUpon>RadioBtns.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\RegularExpression.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.aspx.cs">
       <DependentUpon>RegularExpression.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\RegularExpression.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.aspx.designer.cs">
       <DependentUpon>RegularExpression.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\TBFullCtrl.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.aspx.cs">
       <DependentUpon>TBFullCtrl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\TBFullCtrl.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.aspx.designer.cs">
       <DependentUpon>TBFullCtrl.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\TBFullCtrl_Dtl.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_Dtl.aspx.cs">
       <DependentUpon>TBFullCtrl_Dtl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\TBFullCtrl_Dtl.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_Dtl.aspx.designer.cs">
       <DependentUpon>TBFullCtrl_Dtl.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\TBFullCtrl_List.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_List.aspx.cs">
       <DependentUpon>TBFullCtrl_List.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\TBFullCtrl_List.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_List.aspx.designer.cs">
       <DependentUpon>TBFullCtrl_List.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\TBFullCtrl_old.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_old.aspx.cs">
       <DependentUpon>TBFullCtrl_old.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\TBFullCtrl_old.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_old.aspx.designer.cs">
       <DependentUpon>TBFullCtrl_old.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\WordFrm.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx.cs">
       <DependentUpon>WordFrm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\WordFrm.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx.designer.cs">
       <DependentUpon>WordFrm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx.cs">
       <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt\RegularExpressionBatch.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx.designer.cs">
       <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\NodeFrmComponents.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.aspx.cs">
       <DependentUpon>NodeFrmComponents.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\NodeFrmComponents.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.aspx.designer.cs">
       <DependentUpon>NodeFrmComponents.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\RptGuide.Master.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\RptGuide.Master.cs">
       <DependentUpon>RptGuide.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\RptGuide.Master.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\RptGuide.Master.designer.cs">
       <DependentUpon>RptGuide.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S8_RptExportTemplate.aspx.cs">
-      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MapDef\Rpt\S8_RptExportTemplate.aspx.designer.cs">
-      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MapDef\SFSQL.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SFSQL.aspx.cs">
       <DependentUpon>SFSQL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\SFSQL.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SFSQL.aspx.designer.cs">
       <DependentUpon>SFSQL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\EditSQL.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditSQL.aspx.cs">
       <DependentUpon>EditSQL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\EditSQL.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditSQL.aspx.designer.cs">
       <DependentUpon>EditSQL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\SFWS.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SFWS.aspx.cs">
       <DependentUpon>SFWS.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\SFWS.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SFWS.aspx.designer.cs">
       <DependentUpon>SFWS.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\SlnCopy.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx.cs">
       <DependentUpon>SlnCopy.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\SlnCopy.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx.designer.cs">
       <DependentUpon>SlnCopy.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Messages.aspx.cs">
@@ -5213,18 +5201,18 @@
     <Compile Include="WF\Rpt\SearchAdv.aspx.designer.cs">
       <DependentUpon>SearchAdv.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Home.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Home.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx.cs</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S1_Edit.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S1_Edit.aspx.cs">
       <DependentUpon>S1_Edit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S1_Edit.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S1_Edit.aspx.designer.cs">
       <DependentUpon>S1_Edit.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="WF\Rpt\SearchEUI.aspx.cs">
@@ -5248,25 +5236,25 @@
     <Compile Include="WF\Rpt\SiteEUI.Master.designer.cs">
       <DependentUpon>SiteEUI.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Frm_ColsChose.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Frm_ColsChose.aspx.cs">
       <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Frm_ColsChose.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Frm_ColsChose.aspx.designer.cs">
       <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Frm_ColsLabel.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Frm_ColsLabel.aspx.cs">
       <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Frm_ColsLabel.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Frm_ColsLabel.aspx.designer.cs">
       <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S4_ColsOrder.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S4_ColsOrder.aspx.cs">
       <DependentUpon>S4_ColsOrder.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S4_ColsOrder.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S4_ColsOrder.aspx.designer.cs">
       <DependentUpon>S4_ColsOrder.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Rpt\UC\SearchAdv.ascx.cs">
@@ -5724,81 +5712,81 @@
     <Compile Include="WF\Start.aspx.designer.cs">
       <DependentUpon>Start.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\BatchEdit.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx.cs">
       <DependentUpon>BatchEdit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\BatchEdit.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx.designer.cs">
       <DependentUpon>BatchEdit.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S2_ColsChose.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S2_ColsChose.aspx.cs">
       <DependentUpon>S2_ColsChose.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S2_ColsChose.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S2_ColsChose.aspx.designer.cs">
       <DependentUpon>S2_ColsChose.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S3_ColsLabel.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S3_ColsLabel.aspx.cs">
       <DependentUpon>S3_ColsLabel.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S3_ColsLabel.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S3_ColsLabel.aspx.designer.cs">
       <DependentUpon>S3_ColsLabel.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Do.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Do.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S5_SearchCond.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S5_SearchCond.aspx.cs">
       <DependentUpon>S5_SearchCond.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S5_SearchCond.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S5_SearchCond.aspx.designer.cs">
       <DependentUpon>S5_SearchCond.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S6_Power.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S6_Power.aspx.cs">
       <DependentUpon>S6_Power.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S6_Power.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S6_Power.aspx.designer.cs">
       <DependentUpon>S6_Power.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S7_PowerOfDept.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S7_PowerOfDept.aspx.cs">
       <DependentUpon>S7_PowerOfDept.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\S7_PowerOfDept.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S7_PowerOfDept.aspx.designer.cs">
       <DependentUpon>S7_PowerOfDept.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Sln.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Sln.aspx.cs">
       <DependentUpon>Sln.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Sln.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Sln.aspx.designer.cs">
       <DependentUpon>Sln.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\SlnDo.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SlnDo.aspx.cs">
       <DependentUpon>SlnDo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\SlnDo.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SlnDo.aspx.designer.cs">
       <DependentUpon>SlnDo.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\SlnDtl.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SlnDtl.aspx.cs">
       <DependentUpon>SlnDtl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\SlnDtl.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SlnDtl.aspx.designer.cs">
       <DependentUpon>SlnDtl.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\UpdataEleXY.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UpdataEleXY.aspx.cs">
       <DependentUpon>UpdataEleXY.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\UpdataEleXY.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UpdataEleXY.aspx.designer.cs">
       <DependentUpon>UpdataEleXY.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\PrintSample.aspx.cs">
@@ -6778,21 +6766,21 @@
     <Compile Include="WF\HungUpList.aspx.designer.cs">
       <DependentUpon>HungUpList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\CCForm\DataHandler.ashx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CCForm\DataHandler.ashx.cs">
       <DependentUpon>DataHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\EleBatch.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EleBatch.aspx.cs">
       <DependentUpon>EleBatch.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\EleBatch.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EleBatch.aspx.designer.cs">
       <DependentUpon>EleBatch.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\RETemplete.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\RETemplete.aspx.cs">
       <DependentUpon>RETemplete.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\RETemplete.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\RETemplete.aspx.designer.cs">
       <DependentUpon>RETemplete.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\AccepterAdv.aspx.cs">
@@ -6906,285 +6894,285 @@
     <Compile Include="WF\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Action.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Action.aspx.cs">
       <DependentUpon>Action.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Action.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Action.aspx.designer.cs">
       <DependentUpon>Action.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Attachment.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Attachment.aspx.cs">
       <DependentUpon>Attachment.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Attachment.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Attachment.aspx.designer.cs">
       <DependentUpon>Attachment.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\CCForm\CCForm.asmx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CCForm\CCForm.asmx.cs">
       <DependentUpon>CCForm.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\CCForm\Frm.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CCForm\Frm.aspx.cs">
       <DependentUpon>Frm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\CCForm\TableToFree.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CCForm\TableToFree.aspx.cs">
       <DependentUpon>TableToFree.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\CCForm\TableToFree.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CCForm\TableToFree.aspx.designer.cs">
       <DependentUpon>TableToFree.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\CopyDtlField.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CopyDtlField.aspx.cs">
       <DependentUpon>CopyDtlField.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\CopyDtlField.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CopyDtlField.aspx.designer.cs">
       <DependentUpon>CopyDtlField.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\CopyFieldFromNode.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx.cs">
       <DependentUpon>CopyFieldFromNode.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\CopyFieldFromNode.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx.designer.cs">
       <DependentUpon>CopyFieldFromNode.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Do.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Do.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\EditEnum.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditEnum.aspx.cs">
       <DependentUpon>EditEnum.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\EditEnum.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditEnum.aspx.designer.cs">
       <DependentUpon>EditEnum.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\EditF.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditF.aspx.cs">
       <DependentUpon>EditF.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\EditF.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditF.aspx.designer.cs">
       <DependentUpon>EditF.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\EditMapData.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditMapData.aspx.cs">
       <DependentUpon>EditMapData.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\EditMapData.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditMapData.aspx.designer.cs">
       <DependentUpon>EditMapData.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\EditTable.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditTable.aspx.cs">
       <DependentUpon>EditTable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\EditTable.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\EditTable.aspx.designer.cs">
       <DependentUpon>EditTable.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\ExpImp.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\ExpImp.aspx.cs">
       <DependentUpon>ExpImp.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\ExpImp.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\ExpImp.aspx.designer.cs">
       <DependentUpon>ExpImp.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\FrmEvent.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx.cs">
       <DependentUpon>FrmEvent.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\FrmEvent.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx.designer.cs">
       <DependentUpon>FrmEvent.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\GroupField.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\GroupField.aspx.cs">
       <DependentUpon>GroupField.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\GroupField.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\GroupField.aspx.designer.cs">
       <DependentUpon>GroupField.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\HidAttr.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\HidAttr.aspx.cs">
       <DependentUpon>HidAttr.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\HidAttr.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\HidAttr.aspx.designer.cs">
       <DependentUpon>HidAttr.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapDef.aspx.cs">
-      <DependentUpon>MapDef.aspx</DependentUpon>
+    <Compile Include="WF\Admin\FoolFormDesigner\Designer.aspx.cs">
+      <DependentUpon>Designer.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapDef.aspx.designer.cs">
-      <DependentUpon>MapDef.aspx</DependentUpon>
+    <Compile Include="WF\Admin\FoolFormDesigner\Designer.aspx.designer.cs">
+      <DependentUpon>Designer.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapDefDtlFreeFrm.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.aspx.cs">
       <DependentUpon>MapDefDtlFreeFrm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapDefDtlFreeFrm.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.aspx.designer.cs">
       <DependentUpon>MapDefDtlFreeFrm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapDtl.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapDtl.aspx.cs">
       <DependentUpon>MapDtl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapDtl.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapDtl.aspx.designer.cs">
       <DependentUpon>MapDtl.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapDtlDe.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapDtlDe.aspx.cs">
       <DependentUpon>MapDtlDe.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapDtlDe.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapDtlDe.aspx.designer.cs">
       <DependentUpon>MapDtlDe.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapDtlMTR.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapDtlMTR.aspx.cs">
       <DependentUpon>MapDtlMTR.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapDtlMTR.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapDtlMTR.aspx.designer.cs">
       <DependentUpon>MapDtlMTR.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt.aspx.cs">
       <DependentUpon>MapExt.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapExt.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt.aspx.designer.cs">
       <DependentUpon>MapExt.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapFrame.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapFrame.aspx.cs">
       <DependentUpon>MapFrame.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapFrame.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapFrame.aspx.designer.cs">
       <DependentUpon>MapFrame.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapM2M.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapM2M.aspx.cs">
       <DependentUpon>MapM2M.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapM2M.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapM2M.aspx.designer.cs">
       <DependentUpon>MapM2M.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MapM2MM.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapM2MM.aspx.cs">
       <DependentUpon>MapM2MM.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MapM2MM.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MapM2MM.aspx.designer.cs">
       <DependentUpon>MapM2MM.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\MasterPage.master.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MasterPage.master.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\MasterPage.master.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\MasterPage.master.designer.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Pub.ascx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Pub.ascx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt.master.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt.master.cs">
       <DependentUpon>Rpt.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt.master.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt.master.designer.cs">
       <DependentUpon>Rpt.master</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Card.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Card.aspx.cs">
       <DependentUpon>Card.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\Card.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\Card.aspx.designer.cs">
       <DependentUpon>Card.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\DeptPower.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\DeptPower.aspx.cs">
       <DependentUpon>DeptPower.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\DeptPower.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\DeptPower.aspx.designer.cs">
       <DependentUpon>DeptPower.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\WFRptDtl.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\WFRptDtl.aspx.cs">
       <DependentUpon>WFRptDtl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\Rpt\WFRptDtl.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\WFRptDtl.aspx.designer.cs">
       <DependentUpon>WFRptDtl.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\SFTable.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SFTable.aspx.cs">
       <DependentUpon>SFTable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\SFTable.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SFTable.aspx.designer.cs">
       <DependentUpon>SFTable.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\SFTableEditData.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx.cs">
       <DependentUpon>SFTableEditData.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\SFTableEditData.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx.designer.cs">
       <DependentUpon>SFTableEditData.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\SysEnum.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.cs">
       <DependentUpon>SysEnum.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\SysEnum.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.designer.cs">
       <DependentUpon>SysEnum.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\TabIdx.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\TabIdx.aspx.cs">
       <DependentUpon>TabIdx.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\TabIdx.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\TabIdx.aspx.designer.cs">
       <DependentUpon>TabIdx.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\UC\CopyDtlField.ascx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UC\CopyDtlField.ascx.cs">
       <DependentUpon>CopyDtlField.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\UC\CopyDtlField.ascx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UC\CopyDtlField.ascx.designer.cs">
       <DependentUpon>CopyDtlField.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\UC\LeftBar.ascx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UC\LeftBar.ascx.cs">
       <DependentUpon>LeftBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\UC\LeftBar.ascx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UC\LeftBar.ascx.designer.cs">
       <DependentUpon>LeftBar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\UC\MExt.ascx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UC\MExt.ascx.cs">
       <DependentUpon>MExt.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\UC\MExt.ascx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UC\MExt.ascx.designer.cs">
       <DependentUpon>MExt.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\UC\Rpt.ascx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UC\Rpt.ascx.cs">
       <DependentUpon>Rpt.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\UC\Rpt.ascx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\UC\Rpt.ascx.designer.cs">
       <DependentUpon>Rpt.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\ViewFrm.aspx.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx.cs">
       <DependentUpon>ViewFrm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\ViewFrm.aspx.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx.designer.cs">
       <DependentUpon>ViewFrm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\MapDef\WinOpen.master.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.master.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\MapDef\WinOpen.master.designer.cs">
+    <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.master.designer.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
     <Compile Include="WF\Msg\Read.aspx.cs">
@@ -7705,17 +7693,17 @@
     <Content Include="WF\FlowCheck\Site.Master" />
     <None Include="WF\Img\Arr\Thumbs.db" />
     <None Include="WF\Img\FileType\Thumbs.db" />
-    <Content Include="WF\MapDef\CCForm\HanderMapExt.ashx" />
-    <Content Include="WF\MapDef\MasterPage.master" />
-    <Content Include="WF\MapDef\Rpt.master" />
-    <Content Include="WF\MapDef\WinOpen.master" />
+    <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MasterPage.master" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt.master" />
+    <Content Include="WF\Admin\FoolFormDesigner\WinOpen.master" />
     <Content Include="WF\Rpt\MasterPage.master" />
-    <Content Include="WF\MapDef\CCForm\DataHandler.ashx" />
-    <Content Include="WF\MapDef\HanderMapExt.ashx" />
-    <Content Include="WF\MapDef\Handler.ashx" />
+    <Content Include="WF\Admin\FoolFormDesigner\CCForm\DataHandler.ashx" />
+    <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Rpt\Single.Master" />
     <Content Include="WF\Rpt\SiteEUI.Master" />
-    <Content Include="WF\MapDef\Rpt\RptGuide.Master" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\RptGuide.Master" />
     <Content Include="WF\Rpt\EasySearch.Master" />
     <Content Include="WF\OneFlow\HanderMapExt.ashx" />
     <Content Include="WF\OneFlow\MasterPage.master" />
@@ -7743,7 +7731,7 @@
     <Folder Include="WF\Admin\CCFormDesigner\lib\sets\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />
-    <Folder Include="WF\Data\FlowDemo\Flow\" />
+    <Folder Include="WF\Data\FlowDemo\" />
     <Folder Include="WF\Data\JSLib\onchange\" />
     <Folder Include="WF\Data\JSLib\ondblclick\" />
     <Folder Include="WF\Data\JSLib\onkeyup\" />

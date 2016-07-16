@@ -7,6 +7,19 @@ using BP.En;
 namespace BP.Sys
 {
     /// <summary>
+    /// 控件类型
+    /// </summary>
+    public class GroupCtrlType
+    {
+        public const string Frame = "Frame";
+        public const string Dtl = "Dtl";
+        public const string Ath = "Ath";
+        public const string FWC = "FWC";
+        public const string SubFlow = "SubFlow";
+        public const string Track = "Track";
+        public const string Thread = "Thread";
+    }
+    /// <summary>
     /// GroupField
     /// </summary>
     public class GroupFieldAttr : EntityOIDAttr

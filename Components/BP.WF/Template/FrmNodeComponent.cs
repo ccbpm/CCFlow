@@ -158,7 +158,7 @@ namespace BP.WF.Template
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
                     gf.CtrlID = "FWC" + this.No;
-                    gf.CtrlType = "FWC";
+                    gf.CtrlType = GroupCtrlType.FWC;
                     gf.Lab = "审核组件";
                     gf.Idx = 0;
                     gf.Insert(); //插入.
@@ -182,7 +182,7 @@ namespace BP.WF.Template
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
                     gf.CtrlID = "SubFlow" + this.No;
-                    gf.CtrlType = "SubFlow";
+                    gf.CtrlType = GroupCtrlType.SubFlow;
                     gf.Lab = "父子流程组件";
                     gf.Idx = 0;
                     gf.Insert(); //插入.
@@ -205,7 +205,7 @@ namespace BP.WF.Template
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
                     gf.CtrlID = "FrmTrack" + this.No;
-                    gf.CtrlType = "FrmTrack";
+                    gf.CtrlType = GroupCtrlType.Track;
                     gf.Lab = "轨迹";
                     gf.Idx = 0;
                     gf.Insert(); //插入.
@@ -229,7 +229,7 @@ namespace BP.WF.Template
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
                     gf.CtrlID = "FrmThread" + this.No;
-                    gf.CtrlType = "FrmThread";
+                    gf.CtrlType = GroupCtrlType.Thread;
                     gf.Lab = "子线程";
                     gf.Idx = 0;
                     gf.Insert(); //插入.

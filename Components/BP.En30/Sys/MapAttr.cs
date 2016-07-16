@@ -851,6 +851,10 @@ namespace BP.Sys
             {
                 return (int)this.UIHeight;
             }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIHeight, value);
+            }
         }
         /// <summary>
         /// 高度

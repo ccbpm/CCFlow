@@ -13,6 +13,10 @@ namespace CCFlow.WF.Admin.AttrFlow
 {
     public partial class Imp : WebPage
     {
+        #region 属性
+        /// <summary>
+        /// 流程编号
+        /// </summary>
         public string FK_Flow
         {
             get
@@ -20,6 +24,26 @@ namespace CCFlow.WF.Admin.AttrFlow
                 return this.Request.QueryString["FK_Flow"];
             }
         }
+        /// <summary>
+        /// 流程类别编号
+        /// </summary>
+        public string FK_FlowSort
+        {
+            get
+            {
+                string flowSort = this.Request.QueryString["FK_FlowSort"];
+                if (string.IsNullOrEmpty(flowSort))
+                {
+                    BP.WF.Flow flow = new BP.WF.Flow();
+                    if (this.FK_Flow != null)
+                        flow = new BP.WF.Flow(this.FK_Flow);
+                    flowSort = flow.FK_FlowSort;
+                }
+                return flowSort;
+            }
+        }
+        #endregion
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -31,10 +55,6 @@ namespace CCFlow.WF.Admin.AttrFlow
                 string StrsavePath = Server.MapPath("..//..//..//DataUser//FlowFile");//路径
                 StrsavePath = StrsavePath + "//" + FU_Upload.FileName;
                 FU_Upload.SaveAs(StrsavePath);//保存文件
-
-                BP.WF.Flow flow = new BP.WF.Flow();
-                if (this.FK_Flow != null)
-                    flow = new BP.WF.Flow(this.FK_Flow);
 
                 int SpecifiedNumber = 0;
                 BP.WF.ImpFlowTempleteModel model = BP.WF.ImpFlowTempleteModel.AsNewFlow;
@@ -67,7 +87,7 @@ namespace CCFlow.WF.Admin.AttrFlow
                     model = BP.WF.ImpFlowTempleteModel.AsSpecFlowNo;
                 }
                 //执行导入
-                flow = BP.WF.Flow.DoLoadFlowTemplate(flow.FK_FlowSort, StrsavePath, model, SpecifiedNumber);
+                BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(this.FK_FlowSort, StrsavePath, model, SpecifiedNumber);
                 if (flow.No != "")
                 {
                     this.Alert("导入成功");

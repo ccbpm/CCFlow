@@ -522,119 +522,87 @@
     <!--  context menu -->
     <div id="mFlowRoot" class="easyui-menu" style="width: 120px;">
         <div onclick="newFlow()" data-options="iconCls:'icon-add'">新建流程</div>
-
+        <div class="menu-sep"></div>
         <div onclick="SearchFlow()" data-options="iconCls:'icon-Search'">按关键字查询流程</div>
-
-        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-new'">
-            新建子级类别</div>
-        <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">
-            编辑</div>
-        <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">
-            刷新</div>
+        <div class="menu-sep"></div>
+        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-new'">新建子级类别</div>
+        <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">编辑</div>
+        <div class="menu-sep"></div>
+        <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">刷新</div>
     </div>
     <div id="mFlowSort" class="easyui-menu" style="width: 120px;">
         <div onclick="newFlow()" data-options="iconCls:'icon-add'">新建流程</div>
-
-
         <div onclick="ImpFlowBySort()" data-options="iconCls:'icon-redo'">导入流程模板</div>
-        <div onclick="ExpFlowBySort()" data-options="iconCls:'icon-unredo'">导出流程模板</div>
+        <div class="menu-sep"></div>
+        <%--<div onclick="ExpFlowBySort()" data-options="iconCls:'icon-unredo'">导出流程模板</div>--%>
 
 
        <%-- <div onclick="ImpLocalFlow()" data-options="iconCls:'icon-imp'">导入本机流程模版</div>
         <div onclick="ImpColudFlow()" data-options="iconCls:'icon-imp'">导入ccbpm云服务流程模版</div>--%>
 
-        <div onclick="newFlowSort(false)" data-options="iconCls:'icon-new'">
-            新建同级类别</div>
-        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-new'">
-            新建子级类别</div>
-        <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">
-            编辑</div>
-        <div onclick="deleteFlowSort()" data-options="iconCls:'icon-delete'">
-            删除</div>
-        <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">
-            刷新</div>
+        <div onclick="newFlowSort(false)" data-options="iconCls:'icon-new'">新建同级类别</div>
+        <div onclick="newFlowSort(true)" data-options="iconCls:'icon-new'">新建子级类别</div>
+        <div onclick="editFlowSort()" data-options="iconCls:'icon-edit'">编辑</div>
+        <div class="menu-sep"></div>
+        <div onclick="deleteFlowSort()" data-options="iconCls:'icon-delete'">删除</div>
+        <div class="menu-sep"></div>
+        <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">刷新</div>
     </div>
     <div id="mFlow" class="easyui-menu" style="width: 120px;">
         <div onclick="showFlow()" data-options="iconCls:'icon-design'">设计流程图</div>
         <div onclick="RefreshFlowJson()" data-options="iconCls:'icon-reset'">重置流程图</div>
+        <div class="menu-sep"></div>
         <div onclick="ImpFlow()" data-options="iconCls:'icon-redo'">导入流程模板</div>
         <div onclick="ExpFlow()" data-options="iconCls:'icon-unredo'">导出流程模板</div>
-
+        <div class="menu-sep"></div>
         <div onclick="DeleteFlow()" data-options="iconCls:'icon-delete'">删除流程</div>
         <div onclick="FlowProperty()" data-options="iconCls:'icon-sheet'">流程属性</div>
-        
-        <div onclick="newFlow()" data-options="iconCls:'icon-add'">新建流程</div>
+        <div class="menu-sep"></div>
+        <%--<div onclick="newFlow()" data-options="iconCls:'icon-add'">新建流程</div>--%>
         <div onclick="ImpLocalFlow()" data-options="iconCls:'icon-imp'">导入本机流程模版</div>
         <div onclick="ImpColudFlow()" data-options="iconCls:'icon-imp'">导入ccbpm云服务流程模版</div>
 
     </div>
     <div id="mFormRoot" class="easyui-menu" style="width: 120px;">
-        <div onclick="newSrc()" data-options="iconCls:'icon-add'">
-            新建数据源</div>
-        <div onclick="newFrm()" data-options="iconCls:'icon-new'">
-            新建表单</div>
-        <div onclick="RefreshNode('formTree', '0')" data-options="iconCls:'icon-reload'">
-            刷新</div>
+        <div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>
+        <div onclick="newFrm()" data-options="iconCls:'icon-new'">新建表单</div>
+        <div onclick="RefreshNode('formTree', '0')" data-options="iconCls:'icon-reload'">刷新</div>
     </div>
     <div id="mFormSrc" class="easyui-menu" style="width: 120px;">
-        <div onclick="remove()" data-options="iconCls:'icon-add'">
-            新建下级目录</div>
-        <div onclick="newFrm()" data-options="iconCls:'icon-new'">
-            新建表单</div>
-        <div onclick="newSrc()" data-options="iconCls:'icon-add'">
-            新建数据源</div>
+        <div onclick="remove()" data-options="iconCls:'icon-add'">新建下级目录</div>
+        <div onclick="newFrm()" data-options="iconCls:'icon-new'">新建表单</div>
+        <div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
-        <div onclick="newFrm()" data-options="iconCls:'icon-add'">
-            新建/导入表单</div>
-        <div onclick="remove()" data-options="iconCls:'icon-new'">
-            新建同级类别</div>
-        <div onclick="remove()" data-options="iconCls:'icon-new'">
-            新建子级类别</div>
-        <div onclick="remove()" data-options="iconCls:'icon-edit'">
-            编辑</div>
-        <div onclick="remove()" data-options="iconCls:'icon-delete'">
-            删除</div>
-        <div onclick="RefreshNode('formTree', '0')" data-options="iconCls:'icon-reload'">
-            刷新</div>
+        <div onclick="newFrm()" data-options="iconCls:'icon-add'">新建/导入表单</div>
+        <div onclick="remove()" data-options="iconCls:'icon-new'">新建同级类别</div>
+        <div onclick="remove()" data-options="iconCls:'icon-new'">新建子级类别</div>
+        <div onclick="remove()" data-options="iconCls:'icon-edit'">编辑</div>
+        <div onclick="remove()" data-options="iconCls:'icon-delete'">删除</div>
+        <div onclick="RefreshNode('formTree', '0')" data-options="iconCls:'icon-reload'">刷新</div>
     </div>
     <div id="mForm" class="easyui-menu" style="width: 120px;">
-        <div onclick="designFrm()" data-options="iconCls:'icon-open'">
-            设计表单</div>
-        <div onclick="remove()" data-options="iconCls:'icon-property'">
-            表单属性</div>
-        <div onclick="remove()" data-options="iconCls:'icon-delete'">
-            删除</div>
-        <%--<div onclick="remove()" data-options="iconCls:'icon-refresh'">
-            刷新</div>--%>
+        <div onclick="designFrm()" data-options="iconCls:'icon-open'">设计表单</div>
+        <div onclick="remove()" data-options="iconCls:'icon-property'">表单属性</div>
+        <div onclick="remove()" data-options="iconCls:'icon-delete'">删除</div>
+        <%--<div onclick="remove()" data-options="iconCls:'icon-refresh'">刷新</div>--%>
     </div>
     <div id="mSrcRoot" class="easyui-menu" style="width: 120px;">
-        <div onclick="newSrc()" data-options="iconCls:'icon-add'">
-            新建数据源</div>
-        <div onclick="RefreshNode('formTree', 'SrcRoot')" data-options="iconCls:'icon-reload'">
-            刷新</div>
+        <div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>
+        <div onclick="RefreshNode('formTree', 'SrcRoot')" data-options="iconCls:'icon-reload'">刷新</div>
     </div>
     <div id="mSrc" class="easyui-menu" style="width: 120px;">
-        <div onclick="srcProperty()" data-options="iconCls:'icon-sheet'">
-            数据源属性</div>
-        <div onclick="newSrc()" data-options="iconCls:'icon-add'">
-            新建数据源</div>
-        <div onclick="newSrcTable()" data-options="iconCls:'icon-new'">
-            新建表</div>
-        <div onclick="alert('删除数据源，待开发')" data-options="iconCls:'icon-delete'">
-            删除数据源</div>
-        <div onclick="RefreshNode('formTree', 'SrcRoot')" data-options="iconCls:'icon-reload'">
-            刷新</div>
+        <div onclick="srcProperty()" data-options="iconCls:'icon-sheet'">数据源属性</div>
+        <div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>
+        <div onclick="newSrcTable()" data-options="iconCls:'icon-new'">新建表</div>
+        <div onclick="alert('删除数据源，待开发')" data-options="iconCls:'icon-delete'">删除数据源</div>
+        <div onclick="RefreshNode('formTree', 'SrcRoot')" data-options="iconCls:'icon-reload'">刷新</div>
     </div>
     <div id="mSrcTable" class="easyui-menu" style="width: 120px;">
-        <div onclick="srcTableProperty()" data-options="iconCls:'icon-sheet'">
-            表属性</div>
-        <div onclick="newSrcTable()" data-options="iconCls:'icon-new'">
-            新建表</div>
-        <div onclick="srcTableData()" data-options="iconCls:'icon-edit'">
-            查看&编辑数据</div>
-        <div onclick="alert('删除表，待开发')" data-options="iconCls:'icon-delete'">
-            删除表</div>
+        <div onclick="srcTableProperty()" data-options="iconCls:'icon-sheet'">表属性</div>
+        <div onclick="newSrcTable()" data-options="iconCls:'icon-new'">新建表</div>
+        <div onclick="srcTableData()" data-options="iconCls:'icon-edit'">查看&编辑数据</div>
+        <div onclick="alert('删除表，待开发')" data-options="iconCls:'icon-delete'">删除表</div>
     </div>
     <div id="mm" class="easyui-menu cs-tab-menu">
         <div id="mm-tabupdate">刷新</div>
@@ -646,41 +614,28 @@
         <div id="mm-tabcloseleft">关闭左侧</div>
     </div>
     <div id="mDeptRoot" class="easyui-menu" style="width: 120px;">
-        <div onclick="newSubDept()" data-options="iconCls:'icon-new'">
-            增加下级部门</div>
-        <div onclick="editDept()" data-options="iconCls:'icon-edit'">
-            编辑部门</div>
+        <div onclick="newSubDept()" data-options="iconCls:'icon-new'">增加下级部门</div>
+        <div onclick="editDept()" data-options="iconCls:'icon-edit'">编辑部门</div>
         <div class="menu-sep"></div>
-        <div onclick="newStation()" data-options="iconCls:'icon-add'">
-            增加岗位</div>
+        <div onclick="newStation()" data-options="iconCls:'icon-add'">增加岗位</div>
     </div>
     <div id="mDept" class="easyui-menu" style="width: 120px;">
-        <div onclick="newSubDept()" data-options="iconCls:'icon-new'">
-            增加下级部门</div>
-        <div onclick="newDept()" data-options="iconCls:'icon-new'">
-            增加同级部门</div>
-        <div onclick="editDept()" data-options="iconCls:'icon-edit'">
-            编辑部门</div>
-        <div onclick="deleteDept()" data-options="iconCls:'icon-delete'">
-            删除部门</div>
+        <div onclick="newSubDept()" data-options="iconCls:'icon-new'">增加下级部门</div>
+        <div onclick="newDept()" data-options="iconCls:'icon-new'">增加同级部门</div>
+        <div onclick="editDept()" data-options="iconCls:'icon-edit'">编辑部门</div>
+        <div onclick="deleteDept()" data-options="iconCls:'icon-delete'">删除部门</div>
         <div class="menu-sep"></div>
-        <div onclick="newStation()" data-options="iconCls:'icon-add'">
-            增加岗位</div>
+        <div onclick="newStation()" data-options="iconCls:'icon-add'">增加岗位</div>
     </div>
     <div id="mStation" class="easyui-menu" style="width: 120px;">
-        <div onclick="editStation()" data-options="iconCls:'icon-edit'">
-            编辑岗位</div>
-        <div onclick="deleteStation()" data-options="iconCls:'icon-delete'">
-            删除岗位</div>
+        <div onclick="editStation()" data-options="iconCls:'icon-edit'">编辑岗位</div>
+        <div onclick="deleteStation()" data-options="iconCls:'icon-delete'">删除岗位</div>
         <div class="menu-sep"></div>
-        <div onclick="newEmp()" data-options="iconCls:'icon-add'">
-            增加人员</div>
+        <div onclick="newEmp()" data-options="iconCls:'icon-add'">增加人员</div>
     </div>
     <div id="mEmp" class="easyui-menu" style="width: 120px;">
-        <div onclick="editEmp()" data-options="iconCls:'icon-edit'">
-            编辑人员</div>
-        <div onclick="deleteEmp()" data-options="iconCls:'icon-delete'">
-            删除人员</div>
+        <div onclick="editEmp()" data-options="iconCls:'icon-edit'">编辑人员</div>
+        <div onclick="deleteEmp()" data-options="iconCls:'icon-delete'">删除人员</div>
     </div>
     <script src="normalize/js/classie.js"></script>
     <script src="normalize/js/notificationFx.js"></script>

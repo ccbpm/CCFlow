@@ -317,9 +317,10 @@ function ExpFlow() {
 //导入流程
 function ImpFlowBySort() {
     var currFlow = $('#flowTree').tree('getSelected');
-    var fk_flow = currFlow.id;
-    url = "./../AttrFlow/Imp.aspx?FK_FlowSort=" + fk_flow + "&Lang=CH";
-    addTab(fk_flow + "PO", "导入流程模版", url);
+    var fk_flowSort = currFlow.id;
+    fk_flowSort = fk_flowSort.replace("F", "");
+    url = "./../AttrFlow/Imp.aspx?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
+    addTab(fk_flowSort + "PO", "导入流程模版", url);
 }
 
 //导出流程
@@ -329,10 +330,10 @@ function ExpFlowBySort() {
         alert('没有获得当前的流程编号.');
         return;
     }
-
-    var fk_flow = currFlow.id;
-    url = "./../AttrFlow/Exp.aspx?FK_FlowSort=" + fk_flow + "&Lang=CH";
-    addTab(fk_flow + "PO", "导出流程模版", url);
+    var fk_flowSort = currFlow.id;
+    fk_flowSort = fk_flowSort.replace("F", "");
+    url = "./../AttrFlow/Exp.aspx?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
+    addTab(fk_flowSort + "PO", "导出流程模版", url);
 }
 
 

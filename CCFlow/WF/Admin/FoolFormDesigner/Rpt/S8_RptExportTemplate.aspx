@@ -7,14 +7,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>设置报表导出模板</title>
-    <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <style type="text/css">
         .tdhover
         {
@@ -98,6 +98,10 @@
                     $(document.body).append(re.menu);
                     $.parser.parse();
 
+                    beginIdx = parseInt($('#excel').attr('data-beginidx'));
+                    beginSetIdx();
+                    isBeginIdx = 0;
+
                     $('#excel td').hover(function () {
                         currCellName = $(this).attr('data-name');
                         currCellFieldInfo = $(this).attr('data-field').split('`');
@@ -148,10 +152,14 @@
                         }
                         else if (isBeginIdx == 1) {
                             beginIdx = parseInt($(this).attr('data-rowid'));
+                            $('#excel').attr('data-direction', 1);
+                            $('#excel').attr('data-beginidx', beginIdx);
                             alert('填充数据将从第 ' + (beginIdx + 1) + ' 行开始！');
                         }
                         else {
                             beginIdx = parseInt($(this).attr('data-colid'));
+                            $('#excel').attr('data-direction', 2);
+                            $('#excel').attr('data-beginidx', beginIdx);
                             alert('填充数据将从第 ' + (beginIdx + 1) + ' 列开始！');
                         }
                     });
@@ -225,7 +233,25 @@
         function beginSetIdx(isVertical) {
             /// <summary>设置导出数据填充开始的行/列号</summary>
             /// <param name="isVertical" type="Boolean">是否是垂直方向填充</param>
-            isBeginIdx = isVertical ? 1 : 2;
+            if (isVertical == undefined) {
+                isBeginIdx = parseInt($('#excel').attr('data-direction'));
+            }
+            else {
+                isBeginIdx = isVertical ? 1 : 2;
+            }
+
+            $('#excel').attr('data-direction', isBeginIdx);
+
+            $('#btnBeginSetIdx').splitbutton({
+                text: isBeginIdx == 1 ? '开始行号' : '开始列号'
+            });
+
+            for (var i = 1; i < 3; i++) {
+                $('#mBeginIdx').menu('setIcon', {
+                    target: $('#mItem' + i)[0],
+                    iconCls: i == isBeginIdx ? 'icon-ok' : 'icon-xxxx'
+                });
+            }
         }
 
         function beginSetField() {
@@ -381,7 +407,7 @@
                 data-options="plain:true,iconCls:'icon-save'">保存</a> <a id="btnSetField" class="easyui-linkbutton"
                     href="javascript:void(0)" onclick="beginSetField()" data-options="plain:true,iconCls:'icon-accept'">
                     字段对应</a> <a id="btnBeginSetIdx" class="easyui-splitbutton" href="javascript:void(0)"
-                        onclick="beginSetIdx(true)" data-options="menu:'#mBeginIdx',plain:true,iconCls:'icon-ok'">
+                        onclick="beginSetIdx()" data-options="menu:'#mBeginIdx',plain:true,iconCls:'icon-manual'">
                         开始行号</a> <a id="btnClose" class="easyui-linkbutton" href="javascript:void(0)" onclick="closeSet()"
                             data-options="plain:true,iconCls:'icon-closecol'">关闭</a>
             <br />
@@ -389,9 +415,9 @@
             </div>
         </div>
         <div id="mBeginIdx" style="width: 100px;">
-            <div onclick="beginSetIdx(true)" data-options="iconCls:'icon-ok'">
+            <div id="mItem1" onclick="beginSetIdx(true)" data-options="iconCls:''">
                 开始行号</div>
-            <div onclick="beginSetIdx(false)" data-options="iconCls:'icon-cancel'">
+            <div id="mItem2" onclick="beginSetIdx(false)" data-options="iconCls:''">
                 开始列号</div>
         </div>
     </div>

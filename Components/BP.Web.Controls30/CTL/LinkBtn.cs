@@ -203,6 +203,8 @@ namespace BP.Web.Controls
                     break;
                 case NamesOfBtn.Excel:
                 case NamesOfBtn.Export:
+                case NamesOfBtn.ExportToModel:
+                case NamesOfBtn.ExportByTemplate:
                     SetDataOption("iconCls", "'icon-excel'");
                     break;
                 case NamesOfBtn.Open:

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -11,6 +13,10 @@ using BP.WF;
 using BP.Sys;
 using BP.WF.Rpt;
 using BP;
+using BP.WF.Template;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace CCFlow.WF.Rpt
 {
@@ -30,11 +36,11 @@ namespace CCFlow.WF.Rpt
                 return s;
             }
         }
-        public new  string EnsName
+        public new string EnsName
         {
             get
             {
-               return this.Request.QueryString["EnsName"];
+                return this.Request.QueryString["EnsName"];
             }
         }
         public string FK_Flow
@@ -69,8 +75,8 @@ namespace CCFlow.WF.Rpt
         protected void Page_Load(object sender, EventArgs e)
         {
             #region 处理查询权限， 此处不要修改，以Search.ascx为准.
-           // this.Page.RegisterClientScriptBlock("sss",
-           //"<link href='" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Style/Table" + BP.Web.WebUser.Style + ".css' rel='stylesheet' type='text/css' />");
+            // this.Page.RegisterClientScriptBlock("sss",
+            //"<link href='" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Style/Table" + BP.Web.WebUser.Style + ".css' rel='stylesheet' type='text/css' />");
             currMapRpt = new MapRpt(this.RptNo);
             Entity en = this.HisEns.GetNewEntity;
 
@@ -81,9 +87,9 @@ namespace CCFlow.WF.Rpt
                 this.currMapRpt.Update();
             }
 
-           Flow fl = new Flow(this.currMapRpt.FK_Flow);
+            Flow fl = new Flow(this.currMapRpt.FK_Flow);
 
-           this.Page.Title = fl.Name;
+            this.Page.Title = fl.Name;
 
             //初始化查询工具栏.
             this.ToolBar1.InitToolbarOfMapRpt(fl, currMapRpt, this.RptNo, en, 1);
@@ -107,13 +113,14 @@ namespace CCFlow.WF.Rpt
 
 
             this.ToolBar1.AddLinkBtn(BP.Web.Controls.NamesOfBtn.Export); //导出.
+            this.ToolBar1.AddLinkBtn(BP.Web.Controls.NamesOfBtn.ExportByTemplate);  //导出数据到模板文件
 
             //增加转到.
             this.ToolBar1.Add("&nbsp;");
             DDL ddl = new DDL();
             ddl.ID = "GoTo";
             ddl.Items.Add(new ListItem("查询", "Search"));
-           // ddl.Items.Add(new ListItem("高级查询", "SearchAdv"));
+            // ddl.Items.Add(new ListItem("高级查询", "SearchAdv"));
             ddl.Items.Add(new ListItem("分组分析", "Group"));
             ddl.Items.Add(new ListItem("交叉报表", "D3"));
             ddl.Items.Add(new ListItem("对比分析", "Contrast"));
@@ -124,10 +131,11 @@ namespace CCFlow.WF.Rpt
 
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Search).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Export).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+            this.ToolBar1.GetLinkBtnByID(NamesOfBtn.ExportByTemplate).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 
             #endregion 处理查询权限
 
-         
+
 
             //处理按钮.
             this.SetDGData();
@@ -139,7 +147,7 @@ namespace CCFlow.WF.Rpt
             string item = ddl.SelectedItemStringVal;
 
             string tKey = DateTime.Now.ToString("MMddhhmmss");
-            this.Response.Redirect(item + ".aspx?RptNo=" + this.RptNo + "&FK_Flow=" + this.FK_Flow+"&T="+tKey,true);
+            this.Response.Redirect(item + ".aspx?RptNo=" + this.RptNo + "&FK_Flow=" + this.FK_Flow + "&T=" + tKey, true);
         }
 
         public Entities SetDGData()
@@ -152,8 +160,8 @@ namespace CCFlow.WF.Rpt
             {
                 Flow fl = new Flow(this.FK_Flow);
                 fl.DoCheck();
-               
-                MapRpt myRpt=new MapRpt( "ND"+int.Parse(this.FK_Flow)+"MyRpt");
+
+                MapRpt myRpt = new MapRpt("ND" + int.Parse(this.FK_Flow) + "MyRpt");
                 myRpt.ResetIt();
                 //清缓存
                 BP.DA.Cash.Map_Cash.Clear();
@@ -192,8 +200,8 @@ namespace CCFlow.WF.Rpt
                                         "&FK_Flow=" + this.FK_Flow,
                                         pageIdx,
                                         SystemConfig.PageSize);
-            
-            
+
+
             qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx);
             #endregion 执行数据分页查询，并绑定分页控件.
 
@@ -238,7 +246,7 @@ namespace CCFlow.WF.Rpt
             #endregion 检查是否显示按关键字查询，如果是就把关键标注为红色.
 
             // 处理entity的GuestNo 列的问题。
-          //  if (en.EnMap.Attrs.Contains(NDXRptBaseAttr.ex
+            //  if (en.EnMap.Attrs.Contains(NDXRptBaseAttr.ex
             //foreach (Entity en in ens)
             //{
             //}
@@ -318,14 +326,14 @@ namespace CCFlow.WF.Rpt
 
             #region  生成表格标题
             this.UCSys1.AddTR();
-            this.UCSys1.AddTDGroupTitle("style='text-align:center;width:40px;'","序");
+            this.UCSys1.AddTDGroupTitle("style='text-align:center;width:40px;'", "序");
             this.UCSys1.AddTDGroupTitle("标题");
 
             foreach (Attr attr in attrs)
             {
                 if (attr.IsRefAttr
-                    || attr.Key == "Title" 
-                    || attr.Key=="MyNum")
+                    || attr.Key == "Title"
+                    || attr.Key == "MyNum")
                     continue;
 
                 this.UCSys1.AddTDGroupTitle(attr.Desc);
@@ -349,8 +357,8 @@ namespace CCFlow.WF.Rpt
                 idx++;
                 this.UCSys1.AddTR();
                 this.UCSys1.AddTDIdx(idx);
-                this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") +   "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
-                
+                this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
+
                 foreach (Attr attr in attrs)
                 {
                     if (attr.IsRefAttr || attr.Key == "MyNum" || attr.Key == "Title")
@@ -374,7 +382,7 @@ namespace CCFlow.WF.Rpt
                         this.UCSys1.AddTD(s);
                         continue;
                     }
-                    
+
                     string str = en.GetValStrByKey(attr.Key);
 
                     switch (attr.MyDataType)
@@ -484,8 +492,8 @@ namespace CCFlow.WF.Rpt
                     //if (attr.UIVisible == false)
                     //    continue;
 
-                    if (attr.Key == "OID" || attr.Key == "MID" 
-                        || attr.Key.ToUpper() == "WORKID" 
+                    if (attr.Key == "OID" || attr.Key == "MID"
+                        || attr.Key.ToUpper() == "WORKID"
                         || attr.Key == "FID")
                     {
                         this.UCSys1.AddTD();
@@ -510,7 +518,7 @@ namespace CCFlow.WF.Rpt
                             this.UCSys1.AddTD();
                             break;
                     }
-                } 
+                }
                 /*结束循环*/
                 //this.UCSys1.AddTD();
                 this.UCSys1.AddTREnd();
@@ -523,9 +531,10 @@ namespace CCFlow.WF.Rpt
 
         private void ToolBar1_ButtonClick(object sender, System.EventArgs e)
         {
+            var btn = (LinkBtn) sender;
+
             try
             {
-                var btn = (LinkBtn)sender;
 
                 switch (btn.ID)
                 {
@@ -562,7 +571,210 @@ namespace CCFlow.WF.Rpt
                         }
                         catch (Exception ex)
                         {
-                                throw new Exception("数据没有正确导出可能的原因之一是:系统管理员没正确的安装Excel组件，请通知他，参考安装说明书解决。@系统异常信息：" + ex.Message);
+                            throw new Exception("数据没有正确导出可能的原因之一是:系统管理员没正确的安装Excel组件，请通知他，参考安装说明书解决。@系统异常信息：" + ex.Message);
+                        }
+
+                        this.SetDGData();
+                        return;
+                    case NamesOfBtn.ExportByTemplate:
+                        MapData mdMyRpt = new MapData(this.RptNo);
+                        string fk_mapdata = "ND" + int.Parse(FK_Flow) + "Rpt";
+                        string tmpFile = null;
+                        string tmpDir = BP.Sys.SystemConfig.PathOfDataUser + @"TempleteExpEns\" + this.RptNo + @"\";
+                        string tmpXml = BP.Sys.SystemConfig.PathOfDataUser + @"TempleteExpEns\" + this.RptNo + @"\" + mdMyRpt.Name + ".xml";
+                        DirectoryInfo infoTmpDir = new DirectoryInfo(tmpDir);
+                        FileInfo[] tmpFiles = null;
+                        RptExportTemplate tmp = null;
+
+                        if (!infoTmpDir.Exists)
+                            infoTmpDir.Create();
+
+                        tmpFiles = infoTmpDir.GetFiles(mdMyRpt.Name + ".xls*");
+
+                        if (tmpFiles.Length > 0)
+                            tmpFile = tmpFiles[0].FullName;
+
+                        if (!string.IsNullOrWhiteSpace(tmpFile))
+                        {
+                            tmp = RptExportTemplate.FromXml(tmpXml);
+                        }
+                        else
+                        {
+                            ToolBar1_ButtonClick(ToolBar1.GetLinkBtnByID(NamesOfBtn.Export), new EventArgs());
+                            return;
+                        }
+
+                        md = new MapData(fk_mapdata);
+                        ens = md.HisEns;
+                        en = ens.GetNewEntity;
+                        qo = this.ToolBar1.GetnQueryObject(ens, en);
+                        qo.DoQuery();
+
+                        //获取流程绑定的表单库中的表单信息
+                        List<string> listFrms = new List<string>(); //存储绑定表单mapdata编号
+                        FrmNodes frms = new FrmNodes();
+                        frms.Retrieve(FrmNodeAttr.FK_Flow, FK_Flow, FrmNodeAttr.IsEnable, 1);
+
+                        foreach (FrmNode fn in frms)
+                        {
+                            if (listFrms.Contains(fn.FK_Frm))
+                                continue;
+
+                            listFrms.Add(fn.FK_Frm);
+                        }
+
+                        GEEntitys ges = null;
+                        QueryObject qo2 = null;
+                        Dictionary<string, Entities> frmDatas = new Dictionary<string, Entities>(); //存储fk_mapdata,Entities
+                        Dictionary<string, MapAttrs> frmAttrs = new Dictionary<string, MapAttrs>(); //存储fk_mapdata,MapAttrs
+
+                        //获取各绑定表单的记录集合
+                        frmDatas.Add(fk_mapdata, ens);
+                        frmAttrs.Add(fk_mapdata, new MapAttrs(fk_mapdata));
+
+                        foreach (string frm in listFrms)
+                        {
+                            //如果模板中没有涉及该表单的字段绑定信息，则不加载此表单的数据
+                            if (!tmp.HaveCellInMapData(frm))
+                                continue;
+
+                            ges = new GEEntitys(frm);
+                            qo2 = new QueryObject(ges);
+                            qo2.AddWhere("1=2");
+
+                            //增加workid的查询
+                            foreach(Entity en1 in ens)
+                            {
+                                qo2.addOr();
+                                qo2.AddWhere("OID", en1.GetValByKey("OID"));
+                            }
+
+                            qo2.DoQuery();
+                            frmDatas.Add(frm, ges);
+                            frmAttrs.Add(frm, new MapAttrs(frm));
+                        }
+
+                        IWorkbook wb = null;
+                        ISheet sheet = null;
+                        IRow row = null;
+                        ICell cell = null;
+                        int r = 0;
+                        int c = 0;
+                        int lastRowIdx = 0;
+                        MapAttr mattr = null;
+                        IDataFormat fmt = null;
+                        ICellStyle cellStyle = null;
+
+                        try
+                        {
+                            using (FileStream fs = new FileStream(tmpFile, FileMode.Open, FileAccess.Read))
+                            {
+                                if (Path.GetExtension(tmpFile).ToLower() == ".xls")
+                                    wb = new HSSFWorkbook(fs);
+                                else
+                                    wb = new XSSFWorkbook(fs);
+
+                                sheet = wb.GetSheetAt(0);
+                                fmt = wb.CreateDataFormat();
+                                lastRowIdx = sheet.LastRowNum;
+
+                                //垂直方向填充数据时，先将缺少的行数增加上
+                                for (int i = sheet.LastRowNum; i < tmp.BeginIdx + ens.Count - 1; i++)
+                                {
+                                    sheet.CreateRow(i + 1);
+                                }
+
+                                for (int i = 0; i < ens.Count; i++)
+                                {
+                                    foreach (RptExportTemplateCell tcell in tmp.Cells)
+                                    {
+                                        r = tmp.Direction == FillDirection.Vertical
+                                                ? (i + tmp.BeginIdx)
+                                                : tcell.RowIdx;
+                                        c = tmp.Direction == FillDirection.Vertical
+                                                ? tcell.ColumnIdx
+                                                : (i + tmp.BeginIdx);
+                                        row = sheet.GetRow(r);
+                                        cell = row.GetCell(c);
+                                        cellStyle = wb.CreateCellStyle();
+                                        cellStyle.CloneStyleFrom(sheet.GetRow(lastRowIdx).GetCell(c).CellStyle);
+
+                                        if (cell == null)
+                                        {
+                                            cell = row.CreateCell(c);
+                                            cell.CellStyle = wb.CreateCellStyle();
+                                        }
+
+                                        mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
+
+                                        switch (mattr.MyDataType)
+                                        {
+                                            case DataType.AppString:
+                                                if(mattr.LGType == FieldTypeS.Normal)
+                                                    cell.SetCellValue(ens[i].GetValStringByKey(tcell.KeyOfEn));
+                                                else
+                                                    cell.SetCellValue(ens[i].GetValRefTextByKey(tcell.KeyOfEn));
+                                                
+                                                cell.CellStyle.CloneStyleFrom(cellStyle);
+                                                break;
+                                            case DataType.AppInt:
+                                                if (mattr.LGType == FieldTypeS.Normal)
+                                                    cell.SetCellValue(ens[i].GetValIntByKey(tcell.KeyOfEn));
+                                                else
+                                                    cell.SetCellValue(ens[i].GetValRefTextByKey(tcell.KeyOfEn));
+
+                                                cell.CellStyle.CloneStyleFrom(cellStyle);
+                                                break;
+                                            case DataType.AppFloat:
+                                            case DataType.AppMoney:
+                                                if (mattr.LGType == FieldTypeS.Normal)
+                                                    cell.SetCellValue(ens[i].GetValDoubleByKey(tcell.KeyOfEn));
+                                                else
+                                                    cell.SetCellValue(ens[i].GetValRefTextByKey(tcell.KeyOfEn));
+
+                                                cell.CellStyle.CloneStyleFrom(cellStyle);
+                                                break;
+                                            case DataType.AppDate:
+                                                cell.SetCellValue(ens[i].GetValDateTime(tcell.KeyOfEn));
+                                                cell.CellStyle.CloneStyleFrom(cellStyle);
+                                                cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
+                                                break;
+                                            case DataType.AppDateTime:
+                                                cell.SetCellValue(ens[i].GetValDateTime(tcell.KeyOfEn));
+                                                cell.CellStyle.CloneStyleFrom(cellStyle);
+                                                cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
+                                                break;
+                                            case DataType.AppBoolean:
+                                                cell.SetCellValue(ens[i].GetValBooleanByKey(tcell.KeyOfEn));
+                                                cell.CellStyle.CloneStyleFrom(cellStyle);
+                                                break;
+                                            default:
+                                                throw new Exception("未涉及到的数据类型，请检查数据是否正确。");
+                                        }
+                                    }
+                                }
+
+                                //弹出下载
+                                using (MemoryStream ms = new MemoryStream())
+                                {
+                                    wb.Write(ms);
+
+                                    Response.AddHeader("Content-Length", ms.Length.ToString());
+                                    Response.ContentType = "application/octet-stream";
+                                    Response.AddHeader("Content-Disposition",
+                                                       "attachment; filename=" +
+                                                       HttpUtility.UrlEncode(
+                                                           mdMyRpt.Name + "_" +
+                                                           DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                                                           Path.GetExtension(tmpFile), Encoding.UTF8));
+                                    Response.BinaryWrite(ms.ToArray());
+                                    wb = null;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("数据导出时出现错误，@错误信息：" + ex.Message);
                         }
 
                         this.SetDGData();
@@ -582,6 +794,9 @@ namespace CCFlow.WF.Rpt
                     //在这里显示错误
                 }
             }
+
+            if (btn.ID == NamesOfBtn.ExportByTemplate)
+                Response.End();
         }
     }
 }

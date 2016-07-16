@@ -80,6 +80,10 @@ namespace BP.Web.Controls
 		/// 导出model
 		/// </summary>
 		public const string ExportToModel="Btn_ExportToModel";
+        /// <summary>
+        /// 导出数据到模板文件
+        /// </summary>
+	    public const string ExportByTemplate = "Btn_ExportByTemplate";
 		/// <summary>
 		/// Btn_ExportToXml
 		/// </summary>

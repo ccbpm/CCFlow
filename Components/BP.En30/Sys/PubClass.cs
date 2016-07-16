@@ -1017,6 +1017,9 @@ namespace BP.Sys
                     case DBType.Oracle:
                         AddCommentForTable_Ora(en);
                         break;
+                    case DBType.MySQL:
+                        AddCommentForTable_MySql(en);
+                        break;
                     default:
                         AddCommentForTable_MS(en);
                         break;
@@ -1059,6 +1062,70 @@ namespace BP.Sys
                     case FieldType.PKFK:
                         Entity myen1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
                         en.RunSQL("comment on column  " + en.EnMap.PhysicsTable + "." + attr.Field + " IS '" + attr.Desc + ", 主外键:对应物理表:" + myen1.EnMap.PhysicsTable + ",表描述:" + myen1.EnDesc + "'");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        public static void AddCommentForTable_MySql(Entity en)
+        {
+            MySql.Data.MySqlClient.MySqlConnection conn =
+                new MySql.Data.MySqlClient.MySqlConnection(BP.Sys.SystemConfig.AppCenterDSN);
+            en.RunSQL("alter table " + conn.Database + "." + en.EnMap.PhysicsTable + " comment = '" + en.EnDesc + "'");
+            //获取当前实体对应表的所有字段结构信息
+            DataTable cols =
+                DBAccess.RunSQLReturnTable(
+                    "select column_name,column_default,is_nullable,character_set_name,column_type from information_schema.columns where table_schema = '" +
+                    conn.Database + "' and table_name='" + en.EnMap.PhysicsTable + "'");
+            SysEnums ses = new SysEnums();
+            string sql = string.Empty;
+            DataRow row = null;
+
+            foreach (Attr attr in en.EnMap.Attrs)
+            {
+                if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+
+                row = cols.Select(string.Format("column_name='{0}'", attr.Field))[0];
+                sql = string.Format("ALTER TABLE {0}.{1} CHANGE COLUMN {2} {2} {3}{4}{5}{6} COMMENT ",
+                                    conn.Database,
+                                    en.EnMap.PhysicsTable,
+                                    attr.Field,
+                                    row["column_type"].ToString().ToUpper(),
+                                    Equals(row["character_set_name"], "utf8") ? " CHARACTER SET 'utf8'" : "",
+                                    Equals(row["is_nullable"], "YES") ? " NULL" : " NOT NULL",
+                                    Equals(row["column_default"], "NULL")
+                                        ? " DEFAULT NULL"
+                                        : (Equals(row[""], "") ? "" : " DEFAULT " + row[""]));
+
+                switch (attr.MyFieldType)
+                {
+                    case FieldType.PK:
+                        en.RunSQL(sql + string.Format("'{0} - 主键'", attr.Desc));
+                        break;
+                    case FieldType.Normal:
+                        en.RunSQL(sql + string.Format("'{0}'", attr.Desc));
+                        break;
+                    case FieldType.Enum:
+                        ses = new SysEnums(attr.Key, attr.UITag);
+                        en.RunSQL(sql + string.Format("'{0},枚举类型:{1}'", attr.Desc, ses.ToDesc()));
+                        break;
+                    case FieldType.PKEnum:
+                        ses = new SysEnums(attr.Key, attr.UITag);
+                        en.RunSQL(sql + string.Format("'{0},主键:枚举类型:{1}'", attr.Desc, ses.ToDesc()));
+                        break;
+                    case FieldType.FK:
+                        Entity myen = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                        en.RunSQL(sql +
+                                  string.Format("'{0},外键:对应物理表:{1},表描述:{2}'", attr.Desc, myen.EnMap.PhysicsTable,
+                                                myen.EnDesc));
+                        break;
+                    case FieldType.PKFK:
+                        Entity myen1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                        en.RunSQL(sql +
+                                  string.Format("'{0},主外键:对应物理表:{1},表描述:{2}'", attr.Desc, myen1.EnMap.PhysicsTable,
+                                                myen1.EnDesc));
                         break;
                     default:
                         break;

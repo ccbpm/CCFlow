@@ -33,6 +33,49 @@ namespace BP.WF.Rpt
         public List<RptExportTemplateCell> Cells { get; set; }
 
         /// <summary>
+        /// 是否有单元格绑定了指定的表单中的字段
+        /// </summary>
+        /// <param name="fk_mapdata">表单对应FK_MapData</param>
+        /// <returns></returns>
+        public bool HaveCellInMapData(string fk_mapdata)
+        {
+            foreach(RptExportTemplateCell cell in Cells)
+            {
+                if (cell.FK_MapData == fk_mapdata)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public RptExportTemplateCell GetBeginHeaderCell(FillDirection direction)
+        {
+            if (Cells == null || Cells.Count == 0)
+                return null;
+
+            RptExportTemplateCell cell = Cells[0];
+
+            if(direction == FillDirection.Vertical)
+            {
+                for(int i = 1;i<Cells.Count;i++)
+                {
+                    if (Cells[i].ColumnIdx < cell.ColumnIdx)
+                        cell = Cells[i];
+                }
+
+                return cell;
+            }
+            
+            for(int i = 1;i<Cells.Count;i++)
+            {
+                if (Cells[i].RowIdx < cell.RowIdx)
+                    cell = Cells[i];
+            }
+
+            return cell;
+        }
+
+        /// <summary>
         /// 保存到xml文件中
         /// </summary>
         /// <param name="fileName">xml文件路径</param>

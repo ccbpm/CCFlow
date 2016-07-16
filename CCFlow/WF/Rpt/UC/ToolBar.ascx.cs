@@ -110,6 +110,9 @@ namespace CCFlow.WF.Rpt.UC
                 case NamesOfBtn.ExportToModel:
                     text = "模板";
                     break;
+                case NamesOfBtn.ExportByTemplate:
+                    text = "导出至模板";
+                    break;
                 case NamesOfBtn.DataCheck:
                     text = "数据检查";
                     break;

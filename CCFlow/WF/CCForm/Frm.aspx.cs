@@ -262,7 +262,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 /* 没有找到此map. */
-                MapDtl dtl = new MapDtl(this.FK_MapData);
+                MapDtlExt dtl = new MapDtlExt(this.FK_MapData);
                 GEDtl dtlEn = dtl.HisGEDtl;
                 dtlEn.SetValByKey("OID", this.FID);
 

@@ -417,7 +417,7 @@ function NodeProperty_Funs(item) {
         case "DesignerNodeFormFix": //设计傻瓜表单
           //  url = "../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
 
-            url = "../../MapDef/MapDef.aspx?IsFirst=1&FK_MapData=ND" + FK_Node + "&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node;
+            url = "../FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=ND" + FK_Node + "&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node;
             if (window.parent && 1 == 3) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "傻瓜表单" + FK_Node, url, item.iconCls);
             } else {

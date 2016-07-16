@@ -112,7 +112,7 @@
         if (src.DBSrcType != BP.Sys.DBSrcType.WebServices && tab.No.Contains("BP.") == false)
         {
             int dbNum = src.RunSQLReturnInt("SELECT COUNT(*) FROM " + tab.No + " ", 0);
-            editDBLink = "<a href=\"javascript:WinOpen('/WF/MapDef/SFTableEditData.aspx?RefNo=" + tab.No + "')\">编辑(" + dbNum + ")</a>";
+            editDBLink = "<a href=\"javascript:WinOpen('/WF/Admin/FoolFormDesigner/SFTableEditData.aspx?RefNo=" + tab.No + "')\">编辑(" + dbNum + ")</a>";
         }
         
     //int refNum = tab.db("SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE UIBindKey='" + tab.No + "'", 0);
@@ -123,7 +123,7 @@
                 <a href="javascript:WinOpen('/WF/Admin/CCFormDesigner/TableRef.aspx?RefNo=<%=tab.No %>&FromApp=SL')">引用(<%=refNum %>)</a>
             </td>
             <td>
-                <a href="javascript:WinOpen('/WF/MapDef/SFTable.aspx?RefNo=<%=tab.No %>&FromApp=SL')">编辑属性</a>
+                <a href="javascript:WinOpen('/WF/Admin/FoolFormDesigner/SFTable.aspx?RefNo=<%=tab.No %>&FromApp=SL')">编辑属性</a>
             </td>
             <td>
                 <%=editDBLink %>

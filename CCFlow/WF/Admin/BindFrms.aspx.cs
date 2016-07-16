@@ -143,12 +143,12 @@ namespace CCFlow.WF.Admin
                     this.Pub1.AddTD(cb);
                     if (cb.Checked)
                     {
-                        this.Pub1.AddTDB("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" ><b>" + md.Name + "</b></a>");
+                        this.Pub1.AddTDB("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" ><b>" + md.Name + "</b></a>");
                         this.Pub1.AddTDB(md.PTable);
                     }
                     else
                     {
-                        this.Pub1.AddTD("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                        this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
                         this.Pub1.AddTD(md.PTable);
                     }
                     this.Pub1.AddTREnd();
@@ -323,9 +323,9 @@ namespace CCFlow.WF.Admin
                 this.Pub1.AddTD(fn.FK_Frm); 
 
                 if (fn.FK_Frm=="ND"+this.FK_Node)
-                     this.Pub1.AddTDB("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                    this.Pub1.AddTDB("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
                 else
-                     this.Pub1.AddTD("<a href=\"javascript:WinOpen('../MapDef/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
 
                 DDL ddl = new DDL();
                 //获取当前独立表单中的所有字段  add by 海南  zqp
@@ -471,7 +471,7 @@ namespace CCFlow.WF.Admin
                         if (dtls.Count == 0)
                             continue;
 
-                        foreach (MapDtl dtl in dtls)
+                        foreach (MapDtlExt dtl in dtls)
                         {
                             ddl.Items.Add(new ListItem("汇总到:"+myfrn.HisFrm.Name+"-"+dtl.Name,  myfrn.HisFrm.No+"@"+dtl.No));
                         }

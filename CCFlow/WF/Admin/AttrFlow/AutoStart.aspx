@@ -65,7 +65,7 @@
                <li>系统就会对每一条数据发起一条流程，这就是按照数据源的模式自动发起流程。</li>
                <li>该数据源的列名如果与开始节点表单的字段名一致，就会自动赋值。</li>
                <li>该参数支持ccbpm的表达式。</li>
-               <li><a href="javascript:WinOpen('/WF/MapDef/MapExt.aspx?s=d34&FK_MapData=ND<%=Convert.ToInt32(FK_Flow)%>01&ExtType=StartFlow&RefNo=8')">配置数据源</a></li>
+               <li><a href="javascript:WinOpen('/WF/Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND<%=Convert.ToInt32(FK_Flow)%>01&ExtType=StartFlow&RefNo=8')">配置数据源</a></li>
                <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
                </ul>
                </div>

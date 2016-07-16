@@ -221,8 +221,6 @@ namespace CCFlow.WF.UC
                     this.AddTD("<a href=\"javascript:WinOpen('FlowSearchSmallSingle.aspx?FK_Node=" + mynd.NodeID + "');\">工作查询</a>");
                     this.AddTREnd();
 
-
-
                     idx++;
                     isFirst = false;
                 }
@@ -278,7 +276,6 @@ namespace CCFlow.WF.UC
                 //rb.GroupName = "s";
                 //if (WebUser.Style == item.No)
                 //    rb.Checked=true;
-
                 //this.Add(rb);
                 //this.AddBR();
             }

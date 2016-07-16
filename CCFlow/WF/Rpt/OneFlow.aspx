@@ -45,27 +45,27 @@
                     <ul class="navlist">
                         <li>
                             <div>
-                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../MapDef/Rpt/S1_Edit.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
+                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S1_Edit.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
                                     <span class="nav">1. 基本信息</span></a></div>
                         </li>
                         <li>
                             <div>
-                                <a href="javascript:void(0)" id="starthref" onclick="OpenUrlInRightFrame(this, '../MapDef/Rpt/S2_ColsChose.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
+                                <a href="javascript:void(0)" id="starthref" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S2_ColsChose.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
                                     <span class="nav">2. 设置报表显示列</span></a></div>
                         </li>
                         <li>
                             <div>
-                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../MapDef/Rpt/S3_ColsLabel.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
+                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S3_ColsLabel.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
                                     <span class="nav">3. 设置报表显示列次序</span></a></div>
                         </li>
                         <li>
                             <div>
-                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../MapDef/Rpt/S5_SearchCond.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
+                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S5_SearchCond.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
                                     <span class="nav">4. 设置报表查询条件</span></a></div>
                         </li>
                         <li>
                             <div>
-                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../MapDef/Rpt/S8_RptExportTemplate.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
+                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S8_RptExportTemplate.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
                                     <span class="nav">5. 设置报表导出模板</span></a></div>
                         </li>
                         <%-- <li>

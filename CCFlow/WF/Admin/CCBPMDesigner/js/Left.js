@@ -460,7 +460,7 @@ function srcTableProperty() {
         return;
     }
 
-    var url = '../../MapDef/Do.aspx?DoType=EditSFTable&RefNo=' + srcTableNode.id + '&t=' + Math.random();
+    var url = '../FoolFormDesigner/Do.aspx?DoType=EditSFTable&RefNo=' + srcTableNode.id + '&t=' + Math.random();
     //OpenEasyUiDialog(url, "euiframeid", srcTableNode.text + ' 属性', 800, 495, 'icon-edit');
     //todo:数据源表属性修改后，在树上的结节信息的相应变更逻辑
     addTab(srcTableNode.id, srcTableNode.text, url, srcTableNode.iconCls);
@@ -474,7 +474,7 @@ function srcTableData() {
         return;
     }
 
-    var url = "../../MapDef/SFTableEditData.aspx?RefNo=" + srcTableNode.id; //todo:此处BP.Pub.Days样式的，页面报错
+    var url = "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + srcTableNode.id; //todo:此处BP.Pub.Days样式的，页面报错
     //OpenEasyUiDialog(url, "euiframeid", srcTableNode.text + ' 数据编辑', 800, 495, 'icon-edit');
     addTab(srcTableNode.id, srcTableNode.text + ' 数据编辑', url, srcTableNode.iconCls);
 }
@@ -492,7 +492,7 @@ function openForm(id, text) {
         text = formNode.text;
     }
 
-    addTab(id, text, "../../MapDef/CCForm/Frm.aspx?FK_MapData=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID, formNode.iconCls);
+    addTab(id, text, "../FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID, formNode.iconCls);
 }
 
 /*组织结构树操作开始*/

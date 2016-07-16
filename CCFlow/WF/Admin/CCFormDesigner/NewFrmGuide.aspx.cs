@@ -488,7 +488,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm && this.Pub1.GetRadioButtonByID("RB_FrmGenerMode_2").Checked)
             {
-                this.Response.Redirect("../../MapDef/ImpTableField.aspx?DoType=New&FK_MapData=" + md.No);
+                this.Response.Redirect("../FoolFormDesigner/ImpTableField.aspx?DoType=New&FK_MapData=" + md.No);
                 return;
             }
 
@@ -499,7 +499,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
             {
-                this.Response.Redirect("/WF/MapDef/MapDef.aspx?IsFirst=1&FK_MapData=" + md.No);
+                this.Response.Redirect("/WF/Admin/FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=" + md.No);
             }
 
         }

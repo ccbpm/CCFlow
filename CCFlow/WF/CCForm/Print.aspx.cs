@@ -106,7 +106,7 @@ namespace CCFlow.WF.CCForm
                     GEEntity ge = new GEEntity(fn.FK_Frm, this.WorkID);
                     engine.AddEn(ge);
                     MapDtls mdtls = new MapDtls(fn.FK_Frm);
-                    foreach (MapDtl dtl in mdtls)
+                    foreach (MapDtlExt dtl in mdtls)
                     {
                         GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
                         enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
@@ -118,7 +118,7 @@ namespace CCFlow.WF.CCForm
                 GEEntity myge = new GEEntity("ND" + nd.NodeID, this.WorkID);
                 engine.AddEn(myge);
                 MapDtls mymdtls = new MapDtls("ND" + nd.NodeID);
-                foreach (MapDtl dtl in mymdtls)
+                foreach (MapDtlExt dtl in mymdtls)
                 {
                     GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
                     enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
@@ -136,7 +136,7 @@ namespace CCFlow.WF.CCForm
                 engine.AddEn(myge);
 
                 MapDtls mymdtls = new MapDtls(tempName);
-                foreach (MapDtl dtl in mymdtls)
+                foreach (MapDtlExt dtl in mymdtls)
                 {
                     GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
                     enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);

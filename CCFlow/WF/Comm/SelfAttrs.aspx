@@ -78,12 +78,12 @@
  <script type="text/javascript">
      function AddAttr(ensName) {
 
-         var url = '/WF/MapDef/Do.aspx?DoType=AddF&MyPK=' + ensName;
+         var url = '/WF/Admin/FoolFormDesigner/Do.aspx?DoType=AddF&MyPK=' + ensName;
          var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
          window.location.href = window.location.href;
 
        //  var url = '?EnsName=<%=ensName %>';
-//         var url = "/WF/MapDef/Do.aspx?DoType=AddF&MyPK=0&IDX=0&GroupField=&FK_MapData=<%=ensName%>&RefNo=<%=ensName%>";
+//         var url = "/WF/Admin/FoolFormDesigner/Do.aspx?DoType=AddF&MyPK=0&IDX=0&GroupField=&FK_MapData=<%=ensName%>&RefNo=<%=ensName%>";
 //         alert(url);
 //         var str = window.showModalDialog(url, '', 'dialogHeight: 550px; dialogWidth:950px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no');
 //         window.location.href = window.location.href;

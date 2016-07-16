@@ -1563,7 +1563,7 @@ namespace CCFlow.WF
                         MapAttrs mattrs = currND.MapData.MapAttrs;
                         foreach (MapAttr attr in mattrs)
                         {
-                            if (attr.TBModel == 2)
+                            if (attr.TBModel == TBModel.RichText)
                             {
                                 /* 如果是富文本 */
                                 currWK.SetValByKey(attr.KeyOfEn, this.Request.Form["ctl00$ContentPlaceHolder1$MyFlowUC1$MyFlow1$UCEn1$TB_" + attr.KeyOfEn]);

@@ -12,7 +12,6 @@ using BP.WF;
 using BP.WF.Data;
 using BP.WF.Template;
 using BP.Sys;
-using BP.WF.Template;
 
 namespace CCFlow.WF.WorkOpt
 {

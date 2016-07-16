@@ -26,7 +26,6 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
     public class FlowDesignerSvr : System.Web.Services.WebService
     {
         OSModel model = BP.Sys.OSModel.OneOne;
-       
 
         StringBuilder sbJson = new StringBuilder();
         [WebMethod]

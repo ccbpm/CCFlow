@@ -823,7 +823,7 @@ namespace CCFlow.WF.UC
                         lab.Text = attr.Name;
                         this.Add(lab);
                         this.Add("</div>");
-                        if (attr.TBModel == 2)
+                        if (attr.TBModel ==  TBModel.RichText)
                         {
                             //富文本输出.
                             this.AddRichTextBox(en, attr);
@@ -3194,7 +3194,7 @@ namespace CCFlow.WF.UC
                 }
                 #endregion
 
-                if (attr.MaxLen >= 3999 && attr.TBModel == 2)
+                if (attr.MaxLen >= 3999 || attr.TBModel == TBModel.RichText)
                 {
                     this.AddRichTextBox(en, attr);
                     this.Add("</span>");

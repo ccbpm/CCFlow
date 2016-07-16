@@ -396,7 +396,7 @@ namespace CCFlow.WF.CCForm
             GEDtl gedtl = null;
             ReplaceDtlTable wdtl = null;
 
-            foreach (MapDtl mdtl in mdtls)
+            foreach (MapDtlExt mdtl in mdtls)
             {
                 wdtl = dtls.FirstOrDefault(o => o.dtlno == mdtl.No);
 
@@ -625,7 +625,7 @@ namespace CCFlow.WF.CCForm
             ReplaceDtlNos = "[";
             MapDtls dtls = new MapDtls(this.FK_MapData);
             // 填充从表.
-            foreach (MapDtl dtl in dtls)
+            foreach (MapDtlExt dtl in dtls)
             {
                 ReplaceDtlNos += "\"" + dtl.No + "\",";
                 

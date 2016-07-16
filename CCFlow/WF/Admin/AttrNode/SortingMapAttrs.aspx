@@ -26,25 +26,25 @@
         }
         //新增分组名称
         function GroupFieldNew(ensName) {
-            var url = '../../MapDef/GroupField.aspx?DoType=NewGroup&RefNo=' + ensName;
+            var url = '../FoolFormDesigner/GroupField.aspx?DoType=NewGroup&RefNo=' + ensName;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         //编辑分组名称
         function GroupField(mypk, OID) {
-            var url = '../../MapDef/GroupField.aspx?RefNo=' + mypk + "&RefOID=" + OID;
+            var url = '../FoolFormDesigner/GroupField.aspx?RefNo=' + mypk + "&RefOID=" + OID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         //编辑明细表
         function EditDtl(mypk, dtlKey) {
-            var url = '../../MapDef/MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
+            var url = '../FoolFormDesigner/MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
         //编辑多附件
         function EditAthMent(fk_mapdata, athMentKey) {
-            var url = '../../MapDef/Attachment.aspx?FK_MapData=' + fk_mapdata + '&Ath=' + athMentKey;
+            var url = '../FoolFormDesigner/Attachment.aspx?FK_MapData=' + fk_mapdata + '&Ath=' + athMentKey;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }

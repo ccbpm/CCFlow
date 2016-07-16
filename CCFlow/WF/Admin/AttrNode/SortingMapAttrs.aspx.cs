@@ -1247,7 +1247,7 @@ namespace CCFlow.WF.Admin
         /// <returns></returns>
         private string GenerateEditUrl(DataRow drAttr)
         {
-            string url = "../../MapDef/";
+            string url = "../FoolFormDesigner/";
 
             switch ((FieldTypeS)drAttr[MapAttrAttr.LGType])
             {

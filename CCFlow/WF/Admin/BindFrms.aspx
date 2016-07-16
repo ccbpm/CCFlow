@@ -12,17 +12,17 @@
     }
 
     function WinField(fk_mapdata, nodeid, fk_flow) {
-        var url = "../MapDef/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';
+        var url = "./FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';
         WinOpen(url);
     }
 
     function WinFJ(fk_mapdata, nodeid, fk_flow) {
-        var url = "../MapDef/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=FJ';
+        var url = "./FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=FJ';
         WinOpen(url);
     }
 
     function WinDtl(fk_mapdata, nodeid, fk_flow) {
-        var url = "../MapDef/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Dtl';
+        var url = "./FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Dtl';
         WinOpen(url);
     }
 

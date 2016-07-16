@@ -88,11 +88,11 @@ namespace CCFlow.WF.Comm.Sys
                 Pub1.AddTDBegin();
                 Pub1.AddUL("class='navlist'");
 
-                this.Pub1.AddLi("<a href='/WF/MapDef/SFTable.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&FromApp=SL' ><b><img src='./Img/Table.png' border=0 style='width:17px;height:17px;' />外键型表或视图</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。");
-                this.Pub1.AddLi("<a href='/WF/MapDef/SFSQL.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&FromApp=SL'><b><img src='./Img/View.png' border=0  style='width:17px;height:17px;' />外部表SQL数据源</b></a> -  比如：配置一个SQL通过数据库连接或获取的外部数据，组成一个下拉框。");
-                this.Pub1.AddLi("<a href='/WF/MapDef/SFWS.aspx?DoType=AddSFWebServeces&MyPK=" + this.MyPK + "&FType=Class&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "&FromApp=SL'><b><img src='./Img/WS.png' border=0 />WebServices数据</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。");
+                this.Pub1.AddLi("<a href='/WF/Admin/FoolFormDesigner/SFTable.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&FromApp=SL' ><b><img src='./Img/Table.png' border=0 style='width:17px;height:17px;' />外键型表或视图</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。");
+                this.Pub1.AddLi("<a href='/WF/Admin/FoolFormDesigner/SFSQL.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&FromApp=SL'><b><img src='./Img/View.png' border=0  style='width:17px;height:17px;' />外部表SQL数据源</b></a> -  比如：配置一个SQL通过数据库连接或获取的外部数据，组成一个下拉框。");
+                this.Pub1.AddLi("<a href='/WF/Admin/FoolFormDesigner/SFWS.aspx?DoType=AddSFWebServeces&MyPK=" + this.MyPK + "&FType=Class&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "&FromApp=SL'><b><img src='./Img/WS.png' border=0 />WebServices数据</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。");
 
-               // this.Pub1.AddLi("<a href='/WF/MapDef/SFWS.aspx?DoType=AddSFWebServeces&MyPK=" + this.MyPK + "&FType=Class&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "&FromApp=SL'><b><img src='./Img/WS.png' border=0 />WebServices数据</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。");
+               // this.Pub1.AddLi("<a href='/WF/Admin/FoolFormDesigner/SFWS.aspx?DoType=AddSFWebServeces&MyPK=" + this.MyPK + "&FType=Class&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "&FromApp=SL'><b><img src='./Img/WS.png' border=0 />WebServices数据</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。");
 
 
                //// Pub1.AddLi("<div><a href='SFGuide.aspx?Step=12&FK_SFDBsrc=local'><img src='../../Img/New.gif' align='middle' /><span>创建本地编码字典表</span></a></div>");
@@ -509,7 +509,7 @@ namespace CCFlow.WF.Comm.Sys
 
             table.Save();
 
-            EasyUiHelper.AddEasyUiMessagerAndGo(this, "创建成功！查看数据……", "提示", "info", "../../MapDef/SFTableEditData.aspx?RefNo=" + table.No);
+            EasyUiHelper.AddEasyUiMessagerAndGo(this, "创建成功！查看数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + table.No);
         }
 
         void btn_Create_Local_Click(object sender, EventArgs e)
@@ -546,7 +546,7 @@ namespace CCFlow.WF.Comm.Sys
                     table.FK_SFDBSrc = "local";
 
                     table.Save(); 
-                    EasyUiHelper.AddEasyUiMessagerAndGo(this, "您所创建的“" +table.No+ "” 名称的字典表，本地库已经存在，已成功注册！编辑数据……", "提示", "info", "../../MapDef/SFTableEditData.aspx?RefNo=" + table.No);
+                    EasyUiHelper.AddEasyUiMessagerAndGo(this, "您所创建的“" +table.No+ "” 名称的字典表，本地库已经存在，已成功注册！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + table.No);
                 }
                 else if(regColValue != null && regColText != null)
                 {
@@ -558,7 +558,7 @@ namespace CCFlow.WF.Comm.Sys
                     table.FK_SFDBSrc = "local";
 
                     table.Save();
-                    EasyUiHelper.AddEasyUiMessagerAndGo(this, "您所创建的“" + table.No + "” 名称的字典表，本地库已经存在，已成功注册！编辑数据……", "提示", "info", "../../MapDef/SFTableEditData.aspx?RefNo=" + table.No);
+                    EasyUiHelper.AddEasyUiMessagerAndGo(this, "您所创建的“" + table.No + "” 名称的字典表，本地库已经存在，已成功注册！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + table.No);
                 }
                 else
                 {
@@ -594,7 +594,7 @@ namespace CCFlow.WF.Comm.Sys
 
             table.Save();
 
-            EasyUiHelper.AddEasyUiMessagerAndGo(this, "创建成功！编辑数据……", "提示", "info", "../../MapDef/SFTableEditData.aspx?RefNo=" + table.No);
+            EasyUiHelper.AddEasyUiMessagerAndGo(this, "创建成功！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + table.No);
         }
 
         void btn_Click(object sender, EventArgs e)

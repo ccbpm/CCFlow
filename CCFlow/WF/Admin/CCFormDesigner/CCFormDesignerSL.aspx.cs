@@ -19,7 +19,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             //if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
             //{
-            //    this.Response.Redirect("/WF/MapDef/"
+            //    this.Response.Redirect("/WF/Admin/FoolFormDesigner/"
             //}
 
         }

@@ -506,19 +506,19 @@
 /*傻瓜表单按钮样式*/
 .icon-expimp
 {
-    background: url('../../FoolFormDesigner/Img/MapExt/ExpImp.png') no-repeat;
+    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/ExpImp.png') no-repeat;
 }
 .icon-hidden
 {
-    background: url('../../FoolFormDesigner/Img/MapExt/HiddenField.png') no-repeat;
+    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/HiddenField.png') no-repeat;
 }
 .icon-groupbar
 {
-    background: url('../../FoolFormDesigner/Img/MapExt/GroupBar.png') no-repeat;
+    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/GroupBar.png') no-repeat;
 }
 .icon-dtl
 {
-    background: url('../../FoolFormDesigner/Img/MapExt/Dtl.png') no-repeat;
+    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/Dtl.png') no-repeat;
 }
 .icon-closecol
 {
@@ -526,19 +526,19 @@
 }
 .icon-attachment
 {
-    background: url('../../FoolFormDesigner/Img/MapExt/Attachment.png') no-repeat;
+    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/Attachment.png') no-repeat;
 }
 .icon-frame
 {
-    background: url('../../FoolFormDesigner/Img/Frame.gif') no-repeat;
+    background: url('/WF/Admin/FoolFormDesigner/Img/Frame.gif') no-repeat;
 }
 .icon-event
 {
-    background: url('../../FoolFormDesigner/Img/MapExt/event.png') no-repeat;
+    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/event.png') no-repeat;
 }
 .icon-dts
 {
-    background: url('../../FoolFormDesigner/Img/MapExt/DTS.gif') no-repeat;
+    background: url('/WF/Admin/FoolFormDesigner/Img/MapExt/DTS.gif') no-repeat;
 }
 
 .icon-Components

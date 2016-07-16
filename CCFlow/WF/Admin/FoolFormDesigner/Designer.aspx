@@ -14,10 +14,10 @@
         }
     </style>
     <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
-    <script language="JavaScript" src="../../Comm/JScript.js"></script>
-    <script language="JavaScript" src="MapDef.js" type="text/javascript"></script>
-    <script language="JavaScript" src="../../Style/Verify.js"></script>
-    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"
+    <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script language="JavaScript" type="text/javascript" src="MapDef.js" type="text/javascript"></script>
+    <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"
         defer="defer"></script>
     <script language="javascript" type="text/javascript" >
         function FrmEvent(mypk) {
@@ -174,14 +174,14 @@
 
         // 子线程.
         function EditFrmThread(mypk) {
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
 
         // 轨迹图.
         function EditTrack(mypk) {
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
@@ -190,14 +190,14 @@
         /// 审核组件.
         function EditFWC(mypk) {
             //http: //localhost:41466/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FrmNodeComponents&PK=7901&EnName=BP.WF.Template.FrmNodeComponent&tab=%E7%88%B6%E5%AD%90%E6%B5%81%E7%A8%8B%E7%BB%84%E4%BB%B6
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=审核组件';
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=审核组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
         //子流程.
         function EditSubFlow(mypk) {
             // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
@@ -205,7 +205,7 @@
         //子线程.
         function EditThread(mypk) {
             // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=子线程组件';
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=子线程组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
@@ -213,20 +213,20 @@
         //轨迹组件.
         function EditTrack(mypk) {
             // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=轨迹组件';
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=轨迹组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
 
 
         function MapDataEdit(mypk) {
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapFoolForm&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapFoolForm&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 850px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function FrmNodeComponent(mypk) {
-            var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 850px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -330,7 +330,7 @@
         
         <%--<a href="javascript:MapExt('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dts'">扩展设置</a>
 --%>
-        <a href="javascript:MapDataEdit('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dts'">表单属性</a>
+        <a href="javascript:MapDataEdit('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">表单属性</a>
 
         <% if ( fk_flow != null) { %>
         <a href="javascript:FrmNodeComponent('<%=nodeID %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>

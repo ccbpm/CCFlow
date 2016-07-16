@@ -166,7 +166,7 @@ namespace CCFlow.WF.MapDef
                 #region 首先判断是否是框架分组？
                 switch (gf.CtrlType)
                 {
-                    case "Frame": // 框架 类型.
+                    case GroupCtrlType.Frame: // 框架 类型.
                         #region 框架
                         foreach (MapFrame fram in frams)
                         {
@@ -195,7 +195,7 @@ namespace CCFlow.WF.MapDef
                         }
                         #endregion 框架
                         continue;
-                    case "Dtl": //增加从表.
+                    case GroupCtrlType.Dtl : //增加从表.
                         #region 增加从表
                         foreach (MapDtl dtl in dtls)
                         {
@@ -218,7 +218,7 @@ namespace CCFlow.WF.MapDef
                         }
                         #endregion 增加从表
                         continue;
-                    case "Ath": //增加附件.
+                    case GroupCtrlType.Ath: //增加附件.
                         #region 增加附件
                         foreach (FrmAttachment ath in this.aths)
                         {
@@ -246,7 +246,7 @@ namespace CCFlow.WF.MapDef
                         }
                         #endregion 增加附件
                         continue;
-                    case "FWC": //审核组件.
+                    case GroupCtrlType.FWC: //审核组件.
                         FrmWorkCheck fwc = new FrmWorkCheck(this.FK_MapData);
                         if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
                         {
@@ -268,7 +268,7 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
                         continue;
-                    case "SubFlow": //子线程.
+                    case GroupCtrlType.SubFlow: //子线程.
                         FrmSubFlow subflow = new FrmSubFlow(this.FK_MapData);
                         if (subflow.HisFrmSubFlowSta == FrmSubFlowSta.Disable)
                         {
@@ -290,7 +290,7 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
                         continue;
-                    case "Track": //轨迹图.
+                    case GroupCtrlType.Track: //轨迹图.
                         FrmTrack track = new FrmTrack(this.FK_MapData);
                         if (track.FrmTrackSta == FrmTrackSta.Disable)
                         {
@@ -312,7 +312,7 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
                         continue;
-                    case "Thread": //子线程.
+                    case GroupCtrlType.Thread: //子线程.
                         FrmThread thread = new FrmThread(this.FK_MapData);
                         if (thread.FrmThreadSta == FrmThreadSta.Disable)
                         {

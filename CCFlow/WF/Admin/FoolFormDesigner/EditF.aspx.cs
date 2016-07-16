@@ -207,13 +207,14 @@ namespace CCFlow.WF.MapDef
             if (string.IsNullOrEmpty(mapAttr.KeyOfEn))
                 this.Pub1.AddTD("字母/数字/下划线组合");
             else
-                this.Pub1.AddTD("<a href=\"javascript:clipboardData.setData('Text','" + mapAttr.KeyOfEn + "');alert('已经copy到粘帖版上');\" ><img src='../Img/Btn/Copy.gif' class='ICON' />复制字段名</a></TD>");
+                this.Pub1.AddTD("<a href=\"javascript:clipboardData.setData('Text','" + mapAttr.KeyOfEn + "');alert('已经copy到粘帖版上');\" ><img src='../../Img/Btn/Copy.gif' class='ICON' />复制字段名</a></TD>");
 
             this.Pub1.AddTREnd();
 
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("默认值");
+
             tb = new TB();
             tb.ID = "TB_DefVal";
             tb.Text = mapAttr.DefValReal;
@@ -376,7 +377,6 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
             #endregion 是否可编辑.
 
-
             #region 是否可界面可见
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
@@ -415,10 +415,6 @@ namespace CCFlow.WF.MapDef
             //   this.Pub1.AddTD("控制该它在表单的界面里是否可见");
             this.Pub1.AddTREnd();
             #endregion 是否可界面可见
-
-
-       
-
 
         }
 
@@ -619,7 +615,7 @@ namespace CCFlow.WF.MapDef
                 }
 
                 string myUrl = "EleBatch.aspx?KeyOfEn=" + mapAttr.KeyOfEn + "&FK_MapData=" + mapAttr.FK_MapData + "&EleType=MapAttr";
-                this.Pub1.Add("<a href='" + myUrl + "' target='M" + mapAttr.KeyOfEn + "' ><img src='../Img/Btn/Apply.gif' border=0>批处理</a>");
+                this.Pub1.Add("<a href='" + myUrl + "' target='M" + mapAttr.KeyOfEn + "' ><img src='../../Img/Btn/Apply.gif' border=0>批处理</a>");
             }
 
             string url = "Do.aspx?DoType=AddF&MyPK=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
@@ -713,18 +709,29 @@ namespace CCFlow.WF.MapDef
             tb.CssClass = "TBNum";
             tb.Text = mapAttr.UIWidth.ToString();
             this.Pub1.AddTD(tb);
-            this.Pub1.AddTDB("对从表有效");
+            this.Pub1.AddTD("对从表有效");
             this.Pub1.AddTREnd();
 
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
-            this.Pub1.AddTD("高度");
-            tb = new TB();
-            tb.ID = "TB_UIHeight";
-            tb.CssClass = "TBNum";
-            tb.Text = mapAttr.UIHeight.ToString();
-            this.Pub1.AddTD(tb);
-            this.Pub1.AddTD("");
+            this.Pub1.AddTD("行数");
+
+            DDL ddl = new DDL();
+            ddl.ID = "DDL_UIRows";
+            for (int i = 1; i < 30; i++)
+            {
+                ddl.Items.Add(new ListItem(i.ToString(), i.ToString()));
+            }
+
+            ddl.SetSelectItem(mapAttr.UIRows);
+
+            //tb = new TB();
+            //tb.ID = "TB_UIHeight";
+            //tb.CssClass = "TBNum";
+            //tb.Text = mapAttr.UIHeight.ToString();
+
+            this.Pub1.AddTD(ddl);
+            this.Pub1.AddTD("23个像素是一行");
             this.Pub1.AddTREnd();
             this.EditBeforeEnd(mapAttr);
            
@@ -1024,10 +1031,11 @@ namespace CCFlow.WF.MapDef
                             //    attr.DefValReal = "0";
                             break;
                         case DataType.AppString:
-                            attr.UIBindKey = this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemStringVal;
+                           // attr.UIBindKey = this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemStringVal;
+                            attr.UIHeightInt = this.Pub1.GetDDLByID("DDL_UIRows").SelectedItemIntVal *23; 
                             if (attr.TBModel == TBModel.SupperText )
                             {
-                                attr.MaxLen = 4000;
+                                attr.UIBindKey = "1";
                             }
                             break;
                         default:
@@ -1078,29 +1086,26 @@ namespace CCFlow.WF.MapDef
                 }
                 catch
                 {
+
                 }
 
                 //数字签名.
-                try
+                  if (attr.MyDataType == BP.DA.DataType.AppString)
                 {
                     //签名类型.
                     attr.SignType = (SignType)this.Pub1.GetDDLByID("DDL_SignType").SelectedItemIntVal;
-
                     if (attr.SignType == SignType.Pic)
                         attr.PicType = (PicType)this.Pub1.GetDDLByID("DDL_PicType").SelectedItemIntVal;//是否为自动签名
                     else if (attr.SignType == SignType.CA)
                         attr.Para_SiganField = this.Pub1.GetTBByID("TB_SiganField").Text;//数字签名字段.
+               
 
-                }
-                catch
-                {
-
+              
+                    attr.UIHeightInt = this.Pub1.GetDDLByID("DDL_UIRows").SelectedItemIntVal * 23;
+                    attr.TBModel = (TBModel)this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemIntVal;
                 }
 
                 attr.Para_FontSize = this.Pub1.GetDDLByID("DDL_FontSize").SelectedItemIntVal;
-
-                attr.TBModel = (TBModel)this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemIntVal;
-
 
                 //保存数字签名.
                 Response.Buffer = true;

@@ -11,8 +11,6 @@ using BP.En;
 using BP.Web.Controls;
 using BP.DA;
 using BP.Sys.XML;
-using BP.Sys.XML;
-
 
 namespace BP.Web.UC
 {

@@ -12,7 +12,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 表单属性
     /// </summary>
-    public class MapDataCol4 : EntityNoName
+    public class MapFoolForm : EntityNoName
     {
         #region 属性
         /// <summary>
@@ -68,14 +68,14 @@ namespace BP.WF.Template
         /// <summary>
         /// 表单属性
         /// </summary>
-        public MapDataCol4()
+        public MapFoolForm()
         {
         }
         /// <summary>
         /// 表单属性
         /// </summary>
         /// <param name="no">表单ID</param>
-        public MapDataCol4(string no)
+        public MapFoolForm(string no)
             : base(no)
         {
         }
@@ -102,8 +102,8 @@ namespace BP.WF.Template
                     true, false, MapDataAttr.FrmType,
                     "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
 
-                map.AddTBInt(MapDataAttr.TableCol, 4, "显示的列数", true, false);
-                map.AddTBInt(MapDataAttr.TableWidth, 900, "表格宽度", true, false);
+                map.AddTBInt(MapDataAttr.TableCol, 4, "表单显示列数", true, true);
+                map.AddTBInt(MapDataAttr.TableWidth, 900, "表单宽度", true, false);
 
                 //数据源.
                 map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
@@ -266,7 +266,7 @@ namespace BP.WF.Template
             if (this.No.Contains("ND") == true)
                 return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
             else
-                return SystemConfig.CCFlowWebPath + "WF/MapDef/Do.aspx&DoType=FWCShowError";
+                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Do.aspx&DoType=FWCShowError";
         }
         /// <summary>
         /// 执行旧版本的兼容性检查.
@@ -295,7 +295,6 @@ namespace BP.WF.Template
                     attr.Update();
                 }
             }
-
 
             //从表.
             MapDtls dtls = new MapDtls(this.No);
@@ -480,7 +479,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRegularExpressionBatch()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -489,7 +488,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchEditAttr()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/BatchEdit.aspx?FK_MapData=" +
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/BatchEdit.aspx?FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -507,7 +506,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFrom()
         {
-            string url = SystemConfig.CCFlowWebPath + "WF/MapDef/CCForm/Frm.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }
@@ -517,7 +516,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFromCol4()
         {
-            string url = SystemConfig.CCFlowWebPath + "WF/MapDef/MapDef.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }
@@ -547,19 +546,19 @@ namespace BP.WF.Template
         }
         public string DoWordFrm()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
         }
         public string DoExcelFrm()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/ExcelFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=ExcelFrm&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/ExcelFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=ExcelFrm&RefNo=";
         }
         public string DoPageLoadFull()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/PageLoadFull.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/PageLoadFull.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         public string DoInitScript()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/InitScript.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/InitScript.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         /// <summary>
         /// 表单属性.
@@ -567,7 +566,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBodyAttr()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
         }
         /// <summary>
         /// 表单事件
@@ -583,7 +582,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoMapExt()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/List.aspx?FK_MapData=" + this.No + "&T=sd";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/List.aspx?FK_MapData=" + this.No + "&T=sd";
         }
         /// <summary>
         /// 导出表单
@@ -600,13 +599,13 @@ namespace BP.WF.Template
     /// <summary>
     /// 表单属性s
     /// </summary>
-    public class MapDataCol4s : EntitiesNoName
+    public class MapFoolForms : EntitiesNoName
     {
         #region 构造
         /// <summary>
         /// 表单属性s
         /// </summary>
-        public MapDataCol4s()
+        public MapFoolForms()
         {
         }
         /// <summary>
@@ -616,7 +615,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new MapDataCol4();
+                return new MapFoolForm();
             }
         }
         #endregion
@@ -626,20 +625,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapDataCol4> ToJavaList()
+        public System.Collections.Generic.IList<MapFoolForm> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapDataCol4>)this;
+            return (System.Collections.Generic.IList<MapFoolForm>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapDataCol4> Tolist()
+        public System.Collections.Generic.List<MapFoolForm> Tolist()
         {
-            System.Collections.Generic.List<MapDataCol4> list = new System.Collections.Generic.List<MapDataCol4>();
+            System.Collections.Generic.List<MapFoolForm> list = new System.Collections.Generic.List<MapFoolForm>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapDataCol4)this[i]);
+                list.Add((MapFoolForm)this[i]);
             }
             return list;
         }

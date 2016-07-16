@@ -7,6 +7,28 @@ using BP.En;
 namespace BP.Sys
 {
     /// <summary>
+    /// 文本框类型
+    /// </summary>
+    public enum TBModel
+    {
+        /// <summary>
+        /// 正常的
+        /// </summary>
+        Normal,
+        /// <summary>
+        /// 大文本
+        /// </summary>
+        BigDoc,
+        /// <summary>
+        /// 富文本
+        /// </summary>
+        RichText,
+        /// <summary>
+        /// 超大文本
+        /// </summary>
+        SupperText
+    }
+    /// <summary>
     /// 数字签名类型
     /// </summary>
     public enum SignType
@@ -34,7 +56,7 @@ namespace BP.Sys
         /// <summary>
         /// 自动签名
         /// </summary>
-        ZiDong,
+        Auto,
         /// <summary>
         /// 手动签名
         /// </summary>
@@ -181,6 +203,11 @@ namespace BP.Sys
         /// 是否是img字段
         /// </summary>
         public const string IsImgField = "IsImgField";
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public const string TBModel = "TBModel";
+        
 
         #region 参数属性.
         /// <summary>
@@ -801,6 +828,9 @@ namespace BP.Sys
                 return false;
             }
         }
+        /// <summary>
+        /// textbox控件的行数.
+        /// </summary>
         public int UIRows
         {
             get
@@ -993,23 +1023,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 是否是超长字段
-        /// </summary>
-        public bool Para_IsImgField
-        {
-            get
-            {
-                if (this.TBModel == 0)
-                    return false;
-                return this.GetParaBoolen(MapAttrAttr.IsImgField);
-            }
-            set
-            {
-                this.SetPara(MapAttrAttr.IsImgField, value);
-            }
-        }
-
-        /// <summary>
         /// 签名类型
         /// </summary>
         public PicType PicType
@@ -1017,29 +1030,32 @@ namespace BP.Sys
             get
             {
                 if (this.UIIsEnable)
-                    return PicType.ZiDong;
+                    return PicType.Auto;
                 return (PicType)this.GetParaInt(MapAttrAttr.PicType);
             }
             set
             {
                 this.SetPara(MapAttrAttr.PicType, (int)value);
-
             }
         }
         /// <summary>
         /// TextBox类型
         /// </summary>
-        public int TBModel
+        public TBModel TBModel
         {
             get
             {
-                string s= this.GetValStrByKey(MapAttrAttr.UIBindKey);
-                if (string.IsNullOrEmpty(s) || s.Length != 1)
-                    return 0;
-                else
-                    return int.Parse(s);
+                return (TBModel)this.GetParaInt(MapAttrAttr.TBModel);
+                //string s= this.GetValStrByKey(MapAttrAttr.UIBindKey);
+                //if (string.IsNullOrEmpty(s) || s.Length != 1)
+                //    return 0;
+                //else
+                //    return isnt.Parse(s);
             }
-          
+            set
+            {
+                this.SetPara(MapAttrAttr.TBModel, (int)value);
+            }
         }
         /// <summary>
         /// 绑定的值
@@ -1343,8 +1359,8 @@ namespace BP.Sys
             attr.MyPK = this.FK_MapData + "_Title";
             if (attr.RetrieveFromDBSources() == 1)
             {
-                attr.Idx = -1;
-                attr.Update();
+              //  attr.Idx = -1;
+                attr.Update("Idx",-1);
             }
         }
         /// <summary>
@@ -1358,8 +1374,9 @@ namespace BP.Sys
             attr.MyPK = this.FK_MapData + "_Title";
             if (attr.RetrieveFromDBSources() == 1)
             {
-                attr.Idx = -1;
-                attr.Update();
+                attr.Update("Idx", -1);
+                //attr.Idx = -1;
+                //attr.Update();
             }
         }
         public void DoDtlDown()
@@ -1442,7 +1459,7 @@ namespace BP.Sys
         {
             if (string.IsNullOrEmpty(this.Name))
                 throw new Exception("@请输入字段名称。");
-            
+
             if (this.KeyOfEn == null || this.KeyOfEn.Trim() == "")
             {
                 try
@@ -1474,10 +1491,11 @@ namespace BP.Sys
                 MapAttrAttr.FK_MapData, this.FK_MapData))
             {
                 return false;
-                throw new Exception("@在["+this.MyPK+"]已经存在字段名称[" + this.Name + "]字段[" + this.KeyOfEn + "]");
+                throw new Exception("@在[" + this.MyPK + "]已经存在字段名称[" + this.Name + "]字段[" + this.KeyOfEn + "]");
             }
-             
-            this.Idx = 999; // BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'") + 1;
+
+            if (this.Idx != 0)
+                this.Idx = 999; // BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'") + 1;
             this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             return base.beforeInsert();
         }

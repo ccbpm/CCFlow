@@ -1507,7 +1507,10 @@ namespace BP.DA
                 BP.DA.DBAccess.RunSQL(mysql);
             }
         }
-
+        /// <summary>
+        /// 运行SQLs
+        /// </summary>
+        /// <param name="sql"></param>
         public static void RunSQLs(string sql)
         {
             if (string.IsNullOrEmpty(sql))

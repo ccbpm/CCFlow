@@ -5219,7 +5219,8 @@ namespace BP.WF
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             int currNodeId = Dev2Interface.Node_GetCurrentNodeID(fk_flow, workID);
-            BP.WF.Dev2Interface.Node_SaveWork(fk_flow, currNodeId, workID, htWork, workDtls);
+            if (htWork!=null)
+               BP.WF.Dev2Interface.Node_SaveWork(fk_flow, currNodeId, workID, htWork, workDtls);
 
             // 变量.
             Node nd = new Node(currNodeId);
@@ -5239,7 +5240,6 @@ namespace BP.WF
             WorkNode wn = new WorkNode(sw, nd);
             wn.Execer = execUserNo;
             wn.ExecerName = execUserName;
-            wn.Execer = execUserNo;
             wn.title = title; // 设置标题，有可能是从外部传递过来的标题.
             wn.SendHTOfTemp = htWork;
 

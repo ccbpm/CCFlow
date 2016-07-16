@@ -1475,7 +1475,7 @@ namespace BP.WF.Template
         {
             string flowID = int.Parse(this.No).ToString() + "01";
             return Glo.CCFlowAppPath + "WF/Admin/AttrFlow/AutoStart.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
-            //return Glo.CCFlowAppPath + "WF/MapDef/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
+            //return Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
         }
         public string DoCCNode()
         {

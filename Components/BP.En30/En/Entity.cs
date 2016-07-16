@@ -598,6 +598,8 @@ namespace BP.En
             string nextNo = "";
             string myNo = "";
             bool isMeet = false;
+
+            string sqls = "";
             foreach (DataRow dr in dt.Rows)
             {
                 myNo = dr[pk].ToString();
@@ -610,11 +612,14 @@ namespace BP.En
 
                 if (myNo == pkval)
                     isMeet = true;
-                DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'");
+
+               sqls+="@ UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'";
             }
 
-            DBAccess.RunSQL("UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "'");
-            DBAccess.RunSQL("UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "'");
+            sqls+="@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "'";
+            sqls+="@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "'";
+
+            BP.DA.DBAccess.RunSQLs(sqls);
         }
         protected void DoOrderDown(string groupKeyAttr, string groupKeyVal, string gKeyAttr2, string gKeyVal2, string idxAttr)
         {
@@ -628,6 +633,8 @@ namespace BP.En
             string nextNo = "";
             string myNo = "";
             bool isMeet = false;
+
+            string sqls = "";
             foreach (DataRow dr in dt.Rows)
             {
                 myNo = dr[pk].ToString();
@@ -640,11 +647,14 @@ namespace BP.En
 
                 if (myNo == pkval)
                     isMeet = true;
-                DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "' AND  (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) ");
+
+                sqls+="@UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "' AND  (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) ";
             }
 
-            DBAccess.RunSQL("UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )");
-            DBAccess.RunSQL("UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )");
+            sqls+="@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
+            sqls+="@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
+
+            BP.DA.DBAccess.RunSQLs(sqls);
         }
         #endregion 排序操作
 

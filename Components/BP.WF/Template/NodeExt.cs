@@ -1203,7 +1203,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormCol4()
         {
-            return Glo.CCFlowAppPath + "WF/MapDef/MapDef.aspx?PK=ND" + this.NodeID;
+            return Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/Designer.aspx?PK=ND" + this.NodeID;
         }
         /// <summary>
         /// 设计自由表单
@@ -1211,7 +1211,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormFree()
         {
-            return Glo.CCFlowAppPath + "WF/MapDef/CCForm/Frm.aspx?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 绑定独立表单
@@ -1231,11 +1231,11 @@ namespace BP.WF.Template
             switch (type)
             {
                 case NodeFormType.FreeForm:
-                    PubClass.WinOpen(Glo.CCFlowAppPath + "WF/MapDef/CCForm/Frm.aspx?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "设计表单", "sheet", 1024, 768, 0, 0);
+                    PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "设计表单", "sheet", 1024, 768, 0, 0);
                     break;
                 default:
                 case NodeFormType.FixForm:
-                    PubClass.WinOpen(Glo.CCFlowAppPath + "WF/MapDef/MapDef.aspx?PK=ND" + this.NodeID, "设计表单", "sheet", 800, 500, 210, 300);
+                    PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/Designer.aspx?PK=ND" + this.NodeID, "设计表单", "sheet", 800, 500, 210, 300);
                     break;
             }
             return null;

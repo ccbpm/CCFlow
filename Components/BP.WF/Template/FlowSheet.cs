@@ -1085,7 +1085,7 @@ namespace BP.WF.Template
         public string DoSetStartFlowDataSources()
         {
             string flowID = int.Parse(this.No).ToString() + "01";
-            return Glo.CCFlowAppPath + "WF/MapDef/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
+            return Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
         }
         public string DoCCNode()
         {

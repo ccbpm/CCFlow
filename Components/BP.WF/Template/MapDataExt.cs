@@ -1206,7 +1206,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRegularExpressionBatch()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -1224,7 +1224,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFrom()
         {
-            string url = SystemConfig.CCFlowWebPath + "WF/MapDef/CCForm/Frm.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }
@@ -1234,7 +1234,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFromCol4()
         {
-            string url = SystemConfig.CCFlowWebPath + "WF/MapDef/MapDef.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }
@@ -1264,19 +1264,19 @@ namespace BP.WF.Template
         }
         public string DoWordFrm()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
         }
         public string DoExcelFrm()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/ExcelFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=ExcelFrm&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/ExcelFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=ExcelFrm&RefNo=";
         }
         public string DoPageLoadFull()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/PageLoadFull.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/PageLoadFull.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         public string DoInitScript()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/InitScript.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/InitScript.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         /// <summary>
         /// 表单属性.
@@ -1284,7 +1284,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBodyAttr()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
         }
         /// <summary>
         /// 表单事件
@@ -1300,7 +1300,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoMapExt()
         {
-            return SystemConfig.CCFlowWebPath + "WF/MapDef/MapExt/List.aspx?FK_MapData=" + this.No + "&T=sd";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/List.aspx?FK_MapData=" + this.No + "&T=sd";
         }
         /// <summary>
         /// 导出表单

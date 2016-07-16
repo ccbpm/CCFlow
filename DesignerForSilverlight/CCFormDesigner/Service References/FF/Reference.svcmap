@@ -20,11 +20,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:13774/WF/MapDef/CCForm/CCForm.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8158/WF/Admin/FoolFormDesigner/CCForm/CCForm.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="CCForm1.disco" MetadataType="Disco" ID="5e114bf0-04ba-437a-80ab-10a1832a1df2" SourceId="1" SourceUrl="http://localhost:13774/WF/MapDef/CCForm/CCForm.asmx?disco" />
-    <MetadataFile FileName="CCForm1.wsdl" MetadataType="Wsdl" ID="f292fb21-51a3-47d6-a7e7-c3cd6861e82a" SourceId="1" SourceUrl="http://localhost:13774/WF/MapDef/CCForm/CCForm.asmx?wsdl" />
+    <MetadataFile FileName="CCForm.disco" MetadataType="Disco" ID="ced1942b-13aa-4bdc-9e88-6b765d95cf63" SourceId="1" SourceUrl="http://localhost:8158/WF/Admin/FoolFormDesigner/CCForm/CCForm.asmx?disco" />
+    <MetadataFile FileName="CCForm.wsdl" MetadataType="Wsdl" ID="4d6ef529-340a-41b7-9198-f48810c36879" SourceId="1" SourceUrl="http://localhost:8158/WF/Admin/FoolFormDesigner/CCForm/CCForm.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

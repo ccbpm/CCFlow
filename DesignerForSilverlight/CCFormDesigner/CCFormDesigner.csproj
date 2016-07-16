@@ -491,7 +491,7 @@
     <Resource Include="Img\Logo\CCFlow\LogoBig.png" />
     <Resource Include="Img\Logo\SQ\LogoH.png" />
     <Resource Include="Img\arrow-move.png" />
-    <None Include="Service References\FF\CCForm1.wsdl" />
+    <None Include="Service References\FF\CCForm.wsdl" />
     <None Include="Service References\FF\configuration91.svcinfo" />
     <None Include="Service References\FF\configuration.svcinfo" />
     <None Include="Service References\FF\Reference.svcmap">
@@ -503,7 +503,6 @@
     <Resource Include="Img\Event.png" />
     <Resource Include="Img\M2MM.png" />
     <Resource Include="Img\PenInk.png" />
-    <None Include="Service References\FF\CCForm1.disco" />
     <Resource Include="Img\Share.png" />
     <Resource Include="Img\ShareNet.png" />
     <Resource Include="Img\up.png" />
@@ -522,6 +521,7 @@
     <Resource Include="Img\Edit.png" />
     <Resource Include="Img\Exp.png" />
     <Resource Include="Img\SubFlow.png" />
+    <None Include="Service References\FF\CCForm.disco" />
     <Content Include="ServiceReferences.ClientConfig" />
     <Resource Include="Img\Alignment_Center.png" />
     <Resource Include="Img\Alignment_Down.png" />

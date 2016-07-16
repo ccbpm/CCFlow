@@ -9,10 +9,8 @@ using BP.WF;
 using Silverlight;
 using WF.WS;
 
-
 namespace BP
 {
-
     /// <summary>
     /// 主要用来显示流程轨迹
     /// </summary>
@@ -162,6 +160,7 @@ namespace BP
         {
             return "";
         }
+
         #region Properties
         public bool IsNeedSave
         {

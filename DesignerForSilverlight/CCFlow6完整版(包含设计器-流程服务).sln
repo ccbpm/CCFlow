@@ -31,6 +31,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFlowDesignerSingle", "CCFlowDesignerSingle\CCFlowDesignerSingle.csproj", "{1D0E0295-4702-46E2-9766-1A33EE418465}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCFormDesigner", "CCFormDesigner\CCFormDesigner.csproj", "{83D53118-9A8D-4970-9A88-A2909B13FF64}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AB063F5D-5166-4D77-96BB-93E981EDBB0B} = {AB063F5D-5166-4D77-96BB-93E981EDBB0B}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BP.SL", "BP.SL\BP.SL.csproj", "{107F990E-3963-4D97-AAE4-8DCCBD24FCD0}"
 EndProject

@@ -631,7 +631,7 @@ namespace CCForm
             string url = "";
 
             if (Glo.Platform == CCForm.Platform.CCFlow)
-                url = Glo.BPMHost + "/WF/MapDef/CCForm/CCForm.asmx";
+                url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/CCForm/CCForm.asmx";
             else
                 //url = new Uri(App.Current.Host.Source, "../").ToString() + "service/ccformSoap?wsdl";
                 url = Glo.BPMHost + "/service/ccformSoap?wsdl";
@@ -1009,19 +1009,19 @@ namespace CCForm
         }
         public static void OpenDtl(string FK_MapData, string FK_MapDtl)
         {
-            string url = Glo.BPMHost + "/WF/MapDef/MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=" + FK_MapData + "&FK_MapDtl=" + FK_MapDtl;
+            string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=" + FK_MapData + "&FK_MapDtl=" + FK_MapDtl;
             Glo.WinOpen(url, 700, 1100);
         }
         public static void OpenM2M(string FK_MapData, string FK_MapM2M)
         {
-            string url = Glo.BPMHost + "/WF/MapDef/MapM2M.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&NoOfObj=" + FK_MapM2M;
+            string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/MapM2M.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&NoOfObj=" + FK_MapM2M;
 
-            //url = Glo.BPMHost + "/WF/MapDef/MapM2M.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&FK_MapM2M=" + FK_MapM2M;
+            //url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/MapM2M.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&FK_MapM2M=" + FK_MapM2M;
             WinOpenDialog(url, 600, 650);
         }
         public static void IE_ShowAddFGuide()
         {
-            Glo.WinOpenDialog(Glo.BPMHost + "/WF/MapDef/Do.aspx?DoType=AddF&MyPK=" + Glo.FK_MapData);
+            Glo.WinOpenDialog(Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Do.aspx?DoType=AddF&MyPK=" + Glo.FK_MapData);
         }
 
 

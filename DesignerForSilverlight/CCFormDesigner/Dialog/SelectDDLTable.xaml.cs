@@ -185,7 +185,7 @@ namespace CCForm
             string[] kv = item.Content.ToString().Split(':');
 
 
-            string url = Glo.BPMHost + "/WF/MapDef/Do.aspx?DoType=EditSFTable&RefNo=" + kv[0];
+            string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Do.aspx?DoType=EditSFTable&RefNo=" + kv[0];
             if (Glo.Platform == Platform.JFlow)
                 url = url.Replace(".aspx", ".jsp");
 

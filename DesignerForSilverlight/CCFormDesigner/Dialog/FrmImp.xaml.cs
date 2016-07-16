@@ -273,7 +273,7 @@ namespace CCForm
 
         private void Btn_DBSrc_Click(object sender, RoutedEventArgs e)
         {
-            string url = Glo.BPMHost + "/WF/MapDef/ImpTableField.aspx?DoType=New&FK_MapData=" + Glo.FK_MapData;
+            string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/ImpTableField.aspx?DoType=New&FK_MapData=" + Glo.FK_MapData;
             if (Glo.Platform == Platform.JFlow)
                 url = url.Replace(".aspx", ".jsp");
 

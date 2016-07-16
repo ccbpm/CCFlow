@@ -70,7 +70,7 @@ namespace CCForm
                 MessageBox.Show("在您选择字段类型后，注意设置字段隐藏属性。",
                     "提示", MessageBoxButton.OK);
 
-                url = Glo.BPMHost + "/WF/MapDef/Do.aspx?DoType=AddF&MyPK=" + Glo.FK_MapData + tKey;
+                url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Do.aspx?DoType=AddF&MyPK=" + Glo.FK_MapData + tKey;
                 if (Glo.Platform == Platform.JFlow)
                     url = url.Replace(".aspx", ".jsp");
 
@@ -94,13 +94,13 @@ namespace CCForm
                     switch (lgType)
                     {
                         case 0:
-                            url = Glo.BPMHost + "/WF/MapDef/EditF.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditF.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         case 1:
-                            url = Glo.BPMHost + "/WF/MapDef/EditEnum.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditEnum.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         case 2:
-                            url = Glo.BPMHost + "/WF/MapDef/EditTable.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditTable.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         default:
                             break;

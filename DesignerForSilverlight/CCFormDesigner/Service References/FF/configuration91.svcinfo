@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="fPnfHzWOep7ge7u1/zfMfUr1DWQ=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="WGvd/S+Tv/OpNpRVEQUO+5GEJhU=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="CCFormSoap">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="CCFormSoap" contract="FF.CCFormSoap" bindingType="basicHttpBinding" address="http://localhost:13774/WF/MapDef/CCForm/CCForm.asmx" bindingConfiguration="CCFormSoap">
+    <endpoint name="CCFormSoap" contract="FF.CCFormSoap" bindingType="basicHttpBinding" address="http://localhost:8158/WF/Admin/FoolFormDesigner/CCForm/CCForm.asmx" bindingConfiguration="CCFormSoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://localhost:13774/WF/MapDef/CCForm/CCForm.asmx</serializedValue>
+          <serializedValue>http://localhost:8158/WF/Admin/FoolFormDesigner/CCForm/CCForm.asmx</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

@@ -1703,7 +1703,7 @@ namespace BP
                             imp.Show();
                             break;
                         case "Frm_FormSln":
-                            Glo.OpenDialog("/WF/MapDef/Sln.aspx?FK_MapData=" + selectedNode.ID, "表单权限方案");
+                            Glo.OpenDialog("/WF/Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + selectedNode.ID, "表单权限方案");
                             break;
                         default:
                             MessageBox.Show("功能未完成:" + Glo.TempCmd);

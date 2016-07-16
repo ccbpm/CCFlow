@@ -132,7 +132,7 @@ namespace CCForm
 
         private void uploadImage(string fileName, Stream data)
         {
-            Uri uri = new Uri(string.Format(Glo.BPMHost + "/WF/MapDef/CCForm/DataHandler.ashx?filename={0}", fileName), UriKind.RelativeOrAbsolute);
+            Uri uri = new Uri(string.Format(Glo.BPMHost + "/WF/Admin/FoolFormDesigner/CCForm/DataHandler.ashx?filename={0}", fileName), UriKind.RelativeOrAbsolute);
 
             WebClient client = new WebClient();
             client.OpenWriteCompleted += delegate(object s, OpenWriteCompletedEventArgs e)

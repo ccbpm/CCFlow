@@ -2871,18 +2871,19 @@ namespace CCForm
                 //BPWorkCheck workCheck = sender as BPWorkCheck;
                 //if (workCheck != null)
                 //    this.winWorkCheck.BindIt(workCheck);
+                string url = Glo.BPMHost + @"/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=" + Glo.FK_MapData.Replace("ND", "") + "&tab=审核组件";
 
-                string url = Glo.BPMHost + @"/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" + Glo.FK_MapData.Replace("ND", "");
+              //  string url = Glo.BPMHost + @"/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" + Glo.FK_MapData.Replace("ND", "");
                 Glo.WinOpenDialog(url);
             }
             else if (sender is BPSubFlow)
             {
-                string url = Glo.BPMHost + @"/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=" + Glo.FK_MapData.Replace("ND", "");
+                string url = Glo.BPMHost + @"/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=" + Glo.FK_MapData.Replace("ND", "") + "&tab=子流程";
                 Glo.WinOpenDialog(url);
             }
             else
             {
-                string host = Glo.BPMHost + "/WF/MapDef/Do.aspx?DoType=CCForm";
+                string host = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Do.aspx?DoType=CCForm";
 
                 if (sender is BPTextBox)
                 {
@@ -2962,7 +2963,7 @@ namespace CCForm
                     if (ath != null)
                     {
                         //this.winSelectAttachment.BindIt(ath);
-                        string url = Glo.BPMHost + "/WF/MapDef/Attachment.aspx?FK_MapData=" + Glo.FK_MapData + "&Ath=" + ath.Name + Glo.TimeKey;
+                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Attachment.aspx?FK_MapData=" + Glo.FK_MapData + "&Ath=" + ath.Name + Glo.TimeKey;
                         Glo.WinOpen(url, 600, 800);
                     }
                 }
@@ -2971,7 +2972,7 @@ namespace CCForm
                     BPAttachmentM athm = sender as BPAttachmentM;
                     if (athm != null)
                     {
-                        string url = Glo.BPMHost + "/WF/MapDef/Attachment.aspx?FK_MapData=" + Glo.FK_MapData + "&Ath=" + athm.Name + Glo.TimeKey;
+                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Attachment.aspx?FK_MapData=" + Glo.FK_MapData + "&Ath=" + athm.Name + Glo.TimeKey;
                         Glo.WinOpen(url, 600, 800);
                     }
                 }
@@ -4131,7 +4132,7 @@ namespace CCForm
                     return;
 
                 case Func.MapExt: // 扩展设置。
-                    Glo.WinOpen(Glo.BPMHost + "/WF/MapDef/MapExt.aspx?FK_MapData=" + Glo.FK_MapData + Glo.TimeKey);
+                    Glo.WinOpen(Glo.BPMHost + "/WF/Admin/FoolFormDesigner/MapExt.aspx?FK_MapData=" + Glo.FK_MapData + Glo.TimeKey);
                     return;
                 case Func.Imp:
                     winFrmImp.Show();
@@ -4497,7 +4498,7 @@ namespace CCForm
                     BPDtl dtlFrm = Glo.currEle as BPDtl;
                     if (dtlFrm != null)
                     {
-                        string url = Glo.BPMHost + "/WF/MapDef/CCForm/Frm.aspx?FK_MapData=" + dtlFrm.Name
+                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + dtlFrm.Name
                             + "&FK_Node=" + Glo.FK_Node + "&UserNo=" + Glo.UserNo + "&SID=" + Glo.SID + "&S=2" + Glo.TimeKey;
 
                         if (Glo.Platform == Platform.JFlow)
@@ -4517,7 +4518,7 @@ namespace CCForm
                     break;
                 case "eleTabIdx":
                 case "eleTabIdx_Ext":
-                    string url1 = Glo.BPMHost + "/WF/MapDef/TabIdx.aspx?FK_MapData=" + Glo.FK_MapData + Glo.TimeKey;
+                    string url1 = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/TabIdx.aspx?FK_MapData=" + Glo.FK_MapData + Glo.TimeKey;
                     if (Glo.Platform == Platform.JFlow)
                     {
                         url1 = url1.Replace(".aspx", ".jsp");
@@ -5284,7 +5285,7 @@ namespace CCForm
             //    case "FrmAction":
             //        //FrmEvent frm = new FrmEvent();
             //        //frm.Show();
-            //        string host = Glo.BPMHost + "/WF/MapDef/FrmEvent.aspx?FK_MapData=" + Glo.FK_MapData;
+            //        string host = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/FrmEvent.aspx?FK_MapData=" + Glo.FK_MapData;
             //        HtmlPage.Window.Eval("window.showModalDialog('" + host + "',window,'dialogHeight:600px;dialogWidth:450px;center:Yes;help:No;scroll:auto;resizable:1;status:No;');");
             //        return;
             //    case "RefFrm":

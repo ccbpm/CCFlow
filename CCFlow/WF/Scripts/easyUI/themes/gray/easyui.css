@@ -1682,3 +1682,11 @@ a.s-btn-plain-active .s-btn-downarrow{
 	*zoom:1;
 	overflow:hidden;
 }
+.menu-sep {
+  margin: 3px 0px 3px 25px;
+  font-size: 1px;
+}
+.menu-sep {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #fff;
+}

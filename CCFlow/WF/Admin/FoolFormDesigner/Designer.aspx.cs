@@ -153,7 +153,7 @@ namespace CCFlow.WF.MapDef
             int width = 800;
             #endregion 计算出来列的宽度.
 
-            this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;' align='left' >");
+            this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;' align='center' >");
 
             int myidx = 0;
             string src = "";

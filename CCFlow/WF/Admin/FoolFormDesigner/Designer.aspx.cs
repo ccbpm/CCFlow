@@ -153,7 +153,8 @@ namespace CCFlow.WF.MapDef
             int width = 800;
             #endregion 计算出来列的宽度.
 
-            this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;' align='center' >");
+            this.Pub1.Add("<div style='width:" + width + "px;height:100%;background-color:white;border:1px solid #666;' align='center'>");
+            this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;'>");
 
             int myidx = 0;
             string src = "";
@@ -682,10 +683,9 @@ namespace CCFlow.WF.MapDef
                     colSpan = md.TableCol;
                 }
             } // end循环分组.
-
             
-
             this.Pub1.AddTableEnd();
+            this.Pub1.AddDivEnd();
 
             #region 处理异常情况。
             foreach (MapDtl dtl in dtls)

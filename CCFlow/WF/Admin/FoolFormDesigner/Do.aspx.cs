@@ -98,7 +98,7 @@ namespace CCFlow.WF.MapDef
                         mattr.LGType = (BP.En.FieldTypeS)int.Parse(this.Request.QueryString["LGType"]);
                         if (i == 0)
                         {
-                            mattr.Name = System.Web.HttpUtility.UrlDecode(this.Request.QueryString["KeyName"],System.Text.Encoding.GetEncoding("GB2312"));
+                            mattr.Name = System.Web.HttpUtility.UrlDecode(this.Request.QueryString["KeyName"], System.Text.Encoding.GetEncoding("GB2312"));
                             mattr.UIIsEnable = true;
                             mattr.UIVisible = true;
                             if (mattr.LGType == FieldTypeS.Enum)
@@ -356,23 +356,15 @@ namespace CCFlow.WF.MapDef
                         break;
                     case "Up":
                         MapAttr attrU = new MapAttr(this.RefNo);
-                        if (this.Request.QueryString["IsDtl"] != null)
-                            attrU.DoDtlUp();
-                        else
-                            attrU.DoUp();
-
+                        attrU.DoUp();
                         this.WinClose();
                         break;
                     case "Down": //让一个字段下移动.
                         MapAttr attrD = new MapAttr(this.RefNo);
-                            attrD.DoDown();
+                        attrD.DoDown();
                         this.WinClose();
                         break;
-                    case "DownAttr": //让一个字段下移动.
-                        MapAttr attrAttr = new MapAttr(this.RefNo);
-                        attrAttr.DoDtlDown();
-                        this.WinClose();
-                        break;
+
                     case "Jump":
                         MapAttr attrFrom = new MapAttr(this.Request.QueryString["FromID"]);
                         MapAttr attrTo = new MapAttr(this.Request.QueryString["ToID"]);
@@ -594,7 +586,7 @@ namespace CCFlow.WF.MapDef
         {
             this.Title = "增加新字段向导";
             this.Pub1.AddTable();
-            this.Pub1.AddCaptionLeft("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif'>返回</a></a> - <a href='SysEnum.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "' ><img src='../Img/Btn/New.gif' />新建枚举</a>");
+            this.Pub1.AddCaptionLeft("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif'>返回</a></a> - <a href='SysEnum.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "' ><img src='../../Img/Btn/New.gif' />新建枚举</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");
@@ -697,7 +689,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTDIdx(Idx);
                 this.Pub1.AddTD("<a  href=\"javascript:AddSFTable('" + this.MyPK + "','" + this.Idx + "','" + sem.No + "')\" >" + sem.No + "</a>");
 
-                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTable.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
+                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTable.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
 
                 this.Pub1.AddTD(sem.TableDesc); //描述.
 
@@ -751,7 +743,7 @@ namespace CCFlow.WF.MapDef
                 is1 = this.Pub1.AddTR(is1);
                 this.Pub1.AddTDIdx(idx);
                 this.Pub1.AddTD("<a  href=\"javascript:AddSFSQL('" + this.MyPK + "','" + this.Idx + "','" + sem.No + "')\" >" + sem.No + "</a>");
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFSQL.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFSQL.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
 
                 this.Pub1.AddTD(sem.CodeStructT); //编码表类型.
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?RefNo=" + sem.No + "');\" >查看</a>");
@@ -798,7 +790,7 @@ namespace CCFlow.WF.MapDef
                 is1 = this.Pub1.AddTR(is1);
                 this.Pub1.AddTDIdx(idx);
                 this.Pub1.AddTD(sem.No);
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFWS.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFWS.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
 
                 this.Pub1.AddTD(sem.CodeStructT); //编码表类型.
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?RefNo=" + sem.No + "');\" >查看</a>");

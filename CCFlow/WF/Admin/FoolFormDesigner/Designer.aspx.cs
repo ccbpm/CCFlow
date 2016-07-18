@@ -205,7 +205,7 @@ namespace CCFlow.WF.MapDef
                             myidx = rowIdx + 10;
 
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                            this.Pub1.Add("<TD colspan=" + md.TableCol + " class=GroupField  ><div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div>  <div style='text-align:left; float:left'></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a>  <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
+                            this.Pub1.Add("<TD colspan=" + md.TableCol + " class=GroupField  ><div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div>  <div style='text-align:left; float:left'></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a>  <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
                             this.Pub1.AddTREnd();
 
                             myidx++;
@@ -247,6 +247,7 @@ namespace CCFlow.WF.MapDef
                         #endregion 增加附件
                         continue;
                     case GroupCtrlType.FWC: //审核组件.
+                        #region 审核组件
                         FrmWorkCheck fwc = new FrmWorkCheck(this.FK_MapData);
                         if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
                         {
@@ -267,8 +268,10 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + fwc.FWC_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
+                        #endregion  审核组件
                         continue;
-                    case GroupCtrlType.SubFlow: //子线程.
+                    case GroupCtrlType.SubFlow: //子流程..
+                        #region 子流程.
                         FrmSubFlow subflow = new FrmSubFlow(this.FK_MapData);
                         if (subflow.HisFrmSubFlowSta == FrmSubFlowSta.Disable)
                         {
@@ -289,8 +292,10 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + subflow.SF_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
+                        #endregion 子线程.
                         continue;
                     case GroupCtrlType.Track: //轨迹图.
+                        #region 轨迹图.
                         FrmTrack track = new FrmTrack(this.FK_MapData);
                         if (track.FrmTrackSta == FrmTrackSta.Disable)
                         {
@@ -311,8 +316,11 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + track.FrmTrack_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
+                        #endregion 轨迹图.
                         continue;
                     case GroupCtrlType.Thread: //子线程.
+                        #region 子线程.
+
                         FrmThread thread = new FrmThread(this.FK_MapData);
                         if (thread.FrmThreadSta == FrmThreadSta.Disable)
                         {
@@ -333,12 +341,12 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + thread.FrmThread_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
+                        #endregion 轨迹图.
                         continue;
                     default:
                         break;
                 }
                 #endregion
-
 
                 rowIdx = 0;
                 string gfAttr = "";
@@ -362,8 +370,8 @@ namespace CCFlow.WF.MapDef
                     #region 过滤不需要显示的字段.
                     if (attr.GroupID == 0)
                     {
-                        attr.GroupID = gf.OID;
-                        attr.Update();
+                       // attr.GroupID = gf.OID;
+                        attr.Update(MapAttrAttr.GroupID, gf.OID);
                     }
 
                     if (attr.GroupID != gf.OID)
@@ -376,9 +384,7 @@ namespace CCFlow.WF.MapDef
                     }
                     if (attr.HisAttr.IsRefAttr || attr.UIVisible == false)
                         continue;
-
-                    if (colSpan == 0)
-                        this.InsertObjects(true);
+                  
                     #endregion 过滤不需要显示的字段.
 
                     #region 补充空白的列.
@@ -500,13 +506,16 @@ namespace CCFlow.WF.MapDef
                     switch (attr.LGType)
                     {
                         case FieldTypeS.Normal:
-                            tb.Enabled = attr.UIIsEnable;
+
                             switch (attr.MyDataType)
                             {
                                 case BP.DA.DataType.AppString:
                                     this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                     tb.ShowType = TBType.TB;
                                     tb.Text = attr.DefVal;
+
+                                    if (attr.UIIsEnable == false)
+                                        tb.CssClass = "TBReadonly";
 
                                     if (attr.IsSigan)
                                         this.Pub1.AddTD("colspan=" + attr.ColSpan, "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
@@ -517,6 +526,7 @@ namespace CCFlow.WF.MapDef
                                 case BP.DA.DataType.AppDate:
                                     this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                     TB tbD = new TB();
+                                    tbD.Text = attr.DefVal;
                                     if (attr.UIIsEnable)
                                     {
                                         tbD.Attributes["onfocus"] = "WdatePicker();";
@@ -573,7 +583,6 @@ namespace CCFlow.WF.MapDef
                                     tb.Text = attr.DefVal;
                                     if (attr.IsNull)
                                         tb.Text = "";
-
                                     this.Pub1.AddTD(" colspan=" + attr.ColSpan, tb);
                                     break;
                                 default:
@@ -883,7 +892,7 @@ namespace CCFlow.WF.MapDef
             //    int myidx = rowIdx + 10;
             //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
 
-            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a> <a href=\"javascript:DtlDoUp('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
+            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a> <a href=\"javascript:DtlDoUp('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
             //    this.Pub1.AddTREnd();
 
             //    myidx++;
@@ -1053,7 +1062,7 @@ namespace CCFlow.WF.MapDef
             //    fram.IsUse = true;
             //    int myidx = rowIdx + 20;
             //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            //    // this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:DtlDoUp('" + dtl.No + "')\" ><img src='../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" ><img src='../Img/Btn/Down.gif' border=0/></a></div></td>");
+            //    // this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:DtlDoUp('" + dtl.No + "')\" ><img src='../../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" ><img src='../../Img/Btn/Down.gif' border=0/></a></div></td>");
             //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:FrameDoUp('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:FrameDoDown('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
             //    this.Pub1.AddTREnd();
 
@@ -1174,15 +1183,15 @@ namespace CCFlow.WF.MapDef
             if (idx == 0)
             {
                 /*第一个。*/
-                return "<div " + divAttr + " >" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Right.gif' class='Arrow' alt='向右动顺序' border=0/></a></div>";
+                return "<div " + divAttr + " >" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Right.gif' class='Arrow' alt='向右动顺序' border=0/></a></div>";
             }
 
             if (idx == count - 1)
             {
                 /*到数第一个。*/
-                return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Left.gif' alt='向左移动顺序' class='Arrow' border=0/></a>" + lab + "</div>";
+                return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Left.gif' alt='向左移动顺序' class='Arrow' border=0/></a>" + lab + "</div>";
             }
-            return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Left.gif' alt='向下移动顺序' class='Arrow' border=0/></a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Right.gif' alt='向右移动顺序' class='Arrow' border=0/></a></div>";
+            return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Left.gif' alt='向下移动顺序' class='Arrow' border=0/></a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Right.gif' alt='向右移动顺序' class='Arrow' border=0/></a></div>";
         }
         /// <summary>
         /// 字段or控件的顺序号.
@@ -1291,15 +1300,15 @@ namespace CCFlow.WF.MapDef
             if (idx == 0)
             {
                 /*第一个。*/
-                return "<div " + divAttr + " >" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Right.gif' class='Arrow' alt='向右动顺序' border=0/></a></div>";
+                return "<div " + divAttr + " >" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Right.gif' class='Arrow' alt='向右动顺序' border=0/></a></div>";
             }
 
             if (idx == count - 1)
             {
                 /*到数第一个。*/
-                return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Left.gif' alt='向左移动顺序' class='Arrow' border=0/></a>" + lab + "</div>";
+                return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Left.gif' alt='向左移动顺序' class='Arrow' border=0/></a>" + lab + "</div>";
             }
-            return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Left.gif' alt='向下移动顺序' class='Arrow' border=0/></a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../Img/Btn/Right.gif' alt='向右移动顺序' class='Arrow' border=0/></a></div>";
+            return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Left.gif' alt='向下移动顺序' class='Arrow' border=0/></a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Right.gif' alt='向右移动顺序' class='Arrow' border=0/></a></div>";
         }
     }
 

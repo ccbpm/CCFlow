@@ -437,7 +437,7 @@ namespace CCFlow.WF.MapDef
                     cb.Text = "写入流程数据表？";
                     this.Pub2.AddTD(cb);
 
-                    this.Pub2.AddTD("<a href=\"javascript:DelSln('" + this.FK_MapData + "','"+this.FK_Flow+"','"+this.FK_Node+"','" + this.FK_Node + "','" + attr.KeyOfEn + "')\" ><img src='../Img/Btn/Delete.gif' border=0/>Delete</a>");
+                    this.Pub2.AddTD("<a href=\"javascript:DelSln('" + this.FK_MapData + "','"+this.FK_Flow+"','"+this.FK_Node+"','" + this.FK_Node + "','" + attr.KeyOfEn + "')\" ><img src='../../Img/Btn/Delete.gif' border=0/>Delete</a>");
                 }
                 this.Pub2.AddTREnd();
             }

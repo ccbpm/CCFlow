@@ -155,7 +155,7 @@ namespace CCFlow.WF.MapDef
             this.Pub2.Add(btn);
 
             if (this.MyPK != null)
-                this.Pub2.Add("&nbsp;&nbsp;<a href=\"javascript:DoDel('" + this.FK_MapData + "','" + this.Event + "')\"><img src='../Img/Btn/Delete.gif' />删除</a>");
+                this.Pub2.Add("&nbsp;&nbsp;<a href=\"javascript:DoDel('" + this.FK_MapData + "','" + this.Event + "')\"><img src='../../Img/Btn/Delete.gif' />删除</a>");
         }
         void btn_Click(object sender, EventArgs e)
         {

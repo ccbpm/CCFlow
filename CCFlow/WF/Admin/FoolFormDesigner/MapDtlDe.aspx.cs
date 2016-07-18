@@ -109,7 +109,7 @@ namespace CCFlow.WF.MapDef
 
             this.Title = md.Name + " - 设计明细";
             this.Pub1.AddTable("class='Table' border='0' ID='Tab' cellspacing='0' cellpadding='0' ");
-            //     this.Pub1.AddCaptionLeftTX("<a href='Designer.aspx?MyPK=" + md.No + "' ><img src='../Img/Btn/Back.gif' border=0/>" + this.ToE("Back","返回") + ":" + md.Name + "</a> - <img src='../Img/Btn/Table.gif' border=0/>" + dtl.Name + " - <a href=\"javascript:AddF('" + this.MyPK + "');\" ><img src='../Img/Btn/New.gif' border=0/>" + "新建字段" + "</a> ");
+            //     this.Pub1.AddCaptionLeftTX("<a href='Designer.aspx?MyPK=" + md.No + "' ><img src='../../Img/Btn/Back.gif' border=0/>" + this.ToE("Back","返回") + ":" + md.Name + "</a> - <img src='../../Img/Btn/Table.gif' border=0/>" + dtl.Name + " - <a href=\"javascript:AddF('" + this.MyPK + "');\" ><img src='../../Img/Btn/New.gif' border=0/>" + "新建字段" + "</a> ");
             this.Pub1.Add(dtl.MTR);
             
             #region 输出标题.
@@ -123,7 +123,7 @@ namespace CCFlow.WF.MapDef
                     continue;
 
                 this.Pub1.Add("<TH style='width:" + attr.UIWidthInt + "px'>");
-                this.Pub1.Add("<a href=\"javascript:Up('" + this.MyPK + "','" + attr.MyPK + "','" + t + "');\" ><img src='../Img/Btn/Left.gif' class=Arrow alt='向左移动' border=0/></a>");
+                this.Pub1.Add("<a href=\"javascript:Up('" + this.MyPK + "','" + attr.MyPK + "','" + t + "');\" ><img src='../../Img/Btn/Left.gif' class=Arrow alt='向左移动' border=0/></a>");
                 if (attr.HisEditType == EditType.UnDel || attr.HisEditType == EditType.Edit)
                 {
                     switch (attr.LGType)
@@ -145,8 +145,8 @@ namespace CCFlow.WF.MapDef
                 {
                     this.Pub1.Add(attr.Name);
                 }
-                //  this.Pub1.Add("[<a href=\"javascript:Insert('" + this.MyPK + "','" + attr.Idx + "');\" ><img src='../Img/Btn/Insert.gif' border=0/>插入</a>]");
-                this.Pub1.Add("<a href=\"javascript:Down('" + this.MyPK + "','" + attr.MyPK + "','" + t + "');\" ><img src='../Img/Btn/Right.gif' class=Arrow alt='向右移动' border=0/></a>");
+                //  this.Pub1.Add("[<a href=\"javascript:Insert('" + this.MyPK + "','" + attr.Idx + "');\" ><img src='../../Img/Btn/Insert.gif' border=0/>插入</a>]");
+                this.Pub1.Add("<a href=\"javascript:Down('" + this.MyPK + "','" + attr.MyPK + "','" + t + "');\" ><img src='../../Img/Btn/Right.gif' class=Arrow alt='向右移动' border=0/></a>");
                 this.Pub1.Add("</TH>");
             }
 
@@ -355,7 +355,7 @@ namespace CCFlow.WF.MapDef
 
                 #region 输出附件,m2m
                 if (dtl.IsEnableAthM)
-                    this.Pub1.AddTD("<a href=\"javascript:EnableAthM('" + this.FK_MapDtl + "');\" ><img src='../Img/AttachmentM.png' border=0 width='16px' /></a>");
+                    this.Pub1.AddTD("<a href=\"javascript:EnableAthM('" + this.FK_MapDtl + "');\" ><img src='../../Img/AttachmentM.png' border=0 width='16px' /></a>");
 
                 if (dtl.IsEnableM2M)
                     this.Pub1.AddTD("<a href=\"javascript:window.showModalDialog('../CCForm/M2M.aspx?NoOfObj=M2M&IsTest=1&OID=0&FK_MapData=" + this.FK_MapDtl + "','m2m','dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no')\"><img src='./../Img/M2M.png' border=0 width='16px' /></a>");

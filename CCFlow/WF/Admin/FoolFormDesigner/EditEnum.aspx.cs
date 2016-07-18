@@ -17,6 +17,7 @@ namespace CCFlow.WF.MapDef
 {
     public partial class Comm_MapDef_EditEnum : BP.Web.WebPage
     {
+        #region 属性.
         /// <summary>
         /// GroupField
         /// </summary>
@@ -54,6 +55,8 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["IDX"];
             }
         }
+        #endregion 属性.
+
         protected void Page_Load(object sender, EventArgs e)
         {
             //this.Response.Write(this.Request.RawUrl);
@@ -121,7 +124,7 @@ namespace CCFlow.WF.MapDef
             if (string.IsNullOrEmpty(mapAttr.KeyOfEn))
                 this.Pub1.AddTD("字母/数字/下划线组合");
             else
-                this.Pub1.AddTD("<a href=\"javascript:clipboardData.setData('Text','" + mapAttr.KeyOfEn + "');alert('已经copy到粘帖版上');\" ><img src='../Img/Btn/Copy.gif' class='ICON' />复制字段名</a></TD>");
+                this.Pub1.AddTD("<a href=\"javascript:clipboardData.setData('Text','" + mapAttr.KeyOfEn + "');alert('已经copy到粘帖版上');\" ><img src='../../Img/Btn/Copy.gif' class='ICON' />复制字段名</a></TD>");
 
             // this.Pub1.AddTDTitle("&nbsp;");
             //this.Pub1.AddTD("不要以数字开头、不要中文。");
@@ -348,11 +351,11 @@ namespace CCFlow.WF.MapDef
                 }
 
                 string myUrl = "EleBatch.aspx?KeyOfEn=" + mapAttr.KeyOfEn + "&FK_MapData=" + mapAttr.FK_MapData + "&EleType=MapAttr";
-                this.Pub1.Add("<a href='" + myUrl + "' target='M"+mapAttr.KeyOfEn+"' ><img src='../Img/Btn/Apply.gif' border=0>批处理</a>");
+                this.Pub1.Add("<a href='" + myUrl + "' target='M"+mapAttr.KeyOfEn+"' ><img src='../../Img/Btn/Apply.gif' border=0>批处理</a>");
             }
 
             string url = "Do.aspx?DoType=AddF&MyPK=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
-            this.Pub1.Add("<a href='" + url + "'><img src='../Img/Btn/New.gif' border=0>新建</a></TD>");
+            this.Pub1.Add("<a href='" + url + "'><img src='../../Img/Btn/New.gif' border=0>新建</a></TD>");
 
           
             this.Pub1.AddTREnd();

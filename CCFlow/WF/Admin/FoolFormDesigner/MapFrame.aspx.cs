@@ -86,7 +86,7 @@ namespace CCFlow.WF.MapDef
             }
 
             this.Pub1.AddTable();
-            this.Pub1.AddCaptionLeft("<a href='Designer.aspx?MyPK=" + this.MyPK + "'>返回:" + md.Name + "</a> - <a href='MapFrame.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&sd=sd'><img src='../Img/Btn/New.gif' border=0/>新建</a>");
+            this.Pub1.AddCaptionLeft("<a href='Designer.aspx?MyPK=" + this.MyPK + "'>返回:" + md.Name + "</a> - <a href='MapFrame.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&sd=sd'><img src='../../Img/Btn/New.gif' border=0/>新建</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("IDX");
             this.Pub1.AddTDTitle("编号");

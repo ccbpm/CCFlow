@@ -47,14 +47,22 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["DoType"];
             }
         }
+        /// <summary>
+        /// 表单ID
+        /// </summary>
         public string FK_MapData
         {
             get
             {
                 string str= this.Request.QueryString["FK_MapData"];
+                if (str == null)
+                    str = this.MyPK;
                 return str;
             }
         }
+        /// <summary>
+        /// 数据字段类型.
+        /// </summary>
         public int FType
         {
             get
@@ -62,6 +70,9 @@ namespace CCFlow.WF.MapDef
                 return int.Parse(this.Request.QueryString["FType"]);
             }
         }
+        /// <summary>
+        /// 顺序号
+        /// </summary>
         public string IDX
         {
             get
@@ -584,21 +595,21 @@ namespace CCFlow.WF.MapDef
             btn.ID = "Btn_Save";
             btn.CssClass = "Btn";
             btn.Text = " 保存 ";
-            btn.Click += new EventHandler(btn_Save_Click);
+            btn.Click += new EventHandler(Save_Click);
             this.Pub1.Add(btn);
 
             btn = new Button();
             btn.ID = "Btn_SaveAndClose";
             btn.CssClass = "Btn";
             btn.Text = "保存并关闭"; // "保存并关闭";
-            btn.Click += new EventHandler(btn_Save_Click);
+            btn.Click += new EventHandler(Save_Click);
             this.Pub1.Add(btn);
 
             btn = new Button();
             btn.CssClass = "Btn";
             btn.ID = "Btn_SaveAndNew";
             btn.Text = "保存新建"; // "保存新建";
-            btn.Click += new EventHandler(btn_Save_Click);
+            btn.Click += new EventHandler(Save_Click);
             this.Pub1.Add(btn);
 
             if (this.RefNo != null)
@@ -609,7 +620,7 @@ namespace CCFlow.WF.MapDef
                     btn.ID = "Btn_Del";
                     btn.CssClass = "Btn";
                     btn.Text = "删除";
-                    btn.Click += new EventHandler(btn_Save_Click);
+                    btn.Click += new EventHandler(Save_Click);
                     btn.Attributes["onclick"] = " return confirm('您确认吗？');";
                     this.Pub1.Add(btn);
                 }
@@ -859,7 +870,7 @@ namespace CCFlow.WF.MapDef
             if (string.IsNullOrEmpty(mapAttr.KeyOfEn))
                 this.Pub1.AddTD("字母/数字/下划线组合");
             else
-                this.Pub1.AddTD("<a href=\"javascript:clipboardData.setData('Text','" + mapAttr.KeyOfEn + "');alert('已经copy到粘帖版上');\" ><img src='../Img/Btn/Copy.gif' class='ICON' />复制字段名</a></TD>");
+                this.Pub1.AddTD("<a href=\"javascript:clipboardData.setData('Text','" + mapAttr.KeyOfEn + "');alert('已经copy到粘帖版上');\" ><img src='../../Img/Btn/Copy.gif' class='ICON' />复制字段名</a></TD>");
 
             this.Pub1.AddTREnd();
 
@@ -971,7 +982,7 @@ namespace CCFlow.WF.MapDef
 
             this.EditBeforeEnd(mapAttr);
         }
-        public void btn_Save_Click(object sender, EventArgs e)
+        public void  Save_Click(object sender, EventArgs e)
         {
             try
             {
@@ -991,29 +1002,18 @@ namespace CCFlow.WF.MapDef
                 MapAttr attr = new MapAttr();
                 if (this.RefNo != null)
                 {
+                    /*修改的情况。*/
+
                     attr.MyPK = this.RefNo;
-                    try
-                    {
-                        attr.Retrieve();
-                    }
-                    catch
-                    {
-                        attr.CheckPhysicsTable();
-                        attr.Retrieve();
-                    }
+                    attr.RetrieveFromDBSources();
 
                     attr = (MapAttr)this.Pub1.Copy(attr);
                     attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
                     attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
                     if (attr.UIIsEnable == false && attr.MyDataType == DataType.AppString)
                     {
-                        try
-                        {
+                        if (this.Pub1.IsExit("CB_IsSigan") == true)
                             attr.IsSigan = this.Pub1.GetCBByID("CB_IsSigan").Checked;
-                        }
-                        catch
-                        {
-                        }
                     }
 
                     switch (this.FType)
@@ -1031,9 +1031,9 @@ namespace CCFlow.WF.MapDef
                             //    attr.DefValReal = "0";
                             break;
                         case DataType.AppString:
-                           // attr.UIBindKey = this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemStringVal;
-                            attr.UIHeightInt = this.Pub1.GetDDLByID("DDL_UIRows").SelectedItemIntVal *23; 
-                            if (attr.TBModel == TBModel.SupperText )
+                            // attr.UIBindKey = this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemStringVal;
+                            attr.UIHeightInt = this.Pub1.GetDDLByID("DDL_UIRows").SelectedItemIntVal * 23;
+                            if (attr.TBModel == TBModel.SupperText)
                             {
                                 attr.UIBindKey = "1";
                             }
@@ -1048,20 +1048,15 @@ namespace CCFlow.WF.MapDef
                     attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
                     attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
 
-                    MapAttrs attrS = new MapAttrs(this.MyPK);
-                    int idx = 0;
-                    foreach (MapAttr en in attrS)
-                    {
-                        idx++;
-                        en.Idx = idx;
-                        en.Update();
-                        if (en.KeyOfEn == attr.KeyOfEn)
-                            throw new Exception("字段已经存在 Key=" + attr.KeyOfEn);
-                    }
-                    if (this.IDX == null || this.IDX == "")
-                        attr.Idx = 0;
-                    else
-                        attr.Idx = int.Parse(this.IDX) - 1;
+                    MapAttrs attrS = new MapAttrs();
+                    int i = attrS.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn);
+                    if (i > 0)
+                        throw new Exception("@字段已经存在 Key=" + attr.KeyOfEn);
+
+                    //if (this.IDX == null || this.IDX == "")
+                    //    attr.Idx = 0;
+                    //else
+                    //    attr.Idx = int.Parse(this.IDX) - 1;
 
                     attr.MyDataType = this.FType;
                     switch (this.FType)
@@ -1070,6 +1065,10 @@ namespace CCFlow.WF.MapDef
                             attr.MyDataType = BP.DA.DataType.AppBoolean;
                             attr.UIContralType = UIContralType.CheckBok;
                             attr.DefValOfBool = this.Pub1.GetCBByID("CB_DefVal").Checked;
+                            break;
+                        case DataType.AppDateTime:
+                        case DataType.AppDate:
+                            attr.DefValReal = this.Pub1.GetTBByID("TB_DefVal").Text;
                             break;
                         case DataType.AppString:
                             attr.UIBindKey = this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemStringVal;
@@ -1080,17 +1079,11 @@ namespace CCFlow.WF.MapDef
                 }
 
                 // 增加是否为空, 对数字类型的字段有效.
-                try
-                {
+                if (this.Pub1.IsExit("DDL_IsNull")==true)
                     attr.MinLen = this.Pub1.GetDDLByID("DDL_IsNull").SelectedItemIntVal;
-                }
-                catch
-                {
-
-                }
 
                 //数字签名.
-                  if (attr.MyDataType == BP.DA.DataType.AppString)
+                if (this.Pub1.IsExit("DDL_SignType") == true && attr.MyDataType == BP.DA.DataType.AppString)
                 {
                     //签名类型.
                     attr.SignType = (SignType)this.Pub1.GetDDLByID("DDL_SignType").SelectedItemIntVal;
@@ -1098,13 +1091,12 @@ namespace CCFlow.WF.MapDef
                         attr.PicType = (PicType)this.Pub1.GetDDLByID("DDL_PicType").SelectedItemIntVal;//是否为自动签名
                     else if (attr.SignType == SignType.CA)
                         attr.Para_SiganField = this.Pub1.GetTBByID("TB_SiganField").Text;//数字签名字段.
-               
 
-              
                     attr.UIHeightInt = this.Pub1.GetDDLByID("DDL_UIRows").SelectedItemIntVal * 23;
                     attr.TBModel = (TBModel)this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemIntVal;
                 }
 
+                //字体大小.
                 attr.Para_FontSize = this.Pub1.GetDDLByID("DDL_FontSize").SelectedItemIntVal;
 
                 //保存数字签名.

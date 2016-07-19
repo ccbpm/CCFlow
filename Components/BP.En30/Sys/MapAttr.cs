@@ -1017,7 +1017,20 @@ namespace BP.Sys
                 this.SetPara(MapAttrAttr.FontSize, value);
             }
         }
-        
+        /// <summary>
+        /// radiobutton的展现方式
+        /// </summary>
+        public int RBShowModel
+        {
+            get
+            {
+                return this.GetParaInt("RBShowModel");
+            }
+            set
+            {
+                this.SetPara("RBShowModel", value);
+            }
+        }
         /// <summary>
         /// 是否数字签名
         /// </summary>

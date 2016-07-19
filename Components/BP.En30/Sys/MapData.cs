@@ -683,53 +683,7 @@ namespace BP.Sys
             #endregion 升级ccform控件.
         }
 
-        #region 傻瓜表单属性.
-        /// <summary>
-        /// 表格显示的列
-        /// </summary>
-        public int TableCol
-        {
-            get
-            {
-                return 4;
-
-                int i = this.GetValIntByKey(MapDataAttr.TableCol);
-                if (i == 0 || i == 1)
-                    return 4;
-                return i;
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.TableCol, value);
-            }
-        }
-        /// <summary>
-        /// 宽度
-        /// </summary>
-        public string TableWidth
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapDataAttr.TableWidth);
-                if (i <= 50)
-                    return "800px";
-                return i + "px";
-            }
-        }
-        /// <summary>
-        /// 表格高度
-        /// </summary>
-        public string TableHeight
-        {
-            get
-            {
-                int i = this.GetValIntByKey(MapDataAttr.TableHeight);
-                if (i <= 500)
-                    return "900px";
-                return i + "px";
-            }
-        }
-        #endregion
+         
 
         #region weboffice文档属性(参数属性)
         /// <summary>

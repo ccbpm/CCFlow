@@ -151,17 +151,6 @@ namespace CCFlow.WF.MapDef
                         dtlN.FK_MapData = this.FK_MapData;
                         dtlN.GroupID = 0;
                         dtlN.RowIdx = 0;
-                        //GroupFields gfs1 = new GroupFields(this.FK_MapData);
-                        //if (gfs1.Count == 1)
-                        //{
-                        //    GroupField gf = (GroupField)gfs1[0];
-                        //    dtlN.GroupID = gf.OID;
-                        //}
-                        //else
-                        //{
-                        //    dtlN.GroupID = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemIntVal;
-                        //}
-
                         dtlN.Insert();
 
                         if (btn.ID.Contains("AndClose"))
@@ -185,11 +174,12 @@ namespace CCFlow.WF.MapDef
                         dtl.FK_MapData = this.FK_MapData;
                         dtl.IsAutoSize = this.Pub1.GetRadioBtnByID("RB_IsAutoSize_1").Checked;
 
-                        GroupFields gfs = new GroupFields(dtl.FK_MapData);
-                        dtl.GroupID = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemIntVal;
-
                         if (this.DoType == "New")
+                        {
+                           
+                            
                             dtl.Insert();
+                        }
                         else
                             dtl.Update();
 
@@ -254,7 +244,6 @@ namespace CCFlow.WF.MapDef
         public void BindEdit(MapData md, MapFrame dtl)
         {
             this.Pub1.AddTable();
-            //  this.Pub1.AddCaptionLeftTX("<a href='Designer.aspx?MyPK=" + md.No + "'>" + "返回" + ":" + md.Name + "</a> -  " + this.ToE("DtlTable", "从表") + ":（" + dtl.Name + "）");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("ID");
             this.Pub1.AddTDTitle("项目");
@@ -332,9 +321,7 @@ namespace CCFlow.WF.MapDef
                 rb.Checked = false;
             else
                 rb.Checked = true;
-
             this.Pub1.Add(rb);
-
 
             rb = new RadioBtn();
             rb.Text = "让框架自适应大小";
@@ -349,17 +336,6 @@ namespace CCFlow.WF.MapDef
             this.Pub1.Add(rb);
             this.Pub1.AddTDEnd();
             this.Pub1.AddTREnd();
-
-            //GroupFields gfs = new GroupFields(md.No);
-            //this.Pub1.AddTR();
-            //this.Pub1.AddTDIdx(idx++);
-            //this.Pub1.AddTD("显示在分组");
-            //DDL ddl = new DDL();
-            //ddl.ID = "DDL_GroupField";
-            //ddl.BindEntities(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab, false, AddAllLocation.None);
-            //ddl.SetSelectItem(dtl.GroupID);
-            //this.Pub1.AddTD("colspan=2", ddl);
-            //this.Pub1.AddTREnd();
 
 
             this.Pub1.AddTRSum();

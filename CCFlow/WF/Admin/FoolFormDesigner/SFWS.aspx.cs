@@ -28,6 +28,14 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["FromApp"];
             }
         }
+        public  string FK_MapData
+        {
+            get
+            {
+                return this.Request.QueryString["FK_MapData"];
+            }
+        }
+        
         public new string DoType
         {
             get
@@ -73,7 +81,7 @@ namespace CCFlow.WF.MapDef
             }
             else
             {
-                this.Ucsys1.AddCaption("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFWS&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'>WebService数据源接口</a> - 新建WebService数据源接口");
+                this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='FieldTypeList.aspx?DoType=AddSFWS&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>WebService数据源接口</a> - 新建WebService数据源接口");
             }
 
             if (this.RefNo == null)

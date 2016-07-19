@@ -29,7 +29,10 @@ namespace CCFlow.WF.MapDef
         {
             get
             {
-                return this.Request.QueryString["FK_MapData"];
+                string str= this.Request.QueryString["FK_MapData"];
+                if (str == null)
+                    str = this.MyPK;
+                return str;
             }
         }
         public string Idx
@@ -543,16 +546,134 @@ namespace CCFlow.WF.MapDef
             this.Title = "增加新字段向导";
 
             this.Pub1.AddFieldSet("新增普通字段");
-            this.Pub1.AddUL();
-            this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppString + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>字符型</b></a> - <font color=Note>如:姓名、地址、邮编、电话</font>");
-            this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppInt + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>整数型</b></a> - <font color=Note>如:年龄、个数。</font>");
-            this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppMoney + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>金额型</b></a> - <font color=Note>如:单价、薪水。</font>");
-            this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppFloat + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>浮点型</b></a> - <font color=Note>如：身高、体重、长度。</font>");
-            this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppDouble + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>双精度</b></a> - <font color=Note>如：亿万、兆数值类型单位。</font>");
-            this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppDate + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>日期型</b></a> - <font color=Note>如：出生日期、发生日期。</font>");
-            this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppDateTime + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>日期时间型</b></a> - <font color=Note>如：发生日期时间</font>");
-            this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppBoolean + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>Boole型(是/否)</b></a> - <font color=Note>如：是否完成、是否达标</font>");
-            this.Pub1.AddULEnd();
+
+            this.Pub1.AddTable("style='border=0px;width:100%;'");
+            this.Pub1.AddTR();
+            this.Pub1.AddTDBegin();
+
+
+            this.Pub1.AddTable("style='border=0px;width:100%;'");
+            this.Pub1.AddTR();
+            this.Pub1.AddTD("字段中文名");
+            TextBox tb = new TextBox();
+            tb.ID = "TB_Name";
+            tb.AutoPostBack = true;
+            tb.TextChanged += new EventHandler(tb_TextChanged);
+            this.Pub1.AddTD(tb);
+            this.Pub1.AddTREnd();
+
+            this.Pub1.AddTR();
+            this.Pub1.AddTD("字段名");
+            tb = new TextBox();
+            tb.ID = "TB_No";
+            this.Pub1.AddTD(tb);
+            this.Pub1.AddTREnd();
+
+
+            RadioButton rb = new RadioButton();
+            rb.Text = "全拼";
+            rb.ID = "RB_PY_0";
+            rb.GroupName = "PY";
+            rb.AutoPostBack = true;
+            rb.Checked = true;
+            rb.CheckedChanged += new EventHandler(rb_CheckedChanged);
+            this.Pub1.AddTR();
+            this.Pub1.AddTD(rb);
+
+            rb = new RadioButton();
+            rb.Text = "简拼";
+            rb.ID = "RB_PY_1";
+            rb.GroupName = "PY";
+            rb.AutoPostBack = true;
+            rb.CheckedChanged += new EventHandler(rb_CheckedChanged);
+            this.Pub1.AddTD(rb);
+            this.Pub1.AddTREnd();
+
+
+            Button btn = new Button();
+            btn.Text = "确定";
+            btn.Click += new EventHandler(btn_Click);
+            this.Pub1.AddTR();
+            this.Pub1.AddTD("colspan=2", btn);
+            this.Pub1.AddTREnd();
+            this.Pub1.AddTableEnd();
+
+            this.Pub1.AddTDEnd();
+
+            this.Pub1.AddTDBegin();
+            rb = new RadioButton();
+            rb.ID = "RB_" + BP.DA.DataType.AppString;
+            rb.Text = "字符型。";
+            rb.GroupName = "F";
+            rb.Checked = true;
+            this.Pub1.Add(rb);
+            this.Pub1.Add(" - <font color=Gray >如:姓名、地址、邮编、电话</font><br>");
+
+            rb = new RadioButton();
+            rb.ID = "RB_" + BP.DA.DataType.AppInt;
+            rb.Text = "整数型。";
+            rb.GroupName = "F";
+            this.Pub1.Add(rb);
+            this.Pub1.Add(" - <font color=Gray >如:年龄、个数。</font><br>");
+
+            rb = new RadioButton();
+            rb.ID = "RB_" + BP.DA.DataType.AppMoney;
+            rb.Text = "金额型。";
+            rb.GroupName = "F";
+            this.Pub1.Add(rb);
+            this.Pub1.Add(" - <font color=Gray >如:单价、薪水。</font><br>");
+
+
+            rb = new RadioButton();
+            rb.ID = "RB_" + BP.DA.DataType.AppFloat;
+            rb.Text = "浮点型。";
+            rb.GroupName = "F";
+            this.Pub1.Add(rb);
+            this.Pub1.Add(" - <font color=Gray >如：身高、体重、长度。</font><br>");
+
+            rb = new RadioButton();
+            rb.ID = "RB_" + BP.DA.DataType.AppDouble;
+            rb.Text = "双精度。";
+            rb.GroupName = "F";
+            this.Pub1.Add(rb);
+            this.Pub1.Add(" - <font color=Gray >如：亿万、兆数值类型单位。</font><br>");
+
+            rb = new RadioButton();
+            rb.ID = "RB_" + BP.DA.DataType.AppDate;
+            rb.Text = "日期型。";
+            rb.GroupName = "F";
+            this.Pub1.Add(rb);
+            this.Pub1.Add(" - <font color=Gray >如：出生日期、发生日期。</font><br>");
+
+            rb = new RadioButton();
+            rb.ID = "RB_" + BP.DA.DataType.AppDateTime;
+            rb.Text = "日期时间型。";
+            rb.GroupName = "F";
+            this.Pub1.Add(rb);
+            this.Pub1.Add(" - <font color=Gray >如：发生日期时间</font><br>");
+
+            rb = new RadioButton();
+            rb.ID = "RB_" + BP.DA.DataType.AppBoolean;
+            rb.Text = "Boole型(是/否)。";
+            rb.GroupName = "F";
+            this.Pub1.Add(rb);
+            this.Pub1.Add(" - <font color=Gray >如：是否完成、是否达标</font><br>");
+
+            //this.Pub1.AddUL();
+            //this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppString + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>字符型</b></a> - <font color=Note>如:姓名、地址、邮编、电话</font>");
+            //this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppInt + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>整数型</b></a> - <font color=Note>如:年龄、个数。</font>");
+            //this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppMoney + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>金额型</b></a> - <font color=Note>如:单价、薪水。</font>");
+            //this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppFloat + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>浮点型</b></a> - <font color=Note>如：身高、体重、长度。</font>");
+            //this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppDouble + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>双精度</b></a> - <font color=Note>如：亿万、兆数值类型单位。</font>");
+            //this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppDate + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>日期型</b></a> - <font color=Note>如：出生日期、发生日期。</font>");
+            //this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppDateTime + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>日期时间型</b></a> - <font color=Note>如：发生日期时间</font>");
+            //this.Pub1.AddLi("<a href='EditF.aspx?DoType=Add&MyPK=" + this.MyPK + "&FType=" + BP.DA.DataType.AppBoolean + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><b>Boole型(是/否)</b></a> - <font color=Note>如：是否完成、是否达标</font>");
+            //this.Pub1.AddULEnd();
+
+            this.Pub1.AddTDEnd();
+            this.Pub1.AddTREnd();
+            this.Pub1.AddTableEnd();
+
             this.Pub1.AddFieldSetEnd();
 
             this.Pub1.AddFieldSet("新增枚举字段(用来表示，状态、类型...的数据。)");
@@ -579,14 +700,81 @@ namespace CCFlow.WF.MapDef
             string info = DataType.ReadTextFile2Html(BP.Sys.SystemConfig.PathOfData + "SysFields.txt");
             this.Pub1.Add("<div id='SysField' style='display:none' >" + info + "</div>");
             this.Pub1.AddFieldSetEnd(); 
-            
+        }
+
+        void btn_Click(object sender, EventArgs e)
+        {
+            string no = this.Pub1.GetTextBoxByID("TB_No").Text;
+            if (string.IsNullOrEmpty(no) == true)
+            {
+                this.Alert("请输入字段名.");
+                return;
+            }
+
+            MapAttrs attrs = new MapAttrs();
+            int i=attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, no);
+            if (i != 0)
+            {
+                this.Alert("字段名："+no+"已经存在.");
+                return;
+            }
+
+            //求出选择的字段类型.
+            MapAttr attr = new MapAttr();
+            attr.Name = this.Pub1.GetTextBoxByID("TB_Name").Text;
+            attr.KeyOfEn = no;
+            attr.FK_MapData = this.FK_MapData;
+            attr.LGType = FieldTypeS.Normal;
+            attr.MyPK = this.FK_MapData + "_" + no;
+
+            if (this.Pub1.GetRadioButtonByID("RB_" + DataType.AppString).Checked)
+            {
+                attr.UIWidth = 100;
+                attr.UIHeight = 23;
+                attr.UIVisible=true;
+                attr.UIIsEnable = true;
+                //attr.GroupID = this.GroupField;
+                attr.ColSpan = 0;
+
+                attr.MinLen = 0;
+                attr.MaxLen = 50;
+                attr.MyDataType = DataType.AppString;
+                attr.DirectInsert();
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppString + "&DoType=Edit", true);
+            }
+        }
+
+        void rb_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            string name = this.Pub1.GetTextBoxByID("TB_Name").Text;
+            if (string.IsNullOrEmpty(name) == true)
+                return;
+
+            if (rb.ID.Contains("_0") == true)
+                this.Pub1.GetTextBoxByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyin(name);
+            else
+                this.Pub1.GetTextBoxByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyinJianXie(name);
+        }
+
+        void tb_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            string text = this.Pub1.GetTextBoxByID("TB_Name").Text;
+            if (string.IsNullOrEmpty(text) == true)
+                return;
+
+            if (this.Pub1.GetRadioButtonByID("RB_PY_0").Checked)
+                this.Pub1.GetTextBoxByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyin(text);
+            else
+                this.Pub1.GetTextBoxByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyinJianXie(text);
         }
 
         public void AddFEnum()
         {
             this.Title = "增加新字段向导";
             this.Pub1.AddTable();
-            this.Pub1.AddCaptionLeft("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif'>返回</a></a> - <a href='SysEnum.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "' ><img src='../../Img/Btn/New.gif' />新建枚举</a>");
+            this.Pub1.AddCaptionLeft("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif'>返回</a></a> - <a href='SysEnum.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' ><img src='../../Img/Btn/New.gif' />新建枚举</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");
@@ -597,7 +785,7 @@ namespace CCFlow.WF.MapDef
 
             BP.Sys.SysEnumMains sems = new SysEnumMains();
             QueryObject qo = new QueryObject(sems);
-            this.Pub2.BindPageIdx(qo.GetCount(), pageSize, this.PageIdx, "Do.aspx?DoType=AddSysEnum&MyPK=" + this.MyPK + "&Idx=&GroupField");
+            this.Pub2.BindPageIdx(qo.GetCount(), pageSize, this.PageIdx, "Do.aspx?DoType=AddSysEnum&FK_MapData=" + this.FK_MapData + "&Idx=&GroupField");
             qo.DoQuery("No", pageSize, this.PageIdx);
 
             bool is1 = false;
@@ -617,9 +805,9 @@ namespace CCFlow.WF.MapDef
                 Idx++;
                 is1 = this.Pub1.AddTR(is1);
                 this.Pub1.AddTDIdx(Idx);
-                this.Pub1.AddTD("<a  href=\"javascript:AddEnum('" + this.MyPK + "','" + this.Idx + "','" + sem.No + "')\" >" + sem.No + "</a>");
+                this.Pub1.AddTD("<a href=\"javascript:AddEnum('" + this.MyPK + "','" + this.Idx + "','" + sem.No + "')\" >" + sem.No + "</a>");
                 this.Pub1.AddTD(sem.Name);
-                this.Pub1.AddTD("[<a href='SysEnum.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "' >编辑</a>]");
+                this.Pub1.AddTD("[<a href='SysEnum.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "&EnumKey=" + sem.No + "' >编辑</a>]");
                 this.Pub1.AddTD(ddl);
                 this.Pub1.AddTREnd();
             }
@@ -653,12 +841,10 @@ namespace CCFlow.WF.MapDef
                 "Do.aspx?DoType=AddSFTable&MyPK=" + this.MyPK + "&Idx=&GroupField");
             qo.DoQuery("No", pageSize, this.PageIdx);
 
-           
-
 
             this.Title = "增加新字段向导";
             this.Pub1.AddTable();
-            this.Pub1.AddCaption("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 外键列表 - <a href='SFTable.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "' >新建表</a>");
+            this.Pub1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 外键列表 - <a href='SFTable.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建表</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");
@@ -710,7 +896,7 @@ namespace CCFlow.WF.MapDef
             this.Title = "增加新字段向导";
 
             this.Pub1.AddTable();
-            this.Pub1.AddCaption("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 外部表列表 - <a href='SFSQL.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "' >新建外部表</a>");
+            this.Pub1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 外部表列表 - <a href='SFSQL.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建外部表</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");
@@ -757,7 +943,7 @@ namespace CCFlow.WF.MapDef
             this.Title = "增加新WebService接口向导";
 
             this.Pub1.AddTable();
-            this.Pub1.AddCaption("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - WebService接口列表 - <a href='SFWS.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "' >新建WebService接口</a>");
+            this.Pub1.AddCaption("<a href='Do.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - WebService接口列表 - <a href='SFWS.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建WebService接口</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");
@@ -770,7 +956,7 @@ namespace CCFlow.WF.MapDef
             QueryObject qo = new QueryObject(ens);
             qo.AddWhere(BP.Sys.SFTableAttr.SrcType, (int)SrcType.WebServices);
             this.Pub2.BindPageIdx(qo.GetCount(), pageSize, this.PageIdx,
-                "Do.aspx?DoType=AddSFWS&MyPK=" + this.MyPK + "&Idx=&GroupField");
+                "Do.aspx?DoType=AddSFWS&FK_MapData=" + this.FK_MapData + "&Idx=&GroupField");
             qo.DoQuery("No", pageSize, this.PageIdx);
             if (ens.Count == 0)
             {

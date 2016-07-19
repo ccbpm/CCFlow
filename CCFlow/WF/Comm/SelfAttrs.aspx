@@ -78,7 +78,7 @@
  <script type="text/javascript">
      function AddAttr(ensName) {
 
-         var url = '/WF/Admin/FoolFormDesigner/Do.aspx?DoType=AddF&MyPK=' + ensName;
+         var url = '/WF/Admin/FoolFormDesigner/FieldTypeList.aspx?DoType=AddF&FK_MapData=' + ensName;
          var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
          window.location.href = window.location.href;
 

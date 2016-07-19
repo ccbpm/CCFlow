@@ -41,6 +41,13 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["FromApp"];
             }
         }
+        public string FK_MapData
+        {
+            get
+            {
+                return this.Request.QueryString["FK_MapData"];
+            }
+        }
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -338,7 +345,7 @@ namespace CCFlow.WF.MapDef
                 }
             }
 
-            string url = "Do.aspx?DoType=AddF&MyPK=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
+            string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
             this.Pub1.Add("<a href='" + url + "' ><img src='../../Img/Btn/New.gif' border=0>新建</a></TD>");
 
             this.Pub1.AddTDEnd();
@@ -435,12 +442,12 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
+                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
                         return;
                     default:
                         break;
                 }
-                this.Response.Redirect("EditTable.aspx?DoType=Edit&MyPK=" + this.MyPK + "&RefNo=" + attr.MyPK + "&GroupField=" + this.GroupField, true);
+                this.Response.Redirect("EditTable.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&MyPK=" + attr.MyPK + "&GroupField=" + this.GroupField, true);
             }
             catch (Exception ex)
             {

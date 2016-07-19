@@ -34,7 +34,7 @@
     }
     function EditEnum(key)
     {
-        var url='SysEnum.aspx?DoType=Edit&RefNo='+key;
+        var url='SysEnum.aspx?DoType=Edit&EnumKey='+key;
       //  window.location.href=url;
         var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 500px;center: yes; help: no'); 
         window.location.reload(); 
@@ -47,7 +47,7 @@
     }
     function AddEnum(mypk, idx, key) {
         var url = '';
-        url = 'EditEnum.aspx?DoType=Edit&MyPK=' + mypk + '&EnumKey=' + key + '&IDX=' + idx;
+        url = 'EditEnum.aspx?DoType=Edit&FK_MapData=' + mypk + '&EnumKey=' + key + '&IDX=' + idx;
         var c = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
         return;
     }
@@ -82,7 +82,7 @@
 </head>
 <body  topmargin="5" leftmargin="5" onkeypress="Esc()"  onload="RSize()" >
     <form id="form1" runat="server">
-    <div align=left width="80%" >
+    <div align=left width="80%"  >
       <uc1:Pub ID="Pub1" runat="server" />
       <uc1:Pub ID="Pub2" runat="server" />
     </div>

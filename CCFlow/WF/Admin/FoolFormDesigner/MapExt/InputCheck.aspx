@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WF/MapDef/WinOpen.master" AutoEventWireup="true"
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WF/Admin/FoolFormDesigner/WinOpen.master" AutoEventWireup="true"
     CodeBehind="InputCheck.aspx.cs" Inherits="CCFlow.WF.MapDef.InputCheck" %>
 
 <%@ Register Src="../Pub.ascx" TagName="Pub" TagPrefix="uc1" %>

@@ -15,6 +15,7 @@ using BP.Sys;
 
 public partial class WF_MapDef_UC_CopyDtlField :BP.Web.UC.UCBase3
 {
+    #region 属性.
     public string Dtl
     {
         get
@@ -22,16 +23,26 @@ public partial class WF_MapDef_UC_CopyDtlField :BP.Web.UC.UCBase3
             return this.Request.QueryString["Dtl"];
         }
     }
+    public string FK_MapData
+    {
+        get
+        {
+            return this.Request.QueryString["FK_MapData"];
+        }
+    }
+    #endregion 属性.
+
+
     public void BindAttrs()
     {
         MapDtl dtlFrom = new MapDtl(this.Dtl);
-        MapDtl dtl = new MapDtl(this.MyPK);
+        MapDtl dtl = new MapDtl(this.FK_MapData);
 
         MapAttrs attrsFrom = new MapAttrs(this.Dtl);
         MapAttrs attrs = new MapAttrs(dtl.No);
 
         this.AddTable();
-        this.AddCaptionLeft("<A href='CopyDtlField.aspx?MyPK=" + this.MyPK + "'>返回</A> - 选择要复制的字段");
+        this.AddCaptionLeft("<A href='CopyDtlField.aspx?FK_MapData=" + this.FK_MapData + "'>返回</A> - 选择要复制的字段");
         this.AddTR();
         this.AddTDTitle("IDX");
         this.AddTDTitle("名称");
@@ -92,7 +103,7 @@ public partial class WF_MapDef_UC_CopyDtlField :BP.Web.UC.UCBase3
     void btn_Click(object sender, EventArgs e)
     {
         MapAttrs attrsFrom = new MapAttrs(this.Dtl);
-        MapAttrs attrs = new MapAttrs(this.MyPK);
+        MapAttrs attrs = new MapAttrs(this.FK_MapData);
         foreach (MapAttr attr in attrsFrom)
         {
             switch (attr.KeyOfEn)
@@ -116,7 +127,7 @@ public partial class WF_MapDef_UC_CopyDtlField :BP.Web.UC.UCBase3
 
             MapAttr en = new MapAttr();
             en.Copy(attr);
-            en.FK_MapData = this.MyPK;
+            en.FK_MapData = this.FK_MapData;
             en.GroupID = 0;
             //en.Idx = 0;
             en.Insert();
@@ -125,18 +136,18 @@ public partial class WF_MapDef_UC_CopyDtlField :BP.Web.UC.UCBase3
     }
     protected void Page_Load(object sender, EventArgs e)
     {
-        this.Page.Title = "Copy Node Dtl Fields  Esc to exit.";
+        this.Page.Title = "复制节点明细表字段 Esc to exit.";
         if (this.Dtl != null)
         {
             this.BindAttrs();
             return;
         }
 
-        MapDtl dtl = new MapDtl(this.MyPK);
+        MapDtl dtl = new MapDtl(this.FK_MapData);
         //string sql = "SELECT DISTINCT PTable, No, Name From Sys_MapDtl WHERE  No <> '"+this.MyPK+"'";
         string sql = "SELECT b.Name as NodeName, a.No AS DtlNo, a.Name as DtlName";
         sql += " FROM Sys_MapDtl a , Sys_MapData b  ";
-        sql += " WHERE A.FK_MapData=b.No AND B.No LIKE '"+this.MyPK.Substring(0,4)+"%' AND B.No<>'"+this.MyPK+"'";
+        sql += " WHERE A.FK_MapData=b.No AND B.No LIKE '" + this.FK_MapData.Substring(0, 4) + "%' AND B.No<>'" + this.FK_MapData + "'";
 
 
         DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
@@ -148,7 +159,7 @@ public partial class WF_MapDef_UC_CopyDtlField :BP.Web.UC.UCBase3
 
         if (dt.Rows.Count == 1)
         {
-            this.Response.Redirect("CopyDtlField.aspx?MyPK=" + this.MyPK + "&Dtl=" + dt.Rows[0]["DtlNo"].ToString(), true);
+            this.Response.Redirect("CopyDtlField.aspx?FK_MapData=" + this.FK_MapData + "&Dtl=" + dt.Rows[0]["DtlNo"].ToString(), true);
             return;
         }
 
@@ -156,22 +167,12 @@ public partial class WF_MapDef_UC_CopyDtlField :BP.Web.UC.UCBase3
         this.AddUL();
         foreach (DataRow dr in dt.Rows)
         {
-            
-            this.AddLi("CopyDtlField.aspx?MyPK=" + this.MyPK + "&Dtl=" + dr["DtlNo"].ToString(), "节点名：" + dr["NodeName"].ToString() + " 表名称：" + dr["DtlName"].ToString());
+            this.AddLi("CopyDtlField.aspx?FK_MapData=" + this.FK_MapData + "&Dtl=" + dr["DtlNo"].ToString(), "节点名：" + dr["NodeName"].ToString() + " 表名称：" + dr["DtlName"].ToString());
         }
         this.AddULEnd();
         this.AddFieldSetEnd();
 
 
-        //this.AddFieldSet("其他流程上的明细数据");
-        //this.AddUL();
-        //foreach (DataRow dr in dt.Rows)
-        //{
-        //    this.AddLi("CopyDtlField.aspx?MyPK=" + this.MyPK + "&Dtl=" + dr["No"].ToString(), dr["Name"].ToString());
-        //}
-        //this.AddULEnd();
-        //this.AddFieldSetEnd();
-
-
+       
     }
 }

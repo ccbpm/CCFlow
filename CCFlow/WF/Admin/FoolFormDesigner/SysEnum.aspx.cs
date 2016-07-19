@@ -1,21 +1,29 @@
 ﻿using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
-using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
 using BP.Sys;
 using BP.En;
 using BP.Web;
 using BP.Web.UC;
-namespace CCFlow.WF.MapDef
+
+namespace CCFlow.WF.Admin.FoolFormDesigner
 {
-    public partial class Comm_MapDef_NewEnum : BP.Web.WebPage
+    public partial class UISysEnum : BP.Web.WebPage
     {
+        #region 属性.
+        /// <summary>
+        /// 表单ID
+        /// </summary>
+        public   string FK_MapData
+        {
+            get
+            {
+                return this.Request.QueryString["FK_MapData"];
+            }
+        }
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -26,6 +34,9 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["DoType"];
             }
         }
+        /// <summary>
+        /// 顺序号
+        /// </summary>
         public string IDX
         {
             get
@@ -33,37 +44,41 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["IDX"];
             }
         }
+
+        public string EnumKey
+        {
+            get
+            {
+                return this.Request.QueryString["EnumKey"];
+            }
+        }
+        #endregion 
+
         protected void Page_Load(object sender, EventArgs e)
         {
             SysEnumMain main = new SysEnumMain();
-            if (this.RefNo != null)
+            if (this.EnumKey != null)
             {
-                main.No = this.RefNo;
-                main = new SysEnumMain(this.RefNo);
-                // main.Retrieve();
+                main.No = this.EnumKey;
+                main = new SysEnumMain(this.EnumKey);
             }
-            this.BindSysEnum(main);
-        }
-        public void BindSysEnum(SysEnumMain en)
-        {
+
             SysEnums ses = new SysEnums();
-            if (en.No.Length > 0)
+            if (main.No.Length > 0)
             {
-                //ses = new SysEnums(en.No);
-                ses.Retrieve(SysEnumAttr.EnumKey, en.No);
+                ses.Retrieve(SysEnumAttr.EnumKey, main.No);
             }
 
             this.Pub1.AddTable();
-            if (this.RefNo == null)
-                this.Pub1.AddCaptionLeft("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'>枚举字段</a> - 新建");
+            if (this.EnumKey == null)
+                this.Pub1.AddCaptionLeft("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>枚举字段</a> - 新建");
             else
-                this.Pub1.AddCaptionLeft("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'>枚举字段</a> - 编辑");
+                this.Pub1.AddCaptionLeft("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>枚举字段</a> - 编辑");
 
-            if (this.RefNo == null)
+            if (this.EnumKey == null)
                 this.Title = "新建枚举";
             else
                 this.Title = "编辑枚举类型";
-          
 
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("&nbsp;");
@@ -75,24 +90,23 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD("编号");
             BP.Web.Controls.TB tb = new BP.Web.Controls.TB();
             tb.ID = "TB_No";
-            tb.Text = en.No;
-            if (this.RefNo == null)
+            tb.Text = main.No;
+            if (this.EnumKey == null)
                 tb.Enabled = true;
             else
                 tb.Enabled = false;
 
             this.Pub1.AddTD(tb);
-            this.Pub1.AddTD( "枚举英文名称");
+            this.Pub1.AddTD("枚举英文名称");
             this.Pub1.AddTREnd();
-
 
             this.Pub1.AddTRSum();
             this.Pub1.AddTD("名称");
             tb = new BP.Web.Controls.TB();
             tb.ID = "TB_Name";
-            tb.Text = en.Name;
+            tb.Text = main.Name;
             this.Pub1.AddTD(tb);
-            this.Pub1.AddTD(  "枚举中文名称");
+            this.Pub1.AddTD("枚举中文名称:");
             this.Pub1.AddTREnd();
 
             int idx = 0;
@@ -105,6 +119,7 @@ namespace CCFlow.WF.MapDef
                 SysEnum se = ses.GetEntityByKey(SysEnumAttr.IntKey, idx) as SysEnum;
                 if (se != null)
                     tb.Text = se.Lab;
+                
                 //   tb.Text = en.Name;
                 this.Pub1.AddTD(tb);
                 this.Pub1.AddTD("");
@@ -112,52 +127,70 @@ namespace CCFlow.WF.MapDef
                 idx++;
             }
 
-            this.Pub1.AddTRSum();
-            this.Pub1.Add("<TD colspan=3 align=center>");
-            Button btn = new Button();
-            btn.ID = "Btn_Save";
-            btn.CssClass = "Btn";
-            btn.Text = " 保存 ";
-            btn.Click += new EventHandler(btn_Save_Click);
-            this.Pub1.Add(btn);
+            //this.Pub1.AddTRSum();
+            //this.Pub1.Add("<TD colspan=3 align=center>");
+            //Button btn = new Button();
+            //btn.ID = "Btn_Save";
+            //btn.CssClass = "Btn";
+            //btn.Text = " 保存 ";
+            //btn.Click += new EventHandler(Btn_Save_Click);
+            //this.Pub1.Add(btn);
 
-            btn = new Button();
-            btn.CssClass = "Btn";
-            btn.ID = "Btn_Add";
-            btn.Text =  "添加到表单"; // "添加到表单";
-            btn.Attributes["onclick"] = " return confirm('您确认吗？');";
-            btn.Click += new EventHandler(btn_Add_Click);
-            if (this.RefNo == null)
-                btn.Enabled = false;
-            this.Pub1.Add(btn);
+            //btn = new Button();
+            //btn.CssClass = "Btn";
+            //btn.ID = "Btn_Add";
+            //btn.Text = "添加到表单"; // "添加到表单";
+            //btn.Attributes["onclick"] = " return confirm('您确认吗？');";
+            //btn.Click += new EventHandler(btn_Add_Click);
+            //if (this.EnumKey == null)
+            //    btn.Enabled = false;
+            //this.Pub1.Add(btn);
 
-            btn = new Button();
-            btn.CssClass = "Btn";
-            btn.ID = "Btn_Del";
-            btn.Text = " 删除 ";
-            btn.Attributes["onclick"] = " return confirm('您确认吗？');";
-            if (this.RefNo == null)
-                btn.Enabled = false;
+            //btn = new Button();
+            //btn.CssClass = "Btn";
+            //btn.ID = "Btn_Del";
+            //btn.Text = " 删除 ";
+            //btn.Attributes["onclick"] = " return confirm('您确认吗？');";
+            //if (this.EnumKey == null)
+            //    btn.Enabled = false;
 
-            btn.Click += new EventHandler(btn_Del_Click);
-            this.Pub1.Add(btn);
+            //btn.Click += new EventHandler(Btn_Del_Click);
+            //this.Pub1.Add(btn);
 
-            this.Pub1.AddTDEnd();
-            this.Pub1.AddTREnd();
+            //this.Pub1.AddTDEnd();
+            //this.Pub1.AddTREnd();
             this.Pub1.AddTableEnd();
         }
         void btn_Add_Click(object sender, EventArgs e)
         {
-            this.Response.Redirect("Do.aspx?DoType=AddEnum&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "&EnumKey=" + this.RefNo, true);
-            this.WinClose();
+            //SysEnumMain sem1 = new SysEnumMain(this.EnumKey);
+            //MapAttr attrAdd = new MapAttr();
+            //attrAdd.KeyOfEn = sem1.No;
+            //if (attrAdd.IsExit(MapAttrAttr.FK_MapData, this.MyPK, MapAttrAttr.KeyOfEn, sem1.No))
+            //{
+            //    BP.Sys.PubClass.Alert("字段已经存在 [" + sem1.No + "]。");
+            //    return;
+            //}
+            //attrAdd.FK_MapData = this.MyPK;
+            //attrAdd.Name = sem1.Name;
+            //attrAdd.UIContralType = UIContralType.DDL;
+            //attrAdd.UIBindKey = sem1.No;
+            //attrAdd.MyDataType = BP.DA.DataType.AppInt;
+            //attrAdd.LGType = FieldTypeS.Enum;
+            //attrAdd.DefVal = "0";
+            //attrAdd.UIIsEnable = true;
+            //attrAdd.Insert();
+            ///  http://localhost:41466/WF/Admin/FoolFormDesigner/EditEnum.aspx?DoType=Edit&FK_MapData=ND17501&EnumKey=CeShiMoShi&IDX=
+            this.Response.Redirect("EditEnum.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&EnumKey=" + this.EnumKey, true);
+            // this.WinClose();
             return;
         }
-        void btn_Save_Click(object sender, EventArgs e)
+        void Btn_Save_Click(object sender, EventArgs e)
         {
             try
             {
                 SysEnumMain main = new SysEnumMain();
-                if (this.RefNo == null)
+                if (this.EnumKey == null)
                 {
                     main.No = this.Pub1.GetTBByID("TB_No").Text;
                     if (main.IsExits)
@@ -180,11 +213,11 @@ namespace CCFlow.WF.MapDef
                 }
                 else
                 {
-                    main.No = this.RefNo;
+                    main.No = this.EnumKey;
                     main.Retrieve();
                     main = (SysEnumMain)this.Pub1.Copy(main);
                     if (main.No.Length == 0 || main.Name.Length == 0)
-                        throw new Exception( "编号与名称不能为空");
+                        throw new Exception("编号与名称不能为空");
                 }
 
                 string cfgVal = "";
@@ -201,7 +234,7 @@ namespace CCFlow.WF.MapDef
 
                 main.CfgVal = cfgVal;
                 if (main.CfgVal == "")
-                    throw new Exception( "错误：您必须输入枚举值，请参考帮助。"); //错误：您必须输入枚举值，请参考帮助。
+                    throw new Exception("错误：您必须输入枚举值，请参考帮助。"); //错误：您必须输入枚举值，请参考帮助。
 
                 main.Save();
 
@@ -215,7 +248,7 @@ namespace CCFlow.WF.MapDef
                 BP.DA.Cash.DelObjFormApplication(keyApp);
 
                 if (this.MyPK != null)
-                    this.Response.Redirect("SysEnum.aspx?RefNo=" + main.No + "&MyPK=" + this.MyPK + "&IDX=" + this.IDX, true);
+                    this.Response.Redirect("SysEnum.aspx?RefNo=" + main.No + "&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX, true);
                 return;
             }
             catch (Exception ex)
@@ -226,7 +259,7 @@ namespace CCFlow.WF.MapDef
             }
 
         }
-        void btn_Del_Click(object sender, EventArgs e)
+        void Btn_Del_Click(object sender, EventArgs e)
         {
             try
             {
@@ -235,21 +268,21 @@ namespace CCFlow.WF.MapDef
                 QueryObject qo = new QueryObject(attrs);
                 qo.AddWhere(MapAttrAttr.MyDataType, (int)FieldTypeS.Enum);
                 qo.addAnd();
-                qo.AddWhere(MapAttrAttr.KeyOfEn, this.RefNo);
+                qo.AddWhere(MapAttrAttr.KeyOfEn, this.EnumKey);
                 int i = qo.DoQuery();
                 if (i == 0)
                 {
                     BP.Sys.SysEnums ses = new SysEnums();
-                    ses.Delete(BP.Sys.SysEnumAttr.EnumKey, this.RefNo);
+                    ses.Delete(BP.Sys.SysEnumAttr.EnumKey, this.EnumKey);
 
                     BP.Sys.SysEnumMain m = new SysEnumMain();
-                    m.No = this.RefNo;
+                    m.No = this.EnumKey;
                     m.Delete();
                     this.ToWFMsgPage("删除成功");
                     return;
                 }
 
-                string msg =   "错误:下列数据已经引用了枚举您不能删除它。"; // "错误:下列数据已经引用了枚举您不能删除它。";
+                string msg = "错误:下列数据已经引用了枚举您不能删除它。"; // "错误:下列数据已经引用了枚举您不能删除它。";
                 foreach (MapAttr attr in attrs)
                 {
                     msg += "\t\n" + attr.Field + "" + attr.Name + " Table = " + attr.FK_MapData;
@@ -260,8 +293,6 @@ namespace CCFlow.WF.MapDef
             {
                 this.ToErrorPage(ex.Message);
             }
-
         }
     }
-
 }

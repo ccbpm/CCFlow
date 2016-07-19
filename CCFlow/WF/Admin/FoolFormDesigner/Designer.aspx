@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.MapDef.WF_MapDef_MapDef"
-    Title="ccflow傻瓜表单设计器" CodeBehind="Designer.aspx.cs" %>
+    Title="ccform傻瓜表单设计器" CodeBehind="Designer.aspx.cs" %>
 
 <%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -34,12 +34,18 @@
             window.location.href = window.location.href;
         }
         function Insert(mypk, IDX) {
-            var url = 'Do.aspx?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX;
+            var url = 'FieldTypeList.aspx?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function AddF(mypk) {
-            var url = 'Do.aspx?DoType=AddF&MyPK=' + mypk;
+        function AddF(fk_mapdata) {
+            //var url = 'Do.aspx?DoType=AddF&MyPK=' + mypk;
+            var url = 'FieldTypeList.aspx?DoType=AddF&FK_MapData=' + fk_mapdata;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+        function AddField(fk_mapdata, groupID) {
+            var url = 'FieldTypeList.aspx?DoType=AddF&FK_MapData=' + fk_mapdata+'&GroupField='+groupID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -65,8 +71,8 @@
             window.location.href = window.location.href;
         }
         function GroupFieldNew(mypk) {
-            var url = 'GroupField.aspx?RefNo=' + mypk + "&RefOID=0&DoType=FunList";
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 200px; dialogWidth: 600px;center: yes; help: no');
+            var url = 'GroupField.aspx?FK_MapData=' + mypk + "&RefOID=0&DoType=FunList";
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function ExpImp(mypk, fk_flow) {
@@ -75,8 +81,8 @@
             window.location.href = window.location.href;
         }
         function GroupField(mypk, OID) {
-            var url = 'GroupField.aspx?RefNo=' + mypk + "&RefOID=" + OID;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 200px; dialogWidth: 600px;center: yes; help: no');
+            var url = 'GroupField.aspx?FK_MapData=' + mypk + "&GroupField=" + OID;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function GroupFieldDel(mypk, refoid) {
@@ -85,8 +91,8 @@
             window.location.href = window.location.href;
         }
 
-        function Edit(mypk, refno, ftype) {
-            var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
+        function Edit(fk_mapdata, mypk, ftype) {
+            var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData='+fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -316,9 +322,10 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div class="easyui-panel" style="padding: 5px;">
     <%
-        string fk_mapdata = this.MyPK;
-        string fk_flow = this.FK_Flow;
-        int nodeID = this.NodeID;
+        string fk_mapdata = this.Request.QueryString["FK_MapData"];
+        string fk_flow = this.Request.QueryString["FK_Flow"];
+       // int nodeID = 0  this.Request.QueryString["FK_Flow"];
+        string  nodeID = this.Request.QueryString["NodeID"];
          %>
         <a href="javascript:ExpImp('<%=fk_mapdata %>','<%=fk_flow%>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-copy'">导入/导出</a>
         <a href="javascript:AddF('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">新建字段</a>
@@ -326,14 +333,14 @@
         <a href="javascript:GroupFieldNew('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-groupbar'">新建字段分组</a>
         <a href="javascript:MapDtl('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">新建从表</a>
         <a href="javascript:Ath('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">新建附件组件</a>
-        <a href="javascript:MapFrame('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-frame'">设置框架</a>
+        <a href="javascript:MapFrame('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-frame'">新建框架</a>
         
         <%--<a href="javascript:MapExt('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dts'">扩展设置</a>
 --%>
         <a href="javascript:MapDataEdit('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">表单属性</a>
 
         <% if ( fk_flow != null) { %>
-        <a href="javascript:FrmNodeComponent('<%=nodeID %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
+        <a href="javascript:FrmNodeComponent('<%=this.NodeID %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'"> 节点表单组件</a>
         <% } %>
 
        <uc1:Pub ID="UCCaption" runat="server" />

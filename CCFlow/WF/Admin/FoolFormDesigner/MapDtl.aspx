@@ -16,13 +16,13 @@
         //	        alert(id);
         //	    }
 
-        function Insert(mypk, IDX) {
-            var url = 'Do.aspx?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX + '&s=' + Math.random();
+        function Insert(fk_mapdata, IDX) {
+            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&IDX=' + IDX + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function AddF(mypk) {
-            var url = 'Do.aspx?DoType=AddF&MyPK=' + mypk + '&s=' + Math.random();
+        function AddF(fk_mapdata) {
+            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

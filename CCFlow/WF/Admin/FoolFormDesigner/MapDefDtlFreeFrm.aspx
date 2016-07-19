@@ -15,15 +15,15 @@
 	    var b=window.showModalDialog( 'GroupTitle.aspx?EnName='+enName , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
         window.location.href = window.location.href;
 	}
-	function Insert(mypk,IDX)
+	function Insert(fk_mapdata,idx)
     {
-        var url='Do.aspx?DoType=AddF&MyPK='+mypk+'&IDX=' +IDX ;
+        var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&IDX=' + idx;
         var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
         window.location.href = window.location.href;
     }
-	function AddF(mypk) {
+    function AddF(fk_mapdata) {
 
-        var url='Do.aspx?DoType=AddF&MyPK='+mypk;
+        var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata;
         var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
 
         window.location.href = window.location.href;

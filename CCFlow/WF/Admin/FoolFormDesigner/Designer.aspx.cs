@@ -102,6 +102,7 @@ namespace CCFlow.WF.MapDef
             BP.WF.XML.MapMenus xmls = new BP.WF.XML.MapMenus();
             xmls.RetrieveAll();
 
+
             #region bindleft
             //this.UCCaption.AddUL();
             foreach (BP.WF.XML.MapMenu item in xmls)
@@ -238,7 +239,7 @@ namespace CCFlow.WF.MapDef
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='100%' >");
 
-                            src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+                            src = "../../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
                             this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ath.H + "' scrolling=auto  /></iframe>");
 
@@ -358,7 +359,7 @@ namespace CCFlow.WF.MapDef
                 if (gfs.Count == 1)
                     this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top' align:left style='height: 24px;align:left' ", "<div style='text-align:left; float:left'>&nbsp;<a href=\"javascript:GroupField('" + this.FK_MapData + "','" + gf.OID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'></div>");
                 else
-                    this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='height: 24px;align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 />&nbsp;<a href=\"javascript:GroupField('" + this.FK_MapData + "','" + gf.OID + "')\" >" + gf.Lab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                    this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='height: 24px;align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 />&nbsp;<a href=\"javascript:GroupField('" + this.FK_MapData + "','" + gf.OID + "')\" >" + gf.Lab + "</a></div> <div style='text-align:right; float:right'>  <a href=\"javascript:AddField('" + gf.EnName + "','" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-new',plain:true\"> </a>  <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                 this.Pub1.AddTREnd();
                 #endregion 输出分组栏.
 

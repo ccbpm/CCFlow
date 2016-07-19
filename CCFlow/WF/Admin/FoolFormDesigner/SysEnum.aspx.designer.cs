@@ -7,19 +7,64 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace CCFlow.WF.MapDef {
+namespace CCFlow.WF.Admin.FoolFormDesigner {
     
     
-    public partial class Comm_MapDef_NewEnum {
+    public partial class UISysEnum {
         
         /// <summary>
-        /// form1 控件。
+        /// TextBox1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        
+        /// <summary>
+        /// TextBox2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox2;
+        
+        /// <summary>
+        /// Btn_Save 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Btn_Save;
+        
+        /// <summary>
+        /// Btn_SaveAndClose 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Btn_SaveAndClose;
+        
+        /// <summary>
+        /// Btn_SaveAndAddFrm 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Btn_SaveAndAddFrm;
+        
+        /// <summary>
+        /// Btn_Del 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Btn_Del;
         
         /// <summary>
         /// Pub1 控件。
@@ -28,6 +73,6 @@ namespace CCFlow.WF.MapDef {
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::CCFlow.WF.UC.Pub Pub1;
+        protected global::WF_MapDef_Pub Pub1;
     }
 }

@@ -131,7 +131,6 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
 
 
-
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("默认值");
@@ -300,9 +299,7 @@ namespace CCFlow.WF.MapDef
                 string html = "<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">下拉框自动完成</a>";
                 html += " - <a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.ActiveDDL + "_" + mapAttr.MyPK + "')\">设置级联动(如:省份,城市联动)</a>";
                 html += " - <a href=\"javascript:WinOpen('./MapExt/RadioBtns.aspx?FK_MapData=" + mapAttr.FK_MapData + "&KeyOfEn=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">高级JS设置</a>";
-                this.Pub1.AddTD(html);
-                this.Pub1.AddTD("&nbsp;");
-
+                this.Pub1.AddTD("colspan=3",html);
                 this.Pub1.AddTREnd();
             }
             #endregion 扩展设置.
@@ -354,7 +351,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.Add("<a href='" + myUrl + "' target='M"+mapAttr.KeyOfEn+"' ><img src='../../Img/Btn/Apply.gif' border=0>批处理</a>");
             }
 
-            string url = "Do.aspx?DoType=AddF&MyPK=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
+            string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
             this.Pub1.Add("<a href='" + url + "'><img src='../../Img/Btn/New.gif' border=0>新建</a></TD>");
 
           
@@ -427,7 +424,7 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
+                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
                         return;
                     default:
                         break;

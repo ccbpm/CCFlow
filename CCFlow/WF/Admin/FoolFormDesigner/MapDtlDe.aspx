@@ -11,23 +11,23 @@
     <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
     <base target="_self" />
     <script language="javascript">
-        function Insert(mypk, IDX) {
-            var url = 'Do.aspx?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX;
+        function Insert(fk_mapdata, IDX) {
+            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&IDX=' + IDX;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function AddF(mypk) {
-            var url = 'Do.aspx?DoType=AddF&MyPK=' + mypk;
+        function AddF(fk_mapdata) {
+            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function AddFGroup(mypk) {
-            var url = 'Do.aspx?DoType=AddFGroup&FK_MapData=' + mypk;
+        function AddFGroup(fk_mapdata) {
+            var url = 'Do.aspx?DoType=AddFGroup&FK_MapData=' + fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function CopyF(mypk) {
-            var url = 'CopyDtlField.aspx?MyPK=' + mypk + '&s=' + Math.random();
+        function CopyF(fk_mapdata) {
+            var url = 'CopyDtlField.aspx?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
             window.location.href = window.location.href;
         }

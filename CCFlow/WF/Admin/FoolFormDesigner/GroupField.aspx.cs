@@ -23,21 +23,24 @@ namespace CCFlow.WF.MapDef
         /// <summary>
         /// 分组
         /// </summary>
-        public string FromGroupField
+        public int GroupField
         {
             get
             {
-                return this.Request.QueryString["FromGroupField"];
+                string str= this.Request.QueryString["GroupField"];
+                if (str == "" || str == null)
+                    return 0;
+                return int.Parse(str);
             }
         }
         /// <summary>
         /// 相关编号
         /// </summary>
-        public new string RefNo
+        public string FK_MapData
         {
             get
             {
-                string s = this.Request.QueryString["RefNo"];
+                string s = this.Request.QueryString["FK_MapData"];
                 if (s == null)
                     return "t";
                 else
@@ -62,9 +65,9 @@ namespace CCFlow.WF.MapDef
             }
 
             MapAttr attr = new MapAttr();
-            int i = attr.Retrieve(MapAttrAttr.FK_MapData, this.RefNo, MapAttrAttr.KeyOfEn, prx + "_Note");
-            i += attr.Retrieve(MapAttrAttr.FK_MapData, this.RefNo, MapAttrAttr.KeyOfEn, prx + "_Checker");
-            i += attr.Retrieve(MapAttrAttr.FK_MapData, this.RefNo, MapAttrAttr.KeyOfEn, prx + "_RDT");
+            int i = attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_Note");
+            i += attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_Checker");
+            i += attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_RDT");
 
             if (i > 0)
             {
@@ -74,11 +77,11 @@ namespace CCFlow.WF.MapDef
 
             GroupField gf = new GroupField();
             gf.Lab = sta;
-            gf.EnName = this.RefNo;
+            gf.EnName = this.FK_MapData;
             gf.Insert();
 
             attr = new MapAttr();
-            attr.FK_MapData = this.RefNo;
+            attr.FK_MapData = this.FK_MapData;
             attr.KeyOfEn = prx + "_Note";
             attr.Name = "审核意见"; // sta;  // this.ToE("CheckNote", "审核意见");
             attr.MyDataType = DataType.AppString;
@@ -95,7 +98,7 @@ namespace CCFlow.WF.MapDef
 
 
             attr = new MapAttr();
-            attr.FK_MapData = this.RefNo;
+            attr.FK_MapData = this.FK_MapData;
             attr.KeyOfEn = prx + "_Checker";
             attr.Name = "审核人";// "审核人";
             attr.MyDataType = DataType.AppString;
@@ -113,7 +116,7 @@ namespace CCFlow.WF.MapDef
             attr.Update("Idx", 2);
 
             attr = new MapAttr();
-            attr.FK_MapData = this.RefNo;
+            attr.FK_MapData = this.FK_MapData;
             attr.KeyOfEn = prx + "_RDT";
             attr.Name = "审核日期"; // "审核日期";
             attr.MyDataType = DataType.AppDateTime;
@@ -138,28 +141,41 @@ namespace CCFlow.WF.MapDef
                 case "FunList":
                     this.Pub1.AddFieldSet("字段分组向导");
                     this.Pub1.AddUL();
-                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewGroup&RefNo=" + this.RefNo + "'>新建空白字段分组</a></b><br><font color=green>空白字段分组，建立后可以把相关的字段放入此分组里。</font>");
-                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewCheckGroup&RefNo=" + this.RefNo + "'>新建审核分组</a></b><br><font color=green>系统会让您输入审核的信息，并创建审核分组。</font>");
-                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewEvalGroup&RefNo=" + this.RefNo+"'>创建工作质量考核字段分组</a></b><br><font color=green>创建质量考核: EvalEmpNo,EvalEmpName,EvalCent,EvalNote 4个必要的字段。</font>");
+                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewGroup&FK_MapData=" + this.FK_MapData + "'>新建空白字段分组</a></b><br><font color=green>空白字段分组，建立后可以把相关的字段放入此分组里。</font>");
+                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewCheckGroup&FK_MapData=" + this.FK_MapData + "'>新建审核分组</a></b><br><font color=green>系统会让您输入审核的信息，并创建审核分组。</font>");
+                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewEvalGroup&FK_MapData=" + this.FK_MapData+"'>创建工作质量考核字段分组</a></b><br><font color=green>创建质量考核: EvalEmpNo,EvalEmpName,EvalCent,EvalNote 4个必要的字段。</font>");
                     this.Pub1.AddULEnd();
                     this.Pub1.AddFieldSetEnd();
                     return;
                 case "NewCheckGroup":
-                    this.Pub1.AddFieldSet("<a href=GroupField.aspx?DoType=FunList&RefNo=" + this.RefNo + " >字段分组向导</a> - " + "审核分组");
+                    this.Pub1.AddFieldSet("<a href=GroupField.aspx?DoType=FunList&FK_MapData=" + this.FK_MapData + " >字段分组向导</a> - " + "审核分组");
+
+                    this.Pub1.AddTable();
+
+                    this.Pub1.AddTR();
+
                     TB tbc = new TB();
                     tbc.ID = "TB_Sta";
-                    this.Pub1.Add("审核岗位<font color=red>*</font>");
-                    this.Pub1.Add(tbc);
-                    this.Pub1.AddBR("<font color=green>比如:分局长审核、科长审核、总经理审核。</font>");
-                    this.Pub1.AddBR();
+                    this.Pub1.AddTD("审核岗位<font color=red>*</font>");
+                    this.Pub1.AddTD(tbc);
+                    this.Pub1.AddTREnd();
+
+                    this.Pub1.AddTR();
+                    this.Pub1.AddTD("colspan=2", "<font color=green>比如:分局长审核、科长审核、总经理审核。</font>");
+                    this.Pub1.AddTREnd();
 
                     tbc = new TB();
                     tbc.ID = "TB_Prx";
-                    this.Pub1.Add("字段前缀:");
-                    this.Pub1.Add(tbc);
-                    this.Pub1.AddBR("<font color=green>用于自动创建字段，请输入英文字母或者字母数字组合。系统自动依据您的输入产生字段。如：XXX_Note，审核意见。XXX_RDT审核时间。XXX_Checker审核人，为空系统自动用拼音表示。</font>");
-                    this.Pub1.AddBR();
-                    this.Pub1.AddHR();
+                    
+                    this.Pub1.AddTR();
+                    this.Pub1.AddTD("字段前缀:");
+                    this.Pub1.AddTD(tbc);
+                    this.Pub1.AddTREnd();
+
+                    this.Pub1.AddTR();
+                    this.Pub1.AddTD("colspan=2","<font color=green>用于自动创建字段，请输入英文字母或者字母数字组合。系统自动依据您的输入产生字段。如：XXX_Note，审核意见。XXX_RDT审核时间。XXX_Checker审核人，为空系统自动用拼音表示。</font>");
+                    this.Pub1.AddTREnd();
+
                     Btn btnc = new Btn();
                     btnc.Click += new EventHandler(btn_Check_Click);
                     btnc.Text = "保存";
@@ -171,11 +187,11 @@ namespace CCFlow.WF.MapDef
 
                     GroupField gf = new GroupField();
                     gf.Lab = "工作质量考核";
-                    gf.EnName = this.RefNo;
+                    gf.EnName = this.FK_MapData;
                     gf.Insert();
 
                     MapAttr attr = new MapAttr();
-                    attr.FK_MapData = this.RefNo;
+                    attr.FK_MapData = this.FK_MapData;
                     attr.KeyOfEn = BP.WF.WorkSysFieldAttr.EvalNote; 
                     attr.Name = "审核意见"; 
                     attr.MyDataType = DataType.AppString;
@@ -190,7 +206,7 @@ namespace CCFlow.WF.MapDef
                     attr.Insert();
 
                     attr = new MapAttr();
-                    attr.FK_MapData = this.RefNo;
+                    attr.FK_MapData = this.FK_MapData;
                     attr.KeyOfEn = BP.WF.WorkSysFieldAttr.EvalCent; 
                     attr.Name = "分值"; 
                     attr.MyDataType = DataType.AppFloat;
@@ -207,7 +223,7 @@ namespace CCFlow.WF.MapDef
                     attr.Insert();
 
                     attr = new MapAttr();
-                    attr.FK_MapData = this.RefNo;
+                    attr.FK_MapData = this.FK_MapData;
                     attr.KeyOfEn = BP.WF.WorkSysFieldAttr.EvalEmpNo; 
                     attr.Name = "被评估人编号"; 
                     attr.MyDataType = DataType.AppString;
@@ -221,7 +237,7 @@ namespace CCFlow.WF.MapDef
                     attr.Insert();
 
                      attr = new MapAttr();
-                    attr.FK_MapData = this.RefNo;
+                    attr.FK_MapData = this.FK_MapData;
                     attr.KeyOfEn = BP.WF.WorkSysFieldAttr.EvalEmpName; 
                     attr.Name = "被评估人名称";  
                     attr.MyDataType = DataType.AppString;
@@ -236,23 +252,23 @@ namespace CCFlow.WF.MapDef
                     this.WinCloseWithMsg("保存成功"); // "增加成功，您可以调整它的位置与修改字段的标签。"
                     return;
                 case "NewGroup":
-                    GroupFields mygfs = new GroupFields(this.RefNo);
+                    GroupFields mygfs = new GroupFields(this.FK_MapData);
                     GroupField gf1 = new GroupField();
                     gf1.Idx = mygfs.Count;
                     gf1.Lab = "新建字段分组"; // "新建字段分组";
-                    gf1.EnName = this.RefNo;
+                    gf1.EnName = this.FK_MapData;
                     if (gf1.IsExit(GroupFieldAttr.EnName, gf1.EnName, GroupFieldAttr.Lab, gf1.Lab) == false)
                     {
                         gf1.Insert();
                     }
-                    this.Response.Redirect("GroupField.aspx?RefNo=" + this.RefNo + "&RefOID=" + gf1.OID, true);
+                    this.Response.Redirect("GroupField.aspx?FK_MapData=" + this.FK_MapData + "&GroupField=" + gf1.OID, true);
                     return;
                 default:
                     break;
             }
 
             #region edit operation
-            GroupField en = new GroupField(this.RefOID);
+            GroupField en = new GroupField(this.GroupField);
             this.Pub1.Add("<Table border=0 align=center>");
             this.Pub1.AddCaptionLeft("字段分组");
             this.Pub1.AddTR();
@@ -316,11 +332,11 @@ namespace CCFlow.WF.MapDef
 
         void btnC_Click(object sender, EventArgs e)
         {
-            BP.WF.Node mynd = new BP.WF.Node(this.RefNo);
+            BP.WF.Node mynd = new BP.WF.Node(this.FK_MapData);
             BP.WF.Nodes nds = new BP.WF.Nodes(mynd.FK_Flow);
             foreach (BP.WF.Node nd in nds)
             {
-                if ("ND" + nd.NodeID == this.RefNo)
+                if ("ND" + nd.NodeID == this.FK_MapData)
                     continue;
 
                 GroupFields gfs = new GroupFields("ND" + nd.NodeID);
@@ -340,7 +356,7 @@ namespace CCFlow.WF.MapDef
         }
         void btn_del_Click(object sender, EventArgs e)
         {
-            GroupField gf = new GroupField(this.RefOID);
+            GroupField gf = new GroupField(this.GroupField);
             gf.Delete();
             
             BP.WF.Template.MapFoolForm md = new BP.WF.Template.MapFoolForm(gf.EnName);
@@ -352,7 +368,7 @@ namespace CCFlow.WF.MapDef
         void btn_delAll_Click(object sender, EventArgs e)
         {
             MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.GroupID, this.RefOID);
+            attrs.Retrieve(MapAttrAttr.GroupID, this.GroupField);
             foreach (MapAttr attr in attrs)
             {
                 if (attr.HisEditType != EditType.Edit)
@@ -363,18 +379,18 @@ namespace CCFlow.WF.MapDef
             }
 
             MapDtls dtls = new MapDtls();
-            dtls.Retrieve(MapDtlAttr.GroupID, this.RefOID);
+            dtls.Retrieve(MapDtlAttr.GroupID, this.GroupField);
             foreach (MapDtl dtl in dtls)
                 dtl.Delete();
 
-            GroupField gf = new GroupField(this.RefOID);
+            GroupField gf = new GroupField(this.GroupField);
             gf.Delete();
             this.WinClose();// ("删除成功。");
         }
 
         void btn_Click(object sender, EventArgs e)
         {
-            GroupField en = new GroupField(this.RefOID);
+            GroupField en = new GroupField(this.GroupField);
             en.Lab = this.Pub1.GetTBByID("TB_Lab_" + en.OID).Text;
             en.Update();
 
@@ -385,14 +401,14 @@ namespace CCFlow.WF.MapDef
                     this.WinClose();
                     break;
                 case "Btn_NewField":
-                    this.Session["GroupField"] = this.RefOID;
-                    this.Response.Redirect("Do.aspx?DoType=AddF&MyPK=" + this.RefNo + "&GroupField=" + this.RefOID, true);
+                    this.Session["GroupField"] = this.GroupField;
+                    this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&GroupField=" + this.GroupField, true);
                     break;
                 case "Btn_CopyField":
-                    this.Response.Redirect("CopyFieldFromNode.aspx?FK_Node=" + this.RefNo + "&GroupField=" + this.RefOID, true);
+                    this.Response.Redirect("CopyFieldFromNode.aspx?FK_Node=" + this.FK_MapData + "&GroupField=" + this.GroupField, true);
                     break;
                 default:
-                    this.Response.Redirect("GroupField.aspx?RefNo=" + this.RefNo + "&RefOID=" + this.RefOID, true);
+                    this.Response.Redirect("GroupField.aspx?FK_MapData=" + this.FK_MapData + "&GroupField=" + this.GroupField, true);
                     break;
             }
         }

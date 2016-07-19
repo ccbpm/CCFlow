@@ -105,6 +105,9 @@ namespace BP.WF.Template
                 map.AddTBInt(MapDataAttr.TableCol, 4, "表单显示列数", true, true);
                 map.AddTBInt(MapDataAttr.TableWidth, 900, "表单宽度", true, false);
 
+                map.AddTBInt(MapDataAttr.TableHeight, 900, "表单高度", true, false);
+
+
                 //数据源.
                 map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
@@ -216,15 +219,15 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "节点表单组件"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoNodeFrmCompent";
-                rm.Visable = true;
-                rm.RefAttrLinkLabel = "节点表单组件";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Components.png";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "节点表单组件"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoNodeFrmCompent";
+                //rm.Visable = true;
+                //rm.RefAttrLinkLabel = "节点表单组件";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
+                //rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Components.png";
+                //map.AddRefMethod(rm);
                 #endregion 方法 - 基本功能.
 
 

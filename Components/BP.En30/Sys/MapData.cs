@@ -94,6 +94,10 @@ namespace BP.Sys
         /// </summary>
         public const string TableWidth = "TableWidth";
         /// <summary>
+        /// 表格高度
+        /// </summary>
+        public const string TableHeight = "TableHeight";
+        /// <summary>
         /// 来源
         /// </summary>
         public const string FrmFrom = "FrmFrom";
@@ -709,6 +713,19 @@ namespace BP.Sys
                 int i = this.GetValIntByKey(MapDataAttr.TableWidth);
                 if (i <= 50)
                     return "800px";
+                return i + "px";
+            }
+        }
+        /// <summary>
+        /// 表格高度
+        /// </summary>
+        public string TableHeight
+        {
+            get
+            {
+                int i = this.GetValIntByKey(MapDataAttr.TableHeight);
+                if (i <= 500)
+                    return "900px";
                 return i + "px";
             }
         }

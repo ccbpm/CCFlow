@@ -563,6 +563,17 @@ namespace BP.Pub
                     StringBuilder mypict = new StringBuilder();
                     //获取要插入的图片
                     System.Drawing.Image imgAth = System.Drawing.Image.FromFile(path1);
+                    //图片附件描述属性
+                    FrmImgAth frmImgAth = new FrmImgAth();
+                    frmImgAth.RetrieveByAttr(FrmImgAthAttr.MyPK, strs[0].Trim());
+                    //图片高宽
+                    float iWidth = imgAth.Size.Width * 15;
+                    float iHeight = imgAth.Size.Height * 15;
+                    if (frmImgAth != null && !string.IsNullOrEmpty(frmImgAth.FK_MapData))
+                    {
+                        iWidth = frmImgAth.W * 15;
+                        iHeight = frmImgAth.H * 15;
+                    }
 
                     //将要插入的图片转换为16进制字符串
                     string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
@@ -572,8 +583,8 @@ namespace BP.Pub
                     mypict.Append(@"\jpegblip");
                     mypict.Append(@"\picscalex100");
                     mypict.Append(@"\picscaley100");
-                    mypict.Append(@"\picwgoal" + imgAth.Size.Width * 15);
-                    mypict.Append(@"\pichgoal" + imgAth.Size.Height * 15);
+                    mypict.Append(@"\picwgoal" + iWidth);
+                    mypict.Append(@"\pichgoal" + iHeight);
                     mypict.Append(imgHexStringImgAth + "}");
                     mypict.AppendLine();
                     return mypict.ToString();

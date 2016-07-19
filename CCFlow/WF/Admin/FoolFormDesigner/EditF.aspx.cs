@@ -448,26 +448,7 @@ namespace CCFlow.WF.MapDef
         }
         public void EditBeforeEnd(MapAttr mapAttr)
         {
-            #region 合并单元格数
-            isItem = this.Pub1.AddTR(isItem);
-            this.Pub1.AddTDIdx(idx++);
-            this.Pub1.AddTD("横跨的列数");
-            DDL ddl1 = new DDL();
-            ddl1.ID = "DDL_ColSpan";
-            //for (int i = 1; i < 12; i++)
-            //{
-            //    ddl1.Items.Add(new ListItem(i.ToString(), i.ToString()));
-            //}
-            ddl1.Items.Add(new ListItem("1", "1"));
-            ddl1.Items.Add(new ListItem("3", "3"));
-            ddl1.Items.Add(new ListItem("4", "4"));
-
-            ddl1.SetSelectItem(mapAttr.ColSpan.ToString());
-            this.Pub1.AddTD(ddl1);
-
-            this.Pub1.AddTD("对傻瓜表单有效");
-            this.Pub1.AddTREnd();
-            #endregion 合并单元格数
+          
 
             #region 字段分组
             isItem = this.Pub1.AddTR(isItem);
@@ -754,8 +735,6 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD(ddl);
 
             this.Pub1.AddTD("高度:23个像素是一行");
-
-          
             this.Pub1.AddTREnd();
 
 
@@ -773,6 +752,24 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD(cb);
             this.Pub1.AddTD("");
             this.Pub1.AddTREnd();
+
+
+            #region 合并单元格数
+            isItem = this.Pub1.AddTR(isItem);
+            this.Pub1.AddTDIdx(idx++);
+            this.Pub1.AddTD("横跨的列数");
+            DDL ddl1 = new DDL();
+            ddl1.ID = "DDL_ColSpan";
+
+            ddl1.Items.Add(new ListItem("1", "1"));
+            ddl1.Items.Add(new ListItem("3", "3"));
+            ddl1.Items.Add(new ListItem("4", "4"));
+
+            ddl1.SetSelectItem(mapAttr.ColSpan.ToString());
+            this.Pub1.AddTD(ddl1);
+            this.Pub1.AddTD("对傻瓜表单有效");
+            this.Pub1.AddTREnd();
+            #endregion 合并单元格数
 
             this.EditBeforeEnd(mapAttr);
         }

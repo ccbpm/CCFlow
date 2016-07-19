@@ -50,7 +50,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         int pageSize = 36;
         protected void Page_Load(object sender, EventArgs e)
         {
-            
             this.Title = "增加新字段向导";
             this.Pub1.AddTable();
             this.Pub1.AddCaptionLeft("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "'><img src='/WF/Img/Btn/Back.gif'>返回</a></a> - <a href='SysEnum.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "' ><img src='../../Img/Btn/New.gif' />新建枚举</a>");
@@ -71,25 +70,16 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             int Idx = 0;
             foreach (BP.Sys.SysEnumMain sem in sems)
             {
-                BP.Web.Controls.DDL ddl = null;
-                try
-                {
-                    ddl = new BP.Web.Controls.DDL();
-                    ddl.BindSysEnum(sem.No);
-                }
-                catch
-                {
-                    sem.Delete();
-                }
                 Idx++;
                 is1 = this.Pub1.AddTR(is1);
                 this.Pub1.AddTDIdx(Idx);
                 this.Pub1.AddTD("<a href=\"javascript:AddEnum('" + this.FK_MapData + "','" + this.GroupField + "','" + sem.No + "')\" >" + sem.No + "</a>");
                 this.Pub1.AddTD(sem.Name);
                 this.Pub1.AddTD("[<a href='SysEnum.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "&EnumKey=" + sem.No + "' >编辑</a>]");
-                this.Pub1.AddTD(ddl);
+                this.Pub1.AddTD(sem.CfgVal);
                 this.Pub1.AddTREnd();
             }
+
             this.Pub1.AddTableEnd();
         }
     }

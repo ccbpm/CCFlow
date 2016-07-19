@@ -42,23 +42,26 @@
 <tr>
 <td valign="top"  > 
 
-<table>
+<table style="width:100%;">
 <tr>
 <td>枚举中文名称： </td>
-<td> <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox></td>
+<td> <asp:TextBox ID="TB_Name" runat="server" AutoPostBack="True" 
+        ontextchanged="TextBox1_TextChanged"></asp:TextBox></td>
 </tr>
 
 <tr>
 <td>枚举编号： </td>
-<td> <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox></td>
+<td> <asp:TextBox ID="TB_No" runat="server"></asp:TextBox></td>
 </tr>
 
 <tr>
-<td colspan="2"  style="width:300px;" >
-    <asp:Button ID="Btn_Save" runat="server" Text="保存" onclick="btn_Save_Click" />
-    <asp:Button ID="Btn_SaveAndClose" runat="server" Text="保存&关闭"  onclick="Btn_SaveAndClose"  />
-    <asp:Button ID="Btn_SaveAndAddFrm" runat="server" Text="保存并放到表单里"  onclick="Btn_SaveAndAddFrm"  />
-    <asp:Button ID="Btn_Del" runat="server" Text="删除"  onclick="Btn_Del"   />
+<td colspan="2"   >
+    <asp:Button ID="Btn_Save" runat="server" Text="保存" onclick="Btn_Save_Click"   />
+    <asp:Button ID="Btn_SaveAndClose" runat="server" Text="保存&关闭" onclick="Btn_SaveAndClose_Click" 
+            />
+    <asp:Button ID="Btn_SaveAndAddFrm" runat="server" Text="保存并放到表单里" onclick="Btn_SaveAndAddFrm_Click" 
+          />
+    <asp:Button ID="Btn_Del" runat="server" Text="删除" onclick="Btn_Del_Click"    />
 
     </td>
 </tr>

@@ -13,22 +13,22 @@ namespace CCFlow.WF.Admin.FoolFormDesigner {
     public partial class UISysEnum {
         
         /// <summary>
-        /// TextBox1 控件。
+        /// TB_Name 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        protected global::System.Web.UI.WebControls.TextBox TB_Name;
         
         /// <summary>
-        /// TextBox2 控件。
+        /// TB_No 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox2;
+        protected global::System.Web.UI.WebControls.TextBox TB_No;
         
         /// <summary>
         /// Btn_Save 控件。

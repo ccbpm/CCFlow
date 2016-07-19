@@ -17,7 +17,7 @@ function GroupClick(groupID)
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-<table width='100%'>
+<table width='100%' style=" width:100%;">
 <%--<tr>
     <TD valign=top   colspan=2 ><caption class=Caption>复制字段</caption></TD>
     </tr>--%>

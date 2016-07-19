@@ -125,8 +125,8 @@ namespace CCFlow.WF.MapDef
 
 
 
-            this.Pub1.Add("<div style='width:" + md.TableWidth + ";height:"+md.TableHeight+";background-color:white;border:1px solid #666;' align='center'>");
-            this.Pub1.Add("\t\n<Table style='width:98%;border:1px;padding:5px;'>");
+            this.Pub1.Add("<div style='width:" + md.TableWidth + ";height:" + md.TableHeight + ";background-color:white;border:1px solid #666;padding:5px;' align='center'>");
+            this.Pub1.Add("\t\n<Table style='width:98%;border:1px;padding:5px; padding-top:11px;' >");
 
             int myidx = 0;
             string src = "";
@@ -335,7 +335,9 @@ namespace CCFlow.WF.MapDef
                 #endregion 输出分组栏.
 
                 this.idx = 0; // 设置字段的顺序号为0.
-                int colSpan = md.TableCol;  // 定义colspan的宽度.
+
+                //是否是沾满的状态.
+                bool isLeft = true;
                 for (int i = 0; i < mattrs.Count; i++)
                 {
                     MapAttr attr = mattrs[i] as MapAttr;
@@ -360,118 +362,12 @@ namespace CCFlow.WF.MapDef
                   
                     #endregion 过滤不需要显示的字段.
 
-                    #region 补充空白的列.
-                    if (colSpan <= 0)
-                    {
-                        /*如果列已经用完.*/
-                        this.Pub1.AddTREnd();
-                        colSpan = md.TableCol; // 补充列.
-                    }
-                    #endregion 补充空白的列.
-
-                    #region 处理两种状态下的大块文本.
-                    if (attr.IsBigDoc && (attr.ColSpan == md.TableCol || attr.ColSpan == 0))
-                    {
-                        if (colSpan == md.TableCol)
-                        {
-                            /*说明刚刚加满列(处于已经换行的状态)*/
-                            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "'  " + gfAttr);
-                        }
-                        else
-                        {
-                            //补充上空格让它换行.
-                            this.Pub1.AddTD("colspan=" + colSpan, "");
-                            this.Pub1.AddTREnd();
-                            colSpan = md.TableCol;
-                        }
-
-                        /*是大块文本，并且跨度在占领了整个剩余行单元格. */
-                        this.Pub1.Add("<TD colspan=" + md.TableCol + " width='100%' height='" + attr.UIHeight.ToString() + "px' >");
-                        this.Pub1.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + this.GenerLab(attr, 0, count) + "</span>");
-                        this.Pub1.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
-
-                        Label lab = new Label();
-                        lab.ID = "Lab" + attr.KeyOfEn;
-                        lab.Text = "默认值";
-                        this.Pub1.Add(lab);
-                        this.Pub1.Add("</span><br>");
-
-                        TB mytbLine = new TB();
-                        mytbLine.ID = "TB_" + attr.KeyOfEn;
-                        mytbLine.TextMode = TextBoxMode.MultiLine;
-                        mytbLine.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
-                        mytbLine.Enabled = attr.UIIsEnable;
-                        this.Pub1.Add(mytbLine);
-                        mytbLine.Attributes["width"] = "100%";
-                        lab = this.Pub1.GetLabelByID("Lab" + attr.KeyOfEn);
-                        string ctlID = mytbLine.ClientID;
-                        lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + md.No + "')\">默认值</a>";
-                        this.Pub1.AddTDEnd();
-                        this.Pub1.AddTREnd();
-                        continue;
-                    }
-
-                    if (attr.IsBigDoc)
-                    {
-                        /*如果是大文本, 并且没有整列显示它.*/
-                        if (colSpan == md.TableCol)
-                        {
-                            /*已经加满了*/
-                            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' " + gfAttr);
-                            colSpan = colSpan - attr.ColSpan; // 减去已经占用的col.
-                        }
-
-                        this.Pub1.Add("<TD  colspan=" + attr.ColSpan + " width='50%' height='" + attr.UIHeight.ToString() + "px' >");
-                        this.Pub1.Add("<span height='" + attr.UIHeight.ToString() + "px' style='float:left'>" + this.GenerLab(attr, 0, count) + "</span>");
-                        this.Pub1.Add("<span height='" + attr.UIHeight.ToString() + "px' style='float:right'>");
-                        Label lab = new Label();
-                        lab.ID = "Lab" + attr.KeyOfEn;
-                        lab.Text = "默认值";
-                        this.Pub1.Add(lab);
-                        this.Pub1.Add("</span>");
-
-                        TB mytbLine = new TB();
-                        mytbLine.TextMode = TextBoxMode.MultiLine;
-                        mytbLine.Attributes["class"] = "TBDoc"; // "width:100%;padding: 0px;margin: 0px;";
-                        mytbLine.ID = "TB_" + attr.KeyOfEn;
-                        mytbLine.Enabled = attr.UIIsEnable;
-                        if (mytbLine.Enabled == false)
-                            mytbLine.Attributes["class"] = "TBReadonly";
-                        mytbLine.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
-                        this.Pub1.Add(mytbLine);
-
-                        lab = this.Pub1.GetLabelByID("Lab" + attr.KeyOfEn);
-                        string ctlID = mytbLine.ClientID;
-                        lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + md.No + "','" + attr.KeyOfEn + "')\">默认值</a>";
-                        this.Pub1.AddTDEnd();
-                        this.InsertObjects(false);
-                        continue;
-                    }
-                    #endregion 处理两种状态下的大块文本.
-
                     /* 
                      * 以下就是一列标签一列控件的方式展现了.
                      */
 
-                    #region  首先判断当前剩余的单元格是否满足当前控件的需要。
-                    if (attr.ColSpan + 1 > md.TableCol)
-                        attr.ColSpan = md.TableCol - 1; //如果设置的
-
-                    if (colSpan < attr.ColSpan + 1 || colSpan == 1 || colSpan == 0)
-                    {
-                        /*如果剩余的列不能满足当前的单元格，就补充上它，让它换行.*/
-                        this.Pub1.AddTD("colspan=" + colSpan, "");
-                        this.Pub1.AddTREnd();
-
-                        colSpan = md.TableCol;
-                        this.Pub1.AddTR();
-                    }
-                    #endregion  首先判断当前剩余的单元格是否满足当前控件的需要。
-
                     #region 增加控件与描述.
-                    // 增加上描述.
-                    colSpan = colSpan - 1 - attr.ColSpan; // 首先减去当前的占位.
-
+                  
                     TB tb = new TB();
                     tb.Attributes["width"] = "100%";
                     tb.ID = "TB_" + attr.KeyOfEn;
@@ -483,20 +379,139 @@ namespace CCFlow.WF.MapDef
                             switch (attr.MyDataType)
                             {
                                 case BP.DA.DataType.AppString:
-                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                    tb.ShowType = TBType.TB;
-                                    tb.Text = attr.DefVal;
 
-                                    if (attr.UIIsEnable == false)
-                                        tb.CssClass = "TBReadonly";
+                                    #region 大块文本的输出.
+                                    if ( attr.IsBigDoc == true)
+                                    {
+                                        if (attr.ColSpan == 1)
+                                        {
+                                            if (isLeft == true)
+                                            {
+                                                // 如果是灌满的状态.
+                                                this.Pub1.AddTR();
+                                            }
 
-                                    if (attr.IsSigan)
-                                        this.Pub1.AddTD("colspan=" + attr.ColSpan, "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
-                                    else
-                                        this.Pub1.AddTD("colspan=" + attr.ColSpan, tb);
+                                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
+                                            this.Pub1.Add("<TD colspan=" + md.TableCol + " width='100%' height='" + attr.UIHeight.ToString() + "px' >");
+                                            this.Pub1.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + this.GenerLab(attr, 0, count) + "</span>");
+                                            this.Pub1.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
+
+                                            Label lab = new Label();
+                                            lab.ID = "Lab" + attr.KeyOfEn;
+                                            lab.Text = "默认值";
+                                            this.Pub1.Add(lab);
+                                            this.Pub1.Add("</span><br>");
+
+                                            TB mytbLine = new TB();
+                                            mytbLine.ID = "TB_" + attr.KeyOfEn;
+                                            mytbLine.TextMode = TextBoxMode.MultiLine;
+                                            mytbLine.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
+                                            mytbLine.Enabled = attr.UIIsEnable;
+                                            this.Pub1.Add(mytbLine);
+                                            mytbLine.Attributes["width"] = "100%";
+                                            lab = this.Pub1.GetLabelByID("Lab" + attr.KeyOfEn);
+                                            string ctlID = mytbLine.ClientID;
+                                            lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + md.No + "')\">默认值</a>";
+                                            this.Pub1.AddTDEnd();
+
+                                            if (isLeft == false)
+                                            {
+                                                this.Pub1.AddTREnd();
+                                                isLeft = true;
+                                            }
+                                        }
+
+                                        if (attr.ColSpan == 3 || attr.ColSpan == 4)
+                                        {
+                                            if (isLeft == false)
+                                            {
+                                                this.Pub1.AddTD("colspan=2", "");
+                                                this.Pub1.AddTREnd();
+                                                isLeft = true;
+                                            }
+
+                                            this.Pub1.AddTR();
+                                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
+                                            this.Pub1.Add("<TD colspan=" + md.TableCol + " width='100%' height='" + attr.UIHeight.ToString() + "px' >");
+                                            this.Pub1.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + this.GenerLab(attr, 0, count) + "</span>");
+                                            this.Pub1.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
+
+                                            Label lab = new Label();
+                                            lab.ID = "Lab" + attr.KeyOfEn;
+                                            lab.Text = "默认值";
+                                            this.Pub1.Add(lab);
+                                            this.Pub1.Add("</span><br>");
+
+                                            TB mytbLine = new TB();
+                                            mytbLine.ID = "TB_" + attr.KeyOfEn;
+                                            mytbLine.TextMode = TextBoxMode.MultiLine;
+                                            mytbLine.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
+                                            mytbLine.Enabled = attr.UIIsEnable;
+                                            this.Pub1.Add(mytbLine);
+                                            mytbLine.Attributes["width"] = "100%";
+                                            lab = this.Pub1.GetLabelByID("Lab" + attr.KeyOfEn);
+                                            string ctlID = mytbLine.ClientID;
+                                            lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + md.No + "')\">默认值</a>";
+                                            this.Pub1.AddTDEnd();
+                                            this.Pub1.AddTREnd();
+                                        }
+                                        continue;
+                                    }
+                                    #endregion 大块文本的输出.
+
+                                    #region 整行输出.
+                                    if (attr.ColSpan == 3)
+                                    {
+                                        if (isLeft == false)
+                                        {
+                                            this.Pub1.AddTD();
+                                            this.Pub1.AddTREnd();
+                                            isLeft = true;
+                                        }
+
+                                        this.Pub1.AddTR();
+                                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                        tb.ShowType = TBType.TB;
+                                        tb.Text = attr.DefVal;
+
+                                        if (attr.UIIsEnable == false)
+                                            tb.CssClass = "TBReadonly";
+
+                                        if (attr.IsSigan)
+                                            this.Pub1.AddTD("colspan=3", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                        else
+                                            this.Pub1.AddTD("colspan=3", tb);
+
+                                        this.Pub1.AddTREnd();
+                                        continue;
+                                    }
+                                    #endregion 整行输出.
+
+                                    #region 单行输出.
+                                    if (attr.ColSpan == 1)
+                                    {
+                                        if (isLeft == true)
+                                            this.Pub1.AddTR();
+
+                                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                        tb.ShowType = TBType.TB;
+                                        tb.Text = attr.DefVal;
+
+                                        if (attr.UIIsEnable == false)
+                                            tb.CssClass = "TBReadonly";
+
+                                        if (attr.IsSigan)
+                                            this.Pub1.AddTD("colspan=1", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                        else
+                                            this.Pub1.AddTD("colspan=1", tb);
+                                    }
+                                    #endregion 单行输出.
 
                                     break;
                                 case BP.DA.DataType.AppDate:
+                                    if (isLeft == true)
+                                        this.Pub1.AddTR();
+
                                     this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                     TB tbD = new TB();
                                     tbD.Text = attr.DefVal;
@@ -511,9 +526,13 @@ namespace CCFlow.WF.MapDef
                                         tbD.ReadOnly = true;
                                         tbD.Attributes["class"] = "TBcalendar";
                                     }
-                                    this.Pub1.AddTD("colspan=" + attr.ColSpan, tbD);
+                                    this.Pub1.AddTD(" colspan=1", tbD);
                                     break;
                                 case BP.DA.DataType.AppDateTime:
+
+                                    if (isLeft == true)
+                                        this.Pub1.AddTR();
+
                                     this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                     TB tbDT = new TB();
                                     tbDT.Text = attr.DefVal;
@@ -528,39 +547,50 @@ namespace CCFlow.WF.MapDef
                                         tbDT.ReadOnly = true;
                                         tbDT.Attributes["class"] = "TBcalendar";
                                     }
-                                    this.Pub1.AddTD("colspan=" + attr.ColSpan, tbDT);
+                                    this.Pub1.AddTD(" colspan=1", tbDT);
                                     break;
                                 case BP.DA.DataType.AppBoolean:
+                                    if (isLeft == true)
+                                        this.Pub1.AddTR();
+
                                     this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                     CheckBox cb = new CheckBox();
                                     cb.Text = attr.Name;
                                     cb.Checked = attr.DefValOfBool;
                                     cb.Enabled = attr.UIIsEnable;
                                     cb.ID = "CB_" + attr.KeyOfEn;
-                                    this.Pub1.AddTD("  colspan=" + attr.ColSpan, cb);
+                                    this.Pub1.AddTD(" colspan=1", cb);
                                     break;
                                 case BP.DA.DataType.AppDouble:
                                 case BP.DA.DataType.AppFloat:
                                 case BP.DA.DataType.AppInt:
+                                    if (isLeft == true)
+                                        this.Pub1.AddTR();
+
                                     this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                     tb.ShowType = TBType.Num;
                                     tb.Text = attr.DefVal;
                                     if (attr.IsNull)
                                         tb.Text = "";
-                                    this.Pub1.AddTD("  colspan=" + attr.ColSpan, tb);
+                                    this.Pub1.AddTD(" colspan=1", tb);
                                     break;
                                 case BP.DA.DataType.AppMoney:
                                 case BP.DA.DataType.AppRate:
+
+                                    if (isLeft == true)
+                                        this.Pub1.AddTR();
+
                                     this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                     tb.ShowType = TBType.Moneny;
                                     tb.Text = attr.DefVal;
                                     if (attr.IsNull)
                                         tb.Text = "";
-                                    this.Pub1.AddTD(" colspan=" + attr.ColSpan, tb);
+                                    this.Pub1.AddTD(" colspan=1", tb);
                                     break;
                                 default:
                                     break;
                             }
+                             
 
                             tb.Attributes["width"] = "100%";
                             switch (attr.MyDataType)
@@ -584,8 +614,9 @@ namespace CCFlow.WF.MapDef
                         case FieldTypeS.Enum:
                             if (attr.UIContralType == UIContralType.DDL)
                             {
+                                if (isLeft == true)
+                                    this.Pub1.AddTR();
                                 this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-
                                 DDL ddle = new DDL();
                                 ddle.ID = "DDL_" + attr.KeyOfEn;
                                 ddle.BindSysEnum(attr.UIBindKey);
@@ -595,7 +626,78 @@ namespace CCFlow.WF.MapDef
                             }
                             else
                             {
-                                this.Pub1.Add("<TD class=TD colspan='" + attr.ColSpan + "'>");
+                                if (attr.ColSpan == 1)
+                                {
+                                    if (isLeft == true)
+                                        this.Pub1.AddTR();
+
+                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                    this.Pub1.AddTDBegin();
+                                    SysEnums ses = new SysEnums(attr.UIBindKey);
+                                    foreach (SysEnum item in ses)
+                                    {
+                                        RadioButton rb = new RadioButton();
+                                        rb.ID = "RB_" + attr.KeyOfEn + "_" + item.IntKey;
+                                        rb.Text = item.Lab;
+                                        if (item.IntKey.ToString() == attr.DefVal)
+                                            rb.Checked = true;
+                                        else
+                                            rb.Checked = false;
+                                        rb.GroupName = item.EnumKey + attr.KeyOfEn;
+                                        this.Pub1.Add(rb);
+                                        if (attr.RBShowModel == 1)
+                                            this.Pub1.AddBR();
+                                    }
+                                    this.Pub1.AddTDEnd();
+                                }
+
+                                if (attr.ColSpan == 3)
+                                {
+                                    if (isLeft == false)
+                                    {
+                                        /*补充空白行.*/
+                                        this.Pub1.AddTD();
+                                        this.Pub1.AddTD();
+                                        this.Pub1.AddTREnd();
+                                        isLeft = true;
+                                    }
+
+                                    this.Pub1.AddTR();
+                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                    this.Pub1.AddTDBegin("colspan=3");
+                                    SysEnums ses = new SysEnums(attr.UIBindKey);
+                                    foreach (SysEnum item in ses)
+                                    {
+                                        RadioButton rb = new RadioButton();
+                                        rb.ID = "RB_" + attr.KeyOfEn + "_" + item.IntKey;
+                                        rb.Text = item.Lab;
+                                        if (item.IntKey.ToString() == attr.DefVal)
+                                            rb.Checked = true;
+                                        else
+                                            rb.Checked = false;
+                                        rb.GroupName = item.EnumKey + attr.KeyOfEn;
+                                        this.Pub1.Add(rb);
+                                        if (attr.RBShowModel == 1)
+                                            this.Pub1.AddBR();
+                                    }
+                                    this.Pub1.AddTDEnd();
+                                    this.Pub1.AddTREnd();
+                                }
+                            }
+
+                            if (attr.ColSpan == 4)
+                            {
+                                if (isLeft == false)
+                                {
+                                    /*补充空白行.*/
+                                    this.Pub1.AddTD();
+                                    this.Pub1.AddTD();
+                                    this.Pub1.AddTREnd();
+                                    isLeft = true;
+                                }
+
+                                this.Pub1.AddTR();
+                                this.Pub1.AddTDBegin("colspan=4");
                                 this.Pub1.Add(this.GenerLab(attr, i, count));
 
                                 SysEnums ses = new SysEnums(attr.UIBindKey);
@@ -610,11 +712,17 @@ namespace CCFlow.WF.MapDef
                                         rb.Checked = false;
                                     rb.GroupName = item.EnumKey + attr.KeyOfEn;
                                     this.Pub1.Add(rb);
+                                    if (attr.RBShowModel == 1)
+                                        this.Pub1.AddBR();
                                 }
                                 this.Pub1.AddTDEnd();
+                                this.Pub1.AddTREnd();
                             }
                             break;
                         case FieldTypeS.FK:
+                            if (isLeft == true)
+                                this.Pub1.AddTR();
+
                             this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                             DDL ddl1 = new DDL();
                             ddl1.ID = "DDL_" + attr.KeyOfEn;
@@ -629,31 +737,29 @@ namespace CCFlow.WF.MapDef
                             {
                             }
                             ddl1.Enabled = attr.UIIsEnable;
-                            this.Pub1.AddTD("colspan=" + attr.ColSpan, ddl1);
+                            this.Pub1.AddTD("colspan=1", ddl1);
                             break;
                         default:
                             break;
                     }
                     #endregion 增加控件.
 
-                } // end循环分组.
+                    if (isLeft == false)
+                    {
+                        this.Pub1.AddTREnd();
+                    }
 
-                if (colSpan == 0)
+                    isLeft = !isLeft;
+
+                } // end循环字段分组.
+
+                if (isLeft == false)
                 {
-                    colSpan = md.TableCol;
+                    this.Pub1.AddTD();
+                    this.Pub1.AddTD();
                     this.Pub1.AddTREnd();
-                    this.InsertObjects(false);
                 }
 
-                // 在分组后处理它, 首先判断当前剩余的单元格是否满足当前控件的需要。
-                if (colSpan != md.TableCol)
-                {
-                    /*如果剩余的列不能满足当前的单元格，就补充上它，让它换行.*/
-                    this.Pub1.AddTD("colspan=" + colSpan, "");
-                    this.Pub1.AddTREnd();
-                    this.InsertObjects(false);
-                    colSpan = md.TableCol;
-                }
             } // end循环分组.
             
             this.Pub1.AddTableEnd();
@@ -816,242 +922,6 @@ namespace CCFlow.WF.MapDef
             #endregion 处理隐藏字段。
         }
 
-        public void InsertObjects(bool isJudgeRowIdx)
-        {
-            return; 
-
-            //#region 增加从表
-            //foreach (MapDtl dtl in dtls)
-            //{
-            //    if (dtl.IsUse)
-            //        continue;
-
-            //    if (isJudgeRowIdx)
-            //    {
-            //        if (dtl.RowIdx != rowIdx)
-            //            continue;
-            //    }
-
-            //    if (dtl.GroupID == 0 && rowIdx == 0)
-            //    {
-            //        dtl.GroupID = currGF.OID;
-            //        dtl.RowIdx = 0;
-            //        dtl.Update();
-            //    }
-            //    else if (dtl.GroupID == currGF.OID)
-            //    {
-
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-
-            //    dtl.IsUse = true;
-            //    int myidx = rowIdx + 10;
-            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-
-            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddFGroup('" + dtl.No + "');\"><img src='../../Img/Btn/New.gif' border=0/>插入列组</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.HidAttr('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>隐藏字段</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.DtlMTR('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>多表头</a> <a href='Action.aspx?FK_MapData=" + dtl.No + "' >从表事件</a> <a href=\"javascript:DtlDoUp('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
-            //    this.Pub1.AddTREnd();
-
-            //    myidx++;
-            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + dtl.No + "' height='400px' width='" + this.md.TableWidth + "' > ");
-            //    string src = "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
-            //    this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "'  width='" + this.md.TableWidth + "' height='200px' scrolling=no  /></iframe>");
-            //    this.Pub1.AddTDEnd();
-            //    this.Pub1.AddTREnd();
-            //}
-            //#endregion 增加从表
-
-            //#region 增加附件
-            //foreach (FrmAttachment ath in this.aths)
-            //{
-            //    if (ath.IsUse)
-            //        continue;
-
-            //    if (isJudgeRowIdx)
-            //    {
-            //        if (ath.RowIdx != rowIdx)
-            //            continue;
-            //    }
-
-            //    if (ath.GroupID == 0 && rowIdx == 0)
-            //    {
-            //        ath.GroupID = currGF.OID;
-            //        ath.RowIdx = 0;
-            //        ath.Update();
-            //    }
-            //    else if (ath.GroupID == currGF.OID)
-            //    {
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-
-            //    ath.IsUse = true;
-            //    int myidx = rowIdx + 10;
-            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:AthDoUp('" + ath.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:AthDoDown('" + ath.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
-            //    this.Pub1.AddTREnd();
-
-            //    myidx++;
-            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='" + md.TableWidth + "' >");
-
-            //    string src = "../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
-
-            //    //if (dtl.IsAutoSize)
-            //    //    this.Pub1.Add("<iframe ID='F" + dtl.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
-            //    //else
-
-            //    this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + ath.W + "' height='" + ath.H + "' scrolling=auto  /></iframe>");
-
-            //    this.Pub1.AddTDEnd();
-            //    this.Pub1.AddTREnd();
-            //}
-            //#endregion 增加附件
-
-            //#region 增加M2M
-            //foreach (MapM2M m2m in dot2dots)
-            //{
-            //    if (m2m.IsUse)
-            //        continue;
-
-            //    if (isJudgeRowIdx)
-            //    {
-            //        if (m2m.RowIdx != rowIdx)
-            //            continue;
-            //    }
-
-            //    if (m2m.GroupID == 0 && rowIdx == 0)
-            //    {
-            //        m2m.GroupID = currGF.OID;
-            //        m2m.RowIdx = 0;
-            //        m2m.Update();
-            //    }
-            //    else if (m2m.GroupID == currGF.OID)
-            //    {
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-
-            //    m2m.IsUse = true;
-            //    int myidx = rowIdx + 10;
-            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            //    this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditM2M('" + this.FK_MapData + "','" + m2m.NoOfObj + "')\" >" + m2m.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:M2MDoUp('" + m2m.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:M2MDoDown('" + m2m.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
-            //    this.Pub1.AddTREnd();
-
-            //    myidx++;
-            //    string src = "";
-            //    if (m2m.HisM2MType == M2MType.M2M)
-            //        src = "../CCForm/M2M.aspx?FK_MapData=" + this.FK_MapData + "&NoOfObj=" + m2m.NoOfObj + "&OID=0";
-            //    else
-            //        src = "../CCForm/M2MM.aspx?FK_MapData=" + this.FK_MapData + "&NoOfObj=" + m2m.NoOfObj + "&OID=0";
-
-            //    switch (m2m.ShowWay)
-            //    {
-            //        case FrmShowWay.FrmAutoSize:
-            //            //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
-            //            //this.Pub1.Add("<TD colspan=4 ID='TD" + m2m.NoOfObj + "' width='100%'>");
-            //            //this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%'   scrolling=no  /></iframe>");
-            //            //this.Pub1.AddTDEnd();
-            //            //this.Pub1.AddTREnd();
-
-            //            myidx++;
-            //            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            //            this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + m2m.NoOfObj + "' height='50px' width='1000px'>");
-            //            this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
-            //            this.Pub1.AddTDEnd();
-            //            this.Pub1.AddTREnd();
-            //            break;
-            //        case FrmShowWay.FrmSpecSize:
-            //            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
-            //            this.Pub1.Add("<TD colspan=" + md.TableCol + "ID='TD" + m2m.NoOfObj + "' height='" + m2m.H + "' width='" + m2m.W + "'  >");
-            //            this.Pub1.Add("<iframe ID='F" + m2m.NoOfObj + "' src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-            //            this.Pub1.AddTDEnd();
-            //            this.Pub1.AddTREnd();
-            //            break;
-            //        case FrmShowWay.Hidden:
-            //            break;
-            //        case FrmShowWay.WinOpen:
-            //            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "'");
-            //            this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%' >");
-            //            this.Pub1.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
-            //            this.Pub1.AddTDEnd();
-            //            this.Pub1.AddTREnd();
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //}
-            //#endregion 增加M2M
-
-            //#region 增加框架
-            //foreach (MapFrame fram in frams)
-            //{
-            //    if (fram.IsUse)
-            //        continue;
-
-            //    if (isJudgeRowIdx)
-            //    {
-            //        if (fram.RowIdx != rowIdx)
-            //            continue;
-            //    }
-
-            //    if (fram.GroupID == 0 && rowIdx == 0)
-            //    {
-            //        fram.GroupID = currGF.OID;
-            //        fram.RowIdx = 0;
-            //        fram.Update();
-            //    }
-            //    else if (fram.GroupID == currGF.OID)
-            //    {
-
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-
-            //    fram.IsUse = true;
-            //    int myidx = rowIdx + 20;
-            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            //    // this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.AddF('" + dtl.No + "');\"><img src='../../Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='../../Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:DtlDoUp('" + dtl.No + "')\" ><img src='../../Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:DtlDoDown('" + dtl.No + "')\" ><img src='../../Img/Btn/Down.gif' border=0/></a></div></td>");
-            //    this.Pub1.Add("<TD colspan=" + md.TableCol + " class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:FrameDoUp('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:FrameDoDown('" + fram.MyPK + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div></td>");
-            //    this.Pub1.AddTREnd();
-
-            //    myidx++;
-            //    this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            //    if (fram.IsAutoSize)
-            //        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + fram.MyPK + "' height='50px' width='1000px'>");
-            //    else
-            //        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + fram.MyPK + "' height='" + fram.H + "' width='" + fram.W + "' >");
-
-
-            //    string src = fram.URL; // "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + fram.No;
-            //    if (src.Contains("?"))
-            //        src += "&FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
-            //    else
-            //        src += "?FK_Node=" + this.RefNo + "&WorkID=" + this.RefOID;
-
-            //    if (fram.IsAutoSize)
-            //        this.Pub1.Add("<iframe ID='F" + fram.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='100%' scrolling=no  /></iframe>");
-            //    else
-            //        this.Pub1.Add("<iframe ID='F" + fram.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + fram.W + "' height='" + fram.H + "' scrolling=no  /></iframe>");
-
-            //    //  this.Pub1.Add("<iframe ID='F" + fram.No + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='" + fram.W + "px' height='" + fram.H + "px' scrolling=no /></iframe>");
-
-            //    this.Pub1.AddTDEnd();
-            //    this.Pub1.AddTREnd();
-            //}
-            //#endregion 增加从表
-        }
-
         #region varable.
         private FrmAttachments _aths;
         public FrmAttachments aths
@@ -1110,48 +980,7 @@ namespace CCFlow.WF.MapDef
         public bool isLeftNext = true;
         #endregion varable.
 
-        public string GenerLab_arr(MapAttr attr, int idx, int i, int count)
-        {
-            string divAttr = " onmouseover=FieldOnMouseOver('" + attr.MyPK + "') onmouseout=FieldOnMouseOut('" + attr.MyPK + "') ";
-            string lab = attr.Name;
-            if (attr.MyDataType == DataType.AppBoolean && attr.UIIsLine)
-                lab = "编辑";
-
-            if (attr.HisEditType == EditType.Edit || attr.HisEditType == EditType.UnDel)
-            {
-                switch (attr.LGType)
-                {
-                    case FieldTypeS.Normal:
-                        lab = "<a  href=\"javascript:Edit('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
-                        break;
-                    case FieldTypeS.FK:
-                        lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
-                        break;
-                    case FieldTypeS.Enum:
-                        lab = "<a  href=\"javascript:EditEnum('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                lab = attr.Name;
-            }
-
-            if (idx == 0)
-            {
-                /*第一个。*/
-                return "<div " + divAttr + " >" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Right.gif' class='Arrow' alt='向右动顺序' border=0/></a></div>";
-            }
-
-            if (idx == count - 1)
-            {
-                /*到数第一个。*/
-                return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Left.gif' alt='向左移动顺序' class='Arrow' border=0/></a>" + lab + "</div>";
-            }
-            return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Left.gif' alt='向下移动顺序' class='Arrow' border=0/></a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Right.gif' alt='向右移动顺序' class='Arrow' border=0/></a></div>";
-        }
+        
         /// <summary>
         /// 字段or控件的顺序号.
         /// </summary>
@@ -1167,13 +996,7 @@ namespace CCFlow.WF.MapDef
         public string GenerLab(MapAttr attr, int i, int count)
         {
             idx++;
-
-            string divAttr = " onDragEnd=onDragEndF('" + attr.MyPK + "','" + attr.GroupID + "');  onDrag=onDragF('" + attr.MyPK + "','" + attr.GroupID + "'); ";
-            divAttr += " onDragOver=FieldOnMouseOver('" + attr.MyPK + "','" + attr.GroupID + "');  onDragEnter=FieldOnMouseOver('" + attr.MyPK + "','" + attr.GroupID + "'); ";
-            divAttr += " onDragLeave=FieldOnMouseOut();";
-
-            //divAttr += " onDragLeave=FieldOnMouseOut('" + attr.MyPK + "','" + attr.GroupID + "');";
-
+            string divAttr = "";
             string lab = attr.Name;
             if (attr.MyDataType == DataType.AppBoolean && attr.UIIsLine)
                 lab = "编辑";
@@ -1213,61 +1036,6 @@ namespace CCFlow.WF.MapDef
                 return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-left',plain:true\" alt='向左动顺序'> </a>" + lab + "</div>";
             }
             return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-left',plain:true\" alt='向左动顺序'> </a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-right',plain:true\" alt='向右动顺序'> </a></div>";
-
-            //if (idx == 0)
-            //{
-            //    /*第一个。*/
-            //    return "<div " + divAttr + " >" + lab + "</div>";
-            //}
-
-            //if (idx == count - 1)
-            //{
-            //    /*到数第一个。*/
-            //    return "<div " + divAttr + " >" + lab + "</div>";
-            //}
-            //return "<div " + divAttr + " >" + lab + "</div>";
-        }
-        public string GenerLab_bak(MapAttr attr, int idx, int i, int count)
-        {
-            string divAttr = " onDragEnd=onDragEndF('" + attr.MyPK + "','" + attr.GroupID + "')  onDrag=onDragF('" + attr.MyPK + "','" + attr.GroupID + "')  onMouseUp=alert('sss'); onmouseover=FieldOnMouseOver('" + attr.MyPK + "','" + attr.GroupID + "') onmouseout=FieldOnMouseOut('" + attr.MyPK + "','" + attr.GroupID + "') ";
-            string lab = attr.Name;
-            if (attr.MyDataType == DataType.AppBoolean && attr.UIIsLine)
-                lab = "编辑";
-
-            if (attr.HisEditType == EditType.Edit || attr.HisEditType == EditType.UnDel)
-            {
-                switch (attr.LGType)
-                {
-                    case FieldTypeS.Normal:
-                        lab = "<a  href=\"javascript:Edit('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
-                        break;
-                    case FieldTypeS.FK:
-                        lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
-                        break;
-                    case FieldTypeS.Enum:
-                        lab = "<a  href=\"javascript:EditEnum('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                lab = attr.Name;
-            }
-
-            if (idx == 0)
-            {
-                /*第一个。*/
-                return "<div " + divAttr + " >" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Right.gif' class='Arrow' alt='向右动顺序' border=0/></a></div>";
-            }
-
-            if (idx == count - 1)
-            {
-                /*到数第一个。*/
-                return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Left.gif' alt='向左移动顺序' class='Arrow' border=0/></a>" + lab + "</div>";
-            }
-            return "<div " + divAttr + " ><a href=\"javascript:Up('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Left.gif' alt='向下移动顺序' class='Arrow' border=0/></a>" + lab + "<a href=\"javascript:Down('" + this.FK_MapData + "','" + attr.MyPK + "','1');\" ><img src='../../Img/Btn/Right.gif' alt='向右移动顺序' class='Arrow' border=0/></a></div>";
         }
     }
 

@@ -69,7 +69,14 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 ses.Retrieve(SysEnumAttr.EnumKey, main.No);
             }
 
-            this.Pub1.AddTable();
+            if (this.EnumKey != null)
+            {
+                this.TB_No.Text = this.EnumKey;
+                this.TB_No.Enabled = false;
+            }
+            this.TB_Name.Text = main.Name;
+
+            this.Pub1.AddTable("width=100%");
             if (this.EnumKey == null)
                 this.Pub1.AddCaptionLeft("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>枚举字段</a> - 新建");
             else
@@ -81,48 +88,24 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 this.Title = "编辑枚举类型";
 
             this.Pub1.AddTR();
-            this.Pub1.AddTDTitle("&nbsp;");
-            this.Pub1.AddTDTitle("&nbsp;");
-            this.Pub1.AddTDTitle("备注");
-            this.Pub1.AddTREnd();
-
-            this.Pub1.AddTRSum();
-            this.Pub1.AddTD("编号");
-            BP.Web.Controls.TB tb = new BP.Web.Controls.TB();
-            tb.ID = "TB_No";
-            tb.Text = main.No;
-            if (this.EnumKey == null)
-                tb.Enabled = true;
-            else
-                tb.Enabled = false;
-
-            this.Pub1.AddTD(tb);
-            this.Pub1.AddTD("枚举英文名称");
-            this.Pub1.AddTREnd();
-
-            this.Pub1.AddTRSum();
-            this.Pub1.AddTD("名称");
-            tb = new BP.Web.Controls.TB();
-            tb.ID = "TB_Name";
-            tb.Text = main.Name;
-            this.Pub1.AddTD(tb);
-            this.Pub1.AddTD("枚举中文名称:");
+            this.Pub1.AddTDTitle("枚举值;");
+            this.Pub1.AddTDTitle("标签");
             this.Pub1.AddTREnd();
 
             int idx = 0;
+            bool istr = false;
             while (idx < 20)
             {
-                this.Pub1.AddTR();
+               istr= this.Pub1.AddTR(istr);
                 this.Pub1.AddTDIdx(idx);
-                tb = new BP.Web.Controls.TB();
+                BP.Web.Controls.TB tb = new BP.Web.Controls.TB();
                 tb.ID = "TB_" + idx;
+                tb.Columns = 70;
                 SysEnum se = ses.GetEntityByKey(SysEnumAttr.IntKey, idx) as SysEnum;
                 if (se != null)
                     tb.Text = se.Lab;
                 
-                //   tb.Text = en.Name;
                 this.Pub1.AddTD(tb);
-                this.Pub1.AddTD("");
                 this.Pub1.AddTREnd();
                 idx++;
             }
@@ -185,17 +168,19 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             // this.WinClose();
             return;
         }
-        void Btn_Save_Click(object sender, EventArgs e)
+        public void Btn_Save_Click(object sender, EventArgs e)
         {
             try
             {
                 SysEnumMain main = new SysEnumMain();
+                main.Name = this.TB_Name.Text;
+                main.No = this.TB_No.Text;
+
                 if (this.EnumKey == null)
                 {
-                    main.No = this.Pub1.GetTBByID("TB_No").Text;
+                    main.No = this.TB_No.Text;
                     if (main.IsExits)
                     {
-                        //this.Alert("编号（枚举英文名称）[" + main.No + "]已经存在。");
                         this.Alert("编号（枚举英文名称）[" + main.No + "]已经存在。");
                         return;
                     }
@@ -206,19 +191,11 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         this.Alert("编号（枚举英文名称）[" + main.No + "]已经存在。");
                         return;
                     }
+                    main.Name = this.TB_Name.Text;
+                }
 
-                    main = (SysEnumMain)this.Pub1.Copy(main);
-                    if (main.No.Length == 0 || main.Name.Length == 0)
-                        throw new Exception("编号与名称不能为空");
-                }
-                else
-                {
-                    main.No = this.EnumKey;
-                    main.Retrieve();
-                    main = (SysEnumMain)this.Pub1.Copy(main);
-                    if (main.No.Length == 0 || main.Name.Length == 0)
-                        throw new Exception("编号与名称不能为空");
-                }
+                if (main.No.Length == 0 || main.Name.Length == 0)
+                    throw new Exception("编号与名称不能为空");
 
                 string cfgVal = "";
                 int idx = -1;
@@ -253,40 +230,18 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
             catch (Exception ex)
             {
-                this.ResponseWriteBlueMsg(ex.Message);
-                //this.ToErrorPage(ex.Message);
-                //this.Alert(ex.Message);
+                this.Alert(ex.Message);
+                //this.ResponseWriteBlueMsg(ex.Message);
             }
 
         }
-        void Btn_Del_Click(object sender, EventArgs e)
+        public void Btn_Del_Click(object sender, EventArgs e)
         {
             try
             {
-                // 检查这个类型是否被使用？
-                MapAttrs attrs = new MapAttrs();
-                QueryObject qo = new QueryObject(attrs);
-                qo.AddWhere(MapAttrAttr.MyDataType, (int)FieldTypeS.Enum);
-                qo.addAnd();
-                qo.AddWhere(MapAttrAttr.KeyOfEn, this.EnumKey);
-                int i = qo.DoQuery();
-                if (i == 0)
-                {
-                    BP.Sys.SysEnums ses = new SysEnums();
-                    ses.Delete(BP.Sys.SysEnumAttr.EnumKey, this.EnumKey);
-
-                    BP.Sys.SysEnumMain m = new SysEnumMain();
-                    m.No = this.EnumKey;
-                    m.Delete();
-                    this.ToWFMsgPage("删除成功");
-                    return;
-                }
-
-                string msg = "错误:下列数据已经引用了枚举您不能删除它。"; // "错误:下列数据已经引用了枚举您不能删除它。";
-                foreach (MapAttr attr in attrs)
-                {
-                    msg += "\t\n" + attr.Field + "" + attr.Name + " Table = " + attr.FK_MapData;
-                }
+                SysEnumMain sem = new SysEnumMain(this.EnumKey);
+                sem.Delete();
+                this.ToWFMsgPage("删除成功");
                 return;
             }
             catch (Exception ex)
@@ -294,5 +249,27 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 this.ToErrorPage(ex.Message);
             }
         }
+
+        protected void Btn_SaveAndAddFrm_Click(object sender, EventArgs e)
+        {
+        }
+
+        protected void Btn_SaveAndClose_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (this.TB_No.Enabled == false)
+                return;
+
+            if (this.TB_Name.Text == "" || this.TB_Name.Text == null)
+                return;
+
+            this.TB_No.Text = BP.DA.DataType.ParseStringToPinyin(this.TB_Name.Text);
+        }
+
+     
     }
 }

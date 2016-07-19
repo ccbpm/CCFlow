@@ -90,7 +90,7 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
 
             bool isItem = false;
-           isItem= this.Pub1.AddTR(isItem);
+            isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("字段中文名");
             TB tb = new TB();
@@ -104,7 +104,7 @@ namespace CCFlow.WF.MapDef
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("字段英文名");
-             tb = new TB();
+            tb = new TB();
             if (this.MyPK != null)
             {
                 this.Pub1.AddTD(mapAttr.KeyOfEn);
@@ -175,15 +175,10 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("控件类型");
             this.Pub1.AddTDBegin();
-             rb = new RadioButton();
-             rb.ID = "RB_Ctrl_0";
+            rb = new RadioButton();
+            rb.ID = "RB_Ctrl_0";
             rb.Text = "下拉框";
             rb.GroupName = "Ctrl";
-            if (mapAttr.UIContralType == UIContralType.DDL)
-                rb.Checked = true;
-            else
-                rb.Checked = false;
-            //rb.Enabled = false;
             this.Pub1.Add(rb);
 
             rb = new RadioButton();
@@ -195,6 +190,7 @@ namespace CCFlow.WF.MapDef
                 rb.Checked = false;
             else
                 rb.Checked = true;
+
             this.Pub1.Add(rb);
             this.Pub1.AddTDEnd();
 
@@ -280,7 +276,7 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD("修改隶属分组");
             this.Pub1.AddTREnd();
             #endregion 字段分组
-            
+
             #region 扩展设置.
             if (this.MyPK != null)
             {
@@ -289,7 +285,7 @@ namespace CCFlow.WF.MapDef
                 string html = "<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">下拉框自动完成</a>";
                 html += " - <a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.ActiveDDL + "_" + mapAttr.MyPK + "')\">设置级联动(如:省份,城市联动)</a>";
                 html += " - <a href=\"javascript:WinOpen('./MapExt/RadioBtns.aspx?FK_MapData=" + mapAttr.FK_MapData + "&KeyOfEn=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">高级JS设置</a>";
-                this.Pub1.AddTD("colspan=3",html);
+                this.Pub1.AddTD("colspan=3", html);
                 this.Pub1.AddTREnd();
             }
             #endregion 扩展设置.
@@ -299,32 +295,32 @@ namespace CCFlow.WF.MapDef
             Button btn = new Button();
             btn.ID = "Btn_Save";
             btn.CssClass = "Btn";
-            btn.Text =" 保存 ";
-            btn.Click += new EventHandler(btn_Save_Click);
+            btn.Text = " 保存 ";
+            btn.Click += new EventHandler(Save_Click);
             this.Pub1.Add(btn);
 
             btn = new Button();
             btn.ID = "Btn_SaveAndClose";
             btn.CssClass = "Btn";
             btn.Text = "保存并关闭";
-            btn.Click += new EventHandler(btn_Save_Click);
+            btn.Click += new EventHandler(Save_Click);
             this.Pub1.Add(btn);
 
             btn = new Button();
             btn.ID = "Btn_SaveAndNew";
             btn.CssClass = "Btn";
             btn.Text = "保存并新建";
-            btn.Click += new EventHandler(btn_Save_Click);
+            btn.Click += new EventHandler(Save_Click);
             this.Pub1.Add(btn);
             if (this.MyPK != null)
             {
-                btn = new Button();
-                btn.ID = "Btn_AutoFull";
-                btn.CssClass = "Btn";
-                btn.Text = "扩展设置";
-                //  btn.Click += new EventHandler(btn_Save_Click);
-                btn.Attributes["onclick"] = "javascript:WinOpen('./MapExt/AutoFull.aspx?RefNo=" + this.RefNo + "&FK_MapData=" + mapAttr.FK_MapData + "',''); return false;";
-                this.Pub1.Add(btn);
+                //btn = new Button();
+                //btn.ID = "Btn_AutoFull";
+                //btn.CssClass = "Btn";
+                //btn.Text = "扩展设置";
+                ////  btn.Click += new EventHandler(btn_Save_Click);
+                //btn.Attributes["onclick"] = "javascript:WinOpen('./MapExt/AutoFull.aspx?RefNo=" + this.RefNo + "&FK_MapData=" + mapAttr.FK_MapData + "',''); return false;";
+                //this.Pub1.Add(btn);
 
                 if (mapAttr.HisEditType == EditType.Edit)
                 {
@@ -332,25 +328,22 @@ namespace CCFlow.WF.MapDef
                     btn.ID = "Btn_Del";
                     btn.CssClass = "Btn";
                     btn.Text = "删除";
-                    btn.Click += new EventHandler(btn_Save_Click);
+                    btn.Click += new EventHandler(Save_Click);
                     btn.Attributes["onclick"] = " return confirm('您确认吗？');";
                     this.Pub1.Add(btn);
                 }
 
                 string myUrl = "EleBatch.aspx?KeyOfEn=" + mapAttr.KeyOfEn + "&FK_MapData=" + mapAttr.FK_MapData + "&EleType=MapAttr";
-                this.Pub1.Add("<a href='" + myUrl + "' target='M"+mapAttr.KeyOfEn+"' ><img src='../../Img/Btn/Apply.gif' border=0>批处理</a>");
+                this.Pub1.Add("<a href='" + myUrl + "' target='M" + mapAttr.KeyOfEn + "' ><img src='../../Img/Btn/Apply.gif' border=0>批处理</a>");
             }
 
             string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
             this.Pub1.Add("<a href='" + url + "'><img src='../../Img/Btn/New.gif' border=0>新建</a></TD>");
 
-          
             this.Pub1.AddTREnd();
             this.Pub1.AddTableEndWithBR();
-
-
         }
-        void btn_Save_Click(object sender, EventArgs e)
+        void Save_Click(object sender, EventArgs e)
         {
             try
             {
@@ -386,13 +379,13 @@ namespace CCFlow.WF.MapDef
                 else
                     attr.UIContralType = UIContralType.RadioBtn;
 
-                attr.UIBindKey = this.EnumKey;
                 attr.MyDataType = BP.DA.DataType.AppInt;
                 attr.HisEditType = EditType.Edit;
                 attr.LGType = FieldTypeS.Enum;
 
                 if (this.MyPK == null)
                 {
+                    attr.UIBindKey = this.EnumKey;
                     attr.MyPK = this.FK_MapData + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
                     attr.KeyOfEn =  this.Pub1.GetTBByID("TB_KeyOfEn").Text;
                     if (attr.IsExits == true)

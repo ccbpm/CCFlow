@@ -4581,7 +4581,6 @@ namespace BP.WF
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 10, 3);
                 map.AddTBString(FlowAttr.Name, null, "名称", true, false, 0, 500, 10);
                 map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);
-                //map.AddTBString(FlowAttr.FK_FlowSort, null, "流程类别", true, false, 0, 10, 10);
                 map.AddTBInt(FlowAttr.FlowRunWay, 0, "运行方式", false, false);
 
                 //  map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);

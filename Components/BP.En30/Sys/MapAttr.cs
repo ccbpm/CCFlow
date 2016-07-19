@@ -808,6 +808,9 @@ namespace BP.Sys
                     return true;
             }
         }
+        /// <summary>
+        /// 所在的分组
+        /// </summary>
         public int GroupID
         {
             get
@@ -826,12 +829,7 @@ namespace BP.Sys
         {
             get
             {
-                if (this.UIRows > 1 && this.ColSpan==4 )
-                    return true;
-
-                return false;
-
-                if (this.MaxLen > 3000)
+                if (this.ColSpan == 4 && this.MyDataType == DataType.AppString)
                     return true;
                 return false;
             }

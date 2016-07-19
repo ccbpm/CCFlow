@@ -79,6 +79,33 @@ namespace BP.Sys
                 this.Insert();
             }
         }
+        protected override bool beforeDelete()
+        {
+            // 检查这个类型是否被使用？
+            MapAttrs attrs = new MapAttrs();
+            QueryObject qo = new QueryObject(attrs);
+            qo.AddWhere(MapAttrAttr.MyDataType, (int)FieldTypeS.Enum);
+            qo.addAnd();
+            qo.AddWhere(MapAttrAttr.KeyOfEn, this.No);
+            int i = qo.DoQuery();
+            if (i == 0)
+            {
+                BP.Sys.SysEnums ses = new SysEnums();
+                ses.Delete(BP.Sys.SysEnumAttr.EnumKey, this.No);
+            }
+            else
+            {
+                string msg = "错误:下列数据已经引用了枚举您不能删除它。"; // "错误:下列数据已经引用了枚举您不能删除它。";
+                foreach (MapAttr attr in attrs)
+                    msg += "\t\n" + attr.Field + "" + attr.Name + " Table = " + attr.FK_MapData;
+
+                //抛出异常，阻止删除.
+                throw new Exception(msg);
+            }
+
+            return base.beforeDelete();
+        }
+
         private void InitUnRegEnum()
         {
             //   DataTable dt = BP.DA.DBAccess.RunSQL("SELECT DISTINCT EnumKey FROM SYS_Enum WHERE EnumKey Not IN (SELECT No FROM SYS_EnumMain )");

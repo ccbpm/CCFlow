@@ -333,7 +333,7 @@ namespace BP.WF.Template
             attrs.RetrieveInSQL(sql);
             if (attrs.Count != 0)
             {
-                sql = "SELECT OID,Idx FROM Sys_GroupField WHERE EnName='ND17401' AND CtrlType='' ORDER BY Idx ";
+                sql = "SELECT OID,Idx FROM Sys_GroupField WHERE EnName='"+this.No+"' AND CtrlType='' ORDER BY Idx ";
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 GroupField gf;
                 if (dt.Rows.Count == 0)

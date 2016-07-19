@@ -31,46 +31,7 @@ namespace CCFlow.WF.Comm.RefFunc
         public int rowIdx = 0;
         public bool isLeftNext = true;
         #endregion add varable.
-         
-
-        public void InsertObjects2Col(bool isJudgeRowIdx)
-        {
-            foreach (MapDtl dtl in dtls)
-            {
-                if (dtl.IsUse)
-                    continue;
-
-                if (isJudgeRowIdx)
-                {
-                    if (dtl.RowIdx != rowIdx)
-                        continue;
-                }
-
-                if (dtl.GroupID == 0 && rowIdx == 0)
-                {
-                    dtl.GroupID = currGF.OID;
-                    dtl.RowIdx = 0;
-                    dtl.Update();
-                }
-                else if (dtl.GroupID == currGF.OID)
-                {
-
-                }
-                else
-                {
-                    continue;
-                }
-                dtl.IsUse = true;
-                rowIdx++;
-                // myidx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                string src = this.Request.ApplicationPath + "WF/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=1";
-                this.Add("<TD colspan=2 class=FDesc ID='TD" + dtl.No + "'><a href='" + src + "'>" + dtl.Name + "</a></TD>");
-                // this.Add("<iframe ID='F" + dtl.No + "' frameborder=0 Onblur=\"SaveDtl('" + dtl.No + "');\" style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' height='10px' scrolling=no  /></iframe>");
-                //this.AddTDEnd();
-                this.AddTREnd();
-            }
-        }
+        
         /// <summary>
         /// 绑定他
         /// </summary>
@@ -397,41 +358,7 @@ namespace CCFlow.WF.Comm.RefFunc
 
         public void InsertObjects(bool isJudgeRowIdx)
         {
-            foreach (MapDtl dtl in dtls)
-            {
-                if (dtl.IsUse)
-                    continue;
-
-                if (isJudgeRowIdx)
-                {
-                    if (dtl.RowIdx != rowIdx)
-                        continue;
-                }
-
-                if (dtl.GroupID == 0 && rowIdx == 0)
-                {
-                    dtl.GroupID = currGF.OID;
-                    dtl.RowIdx = 0;
-                    dtl.Update();
-                }
-                else if (dtl.GroupID == currGF.OID)
-                {
-
-                }
-                else
-                {
-                    continue;
-                }
-                dtl.IsUse = true;
-                rowIdx++;
-                // myidx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                this.Add("<TD colspan=4 ID='TD" + dtl.No + "' height='50px'>");
-                string src = this.Request.ApplicationPath + "WF/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal;
-                this.Add("<iframe ID='F" + dtl.No + "' frameborder=0 Onblur=\"SaveDtl('" + dtl.No + "');\" style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' height='10px' scrolling=no  /></iframe>");
-                this.AddTDEnd();
-                this.AddTREnd();
-            }
+            
         }
         #endregion
 

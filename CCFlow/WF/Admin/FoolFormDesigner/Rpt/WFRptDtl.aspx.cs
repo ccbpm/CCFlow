@@ -155,7 +155,6 @@ public partial class WF_MapDef_WFRptDtl : BP.Web.WebPage
                 dtlNew.Copy(dtl);
                 dtlNew.No = this.MyPK + i;
                 dtlNew.FK_MapData = this.MyPK;
-                dtlNew.GroupID = this.Pub1.GetDDLByID("DDL_" + dtl.No).SelectedItemIntVal;
                 dtlNew.Insert();
 
                 // 删除原来的数据。

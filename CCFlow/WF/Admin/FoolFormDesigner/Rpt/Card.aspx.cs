@@ -400,20 +400,7 @@ public partial class WF_MapDef_WFRpt : BP.Web.WebPage
             this.InsertObjects(false);
         }
         this.Pub1.AddTableEnd();
-
-
-        #region 处理异常情况。
-        foreach (MapDtl dtl in dtls)
-        {
-            if (dtl.IsUse == false)
-            {
-                dtl.RowIdx = 0;
-                dtl.GroupID = 0;
-                dtl.Update();
-                //    this.Response.Redirect(this.Request.RawUrl, true);
-            }
-        }
-        #endregion 处理异常情况。
+        
 
 
         #region 处理iFrom 的自适应的问题。
@@ -510,52 +497,6 @@ public partial class WF_MapDef_WFRpt : BP.Web.WebPage
 
     public void InsertObjects(bool isJudgeRowIdx)
     {
-        foreach (MapDtl dtl in dtls)
-        {
-            if (dtl.IsUse)
-                continue;
-
-            if (isJudgeRowIdx)
-            {
-                if (dtl.RowIdx != rowIdx)
-                    continue;
-            }
-
-            if (dtl.GroupID == 0 && rowIdx == 0)
-            {
-                dtl.GroupID = currGF.OID;
-                dtl.RowIdx = 0;
-                dtl.Update();
-            }
-            else if (dtl.GroupID == currGF.OID)
-            {
-
-            }
-            else
-            {
-                continue;
-            }
-
-
-            dtl.IsUse = true;
-            int myidx = rowIdx + 10;
-            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            this.Pub1.Add("<TD colspan=4 class=TRSum  ><div style='text-align:left; float:left'><a href=\"javascript:EditDtl('" + this.FK_MapData
-                + "','" + dtl.No + "')\" >" + dtl.Name + "</a></div><div style='text-align:right; float:right'><a href=\"javascript:document.getElementById('F" + dtl.No
-                + "').contentWindow.AddF('" + dtl.No + "');\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/New.gif' border=0/>插入列</a><a href=\"javascript:document.getElementById('F" + dtl.No
-                + "').contentWindow.CopyF('" + dtl.No + "');\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Copy.gif' border=0/>复制列</a><a href=\"javascript:DtlDoUp('" + dtl.No
-                + "')\" ><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Up.gif' border=0/></a> <a href=\"javascript:DtlDoDown('" + dtl.No
-                + "')\" ><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Down.gif' border=0/></a></div></td>");
-            this.Pub1.AddTREnd();
-
-            myidx++;
-            this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-            this.Pub1.Add("<TD colspan=4 ID='TD" + dtl.No + "' height='50px' width='1000px'>");
-            string src = BP.WF.Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
-            this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='10px' scrolling=no  /></iframe>");
-            this.Pub1.AddTDEnd();
-            this.Pub1.AddTREnd();
-        }
     }
 
     #region varable.

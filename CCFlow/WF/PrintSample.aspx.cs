@@ -1013,17 +1013,9 @@ namespace CCFlow.WF
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /*傻瓜表单*/
-                        MapData map = new MapData(nd.NodeFrmID);
-                        if (map.TableWidth.Contains("px"))
-                            Width = map.TableWidth.Replace("px", "");
-                        else
-                            Width = map.TableWidth + "";
-                        if (map.TableWidth.Equals("100%"))
-                            Width = "900";
+                        MapFoolForm map = new MapFoolForm(nd.NodeFrmID);
 
-
-                        Height = map.MaxEnd + "";
-                        this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px;overflow-x:scroll;' >");
+                        this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + ";height:" + map.TableHeight + "px;overflow-x:scroll;' >");
                         this.UCEn1.BindColumn4(wk, nd.NodeFrmID); //, false, false, null);
                         if (wk.WorkEndInfo.Length > 2)
                             this.Pub3.Add(wk.WorkEndInfo);

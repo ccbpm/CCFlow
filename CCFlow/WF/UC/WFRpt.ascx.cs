@@ -302,15 +302,9 @@ namespace CCFlow.WF.UC
 
                 if (nd.HisFormType == NodeFormType.FixForm)
                 {
-                    MapData map = new MapData( nd.NodeFrmID);
-                    if (map.TableWidth.Contains("px"))
-                        Width = map.TableWidth.Replace("px", "");
-                    else
-                        Width = map.TableWidth + "";
-                    if (map.TableWidth.Equals("100%"))
-                        Width = "900";
+                    MapFoolForm map = new MapFoolForm(nd.NodeFrmID);
 
-                    this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + map.FrmH + "px;overflow-x:scroll;' >");
+                    this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + ";height:" + map.TableHeight+ ";overflow-x:scroll;' >");
                     /*傻瓜表单*/
                     this.UCEn1.IsReadonly = true;
                     this.UCEn1.BindColumn4(wk, nd.NodeFrmID); //, false, false, null);

@@ -96,13 +96,13 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditEnum(mypk, refno) {
-            var url = 'EditEnum.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno;
+        function EditEnum(fk_mapdata, mypk) {
+            var url = 'EditEnum.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditTable(mypk, refno) {
-            var url = 'EditTable.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno;
+        function EditTable(fk_mapdata, mypk) {
+            var url = 'EditTable.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -346,7 +346,7 @@
        <uc1:Pub ID="UCCaption" runat="server" />
     </div>
 
-    <div align="center"  style=" vertical-align:middle;background-color:#d0d0d0;min-height:100%;*+height:100%;_height:100%;padding-top:10px;padding-bottom:10px;" >
+    <div align="center"  style="vertical-align:middle;background-color:#d0d0d0;min-height:100%;*+height:100%;_height:100%;padding-top:10px;padding-bottom:10px;" >
      <uc1:Pub ID="Pub1" runat="server" />
     </div>
 

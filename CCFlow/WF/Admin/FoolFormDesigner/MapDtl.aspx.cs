@@ -63,6 +63,12 @@ namespace CCFlow.WF.MapDef
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //if (this.Request.QueryString["FK_MapData"] != null && this.FK_MapDtl.Length > 2)
+            //{
+            //    this.Response.Redirect("/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&PK=" + this.FK_MapDtl+"&FK_MapData="+this.FK_MapData, true);
+            //    return;
+            //}
+
             MapData md = new MapData(this.FK_MapData);
             this.Title = md.Name + " - 设计明细";
             switch (this.DoType)
@@ -120,9 +126,7 @@ namespace CCFlow.WF.MapDef
                             }
                         }
                         dtlN.FK_MapData = this.FK_MapData;
-                        dtlN.GroupID = 0;
-                        dtlN.RowIdx = 0;
-
+                       
                         // 参数属性.
                         dtlN.DtlSaveModel = (DtlSaveModel)this.Pub1.GetDDLByID("DDL_"+MapDtlAttr.DtlSaveModel).SelectedItemIntVal;
                         dtlN.DtlAddRecModel = (DtlAddRecModel)this.Pub1.GetDDLByID("DDL_" + MapDtlAttr.DtlAddRecModel).SelectedItemIntVal;
@@ -169,15 +173,7 @@ namespace CCFlow.WF.MapDef
                         //锁定.
                         dtl.IsRowLock = this.Pub1.GetCBByID("CB_" + MapDtlAttr.IsRowLock).Checked;
 
-                        //分组字段。
-                        try
-                        {
-                            dtl.GroupField = this.Pub1.GetDDLByID("DDL_GroupField").SelectedItemStringVal;
-                        }
-                        catch
-                        {
-                        }
-
+                        
                         if (this.DoType == "New")
                         {
                             if (dtl.IsExits)
@@ -188,9 +184,7 @@ namespace CCFlow.WF.MapDef
                         }
 
                         dtl.FK_MapData = this.FK_MapData;
-                        GroupFields gfs = new GroupFields(dtl.FK_MapData);
-                        if (gfs.Count > 1)
-                            dtl.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
+                       
 
                         if (dtl.IsEnableAthM)
                         {
@@ -274,7 +268,10 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTable();
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("ID");
-            this.Pub1.AddTDTitle("colspan=3", "基本设置");
+
+            string url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&PK=" + this.FK_MapDtl + "&FK_MapData=" + this.FK_MapData;
+
+            this.Pub1.AddTDTitle("colspan=3", "基本设置 <div style='float:right'><a href='" + url + "'>高级设置</div>");
             this.Pub1.AddTREnd();
 
             int idx = 1;
@@ -326,31 +323,7 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
 
 
-            if (dtl.DtlModel == DtlModel.FixRow)
-            {
-                tb = new TB();
-                tb.ID = "TB_" + MapDtlAttr.ImpFixTreeSql;
-                tb.Text = dtl.ImpFixTreeSql;
-                tb.Columns = 80;
-
-                isItem = this.Pub1.AddTR(isItem);
-                this.Pub1.AddTDIdx(idx++);
-                this.Pub1.AddTD("树形结构数据源");
-                this.Pub1.AddTD("colspan=2", tb);
-                this.Pub1.AddTREnd();
-
-                tb = new TB();
-                tb.ID = "TB_" + MapDtlAttr.ImpFixDataSql;
-                tb.Text = dtl.ImpFixDataSql;
-                tb.Columns = 80;
-
-                this.Pub1.AddTR();
-                this.Pub1.AddTDIdx(idx++);
-                this.Pub1.AddTD("明细表数据源");
-                this.Pub1.AddTD("colspan=2", tb);
-                this.Pub1.AddTREnd();
-
-            }
+          
 
             #region 权限控制.
             CheckBox cb = new CheckBox();

@@ -41,51 +41,47 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["DoType"];
             }
         }
-        public string FType
+        public string FK_MapData
         {
             get
             {
-                return this.Request.QueryString["FType"];
+                return this.Request.QueryString["FK_MapData"];
             }
         }
-        public string IDX
+        public string EnumKey
         {
             get
             {
-                return this.Request.QueryString["IDX"];
+                return this.Request.QueryString["EnumKey"];
             }
         }
         #endregion 属性.
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //this.Response.Write(this.Request.RawUrl);
-            this.Title = "编辑枚举类型"; // "编辑枚举类型";
+            this.Title = "编辑枚举类型"; 
             MapAttr attr = null;
-
-            if (this.RefNo == null)
+            if (this.MyPK == null)
             {
                 attr = new MapAttr();
-                string enumKey = this.Request.QueryString["EnumKey"];
-                if (enumKey != null)
+                if (this.EnumKey != null)
                 {
-                    SysEnumMain se = new SysEnumMain(enumKey);
-                    attr.KeyOfEn = enumKey;
-                    attr.UIBindKey = enumKey;
-                    attr.Name = se.Name;
+                    SysEnumMain se = new SysEnumMain(this.EnumKey);
+                    attr.KeyOfEn = this.EnumKey;
+                    attr.UIBindKey = this.EnumKey;
                     attr.Name = se.Name;
                 }
             }
             else
             {
-                attr = new MapAttr(this.RefNo);
+                attr = new MapAttr(this.MyPK);
             }
             BindEnum(attr);
         }
         int idx = 1;
         public void BindEnum(MapAttr mapAttr)
         {
-            this.Pub1.AddTable();
+            this.Pub1.AddTable(" width='450px'");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("ID");
             this.Pub1.AddTDTitle("项目");
@@ -109,7 +105,7 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("字段英文名");
              tb = new TB();
-            if (this.RefNo != null)
+            if (this.MyPK != null)
             {
                 this.Pub1.AddTD(mapAttr.KeyOfEn);
             }
@@ -125,9 +121,6 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTD("字母/数字/下划线组合");
             else
                 this.Pub1.AddTD("<a href=\"javascript:clipboardData.setData('Text','" + mapAttr.KeyOfEn + "');alert('已经copy到粘帖版上');\" ><img src='../../Img/Btn/Copy.gif' class='ICON' />复制字段名</a></TD>");
-
-            // this.Pub1.AddTDTitle("&nbsp;");
-            //this.Pub1.AddTD("不要以数字开头、不要中文。");
             this.Pub1.AddTREnd();
 
 
@@ -140,7 +133,7 @@ namespace CCFlow.WF.MapDef
             ddl.BindSysEnum(mapAttr.UIBindKey);
             ddl.SetSelectItem(mapAttr.DefVal);
             this.Pub1.AddTD(ddl);
-            this.Pub1.AddTD("<a href='SysEnum.aspx?RefNo=" + mapAttr.UIBindKey+ "'>编辑</a>");
+            this.Pub1.AddTD("<a href='SysEnum.aspx?MyPK=" + mapAttr.UIBindKey + "'>编辑</a>");
             this.Pub1.AddTREnd();
 
 
@@ -190,8 +183,9 @@ namespace CCFlow.WF.MapDef
                 rb.Checked = true;
             else
                 rb.Checked = false;
-            rb.Enabled = false;
+            //rb.Enabled = false;
             this.Pub1.Add(rb);
+
             rb = new RadioButton();
             rb.ID = "RB_Ctrl_1";
             rb.Text = "单选按钮";
@@ -201,14 +195,18 @@ namespace CCFlow.WF.MapDef
                 rb.Checked = false;
             else
                 rb.Checked = true;
-            rb.Enabled = false;
             this.Pub1.Add(rb);
             this.Pub1.AddTDEnd();
 
-            this.Pub1.AddTD("");
+            ddl = new DDL();
+            ddl.ID = "DDL_RBShowModel";
+            ddl.Items.Add(new ListItem("横向展示", "0"));
+            ddl.Items.Add(new ListItem("竖向展示", "1"));
+            ddl.SetSelectItem(mapAttr.RBShowModel);
+            this.Pub1.AddTD(ddl);
+
             this.Pub1.AddTREnd();
             #endregion 展示控件
-
 
             #region 是否可界面可见
             isItem = this.Pub1.AddTR(isItem);
@@ -248,7 +246,6 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
             #endregion 是否可界面可见
 
-
             #region 合并单元格数
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
@@ -259,18 +256,11 @@ namespace CCFlow.WF.MapDef
             ddl.Items.Add(new ListItem("1", "1"));
             ddl.Items.Add(new ListItem("3", "3"));
             ddl.Items.Add(new ListItem("4", "4"));
-
-
-            //for (int i = 1; i < 12; i++)
-            //{
-            //    ddl.Items.Add(new ListItem(i.ToString(),i.ToString()));
-            //}
             ddl.SetSelectItem(mapAttr.ColSpan.ToString());
             this.Pub1.AddTD(ddl);
             this.Pub1.AddTD("对傻瓜表单有效");
             this.Pub1.AddTREnd();
             #endregion 合并单元格数
-
 
             #region 字段分组
             isItem = this.Pub1.AddTR(isItem);
@@ -292,7 +282,7 @@ namespace CCFlow.WF.MapDef
             #endregion 字段分组
             
             #region 扩展设置.
-            if (this.RefNo != null)
+            if (this.MyPK != null)
             {
                 isItem = this.Pub1.AddTR(isItem);
                 this.Pub1.AddTDIdx(idx++);
@@ -326,7 +316,7 @@ namespace CCFlow.WF.MapDef
             btn.Text = "保存并新建";
             btn.Click += new EventHandler(btn_Save_Click);
             this.Pub1.Add(btn);
-            if (this.RefNo != null)
+            if (this.MyPK != null)
             {
                 btn = new Button();
                 btn.ID = "Btn_AutoFull";
@@ -368,8 +358,8 @@ namespace CCFlow.WF.MapDef
                 switch (btn.ID)
                 {
                     case "Btn_Del":
-                           MapAttr attrDel = new MapAttr();
-                        attrDel.MyPK = this.RefNo;
+                        MapAttr attrDel = new MapAttr();
+                        attrDel.MyPK = this.MyPK;
                         attrDel.Delete();
                         this.WinClose();
                         return;
@@ -378,39 +368,38 @@ namespace CCFlow.WF.MapDef
                 }
 
                 MapAttr attr = new MapAttr();
-                attr.MyPK = this.RefNo;
-                if (this.RefNo != null)
+                attr.MyPK = this.MyPK;
+                if (this.MyPK != null)
                     attr.Retrieve();
+
                 attr = (MapAttr)this.Pub1.Copy(attr);
-                attr.FK_MapData = this.MyPK;
+                attr.FK_MapData = this.FK_MapData;
                 attr.DefVal = this.Pub1.GetDDLByID("DDL").SelectedItemStringVal;
                 attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
                 attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
+
+                //单选按钮的展现方式.
+                attr.RBShowModel = this.Pub1.GetDDLByID("DDL_RBShowModel").SelectedItemIntVal;
 
                 if (this.Pub1.GetRadioButtonByID("RB_Ctrl_0").Checked)
                     attr.UIContralType = UIContralType.DDL;
                 else
                     attr.UIContralType = UIContralType.RadioBtn;
 
-                if (this.RefNo == null)
+                attr.UIBindKey = this.EnumKey;
+                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.HisEditType = EditType.Edit;
+                attr.LGType = FieldTypeS.Enum;
+
+                if (this.MyPK == null)
                 {
-                    attr.MyPK = this.MyPK + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
-                    string idx = this.Request.QueryString["IDX"];
-                    if (idx == null || idx == "")
+                    attr.MyPK = this.FK_MapData + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
+                    attr.KeyOfEn =  this.Pub1.GetTBByID("TB_KeyOfEn").Text;
+                    if (attr.IsExits == true)
                     {
+                        this.Alert("@字段["+attr.KeyOfEn+"]已经存在.");
+                        return;
                     }
-                    else
-                    {
-                        attr.Idx = int.Parse(this.Request.QueryString["IDX"]);
-                    }
-
-                    string enumKey = this.Request.QueryString["EnumKey"];
-                    attr.UIBindKey = enumKey;
-                    attr.MyDataType = BP.DA.DataType.AppInt;
-                    attr.HisEditType = EditType.Edit;
-
-                    attr.UIContralType = UIContralType.DDL;
-                    attr.LGType = FieldTypeS.Enum;
                     attr.Insert();
                 }
                 else
@@ -424,13 +413,13 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
+                        this.Response.Redirect("FieldTypeList.aspx?FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField + "&EnumKey="+this.EnumKey, true);
                         return;
                     default:
                         break;
                 }
-                if (this.RefNo == null)
-                    this.Response.Redirect("EditEnum.aspx?DoType=Edit&MyPK=" + this.MyPK + "&RefNo=" + attr.MyPK + "&GroupField=" + this.GroupField, true);
+                if (this.MyPK == null)
+                    this.Response.Redirect("EditEnum.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&MyPK=" + attr.MyPK + "&GroupField=" + this.GroupField + "&EnumKey=" + this.EnumKey, true);
             }
             catch (Exception ex)
             {
@@ -442,9 +431,9 @@ namespace CCFlow.WF.MapDef
             get
             {
                 if (this.DoType == "Add")
-                    return "增加新字段向导 - <a href='Do.aspx?DoType=ChoseFType&GroupField=" + this.GroupField + "'>选择类型</a>";
+                    return "增加新字段向导 - <a href='Do.aspx?DoType=ChoseFType&GroupField=" + this.GroupField + "&FK_MapData="+this.FK_MapData+"'>选择类型</a>";
                 else
-                    return " <a href='Do.aspx?DoType=ChoseFType&MyPK=" + this.MyPK + "&RefNo=" + this.RefNo + "&GroupField=" + this.GroupField + "'>编辑</a>";
+                    return " <a href='FieldTypeList.aspx?DoType=ChoseFType&FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&GroupField=" + this.GroupField + "'>编辑</a>";
             }
         }
     }

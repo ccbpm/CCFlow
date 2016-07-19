@@ -94,18 +94,6 @@ namespace CCFlow.WF.MapDef
                 this.Pub2.AddTD(cb);
                 this.Pub2.AddTREnd();
 
-                foreach (MapDtl dtl in dtls)
-                {
-                    if (dtl.GroupID != gf.OID)
-                        continue;
-
-                    this.Pub2.AddTR();
-                    cb = new CheckBox();
-                    cb.ID = "CB" + dtl.No + "_" + dtl.GroupID;
-                    cb.Text =  "从表:" + dtl.Name;
-                    this.Pub2.AddTD(cb);
-                    this.Pub2.AddTREnd();
-                }
 
                 foreach (MapM2M m2m in m2ms)
                 {
@@ -283,10 +271,7 @@ namespace CCFlow.WF.MapDef
                     dtlNew.IsInsert = false;
                     dtlNew.IsUpdate = false;
                     dtlNew.IsDelete = false;
-
-                    dtlNew.GroupID = mygf.OID;
                     dtlNew.PTable = dtlNew.No;
-
                     dtlNew.Insert();
 
                     // 复制从表里面的明细。
@@ -301,7 +286,6 @@ namespace CCFlow.WF.MapDef
                         if (attrNew.DefVal.Contains("@"))
                             attrNew.DefVal = "";
 
-                        dtlNew.RowIdx = idx;
                         attrNew.HisEditType = EditType.Edit;
                         attrNew.Insert();
                     }

@@ -97,40 +97,12 @@ namespace CCFlow.WF.MapDef
         }
         #endregion 属性.
 
-        public void BindLeft()
-        {
-            BP.WF.XML.MapMenus xmls = new BP.WF.XML.MapMenus();
-            xmls.RetrieveAll();
-
-
-            #region bindleft
-            //this.UCCaption.AddUL();
-            foreach (BP.WF.XML.MapMenu item in xmls)
-            {
-                //this.UCCaption.Add("<li style='float:left;' ><a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" ><img src='" + item.Img + "' width='16px' /><b>" + item.Name + "</b></a></li>");
-                this.UCCaption.Add("<a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'" + item.Img + "'\">" + item.Name + "</a>");
-            }
-            //this.UCCaption.AddULEnd();
-            #endregion bindleft
-            return;
-
-            #region bindleft
-            //this.Left.Add("<a href='http://ccflow.org' target=_blank ><img src='../../DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png' border=0/></a>");
-            //this.Left.AddHR();
-            //this.Left.AddUL();
-            //foreach (BP.WF.XML.MapMenu item in xmls)
-            //{
-            //    this.Left.AddLi("<a href=\"" + item.JS.Replace("@MyPK", "'" + this.FK_MapData + "'").Replace("@FK_Flow", "'" + this.FK_Flow + "'") + "\" ><img src='" + item.Img + "' width='16px' /><b>" + item.Name + "</b></a><br><font color=green>" + item.Note + "</font>");
-            //}
-            //this.Left.AddULEnd();
-            #endregion bindleft
-        }
-        public MapData md = null;
+        public MapFoolForm md = null;
         protected void Page_Load(object sender, EventArgs e)
         {
 
             string fk_node = this.Request.QueryString["FK_Node"];
-            md = new MapData(this.FK_MapData);
+            md = new MapFoolForm(this.FK_MapData);
 
             //如果是第一次进入，就执行旧版本的升级检查.
             if (this.IsFirst == true)
@@ -144,18 +116,17 @@ namespace CCFlow.WF.MapDef
             MapAttrs mattrs = new MapAttrs(md.No);
             int count = mattrs.Count;
 
-          //  this.BindLeft();
-
             #region 计算出来列的宽度.
             //int labCol = 50;
            // int ctrlCol = 300;
           //  int width = (labCol + ctrlCol) * md.TableCol / 2;
          //   int width = md.FrmW; // (labCol + ctrlCol) * md.TableCol / 2;
-            int width = 800;
             #endregion 计算出来列的宽度.
 
-            this.Pub1.Add("<div style='width:" + width + "px;height:100%;background-color:white;border:1px solid #666;' align='center'>");
-            this.Pub1.Add("\t\n<Table style='width:" + width + "px;border:1px;'>");
+
+
+            this.Pub1.Add("<div style='width:" + md.TableWidth + ";height:"+md.TableHeight+";background-color:white;border:1px solid #666;' align='center'>");
+            this.Pub1.Add("\t\n<Table style='width:98%;border:1px;padding:5px;'>");
 
             int myidx = 0;
             string src = "";
@@ -687,19 +658,6 @@ namespace CCFlow.WF.MapDef
             
             this.Pub1.AddTableEnd();
             this.Pub1.AddDivEnd();
-
-            #region 处理异常情况。
-            foreach (MapDtl dtl in dtls)
-            {
-                if (dtl.IsUse == false)
-                {
-                    dtl.RowIdx = 0;
-                    dtl.GroupID = 0;
-                    dtl.Update();
-                    //    this.Response.Redirect(this.Request.RawUrl, true);
-                }
-            }
-            #endregion 处理异常情况。
 
             #region 处理扩展信息。
             MapExts mes = new MapExts(this.FK_MapData);

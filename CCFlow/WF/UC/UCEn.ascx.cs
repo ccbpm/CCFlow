@@ -668,6 +668,9 @@ namespace CCFlow.WF.UC
             this.EnName = enName;
             this.HisEn = en;
             this.mapData = new MapData(enName);
+
+            MapFoolForm mff = new MapFoolForm(enName);
+
             currGF = new GroupField();
             MapAttrs mattrs = this.mapData.MapAttrs;
             gfs = this.mapData.GroupFields;
@@ -702,15 +705,10 @@ namespace CCFlow.WF.UC
             //处理装载前填充.
             this.LoadData(mattrs, en);
             string appPath = CCFlowAppPath; //this.Page.Request.ApplicationPath;
-
-            #region 计算出来列的宽度.
-            int labCol = 80;
-            int ctrlCol = 260;
-            int width = (labCol + ctrlCol) * mapData.TableCol / 2;
-            #endregion 计算出来列的宽度.
+             
 
             #region 生成表头.
-            this.Add("\t\n<Table style='width:" + width + "px;' align=left>");
+            this.Add("\t\n<Table style='width:" + mff.TableWidth + ";' align=left>");
 
             this.AddTREnd();
             #endregion 生成表头.
@@ -729,11 +727,11 @@ namespace CCFlow.WF.UC
 
                             this.AddTR();
                             //增加Group.
-                            this.AddTD("colspan=" + this.mapData.TableCol + " style='width:100%' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + fram.Name + "</div><div style='text-align:right; float:right'></div>");
+                            this.AddTD("colspan=4 style='width:100%' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + fram.Name + "</div><div style='text-align:right; float:right'></div>");
                             this.AddTREnd();
 
                             this.AddTR();
-                            this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
+                            this.Add("<TD colspan=4 ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
                             string paras = this.RequestParas;
                             if (paras.Contains("FID=") == false)
                                 paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
@@ -764,15 +762,15 @@ namespace CCFlow.WF.UC
                 currGF = gf;
                 this.AddTR();
                 if (gfs.Count == 1)
-                    this.AddTD("colspan=" + this.mapData.TableCol + " style='width:" + width + "px' class=GroupField valign='top' align=left ", "<div style='text-align:left; float:left'>&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
+                    this.AddTD("colspan=4 style='width:" + mff.TableWidth + "' class=GroupField valign='top' align=left ", "<div style='text-align:left; float:left'>&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
                 else
-                    this.AddTD("colspan=" + this.mapData.TableCol + " style='width:" + width + "px' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
+                    this.AddTD("colspan=4 style='width:" + mff.TableWidth + "' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
                 this.AddTREnd();
 
                 idx = -1;
 
                 rowIdx = 0;
-                int colSpan = this.mapData.TableCol;  // 定义colspan的宽度.
+                int colSpan = 4;  // 定义colspan的宽度.
                 this.AddTR();
                 for (int i = 0; i < mattrs.Count; i++)
                 {
@@ -801,7 +799,7 @@ namespace CCFlow.WF.UC
                     {
                         /*如果列已经用完.*/
                         this.AddTREnd();
-                        colSpan = this.mapData.TableCol; //补充列.
+                        colSpan = 4; 
                         rowIdx++;
                     }
                     #endregion 补充空白的列.
@@ -809,13 +807,13 @@ namespace CCFlow.WF.UC
                     #region 处理大块文本的输出.
                     // 显示的顺序号.
                     idx++;
-                    if (attr.IsBigDoc && (attr.ColSpan == this.mapData.TableCol || attr.ColSpan == 0))
+                    if (attr.IsBigDoc && (attr.ColSpan == 4 || attr.ColSpan == 0))
                     {
                         int h = attr.UIHeightInt + 20;
                         if (attr.UIIsEnable)
-                            this.Add("<TD height='" + h.ToString() + "px'  colspan=" + this.mapData.TableCol + " width='100%' valign=top align=left>");
+                            this.Add("<TD height='" + h.ToString() + "px'  colspan=4 width='100%' valign=top align=left>");
                         else
-                            this.Add("<TD height='" + h.ToString() + "px'  colspan=" + this.mapData.TableCol + " width='100%' valign=top class=TBReadonly>");
+                            this.Add("<TD height='" + h.ToString() + "px'  colspan=4 width='100%' valign=top class=TBReadonly>");
 
                         this.Add("<div style='font-size:12px;color:black;' >");
                         Label lab = new Label();
@@ -861,7 +859,7 @@ namespace CCFlow.WF.UC
 
                     if (attr.IsBigDoc)
                     {
-                        if (colSpan == this.mapData.TableCol)
+                        if (colSpan == 4 )
                         {
                             /*已经加满了*/
                             this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
@@ -917,8 +915,8 @@ namespace CCFlow.WF.UC
                     #endregion 处理超链接
 
                     #region  首先判断当前剩余的单元格是否满足当前控件的需要。
-                    if (attr.ColSpan + 1 > mapData.TableCol)
-                        attr.ColSpan = this.mapData.TableCol - 1; //如果设置的
+                    if (attr.ColSpan + 1 > 4)
+                        attr.ColSpan = 4- 1; //如果设置的
 
                     if (colSpan < attr.ColSpan + 1 || colSpan == 1 || colSpan == 0)
                     {
@@ -927,7 +925,7 @@ namespace CCFlow.WF.UC
                             this.AddTD("colspan=" + colSpan, "");
                         this.AddTREnd();
 
-                        colSpan = mapData.TableCol;
+                        colSpan =4;
                         this.AddTR();
                     }
                     #endregion  首先判断当前剩余的单元格是否满足当前控件的需要。
@@ -1120,14 +1118,14 @@ namespace CCFlow.WF.UC
                 } // 结束字段集合循环.
 
                 // 在分组后处理它, 首先判断当前剩余的单元格是否满足当前控件的需要。
-                if (colSpan != this.mapData.TableCol)
+                if (colSpan != 4)
                 {
                     /* 如果剩余的列不能满足当前的单元格，就补充上它，让它换行.*/
                     if (colSpan != 0)
                         this.AddTD("colspan=" + colSpan, "");
 
                     this.AddTREnd();
-                    colSpan = mapData.TableCol;
+                    colSpan = 4;
                 }
                 this.InsertObjects(false);
             } // 结束分组循环.
@@ -1140,12 +1138,12 @@ namespace CCFlow.WF.UC
                 rowIdx++;
 
                 this.AddTR();
-                this.AddTD("colspan=" + this.mapData.TableCol + " class=GroupField valign='top' align=left ", "<div style='text-align:left; float:left'>&nbsp;审核信息</div><div style='text-align:right; float:right'></div>");
+                this.AddTD("colspan=" +4+ " class=GroupField valign='top' align=left ", "<div style='text-align:left; float:left'>&nbsp;审核信息</div><div style='text-align:right; float:right'></div>");
                 this.AddTREnd();
 
                 // myidx++;
                 this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + enName + "' height='50px' width='100%' style='align:left'>");
+                this.Add("<TD colspan=" + 4 + " ID='TD" + enName + "' height='50px' width='100%' style='align:left'>");
                 string src = CCFlowAppPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
                 string paras = this.RequestParas;
                 try

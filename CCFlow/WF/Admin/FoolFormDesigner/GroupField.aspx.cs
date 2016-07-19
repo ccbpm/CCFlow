@@ -378,11 +378,6 @@ namespace CCFlow.WF.MapDef
                 attr.Delete();
             }
 
-            MapDtls dtls = new MapDtls();
-            dtls.Retrieve(MapDtlAttr.GroupID, this.GroupField);
-            foreach (MapDtl dtl in dtls)
-                dtl.Delete();
-
             GroupField gf = new GroupField(this.GroupField);
             gf.Delete();
             this.WinClose();// ("删除成功。");

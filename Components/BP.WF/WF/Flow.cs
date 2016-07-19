@@ -2803,11 +2803,8 @@ namespace BP.WF
                         rtpDtl.No = rptDtlNo;
                         rtpDtl.FK_MapData = rpt;
                         rtpDtl.PTable = rptDtlNo;
-                        rtpDtl.GroupID = -1;
                         rtpDtl.Insert();
                     }
-
-
 
                     MapAttrs attrsRptDtl = new MapAttrs(rptDtlNo);
                     MapAttrs attrs = new MapAttrs(dtl.No);

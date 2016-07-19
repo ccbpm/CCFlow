@@ -172,6 +172,10 @@ namespace BP.WF
             try
             {
 
+                // 运行升级SQL.
+                BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
+
+
                 #region 表单方案中的不可编辑, 旧版本如果包含了这个列.
                 if (BP.DA.DBAccess.IsExitsTableCol("WF_FrmNode", "IsEdit") == true)
                 {
@@ -188,93 +192,6 @@ namespace BP.WF
                 Cond cnd = new Cond();
                 cnd.CheckPhysicsTable();
 
-                #region 升级数据源.
-                sql = "UPDATE Sys_SFTable SET FK_SFDBSrc='local' WHERE FK_SFDBSrc IS NULL OR FK_SFDBSrc=''";
-                BP.DA.DBAccess.RunSQL(sql);
-
-                sql = "UPDATE Sys_MapAttr SET ColSpan=4 WHERE ColSpan>=3";
-                BP.DA.DBAccess.RunSQL(sql);
-                #endregion 升级数据源
-
-                #region 标签Ext
-
-                sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FrmNodeComponent'";
-                DBAccess.RunSQL(sql);
-    
-                sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FrmNodeComponent','";
-                sql += "@NodeID=审核组件,适用于sdk表单审核组件与ccform上的审核组件属性设置.";
-                sql += "@SFLab=父子流程组件,在该节点上配置与显示父子流程.";
-                sql += "@FrmThreadLab=子线程组件,对合流节点有效，用于配置与现实子线程运行的情况。";
-                sql += "@FrmTrackLab=轨迹组件,用于显示流程运行的轨迹图.";                
-                sql += "')";
-                DBAccess.RunSQL(sql);
-
-
-                sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeExt'";
-                DBAccess.RunSQL(sql);
-                sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeExt','";
-                sql += "@NodeID=基本配置";
-                sql += "@FWCSta=审核组件,适用于sdk表单审核组件与ccform上的审核组件属性设置.";
-                sql += "@SendLab=按钮权限,控制工作节点可操作按钮.";
-                sql += "@RunModel=运行模式,分合流,父子流程";
-                sql += "@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.";
-                sql += "@MPhone_WorkModel=移动,与手机平板电脑相关的应用设置.";
-                sql += "@TSpanDay=考核,时效考核,质量考核.";
-                //   sql += "@OfficeOpen=公文按钮,只有当该节点是公文流程时候有效";
-                sql += "')";
-                BP.DA.DBAccess.RunSQL(sql);
-
-                sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt'";
-                BP.DA.DBAccess.RunSQL(sql);
-                sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','";
-                sql += "@No=基本配置";
-                sql += "')";
-                BP.DA.DBAccess.RunSQL(sql);
-
-                sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapDataExt'";
-                BP.DA.DBAccess.RunSQL(sql);
-                sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDataExt','";
-                sql += "@No=基本属性";
-                sql += "@Designer=设计者信息";
-                sql += "')";
-                BP.DA.DBAccess.RunSQL(sql);
-
-                //更新表单应用类型，注意会涉及到其他问题.
-                sql = "UPDATE Sys_MapData SET AppType=0 WHERE No NOT LIKE 'ND%'";
-                DBAccess.RunSQL(sql);
-                #endregion
-
-                #region 标签
-                sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeSheet'";
-                BP.DA.DBAccess.RunSQL(sql);
-                sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeSheet','";
-                sql += "@NodeID=基本配置";
-                sql += "@FormType=表单";
-                sql += "@FWCSta=审核组件,适用于sdk表单审核组件与ccform上的审核组件属性设置.";
-                sql += "@SFSta=父子流程,对启动，查看父子流程的控件设置.";
-                sql += "@SendLab=按钮权限,控制工作节点可操作按钮.";
-                sql += "@RunModel=运行模式,分合流,父子流程";
-                sql += "@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.";
-                sql += "@MPhone_WorkModel=移动,与手机平板电脑相关的应用设置.";
-                //     sql += "@TSpanDay=考核,时效考核,质量考核.";
-                //  sql += "@MsgCtrl=消息,流程消息信息.";
-                sql += "@OfficeOpen=公文按钮,只有当该节点是公文流程时候有效";
-                sql += "')";
-                DBAccess.RunSQL(sql);
-
-                sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowSheet'";
-                DBAccess.RunSQL(sql);
-                sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowSheet','";
-                sql += "@No=基本配置";
-                sql += "@FlowRunWay=启动方式,配置工作流程如何自动发起，该选项要与流程服务一起工作才有效.";
-                sql += "@StartLimitRole=启动限制规则";
-                sql += "@StartGuideWay=发起前置导航";
-                sql += "@CFlowWay=延续流程";
-                sql += "@DTSWay=流程数据与业务数据同步";
-                sql += "@PStarter=轨迹查看权限";
-                sql += "')";
-                BP.DA.DBAccess.RunSQL(sql);
-                #endregion
 
                 #region 创建 Port_EmpDept 视图兼容旧版本.
                 //创建视图.
@@ -336,18 +253,7 @@ namespace BP.WF
                     src.Insert();
                 #endregion 检查数据源.
 
-                #region 更新枚举类型.
-                //删除枚举值,让其自动生成.
-                sql = "DELETE FROM Sys_Enum WHERE EnumKey IN ('CodeStruct'";
-                sql += ",'DBSrcType'";
-                sql += ",'TBModel'";
-                sql += ",'FrmType'"; 
-                sql += ",'WebOfficeEnable'";
-                sql += ",'FrmEnableRole'";
-                sql += ",'BlockModel'";
-                sql += ",'CCRole','FWCType','SelectAccepterEnable','NodeFormType','StartGuideWay','" + FlowAttr.StartLimitRole + "','BillFileType','EventDoType','FormType','BatchRole','StartGuideWay','NodeFormType','FormRunType')";
-                BP.DA.DBAccess.RunSQL(sql);
-                #endregion 更新枚举类型.
+              
 
                 #region 其他.
                 // 更新 PassRate.

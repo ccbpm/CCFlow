@@ -285,14 +285,26 @@ namespace BP.WF.Template
             attrs.RetrieveInSQL(sql);
             if (attrs.Count != 0)
             {
-                GroupField gf = new GroupField();
-                gf.Lab = "基本信息";
-                gf.EnName = this.No;
-                gf.Insert();
+                sql = "SELECT OID,Idx FROM Sys_GroupField WHERE EnName='ND17401' AND CtrlType='' ORDER BY Idx ";
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                GroupField gf;
+                if (dt.Rows.Count == 0)
+                {
+                    gf = new GroupField();
+                    gf.Lab = "基本信息";
+                    gf.EnName = this.No;
+                    gf.Insert();
+                }
+                else
+                {
+                    int gID = int.Parse(dt.Rows[0][0].ToString());
+                    gf = new GroupField(gID);
+                }
+
+                //设置GID.
                 foreach (MapAttr attr in attrs)
                 {
-                    attr.GroupID = gf.OID;
-                    attr.Update();
+                    attr.Update(MapAttrAttr.GroupID,  gf.OID);
                 }
             }
 

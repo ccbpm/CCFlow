@@ -97,14 +97,13 @@ namespace BP.Sys
     public class MapDtlAttr : EntityNoNameAttr
     {
         /// <summary>
-        /// 填充Data
+        /// GrupID
         /// </summary>
-        public const string ImpFixDataSql = "ImpFixDataSql";
-
+        public const string GroupID = "GroupID";
         /// <summary>
-        /// 填充树形Sql
+        /// 行Idx
         /// </summary>
-        public const string ImpFixTreeSql = "ImpFixTreeSql";
+        public const string RowIdx = "RowIdx";
         /// <summary>
         /// 工作模式
         /// </summary>
@@ -121,10 +120,6 @@ namespace BP.Sys
         /// DtlOpenType
         /// </summary>
         public const string DtlOpenType = "DtlOpenType";
-        /// <summary>
-        /// 插入表单的位置
-        /// </summary>
-        public const string RowIdx = "RowIdx";
         /// <summary>
         /// 行数量
         /// </summary>
@@ -149,10 +144,6 @@ namespace BP.Sys
         /// WhenOverSize
         /// </summary>
         public const string WhenOverSize = "WhenOverSize";
-        /// <summary>
-        /// GroupID
-        /// </summary>
-        public const string GroupID = "GroupID";
         /// <summary>
         /// 是否可以删除
         /// </summary>
@@ -313,6 +304,31 @@ namespace BP.Sys
     {
         #region 导入导出属性.
         /// <summary>
+        /// Rowid
+        /// </summary>
+        public int RowIdx
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDtlAttr.RowIdx);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.RowIdx, value);
+            }
+        }
+        public int GroupID
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDtlAttr.GroupID);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.GroupID, value);
+            }
+        }
+        /// <summary>
         /// 是否可以导出
         /// </summary>
         public bool IsExp
@@ -399,24 +415,6 @@ namespace BP.Sys
         #endregion
 
         #region 基本设置
-
-        public string ImpFixDataSql
-        {
-            get { return this.GetValStringByKey(MapDtlAttr.ImpFixDataSql); }
-            set { this.SetValByKey(MapDtlAttr.ImpFixDataSql, value); }
-
-        }
-
-        /// <summary>
-        /// 填充属性sql
-        /// </summary>
-        public string ImpFixTreeSql
-        {
-            
-            get { return this.GetValStringByKey(MapDtlAttr.ImpFixTreeSql); }
-            set { this.SetValByKey(MapDtlAttr.ImpFixTreeSql, value); }
-        }
-
         /// <summary>
         /// 工作模式
         /// </summary>
@@ -1168,31 +1166,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// Idx.
-        /// </summary>
-        public int RowIdx
-        {
-            get
-            {
-                return this.GetValIntByKey(MapDtlAttr.RowIdx);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.RowIdx, value);
-            }
-        }
-        public int GroupID
-        {
-            get
-            {
-                return this.GetValIntByKey(MapDtlAttr.GroupID);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.GroupID, value);
-            }
-        }
-        /// <summary>
         /// 物理表
         /// </summary>
         public string PTable
@@ -1324,12 +1297,7 @@ namespace BP.Sys
                 //map.AddTBInt(MapDtlAttr.Model, 0, "工作模式", false, false);
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,
                  MapDtlAttr.Model, "@0=普通@1=固定行");
-
-                map.AddTBString(MapDtlAttr.ImpFixTreeSql, null, "固定列树形SQL", true, false, 0, 500, 20);
-                map.AddTBString(MapDtlAttr.ImpFixDataSql, null, "固定列数据SQL", true, false, 0, 500, 20);
-
-                map.AddTBInt(MapDtlAttr.RowIdx, 99, "位置", false, false);
-                map.AddTBInt(MapDtlAttr.GroupID, 0, "GroupID", false, false);
+               
                 map.AddTBInt(MapDtlAttr.RowsOfList, 6, "Rows", false, false);
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", false, false);

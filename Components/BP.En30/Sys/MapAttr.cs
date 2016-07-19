@@ -819,10 +819,18 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.GroupID, value);
             }
         }
+        /// <summary>
+        /// 是否是大块文本？
+        /// </summary>
         public bool IsBigDoc
         {
             get
             {
+                if (this.UIRows > 1 && this.ColSpan==4 )
+                    return true;
+
+                return false;
+
                 if (this.MaxLen > 3000)
                     return true;
                 return false;
@@ -838,7 +846,7 @@ namespace BP.Sys
                 if (this.UIHeight < 40)
                     return 1;
 
-                decimal d = decimal.Parse(this.UIHeight.ToString()) / 16;
+                decimal d = decimal.Parse(this.UIHeight.ToString()) / 23;
                 return (int)Math.Round(d, 0);
             }
         }
@@ -1379,34 +1387,7 @@ namespace BP.Sys
             if (attr.RetrieveFromDBSources() == 1)
             {
                 attr.Update("Idx", -1);
-                //attr.Idx = -1;
-                //attr.Update();
             }
-        }
-        public void DoDtlDown()
-        {
-            try
-            {
-                string sql = "UPDATE Sys_MapAttr SET GroupID=( SELECT OID FROM Sys_GroupField WHERE EnName='" + this.FK_MapData + "') WHERE FK_MapData='" + this.FK_MapData + "'";
-                DBAccess.RunSQL(sql);
-            }
-            catch
-            {
-            }
-
-            this.DoDown();
-        }
-        public void DoDtlUp()
-        {
-            try
-            {
-                string sql = "UPDATE Sys_MapAttr SET GroupID=( SELECT OID FROM Sys_GroupField WHERE EnName='" + this.FK_MapData + "') WHERE FK_MapData='" + this.FK_MapData + "'";
-                DBAccess.RunSQL(sql);
-            }
-            catch
-            {
-            }
-            this.DoUp();
         }
         public void DoJump(MapAttr attrTo)
         {
@@ -1459,6 +1440,10 @@ namespace BP.Sys
             this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             return base.beforeUpdate();
         }
+        /// <summary>
+        /// 插入之间需要做的事情.
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeInsert()
         {
             if (string.IsNullOrEmpty(this.Name))
@@ -1498,7 +1483,7 @@ namespace BP.Sys
                 throw new Exception("@在[" + this.MyPK + "]已经存在字段名称[" + this.Name + "]字段[" + this.KeyOfEn + "]");
             }
 
-            if (this.Idx != 0)
+            if (this.Idx == 0)
                 this.Idx = 999; // BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'") + 1;
             this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             return base.beforeInsert();

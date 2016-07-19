@@ -99,24 +99,6 @@ namespace BP.WF.Template
         #endregion
 
         #region 基本设置
-
-        public string ImpFixDataSql
-        {
-            get { return this.GetValStringByKey(MapDtlAttr.ImpFixDataSql); }
-            set { this.SetValByKey(MapDtlAttr.ImpFixDataSql, value); }
-
-        }
-
-        /// <summary>
-        /// 填充属性sql
-        /// </summary>
-        public string ImpFixTreeSql
-        {
-            
-            get { return this.GetValStringByKey(MapDtlAttr.ImpFixTreeSql); }
-            set { this.SetValByKey(MapDtlAttr.ImpFixTreeSql, value); }
-        }
-
         /// <summary>
         /// 工作模式
         /// </summary>
@@ -868,31 +850,6 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// Idx.
-        /// </summary>
-        public int RowIdx
-        {
-            get
-            {
-                return this.GetValIntByKey(MapDtlAttr.RowIdx);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.RowIdx, value);
-            }
-        }
-        public int GroupID
-        {
-            get
-            {
-                return this.GetValIntByKey(MapDtlAttr.GroupID);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.GroupID, value);
-            }
-        }
-        /// <summary>
         /// 物理表
         /// </summary>
         public string PTable
@@ -1015,36 +972,33 @@ namespace BP.WF.Template
                 map.EnDesc = "明细";
                 map.EnType = EnType.Sys;
 
+                #region 基础信息.
+
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
-                map.AddTBString(MapDtlAttr.Name, null, "描述", true, false, 1, 200, 20);
-                map.AddTBString(MapDtlAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
-                map.AddTBString(MapDtlAttr.PTable, null, "物理表", true, false, 0, 200, 20);
-                map.AddTBString(MapDtlAttr.GroupField, null, "分组字段", true, false, 0, 300, 20);
+                map.AddTBString(MapDtlAttr.Name, null, "名称", true, false, 1, 200, 20);
+                map.AddTBString(MapDtlAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
+                map.AddTBString(MapDtlAttr.PTable, null, "存储表", true, false, 0, 200, 20);
 
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,MapDtlAttr.Model, "@0=普通@1=固定行");
 
-                map.AddTBString(MapDtlAttr.ImpFixTreeSql, null, "固定列树形SQL", true, false, 0, 500, 20);
-                map.AddTBString(MapDtlAttr.ImpFixDataSql, null, "固定列数据SQL", true, false, 0, 500, 20);
+                //map.AddTBString(MapDtlAttr.ImpFixTreeSql, null, "固定列树形SQL", true, false, 0, 500, 20);
+                //map.AddTBString(MapDtlAttr.ImpFixDataSql, null, "固定列数据SQL", true, false, 0, 500, 20);
 
-                map.AddTBInt(MapDtlAttr.RowIdx, 99, "位置", false, false);
-                map.AddTBInt(MapDtlAttr.GroupID, 0, "GroupID", false, false);
-                map.AddTBInt(MapDtlAttr.RowsOfList, 6, "Rows", false, false);
+                map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", false, false);
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", false, false);
 
-                map.AddBoolean(MapDtlAttr.IsShowSum, true, "IsShowSum", false, false);
-                map.AddBoolean(MapDtlAttr.IsShowIdx, true, "IsShowIdx", false, false);
-                map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "IsCopyNDData", false, false);
-                map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", false, false);
+                map.AddBoolean(MapDtlAttr.IsShowSum, true, "是否显示合计？", false, false);
+                map.AddBoolean(MapDtlAttr.IsShowIdx, true, "是否显示序号？", false, false);
+            
+                map.AddBoolean(MapDtlAttr.IsReadonly, false, "是否只读？", false, false);
+                map.AddBoolean(MapDtlAttr.IsShowTitle, true, "是否显示标题？", false, false);
+                map.AddBoolean(MapDtlAttr.IsView, true, "是否可见？", false, false);
 
-                map.AddBoolean(MapDtlAttr.IsReadonly, false, "IsReadonly", false, false);
-                map.AddBoolean(MapDtlAttr.IsShowTitle, true, "IsShowTitle", false, false);
-                map.AddBoolean(MapDtlAttr.IsView, true, "是否可见", false, false);
-              
 
-                map.AddBoolean(MapDtlAttr.IsInsert, true, "IsInsert", false, false);
-                map.AddBoolean(MapDtlAttr.IsDelete, true, "IsDelete", false, false);
-                map.AddBoolean(MapDtlAttr.IsUpdate, true, "IsUpdate", false, false);
+                map.AddBoolean(MapDtlAttr.IsInsert, true, "是否可以插入行？", false, false);
+                map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行？", false, false);
+                map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", false, false);
 
                 map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", false, false);
@@ -1074,21 +1028,32 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
-                //add 2014-02-21.
-                map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
+             
 
                 //参数.
                 map.AddTBAtParas(300);
 
+                #endregion 基础信息.
+
+
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
-                map.AddBoolean(MapDtlAttr.IsExp, true, "IsExp", false, false);
-                map.AddBoolean(MapDtlAttr.IsImp, true, "IsImp", false, false);
+                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导出？", false, false);
+                map.AddBoolean(MapDtlAttr.IsImp, true, "是否可以导入？", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?", false, false);
-                map.AddTBString(MapDtlAttr.ImpSQLSearch, null, "查询SQL", true, false, 0, 500, 20);
-                map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20);
-                map.AddTBString(MapDtlAttr.ImpSQLFull, null, "数据填充SQL", true, false, 0, 500, 20);
+                map.AddTBString(MapDtlAttr.ImpSQLSearch, null, "查询SQL", true, false, 0, 500, 20,true);
+                map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20,true);
+                map.AddTBString(MapDtlAttr.ImpSQLFull, null, "数据填充SQL", true, false, 0, 500, 20,true);
                 #endregion 导入导出填充.
+
+                #region 工作流相关.
+                //add 2014-02-21.
+                map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
+
+                map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许copy节点数据", false, false);
+                map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", false, false);
+                #endregion 工作流相关.
+
 
                 this._enMap = map;
                 return this._enMap;

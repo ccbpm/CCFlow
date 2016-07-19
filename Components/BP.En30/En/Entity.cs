@@ -3634,6 +3634,7 @@ namespace BP.En
             }
             return false;
         }
+       
         /// <summary>
         /// 创建一个该集合的元素的类型的新实例
         /// </summary>

@@ -655,8 +655,8 @@ namespace BP.Pub
                                 pict.Append(@"\jpegblip");
                                 pict.Append(@"\picscalex100");
                                 pict.Append(@"\picscaley100");
-                                pict.Append(@"\picwgoal" + img.Size.Width * 5);
-                                pict.Append(@"\pichgoal" + img.Size.Height * 5);
+                                pict.Append(@"\picwgoal" + img.Size.Width * 15);
+                                pict.Append(@"\pichgoal" + img.Size.Height * 15);
                                 pict.Append(imgHexString + "}");
                                 pict.AppendLine();
                                 return pict.ToString();

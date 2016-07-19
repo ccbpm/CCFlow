@@ -155,36 +155,39 @@ namespace BP.DA
             StringBuilder jsonString = new StringBuilder();
             jsonString.Append("[");
             DataRowCollection drc = dt.Rows;
-            for (int i = 0; i < drc.Count; i++)
+            if (drc.Count >0)
             {
-                jsonString.Append("{");
-                for (int j = 0; j < dt.Columns.Count; j++)
+                for (int i = 0; i < drc.Count; i++)
                 {
-                    string strKey = dt.Columns[j].ColumnName;
-                    /**小周鹏修改-2014/11/11----------------------------START**/
-                    // BillNoFormat对应value:{YYYY}-{MM}-{dd}-{LSH4} Format时会产生异常。
-                    if (strKey.Equals("BillNoFormat"))
+                    jsonString.Append("{");
+                    for (int j = 0; j < dt.Columns.Count; j++)
                     {
-                        continue;
-                    }
-                    /**小周鹏修改-2014/11/11----------------------------END**/
-                    string strValue = drc[i][j].ToString();
-                    Type type = dt.Columns[j].DataType;
-                    jsonString.Append("\"" + strKey + "\":");
+                        string strKey = dt.Columns[j].ColumnName;
+                        /**小周鹏修改-2014/11/11----------------------------START**/
+                        // BillNoFormat对应value:{YYYY}-{MM}-{dd}-{LSH4} Format时会产生异常。
+                        if (strKey.Equals("BillNoFormat"))
+                        {
+                            continue;
+                        }
+                        /**小周鹏修改-2014/11/11----------------------------END**/
+                        string strValue = drc[i][j].ToString();
+                        Type type = dt.Columns[j].DataType;
+                        jsonString.Append("\"" + strKey + "\":");
 
-                    strValue = String.Format(strValue, type);
-                    if (j < dt.Columns.Count - 1)
-                    {
-                        jsonString.Append("\"" + strValue + "\",");
+                        strValue = String.Format(strValue, type);
+                        if (j < dt.Columns.Count - 1)
+                        {
+                            jsonString.Append("\"" + strValue + "\",");
+                        }
+                        else
+                        {
+                            jsonString.Append("\"" + strValue + "\"");
+                        }
                     }
-                    else
-                    {
-                        jsonString.Append("\"" + strValue + "\"");
-                    }
+                    jsonString.Append("},");
                 }
-                jsonString.Append("},");
+                jsonString.Remove(jsonString.Length - 1, 1);
             }
-            jsonString.Remove(jsonString.Length - 1, 1);
             jsonString.Append("]");
             return jsonString.ToString();
         }

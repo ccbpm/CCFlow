@@ -346,7 +346,7 @@
        <uc1:Pub ID="UCCaption" runat="server" />
     </div>
 
-    <div align="center"  style=" vertical-align:middle;background-color:#d0d0d0;height:100%;padding-top:10px;padding-bottom:10px;" >
+    <div align="center"  style=" vertical-align:middle;background-color:#d0d0d0;min-height:100%;*+height:100%;_height:100%;padding-top:10px;padding-bottom:10px;" >
      <uc1:Pub ID="Pub1" runat="server" />
     </div>
 

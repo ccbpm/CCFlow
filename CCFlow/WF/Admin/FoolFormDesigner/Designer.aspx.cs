@@ -214,7 +214,7 @@ namespace CCFlow.WF.MapDef
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + dtl.No + "'   > ");
                             src = "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
-                            this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl.W + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto' /></iframe>");
+                            this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto' /></iframe>");
                             this.Pub1.AddTDEnd();
                             this.Pub1.AddTREnd();
                         }

@@ -347,8 +347,8 @@
 --%>
         <a href="javascript:MapDataEdit('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">表单属性</a>
 
-        <% if ( string.IsNullOrEmpty( fk_flow) ==true) { %>
-        <a href="javascript:FrmNodeComponent('<%=this.NodeID %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'"> 节点表单组件</a>
+        <% if ( string.IsNullOrEmpty( fk_flow) == false ) { %>
+           <a href="javascript:FrmNodeComponent('<%=this.NodeID %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'"> 节点表单组件</a>
         <% } %>
 
        <uc1:Pub ID="UCCaption" runat="server" />

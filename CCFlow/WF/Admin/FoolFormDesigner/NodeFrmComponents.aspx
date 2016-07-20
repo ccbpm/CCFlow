@@ -166,27 +166,58 @@
    { %>
    <table  style="width:100%; height:100%;">
 
-   <tr>
-   <td>节点1接受人:</td>
-   <td> xxxx </td>
-   <td>节点2接受人:</td>
-   <td> xxxx </td>
-   </tr>
-     
-   <tr>
-   <td>节点3接受人:</td>
-   <td> xxxx </td>
-   <td>节点4接受人:</td>
-   <td> xxxx </td>
-   </tr>
-   
-   <tr>
-   <td>节点5接受人:</td>
-   <td> xxxx </td>
-   <td>节点6接受人:</td>
-   <td> xxxx </td>
+    <tr>
+   <td>节点步骤</td>
+   <td> 处理人</td>
+   <td> 计划完成日期 </td>
    </tr>
 
+
+   <tr>
+   <td>节点1</td>
+   <td> 张三 </td>
+   <td> xxxx年xx月xx日 </td>
+   </tr>
+     
+     
+   <tr>
+   <td>节点2</td>
+   <td> 李四 </td>
+   <td> xxxx年xx月xx日 </td>
+   </tr>
+   
+     
+   <tr>
+   <td>节点3</td>
+   <td> 王五 </td>
+   <td> xxxx年xx月xx日 </td>
+   </tr>
+
+       
+   <tr>
+   <td>节点4</td>
+   <td> 赵六 </td>
+   <td> xxxx年xx月xx日 </td>
+   </tr>
+
+        
+   <tr>
+   <td>节点5</td>
+   <td> 张思 </td>
+   <td> xxxx年xx月xx日 </td>
+   </tr>
+
+    <tr>
+   <td>节点6</td>
+   <td> 孙倩 </td>
+   <td> xxxx年xx月xx日 </td>
+   </tr>
+
+     <tr>
+   <td>节点7</td>
+   <td> 姚家 </td>
+   <td> xxxx年xx月xx日 </td>
+   </tr>
 
    </table>
 

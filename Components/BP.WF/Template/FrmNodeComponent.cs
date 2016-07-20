@@ -158,7 +158,7 @@ namespace BP.WF.Template
             }
             else
             {
-                if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "FWC" + this.No) == false)
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
@@ -182,7 +182,7 @@ namespace BP.WF.Template
             }
             else
             {
-                if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "SubFlow" + this.No) == false)
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
@@ -205,7 +205,7 @@ namespace BP.WF.Template
             }
             else
             {
-                if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "FrmTrack" + this.No) == false)
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
@@ -252,13 +252,13 @@ namespace BP.WF.Template
             }
             else
             {
-                if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "FrmFTC" + this.No) == false)
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
                     gf.CtrlID = "FrmFTC" + this.No;
-                    gf.CtrlType = GroupCtrlType.Thread;
-                    gf.Lab = "子线程";
+                    gf.CtrlType = GroupCtrlType.FTC;
+                    gf.Lab = "流转自定义";
                     gf.Idx = 0;
                     gf.Insert(); //插入.
                 }

@@ -18,6 +18,10 @@ namespace BP.Sys
         public const string SubFlow = "SubFlow";
         public const string Track = "Track";
         public const string Thread = "Thread";
+        /// <summary>
+        /// 流转自定义组件
+        /// </summary>
+        public const string FTC = "FTC";
     }
     /// <summary>
     /// GroupField

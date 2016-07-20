@@ -141,21 +141,17 @@ namespace BP.WF.Template
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 190, 20);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20);
-
-                //表单的运行类型.
-                map.AddDDLSysEnum(MapDataAttr.FrmType, 1, "表单类型",
-                    true, false, MapDataAttr.FrmType,
-                    "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
-
                 map.AddTBInt(MapDataAttr.TableCol, 4, "表单显示列数", true, true);
-                map.AddTBInt(MapDataAttr.TableWidth, 900, "表单宽度", true, false);
-
-                map.AddTBInt(MapDataAttr.TableHeight, 900, "表单高度", true, false);
-
+                map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
+                map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
 
                 //数据源.
                 map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                //表单的运行类型.
+                map.AddDDLSysEnum(MapDataAttr.FrmType, 1, "表单类型",
+                    true, false, MapDataAttr.FrmType,
+                    "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
                 #endregion 基本属性.
 
                 #region 设计者信息.
@@ -194,14 +190,14 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "批量设置验证规则";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/RegularExpression.png";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/telephone.png";
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -411,58 +407,8 @@ namespace BP.WF.Template
 
             if (this.IsNodeFrm == true)
             {
-                int myNodeID = this.NodeID;
-
-                GroupField gf = new GroupField();
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "FWCND" + myNodeID) == false)
-                {
-                    gf = new GroupField();
-                    gf.Lab = "审核信息";
-                    gf.CtrlID = "FWCND" + myNodeID;
-                    gf.CtrlType = "FWC";
-                    gf.EnName = "ND" + myNodeID;
-                    gf.Insert();
-
-                    str += "@为审核组件增加了分组.";
-
-                }
-
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "SubFlowND" + myNodeID) == false)
-                {
-                    gf = new GroupField();
-                    gf.Lab = "父子流程";
-                    gf.CtrlID = "SubFlowND" + myNodeID;
-                    gf.CtrlType = "SubFlow";
-                    gf.EnName = "ND" + myNodeID;
-                    gf.Insert();
-
-                    str += "@为 父子流程 增加了分组.";
-
-                }
-
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "ThreadND" + myNodeID) == false)
-                {
-                    gf = new GroupField();
-                    gf.Lab = "子线程";
-                    gf.CtrlID = "ThreadND" + myNodeID;
-                    gf.CtrlType = "Thread";
-                    gf.EnName = "ND" + myNodeID;
-                    gf.Insert();
-
-                    str += "@为 子线程 增加了分组.";
-                }
-
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "TrackND" + myNodeID) == false)
-                {
-                    gf = new GroupField();
-                    gf.Lab = "轨迹图";
-                    gf.CtrlID = "TrackND" + myNodeID;
-                    gf.CtrlType = "Track";
-                    gf.EnName = "ND" + myNodeID;
-                    gf.Insert();
-
-                    str += "@为 轨迹图 增加了分组.";
-                }
+                FrmNodeComponent conn = new FrmNodeComponent(this.NodeID);
+                conn.Update();
             }
 
             if (str == "")

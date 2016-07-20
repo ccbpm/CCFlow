@@ -302,10 +302,7 @@ namespace BP.WF.Template
             }
         }
        
-        protected override bool beforeUpdateInsertAction()
-        {
-            return base.beforeUpdateInsertAction();
-        }
+     
         #endregion
     }
     /// <summary>

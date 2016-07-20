@@ -81,6 +81,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\RefDLL\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\RefDLL\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\RefDLL\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\RefDLL\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -754,6 +766,10 @@
     <Content Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx" />
     <Content Include="WF\Admin\FlowDB\流程按月分析.png" />
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Info.aspx" />
     <Content Include="WF\Admin\Org\Integration.aspx" />
@@ -1224,6 +1240,7 @@
     <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
+    <Content Include="WF\Data\UpdataCCFlowVer.sql" />
     <Content Include="WF\Data\XML\BPMMenu.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -2445,7 +2462,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Do.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditF.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditMapData.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditTable.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\ExpImp.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx" />
@@ -2484,7 +2500,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Style\Min.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\SysDataType.xml" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\XmlDB.xml" />
-    <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\TabIdx.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\UC\CopyDtlField.ascx" />
     <Content Include="WF\Admin\FoolFormDesigner\UC\LeftBar.ascx" />
@@ -4055,6 +4070,34 @@
     </Compile>
     <Compile Include="WF\Admin\FlowFrm\FrmEnableRole.aspx.designer.cs">
       <DependentUpon>FrmEnableRole.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx.cs">
+      <DependentUpon>FieldTypeList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx.designer.cs">
+      <DependentUpon>FieldTypeList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx.cs">
+      <DependentUpon>InputCheck.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx.designer.cs">
+      <DependentUpon>InputCheck.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.cs">
+      <DependentUpon>SysEnum.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.designer.cs">
+      <DependentUpon>SysEnum.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx.cs">
+      <DependentUpon>SysEnumList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx.designer.cs">
+      <DependentUpon>SysEnumList.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Info.aspx.cs">
       <DependentUpon>Info.aspx</DependentUpon>
@@ -6950,13 +6993,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\EditF.aspx.designer.cs">
       <DependentUpon>EditF.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditMapData.aspx.cs">
-      <DependentUpon>EditMapData.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditMapData.aspx.designer.cs">
-      <DependentUpon>EditMapData.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\EditTable.aspx.cs">
       <DependentUpon>EditTable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7110,13 +7146,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx.designer.cs">
       <DependentUpon>SFTableEditData.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.cs">
-      <DependentUpon>SysEnum.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.designer.cs">
-      <DependentUpon>SysEnum.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\TabIdx.aspx.cs">
       <DependentUpon>TabIdx.aspx</DependentUpon>
@@ -7763,7 +7792,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>41466</DevelopmentServerPort>
+          <DevelopmentServerPort>49520</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

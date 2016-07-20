@@ -4196,7 +4196,7 @@ namespace CCFlow.WF.UC
                     this.AddFieldSet("<a href=\"javascript:ImgAth('" + url + "','" + ath.MyPK + "');\" >编辑</a>");
 
                 FrmImgAthDB imgAthDb = new FrmImgAthDB();
-                imgAthDb.MyPK = ath.CtrlID + "_" + en.PKVal;
+                imgAthDb.MyPK = ath.MyPK + "_" + en.PKVal;
                 imgAthDb.RetrieveFromDBSources();
                 if (imgAthDb != null && !string.IsNullOrEmpty(imgAthDb.FileName))
                     this.Add("\t\n<img src='" + appPath + "DataUser/ImgAth/Data/" + imgAthDb.FileName + ".png' onerror=\"this.src='" + appPath + "WF/Data/Img/LogH.PNG'\" name='Img" + ath.MyPK + "' id='Img" + ath.MyPK + "' style='padding: 0px;margin: 0px;border-width: 0px;' width=" + ath.W + " height=" + ath.H + " />");

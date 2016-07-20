@@ -95,10 +95,6 @@
 
 <% if (this.Request.QueryString["DoType"] == "FrmThread")
    { %>
-
-
-   
-
    <table  style="width:100%; height:100%;">
    <tr>
    <th>标题</th>
@@ -163,5 +159,38 @@
    <img src='./Img/Track.png' style=" width:100%; height:100%" />
 
 <%} %>
+
+
+
+<% if (this.Request.QueryString["DoType"] == "FrmFTC")
+   { %>
+   <table  style="width:100%; height:100%;">
+
+   <tr>
+   <td>节点1接受人:</td>
+   <td> xxxx </td>
+   <td>节点2接受人:</td>
+   <td> xxxx </td>
+   </tr>
+     
+   <tr>
+   <td>节点3接受人:</td>
+   <td> xxxx </td>
+   <td>节点4接受人:</td>
+   <td> xxxx </td>
+   </tr>
+   
+   <tr>
+   <td>节点5接受人:</td>
+   <td> xxxx </td>
+   <td>节点6接受人:</td>
+   <td> xxxx </td>
+   </tr>
+
+
+   </table>
+
+<%} %>
+
 
 </asp:Content>

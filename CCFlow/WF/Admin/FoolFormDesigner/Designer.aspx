@@ -216,6 +216,14 @@
             window.location.href = window.location.href;
         }
 
+        //流转自定义.
+        function EditFTC(mypk) {
+            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=流转自定义';
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+        
         //轨迹组件.
         function EditTrack(mypk) {
             // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
@@ -339,7 +347,7 @@
 --%>
         <a href="javascript:MapDataEdit('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">表单属性</a>
 
-        <% if ( fk_flow != null) { %>
+        <% if ( string.IsNullOrEmpty( fk_flow) ==true) { %>
         <a href="javascript:FrmNodeComponent('<%=this.NodeID %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'"> 节点表单组件</a>
         <% } %>
 

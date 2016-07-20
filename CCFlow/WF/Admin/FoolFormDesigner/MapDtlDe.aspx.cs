@@ -151,13 +151,13 @@ namespace CCFlow.WF.MapDef
             }
 
             if (dtl.IsEnableAthM)
-                this.Pub1.AddTDTitle("<a href=\"javascript:Attachment('" + dtl.No + "');\"><img src='./../Img/set.gif' border=0 width='16px' /></a>");
+                this.Pub1.AddTDTitle("<a href=\"javascript:Attachment('" + dtl.No + "');\"><img src='../../Img/set.gif' border=0 width='16px' /></a>");
 
             if (dtl.IsEnableM2M)
-                this.Pub1.AddTDTitle("<a href=\"javascript:MapM2M('" + dtl.No + "');\"><img src='./../Img/set.gif' border=0 width='16px' /></a>");
+                this.Pub1.AddTDTitle("<a href=\"javascript:MapM2M('" + dtl.No + "');\"><img src='../../Img/set.gif' border=0 width='16px' /></a>");
 
             if (dtl.IsEnableM2MM)
-                this.Pub1.AddTDTitle("<a href=\"javascript:window.showModalDialog('MapM2MM.aspx?NoOfObj=M2MM&FK_MapData=" + this.FK_MapDtl + "','m2m','dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no')\"><img src='./../Img/set.gif' border=0 width='16px' /></a>");
+                this.Pub1.AddTDTitle("<a href=\"javascript:window.showModalDialog('MapM2MM.aspx?NoOfObj=M2MM&FK_MapData=" + this.FK_MapDtl + "','m2m','dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no')\"><img src='../../Img/set.gif' border=0 width='16px' /></a>");
 
             if (dtl.IsEnableLink)
                 this.Pub1.AddTDTitle(dtl.LinkLabel);

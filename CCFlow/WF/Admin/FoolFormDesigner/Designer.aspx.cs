@@ -90,7 +90,7 @@ namespace CCFlow.WF.MapDef
         {
             get
             {
-                if (this.FK_Flow == null)
+                if (this.FK_Flow == null || this.FK_Flow=="")
                     return 0;
                 return int.Parse(this.FK_MapData.Replace("ND", ""));
             }
@@ -307,13 +307,38 @@ namespace CCFlow.WF.MapDef
 
                         myidx++;
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + thread.No + "' height='" + thread.FrmThread_H + "px' width='100%' >");
+                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDThread" + thread.No + "' height='" + thread.FrmThread_H + "px' width='100%' >");
 
                         src = "NodeFrmComponents.aspx?DoType=FrmThread&FK_MapData=" + thread.NodeID;
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + thread.FrmThread_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
                         #endregion 轨迹图.
+                        continue;
+                    case GroupCtrlType.FTC: //流转自定义.
+                        #region 流转自定义.
+
+                        FrmTransferCustom ftc = new FrmTransferCustom(this.FK_MapData);
+                        if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.Disable)
+                        {
+                            gf.Delete();
+                            continue;
+                        }
+
+                        myidx = rowIdx + 10;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFTC('" + ftc.NodeID + "')\" >" + ftc.FrmTransferCustomLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTREnd();
+
+                        myidx++;
+                        this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFTC" + ftc.No + "' height='" + ftc.FrmTransferCustom_H + "px' width='100%' >");
+
+                        src = "NodeFrmComponents.aspx?DoType=FrmFTC&FK_MapData=" + ftc.NodeID;
+                        this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ftc.FrmTransferCustom_H + "px' scrolling=auto  /></iframe>");
+                        this.Pub1.AddTDEnd();
+                        this.Pub1.AddTREnd();
+                        #endregion 流转自定义.
                         continue;
                     default:
                         break;

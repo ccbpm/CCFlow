@@ -49,16 +49,16 @@ namespace CCFlow.WF.MapDef
         }
         #endregion 属性.
 
-        void btn_Check_Click(object sender, EventArgs e)
+       public void Btn_Save_Check_Click(object sender, EventArgs e)
         {
-            string sta = this.Pub1.GetTBByID("TB_Sta").Text.Trim();
+            string sta =  this.TB_Check_Name.Text;
             if (sta.Length == 0)
             {
                 this.Alert("审核岗位不能为空");
                 return;
             }
 
-            string prx = this.Pub1.GetTBByID("TB_Prx").Text.Trim();
+            string prx = this.TB_Check_Pix.Text;
             if (prx.Length == 0)
             {
                 prx = chs2py.convert(sta);
@@ -92,6 +92,7 @@ namespace CCFlow.WF.MapDef
             attr.ColSpan = 4;
             attr.GroupID = gf.OID;
             attr.UIHeight = 23 * 3;
+          //  attr.UIRows = 3;
             attr.Idx = 1;
             attr.Insert();
             attr.Update("Idx", 1);
@@ -139,49 +140,13 @@ namespace CCFlow.WF.MapDef
             switch (this.DoType)
             {
                 case "FunList":
-                    this.Pub1.AddFieldSet("字段分组向导");
-                    this.Pub1.AddUL();
-                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewGroup&FK_MapData=" + this.FK_MapData + "'>新建空白字段分组</a></b><br><font color=green>空白字段分组，建立后可以把相关的字段放入此分组里。</font>");
-                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewCheckGroup&FK_MapData=" + this.FK_MapData + "'>新建审核分组</a></b><br><font color=green>系统会让您输入审核的信息，并创建审核分组。</font>");
-                    this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewEvalGroup&FK_MapData=" + this.FK_MapData+"'>创建工作质量考核字段分组</a></b><br><font color=green>创建质量考核: EvalEmpNo,EvalEmpName,EvalCent,EvalNote 4个必要的字段。</font>");
-                    this.Pub1.AddULEnd();
-                    this.Pub1.AddFieldSetEnd();
-                    return;
-                case "NewCheckGroup":
-                    this.Pub1.AddFieldSet("<a href=GroupField.aspx?DoType=FunList&FK_MapData=" + this.FK_MapData + " >字段分组向导</a> - " + "审核分组");
-
-                    this.Pub1.AddTable();
-
-                    this.Pub1.AddTR();
-
-                    TB tbc = new TB();
-                    tbc.ID = "TB_Sta";
-                    this.Pub1.AddTD("审核岗位<font color=red>*</font>");
-                    this.Pub1.AddTD(tbc);
-                    this.Pub1.AddTREnd();
-
-                    this.Pub1.AddTR();
-                    this.Pub1.AddTD("colspan=2", "<font color=green>比如:分局长审核、科长审核、总经理审核。</font>");
-                    this.Pub1.AddTREnd();
-
-                    tbc = new TB();
-                    tbc.ID = "TB_Prx";
-                    
-                    this.Pub1.AddTR();
-                    this.Pub1.AddTD("字段前缀:");
-                    this.Pub1.AddTD(tbc);
-                    this.Pub1.AddTREnd();
-
-                    this.Pub1.AddTR();
-                    this.Pub1.AddTD("colspan=2","<font color=green>用于自动创建字段，请输入英文字母或者字母数字组合。系统自动依据您的输入产生字段。如：XXX_Note，审核意见。XXX_RDT审核时间。XXX_Checker审核人，为空系统自动用拼音表示。</font>");
-                    this.Pub1.AddTREnd();
-
-                    Btn btnc = new Btn();
-                    btnc.Click += new EventHandler(btn_Check_Click);
-                    btnc.Text = "保存";
-
-                    this.Pub1.Add(btnc);
-                    this.Pub1.AddFieldSetEnd();
+                    //this.Pub1.AddFieldSet("字段分组向导");
+                    //this.Pub1.AddUL();
+                    //this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewGroup&FK_MapData=" + this.FK_MapData + "'>新建空白字段分组</a></b><br><font color=green>空白字段分组，建立后可以把相关的字段放入此分组里。</font>");
+                    //this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewCheckGroup&FK_MapData=" + this.FK_MapData + "'>新建审核分组</a></b><br><font color=green>系统会让您输入审核的信息，并创建审核分组。</font>");
+                    //this.Pub1.AddLi("<b><a href='GroupField.aspx?DoType=NewEvalGroup&FK_MapData=" + this.FK_MapData+"'>创建工作质量考核字段分组</a></b><br><font color=green>创建质量考核: EvalEmpNo,EvalEmpName,EvalCent,EvalNote 4个必要的字段。</font>");
+                    //this.Pub1.AddULEnd();
+                    //this.Pub1.AddFieldSetEnd();
                     return;
                 case "NewEvalGroup":
 
@@ -251,121 +216,90 @@ namespace CCFlow.WF.MapDef
                     attr.Insert();
                     this.WinCloseWithMsg("保存成功"); // "增加成功，您可以调整它的位置与修改字段的标签。"
                     return;
-                case "NewGroup":
-                    GroupFields mygfs = new GroupFields(this.FK_MapData);
-                    GroupField gf1 = new GroupField();
-                    gf1.Idx = mygfs.Count;
-                    gf1.Lab = "新建字段分组"; // "新建字段分组";
-                    gf1.EnName = this.FK_MapData;
-                    if (gf1.IsExit(GroupFieldAttr.EnName, gf1.EnName, GroupFieldAttr.Lab, gf1.Lab) == false)
-                    {
-                        gf1.Insert();
-                    }
-                    this.Response.Redirect("GroupField.aspx?FK_MapData=" + this.FK_MapData + "&GroupField=" + gf1.OID, true);
-                    return;
                 default:
                     break;
             }
-
-            #region edit operation
-            GroupField en = new GroupField(this.GroupField);
-            this.Pub1.Add("<Table border=0 align=center>");
-            this.Pub1.AddCaptionLeft("字段分组");
-            this.Pub1.AddTR();
-
-            this.Pub1.AddTD("分组名称");
-
-            TB tb = new TB();
-            tb.ID = "TB_Lab_" + en.OID;
-            tb.Text = en.Lab;
-            tb.Columns = 50;
-            this.Pub1.AddTD(tb);
-            this.Pub1.AddTREnd();
-
-            this.Pub1.AddTRSum();
-            this.Pub1.Add("<TD align=center colspan=2>");
-            Btn btn = new Btn();
-            btn.Text = "保存";
-            btn.ID = "Btn_Save";
-            btn.Click += new EventHandler(btn_Click);
-            this.Pub1.Add(btn);
-            btn = new Btn();
-            btn.Text = "保存并关闭";
-            btn.ID = "Btn_SaveAndClose";
-            btn.Click += new EventHandler(btn_Click);
-            this.Pub1.Add(btn);
-
-            btn = new Btn();
-            btn.Text = "新建字段";
-            btn.ID = "Btn_NewField";
-            btn.Click += new EventHandler(btn_Click);
-            this.Pub1.Add(btn);
-
-            //btn = new Btn();
-            //btn.Text = this.ToE("CopyField", "复制字段");
-            //btn.ID = "Btn_CopyField";
-            //btn.Click += new EventHandler(btn_Click);
-            //this.Pub1.Add(btn);
-
-
-            btn = new Btn();
-            btn.Text = "仅删除分组";
-            btn.ID = "Btn_Delete";
-            btn.Click += new EventHandler(btn_del_Click);
-            btn.Attributes["onclick"] = " return confirm('您确认吗？');";
-            this.Pub1.Add(btn);
-
-            btn = new Btn();
-            btn.Text = "删除分组与数据";
-            btn.ID = "Btn_DeleteAll";
-            btn.Click += new EventHandler(btn_delAll_Click);
-            btn.Attributes["onclick"] = " return confirm('您确认吗？');";
-            this.Pub1.Add(btn);
-
-            this.Pub1.Add("</TD>");
-            this.Pub1.AddTREnd();
-            this.Pub1.AddTableEnd();
-          //  this.Pub1.Add("把相近的字段放在一个大单元格里，只是为了显示所用没有任何计算意义。");
-            #endregion
-
         }
 
-        void btnC_Click(object sender, EventArgs e)
+        public void btn_SaveBlank_Click(object sender, EventArgs e)
         {
-            BP.WF.Node mynd = new BP.WF.Node(this.FK_MapData);
-            BP.WF.Nodes nds = new BP.WF.Nodes(mynd.FK_Flow);
-            foreach (BP.WF.Node nd in nds)
+            GroupField en = new GroupField();
+            en.EnName = this.FK_MapData;
+
+            if (this.GroupField == 0)
             {
-                if ("ND" + nd.NodeID == this.FK_MapData)
-                    continue;
-
-                GroupFields gfs = new GroupFields("ND" + nd.NodeID);
-                foreach (GroupField gf in gfs)
-                {
-                    string id = "CB_" + gf.OID;
-                    if (this.Pub1.GetCBByID(id).Checked == false)
-                        continue;
-
-                    MapAttrs attrs = new MapAttrs();
-                    attrs.Retrieve(MapAttrAttr.GroupID, gf.OID);
-                    if (attrs.Count == 0)
-                        continue;
-
-                }
+                en.Lab = this.TB_Blank_Name.Text;
+                en.Insert();
             }
+            else
+            {
+                en.OID = this.GroupField;
+                en.RetrieveFromDBSources();
+                en.Lab = this.TB_Blank_Name.Text;
+                en.Update();
+            }
+
+            this.Response.Redirect("GroupField.aspx?FK_MapData=" + this.FK_MapData + "&GroupField=" + en.OID, true);
+
+
+            //Btn btn = sender as Btn;
+            //switch (btn.ID)
+            //{
+            //    case "Btn_SaveAndClose":
+            //        this.WinClose();
+            //        break;
+            //    case "Btn_NewField":
+            //        this.Session["GroupField"] = en.OID;
+            //        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&GroupField=" + en.OID, true);
+            //        break;
+            //    case "Btn_CopyField":
+            //        this.Response.Redirect("CopyFieldFromNode.aspx?FK_Node=" + this.FK_MapData + "&GroupField=" + en.OID, true);
+            //        break;
+            //    default:
+            //        this.Response.Redirect("GroupField.aspx?FK_MapData=" + this.FK_MapData + "&GroupField=" + en.OID, true);
+            //        break;
+            //}
         }
-        void btn_del_Click(object sender, EventArgs e)
+
+        protected void TB_Check_Name_TextChanged(object sender, EventArgs e)
+        {
+            string name = this.TB_Check_Name.Text;
+            if (string.IsNullOrEmpty(name) == true)
+                return;
+
+            this.TB_Check_Pix.Text = BP.DA.DataType.ParseStringToPinyinJianXie(name);
+        }
+
+        protected void Btn_Edit_Save_Click(object sender, EventArgs e)
         {
             GroupField gf = new GroupField(this.GroupField);
-            gf.Delete();
-            
-            BP.WF.Template.MapFoolForm md = new BP.WF.Template.MapFoolForm(gf.EnName);
-            md.DoCheckFixFrmForUpdateVer();
-            
-            this.WinClose();// ("删除成功。");
+            gf.Lab = this.TB_Edit_Name.Text;
+            if (gf.Lab.Length == 0)
+            {
+                this.Alert("不能为空");
+                return;
+            }
+            gf.Update();
         }
 
-        void btn_delAll_Click(object sender, EventArgs e)
+        protected void Btn_Edit_SaveAndClose_Click(object sender, EventArgs e)
+        {
+            Btn_Edit_Save_Click(null, null);
+            this.WinClose();
+        }
+
+        protected void Btn_Edit_Del_Click(object sender, EventArgs e)
+        {
+            GroupField gf = new GroupField();
+            gf.OID = this.GroupField;
+            gf.Delete();
+
+            BP.WF.Template.MapFoolForm md = new BP.WF.Template.MapFoolForm(this.FK_MapData);
+            md.DoCheckFixFrmForUpdateVer();
+            this.WinClose(); 
+        }
+
+        protected void Btn_Edit_DelAll_Click(object sender, EventArgs e)
         {
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.GroupID, this.GroupField);
@@ -378,35 +312,14 @@ namespace CCFlow.WF.MapDef
                 attr.Delete();
             }
 
-            GroupField gf = new GroupField(this.GroupField);
+            GroupField gf = new GroupField();
+            gf.OID = this.GroupField;
             gf.Delete();
+
             this.WinClose();// ("删除成功。");
         }
 
-        void btn_Click(object sender, EventArgs e)
-        {
-            GroupField en = new GroupField(this.GroupField);
-            en.Lab = this.Pub1.GetTBByID("TB_Lab_" + en.OID).Text;
-            en.Update();
-
-            Btn btn = sender as Btn;
-            switch (btn.ID)
-            {
-                case "Btn_SaveAndClose":
-                    this.WinClose();
-                    break;
-                case "Btn_NewField":
-                    this.Session["GroupField"] = this.GroupField;
-                    this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&GroupField=" + this.GroupField, true);
-                    break;
-                case "Btn_CopyField":
-                    this.Response.Redirect("CopyFieldFromNode.aspx?FK_Node=" + this.FK_MapData + "&GroupField=" + this.GroupField, true);
-                    break;
-                default:
-                    this.Response.Redirect("GroupField.aspx?FK_MapData=" + this.FK_MapData + "&GroupField=" + this.GroupField, true);
-                    break;
-            }
-        }
+        
     }
 
 }

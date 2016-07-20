@@ -157,23 +157,13 @@ namespace CCFlow.WF.Admin
             qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
             qo.DoQuery();
 
-            athMents = new FrmAttachments();
-            qo = new QueryObject(athMents);
-            qo.AddWhere(FrmAttachmentAttr.FK_MapData, FK_MapData);
-            qo.addOrderBy(FrmAttachmentAttr.RowIdx);
-            qo.DoQuery();
 
-            dtls = new MapDtls();
-            qo = new QueryObject(dtls);
-            qo.AddWhere(MapDtlAttr.FK_MapData, FK_MapData);
-            qo.addAnd();
-            qo.AddWhere(MapDtlAttr.IsView, true);
-            qo.addOrderBy(MapDtlAttr.RowIdx);
-            qo.DoQuery();
+            athMents = new FrmAttachments(this.FK_MapData);
+            dtls = new MapDtls(this.FK_MapData);
 
             groups = new GroupFields();
-            qo = new QueryObject(groups);
-            qo.AddWhere(GroupFieldAttr.EnName, FK_MapData);
+            groups.RetrieveFieldGroup(this.FK_MapData);
+
             //将明细表分组也放入分组集合
             if (dtls != null && dtls.Count > 0)
             {
@@ -193,11 +183,10 @@ namespace CCFlow.WF.Admin
                     qo.AddWhereIn(GroupFieldAttr.OID, "(" + groupIds + ")");
                 }
             }
-            qo.addOrderBy(GroupFieldAttr.Idx);
             qo.DoQuery();
             #endregion
 
-            BindData();
+            this.BindData();
         }
 
         /// <summary>

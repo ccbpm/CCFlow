@@ -1008,13 +1008,15 @@ namespace CCFlow.WF.MapDef
 
                 attr = (MapAttr)this.Pub1.Copy(attr);
                 attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
-                attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
+
+                if (attr.MyDataType == DataType.AppString && this.Pub1.IsExit("DDL_ColSpan") == true)
+                   attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
+
                 if (attr.UIIsEnable == false && attr.MyDataType == DataType.AppString)
                 {
                     if (this.Pub1.IsExit("CB_IsSigan") == true)
                         attr.IsSigan = this.Pub1.GetCBByID("CB_IsSigan").Checked;
                 }
-
                 switch (this.FType)
                 {
                     case DataType.AppBoolean:
@@ -1040,7 +1042,6 @@ namespace CCFlow.WF.MapDef
                     default:
                         break;
                 }
-
 
                 // 增加是否为空, 对数字类型的字段有效.
                 if (this.Pub1.IsExit("DDL_IsNull") == true)

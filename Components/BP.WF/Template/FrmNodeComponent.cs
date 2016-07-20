@@ -131,9 +131,14 @@ namespace BP.WF.Template
                 FrmThread thread = new FrmThread();
                 map.AddAttrs(thread.EnMap.Attrs);
 
+                //轨迹组件.
                 FrmTrack track = new FrmTrack();
                 map.AddAttrs(track.EnMap.Attrs);
 
+                //流转自定义组件.
+                FrmTransferCustom ftt = new FrmTransferCustom();
+                map.AddAttrs(ftt.EnMap.Attrs);
+                
                 this._enMap = map;
                 return this._enMap;
             }
@@ -236,6 +241,30 @@ namespace BP.WF.Template
                 }
             }
             #endregion 子线程组件.
+
+            #region 子线程组件.
+            FrmTransferCustom ftc = new FrmTransferCustom(this.NodeID);
+            ftc.Copy(this);
+
+            if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.Disable)
+            {
+                gf.Delete(GroupFieldAttr.CtrlID, "FrmFTC" + this.No);
+            }
+            else
+            {
+                if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
+                {
+                    gf = new GroupField();
+                    gf.EnName = "ND" + this.NodeID;
+                    gf.CtrlID = "FrmFTC" + this.No;
+                    gf.CtrlType = GroupCtrlType.Thread;
+                    gf.Lab = "子线程";
+                    gf.Idx = 0;
+                    gf.Insert(); //插入.
+                }
+            }
+            #endregion 子线程组件.
+
 
             return base.beforeUpdate();
         }

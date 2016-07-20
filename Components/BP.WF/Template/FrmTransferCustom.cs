@@ -11,55 +11,55 @@ namespace BP.WF.Template
     /// <summary>
     /// 轨迹图标组件控件状态
     /// </summary>
-    public enum FrmTrackSta
+    public enum FrmTransferCustomSta
     {
         /// <summary>
         /// 不可用
         /// </summary>
         Disable,
         /// <summary>
-        /// 显示轨迹图
+        /// 只读
         /// </summary>
-        Chart,
+        ReadOnly,
         /// <summary>
-        /// 显示轨迹表
+        /// 可以设置人员
         /// </summary>
-        Table
+        SetWorkers
     }
     /// <summary>
-    /// 轨迹图标组件
+    /// 流转自定义组件
     /// </summary>
-    public class FrmTrackAttr : EntityNoAttr
+    public class FrmTransferCustomAttr : EntityNoAttr
     {
         /// <summary>
         /// 显示标签
         /// </summary>
-        public const string FrmTrackLab = "FrmTrackLab";
+        public const string FrmTransferCustomLab = "FrmTransferCustomLab";
         /// <summary>
         /// 状态
         /// </summary>
-        public const string FrmTrackSta = "FrmTrackSta";
+        public const string FrmTransferCustomSta = "FrmTransferCustomSta";
         /// <summary>
         /// X
         /// </summary>
-        public const string FrmTrack_X = "FrmTrack_X";
+        public const string FrmTransferCustom_X = "FrmTransferCustom_X";
         /// <summary>
         /// Y
         /// </summary>
-        public const string FrmTrack_Y = "FrmTrack_Y";
+        public const string FrmTransferCustom_Y = "FrmTransferCustom_Y";
         /// <summary>
         /// H
         /// </summary>
-        public const string FrmTrack_H = "FrmTrack_H";
+        public const string FrmTransferCustom_H = "FrmTransferCustom_H";
         /// <summary>
         /// W
         /// </summary>
-        public const string FrmTrack_W = "FrmTrack_W";
+        public const string FrmTransferCustom_W = "FrmTransferCustom_W";
     }
     /// <summary>
-    /// 轨迹图标组件
+    /// 流转自定义组件
     /// </summary>
-    public class FrmTrack : Entity
+    public class FrmTransferCustom : Entity
     {
         #region 属性
         public string No
@@ -91,89 +91,89 @@ namespace BP.WF.Template
         /// <summary>
         /// 控件状态
         /// </summary>
-        public FrmTrackSta FrmTrackSta
+        public FrmTransferCustomSta FrmTransferCustomSta
         {
             get
             {
-                return (FrmTrackSta)this.GetValIntByKey(FrmTrackAttr.FrmTrackSta);
+                return (FrmTransferCustomSta)this.GetValIntByKey(FrmTransferCustomAttr.FrmTransferCustomSta);
             }
             set
             {
-                this.SetValByKey(FrmTrackAttr.FrmTrackSta, (int)value);
+                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustomSta, (int)value);
             }
         }
         /// <summary>
         /// Y
         /// </summary>
-        public float FrmTrack_Y
+        public float FrmTransferCustom_Y
         {
             get
             {
-                return this.GetValFloatByKey(FrmTrackAttr.FrmTrack_Y);
+                return this.GetValFloatByKey(FrmTransferCustomAttr.FrmTransferCustom_Y);
             }
             set
             {
-                this.SetValByKey(FrmTrackAttr.FrmTrack_Y, value);
+                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustom_Y, value);
             }
         }
         /// <summary>
         /// X
         /// </summary>
-        public float FrmTrack_X
+        public float FrmTransferCustom_X
         {
             get
             {
-                return this.GetValFloatByKey(FrmTrackAttr.FrmTrack_X);
+                return this.GetValFloatByKey(FrmTransferCustomAttr.FrmTransferCustom_X);
             }
             set
             {
-                this.SetValByKey(FrmTrackAttr.FrmTrack_X, value);
+                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustom_X, value);
             }
         }
         /// <summary>
         /// W
         /// </summary>
-        public float FrmTrack_W
+        public float FrmTransferCustom_W
         {
             get
             {
-                return this.GetValFloatByKey(FrmTrackAttr.FrmTrack_W);
+                return this.GetValFloatByKey(FrmTransferCustomAttr.FrmTransferCustom_W);
             }
             set
             {
-                this.SetValByKey(FrmTrackAttr.FrmTrack_W, value);
+                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustom_W, value);
             }
         }
-        public string FrmTrack_Wstr
+        public string FrmTransferCustom_Wstr
         {
             get
             {
-                if (this.FrmTrack_W == 0)
+                if (this.FrmTransferCustom_W == 0)
                     return "100%";
-                return this.FrmTrack_W + "px";
+                return this.FrmTransferCustom_W + "px";
             }
         }
         /// <summary>
         /// H
         /// </summary>
-        public float FrmTrack_H
+        public float FrmTransferCustom_H
         {
             get
             {
-                return this.GetValFloatByKey(FrmTrackAttr.FrmTrack_H);
+                return this.GetValFloatByKey(FrmTransferCustomAttr.FrmTransferCustom_H);
             }
             set
             {
-                this.SetValByKey(FrmTrackAttr.FrmTrack_H, value);
+                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustom_H, value);
             }
         }
-        public string FrmTrack_Hstr
+        public string FrmTransferCustom_Hstr
         {
             get
             {
-                if (this.FrmTrack_H == 0)
+                if (this.FrmTransferCustom_H == 0)
                     return "100%";
-                return this.FrmTrack_H + "px";
+                return this.FrmTransferCustom_H + "px";
             }
         }
         /// <summary>
@@ -189,11 +189,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 显示标签
         /// </summary>
-        public string FrmTrackLab
+        public string FrmTransferCustomLab
         {
             get
             {
-                return this.GetValStrByKey(FrmTrackAttr.FrmTrackLab);
+                return this.GetValStrByKey(FrmTransferCustomAttr.FrmTransferCustomLab);
             }
         }
         #endregion
@@ -224,27 +224,27 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 轨迹图标组件
+        /// 流转自定义组件
         /// </summary>
-        public FrmTrack()
+        public FrmTransferCustom()
         {
         }
         /// <summary>
-        /// 轨迹图标组件
+        /// 流转自定义组件
         /// </summary>
         /// <param name="no"></param>
-        public FrmTrack(string mapData)
+        public FrmTransferCustom(string mapData)
         {
             if (mapData.Contains("ND") == false)
             {
-                this.FrmTrackSta = FrmTrackSta.Disable;
+                this.FrmTransferCustomSta = FrmTransferCustomSta.Disable;
                 return;
             }
 
             string mapdata = mapData.Replace("ND", "");
             if (DataType.IsNumStr(mapdata) == false)
             {
-                this.FrmTrackSta = FrmTrackSta.Disable;
+                this.FrmTransferCustomSta = FrmTransferCustomSta.Disable;
                 return;
             }
 
@@ -259,10 +259,10 @@ namespace BP.WF.Template
             this.Retrieve();
         }
         /// <summary>
-        /// 轨迹图标组件
+        /// 流转自定义组件
         /// </summary>
         /// <param name="no"></param>
-        public FrmTrack(int nodeID)
+        public FrmTransferCustom(int nodeID)
         {
             this.NodeID = nodeID;
             this.Retrieve();
@@ -277,23 +277,23 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_Node", "轨迹图标组件");
+                Map map = new Map("WF_Node", "流转自定义组件");
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
-                map.AddTBString(FrmTrackAttr.FrmTrackLab, "轨迹", "显示标签", true, false, 0, 200, 10, true);
+                map.AddTBString(FrmTransferCustomAttr.FrmTransferCustomLab, "流转自定义", "显示标签", true, false, 0, 200, 10, true);
 
 
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
-                map.AddDDLSysEnum(FrmTrackAttr.FrmTrackSta, (int)FrmTrackSta.Disable, "组件状态",
-                   true, true, FrmTrackAttr.FrmTrackSta, "@0=禁用@1=轨迹图@2=轨迹表");
+                map.AddDDLSysEnum(FrmTransferCustomAttr.FrmTransferCustomSta, (int)FrmTransferCustomSta.Disable, "组件状态",
+                   true, true, FrmTransferCustomAttr.FrmTransferCustomSta, "@0=禁用@1=只读@2=可以设置人员");
 
-                map.AddTBFloat(FrmTrackAttr.FrmTrack_X, 5, "位置X", false, false);
-                map.AddTBFloat(FrmTrackAttr.FrmTrack_Y, 5, "位置Y", false, false);
+                map.AddTBFloat(FrmTransferCustomAttr.FrmTransferCustom_X, 5, "位置X", false, false);
+                map.AddTBFloat(FrmTransferCustomAttr.FrmTransferCustom_Y, 5, "位置Y", false, false);
 
-                map.AddTBFloat(FrmTrackAttr.FrmTrack_H, 300, "高度", true, false);
-                map.AddTBFloat(FrmTrackAttr.FrmTrack_W, 400, "宽度", true, false);
+                map.AddTBFloat(FrmTransferCustomAttr.FrmTransferCustom_H, 300, "高度", true, false);
+                map.AddTBFloat(FrmTransferCustomAttr.FrmTransferCustom_W, 400, "宽度", true, false);
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
@@ -309,22 +309,22 @@ namespace BP.WF.Template
         #endregion
     }
     /// <summary>
-    /// 轨迹图标组件s
+    /// 流转自定义组件s
     /// </summary>
-    public class FrmTracks : Entities
+    public class FrmTransferCustoms : Entities
     {
         #region 构造
         /// <summary>
-        /// 轨迹图标组件s
+        /// 流转自定义组件s
         /// </summary>
-        public FrmTracks()
+        public FrmTransferCustoms()
         {
         }
         /// <summary>
-        /// 轨迹图标组件s
+        /// 流转自定义组件s
         /// </summary>
         /// <param name="fk_mapdata">s</param>
-        public FrmTracks(string fk_mapdata)
+        public FrmTransferCustoms(string fk_mapdata)
         {
             if (SystemConfig.IsDebug)
                 this.Retrieve("No", fk_mapdata);
@@ -338,7 +338,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new FrmTrack();
+                return new FrmTransferCustom();
             }
         }
         #endregion
@@ -347,21 +347,21 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmTrack> ToJavaList()
+        public System.Collections.Generic.IList<FrmTransferCustom> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmTrack>)this;
+            return (System.Collections.Generic.IList<FrmTransferCustom>)this;
         }
 
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmTrack> Tolist()
+        public System.Collections.Generic.List<FrmTransferCustom> Tolist()
         {
-            System.Collections.Generic.List<FrmTrack> list = new System.Collections.Generic.List<FrmTrack>();
+            System.Collections.Generic.List<FrmTransferCustom> list = new System.Collections.Generic.List<FrmTransferCustom>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmTrack)this[i]);
+                list.Add((FrmTransferCustom)this[i]);
             }
             return list;
         }

@@ -60,10 +60,9 @@ namespace CCFlow.WF.MapDef
         protected void Page_Load(object sender, EventArgs e)
         {
             this.Title = "编辑枚举类型"; 
-            MapAttr attr = null;
+            MapAttr attr = new MapAttr();
             if (this.MyPK == null)
             {
-                attr = new MapAttr();
                 if (this.EnumKey != null)
                 {
                     SysEnumMain se = new SysEnumMain(this.EnumKey);
@@ -71,11 +70,14 @@ namespace CCFlow.WF.MapDef
                     attr.UIBindKey = this.EnumKey;
                     attr.Name = se.Name;
                 }
+                attr.UIContralType = UIContralType.DDL;
             }
             else
             {
                 attr = new MapAttr(this.MyPK);
             }
+            attr.FK_MapData = this.FK_MapData;
+
             BindEnum(attr);
         }
         int idx = 1;
@@ -133,7 +135,7 @@ namespace CCFlow.WF.MapDef
             ddl.BindSysEnum(mapAttr.UIBindKey);
             ddl.SetSelectItem(mapAttr.DefVal);
             this.Pub1.AddTD(ddl);
-            this.Pub1.AddTD("<a href='SysEnum.aspx?MyPK=" + mapAttr.UIBindKey + "'>编辑</a>");
+            this.Pub1.AddTD("<a href='SysEnum.aspx?EnumKey=" + mapAttr.UIBindKey + "'>编辑</a>");
             this.Pub1.AddTREnd();
 
 
@@ -175,21 +177,23 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("控件类型");
             this.Pub1.AddTDBegin();
+
             rb = new RadioButton();
             rb.ID = "RB_Ctrl_0";
             rb.Text = "下拉框";
             rb.GroupName = "Ctrl";
+
+            if (mapAttr.UIContralType == UIContralType.DDL)
+                rb.Checked = true;
+            else
+                rb.Checked = false;
+
             this.Pub1.Add(rb);
 
             rb = new RadioButton();
             rb.ID = "RB_Ctrl_1";
             rb.Text = "单选按钮";
             rb.GroupName = "Ctrl";
-
-            if (mapAttr.UIContralType == UIContralType.DDL)
-                rb.Checked = false;
-            else
-                rb.Checked = true;
 
             this.Pub1.Add(rb);
             this.Pub1.AddTDEnd();
@@ -264,10 +268,12 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD("字段分组");
             DDL ddlGroup = new DDL();
             ddlGroup.ID = "DDL_GroupID";
+
             GroupFields gfs = new GroupFields();
             gfs.RetrieveFieldGroup(mapAttr.FK_MapData);
 
             ddlGroup.Bind(gfs, GroupFieldAttr.OID, GroupFieldAttr.Lab);
+
             if (mapAttr.GroupID == 0)
                 mapAttr.GroupID = this.GroupField;
 

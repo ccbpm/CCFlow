@@ -17,11 +17,21 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         /// <summary>
         /// 表单ID
         /// </summary>
-        public   string FK_MapData
+        public string FK_MapData
         {
             get
             {
                 return this.Request.QueryString["FK_MapData"];
+            }
+        }
+        /// <summary>
+        /// 分组
+        /// </summary>
+        public string GroupField
+        {
+            get
+            {
+                return this.Request.QueryString["GroupField"];
             }
         }
         /// <summary>
@@ -56,6 +66,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
             SysEnumMain main = new SysEnumMain();
             if (this.EnumKey != null)
             {
@@ -69,12 +80,26 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 ses.Retrieve(SysEnumAttr.EnumKey, main.No);
             }
 
-            if (this.EnumKey != null)
+            if (this.IsPostBack == false)
             {
-                this.TB_No.Text = this.EnumKey;
-                this.TB_No.Enabled = false;
+                this.Btn_SaveAndAddFrm.Enabled = false;
+                this.Btn_Del.Enabled = false;
+                this.Btn_SaveAndAddFrm.Enabled = false;
+
+                if (this.EnumKey != null)
+                {
+               
+                    this.TB_No.Text = this.EnumKey;
+                    this.TB_No.Enabled = false;
+
+                    this.Btn_Del.Enabled = true;
+                    if (this.FK_MapData != null)
+                    {
+                        this.Btn_SaveAndAddFrm.Enabled = true;
+                    }
+                }
+                this.TB_Name.Text = main.Name;
             }
-            this.TB_Name.Text = main.Name;
 
             this.Pub1.AddTable("width=100%");
             if (this.EnumKey == null)
@@ -96,53 +121,21 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             bool istr = false;
             while (idx < 20)
             {
-               istr= this.Pub1.AddTR(istr);
+                istr = this.Pub1.AddTR(istr);
                 this.Pub1.AddTDIdx(idx);
                 BP.Web.Controls.TB tb = new BP.Web.Controls.TB();
                 tb.ID = "TB_" + idx;
-                tb.Columns = 70;
+                tb.Columns = 50;
                 SysEnum se = ses.GetEntityByKey(SysEnumAttr.IntKey, idx) as SysEnum;
                 if (se != null)
                     tb.Text = se.Lab;
-                
+
                 this.Pub1.AddTD(tb);
                 this.Pub1.AddTREnd();
                 idx++;
             }
-
-            //this.Pub1.AddTRSum();
-            //this.Pub1.Add("<TD colspan=3 align=center>");
-            //Button btn = new Button();
-            //btn.ID = "Btn_Save";
-            //btn.CssClass = "Btn";
-            //btn.Text = " 保存 ";
-            //btn.Click += new EventHandler(Btn_Save_Click);
-            //this.Pub1.Add(btn);
-
-            //btn = new Button();
-            //btn.CssClass = "Btn";
-            //btn.ID = "Btn_Add";
-            //btn.Text = "添加到表单"; // "添加到表单";
-            //btn.Attributes["onclick"] = " return confirm('您确认吗？');";
-            //btn.Click += new EventHandler(btn_Add_Click);
-            //if (this.EnumKey == null)
-            //    btn.Enabled = false;
-            //this.Pub1.Add(btn);
-
-            //btn = new Button();
-            //btn.CssClass = "Btn";
-            //btn.ID = "Btn_Del";
-            //btn.Text = " 删除 ";
-            //btn.Attributes["onclick"] = " return confirm('您确认吗？');";
-            //if (this.EnumKey == null)
-            //    btn.Enabled = false;
-
-            //btn.Click += new EventHandler(Btn_Del_Click);
-            //this.Pub1.Add(btn);
-
-            //this.Pub1.AddTDEnd();
-            //this.Pub1.AddTREnd();
             this.Pub1.AddTableEnd();
+
         }
         void btn_Add_Click(object sender, EventArgs e)
         {
@@ -168,6 +161,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             // this.WinClose();
             return;
         }
+        bool isSaveOK = false;
         public void Btn_Save_Click(object sender, EventArgs e)
         {
             try
@@ -182,6 +176,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     if (main.IsExits)
                     {
                         this.Alert("编号（枚举英文名称）[" + main.No + "]已经存在。");
+                        isSaveOK = false;
                         return;
                     }
 
@@ -189,6 +184,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     if (se.IsExit(SysEnumAttr.EnumKey, main.No) == true)
                     {
                         this.Alert("编号（枚举英文名称）[" + main.No + "]已经存在。");
+                        isSaveOK = false;
                         return;
                     }
                     main.Name = this.TB_Name.Text;
@@ -224,16 +220,17 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 string keyApp = "EnumOf" + main.No + WebUser.SysLang;
                 BP.DA.Cash.DelObjFormApplication(keyApp);
 
-                if (this.MyPK != null)
-                    this.Response.Redirect("SysEnum.aspx?RefNo=" + main.No + "&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX, true);
+                if (this.EnumKey == null)
+                    this.Response.Redirect("SysEnum.aspx?EnumKey=" + main.No + "&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&GroupField=" + this.GroupField, true);
+                isSaveOK = true;
                 return;
             }
             catch (Exception ex)
             {
                 this.Alert(ex.Message);
-                //this.ResponseWriteBlueMsg(ex.Message);
+                isSaveOK = false;
+                return;
             }
-
         }
         public void Btn_Del_Click(object sender, EventArgs e)
         {
@@ -250,13 +247,54 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
         }
 
+        /// <summary>
+        /// 保存并保存到表单里.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Btn_SaveAndAddFrm_Click(object sender, EventArgs e)
         {
+            this.Btn_Save_Click(null, null);
+
+            if (this.isSaveOK == false)
+                return;
+             
+            //SysEnumMain sem1 = new SysEnumMain(this.EnumKey);
+            //MapAttr attrAdd = new MapAttr();
+            //attrAdd.KeyOfEn = sem1.No;
+            //if (attrAdd.IsExit(MapAttrAttr.FK_MapData, this.MyPK, MapAttrAttr.KeyOfEn, sem1.No))
+            //{
+            //    BP.Sys.PubClass.Alert("字段已经存在 [" + sem1.No + "]。");
+            //    return;
+            //}
+            //attrAdd.FK_MapData = this.MyPK;
+            //attrAdd.Name = sem1.Name;
+            //attrAdd.UIContralType = UIContralType.DDL;
+            //attrAdd.UIBindKey = sem1.No;
+            //attrAdd.MyDataType = BP.DA.DataType.AppInt;
+            //attrAdd.LGType = FieldTypeS.Enum;
+            //attrAdd.DefVal = "0";
+            //attrAdd.UIIsEnable = true;
+            //attrAdd.Insert();
+
+
+            this.Response.Redirect("EditEnum.aspx?DoType=New&FK_MapData="+this.FK_MapData+"&EnumKey="+this.EnumKey+"&GroupField="+this.GroupField, true);
+
         }
 
+        /// <summary>
+        /// 保存并关闭.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Btn_SaveAndClose_Click(object sender, EventArgs e)
         {
+            this.Btn_Save_Click(null, null);
 
+            if (this.isSaveOK == false)
+                return;
+            
+            this.WinClose();
         }
 
         protected void TextBox1_TextChanged(object sender, EventArgs e)

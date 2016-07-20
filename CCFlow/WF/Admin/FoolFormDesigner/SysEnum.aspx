@@ -38,19 +38,19 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
 <table  style="width:100%">
-<caption>枚举值编辑</caption>
 <tr>
 <td valign="top"  > 
 
 <table style="width:100%;">
+<caption> 枚举属性 </caption>
 <tr>
-<td>枚举中文名称： </td>
+<td nowarp=true >中文名:</td>
 <td> <asp:TextBox ID="TB_Name" runat="server" AutoPostBack="True" 
         ontextchanged="TextBox1_TextChanged"></asp:TextBox></td>
 </tr>
 
 <tr>
-<td>枚举编号： </td>
+<td  nowarp=true >编号:</td>
 <td> <asp:TextBox ID="TB_No" runat="server"></asp:TextBox></td>
 </tr>
 

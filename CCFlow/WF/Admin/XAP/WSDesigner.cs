@@ -83,7 +83,7 @@ namespace CCFlow.WF.Admin.XAP
                 myds.Tables.Add(dtDept);
 
                 //加入人员.
-                sql = "SELECT No,Name,FK_Dept FROM Port_Emp ORDER BY No,Idx";
+                sql = "SELECT No,Name,FK_Dept FROM Port_Emp ORDER BY No ";
                 DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 dtEmp.TableName = "Port_Emp";
                 myds.Tables.Add(dtEmp);

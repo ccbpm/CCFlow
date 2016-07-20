@@ -106,7 +106,6 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTD("<a href='MapFrame.aspx?FK_MapData=" + this.FK_MapData + "&DoType=Edit&FK_MapFrame=" + dtl.MyPK + "'>编辑</a>");
                 this.Pub1.AddTREnd();
                 //continue;
-
                 //tb = new TB();
                 //tb.ID = "TB_No_" + dtl.MyPK;
                 //tb.Text = dtl.MyPK;

@@ -124,7 +124,6 @@ namespace CCFlow.WF.MapDef
             #endregion 计算出来列的宽度.
 
 
-
             this.Pub1.Add("<div style='width:" + md.TableWidth + ";height:" + md.TableHeight + ";background-color:white;border:1px solid #666;padding:5px;' align='center'>");
             this.Pub1.Add("\t\n<Table style='width:98%;border:1px;padding:5px; padding-top:11px;' >");
 

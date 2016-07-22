@@ -1244,10 +1244,10 @@ namespace CCFlow.WF.Admin
                     url += "EditEnum.aspx?MyPK=" + drAttr[MapAttrAttr.FK_MapData] + "&RefNo=" + drAttr[MapAttrAttr.MyPK];
                     break;
                 case BP.En.FieldTypeS.Normal:
-                    url += "EditF.aspx?DoType=Edit&MyPK=" + drAttr[MapAttrAttr.FK_MapData] + "&RefNo=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
+                    url += "EditF.aspx?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 case BP.En.FieldTypeS.FK:
-                    url += "EditTable.aspx?DoType=Edit&MyPK=" + drAttr[MapAttrAttr.FK_MapData] + "&RefNo=" + drAttr[MapAttrAttr.MyPK] + "&FType=" +
+                    url += "EditTable.aspx?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" +
                            drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 default:

@@ -4,8 +4,8 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script type="text/javascript">
-    function Edit(mypk, refno, ftype) {
-        var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
+        function Edit(fk_mapdata, mypk, ftype) {
+        var url = 'EditF.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
         var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         window.close();
         //window.location.href = window.location.href;

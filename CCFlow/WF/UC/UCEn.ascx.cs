@@ -706,15 +706,248 @@ namespace CCFlow.WF.UC
             this.LoadData(mattrs, en);
             string appPath = CCFlowAppPath; //this.Page.Request.ApplicationPath;
              
-
             #region 生成表头.
             this.Add("\t\n<Table style='width:" + mff.TableWidth + ";' align=left>");
-
-            this.AddTREnd();
             #endregion 生成表头.
+
+            bool isLeft = true;
 
             foreach (GroupField gf in gfs)
             {
+                #region 首先判断是否是框架分组？
+                switch (gf.CtrlType)
+                {
+                    case GroupCtrlType.Frame: // 框架 类型.
+                        #region 框架
+                        foreach (MapFrame fram in frames)
+                        {
+                            if (fram.MyPK != gf.CtrlID)
+                                continue;
+
+                            this.AddTR();
+                            //增加Group.
+                            this.AddTD("colspan=4 style='width:100%' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + fram.Name + "</div><div style='text-align:right; float:right'></div>");
+                            this.AddTREnd();
+
+                            this.AddTR();
+                            this.Add("<TD colspan=4 ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
+                            string paras = this.RequestParas;
+                            if (paras.Contains("FID=") == false)
+                                paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
+
+                            if (paras.Contains("WorkID=") == false)
+                                paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
+
+                            string src = fram.URL;
+                            if (src.Contains("?"))
+                                src += "&r=q" + paras;
+                            else
+                                src += "?r=q" + paras;
+                            this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='" + fram.H + "' scrolling=auto /></iframe>");
+                            this.AddTDEnd();
+                            this.AddTREnd();
+                        }
+                        #endregion 框架
+                        continue;
+                    case GroupCtrlType.Dtl: //增加从表.
+                        #region 增加从表
+                        foreach (MapDtl dtl in dtls)
+                        {
+                            if (dtl.No != gf.CtrlID)
+                                continue;
+
+                            if (dtl.IsView == false || this.ctrlUseSta.Contains(dtl.No))
+                                continue;
+                              
+                            this.ctrlUseSta += dtl.No;
+
+                            rowIdx++;
+                            // myidx++;
+                            this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
+                            this.Add("<TD colspan=" + this.mapData.PTable + " ID='TD" + dtl.No + "' height='50px' width='100%' style='align:left'>");
+                            string src = "";
+                            try
+                            {
+                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+                            }
+                            catch
+                            {
+                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+                            }
+
+                            if (this.IsReadonly || dtl.IsReadonly)
+                                this.Add("<iframe ID='F" + dtl.No + "'  src='" + src +
+                                         "&IsReadonly=1' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
+                            else
+                            {
+                                //this.Add("<iframe ID='F" + dtl.No + "'   Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' /></iframe>");
+
+                                AddLoadFunction(dtl.No, "blur", "SaveDtl");
+
+                                this.Add("<iframe ID='F" + dtl.No + "'   onload='" + dtl.No + "load();'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
+
+                            }
+
+                            this.AddTDEnd();
+                            this.AddTREnd();
+                        }
+                        #endregion 增加从表
+                        continue;
+                    case GroupCtrlType.Ath: //增加附件.
+                        #region 增加附件
+                        foreach (FrmAttachment ath in this.aths)
+                        {
+                            if (ath.MyPK != gf.CtrlID)
+                                continue;
+
+                            ath.IsUse = true;
+
+                            //myidx = rowIdx + 10;
+
+                            //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                            //this.Pub1.AddTREnd();
+
+                            //myidx++;
+                            //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                            //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='100%' >");
+
+                            //src = "../../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+
+                            //this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ath.H + "' scrolling=auto  /></iframe>");
+
+                            //this.Pub1.AddTDEnd();
+                            //this.Pub1.AddTREnd();
+                        }
+                        #endregion 增加附件
+                        continue;
+                    case GroupCtrlType.FWC: //审核组件.
+                        #region 审核组件
+                        FrmWorkCheck fwc = new FrmWorkCheck(this.FK_MapData);
+                        if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
+                        {
+                            gf.Delete();
+                            continue;
+                        }
+
+                        //myidx = rowIdx + 10;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFWC('" + fwc.NodeID + "')\" >" + fwc.FWCLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        //this.Pub1.AddTREnd();
+
+                        //myidx++;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + fwc.No + "' height='" + fwc.FWC_H + "px' width='100%' >");
+
+                        //src = "NodeFrmComponents.aspx?DoType=FWC&FK_MapData=" + fwc.NodeID;
+                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + fwc.FWC_H + "px' scrolling=auto  /></iframe>");
+                        //this.Pub1.AddTDEnd();
+                        //this.Pub1.AddTREnd();
+                        #endregion  审核组件
+                        continue;
+                    case GroupCtrlType.SubFlow: //子流程..
+                        #region 子流程.
+                        FrmSubFlow subflow = new FrmSubFlow(this.FK_MapData);
+                        if (subflow.HisFrmSubFlowSta == FrmSubFlowSta.Disable)
+                        {
+                            gf.Delete();
+                            continue;
+                        }
+
+                        //myidx = rowIdx + 10;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='ImgSub" + subflow.NodeID + "'  border=0 /><a href=\"javascript:EditSubFlow('" + subflow.NodeID + "')\" >" + subflow.SFLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        //this.Pub1.AddTREnd();
+
+                        //myidx++;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + subflow.No + "' height='" + subflow.SF_H + "px' width='100%' >");
+
+                        //src = "NodeFrmComponents.aspx?DoType=SubFlow&FK_MapData=" + subflow.NodeID;
+                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + subflow.SF_H + "px' scrolling=auto  /></iframe>");
+                        //this.Pub1.AddTDEnd();
+                        //this.Pub1.AddTREnd();
+                        #endregion 子线程.
+                        continue;
+                    case GroupCtrlType.Track: //轨迹图.
+                        #region 轨迹图.
+                        FrmTrack track = new FrmTrack(this.FK_MapData);
+                        if (track.FrmTrackSta == FrmTrackSta.Disable)
+                        {
+                            gf.Delete();
+                            continue;
+                        }
+
+                        //myidx = rowIdx + 10;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditTrack('" + track.NodeID + "')\" >" + track.FrmTrackLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        //this.Pub1.AddTREnd();
+
+                        //myidx++;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + track.No + "' height='" + track.FrmTrack_H + "px' width='100%' >");
+
+                        //src = "NodeFrmComponents.aspx?DoType=FrmTrack&FK_MapData=" + track.NodeID;
+                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + track.FrmTrack_H + "px' scrolling=auto  /></iframe>");
+                        //this.Pub1.AddTDEnd();
+                        //this.Pub1.AddTREnd();
+                        #endregion 轨迹图.
+                        continue;
+                    case GroupCtrlType.Thread: //子线程.
+                        #region 子线程.
+
+                        FrmThread thread = new FrmThread(this.FK_MapData);
+                        if (thread.FrmThreadSta == FrmThreadSta.Disable)
+                        {
+                            gf.Delete();
+                            continue;
+                        }
+
+                        //myidx = rowIdx + 10;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditThread('" + thread.NodeID + "')\" >" + thread.FrmThreadLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        //this.Pub1.AddTREnd();
+
+                        //myidx++;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDThread" + thread.No + "' height='" + thread.FrmThread_H + "px' width='100%' >");
+
+                        //src = "NodeFrmComponents.aspx?DoType=FrmThread&FK_MapData=" + thread.NodeID;
+                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + thread.FrmThread_H + "px' scrolling=auto  /></iframe>");
+                        //this.Pub1.AddTDEnd();
+                        //this.Pub1.AddTREnd();
+                        #endregion 轨迹图.
+                        continue;
+                    case GroupCtrlType.FTC: //流转自定义.
+                        #region 流转自定义.
+
+                        FrmTransferCustom ftc = new FrmTransferCustom(this.FK_MapData);
+                        if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.Disable)
+                        {
+                            gf.Delete();
+                            continue;
+                        }
+
+                        //myidx = rowIdx + 10;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFTC('" + ftc.NodeID + "')\" >" + ftc.FrmTransferCustomLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        //this.Pub1.AddTREnd();
+
+                        //myidx++;
+                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFTC" + ftc.No + "' height='" + ftc.FrmTransferCustom_H + "px' width='100%' >");
+
+                        //src = "NodeFrmComponents.aspx?DoType=FrmFTC&FK_MapData=" + ftc.NodeID;
+                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ftc.FrmTransferCustom_H + "px' scrolling=auto  /></iframe>");
+                        //this.Pub1.AddTDEnd();
+                        //this.Pub1.AddTREnd();
+                        #endregion 流转自定义.
+                        continue;
+                    default:
+                        break;
+                }
+                #endregion
+
                 #region 首先判断是否是框架分组？
                 switch (gf.CtrlType)
                 {
@@ -1129,39 +1362,6 @@ namespace CCFlow.WF.UC
                 }
                 this.InsertObjects(false);
             } // 结束分组循环.
-
-
-            #region 审核组件
-            FrmWorkCheck fwc = new FrmWorkCheck(enName);
-            if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Disable)
-            {
-                rowIdx++;
-
-                this.AddTR();
-                this.AddTD("colspan=" +4+ " class=GroupField valign='top' align=left ", "<div style='text-align:left; float:left'>&nbsp;审核信息</div><div style='text-align:right; float:right'></div>");
-                this.AddTREnd();
-
-                // myidx++;
-                this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                this.Add("<TD colspan=" + 4 + " ID='TD" + enName + "' height='50px' width='100%' style='align:left'>");
-                string src = CCFlowAppPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
-                string paras = this.RequestParas;
-                try
-                {
-                    if (paras.Contains("FID=") == false)
-                        paras += "&FID=" + en.GetValStrByKey("FID");
-                }
-                catch
-                {
-                }
-                if (paras.Contains("OID=") == false)
-                    paras += "&OID=" + en.GetValStrByKey("OID");
-                src += "&r=q" + paras;
-                this.Add("<iframe ID='F33" + fwc.No + "'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0'  width='100%'  scrolling=auto/></iframe>");
-                this.AddTDEnd();
-                this.AddTREnd();
-            }
-            #endregion 审核组件
 
 
             this.AddTREnd();

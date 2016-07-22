@@ -111,8 +111,8 @@
             //window.location.href ='Designer.aspx?PK='+mypk+'&IsOpen=1';
             window.location.href = window.location.href;
         }
-        function Down(mypk, mypk, idx, t) {
-            var url = 'Do.aspx?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
+        function Down(fk_mapdata, mypk, idx) {
+            var url = 'Do.aspx?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=xx';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }

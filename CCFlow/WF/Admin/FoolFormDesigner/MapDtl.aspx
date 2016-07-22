@@ -26,8 +26,8 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function Edit(mypk, refno, ftype) {
-            var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype + '&s=' + Math.random();
+        function Edit(fk_mapdata, mypk, ftype) {
+            var url = 'EditF.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

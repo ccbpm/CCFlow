@@ -14,9 +14,8 @@
             window.close();
        return true;
    }
-   
     </script>
-    <base target=_self /> 
+    <base target="_self" /> 
 </head>
 <body topmargin="0" leftmargin="0" onkeypress="Esc()"   >
     <form id="form1" runat="server">

@@ -69,10 +69,10 @@
         var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
         window.location.href = window.location.href;
     }
-     
-    function Edit(mypk,refno, ftype)
+
+    function Edit(fk_mapdata, mypk, ftype)
     {
-        var url='EditF.aspx?DoType=Edit&MyPK='+mypk+'&RefNo='+refno +'&FType=' + ftype;
+        var url = 'EditF.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
         var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
         window.location.href = window.location.href;
     }

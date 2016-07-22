@@ -115,7 +115,7 @@
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none;" href="javascript:Run_Flow();"  title="流程测试">
             <img src="Img/Menu/RunFlow.png"  id="FlowRun"   border="0" width="14" height="14"  alt="测试并运行流程." />
-            <label for="FlowRun" class="toolbarText">流程测试</label> 
+            <label for="FlowRun" class="toolbarText">运行</label> 
         </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a  style="text-decoration: none;" href="javascript:action('connector-straight');" title="直线连接">

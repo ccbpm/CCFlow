@@ -116,13 +116,13 @@ namespace CCFlow.WF.MapDef
                         switch (mattr.LGType)
                         {
                             case BP.En.FieldTypeS.Enum:
-                                this.Response.Redirect("EditEnum.aspx?MyPK=" + mattr.FK_MapData + "&RefNo=" + mattr.MyPK, true);
+                                this.Response.Redirect("EditEnum.aspx?FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK, true);
                                 return;
                             case BP.En.FieldTypeS.Normal:
-                                this.Response.Redirect("EditF.aspx?DoType=Edit&MyPK=" + mattr.FK_MapData + "&RefNo=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
+                                this.Response.Redirect("EditF.aspx?DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
                                 return;
                             case BP.En.FieldTypeS.FK:
-                                this.Response.Redirect("EditTable.aspx?DoType=Edit&MyPK=" + mattr.FK_MapData + "&RefNo=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
+                                this.Response.Redirect("EditTable.aspx?DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
                                 return;
                             default:
                                 break;

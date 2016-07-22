@@ -37,38 +37,38 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
             //  window.location.href = window.location.href;
         }
-        function Edit(mypk, refNo, ftype) {
-            var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refNo + '&FType=' + ftype + '&s=' + Math.random();
+        function Edit(fk_mapdata, mypk, ftype) {
+            var url = 'EditF.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditEnum(mypk, refNo) {
-            var url = 'EditEnum.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refNo + '&s=' + Math.random();
+        function EditEnum(fk_mapdata, refNo) {
+            var url = 'EditEnum.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditTable(mypk, refno) {
-            var url = 'EditTable.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&s=' + Math.random();
+        function EditTable(fk_mapdata, refno) {
+            var url = 'EditTable.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
-        function Up(mypk, refNo, toidx) {
-            var url = 'Do.aspx?DoType=Up&MyPK=' + mypk + '&RefNo=' + refNo + "&IsDtl=1&ToIdx=" + toidx;
+        function Up(fk_mapdata, mypk, toidx) {
+            var url = 'Do.aspx?DoType=Up&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + "&IsDtl=1&ToIdx=" + toidx;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             //window.location.href ='Designer.aspx?PK='+mypk+'&IsOpen=1';
             window.location.href = window.location.href;
         }
-        function Down(mypk, refNo, toidx) {
-            var url = 'Do.aspx?DoType=DownAttr&MyPK=' + mypk + '&RefNo=' + refNo + "&IsDtl=1&Ds=" + toidx;
+        function Down(fk_mapdata, mypk, toidx) {
+            var url = 'Do.aspx?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + "&IsDtl=1&Ds=" + toidx;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function Del(mypk, refNo) {
+        function Del(fk_mapdata, refNo) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            var url = 'Do.aspx?DoType=Del&MyPK=' + mypk + '&RefNo=' + refNo;
+            var url = 'Do.aspx?DoType=Del&MyPK=' + fk_mapdata + '&RefNo=' + refNo;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

@@ -90,7 +90,6 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-
         function Edit(fk_mapdata, mypk, ftype) {
             var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData='+fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
@@ -106,15 +105,14 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-
-        function Up(mypk, refoid, idx, t) {
-            var url = 'Do.aspx?DoType=Up&MyPK=' + mypk + '&RefNo=' + refoid + '&ToIdx=' + idx + '&T=' + t;
+        function Up(fk_mapdata, mypk, idx, t) {
+            var url = 'Do.aspx?DoType=Up&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             //window.location.href ='Designer.aspx?PK='+mypk+'&IsOpen=1';
             window.location.href = window.location.href;
         }
-        function Down(mypk, refoid, idx, t) {
-            var url = 'Do.aspx?DoType=Down&MyPK=' + mypk + '&RefNo=' + refoid + '&ToIdx=' + idx + '&T=' + t;
+        function Down(mypk, mypk, idx, t) {
+            var url = 'Do.aspx?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }

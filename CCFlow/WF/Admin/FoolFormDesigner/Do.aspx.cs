@@ -358,16 +358,15 @@ namespace CCFlow.WF.MapDef
                         this.AddF();
                         break;
                     case "Up":
-                        MapAttr attrU = new MapAttr(this.RefNo);
+                        MapAttr attrU = new MapAttr(this.MyPK);
                         attrU.DoUp();
                         this.WinClose();
                         break;
                     case "Down": //让一个字段下移动.
-                        MapAttr attrD = new MapAttr(this.RefNo);
+                        MapAttr attrD = new MapAttr(this.MyPK);
                         attrD.DoDown();
                         this.WinClose();
                         break;
-
                     case "Jump":
                         MapAttr attrFrom = new MapAttr(this.Request.QueryString["FromID"]);
                         MapAttr attrTo = new MapAttr(this.Request.QueryString["ToID"]);

@@ -41,7 +41,7 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapFoolForm','@No=�
 
 --新版本的流程属性,节点属性.
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeExt','@NodeID=基本配置@FWCSta=审核组件,适用于sdk表单审核组件与ccform上的审核组件属性设置.@SendLab=按钮权限,控制工作节点可操作按钮.@RunModel=运行模式,分合流,父子流程@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.@MPhone_WorkModel=移动,与手机平板电脑相关的应用设置.@TSpanDay=考核,时效考核,质量考核.@OfficeOpen=公文按钮,只有当该节点是公文流程时候有效');
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeExt','@NodeID=基本配置@FWCSta=审核组件,适用于sdk表单审核组件与ccform上的审核组件属性设置.@SendLab=按钮权限,控制工作节点可操作按钮.@RunModel=运行模式,分合流,父子流程@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.@MPhone_WorkModel=移动,与手机平板电脑相关的应用设置.');
 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基本配置');

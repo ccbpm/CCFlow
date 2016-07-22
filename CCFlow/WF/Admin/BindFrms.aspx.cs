@@ -471,7 +471,7 @@ namespace CCFlow.WF.Admin
                         if (dtls.Count == 0)
                             continue;
 
-                        foreach (MapDtlExt dtl in dtls)
+                        foreach (MapDtl dtl in dtls)
                         {
                             ddl.Items.Add(new ListItem("汇总到:"+myfrn.HisFrm.Name+"-"+dtl.Name,  myfrn.HisFrm.No+"@"+dtl.No));
                         }

@@ -625,7 +625,7 @@ namespace CCFlow.WF.CCForm
             ReplaceDtlNos = "[";
             MapDtls dtls = new MapDtls(this.FK_MapData);
             // 填充从表.
-            foreach (MapDtlExt dtl in dtls)
+            foreach (MapDtl dtl in dtls)
             {
                 ReplaceDtlNos += "\"" + dtl.No + "\",";
                 

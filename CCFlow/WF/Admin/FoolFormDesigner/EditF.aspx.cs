@@ -62,8 +62,8 @@ namespace CCFlow.WF.MapDef
             get
             {
                 string str = this.Request.QueryString["FK_MapData"];
-                if (str == null)
-                    str = this.MyPK;
+                if (string.IsNullOrEmpty(str) == true)
+                    throw new Exception("@没有接收到FK_MapData的参数.");
                 return str;
             }
         }
@@ -1083,7 +1083,7 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "&GroupField=" + attr.GroupID, true);
+                        this.Response.Redirect("FieldTypeList.aspx?FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&GroupField=" + attr.GroupID, true);
                         return;
                     default:
                         break;

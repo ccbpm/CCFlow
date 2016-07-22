@@ -97,10 +97,6 @@ namespace BP.Sys
     public class MapDtlAttr : EntityNoNameAttr
     {
         /// <summary>
-        /// GrupID
-        /// </summary>
-        public const string GroupID = "GroupID";
-        /// <summary>
         /// 行Idx
         /// </summary>
         public const string RowIdx = "RowIdx";
@@ -315,17 +311,6 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapDtlAttr.RowIdx, value);
-            }
-        }
-        public int GroupID
-        {
-            get
-            {
-                return this.GetValIntByKey(MapDtlAttr.GroupID);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.GroupID, value);
             }
         }
         /// <summary>

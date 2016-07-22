@@ -179,7 +179,7 @@ namespace CCFlow.WF.MapDef
             if (mapAttr.UIBindKey.Contains("."))
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('../Comm/Search.aspx?EnsName=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
             else
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?RefNo=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
             this.Pub1.AddTREnd();
 
             isItem = this.Pub1.AddTR(isItem);
@@ -383,8 +383,7 @@ namespace CCFlow.WF.MapDef
                 if (this.MyPK == null || this.MyPK == "")
                 {
 
-                    attr.MyPK = this.MyPK + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
-
+                    attr.MyPK = this.FK_MapData + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
                     attr.KeyOfEn = this.Pub1.GetTBByID("TB_KeyOfEn").Text;
                     if (attr.IsExits == true)
                     {
@@ -394,7 +393,6 @@ namespace CCFlow.WF.MapDef
 
                     attr.UIContralType = UIContralType.DDL;
                     attr.MyDataType = BP.DA.DataType.AppString;
-                    attr.LGType = FieldTypeS.FK;
                     attr.DefVal = "";
                     //   attr.UIBindKey = this.Request.QueryString["SFKey"];
                     attr.UIIsEnable = true;
@@ -407,6 +405,7 @@ namespace CCFlow.WF.MapDef
 
                 attr = (MapAttr)this.Pub1.Copy(attr);
                 attr.FK_MapData = this.FK_MapData;
+                attr.LGType = FieldTypeS.FK;
 
                 attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
                 attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;

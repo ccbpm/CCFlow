@@ -36,6 +36,20 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["DoType"];
             }
         }
+        public string FK_MapData
+        {
+            get
+            {
+                return this.Request.QueryString["FK_MapData"];
+            }
+        }
+        public string FK_SFTable
+        {
+            get
+            {
+                return this.Request.QueryString["FK_SFTable"];
+            }
+        }
         public string IDX
         {
             get
@@ -48,9 +62,9 @@ namespace CCFlow.WF.MapDef
         protected void Page_Load(object sender, EventArgs e)
         {
             SFTable main = new SFTable();
-            if (this.RefNo != null)
+            if (this.FK_SFTable != null)
             {
-                main.No = this.RefNo;
+                main.No = this.FK_SFTable;
                 main.Retrieve();
             }
             this.BindSFTable(main);
@@ -64,20 +78,20 @@ namespace CCFlow.WF.MapDef
             #region 生成标题.
             if (this.FromApp == "SL")
             {
-                if (this.RefNo == null)
+                if (this.FK_SFTable == null)
                     this.Ucsys1.AddCaption("新建表");
                 else
                     this.Ucsys1.AddCaption("编辑表");
             }
             else
             {
-                if (this.RefNo == null)
-                    this.Ucsys1.AddCaption("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'>外部表</a> - 新建表");
+                if (this.FK_SFTable == null)
+                    this.Ucsys1.AddCaption("<a href='Do.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 新建表");
                 else
-                    this.Ucsys1.AddCaption("<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'>外部表</a> - 编辑表");
+                    this.Ucsys1.AddCaption("<a href='Do.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 编辑表");
             }
 
-            if (this.RefNo == null)
+            if (this.FK_SFTable == null)
                 this.Title = "新建表";
             else
                 this.Title = "编辑表";
@@ -104,7 +118,7 @@ namespace CCFlow.WF.MapDef
 
             ddl.Bind(srcs, en.FK_SFDBSrc);
             this.Ucsys1.AddTD(ddl);
-            this.Ucsys1.AddTD("选择数据源,点击这里<a href=\"javascript:WinOpen('/WF/Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New')\">创建</a>，<a href='SFSQL.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx='>刷新</a>。");
+            this.Ucsys1.AddTD("选择数据源,点击这里<a href=\"javascript:WinOpen('/WF/Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New')\">创建</a>，<a href='SFSQL.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx='>刷新</a>。");
             this.Ucsys1.AddTREnd();
 
 
@@ -128,7 +142,7 @@ namespace CCFlow.WF.MapDef
             tb = new BP.Web.Controls.TB();
             tb.ID = "TB_" + SFTableAttr.No;
             tb.Text = en.No;
-            if (this.RefNo == null)
+            if (this.FK_SFTable == null)
                 tb.Enabled = true;
             else
                 tb.Enabled = false;
@@ -203,7 +217,7 @@ namespace CCFlow.WF.MapDef
             Button btn = new Button();
             btn.ID = "Btn_Save";
             btn.CssClass = "Btn";
-            if (this.RefNo == null)
+            if (this.FK_SFTable == null)
                 btn.Text = "创建";
             else
                 btn.Text = "保存";
@@ -214,12 +228,12 @@ namespace CCFlow.WF.MapDef
             //btn.ID = "Btn_Edit";
             //btn.CssClass = "Btn";
             //btn.Text =  "查看数据"; // "编辑数据"
-            //if (this.RefNo == null)
+            //if (this.FK_SFTable == null)
             //    btn.Enabled = false;
             //if (en.IsClass)
             //    btn.Attributes["onclick"] = "WinOpen('../Search.aspx?EnsName=" + en.No + "','dg' ); return false;";
             //else
-            //    btn.Attributes["onclick"] = "WinOpen('SFTableEditData.aspx?RefNo=" + this.RefNo + "','dg' ); return false;";
+            //    btn.Attributes["onclick"] = "WinOpen('SFTableEditData.aspx?RefNo=" + this.FK_SFTable + "','dg' ); return false;";
             //this.Ucsys1.Add(btn);
 
             if (this.FromApp != "SL")
@@ -230,7 +244,7 @@ namespace CCFlow.WF.MapDef
                 btn.Text = "添加到表单"; ; // "添加到表单";
                 btn.Attributes["onclick"] = " return confirm('您确认吗？');";
                 btn.Click += new EventHandler(btn_Add_Click);
-                if (this.RefNo == null)
+                if (this.FK_SFTable == null)
                     btn.Enabled = false;
                 this.Ucsys1.Add(btn);
             }
@@ -240,7 +254,7 @@ namespace CCFlow.WF.MapDef
             btn.CssClass = "Btn";
             btn.Text = "删除";
             btn.Attributes["onclick"] = " return confirm('您确认吗？');";
-            if (this.RefNo == null)
+            if (this.FK_SFTable == null)
                 btn.Enabled = false;
 
             btn.Click += new EventHandler(btn_Del_Click);
@@ -265,14 +279,14 @@ namespace CCFlow.WF.MapDef
         }
         void btn_Add_Click(object sender, EventArgs e)
         {
-            SFTable table = new SFTable(this.RefNo);
+            SFTable table = new SFTable(this.FK_SFTable);
             if (table.GetTableSQL.Rows.Count == 0)
             {
-                this.Alert("该表里[" + this.RefNo + "]中没有数据，您需要维护数据才能加入。");
+                this.Alert("该表里[" + this.FK_SFTable + "]中没有数据，您需要维护数据才能加入。");
                 return;
             }
 
-            this.Response.Redirect("Do.aspx?DoType=AddSFSQLAttr&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "&RefNo=" + this.RefNo + "&FromApp=" + this.FromApp, true);
+            this.Response.Redirect("Do.aspx?DoType=AddSFSQLAttr&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&RefNo=" + this.FK_SFTable + "&FromApp=" + this.FromApp, true);
             this.WinClose();
             return;
         }
@@ -281,11 +295,11 @@ namespace CCFlow.WF.MapDef
             try
             {
                 SFTable main = new SFTable();
-                main.No = this.RefNo;
+                main.No = this.FK_SFTable;
                 main.RetrieveFromDBSources();
                 main = (SFTable)this.Ucsys1.Copy(main);
 
-                if (this.RefNo == null)
+                if (this.FK_SFTable == null)
                 {
                     if (main.IsExits==true)
                         throw new Exception("编号["+main.No+"]已经存在");
@@ -308,13 +322,13 @@ namespace CCFlow.WF.MapDef
                     main.CashMinute = 0;
                 #endregion 检查必填项.
 
-                if (this.RefNo == null)
+                if (this.FK_SFTable == null)
                     main.FK_Val = main.No;  
              
                 main.Save();
 
                 //重新生成
-                this.Response.Redirect("SFSQL.aspx?RefNo=" + main.No + "&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "&FromApp=" + this.FromApp, true);
+                this.Response.Redirect("SFSQL.aspx?RefNo=" + main.No + "&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&FromApp=" + this.FromApp, true);
             }
             catch (Exception ex)
             {
@@ -330,12 +344,12 @@ namespace CCFlow.WF.MapDef
                 QueryObject qo = new QueryObject(attrs);
                 qo.AddWhere(MapAttrAttr.MyDataType, DataType.AppString);
                 qo.addAnd();
-                qo.AddWhere(MapAttrAttr.UIBindKey, this.RefNo);
+                qo.AddWhere(MapAttrAttr.UIBindKey, this.FK_SFTable);
                 int i = qo.DoQuery();
                 if (i == 0)
                 {
                     BP.Sys.SFTable m = new SFTable();
-                    m.No = this.RefNo;
+                    m.No = this.FK_SFTable;
                     m.Delete();
                     this.ToWFMsgPage("外键删除成功");
                     return;

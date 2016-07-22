@@ -509,7 +509,7 @@ namespace CCFlow.WF.Comm.Sys
 
             table.Save();
 
-            EasyUiHelper.AddEasyUiMessagerAndGo(this, "创建成功！查看数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + table.No);
+            EasyUiHelper.AddEasyUiMessagerAndGo(this, "创建成功！查看数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + table.No);
         }
 
         void btn_Create_Local_Click(object sender, EventArgs e)
@@ -545,8 +545,8 @@ namespace CCFlow.WF.Comm.Sys
                     table.ParentValue = regColParentNo;
                     table.FK_SFDBSrc = "local";
 
-                    table.Save(); 
-                    EasyUiHelper.AddEasyUiMessagerAndGo(this, "您所创建的“" +table.No+ "” 名称的字典表，本地库已经存在，已成功注册！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + table.No);
+                    table.Save();
+                    EasyUiHelper.AddEasyUiMessagerAndGo(this, "您所创建的“" + table.No + "” 名称的字典表，本地库已经存在，已成功注册！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + table.No);
                 }
                 else if(regColValue != null && regColText != null)
                 {
@@ -558,7 +558,7 @@ namespace CCFlow.WF.Comm.Sys
                     table.FK_SFDBSrc = "local";
 
                     table.Save();
-                    EasyUiHelper.AddEasyUiMessagerAndGo(this, "您所创建的“" + table.No + "” 名称的字典表，本地库已经存在，已成功注册！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + table.No);
+                    EasyUiHelper.AddEasyUiMessagerAndGo(this, "您所创建的“" + table.No + "” 名称的字典表，本地库已经存在，已成功注册！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + table.No);
                 }
                 else
                 {
@@ -594,7 +594,7 @@ namespace CCFlow.WF.Comm.Sys
 
             table.Save();
 
-            EasyUiHelper.AddEasyUiMessagerAndGo(this, "创建成功！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + table.No);
+            EasyUiHelper.AddEasyUiMessagerAndGo(this, "创建成功！编辑数据……", "提示", "info", "../FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + table.No);
         }
 
         void btn_Click(object sender, EventArgs e)

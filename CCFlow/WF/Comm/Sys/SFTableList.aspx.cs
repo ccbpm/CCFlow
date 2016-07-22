@@ -48,7 +48,7 @@ public partial class CCFlow_Comm_Sys_SFTableList : BP.Web.WebPageAdmin
         btn.Click += new EventHandler(btn_Click);
         this.UCSys1.AddTD("colspan=2", btn);
         if (this.RefNo.Contains(".") == false)
-            this.UCSys1.AddTD("<a href='./../FoolFormDesigner/SFTableEditData.aspx?RefNo=" + this.RefNo + "' >编辑数据</a>");
+            this.UCSys1.AddTD("<a href='./../FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + this.FK_SFTable + "' >编辑数据</a>");
         else
             this.UCSys1.AddTD("<a href='./../Ens.aspx?EnsName=" + this.RefNo + "' >编辑数据</a>");
 
@@ -132,7 +132,7 @@ public partial class CCFlow_Comm_Sys_SFTableList : BP.Web.WebPageAdmin
         }
       //  m.HisSFTableType = SFTableType.SFTable;
         m.Save();
-        this.Response.Redirect("SFTableList.aspx?RefNo=" + m.No, true);
+        this.Response.Redirect("SFTableList.aspx?FK_SFTable=" + m.No, true);
          
     }
 
@@ -155,7 +155,17 @@ public partial class CCFlow_Comm_Sys_SFTableList : BP.Web.WebPageAdmin
         }
         //  m.HisSFTableType = SFTableType.SFTable;
         m.Insert();
-        this.Response.Redirect("SFTableList.aspx?RefNo=" + m.No, true);
+        this.Response.Redirect("SFTableList.aspx?FK_SFTable=" + m.No, true);
+    }
+    /// <summary>
+    /// FK_SFTable
+    /// </summary>
+    public string FK_SFTable
+    {
+        get
+        {
+            return this.Request.QueryString["FK_SFTable"];
+        }
     }
     protected void Page_Load(object sender, EventArgs e)
     {

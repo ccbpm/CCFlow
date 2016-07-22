@@ -413,7 +413,7 @@ namespace CCFlow.WF.MapDef
                                 case BP.DA.DataType.AppString:
 
                                     #region 大块文本的输出.
-                                    if ( attr.IsBigDoc == true)
+                                    if (attr.IsBigDoc == true)
                                     {
                                         if (attr.ColSpan == 1)
                                         {
@@ -582,15 +582,14 @@ namespace CCFlow.WF.MapDef
                                     this.Pub1.AddTD(" colspan=1", tbDT);
                                     break;
                                 case BP.DA.DataType.AppBoolean:
-                                    if (isLeft == true)
-                                        this.Pub1.AddTR();
+
 
                                     CheckBox cb = new CheckBox();
                                     cb.Text = attr.Name;
                                     cb.Checked = attr.DefValOfBool;
                                     cb.Enabled = attr.UIIsEnable;
                                     cb.ID = "CB_" + attr.KeyOfEn;
-                                    if (attr.ColSpan == 4)
+                                    if (attr.ColSpan == 4 || attr.ColSpan == 3)
                                     {
                                         if (isLeft == false)
                                         {
@@ -602,13 +601,15 @@ namespace CCFlow.WF.MapDef
                                         this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                         this.Pub1.AddTD(" colspan=3", cb);
                                         this.Pub1.AddTREnd();
+                                        continue;
                                     }
                                     else
                                     {
+                                        if (isLeft == true)
+                                            this.Pub1.AddTR();
                                         this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                        this.Pub1.AddTD(" colspan=1", cb);
+                                        this.Pub1.AddTD(" colspan=1 ", cb);
                                     }
-
                                     break;
                                 case BP.DA.DataType.AppDouble:
                                 case BP.DA.DataType.AppFloat:
@@ -639,7 +640,7 @@ namespace CCFlow.WF.MapDef
                                 default:
                                     break;
                             }
-                             
+
 
                             tb.Attributes["width"] = "100%";
                             switch (attr.MyDataType)
@@ -769,24 +770,38 @@ namespace CCFlow.WF.MapDef
                             }
                             break;
                         case FieldTypeS.FK:
-                            if (isLeft == true)
-                                this.Pub1.AddTR();
-
-                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                            DDL ddl1 = new DDL();
-                            ddl1.ID = "DDL_" + attr.KeyOfEn;
-                            try
-                            {
+                            DDL ddlFK = new DDL();
+                            ddlFK.ID = "DDL_" + attr.KeyOfEn;
+                         
                                 EntitiesNoName ens = attr.HisEntitiesNoName;
                                 ens.RetrieveAll();
-                                ddl1.BindEntities(ens);
-                                ddl1.SetSelectItem(attr.DefVal);
-                            }
-                            catch
+                                ddlFK.BindEntities(ens);
+                                ddlFK.SetSelectItem(attr.DefVal);
+                           
+
+                            ddlFK.Enabled = attr.UIIsEnable;
+                            if (attr.ColSpan == 4 || attr.ColSpan == 3)
                             {
+                                if (isLeft == false)
+                                {
+                                    this.Pub1.AddTD("colspan=2", "");
+                                    this.Pub1.AddTREnd();
+                                    isLeft = true;
+                                }
+                                this.Pub1.AddTR();
+                                this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                this.Pub1.AddTD(" colspan=3", ddlFK);
+                                this.Pub1.AddTREnd();
+                                continue;
                             }
-                            ddl1.Enabled = attr.UIIsEnable;
-                            this.Pub1.AddTD("colspan=1", ddl1);
+                            else
+                            {
+                                if (isLeft == true)
+                                    this.Pub1.AddTR();
+
+                                this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                this.Pub1.AddTD("colspan=1", ddlFK);
+                            }
                             break;
                         default:
                             break;
@@ -797,7 +812,6 @@ namespace CCFlow.WF.MapDef
                     {
                         this.Pub1.AddTREnd();
                     }
-
                     isLeft = !isLeft;
 
                 } // end循环字段分组.

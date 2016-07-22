@@ -22,7 +22,7 @@
         function Del(refno, pageidx, enpk) {
             if (window.confirm('您确定要删除字段[' + enpk + ']吗？') == false)
                 return;
-            var url = 'SFTableEditData.aspx?RefNo=' + refno + '&PageIdx=' + pageidx + '&EnPK=' + enpk;
+            var url = 'SFTableEditData.aspx?FK_SFTable=' + refno + '&PageIdx=' + pageidx + '&EnPK=' + enpk;
             window.location.href = url;
         }
         function ToUrl(url) {

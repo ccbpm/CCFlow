@@ -26,6 +26,14 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["DoType"];
             }
         }
+        public string FK_SFTable
+        {
+            get
+            {
+                return this.Request.QueryString["FK_SFTable"];
+            }
+        }
+        
         public string IDX
         {
             get
@@ -39,7 +47,7 @@ namespace CCFlow.WF.MapDef
         {
             if (this.Request.QueryString["EnPK"] != null)
             {
-                GENoName en = new GENoName(this.RefNo, "");
+                GENoName en = new GENoName(this.FK_SFTable, "");
                 en.No = this.Request.QueryString["EnPK"];
                 en.Delete();
             }
@@ -50,7 +58,7 @@ namespace CCFlow.WF.MapDef
 
         public void BindSFTable()
         {
-            SFTable sf = new SFTable(this.RefNo);
+            SFTable sf = new SFTable(this.FK_SFTable);
             var canEdit = sf.FK_SFDBSrc == "local"; //todo:此处判断不准确，需更加精确的判断??
 
             this.Title = (canEdit ? "编辑:" : "查看:") + sf.Name;
@@ -68,12 +76,12 @@ namespace CCFlow.WF.MapDef
             QueryObject qo = new QueryObject(ens);
             try
             {
-                this.Pub2.BindPageIdxEasyUi(qo.GetCount(), "SFTableEditData.aspx?RefNo=" + this.RefNo, this.PageIdx);
+                this.Pub2.BindPageIdxEasyUi(qo.GetCount(), "SFTableEditData.aspx?FK_SFTable=" + this.FK_SFTable, this.PageIdx);
             }
             catch
             {
                 sf.CheckPhysicsTable();
-                this.Pub2.BindPageIdxEasyUi(qo.GetCount(), "SFTableEditData.aspx?RefNo=" + this.RefNo, this.PageIdx);
+                this.Pub2.BindPageIdxEasyUi(qo.GetCount(), "SFTableEditData.aspx?FK_SFTable=" + this.FK_SFTable, this.PageIdx);
             }
 
             qo.DoQuery("No", 10, this.PageIdx, false);
@@ -91,7 +99,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTD(tb);
 
                 if (canEdit)
-                    this.Pub1.AddTD("<a href=\"javascript:Del('" + this.RefNo + "','" + this.PageIdx + "','" + en.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-delete'\" >删除</a>");
+                    this.Pub1.AddTD("<a href=\"javascript:Del('" + this.FK_SFTable + "','" + this.PageIdx + "','" + en.No + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-delete'\" >删除</a>");
                 else
                     this.Pub1.AddTD();
 
@@ -144,7 +152,7 @@ namespace CCFlow.WF.MapDef
         void btn_Click(object sender, EventArgs e)
         {
             //批量保存数据。
-            GENoNames ens = new GENoNames(this.RefNo, "sdsd");
+            GENoNames ens = new GENoNames(this.FK_SFTable,"自定义表");
             QueryObject qo = new QueryObject(ens);
             qo.DoQuery("No", 10, this.PageIdx, false);
             foreach (GENoName myen in ens)
@@ -153,18 +161,18 @@ namespace CCFlow.WF.MapDef
                 string name1 = this.Pub1.GetTextBoxByID("TB_" + myen.No).Text;
                 if (name1 == "")
                     continue;
-                BP.DA.DBAccess.RunSQL("update " + this.RefNo + " set Name='" + name1 + "' WHERE no='" + no + "'");
+                BP.DA.DBAccess.RunSQL("update " + this.FK_SFTable + " set Name='" + name1 + "' WHERE no='" + no + "'");
             }
 
 
-            BP.En.GENoName en = new GENoName(this.RefNo, "sd");
+            BP.En.GENoName en = new GENoName(this.FK_SFTable, "sd");
             string name = this.Pub1.GetTextBoxByID("TB_Name").Text.Trim();
             if (name.Length > 0)
             {
                 en.Name = name;
                 en.No = en.GenerNewNo;
                 en.Insert();
-                this.Response.Redirect("SFTableEditData.aspx?RefNo=" + this.RefNo + "&PageIdx=" + this.PageIdx, true);
+                this.Response.Redirect("SFTableEditData.aspx?FK_SFTable=" + this.FK_SFTable + "&PageIdx=" + this.PageIdx, true);
             }
         }
     }

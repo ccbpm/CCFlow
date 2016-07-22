@@ -192,11 +192,7 @@ namespace CCFlow.WF.MapDef
                     case "AddSFWS":
                         this.AddSFWS();
                         break;
-                    case "AddSFTableAttr":
-                        SFTable sf = new SFTable(this.Request.QueryString["FK_SFTable"]);
-                        this.Response.Redirect("EditTable.aspx?FK_MapData=" + this.FK_MapData + "&FK_SFTable=" + sf.No, true);
-                        this.WinClose();
-                        return;
+                  
                     case "AddSFSQLAttr":
                         SFTable mysf = new SFTable(this.Request.QueryString["RefNo"]);
                         this.Response.Redirect("EditSQL.aspx?FK_MapData=" + this.FK_MapData + "&SFKey=" + mysf.No, true);
@@ -851,7 +847,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFSQL.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
 
                 this.Pub1.AddTD(sem.CodeStructT); //编码表类型.
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?RefNo=" + sem.No + "');\" >查看</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?FK_SFTable=" + sem.No + "');\" >查看</a>");
                 this.Pub1.AddTREnd();
             }
             this.Pub1.AddTableEnd();
@@ -898,7 +894,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFWS.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
 
                 this.Pub1.AddTD(sem.CodeStructT); //编码表类型.
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?RefNo=" + sem.No + "');\" >查看</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?FK_SFTable=" + sem.No + "');\" >查看</a>");
                 this.Pub1.AddTREnd();
             }
             this.Pub1.AddTableEnd();

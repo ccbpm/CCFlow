@@ -112,7 +112,7 @@
         if (src.DBSrcType != BP.Sys.DBSrcType.WebServices && tab.No.Contains("BP.") == false)
         {
             int dbNum = src.RunSQLReturnInt("SELECT COUNT(*) FROM " + tab.No + " ", 0);
-            editDBLink = "<a href=\"javascript:WinOpen('/WF/Admin/FoolFormDesigner/SFTableEditData.aspx?RefNo=" + tab.No + "')\">编辑(" + dbNum + ")</a>";
+            editDBLink = "<a href=\"javascript:WinOpen('/WF/Admin/FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + tab.No + "')\">编辑(" + dbNum + ")</a>";
         }
         
     //int refNum = tab.db("SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE UIBindKey='" + tab.No + "'", 0);

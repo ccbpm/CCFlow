@@ -17,9 +17,9 @@
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
     <script language="JavaScript" type="text/javascript" src="MapDef.js" type="text/javascript"></script>
     <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
-    <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"
-        defer="defer"></script>
-    <script language="javascript" type="text/javascript" >
+    <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js"
+        type="text/javascript" defer="defer"></script>
+    <script language="javascript" type="text/javascript">
         function FrmEvent(mypk) {
             var url = 'FrmEvent.aspx?FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
@@ -45,7 +45,7 @@
             window.location.href = window.location.href;
         }
         function AddField(fk_mapdata, groupID) {
-            var url = 'FieldTypeList.aspx?DoType=AddF&FK_MapData=' + fk_mapdata+'&GroupField='+groupID;
+            var url = 'FieldTypeList.aspx?DoType=AddF&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -64,7 +64,7 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 800px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-       
+
         function CopyFieldFromNode(mypk) {
             var url = 'CopyFieldFromNode.aspx?DoType=AddF&FK_Node=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
@@ -91,7 +91,7 @@
             window.location.href = window.location.href;
         }
         function Edit(fk_mapdata, mypk, ftype) {
-            var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData='+fk_mapdata;
+            var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -126,7 +126,7 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-       
+
 
         function Del(mypk, refoid) {
             if (window.confirm('您确定要删除吗？') == false)
@@ -190,7 +190,7 @@
             window.location.href = window.location.href;
         }
 
-     
+
         /// 审核组件.
         function EditFWC(mypk) {
             //http: //localhost:41466/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FrmNodeComponents&PK=7901&EnName=BP.WF.Template.FrmNodeComponent&tab=%E7%88%B6%E5%AD%90%E6%B5%81%E7%A8%8B%E7%BB%84%E4%BB%B6
@@ -221,7 +221,7 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
-        
+
         //轨迹组件.
         function EditTrack(mypk) {
             // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
@@ -323,37 +323,40 @@
         window.onload = ResizeWindow();
     </script>
     <base target="_self" />
-   
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <div class="easyui-panel" style="padding: 5px;">
-    <%
-        string fk_mapdata = this.Request.QueryString["FK_MapData"];
-        string fk_flow = this.Request.QueryString["FK_Flow"];
-       // int nodeID = 0  this.Request.QueryString["FK_Flow"];
-        string  nodeID = this.Request.QueryString["NodeID"];
-         %>
-        <a href="javascript:ExpImp('<%=fk_mapdata %>','<%=fk_flow%>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-copy'">导入/导出</a>
-        <a href="javascript:AddF('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">新建字段</a>
-        <a href="javascript:HidAttr('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">隐藏字段</a>
-        <a href="javascript:GroupFieldNew('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-groupbar'">新建字段分组</a>
-        <a href="javascript:MapDtl('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">新建从表</a>
-        <a href="javascript:Ath('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">新建附件组件</a>
-        <a href="javascript:MapFrame('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-frame'">新建框架</a>
-        
-        <%--<a href="javascript:MapExt('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dts'">扩展设置</a>
---%>
-        <a href="javascript:MapDataEdit('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">表单属性</a>
-
-        <% if ( string.IsNullOrEmpty( fk_flow) == false ) { %>
-           <a href="javascript:FrmNodeComponent('<%=this.NodeID %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'"> 节点表单组件</a>
-        <% } %>
-
-       <uc1:Pub ID="UCCaption" runat="server" />
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'north'" style="height: auto; padding: 5px; overflow-y: hidden;">
+            <%
+                string fk_mapdata = this.Request.QueryString["FK_MapData"];
+                string fk_flow = this.Request.QueryString["FK_Flow"];
+                // int nodeID = 0  this.Request.QueryString["FK_Flow"];
+                string nodeID = this.Request.QueryString["NodeID"];
+            %>
+            <a href="javascript:ExpImp('<%=fk_mapdata %>','<%=fk_flow%>');" class="easyui-linkbutton"
+                data-options="plain:true,iconCls:'icon-copy'">导入/导出</a> <a href="javascript:AddF('<%=fk_mapdata %>');"
+                    class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">新建字段</a>
+            <a href="javascript:HidAttr('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
+                隐藏字段</a> <a href="javascript:GroupFieldNew('<%=fk_mapdata %>');" class="easyui-linkbutton"
+                    data-options="plain:true,iconCls:'icon-groupbar'">新建字段分组</a> <a href="javascript:MapDtl('<%=fk_mapdata %>');"
+                        class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">新建从表</a>
+            <a href="javascript:Ath('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">
+                新建附件组件</a> <a href="javascript:MapFrame('<%=fk_mapdata %>');" class="easyui-linkbutton"
+                    data-options="plain:true,iconCls:'icon-frame'">新建框架</a>
+            <%--<a href="javascript:MapExt('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dts'">扩展设置</a>
+            --%>
+            <a href="javascript:MapDataEdit('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">
+                表单属性</a>
+            <% if (string.IsNullOrEmpty(fk_flow) == false)
+               { %>
+            <a href="javascript:FrmNodeComponent('<%=this.NodeID %>');" class="easyui-linkbutton"
+                data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
+            <% } %>
+            <uc1:Pub ID="UCCaption" runat="server" />
+        </div>
+        <div data-options="region:'center'" style="background-color: #d0d0d0; padding-top: 10px;
+            padding-bottom: 10px;">
+            <uc1:Pub ID="Pub1" runat="server" />
+        </div>
     </div>
-
-    <div align="center"  style="vertical-align:middle;background-color:#d0d0d0;min-height:100%;*+height:100%;_height:100%;padding-top:10px;padding-bottom:10px;" >
-     <uc1:Pub ID="Pub1" runat="server" />
-    </div>
-
 </asp:Content>

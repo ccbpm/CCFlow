@@ -26,10 +26,13 @@
         var flowNo = getQueryStringByName('FK_Flow');
         var md = getQueryStringByName('FK_MapData');
         var attrs;
+        var dtlattrs;
         var currCellName;
         var currCellFieldInfo;
+        var currDtl;
         var isBeginIdx = 0;
         var beginIdx = 0;
+        var isBeginDtlIdx = false;
 
         function useTmp(obj) {
             /// <summary>使用此模板</summary>
@@ -92,10 +95,12 @@
                     closeSet();
 
                     attrs = re.attrs;
+                    dtlattrs = re.dtlattrs;
                     $('#setDiv').attr('data-tmp', tmpName);
                     $('#setDiv').show();
                     $('#excelDiv').html(re.setinfo);
                     $(document.body).append(re.menu);
+                    $(document.body).append(re.dtlmenu);
                     $.parser.parse();
 
                     beginIdx = parseInt($('#excel').attr('data-beginidx'));
@@ -143,6 +148,20 @@
                     $('#excel td').bind("click", function (e) {
                         e.preventDefault();
 
+                        if (isBeginDtlIdx) {
+                            //仅当该单元格已经设置主表字段对应，才可以设置明细表字段对应
+                            if ($(this).attr('data-field').length == 0) {
+                                return;
+                            }
+
+                            $('#mDtlAttrs').attr('data-td', $(this).attr('data-name'));
+                            $('#mDtlAttrs').menu('show', {
+                                left: e.pageX,
+                                top: e.pageY
+                            });
+                            return;
+                        }
+
                         if (isBeginIdx == 0) {
                             $('#mAttrs').attr('data-td', $(this).attr('data-name'));
                             $('#mAttrs').menu('show', {
@@ -172,7 +191,9 @@
                             if (item.name == 'deleteField') {
                                 td.css("background-color", '');
                                 td.attr('data-field', '');
+                                td.attr('data-dtlField', '');
                                 td.attr('data-tooltip', '');
+                                currDtl = getCurrDtl();
                             }
                             else {
                                 var attr = getMapAttr(item.name);
@@ -183,9 +204,49 @@
                         }
                     });
 
+                    $('#mDtlAttrs').menu({
+                        onClick: function (item) {
+                            var cellName = $('#mDtlAttrs').attr('data-td');
+                            var td = $("#excel td[data-name='" + cellName + "']");
+                            var attr = td.attr('data-field').split('`');
+
+                            if (item.name == 'deleteDtlField') {
+                                td.attr('data-dtlField', '');
+                                td.attr('data-tooltip', (attr[0] == md ? '' : (attr[0] + '[' + attr[1] + '] ')) + attr[2] + '[' + attr[3] + ']');
+                                currDtl = getCurrDtl();
+                            }
+                            else {
+                                var dtlAttr = getDtlMapAttr(item.name);
+
+                                if (currDtl && dtlAttr.FK_MAPDATA != currDtl) {
+                                    alert('模板中不能定义多个明细表填充，当前定义的明细表为：' + currDtl);
+                                    return;
+                                }
+
+                                td.attr('data-dtlField', dtlAttr.FK_MAPDATA + '`' + dtlAttr.FK_MAPDATANAME + '`' + dtlAttr.KEYOFEN + '`' + dtlAttr.NAME);
+                                td.attr('data-tooltip', (attr[0] == md ? '' : (attr[0] + '[' + attr[1] + '] ')) + attr[2] + '[' + attr[3] + ']'
+                                + '<br />明细表：' + dtlAttr.FK_MAPDATA + '[' + dtlAttr.FK_MAPDATANAME + '] ' + dtlAttr.KEYOFEN + '[' + dtlAttr.NAME + ']');
+                            }
+                        }
+                    });
+
+                    //设置所有已定义单元格的背景颜色
                     $("#excel td[data-field!='']").css("background-color", "#FFF5B1");
+
+                    //获取已定义明细表，只能配置一个明细表
+                    currDtl = getCurrDtl();
                 }
             });
+        }
+
+        function getCurrDtl() {
+            /// <summary>获取当前已经定义的明细表编号</summary>
+            var dtlTds = $("#excel td[data-dtlField!='']");
+            if (dtlTds.length > 0) {
+                return $(dtlTds[0]).attr('data-dtlField').split('`')[0];
+            }
+
+            return null;
         }
 
         function getMapAttr(names) {
@@ -195,6 +256,22 @@
             var attr;
 
             $.each(attrs, function () {
+                if (this.FK_MAPDATA == ns[0] && this.KEYOFEN == ns[1]) {
+                    attr = this;
+                    return false;
+                }
+            });
+
+            return attr;
+        }
+
+        function getDtlMapAttr(names) {
+            /// <summary>根据menu-item的name，获取对应的明细表字段对象</summary>
+            /// <param name="names" type="String">name，格式如：ND201Dtl1.Name</param>
+            var ns = names.split('.');
+            var attr;
+
+            $.each(dtlattrs, function () {
                 if (this.FK_MAPDATA == ns[0] && this.KEYOFEN == ns[1]) {
                     attr = this;
                     return false;
@@ -233,6 +310,8 @@
         function beginSetIdx(isVertical) {
             /// <summary>设置导出数据填充开始的行/列号</summary>
             /// <param name="isVertical" type="Boolean">是否是垂直方向填充</param>
+            isBeginDtlIdx = false;
+
             if (isVertical == undefined) {
                 isBeginIdx = parseInt($('#excel').attr('data-direction'));
             }
@@ -255,8 +334,14 @@
         }
 
         function beginSetField() {
-            /// <summary>设置字段绑定</summary>
+            /// <summary>设置主表字段绑定</summary>
             isBeginIdx = 0;
+            isBeginDtlIdx = false;
+        }
+
+        function beginSetDtlField() {
+            /// <summary>设置明细表字段绑定</summary>
+            isBeginDtlIdx = true;
         }
 
         function ajax(data, successFunction, errorFunction) {
@@ -295,6 +380,7 @@
             $('#setDiv').hide();
 
             attrs = undefined;
+            dtlattrs = undefined;
             currCellName = undefined;
             currCellFieldInfo = undefined;
             isBeginIdx = 0;
@@ -306,10 +392,12 @@
             var tmpName = $('#setDiv').attr('data-tmp');
             var re = isBeginIdx + '`' + beginIdx;
             var ns;
+            var nsDtl;
 
             $.each($("#excel td[data-field!='']"), function () {
                 ns = $(this).attr('data-field').split('`');
-                re += '`' + $(this).attr('data-rowid') + '^' + $(this).attr('data-colid') + '^' + ns[0] + '^' + ns[2];
+                nsDtl = $(this).attr('data-dtlField').split('`');
+                re += '`' + $(this).attr('data-rowid') + '^' + $(this).attr('data-colid') + '^' + ns[0] + '^' + ns[2] + '^' + (nsDtl.length == 4 ? nsDtl[0] : '') + '^' + (nsDtl.length == 4 ? nsDtl[2] : '');
             });
 
             ajax({ method: 'save', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName), data: encodeURIComponent(re) }, function (msg) {
@@ -406,10 +494,12 @@
             <a id="btnSave" class="easyui-linkbutton" href="javascript:void(0)" onclick="saveSet()"
                 data-options="plain:true,iconCls:'icon-save'">保存</a> <a id="btnSetField" class="easyui-linkbutton"
                     href="javascript:void(0)" onclick="beginSetField()" data-options="plain:true,iconCls:'icon-accept'">
-                    字段对应</a> <a id="btnBeginSetIdx" class="easyui-splitbutton" href="javascript:void(0)"
-                        onclick="beginSetIdx()" data-options="menu:'#mBeginIdx',plain:true,iconCls:'icon-manual'">
-                        开始行号</a> <a id="btnClose" class="easyui-linkbutton" href="javascript:void(0)" onclick="closeSet()"
-                            data-options="plain:true,iconCls:'icon-closecol'">关闭</a>
+                    主表字段对应</a> <a id="A1" class="easyui-linkbutton" href="javascript:void(0)" onclick="beginSetDtlField()"
+                        data-options="plain:true,iconCls:'icon-accept'">明细表字段对应</a> <a id="btnBeginSetIdx"
+                            class="easyui-splitbutton" href="javascript:void(0)" onclick="beginSetIdx()"
+                            data-options="menu:'#mBeginIdx',plain:true,iconCls:'icon-manual'">开始行号</a>
+            <a id="btnClose" class="easyui-linkbutton" href="javascript:void(0)" onclick="closeSet()"
+                data-options="plain:true,iconCls:'icon-closecol'">关闭</a>
             <br />
             <div id="excelDiv">
             </div>

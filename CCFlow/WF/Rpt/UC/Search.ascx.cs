@@ -531,7 +531,7 @@ namespace CCFlow.WF.Rpt
 
         private void ToolBar1_ButtonClick(object sender, System.EventArgs e)
         {
-            var btn = (LinkBtn) sender;
+            var btn = (LinkBtn)sender;
 
             try
             {
@@ -576,7 +576,7 @@ namespace CCFlow.WF.Rpt
 
                         this.SetDGData();
                         return;
-                    case NamesOfBtn.ExportByTemplate:
+                    case NamesOfBtn.ExportByTemplate:   //导出数据到模板
                         MapData mdMyRpt = new MapData(this.RptNo);
                         string fk_mapdata = "ND" + int.Parse(FK_Flow) + "Rpt";
                         string tmpFile = null;
@@ -624,13 +624,17 @@ namespace CCFlow.WF.Rpt
                         }
 
                         GEEntitys ges = null;
+                        GEEntitys dtlGes = null;
                         QueryObject qo2 = null;
+                        string dtlNo = tmp.GetDtl();
                         Dictionary<string, Entities> frmDatas = new Dictionary<string, Entities>(); //存储fk_mapdata,Entities
                         Dictionary<string, MapAttrs> frmAttrs = new Dictionary<string, MapAttrs>(); //存储fk_mapdata,MapAttrs
+                        string oids = GetOidsJoin(ens, "OID", false);
 
                         //获取各绑定表单的记录集合
                         frmDatas.Add(fk_mapdata, ens);
                         frmAttrs.Add(fk_mapdata, new MapAttrs(fk_mapdata));
+
 
                         foreach (string frm in listFrms)
                         {
@@ -640,18 +644,27 @@ namespace CCFlow.WF.Rpt
 
                             ges = new GEEntitys(frm);
                             qo2 = new QueryObject(ges);
-                            qo2.AddWhere("1=2");
 
-                            //增加workid的查询
-                            foreach(Entity en1 in ens)
-                            {
-                                qo2.addOr();
-                                qo2.AddWhere("OID", en1.GetValByKey("OID"));
-                            }
+                            if (ens.Count > 0)
+                                qo2.AddWhereIn("OID", oids);
 
                             qo2.DoQuery();
                             frmDatas.Add(frm, ges);
                             frmAttrs.Add(frm, new MapAttrs(frm));
+                        }
+
+                        oids = GetOidsJoin(ens, "OID", true);
+
+                        //获取定义明细表的记录集合
+                        if (!string.IsNullOrWhiteSpace(dtlNo))
+                        {
+                            dtlGes = new GEEntitys(dtlNo);
+                            qo2 = new QueryObject(dtlGes);
+
+                            if (ens.Count > 0)
+                                qo2.AddWhereIn("RefPK", oids);
+
+                            qo2.DoQuery();
                         }
 
                         IWorkbook wb = null;
@@ -664,6 +677,12 @@ namespace CCFlow.WF.Rpt
                         MapAttr mattr = null;
                         IDataFormat fmt = null;
                         ICellStyle cellStyle = null;
+                        int dtlRecordCount = dtlGes != null ? dtlGes.Count : 0;
+                        string workid = string.Empty;
+                        Entity newEn = null;
+                        Entities tens = null;
+                        DataTable dtData = new DataTable();
+                        DataRow dr1 = null;
 
                         try
                         {
@@ -679,13 +698,158 @@ namespace CCFlow.WF.Rpt
                                 lastRowIdx = sheet.LastRowNum;
 
                                 //垂直方向填充数据时，先将缺少的行数增加上
-                                for (int i = sheet.LastRowNum; i < tmp.BeginIdx + ens.Count - 1; i++)
+                                for (int i = sheet.LastRowNum; i < tmp.BeginIdx + ens.Count + dtlRecordCount - 1; i++)
                                 {
                                     sheet.CreateRow(i + 1);
                                 }
 
+                                //生成列
+                                foreach (RptExportTemplateCell tcell in tmp.Cells)
+                                {
+                                    mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
+
+                                    switch (mattr.MyDataType)
+                                    {
+                                        case DataType.AppString:
+                                            dtData.Columns.Add(mattr.MyPK, typeof(string));
+                                            break;
+                                        case DataType.AppInt:
+                                            if (mattr.LGType == FieldTypeS.Normal)
+                                                dtData.Columns.Add(mattr.MyPK, typeof(int));
+                                            else
+                                                dtData.Columns.Add(mattr.MyPK, typeof(string));
+                                            break;
+                                        case DataType.AppFloat:
+                                        case DataType.AppMoney:
+                                            if (mattr.LGType == FieldTypeS.Normal)
+                                                dtData.Columns.Add(mattr.MyPK, typeof(double));
+                                            else
+                                                dtData.Columns.Add(mattr.MyPK, typeof(string));
+                                            break;
+                                        case DataType.AppDate:
+                                        case DataType.AppDateTime:
+                                            dtData.Columns.Add(mattr.MyPK, typeof(string));
+                                            break;
+                                        case DataType.AppBoolean:
+                                            dtData.Columns.Add(mattr.MyPK, typeof(bool));
+                                            break;
+                                        default:
+                                            throw new Exception("未涉及到的数据类型，请检查数据是否正确。");
+                                    }
+                                }
+
                                 for (int i = 0; i < ens.Count; i++)
                                 {
+                                    //添加主表数据
+                                    dr1 = dtData.NewRow();
+
+                                    foreach (RptExportTemplateCell tcell in tmp.Cells)
+                                    {
+                                        mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
+                                        tens = frmDatas[tcell.FK_MapData];
+
+                                        if (tcell.FK_MapData != fk_mapdata)
+                                            newEn = tens.GetEntityByKey(ens[i].PKVal) ?? tens.GetNewEntity;
+                                        else
+                                            newEn = ens[i];
+
+                                        switch (mattr.MyDataType)
+                                        {
+                                            case DataType.AppString:
+                                                if (mattr.LGType == FieldTypeS.Normal)
+                                                    dr1[mattr.MyPK] = newEn.GetValStringByKey(tcell.KeyOfEn);
+                                                else
+                                                    dr1[mattr.MyPK] = newEn.GetValRefTextByKey(tcell.KeyOfEn);
+                                                break;
+                                            case DataType.AppInt:
+                                                if (mattr.LGType == FieldTypeS.Normal)
+                                                    dr1[mattr.MyPK] = newEn.GetValIntByKey(tcell.KeyOfEn);
+                                                else
+                                                    dr1[mattr.MyPK] = newEn.GetValRefTextByKey(tcell.KeyOfEn);
+                                                break;
+                                            case DataType.AppFloat:
+                                            case DataType.AppMoney:
+                                                if (mattr.LGType == FieldTypeS.Normal)
+                                                    dr1[mattr.MyPK] = newEn.GetValDoubleByKey(tcell.KeyOfEn);
+                                                else
+                                                    dr1[mattr.MyPK] = newEn.GetValRefTextByKey(tcell.KeyOfEn);
+                                                break;
+                                            case DataType.AppDate:
+                                            case DataType.AppDateTime:
+                                                dr1[mattr.MyPK] = newEn.GetValStringByKey(tcell.KeyOfEn, "");
+                                                break;
+                                            case DataType.AppBoolean:
+                                                dr1[mattr.MyPK] = newEn.GetValBooleanByKey(tcell.KeyOfEn);
+                                                break;
+                                            default:
+                                                throw new Exception("未涉及到的数据类型，请检查数据是否正确。");
+                                        }
+                                    }
+
+                                    dtData.Rows.Add(dr1);
+
+                                    //添加明细表数据
+                                    if (dtlGes == null)
+                                        continue;
+
+                                    workid = ens[i].GetValIntByKey("OID").ToString();
+
+                                    foreach (GEEntity gen in dtlGes)
+                                    {
+                                        if (gen.GetValStringByKey("RefPK") != workid) continue;
+
+                                        dr1 = dtData.NewRow();
+
+                                        foreach (RptExportTemplateCell tcell in tmp.Cells)
+                                        {
+                                            if (string.IsNullOrWhiteSpace(tcell.DtlKeyOfEn))
+                                                continue;
+
+                                            mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
+                                            newEn = gen;
+
+                                            switch (mattr.MyDataType)
+                                            {
+                                                case DataType.AppString:
+                                                    if (mattr.LGType == FieldTypeS.Normal)
+                                                        dr1[mattr.MyPK] = newEn.GetValStringByKey(tcell.DtlKeyOfEn);
+                                                    else
+                                                        dr1[mattr.MyPK] = newEn.GetValRefTextByKey(tcell.DtlKeyOfEn);
+                                                    break;
+                                                case DataType.AppInt:
+                                                    if (mattr.LGType == FieldTypeS.Normal)
+                                                        dr1[mattr.MyPK] = newEn.GetValIntByKey(tcell.DtlKeyOfEn);
+                                                    else
+                                                        dr1[mattr.MyPK] = newEn.GetValRefTextByKey(tcell.DtlKeyOfEn);
+                                                    break;
+                                                case DataType.AppFloat:
+                                                case DataType.AppMoney:
+                                                    if (mattr.LGType == FieldTypeS.Normal)
+                                                        dr1[mattr.MyPK] = newEn.GetValDoubleByKey(tcell.DtlKeyOfEn);
+                                                    else
+                                                        dr1[mattr.MyPK] = newEn.GetValRefTextByKey(tcell.DtlKeyOfEn);
+                                                    break;
+                                                case DataType.AppDate:
+                                                case DataType.AppDateTime:
+                                                    dr1[mattr.MyPK] = newEn.GetValStringByKey(tcell.DtlKeyOfEn);
+                                                    break;
+                                                case DataType.AppBoolean:
+                                                    dr1[mattr.MyPK] = newEn.GetValBooleanByKey(tcell.DtlKeyOfEn);
+                                                    break;
+                                                default:
+                                                    throw new Exception("未涉及到的数据类型，请检查数据是否正确。");
+                                            }
+                                        }
+
+                                        dtData.Rows.Add(dr1);
+                                    }
+                                }
+
+                                //写入excel单元格值
+                                for (int i = 0; i < dtData.Rows.Count; i++)
+                                {
+                                    dr1 = dtData.Rows[i];
+
                                     foreach (RptExportTemplateCell tcell in tmp.Cells)
                                     {
                                         r = tmp.Direction == FillDirection.Vertical
@@ -710,42 +874,38 @@ namespace CCFlow.WF.Rpt
                                         switch (mattr.MyDataType)
                                         {
                                             case DataType.AppString:
-                                                if(mattr.LGType == FieldTypeS.Normal)
-                                                    cell.SetCellValue(ens[i].GetValStringByKey(tcell.KeyOfEn));
-                                                else
-                                                    cell.SetCellValue(ens[i].GetValRefTextByKey(tcell.KeyOfEn));
-                                                
+                                                cell.SetCellValue(dr1[mattr.MyPK] as string);
                                                 cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 break;
                                             case DataType.AppInt:
                                                 if (mattr.LGType == FieldTypeS.Normal)
-                                                    cell.SetCellValue(ens[i].GetValIntByKey(tcell.KeyOfEn));
+                                                    cell.SetCellValue((int)dr1[mattr.MyPK]);
                                                 else
-                                                    cell.SetCellValue(ens[i].GetValRefTextByKey(tcell.KeyOfEn));
+                                                    cell.SetCellValue(dr1[mattr.MyPK] as string);
 
                                                 cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 break;
                                             case DataType.AppFloat:
                                             case DataType.AppMoney:
                                                 if (mattr.LGType == FieldTypeS.Normal)
-                                                    cell.SetCellValue(ens[i].GetValDoubleByKey(tcell.KeyOfEn));
+                                                    cell.SetCellValue((double)dr1[mattr.MyPK]);
                                                 else
-                                                    cell.SetCellValue(ens[i].GetValRefTextByKey(tcell.KeyOfEn));
+                                                    cell.SetCellValue(dr1[mattr.MyPK] as string);
 
                                                 cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 break;
                                             case DataType.AppDate:
-                                                cell.SetCellValue(ens[i].GetValDateTime(tcell.KeyOfEn));
+                                                cell.SetCellValue(dr1[mattr.MyPK] as string);
                                                 cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
                                                 break;
                                             case DataType.AppDateTime:
-                                                cell.SetCellValue(ens[i].GetValDateTime(tcell.KeyOfEn));
+                                                cell.SetCellValue(dr1[mattr.MyPK] as string);
                                                 cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
                                                 break;
                                             case DataType.AppBoolean:
-                                                cell.SetCellValue(ens[i].GetValBooleanByKey(tcell.KeyOfEn));
+                                                cell.SetCellValue((bool)dr1[mattr.MyPK]);
                                                 cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 break;
                                             default:
@@ -797,6 +957,25 @@ namespace CCFlow.WF.Rpt
 
             if (btn.ID == NamesOfBtn.ExportByTemplate)
                 Response.End();
+        }
+
+        /// <summary>
+        /// 获取指定字段的拼接字符串形式，用英文逗号相连
+        /// </summary>
+        /// <param name="ens">实体集合</param>
+        /// <param name="field">字段</param>
+        /// <param name="isVarchar">值是否是字符</param>
+        /// <returns></returns>
+        private string GetOidsJoin(Entities ens, string field, bool isVarchar)
+        {
+            string oids = string.Empty;
+
+            foreach (Entity en1 in ens)
+            {
+                oids += (isVarchar ? "'" : "") + en1.GetValByKey(field) + (isVarchar ? "'" : "") + ",";
+            }
+
+            return "(" + oids.TrimEnd(',') + ")";
         }
     }
 }

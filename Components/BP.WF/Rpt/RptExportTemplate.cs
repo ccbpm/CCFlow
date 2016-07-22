@@ -98,6 +98,21 @@ namespace BP.WF.Rpt
         }
 
         /// <summary>
+        /// 获取定义的填充明细表NO
+        /// </summary>
+        /// <returns></returns>
+        public string GetDtl()
+        {
+            foreach(RptExportTemplateCell cell in Cells)
+            {
+                if (!string.IsNullOrWhiteSpace(cell.DtlKeyOfEn))
+                    return cell.FK_DtlMapData;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// 从xml文件加载报表导出模板信息对象
         /// </summary>
         /// <param name="fileName">xml文件路径</param>
@@ -187,6 +202,16 @@ namespace BP.WF.Rpt
         /// 字段英文名
         /// </summary>
         public string KeyOfEn { get; set; }
+
+        /// <summary>
+        /// 明细表字段所属fk_mapdata
+        /// </summary>
+        public string FK_DtlMapData { get; set; }
+
+        /// <summary>
+        /// 明细表字段英文名
+        /// </summary>
+        public string DtlKeyOfEn { get; set; }
 
         /// <summary>
         /// 获取单元格的显示名称，格式如A1,B2

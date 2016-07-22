@@ -182,18 +182,16 @@ namespace CCFlow.WF.MapDef
             rb.ID = "RB_Ctrl_0";
             rb.Text = "下拉框";
             rb.GroupName = "Ctrl";
-
             if (mapAttr.UIContralType == UIContralType.DDL)
                 rb.Checked = true;
-            else
-                rb.Checked = false;
-
             this.Pub1.Add(rb);
 
             rb = new RadioButton();
             rb.ID = "RB_Ctrl_1";
             rb.Text = "单选按钮";
             rb.GroupName = "Ctrl";
+            if (mapAttr.UIContralType == UIContralType.RadioBtn)
+                rb.Checked = true;
 
             this.Pub1.Add(rb);
             this.Pub1.AddTDEnd();

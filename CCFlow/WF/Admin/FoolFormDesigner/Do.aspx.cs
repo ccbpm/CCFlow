@@ -173,7 +173,7 @@ namespace CCFlow.WF.MapDef
                             attrAdd.Idx = int.Parse(this.Idx);
                         }
                         attrAdd.Insert();
-                        this.Response.Redirect("EditEnum.aspx?MyPK=" + this.MyPK + "&RefNo=" + attrAdd.MyPK, true);
+                        this.Response.Redirect("EditEnum.aspx?FK_MapData=" + this.FK_MapData + "&RefNo=" + attrAdd.MyPK, true);
                         this.WinClose();
                         return;
                     case "DelEnum":
@@ -183,12 +183,8 @@ namespace CCFlow.WF.MapDef
                         sem.Delete();
                         this.WinClose();
                         return;
-
                     case "AddSysEnum":
                         this.AddFEnum();
-                        break;
-                    case "AddSFTable":
-                        this.AddSFTable();
                         break;
                     case "AddSFSQL":
                         this.AddSFSQL();
@@ -197,13 +193,13 @@ namespace CCFlow.WF.MapDef
                         this.AddSFWS();
                         break;
                     case "AddSFTableAttr":
-                        SFTable sf = new SFTable(this.Request.QueryString["RefNo"]);
-                        this.Response.Redirect("EditTable.aspx?MyPK=" + this.MyPK + "&SFKey=" + sf.No, true);
+                        SFTable sf = new SFTable(this.Request.QueryString["FK_SFTable"]);
+                        this.Response.Redirect("EditTable.aspx?FK_MapData=" + this.FK_MapData + "&FK_SFTable=" + sf.No, true);
                         this.WinClose();
                         return;
                     case "AddSFSQLAttr":
                         SFTable mysf = new SFTable(this.Request.QueryString["RefNo"]);
-                        this.Response.Redirect("EditSQL.aspx?MyPK=" + this.MyPK + "&SFKey=" + mysf.No, true);
+                        this.Response.Redirect("EditSQL.aspx?FK_MapData=" + this.FK_MapData + "&SFKey=" + mysf.No, true);
                         this.WinClose();
                         return;
                     case "AddFG": /*执行一个插入列组的命令.*/
@@ -812,65 +808,7 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddFieldSetEnd();
         }
         int pageSize = 12;
-        public void AddSFTable()
-        {
-            BP.Sys.SFTables ens = new SFTables();
-            QueryObject qo = new QueryObject(ens);
-            qo.AddWhere(BP.Sys.SFTableAttr.SrcType, (int)SrcType.TableOrView);
-
-            this.Pub2.BindPageIdx(qo.GetCount(), pageSize, this.PageIdx,
-                "Do.aspx?DoType=AddSFTable&MyPK=" + this.MyPK + "&Idx=&GroupField");
-            qo.DoQuery("No", pageSize, this.PageIdx);
-
-
-            this.Title = "增加新字段向导";
-            this.Pub1.AddTable();
-            this.Pub1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 外键列表 - <a href='SFTable.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建表</a>");
-            this.Pub1.AddTR();
-            this.Pub1.AddTDTitle("Idx");
-            this.Pub1.AddTDTitle("编号(点击增加到表单)");
-            this.Pub1.AddTDTitle("名称(点击修改属性)");
-            this.Pub1.AddTDTitle("描述");
-            this.Pub1.AddTDTitle("编码表类型");
-            this.Pub1.AddTDTitle("编辑数据");
-            this.Pub1.AddTREnd();
-
-            if (ens.Count == 0)
-            {
-                //string html = "<a href='Do.aspx?DoType=AddF&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 增加外键字段 - <a href='SFTable.aspx?DoType=New&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "' >新建表</a>";
-                this.Pub1.AddTR();
-                this.Pub1.AddTDBigDoc("colspan=5","注册到ccform的表为空，点击上面的新建表，进入创建向导。");
-                this.Pub1.AddTREnd();
-                this.Pub1.AddTableEnd();
-                return;
-            }
-
-
-            bool is1 = false;
-            int Idx = 0;
-            foreach (BP.Sys.SFTable sem in ens)
-            {
-                Idx++;
-                //is1 = this.Pub1.AddTR(is1);
-                is1 = this.Pub1.AddTR(is1);
-                this.Pub1.AddTDIdx(Idx);
-                this.Pub1.AddTD("<a  href=\"javascript:AddSFTable('" + this.MyPK + "','" + this.Idx + "','" + sem.No + "')\" >" + sem.No + "</a>");
-
-                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTable.aspx?DoType=Edit&MyPK=" + this.MyPK + "&Idx=" + this.Idx + "&RefNo=" + sem.No + "','sg')\"  ><img src='../../Img/Btn/Edit.gif' border=0/>" + sem.Name + "</a>");
-
-                this.Pub1.AddTD(sem.TableDesc); //描述.
-
-                //编码表类型.
-                this.Pub1.AddTD(sem.CodeStructT);
-
-                if (sem.No.Contains("."))
-                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/Search.aspx?EnsName=" + sem.No + "');\" >编辑数据</a>");
-                else
-                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?RefNo=" + sem.No + "');\" >编辑数据</a>");
-                this.Pub1.AddTREnd();
-            }
-            this.Pub1.AddTableEnd();
-        }
+      
 
         public void AddSFSQL()
         {

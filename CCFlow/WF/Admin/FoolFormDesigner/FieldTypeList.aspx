@@ -91,8 +91,8 @@
 <td colspan=2>
 
 <ul>
-<li><a href='SysEnumList.aspx?DoType=AddSysEnum&FK_MapData=<%=this.FK_MapData %>&Idx=&GroupField=<%=this.GroupID %>'><b>枚举型</b></a> -  比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li> 	
-<li> <a href="SysEnum.aspx?DoType=New&FK_MapData=<%=this.FK_MapData  %>&Idx=&GroupField=<%=this.GroupID %>"  >新建枚举 </a> </li>
+<li><a href='SysEnumList.aspx?DoType=AddSysEnum&FK_MapData=<%=this.FK_MapData %>&Idx=&GroupField=<%=this.GroupField %>'><b>枚举型</b></a> -  比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li> 	
+<li> <a href="SysEnum.aspx?DoType=New&FK_MapData=<%=this.FK_MapData  %>&Idx=&GroupField=<%=this.GroupField %>"  >新建枚举 </a> </li>
 </ul>	
 
  </td>
@@ -106,7 +106,7 @@
 <tr>
 <td colspan=2 >
 <ul>
-<li><a href='Do.aspx?DoType=AddSFTable&MyPK=ND17501&FType=Class&Idx=&GroupField='><b>外键型</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。</li> 	
+<li><a href='SFList.aspx?DoType=AddSFTable&FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>'><b>外键型</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。<a href='SFTable.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>'>新建表</a></li> 	
 <li><a href='Do.aspx?DoType=AddSFSQL&MyPK=ND17501&FType=Class&Idx=&GroupField='><b>外部表</b></a> -  比如：配置一个SQL通过数据库连接或获取的外部数据，组成一个下拉框。</li> 	
 <li><a href='Do.aspx?DoType=AddSFWebServeces&MyPK=ND17501&FType=Class&Idx=&GroupField='><b>WebServices</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。</li> 	
 </ul>	
@@ -121,7 +121,7 @@
 <td colspan=2>
 
 <ul>
-<li><a href="javascript:WinOpen('ImpTableField.aspx?FK_MapData=ND17501&FType=Class&Idx=&GroupField=');" ><b>导入字段</b></a>
+<li><a href="javascript:WinOpen('ImpTableField.aspx?FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>');" ><b>导入字段</b></a>
  &nbsp;&nbsp;从现有的表中导入字段,以提高开发的速度与字段拼写的正确性.</li> 	
 </ul>	
 

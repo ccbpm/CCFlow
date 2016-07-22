@@ -48,6 +48,13 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["FK_MapData"];
             }
         }
+        public string FK_SFTable
+        {
+            get
+            {
+                return this.Request.QueryString["FK_SFTable"];
+            }
+        }
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -78,19 +85,18 @@ namespace CCFlow.WF.MapDef
         {
             this.Title = "编辑外键类型字段";
             MapAttr attr = null;
-            if (this.RefNo == null)
+            if (this.MyPK == null)
             {
                 attr = new MapAttr();
-                string sfKey = this.Request.QueryString["SFKey"];
-                SFTable sf = new SFTable(sfKey);
+                SFTable sf = new SFTable(this.FK_SFTable);
                 attr.KeyOfEn = sf.FK_Val;
-                attr.UIBindKey = sfKey;
+                attr.UIBindKey = this.FK_SFTable;
                 attr.Name = sf.Name;
                 this.Title = "编辑外键类型字段";
             }
             else
             {
-                attr = new MapAttr(this.RefNo);
+                attr = new MapAttr(this.MyPK);
                 this.Title = "修改外键类型字段";
             }
             BindTable(attr);
@@ -124,16 +130,16 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("字段英文名"); // "字段英文名称"
             tb = new TB();
-            if (this.RefNo != null)
-            {
-                this.Pub1.AddTD(mapAttr.KeyOfEn);
-            }
-            else
+            if (this.MyPK == null)
             {
                 tb = new TB();
                 tb.ID = "TB_KeyOfEn";
                 tb.Text = mapAttr.KeyOfEn;
                 this.Pub1.AddTD(tb);
+            }
+            else
+            {
+                this.Pub1.AddTD(mapAttr.KeyOfEn);
             }
 
             if (string.IsNullOrEmpty(mapAttr.KeyOfEn))
@@ -147,11 +153,14 @@ namespace CCFlow.WF.MapDef
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("外键表/类"); // 字段中文名称
-            tb = new TB();
-            tb.ID = "TB_UIBindKey";
-            tb.Text = mapAttr.UIBindKey;
-            tb.Attributes["width"] = "100%";
-            this.Pub1.AddTD(tb);
+
+            this.Pub1.AddTD(mapAttr.UIBindKey);
+
+            //tb = new TB();
+            //tb.ID = "TB_UIBindKey";
+            //tb.Text = mapAttr.UIBindKey;
+            //tb.Attributes["width"] = "100%";
+            //this.Pub1.AddTD(tb);
             this.Pub1.AddTD("");
             this.Pub1.AddTREnd();
 
@@ -283,7 +292,7 @@ namespace CCFlow.WF.MapDef
             #endregion 字段分组
 
             #region 扩展功能.
-            if (this.RefNo != null)
+            if (this.MyPK != null)
             {
                 isItem = this.Pub1.AddTR(isItem);
                 this.Pub1.AddTDIdx(idx++);
@@ -325,7 +334,7 @@ namespace CCFlow.WF.MapDef
             btn.Click += new EventHandler(btn_Save_Click);
             this.Pub1.Add(btn);
 
-            if (this.RefNo != null)
+            if (this.MyPK != null)
             {
                 if (mapAttr.HisEditType == EditType.Edit)
                 {
@@ -362,7 +371,7 @@ namespace CCFlow.WF.MapDef
                 {
                     case "Btn_Del":
                         MapAttr attrDel = new MapAttr();
-                        attrDel.MyPK = this.RefNo;
+                        attrDel.MyPK = this.MyPK;
                         attrDel.Delete();
                         this.WinClose();
                         return;
@@ -371,67 +380,42 @@ namespace CCFlow.WF.MapDef
                 }
 
                 MapAttr attr = new MapAttr();
-                if (this.RefNo == null || this.RefNo == "")
+                if (this.MyPK == null || this.MyPK == "")
                 {
+
                     attr.MyPK = this.MyPK + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
+
+                    attr.KeyOfEn = this.Pub1.GetTBByID("TB_KeyOfEn").Text;
+                    if (attr.IsExits == true)
+                    {
+                        this.Alert("@字段名["+attr.KeyOfEn+"]，已经存在。");
+                        return;
+                    }
+
                     attr.UIContralType = UIContralType.DDL;
                     attr.MyDataType = BP.DA.DataType.AppString;
                     attr.LGType = FieldTypeS.FK;
                     attr.DefVal = "";
-                    attr.UIBindKey = this.Request.QueryString["SFKey"];
+                    //   attr.UIBindKey = this.Request.QueryString["SFKey"];
                     attr.UIIsEnable = true;
                 }
                 else
                 {
-                    attr.MyPK = this.RefNo;
+                    attr.MyPK = this.MyPK;
                     attr.Retrieve();
                 }
+
                 attr = (MapAttr)this.Pub1.Copy(attr);
-                attr.FK_MapData = this.MyPK;
+                attr.FK_MapData = this.FK_MapData;
 
                 attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
                 attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
                 attr.DefVal = this.Pub1.GetTBByID("TB_DefVal").Text;
-                attr.UIBindKey = this.Pub1.GetTBByID("TB_UIBindKey").Text;
 
-                //MapExt me = new MapExt();
-                //me.MyPK = MapExtXmlList.AutoFullDLL + "_" + attr.FK_MapData + "_" + attr.KeyOfEn;
-                //me.RetrieveFromDBSources();
-                //string sql = this.Pub1.GetTBByID("TB_LoadSQL").Text.Trim();
-                //if (string.IsNullOrEmpty(sql))
-                //{
-                //    me.Delete();
-                //}
-                //else
-                //{
-                //    me.FK_MapData = attr.FK_MapData;
-                //    me.AttrOfOper = attr.KeyOfEn;
-                //    me.ExtType = MapExtXmlList.AutoFullDLL;
-                //    me.Doc = sql;
-                //    me.Save();
-                //}
+                if (string.IsNullOrEmpty(this.FK_SFTable)==false)
+                    attr.UIBindKey = this.FK_SFTable;
 
-                //if (this.Pub1.IsExit("CB_IsDefValNull"))
-                //{
-                //    if (this.Pub1.GetCBByID("CB_IsDefValNull").Checked == false)
-                //        attr.DefVal = this.Pub1.GetDDLByID("DDL").SelectedItemStringVal;
-                //    else
-                //        attr.DefVal = "";
-                //}
-                //else
-                //{
-                //    string s = this.Pub1.GetDDLByID("DDL_DefVal").SelectedItemStringVal;
-                //    if (s == "@Select")
-                //    {
-                //        attr.DefVal = this.Pub1.GetDDLByID("DDL").SelectedItemStringVal;
-                //    }
-                //    else
-                //    {
-                //        attr.DefVal = s;
-                //    }
-                //}
-
-                if (this.RefNo == null || this.RefNo == "")
+                if (this.MyPK == null || this.MyPK == "")
                     attr.Insert();
                 else
                     attr.Update();
@@ -442,12 +426,12 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
+                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField + "&FK_SFTable=" + this.FK_SFTable, true);
                         return;
                     default:
                         break;
                 }
-                this.Response.Redirect("EditTable.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&MyPK=" + attr.MyPK + "&GroupField=" + this.GroupField, true);
+                this.Response.Redirect("EditTable.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&MyPK=" + attr.MyPK + "&GroupField=" + this.GroupField + "&FK_SFTable=" + this.FK_SFTable, true);
             }
             catch (Exception ex)
             {
@@ -459,7 +443,7 @@ namespace CCFlow.WF.MapDef
             get
             {
                 if (this.DoType == "Add")
-                    return "增加新字段向导  - <a href='Do.aspx?DoType=ChoseFType&GroupField=" + this.GroupField + "'>选择类型</a> -" + "编辑字段";
+                    return "增加新字段向导  - <a href='FieldTypeList.aspx?DoType=ChoseFType&GroupField=" + this.GroupField + "&FK_MapData="+this.FK_MapData+"'>选择类型</a> -" + "编辑字段";
                 else
                     return "编辑字段"; // "编辑字段";
             }

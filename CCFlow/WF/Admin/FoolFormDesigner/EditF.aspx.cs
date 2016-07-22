@@ -1022,6 +1022,10 @@ namespace CCFlow.WF.MapDef
                     case DataType.AppBoolean:
                         attr.MyDataType = BP.DA.DataType.AppBoolean;
                         attr.DefValOfBool = this.Pub1.GetCBByID("CB_DefVal").Checked;
+                        if (this.Pub1.GetCBByID("RB_UIIsLine_0").Checked)
+                            attr.ColSpan = 1;
+                        else
+                            attr.ColSpan = 4;
                         break;
                     case DataType.AppDateTime:
                     case DataType.AppDate:

@@ -39,7 +39,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return this.Request.QueryString["Idx"];
             }
         }
-        public int GroupID
+        public int GroupField
         {
             get
             {
@@ -110,7 +110,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             attr.FK_MapData = this.FK_MapData;
             attr.LGType = FieldTypeS.Normal;
             attr.MyPK = this.FK_MapData + "_" + no;
-            attr.GroupID = this.GroupID;
+            attr.GroupID = this.GroupField;
 
             if (this.RB_String.Checked)
             {
@@ -123,7 +123,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppString;
                 attr.Insert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppString + "&DoType=Edit&GroupID="+this.GroupID, true);
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppString + "&DoType=Edit&GroupID="+this.GroupField, true);
             }
 
             if (this.RB_Int.Checked)
@@ -137,7 +137,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppInt;
                 attr.Insert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppInt + "&DoType=Edit&GroupID=" + this.GroupID, true);
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppInt + "&DoType=Edit&GroupID=" + this.GroupField, true);
             }
 
             if (this.RB_Money.Checked)
@@ -151,7 +151,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppMoney;
                 attr.Insert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppMoney + "&DoType=Edit&GroupID=" + this.GroupID, true);
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppMoney + "&DoType=Edit&GroupID=" + this.GroupField, true);
             }
 
             if (this.RB_Float.Checked)
@@ -165,7 +165,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppFloat;
                 attr.Insert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppFloat + "&DoType=Edit&GroupID=" + this.GroupID, true);
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppFloat + "&DoType=Edit&GroupID=" + this.GroupField, true);
             }
 
             if (this.RB_Double.Checked)
@@ -179,7 +179,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppDouble;
                 attr.Insert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDouble + "&DoType=Edit&GroupID=" + this.GroupID, true);
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDouble + "&DoType=Edit&GroupID=" + this.GroupField, true);
             }
 
             if (this.RB_Data.Checked)
@@ -193,7 +193,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppDate;
                 attr.Insert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDate + "&DoType=Edit&GroupID=" + this.GroupID, true);
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDate + "&DoType=Edit&GroupID=" + this.GroupField, true);
             }
 
             if (this.RB_DataTime.Checked)
@@ -207,7 +207,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppDateTime;
                 attr.Insert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDateTime + "&DoType=Edit&GroupID=" + this.GroupID, true);
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDateTime + "&DoType=Edit&GroupID=" + this.GroupField, true);
             }
 
             if (this.RB_Boolen.Checked)
@@ -221,7 +221,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppBoolean;
                 attr.Insert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupID=" + this.GroupID, true);
+                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupID=" + this.GroupField, true);
             }
 
         }

@@ -180,6 +180,7 @@ namespace CCFlow.WF.MapDef
                         {
                             if (dtl.No != gf.CtrlID)
                                 continue;
+
                             dtl.IsUse = true;
                             myidx = rowIdx + 10;
 
@@ -584,13 +585,30 @@ namespace CCFlow.WF.MapDef
                                     if (isLeft == true)
                                         this.Pub1.AddTR();
 
-                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
                                     CheckBox cb = new CheckBox();
                                     cb.Text = attr.Name;
                                     cb.Checked = attr.DefValOfBool;
                                     cb.Enabled = attr.UIIsEnable;
                                     cb.ID = "CB_" + attr.KeyOfEn;
-                                    this.Pub1.AddTD(" colspan=1", cb);
+                                    if (attr.ColSpan == 4)
+                                    {
+                                        if (isLeft == false)
+                                        {
+                                            this.Pub1.AddTD("colspan=2", "");
+                                            this.Pub1.AddTREnd();
+                                            isLeft = true;
+                                        }
+                                        this.Pub1.AddTR();
+                                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                        this.Pub1.AddTD(" colspan=3", cb);
+                                        this.Pub1.AddTREnd();
+                                    }
+                                    else
+                                    {
+                                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                        this.Pub1.AddTD(" colspan=1", cb);
+                                    }
+
                                     break;
                                 case BP.DA.DataType.AppDouble:
                                 case BP.DA.DataType.AppFloat:

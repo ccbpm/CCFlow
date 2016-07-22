@@ -76,9 +76,9 @@ namespace CCFlow.WF.MapDef
             else
             {
                 if (this.RefNo == null)
-                    this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFTable&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'>外键</a> - 新建表");
+                    this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='SFList.aspx?DoType=AddSFTable&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外键</a> - 新建表");
                 else
-                    this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFTable&MyPK=" + this.MyPK + "&IDX=" + this.IDX + "'>外键</a> - 编辑表");
+                    this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='SFList.aspx?DoType=AddSFTable&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外键</a> - 编辑表");
             }
 
             if (this.RefNo == null)

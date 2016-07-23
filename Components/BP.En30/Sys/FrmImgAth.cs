@@ -200,8 +200,11 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            //this.MyPK = this.FK_MapData + this.CtrlID;
             this.MyPK = this.CtrlID;
+            if (this.CtrlID.Contains(this.FK_MapData) == false)
+            {
+                this.MyPK = this.FK_MapData + this.CtrlID;
+            }
             return base.beforeUpdateInsertAction();
         }
     }

@@ -744,17 +744,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-                //带有参数的方法.
-                rm = new RefMethod();
-                rm.GroupName = "流程维护";
-                rm.Title = "删除指定日期范围内的流程";
-                rm.Warning = "您确定要删除吗？";
-                rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, false);
-                rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, false);
-                rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
-                rm.ClassMethodName = this.ToString() + ".DoDelFlows";
-                map.AddRefMethod(rm);
-
+             
 
                 rm = new RefMethod();
                 rm.Title = "节点表单字段视图";
@@ -781,6 +771,19 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBInt("WorkID", 0, "输入工作ID", true, false);
                 rm.HisAttrs.AddTBString("beizhu", null, "删除备注", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
+
+                //带有参数的方法.
+                rm = new RefMethod();
+                rm.GroupName = "流程维护";
+                rm.Title = "删除指定日期范围内的流程";
+                rm.Warning = "您确定要删除吗？";
+                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Delete.gif";
+                rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, false);
+                rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, false);
+                rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
+                rm.ClassMethodName = this.ToString() + ".DoDelFlows";
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "回滚流程";

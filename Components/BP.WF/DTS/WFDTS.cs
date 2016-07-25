@@ -137,7 +137,8 @@ namespace BP.WF.DTS
         /// </summary>
         public override void Do()
         {
-
+            if (1 == 2)//此方法可能需要排除，不需要创建目录。
+                return;
             Depts Depts = new Depts();
             QueryObject qo = new QueryObject(Depts);
       //      qo.AddWhere("Grade", " < ", 4);

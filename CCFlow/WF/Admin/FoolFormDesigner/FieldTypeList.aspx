@@ -107,7 +107,7 @@
 <td colspan=2 >
 <ul>
 <li><a href='SFList.aspx?DoType=AddSFTable&FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>'><b>外键型</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。<a href='SFTable.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>'>新建表</a></li> 	
-<li><a href='Do.aspx?DoType=AddSFSQL&MyPK=ND17501&FType=Class&Idx=&GroupField='><b>外部表</b></a> -  比如：配置一个SQL通过数据库连接或获取的外部数据，组成一个下拉框。</li> 	
+<li><a href='SQLList.aspx?FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>'><b>外部表</b></a> -  比如：配置一个SQL通过数据库连接或获取的外部数据，组成一个下拉框。</li> 	
 <li><a href='Do.aspx?DoType=AddSFWebServeces&MyPK=ND17501&FType=Class&Idx=&GroupField='><b>WebServices</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。</li> 	
 </ul>	
 </td>

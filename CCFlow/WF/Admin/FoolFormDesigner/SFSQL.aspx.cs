@@ -217,10 +217,12 @@ namespace CCFlow.WF.MapDef
             Button btn = new Button();
             btn.ID = "Btn_Save";
             btn.CssClass = "Btn";
+
             if (this.FK_SFTable == null)
                 btn.Text = "创建";
             else
                 btn.Text = "保存";
+
             btn.Click += new EventHandler(btn_Save_Click);
             this.Ucsys1.Add(btn);
 
@@ -236,7 +238,7 @@ namespace CCFlow.WF.MapDef
             //    btn.Attributes["onclick"] = "WinOpen('SFTableEditData.aspx?RefNo=" + this.FK_SFTable + "','dg' ); return false;";
             //this.Ucsys1.Add(btn);
 
-            if (this.FromApp != "SL")
+            if (this.FromApp != "SL" && this.FK_SFTable!=null)
             {
                 btn = new Button();
                 btn.ID = "Btn_Add";
@@ -249,16 +251,19 @@ namespace CCFlow.WF.MapDef
                 this.Ucsys1.Add(btn);
             }
 
-            btn = new Button();
-            btn.ID = "Btn_Del";
-            btn.CssClass = "Btn";
-            btn.Text = "删除";
-            btn.Attributes["onclick"] = " return confirm('您确认吗？');";
-            if (this.FK_SFTable == null)
-                btn.Enabled = false;
+            if (this.FK_SFTable != null)
+            {
+                btn = new Button();
+                btn.ID = "Btn_Del";
+                btn.CssClass = "Btn";
+                btn.Text = "删除";
+                btn.Attributes["onclick"] = " return confirm('您确认吗？');";
+                if (this.FK_SFTable == null)
+                    btn.Enabled = false;
 
-            btn.Click += new EventHandler(btn_Del_Click);
-            this.Ucsys1.Add(btn);
+                btn.Click += new EventHandler(btn_Del_Click);
+                this.Ucsys1.Add(btn);
+            }
             this.Ucsys1.Add("</TD>");
             this.Ucsys1.AddTREnd();
             this.Ucsys1.AddTableEnd();
@@ -274,7 +279,7 @@ namespace CCFlow.WF.MapDef
         {
             if (this.Ucsys1.GetTBByID("TB_No").Text == "")
             {
-                this.Ucsys1.GetTBByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyin(this.Ucsys1.GetTBByID("TB_Name").Text);
+                this.Ucsys1.GetTBByID("TB_No").Text = "SQL_"+BP.DA.DataType.ParseStringToPinyin(this.Ucsys1.GetTBByID("TB_Name").Text);
             }
         }
         void btn_Add_Click(object sender, EventArgs e)
@@ -286,8 +291,10 @@ namespace CCFlow.WF.MapDef
                 return;
             }
 
-            this.Response.Redirect("Do.aspx?DoType=AddSFSQLAttr&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&RefNo=" + this.FK_SFTable + "&FromApp=" + this.FromApp, true);
-            this.WinClose();
+            this.Response.Redirect("EditSQL.aspx?FK_MapData=" + this.FK_MapData + "&FK_SFTable=" + table.No, true);
+
+            // this.Response.Redirect("Do.aspx?DoType=AddSFSQLAttr&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&FK_SFTable=" + this.FK_SFTable + "&FromApp=" + this.FromApp, true);
+            //this.WinClose();
             return;
         }
         void btn_Save_Click(object sender, EventArgs e)
@@ -328,7 +335,7 @@ namespace CCFlow.WF.MapDef
                 main.Save();
 
                 //重新生成
-                this.Response.Redirect("SFSQL.aspx?RefNo=" + main.No + "&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&FromApp=" + this.FromApp, true);
+                this.Response.Redirect("SFSQL.aspx?FK_SFTable=" + main.No + "&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&FromApp=" + this.FromApp, true);
             }
             catch (Exception ex)
             {

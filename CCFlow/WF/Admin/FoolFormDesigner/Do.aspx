@@ -56,11 +56,7 @@
         var url = 'Do.aspx?DoType=AddSFTableAttr&MyPK=' + mypk + '&IDX=' + idx + '&RefNo=' + key;
         var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
     }
-    function AddSFSQL(mypk, idx, key) {
-
-        var url = 'Do.aspx?DoType=AddSFSQLAttr&MyPK=' + mypk + '&IDX=' + idx + '&RefNo=' + key;
-        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
-    }
+  
     function HidShowSysField() {
         var v = document.getElementById('SysField').style.display;
         if (v == 'none')

@@ -193,11 +193,7 @@ namespace CCFlow.WF.MapDef
                         this.AddSFWS();
                         break;
                   
-                    case "AddSFSQLAttr":
-                        SFTable mysf = new SFTable(this.Request.QueryString["RefNo"]);
-                        this.Response.Redirect("EditSQL.aspx?FK_MapData=" + this.FK_MapData + "&SFKey=" + mysf.No, true);
-                        this.WinClose();
-                        return;
+                  
                     case "AddFG": /*执行一个插入列组的命令.*/
                         switch (this.RefNo)
                         {

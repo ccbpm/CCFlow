@@ -90,6 +90,7 @@ namespace CCFlow.WF.MapDef
                 attr = new MapAttr();
                 SFTable sf = new SFTable(this.FK_SFTable);
                 attr.KeyOfEn = sf.FK_Val;
+                attr.FK_MapData = this.FK_MapData;
                 attr.UIBindKey = this.FK_SFTable;
                 attr.Name = sf.Name;
                 this.Title = "编辑外键类型字段";
@@ -354,7 +355,7 @@ namespace CCFlow.WF.MapDef
                 }
             }
 
-            string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
+            string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx + "&GroupField=" + this.GroupField;
             this.Pub1.Add("<a href='" + url + "' ><img src='../../Img/Btn/New.gif' border=0>新建</a></TD>");
 
             this.Pub1.AddTDEnd();

@@ -58,11 +58,11 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["DoType"];
             }
         }
-        public string FType
+        public string FK_SFTable
         {
             get
             {
-                return this.Request.QueryString["FType"];
+                return this.Request.QueryString["FK_SFTable"];
             }
         }
         public string IDX
@@ -78,21 +78,21 @@ namespace CCFlow.WF.MapDef
         {
             this.Title = "编辑外部表字段";
             MapAttr attr = null;
-            if (this.RefNo == null)
+            if (this.MyPK == null)
             {
                 attr = new MapAttr();
-                string sfKey = this.Request.QueryString["SFKey"];
-                SFTable sf = new SFTable(sfKey);
+                SFTable sf = new SFTable(this.FK_SFTable);
                 attr.KeyOfEn = sf.FK_Val;
-                attr.UIBindKey = sfKey;
+                attr.UIBindKey = this.FK_SFTable;
                 attr.Name = sf.Name;
                 this.Title = "编辑外部表字段";
             }
             else
             {
-                attr = new MapAttr(this.RefNo);
+                attr = new MapAttr(this.MyPK);
                 this.Title = "修改外部表字段";
             }
+            attr.FK_MapData = this.FK_MapData;
             BindTable(attr);
         }
 
@@ -124,7 +124,7 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("字段英文名"); // "字段英文名称"
             tb = new TB();
-            if (this.RefNo != null)
+            if (this.MyPK != null)
             {
                 this.Pub1.AddTD(mapAttr.KeyOfEn);
             }
@@ -285,7 +285,7 @@ namespace CCFlow.WF.MapDef
             #endregion 字段分组
 
             #region 扩展功能.
-            if (this.RefNo != null)
+            if (this.MyPK != null)
             {
                 isItem = this.Pub1.AddTR(isItem);
                 this.Pub1.AddTDIdx(idx++);
@@ -299,6 +299,7 @@ namespace CCFlow.WF.MapDef
             #region 字段按钮
             this.Pub1.AddTRSum();
             this.Pub1.Add("<TD colspan=4>");
+             
             Button btn = new Button();
             btn.ID = "Btn_Save";
             btn.Text = "保存";
@@ -327,7 +328,7 @@ namespace CCFlow.WF.MapDef
             btn.Click += new EventHandler(btn_Save_Click);
             this.Pub1.Add(btn);
 
-            if (this.RefNo != null)
+            if (this.MyPK != null)
             {
                 if (mapAttr.HisEditType == EditType.Edit)
                 {
@@ -364,7 +365,7 @@ namespace CCFlow.WF.MapDef
                 {
                     case "Btn_Del":
                         MapAttr attrDel = new MapAttr();
-                        attrDel.MyPK = this.RefNo;
+                        attrDel.MyPK = this.MyPK;
                         attrDel.Delete();
                         this.WinClose();
                         return;
@@ -373,7 +374,7 @@ namespace CCFlow.WF.MapDef
                 }
 
                 MapAttr attr = new MapAttr();
-                if (this.RefNo == null || this.RefNo == "")
+                if (this.MyPK == null || this.MyPK == "")
                 {
                     attr.MyPK = this.MyPK + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
                     attr.KeyOfEn =  this.Pub1.GetTBByID("TB_KeyOfEn").Text;
@@ -381,7 +382,7 @@ namespace CCFlow.WF.MapDef
                     attr.MyDataType = BP.DA.DataType.AppString;
                     attr.LGType = FieldTypeS.Normal;
                     attr.DefVal = "";
-                    attr.UIBindKey = this.Request.QueryString["SFKey"];
+                    attr.UIBindKey = this.FK_SFTable ;
                     attr.UIIsEnable = true;
                     if (attr.IsExits == true)
                         throw new Exception("@字段名["+attr.KeyOfEn+"]已经存在，保存失败。");
@@ -390,7 +391,7 @@ namespace CCFlow.WF.MapDef
                 }
                 else
                 {
-                    attr.MyPK = this.RefNo;
+                    attr.MyPK = this.MyPK;
                     attr.Retrieve();
                     attr = (MapAttr)this.Pub1.Copy(attr);
                 }
@@ -402,7 +403,7 @@ namespace CCFlow.WF.MapDef
                 attr.UIBindKey = this.Pub1.GetTBByID("TB_UIBindKey").Text;
 
                 string field = attr.KeyOfEn;
-                if (this.RefNo == null || this.RefNo == "")
+                if (this.MyPK == null || this.MyPK == "")
                 {
                     attr.Insert(); //首先插入数据表现数据.
 

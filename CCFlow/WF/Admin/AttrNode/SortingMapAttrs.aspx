@@ -31,8 +31,8 @@
             window.location.href = window.location.href;
         }
         //编辑分组名称
-        function GroupField(mypk, OID) {
-            var url = '../FoolFormDesigner/GroupField.aspx?RefNo=' + mypk + "&RefOID=" + OID;
+        function GroupField(fk_mapdata, OID) {
+            var url = '../FoolFormDesigner/GroupField.aspx?FK_MapData=' + fk_mapdata + "&GroupField=" + OID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }

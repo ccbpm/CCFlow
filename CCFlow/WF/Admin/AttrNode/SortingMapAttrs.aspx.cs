@@ -162,27 +162,9 @@ namespace CCFlow.WF.Admin
             dtls = new MapDtls(this.FK_MapData);
 
             groups = new GroupFields();
-            groups.RetrieveFieldGroup(this.FK_MapData);
-
-            //将明细表分组也放入分组集合
-            if (dtls != null && dtls.Count > 0)
-            {
-                string groupIds = "";
-                foreach (MapDtl dtl in dtls)
-                {
-                    //排除未分组
-                    if (string.IsNullOrEmpty(dtl.GroupID.ToString()) || dtl.GroupID == 0)
-                        continue;
-                    groupIds += dtl.GroupID + ",";
-                }
-                //明细表分组值
-                if (groupIds.Length > 0)
-                {
-                    groupIds = groupIds.Remove(groupIds.Length - 1);
-                    qo.addOr();
-                    qo.AddWhereIn(GroupFieldAttr.OID, "(" + groupIds + ")");
-                }
-            }
+            qo = new QueryObject(groups);
+            qo.AddWhere(GroupFieldAttr.EnName, FK_MapData);
+            qo.addOrderBy(GroupFieldAttr.Idx);
             qo.DoQuery();
             #endregion
 
@@ -204,6 +186,7 @@ namespace CCFlow.WF.Admin
             DDL ddl = null;
             int idx_Attr = 1;
             int gidx = 1;
+            GroupField group = null;
 
             if (mapdata != null)
             {
@@ -229,22 +212,34 @@ namespace CCFlow.WF.Admin
                     if (IsExistInDataRowArray(dtGroups.Rows, GroupFieldAttr.OID, dr[MapAttrAttr.GroupID]) == false)
                         dtNoGroupAttrs.Rows.Add(dr.ItemArray);
                 }
-                //未分组明细表,自动分配一个
+                //未分组明细表,自动创建一个
                 foreach (MapDtl mapDtl in dtls)
                 {
-                    if (IsExistInDataRowArray(dtGroups.Rows, GroupFieldAttr.OID, mapDtl.GroupID) == false)
+                    if (GetGroupID(mapDtl.No, groups) == 0)
                     {
-                        mapDtl.GroupID = int.Parse(dtGroups.Rows[0]["OID"].ToString());
-                        mapDtl.Update();
+                        group = new GroupField();
+                        group.Lab = mapDtl.Name;
+                        group.EnName = mapDtl.FK_MapData;
+                        group.CtrlType = GroupCtrlType.Dtl;
+                        group.CtrlID = mapDtl.No;
+                        group.Insert();
+
+                        groups.AddEntity(group);
                     }
                 }
                 //未分组多附件自动分配一个
                 foreach (FrmAttachment athMent in athMents)
                 {
-                    if (IsExistInDataRowArray(dtGroups.Rows, GroupFieldAttr.OID, athMent.GroupID) == false)
+                    if (GetGroupID(athMent.MyPK, groups) == 0)
                     {
-                        athMent.GroupID = int.Parse(dtGroups.Rows[0]["OID"].ToString());
-                        athMent.Update();
+                        group = new GroupField();
+                        group.Lab = athMent.Name;
+                        group.EnName = athMent.FK_MapData;
+                        group.CtrlType = GroupCtrlType.Ath;
+                        group.CtrlID = athMent.MyPK;
+                        group.Insert();
+
+                        groups.AddEntity(group);
                     }
                 }
 
@@ -291,7 +286,7 @@ namespace CCFlow.WF.Admin
                         ddl = new DDL();
                         ddl.ID = "DDL_Group_" + drGrp[GroupFieldAttr.OID] + "_" + row[MapAttrAttr.KeyOfEn];
 
-                        foreach (DataRow rowGroup in dtGroups.Rows)
+                        foreach (DataRow rowGroup in dtGroups.Select("CTRLTYPE = ''"))
                             ddl.Items.Add(new ListItem(rowGroup[GroupFieldAttr.Lab].ToString(), rowGroup[GroupFieldAttr.OID].ToString()));
 
                         ddl.AutoPostBack = true;
@@ -339,7 +334,7 @@ namespace CCFlow.WF.Admin
                     {
                         if (athMent.IsVisable == false)
                             continue;
-                        if (athMent.GroupID.ToString() != drGrp["OID"].ToString())
+                        if (GetGroupID(athMent.MyPK, groups).ToString() != drGrp["OID"].ToString())
                             continue;
                         groupOfAthMents.Add(athMent);
                     }
@@ -354,7 +349,7 @@ namespace CCFlow.WF.Admin
                     List<MapDtl> groupOfDtls = new List<MapDtl>();
                     foreach (MapDtl mapDtl in dtls)
                     {
-                        if (mapDtl.GroupID.ToString() != drGrp["OID"].ToString())
+                        if (GetGroupID(mapDtl.No, groups).ToString() != drGrp["OID"].ToString())
                             continue;
                         groupOfDtls.Add(mapDtl);
                     }
@@ -628,7 +623,7 @@ namespace CCFlow.WF.Admin
                 qo.AddWhere(MapDtlAttr.FK_MapData, tmd);
                 qo.addAnd();
                 qo.AddWhere(MapDtlAttr.IsView, true);
-                qo.addOrderBy(MapDtlAttr.RowIdx);
+                //qo.addOrderBy(MapDtlAttr.RowIdx);
                 qo.DoQuery();
                 #endregion
 
@@ -720,6 +715,9 @@ namespace CCFlow.WF.Admin
 
                 #region //明细表排序复制
                 string dtlIdx = string.Empty;
+                GroupField tgroup = null;
+                int groupidx = 0;
+                int tgroupidx = 0;
 
                 foreach (MapDtl dtl in dtls)
                 {
@@ -729,21 +727,42 @@ namespace CCFlow.WF.Admin
                     if (tdtl == null)
                         continue;
 
-                    #region 1.明细表排序
-                    if (tdtl.RowIdx != dtl.RowIdx)
-                    {
-                        tdtl.RowIdx = dtl.RowIdx;
-                        tdtl.DirectUpdate();
+                    //判断目标明细表是否有分组，没有分组，则创建分组
+                    tgroup = GetGroup(tdtl.No, tgroups);
+                    tgroupidx = tgroup == null ? 0 : tgroup.Idx;
+                    group = GetGroup(dtl.No, groups);
+                    groupidx = group == null ? 0 : group.Idx;
 
+                    if (tgroup == null)
+                    {
+                        group = new GroupField();
+                        group.Lab = tdtl.Name;
+                        group.EnName = tdtl.FK_MapData;
+                        group.CtrlType = GroupCtrlType.Dtl;
+                        group.CtrlID = tdtl.No;
+                        group.Idx = groupidx;
+                        group.Insert();
+
+                        tgroupidx = groupidx;
+                        tgroups.AddEntity(group);
+                    }
+
+                    #region 1.明细表排序
+                    if (tgroupidx != groupidx && group != null)
+                    {
+                        tgroup.Idx = groupidx;
+                        tgroup.DirectUpdate();
+
+                        tgroupidx = groupidx;
                         tmapdata = tmapdatas.GetEntityByKey(MapDataAttr.No, tdtl.No) as MapData;
                         if (tmapdata != null)
                         {
-                            tmapdata.Idx = dtl.RowIdx;
+                            tmapdata.Idx = tgroup.Idx;
                             tmapdata.DirectUpdate();
                         }
                     }
 
-                    maxDtlIdx = Math.Max(tdtl.RowIdx, maxDtlIdx);
+                    maxDtlIdx = Math.Max(tgroupidx, maxDtlIdx);
                     idxDtls.Add(dtl.No);
                     #endregion
 
@@ -863,18 +882,38 @@ namespace CCFlow.WF.Admin
                     #endregion
                 }
 
+                //确定目标节点中，源节点没有的明细表的排序
                 foreach (MapDtl dtl in tdtls)
                 {
                     if (idxDtls.Contains(dtl.No))
                         continue;
 
-                    dtl.RowIdx = maxDtlIdx = maxDtlIdx + 1;
-                    dtl.DirectUpdate();
+                    maxDtlIdx = maxDtlIdx + 1;
+                    tgroup = GetGroup(dtl.No, tgroups);
+
+                    if(tgroup == null)
+                    {
+                        tgroup = new GroupField();
+                        tgroup.Lab = tdtl.Name;
+                        tgroup.EnName = tdtl.FK_MapData;
+                        tgroup.CtrlType = GroupCtrlType.Dtl;
+                        tgroup.CtrlID = tdtl.No;
+                        tgroup.Idx = maxDtlIdx;
+                        tgroup.Insert();
+
+                        tgroups.AddEntity(group);
+                    }
+
+                    if(tgroup.Idx != maxDtlIdx)
+                    {
+                        tgroup.Idx = maxDtlIdx;
+                        tgroup.DirectUpdate();
+                    }
 
                     tmapdata = tmapdatas.GetEntityByKey(MapDataAttr.No, dtl.No) as MapData;
                     if (tmapdata != null)
                     {
-                        tmapdata.Idx = dtl.RowIdx;
+                        tmapdata.Idx = maxDtlIdx;
                         tmapdata.DirectUpdate();
                     }
                 }
@@ -909,20 +948,20 @@ namespace CCFlow.WF.Admin
             //如果是明细表
             if (ids[1] == "Dtl")
             {
-                MapDtl mapDtl = dtls.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapDtlAttr.No, key) as MapDtl;
-                if (mapDtl == null) return;
+                //MapDtl mapDtl = dtls.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapDtlAttr.No, key) as MapDtl;
+                //if (mapDtl == null) return;
 
-                mapDtl.GroupID = newGrpId;
-                mapDtl.DirectUpdate();
+                //mapDtl.GroupID = newGrpId;
+                //mapDtl.DirectUpdate();
             }
             else if (ids[1] == "AthMent")
             {
                 //多附件排序
-                FrmAttachment athMent = athMents.GetEntityByKey(FrmAttachmentAttr.FK_MapData, FK_MapData, FrmAttachmentAttr.NoOfObj, key) as FrmAttachment;
-                if (athMent == null) return;
+                //FrmAttachment athMent = athMents.GetEntityByKey(FrmAttachmentAttr.FK_MapData, FK_MapData, FrmAttachmentAttr.NoOfObj, key) as FrmAttachment;
+                //if (athMent == null) return;
 
-                athMent.GroupID = newGrpId;
-                athMent.DirectUpdate();
+                //athMent.GroupID = newGrpId;
+                //athMent.DirectUpdate();
             }
             else
             {
@@ -1108,9 +1147,12 @@ namespace CCFlow.WF.Admin
                             if (tids.OldIdx != ids.Idx)
                             {
                                 //更新MapDtl中的明细表索引
-                                dtl = dtls.GetEntityByKey(tids.Key) as MapDtl;
-                                dtl.RowIdx = ids.Idx;
-                                dtl.Update();
+                                //dtl = dtls.GetEntityByKey(tids.Key) as MapDtl;
+                                //dtl.RowIdx = ids.Idx;
+                                //dtl.Update();
+                                group = GetGroup(tids.Key, groups);
+                                group.Idx = ids.Idx;
+                                group.Update();
 
                                 //更新MapData中的索引
                                 mapdata = mapdatas.GetEntityByKey(dtl.No) as MapData;
@@ -1124,9 +1166,12 @@ namespace CCFlow.WF.Admin
                             if (tids.OldIdx != targetIdx)
                             {
                                 //更新MapDtl中的明细表索引
-                                dtl = dtls.GetEntityByKey(tids.Key) as MapDtl;
-                                dtl.RowIdx = targetIdx;
-                                dtl.Update();
+                                //dtl = dtls.GetEntityByKey(tids.Key) as MapDtl;
+                                //dtl.RowIdx = targetIdx;
+                                //dtl.Update();
+                                group = GetGroup(tids.Key, groups);
+                                group.Idx = targetIdx;
+                                group.Update();
 
                                 //更新MapData中的索引
                                 mapdata = mapdatas.GetEntityByKey(dtl.No) as MapData;
@@ -1140,9 +1185,12 @@ namespace CCFlow.WF.Admin
                             if (tids.OldIdx != tids.Idx)
                             {
                                 //更新MapDtl中的明细表索引
-                                dtl = dtls.GetEntityByKey(tids.Key) as MapDtl;
-                                dtl.RowIdx = tids.Idx;
-                                dtl.Update();
+                                //dtl = dtls.GetEntityByKey(tids.Key) as MapDtl;
+                                //dtl.RowIdx = tids.Idx;
+                                //dtl.Update();
+                                group = GetGroup(tids.Key, groups);
+                                group.Idx = tids.Idx;
+                                group.Update();
 
                                 //更新MapData中的索引
                                 mapdata = mapdatas.GetEntityByKey(dtl.No) as MapData;
@@ -1241,7 +1289,7 @@ namespace CCFlow.WF.Admin
             switch ((FieldTypeS)drAttr[MapAttrAttr.LGType])
             {
                 case BP.En.FieldTypeS.Enum:
-                    url += "EditEnum.aspx?MyPK=" + drAttr[MapAttrAttr.FK_MapData] + "&RefNo=" + drAttr[MapAttrAttr.MyPK];
+                    url += "EditEnum.aspx?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 case BP.En.FieldTypeS.Normal:
                     url += "EditF.aspx?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
@@ -1289,16 +1337,17 @@ namespace CCFlow.WF.Admin
                 pub1.AddTD("style='text-align:center'", idx_Attr.ToString());
                 pub1.AddTD("<a href=\"javascript:EditDtl('" + this.FK_MapData + "','" + dtl.No + "')\" >" + dtl.No + "</a>");
                 pub1.AddTD(dtl.Name);
-                DDL ddl = new DDL();
-                ddl.ID = "DDL_Dtl_" + dtl.GroupID + "_" + dtl.No;
+                //DDL ddl = new DDL();
+                //ddl.ID = "DDL_Dtl_" + dtl.GroupID + "_" + dtl.No;
 
-                foreach (GroupField groupField in groups)
-                    ddl.Items.Add(new ListItem(groupField.Lab, groupField.OID.ToString()));
+                //foreach (GroupField groupField in groups)
+                //    ddl.Items.Add(new ListItem(groupField.Lab, groupField.OID.ToString()));
 
-                ddl.AutoPostBack = true;
-                ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
-                ddl.SetSelectItem(dtl.GroupID);
-                pub1.AddTD(ddl);
+                //ddl.AutoPostBack = true;
+                //ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
+                //ddl.SetSelectItem(dtl.GroupID);
+                //pub1.AddTD(ddl);
+                pub1.AddTD("&nbsp;");
 
                 pub1.AddTDBegin();
 
@@ -1368,16 +1417,17 @@ namespace CCFlow.WF.Admin
                 pub1.AddTD("style='text-align:center'", idx_Attr.ToString());
                 pub1.AddTD("<a href=\"javascript:EditAthMent('" + this.FK_MapData + "','" + athMent.NoOfObj + "')\" >" + athMent.NoOfObj + "</a>");
                 pub1.AddTD(athMent.Name);
-                DDL ddl = new DDL();
-                ddl.ID = "DDL_AthMent_" + athMent.GroupID + "_" + athMent.NoOfObj;
+                //DDL ddl = new DDL();
+                //ddl.ID = "DDL_AthMent_" + athMent.GroupID + "_" + athMent.NoOfObj;
 
-                foreach (GroupField groupField in groups)
-                    ddl.Items.Add(new ListItem(groupField.Lab, groupField.OID.ToString()));
+                //foreach (GroupField groupField in groups)
+                //    ddl.Items.Add(new ListItem(groupField.Lab, groupField.OID.ToString()));
 
-                ddl.AutoPostBack = true;
-                ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
-                ddl.SetSelectItem(athMent.GroupID);
-                pub1.AddTD(ddl);
+                //ddl.AutoPostBack = true;
+                //ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
+                //ddl.SetSelectItem(athMent.GroupID);
+                //pub1.AddTD(ddl);
+                pub1.AddTD("&nbsp;");
 
                 pub1.AddTDBegin();
 
@@ -1408,6 +1458,17 @@ namespace CCFlow.WF.Admin
             pub1.AddBR();
             pub1.AddTDEnd();
             pub1.AddTREnd();
+        }
+
+        private int GetGroupID(string ctrlID, GroupFields gfs)
+        {
+            GroupField gf = gfs.GetEntityByKey(GroupFieldAttr.CtrlID, ctrlID) as GroupField;
+            return gf == null ? 0 : gf.OID;
+        }
+
+        private GroupField GetGroup(string ctrlID, GroupFields gfs)
+        {
+            return gfs.GetEntityByKey(GroupFieldAttr.CtrlID, ctrlID) as GroupField;
         }
     }
 }

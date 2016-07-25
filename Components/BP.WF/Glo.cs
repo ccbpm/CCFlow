@@ -310,14 +310,14 @@ namespace BP.WF
                     switch (src.HisDBType)
                     {
                         case DBType.MSSQL:
-                                DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson IMAGE NULL");
+                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson IMAGE NULL");
                             break;
                         case DBType.Oracle:
                         case DBType.Informix:
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson BLOB NULL");
                             break;
                         case DBType.MySQL:
-                                DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson TEXT");
+                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson TEXT");
                             break;
                         default:
                             break;

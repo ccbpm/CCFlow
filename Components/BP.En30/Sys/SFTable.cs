@@ -121,6 +121,10 @@ namespace BP.Sys
         /// 最近缓存的时间
         /// </summary>
         public const string CashDT = "CashDT";
+        /// <summary>
+        /// 加入日期
+        /// </summary>
+        public const string RDT = "RDT";
         #endregion 链接到其他系统获取数据的属性。
     }
     /// <summary>
@@ -431,7 +435,6 @@ namespace BP.Sys
                 this.SetValByKey(SFTableAttr.ParentValue, value);
             }
         }
-
         /// <summary>
         /// 查询语句
         /// </summary>
@@ -444,6 +447,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(SFTableAttr.SelectStatement, value);
+            }
+        }
+        /// <summary>
+        /// 加入日期
+        /// </summary>
+        public string RDT
+        {
+            get
+            {
+                return this.GetValStringByKey(SFTableAttr.RDT);
+            }
+            set
+            {
+                this.SetValByKey(SFTableAttr.RDT, value);
             }
         }
         #endregion
@@ -486,6 +503,26 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(SFTableAttr.SrcType, (int)value);
+            }
+        }
+        /// <summary>
+        /// 数据源类型名称
+        /// </summary>
+        public string SrcTypeText
+        {
+            get
+            {
+                switch (this.SrcType)
+                {
+                    case Sys.SrcType.TableOrView:
+                        return "<img src='/WF/Img/Table.gif' width='16px' broder='0' />" + this.GetValRefTextByKey(SFTableAttr.SrcType);
+                    case Sys.SrcType.SQL:
+                        return "<img src='/WF/Img/SQL.png' width='16px' broder='0' />" + this.GetValRefTextByKey(SFTableAttr.SrcType);
+                    case Sys.SrcType.WebServices:
+                        return "<img src='/WF/Img/WebServices.gif' width='16px' broder='0' />" + this.GetValRefTextByKey(SFTableAttr.SrcType);
+                    default:
+                        return "";
+                }
             }
         }
         /// <summary>
@@ -609,6 +646,7 @@ namespace BP.Sys
                         this.Insert();
                         break;
                     case "BP.Pub.Days":
+                
                         this.Name = "天";
                         //   this.HisCodeStruct = CodeStruct.ClsLab;
                         this.FK_Val = "FK_Day";
@@ -642,6 +680,7 @@ namespace BP.Sys
                 map.EnDesc = "字典表";
                 map.EnType = EnType.Sys;
 
+
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
@@ -658,7 +697,6 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.CashDT, null, "上次同步的时间", false, false, 0, 200, 20);
                 map.AddTBInt(SFTableAttr.CashMinute, 0, "数据缓存时间(0表示不缓存)", false, false);
 
-
                 //数据源.
                 map.AddDDLEntities(SFTableAttr.FK_SFDBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
 
@@ -667,6 +705,10 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.ColumnText, null, "显示的文字(名称列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ParentValue, null, "父级值(父级列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", false, false, 0, 1000, 600, true);
+
+
+                map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
+
 
                 //查找.
                 map.AddSearchAttr(SFTableAttr.FK_SFDBSrc);
@@ -737,6 +779,13 @@ namespace BP.Sys
                 throw new Exception("@如下实体字段在引用:" + err + "。您不能删除该表。");
             }
             return base.beforeDelete();
+        }
+
+        protected override bool beforeInsert()
+        {
+            //利用这个时间串进行排序.
+            this.RDT = DataType.CurrentDataTime;
+            return base.beforeInsert();
         }
     }
     /// <summary>

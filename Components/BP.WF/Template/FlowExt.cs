@@ -740,9 +740,21 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
-
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 map.AddRefMethod(rm);
+
+
+                //带有参数的方法.
+                rm = new RefMethod();
+                rm.GroupName = "流程维护";
+                rm.Title = "删除指定日期范围内的流程";
+                rm.Warning = "您确定要删除吗？";
+                rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, false);
+                rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, false);
+                rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
+                rm.ClassMethodName = this.ToString() + ".DoDelFlows";
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "节点表单字段视图";
@@ -982,6 +994,36 @@ namespace BP.WF.Template
         #endregion 报表设计.
 
         #region 开发接口.
+        /// <summary>
+        /// 执行删除指定日期范围内的流程
+        /// </summary>
+        /// <param name="dtFrom">日期从</param>
+        /// <param name="dtTo">日期到</param>
+        /// <param name="isOk">仅仅删除当前流程？1=删除当前流程, 0=删除全部流程.</param>
+        /// <returns></returns>
+        public string DoDelFlows(string dtFrom, string dtTo, string isDelCurrFlow)
+        {
+            if (BP.Web.WebUser.No != "admin")
+                return "非admin用户，不能删除。";
+
+            string sql = "";
+            if (isDelCurrFlow=="1")
+                sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "'  AND FK_Flow='" + this.No + "' ";
+            else
+                sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "' ";
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+            string msg = "如下流程ID被删除:";
+            foreach (DataRow dr in dt.Rows)
+            {
+                Int64 workid = Int64.Parse(dr["WorkID"].ToString());
+                string fk_flow = dr["FK_Flow"].ToString();
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workid, false);
+                msg += " " + workid;
+            }
+            return msg;
+        }
         /// <summary>
         /// 批量重命名字段.
         /// </summary>

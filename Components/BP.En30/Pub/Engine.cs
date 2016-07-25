@@ -549,7 +549,7 @@ namespace BP.Pub
             string[] strs = key.Split('.');
 
             // 如果不包含 . 就说明他是从Rpt中取数据。
-            if (this.HisGEEntity != null && key.Contains("ND") == false)
+            if (this.HisGEEntity != null && this.HisEns.Count == 0)
             {
                 if (strs.Length == 1)
                     return this.HisGEEntity.GetValStringByKey(key);
@@ -557,8 +557,13 @@ namespace BP.Pub
                 if (strs[1].Trim() == "ImgAth")
                 {
                     string path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
-                    if(!File.Exists(path1))
-                        return this.GetCode(key);
+                    if (!File.Exists(path1))
+                    {
+                        FrmImgAthDB dbImgAth = new FrmImgAthDB(strs[0].Trim() + "_" + this.HisGEEntity.PKVal);
+                        path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
+                        if (!File.Exists(path1))
+                            return this.GetCode(key);
+                    }
                     //定义rtf中图片字符串.
                     StringBuilder mypict = new StringBuilder();
                     //获取要插入的图片

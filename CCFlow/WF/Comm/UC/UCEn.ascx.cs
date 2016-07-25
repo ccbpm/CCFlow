@@ -429,6 +429,12 @@ namespace CCFlow.Web.Comm.UC
                                     case DataType.AppMoney:
                                         tb.Text = decimal.Parse(val.ToString()).ToString("0.00");
                                         break;
+                                    case DataType.AppDate:
+                                        tb.Text =DataType.CurrentData;
+                                        break;
+                                    case DataType.AppDateTime:
+                                        tb.Text = DataType.CurrentDataTime;
+                                        break;
                                     default:
                                         tb.Text = val.ToString();
                                         break;

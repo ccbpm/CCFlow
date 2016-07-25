@@ -5,7 +5,7 @@
 
 <table style="width:100%;">
 <tr>
-<th colspan=2>新增普通类型的字段</th>
+<th colspan="2">新增普通类型的字段</th>
 </tr>
 
 <tr>
@@ -40,7 +40,7 @@
 
 
 <tr>
-<td colspan=2> 
+<td colspan="2"> 
     <asp:Button ID="Btn_Save" runat="server" Text="创建(C)" AccessKey="c" 
         onclick="Btn_Save_Click" />
     </td>
@@ -84,11 +84,11 @@
 
 
 <tr>
-<th colspan=2>新增枚举字段(用来表示，状态、类型...的数据。)</th>
+<th colspan="2">新增枚举字段(用来表示，状态、类型...的数据。)</th>
 </tr>
 
 <tr>
-<td colspan=2>
+<td colspan="2">
 
 <ul>
 <li><a href='SysEnumList.aspx?DoType=AddSysEnum&FK_MapData=<%=this.FK_MapData %>&Idx=&GroupField=<%=this.GroupField %>'><b>枚举型</b></a> -  比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li> 	
@@ -100,16 +100,18 @@
 
 
 <tr>
-<th colspan=2> 新增下拉框(外键、外部表、WebServices)字段(通常只有编号名称两个列)</th>
+<th colspan="2"> 新增下拉框(外键、外部表、WebServices)字段(通常只有编号名称两个列)</th>
 </tr>
 
 <tr>
-<td colspan=2 >
+<td colspan="2" >
 <ul>
+<li><a href='SFList.aspx?DoType=AddSFTable&FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>'><b>外键、外部数据、webservices数据类型</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。<a href='SFTable.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>'>新建表</a></li> 	
+
 <li><a href='SFList.aspx?DoType=AddSFTable&FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>'><b>外键型</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。<a href='SFTable.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>'>新建表</a></li> 	
 <li><a href='SQLList.aspx?FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>'><b>外部表</b></a> -  比如：配置一个SQL通过数据库连接或获取的外部数据，组成一个下拉框。</li> 	
 <li><a href='Do.aspx?DoType=AddSFWebServeces&MyPK=ND17501&FType=Class&Idx=&GroupField='><b>WebServices</b></a> -  比如：通过调用Webservices接口获得数据，组成一个下拉框。</li> 	
-</ul>	
+</ul>
 </td>
 </tr>
 
@@ -118,7 +120,7 @@
 </tr>
 
 <tr>
-<td colspan=2>
+<td colspan="2">
 
 <ul>
 <li><a href="javascript:WinOpen('ImpTableField.aspx?FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>');" ><b>导入字段</b></a>
@@ -130,11 +132,11 @@
 
 
 <tr>
-<th colspan=2> 增加系统字段-隐藏/显示</th>
+<th colspan="2"> 增加系统字段-隐藏/显示</th>
 </tr>
 
 <tr>
-<td colspan=2>
+<td colspan="2">
 
 ><fieldset width='100%' ><legend>&nbsp;<div onclick="javascript:HidShowSysFieldImp();" >增加系统字段-隐藏/显示</div> &nbsp;</legend><div id='SysField' style='display:none' >        /// <summary>
 <BR>        /// 发送人员字段

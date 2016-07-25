@@ -129,6 +129,7 @@
     <Content Include="ClientBin\CCFlowDesigner.xap" />
     <Content Include="ClientBin\CCFlowDesignerSingle.xap" />
     <Content Include="ClientBin\CCFormDesigner.xap" />
+    <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
     <Content Include="WF\Admin\ClientBin\CCFormDesigner.xap" />
@@ -767,7 +768,11 @@
     <Content Include="WF\Admin\FlowDB\流程按月分析.png" />
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\FieldTypeListDDL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFEdit.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SQLList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx" />
     <Content Include="WF\Admin\Img\PK.png" />
@@ -777,7 +782,6 @@
     <Content Include="WF\Admin\Org\IntegrationDB.aspx" />
     <Content Include="WF\Admin\Org\IntegrationWS.aspx" />
     <Content Include="WF\Admin\Org\Working.png" />
-    <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\Templete\Uploade.aspx" />
     <Content Include="WF\Admin\Condition.aspx" />
     <Content Include="WF\Admin\ConditionLine.aspx" />
@@ -1642,6 +1646,7 @@
     <Content Include="WF\SDKComponents\DocMainAth.ascx" />
     <Content Include="WF\SDKComponents\FrmCheck.ascx" />
     <Content Include="WF\SDKComponents\DocMultiAth.ascx" />
+    <Content Include="WF\SDKComponents\FTC.ascx" />
     <Content Include="WF\SDKComponents\Readme.txt" />
     <Content Include="WF\SDKComponents\ShowMsg.aspx" />
     <Content Include="WF\SDKComponents\SubFlowDtl.ascx" />
@@ -4078,12 +4083,40 @@
     <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx.designer.cs">
       <DependentUpon>FieldTypeList.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeListDDL.aspx.cs">
+      <DependentUpon>FieldTypeListDDL.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeListDDL.aspx.designer.cs">
+      <DependentUpon>FieldTypeListDDL.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx.cs">
       <DependentUpon>InputCheck.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx.designer.cs">
       <DependentUpon>InputCheck.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SFEdit.aspx.cs">
+      <DependentUpon>SFEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SFEdit.aspx.designer.cs">
+      <DependentUpon>SFEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SFList.aspx.cs">
+      <DependentUpon>SFList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SFList.aspx.designer.cs">
+      <DependentUpon>SFList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SQLList.aspx.cs">
+      <DependentUpon>SQLList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\SQLList.aspx.designer.cs">
+      <DependentUpon>SQLList.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.cs">
       <DependentUpon>SysEnum.aspx</DependentUpon>
@@ -4140,13 +4173,6 @@
     </Compile>
     <Compile Include="WF\Admin\Org\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\SortingMapAttrs.aspx.cs">
-      <DependentUpon>SortingMapAttrs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\SortingMapAttrs.aspx.designer.cs">
-      <DependentUpon>SortingMapAttrs.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Templete\Uploade.aspx.cs">
       <DependentUpon>Uploade.aspx</DependentUpon>
@@ -5340,6 +5366,13 @@
     </Compile>
     <Compile Include="WF\SDKComponents\DocMultiAth.ascx.designer.cs">
       <DependentUpon>DocMultiAth.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\SDKComponents\FTC.ascx.cs">
+      <DependentUpon>FTC.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\SDKComponents\FTC.ascx.designer.cs">
+      <DependentUpon>FTC.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\SDKComponents\ShowMsg.aspx.cs">
       <DependentUpon>ShowMsg.aspx</DependentUpon>

@@ -255,6 +255,9 @@ namespace BP.Sys
 
                 if (_ens == null)
                 {
+                    SFTable sf = new SFTable(this.UIBindKey);
+                   
+
                     GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
                     myens.RetrieveAll();
                     _ens = myens;

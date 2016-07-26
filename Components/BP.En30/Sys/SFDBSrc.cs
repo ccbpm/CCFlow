@@ -44,7 +44,11 @@ namespace BP.Sys
         /// <summary>
         /// WebService数据源
         /// </summary>
-        WebServices = 100
+        WebServices = 100,
+        /// <summary>
+        /// 海尔的double服务.
+        /// </summary>
+        Double=200
     }
     /// <summary>
     /// 数据源
@@ -727,7 +731,7 @@ namespace BP.Sys
         }
         #endregion
 
-
+        #region 方法.
         /// <summary>
         /// 是表还是视图？
         /// </summary>
@@ -1489,6 +1493,9 @@ namespace BP.Sys
 
             return base.beforeUpdateInsertAction();
         }
+        #endregion 方法.
+
+
 
     }
     /// <summary>
@@ -1525,16 +1532,6 @@ namespace BP.Sys
                 src.Name = "应用系统主数据库(默认)";
                 src.Insert();
                 this.AddEntity(src);
-
-                //src = new SFDBSrc();
-                //src.No = "local_Test";
-                //src.Name = "测试数据源";
-                //src.UserID = "sa";
-                //src.Password = "ccflow";
-                //src.DBSrcType = BP.DA.DBAccess.AppCenterDBType;
-                //if (BP.DA.DBAccess.GetAppCenterDBConn.sa
-                //src.Insert();
-                //this.AddEntity(src);
                 return 1;
             }
             return i;
@@ -1542,14 +1539,29 @@ namespace BP.Sys
         /// <summary>
         /// 查询数据源
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回查询的个数</returns>
         public int RetrieveDBSrc()
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(SFDBSrcAttr.DBSrcType, " < ", 100);
-            return qo.DoQuery();
+            int i= qo.DoQuery();
+            if (i == 0)
+                return this.RetrieveAll();
+            return i;
         }
-
+        /// <summary>
+        /// 查询数据源
+        /// </summary>
+        /// <returns>返回查询的个数</returns>
+        public int RetrieveWCSrc()
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere(SFDBSrcAttr.DBSrcType, "= ", (int) DBSrcType.WebServices );
+            int i = qo.DoQuery();
+            if (i == 0)
+                return this.RetrieveAll();
+            return i;
+        }
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

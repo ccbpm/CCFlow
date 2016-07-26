@@ -563,6 +563,9 @@ namespace BP.Sys
                 this.SetValByKey(SFTableAttr.FK_Val, value);
             }
         }
+        /// <summary>
+        /// 描述
+        /// </summary>
         public string TableDesc
         {
             get
@@ -633,31 +636,22 @@ namespace BP.Sys
                 {
                     case "BP.Pub.NYs":
                         this.Name = "年月";
-                        //  this.HisCodeStruct = CodeStruct.ClsLab;
                         this.FK_Val = "FK_NY";
-                        //   this.IsEdit = true;
                         this.Insert();
                         break;
                     case "BP.Pub.YFs":
                         this.Name = "月";
-                        //  this.HisCodeStruct = CodeStruct.ClsLab;
                         this.FK_Val = "FK_YF";
-                        // this.IsEdit = true;
                         this.Insert();
                         break;
                     case "BP.Pub.Days":
-                
                         this.Name = "天";
-                        //   this.HisCodeStruct = CodeStruct.ClsLab;
                         this.FK_Val = "FK_Day";
-                        //this.IsEdit = true;
                         this.Insert();
                         break;
                     case "BP.Pub.NDs":
                         this.Name = "年";
-                        //   this.HisCodeStruct = CodeStruct.ClsLab;
                         this.FK_Val = "FK_ND";
-                        // this.IsEdit = true;
                         this.Insert();
                         break;
                     default:
@@ -706,9 +700,7 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.ParentValue, null, "父级值(父级列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", false, false, 0, 1000, 600, true);
 
-
                 map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
-
 
                 //查找.
                 map.AddSearchAttr(SFTableAttr.FK_SFDBSrc);
@@ -780,12 +772,20 @@ namespace BP.Sys
             }
             return base.beforeDelete();
         }
-
         protected override bool beforeInsert()
         {
             //利用这个时间串进行排序.
             this.RDT = DataType.CurrentDataTime;
             return base.beforeInsert();
+        }
+
+        /// <summary>
+        ///  返回该数据源的数据
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GenerHisDataTable()
+        {
+            return DBAccess.RunSQLReturnTable("SELECT No,Name FROM Port_Emp ");
         }
     }
     /// <summary>

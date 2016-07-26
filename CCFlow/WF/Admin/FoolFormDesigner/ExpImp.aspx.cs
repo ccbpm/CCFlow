@@ -15,6 +15,7 @@ namespace CCFlow.WF.MapDef
 {
     public partial class WF_MapDef_ExpImp : BP.Web.WebPage
     {
+        #region 属性.
         /// <summary>
         /// 流程编号
         /// </summary>
@@ -32,24 +33,33 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["FromMap"];
             }
         }
+        public string FK_MapData
+        {
+            get
+            {
+                return this.Request.QueryString["FK_MapData"];
+            }
+        }
+        #endregion 属性.
+
         protected void Page_Load(object sender, EventArgs e)
         {
             this.Title = "ccfrom:导入导出";
             BP.Sys.MapData md = new BP.Sys.MapData();
-            md.No = this.RefNo;
+            md.No = this.FK_MapData;
             md.RetrieveFromDBSources();
             switch (this.DoType)
             {
                 case "Exp":
                     DataSet ds = md.GenerHisDataSet();
-                    string file = this.Request.PhysicalApplicationPath + "\\DataUser\\Temp\\" + this.RefNo + ".xml";
+                    string file = this.Request.PhysicalApplicationPath + "\\DataUser\\Temp\\" + this.FK_MapData + ".xml";
                     ds.WriteXml(file);
                     BP.Sys.PubClass.DownloadFile(file, md.Name + ".xml");
                     this.WinClose();
                     break;
                 case "Imp":
                     MapData mdForm = new MapData(this.FromMap);
-                    MapData.ImpMapData(this.RefNo, mdForm.GenerHisDataSet(), true);
+                    MapData.ImpMapData(this.FK_MapData, mdForm.GenerHisDataSet(), true);
                     this.WinClose();
                     return;
                 case "Share":
@@ -72,7 +82,7 @@ namespace CCFlow.WF.MapDef
 
             this.Pub1.AddTR();
             this.Pub1.AddTD("表单类别");
-            MapData md = new MapData(this.RefNo);
+            MapData md = new MapData(this.FK_MapData);
             TextBox tb = new TextBox();
             tb.ID = "TB_Sort";
             if (string.IsNullOrEmpty(md.FK_FrmSort.Trim()))
@@ -152,9 +162,9 @@ namespace CCFlow.WF.MapDef
         {
             this.Pub1.AddFieldSet("导出表单模板");
             this.Pub1.AddUL();
-            this.Pub1.AddLi("<a href='ExpImp.aspx?DoType=Exp&RefNo=" + this.RefNo + "' target=_blank >导出表单模板并下载</a>");
+            this.Pub1.AddLi("<a href='ExpImp.aspx?DoType=Exp&FK_MapData=" + this.FK_MapData + "' target=_blank >导出表单模板并下载</a>");
             this.Pub1.AddLi("<a href='../Comm/Method.aspx?M=BP.WF.GenerTemplate' >导出全部的流程模板与表单模板到服务器上。</a>");
-            // this.Pub1.AddLi("<a href='ExpImp.aspx?DoType=Share&RefNo=" + this.RefNo + "'>共享此表单给互联网其它的朋友。</a>");
+            // this.Pub1.AddLi("<a href='ExpImp.aspx?DoType=Share&FK_MapData=" + this.FK_MapData + "'>共享此表单给互联网其它的朋友。</a>");
             this.Pub1.AddLi("<a href=\"javascript:alert('此功能在施工中，敬请期待。\t\n您可以把此模板文件导出后发送到:template@ccflow.org.');\" >共享此表单给互联网其它的朋友。</a>");
             this.Pub1.AddULEnd();
             this.Pub1.AddFieldSetEnd();
@@ -196,10 +206,14 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddUL();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    this.Pub1.AddLi("ExpImp.aspx?DoType=Imp&FK_Flow=" + this.FK_Flow + "&RefNo=" + this.RefNo + "&FromMap=ND" + dr["NodeID"], "节点ID:" + dr["NodeID"] + ",步骤:" + dr["Step"] + "," + dr["Name"].ToString());
-                    //  window.location.href = 'ExpImp.aspx?DoType=Imp&FK_Flow=" + fk_flow + "&RefNo=" +refno + "&FromMap=' + fk_Frm;
-                    //     this.Pub1.AddLi("<a href=\"javascript:LoadFrm('" + this.FK_Flow + "','" + this.RefNo + "','ND" + dr["NodeID"] + "');\" >" + dr["Name"].ToString() + "</a>");
-                    //  this.Pub1.AddLi("<a href=\"javascript:LoadFrm('" + this.FK_Flow + "','" + this.RefNo + "','ND" + dr["NodeID"] + "');\" >" + dr["Name"].ToString() + "</a>");
+                    string str = dr["NodeID"].ToString();
+                    if (this.FK_MapData.Contains(str) == true)
+                        continue;
+
+                    this.Pub1.AddLi("ExpImp.aspx?DoType=Imp&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + this.FK_MapData + "&FromMap=ND" + dr["NodeID"], "节点ID:" + dr["NodeID"] + ",步骤:" + dr["Step"] + "," + dr["Name"].ToString());
+                    //  window.location.href = 'ExpImp.aspx?DoType=Imp&FK_Flow=" + fk_flow + "&FK_MapData=" +FK_MapData + "&FromMap=' + fk_Frm;
+                    //     this.Pub1.AddLi("<a href=\"javascript:LoadFrm('" + this.FK_Flow + "','" + this.FK_MapData + "','ND" + dr["NodeID"] + "');\" >" + dr["Name"].ToString() + "</a>");
+                    //  this.Pub1.AddLi("<a href=\"javascript:LoadFrm('" + this.FK_Flow + "','" + this.FK_MapData + "','ND" + dr["NodeID"] + "');\" >" + dr["Name"].ToString() + "</a>");
                 }
                 this.Pub1.AddULEnd();
                 this.Pub1.AddFieldSetEnd();
@@ -226,7 +240,7 @@ namespace CCFlow.WF.MapDef
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
 
-                string file =  path+ this.RefNo + ".xml";
+                string file =  path+ this.FK_MapData + ".xml";
 
                 Button btn = sender as Button;
                 if (btn.ID == "Btn_Local")
@@ -253,7 +267,7 @@ namespace CCFlow.WF.MapDef
                 {
                     DataSet ds = new DataSet();
                     ds.ReadXml(file);
-                    BP.Sys.MapData.ImpMapData(this.RefNo, ds, true);
+                    BP.Sys.MapData.ImpMapData(this.FK_MapData, ds, true);
                     this.WinClose();
                 }
                 catch (Exception ex)

@@ -118,7 +118,7 @@ namespace CCFlow.WF.MapDef
             this.Ucsys1.AddTD(ddl);
 
           //  this.Ucsys1.AddTD("外键表的数据源必须与该表单的数据源一致.");
-            this.Ucsys1.AddTD("选择数据源,点击这里<a href=\"javascript:WinOpen('/WF/Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New')\">创建</a>，<a href='SFSQL.aspx?FK_MapData="+this.FK_MapData+"&FK_SFTable=" + this.FK_SFTable + "&Idx='>刷新</a>。");
+            this.Ucsys1.AddTD("选择数据源,点击这里<a href=\"javascript:WinOpen('/WF/Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New')\">创建</a>，<a href='SFTable.aspx?FK_MapData=" + this.FK_MapData + "&FK_SFTable=" + this.FK_SFTable + "&Idx='>刷新</a>。");
             this.Ucsys1.AddTREnd();
 
 

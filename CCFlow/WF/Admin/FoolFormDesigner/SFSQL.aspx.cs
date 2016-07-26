@@ -86,9 +86,9 @@ namespace CCFlow.WF.MapDef
             else
             {
                 if (this.FK_SFTable == null)
-                    this.Ucsys1.AddCaption("<a href='Do.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 新建表");
+                    this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='FieldTypeList.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 新建表");
                 else
-                    this.Ucsys1.AddCaption("<a href='Do.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 编辑表");
+                    this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 编辑表");
             }
 
             if (this.FK_SFTable == null)
@@ -285,7 +285,7 @@ namespace CCFlow.WF.MapDef
         void btn_Add_Click(object sender, EventArgs e)
         {
             SFTable table = new SFTable(this.FK_SFTable);
-            if (table.GetTableSQL.Rows.Count == 0)
+            if (table.GenerHisDataTable.Rows.Count == 0)
             {
                 this.Alert("该表里[" + this.FK_SFTable + "]中没有数据，您需要维护数据才能加入。");
                 return;

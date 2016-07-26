@@ -240,7 +240,7 @@ namespace CCFlow.WF.MapDef
                                     /*如果数据源是SQL*/
                                     try
                                     {
-                                        ddl.Bind(sf.GetTableSQL, "No","Name");
+                                        ddl.Bind(sf.GenerHisDataTable, "No", "Name");
                                         if (ddl.SetSelectItem(attr.DefVal) == false)
                                         {
                                             ddl.Items.Insert(0, new ListItem("请选择", attr.DefVal));

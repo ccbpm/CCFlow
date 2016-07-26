@@ -376,7 +376,7 @@ namespace CCFlow.WF.MapDef
         void btn_Add_Click(object sender, EventArgs e)
         {
             SFTable table = new SFTable(this.RefNo);
-            if (table.GetTableSQL.Rows.Count == 0)
+            if (table.GenerHisDataTable.Rows.Count == 0)
             {
                 this.Alert("该表里[" + this.RefNo + "]中没有数据，您需要维护数据才能加入。");
                 return;

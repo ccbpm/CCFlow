@@ -6,7 +6,7 @@
         if (confirm('您确定吗？') == false)
             return;
         window.location.target = '_self';
-        window.location.href = 'ExpImp.aspx?DoType=Imp&FK_Flow=" + fk_flow + "&RefNo=" +refno + "&FromMap=' + fk_Frm;
+        window.location.href = 'ExpImp.aspx?DoType=Imp&FK_Flow=" + fk_flow + "&FK_MapData=" +refno + "&FromMap=' + fk_Frm;
     }
 </script>
 <base target=_self />

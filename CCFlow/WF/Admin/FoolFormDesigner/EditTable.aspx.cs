@@ -154,15 +154,8 @@ namespace CCFlow.WF.MapDef
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("外键表/类"); // 字段中文名称
-
             this.Pub1.AddTD(mapAttr.UIBindKey);
-
-            //tb = new TB();
-            //tb.ID = "TB_UIBindKey";
-            //tb.Text = mapAttr.UIBindKey;
-            //tb.Attributes["width"] = "100%";
-            //this.Pub1.AddTD(tb);
-            this.Pub1.AddTD("");
+            this.Pub1.AddTD("不可更改.");
             this.Pub1.AddTREnd();
 
 
@@ -178,9 +171,17 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD(tb);
 
             if (mapAttr.UIBindKey.Contains("."))
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('../Comm/Search.aspx?EnsName=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
+            {
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('../Comm/Search.aspx?EnsName=" + mapAttr.UIBindKey + "','df');\" >数据维护</a>");
+            }
             else
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
+            {
+                SFTable sf = new SFTable(mapAttr.UIBindKey);
+                if (sf.SrcType == SrcType.TableOrView)
+                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >数据维护</a>");
+                else
+                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFSQLDataView.aspx?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >查看</a>");
+            }
             this.Pub1.AddTREnd();
 
             isItem = this.Pub1.AddTR(isItem);
@@ -256,14 +257,9 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD("合并单元格数");
             DDL ddl1 = new DDL();
             ddl1.ID = "DDL_ColSpan";
-            //for (int i = 1; i < 12; i++)
-            //{
-            //    ddl1.Items.Add(new ListItem(i.ToString(), i.ToString()));
-            //}
-
             ddl1.Items.Add(new ListItem("1", "1"));
             ddl1.Items.Add(new ListItem("3", "3"));
-            ddl1.Items.Add(new ListItem("4", "4"));
+            //ddl1.Items.Add(new ListItem("4", "4"));
 
             ddl1.SetSelectItem(mapAttr.ColSpan.ToString());
             this.Pub1.AddTD(ddl1);
@@ -381,21 +377,20 @@ namespace CCFlow.WF.MapDef
                 }
 
                 MapAttr attr = new MapAttr();
+                attr = (MapAttr)this.Pub1.Copy(attr);
+                attr.UIBindKey = this.FK_SFTable;
+
+                /*普通类型的外部字典字段.*/
                 if (this.MyPK == null || this.MyPK == "")
                 {
-
                     attr.MyPK = this.FK_MapData + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
                     attr.KeyOfEn = this.Pub1.GetTBByID("TB_KeyOfEn").Text;
                     if (attr.IsExits == true)
                     {
-                        this.Alert("@字段名["+attr.KeyOfEn+"]，已经存在。");
+                        this.Alert("@字段名[" + attr.KeyOfEn + "]，已经存在。");
                         return;
                     }
-
-                    attr.UIContralType = UIContralType.DDL;
-                    attr.MyDataType = BP.DA.DataType.AppString;
                     attr.DefVal = "";
-                    //   attr.UIBindKey = this.Request.QueryString["SFKey"];
                     attr.UIIsEnable = true;
                 }
                 else
@@ -404,21 +399,80 @@ namespace CCFlow.WF.MapDef
                     attr.Retrieve();
                 }
 
-                attr = (MapAttr)this.Pub1.Copy(attr);
-                attr.FK_MapData = this.FK_MapData;
-                attr.LGType = FieldTypeS.FK;
 
-                attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
-                attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
-                attr.DefVal = this.Pub1.GetTBByID("TB_DefVal").Text;
+                if (attr.UIBindKey.Contains(".") == false)
+                {
 
-                if (string.IsNullOrEmpty(this.FK_SFTable)==false)
-                    attr.UIBindKey = this.FK_SFTable;
+                    attr = (MapAttr)this.Pub1.Copy(attr);
+                    attr.FK_MapData = this.FK_MapData;
+                    attr.LGType = FieldTypeS.Normal;
 
-                if (this.MyPK == null || this.MyPK == "")
-                    attr.Insert();
+                    //控件类型为 DDL, 逻辑类型为Normal
+                    attr.UIContralType = UIContralType.DDL;
+                    attr.MyDataType = BP.DA.DataType.AppString;
+
+                    attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
+                    attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
+                    attr.DefVal = this.Pub1.GetTBByID("TB_DefVal").Text;
+
+                    if (string.IsNullOrEmpty(this.FK_SFTable) == false)
+                        attr.UIBindKey = this.FK_SFTable;
+
+                    if (this.MyPK == null || this.MyPK == "")
+                        attr.Insert();
+                    else
+                        attr.Update();
+
+                    #region 为它增加隐藏字段.
+                    MapAttr attrH = new MapAttr();
+                    attrH.Copy(attr);
+                    attrH.KeyOfEn = attr.KeyOfEn + "T";
+                    attrH.Name = attr.Name;
+                    attrH.UIContralType = UIContralType.TB;
+                    attrH.MinLen = 0;
+                    attrH.MaxLen = 60;
+                    attrH.MyDataType = BP.DA.DataType.AppString;
+                    attrH.UIVisible = false;
+                    attrH.UIIsEnable = false;
+                    attrH.MyPK = attrH.FK_MapData + "_" + attrH.KeyOfEn;
+                    attrH.Save();
+                    #endregion
+                }
                 else
-                    attr.Update();
+                {
+
+                    /*普通类型的外部字典字段.*/
+                    if (this.MyPK == null || this.MyPK == "")
+                    {
+                        attr.MyPK = this.FK_MapData + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
+                        attr.KeyOfEn = this.Pub1.GetTBByID("TB_KeyOfEn").Text;
+                        if (attr.IsExits == true)
+                        {
+                            this.Alert("@字段名[" + attr.KeyOfEn + "]，已经存在。");
+                            return;
+                        }
+                        attr.DefVal = "";
+                        attr.UIIsEnable = true;
+                    }
+                    else
+                    {
+                        attr.MyPK = this.MyPK;
+                        attr.Retrieve();
+                    }
+
+
+                    attr = (MapAttr)this.Pub1.Copy(attr);
+                    attr.FK_MapData = this.FK_MapData;
+                    attr.LGType = FieldTypeS.FK;
+
+                    attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
+                    attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
+                    attr.DefVal = this.Pub1.GetTBByID("TB_DefVal").Text;
+                    attr.MyDataType = BP.DA.DataType.AppString;
+
+                    attr.Save();
+
+                }
 
                 switch (btn.ID)
                 {

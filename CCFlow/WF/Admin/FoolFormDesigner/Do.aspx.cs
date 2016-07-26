@@ -854,7 +854,7 @@ namespace CCFlow.WF.MapDef
             this.Title = "增加新WebService接口向导";
 
             this.Pub1.AddTable();
-            this.Pub1.AddCaption("<a href='Do.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - WebService接口列表 - <a href='SFWS.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建WebService接口</a>");
+            this.Pub1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - WebService接口列表 - <a href='SFWS.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建WebService接口</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");

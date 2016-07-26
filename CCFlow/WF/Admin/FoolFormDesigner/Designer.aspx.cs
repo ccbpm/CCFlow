@@ -503,16 +503,34 @@ namespace CCFlow.WF.MapDef
 
                                         this.Pub1.AddTR();
                                         this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                        tb.ShowType = TBType.TB;
-                                        tb.Text = attr.DefVal;
 
-                                        if (attr.UIIsEnable == false)
-                                            tb.CssClass = "TBReadonly";
-
-                                        if (attr.IsSigan)
-                                            this.Pub1.AddTD("colspan=3", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                        if (attr.UIContralType == UIContralType.DDL)
+                                        {
+                                            DDL ddl = new DDL();
+                                            if (attr.UIIsEnable == false)
+                                            {
+                                                ddl.Enabled = attr.UIIsEnable;
+                                                ddl.Items.Add(new ListItem("数据1", "0"));
+                                            }
+                                            else
+                                            {
+                                                ddl.Bind(attr.HisDT, "No", "Name", attr.DefVal);
+                                            }
+                                            this.Pub1.AddTD("colspan=3", ddl);
+                                        }
                                         else
-                                            this.Pub1.AddTD("colspan=3", tb);
+                                        {
+                                            tb.ShowType = TBType.TB;
+                                            tb.Text = attr.DefVal;
+
+                                            if (attr.UIIsEnable == false)
+                                                tb.CssClass = "TBReadonly";
+
+                                            if (attr.IsSigan)
+                                                this.Pub1.AddTD("colspan=3", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                            else
+                                                this.Pub1.AddTD("colspan=3", tb);
+                                        }
 
                                         this.Pub1.AddTREnd();
                                         continue;
@@ -526,16 +544,40 @@ namespace CCFlow.WF.MapDef
                                             this.Pub1.AddTR();
 
                                         this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                        tb.ShowType = TBType.TB;
-                                        tb.Text = attr.DefVal;
-
-                                        if (attr.UIIsEnable == false)
-                                            tb.CssClass = "TBReadonly";
-
-                                        if (attr.IsSigan)
-                                            this.Pub1.AddTD("colspan=1", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                        if (attr.UIContralType == UIContralType.DDL)
+                                        {
+                                            DDL ddl = new DDL();
+                                            if (attr.UIIsEnable == false)
+                                            {
+                                                ddl.Enabled = attr.UIIsEnable;
+                                                ddl.Items.Add(new ListItem("数据1", "0"));
+                                            }
+                                            else
+                                            {
+                                                if (attr.UIBindKey.Contains(".") == true)
+                                                {
+                                                    ddl.Bind(attr.HisEntitiesNoName, attr.DefVal);
+                                                }
+                                                else
+                                                {
+                                                    ddl.Bind(attr.HisDT, "No", "Name", attr.DefVal);
+                                                }
+                                            }
+                                            this.Pub1.AddTD("colspan=1", ddl);
+                                        }
                                         else
-                                            this.Pub1.AddTD("colspan=1", tb);
+                                        {
+                                            tb.ShowType = TBType.TB;
+                                            tb.Text = attr.DefVal;
+
+                                            if (attr.UIIsEnable == false)
+                                                tb.CssClass = "TBReadonly";
+
+                                            if (attr.IsSigan)
+                                                this.Pub1.AddTD("colspan=1", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                            else
+                                                this.Pub1.AddTD("colspan=1", tb);
+                                        }
                                     }
                                     #endregion 单行输出.
 
@@ -1069,13 +1111,16 @@ namespace CCFlow.WF.MapDef
                 switch (attr.LGType)
                 {
                     case FieldTypeS.Normal:
-                        lab = "<a  href=\"javascript:Edit('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
+                        if (attr.UIContralType == UIContralType.DDL)
+                            lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + lab + "</a>";
+                        else
+                            lab = "<a  href=\"javascript:Edit('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
                         break;
                     case FieldTypeS.FK:
-                        lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
+                        lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + lab + "</a>";
                         break;
                     case FieldTypeS.Enum:
-                        lab = "<a  href=\"javascript:EditEnum('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
+                        lab = "<a  href=\"javascript:EditEnum('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + lab + "</a>";
                         break;
                     default:
                         break;

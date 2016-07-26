@@ -253,7 +253,7 @@ namespace CCFlow.WF.MapDef
 
             ddl.Items.Add(new ListItem("1", "1"));
             ddl.Items.Add(new ListItem("3", "3"));
-            ddl.Items.Add(new ListItem("4", "4"));
+            //ddl.Items.Add(new ListItem("4", "4"));
             ddl.SetSelectItem(mapAttr.ColSpan.ToString());
             this.Pub1.AddTD(ddl);
             this.Pub1.AddTD("对傻瓜表单有效");

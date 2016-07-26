@@ -130,6 +130,7 @@ namespace CCFlow.WF.Comm.Charts
 
             //Get all export parameters into a Hastable
             Hashtable parameters = parseParams(Request["parameters"]);
+            parameters["exportfilename"] = HttpUtility.UrlDecode(parameters["exportfilename"].ToString(), Encoding.UTF8);//使用中文名字时，前端需要编码utf-8 edited by qin 
             exportData["parameters"] = parameters;
 
             //get width and height of the chart

@@ -824,7 +824,7 @@ namespace BP.Sys
                 }
 
                 //返回数据.
-                return sf.GetTableSQL;
+                return sf.GenerHisDataTable;
             }
         }
 

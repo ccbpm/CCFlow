@@ -136,13 +136,16 @@ namespace BP.Sys
         /// <summary>
         /// 获得外部数据表
         /// </summary>
-        public System.Data.DataTable GetTableSQL
+        public System.Data.DataTable GenerHisDataTable
         {
             get
             {
+                //创建数据源.
                 SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
 
-                #region //this.SrcType == Sys.SrcType.WebServices，by liuxc
+                #region  WebServices
+
+                // this.SrcType == Sys.SrcType.WebServices，by liuxc 
                 //暂只考虑No,Name结构的数据源，2015.10.04，added by liuxc
                 if (this.SrcType == Sys.SrcType.WebServices)
                 {
@@ -242,19 +245,42 @@ namespace BP.Sys
                 }
                 #endregion
 
+                #region 如果是一个SQL.
+                if (this.SrcType == Sys.SrcType.SQL)
+                {
+                    string runObj = this.SelectStatement;
+                    runObj = runObj.Replace("~", "'");
+                    if (runObj.Contains("@WebUser.No"))
+                        runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
 
-                string runObj = this.SelectStatement;
+                    if (runObj.Contains("@WebUser.Name"))
+                        runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
 
-                runObj = runObj.Replace("~", "'");
-                if (runObj.Contains("@WebUser.No"))
-                    runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    if (runObj.Contains("@WebUser.FK_Dept"))
+                        runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    return src.RunSQLReturnTable(runObj);
+                }
+                #endregion 如果是一个SQL.
 
-                if (runObj.Contains("@WebUser.Name"))
-                    runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                #region 如果是一个外键表.
+                if (this.SrcType == Sys.SrcType.TableOrView)
+                {
+                    /*如果是表或者视图*/
+                    if (this.IsClass)
+                    {
+                        /*如果是一个类*/
+                        Entities ens = ClassFactory.GetEns(this.No);
+                        return  ens.RetrieveAllToTable();
+                    }
+                    else
+                    {
+                        string sql = "SELECT No, Name FROM "+this.No;
+                        return src.RunSQLReturnTable(sql);
+                    }
+                }
+                #endregion 如果是一个SQL.
 
-                if (runObj.Contains("@WebUser.FK_Dept"))
-                    runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                return src.RunSQLReturnTable(runObj);
+                throw new Exception("@没有判断的数据类型.");
             }
         }
         /// <summary>
@@ -515,11 +541,14 @@ namespace BP.Sys
                 switch (this.SrcType)
                 {
                     case Sys.SrcType.TableOrView:
-                        return "<img src='/WF/Img/Table.gif' width='16px' broder='0' />" + this.GetValRefTextByKey(SFTableAttr.SrcType);
+                        if (this.IsClass)
+                            return "<img src='/WF/Img/Class.png' width='16px' broder='0' />实体类";
+                        else
+                            return "<img src='/WF/Img/Table.gif' width='16px' broder='0' />表/视图";
                     case Sys.SrcType.SQL:
-                        return "<img src='/WF/Img/SQL.png' width='16px' broder='0' />" + this.GetValRefTextByKey(SFTableAttr.SrcType);
+                        return "<img src='/WF/Img/SQL.png' width='16px' broder='0' />SQL表达式";
                     case Sys.SrcType.WebServices:
-                        return "<img src='/WF/Img/WebServices.gif' width='16px' broder='0' />" + this.GetValRefTextByKey(SFTableAttr.SrcType);
+                        return "<img src='/WF/Img/WebServices.gif' width='16px' broder='0' />WebServices";
                     default:
                         return "";
                 }
@@ -542,6 +571,9 @@ namespace BP.Sys
                 this.SetValByKey(SFTableAttr.CodeStruct, (int)value);
             }
         }
+        /// <summary>
+        /// 编码类型
+        /// </summary>
         public string CodeStructT
         {
             get
@@ -778,15 +810,7 @@ namespace BP.Sys
             this.RDT = DataType.CurrentDataTime;
             return base.beforeInsert();
         }
-
-        /// <summary>
-        ///  返回该数据源的数据
-        /// </summary>
-        /// <returns></returns>
-        public DataTable GenerHisDataTable()
-        {
-            return DBAccess.RunSQLReturnTable("SELECT No,Name FROM Port_Emp ");
-        }
+ 
     }
     /// <summary>
     /// 用户自定义表s

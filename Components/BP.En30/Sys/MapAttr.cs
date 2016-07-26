@@ -242,6 +242,9 @@ namespace BP.Sys
 
         #region 属性
         public EntitiesNoName _ens = null;
+        /// <summary>
+        /// 实体类
+        /// </summary>
         public EntitiesNoName HisEntitiesNoName
         {
             get
@@ -256,11 +259,17 @@ namespace BP.Sys
                 if (_ens == null)
                 {
                     SFTable sf = new SFTable(this.UIBindKey);
-                   
 
-                    GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
-                    myens.RetrieveAll();
-                    _ens = myens;
+                    if (sf.FK_SFDBSrc == "local")
+                    {
+                        GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
+                        myens.RetrieveAll();
+                        _ens = myens;
+                    }
+                    else
+                    {
+                        throw new Exception("@非实体类实体不能获取EntitiesNoName。");
+                    }
                 }
                 return _ens;
             }
@@ -280,7 +289,7 @@ namespace BP.Sys
                         throw new Exception("@属性：" + this.MyPK + " 丢失属性 UIBindKey 字段。");
 
                     SFTable sf = new SFTable(this.UIBindKey);
-                    _dt= sf.GetTableSQL;
+                    _dt= sf.GenerHisDataTable;
                 }
                 return _dt;
             }

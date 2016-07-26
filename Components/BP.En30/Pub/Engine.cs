@@ -549,7 +549,8 @@ namespace BP.Pub
             string[] strs = key.Split('.');
 
             // 如果不包含 . 就说明他是从Rpt中取数据。
-            if (this.HisGEEntity != null && this.HisEns.Count == 0)
+            //if (this.HisGEEntity != null && key.Contains("ND") == false)
+            if (this.HisGEEntity != null)
             {
                 if (strs.Length == 1)
                     return this.HisGEEntity.GetValStringByKey(key);

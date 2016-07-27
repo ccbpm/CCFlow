@@ -899,6 +899,12 @@ namespace BP.Pub
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains(".NYR"))
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
+                        else if (para.Contains(".Year"))
+                            str = str.Replace("<" + para + ">", this.GetValueByKey(para));
+                        else if (para.Contains(".Month"))
+                            str = str.Replace("<" + para + ">", this.GetValueByKey(para));
+                        else if (para.Contains(".Day"))
+                            str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains(".Yes") == true)
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
                         else if (para.Contains(".") == true)

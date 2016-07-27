@@ -173,6 +173,18 @@ namespace BP.DA
                         {
                             real = findKey + ".RMBDX";
                         }
+                        else if (real.Contains(findKey + ".Year") == true)
+                        {
+                            real = findKey + ".Year";
+                        }
+                        else if (real.Contains(findKey + ".Month") == true)
+                        {
+                            real = findKey + ".Month";
+                        }
+                        else if (real.Contains(findKey + ".Day") == true)
+                        {
+                            real = findKey + ".Day";
+                        }
                         else
                         {
                             real = findKey;

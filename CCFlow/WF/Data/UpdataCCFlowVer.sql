@@ -22,6 +22,13 @@ DELETE FROM Sys_Enum WHERE EnumKey ='StartGuideWay';
 DELETE FROM Sys_Enum WHERE EnumKey ='NodeFormType';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmType';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTransferCustomSta';
+DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
+
+
+-- 升级数据源 2016.0
+UPDATE Sys_SFTable SET SrcType=0 WHERE No like 'BP.%' AND  (SrcType = 0 OR SrcType = 1)
+UPDATE Sys_SFTable SET SrcType=1 WHERE (No NOT like 'BP.%') AND  (SrcType = 0 OR SrcType = 1)
+-- UPDATE Sys_SFTable SET SrcType=2 WHERE  LEN (SelectStatement ) >10
 
 
 -- 2016.07.20 升级明细表维护分组;

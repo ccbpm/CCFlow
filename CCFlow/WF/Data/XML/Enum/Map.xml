@@ -17,7 +17,7 @@ RU=""
  />
   
   <Item Key="TabType" Name="表数据来源类型"
-CH="@0=本地表或者视图@1=通过一个SQL确定的一个外部数据源@2=通过WebServices获得的一个数据源"
+CH="@0=本地表或视图@1=通过一个SQL确定的一个外部数据源@2=通过WebServices获得的一个数据源"
 EN=""
 JP=""
 RU="" />

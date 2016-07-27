@@ -469,7 +469,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             /*创建这个表，并且插入基础数据。*/
                             try
                             {
-                                // 如果没有该表或者视图，就要创建它。
+                                // 如果没有该表或视图，就要创建它。
                                 sql = "CREATE TABLE " + enName + "(No varchar(30) NOT NULL,Name varchar(50) NULL)";
                                 DBAccess.RunSQL(sql);
                                 DBAccess.RunSQL("INSERT INTO " + enName + " (No,Name) VALUES('001','Item1')");

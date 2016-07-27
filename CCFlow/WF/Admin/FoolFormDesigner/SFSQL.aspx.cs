@@ -270,7 +270,7 @@ namespace CCFlow.WF.MapDef
 
             //string help = "<ul>";
             //help += "<li>输入:新表名或已经存在的表名或者视图，必须是英文字母或者下划线。</li>";
-            //help += "<li>如果该表或者视图已经存在本机中，系统就会把他注册到ccform的数据源（Sys_SFTable）里，您可以打开Sys_SFTable查看ccform对外部数据源管理的信息。</li>";
+            //help += "<li>如果该表或视图已经存在本机中，系统就会把他注册到ccform的数据源（Sys_SFTable）里，您可以打开Sys_SFTable查看ccform对外部数据源管理的信息。</li>";
             //help += "<li>如果不存在ccform就会自动创建表，该表有No,Name两个列，并且初始化3笔数据，您可以对该表进行编辑。</li>";
             //help += "</ul>";
             //this.Ucsys1.AddFieldSet("帮助", help);

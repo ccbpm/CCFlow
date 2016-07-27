@@ -15,7 +15,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             string frmID = this.Request.QueryString["FrmID"];
             BP.Sys.MapData md = new BP.Sys.MapData(frmID);
 
-            if (md.HisFrmType == BP.Sys.FrmType.FreeFrm || md.HisFrmType == BP.Sys.FrmType.Column4Frm)
+            if (md.HisFrmType == BP.Sys.FrmType.FreeFrm || md.HisFrmType == BP.Sys.FrmType.FoolForm)
             {
                 this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataExts&PK=" + frmID, true);
                 return;

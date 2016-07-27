@@ -15,7 +15,7 @@
         string fk_mapdata = this.Request.QueryString["FK_MapData"];
         BP.Sys.MapData md = new BP.Sys.MapData(fk_mapdata);
 
-        if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
+        if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
         {
             /*傻瓜表单*/
             this.Response.Redirect("./FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=" + fk_mapdata, true);

@@ -17,7 +17,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             //md.No = fk_mapdata;
             //md.Retrieve();
 
-            //if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
+            //if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             //{
             //    this.Response.Redirect("/WF/Admin/FoolFormDesigner/"
             //}

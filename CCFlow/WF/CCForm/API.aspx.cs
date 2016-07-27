@@ -55,11 +55,8 @@ namespace CCFlow.WF.CCForm
                 case FrmType.FreeFrm:
                     this.Response.Redirect("Frm.aspx?FK_MapData=" + fk_mapdata + "&OID=" + oid, true); 
                     break;
-                case FrmType.Column4Frm:
+                case FrmType.FoolForm:
                     this.Response.Redirect("FrmFix.aspx?FK_MapData=" + fk_mapdata + "&OID=" + oid, true);
-                    break;
-                case FrmType.SLFrm: // 
-                    this.Response.Redirect("SLFrm.aspx?FK_MapData=" + fk_mapdata + "&OID=" + oid, true);
                     break;
                 case FrmType.Url: // 如果是一个超链接
                     string url = md.PTable;

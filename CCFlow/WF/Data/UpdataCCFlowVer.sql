@@ -20,7 +20,7 @@ DELETE FROM Sys_Enum WHERE EnumKey ='FormType';
 DELETE FROM Sys_Enum WHERE EnumKey ='BatchRole';
 DELETE FROM Sys_Enum WHERE EnumKey ='StartGuideWay';
 DELETE FROM Sys_Enum WHERE EnumKey ='NodeFormType';
-DELETE FROM Sys_Enum WHERE EnumKey ='FormRunType';
+DELETE FROM Sys_Enum WHERE EnumKey ='FrmType';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTransferCustomSta';
 
 

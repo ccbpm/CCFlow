@@ -664,7 +664,7 @@ namespace CCFlow.WF.FlowFormTree
                     qo.DoQuery();
                     foreach (FrmNode fn in frmNodes)
                     {
-                        if (fn.HisFrmType == FrmType.Column4Frm || fn.HisFrmType == FrmType.FreeFrm)
+                        if (fn.HisFrmType == FrmType.FoolForm || fn.HisFrmType == FrmType.FreeFrm)
                         {
                             mdes.Retrieve(MapDataAttr.No, fn.FK_Frm);
                             //根据设置的关键字段是否有值，进行判断

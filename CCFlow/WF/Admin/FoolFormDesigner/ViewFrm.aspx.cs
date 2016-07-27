@@ -51,7 +51,7 @@ namespace CCFlow.WF.MapDef
                 case "CCForm":
                     this.UCEn1.BindCCForm(md.HisGEEn, this.FK_MapData, false, 0,false);
                     break;
-                case "Column4Frm":
+                case "FoolForm":
                     this.UCEn1.BindColumn4(md.HisEn, this.FK_MapData);
                     break;
                 default:

@@ -249,7 +249,7 @@ namespace CCFlow.WF.CCForm
             if (md.RetrieveFromDBSources() == 0 && md.Name.Length > 3)
             {
                 /*如果没有找到，就可能是 dtl 。*/
-                if (md.HisFrmType == FrmType.Url || md.HisFrmType == FrmType.SLFrm)
+                if (md.HisFrmType == FrmType.Url )
                 {
                     string no = Request.QueryString["NO"];
                     string urlParas = "OID=" + this.OID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
@@ -298,7 +298,7 @@ namespace CCFlow.WF.CCForm
                 if (md.HisFrmType == FrmType.FreeFrm)
                     this.UCEn1.BindCCForm(dtlEn, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
 
-                if (md.HisFrmType == FrmType.Column4Frm)
+                if (md.HisFrmType == FrmType.FoolForm)
                     this.UCEn1.BindCCForm(dtlEn, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
 
                 this.AddJSEvent(dtlEn);
@@ -307,7 +307,7 @@ namespace CCFlow.WF.CCForm
             else
             {
                 /*如果没有找到，就可能是dtl。*/
-                if (md.HisFrmType == FrmType.Url || md.HisFrmType == FrmType.SLFrm)
+                if (md.HisFrmType == FrmType.Url )
                 {
                     string no = Request.QueryString["NO"];
                     string urlParas = "OID=" + this.OID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&IsEdit=" + this.IsEdit.ToString() + "&UserNo=" + WebUser.No + "&SID=" + this.SID;

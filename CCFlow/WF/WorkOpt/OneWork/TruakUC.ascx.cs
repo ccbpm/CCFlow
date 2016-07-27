@@ -203,7 +203,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     Frm myfrm = new Frm();
                     myfrm.No = "ND" + nd.NodeID;
                     myfrm.Name = wk.EnDesc;
-                    myfrm.HisFormRunType = (FormRunType)(int)nd.HisFormType;
+                    myfrm.HisFrmType = (FrmType)(int)nd.HisFormType;
 
                     FrmNode fnNode = new FrmNode();
                     fnNode.FK_Frm = myfrm.No;
@@ -212,7 +212,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     switch (nd.HisFormType)
                     {
                         case NodeFormType.FixForm:
-                            fnNode.HisFrmType = FrmType.Column4Frm;
+                            fnNode.HisFrmType = FrmType.FoolForm;
                             break;
                         case NodeFormType.FreeForm:
                             fnNode.HisFrmType = FrmType.FreeFrm;

@@ -109,7 +109,7 @@
 <li><a href='SFList.aspx?DoType=AddSFTable&FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>'><b>外键、外部数据、webservices数据类型</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。
 
 <br />
-<a href='SFTable.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>' >新建字典表</a></li> 	
+<a href='/WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>' >新建字典表</a></li> 	
 
 <%--<li><a href='SFList.aspx?DoType=AddSFTable&FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>'><b>外键型</b></a> -  比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。<a href='SFTable.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>'>新建表</a></li> 	
 <li><a href='SFList.aspx?FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>'><b>外部表</b></a> -  比如：配置一个SQL通过数据库连接或获取的外部数据，组成一个下拉框。</li> 	

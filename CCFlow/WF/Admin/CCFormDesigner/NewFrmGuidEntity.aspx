@@ -66,13 +66,13 @@ line-height: 30px !important;
                     </fieldset>
                     <fieldset width="100%">
                         <legend>&nbsp;
-                                <a class='title' href="?Step=1&FrmType=<%=(int)BP.Sys.FrmType.Column4Frm %>&FK_FrmSort=<%=this.FK_FrmSort %>&DBSrc=<%=this.DBSrc %>">创建傻瓜表单</a>&nbsp;
+                                <a class='title' href="?Step=1&FrmType=<%=(int)BP.Sys.FrmType.FoolForm %>&FK_FrmSort=<%=this.FK_FrmSort %>&DBSrc=<%=this.DBSrc %>">创建傻瓜表单</a>&nbsp;
                         </legend>
                         <div class='con-list' style='float:left'>
                             <ul>
                                 <li>傻瓜表单与自由表单就是展示格式不同,其他的与自由表单一样.</li>
                                 <li>傻瓜表单有固定的列与行，格式简洁、清新、实用.</li>
-                                <li><a href="?Step=1&FrmType=<%=(int)BP.Sys.FrmType.Column4Frm %>&FK_FrmSort=<%=this.FK_FrmSort %>&DBSrc=<%=this.DBSrc %>">创建空白傻瓜表单</a>&nbsp;</li>
+                                <li><a href="?Step=1&FrmType=<%=(int)BP.Sys.FrmType.FoolForm %>&FK_FrmSort=<%=this.FK_FrmSort %>&DBSrc=<%=this.DBSrc %>">创建空白傻瓜表单</a>&nbsp;</li>
                             </ul>
                         </div>
                         <div style='float:right'>

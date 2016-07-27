@@ -116,7 +116,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             this.Pub1.AddFieldSetEnd();
 
 
-            this.Pub1.AddFieldSet("<a class='title' href='?Step=1&FrmType=" + (int)BP.Sys.FrmType.Column4Frm + "&FK_FrmSort=" + this.FK_FrmSort + "&DBSrc=" + this.DBSrc + "' >创建傻瓜表单</a>");
+            this.Pub1.AddFieldSet("<a class='title' href='?Step=1&FrmType=" + (int)BP.Sys.FrmType.FoolForm + "&FK_FrmSort=" + this.FK_FrmSort + "&DBSrc=" + this.DBSrc + "' >创建傻瓜表单</a>");
             this.Pub1.Add("<div class='con-list' style='float:left'>");
             this.Pub1.AddUL();
             this.Pub1.AddLi("傻瓜表单与自由表单就是展示格式不同,其他的与自由表单一样.");
@@ -292,8 +292,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             if ((BP.Sys.FrmType)(this.FrmType) != BP.Sys.FrmType.Url)
             {
                 if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.FreeFrm ||
-                    (BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.Column4Frm ||
-                    (BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.SLFrm)
+                    (BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.FoolForm )
                 {
 
                     this.Pub1.AddTD("表单生成方式");
@@ -422,8 +421,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             {
                 //自由，傻瓜，SL表单不做判断
                 case BP.Sys.FrmType.FreeFrm:
-                case BP.Sys.FrmType.Column4Frm:
-                case BP.Sys.FrmType.SLFrm:
+                case BP.Sys.FrmType.FoolForm:
                     break;
                 case BP.Sys.FrmType.Url:
                     string url = this.Pub1.GetTextBoxByID("TB_Url").Text;
@@ -497,7 +495,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 this.Response.Redirect("FormDesigner.aspx?FK_MapData=" + md.No);
             }
 
-            if (md.HisFrmType == BP.Sys.FrmType.Column4Frm)
+            if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             {
                 this.Response.Redirect("/WF/Admin/FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=" + md.No);
             }

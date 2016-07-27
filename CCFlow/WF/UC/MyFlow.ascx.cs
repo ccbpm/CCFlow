@@ -1390,7 +1390,7 @@ namespace CCFlow.WF.UC
                             myfrm.No = "ND" + nd.NodeID;
                             myfrm.Name = wk.EnDesc;
                             //myfrm.HisFormType = nd.HisFormType;
-                            myfrm.HisFormRunType = (FormRunType)(int)nd.HisFormType;
+                            myfrm.HisFrmType = (FrmType)(int)nd.HisFormType;
 
                             FrmNode fnNode = new FrmNode();
                             fnNode.FK_Frm = myfrm.No;
@@ -1399,7 +1399,7 @@ namespace CCFlow.WF.UC
                             switch (nd.HisFormType)
                             {
                                 case NodeFormType.FixForm:
-                                    fnNode.HisFrmType = FrmType.Column4Frm;
+                                    fnNode.HisFrmType = FrmType.FoolForm;
                                     break;
                                 case NodeFormType.FreeForm:
                                     fnNode.HisFrmType = FrmType.FreeFrm;

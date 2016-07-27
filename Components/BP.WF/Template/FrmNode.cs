@@ -154,12 +154,10 @@ namespace BP.WF.Template
             {
                 switch (this.HisFrmType)
                 {
-                    case FrmType.Column4Frm:
+                    case FrmType.FoolForm:
                         return Glo.CCFlowAppPath + "WF/CCForm/FrmFix";
                     case FrmType.FreeFrm:
                         return Glo.CCFlowAppPath + "WF/CCForm/Frm";
-                    case FrmType.SLFrm:
-                        return Glo.CCFlowAppPath + "WF/CCForm/SLFrm";
                     default:
                         throw new Exception("err,未处理。");
                 }

@@ -53,27 +53,23 @@ namespace BP.Sys
         /// <summary>
         /// 傻瓜表单
         /// </summary>
-        Column4Frm = 0,
+        FoolForm = 0,
         /// <summary>
         /// 自由表单
         /// </summary>
         FreeFrm = 1,
         /// <summary>
-        /// silverlight
-        /// </summary>
-        SLFrm = 2,
-        /// <summary>
         /// URL表单(自定义)
         /// </summary>
-        Url = 3,
-        /// <summary>
-        /// Word类型表单
-        /// </summary>
-        WordFrm = 4,
+        Url = 2,
         /// <summary>
         /// Excel类型表单
         /// </summary>
-        ExcelFrm = 5
+        ExcelFrm = 3,
+        /// <summary>
+        /// Word类型表单
+        /// </summary>
+        WordFrm = 4
     }
     /// <summary>
     /// 映射基础
@@ -1796,8 +1792,10 @@ namespace BP.Sys
                 map.AddTBString(MapDataAttr.FK_FrmSort, null, "表单类别", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.FK_FormTree, null, "表单树类别", true, false, 0, 500, 20);
 
-                // enumFrmType  @自由表单，@傻瓜表单，@嵌入式表单.
+
+                // enumFrmType  @自由表单，@傻瓜表单，@嵌入式表单.  
                 map.AddTBInt(MapDataAttr.FrmType, 1, "表单类型", true, false);
+
 
 
                 // 应用类型.  0独立表单.1节点表单

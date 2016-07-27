@@ -17,7 +17,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 运行类型
         /// </summary>
-        public const string FormRunType = "FormRunType";
+        public const string FrmType = "FrmType";
         /// <summary>
         /// 表单树
         /// </summary>
@@ -63,15 +63,15 @@ namespace BP.WF.Template
                 this.SetValByKey(SysFormAttr.URL, value);
             }
         }
-        public FormRunType HisFormRunType
+        public FrmType HisFrmType
         {
             get
             {
-                return (FormRunType)this.GetValIntByKey(SysFormAttr.FormRunType);
+                return (FrmType)this.GetValIntByKey(SysFormAttr.FrmType);
             }
             set
             {
-                this.SetValByKey(SysFormAttr.FormRunType, (int)value);
+                this.SetValByKey(SysFormAttr.FrmType, (int)value);
             }
         }
         public string FK_FormTree
@@ -120,13 +120,15 @@ namespace BP.WF.Template
                 map.AddTBString(SysFormAttr.Name, null, null, true, false, 0, 500, 10);
 
                 //表单的运行类型.
-                map.AddDDLSysEnum(SysFormAttr.FormRunType, (int)BP.WF.FormRunType.FreeForm, "运行类型",
-                    true, false, SysFormAttr.FormRunType, "@0=傻瓜表单@1=自由表单@2=嵌入式表单@4=Silverlight表单");
+                map.AddTBInt(Sys.MapDataAttr.FrmType, 0, "运行类型", true, false);
+
+                //map.AddDDLSysEnum(SysFormAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "运行类型",
+                //    true, false, SysFormAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=嵌入式表单@4=Silverlight表单");
 
                 //该表单对应的物理表
                 map.AddTBString(SysFormAttr.PTable, null, "物理表", true, false, 0, 50, 10);
 
-                // FormRunType=嵌入式表单时, 该字段有效. 
+                // FrmType=嵌入式表单时, 该字段有效. 
                 map.AddTBString(SysFormAttr.URL, null, "Url", true, false, 0, 50, 10);
 
                 //系统表单类别.

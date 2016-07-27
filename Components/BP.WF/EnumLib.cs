@@ -995,36 +995,6 @@ namespace BP.WF
         End
     }
     /// <summary>
-    /// 表单运行类型
-    /// </summary>
-    public enum FormRunType
-    {
-        /// <summary>
-        /// 傻瓜表单.
-        /// </summary>
-        FixForm = 0,
-        /// <summary>
-        /// 自由表单.
-        /// </summary>
-        FreeForm = 1,
-        /// <summary>
-        /// SL表单
-        /// </summary>
-        SLFrom = 2,
-        /// <summary>
-        /// 嵌入式表单.
-        /// </summary>
-        SelfForm = 3,
-        /// <summary>
-        /// excel表单
-        /// </summary>
-        ExclForm = 4,
-        /// <summary>
-        /// word表单
-        /// </summary>
-        WordForm =5
-    }
-    /// <summary>
     /// 节点表单类型
     /// </summary>
     public enum NodeFormType

@@ -19,7 +19,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 运行类型
         /// </summary>
-        public const string FormRunType = "FormRunType";
+        public const string FrmType = "FrmType";
         /// <summary>
         /// URL
         /// </summary>
@@ -77,15 +77,15 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmAttr.URL, value);
             }
         }
-        public FormRunType HisFormRunType
+        public FrmType HisFrmType
         {
             get
             {
-                return (FormRunType)this.GetValIntByKey(FrmAttr.FormRunType);
+                return (FrmType)this.GetValIntByKey(FrmAttr.FrmType);
             }
             set
             {
-                this.SetValByKey(FrmAttr.FormRunType, (int)value);
+                this.SetValByKey(FrmAttr.FrmType, (int)value);
             }
         }
         #endregion
@@ -122,11 +122,11 @@ namespace BP.WF.Template
                 map.AddTBStringPK(FrmAttr.No, null, null, true, true, 1, 200, 4);
                 map.AddTBString(FrmAttr.Name, null, null, true, false, 0, 50, 10);
                 map.AddTBString(FrmAttr.FK_Flow, null, "独立表单属性:FK_Flow", true, false, 0, 50, 10);
-             //   map.AddDDLSysEnum(FrmAttr.FormRunType, 0, "独立表单属性:运行类型", true, false, FrmAttr.FormRunType);
+             //   map.AddDDLSysEnum(FrmAttr.FrmType, 0, "独立表单属性:运行类型", true, false, FrmAttr.FrmType);
 
                 //表单的运行类型.
-                map.AddDDLSysEnum(FrmAttr.FormRunType, (int)BP.WF.FormRunType.FreeForm, "运行类型",
-                    true, false, FrmAttr.FormRunType, "@0=傻瓜表单@1=自由表单@2=嵌入式表单@4=Excel表单@5=Word表单");
+                map.AddDDLSysEnum(FrmAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
+                    true, false, FrmAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=嵌入式表单@3=Excel表单@4=Word表单");
 
                 map.AddTBString(FrmAttr.PTable, null, "物理表", true, false, 0, 50, 10);
                 map.AddTBInt(FrmAttr.DBURL, 0, "DBURL", true, false);

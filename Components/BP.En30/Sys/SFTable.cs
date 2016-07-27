@@ -20,6 +20,14 @@ namespace BP.Sys
     public enum SrcType
     {
         /// <summary>
+        /// 本地的类
+        /// </summary>
+        BPClass,
+        /// <summary>
+        /// 新建表
+        /// </summary>
+        NewTable,
+        /// <summary>
         /// 本地表或者视图
         /// </summary>
         TableOrView,
@@ -284,7 +292,7 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 实例化WebServices
+        /// 实例化 WebServices
         /// </summary>
         /// <param name="url">WebServices地址</param>
         /// <param name="methodname">调用的方法</param>
@@ -609,6 +617,9 @@ namespace BP.Sys
                 this.SetValByKey(SFTableAttr.TableDesc, value);
             }
         }
+        /// <summary>
+        /// 默认值
+        /// </summary>
         public string DefVal
         {
             get

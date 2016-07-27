@@ -28,11 +28,11 @@ namespace BP.Sys
         /// </summary>
         CreateTable=1,
         /// <summary>
-        /// 表或者视图
+        /// 表或视图
         /// </summary>
         TableOrView=2,
         /// <summary>
-        /// SQL查询表
+        /// SQL查询数据
         /// </summary>
         SQL=3,
         /// <summary>
@@ -273,7 +273,7 @@ namespace BP.Sys
                 #region 如果是一个外键表.
                 if (this.SrcType == Sys.SrcType.TableOrView)
                 {
-                    /*如果是表或者视图*/
+                    /*如果是表或视图*/
                     if (this.IsClass)
                     {
                         /*如果是一个类*/
@@ -721,7 +721,7 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
                 map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
-                    "@0=本地的类@1=创建表@2=表或者视图@3=SQL查询表@4=WebServices");
+                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
 

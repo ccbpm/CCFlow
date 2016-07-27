@@ -22,23 +22,23 @@ namespace BP.Sys
         /// <summary>
         /// 本地的类
         /// </summary>
-        BPClass,
+        BPClass=0,
         /// <summary>
-        /// 新建表
+        /// 创建表
         /// </summary>
-        NewTable,
+        CreateTable=1,
         /// <summary>
-        /// 本地表或者视图
+        /// 表或者视图
         /// </summary>
-        TableOrView,
+        TableOrView=2,
         /// <summary>
-        /// 通过一个SQL确定的一个外部数据源
+        /// SQL查询表
         /// </summary>
-        SQL,
+        SQL=3,
         /// <summary>
-        /// 通过WebServices获得的一个数据源
+        /// WebServices
         /// </summary>
-        WebServices
+        WebServices=4
     }
     /// <summary>
     /// 编码表类型
@@ -717,12 +717,11 @@ namespace BP.Sys
                 map.EnDesc = "字典表";
                 map.EnType = EnType.Sys;
 
-
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
                 map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
-                    "@0=外键表@1=外部表(SQL表)@2=WebService表(通过WS服务表)");
+                    "@0=本地的类@1=创建表@2=表或者视图@3=SQL查询表@4=WebServices");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
 

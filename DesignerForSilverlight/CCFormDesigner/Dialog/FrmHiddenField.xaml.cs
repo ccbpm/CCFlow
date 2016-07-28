@@ -94,13 +94,13 @@ namespace CCForm
                     switch (lgType)
                     {
                         case 0:
-                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditF.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditF.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         case 1:
-                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditEnum.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditEnum.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         case 2:
-                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditTable.aspx?DoType=Edit&MyPK=" + Glo.FK_MapData + "&RefNo=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditTable.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         default:
                             break;

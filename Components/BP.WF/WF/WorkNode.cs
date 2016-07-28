@@ -2055,7 +2055,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("@判断流程{0}完成条件出现错误." + ex.Message, this.HisNode.Name));
+                throw new Exception(string.Format("@判断流程{0}完成条件出现错误." + ex.StackTrace, this.HisNode.Name));
             }
             #endregion
         }
@@ -7355,7 +7355,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("@判断流程{0}完成条件出现错误." + ex.Message, this.HisNode.Name));
+                throw new Exception(string.Format("@判断流程{0}完成条件出现错误." + ex.StackTrace, this.HisNode.Name));
             }
             #endregion
 

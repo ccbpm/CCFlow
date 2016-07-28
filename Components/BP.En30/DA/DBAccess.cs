@@ -2242,12 +2242,15 @@ namespace BP.DA
                 ada.SelectCommand.CommandType = CommandType.Text;
 
                 // 加入参数
-                foreach (Para para in paras)
+                if (paras != null)
                 {
-                    OracleParameter myParameter = new OracleParameter(para.ParaName, para.DATypeOfOra);
-                    myParameter.Size = para.Size;
-                    myParameter.Value = para.val;
-                    ada.SelectCommand.Parameters.Add(myParameter);
+                    foreach (Para para in paras)
+                    {
+                        OracleParameter myParameter = new OracleParameter(para.ParaName, para.DATypeOfOra);
+                        myParameter.Size = para.Size;
+                        myParameter.Value = para.val;
+                        ada.SelectCommand.Parameters.Add(myParameter);
+                    }
                 }
 
                 DataTable oratb = new DataTable("otb");

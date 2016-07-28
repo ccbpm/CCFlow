@@ -310,7 +310,7 @@ namespace BP.Sys
         /// <returns></returns>
         public DataTable RunSQLReturnTable(string runObj)
         {
-            return RunSQLReturnTable(runObj, null);
+            return RunSQLReturnTable(runObj, new Paras() );
         }
         /// <summary>
         /// 运行SQL返回datatable

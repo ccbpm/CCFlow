@@ -151,8 +151,17 @@ namespace BP.Sys
                 //创建数据源.
                 SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
 
-                #region  WebServices
+                #region 自己定义的表.
+                if (this.SrcType == Sys.SrcType.BPClass)
+                {
+                    Entities ens = ClassFactory.GetEns(this.No);
+                    return ens.RetrieveAllToTable();
+                }
+                #endregion
 
+
+
+                #region  WebServices
                 // this.SrcType == Sys.SrcType.WebServices，by liuxc 
                 //暂只考虑No,Name结构的数据源，2015.10.04，added by liuxc
                 if (this.SrcType == Sys.SrcType.WebServices)
@@ -273,22 +282,22 @@ namespace BP.Sys
                 #region 如果是一个外键表.
                 if (this.SrcType == Sys.SrcType.TableOrView)
                 {
-                    /*如果是表或视图*/
-                    if (this.IsClass)
-                    {
-                        /*如果是一个类*/
-                        Entities ens = ClassFactory.GetEns(this.No);
-                        return  ens.RetrieveAllToTable();
-                    }
-                    else
-                    {
-                        string sql = "SELECT No, Name FROM "+this.No;
-                        return src.RunSQLReturnTable(sql);
-                    }
+                    string sql = "SELECT No, Name FROM " + this.No;
+                    return src.RunSQLReturnTable(sql);
                 }
                 #endregion 如果是一个SQL.
 
-                throw new Exception("@没有判断的数据类型.");
+                #region 自己定义的表.
+                if (this.SrcType == Sys.SrcType.CreateTable)
+                {
+                    string sql = "SELECT No, Name FROM " + this.No;
+                    return src.RunSQLReturnTable(sql);
+                }
+                #endregion
+
+ 
+
+                throw new Exception("@没有判断的数据类型."+this.SrcType +" - "+this.SrcTypeText );
             }
         }
         /// <summary>

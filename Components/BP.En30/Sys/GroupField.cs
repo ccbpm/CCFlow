@@ -67,6 +67,9 @@ namespace BP.Sys
                 this.SetValByKey(GroupFieldAttr.EnName, value);
             }
         }
+        /// <summary>
+        /// 标签
+        /// </summary>
         public string Lab
         {
             get
@@ -78,6 +81,9 @@ namespace BP.Sys
                 this.SetValByKey(GroupFieldAttr.Lab, value);
             }
         }
+        /// <summary>
+        /// 顺序号
+        /// </summary>
         public int Idx
         {
             get
@@ -226,9 +232,7 @@ namespace BP.Sys
                 gf.Insert();
                 this.AddEntity(gf);
             }
-            else
-            {
-            }
+            
         }
         /// <summary>
         /// 得到它的 Entity
@@ -250,7 +254,8 @@ namespace BP.Sys
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(GroupFieldAttr.EnName, enName);
             qo.addAnd();
-            qo.AddWhereLen(GroupFieldAttr.CtrlID, " = ", 0, SystemConfig.AppCenterDBType);
+            qo.AddWhereIsNull(GroupFieldAttr.CtrlID);
+            //qo.AddWhereLen(GroupFieldAttr.CtrlID, " = ", 0, SystemConfig.AppCenterDBType);
             int num=qo.DoQuery();
 
             if (num==0)

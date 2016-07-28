@@ -1783,7 +1783,7 @@ namespace BP.Sys
                 map.AddTBInt(MapDataAttr.FrmH, 1200, "FrmH", true, true);
 
                 map.AddTBInt(MapDataAttr.TableCol, 4, "傻瓜表单显示的列", true, true);
-                map.AddTBInt(MapDataAttr.TableWidth, 600, "表格宽度", true, true);
+                map.AddTBInt(MapDataAttr.TableWidth, 800, "表格宽度", true, true);
 
                 //Tag
                 map.AddTBString(MapDataAttr.Tag, null, "Tag", true, false, 0, 500, 20);

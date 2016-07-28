@@ -841,8 +841,10 @@ namespace BP.Sys
         {
             get
             {
-                if (this.ColSpan == 4 && this.MyDataType == DataType.AppString)
+                if (this.UIRows > 1 && this.MyDataType == DataType.AppString)
                     return true;
+                //if (this.ColSpan == 4 && this.MyDataType == DataType.AppString)
+                //    return true;
                 return false;
             }
         }
@@ -1081,11 +1083,6 @@ namespace BP.Sys
             get
             {
                 return (TBModel)this.GetParaInt(MapAttrAttr.TBModel);
-                //string s= this.GetValStrByKey(MapAttrAttr.UIBindKey);
-                //if (string.IsNullOrEmpty(s) || s.Length != 1)
-                //    return 0;
-                //else
-                //    return isnt.Parse(s);
             }
             set
             {

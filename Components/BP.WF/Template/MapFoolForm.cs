@@ -323,32 +323,31 @@ namespace BP.WF.Template
 
             string str = "";
 
-             // 处理失去分组的字段.
-            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='"+this.No+"' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='"+this.No+"' AND "+SystemConfig.AppCenterDBLengthStr+"(CtrlID)=0)  ";
+             // 处理失去分组的字段. 
+            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "' AND CtrlType='' ) ";
             MapAttrs attrs = new MapAttrs();
             attrs.RetrieveInSQL(sql);
             if (attrs.Count != 0)
             {
-                sql = "SELECT OID,Idx FROM Sys_GroupField WHERE EnName='"+this.No+"' AND CtrlType='' ORDER BY Idx ";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                GroupField gf;
-                if (dt.Rows.Count == 0)
+                GroupField gf = null;
+                GroupFields gfs = new GroupFields(this.No);
+                foreach (GroupField mygf in gfs)
+                {
+                    if (mygf.CtrlID == "")
+                        gf = mygf;
+                }
+                if (gf == null)
                 {
                     gf = new GroupField();
                     gf.Lab = "基本信息";
                     gf.EnName = this.No;
                     gf.Insert();
                 }
-                else
-                {
-                    int gID = int.Parse(dt.Rows[0][0].ToString());
-                    gf = new GroupField(gID);
-                }
 
                 //设置GID.
                 foreach (MapAttr attr in attrs)
                 {
-                    attr.Update(MapAttrAttr.GroupID,  gf.OID);
+                    attr.Update(MapAttrAttr.GroupID, gf.OID);
                 }
             }
 

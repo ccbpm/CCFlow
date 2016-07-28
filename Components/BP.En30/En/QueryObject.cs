@@ -309,7 +309,9 @@ namespace BP.En
                 else
                 {
                     if (val.Contains(":") || val.Contains("@"))
+                    {
                         this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
+                    }
                     else
                     {
                         if (val.Contains("'") == false)
@@ -349,7 +351,14 @@ namespace BP.En
             else
                 this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
         }
-
+        /// <summary>
+        /// 是空的
+        /// </summary>
+        /// <param name="attr"></param>
+        public void AddWhereIsNull(string attr)
+        {
+            this.SQL = "( " + attr2Field(attr) + "  IS NULL OR  " + attr2Field(attr) + "='' )";
+        }
         public void AddWhereField(string attr, string exp, string val)
         {
             if (val.ToString() == "all")
@@ -450,6 +459,11 @@ namespace BP.En
         {
             this.AddWhere(attr, "=", val);
         }
+        /// <summary>
+        /// 增加条件(默认的是= )
+        /// </summary>
+        /// <param name="attr">属性</param>
+        /// <param name="val">值</param>
         public void AddWhere(string attr, int val)
         {
             this.AddWhere(attr, "=", val);

@@ -706,11 +706,9 @@ namespace CCFlow.WF.UC
             this.LoadData(mattrs, en);
             string appPath = CCFlowAppPath; //this.Page.Request.ApplicationPath;
              
-            #region 生成表头.
-            this.Add("\t\n<Table style='width:" + mff.TableWidth + ";' align=left>");
-            #endregion 生成表头.
+            this.Add("\t\n<Table style='width:" + mff.TableWidth + ";' align=left >");
 
-            bool isLeft = true;
+            string src, paras;
 
             foreach (GroupField gf in gfs)
             {
@@ -731,14 +729,14 @@ namespace CCFlow.WF.UC
 
                             this.AddTR();
                             this.Add("<TD colspan=4 ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
-                            string paras = this.RequestParas;
+                            paras = this.RequestParas;
                             if (paras.Contains("FID=") == false)
                                 paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
 
                             if (paras.Contains("WorkID=") == false)
                                 paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
 
-                            string src = fram.URL;
+                            src = fram.URL;
                             if (src.Contains("?"))
                                 src += "&r=q" + paras;
                             else
@@ -758,34 +756,28 @@ namespace CCFlow.WF.UC
 
                             if (dtl.IsView == false || this.ctrlUseSta.Contains(dtl.No))
                                 continue;
-                              
+
                             this.ctrlUseSta += dtl.No;
 
                             rowIdx++;
                             // myidx++;
                             this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
                             this.Add("<TD colspan=" + this.mapData.PTable + " ID='TD" + dtl.No + "' height='50px' width='100%' style='align:left'>");
-                            string src = "";
-                            try
-                            {
-                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-                            }
-                            catch
-                            {
-                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-                            }
+
+                            if (en.EnMap.Attrs.Contains("FID"))
+                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+                            else
+                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&FID=0&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
 
                             if (this.IsReadonly || dtl.IsReadonly)
+                            {
                                 this.Add("<iframe ID='F" + dtl.No + "'  src='" + src +
                                          "&IsReadonly=1' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
+                            }
                             else
                             {
-                                //this.Add("<iframe ID='F" + dtl.No + "'   Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' /></iframe>");
-
                                 AddLoadFunction(dtl.No, "blur", "SaveDtl");
-
                                 this.Add("<iframe ID='F" + dtl.No + "'   onload='" + dtl.No + "load();'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
-
                             }
 
                             this.AddTDEnd();
@@ -800,128 +792,172 @@ namespace CCFlow.WF.UC
                             if (ath.MyPK != gf.CtrlID)
                                 continue;
 
-                            ath.IsUse = true;
+                            this.AddTR();
+                            this.AddTD("colspan=4  class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", ath.Name);
+                            this.AddTREnd();
 
-                            //myidx = rowIdx + 10;
+                            this.AddTR();
+                            this.Add("<TD colspan=4 ID='TD" + ath.MyPK + "' height='" + ath.H + "' width='100%' style='align:left'>");
 
-                            //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                            //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditAth('" + this.FK_MapData + "','" + ath.NoOfObj + "')\" >" + ath.Name + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
-                            //this.Pub1.AddTREnd();
+                            src = "";
+                            if (this.IsReadonly)
+                                src = appPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + en.PKVal.ToString() + "&Ath=" + ath.NoOfObj + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1" + this.RequestParas;
+                            else
+                                src = appPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + en.PKVal.ToString() + "&Ath=" + ath.NoOfObj + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
 
-                            //myidx++;
-                            //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                            //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + ath.MyPK + "' height='" + ath.H + "px' width='100%' >");
-
-                            //src = "../../CCForm/AttachmentUpload.aspx?PKVal=0&Ath=" + ath.NoOfObj + "&FK_MapData=" + this.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
-
-                            //this.Pub1.Add("<iframe ID='F" + ath.MyPK + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ath.H + "' scrolling=auto  /></iframe>");
-
-                            //this.Pub1.AddTDEnd();
-                            //this.Pub1.AddTREnd();
+                            this.Add("<iframe ID='F" + ath.MyPK + "'    src='" + src + "' frameborder=0  style='position:absolute;width:" + ath.W + "px; height:" + ath.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto></iframe>");
+                            this.AddTDEnd();
+                            this.AddTREnd();
                         }
                         #endregion 增加附件
                         continue;
                     case GroupCtrlType.FWC: //审核组件.
                         #region 审核组件
-                        FrmWorkCheck fwc = new FrmWorkCheck(this.FK_MapData);
+                        FrmWorkCheck fwc = new FrmWorkCheck(enName);
                         if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
                         {
                             gf.Delete();
                             continue;
                         }
 
-                        //myidx = rowIdx + 10;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFWC('" + fwc.NodeID + "')\" >" + fwc.FWCLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
-                        //this.Pub1.AddTREnd();
+                        this.AddTR();
+                        this.AddTD("colspan=4 class=GroupField valign='top'  style='align:left' ", fwc.FWCLab);
+                        this.AddTREnd();
 
-                        //myidx++;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + fwc.No + "' height='" + fwc.FWC_H + "px' width='100%' >");
 
-                        //src = "NodeFrmComponents.aspx?DoType=FWC&FK_MapData=" + fwc.NodeID;
-                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + fwc.FWC_H + "px' scrolling=auto  /></iframe>");
-                        //this.Pub1.AddTDEnd();
-                        //this.Pub1.AddTREnd();
+                        this.AddTR();
+                        this.Add("<TD height='" + fwc.FWC_Hstr+ "'  colspan=4 >");
+
+                        src = appPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
+                        string fwcOnload = "";
+                        paras = this.RequestParas;
+                        if (paras.Contains("FID=") == false)
+                            paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
+
+                        if (paras.Contains("OID=") == false)
+                            paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
+
+                        if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Readonly)
+                        {
+                            src += "&DoType=View";
+                        }
+                        else
+                        {
+                            fwcOnload = "onload= 'WC" + fwc.No + "load();'";
+                            AddLoadFunction("WC" + fwc.No, "blur", "SaveDtl");
+                        }
+
+                        src += "&r=q" + paras;
+                        this.Add("<iframe ID='FWC" + fwc.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='100%'   scrolling=auto/></iframe>");
+
+                        this.AddTDEnd();
+                        this.AddTREnd();
                         #endregion  审核组件
                         continue;
                     case GroupCtrlType.SubFlow: //子流程..
                         #region 子流程.
-                        FrmSubFlow subflow = new FrmSubFlow(this.FK_MapData);
+                        FrmSubFlow subflow = new FrmSubFlow(enName);
                         if (subflow.HisFrmSubFlowSta == FrmSubFlowSta.Disable)
                         {
                             gf.Delete();
                             continue;
                         }
+                       
+                        this.AddTR();
+                        this.AddTD("colspan=4 class=GroupField valign='top'  style='align:left' ", gf.Lab);
+                        this.AddTREnd();
 
-                        //myidx = rowIdx + 10;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='ImgSub" + subflow.NodeID + "'  border=0 /><a href=\"javascript:EditSubFlow('" + subflow.NodeID + "')\" >" + subflow.SFLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
-                        //this.Pub1.AddTREnd();
+                        this.AddTR();
+                        this.Add("<TD colspan=4 ID='TDFWC" + subflow.No + "' height='" + subflow.SF_H + "px' width='100%' >");
+                        src = appPath + "WF/WorkOpt/SubFlow.aspx?s=2";
+                        fwcOnload = "";
+                        paras = this.RequestParas;
+                        if (paras.Contains("FID=") == false && en.EnMap.Attrs.Contains("FID") == true)
+                            paras += "&FID=" + en.GetValStrByKey("FID");
 
-                        //myidx++;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + subflow.No + "' height='" + subflow.SF_H + "px' width='100%' >");
+                        if (paras.Contains("OID=") == false)
+                            paras += "&OID=" + en.GetValStrByKey("OID");
+                        if (subflow.SFSta == FrmSubFlowSta.Readonly)
+                        {
+                            src += "&DoType=View";
+                        }
+                        src += "&r=q" + paras;
+                        this.Add("<iframe ID='FWC" + subflow.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + subflow.SF_W + "' height='" + subflow.SF_H + "'   scrolling=auto/></iframe>");
 
-                        //src = "NodeFrmComponents.aspx?DoType=SubFlow&FK_MapData=" + subflow.NodeID;
-                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + subflow.SF_H + "px' scrolling=auto  /></iframe>");
-                        //this.Pub1.AddTDEnd();
-                        //this.Pub1.AddTREnd();
-                        #endregion 子线程.
+                        this.AddTDEnd();
+                        this.AddTREnd();
+                        #endregion 子流程.
                         continue;
                     case GroupCtrlType.Track: //轨迹图.
                         #region 轨迹图.
-                        FrmTrack track = new FrmTrack(this.FK_MapData);
+                        FrmTrack track = new FrmTrack(enName);
                         if (track.FrmTrackSta == FrmTrackSta.Disable)
                         {
                             gf.Delete();
                             continue;
                         }
 
-                        //myidx = rowIdx + 10;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditTrack('" + track.NodeID + "')\" >" + track.FrmTrackLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
-                        //this.Pub1.AddTREnd();
+                        this.AddTR();
+                        this.AddTD("colspan=4 class=GroupField valign='top'  style='align:left' ", gf.Lab);
+                        this.AddTREnd();
 
-                        //myidx++;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + track.No + "' height='" + track.FrmTrack_H + "px' width='100%' >");
+                        this.AddTR();
+                        this.Add("<TD colspan=4 ID='TDFWC" + track.No + "' height='" + track.FrmTrack_H + "px' width='100%' >");
+                        src = appPath + "WF/WorkOpt/Track.aspx?s=2";
+                        fwcOnload = "";
+                        paras = this.RequestParas;
+                        if (paras.Contains("FID=") == false && en.EnMap.Attrs.Contains("FID") == true)
+                            paras += "&FID=" + en.GetValStrByKey("FID");
 
-                        //src = "NodeFrmComponents.aspx?DoType=FrmTrack&FK_MapData=" + track.NodeID;
-                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + track.FrmTrack_H + "px' scrolling=auto  /></iframe>");
-                        //this.Pub1.AddTDEnd();
-                        //this.Pub1.AddTREnd();
+                        if (paras.Contains("OID=") == false)
+                            paras += "&OID=" + en.GetValStrByKey("OID");
+                        if (track.FrmTrackSta != FrmTrackSta.Disable)
+                        {
+                            src += "&DoType=View";
+                        }
+                        src += "&r=q" + paras;
+                        this.Add("<iframe ID='FWC" + track.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + track.FrmTrack_W + "' height='" + track.FrmTrack_H + "'   scrolling=auto/></iframe>");
+
+                        this.AddTDEnd();
+                        this.AddTREnd();
                         #endregion 轨迹图.
                         continue;
                     case GroupCtrlType.Thread: //子线程.
                         #region 子线程.
 
-                        FrmThread thread = new FrmThread(this.FK_MapData);
+                        FrmThread thread = new FrmThread(enName);
                         if (thread.FrmThreadSta == FrmThreadSta.Disable)
                         {
                             gf.Delete();
                             continue;
                         }
 
-                        //myidx = rowIdx + 10;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditThread('" + thread.NodeID + "')\" >" + thread.FrmThreadLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
-                        //this.Pub1.AddTREnd();
+                        this.AddTR();
+                        this.AddTD("colspan=4 class=GroupField valign='top'  style='align:left' ", gf.Lab);
+                        this.AddTREnd();
 
-                        //myidx++;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDThread" + thread.No + "' height='" + thread.FrmThread_H + "px' width='100%' >");
+                        this.AddTR();
+                        this.Add("<TD colspan=4 ID='TDFWC" + thread.No + "' height='" + thread.FrmThread_H + "px' width='100%' >");
+                        src = appPath + "WF/WorkOpt/Thread.aspx?s=2";
+                        fwcOnload = "";
+                        paras = this.RequestParas;
+                        if (paras.Contains("FID=") == false && en.EnMap.Attrs.Contains("FID") == true)
+                            paras += "&FID=" + en.GetValStrByKey("FID");
 
-                        //src = "NodeFrmComponents.aspx?DoType=FrmThread&FK_MapData=" + thread.NodeID;
-                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + thread.FrmThread_H + "px' scrolling=auto  /></iframe>");
-                        //this.Pub1.AddTDEnd();
-                        //this.Pub1.AddTREnd();
+                        if (paras.Contains("OID=") == false)
+                            paras += "&OID=" + en.GetValStrByKey("OID");
+
+                        src += "&r=q" + paras;
+                        this.Add("<iframe ID='FWC" + thread.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='" + thread.FrmThread_H + "'   scrolling=auto/></iframe>");
+
+                        this.AddTDEnd();
+                        this.AddTREnd();
                         #endregion 轨迹图.
                         continue;
                     case GroupCtrlType.FTC: //流转自定义.
                         #region 流转自定义.
 
-                        FrmTransferCustom ftc = new FrmTransferCustom(this.FK_MapData);
+                        FrmTransferCustom ftc = new FrmTransferCustom(enName);
                         if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.Disable)
                         {
                             gf.Delete();
@@ -929,18 +965,18 @@ namespace CCFlow.WF.UC
                         }
 
                         //myidx = rowIdx + 10;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFTC('" + ftc.NodeID + "')\" >" + ftc.FrmTransferCustomLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
-                        //this.Pub1.AddTREnd();
+                        //this.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFTC('" + ftc.NodeID + "')\" >" + ftc.FrmTransferCustomLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        //this.AddTREnd();
 
                         //myidx++;
-                        //this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFTC" + ftc.No + "' height='" + ftc.FrmTransferCustom_H + "px' width='100%' >");
+                        //this.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
+                        //this.Add("<TD colspan=" + md.TableCol + " ID='TDFTC" + ftc.No + "' height='" + ftc.FrmTransferCustom_H + "px' width='100%' >");
 
                         //src = "NodeFrmComponents.aspx?DoType=FrmFTC&FK_MapData=" + ftc.NodeID;
-                        //this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ftc.FrmTransferCustom_H + "px' scrolling=auto  /></iframe>");
-                        //this.Pub1.AddTDEnd();
-                        //this.Pub1.AddTREnd();
+                        //this.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ftc.FrmTransferCustom_H + "px' scrolling=auto  /></iframe>");
+                        //this.AddTDEnd();
+                        //this.AddTREnd();
                         #endregion 流转自定义.
                         continue;
                     default:
@@ -948,368 +984,386 @@ namespace CCFlow.WF.UC
                 }
                 #endregion
 
-                #region 首先判断是否是框架分组？
-                switch (gf.CtrlType)
-                {
-                    case "Frame": //类型.
-                        #region 框架
-                        foreach (MapFrame fram in frames)
-                        {
-                            if (fram.MyPK != gf.CtrlID)
-                                continue;
-
-                            this.AddTR();
-                            //增加Group.
-                            this.AddTD("colspan=4 style='width:100%' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + fram.Name + "</div><div style='text-align:right; float:right'></div>");
-                            this.AddTREnd();
-
-                            this.AddTR();
-                            this.Add("<TD colspan=4 ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
-                            string paras = this.RequestParas;
-                            if (paras.Contains("FID=") == false)
-                                paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-
-                            if (paras.Contains("WorkID=") == false)
-                                paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
-
-                            string src = fram.URL;
-                            if (src.Contains("?"))
-                                src += "&r=q" + paras;
-                            else
-                                src += "?r=q" + paras;
-                            this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='" + fram.H + "' scrolling=auto /></iframe>");
-                            this.AddTDEnd();
-                            this.AddTREnd();
-                        }
-
-                        #endregion 框架
-                        continue;
-                    case "Dtl": //类型.
-                        break;
-                    default:
-                        break;
-                }
-                #endregion
-
-
-                currGF = gf;
                 this.AddTR();
-                if (gfs.Count == 1)
-                    this.AddTD("colspan=4 style='width:" + mff.TableWidth + "' class=GroupField valign='top' align=left ", "<div style='text-align:left; float:left'>&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
-                else
-                    this.AddTD("colspan=4 style='width:" + mff.TableWidth + "' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
+                this.AddTD("colspan=4 style='width:" + mff.TableWidth + "' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
                 this.AddTREnd();
 
-                idx = -1;
-
-                rowIdx = 0;
-                int colSpan = 4;  // 定义colspan的宽度.
-                this.AddTR();
+                bool isLeft = true;
+                //是否是沾满的状态.
                 for (int i = 0; i < mattrs.Count; i++)
                 {
                     MapAttr attr = mattrs[i] as MapAttr;
 
-                    #region 过滤不显示的字段.
+                    #region 过滤不需要显示的字段.
+                    if (attr.GroupID == 0)
+                    {
+                        // attr.GroupID = gf.OID;
+                        attr.Update(MapAttrAttr.GroupID, gf.OID);
+                    }
+
                     if (attr.GroupID != gf.OID)
                     {
                         if (gf.Idx == 0 && attr.GroupID == 0)
                         {
                         }
                         else
-                        {
                             continue;
-                        }
                     }
                     if (attr.HisAttr.IsRefAttr || attr.UIVisible == false)
                         continue;
 
-                    if (colSpan == 0)
-                        this.InsertObjects(true);
-                    #endregion 过滤不显示的字段.
+                    #endregion 过滤不需要显示的字段.
 
-                    #region 补充空白的列.
-                    if (colSpan <= 0)
+                    /* 
+                     * 以下就是一列标签一列控件的方式展现了 .
+                     */
+
+                    TB tb = new TB();
+                    tb.Attributes["width"] = "100%";
+                    tb.ID = "TB_" + attr.KeyOfEn;
+
+                    #region AppString .
+                    if (attr.MyDataType == DataType.AppString && attr.LGType != FieldTypeS.FK)
                     {
-                        /*如果列已经用完.*/
-                        this.AddTREnd();
-                        colSpan = 4; 
-                        rowIdx++;
-                    }
-                    #endregion 补充空白的列.
-
-                    #region 处理大块文本的输出.
-                    // 显示的顺序号.
-                    idx++;
-                    if (attr.IsBigDoc && (attr.ColSpan == 4 || attr.ColSpan == 0))
-                    {
-                        int h = attr.UIHeightInt + 20;
-                        if (attr.UIIsEnable)
-                            this.Add("<TD height='" + h.ToString() + "px'  colspan=4 width='100%' valign=top align=left>");
-                        else
-                            this.Add("<TD height='" + h.ToString() + "px'  colspan=4 width='100%' valign=top class=TBReadonly>");
-
-                        this.Add("<div style='font-size:12px;color:black;' >");
-                        Label lab = new Label();
-                        lab.ID = "Lab" + attr.KeyOfEn;
-                        lab.Text = attr.Name;
-                        this.Add(lab);
-                        this.Add("</div>");
-                        if (attr.TBModel ==  TBModel.RichText)
+                        #region 如果是1-2行, 就让其显示 大眼睛方式..
+                        if (attr.UIRows > 1 && (attr.ColSpan == 2 || attr.ColSpan == 1))
                         {
-                            //富文本输出.
-                            this.AddRichTextBox(en, attr);
-                        }
-                        else
-                        {
-                            TB mytbLine = new TB();
-                            mytbLine.TextMode = TextBoxMode.MultiLine;
-                            mytbLine.ID = "TB_" + attr.KeyOfEn;
-                            mytbLine.Text = en.GetValStrByKey(attr.KeyOfEn).Replace("\\n", "\n");
+                            if (isLeft == true)
+                                this.AddTR();
 
-                            mytbLine.Enabled = attr.UIIsEnable;
-                            if (mytbLine.Enabled == false)
-                                mytbLine.Attributes.Add("readonly", "true");
+                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
+                            this.Add("<TD colspan=2 width='50%' height='" + attr.UIHeight.ToString() + "px' >");
+                            this.Add("<span style='float:left'>" + attr.Name + "</span>");
+
+                            if (attr.TBModel == TBModel.RichText)
+                            {
+                                this.AddRichTextBox(en, attr);
+                            }
                             else
-                                mytbLine.Attributes["class"] = "TBDoc";
-
-                            mytbLine.Attributes["style"] = "width:98%;height:" + attr.UIHeight + "px;padding: 0px;margin: 0px;";
-                            this.Add(mytbLine);
-
-                            if (mytbLine.Enabled)
                             {
-                                string ctlID = mytbLine.ClientID;
-                                Label mylab = this.GetLabelByID("Lab" + attr.KeyOfEn);
-                                mylab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + appPath + "','" + enName + "','" + attr.KeyOfEn + "','" + enName + "')\">" + attr.Name + "</a>";
+                                this.Add("<span style='float:right'>");
+                                Label lab = new Label();
+                                lab.ID = "Lab" + attr.KeyOfEn;
+                                this.Add(lab);
+                                this.Add("</span><br>");
+
+                                //加入文本框.
+                                tb = new TB();
+                                tb.ID = "TB_" + attr.KeyOfEn;
+                                tb.TextMode = TextBoxMode.MultiLine;
+                                tb.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
+                                tb.Text = en.GetValStrByKey(attr.KeyOfEn).Replace("\\n", "\n");
+                                tb.Enabled = attr.UIIsEnable;
+                                this.Add(tb);
+                                lab.Text = "<a href=\"javascript:TBHelp('" + tb.ClientID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + mff.No + "')\">默认值</a>";
                             }
-                        }
+                            this.AddTDEnd();
 
-                        this.AddTDEnd();
-                        this.AddTREnd();
-                        rowIdx++;
-                        isLeftNext = true;
-                        continue;
-                    }
-
-                    if (attr.IsBigDoc)
-                    {
-                        if (colSpan == 4 )
-                        {
-                            /*已经加满了*/
-                            this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-                            colSpan = colSpan - attr.ColSpan; // 减去已经占用的col.
-                        }
-
-                        this.Add("<TD class=FDesc colspan=" + attr.ColSpan + " height='" + attr.UIHeight.ToString() + "px' >");
-                        this.Add(attr.Name);
-                        TB mytbLine = new TB();
-                        mytbLine.ID = "TB_" + attr.KeyOfEn;
-                        mytbLine.TextMode = TextBoxMode.MultiLine;
-                        mytbLine.Attributes["class"] = "TBDoc";
-                        mytbLine.Text = en.GetValStrByKey(attr.KeyOfEn);
-                        if (mytbLine.Enabled == false)
-                        {
-                            mytbLine.Attributes["class"] = "TBReadonly";
-                            mytbLine.Attributes.Add("readonly", "true");
-                        }
-                        mytbLine.Attributes["style"] = "width:98%;height:100%;padding: 0px;margin: 0px;";
-                        this.Add(mytbLine);
-                        this.AddTDEnd();
-                        continue;
-                    }
-                    #endregion 大块文本的输出.
-
-                    #region 处理超链接
-                    if (attr.UIIsEnable == false)
-                    {
-                        /* 判断是否有隐藏的超链接字段. */
-                        if (this.LinkFields.Contains("," + attr.KeyOfEn + ","))
-                        {
-                            MapExt meLink = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.Link) as MapExt;
-                            string url = meLink.Tag;
-                            if (url.Contains("?") == false)
-                                url = url + "?a3=2";
-                            url = url + "&WebUserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&EnName=" + enName;
-                            if (url.Contains("@AppPath"))
-                                url = url.Replace("@AppPath", "http://" + this.Request.Url.Host + CCFlowAppPath);
-                            if (url.Contains("@"))
-                            {
-                                Attrs attrs = en.EnMap.Attrs;
-                                foreach (Attr item in attrs)
-                                {
-                                    url = url.Replace("@" + attr.KeyOfEn, en.GetValStrByKey(attr.KeyOfEn));
-                                    if (url.Contains("@") == false)
-                                        break;
-                                }
-                            }
-                            this.AddTD("colspan=" + colSpan, "<a href='" + url + "' target='" + meLink.Tag1 + "' >" + en.GetValByKey(attr.KeyOfEn) + "</a>");
+                            if (isLeft == false)
+                                this.AddTREnd();
+                            isLeft = !isLeft;
                             continue;
                         }
-                    }
-                    #endregion 处理超链接
+                        #endregion 如果是1-2行, 就让其显示 大眼睛方式.
 
-                    #region  首先判断当前剩余的单元格是否满足当前控件的需要。
-                    if (attr.ColSpan + 1 > 4)
-                        attr.ColSpan = 4- 1; //如果设置的
-
-                    if (colSpan < attr.ColSpan + 1 || colSpan == 1 || colSpan == 0)
-                    {
-                        /*如果剩余的列不能满足当前的单元格，就补充上它，让它换行.*/
-                        if (colSpan != 0)
-                            this.AddTD("colspan=" + colSpan, "");
-                        this.AddTREnd();
-
-                        colSpan =4;
-                        this.AddTR();
-                    }
-                    #endregion  首先判断当前剩余的单元格是否满足当前控件的需要。
-
-                    #region 其它的就是增加一列控件一列描述的字段.
-                    TB tb = new TB();
-                    tb.ID = "TB_" + attr.KeyOfEn;
-                    tb.Enabled = attr.UIIsEnable;
-                    colSpan = colSpan - 1 - attr.ColSpan; // 首先减去当前的占位.
-                    switch (attr.LGType)
-                    {
-                        case FieldTypeS.Normal:
-                            switch (attr.MyDataType)
+                        #region 如果是3行 就是独眼龙方式.
+                        if (attr.UIRows > 1 && attr.ColSpan == 3)
+                        {
+                            if (isLeft == false)
                             {
-                                case BP.DA.DataType.AppString:
-                                    this.AddTDDesc(attr.Name);
-                                    if (attr.IsSigan)
-                                    {
-                                        string v = en.GetValStrByKey(attr.KeyOfEn);
-                                        if (v.Length == 0)
-                                            this.AddTD("colspan=" + attr.ColSpan, "<img src='" + CCFlowAppPath + "DataUser/Siganture/" + WebUser.No + ".jpg' border=0 onerror=\"this.src='" + CCFlowAppPath + "DataUser/Siganture/UnName.jpg'\"/>");
-                                        else
-                                            this.AddTD("colspan=" + attr.ColSpan, "<img src='" + CCFlowAppPath + "DataUser/Siganture/" + v + ".jpg' border=0 onerror=\"this.src='" + CCFlowAppPath + "DataUser/Siganture/UnName.jpg'\"/>");
-                                    }
-                                    else
-                                    {
-                                        tb.ShowType = TBType.TB;
-                                        tb.Text = en.GetValStrByKey(attr.KeyOfEn);
-                                        tb.Attributes["width"] = "100%";
-                                        this.AddTD("colspan=" + attr.ColSpan, tb);
-                                    }
-                                    break;
-                                case BP.DA.DataType.AppDate:
-                                    this.AddTDDesc(attr.Name);
-                                    tb.ShowType = TBType.Date;
-                                    tb.Text = en.GetValStrByKey(attr.KeyOfEn);
-                                    if (attr.UIIsEnable)
-                                        tb.Attributes["onfocus"] = "WdatePicker();";
-
-                                    this.AddTD("colspan=" + attr.ColSpan, tb);
-                                    break;
-                                case BP.DA.DataType.AppDateTime:
-                                    this.AddTDDesc(attr.Name);
-                                    tb.ShowType = TBType.DateTime;
-                                    tb.Text = en.GetValStrByKey(attr.KeyOfEn);
-                                    if (attr.UIIsEnable)
-                                        tb.Attributes["onfocus"] = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});";
-
-                                    this.AddTD("colspan=" + attr.ColSpan, tb);
-                                    break;
-                                case BP.DA.DataType.AppBoolean:
-                                    this.AddTDDesc("");
-                                    CheckBox cb = new CheckBox();
-                                    cb.Text = attr.Name;
-                                    cb.ID = "CB_" + attr.KeyOfEn;
-                                    cb.Checked = attr.DefValOfBool;
-                                    cb.Enabled = attr.UIIsEnable;
-                                    cb.Checked = en.GetValBooleanByKey(attr.KeyOfEn);
-                                    this.AddTD("colspan=" + attr.ColSpan, cb);
-                                    break;
-                                case BP.DA.DataType.AppDouble:
-                                case BP.DA.DataType.AppFloat:
-                                    //增加验证
-                                    //tb.Attributes.Add("onkeyup", @"value=value.replace(/[^-?\d+\.*\d*$]/g,'')");
-                                    tb.Attributes.Add("onblur", @"value=value.replace(/[^-?\d+\.*\d*$]/g,'')");
-                                    this.AddTDDesc(attr.Name);
-                                    tb.ShowType = TBType.Num;
-                                    tb.Text = en.GetValStrByKey(attr.KeyOfEn);
-                                    this.AddTD("colspan=" + attr.ColSpan, tb);
-                                    break;
-                                case BP.DA.DataType.AppInt:
-                                    this.AddTDDesc(attr.Name);
-                                    tb.ShowType = TBType.Num;
-                                    //增加验证
-                                    //tb.Attributes.Add("onkeyup", @"value=value.replace(/[^-?\d]/g,'')");
-                                    tb.Attributes.Add("onblur", @"value=value.replace(/[^-?\d]/g,'')");
-                                    tb.Text = en.GetValStrByKey(attr.KeyOfEn);
-                                    this.AddTD("colspan=" + attr.ColSpan, tb);
-                                    break;
-                                case BP.DA.DataType.AppMoney:
-                                    this.AddTDDesc(attr.Name);
-                                    tb.ShowType = TBType.Moneny;
-
-                                    if (SystemConfig.AppSettings["IsEnableNull"] == "1")
-                                    {
-                                        decimal v = en.GetValMoneyByKey(attr.KeyOfEn);
-                                        if (v == 567567567)
-                                            tb.Text = "";
-                                        else
-                                            tb.Text = v.ToString("0.00");
-                                    }
-                                    else
-                                        tb.Text = en.GetValMoneyByKey(attr.KeyOfEn).ToString("0.00");
-
-                                    //tb.Text = en.GetValMoneyByKey(attr.KeyOfEn).ToString("0.00");
-
-                                    //增加验证
-                                    //tb.Attributes.Add("onkeyup", @"value=value.replace(/[^-?\d+\.*\d*$]/g,'')");
-                                    tb.Attributes.Add("onblur", @"value=value.replace(/[^-?\d+\.*\d*$]/g,'')");
-                                    this.AddTD("colspan=" + attr.ColSpan, tb);
-                                    break;
-                                case BP.DA.DataType.AppRate:
-                                    this.AddTDDesc(attr.Name);
-                                    tb.ShowType = TBType.Moneny;
-                                    tb.Text = en.GetValMoneyByKey(attr.KeyOfEn).ToString("0.00");
-                                    //增加验证
-                                    //tb.Attributes.Add("onkeyup", @"value=value.replace(/[^-?\d+\.*\d*$]/g,'')");
-                                    tb.Attributes.Add("onblur", @"value=value.replace(/[^-?\d+\.*\d*$]/g,'')");
-                                    this.AddTD("colspan=" + attr.ColSpan, tb);
-                                    break;
-                                default:
-                                    break;
+                                this.AddTD("colspan=2", "");
+                                this.AddTREnd();
+                                isLeft = true;
                             }
-                            // tb.Attributes["width"] = "100%";
-                            switch (attr.MyDataType)
+
+                            this.AddTR();
+                            this.AddTDDesc(attr.Name);
+
+                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
+                            this.Add("<TD colspan=3 width='100%' height='" + attr.UIHeight.ToString() + "px' >");
+                            this.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
+                            Label lab = new Label();
+                            lab.ID = "Lab" + attr.KeyOfEn;
+                            lab.Text = "默认值";
+                            this.Add(lab);
+                            this.Add("</span><br>");
+
+                            tb = new TB();
+                            tb.ID = "TB_" + attr.KeyOfEn;
+                            tb.TextMode = TextBoxMode.MultiLine;
+                            tb.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
+                            tb.Enabled = attr.UIIsEnable;
+                            this.Add(tb);
+                            tb.Attributes["width"] = "100%";
+                            tb.Text = en.GetValStrByKey(attr.KeyOfEn).Replace("\\n", "\n");
+
+                            lab = this.GetLabelByID("Lab" + attr.KeyOfEn);
+                            string ctlID = tb.ClientID;
+                            lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + mff.No + "')\">默认值</a>";
+                            this.AddTDEnd();
+                            this.AddTREnd();
+                            continue;
+                        }
+                        #endregion
+
+                        #region 如果是4行 大块文本输出.
+                        if (attr.UIRows > 1 && attr.ColSpan == 4)
+                        {
+                            if (isLeft == false)
                             {
-                                case BP.DA.DataType.AppString:
-                                case BP.DA.DataType.AppDateTime:
-                                case BP.DA.DataType.AppDate:
-                                    if (tb.Enabled)
-                                    {
-                                        tb.MaxLength = attr.MaxLen;
-                                    }
-                                    else
-                                    {
-                                        tb.Attributes["class"] = "TBReadonly";
-                                    }
-                                    break;
-                                default:
-                                    if (tb.Enabled)
-                                        tb.Attributes["class"] = "TBNum";
-                                    else
-                                        tb.Attributes["class"] = "TBNumReadonly";
-                                    break;
+                                this.AddTD("colspan=2", "");
+                                this.AddTREnd();
+                                isLeft = true;
                             }
-                            break;
-                        case FieldTypeS.Enum:
+
+                            this.AddTR();
+                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
+                            this.Add("<TD colspan=4  height='" + attr.UIHeight.ToString() + "px' >");
+                            this.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + attr.Name + "</span>");
+                            this.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
+
+                            Label lab = new Label();
+                            lab.ID = "Lab" + attr.KeyOfEn;
+                            lab.Text = "默认值";
+                            this.Add(lab);
+                            this.Add("</span><br>");
+
+                            tb = new TB();
+                            tb.ID = "TB_" + attr.KeyOfEn;
+                            tb.TextMode = TextBoxMode.MultiLine;
+                            tb.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
+                            tb.Enabled = attr.UIIsEnable;
+                            tb.Text = en.GetValStrByKey(attr.KeyOfEn).Replace("\\n", "\n");
+                            this.Add(tb);
+
+                            tb.Attributes["width"] = "100%";
+                            lab = this.GetLabelByID("Lab" + attr.KeyOfEn);
+                            string ctlID = tb.ClientID;
+                            lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + mff.No + "')\">默认值</a>";
+                            this.AddTDEnd();
+                            this.AddTREnd();
+                            continue;
+                        }
+                        #endregion 大块文本的输出.
+
+                        #region 整行输出.
+                        if (attr.ColSpan == 3)
+                        {
+                            if (isLeft == false)
+                            {
+                                this.AddTD();
+                                this.AddTREnd();
+                                isLeft = true;
+                            }
+
+                            this.AddTR();
+                            this.AddTDDesc(attr.Name);
+
+                            //外键字段的输出.
                             if (attr.UIContralType == UIContralType.DDL)
                             {
-                                this.AddTDDesc(attr.Name);
-                                DDL ddle = new DDL();
-                                ddle.ID = "DDL_" + attr.KeyOfEn;
-                                ddle.BindSysEnum(attr.UIBindKey);
-                                ddle.SetSelectItem(en.GetValStrByKey(attr.KeyOfEn));
-                                ddle.Enabled = attr.UIIsEnable;
-                                this.AddTD("colspan=" + attr.ColSpan, ddle);
+                                if (attr.UIIsEnable == false)
+                                {
+                                    this.AddTD("colspan=3", en.GetValStrByKey(attr.KeyOfEn + "T"));
+                                }
+                                else
+                                {
+                                    DDL ddl = new DDL();
+                                    ddl.Bind(attr.HisDT, "No", "Name", en.GetValStrByKey(attr.KeyOfEn));
+                                    this.AddTD("colspan=3", ddl);
+                                }
                             }
-                            else
+
+                            //普通文本的输出.
+                            if (attr.UIContralType == UIContralType.TB)
                             {
+                                tb.Text = en.GetValStrByKey(attr.KeyOfEn); 
+
+                                if (attr.UIIsEnable == false)
+                                    tb.CssClass = "TBReadonly";
+
+                                if (attr.IsSigan)
+                                {
+
+                                    this.AddTDBegin("colspan=3");
+                                    this.CCForm_AddSign(en, attr, "/", null, false);
+                                    this.AddTDEnd();
+
+                                    //this.AddTD("colspan=3", "<img src='/DataUser/Siganture/" + en.GetValStrByKey(attr.KeyOfEn) + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                }
+                                else
+                                {
+                                    this.AddTD("colspan=3", tb);
+                                }
+                            }
+
+                            this.AddTREnd();
+                            continue;
+                        }
+                        #endregion 整行输出.
+
+                        #region 单行输出.
+                        if (attr.ColSpan == 1)
+                        {
+                            if (isLeft == true)
+                                this.AddTR();
+
+                            this.AddTDDesc(attr.Name);
+
+                            // 外部字典输出.
+                            if (attr.UIContralType == UIContralType.DDL)
+                            {
+                                DDL ddl = new DDL();
+                                if (attr.UIIsEnable == false)
+                                {
+                                    ddl.Enabled = attr.UIIsEnable;
+                                    ddl.Items.Add(new ListItem("数据1", "0"));
+                                }
+                                else
+                                {
+                                    if (attr.UIBindKey.Contains(".") == true)
+                                    {
+                                        ddl.Bind(attr.HisEntitiesNoName, en.GetValStrByKey(attr.KeyOfEn));
+                                    }
+                                    else
+                                    {
+                                        ddl.Bind(attr.HisDT, "No", "Name", en.GetValStrByKey(attr.KeyOfEn));
+                                    }
+                                }
+                                this.AddTD("colspan=1", ddl);
+                            }
+
+                            // 文本输出.
+                            if (attr.UIContralType == UIContralType.TB)
+                            {
+                                tb.ShowType = TBType.TB;
+                                tb.Text = en.GetValStrByKey(attr.KeyOfEn);
+
+                                if (attr.UIIsEnable == false)
+                                    tb.CssClass = "TBReadonly";
+
+                                if (attr.IsSigan)
+                                {
+                                    this.AddTDBegin("colspan=1");
+                                    this.CCForm_AddSign(en, attr, "/", null, false);
+                                    this.AddTDEnd();
+                                }
+                                else
+                                {
+                                    this.AddTD("colspan=1", tb);
+                                }
+                            }
+                        }
+                        #endregion 单行输出.
+                    }
+                    #endregion AppString.
+
+                    #region AppDate.
+                    if (attr.MyDataType == DataType.AppDate)
+                    {
+                        if (isLeft == true)
+                            this.AddTR();
+
+                        this.AddTDDesc(attr.Name);
+                        TB tbD = new TB();
+                        tbD.ID = "TB_" + attr.KeyOfEn;
+                        tbD.Text = en.GetValStrByKey(attr.KeyOfEn);
+                        if (attr.UIIsEnable)
+                        {
+                            tbD.Attributes["onfocus"] = "WdatePicker();";
+                            tbD.Attributes["class"] = "TBcalendar";
+                        }
+                        else
+                        {
+                            tbD.Enabled = false;
+                            tbD.ReadOnly = true;
+                            tbD.Attributes["class"] = "TBcalendar";
+                        }
+                        this.AddTD(" colspan=1", tbD);
+                    }
+                    #endregion AppDate.
+
+                    #region AppDateTime.
+                    if (attr.MyDataType == DataType.AppDateTime)
+                    {
+                        if (isLeft == true)
+                            this.AddTR();
+
+                        this.AddTDDesc(attr.Name);
+                        TB tbDT = new TB();
+                        tbDT.Text = en.GetValStrByKey(attr.KeyOfEn);
+                        if (attr.UIIsEnable)
+                        {
+                            tbDT.Attributes["onfocus"] = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});";
+                            tbDT.Attributes["class"] = "TBcalendar";
+                        }
+                        else
+                        {
+                            tbDT.Enabled = false;
+                            tbDT.ReadOnly = true;
+                            tbDT.Attributes["class"] = "TBcalendar";
+                        }
+                        this.AddTD("colspan=1", tbDT);
+
+                    }
+                    #endregion AppDateTime.
+
+                    #region AppBoolean.
+                    if (attr.MyDataType == DataType.AppBoolean)
+                    {
+                        CheckBox cb = new CheckBox();
+                        cb.Text = attr.Name;
+                        cb.Checked = en.GetValBooleanByKey(attr.KeyOfEn);
+                        cb.Enabled = attr.UIIsEnable;
+                        cb.ID = "CB_" + attr.KeyOfEn;
+                        if (attr.ColSpan == 4 || attr.ColSpan == 3)
+                        {
+                            if (isLeft == false)
+                            {
+                                this.AddTD("colspan=2", "");
+                                this.AddTREnd();
+                                isLeft = true;
+                            }
+                            this.AddTR();
+                            this.AddTDDesc(attr.Name);
+                            this.AddTD(" colspan=3", cb);
+                            this.AddTREnd();
+                            continue;
+                        }
+                        else
+                        {
+                            if (isLeft == true)
+                                this.AddTR();
+                            this.AddTDDesc(attr.Name);
+                            this.AddTD(" colspan=1 ", cb);
+                        }
+                    }
+                    #endregion AppBoolean.
+
+                    #region AppInt Enum
+                    if (attr.MyDataType == DataType.AppInt && attr.LGType == FieldTypeS.Enum)
+                    {
+                        if (attr.UIContralType == UIContralType.DDL)
+                        {
+                            if (isLeft == true)
+                                this.AddTR();
+                            this.AddTDDesc(attr.Name);
+                            DDL ddle = new DDL();
+                            ddle.ID = "DDL_" + attr.KeyOfEn;
+                            ddle.BindSysEnum(attr.UIBindKey, en.GetValIntByKey(attr.KeyOfEn));
+                            ddle.Enabled = attr.UIIsEnable;
+                            this.AddTD("colspan=" + attr.ColSpan, ddle);
+                        }
+
+                        if (attr.UIContralType == UIContralType.RadioBtn)
+                        {
+                            if (attr.ColSpan == 1)
+                            {
+                                if (isLeft == true)
+                                    this.AddTR();
+
                                 this.AddTDDesc(attr.Name);
-                                this.Add("<TD class=TD colspan='" + attr.ColSpan + "'>");
+                                this.AddTDBegin();
                                 SysEnums ses = new SysEnums(attr.UIBindKey);
                                 foreach (SysEnum item in ses)
                                 {
@@ -1320,49 +1374,138 @@ namespace CCFlow.WF.UC
                                         rb.Checked = true;
                                     else
                                         rb.Checked = false;
-                                    rb.GroupName = attr.KeyOfEn;
+                                    rb.GroupName = item.EnumKey + attr.KeyOfEn;
                                     this.Add(rb);
+                                    if (attr.RBShowModel == 1)
+                                        this.AddBR();
                                 }
                                 this.AddTDEnd();
                             }
-                            break;
-                        case FieldTypeS.FK:
-                            this.AddTDDesc(attr.Name);
-                            DDL ddl1 = new DDL();
-                            ddl1.ID = "DDL_" + attr.KeyOfEn;
-                            try
+
+                            if (attr.ColSpan == 3)
                             {
-                                EntitiesNoName ens = attr.HisEntitiesNoName;
-                                ens.RetrieveAll();
-                                ddl1.BindEntities(ens);
-                                ddl1.SetSelectItem(en.GetValStrByKey(attr.KeyOfEn));
+                                if (isLeft == false)
+                                {
+                                    /*补充空白行.*/
+                                    this.AddTD();
+                                    this.AddTD();
+                                    this.AddTREnd();
+                                    isLeft = true;
+                                }
+
+                                this.AddTR();
+                                this.AddTDDesc(attr.Name);
+                                this.AddTDBegin("colspan=3");
+                                SysEnums ses = new SysEnums(attr.UIBindKey);
+                                foreach (SysEnum item in ses)
+                                {
+                                    RadioButton rb = new RadioButton();
+                                    rb.ID = "RB_" + attr.KeyOfEn + "_" + item.IntKey;
+                                    rb.Text = item.Lab;
+                                    if (item.IntKey == en.GetValIntByKey(attr.KeyOfEn))
+                                        rb.Checked = true;
+                                    else
+                                        rb.Checked = false;
+                                    rb.GroupName = item.EnumKey + attr.KeyOfEn;
+                                    this.Add(rb);
+                                    if (attr.RBShowModel == 1)
+                                        this.AddBR();
+                                }
+                                this.AddTDEnd();
+                                this.AddTREnd();
+                                continue;
                             }
-                            catch
-                            {
-                            }
-                            ddl1.Enabled = attr.UIIsEnable;
-                            this.AddTD("colspan=" + attr.ColSpan, ddl1);
-                            break;
-                        default:
-                            break;
+                        }
+
                     }
-                    #endregion 其它的就是增加一列控件一列描述的字段
+                    #endregion AppInt Enum
 
-                } // 结束字段集合循环.
+                    #region AppDouble  AppFloat AppInt .
+                    if (attr.MyDataType == DataType.AppDouble ||
+                        attr.MyDataType == DataType.AppFloat ||
+                        (attr.MyDataType == DataType.AppInt && attr.LGType != FieldTypeS.Enum)
+                    )
+                    {
+                        if (isLeft == true)
+                            this.AddTR();
 
-                // 在分组后处理它, 首先判断当前剩余的单元格是否满足当前控件的需要。
-                if (colSpan != 4)
+                        this.AddTDDesc(attr.Name);
+                        tb.ShowType = TBType.Num;
+                        tb.Text = en.GetValStrByKey(attr.KeyOfEn);
+                        if (attr.IsNull)
+                            tb.Text = "";
+                        this.AddTD(" colspan=1", tb);
+                    }
+                    #endregion AppDouble  AppFloat AppInt .
+
+                    #region AppMoney  AppRate  .
+                    if (attr.MyDataType == DataType.AppMoney || attr.MyDataType == DataType.AppRate)
+                    {
+                        if (isLeft == true)
+                            this.AddTR();
+
+                        this.AddTDDesc(attr.Name);
+                        tb.ShowType = TBType.Moneny;
+                        tb.Text = en.GetValStrByKey(attr.KeyOfEn);
+                        if (attr.IsNull)
+                            tb.Text = "";
+                        this.AddTD("colspan=1", tb);
+
+                    }
+                    #endregion  AppMoney  AppRate .
+
+                    #region FK 外键.
+                    if (attr.LGType == FieldTypeS.FK)
+                    {
+                        DDL ddlFK = new DDL();
+                        ddlFK.ID = "DDL_" + attr.KeyOfEn;
+
+                        EntitiesNoName ens = attr.HisEntitiesNoName;
+                        ens.RetrieveAll();
+                        ddlFK.BindEntities(ens);
+                        ddlFK.SetSelectItem(en.GetValStrByKey(attr.KeyOfEn));
+                        ddlFK.Enabled = attr.UIIsEnable;
+
+                        if (attr.ColSpan == 4 || attr.ColSpan == 3)
+                        {
+                            if (isLeft == false)
+                            {
+                                this.AddTD("colspan=2", "");
+                                this.AddTREnd();
+                                isLeft = true;
+                            }
+                            this.AddTR();
+                            this.AddTDDesc(attr.Name);
+                            this.AddTD(" colspan=3", ddlFK);
+                            this.AddTREnd();
+                            continue;
+                        }
+
+                        if (attr.ColSpan == 1 || attr.ColSpan == 2)
+                        {
+                            if (isLeft == true)
+                                this.AddTR();
+
+                            this.AddTDDesc(attr.Name);
+                            this.AddTD("colspan=1", ddlFK);
+                        }
+                    }
+                    #endregion FK 外键.
+
+                    if (isLeft == false)
+                        this.AddTREnd();
+
+                    isLeft = !isLeft;
+
+                } // end循环字段分组.
+
+                if (isLeft == false)
                 {
-                    /* 如果剩余的列不能满足当前的单元格，就补充上它，让它换行.*/
-                    if (colSpan != 0)
-                        this.AddTD("colspan=" + colSpan, "");
-
+                    this.AddTD();
+                    this.AddTD();
                     this.AddTREnd();
-                    colSpan = 4;
                 }
-                this.InsertObjects(false);
-            } // 结束分组循环.
-
+            } // 字段循环
 
             this.AddTREnd();
             this.AddTableEnd();
@@ -1417,8 +1560,202 @@ namespace CCFlow.WF.UC
                 js += "\t\n</script>";
                 this.Add(js);
                 #endregion 处理iFrom  SaveM2M Save。
-            }
+             }
         }
+        /// <summary>
+        /// 增加数字签名
+        /// </summary>
+        private void CCForm_AddSign(Entity en, MapAttr attr, string appPath, string activeFilds, bool IsAddCa)
+        {
+            #region 判断权限
+            bool isEdit = false;//是否可以编辑签名
+            string v = en.GetValStrByKey(attr.KeyOfEn);
+
+            //如果为空，默认使用当前登录人签名
+            if (string.IsNullOrEmpty(v) && activeFilds.Contains(attr.KeyOfEn + ","))
+                v = WebUser.No;
+
+            //如果为只读并且为空，显示为未签名
+            if (this.IsReadonly && string.IsNullOrEmpty(v))
+                v = "sigan-readonly";
+
+            if (attr.PicType == PicType.ShouDong)
+            {
+                isEdit = true;
+                v = "sigan-readonly";
+            }
+
+            if (this.FK_Node != 0 && this.IsReadonly == false)
+            {
+                //获取表单方案，如果为可编辑，则对属性设置为true
+                v = en.GetValStrByKey(attr.KeyOfEn);
+                long workId = Convert.ToInt64(this.HisEn.GetValStrByKey("OID"));
+                FrmField keyOfEn = new FrmField();
+                QueryObject info = new QueryObject(keyOfEn);
+                info.AddWhere(FrmFieldAttr.FK_Node, this.FK_Node);
+                info.addAnd();
+                info.AddWhere(FrmFieldAttr.FK_MapData, attr.FK_MapData);
+                info.addAnd();
+                info.AddWhere(FrmFieldAttr.KeyOfEn, attr.KeyOfEn);
+                info.addAnd();
+                info.AddWhere(MapAttrAttr.UIIsEnable, "1");
+                if (info.DoQuery() > 0)
+                {
+                    isEdit = true;//可编辑，如果值为空显示可编辑图片
+                    if (string.IsNullOrEmpty(v))
+                        v = "siganture";
+                }
+                else
+                {
+                    isEdit = false;
+                    //不可编辑，如果值为空显示不可编辑图片
+                    if (string.IsNullOrEmpty(v))
+                        v = "sigan-readonly";
+                }
+            }
+            #endregion 判断权限
+
+            #region 图片签名 (dai guoqiang)
+            if (attr.SignType == SignType.Pic)
+            {
+                //如果为可编辑，对签名进行修改.
+                if (isEdit)
+                {
+                    this.Add("<img src='" + appPath + "DataUser/Siganture/" + v + ".jpg' "
+                    + "ondblclick=\"SigantureAct(this,'" + WebUser.No + "','" + attr.FK_MapData + "','" + attr.KeyOfEn
+                    + "','" + this.HisEn.GetValStrByKey("OID") + "');\" border=\"0\" alt=\"双击进行签名或取消签名\" onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
+                }
+                else
+                {
+                    //zhoupeng 增加业务逻辑判断, 不影响以前的逻辑 for 动态字段的需要..
+                    if (activeFilds != "")
+                    {
+                        /* 有动态字段的权限情况. */
+                        string myuser = en.GetValStringByKey(attr.KeyOfEn);
+                        if (myuser == "" && activeFilds.Contains(attr.KeyOfEn + ",") == false)
+                        {
+                            /*说明没有签名,直接输出图片.*/
+                            v = "sigan-readonly";
+                        }
+                        if (myuser == "" && activeFilds.Contains(attr.KeyOfEn + ",") == true)
+                        {
+                            v = BP.Web.WebUser.No;
+
+                            //直接更新到数据库里.
+                            en.Update(attr.KeyOfEn, WebUser.No);
+                        }
+                    }
+
+                    this.Add("<img  style='border:0px;width:90px;' src='" + appPath + "DataUser/Siganture/" + v + ".jpg' border=0 onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
+
+                }
+            } //结束图片签名.
+
+            #endregion 结束图片签名
+
+            #region 广东CA签名 (zhoupeng 2016-03-12)
+            if (attr.SignType == SignType.GDCA)
+            {
+                if (IsAddCa == false && isEdit == true)
+                {
+                    IsAddCa = true;
+                    HtmlGenericControl loadWebSignJs = new HtmlGenericControl("script");
+                    loadWebSignJs.Attributes["type"] = "text/javascript";
+                    loadWebSignJs.Attributes["src"] = "/WF/Activex/GDCASign/Loadwebsign.js";
+                    Page.Header.Controls.Add(loadWebSignJs);
+                    ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/GDCASign/main.js");
+                }
+
+                if (!string.IsNullOrEmpty(attr.Para_SiganField))
+                {
+                    //string signClient = this.GetTBByID("TB_" + attr.Para_SiganField).ClientID;
+                    string signClient = "";
+                    if (this.PageID == "Frm")
+                        signClient = "ctl00$ContentPlaceHolder1$UCEn1$TB_" + attr.Para_SiganField;
+                    else
+                        signClient = "ctl00$ContentPlaceHolder1$MyFlowUC1$MyFlow1$UCEn1$TB_" + attr.Para_SiganField;
+
+                    this.Add("<span id='" + signClient + "sealpostion' />");
+                    if (isEdit)
+                    {
+                        this.Add("<img  src='" + appPath + "DataUser/Siganture/setting.JPG' ondblclick=\"addseal('" + signClient + "');\"  border=0 onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
+                    }
+                    else
+                    {
+                        string image =
+                            Server.MapPath(string.Format("~" + appPath + "DataUser/Siganture/{0}",
+                                this.HisEn.GetValStrByKey("OID")));
+                        string realImage = "";
+                        if (Directory.Exists(image))
+                        {
+                            image =
+                                Server.MapPath(string.Format("~" + appPath + "DataUser/Siganture/{0}/{1}.jpg",
+                                    this.HisEn.GetValStrByKey("OID"), v));
+                            if (File.Exists(image))
+                                realImage = string.Format(appPath + "DataUser/Siganture/{0}/{1}.jpg", this.HisEn.GetValStrByKey("OID"), v);
+                            else
+                                realImage = appPath + "DataUser/Siganture/" + v + ".jpg";
+                        }
+                        else
+                            realImage = appPath + "DataUser/Siganture/" + v + ".jpg";
+                        this.Add("<img src='" + realImage + "' border=0 onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
+                    }
+                }
+            }
+            #endregion 结束CA签名
+
+            #region 山东CA签名 (song honggang 2014-06-08)
+            if (attr.SignType == SignType.CA)
+            {
+                if (IsAddCa == false && isEdit == true)
+                {
+                    IsAddCa = true;
+                    HtmlGenericControl loadWebSignJs = new HtmlGenericControl("script");
+                    loadWebSignJs.Attributes["type"] = "text/javascript";
+                    loadWebSignJs.Attributes["src"] = "/WF/Activex/Sign/Loadwebsign.js";
+                    Page.Header.Controls.Add(loadWebSignJs);
+                    ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/Sign/main.js");
+                }
+
+                if (!string.IsNullOrEmpty(attr.Para_SiganField))
+                {
+                    //string signClient = this.GetTBByID("TB_" + attr.Para_SiganField).ClientID;
+                    string signClient = "";
+                    if (this.PageID == "Frm")
+                        signClient = "ctl00$ContentPlaceHolder1$UCEn1$TB_" + attr.Para_SiganField;
+                    else
+                        signClient = "ctl00$ContentPlaceHolder1$MyFlowUC1$MyFlow1$UCEn1$TB_" + attr.Para_SiganField;
+
+                    this.Add("<span id='" + signClient + "sealpostion' />");
+                    if (isEdit)
+                    {
+                        this.Add("<img  src='" + appPath + "DataUser/Siganture/setting.JPG' ondblclick=\"addseal('" + signClient + "');\"  border=0 onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
+                    }
+                    else
+                    {
+                        string image =
+                            Server.MapPath(string.Format("~" + appPath + "DataUser/Siganture/{0}",
+                                this.HisEn.GetValStrByKey("OID")));
+                        string realImage = "";
+                        if (Directory.Exists(image))
+                        {
+                            image =
+                                Server.MapPath(string.Format("~" + appPath + "DataUser/Siganture/{0}/{1}.jpg",
+                                    this.HisEn.GetValStrByKey("OID"), v));
+                            if (File.Exists(image))
+                                realImage = string.Format(appPath + "DataUser/Siganture/{0}/{1}.jpg", this.HisEn.GetValStrByKey("OID"), v);
+                            else
+                                realImage = appPath + "DataUser/Siganture/" + v + ".jpg";
+                        }
+                        else
+                            realImage = appPath + "DataUser/Siganture/" + v + ".jpg";
+                        this.Add("<img src='" + realImage + "'  onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
+                    }
+                }
+            }
+            #endregion 结束CA签名
+        }
+
         private void AfterBindEn_DealMapExt(string enName, MapAttrs mattrs, Entity en)
         {
             #region 处理事件.
@@ -1962,271 +2299,6 @@ namespace CCFlow.WF.UC
                 this.Add(js); //加入里面.
             }
             #endregion
-
-        }
-        public void InsertObjects(bool isJudgeRowIdx)
-        {
-            return;
-
-            //#region 从表
-            //foreach (MapDtl dtl in dtls)
-            //{
-            //    if (dtl.IsView == false || this.ctrlUseSta.Contains(dtl.No))
-            //        continue;
-
-            //    if (dtl.GroupID == 0)
-            //    {
-            //        dtl.GroupID = currGF.OID;
-            //        dtl.RowIdx = 0;
-            //        dtl.Update();
-            //    }
-
-            //    if (isJudgeRowIdx)
-            //    {
-            //        if (dtl.RowIdx != rowIdx)
-            //            continue;
-            //    }
-
-            //    if (dtl.GroupID == currGF.OID)
-            //    {
-
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-
-            //    // dtl.IsUse = true;
-
-            //    this.ctrlUseSta += dtl.No;
-
-            //    rowIdx++;
-            //    // myidx++;
-            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-            //    this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + dtl.No + "' height='50px' width='100%' style='align:left'>");
-            //    string src = "";
-            //    try
-            //    {
-            //        src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-            //    }
-            //    catch
-            //    {
-            //        src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + this.HisEn.PKVal + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
-            //    }
-
-            //    if (this.IsReadonly || dtl.IsReadonly)
-            //        this.Add("<iframe ID='F" + dtl.No + "'  src='" + src +
-            //                 "&IsReadonly=1' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
-            //    else
-            //    {
-            //        //this.Add("<iframe ID='F" + dtl.No + "'   Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' /></iframe>");
-
-            //        AddLoadFunction(dtl.No, "blur", "SaveDtl");
-
-            //        this.Add("<iframe ID='F" + dtl.No + "'   onload='" + dtl.No + "load();'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%'  /></iframe>");
-
-            //    }
-
-            //    this.AddTDEnd();
-            //    this.AddTREnd();
-            //}
-            //#endregion 从表
-
-            //#region 多对多的关系
-            //foreach (MapM2M m2m in m2ms)
-            //{
-            //    if (this.ctrlUseSta.Contains("@" + m2m.MyPK))
-            //        continue;
-
-            //    if (isJudgeRowIdx)
-            //    {
-            //        if (m2m.RowIdx != rowIdx)
-            //            continue;
-            //    }
-
-            //    if (m2m.GroupID == 0 && rowIdx == 0)
-            //    {
-            //        m2m.GroupID = currGF.OID;
-            //        m2m.RowIdx = 0;
-            //        m2m.Update();
-            //    }
-            //    else if (m2m.GroupID == currGF.OID)
-            //    {
-
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-
-            //    this.ctrlUseSta += "@" + m2m.MyPK;
-
-
-            //    rowIdx++;
-            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-
-            //    string src = CCFlowAppPath + "WF/CCForm/M2M.aspx?NoOfObj=" + m2m.NoOfObj;
-            //    string paras = this.RequestParas;
-            //    if (paras.Contains("FID=") == false)
-            //        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-
-            //    if (paras.Contains("OID=") == false)
-            //        paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
-
-            //    src += "&r=q" + paras;
-            //    if (src.Contains("FK_MapData") == false)
-            //        src += "&FK_MapData=" + m2m.FK_MapData;
-            //    switch (m2m.ShowWay)
-            //    {
-            //        case FrmShowWay.FrmAutoSize:
-            //            this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%'  >");
-            //            if (m2m.HisM2MType == M2MType.M2M)
-            //            {
-
-            //                AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
-
-
-            //                //  this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
-            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "'  onload='" + m2m.NoOfObj + "load();'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
-
-            //            }
-            //            else
-            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "' src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=no /></iframe>");
-            //            break;
-            //        case FrmShowWay.FrmSpecSize:
-            //            this.Add("<TD colspan=" + this.mapData.TableCol + "  ID='TD" + m2m.NoOfObj + "' height='" + m2m.H + "' width='" + m2m.W + "'  >");
-            //            if (m2m.HisM2MType == M2MType.M2M)
-            //            {
-            //                AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
-
-            //                // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "' onload='" + m2m.NoOfObj + "load();'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-
-            //            }
-            //            else
-            //                this.Add("<iframe ID='F" + m2m.NoOfObj + "'    src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "' scrolling=auto /></iframe>");
-            //            break;
-            //        case FrmShowWay.Hidden:
-            //            break;
-            //        case FrmShowWay.WinOpen:
-            //            this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + m2m.NoOfObj + "' height='20px' width='100%'  >");
-            //            this.Add("<a href=\"javascript:WinOpen('" + src + "&IsOpen=1','" + m2m.W + "','" + m2m.H + "');\"  />" + m2m.Name + "</a>");
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
-            //#endregion 多对多的关系
-
-            //#region 框架
-            //foreach (MapFrame fram in frames)
-            //{
-            //    if (this.ctrlUseSta.Contains("@" + fram.MyPK))
-            //        continue;
-
-            //    if (isJudgeRowIdx)
-            //    {
-            //        if (fram.RowIdx != rowIdx)
-            //            continue;
-            //    }
-
-            //    if (fram.GroupID == 0 && rowIdx == 0)
-            //    {
-            //        fram.GroupID = currGF.OID;
-            //        fram.RowIdx = 0;
-            //        fram.Update();
-            //    }
-            //    else if (fram.GroupID == currGF.OID)
-            //    {
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-
-            //    this.ctrlUseSta += "@" + fram.MyPK;
-            //    rowIdx++;
-            //    // myidx++;
-            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-            //    if (fram.IsAutoSize)
-            //        this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + fram.NoOfObj + "' height='50px' width='100%'  >");
-            //    else
-            //        this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
-
-            //    string paras = this.RequestParas;
-            //    if (paras.Contains("FID=") == false)
-            //        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-
-            //    if (paras.Contains("WorkID=") == false)
-            //        paras += "&WorkID=" + this.HisEn.GetValStrByKey("OID");
-
-            //    string src = fram.URL;
-            //    if (src.Contains("?"))
-            //        src += "&r=q" + paras;
-            //    else
-            //        src += "?r=q" + paras;
-
-            //    if (fram.IsAutoSize)
-            //    {
-            //        this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=auto /></iframe>");
-            //    }
-            //    else
-            //    {
-            //        this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + fram.W + "' height='" + fram.H + "' scrolling=auto /></iframe>");
-            //    }
-
-            //    this.AddTDEnd();
-            //    this.AddTREnd();
-            //}
-            //#endregion 框架
-
-            //#region 附件
-            //foreach (BP.Sys.FrmAttachment ath in aths)
-            //{
-            //    if (this.ctrlUseSta.Contains("@" + ath.MyPK))
-            //        continue;
-            //    if (isJudgeRowIdx)
-            //    {
-            //        if (ath.RowIdx != rowIdx)
-            //            continue;
-            //    }
-
-            //    if (ath.GroupID == 0 && rowIdx == 0)
-            //    {
-            //        ath.GroupID = currGF.OID;
-            //        ath.RowIdx = 0;
-            //        ath.Update();
-            //    }
-            //    else if (ath.GroupID == currGF.OID)
-            //    {
-            //    }
-            //    else
-            //    {
-            //        continue;
-            //    }
-            //    this.ctrlUseSta += "@" + ath.MyPK;
-            //    rowIdx++;
-            //    // myidx++;
-            //    this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
-            //    this.Add("<TD colspan=" + this.mapData.TableCol + " ID='TD" + ath.MyPK + "' height='50px' width='100%' style='align:left'>");
-            //    string src = "";
-            //    if (this.IsReadonly)
-            //        src = CCFlowAppPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + this.HisEn.PKVal + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1" + this.RequestParas;
-            //    else
-            //        src = CCFlowAppPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + this.HisEn.PKVal + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + EnName + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
-
-            //    if (ath.IsAutoSize)
-            //    {
-            //        this.Add("<iframe ID='F" + ath.MyPK + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='10px' scrolling=auto /></iframe>");
-            //    }
-            //    else
-            //    {
-            //        this.Add("<iframe ID='F" + ath.MyPK + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + ath.W + "' height='" + ath.H + "' scrolling=auto /></iframe>");
-            //    }
-            //    this.AddTDEnd();
-            //    this.AddTREnd();
-            //}
-            //#endregion 附件
         }
         public void AddRichTextBox(Entity en, MapAttr attr)
         {
@@ -3197,193 +3269,8 @@ namespace CCFlow.WF.UC
                 #region 数字签名
                 if (attr.IsSigan)
                 {
-                    #region 判断权限
-                    bool isEdit = false;//是否可以编辑签名
-                    string v = en.GetValStrByKey(attr.KeyOfEn);
-
-                    //如果为空，默认使用当前登录人签名
-                    if (string.IsNullOrEmpty(v) && activeFilds.Contains(attr.KeyOfEn + ","))
-                        v = WebUser.No;
-
-                    //如果为只读并且为空，显示为未签名
-                    if (this.IsReadonly && string.IsNullOrEmpty(v))
-                        v = "sigan-readonly";
-
-                    if (attr.PicType == PicType.ShouDong)
-                    {
-                        isEdit = true;
-                        v = "sigan-readonly";
-                    }
-
-                    if (this.FK_Node != 0 && this.IsReadonly == false)
-                    {
-                        //获取表单方案，如果为可编辑，则对属性设置为true
-                        v = en.GetValStrByKey(attr.KeyOfEn);
-                        long workId = Convert.ToInt64(this.HisEn.GetValStrByKey("OID"));
-                        FrmField keyOfEn = new FrmField();
-                        QueryObject info = new QueryObject(keyOfEn);
-                        info.AddWhere(FrmFieldAttr.FK_Node, this.FK_Node);
-                        info.addAnd();
-                        info.AddWhere(FrmFieldAttr.FK_MapData, attr.FK_MapData);
-                        info.addAnd();
-                        info.AddWhere(FrmFieldAttr.KeyOfEn, attr.KeyOfEn);
-                        info.addAnd();
-                        info.AddWhere(MapAttrAttr.UIIsEnable, "1");
-                        if (info.DoQuery() > 0)
-                        {
-                            isEdit = true;//可编辑，如果值为空显示可编辑图片
-                            if (string.IsNullOrEmpty(v))
-                                v = "siganture";
-                        }
-                        else
-                        {
-                            isEdit = false;
-                            //不可编辑，如果值为空显示不可编辑图片
-                            if (string.IsNullOrEmpty(v))
-                                v = "sigan-readonly";
-                        }
-                    }
-                    #endregion 判断权限
-
-                    #region 图片签名 (dai guoqiang)
-                    if (attr.SignType == SignType.Pic)
-                    {
-                        //如果为可编辑，对签名进行修改.
-                        if (isEdit)
-                        {
-                            this.Add("<img src='" + appPath + "DataUser/Siganture/" + v + ".jpg' "
-                            + "ondblclick=\"SigantureAct(this,'" + WebUser.No + "','" + attr.FK_MapData + "','" + attr.KeyOfEn
-                            + "','" + this.HisEn.GetValStrByKey("OID") + "');\" border=\"0\" alt=\"双击进行签名或取消签名\" onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
-                        }
-                        else
-                        {
-                            //zhoupeng 增加业务逻辑判断, 不影响以前的逻辑 for 动态字段的需要..
-                            if (activeFilds != "")
-                            {
-                                /* 有动态字段的权限情况. */
-                                string myuser = en.GetValStringByKey(attr.KeyOfEn);
-                                if (myuser == "" && activeFilds.Contains(attr.KeyOfEn + ",") == false)
-                                {
-                                    /*说明没有签名,直接输出图片.*/
-                                    v = "sigan-readonly";
-                                }
-                                if (myuser == "" && activeFilds.Contains(attr.KeyOfEn + ",") == true)
-                                {
-                                    v = BP.Web.WebUser.No;
-
-                                    //直接更新到数据库里.
-                                    en.Update(attr.KeyOfEn, WebUser.No);
-                                }
-                            }
-
-                            this.Add("<img  style='border:0px;width:90px;' src='" + appPath + "DataUser/Siganture/" + v + ".jpg' border=0 onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
-
-                        }
-                    } //结束图片签名.
-
-                    #endregion 结束图片签名
-
-                    #region 广东CA签名 (zhoupeng 2016-03-12)
-                    if (attr.SignType == SignType.GDCA)
-                    {
-                        if (IsAddCa == false && isEdit == true)
-                        {
-                            IsAddCa = true;
-                            HtmlGenericControl loadWebSignJs = new HtmlGenericControl("script");
-                            loadWebSignJs.Attributes["type"] = "text/javascript";
-                            loadWebSignJs.Attributes["src"] = "/WF/Activex/GDCASign/Loadwebsign.js";
-                            Page.Header.Controls.Add(loadWebSignJs);
-                            ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/GDCASign/main.js");
-                        }
-
-                        if (!string.IsNullOrEmpty(attr.Para_SiganField))
-                        {
-                            //string signClient = this.GetTBByID("TB_" + attr.Para_SiganField).ClientID;
-                            string signClient = "";
-                            if (this.PageID == "Frm")
-                                signClient = "ctl00$ContentPlaceHolder1$UCEn1$TB_" + attr.Para_SiganField;
-                            else
-                                signClient = "ctl00$ContentPlaceHolder1$MyFlowUC1$MyFlow1$UCEn1$TB_" + attr.Para_SiganField;
-
-                            this.Add("<span id='" + signClient + "sealpostion' />");
-                            if (isEdit)
-                            {
-                                this.Add("<img  src='" + appPath + "DataUser/Siganture/setting.JPG' ondblclick=\"addseal('" + signClient + "');\"  border=0 onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
-                            }
-                            else
-                            {
-                                string image =
-                                    Server.MapPath(string.Format("~" + appPath + "DataUser/Siganture/{0}",
-                                        this.HisEn.GetValStrByKey("OID")));
-                                string realImage = "";
-                                if (Directory.Exists(image))
-                                {
-                                    image =
-                                        Server.MapPath(string.Format("~" + appPath + "DataUser/Siganture/{0}/{1}.jpg",
-                                            this.HisEn.GetValStrByKey("OID"), v));
-                                    if (File.Exists(image))
-                                        realImage = string.Format(appPath + "DataUser/Siganture/{0}/{1}.jpg", this.HisEn.GetValStrByKey("OID"), v);
-                                    else
-                                        realImage = appPath + "DataUser/Siganture/" + v + ".jpg";
-                                }
-                                else
-                                    realImage = appPath + "DataUser/Siganture/" + v + ".jpg";
-                                this.Add("<img src='" + realImage + "' border=0 onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
-                            }
-                        }
-                    }
-                    #endregion 结束CA签名
-
-                    #region 山东CA签名 (song honggang 2014-06-08)
-                    if (attr.SignType == SignType.CA)
-                    {
-                        if (IsAddCa == false && isEdit == true)
-                        {
-                            IsAddCa = true;
-                            HtmlGenericControl loadWebSignJs = new HtmlGenericControl("script");
-                            loadWebSignJs.Attributes["type"] = "text/javascript";
-                            loadWebSignJs.Attributes["src"] = "/WF/Activex/Sign/Loadwebsign.js";
-                            Page.Header.Controls.Add(loadWebSignJs);
-                            ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "mainCA", "/WF/Activex/Sign/main.js");
-                        }
-
-                        if (!string.IsNullOrEmpty(attr.Para_SiganField))
-                        {
-                            //string signClient = this.GetTBByID("TB_" + attr.Para_SiganField).ClientID;
-                            string signClient = "";
-                            if (this.PageID == "Frm")
-                                signClient = "ctl00$ContentPlaceHolder1$UCEn1$TB_" + attr.Para_SiganField;
-                            else
-                                signClient = "ctl00$ContentPlaceHolder1$MyFlowUC1$MyFlow1$UCEn1$TB_" + attr.Para_SiganField;
-
-                            this.Add("<span id='" + signClient + "sealpostion' />");
-                            if (isEdit)
-                            {
-                                this.Add("<img  src='" + appPath + "DataUser/Siganture/setting.JPG' ondblclick=\"addseal('" + signClient + "');\"  border=0 onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
-                            }
-                            else
-                            {
-                                string image =
-                                    Server.MapPath(string.Format("~" + appPath + "DataUser/Siganture/{0}",
-                                        this.HisEn.GetValStrByKey("OID")));
-                                string realImage = "";
-                                if (Directory.Exists(image))
-                                {
-                                    image =
-                                        Server.MapPath(string.Format("~" + appPath + "DataUser/Siganture/{0}/{1}.jpg",
-                                            this.HisEn.GetValStrByKey("OID"), v));
-                                    if (File.Exists(image))
-                                        realImage = string.Format(appPath + "DataUser/Siganture/{0}/{1}.jpg", this.HisEn.GetValStrByKey("OID"), v);
-                                    else
-                                        realImage = appPath + "DataUser/Siganture/" + v + ".jpg";
-                                }
-                                else
-                                    realImage = appPath + "DataUser/Siganture/" + v + ".jpg";
-                                this.Add("<img src='" + realImage + "'  onerror=\"this.src='" + appPath + "DataUser/Siganture/UnName.jpg'\"/>");
-                            }
-                        }
-                    }
-                    #endregion 结束CA签名
+                    //与傻瓜表单一起调用通用方法.
+                    this.CCForm_AddSign(en, attr, appPath, activeFilds, IsAddCa);
 
                     this.Add("</span>");
                     this.Add("</DIV>");
@@ -4030,21 +3917,15 @@ namespace CCFlow.WF.UC
                 x = fwc.FWC_X + wtX;
                 this.Add("<DIV id='DIVWC" + fwc.No + "' style='position:absolute; left:" + x + "px; top:" + fwc.FWC_Y + "px; width:" + fwc.FWC_W + "px; height:" + fwc.FWC_H + "px;text-align: left;' >");
                 this.Add("<span>");
+
                 string src = appPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
                 string fwcOnload = "";
                 string paras = this.RequestParas;
-                try
-                {
                     if (paras.Contains("FID=") == false)
-                        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-                }
-                catch
-                {
-
-                }
+                        paras += "&FID=" + en.GetValStrByKey("FID");
 
                 if (paras.Contains("OID=") == false)
-                    paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
+                    paras += "&OID=" + en.GetValStrByKey("OID");
 
                 if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Readonly)
                 {
@@ -4057,6 +3938,8 @@ namespace CCFlow.WF.UC
                 }
                 src += "&r=q" + paras;
                 this.Add("<iframe ID='FWC" + fwc.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + fwc.FWC_W + "' height='" + fwc.FWC_H + "'   scrolling=auto/></iframe>");
+
+
                 this.Add("</span>");
                 this.Add("</DIV>");
             }
@@ -4069,30 +3952,23 @@ namespace CCFlow.WF.UC
                 x = subFlow.SF_X + wtX;
                 this.Add("<DIV id='DIVWC" + fwc.No + "' style='position:absolute; left:" + x + "px; top:" + subFlow.SF_Y + "px; width:" + subFlow.SF_W + "px; height:" + subFlow.SF_H + "px;text-align: left;' >");
                 this.Add("<span>");
+                
                 string src = appPath + "WF/WorkOpt/SubFlow.aspx?s=2";
                 string fwcOnload = "";
                 string paras = this.RequestParas;
-                try
-                {
-                    if (paras.Contains("FID=") == false)
-                        paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
-                }
-                catch
-                {
-                }
+                    if (paras.Contains("FID=") == false && en.EnMap.Attrs.Contains("FID")==true )
+                        paras += "&FID=" + en.GetValStrByKey("FID");
+
                 if (paras.Contains("OID=") == false)
-                    paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
+                    paras += "&OID=" + en.GetValStrByKey("OID");
                 if (subFlow.HisFrmSubFlowSta == FrmSubFlowSta.Readonly)
                 {
                     src += "&DoType=View";
                 }
-                else
-                {
-                    //  fwcOnload = "onload= 'WC" + fwc.No + "load();'";
-                    // AddLoadFunction("WC" + fwc.No, "blur", "SaveDtl");
-                }
                 src += "&r=q" + paras;
                 this.Add("<iframe ID='FWC" + subFlow.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + subFlow.SF_W + "' height='" + subFlow.SF_H + "'   scrolling=auto/></iframe>");
+
+
                 this.Add("</span>");
                 this.Add("</DIV>");
             }
@@ -4187,28 +4063,20 @@ namespace CCFlow.WF.UC
                     lab.ID = "Lab" + ath.MyPK;
                     this.Add(lab);
 
-                    string node = "";
-                    try
-                    {
-                        node = this.HisEn.GetValStrByKey("FK_Node");
-                        if (node == "0" || node == "")
-                            node = ((Work)en).NodeID.ToString();
-                    }
-                    catch
-                    {
-                        node = this.Request.QueryString["FK_Node"];
-                        //  node = ((Work)en).NodeID.ToString();
-                    }
+                   string node = this.Request.QueryString["FK_Node"];
+                   if (string.IsNullOrEmpty(node) && en.EnMap.Attrs.Contains("FK_Node"))
+                   {
+                       node = en.GetValStrByKey("FK_Node");
+                       if (node == "0" || node == "")
+                           node = ((Work)en).NodeID.ToString();
+                   }
 
                     if (athDB != null)
                     {
-
-                        //  lab.Text = "<img src='" + appPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName;
                         if (ath.IsWoEnableWF)
                             lab.Text = "<a  href=\"javascript:OpenOfiice('" + athDB.FK_FrmAttachment + "','" + this.HisEn.GetValStrByKey("OID") + "','" + athDB.MyPK + "','" + this.FK_MapData + "','" + ath.NoOfObj + "','" + node + "')\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName + "</a>";
                         else
                             lab.Text = "<img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName;
-                        // lab.Text = "<a href='" + this.Request.ApplicationPath + "DataUser/UploadFile/" + athDB.FilePathName + "' target=_blank ><img src='/WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName + "</a>";
                     }
                     this.Add("</DIV>");
 
@@ -4360,11 +4228,12 @@ namespace CCFlow.WF.UC
                     this.Add("<span>");
                     string src = "";
                     if (this.IsReadonly)
-                        src = appPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + this.HisEn.PKVal.ToString() + "&Ath=" + ath.NoOfObj + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1" + this.RequestParas;
+                        src = appPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + en.PKVal.ToString() + "&Ath=" + ath.NoOfObj + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1" + this.RequestParas;
                     else
-                        src = appPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + this.HisEn.PKVal.ToString() + "&Ath=" + ath.NoOfObj + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
+                        src = appPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + en.PKVal.ToString() + "&Ath=" + ath.NoOfObj + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
 
                     this.Add("<iframe ID='F" + ath.MyPK + "'    src='" + src + "' frameborder=0  style='position:absolute;width:" + ath.W + "px; height:" + ath.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto></iframe>");
+
                     this.Add("</span>");
                     this.Add("</DIV>");
                 }

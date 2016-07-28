@@ -123,14 +123,6 @@ namespace CCFlow.WF.MapDef
             MapAttrs mattrs = new MapAttrs(md.No);
             int count = mattrs.Count;
 
-            #region 计算出来列的宽度.
-            //int labCol = 50;
-           // int ctrlCol = 300;
-          //  int width = (labCol + ctrlCol) * md.TableCol / 2;
-         //   int width = md.FrmW; // (labCol + ctrlCol) * md.TableCol / 2;
-            #endregion 计算出来列的宽度.
-
-
             this.Pub1.Add("<div style='width:" + md.TableWidth + ";background-color:white;border:1px solid #666;padding:5px;margin:auto;' align='center'>");
             this.Pub1.Add("\t\n<Table style='width:98%;border:1px;padding:5px; padding-top:11px;' >");
 
@@ -153,7 +145,7 @@ namespace CCFlow.WF.MapDef
                                 continue;
 
                             fram.IsUse = true;
-                             myidx = rowIdx + 20;
+                            myidx = rowIdx + 20;
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFrame('" + this.FK_MapData + "','" + fram.MyPK + "')\" >" + fram.Name + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                             this.Pub1.AddTREnd();
@@ -174,7 +166,7 @@ namespace CCFlow.WF.MapDef
                         }
                         #endregion 框架
                         continue;
-                    case GroupCtrlType.Dtl : //增加从表.
+                    case GroupCtrlType.Dtl: //增加从表.
                         #region 增加从表
                         foreach (MapDtl dtl in dtls)
                         {
@@ -234,7 +226,7 @@ namespace CCFlow.WF.MapDef
                             gf.Delete();
                             continue;
                         }
-                        
+
                         myidx = rowIdx + 10;
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                         this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFWC('" + fwc.NodeID + "')\" >" + fwc.FWCLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
@@ -377,7 +369,7 @@ namespace CCFlow.WF.MapDef
                     #region 过滤不需要显示的字段.
                     if (attr.GroupID == 0)
                     {
-                       // attr.GroupID = gf.OID;
+                        // attr.GroupID = gf.OID;
                         attr.Update(MapAttrAttr.GroupID, gf.OID);
                     }
 
@@ -391,393 +383,354 @@ namespace CCFlow.WF.MapDef
                     }
                     if (attr.HisAttr.IsRefAttr || attr.UIVisible == false)
                         continue;
-                  
+
                     #endregion 过滤不需要显示的字段.
 
                     /* 
                      * 以下就是一列标签一列控件的方式展现了.
                      */
 
-                    #region 增加控件与描述.
-                  
                     TB tb = new TB();
                     tb.Attributes["width"] = "100%";
                     tb.ID = "TB_" + attr.KeyOfEn;
 
-                    switch (attr.LGType)
+                    #region AppString .
+                    if (attr.MyDataType == DataType.AppString && attr.LGType != FieldTypeS.FK)
                     {
-                        case FieldTypeS.Normal:
+                        #region 如果是1-2行, 就让其显示 大眼睛方式..
+                        if (attr.UIRows > 1 && (attr.ColSpan == 2 || attr.ColSpan == 1))
+                        {
+                            if (isLeft == true)
+                                this.Pub1.AddTR();
 
-                            switch (attr.MyDataType)
+                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
+                            this.Pub1.Add("<TD colspan=2 width='50%' height='" + attr.UIHeight.ToString() + "px' >");
+                            this.Pub1.Add("<span style='float:left'>" + this.GenerLab(attr, 0, count) + "</span>");
+                            this.Pub1.Add("<span style='float:right'>");
+                            Label lab = new Label();
+                            lab.ID = "Lab" + attr.KeyOfEn;
+                            this.Pub1.Add(lab);
+                            this.Pub1.Add("</span><br>");
+
+
+                            //加入文本框.
+                            tb = new TB();
+                            tb.ID = "TB_" + attr.KeyOfEn;
+                            tb.TextMode = TextBoxMode.MultiLine;
+                            tb.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
+                            tb.Enabled = attr.UIIsEnable;
+                            this.Pub1.Add(tb);
+                            lab.Text = "<a href=\"javascript:TBHelp('" + tb.ClientID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + md.No + "')\">默认值</a>";
+                            this.Pub1.AddTDEnd();
+
+                            if (isLeft == false)
+                                this.Pub1.AddTREnd();
+                            isLeft = !isLeft;
+                            continue;
+                        }
+                        #endregion 如果是1-2行, 就让其显示 大眼睛方式.
+
+                        #region 如果是3行 就是独眼龙方式.
+                        if (attr.UIRows > 1 && attr.ColSpan == 3)
+                        {
+                            if (isLeft == false)
                             {
-                                case BP.DA.DataType.AppString:
-
-                                    #region 大块文本的输出.
-                                    if (attr.IsBigDoc == true)
-                                    {
-                                        if (attr.ColSpan == 1)
-                                        {
-                                            if (isLeft == true)
-                                            {
-                                                // 如果是灌满的状态.
-                                                this.Pub1.AddTR();
-                                            }
-
-                                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
-                                            this.Pub1.Add("<TD colspan=" + md.TableCol + " width='100%' height='" + attr.UIHeight.ToString() + "px' >");
-                                            this.Pub1.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + this.GenerLab(attr, 0, count) + "</span>");
-                                            this.Pub1.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
-
-                                            Label lab = new Label();
-                                            lab.ID = "Lab" + attr.KeyOfEn;
-                                            lab.Text = "默认值";
-                                            this.Pub1.Add(lab);
-                                            this.Pub1.Add("</span><br>");
-
-                                            TB mytbLine = new TB();
-                                            mytbLine.ID = "TB_" + attr.KeyOfEn;
-                                            mytbLine.TextMode = TextBoxMode.MultiLine;
-                                            mytbLine.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
-                                            mytbLine.Enabled = attr.UIIsEnable;
-                                            this.Pub1.Add(mytbLine);
-                                            mytbLine.Attributes["width"] = "100%";
-                                            lab = this.Pub1.GetLabelByID("Lab" + attr.KeyOfEn);
-                                            string ctlID = mytbLine.ClientID;
-                                            lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + md.No + "')\">默认值</a>";
-                                            this.Pub1.AddTDEnd();
-
-                                            if (isLeft == false)
-                                            {
-                                                this.Pub1.AddTREnd();
-                                                isLeft = true;
-                                            }
-                                        }
-
-                                        if (attr.ColSpan == 3 || attr.ColSpan == 4)
-                                        {
-                                            if (isLeft == false)
-                                            {
-                                                this.Pub1.AddTD("colspan=2", "");
-                                                this.Pub1.AddTREnd();
-                                                isLeft = true;
-                                            }
-
-                                            this.Pub1.AddTR();
-                                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
-                                            this.Pub1.Add("<TD colspan=" + md.TableCol + " width='100%' height='" + attr.UIHeight.ToString() + "px' >");
-                                            this.Pub1.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + this.GenerLab(attr, 0, count) + "</span>");
-                                            this.Pub1.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
-
-                                            Label lab = new Label();
-                                            lab.ID = "Lab" + attr.KeyOfEn;
-                                            lab.Text = "默认值";
-                                            this.Pub1.Add(lab);
-                                            this.Pub1.Add("</span><br>");
-
-                                            TB mytbLine = new TB();
-                                            mytbLine.ID = "TB_" + attr.KeyOfEn;
-                                            mytbLine.TextMode = TextBoxMode.MultiLine;
-                                            mytbLine.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
-                                            mytbLine.Enabled = attr.UIIsEnable;
-                                            this.Pub1.Add(mytbLine);
-                                            mytbLine.Attributes["width"] = "100%";
-                                            lab = this.Pub1.GetLabelByID("Lab" + attr.KeyOfEn);
-                                            string ctlID = mytbLine.ClientID;
-                                            lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + md.No + "')\">默认值</a>";
-                                            this.Pub1.AddTDEnd();
-                                            this.Pub1.AddTREnd();
-                                        }
-                                        continue;
-                                    }
-                                    #endregion 大块文本的输出.
-
-                                    #region 整行输出.
-                                    if (attr.ColSpan == 3)
-                                    {
-                                        if (isLeft == false)
-                                        {
-                                            this.Pub1.AddTD();
-                                            this.Pub1.AddTREnd();
-                                            isLeft = true;
-                                        }
-
-                                        this.Pub1.AddTR();
-                                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-
-                                        if (attr.UIContralType == UIContralType.DDL)
-                                        {
-                                            DDL ddl = new DDL();
-                                            if (attr.UIIsEnable == false)
-                                            {
-                                                ddl.Enabled = attr.UIIsEnable;
-                                                ddl.Items.Add(new ListItem("数据1", "0"));
-                                            }
-                                            else
-                                            {
-                                                ddl.Bind(attr.HisDT, "No", "Name", attr.DefVal);
-                                            }
-                                            this.Pub1.AddTD("colspan=3", ddl);
-                                        }
-                                        else
-                                        {
-                                            tb.ShowType = TBType.TB;
-                                            tb.Text = attr.DefVal;
-
-                                            if (attr.UIIsEnable == false)
-                                                tb.CssClass = "TBReadonly";
-
-                                            if (attr.IsSigan)
-                                                this.Pub1.AddTD("colspan=3", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
-                                            else
-                                                this.Pub1.AddTD("colspan=3", tb);
-                                        }
-
-                                        this.Pub1.AddTREnd();
-                                        continue;
-                                    }
-                                    #endregion 整行输出.
-
-                                    #region 单行输出.
-                                    if (attr.ColSpan == 1)
-                                    {
-                                        if (isLeft == true)
-                                            this.Pub1.AddTR();
-
-                                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                        if (attr.UIContralType == UIContralType.DDL)
-                                        {
-                                            DDL ddl = new DDL();
-                                            if (attr.UIIsEnable == false)
-                                            {
-                                                ddl.Enabled = attr.UIIsEnable;
-                                                ddl.Items.Add(new ListItem("数据1", "0"));
-                                            }
-                                            else
-                                            {
-                                                if (attr.UIBindKey.Contains(".") == true)
-                                                {
-                                                    ddl.Bind(attr.HisEntitiesNoName, attr.DefVal);
-                                                }
-                                                else
-                                                {
-                                                    ddl.Bind(attr.HisDT, "No", "Name", attr.DefVal);
-                                                }
-                                            }
-                                            this.Pub1.AddTD("colspan=1", ddl);
-                                        }
-                                        else
-                                        {
-                                            tb.ShowType = TBType.TB;
-                                            tb.Text = attr.DefVal;
-
-                                            if (attr.UIIsEnable == false)
-                                                tb.CssClass = "TBReadonly";
-
-                                            if (attr.IsSigan)
-                                                this.Pub1.AddTD("colspan=1", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
-                                            else
-                                                this.Pub1.AddTD("colspan=1", tb);
-                                        }
-                                    }
-                                    #endregion 单行输出.
-
-                                    break;
-                                case BP.DA.DataType.AppDate:
-                                    if (isLeft == true)
-                                        this.Pub1.AddTR();
-
-                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                    TB tbD = new TB();
-                                    tbD.Text = attr.DefVal;
-                                    if (attr.UIIsEnable)
-                                    {
-                                        tbD.Attributes["onfocus"] = "WdatePicker();";
-                                        tbD.Attributes["class"] = "TBcalendar";
-                                    }
-                                    else
-                                    {
-                                        tbD.Enabled = false;
-                                        tbD.ReadOnly = true;
-                                        tbD.Attributes["class"] = "TBcalendar";
-                                    }
-                                    this.Pub1.AddTD(" colspan=1", tbD);
-                                    break;
-                                case BP.DA.DataType.AppDateTime:
-
-                                    if (isLeft == true)
-                                        this.Pub1.AddTR();
-
-                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                    TB tbDT = new TB();
-                                    tbDT.Text = attr.DefVal;
-                                    if (attr.UIIsEnable)
-                                    {
-                                        tbDT.Attributes["onfocus"] = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});";
-                                        tbDT.Attributes["class"] = "TBcalendar";
-                                    }
-                                    else
-                                    {
-                                        tbDT.Enabled = false;
-                                        tbDT.ReadOnly = true;
-                                        tbDT.Attributes["class"] = "TBcalendar";
-                                    }
-                                    this.Pub1.AddTD(" colspan=1", tbDT);
-                                    break;
-                                case BP.DA.DataType.AppBoolean:
-
-
-                                    CheckBox cb = new CheckBox();
-                                    cb.Text = attr.Name;
-                                    cb.Checked = attr.DefValOfBool;
-                                    cb.Enabled = attr.UIIsEnable;
-                                    cb.ID = "CB_" + attr.KeyOfEn;
-                                    if (attr.ColSpan == 4 || attr.ColSpan == 3)
-                                    {
-                                        if (isLeft == false)
-                                        {
-                                            this.Pub1.AddTD("colspan=2", "");
-                                            this.Pub1.AddTREnd();
-                                            isLeft = true;
-                                        }
-                                        this.Pub1.AddTR();
-                                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                        this.Pub1.AddTD(" colspan=3", cb);
-                                        this.Pub1.AddTREnd();
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        if (isLeft == true)
-                                            this.Pub1.AddTR();
-                                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                        this.Pub1.AddTD(" colspan=1 ", cb);
-                                    }
-                                    break;
-                                case BP.DA.DataType.AppDouble:
-                                case BP.DA.DataType.AppFloat:
-                                case BP.DA.DataType.AppInt:
-                                    if (isLeft == true)
-                                        this.Pub1.AddTR();
-
-                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                    tb.ShowType = TBType.Num;
-                                    tb.Text = attr.DefVal;
-                                    if (attr.IsNull)
-                                        tb.Text = "";
-                                    this.Pub1.AddTD(" colspan=1", tb);
-                                    break;
-                                case BP.DA.DataType.AppMoney:
-                                case BP.DA.DataType.AppRate:
-
-                                    if (isLeft == true)
-                                        this.Pub1.AddTR();
-
-                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                    tb.ShowType = TBType.Moneny;
-                                    tb.Text = attr.DefVal;
-                                    if (attr.IsNull)
-                                        tb.Text = "";
-                                    this.Pub1.AddTD(" colspan=1", tb);
-                                    break;
-                                default:
-                                    break;
+                                this.Pub1.AddTD("colspan=2", "");
+                                this.Pub1.AddTREnd();
+                                isLeft = true;
                             }
 
+                            this.Pub1.AddTR();
+                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
 
+                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
+                            this.Pub1.Add("<TD colspan=3 width='100%' height='" + attr.UIHeight.ToString() + "px' >");
+                            this.Pub1.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
+                            Label lab = new Label();
+                            lab.ID = "Lab" + attr.KeyOfEn;
+                            lab.Text = "默认值";
+                            this.Pub1.Add(lab);
+                            this.Pub1.Add("</span><br>");
+
+                            tb = new TB();
+                            tb.ID = "TB_" + attr.KeyOfEn;
+                            tb.TextMode = TextBoxMode.MultiLine;
+                            tb.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
+                            tb.Enabled = attr.UIIsEnable;
+                            this.Pub1.Add(tb);
                             tb.Attributes["width"] = "100%";
-                            switch (attr.MyDataType)
+                            lab = this.Pub1.GetLabelByID("Lab" + attr.KeyOfEn);
+                            string ctlID = tb.ClientID;
+                            lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + md.No + "')\">默认值</a>";
+                            this.Pub1.AddTDEnd();
+                            this.Pub1.AddTREnd();
+                            continue;
+                        }
+                        #endregion
+
+                        #region 如果是4行 大块文本输出.
+                        if (attr.UIRows > 1 && attr.ColSpan == 4)
+                        {
+                            if (isLeft == false)
                             {
-                                case BP.DA.DataType.AppString:
-                                case BP.DA.DataType.AppDateTime:
-                                case BP.DA.DataType.AppDate:
-                                    if (tb.Enabled)
-                                        tb.Attributes["class"] = "TB";
-                                    else
-                                        tb.Attributes["class"] = "TBReadonly";
-                                    break;
-                                default:
-                                    if (tb.Enabled)
-                                        tb.Attributes["class"] = "TBNum";
-                                    else
-                                        tb.Attributes["class"] = "TBNumReadonly";
-                                    break;
+                                this.Pub1.AddTD("colspan=2", "");
+                                this.Pub1.AddTREnd();
+                                isLeft = true;
                             }
-                            break;
-                        case FieldTypeS.Enum:
+
+                            this.Pub1.AddTR();
+                            /*是大块文本，并且跨度在占领了整个剩余行单元格. */
+                            this.Pub1.Add("<TD colspan=4  height='" + attr.UIHeight.ToString() + "px' >");
+                            this.Pub1.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + this.GenerLab(attr, 0, count) + "</span>");
+                            this.Pub1.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
+
+                            Label lab = new Label();
+                            lab.ID = "Lab" + attr.KeyOfEn;
+                            lab.Text = "默认值";
+                            this.Pub1.Add(lab);
+                            this.Pub1.Add("</span><br>");
+
+                            tb = new TB();
+                            tb.ID = "TB_" + attr.KeyOfEn;
+                            tb.TextMode = TextBoxMode.MultiLine;
+                            tb.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
+                            tb.Enabled = attr.UIIsEnable;
+                            this.Pub1.Add(tb);
+                            tb.Attributes["width"] = "100%";
+                            lab = this.Pub1.GetLabelByID("Lab" + attr.KeyOfEn);
+                            string ctlID = tb.ClientID;
+                            lab.Text = "<a href=\"javascript:TBHelp('" + ctlID + "','" + this.Request.ApplicationPath + "','" + attr.KeyOfEn + "','" + md.No + "')\">默认值</a>";
+                            this.Pub1.AddTDEnd();
+                            this.Pub1.AddTREnd();
+                            continue;
+                        }
+                        #endregion 大块文本的输出.
+
+                        #region 整行输出.
+                        if (attr.ColSpan == 3)
+                        {
+                            if (isLeft == false)
+                            {
+                                this.Pub1.AddTD();
+                                this.Pub1.AddTREnd();
+                                isLeft = true;
+                            }
+
+                            this.Pub1.AddTR();
+                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+
+                            //外键字段的输出.
                             if (attr.UIContralType == UIContralType.DDL)
+                            {
+                                DDL ddl = new DDL();
+                                if (attr.UIIsEnable == false)
+                                {
+                                    ddl.Enabled = attr.UIIsEnable;
+                                    ddl.Items.Add(new ListItem("数据1", "0"));
+                                }
+                                else
+                                {
+                                    ddl.Bind(attr.HisDT, "No", "Name", attr.DefVal);
+                                }
+                                this.Pub1.AddTD("colspan=3", ddl);
+                            }
+
+                            //普通文本的输出.
+                            if (attr.UIContralType == UIContralType.TB)
+                            {
+                                tb.ShowType = TBType.TB;
+                                tb.Text = attr.DefVal;
+
+                                if (attr.UIIsEnable == false)
+                                    tb.CssClass = "TBReadonly";
+
+                                if (attr.IsSigan)
+                                    this.Pub1.AddTD("colspan=3", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                else
+                                    this.Pub1.AddTD("colspan=3", tb);
+                            }
+
+                            this.Pub1.AddTREnd();
+                            continue;
+                        }
+                        #endregion 整行输出.
+
+                        #region 单行输出.
+                        if (attr.ColSpan == 1)
+                        {
+                            if (isLeft == true)
+                                this.Pub1.AddTR();
+
+                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+
+                            // 外部字典输出.
+                            if (attr.UIContralType == UIContralType.DDL)
+                            {
+                                DDL ddl = new DDL();
+                                if (attr.UIIsEnable == false)
+                                {
+                                    ddl.Enabled = attr.UIIsEnable;
+                                    ddl.Items.Add(new ListItem("数据1", "0"));
+                                }
+                                else
+                                {
+                                    if (attr.UIBindKey.Contains(".") == true)
+                                    {
+                                        ddl.Bind(attr.HisEntitiesNoName, attr.DefVal);
+                                    }
+                                    else
+                                    {
+                                        ddl.Bind(attr.HisDT, "No", "Name", attr.DefVal);
+                                    }
+                                }
+                                this.Pub1.AddTD("colspan=1", ddl);
+                            }
+
+                            // 文本输出.
+                            if (attr.UIContralType == UIContralType.TB)
+                            {
+                                tb.ShowType = TBType.TB;
+                                tb.Text = attr.DefVal;
+
+                                if (attr.UIIsEnable == false)
+                                    tb.CssClass = "TBReadonly";
+
+                                if (attr.IsSigan)
+                                    this.Pub1.AddTD("colspan=1", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
+                                else
+                                    this.Pub1.AddTD("colspan=1", tb);
+                            }
+                        }
+                        #endregion 单行输出.
+                    }
+                    #endregion AppString.
+
+                    #region AppDate.
+                    if (attr.MyDataType == DataType.AppDate)
+                    {
+                        if (isLeft == true)
+                            this.Pub1.AddTR();
+
+                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                        TB tbD = new TB();
+                        tbD.Text = attr.DefVal;
+                        if (attr.UIIsEnable)
+                        {
+                            tbD.Attributes["onfocus"] = "WdatePicker();";
+                            tbD.Attributes["class"] = "TBcalendar";
+                        }
+                        else
+                        {
+                            tbD.Enabled = false;
+                            tbD.ReadOnly = true;
+                            tbD.Attributes["class"] = "TBcalendar";
+                        }
+                        this.Pub1.AddTD(" colspan=1", tbD);
+
+                    }
+                    #endregion AppDate.
+
+                    #region AppDateTime.
+                    if (attr.MyDataType == DataType.AppDateTime)
+                    {
+                        if (isLeft == true)
+                            this.Pub1.AddTR();
+
+                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                        TB tbDT = new TB();
+                        tbDT.Text = attr.DefVal;
+                        if (attr.UIIsEnable)
+                        {
+                            tbDT.Attributes["onfocus"] = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});";
+                            tbDT.Attributes["class"] = "TBcalendar";
+                        }
+                        else
+                        {
+                            tbDT.Enabled = false;
+                            tbDT.ReadOnly = true;
+                            tbDT.Attributes["class"] = "TBcalendar";
+                        }
+                        this.Pub1.AddTD("colspan=1", tbDT);
+
+                    }
+                    #endregion AppDateTime.
+
+                    #region AppBoolean.
+                    if (attr.MyDataType == DataType.AppBoolean)
+                    {
+                        CheckBox cb = new CheckBox();
+                        cb.Text = attr.Name;
+                        cb.Checked = attr.DefValOfBool;
+                        cb.Enabled = attr.UIIsEnable;
+                        cb.ID = "CB_" + attr.KeyOfEn;
+                        if (attr.ColSpan == 4 || attr.ColSpan == 3)
+                        {
+                            if (isLeft == false)
+                            {
+                                this.Pub1.AddTD("colspan=2", "");
+                                this.Pub1.AddTREnd();
+                                isLeft = true;
+                            }
+                            this.Pub1.AddTR();
+                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                            this.Pub1.AddTD(" colspan=3", cb);
+                            this.Pub1.AddTREnd();
+                            continue;
+                        }
+                        else
+                        {
+                            if (isLeft == true)
+                                this.Pub1.AddTR();
+                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                            this.Pub1.AddTD(" colspan=1 ", cb);
+                        }
+                    }
+                    #endregion AppBoolean.
+
+                    #region AppInt Enum
+                    if (attr.MyDataType == DataType.AppInt && attr.LGType == FieldTypeS.Enum)
+                    {
+                        if (attr.UIContralType == UIContralType.DDL)
+                        {
+                            if (isLeft == true)
+                                this.Pub1.AddTR();
+                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                            DDL ddle = new DDL();
+                            ddle.ID = "DDL_" + attr.KeyOfEn;
+                            ddle.BindSysEnum(attr.UIBindKey);
+                            ddle.SetSelectItem(attr.DefVal);
+                            ddle.Enabled = attr.UIIsEnable;
+                            this.Pub1.AddTD("colspan=" + attr.ColSpan, ddle);
+                        }
+
+                        if (attr.UIContralType == UIContralType.RadioBtn)
+                        {
+                            if (attr.ColSpan == 1)
                             {
                                 if (isLeft == true)
                                     this.Pub1.AddTR();
+
                                 this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                DDL ddle = new DDL();
-                                ddle.ID = "DDL_" + attr.KeyOfEn;
-                                ddle.BindSysEnum(attr.UIBindKey);
-                                ddle.SetSelectItem(attr.DefVal);
-                                ddle.Enabled = attr.UIIsEnable;
-                                this.Pub1.AddTD("colspan=" + attr.ColSpan, ddle);
-                            }
-                            else
-                            {
-                                if (attr.ColSpan == 1)
+                                this.Pub1.AddTDBegin();
+                                SysEnums ses = new SysEnums(attr.UIBindKey);
+                                foreach (SysEnum item in ses)
                                 {
-                                    if (isLeft == true)
-                                        this.Pub1.AddTR();
-
-                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                    this.Pub1.AddTDBegin();
-                                    SysEnums ses = new SysEnums(attr.UIBindKey);
-                                    foreach (SysEnum item in ses)
-                                    {
-                                        RadioButton rb = new RadioButton();
-                                        rb.ID = "RB_" + attr.KeyOfEn + "_" + item.IntKey;
-                                        rb.Text = item.Lab;
-                                        if (item.IntKey.ToString() == attr.DefVal)
-                                            rb.Checked = true;
-                                        else
-                                            rb.Checked = false;
-                                        rb.GroupName = item.EnumKey + attr.KeyOfEn;
-                                        this.Pub1.Add(rb);
-                                        if (attr.RBShowModel == 1)
-                                            this.Pub1.AddBR();
-                                    }
-                                    this.Pub1.AddTDEnd();
+                                    RadioButton rb = new RadioButton();
+                                    rb.ID = "RB_" + attr.KeyOfEn + "_" + item.IntKey;
+                                    rb.Text = item.Lab;
+                                    if (item.IntKey.ToString() == attr.DefVal)
+                                        rb.Checked = true;
+                                    else
+                                        rb.Checked = false;
+                                    rb.GroupName = item.EnumKey + attr.KeyOfEn;
+                                    this.Pub1.Add(rb);
+                                    if (attr.RBShowModel == 1)
+                                        this.Pub1.AddBR();
                                 }
-
-                                if (attr.ColSpan == 3)
-                                {
-                                    if (isLeft == false)
-                                    {
-                                        /*补充空白行.*/
-                                        this.Pub1.AddTD();
-                                        this.Pub1.AddTD();
-                                        this.Pub1.AddTREnd();
-                                        isLeft = true;
-                                    }
-
-                                    this.Pub1.AddTR();
-                                    this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                    this.Pub1.AddTDBegin("colspan=3");
-                                    SysEnums ses = new SysEnums(attr.UIBindKey);
-                                    foreach (SysEnum item in ses)
-                                    {
-                                        RadioButton rb = new RadioButton();
-                                        rb.ID = "RB_" + attr.KeyOfEn + "_" + item.IntKey;
-                                        rb.Text = item.Lab;
-                                        if (item.IntKey.ToString() == attr.DefVal)
-                                            rb.Checked = true;
-                                        else
-                                            rb.Checked = false;
-                                        rb.GroupName = item.EnumKey + attr.KeyOfEn;
-                                        this.Pub1.Add(rb);
-                                        if (attr.RBShowModel == 1)
-                                            this.Pub1.AddBR();
-                                    }
-                                    this.Pub1.AddTDEnd();
-                                    this.Pub1.AddTREnd();
-                                }
+                                this.Pub1.AddTDEnd();
                             }
 
-                            if (attr.ColSpan == 4)
+                            if (attr.ColSpan == 3)
                             {
                                 if (isLeft == false)
                                 {
@@ -789,9 +742,8 @@ namespace CCFlow.WF.MapDef
                                 }
 
                                 this.Pub1.AddTR();
-                                this.Pub1.AddTDBegin("colspan=4");
-                                this.Pub1.Add(this.GenerLab(attr, i, count));
-
+                                this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                                this.Pub1.AddTDBegin("colspan=3");
                                 SysEnums ses = new SysEnums(attr.UIBindKey);
                                 foreach (SysEnum item in ses)
                                 {
@@ -809,51 +761,88 @@ namespace CCFlow.WF.MapDef
                                 }
                                 this.Pub1.AddTDEnd();
                                 this.Pub1.AddTREnd();
-                            }
-                            break;
-                        case FieldTypeS.FK:
-                            DDL ddlFK = new DDL();
-                            ddlFK.ID = "DDL_" + attr.KeyOfEn;
-                         
-                                EntitiesNoName ens = attr.HisEntitiesNoName;
-                                ens.RetrieveAll();
-                                ddlFK.BindEntities(ens);
-                                ddlFK.SetSelectItem(attr.DefVal);
-                           
-
-                            ddlFK.Enabled = attr.UIIsEnable;
-                            if (attr.ColSpan == 4 || attr.ColSpan == 3)
-                            {
-                                if (isLeft == false)
-                                {
-                                    this.Pub1.AddTD("colspan=2", "");
-                                    this.Pub1.AddTREnd();
-                                    isLeft = true;
-                                }
-                                this.Pub1.AddTR();
-                                this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                this.Pub1.AddTD(" colspan=3", ddlFK);
-                                this.Pub1.AddTREnd();
                                 continue;
                             }
-                            else
-                            {
-                                if (isLeft == true)
-                                    this.Pub1.AddTR();
+                        }
 
-                                this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
-                                this.Pub1.AddTD("colspan=1", ddlFK);
-                            }
-                            break;
-                        default:
-                            break;
                     }
-                    #endregion 增加控件.
+                    #endregion AppInt Enum
+
+                    #region AppDouble  AppFloat AppInt .
+                    if (attr.MyDataType == DataType.AppDouble ||
+                        attr.MyDataType == DataType.AppFloat  ||
+                        (attr.MyDataType == DataType.AppInt && attr.LGType != FieldTypeS.Enum)
+                    )
+                    {
+                        if (isLeft == true)
+                            this.Pub1.AddTR();
+
+                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                        tb.ShowType = TBType.Num;
+                        tb.Text = attr.DefVal;
+                        if (attr.IsNull)
+                            tb.Text = "";
+                        this.Pub1.AddTD(" colspan=1", tb);
+                    }
+                    #endregion AppDouble  AppFloat AppInt .
+
+                    #region AppMoney  AppRate  .
+                    if (attr.MyDataType == DataType.AppMoney || attr.MyDataType == DataType.AppRate  )
+                    {
+                        if (isLeft == true)
+                            this.Pub1.AddTR();
+
+                        this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                        tb.ShowType = TBType.Moneny;
+                        tb.Text = attr.DefVal;
+                        if (attr.IsNull)
+                            tb.Text = "";
+                        this.Pub1.AddTD("colspan=1", tb);
+
+                    }
+                    #endregion  AppMoney  AppRate .
+
+                    #region FK 外键.
+                    if (attr.LGType == FieldTypeS.FK)
+                    {
+                        DDL ddlFK = new DDL();
+                        ddlFK.ID = "DDL_" + attr.KeyOfEn;
+
+                        EntitiesNoName ens = attr.HisEntitiesNoName;
+                        ens.RetrieveAll();
+                        ddlFK.BindEntities(ens);
+                        ddlFK.SetSelectItem(attr.DefVal);
+                        ddlFK.Enabled = attr.UIIsEnable;
+
+                        if (attr.ColSpan == 4 || attr.ColSpan == 3)
+                        {
+                            if (isLeft == false)
+                            {
+                                this.Pub1.AddTD("colspan=2", "");
+                                this.Pub1.AddTREnd();
+                                isLeft = true;
+                            }
+                            this.Pub1.AddTR();
+                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                            this.Pub1.AddTD(" colspan=3", ddlFK);
+                            this.Pub1.AddTREnd();
+                            continue;
+                        }
+
+                        if (attr.ColSpan == 1 || attr.ColSpan == 2)
+                        {
+                            if (isLeft == true)
+                                this.Pub1.AddTR();
+
+                            this.Pub1.AddTDDesc(this.GenerLab(attr, i, count));
+                            this.Pub1.AddTD("colspan=1", ddlFK);
+                        }
+                    }
+                    #endregion FK 外键.
 
                     if (isLeft == false)
-                    {
                         this.Pub1.AddTREnd();
-                    }
+
                     isLeft = !isLeft;
 
                 } // end循环字段分组.

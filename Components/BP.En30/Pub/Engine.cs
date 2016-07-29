@@ -910,7 +910,7 @@ namespace BP.Pub
                         else if (para.Contains(".") == true)
                             continue; /*有可能是明细表数据.*/
                         else
-                            str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
+                            str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para).Replace("\\","\\\\")));
                     }
                     catch (Exception ex)
                     {

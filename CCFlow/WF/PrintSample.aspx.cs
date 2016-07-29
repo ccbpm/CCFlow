@@ -1015,7 +1015,7 @@ namespace CCFlow.WF
                         /*傻瓜表单*/
                         MapFoolForm map = new MapFoolForm(nd.NodeFrmID);
 
-                        this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + ";height:" + map.TableHeight + "px;overflow-x:scroll;' >");
+                        this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight + "px;overflow-x:auto;' >");
                         this.UCEn1.BindColumn4(wk, nd.NodeFrmID); //, false, false, null);
                         if (wk.WorkEndInfo.Length > 2)
                             this.Pub3.Add(wk.WorkEndInfo);

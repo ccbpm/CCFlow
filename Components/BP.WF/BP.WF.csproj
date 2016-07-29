@@ -199,6 +199,7 @@
     <Compile Include="DTS\OrgInit_Ding.cs" />
     <Compile Include="DTS\OrgInit_NameOfPath.cs" />
     <Compile Include="DTS\OrgInit_WeiXinUserIcon.cs" />
+    <Compile Include="DTS\DocFieldAddLengthTo1000.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Service References\CCInterface\Reference.cs">

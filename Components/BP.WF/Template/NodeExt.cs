@@ -845,7 +845,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 字段相关功能（不显示在菜单里）
 
-
                 #region 表单设置.
                 rm = new RefMethod();
                 rm.Title = "表单方案";
@@ -866,6 +865,16 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "节点组件";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Components.png";
+                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Mobile.png";
+                rm.ClassMethodName = this.ToString() + ".DoFrmNodeComponent";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "表单设置";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "特别控件特别用户权限";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/SpecUserSpecFields.png";
                 rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
@@ -873,7 +882,6 @@ namespace BP.WF.Template
                 rm.GroupName = "表单设置";
                 map.AddRefMethod(rm);
                 #endregion 表单设置.
-
 
                 #region 考核.
                 rm = new RefMethod();
@@ -1022,6 +1030,15 @@ namespace BP.WF.Template
         }
         #endregion 
 
+        #region 表单相关.
+        /// <summary>
+        /// 节点组件
+        /// </summary>
+        /// <returns></returns>
+        public string DoFrmNodeComponent()
+        {
+            return Glo.CCFlowAppPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK="+this.NodeID+"&t=" + DataType.CurrentDataTime;
+        }
         /// <summary>
         /// 特别用户特殊字段权限.
         /// </summary>
@@ -1030,16 +1047,6 @@ namespace BP.WF.Template
         {
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/SepcFiledsSepcUsers.aspx?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
                    this.NodeID + "&FK_Node="+this.NodeID+"&t=" + DataType.CurrentDataTime;
-        }
-
-        /// <summary>
-        /// 节点运行模式.
-        /// </summary>
-        /// <returns></returns>
-        public string DoRunModel()
-        {
-            return Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeRunModel.aspx?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
-                   this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 排序字段顺序
@@ -1050,6 +1057,18 @@ namespace BP.WF.Template
             return Glo.CCFlowAppPath + "WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
                    this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
+        #endregion 表单相关.
+
+        /// <summary>
+        /// 节点运行模式.
+        /// </summary>
+        /// <returns></returns>
+        public string DoRunModel()
+        {
+            return Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeRunModel.aspx?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+                   this.NodeID + "&t=" + DataType.CurrentDataTime;
+        }
+      
         /// <summary>
         /// 集团部门树
         /// </summary>

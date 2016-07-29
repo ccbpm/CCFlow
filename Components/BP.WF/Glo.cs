@@ -253,7 +253,7 @@ namespace BP.WF
                     src.Insert();
                 #endregion 检查数据源.
 
-              
+
 
                 #region 其他.
                 // 更新 PassRate.
@@ -2336,15 +2336,16 @@ namespace BP.WF
                     try
                     {
                         gedtls = new GEDtls(dtl.No);
-                        gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
+                        if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
+                            continue;
+                        //gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
                     }
                     catch (Exception ex)
                     {
                         (gedtls.GetNewEntity as GEDtl).CheckPhysicsTable();
                     }
 
-                    dt =
-                        DBAccess.RunSQLReturnTable(sql.StartsWith(dtl.No + "=")
+                    dt = DBAccess.RunSQLReturnTable(sql.StartsWith(dtl.No + "=")
                                                        ? sql.Substring((dtl.No + "=").Length)
                                                        : sql);
                     foreach (DataRow dr in dt.Rows)

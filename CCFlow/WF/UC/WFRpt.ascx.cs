@@ -304,7 +304,7 @@ namespace CCFlow.WF.UC
                 {
                     MapFoolForm map = new MapFoolForm(nd.NodeFrmID);
 
-                    this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + ";height:" + map.TableHeight+ ";overflow-x:scroll;' >");
+                    this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight+ "px;overflow-x:scroll;' >");
                     /*傻瓜表单*/
                     this.UCEn1.IsReadonly = true;
                     this.UCEn1.BindColumn4(wk, nd.NodeFrmID); //, false, false, null);

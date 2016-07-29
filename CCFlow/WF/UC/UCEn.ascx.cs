@@ -706,7 +706,7 @@ namespace CCFlow.WF.UC
             this.LoadData(mattrs, en);
             string appPath = CCFlowAppPath; //this.Page.Request.ApplicationPath;
              
-            this.Add("\t\n<Table style='width:" + mff.TableWidth + ";' align=left >");
+            this.Add("\t\n<Table style='width:" + mff.TableWidth + "px;' align=left >");
 
             string src, paras;
 
@@ -999,7 +999,7 @@ namespace CCFlow.WF.UC
                 #endregion
 
                 this.AddTR();
-                this.AddTD("colspan=4 style='width:" + mff.TableWidth + "' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
+                this.AddTD("colspan=4 style='width:" + mff.TableWidth + "px;' class=GroupField valign='top' align=left  onclick=\"GroupBarClick('" + gf.Idx + "')\"  ", "<div style='text-align:left; float:left'>&nbsp;<img src='" + CCFlowAppPath + "WF/Style/Min.gif' alert='Min' id='Img" + gf.Idx + "' border=0 />&nbsp;" + gf.Lab + "</div><div style='text-align:right; float:right'></div>");
                 this.AddTREnd();
 
                 bool isLeft = true;

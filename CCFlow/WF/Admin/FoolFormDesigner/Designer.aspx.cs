@@ -123,7 +123,7 @@ namespace CCFlow.WF.MapDef
             MapAttrs mattrs = new MapAttrs(md.No);
             int count = mattrs.Count;
 
-            this.Pub1.Add("<div style='width:" + md.TableWidth + ";background-color:white;border:1px solid #666;padding:5px;margin:auto;' align='center'>");
+            this.Pub1.Add("<div style='width:" + md.TableWidth + "px;background-color:white;border:1px solid #666;padding:5px;margin:auto;' align='center'>");
             this.Pub1.Add("\t\n<Table style='width:98%;border:1px;padding:5px; padding-top:11px;' >");
 
             int myidx = 0;

@@ -129,6 +129,7 @@
     <Content Include="ClientBin\CCFlowDesigner.xap" />
     <Content Include="ClientBin\CCFlowDesignerSingle.xap" />
     <Content Include="ClientBin\CCFormDesigner.xap" />
+    <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
@@ -768,11 +769,10 @@
     <Content Include="WF\Admin\FlowDB\流程按月分析.png" />
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\FieldTypeListDDL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SQLList.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx" />
     <Content Include="WF\Admin\Img\PK.png" />
@@ -1294,7 +1294,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFSQL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SFWS.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx" />
     <Content Include="WF\Messages.aspx" />
     <Content Include="WF\MessagesReplay.aspx" />
@@ -2154,6 +2153,7 @@
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />
     <Content Include="WF\WorkOpt\Forward.aspx" />
+    <Content Include="WF\WorkOpt\FTC.aspx" />
     <Content Include="WF\WorkOpt\GridEdit.aspx" />
     <Content Include="WF\WorkOpt\HungUp.aspx" />
     <Content Include="WF\Img\Action\Cancel.png" />
@@ -2653,8 +2653,10 @@
     <Content Include="WF\WorkOpt\StartGuideFrms.aspx" />
     <Content Include="WF\WorkOpt\StopFlow.aspx" />
     <Content Include="WF\WorkOpt\SubFlow.aspx" />
+    <Content Include="WF\WorkOpt\Thread.aspx" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.aspx" />
+    <Content Include="WF\WorkOpt\Track.aspx" />
     <Content Include="WF\WorkOpt\TrackChart.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
     <Content Include="WF\WorkOpt\UnPassDtl.aspx" />
@@ -3531,6 +3533,13 @@
     <Compile Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx.designer.cs">
       <DependentUpon>SepcFiledsSepcUsersDtl.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Admin\AttrNode\SortingMapAttrs.aspx.cs">
+      <DependentUpon>SortingMapAttrs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\AttrNode\SortingMapAttrs.aspx.designer.cs">
+      <DependentUpon>SortingMapAttrs.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Admin\AttrNode\SubFlows.aspx.cs">
       <DependentUpon>SubFlows.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -4083,13 +4092,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx.designer.cs">
       <DependentUpon>FieldTypeList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeListDDL.aspx.cs">
-      <DependentUpon>FieldTypeListDDL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeListDDL.aspx.designer.cs">
-      <DependentUpon>FieldTypeListDDL.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx.cs">
       <DependentUpon>InputCheck.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -4111,12 +4113,12 @@
     <Compile Include="WF\Admin\FoolFormDesigner\SFList.aspx.designer.cs">
       <DependentUpon>SFList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SQLList.aspx.cs">
-      <DependentUpon>SQLList.aspx</DependentUpon>
+    <Compile Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx.cs">
+      <DependentUpon>SFSQLDataView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SQLList.aspx.designer.cs">
-      <DependentUpon>SQLList.aspx</DependentUpon>
+    <Compile Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx.designer.cs">
+      <DependentUpon>SFSQLDataView.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.cs">
       <DependentUpon>SysEnum.aspx</DependentUpon>
@@ -5075,13 +5077,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\EditSQL.aspx.designer.cs">
       <DependentUpon>EditSQL.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFWS.aspx.cs">
-      <DependentUpon>SFWS.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFWS.aspx.designer.cs">
-      <DependentUpon>SFWS.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx.cs">
       <DependentUpon>SlnCopy.aspx</DependentUpon>
@@ -6924,6 +6919,13 @@
     <Compile Include="WF\WorkOpt\Forward.aspx.designer.cs">
       <DependentUpon>Forward.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\WorkOpt\FTC.aspx.cs">
+      <DependentUpon>FTC.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\WorkOpt\FTC.aspx.designer.cs">
+      <DependentUpon>FTC.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\WorkOpt\GridData.ashx.cs">
       <DependentUpon>GridData.ashx</DependentUpon>
     </Compile>
@@ -7642,6 +7644,13 @@
     <Compile Include="WF\WorkOpt\SubFlow.aspx.designer.cs">
       <DependentUpon>SubFlow.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\WorkOpt\Thread.aspx.cs">
+      <DependentUpon>Thread.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\WorkOpt\Thread.aspx.designer.cs">
+      <DependentUpon>Thread.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\WorkOpt\ThreadDtl.aspx.cs">
       <DependentUpon>ThreadDtl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7655,6 +7664,13 @@
     </Compile>
     <Compile Include="WF\WorkOpt\ToNodes.aspx.designer.cs">
       <DependentUpon>ToNodes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\Track.aspx.cs">
+      <DependentUpon>Track.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\WorkOpt\Track.aspx.designer.cs">
+      <DependentUpon>Track.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\TrackChart.aspx.cs">
       <DependentUpon>TrackChart.aspx</DependentUpon>
@@ -7825,7 +7841,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49520</DevelopmentServerPort>
+          <DevelopmentServerPort>16861</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

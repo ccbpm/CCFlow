@@ -821,7 +821,7 @@ namespace CCFlow.WF.UC
                         }
 
                         this.AddTR();
-                        this.AddTD("colspan=4 class=GroupField valign='top'  style='align:left' ", fwc.FWCLab);
+                        this.AddTD("colspan=4 class=GroupField style='align:left' ", fwc.FWCLab);
                         this.AddTREnd();
 
 
@@ -838,9 +838,7 @@ namespace CCFlow.WF.UC
                             paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
 
                         if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Readonly)
-                        {
                             src += "&DoType=View";
-                        }
                         else
                         {
                             fwcOnload = "onload= 'WC" + fwc.No + "load();'";
@@ -924,7 +922,6 @@ namespace CCFlow.WF.UC
                         continue;
                     case GroupCtrlType.Thread: //子线程.
                         #region 子线程.
-
                         FrmThread thread = new FrmThread(enName);
                         if (thread.FrmThreadSta == FrmThreadSta.Disable)
                         {
@@ -933,7 +930,7 @@ namespace CCFlow.WF.UC
                         }
 
                         this.AddTR();
-                        this.AddTD("colspan=4 class=GroupField valign='top'  style='align:left' ", gf.Lab);
+                        this.AddTD("colspan=4 class=GroupField  style='align:left' ", gf.Lab);
                         this.AddTREnd();
 
                         this.AddTR();
@@ -952,11 +949,11 @@ namespace CCFlow.WF.UC
 
                         this.AddTDEnd();
                         this.AddTREnd();
-                        #endregion 轨迹图.
+                        #endregion 子线程.
                         continue;
                     case GroupCtrlType.FTC: //流转自定义.
-                        #region 流转自定义.
 
+                        #region 审核组件.
                         FrmTransferCustom ftc = new FrmTransferCustom(enName);
                         if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.Disable)
                         {
@@ -964,20 +961,37 @@ namespace CCFlow.WF.UC
                             continue;
                         }
 
-                        //myidx = rowIdx + 10;
-                        //this.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFTC('" + ftc.NodeID + "')\" >" + ftc.FrmTransferCustomLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
-                        //this.AddTREnd();
+                        this.AddTR();
+                        this.AddTD("colspan=4 class=GroupField style='align:left' ", ftc.FrmTransferCustomLab);
+                        this.AddTREnd();
 
-                        //myidx++;
-                        //this.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        //this.Add("<TD colspan=" + md.TableCol + " ID='TDFTC" + ftc.No + "' height='" + ftc.FrmTransferCustom_H + "px' width='100%' >");
+                        this.AddTR();
+                        this.Add("<TD height='" + ftc.FrmTransferCustom_H+ "'  colspan=4 >");
 
-                        //src = "NodeFrmComponents.aspx?DoType=FrmFTC&FK_MapData=" + ftc.NodeID;
-                        //this.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ftc.FrmTransferCustom_H + "px' scrolling=auto  /></iframe>");
-                        //this.AddTDEnd();
-                        //this.AddTREnd();
-                        #endregion 流转自定义.
+                        src = appPath + "WF/WorkOpt/FTC.aspx?s=2";
+                        fwcOnload = "";
+                        paras = this.RequestParas;
+                        if (paras.Contains("FID=") == false)
+                            paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
+
+                        if (paras.Contains("OID=") == false)
+                            paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
+
+                        if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.ReadOnly)
+                            src += "&DoType=View";
+                        else
+                        {
+                            fwcOnload = "onload= 'FTC" + ftc.No + "load();'";
+                            AddLoadFunction("FTC" + ftc.No, "blur", "SaveDtl");
+                        }
+
+                        src += "&r=q" + paras;
+                        this.Add("<iframe ID='FTC" + ftc.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='100%'  scrolling=auto/></iframe>");
+
+                        this.AddTDEnd();
+                        this.AddTREnd();
+                        #endregion  流转自定义
+                         
                         continue;
                     default:
                         break;
@@ -1488,13 +1502,15 @@ namespace CCFlow.WF.UC
 
                             this.AddTDDesc(attr.Name);
                             this.AddTD("colspan=1", ddlFK);
+
                         }
                     }
                     #endregion FK 外键.
 
+
+
                     if (isLeft == false)
                         this.AddTREnd();
-
                     isLeft = !isLeft;
 
                 } // end循环字段分组.
@@ -1769,13 +1785,13 @@ namespace CCFlow.WF.UC
                 {
                     if (dtl.IsUpdate == true || dtl.IsInsert == true)
                     {
-                        scriptSaveDtl += "\t\n try{  ";
+                        scriptSaveDtl += "\t\n try {  ";
 
                         if (dtl.HisDtlShowModel == DtlShowModel.Table)
                             scriptSaveDtl += "\t\n  SaveDtl('" + dtl.No + "'); ";
 
                         scriptSaveDtl += "\t\n } catch(e) { ";
-                        scriptSaveDtl += "\t\n  alert(e.name  + e.message);  return false;";
+                        scriptSaveDtl += "\t\n  alert( e.name  + e.message );  return false;";
                         scriptSaveDtl += "\t\n } ";
                     }
                 }
@@ -2141,10 +2157,6 @@ namespace CCFlow.WF.UC
                     }
                 }
                 #endregion 在处理其它。
-
-
-
-
             }
 
             #region 保存时处理正则表达式验证

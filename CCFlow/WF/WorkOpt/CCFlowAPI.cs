@@ -1705,7 +1705,7 @@ public class CCFlowAPI : CCForm
             this.LetUserLogin(userNo, sid);
 
             // 获取接收人DataSet
-            DataSet ds = BP.WF.Dev2Interface.WorkOpt_AccepterDB(fk_flow, fk_node, workID, fid);
+            DataSet ds = BP.WF.Dev2Interface.WorkOpt_AccepterDB(fk_node, workID, fid);
 
             return BP.Tools.FormatToJson.ToJson(ds);
         }

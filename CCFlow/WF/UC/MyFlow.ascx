@@ -11,7 +11,7 @@
 </div>
 
 <div style="margin: 0; padding: 0;" id="D">
-    <div style="width: <%=Width %>;" class="topBar" id="topBar">
+    <div style="width: <%=this.Width %>px;" class="topBar" id="topBar">
         <uc3:ToolBar ID="ToolBar1" runat="server" />
         <div style="float:right; font-weight:bold; font-size:17px; vertical-align:middle; margin:5px;" > <%= this.currND.Tip%>
         </div>

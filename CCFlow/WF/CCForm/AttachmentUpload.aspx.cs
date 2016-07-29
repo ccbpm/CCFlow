@@ -813,9 +813,6 @@ namespace CCFlow.WF.CCForm
 
                     if (string.IsNullOrEmpty(realFileExts))
                         realFileExts = "*.*";
-                    this.Page.RegisterClientScriptBlock("jquery1.7.2",
-                    "<script language='JavaScript' src='" + BP.WF.Glo.CCFlowAppPath + "WF/Scripts/jquery-1.7.2.min.js' ></script>");
-                    ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "jquery1.7.2", BP.WF.Glo.CCFlowAppPath + "WF/Scripts/jquery-1.7.2.min.js");
                     ScriptManager.RegisterClientScriptInclude(this, this.GetType(), "uploadify", "" + BP.WF.Glo.CCFlowAppPath + "WF/Scripts/Jquery-plug/fileupload/jquery.uploadify.min.js");
                     this.Page.RegisterClientScriptBlock("jqueryUpSwfcss",
                     "<link href='" + BP.WF.Glo.CCFlowAppPath + "WF/Scripts/Jquery-plug/fileupload/uploadify.css' rel='stylesheet' type='text/css' />");

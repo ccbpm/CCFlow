@@ -53,8 +53,8 @@ namespace BP.WF.Template
             {
                 int i = this.GetValIntByKey(MapDataAttr.TableWidth);
                 if (i <= 50)
-                    return "900px";
-                return i + "px";
+                    return "900";
+                return i.ToString();
             }
         }
         /// <summary>
@@ -66,8 +66,8 @@ namespace BP.WF.Template
             {
                 int i = this.GetValIntByKey(MapDataAttr.TableHeight);
                 if (i <= 500)
-                    return "900px";
-                return i + "px";
+                    return "900";
+                return i.ToString();
             }
         }
         /// <summary>
@@ -356,14 +356,14 @@ namespace BP.WF.Template
             foreach (MapDtl dtl in dtls)
             {
                 GroupField gf = new GroupField();
-                if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) == true)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, dtl.No) == true && !string.IsNullOrEmpty(gf.CtrlType))
                     continue;
 
                 gf.Lab = dtl.Name;
                 gf.CtrlID =  dtl.No;
                 gf.CtrlType = "Dtl";
                 gf.EnName = dtl.FK_MapData;
-                gf.Insert();
+                gf.DirectSave();
 
                 str += "@为从表" + dtl.Name + " 增加了分组.";
             }
@@ -373,7 +373,7 @@ namespace BP.WF.Template
             foreach (MapFrame fram in frams)
             {
                 GroupField gf = new GroupField();
-                if (gf.IsExit(GroupFieldAttr.CtrlID, fram.MyPK) == true)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, fram.MyPK) == true && !string.IsNullOrEmpty(gf.CtrlType))
                     continue;
 
                 gf.Lab = fram.Name;
@@ -392,7 +392,7 @@ namespace BP.WF.Template
             foreach (FrmAttachment ath in aths)
             {
                 GroupField gf = new GroupField();
-                if (gf.IsExit(GroupFieldAttr.CtrlID, ath.MyPK) == true)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, ath.MyPK) == true && !string.IsNullOrEmpty(gf.CtrlType))
                     continue;
 
                 gf.Lab = ath.Name;

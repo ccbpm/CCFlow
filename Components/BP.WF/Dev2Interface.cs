@@ -679,7 +679,6 @@ namespace BP.WF
             ps.SQL = "SELECT * FROM ND" + int.Parse(fk_flow) + "Rpt WHERE FlowStarter=" + dbstr + "FlowStarter  ORDER BY RDT";
             ps.Add(GERptAttr.FlowStarter, userNo);
             return DBAccess.RunSQLReturnTable(ps);
-
         }
         #endregion 获取流程事例的轨迹图
 
@@ -1929,7 +1928,7 @@ namespace BP.WF
         }
         #endregion
 
-        #region 获取当前可以退回的节点。
+        #region 工作部件的数据源获取。
         /// <summary>
         /// 获取当前节点可以退回的节点
         /// </summary>
@@ -2077,7 +2076,26 @@ namespace BP.WF
                 throw new Exception("@没有计算出来要退回的节点，请管理员确认节点退回规则是否合理？");
             return dt;
         }
-        #endregion 获取当前可以退回的节点
+        /// <summary>
+        /// 获得指定节点的可以选择的接受人
+        /// </summary>
+        /// <param name="fk_node">节点编号</param>
+        /// <returns>返回No,Name,FK_Dept两个列.</returns>
+        public static DataTable DB_SelectAccepter(int fk_node)
+        {
+             Selector en = new Selector(fk_node);
+
+             switch (en.SelectorModel)
+             {
+                 case SelectorModel.Dept:
+                     break;
+                 default:
+                     break;
+             }
+
+            return null;
+        }
+        #endregion 工作部件的数据源获取
 
         #region 获取当前操作员的在途工作
 
@@ -7226,35 +7244,30 @@ namespace BP.WF
         /// <summary>
         /// 获得接收人的数据源
         /// </summary>
-        /// <param name="FK_Flow">流程编号</param>
-        /// <param name="ToNode">到达节点ID</param>
+        /// <param name="nodeID">指定节点</param>
         /// <param name="WorkID">工作ID</param>
         /// <param name="FID">流程ID</param>
         /// <returns></returns>
-        public static DataSet WorkOpt_AccepterDB(string FK_Flow, int ToNode, Int64 WorkID, Int64 FID)
+        public static DataSet WorkOpt_AccepterDB(int nodeID, Int64 WorkID, Int64 FID=0)
         {
             DataSet ds = new DataSet();
-            Selector MySelector = new Selector(ToNode);
-            switch (MySelector.SelectorModel)
+
+            Selector en = new Selector(nodeID);
+            switch (en.SelectorModel)
             {
                 case SelectorModel.Station:
-                    DataTable dt = WorkOpt_Accepter_ByStation(ToNode);
+                    DataTable dt = WorkOpt_Accepter_ByStation(nodeID);
                     dt.TableName = "Port_Emp";
                     ds.Tables.Add(dt);
-                    //部门表
-                    // string sql = "SELECT * FROM Port_Dept ";
-                    // DataTable dt1 = DBAccess.RunSQLReturnTable(sql);
-                    // dt1.TableName = "Port_Dept";
-                    // ds.Tables.Add(dt1);
                     break;
                 case SelectorModel.SQL:
-                    ds = WorkOpt_Accepter_BySQL(ToNode);
+                    ds = WorkOpt_Accepter_BySQL(nodeID);
                     break;
                 case SelectorModel.Dept:
-                    ds = WorkOpt_Accepter_ByDept(ToNode);
+                    ds = WorkOpt_Accepter_ByDept(nodeID);
                     break;
                 case SelectorModel.Emp:
-                    ds = WorkOpt_Accepter_ByEmp(ToNode);
+                    ds = WorkOpt_Accepter_ByEmp(nodeID);
                     break;
                 case SelectorModel.Url:
                 default:
@@ -7265,17 +7278,17 @@ namespace BP.WF
         /// <summary>
         /// 获取节点绑定岗位人员
         /// </summary>
-        /// <param name="ToNode"></param>
+        /// <param name="nodeID">指定的节点</param>
         /// <returns></returns>
-        public static DataTable WorkOpt_Accepter_ByStation(int ToNode)
+        private static DataTable WorkOpt_Accepter_ByStation(int nodeID)
         {
-            if (ToNode == 0)
+            if (nodeID == 0)
                 throw new Exception("@流程设计错误，没有转向的节点。举例说明: 当前是A节点。如果您在A点的属性里启用了[接受人]按钮，那么他的转向节点集合中(就是A可以转到的节点集合比如:A到B，A到C, 那么B,C节点就是转向节点集合)，必须有一个节点是的节点属性的[访问规则]设置为[由上一步发送人员选择]");
 
-            NodeStations stas = new NodeStations(ToNode);
+            NodeStations stas = new NodeStations(nodeID);
             if (stas.Count == 0)
             {
-                BP.WF.Node toNd = new BP.WF.Node(ToNode);
+                BP.WF.Node toNd = new BP.WF.Node(nodeID);
                 throw new Exception("@流程设计错误：设计员没有设计节点[" + toNd.Name + "]，接受人的岗位范围。");
             }
             // 优先解决本部门的问题。
@@ -7284,7 +7297,7 @@ namespace BP.WF
             {
                 sql = "SELECT A.No,A.Name, A.FK_Dept, B.Name as DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND a.NO IN ( ";
                 sql += "SELECT FK_EMP FROM Port_DeptEmpStation WHERE FK_STATION ";
-                sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + ToNode + ") ";
+                sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
                 sql += ") AND a.No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
                 sql += " ORDER BY FK_DEPT ";
             }
@@ -7292,10 +7305,11 @@ namespace BP.WF
             {
                 sql = "SELECT A.No,A.Name, A.FK_Dept, B.Name as DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND a.NO IN ( ";
                 sql += "SELECT FK_EMP FROM " + BP.WF.Glo.EmpStation + " WHERE FK_STATION ";
-                sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + ToNode + ") ";
+                sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
                 sql += ") AND a.No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
                 sql += " ORDER BY FK_DEPT ";
             }
+
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count != 0)
                 return dt;
@@ -7303,18 +7317,17 @@ namespace BP.WF
             //组织结构中所有岗位人员
             sql = "SELECT A.No,A.Name, A.FK_Dept, B.Name as DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND a.NO IN ( ";
             sql += "SELECT FK_EMP FROM " + BP.WF.Glo.EmpStation + " WHERE FK_STATION ";
-            sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + ToNode + ") ";
+            sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
             sql += ") ORDER BY FK_DEPT ";
             return BP.DA.DBAccess.RunSQLReturnTable(sql);
         }
-
         /// <summary>
         /// 按sql方式
         /// </summary>
-        public static DataSet WorkOpt_Accepter_BySQL(int ToNode)
+        private static DataSet WorkOpt_Accepter_BySQL(int nodeID)
         {
             DataSet ds = new DataSet();
-            Selector MySelector = new Selector(ToNode);
+            Selector MySelector = new Selector(nodeID);
             string sqlGroup = MySelector.SelectorP1;
             sqlGroup = sqlGroup.Replace("@WebUser.No", WebUser.No);
             sqlGroup = sqlGroup.Replace("@WebUser.Name", WebUser.Name);
@@ -7340,11 +7353,11 @@ namespace BP.WF
         /// </summary>
         /// <param name="ToNode"></param>
         /// <returns></returns>
-        public static DataSet WorkOpt_Accepter_ByDept(int ToNode)
+        private static DataSet WorkOpt_Accepter_ByDept(int nodeID)
         {
             DataSet ds = new DataSet();
-            string sqlGroup = "SELECT No,Name FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node='" + ToNode + "')";
-            string sqlDB = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node='" + ToNode + "')";
+            string sqlGroup = "SELECT No,Name FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node='" + nodeID + "')";
+            string sqlDB = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node='" + nodeID + "')";
 
             DataTable dtGroup = DBAccess.RunSQLReturnTable(sqlGroup);
             dtGroup.TableName = "Port_Dept";
@@ -7360,19 +7373,19 @@ namespace BP.WF
         /// <summary>
         /// 按BindByEmp 方式
         /// </summary>
-        public static DataSet WorkOpt_Accepter_ByEmp(int ToNode)
+        private static DataSet WorkOpt_Accepter_ByEmp(int nodeID)
         {
-            string sqlGroup = "SELECT No,Name FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM Port_Emp WHERE No in(SELECT FK_EMP FROM WF_NodeEmp WHERE FK_Node='" + ToNode + "'))";
-            string sqlDB = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE No in (SELECT FK_EMP FROM WF_NodeEmp WHERE FK_Node='" + ToNode + "')";
+            string sqlGroup = "SELECT No,Name FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM Port_Emp WHERE No in(SELECT FK_EMP FROM WF_NodeEmp WHERE FK_Node='" + nodeID + "'))";
+            string sqlDB = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE No in (SELECT FK_EMP FROM WF_NodeEmp WHERE FK_Node='" + nodeID + "')";
 
             DataSet ds = new DataSet();
             DataTable dtGroup = DBAccess.RunSQLReturnTable(sqlGroup);
             dtGroup.TableName = "Port_Dept";
             ds.Tables.Add(dtGroup);
+
             DataTable dtDB = DBAccess.RunSQLReturnTable(sqlDB);
             dtDB.TableName = "Port_Emp";
             ds.Tables.Add(dtDB);
-
             return ds;
         }
 
@@ -7384,14 +7397,14 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         /// <param name="emps">指定的人员集合zhangsan,lisi,wangwu</param>
         /// <param name="isNextTime">是否下次自动设置</param>
-        public static void WorkOpt_SetAccepter(int toNode, Int64 workid, Int64 fid, string emps, bool isNextTime)
+        public static void WorkOpt_SetAccepter(int nodeID, Int64 workid, Int64 fid, string emps, bool isNextTime)
         {
             SelectAccpers ens = new SelectAccpers();
-            ens.Delete(SelectAccperAttr.FK_Node, toNode,
+            ens.Delete(SelectAccperAttr.FK_Node, nodeID,
                 SelectAccperAttr.WorkID, workid);
 
             //下次是否记忆选择，清空掉。
-            string sql = "UPDATE WF_SelectAccper SET " + SelectAccperAttr.IsRemember + " = 0 WHERE Rec='" + WebUser.No + "' AND IsRemember=1 AND FK_Node=" + toNode;
+            string sql = "UPDATE WF_SelectAccper SET " + SelectAccperAttr.IsRemember + " = 0 WHERE Rec='" + WebUser.No + "' AND IsRemember=1 AND FK_Node=" + nodeID;
             BP.DA.DBAccess.RunSQL(sql);
 
             //开始执行保存.
@@ -7402,9 +7415,9 @@ namespace BP.WF
                     continue;
 
                 SelectAccper en = new SelectAccper();
-                en.MyPK = toNode + "_" + workid + "_" + str;
+                en.MyPK = nodeID + "_" + workid + "_" + str;
                 en.FK_Emp = str;
-                en.FK_Node = toNode;
+                en.FK_Node = nodeID;
                 en.WorkID = workid;
                 en.Rec = WebUser.No;
                 en.IsRemember = isNextTime;

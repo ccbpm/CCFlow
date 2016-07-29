@@ -359,7 +359,7 @@
     <Compile Include="Rpt\RptEmp.cs" />
     <Compile Include="Template\WorkflowDefintionManager.cs" />
     <Compile Include="Template\PushMsg.cs" />
-    <Compile Include="Template\TransferCustom.cs" />
+    <Compile Include="WF\TransferCustom.cs" />
     <Compile Include="DINGTalk\WeinXinModel.cs" />
     <Compile Include="DINGTalk\WeiXin.cs" />
     <Compile Include="DINGTalk\WXBizMsgCrypt.cs" />

@@ -16,10 +16,10 @@ namespace BP.WF
     {
         /// <summary>
         /// 按照流程定义的模式执行(自动模式)
-        /// </summary>
+        /// </summary>s
         ByCCBPMDefine,
         /// <summary>
-        /// 按照工作人员的设置执行(人工干涉模式)
+        /// 按照工作人员的设置执行(人工干涉模式,人工定义模式.)
         /// </summary>
         ByWorkerSet
     }

@@ -204,14 +204,13 @@ namespace BP.WF
             return str;
         }
         /// <summary>
-        /// 产生它的工作者.
+        /// 产生它的工作者
         /// </summary>
-        /// <param name="town"></param>
-        /// <returns></returns>
+        /// <param name="town">WorkNode</param>
+        /// <returns>产生的工作人员</returns>
         public GenerWorkerLists Func_GenerWorkerLists(WorkNode town)
         {
             this.town = town;
-
             DataTable dt = new DataTable();
             dt.Columns.Add("No", typeof(string));
             string sql;
@@ -242,17 +241,12 @@ namespace BP.WF
                 return InitWorkerLists(town, dt);
             }
 
-            // 如果执行了两次发送，那前一次的轨迹就需要被删除,这里是为了避免错误。
+            // 如果执行了两次发送，那前一次的轨迹就需要被删除,这里是为了避免错误,
             ps = new Paras();
             ps.Add("WorkID", this.HisWork.OID);
             ps.Add("FK_Node", town.HisNode.NodeID);
             ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FK_Node =" + dbStr + "FK_Node";
             DBAccess.RunSQL(ps);
-
-            if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
-            {
-
-            }
 
             if (this.town.HisNode.HisDeliveryWay == DeliveryWay.ByCCFlowBPM 
                 || 1 == 1)
@@ -5733,7 +5727,7 @@ namespace BP.WF
                     _transferCustom = TransferCustom.GetNextTransferCustom(this.WorkID, this.HisNode.NodeID);
                     if (_transferCustom == null)
                     {
-                        /*表示执行到这里结束流程.*/
+                        /* 表示执行到这里结束流程. */
                         this.IsStopFlow = true;
 
                         this.HisGenerWorkFlow.WFState = WFState.Complete;

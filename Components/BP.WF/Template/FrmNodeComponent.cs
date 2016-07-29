@@ -229,7 +229,7 @@ namespace BP.WF.Template
             }
             else
             {
-                if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "FrmThread" + this.No) == false)
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
@@ -264,7 +264,6 @@ namespace BP.WF.Template
                 }
             }
             #endregion 子线程组件.
-
 
             return base.beforeUpdate();
         }

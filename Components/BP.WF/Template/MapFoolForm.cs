@@ -53,7 +53,7 @@ namespace BP.WF.Template
             {
                 int i = this.GetValIntByKey(MapDataAttr.TableWidth);
                 if (i <= 50)
-                    return "800px";
+                    return "900px";
                 return i + "px";
             }
         }

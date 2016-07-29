@@ -267,6 +267,7 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(SelectorAttr.SelectorDBShowWay, 0, "数据显示方式", true, true,
                 SelectorAttr.SelectorDBShowWay, "@0=表格显示@1=树形显示");
+
                 map.AddDDLSysEnum(SelectorAttr.SelectorModel, 0, "窗口模式", true, true, SelectorAttr.SelectorModel,
                     "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url");
 

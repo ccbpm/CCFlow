@@ -176,8 +176,6 @@ namespace BP.WF.Port
                 map.AttrsOfOneVSM.Add(new EmpStations(), new Stations(), 
                     EmpStationAttr.FK_Emp, EmpStationAttr.FK_Station, DeptAttr.Name, DeptAttr.No, "岗位权限");
 
-              
-
                 RefMethod rm = new RefMethod();
                 rm.Title = "禁用";
                 rm.Warning = "您确定要执行吗?";
@@ -188,9 +186,103 @@ namespace BP.WF.Port
                 rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoEnableIt";
                 map.AddRefMethod(rm);
+
+
+
+                rm = new RefMethod();
+                rm.Title = "更改登录帐号";
+                rm.Warning = "您确定要处理吗？如果确定，该用户当前的待办信息一起其他的流程信息都会被重置到新编号里。";
+                rm.HisAttrs.AddTBString("FieldNew", null, "新帐号", true, false, 0, 100, 100);
+                rm.ClassMethodName = this.ToString() + ".DoChangeUserNo";
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        /// <summary>
+        /// 重置当前用户编号
+        /// </summary>
+        /// <param name="userNo">当前用户编号</param>
+        /// <returns>返回重置信息</returns>
+        public string DoChangeUserNo(string userNo)
+        {
+            if (BP.Web.WebUser.No != "admin")
+                return "非超级管理员，不能执行。";
+
+            string msg = "";
+            int i = 0;
+            //更新待办.
+            string sql = "update wf_generworkerlist set fk_emp='"+userNo+"' where fk_emp='"+this.No+"'";
+            i= BP.DA.DBAccess.RunSQL(sql);
+            if (i != 0)
+                msg += "@待办更新[" + i + "]个。";
+
+            sql = "UPDATE WF_GENERWORKFLOW A  SET A.STARTER='"+userNo+"'  WHERE STARTER='"+this.No+"'";
+            i = BP.DA.DBAccess.RunSQL(sql);
+            if (i != 0)
+                msg += "@流程注册更新[" + i + "]个。";
+
+
+            //更换流程信息的数据表
+            BP.WF.Flows fls = new Flows();
+            fls.RetrieveAll();
+            foreach (Flow fl in fls)
+            {
+                sql = "UPDATE " + fl.PTable + " SET FlowEnder='" + userNo + "' WHERE FlowEnder='" + this.No + "'";
+                i = DBAccess.RunSQL(sql);
+
+                if (i != 0)
+                    msg += "@流程注册更新[" + i + "]个。";
+
+                sql = "UPDATE  " + fl.PTable + "  SET FlowStarter='" + userNo + "' WHERE FlowStarter='" + this.No + "'";
+                i = DBAccess.RunSQL(sql);
+                if (i != 0)
+                    msg += "@流程业务表发起人，更新了[" + i + "]个。";
+
+
+                sql = "UPDATE  " + fl.PTable + "  SET Rec='" + userNo + "' WHERE Rec='" + this.No + "'";
+                i = DBAccess.RunSQL(sql);
+                if (i != 0)
+                    msg += "@流程业务表记录人，更新了[" + i + "]个。";
+
+                string trackTable = "ND" + int.Parse(fl.No) + "Track";
+                sql = "UPDATE  " + trackTable + "  SET EmpFrom='" + userNo + "' WHERE EmpFrom='" + this.No + "'";
+                i = DBAccess.RunSQL(sql);
+                if (i != 0)
+                    msg += "@轨迹表 EmpFrom，更新了[" + i + "]个。";
+
+
+                sql = "UPDATE  " + trackTable + "  SET EmpTo='" + userNo + "' WHERE EmpTo='" + this.No + "'";
+                i = DBAccess.RunSQL(sql);
+                if (i != 0)
+                    msg += "@轨迹表 EmpTo，更新了[" + i + "]个。";
+
+
+                sql = "UPDATE  " + trackTable + "  SET Exer='" + userNo + "' WHERE Exer='" + this.No + "'";
+                i = DBAccess.RunSQL(sql);
+                if (i != 0)
+                    msg += "@轨迹表 Exer，更新了[" + i + "]个。";
+            }
+
+
+            //更新其他字段.
+            BP.Sys.MapAttrs attrs = new Sys.MapAttrs();
+            attrs.RetrieveAll();
+            foreach (BP.Sys.MapAttr attr in attrs)
+            {
+                if (attr.DefValReal.Contains("@WebUser.No") == true)
+                {
+                    BP.Sys.MapData md = new Sys.MapData(attr.FK_MapData);
+                    sql = "UPDATE " + md.PTable + " SET " + attr.KeyOfEn + "='" + userNo + "' WHERE " + attr.KeyOfEn + "='" + this.No + "'";
+                    i = DBAccess.RunSQL(sql);
+                    if (i != 0)
+                        msg += "@表["+md.Name+"],["+md.PTable+"] ["+attr.KeyOfEn+"]，更新了[" + i + "]个。";
+                }
+            }
+
+            return msg;
         }
         /// <summary>
         /// 执行禁用

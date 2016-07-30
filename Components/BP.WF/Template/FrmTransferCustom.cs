@@ -11,7 +11,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 轨迹图标组件控件状态
     /// </summary>
-    public enum FrmTransferCustomSta
+    public enum FTCSta
     {
         /// <summary>
         /// 不可用
@@ -29,32 +29,36 @@ namespace BP.WF.Template
     /// <summary>
     /// 流转自定义组件
     /// </summary>
-    public class FrmTransferCustomAttr : EntityNoAttr
+    public class FTCAttr : EntityNoAttr
     {
         /// <summary>
         /// 显示标签
         /// </summary>
-        public const string FrmTransferCustomLab = "FrmTransferCustomLab";
+        public const string FTCLab = "FTCLab";
         /// <summary>
         /// 状态
         /// </summary>
-        public const string FrmTransferCustomSta = "FrmTransferCustomSta";
+        public const string FTCSta = "FTCSta";
+        /// <summary>
+        /// 工作模式
+        /// </summary>
+        public const string FTCWorkModel = "FTCWorkModel";
         /// <summary>
         /// X
         /// </summary>
-        public const string FrmTransferCustom_X = "FrmTransferCustom_X";
+        public const string FTC_X = "FTC_X";
         /// <summary>
         /// Y
         /// </summary>
-        public const string FrmTransferCustom_Y = "FrmTransferCustom_Y";
+        public const string FTC_Y = "FTC_Y";
         /// <summary>
         /// H
         /// </summary>
-        public const string FrmTransferCustom_H = "FrmTransferCustom_H";
+        public const string FTC_H = "FTC_H";
         /// <summary>
         /// W
         /// </summary>
-        public const string FrmTransferCustom_W = "FrmTransferCustom_W";
+        public const string FTC_W = "FTC_W";
     }
     /// <summary>
     /// 流转自定义组件
@@ -91,89 +95,103 @@ namespace BP.WF.Template
         /// <summary>
         /// 控件状态
         /// </summary>
-        public FrmTransferCustomSta FrmTransferCustomSta
+        public FTCSta FTCSta
         {
             get
             {
-                return (FrmTransferCustomSta)this.GetValIntByKey(FrmTransferCustomAttr.FrmTransferCustomSta);
+                return (FTCSta)this.GetValIntByKey(FTCAttr.FTCSta);
             }
             set
             {
-                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustomSta, (int)value);
+                this.SetValByKey(FTCAttr.FTCSta, (int)value);
+            }
+        }
+        /// <summary>
+        /// 工作模式
+        /// </summary>
+        public int FTCWorkModel
+        {
+            get
+            {
+                return this.GetValIntByKey(FTCAttr.FTCWorkModel);
+            }
+            set
+            {
+                this.SetValByKey(FTCAttr.FTCWorkModel, value);
             }
         }
         /// <summary>
         /// Y
         /// </summary>
-        public float FrmTransferCustom_Y
+        public float FTC_Y
         {
             get
             {
-                return this.GetValFloatByKey(FrmTransferCustomAttr.FrmTransferCustom_Y);
+                return this.GetValFloatByKey(FTCAttr.FTC_Y);
             }
             set
             {
-                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustom_Y, value);
+                this.SetValByKey(FTCAttr.FTC_Y, value);
             }
         }
         /// <summary>
         /// X
         /// </summary>
-        public float FrmTransferCustom_X
+        public float FTC_X
         {
             get
             {
-                return this.GetValFloatByKey(FrmTransferCustomAttr.FrmTransferCustom_X);
+                return this.GetValFloatByKey(FTCAttr.FTC_X);
             }
             set
             {
-                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustom_X, value);
+                this.SetValByKey(FTCAttr.FTC_X, value);
             }
         }
         /// <summary>
         /// W
         /// </summary>
-        public float FrmTransferCustom_W
+        public float FTC_W
         {
             get
             {
-                return this.GetValFloatByKey(FrmTransferCustomAttr.FrmTransferCustom_W);
+                return this.GetValFloatByKey(FTCAttr.FTC_W);
             }
             set
             {
-                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustom_W, value);
+                this.SetValByKey(FTCAttr.FTC_W, value);
             }
         }
-        public string FrmTransferCustom_Wstr
+        public string FTC_Wstr
         {
             get
             {
-                if (this.FrmTransferCustom_W == 0)
+                if (this.FTC_W == 0)
                     return "100%";
-                return this.FrmTransferCustom_W + "px";
+                return this.FTC_W + "px";
             }
         }
         /// <summary>
         /// H
         /// </summary>
-        public float FrmTransferCustom_H
+        public float FTC_H
         {
             get
             {
-                return this.GetValFloatByKey(FrmTransferCustomAttr.FrmTransferCustom_H);
+                return this.GetValFloatByKey(FTCAttr.FTC_H);
             }
             set
             {
-                this.SetValByKey(FrmTransferCustomAttr.FrmTransferCustom_H, value);
+                this.SetValByKey(FTCAttr.FTC_H, value);
             }
         }
-        public string FrmTransferCustom_Hstr
+        public string FTC_Hstr
         {
             get
             {
-                if (this.FrmTransferCustom_H == 0)
+                if (this.FTC_H == 0)
                     return "100%";
-                return this.FrmTransferCustom_H + "px";
+                return this.FTC_H + "px";
             }
         }
         /// <summary>
@@ -189,11 +207,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 显示标签
         /// </summary>
-        public string FrmTransferCustomLab
+        public string FTCLab
         {
             get
             {
-                return this.GetValStrByKey(FrmTransferCustomAttr.FrmTransferCustomLab);
+                return this.GetValStrByKey(FTCAttr.FTCLab);
             }
         }
         #endregion
@@ -237,14 +255,14 @@ namespace BP.WF.Template
         {
             if (mapData.Contains("ND") == false)
             {
-                this.FrmTransferCustomSta = FrmTransferCustomSta.Disable;
+                this.FTCSta = FTCSta.Disable;
                 return;
             }
 
             string mapdata = mapData.Replace("ND", "");
             if (DataType.IsNumStr(mapdata) == false)
             {
-                this.FrmTransferCustomSta = FrmTransferCustomSta.Disable;
+                this.FTCSta = FTCSta.Disable;
                 return;
             }
 
@@ -281,19 +299,22 @@ namespace BP.WF.Template
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
-                map.AddTBString(FrmTransferCustomAttr.FrmTransferCustomLab, "流转自定义", "显示标签", true, false, 0, 200, 10, true);
+                map.AddTBString(FTCAttr.FTCLab, "流转自定义", "显示标签", true, false, 0, 200, 10, true);
 
 
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
-                map.AddDDLSysEnum(FrmTransferCustomAttr.FrmTransferCustomSta, (int)FrmTransferCustomSta.Disable, "组件状态",
-                   true, true, FrmTransferCustomAttr.FrmTransferCustomSta, "@0=禁用@1=只读@2=可以设置人员");
+                map.AddDDLSysEnum(FTCAttr.FTCSta, (int)FTCSta.Disable, "组件状态",
+                   true, true, FTCAttr.FTCSta, "@0=禁用@1=只读@2=可设置人员");
 
-                map.AddTBFloat(FrmTransferCustomAttr.FrmTransferCustom_X, 5, "位置X", false, false);
-                map.AddTBFloat(FrmTransferCustomAttr.FrmTransferCustom_Y, 5, "位置Y", false, false);
+                map.AddDDLSysEnum(FTCAttr.FTCWorkModel,0, "工作模式",
+                  true, true, FTCAttr.FTCWorkModel, "@0=简洁模式@1=高级模式");
 
-                map.AddTBFloat(FrmTransferCustomAttr.FrmTransferCustom_H, 300, "高度", true, false);
-                map.AddTBFloat(FrmTransferCustomAttr.FrmTransferCustom_W, 400, "宽度", true, false);
+                map.AddTBFloat(FTCAttr.FTC_X, 5, "位置X", false, false);
+                map.AddTBFloat(FTCAttr.FTC_Y, 5, "位置Y", false, false);
+
+                map.AddTBFloat(FTCAttr.FTC_H, 300, "高度", true, false);
+                map.AddTBFloat(FTCAttr.FTC_W, 400, "宽度", true, false);
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 

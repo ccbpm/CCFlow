@@ -5623,8 +5623,8 @@ namespace BP.WF
             {
                 if (this.DealOradeNode() == true)
                 {
-                    if (this._transferCustom != null)
-                        _transferCustom.Delete();
+                    //if (this._transferCustom != null)
+                    //    _transferCustom.Delete();
 
                     //执行时效考核.
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
@@ -5638,8 +5638,8 @@ namespace BP.WF
                 /* 如果是协作.*/
                 if (this.DealTeamUpNode() == true)
                 {
-                    if (this._transferCustom != null)
-                        _transferCustom.Delete();
+                    //if (this._transferCustom != null)
+                    //    _transferCustom.Delete();
 
                     //执行时效考核.
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
@@ -6173,10 +6173,7 @@ namespace BP.WF
                 }
                 #endregion 设置流程的标记.
 
-                #region 删除找到的自定义流程运转的信息.
-                if (_transferCustom != null)
-                    _transferCustom.Delete();
-                #endregion 删除找到的自定义流程运转的信息
+              
 
                 //执行时效考核.
                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);

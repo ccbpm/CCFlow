@@ -246,7 +246,7 @@ namespace BP.WF.Template
             FrmTransferCustom ftc = new FrmTransferCustom(this.NodeID);
             ftc.Copy(this);
 
-            if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.Disable)
+            if (ftc.FTCSta == FTCSta.Disable)
             {
                 gf.Delete(GroupFieldAttr.CtrlID, "FrmFTC" + this.No);
             }

@@ -239,37 +239,24 @@ namespace BP.WF
             if (ens.Count == 0)
                 return null;
 
-            return (TransferCustom)ens[0];
-
-                ///*获取最后一个*/
-                //TransferCustom tEnd = ens[ens.Count-1] as TransferCustom;
-                //if (tEnd.FK_Node == currNodeID)
-                //{
-                //    //if (tEnd.TodolistModel == true)
-                //    //    return null; //表示要结束，因为这是最后一个环节.
-                //    return tEnd;
-                //}
-
-            // 开始找, 找到当前节点的下一个.
-            bool isRec = false;
-            foreach (TransferCustom en in ens)
+            //寻找当前节点的下一个. 
+            bool isMeet = false;
+            foreach (TransferCustom item in ens)
             {
-                if (en.FK_Node == currNodeID && en.Worker != BP.Web.WebUser.No)
+                if (item.FK_Node == currNodeID)
                 {
-                    isRec = true;
+                    isMeet = true;
                     continue;
                 }
 
-                if (isRec)
-                {
-                    /*是否出现*/
-                  // en.TodolistModel = true;
-                    return en;
-                }
+                if (isMeet == true)
+                    return item;
             }
 
-            //如果没有找到，就返回最后一个.
-            return (TransferCustom)ens[0];
+            if (currNodeID.ToString().EndsWith("01") == true)
+                return (TransferCustom)ens[0];
+            return null;
+            // return null;
         }
     }
 	/// <summary>

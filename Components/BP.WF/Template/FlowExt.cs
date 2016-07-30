@@ -744,8 +744,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-             
-
                 rm = new RefMethod();
                 rm.Title = "节点表单字段视图";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Field.png";

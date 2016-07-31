@@ -115,7 +115,9 @@ namespace CCFlow.WF.MapDef.MapExtUI
                 rb.Checked = true;
 
             this.Pub1.Add("在下面文本框中输入一个SQL,具有编号，标签列，用来绑定下从动下拉框。<br />");
-            this.Pub1.Add("比如:SELECT No, Name FROM CN_City WHERE FK_SF = '@Key' ");
+            this.Pub1.Add("比如: SELECT No, Name FROM CN_SF WHERE FK_PQ = '@Key' ");
+            this.Pub1.AddBR("SELECT No, Name FROM CN_City WHERE FK_SF = '@Key' ");
+
             this.Pub1.AddBR();
             TextBox tb = new TextBox();
             tb.ID = "TB_Doc";

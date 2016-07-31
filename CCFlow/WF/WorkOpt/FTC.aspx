@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WF/WinOpen.master" AutoEventWireup="true" CodeBehind="FTC.aspx.cs" Inherits="CCFlow.WF.WorkOpt.FTC" %>
 <%@ Register src="../Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
- 
 
  <script type="text/javascript">
      function Save() {

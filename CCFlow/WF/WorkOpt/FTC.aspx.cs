@@ -14,6 +14,9 @@ namespace CCFlow.WF.WorkOpt
     public partial class FTC : System.Web.UI.Page
     {
         #region 属性.
+        /// <summary>
+        /// 流程编号
+        /// </summary>
         public string FK_Flow
         {
             get
@@ -21,13 +24,9 @@ namespace CCFlow.WF.WorkOpt
                 return this.Request.QueryString["FK_Flow"];
             }
         }
-        public string FK_MapData
-        {
-            get
-            {
-                return this.Request.QueryString["FK_MapData"];
-            }
-        }
+        /// <summary>
+        /// 节点ID
+        /// </summary>
         public int FK_Node
         {
             get
@@ -40,6 +39,9 @@ namespace CCFlow.WF.WorkOpt
                 return int.Parse(str);
             }
         }
+        /// <summary>
+        /// 工作ID
+        /// </summary>
         public Int64 WorkID
         {
             get
@@ -50,6 +52,9 @@ namespace CCFlow.WF.WorkOpt
                 return Int64.Parse(str);
             }
         }
+        /// <summary>
+        /// FID
+        /// </summary>
         public Int64 FID
         {
             get
@@ -63,12 +68,20 @@ namespace CCFlow.WF.WorkOpt
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Nodes nds = new Nodes(this.FK_Flow);
-
             //配置信息.
             FrmTransferCustom ftc = new FrmTransferCustom(this.FK_Node);
+            if (ftc.FTCWorkModel == 1)
+            {
+                /*如果是高级模式,就让其转到高级模式的设置.*/
+                string url=this.Request.RawUrl.Replace("FTC.","TransferCustom.");
+                this.Response.Redirect(url,true);
+                return;
+            }
+
             TransferCustoms tcs = new TransferCustoms(this.WorkID);
             GenerWorkerLists gwls = new GenerWorkerLists(this.WorkID);
+
+            Nodes nds = new Nodes(this.FK_Flow);
 
             this.Pub1.AddTable("width=95%");
             this.Pub1.AddTR();
@@ -124,10 +137,10 @@ namespace CCFlow.WF.WorkOpt
                     this.Pub1.AddTD(nd.Step);
                     this.Pub1.AddTD(nd.Name);
 
-                    if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.ReadOnly)
+                    if (ftc.FTCSta == FTCSta.ReadOnly)
                     {
                         /* 如果是只读. */
-                        this.Pub1.AddTD(tc.Worker);
+                        this.Pub1.AddTD(tc.WorkerName);
                         this.Pub1.AddTD(tc.PlanDT); //计划完成日期.
                         this.Pub1.AddTD("无");
                     }

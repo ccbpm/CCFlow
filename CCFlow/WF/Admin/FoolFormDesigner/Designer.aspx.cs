@@ -319,7 +319,7 @@ namespace CCFlow.WF.MapDef
                         #region 流转自定义.
 
                         FrmTransferCustom ftc = new FrmTransferCustom(this.FK_MapData);
-                        if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.Disable)
+                        if (ftc.FTCSta == FTCSta.Disable)
                         {
                             gf.Delete();
                             continue;
@@ -327,15 +327,15 @@ namespace CCFlow.WF.MapDef
 
                         myidx = rowIdx + 10;
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFTC('" + ftc.NodeID + "')\" >" + ftc.FrmTransferCustomLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
+                        this.Pub1.AddTD("colspan=" + md.TableCol + " class=GroupField valign='top'  style='align:left' ", "<div style='text-align:left; float:left'><img src='./Style/Min.gif' alert='Min' id='Img" + gf.Idx + "'  border=0 /><a href=\"javascript:EditFTC('" + ftc.NodeID + "')\" >" + ftc.FTCLab + "</a></div><div style='text-align:right; float:right'> <a href=\"javascript:GFDoUp('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-up',plain:true\"> </a> <a href=\"javascript:GFDoDown('" + gf.OID + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-down',plain:true\"> </a></div>");
                         this.Pub1.AddTREnd();
 
                         myidx++;
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
-                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFTC" + ftc.No + "' height='" + ftc.FrmTransferCustom_H + "px' width='100%' >");
+                        this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFTC" + ftc.No + "' height='" + ftc.FTC_H + "px' width='100%' >");
 
                         src = "NodeFrmComponents.aspx?DoType=FrmFTC&FK_MapData=" + ftc.NodeID;
-                        this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ftc.FrmTransferCustom_H + "px' scrolling=auto  /></iframe>");
+                        this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ftc.FTC_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
                         #endregion 流转自定义.
@@ -393,6 +393,7 @@ namespace CCFlow.WF.MapDef
                     TB tb = new TB();
                     tb.Attributes["width"] = "100%";
                     tb.ID = "TB_" + attr.KeyOfEn;
+                    tb.Attributes["style"] = "width:100%;height:100%;padding: 0px;margin: 0px;";
 
                     #region AppString .
                     if (attr.MyDataType == DataType.AppString && attr.LGType != FieldTypeS.FK)
@@ -469,7 +470,7 @@ namespace CCFlow.WF.MapDef
                         #endregion
 
                         #region 如果是4行 大块文本输出.
-                        if (attr.UIRows > 1 && attr.ColSpan == 4)
+                        if (  attr.ColSpan == 4)
                         {
                             if (isLeft == false)
                             {
@@ -507,7 +508,7 @@ namespace CCFlow.WF.MapDef
                         #endregion 大块文本的输出.
 
                         #region 整行输出.
-                        if (attr.ColSpan == 3)
+                        if (attr.ColSpan == 3  )
                         {
                             if (isLeft == false)
                             {
@@ -567,6 +568,8 @@ namespace CCFlow.WF.MapDef
                             if (attr.UIContralType == UIContralType.DDL)
                             {
                                 DDL ddl = new DDL();
+                                ddl.ID = "DDL_" + attr.KeyOfEn;
+
                                 if (attr.UIIsEnable == false)
                                 {
                                     ddl.Enabled = attr.UIIsEnable;
@@ -574,14 +577,7 @@ namespace CCFlow.WF.MapDef
                                 }
                                 else
                                 {
-                                    if (attr.UIBindKey.Contains(".") == true)
-                                    {
-                                        ddl.Bind(attr.HisEntitiesNoName, attr.DefVal);
-                                    }
-                                    else
-                                    {
-                                        ddl.Bind(attr.HisDT, "No", "Name", attr.DefVal);
-                                    }
+                                    ddl.Bind(attr.HisDT, "No", "Name", attr.DefVal);
                                 }
                                 this.Pub1.AddTD("colspan=1", ddl);
                             }
@@ -599,6 +595,8 @@ namespace CCFlow.WF.MapDef
                                     this.Pub1.AddTD("colspan=1", "<img src='/DataUser/Siganture/" + WebUser.No + ".jpg'  style='border:0px;Width:70px;' onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"/>");
                                 else
                                     this.Pub1.AddTD("colspan=1", tb);
+
+
                             }
                         }
                         #endregion 单行输出.

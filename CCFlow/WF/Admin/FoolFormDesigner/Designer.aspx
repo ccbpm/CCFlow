@@ -15,10 +15,11 @@
     </style>
     <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
-    <script language="JavaScript" type="text/javascript" src="MapDef.js" type="text/javascript"></script>
+    <script language="JavaScript" type="text/javascript" src="MapDef.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js" ></script>
+
     <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
-    <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js"
-        type="text/javascript" defer="defer"></script>
+    <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
     <script language="javascript" type="text/javascript">
         function FrmEvent(mypk) {
             var url = 'FrmEvent.aspx?FK_MapData=' + mypk;
@@ -349,8 +350,7 @@
                 表单属性</a>
             <% if (string.IsNullOrEmpty(fk_flow) == false)
                { %>
-            <a href="javascript:FrmNodeComponent('<%=this.NodeID %>');" class="easyui-linkbutton"
-                data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
+            <a href="javascript:FrmNodeComponent('<%=this.NodeID %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
             <% } %>
             <uc1:Pub ID="UCCaption" runat="server" />
         </div>

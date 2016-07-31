@@ -705,7 +705,7 @@ namespace CCFlow.WF.UC
             //处理装载前填充.
             this.LoadData(mattrs, en);
             string appPath = CCFlowAppPath; //this.Page.Request.ApplicationPath;
-             
+
             this.Add("\t\n<Table style='width:" + mff.TableWidth + "px;' align=left >");
 
             string src, paras;
@@ -797,7 +797,7 @@ namespace CCFlow.WF.UC
                             this.AddTREnd();
 
                             this.AddTR();
-                            this.Add("<TD colspan=4 ID='TD" + ath.MyPK + "' height='" + ath.H + "' width='100%' style='align:left'>");
+                            this.Add("<TD colspan=4 valign='top' ID='TD" + ath.MyPK + "' height='" + ath.H + "' width='100%' style='align:left'>");
 
                             src = "";
                             if (this.IsReadonly)
@@ -805,7 +805,8 @@ namespace CCFlow.WF.UC
                             else
                                 src = appPath + "WF/CCForm/AttachmentUpload.aspx?PKVal=" + en.PKVal.ToString() + "&Ath=" + ath.NoOfObj + "&FK_FrmAttachment=" + ath.MyPK + this.RequestParas;
 
-                            this.Add("<iframe ID='F" + ath.MyPK + "'    src='" + src + "' frameborder=0  style='position:absolute;width:" + ath.W + "px; height:" + ath.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto></iframe>");
+                            this.Add("<iframe ID='F" + ath.MyPK + "'    src='" + src + "' frameborder=0  style='position:absolute;width:100%; height:100%;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto></iframe>");
+
                             this.AddTDEnd();
                             this.AddTREnd();
                         }
@@ -826,7 +827,7 @@ namespace CCFlow.WF.UC
 
 
                         this.AddTR();
-                        this.Add("<TD height='" + fwc.FWC_Hstr+ "'  colspan=4 >");
+                        this.Add("<TD height='" + fwc.FWC_Hstr + "'  colspan=4 >");
 
                         src = appPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
                         string fwcOnload = "";
@@ -860,7 +861,7 @@ namespace CCFlow.WF.UC
                             gf.Delete();
                             continue;
                         }
-                       
+
                         this.AddTR();
                         this.AddTD("colspan=4 class=GroupField valign='top'  style='align:left' ", gf.Lab);
                         this.AddTREnd();
@@ -952,23 +953,24 @@ namespace CCFlow.WF.UC
                         #endregion 子线程.
                         continue;
                     case GroupCtrlType.FTC: //流转自定义.
-
-                        #region 审核组件.
+                        #region 流转自定义.
                         FrmTransferCustom ftc = new FrmTransferCustom(enName);
-                        if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.Disable)
+                        if (ftc.FTCSta == FTCSta.Disable)
                         {
                             gf.Delete();
                             continue;
                         }
 
                         this.AddTR();
-                        this.AddTD("colspan=4 class=GroupField style='align:left' ", ftc.FrmTransferCustomLab);
+                        this.AddTD("colspan=4 class=GroupField style='align:left' ", ftc.FTCLab);
                         this.AddTREnd();
 
                         this.AddTR();
-                        this.Add("<TD height='" + ftc.FrmTransferCustom_H+ "'  colspan=4 >");
+                        this.Add("<TD height='" + ftc.FTC_H + "'  colspan=4 >");
 
+                        //if (ftc.FTCSta
                         src = appPath + "WF/WorkOpt/FTC.aspx?s=2";
+
                         fwcOnload = "";
                         paras = this.RequestParas;
                         if (paras.Contains("FID=") == false)
@@ -977,7 +979,7 @@ namespace CCFlow.WF.UC
                         if (paras.Contains("OID=") == false)
                             paras += "&OID=" + this.HisEn.GetValStrByKey("OID");
 
-                        if (ftc.FrmTransferCustomSta == FrmTransferCustomSta.ReadOnly)
+                        if (ftc.FTCSta == FTCSta.ReadOnly)
                             src += "&DoType=View";
                         else
                         {
@@ -991,7 +993,6 @@ namespace CCFlow.WF.UC
                         this.AddTDEnd();
                         this.AddTREnd();
                         #endregion  流转自定义
-                         
                         continue;
                     default:
                         break;
@@ -1025,7 +1026,6 @@ namespace CCFlow.WF.UC
                     }
                     if (attr.HisAttr.IsRefAttr || attr.UIVisible == false)
                         continue;
-
                     #endregion 过滤不需要显示的字段.
 
                     /* 
@@ -1121,7 +1121,7 @@ namespace CCFlow.WF.UC
                         #endregion
 
                         #region 如果是4行 大块文本输出.
-                        if (attr.UIRows > 1 && attr.ColSpan == 4)
+                        if (attr.ColSpan == 4)
                         {
                             if (isLeft == false)
                             {
@@ -1191,7 +1191,7 @@ namespace CCFlow.WF.UC
                             //普通文本的输出.
                             if (attr.UIContralType == UIContralType.TB)
                             {
-                                tb.Text = en.GetValStrByKey(attr.KeyOfEn); 
+                                tb.Text = en.GetValStrByKey(attr.KeyOfEn);
 
                                 if (attr.UIIsEnable == false)
                                     tb.CssClass = "TBReadonly";
@@ -1554,8 +1554,6 @@ namespace CCFlow.WF.UC
             this.Add(js);
             #endregion 处理iFrom 的自适应的问题。
 
-            // 处理扩展。
-            this.AfterBindEn_DealMapExt(enName, mattrs, en);
             if (this.IsReadonly == false)
             {
                 #region 处理iFrom SaveDtlData。
@@ -1576,7 +1574,12 @@ namespace CCFlow.WF.UC
                 js += "\t\n</script>";
                 this.Add(js);
                 #endregion 处理iFrom  SaveM2M Save。
-             }
+            }
+
+            // 处理扩展.
+            if (this.IsReadonly == false)
+                this.AfterBindEn_DealMapExt(enName, mattrs, en);
+            return;
         }
         /// <summary>
         /// 增加数字签名

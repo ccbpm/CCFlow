@@ -13,11 +13,11 @@
     
     int nodeID = int.Parse(this.Request.QueryString["FK_Node"]);
     BP.WF.Template.FrmTransferCustom frmTC = new BP.WF.Template.FrmTransferCustom(nodeID);
-    if (frmTC.FrmTransferCustomSta != BP.WF.Template.FrmTransferCustomSta.Disable)
+    if (frmTC.FTCSta != BP.WF.Template.FTCSta.Disable)
     {
 %>
 
-<div id="tt" class="easyui-tabs"  style="width: <%=frmTC.FrmTransferCustom_Wstr%>; height:<%= frmTC.FrmTransferCustom_Hstr %>;">
+<div id="tt" class="easyui-tabs"  style="width: <%=frmTC.FTC_Wstr%>; height:<%= frmTC.FTC_Hstr %>;">
     <div title="设计接受人" id='FTC'   >
         <iframe id='F' src='<%=src%>' frameborder="0" style=' padding: 0px; border: 0px; margin:0px; height:99%'
             leftmargin='0' topmargin='0' width='100%'   >

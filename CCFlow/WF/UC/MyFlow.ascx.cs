@@ -292,12 +292,23 @@ namespace CCFlow.WF.UC
             }
         }
         private string _width = "";
+        /// <summary>
+        /// 表单宽度
+        /// </summary>
         public string Width
         {
-            get { return _width; }
+            get
+            {
+                return _width;
+                //float w = float.Parse(_width)+20;
+                //return w.ToString();
+            }
             set { _width = value; }
         }
         private string _height = "";
+        /// <summary>
+        /// 表单高度
+        /// </summary>
         public string Height
         {
             get { return _height; }

@@ -1093,21 +1093,25 @@ namespace CCFlow.WF.MapDef
             if (attr.MyDataType == DataType.AppBoolean && attr.UIIsLine)
                 lab = "编辑";
 
+            string str = "";
+            if (attr.UIIsInput == true)
+                str = "<font color=red><b>*</b></font>";
+
             if (attr.HisEditType == EditType.Edit || attr.HisEditType == EditType.UnDel)
             {
                 switch (attr.LGType)
                 {
                     case FieldTypeS.Normal:
                         if (attr.UIContralType == UIContralType.DDL)
-                            lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + lab + "</a>";
+                            lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + lab + str + "</a>";
                         else
-                            lab = "<a  href=\"javascript:Edit('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + "</a>";
+                            lab = "<a  href=\"javascript:Edit('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + str + "</a>";
                         break;
                     case FieldTypeS.FK:
-                        lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + lab + "</a>";
+                        lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + str + lab + str + "</a>";
                         break;
                     case FieldTypeS.Enum:
-                        lab = "<a  href=\"javascript:EditEnum('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + lab + "</a>";
+                        lab = "<a  href=\"javascript:EditEnum('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + str + lab + str + "</a>";
                         break;
                     default:
                         break;
@@ -1117,6 +1121,7 @@ namespace CCFlow.WF.MapDef
             {
                 lab = attr.Name;
             }
+
 
 
             if (idx == 0)

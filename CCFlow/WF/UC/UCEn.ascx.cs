@@ -1032,9 +1032,11 @@ namespace CCFlow.WF.UC
                      * 以下就是一列标签一列控件的方式展现了 .
                      */
 
+                    string str = "";
+                    if (attr.UIIsInput == true)
+                        str = "<font color=red><b>*</b></font>";
+
                     TB tb = new TB();
-                    tb.Attributes["width"] = "100%";
-                    tb.ID = "TB_" + attr.KeyOfEn;
 
                     #region AppString .
                     if (attr.MyDataType == DataType.AppString && attr.LGType != FieldTypeS.FK)
@@ -1047,7 +1049,7 @@ namespace CCFlow.WF.UC
 
                             /*是大块文本，并且跨度在占领了整个剩余行单元格. */
                             this.Add("<TD colspan=2 width='50%' height='" + attr.UIHeight.ToString() + "px' >");
-                            this.Add("<span style='float:left'>" + attr.Name + "</span>");
+                            this.Add("<span style='float:left'>" + attr.Name+str + "</span>");
 
                             if (attr.TBModel == TBModel.RichText)
                             {
@@ -1091,7 +1093,7 @@ namespace CCFlow.WF.UC
                             }
 
                             this.AddTR();
-                            this.AddTDDesc(attr.Name);
+                            this.AddTDDesc(attr.Name+str);
 
                             /*是大块文本，并且跨度在占领了整个剩余行单元格. */
                             this.Add("<TD colspan=3 width='100%' height='" + attr.UIHeight.ToString() + "px' >");
@@ -1133,7 +1135,7 @@ namespace CCFlow.WF.UC
                             this.AddTR();
                             /*是大块文本，并且跨度在占领了整个剩余行单元格. */
                             this.Add("<TD colspan=4  height='" + attr.UIHeight.ToString() + "px' >");
-                            this.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + attr.Name + "</span>");
+                            this.Add("<span style='float:left' height='" + attr.UIHeight.ToString() + "px' >" + attr.Name + str + "</span>");
                             this.Add("<span style='float:right' height='" + attr.UIHeight.ToString() + "px'  >");
 
                             Label lab = new Label();
@@ -1171,7 +1173,7 @@ namespace CCFlow.WF.UC
                             }
 
                             this.AddTR();
-                            this.AddTDDesc(attr.Name);
+                            this.AddTDDesc(attr.Name + str);
 
                             //外键字段的输出.
                             if (attr.UIContralType == UIContralType.DDL)
@@ -1183,6 +1185,7 @@ namespace CCFlow.WF.UC
                                 else
                                 {
                                     DDL ddl = new DDL();
+                                    ddl.ID = "DDL_" + attr.KeyOfEn;
                                     ddl.Bind(attr.HisDT, "No", "Name", en.GetValStrByKey(attr.KeyOfEn));
                                     this.AddTD("colspan=3", ddl);
                                 }
@@ -1222,29 +1225,22 @@ namespace CCFlow.WF.UC
                             if (isLeft == true)
                                 this.AddTR();
 
-                            this.AddTDDesc(attr.Name);
+                            this.AddTDDesc(attr.Name + str);
 
                             // 外部字典输出.
                             if (attr.UIContralType == UIContralType.DDL)
                             {
-                                DDL ddl = new DDL();
                                 if (attr.UIIsEnable == false)
                                 {
-                                    ddl.Enabled = attr.UIIsEnable;
-                                    ddl.Items.Add(new ListItem("数据1", "0"));
+                                    this.AddTD("colspan=1", en.GetValStrByKey(attr.KeyOfEn + "T"));
                                 }
                                 else
                                 {
-                                    if (attr.UIBindKey.Contains(".") == true)
-                                    {
-                                        ddl.Bind(attr.HisEntitiesNoName, en.GetValStrByKey(attr.KeyOfEn));
-                                    }
-                                    else
-                                    {
-                                        ddl.Bind(attr.HisDT, "No", "Name", en.GetValStrByKey(attr.KeyOfEn));
-                                    }
+                                    DDL ddl = new DDL();
+                                    ddl.ID = "DDL_" + attr.KeyOfEn;
+                                    ddl.Bind(attr.HisDT, "No", "Name", en.GetValStrByKey(attr.KeyOfEn));
+                                    this.AddTD("colspan=1", ddl);
                                 }
-                                this.AddTD("colspan=1", ddl);
                             }
 
                             // 文本输出.
@@ -1278,7 +1274,7 @@ namespace CCFlow.WF.UC
                         if (isLeft == true)
                             this.AddTR();
 
-                        this.AddTDDesc(attr.Name);
+                        this.AddTDDesc(attr.Name + str);
                         TB tbD = new TB();
                         tbD.ID = "TB_" + attr.KeyOfEn;
                         tbD.Text = en.GetValStrByKey(attr.KeyOfEn);
@@ -1303,7 +1299,7 @@ namespace CCFlow.WF.UC
                         if (isLeft == true)
                             this.AddTR();
 
-                        this.AddTDDesc(attr.Name);
+                        this.AddTDDesc(attr.Name + str);
                         TB tbDT = new TB();
                         tbDT.Text = en.GetValStrByKey(attr.KeyOfEn);
                         if (attr.UIIsEnable)
@@ -1339,7 +1335,7 @@ namespace CCFlow.WF.UC
                                 isLeft = true;
                             }
                             this.AddTR();
-                            this.AddTDDesc(attr.Name);
+                            this.AddTDDesc(attr.Name + str);
                             this.AddTD(" colspan=3", cb);
                             this.AddTREnd();
                             continue;
@@ -1348,7 +1344,7 @@ namespace CCFlow.WF.UC
                         {
                             if (isLeft == true)
                                 this.AddTR();
-                            this.AddTDDesc(attr.Name);
+                            this.AddTDDesc(attr.Name + str);
                             this.AddTD(" colspan=1 ", cb);
                         }
                     }
@@ -1361,7 +1357,7 @@ namespace CCFlow.WF.UC
                         {
                             if (isLeft == true)
                                 this.AddTR();
-                            this.AddTDDesc(attr.Name);
+                            this.AddTDDesc(attr.Name + str);
                             DDL ddle = new DDL();
                             ddle.ID = "DDL_" + attr.KeyOfEn;
                             ddle.BindSysEnum(attr.UIBindKey, en.GetValIntByKey(attr.KeyOfEn));
@@ -1376,7 +1372,7 @@ namespace CCFlow.WF.UC
                                 if (isLeft == true)
                                     this.AddTR();
 
-                                this.AddTDDesc(attr.Name);
+                                this.AddTDDesc(attr.Name + str);
                                 this.AddTDBegin();
                                 SysEnums ses = new SysEnums(attr.UIBindKey);
                                 foreach (SysEnum item in ses)
@@ -1408,7 +1404,7 @@ namespace CCFlow.WF.UC
                                 }
 
                                 this.AddTR();
-                                this.AddTDDesc(attr.Name);
+                                this.AddTDDesc(attr.Name + str);
                                 this.AddTDBegin("colspan=3");
                                 SysEnums ses = new SysEnums(attr.UIBindKey);
                                 foreach (SysEnum item in ses)
@@ -1443,7 +1439,7 @@ namespace CCFlow.WF.UC
                         if (isLeft == true)
                             this.AddTR();
 
-                        this.AddTDDesc(attr.Name);
+                        this.AddTDDesc(attr.Name + str);
                         tb.ShowType = TBType.Num;
                         tb.Text = en.GetValStrByKey(attr.KeyOfEn);
                         if (attr.IsNull)
@@ -1458,7 +1454,7 @@ namespace CCFlow.WF.UC
                         if (isLeft == true)
                             this.AddTR();
 
-                        this.AddTDDesc(attr.Name);
+                        this.AddTDDesc(attr.Name + str);
                         tb.ShowType = TBType.Moneny;
                         tb.Text = en.GetValStrByKey(attr.KeyOfEn);
                         if (attr.IsNull)
@@ -1489,7 +1485,7 @@ namespace CCFlow.WF.UC
                                 isLeft = true;
                             }
                             this.AddTR();
-                            this.AddTDDesc(attr.Name);
+                            this.AddTDDesc(attr.Name + str);
                             this.AddTD(" colspan=3", ddlFK);
                             this.AddTREnd();
                             continue;
@@ -1500,13 +1496,11 @@ namespace CCFlow.WF.UC
                             if (isLeft == true)
                                 this.AddTR();
 
-                            this.AddTDDesc(attr.Name);
+                            this.AddTDDesc(attr.Name + str);
                             this.AddTD("colspan=1", ddlFK);
-
                         }
                     }
                     #endregion FK 外键.
-
 
 
                     if (isLeft == false)

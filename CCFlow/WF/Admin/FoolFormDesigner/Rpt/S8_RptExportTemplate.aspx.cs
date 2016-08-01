@@ -153,6 +153,8 @@ namespace CCFlow.WF.MapDef.Rpt
                             try
                             {
                                 File.Delete(filename);
+                                File.Delete(Path.GetDirectoryName(filename) + "\\" +
+                                            Path.GetFileNameWithoutExtension(filename) + ".xml");
                                 resultString = ReturnJson(true, "删除成功！");
                             }
                             catch (Exception ex)
@@ -173,6 +175,12 @@ namespace CCFlow.WF.MapDef.Rpt
                             {
                                 DataTable dtAttrs = BP.DA.DBAccess.RunSQLReturnTable(string.Format(selectSql, FK_Flow, int.Parse(FK_Flow)));
                                 DataTable dtDtlsAttrs = BP.DA.DBAccess.RunSQLReturnTable(string.Format(selectDtlsSql, FK_Flow));
+
+                                //处理GROUPID为null的情况
+                                DataRow[] drs = dtAttrs.Select("GROUPID IS NULL");
+
+                                foreach (DataRow r in drs)
+                                    r["GROUPID"] = 0;
 
                                 resultString = "{\"success\": true, \"attrs\": " + BP.Tools.Json.ToJson(dtAttrs) +
                                                ",\"dtlattrs\": " + BP.Tools.Json.ToJson(dtDtlsAttrs) +
@@ -335,6 +343,10 @@ namespace CCFlow.WF.MapDef.Rpt
         {
             DataTable dtAttrs = BP.DA.DBAccess.RunSQLReturnTable(string.Format(selectSql, FK_Flow, int.Parse(FK_Flow)));
             string xml = TmpDir + "\\" + Path.GetFileNameWithoutExtension(tmpFile) + ".xml";
+
+            if (File.Exists(xml))
+                File.Delete(xml);
+
             RptExportTemplate tmp = RptExportTemplate.FromXml(xml);
             string ext = Path.GetExtension(tmpFile).ToLower();
             IWorkbook wb = null;
@@ -386,6 +398,7 @@ namespace CCFlow.WF.MapDef.Rpt
         /// <returns>返回easyui-menu的html代码</returns>
         private string GetMapAttrsMenu(DataTable dtAttrs)
         {
+            int groupid = 0;
             StringBuilder s = new StringBuilder();
             Dictionary<string, List<DataRow>> mapdatas = new Dictionary<string, List<DataRow>>(); //fk_mapdata,attrs
             Dictionary<int, List<DataRow>> groups = null;
@@ -411,10 +424,12 @@ namespace CCFlow.WF.MapDef.Rpt
                 //在fk_mapdata分组的字段集合中，再按照字段所处group进行分组
                 foreach (DataRow row in ke.Value)
                 {
-                    if (!groups.ContainsKey((int)row["GROUPID"]))
-                        groups.Add((int)row["GROUPID"], new List<DataRow> { row });
+                    groupid = row["GROUPID"] == null || row["GROUPID"] == DBNull.Value ? 0 : (int) row["GROUPID"];
+
+                    if (!groups.ContainsKey(groupid))
+                        groups.Add(groupid, new List<DataRow> { row });
                     else
-                        groups[(int)row["GROUPID"]].Add(row);
+                        groups[groupid].Add(row);
                 }
 
                 foreach (KeyValuePair<int, List<DataRow>> ke2 in groups)

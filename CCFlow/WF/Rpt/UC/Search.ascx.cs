@@ -635,6 +635,8 @@ namespace CCFlow.WF.Rpt
                         frmDatas.Add(fk_mapdata, ens);
                         frmAttrs.Add(fk_mapdata, new MapAttrs(fk_mapdata));
 
+                        //增加明细表的字段定义
+                        frmAttrs.Add(dtlNo, new MapAttrs(dtlNo));
 
                         foreach (string frm in listFrms)
                         {
@@ -675,6 +677,7 @@ namespace CCFlow.WF.Rpt
                         int c = 0;
                         int lastRowIdx = 0;
                         MapAttr mattr = null;
+                        MapAttr dmattr = null;
                         IDataFormat fmt = null;
                         ICellStyle cellStyle = null;
                         int dtlRecordCount = dtlGes != null ? dtlGes.Count : 0;
@@ -820,7 +823,14 @@ namespace CCFlow.WF.Rpt
                                                     if (mattr.LGType == FieldTypeS.Normal)
                                                         dr1[mattr.MyPK] = newEn.GetValIntByKey(tcell.DtlKeyOfEn);
                                                     else
-                                                        dr1[mattr.MyPK] = newEn.GetValRefTextByKey(tcell.DtlKeyOfEn);
+                                                    {
+                                                        //此处需要区别明细表的该字段数据类型是否与主表一致
+                                                        dmattr = frmAttrs[tcell.FK_DtlMapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_DtlMapData + "_" + tcell.DtlKeyOfEn) as MapAttr;
+                                                        if (dmattr.MyDataType == mattr.MyDataType)
+                                                            dr1[mattr.MyPK] = newEn.GetValRefTextByKey(tcell.DtlKeyOfEn);
+                                                        else
+                                                            dr1[mattr.MyPK] = newEn.GetValStringByKey(tcell.DtlKeyOfEn);
+                                                    }
                                                     break;
                                                 case DataType.AppFloat:
                                                 case DataType.AppMoney:

@@ -576,6 +576,9 @@ namespace BP.WF
                 return false;
             }
         }
+        /// <summary>
+        /// 插入之后执行的方法.
+        /// </summary>
         protected override void afterInsert()
         {
             try
@@ -619,7 +622,7 @@ namespace BP.WF
             }
             catch(Exception ex)
             {
-                BP.DA.Log.DebugWriteError("消息机制没有配置成功."+ex.Message);
+                BP.DA.Log.DebugWriteError("@消息机制没有配置成功."+ex.Message);
             }
             base.afterInsert();
         }

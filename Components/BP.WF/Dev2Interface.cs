@@ -4833,12 +4833,6 @@ namespace BP.WF
             // 执行对报表的数据表WFState状态的更新,让它为runing的状态.
             if (string.IsNullOrEmpty(title) == false)
             {
-                if (fl.TitleRole != "@OutPara")
-                {
-                    fl.TitleRole = "@OutPara";
-                    fl.Update();
-                }
-
                 ps = new Paras();
                 ps.SQL = "UPDATE " + fl.PTable + " SET PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID,WFState=" + dbstr + "WFState,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
                 ps.Add(GERptAttr.PFlowNo, parentFlowNo);
@@ -4960,21 +4954,6 @@ namespace BP.WF
 
             Flow fl = new Flow(flowNo);
             Node nd = new Node(fl.StartNodeID);
-
-            #region 处理流程标题.
-            if (string.IsNullOrEmpty(title) == false && fl.TitleRole != "@OutPara")
-            {
-                /*如果标题不为空*/
-                fl.TitleRole = "@OutPara"; //特殊标记不为空.
-                fl.Update();
-            }
-            if (string.IsNullOrEmpty(title) == true && fl.TitleRole == "@OutPara")
-            {
-                /*如果标题为空 */
-                fl.TitleRole = ""; //特殊标记不为空.
-                fl.Update();
-            }
-            #endregion 处理流程标题.
 
             // 下一个工作人员。
             Emp emp = new Emp(flowStarter);

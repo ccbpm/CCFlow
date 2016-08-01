@@ -6506,7 +6506,7 @@ namespace BP.WF
                     titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
             }
 
-            if (titleRole == "@OutPara")
+            if (titleRole == "@OutPara" || string.IsNullOrEmpty(titleRole)==true)
                 titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
 
 
@@ -6583,7 +6583,7 @@ namespace BP.WF
                     titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
             }
 
-            if (titleRole == "@OutPara")
+            if (titleRole == "@OutPara" || string.IsNullOrEmpty(titleRole) == true )
                 titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
 
 
@@ -6719,7 +6719,7 @@ namespace BP.WF
             #region 设置流程标题.
             if (this.title == null)
             {
-                if (this.HisFlow.TitleRole == "@OutPara")
+                if (this.HisFlow.TitleRole == "@OutPara" || string.IsNullOrEmpty(this.HisFlow.TitleRole) == true)
                 {
                     /*如果是外部参数,*/
                     gwf.Title = DBAccess.RunSQLReturnString("SELECT Title FROM " + this.HisFlow.PTable + " WHERE OID=" + this.WorkID);

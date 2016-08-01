@@ -128,12 +128,6 @@ namespace BP.WF
             // 执行对报表的数据表WFState状态的更新,让它为runing的状态.
             if (string.IsNullOrEmpty(title) == false)
             {
-                if (fl.TitleRole != "@OutPara")
-                {
-                    fl.TitleRole = "@OutPara";
-                    fl.Update();
-                }
-
                 ps = new Paras();
                 ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
                 ps.Add(GERptAttr.WFState, (int)WFState.Blank);

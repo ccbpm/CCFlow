@@ -165,7 +165,7 @@ namespace CCFlow.WF.Admin.AttrNode
                 this.Pub2.Add(cb2);
             }
             #endregion 绑定节点
-
+          
         }
 
         protected void Btn_Save_Click(object sender, EventArgs e)

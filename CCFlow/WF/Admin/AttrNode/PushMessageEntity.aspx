@@ -68,37 +68,28 @@
 
 </fieldset>
  
-
-
 <!--------   邮件提醒.   -------------------------->
 <fieldset> 
 <legend>启用邮件提醒</legend>
-
 <table style="width:100%;" >
 <tr>
 <td colspan="2" ><asp:RadioButton ID="RB_Email_0" runat="server"  Text="不发送"  GroupName="email"/>   </td>
 </tr>
-
 <tr>
 <td colspan="2"> <asp:RadioButton ID="RB_Email_1" runat="server"  Text="本节点的接受人"  GroupName="email"/>  </td>
 </tr>
- 
 <tr>
 <td><asp:RadioButton ID="RB_Email_2" runat="server"  Text="表单上的字段作为邮件" GroupName="email"/>   </td>
 <td>选择一个字段:<asp:DropDownList ID="DDL_Email" runat="server">
        </asp:DropDownList>  
        </td>
 </tr>
-
-
    <tr>
     <td><asp:RadioButton ID="RB_Email_3" runat="server"  Text="其他节点的处理人"  GroupName="email"/> </td>
     <td>
         <uc1:Pub ID="Pub2" runat="server" />
        </td>
    </tr>
-
-
 <tr>
   <td style="width:200px;" > 
             <fieldset style="border:0px;">

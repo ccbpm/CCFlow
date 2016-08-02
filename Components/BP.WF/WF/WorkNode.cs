@@ -6509,7 +6509,6 @@ namespace BP.WF
             if (titleRole == "@OutPara" || string.IsNullOrEmpty(titleRole)==true)
                 titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
 
-
             titleRole = titleRole.Replace("@WebUser.No", wk.Rec);
             titleRole = titleRole.Replace("@WebUser.Name", wk.RecText);
             titleRole = titleRole.Replace("@WebUser.FK_DeptName", wk.RecOfEmp.FK_DeptText);

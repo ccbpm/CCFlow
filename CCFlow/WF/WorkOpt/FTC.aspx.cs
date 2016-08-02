@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.Web.Controls;
 using BP.WF;
 using BP.WF.Template;
 using BP.DA;
@@ -73,7 +75,7 @@ namespace CCFlow.WF.WorkOpt
             if (ftc.FTCWorkModel == 1)
             {
                 /*如果是高级模式,就让其转到高级模式的设置.*/
-                string url=this.Request.RawUrl.Replace("FTC.","TransferCustom.");
+                string url=this.Request.RawUrl.Replace("FTC.","TransferCustom.").Replace("OID=","WorkID=");
                 this.Response.Redirect(url,true);
                 return;
             }
@@ -148,10 +150,40 @@ namespace CCFlow.WF.WorkOpt
                     {
                         BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
                         ddl.ID = "DDL_" + nd.NodeID;
+                        ddl.Attributes["onchange"] = "selectEmps(this)";
                         DataSet ds = BP.WF.Dev2Interface.WorkOpt_AccepterDB(nd.NodeID, this.WorkID);
 
                         BP.Web.Controls.Glo.DDL_BindDataTable(ddl, ds.Tables["Port_Emp"], tc.Worker,"No","Name");
-                        this.Pub1.AddTD(ddl);
+
+                        //如果是多人处理的，则增加多人处理项
+                        if(tc.Worker.IndexOf(',') != -1)
+                        {
+                            ddl.Items.Add(new ListItem(tc.WorkerName, tc.Worker));
+                            ddl.SelectedIndex = ddl.Items.Count - 1;
+                        }
+
+                        //如果当前节可处理人多于1人，则增加一项，多选
+                        if(ddl.Items.Count > 2)
+                        {
+                            ddl.Items.Add(new ListItem("选择多人...", "0"));
+                        }
+
+                        this.Pub1.AddTDBegin();
+                        this.Pub1.Add(ddl);
+
+                        StringBuilder s = new StringBuilder();
+
+                        foreach (DataRow r in ds.Tables["Port_Emp"].Rows)
+                            s.Append(string.Format("{0},{1};", r["No"], r["Name"]));
+
+                        HiddenField hidden = new HiddenField();
+                        hidden.ID = "HID_" + nd.NodeID;
+                        hidden.Value = s.ToString();
+                        this.Pub1.Add(hidden);
+
+                        this.Pub1.AddTDEnd();
+                        
+                        //this.Pub1.AddTD(ddl);
 
                         TextBox tb = new TextBox();
                         tb.ID = "TB_PlanDT_" + nd.NodeID;
@@ -193,15 +225,35 @@ namespace CCFlow.WF.WorkOpt
                 tfc.PlanDT = tb.Text;
 
                 //工作人员,多个用逗号分开.
-                tfc.Worker = this.Pub1.GetDDLByID("DDL_" + nd.NodeID).SelectedItemStringVal; ;
+                DDL ddl = this.Pub1.GetDDLByID("DDL_" + nd.NodeID);
+                tfc.Worker = this.Request.Params[ddl.UniqueID];
+                tfc.WorkerName = string.Empty;
+                string workers = "," + tfc.Worker + ",";
 
                 //选择人的名字,多个用逗号分开.
-                tfc.WorkerName = this.Pub1.GetDropDownListByID("DDL_" + nd.NodeID).SelectedItem.Text;
+                foreach(ListItem item in ddl.Items)
+                {
+                    if (workers.IndexOf("," + item.Value + ",") != -1 && item.Value.IndexOf(',') == -1)
+                        tfc.WorkerName += item.Text + ",";
+                }
+
+                tfc.WorkerName = tfc.WorkerName.Substring(0, tfc.WorkerName.Length - 1);
+
+                if(tfc.Worker.IndexOf(',') != -1)
+                {
+                    if (ddl.Items.FindByValue(tfc.Worker) == null)
+                    {
+                        ddl.Items.Insert(ddl.Items.Count - 1, new ListItem(tfc.WorkerName, tfc.Worker));
+                        ddl.SelectedIndex = ddl.Items.Count - 2;
+                    }
+                    else
+                    {
+                        ddl.SetSelectItem(tfc.Worker);
+                    }
+                }
 
                 tfc.WorkID = this.WorkID;
-
                 tfc.MyPK = tfc.FK_Node + "_" + this.WorkID ;
-
                 tfc.Idx = nd.Step;
 
                 tfc.Save(); //执行保存.
@@ -211,7 +263,6 @@ namespace CCFlow.WF.WorkOpt
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.TransferCustomType = TransferCustomType.ByWorkerSet;
             gwf.Update();
-
         }
     }
 }

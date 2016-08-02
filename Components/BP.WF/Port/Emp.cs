@@ -274,11 +274,14 @@ namespace BP.WF.Port
             {
                 if (attr.DefValReal.Contains("@WebUser.No") == true)
                 {
-                    BP.Sys.MapData md = new Sys.MapData(attr.FK_MapData);
-                    sql = "UPDATE " + md.PTable + " SET " + attr.KeyOfEn + "='" + userNo + "' WHERE " + attr.KeyOfEn + "='" + this.No + "'";
-                    i = DBAccess.RunSQL(sql);
-                    if (i != 0)
-                        msg += "@表["+md.Name+"],["+md.PTable+"] ["+attr.KeyOfEn+"]，更新了[" + i + "]个。";
+                    BP.Sys.MapData md = new Sys.MapData();
+                    if (md.IsExit(EntityNoAttr.No, attr.FK_MapData) == true)
+                    {
+                        sql = "UPDATE " + md.PTable + " SET " + attr.KeyOfEn + "='" + userNo + "' WHERE " + attr.KeyOfEn + "='" + this.No + "'";
+                        i = DBAccess.RunSQL(sql);
+                        if (i != 0)
+                            msg += "@表[" + md.Name + "],[" + md.PTable + "] [" + attr.KeyOfEn + "]，更新了[" + i + "]个。";
+                    }
                 }
             }
 

@@ -679,7 +679,6 @@ namespace CCFlow.WF.Rpt
                         MapAttr mattr = null;
                         MapAttr dmattr = null;
                         IDataFormat fmt = null;
-                        ICellStyle cellStyle = null;
                         int dtlRecordCount = dtlGes != null ? dtlGes.Count : 0;
                         string workid = string.Empty;
                         Entity newEn = null;
@@ -703,7 +702,7 @@ namespace CCFlow.WF.Rpt
                                 //垂直方向填充数据时，先将缺少的行数增加上
                                 for (int i = sheet.LastRowNum; i < tmp.BeginIdx + ens.Count + dtlRecordCount - 1; i++)
                                 {
-                                    sheet.CreateRow(i + 1);
+                                    sheet.GetRow(lastRowIdx).CopyRowTo(i + 1);
                                 }
 
                                 //生成列
@@ -859,7 +858,7 @@ namespace CCFlow.WF.Rpt
                                 for (int i = 0; i < dtData.Rows.Count; i++)
                                 {
                                     dr1 = dtData.Rows[i];
-
+                                    
                                     foreach (RptExportTemplateCell tcell in tmp.Cells)
                                     {
                                         r = tmp.Direction == FillDirection.Vertical
@@ -870,13 +869,10 @@ namespace CCFlow.WF.Rpt
                                                 : (i + tmp.BeginIdx);
                                         row = sheet.GetRow(r);
                                         cell = row.GetCell(c);
-                                        cellStyle = wb.CreateCellStyle();
-                                        cellStyle.CloneStyleFrom(sheet.GetRow(lastRowIdx).GetCell(c).CellStyle);
 
                                         if (cell == null)
                                         {
                                             cell = row.CreateCell(c);
-                                            cell.CellStyle = wb.CreateCellStyle();
                                         }
 
                                         mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
@@ -885,15 +881,12 @@ namespace CCFlow.WF.Rpt
                                         {
                                             case DataType.AppString:
                                                 cell.SetCellValue(dr1[mattr.MyPK] as string);
-                                                cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 break;
                                             case DataType.AppInt:
                                                 if (mattr.LGType == FieldTypeS.Normal)
                                                     cell.SetCellValue((int)dr1[mattr.MyPK]);
                                                 else
                                                     cell.SetCellValue(dr1[mattr.MyPK] as string);
-
-                                                cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 break;
                                             case DataType.AppFloat:
                                             case DataType.AppMoney:
@@ -901,22 +894,17 @@ namespace CCFlow.WF.Rpt
                                                     cell.SetCellValue((double)dr1[mattr.MyPK]);
                                                 else
                                                     cell.SetCellValue(dr1[mattr.MyPK] as string);
-
-                                                cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 break;
                                             case DataType.AppDate:
                                                 cell.SetCellValue(dr1[mattr.MyPK] as string);
-                                                cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
                                                 break;
                                             case DataType.AppDateTime:
                                                 cell.SetCellValue(dr1[mattr.MyPK] as string);
-                                                cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
                                                 break;
                                             case DataType.AppBoolean:
                                                 cell.SetCellValue((bool)dr1[mattr.MyPK]);
-                                                cell.CellStyle.CloneStyleFrom(cellStyle);
                                                 break;
                                             default:
                                                 throw new Exception("未涉及到的数据类型，请检查数据是否正确。");

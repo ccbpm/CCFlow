@@ -4,7 +4,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
 <%
-   //获取待办。
+   //获取待办, 返回一个数据源，生成一个待办列表。
    System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No,null);
    // 输出结果
    %> 

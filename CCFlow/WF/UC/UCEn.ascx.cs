@@ -3288,9 +3288,10 @@ namespace CCFlow.WF.UC
                 }
                 #endregion
 
-                if (attr.MaxLen >= 3999 || attr.TBModel == TBModel.RichText)
+                if (attr.MaxLen >= 3999 && attr.TBModel == TBModel.RichText)
                 {
                     this.AddRichTextBox(en, attr);
+
                     this.Add("</span>");
                     this.Add("</DIV>");
                     continue;

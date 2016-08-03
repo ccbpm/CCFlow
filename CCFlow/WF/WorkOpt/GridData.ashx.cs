@@ -342,8 +342,9 @@ namespace CCFlow.WF.WorkOpt
             {
                 //把数据赋值给wk.
                 wk.Row = ndxxRpt.Row;
-                string tempJson =  JsonConvert.SerializeObject(wk.Row);
-                jsonData  = tempJson;
+                jsonData = "{\"MainPage\":[";
+                jsonData += JsonConvert.SerializeObject(wk.Row);
+                jsonData += "]}";
             }
             return jsonData;
         }

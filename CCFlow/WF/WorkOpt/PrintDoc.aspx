@@ -27,7 +27,7 @@
                             for (var idx in jsonData) {
                                 var childReport = ReportViewer.Report.ControlByName(jsonData[idx].Name);
                                 if (childReport == undefined || childReport == null) {
-                                    alert("加载子报表为空");
+                                    //alert("加载子报表为空");
                                 } else {
                                     childReport.AsSubReport.Report.LoadDataFromURL("/WF/WorkOpt/GridData.ashx?WorkID=<%=this.WorkID %>&FK_Flow=<%=this.FK_Flow %>&FK_Node=<%=this.FK_Node %>&DoType=1&Name="+jsonData[idx].Name);
                                 }

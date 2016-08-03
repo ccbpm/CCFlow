@@ -37,12 +37,12 @@
 </head>
 <body style="margin:0px;height:800px">
     <script type="text/javascript">
-//        var file = "../../DataUser/CyclostyleFile/<%=Request.QueryString["grf"] %>";
+        var file = "../../DataUser/CyclostyleFile/<%=Request.QueryString["grf"] %>";
         //修改一个报表，在完成报表设计后，将报表保存在web服务器上
         //前面两个参数分别指定模板载入与保存的URL，
         //第三个参数指定报表数据的URL，以便在设计时载入数据及时查看效果
         //这里不指定任何参数，在 OpenReport 与 SaveReport 中进行具体的参数化处理
-        CreateDesignerEx("100%", "100%", "", "", "",  "<param name='OnOpenReport' value='OnOpenReport'><param name='OnSaveReport' value='OnSaveReport'>");
+        CreateDesignerEx("100%", "100%", file, "", "", "<param name='OnOpenReport' value='OnOpenReport'><param name='OnSaveReport' value='OnSaveReport'>");
     </script>
 </body>
 </html>

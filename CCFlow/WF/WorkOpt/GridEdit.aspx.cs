@@ -55,15 +55,12 @@ namespace CCFlow.WF.WorkOpt
                     case "load":
                         string loadPathFile = Server.MapPath("~") + "DataUser\\CyclostyleFile\\" + Request.QueryString["grf"];
                         Response.Clear();
-                             Response.WriteFile(loadPathFile);
+                        Response.WriteFile(loadPathFile);
                         break;
                     default:
                         break;
                 }
-
-
-             }
-
+            }
         }
     }
 }

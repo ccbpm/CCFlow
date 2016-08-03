@@ -4865,7 +4865,13 @@ namespace BP.WF
             gwf.DeptName = WebUser.FK_DeptName;
             gwf.FK_Node = fl.StartNodeID;
             gwf.NodeName = nd.Name;
-            gwf.WFState = WFState.Runing;
+            gwf.WFState = WFState.Blank;
+            //默认启用草稿,如果写入待办则状态为运行
+            if(fl.DraftRole == DraftRole.SaveToTodolist)
+                gwf.WFState = WFState.Runing;
+            if (fl.DraftRole == DraftRole.SaveToDraftList)
+                gwf.WFState = WFState.Draft;
+
             if (string.IsNullOrEmpty(title))
                 gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
             else
@@ -5027,8 +5033,21 @@ namespace BP.WF
             gwf.FK_Node = fl.StartNodeID;
 
             gwf.NodeName = nd.Name;
-            gwf.WFSta = WFSta.Runing;
-            gwf.WFState = WFState.Runing;
+
+            //默认是空白流程
+            gwf.WFSta = WFSta.Etc;
+            gwf.WFState = WFState.Blank;
+            //保存到草稿
+            if (fl.DraftRole == DraftRole.SaveToDraftList)
+            {
+                gwf.WFState = WFState.Draft;
+            }
+            else if (fl.DraftRole == DraftRole.SaveToTodolist)
+            {
+                //保存到待办
+                gwf.WFSta = WFSta.Runing;
+                gwf.WFState = WFState.Runing;
+            }
 
             if (string.IsNullOrEmpty(title))
                 gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
@@ -5085,13 +5104,30 @@ namespace BP.WF
             }
             #endregion 为开始工作创建待办
 
-            // 执行对报表的数据表WFState状态的更新,让它为runing的状态. 
+            // 执行对报表的数据表WFState状态的更新 
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Title=" + dbstr 
                 + "Title,FK_Dept=" + dbstr + "FK_Dept,PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID WHERE OID=" + dbstr + "OID";
-            ps.Add("WFState", (int)WFState.Runing);
-            ps.Add("WFSta", (int)WFSta.Runing);
+
+            //默认启用草稿
+            if (fl.DraftRole == DraftRole.None)
+            {
+                ps.Add("WFState", (int)WFState.Blank);
+                ps.Add("WFSta", (int)WFSta.Etc);
+            }
+            else if (fl.DraftRole == DraftRole.SaveToDraftList)
+            {
+                //保存到草稿
+                ps.Add("WFState", (int)WFState.Draft);
+                ps.Add("WFSta", (int)WFSta.Etc);
+            }
+            else if (fl.DraftRole == DraftRole.SaveToTodolist)
+            {
+                //保存到待办
+                ps.Add("WFState", (int)WFState.Runing);
+                ps.Add("WFSta", (int)WFSta.Runing);
+            }
             ps.Add("Title", gwf.Title);
             ps.Add("FK_Dept", gwf.FK_Dept);
 

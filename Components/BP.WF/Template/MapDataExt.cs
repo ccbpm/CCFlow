@@ -1020,6 +1020,16 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "批量修改字段"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/Img/field.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
@@ -1199,6 +1209,15 @@ namespace BP.WF.Template
                 item.Save();
             }
             return "执行成功";
+        }
+        /// <summary>
+        /// 批量修改字段
+        /// </summary>
+        /// <returns></returns>
+        public string DoBatchEditAttr()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/BatchEdit.aspx?FK_MapData=" +
+                   this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 批量设置正则表达式规则.

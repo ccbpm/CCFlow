@@ -170,6 +170,7 @@ namespace BP.WF.Template
                 map.AddSearchAttr(MapDataAttr.DBSrc);
 
                 #region 方法 - 基本功能.
+
                 RefMethod rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
@@ -194,6 +195,16 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "批量修改字段"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/Img/field.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
@@ -241,14 +252,7 @@ namespace BP.WF.Template
 
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "批量修改字段"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/Img/field.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
+              
 
 
                 rm = new RefMethod();

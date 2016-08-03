@@ -4,12 +4,12 @@
 //   本插件安装文件到网站对应目录，并更新这里的版本号。
 //3、更多详细信息请参考帮助中“报表插件(WEB报表)->在服务器部署插件安装包”部分
 var gr_InstallPath = "WF/Activex"; //实际项目中应该写从根目录寻址的目录，如gr_InstallPath="/myapp/report/grinstall"; 
-var gr_Version = "5,8,14,110";
+var gr_Version = "6,0,15,0819";
 
 //以下注册号为本机开发测试注册号，报表访问地址为localhost时可以去掉试用标志
 //购买注册后，请用您的注册用户名与注册号替换下面变量中值
 var gr_UserName = '锐浪报表插件本机开发测试注册';
-var gr_SerialNo = '4DFB949E066NYS7W11L8KAT53SA177391Q9LZQ094WUT9C9J3813SX8PTQC4ALPB9UAQN6TMA55Q3BN8E5726Z5A839QAD9P6E76TKNK5';
+var gr_SerialNo = '8PJH495VA61FLI5TG0L4KB2337F1G7AKLD6LNNA9F9T28IKRU6N33P8Z6XX4BUYB5E9NZ6INMD5T8EN47IX63VV7F9BJHB5ZJQQ6MX3J3V12C4XDHU97SXX6X3VA57KCB6';
 
 //报表插件目前只能在32位浏览器中使用
 var _gr_platform = window.navigator.platform;
@@ -22,7 +22,7 @@ var _gr_isIE = (_gr_agent.indexOf("msie")>0)? true : false;
 
 var gr_CodeBase;
 if( _gr_isIE )
-    gr_CodeBase = 'codebase="' + gr_InstallPath + '/grbsctl5.cab#Version=' + gr_Version + '"';
+    gr_CodeBase = 'codebase="' + gr_InstallPath + '/grbsctl6.cab#Version=' + gr_Version + '"';
 else
     gr_CodeBase = '';
 
@@ -33,9 +33,9 @@ function CreateReport(PluginID, EventParams)
 {
     var typeid;
     if( _gr_isIE )
-        typeid = 'classid="clsid:25240C9A-6AA5-416c-8CDA-801BBAF03928" ';
+        typeid = 'classid="clsid:396841CC-FC0F-4989-8182-EBA06AA8CA2F" ';
     else
-        typeid = 'type="application/x-grplugin-report" ';
+        typeid = 'type="application/x-grplugin6-report" ';
     typeid += gr_CodeBase;
 	document.write('<object id="' + PluginID + '" ' + typeid);
 	document.write(' width="0" height="0" VIEWASTEXT>');
@@ -60,9 +60,9 @@ function CreatePrintViewerEx2(PluginID, Width, Height, ReportURL, DataURL, AutoR
 {
     var typeid;
     if( _gr_isIE )
-        typeid = 'classid="clsid:B7EF88E6-A0AD-4235-B418-6F07D8533A9F" ' + gr_CodeBase;
+        typeid = 'classid="clsid:ABB64AAC-D7E8-4733-B052-1B141C92F3CE" ' + gr_CodeBase;
     else
-        typeid = 'type="application/x-grplugin-printviewer"';
+        typeid = 'type="application/x-grplugin6-printviewer"';
 	document.write('<object id="' + PluginID + '" ' + typeid);
 	document.write(' width="' + Width + '" height="' + Height + '">');
 	document.write('<param name="ReportURL" value="' + ReportURL + '">');
@@ -86,9 +86,9 @@ function CreateDisplayViewerEx2(PluginID, Width, Height, ReportURL, DataURL, Aut
 {
     var typeid;
     if( _gr_isIE )
-        typeid = 'classid="clsid:CB45DFE5-6C35-4687-B790-FEC65D512859" ' + gr_CodeBase;
+        typeid = 'classid="clsid:600CD6D9-EBE1-42cb-B8DF-DFB81977122E" ' + gr_CodeBase;
     else
-        typeid = 'type="application/x-grplugin-displayviewer"';
+        typeid = 'type="application/x-grplugin6-displayviewer"';
 	document.write('<object id="' + PluginID + '" ' + typeid);
 	document.write(' width="' + Width + '" height="' + Height + '">');
 	document.write('<param name="ReportURL" value="' + ReportURL + '">');
@@ -111,9 +111,11 @@ function CreateDesignerEx(Width, Height, LoadReportURL, SaveReportURL, DataURL, 
 {
     var typeid;
     if( _gr_isIE )
-        typeid = 'classid="clsid:3C19F439-B64D-4dfb-A96A-661FE70EA04D" ' + gr_CodeBase;
+        typeid = 'classid="clsid:CE666189-5D7C-42ee-AAA4-E5CB375ED3C7" ' + gr_CodeBase;
     else
-        typeid = 'type="application/x-grplugin-designer"';
+        typeid = 'type="application/x-grplugin6-designer"';
+
+
 	document.write('<object id="ReportDesigner" ' + typeid);
 	document.write(' width="' + Width + '" height="' + Height + '">');
 	document.write('<param name="LoadReportURL" value="' + LoadReportURL + '">');

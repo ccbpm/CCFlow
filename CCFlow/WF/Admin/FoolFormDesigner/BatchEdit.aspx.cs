@@ -33,9 +33,11 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTDTitle("最小长度");
             this.Pub1.AddTDTitle("最大长度");
 
+            this.Pub1.AddTDTitle("是否可以用？");
+
             //add by myflow-大连 2014-08-01
             this.Pub1.AddTDTitle("分组");
-            this.Pub1.AddTDTitle("最大长度");
+            this.Pub1.AddTDTitle("顺序");
 
             GroupFields gfs = new GroupFields();
             gfs.RetrieveFieldGroup(this.FK_MapData); 
@@ -83,6 +85,12 @@ namespace CCFlow.WF.MapDef
                 tb.Columns = 3;
                 this.Pub1.AddTD(tb);
 
+                CheckBox cb = new CheckBox();
+                cb.ID = "CB_IsEdit_"+attr.KeyOfEn;
+                cb.Text = "是否可编辑?";
+                cb.Checked = attr.UIIsEnable;
+                this.Pub1.AddTD(cb);
+                
                 //隶属分组
                 BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
                 ddl.ID = "DDL_Group_" + attr.KeyOfEn;
@@ -135,6 +143,10 @@ namespace CCFlow.WF.MapDef
                     
                     int groupID  =this.Pub1.GetDDLByID("DDL_Group_" + attr.KeyOfEn).SelectedItemIntVal;
 
+                    //是否可编辑.
+                    bool isEnable = this.Pub1.GetCBByID("CB_IsEdit_" + attr.KeyOfEn).Checked;
+
+
                     if (attr.KeyOfEn != filed)
                     {
                         attr.Delete();
@@ -143,6 +155,7 @@ namespace CCFlow.WF.MapDef
                         attr.Name = name;
                         attr.MaxLen = maxLen;
                         attr.MinLen = minLen;
+                        attr.UIIsEnable = isEnable;
                         //add by myflow-大连 2014-08-01
                         attr.Idx = idx;
                         //end
@@ -155,6 +168,9 @@ namespace CCFlow.WF.MapDef
 
                     bool isChange = false;
                     if (attr.Name != name)
+                        isChange = true;
+
+                    if (attr.UIIsEnable != isEnable)
                         isChange = true;
 
                     if (attr.MinLen != minLen)
@@ -176,6 +192,8 @@ namespace CCFlow.WF.MapDef
                     attr.MaxLen = maxLen;
                     attr.MinLen = minLen;
                     attr.Name = name;
+                    attr.UIIsEnable = isEnable; 
+
                     //add by myflow-大连 2014-08-01
                     attr.Idx = idx;
                     //end

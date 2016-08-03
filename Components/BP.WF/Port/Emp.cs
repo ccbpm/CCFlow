@@ -219,7 +219,7 @@ namespace BP.WF.Port
             if (i != 0)
                 msg += "@待办更新[" + i + "]个。";
 
-            sql = "UPDATE WF_GENERWORKFLOW A  SET A.STARTER='"+userNo+"'  WHERE STARTER='"+this.No+"'";
+            sql = "UPDATE WF_GENERWORKFLOW  SET STARTER='"+userNo+"'  WHERE STARTER='"+this.No+"'";
             i = BP.DA.DBAccess.RunSQL(sql);
             if (i != 0)
                 msg += "@流程注册更新[" + i + "]个。";
@@ -274,16 +274,21 @@ namespace BP.WF.Port
             {
                 if (attr.DefValReal.Contains("@WebUser.No") == true)
                 {
-                    BP.Sys.MapData md = new Sys.MapData();
-                    if (md.IsExit(EntityNoAttr.No, attr.FK_MapData) == true)
+                    try
                     {
+                        BP.Sys.MapData md = new Sys.MapData(attr.FK_MapData);
                         sql = "UPDATE " + md.PTable + " SET " + attr.KeyOfEn + "='" + userNo + "' WHERE " + attr.KeyOfEn + "='" + this.No + "'";
                         i = DBAccess.RunSQL(sql);
                         if (i != 0)
                             msg += "@表[" + md.Name + "],[" + md.PTable + "] [" + attr.KeyOfEn + "]，更新了[" + i + "]个。";
                     }
+                    catch
+                    {
+
+                    }
                 }
             }
+            //人员主表信息-手动修改
 
             return msg;
         }

@@ -953,13 +953,6 @@ namespace BP.WF
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
             {
                 string sql = "";
-                //// 按岗位计算.
-                //sql += "SELECT FK_Flow FROM WF_Node WHERE NodePosType=0 AND ( WhoExeIt=0 OR WhoExeIt=2 ) AND NodeID IN ( SELECT FK_Node FROM WF_NodeStation WHERE FK_Station IN (SELECT FK_Station FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Emp='" + userNo + "')) ";
-                //sql += " UNION  "; //按指定的人员计算.
-                //sql += "SELECT FK_Flow FROM WF_Node WHERE NodePosType=0 AND ( WhoExeIt=0 OR WhoExeIt=2 ) AND NodeID IN ( SELECT FK_Node FROM WF_NodeEmp WHERE FK_Emp='" + userNo + "' ) ";
-                //sql += " UNION  "; // 按部门计算.
-                //sql += "SELECT FK_Flow FROM WF_Node WHERE NodePosType=0 AND ( WhoExeIt=0 OR WhoExeIt=2 ) AND NodeID IN ( SELECT FK_Node FROM WF_NodeDept WHERE FK_Dept IN(SELECT FK_Dept FROM Port_Emp WHERE No='" + userNo + "' UNION SELECT FK_DEPT FROM " + Glo.EmpDept + " WHERE FK_Emp='" + userNo + "') ) ";
-
                 // 采用新算法.
                 if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
                     sql = "SELECT FK_Flow FROM V_FlowStarter WHERE FK_Emp='" + userNo + "'";

@@ -4014,16 +4014,6 @@ namespace BP.WF
                 return int.Parse(Glo.PMTo.Replace(":", ""));
             }
         }
-        /// <summary>
-        /// 是否显示组织结构在设计器里
-        /// </summary>
-        public static bool IsShowOSInDesigner
-        {
-            get
-            {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsShowOSInDesigner", true);
-            }
-        }
         #endregion 与考核相关.
 
         #region 其他方法。

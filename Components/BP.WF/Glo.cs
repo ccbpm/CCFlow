@@ -317,7 +317,7 @@ namespace BP.WF
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson BLOB NULL");
                             break;
                         case DBType.MySQL:
-                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson TEXT");
+                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson LONGTEXT");
                             break;
                         default:
                             break;

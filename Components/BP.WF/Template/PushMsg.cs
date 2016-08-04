@@ -754,7 +754,7 @@ namespace BP.WF.Template
                     //发送邮件.
                     BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid);
                 }
-                return "@已向:{" + toEmpIDs + "}发送提醒邮件，由 " + this.FK_Event + " 发出.";
+                return "@已向:{" + toEmpIDs + "}发送提醒邮件.";
             }
             #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
 
@@ -783,7 +783,7 @@ namespace BP.WF.Template
                         BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event,
                             "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No,null,emp);
                     }
-                    return "@已向:{" + toEmpIDs + "}发送提醒邮件，由 " + this.FK_Event + " 发出.";
+                    return "@已向:{" + toEmpIDs + "}发送提醒邮件.";
                 }
 
                 if (this.MailPushWay == 2)
@@ -793,7 +793,7 @@ namespace BP.WF.Template
 
                     //发送邮件
                     BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event , "WKAlt" + currNode.NodeID + "_" + workid,BP.Web.WebUser.No,null,null);
-                    return "@已向:{" + emailAddress + "}发送提醒邮件，由 " + this.FK_Event + " 发出.";
+                    return "@已向:{" + emailAddress + "}发送提醒邮件.";
                 }
             }
             #endregion 发送成功事件.
@@ -822,7 +822,7 @@ namespace BP.WF.Template
                         //发送邮件.
                         BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, null, emp);
                     }
-                    return "@已向:{" + toEmpIDs + "}发送提醒邮件，由 SendSuccess 发出.";
+                    return "@已向:{" + toEmpIDs + "}发送提醒邮件.";
                 }
 
                 if (this.MailPushWay == 2)
@@ -833,7 +833,7 @@ namespace BP.WF.Template
                     //发送邮件
                     BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid,BP.Web.WebUser.No,null,null);
 
-                    return "@已向:{" + emailAddress + "}发送提醒邮件，由 SendSuccess 发出.";
+                    return "@已向:{" + emailAddress + "}发送提醒邮件.";
                 }
             }
             #endregion 发送成功事件.

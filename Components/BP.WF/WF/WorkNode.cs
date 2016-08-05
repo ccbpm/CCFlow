@@ -3735,9 +3735,14 @@ namespace BP.WF
                         //  throw new Exception("@流程设计错误:请检查流程获取详细信息, 合流点(" + this.HisNode.Name + ")下面不能连接合流节点(" + toND4.Name + ").");
                         case RunModel.SubThread:/*4.5 子线程*/
                             if (toND4.HisSubThreadType == SubThreadType.SameSheet)
+                            {
                                 NodeSend_24_SameSheet(toND4);
-                            //else
-                            //    NodeSend_24_UnSameSheet(toNDs); /*可能是只发送1个异表单*/
+                            }
+                            else
+                            {
+                                Nodes toNDs4 = this.Func_GenerNextStepNodes();
+                                NodeSend_24_UnSameSheet(toNDs4); /*可能是只发送1个异表单*/
+                            }
                             break;
                         //throw new Exception("@流程设计错误:请检查流程获取详细信息, 合流点(" + this.HisNode.Name + ")下面不能连接子线程节点(" + toND4.Name + ").");
                         default:

@@ -636,7 +636,10 @@ namespace CCFlow.WF.Rpt
                         frmAttrs.Add(fk_mapdata, new MapAttrs(fk_mapdata));
 
                         //增加明细表的字段定义
-                        frmAttrs.Add(dtlNo, new MapAttrs(dtlNo));
+                        if (!string.IsNullOrWhiteSpace(dtlNo))
+                        {
+                            frmAttrs.Add(dtlNo, new MapAttrs(dtlNo));
+                        }
 
                         foreach (string frm in listFrms)
                         {

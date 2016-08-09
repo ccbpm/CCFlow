@@ -770,6 +770,7 @@
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Rpt\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx" />
@@ -2151,6 +2152,7 @@
     <Content Include="WF\WorkOpt\CH.aspx" />
     <Content Include="WF\WorkOpt\ChartTrackV2.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
+    <Content Include="WF\WorkOpt\DTC.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />
     <Content Include="WF\WorkOpt\Forward.aspx" />
     <Content Include="WF\WorkOpt\FTC.aspx" />
@@ -4098,6 +4100,13 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx.designer.cs">
       <DependentUpon>InputCheck.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S8_RptExportTemplate.aspx.cs">
+      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\Rpt\S8_RptExportTemplate.aspx.designer.cs">
+      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SFEdit.aspx.cs">
       <DependentUpon>SFEdit.aspx</DependentUpon>
@@ -6904,6 +6913,13 @@
     </Compile>
     <Compile Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx.designer.cs">
       <DependentUpon>DealSubThreadReturnToHL.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\DTC.aspx.cs">
+      <DependentUpon>DTC.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\WorkOpt\DTC.aspx.designer.cs">
+      <DependentUpon>DTC.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\FHLFlow.aspx.cs">
       <DependentUpon>FHLFlow.aspx</DependentUpon>

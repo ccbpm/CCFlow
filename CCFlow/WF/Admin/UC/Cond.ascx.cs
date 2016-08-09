@@ -538,7 +538,7 @@ namespace CCFlow.WF.Admin
 
         void btn_Save_Click(object sender, EventArgs e)
         {
-            var btn = sender as LinkBtn;
+            LinkBtn btn = sender as LinkBtn;
             if (btn.ID == NamesOfBtn.Delete)
             {
                 DBAccess.RunSQL("DELETE FROM WF_Cond WHERE  ToNodeID=" + this.ToNodeID + " AND DataFrom=" + (int)ConnDataFrom.Form);
@@ -546,7 +546,13 @@ namespace CCFlow.WF.Admin
                 return;
             }
 
-            if (this.GetOperVal == "" || this.GetOperVal == null)
+            string oper = this.DDL_Oper.SelectedItemStringVal;
+            string val = this.GetOperVal;
+
+            if (val == null)
+                val = "";
+
+            if (val == "" && (oper != "=" || oper != "<>" || oper != "!="))
             {
                 this.Alert("您没有设置条件，请在值文本框中输入值。");
                 return;

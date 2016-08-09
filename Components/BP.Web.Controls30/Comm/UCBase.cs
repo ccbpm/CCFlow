@@ -428,7 +428,16 @@ namespace BP.Web.UC
                         if (ddl.Items.Count == 0)
                             continue;
 
-                        en.SetValByKey(key, ddl.SelectedValue);
+                        //edited by liuxc,2016-08-08,解决前台JS修改了DDL的下拉框值，后台使用常规方法获取不到新值的问题
+                        foreach (string paramKey in Request.Params.AllKeys)
+                        {
+                            if (paramKey.EndsWith(ddl.ID))
+                            {
+                                en.SetValByKey(key, Request.Params[paramKey]);
+                                break;
+                            }
+                        }
+                        //en.SetValByKey(key, ddl.SelectedValue);
 
                         //设置他的影子字段值.
                         if (ddl.SelectedItem.Text != "请选择")
@@ -442,7 +451,15 @@ namespace BP.Web.UC
                         if (myddl.Items.Count == 0)
                             continue;
 
-                        en.SetValByKey(key, myddl.SelectedValue);
+                        foreach (string paramKey in Request.Params.AllKeys)
+                        {
+                            if (paramKey.EndsWith(myddl.ID))
+                            {
+                                en.SetValByKey(key, Request.Params[paramKey]);
+                                break;
+                            }
+                        }
+                        //en.SetValByKey(key, myddl.SelectedValue);
 
                         //设置他的影子字段值.
                         if (myddl.SelectedItem.Text != "请选择")

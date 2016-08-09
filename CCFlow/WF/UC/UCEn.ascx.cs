@@ -3611,7 +3611,7 @@ namespace CCFlow.WF.UC
                             DDL ddle = new DDL();
                             ddle.ID = "DDL_" + attr.KeyOfEn;
                             ddle.Attributes["tabindex"] = attr.Idx.ToString();
-                            if (attr.UIIsEnable || activeFilds.Contains(attr.KeyOfEn + ","))
+                            if ((attr.UIIsEnable && this.IsReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
                             {
                                 ddle.BindSysEnum(attr.UIBindKey);
                                 ddle.SetSelectItem(en.GetValStrByKey(attr.KeyOfEn));

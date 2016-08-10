@@ -1122,6 +1122,7 @@ namespace BP.WF
                 mygwf.DeptName = BP.Web.WebUser.FK_DeptName;
                 mygwf.FK_Flow = this.No;
                 mygwf.FK_FlowSort = this.FK_FlowSort;
+                mygwf.SysType = this.SysType;
                 mygwf.FK_Node = nd.NodeID;
                 mygwf.WorkID = wk.OID;
                 mygwf.WFState = WFState.Blank;
@@ -4287,6 +4288,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 系统类别
+        /// </summary>
+        public string SysType
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.SysType);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.SysType, value);
+            }
+        }
+        /// <summary>
         /// 参数
         /// </summary>
         public string Paras
@@ -4580,7 +4595,10 @@ namespace BP.WF
 
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 10, 3);
                 map.AddTBString(FlowAttr.Name, null, "名称", true, false, 0, 500, 10);
+
                 map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);
+                map.AddTBString(FlowAttr.SysType, null, "系统类别", true, false, 0, 3, 10);
+
                 map.AddTBInt(FlowAttr.FlowRunWay, 0, "运行方式", false, false);
 
                 //  map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);

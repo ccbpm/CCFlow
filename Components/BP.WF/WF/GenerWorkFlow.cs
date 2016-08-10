@@ -164,6 +164,10 @@ namespace BP.WF
         /// </summary>
         public const string FK_FlowSort = "FK_FlowSort";
         /// <summary>
+        /// 系统类别
+        /// </summary>
+        public const string SysType = "SysType";
+        /// <summary>
         /// 优先级
         /// </summary>
         public const string PRI = "PRI";
@@ -454,6 +458,23 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.FK_FlowSort, value);
             }
         }
+        /// <summary>
+        /// 系统类别
+        /// </summary>
+        public string SysType
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.SysType);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.SysType, value);
+            }
+        }
+        /// <summary>
+        /// 发起人部门
+        /// </summary>
 		public string  FK_Dept
 		{
 			get
@@ -956,6 +977,7 @@ namespace BP.WF
                 map.AddTBInt(GenerWorkFlowAttr.FID, 0, "流程ID", true, true);
 
                 map.AddTBString(GenerWorkFlowAttr.FK_FlowSort, null, "流程类别", true, false, 0, 10, 10);
+                map.AddTBString(GenerWorkFlowAttr.SysType, null, "系统类别", true, false, 0, 10, 10);
                 map.AddTBString(GenerWorkFlowAttr.FK_Flow, null, "流程", true, false, 0, 3, 10);
                 map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
 

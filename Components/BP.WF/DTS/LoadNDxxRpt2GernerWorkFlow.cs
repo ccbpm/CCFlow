@@ -63,6 +63,8 @@ namespace BP.WF.DTS
                     gwf.FID = Int64.Parse(dr[NDXRptBaseAttr.FID].ToString());
 
                     gwf.FK_FlowSort = en.FK_FlowSort;
+                    gwf.SysType = en.SysType;
+
                     gwf.FK_Flow = en.No;
                     gwf.FlowName = en.Name;
                     gwf.Title = dr[NDXRptBaseAttr.Title].ToString();

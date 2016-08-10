@@ -176,6 +176,7 @@ namespace BP.WF
             gwf.FlowName = fl.Name;
             gwf.FK_Flow = flowNo;
             gwf.FK_FlowSort = fl.FK_FlowSort;
+            gwf.SysType = fl.SysType;
             gwf.FK_Dept = WebUser.FK_Dept;
             gwf.DeptName = WebUser.FK_DeptName;
             gwf.FK_Node = fl.StartNodeID;

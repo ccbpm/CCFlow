@@ -1241,6 +1241,8 @@ namespace BP.WF.Template
                 gwf.Starter = rpt.FlowStarter;
                 gwf.StarterName = empStarter.Name;
                 gwf.FK_FlowSort = fl.FK_FlowSort;
+                gwf.SysType = fl.SysType;
+
                 gwf.Title = rpt.Title;
                 gwf.WFState = WFState.ReturnSta; /*设置为退回的状态*/
                 gwf.FK_Dept = rpt.FK_Dept;

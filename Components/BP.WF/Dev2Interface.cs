@@ -4319,6 +4319,7 @@ namespace BP.WF
                 gwf.FK_Flow = flowNo;
                 BP.WF.Flow fl = new Flow(flowNo);
                 gwf.FK_FlowSort = fl.FK_FlowSort;
+                gwf.SysType = fl.SysType;
                 gwf.FK_Dept = WebUser.FK_Dept;
 
                 gwf.TransferCustomType = runType;
@@ -4356,6 +4357,8 @@ namespace BP.WF
                 gwf.FK_Flow = flowNo;
                 BP.WF.Flow fl = new Flow(flowNo);
                 gwf.FK_FlowSort = fl.FK_FlowSort;
+                gwf.SysType = fl.SysType;
+
                 gwf.FK_Dept = WebUser.FK_Dept;
 
                 gwf.TransferCustomType = runType;
@@ -4861,6 +4864,8 @@ namespace BP.WF
             gwf.FlowName = fl.Name;
             gwf.FK_Flow = flowNo;
             gwf.FK_FlowSort = fl.FK_FlowSort;
+            gwf.SysType = fl.SysType;
+
             gwf.FK_Dept = WebUser.FK_Dept;
             gwf.DeptName = WebUser.FK_DeptName;
             gwf.FK_Node = fl.StartNodeID;
@@ -5027,6 +5032,7 @@ namespace BP.WF
             gwf.FlowName = fl.Name;
             gwf.FK_Flow = flowNo;
             gwf.FK_FlowSort = fl.FK_FlowSort;
+            gwf.SysType = fl.SysType;
 
             gwf.FK_Dept = emp.FK_Dept;
             gwf.DeptName = emp.FK_DeptText;
@@ -5885,6 +5891,7 @@ namespace BP.WF
                         gwf.FlowName = fl.Name;
                         gwf.FK_Flow = fk_flow;
                         gwf.FK_FlowSort = fl.FK_FlowSort;
+                        gwf.SysType = fl.SysType;
 
                         gwf.FK_Node = fk_node;
                         gwf.NodeName = nd.Name;
@@ -6400,6 +6407,7 @@ namespace BP.WF
 
                 Flow fl = new Flow(flowNo);
                 gwf.FK_FlowSort = fl.FK_FlowSort;
+                gwf.SysType = fl.SysType;
                 gwf.FK_Node = nodeID;
                 gwf.Starter = emp.No;
                 gwf.StarterName = emp.Name;

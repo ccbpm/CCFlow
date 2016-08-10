@@ -2533,6 +2533,8 @@ namespace BP.WF
                         gwf.FK_Flow = nd.FK_Flow;
                         gwf.FlowName = nd.FlowName;
                         gwf.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;
+                        gwf.SysType = this.HisNode.HisFlow.SysType;
+
                         gwf.FK_Node = nd.NodeID;
                         gwf.NodeName = nd.Name;
                         gwf.FK_Dept = wl.FK_Dept;
@@ -3177,6 +3179,7 @@ namespace BP.WF
                     gwf.StarterName = this.ExecerName;
                     gwf.FK_Flow = toNode.FK_Flow;
                     gwf.FlowName = toNode.FlowName;
+
                     gwf.FID = this.WorkID;
                     gwf.FK_FlowSort = toNode.HisFlow.FK_FlowSort;
                     gwf.NodeName = toNode.Name;
@@ -6768,6 +6771,7 @@ namespace BP.WF
             gwf.FK_Flow = this.HisNode.FK_Flow;
             gwf.FlowName = this.HisNode.FlowName;
             gwf.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;
+            gwf.SysType = this.HisNode.HisFlow.SysType;
             gwf.FK_Node = this.HisNode.NodeID;
             gwf.NodeName = this.HisNode.Name;
             gwf.FK_Dept = this.HisWork.RecOfEmp.FK_Dept;

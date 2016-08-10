@@ -243,6 +243,10 @@ namespace BP.WF.Template
         /// 是否自动装载上一笔数据？
         /// </summary>
         public const string IsLoadPriData = "IsLoadPriData";
+        /// <summary>
+        /// 系统类别（第2级流程树节点编号）
+        /// </summary>
+        public const string SysType = "SysType";
         #endregion 开始节点数据导入规则.
 
         #region 父子流程

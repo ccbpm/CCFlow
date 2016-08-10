@@ -17,6 +17,20 @@ namespace BP.WF.Template
     {
         #region 属性.
         /// <summary>
+        /// 系统类别（第2级流程树节点编号）
+        /// </summary>
+        public string SysType
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.SysType);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.SysType, value);
+            }
+        }
+        /// <summary>
         /// 流程事件实体
         /// </summary>
         public string FlowEventEntity
@@ -349,6 +363,11 @@ namespace BP.WF.Template
                 //移动到这里 by zhoupeng 2016.04.08.
                 map.AddBoolean(FlowAttr.IsResetData, false, "是否启用开始节点数据重置按钮？", true, true, true);
                 map.AddBoolean(FlowAttr.IsLoadPriData, false, "是否自动装载上一笔数据？", true, true, true);
+
+
+                //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
+                map.AddTBString(FlowAttr.SysType, null, "类型类型", false, false, 0, 100, 10, false);
+
                 #endregion 基本属性。
 
                 #region 启动方式
@@ -1750,6 +1769,29 @@ namespace BP.WF.Template
                 if (md.PTable != fl.PTable)
                     md.Update();
             }
+
+            #region 为systype设置，当前所在节点的第2级别目录。
+            FlowSort fs = new FlowSort(fl.FK_FlowSort);
+            if (fs.ParentNo == "99")
+            {
+                this.SysType = fl.FK_FlowSort;
+            }
+            else
+            {
+                FlowSort fsP = new FlowSort(fs.ParentNo);
+                if (fsP.ParentNo == "99")
+                {
+                    this.SysType = fsP.No;
+                }
+                else
+                {
+                    FlowSort fsPP = new FlowSort(fsP.ParentNo);
+                    this.SysType = fsPP.No;
+                }
+            }
+            #endregion 为systype设置，当前所在节点的第2级别目录。
+
+
             base.afterInsertUpdateAction();
         }
         #endregion

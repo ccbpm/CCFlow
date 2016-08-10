@@ -717,11 +717,15 @@ namespace BP.WF.Data
 
                 Map map = new Map("WF_GenerWorkFlow", "流程查询");
 
+               // map.AddTBIntPK("WorkID", 0, "WorkID", true, true);
                 map.AddTBIntPK(GenerWorkFlowViewAttr.WorkID, 0, "WorkID", true, true);
+
 
                 map.AddTBString(GenerWorkFlowViewAttr.StarterName, null, "发起人", true, false, 0, 30, 10);
                 map.AddTBString(GenerWorkFlowViewAttr.Title, null, "标题", true, false, 0, 100, 10,true);
-                map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFSta, 0, "流程状态", true, false, GenerWorkFlowViewAttr.WFSta, "@0=运行中@1=已完成@2=其他");
+                map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFSta, 0, "流程状态", true, false, GenerWorkFlowViewAttr.WFSta,
+                    "@0=运行中@1=已完成@2=其他");
+
                 map.AddTBString(GenerWorkFlowViewAttr.NodeName, null, "当前节点名称", true, false, 0, 100, 10);
                 map.AddTBDateTime(GenerWorkFlowViewAttr.RDT, "记录日期", true, true);
                 map.AddTBString(GenerWorkFlowViewAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
@@ -734,8 +738,6 @@ namespace BP.WF.Data
                 map.AddTBInt(GenerWorkFlowViewAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(GenerWorkFlowViewAttr.FK_Node, 0, "FK_Node", false, false);
                 map.AddTBInt(GenerWorkFlowViewAttr.WFState, 0, "WFState", false, false);
-
-
 
                 map.AddDDLEntities(GenerWorkFlowViewAttr.FK_NY, null, "月份", new GenerWorkFlowViewNYs(), false);
 

@@ -27,6 +27,9 @@ namespace BP.Web.Comm
             url = url.Replace("/Comm/", "/Comm/RefFunc/");
             this.Response.Redirect(url,true);
             return;
+
+           
+
         }
 
         #region Web 窗体设计器生成的代码

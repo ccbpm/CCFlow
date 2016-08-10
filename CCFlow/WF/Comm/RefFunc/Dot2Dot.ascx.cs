@@ -424,7 +424,7 @@ namespace CCFlow.WF.Comm.RefFunc
                 if (cb.Checked == false)
                     continue;
 
-                key = ctl.ID.Split('_')[1];
+                  key = ctl.ID.Split('_')[1];
 
                 if (key == "EN" || key == "SE" || keys.Contains(key))
                     continue;

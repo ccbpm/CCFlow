@@ -137,6 +137,7 @@ namespace CCFlow.WF
             DataTable dt = null;
             if (this.IsPostBack == false)
             {
+                //首先通过API，获得可以退回的节点。
                 dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
                 if (dt.Rows.Count == 0)
                 {

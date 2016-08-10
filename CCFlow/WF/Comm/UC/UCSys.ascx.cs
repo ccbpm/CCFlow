@@ -2869,7 +2869,7 @@ namespace CCFlow.WF.Comm.UC
 
                         CheckBox cb = new CheckBox();
                         val = en.GetValStringByKey(showVal);
-                        cb.ID = "CB_" + val + "_" + gVal; //edited by liuxc,2015.1.6
+                        cb.ID = "CB_" + val + "_" + gVal;  //edited by liuxc,2015.1.6
                         cb.Text = en.GetValStringByKey(showText);
 
                         seEn = selectedEns.GetEntityByKey(selecteVal, val);

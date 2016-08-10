@@ -40,7 +40,7 @@
    </tr>
 
    <tr>
-    <td><asp:RadioButton ID="RB_SMS_3" runat="server"  Text="其他节点的处理人(未完成)"  GroupName="xx"/> </td>
+    <td><asp:RadioButton ID="RB_SMS_3" runat="server"  Text="其他节点的处理人"  GroupName="xx"/> </td>
     <td>
         <uc1:Pub ID="Pub1" runat="server" />
        </td>

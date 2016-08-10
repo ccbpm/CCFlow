@@ -3221,8 +3221,6 @@ namespace CCFlow.WF.UC
 
             #region 输出数据控件.
             TB tb = new TB();
-            //DDL ddl = new DDL();
-            //CheckBox cb = new CheckBox();
             int fSize = 0;
             foreach (MapAttr attr in mattrs)
             {
@@ -3639,111 +3637,117 @@ namespace CCFlow.WF.UC
                         ddlFK.ID = "DDL_" + attr.KeyOfEn;
                         ddlFK.Attributes["tabindex"] = attr.Idx.ToString();
                         this.Add(ddlFK);
-                        if (ddlFK.Enabled || activeFilds.Contains(attr.KeyOfEn + ","))
-                        {
-                            EntitiesNoName ens = attr.HisEntitiesNoName;
-                            ens.RetrieveAll();
-                            ddlFK.Enabled = true;
 
-                            //added by liuxc，2015-10-22
-                            //此处判断是否含有级联下拉框的情况，如果此属性是级联的下拉框，则判断其引起级联的属性值，根据此值只加载其级联子项
-                            MapExt me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
-                                                           MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
-                            if (me != null)
-                            {
-                                string valOper = en.GetValStringByKey(me.AttrOfOper);
+                           MapExt me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
+                                                       MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
 
-                                if (IsPostBack)
-                                {
-                                    valOper = Request.Params[ddlFK.UniqueID.Substring(0, ddlFK.UniqueID.Length - ddlFK.ID.Length) + "DDL_" + me.AttrOfOper];
-                                }
+                           if (me != null)
+                           {
+                               /*如果有装载填充了，就不给他加载数据了，因为在ａｆｔｅｒ里面会给他按照sql加载数据。*/
+                               //add by dgq 2013-4-9,添加内容修改后的事件
+                               ddlFK.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
+                           }
+                           else
+                           {
 
-                                if (!string.IsNullOrWhiteSpace(valOper))
-                                {
-                                    string fullSQL = me.Doc.Clone() as string;
-                                    fullSQL = fullSQL.Replace("~", ",");
-                                    fullSQL = fullSQL.Replace("@Key", valOper).Replace("@key", valOper);
-                                    fullSQL = fullSQL.Replace("@WebUser.No", WebUser.No);
-                                    fullSQL = fullSQL.Replace("@WebUser.Name", WebUser.Name);
-                                    fullSQL = fullSQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-                                    fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
+                               if (ddlFK.Enabled || activeFilds.Contains(attr.KeyOfEn + ","))
+                               {
+                                   EntitiesNoName ens = attr.HisEntitiesNoName;
+                                   ens.RetrieveAll();
+                                   ddlFK.Enabled = true;
 
-                                    DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
-                                    ddlFK.Items.Clear();
-                                    foreach (DataRow dr in dt.Rows)
-                                        ddlFK.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
-                                }
-                                else
-                                {
-                                    ddlFK.Items.Clear();
-                                }
-                            }
-                            else
-                            {
-                                ddlFK.BindEntities(ens);
-                            }
+                                   //added by liuxc，2015-10-22.
+                                   //此处判断是否含有级联下拉框的情况，如果此属性是级联的下拉框，则判断其引起级联的属性值，根据此值只加载其级联子项
+                                   me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
+                                                                  MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
+                                   if (me != null)
+                                   {
+                                       string valOper = en.GetValStringByKey(me.AttrOfOper);
 
-                            if (ddlFK.Items.Count > 0)
-                            {
-                                if (ddlFK.Items.FindByText("请选择") == null)
-                                {
-                                    ddlFK.Items.Insert(0, new ListItem("请选择", ""));
-                                }
-                            }
-                            else
-                            {
-                                if (ddlFK.Items.FindByText("无数据") == null)
-                                {
-                                    ddlFK.Items.Insert(0, new ListItem("无数据", ""));
-                                }
-                            }
-                            //if (ddlFK.Items.FindByText("请选择") == null)
-                            //{
-                            //    if (ddlFK.Items.Count > 0)
-                            //        ddlFK.Items.Insert(0, new ListItem("请选择", ""));
-                            //    else
-                            //        ddlFK.Items.Add(new ListItem("请选择", ""));
-                            //}
+                                       if (IsPostBack)
+                                       {
+                                           valOper = Request.Params[ddlFK.UniqueID.Substring(0, ddlFK.UniqueID.Length - ddlFK.ID.Length) + "DDL_" + me.AttrOfOper];
+                                       }
 
-                            string val = en.GetValStrByKey(attr.KeyOfEn);
-                            if (string.IsNullOrEmpty(val) == true)
-                            {
-                                ddlFK.SetSelectItem("");
-                            }
-                            else
-                                ddlFK.SetSelectItem(val);
+                                       if (!string.IsNullOrWhiteSpace(valOper))
+                                       {
+                                           string fullSQL = me.Doc.Clone() as string;
+                                           fullSQL = fullSQL.Replace("~", ",");
+                                           fullSQL = fullSQL.Replace("@Key", valOper).Replace("@key", valOper);
+                                           fullSQL = fullSQL.Replace("@WebUser.No", WebUser.No);
+                                           fullSQL = fullSQL.Replace("@WebUser.Name", WebUser.Name);
+                                           fullSQL = fullSQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                                           fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
 
-                            //add by dgq 2013-4-9,添加内容修改后的事件
-                            ddlFK.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
-                        }
-                        else
-                        {
-                            if (ddlFK.Enabled == true && isReadonly == true)
-                                ddlFK.Enabled = false;
+                                           DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
+                                           ddlFK.Items.Clear();
+                                           foreach (DataRow dr in dt.Rows)
+                                               ddlFK.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
+                                       }
+                                       else
+                                       {
+                                           ddlFK.Items.Clear();
+                                       }
+                                   }
+                                   else
+                                   {
+                                       ddlFK.BindEntities(ens);
+                                   }
 
-                            fSize = attr.Para_FontSize;
-                            if (fSize == 0)
-                                ddlFK.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";
-                            else
-                                ddlFK.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: left; height: " + fSize + "px;";
+                                   if (ddlFK.Items.Count > 0)
+                                   {
+                                       if (ddlFK.Items.FindByText("请选择") == null)
+                                       {
+                                           ddlFK.Items.Insert(0, new ListItem("请选择", ""));
+                                       }
+                                   }
+                                   else
+                                   {
+                                       if (ddlFK.Items.FindByText("无数据") == null)
+                                       {
+                                           ddlFK.Items.Insert(0, new ListItem("无数据", ""));
+                                       }
+                                   }
+                                   string val = en.GetValStrByKey(attr.KeyOfEn);
+                                   if (string.IsNullOrEmpty(val) == true)
+                                   {
+                                       ddlFK.SetSelectItem("");
+                                   }
+                                   else
+                                       ddlFK.SetSelectItem(val);
 
-                            string val = en.GetValStrByKey(attr.KeyOfEn);
-                            string text = en.GetValRefTextByKey(attr.KeyOfEn);
+                                   //add by dgq 2013-4-9,添加内容修改后的事件
+                                   ddlFK.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
+                               }
+                               else
+                               {
+                                   if (ddlFK.Enabled == true && isReadonly == true)
+                                       ddlFK.Enabled = false;
 
-                            if (string.IsNullOrEmpty(text) && string.IsNullOrEmpty(val) == false)
-                            {
-                                EntitiesNoName ens = attr.HisEntitiesNoName;
-                                Entity myen = ens.GetNewEntity;
-                                myen.PKVal = val;
-                                if (myen.RetrieveFromDBSources() != 0)
-                                    text = myen.GetValStringByKey("Name");
-                                else
-                                    text = val;
-                            }
-                            ddlFK.Items.Add(new ListItem(text, val));
+                                   fSize = attr.Para_FontSize;
+                                   if (fSize == 0)
+                                       ddlFK.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";
+                                   else
+                                       ddlFK.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: left; height: " + fSize + "px;";
 
-                            ddlFK.Enabled = false;
-                        }
+                                   string val = en.GetValStrByKey(attr.KeyOfEn);
+                                   string text = en.GetValRefTextByKey(attr.KeyOfEn);
+
+                                   if (string.IsNullOrEmpty(text) && string.IsNullOrEmpty(val) == false)
+                                   {
+                                       EntitiesNoName ens = attr.HisEntitiesNoName;
+                                       Entity myen = ens.GetNewEntity;
+                                       myen.PKVal = val;
+                                       if (myen.RetrieveFromDBSources() != 0)
+                                           text = myen.GetValStringByKey("Name");
+                                       else
+                                           text = val;
+                                   }
+                                   ddlFK.Items.Add(new ListItem(text, val));
+
+                                   ddlFK.Enabled = false;
+                               }
+                           }
                         break;
                     default:
                         break;

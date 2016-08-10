@@ -175,7 +175,8 @@ namespace CCFlow.WF
                     return;
                 }
 
-                string info = BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
+                string info = BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, 
+                    this.WorkID, this.FID, toEmp, msg);
 
                 this.Session["info"] = info;
                 this.Response.Redirect(BP.WF.Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=Msg&FK_Flow=" + this.FK_Flow, true);

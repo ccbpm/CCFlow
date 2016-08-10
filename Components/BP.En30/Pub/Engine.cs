@@ -146,8 +146,8 @@ namespace BP.Pub
 
         public string GetCode(string str)
         {
-            if (str == "")
-                return str;
+            if (str == null || str == "")
+                return "";
 
             string rtn = "";
             byte[] rr = _encoder.GetBytes(str);

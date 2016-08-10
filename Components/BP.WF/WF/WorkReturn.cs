@@ -735,8 +735,6 @@ namespace BP.WF
                     else
                         focusField = focusFields[0];
 
-
-
                     // 把数据更新它。
                     this.HisWork.Update(focusField, "");
                 }
@@ -809,11 +807,19 @@ namespace BP.WF
             rw.Insert();
 
 
-            // 加入track.
-            this.AddToTrack(ActionType.Return, gwl.FK_Emp, gwl.FK_EmpText,
-                this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
-
-
+            // 为电建增加一个退回并原路返回的日志类型.
+            if (IsBackTrack == true)
+            {
+                // 加入track.
+                this.AddToTrack(ActionType.ReturnAndBackWay, gwl.FK_Emp, gwl.FK_EmpText,
+                    this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
+            }
+            else
+            {
+                // 加入track.
+                this.AddToTrack(ActionType.Return, gwl.FK_Emp, gwl.FK_EmpText,
+                    this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
+            }
 
             try
             {

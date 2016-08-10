@@ -308,6 +308,8 @@ namespace BP.WF
                     return "前进";
                 case ActionType.Return:
                     return "退回";
+                case ActionType.ReturnAndBackWay:
+                    return "退回并原路返回";
                 case ActionType.Shift:
                     return "移交";
                 case ActionType.UnShift:

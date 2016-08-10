@@ -131,6 +131,10 @@ namespace BP.WF
         /// </summary>
         Return=2,
         /// <summary>
+        /// 退回并原路返回.
+        /// </summary>
+        ReturnAndBackWay = 201,
+        /// <summary>
         /// 移交
         /// </summary>
         Shift=3,

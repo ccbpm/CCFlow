@@ -2065,13 +2065,13 @@ namespace BP.WF
 
             if (billNo.Contains("@WebUser.DeptZi"))
             {
-                string val = DBAccess.RunSQLReturnStringIsNull("SELECT Zi FROM Port_Dept where no='" + WebUser.FK_Dept + "'", "");
+                string val = DBAccess.RunSQLReturnStringIsNull("SELECT Zi FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'", "");
                 billNo = billNo.Replace("@WebUser.DeptZi", val.ToString());
             }
 
             if (billNo.Contains("{ParentBillNo}"))
             {
-                string pWorkID = DBAccess.RunSQLReturnStringIsNull("SELECT PWorkID FROM " + flowPTable + " WHERE OID=" + workid, "0");
+                string pWorkID = DBAccess.RunSQLReturnStringIsNull("SELECT PWorkID FROM " + flowPTable + " WHERE   WFState >1 AND  OID=" + workid, "0");
                 string parentBillNo = DBAccess.RunSQLReturnStringIsNull("SELECT BillNo FROM WF_GenerWorkFlow WHERE WorkID=" + pWorkID, "");
                 billNo = billNo.Replace("{ParentBillNo}", parentBillNo);
 
@@ -2082,7 +2082,7 @@ namespace BP.WF
                     if (billNo.Contains("{LSH" + i + "}") == false)
                         continue;
 
-                    sql = "SELECT COUNT(OID) FROM " + flowPTable + " WHERE PWorkID =" + pWorkID;
+                    sql = "SELECT COUNT(OID) FROM " + flowPTable + " WHERE PWorkID =" + pWorkID +" AND WFState >1 ";
                     num = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
                     billNo = billNo + num.ToString().PadLeft(i, '0');
                     billNo = billNo.Replace("{LSH" + i + "}", "");
@@ -2100,12 +2100,12 @@ namespace BP.WF
 
                     billNo = billNo.Replace("{LSH" + i + "}", "");
 
-                    sql = "SELECT COUNT(*) FROM " + flowPTable + " WHERE BillNo LIKE '" + billNo + "%'";
+                    sql = "SELECT COUNT(*) FROM " + flowPTable + " WHERE BillNo LIKE '" + billNo + "%' AND WFState >1 ";
                     if (DBAccess.AppCenterDBType == DBType.MSSQL)
                     {
                         //改为取最大值
                         sql = " SELECT isnull(convert(int,max(RIGHT(billno,len(billno)-len('" + billNo + "')-1))),0) FROM "
-                            + flowPTable + " WHERE BillNo LIKE '" + billNo + "%'";
+                            + flowPTable + " WHERE BillNo LIKE '" + billNo + "%' AND WFState >1 ";
                     }
 
                     num = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0) + 1;

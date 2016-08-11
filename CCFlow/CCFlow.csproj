@@ -2661,6 +2661,7 @@
     <Content Include="WF\WorkOpt\Track.aspx" />
     <Content Include="WF\WorkOpt\TrackChart.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
+    <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
     <Content Include="WF\WorkOpt\UnPassDtl.aspx" />
     <Content Include="WF\WorkOpt\UnSend.aspx" />
     <Content Include="WF\WorkOpt\WebOffice.aspx" />
@@ -7701,6 +7702,13 @@
     </Compile>
     <Compile Include="WF\WorkOpt\TransferCustom.aspx.designer.cs">
       <DependentUpon>TransferCustom.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\TransferCustomSimple.aspx.cs">
+      <DependentUpon>TransferCustomSimple.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\WorkOpt\TransferCustomSimple.aspx.designer.cs">
+      <DependentUpon>TransferCustomSimple.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\UnPassDtl.aspx.cs">
       <DependentUpon>UnPassDtl.aspx</DependentUpon>

@@ -87,13 +87,6 @@ namespace CCFlow.WF.WorkOpt
                                 nodes.Retrieve(NodeAttr.FK_Flow, flowno, "Step");
                                 TransferCustom tc = null;
                                 re = "{\"workid\":" + workId + ", \"nodes\":[";
-                                string s = string.Empty;
-                                DataSet ds = null;
-                                DataTable dtEmp = null;
-                                DataTable dtDept = null;
-                                DataRow rd = null;
-                                string deptName = null;
-                                string sWorkers = null;
 
                                 foreach (Node node in nodes)
                                 {
@@ -119,29 +112,7 @@ namespace CCFlow.WF.WorkOpt
 
                                         if (tc == null)
                                             tc = new TransferCustom();
-
-                                        //ds = BP.WF.Dev2Interface.WorkOpt_AccepterDB(node.NodeID, workId);
-                                        //dtEmp = ds.Tables["Port_Emp"];
-                                        //dtDept = ds.Tables["Port_Dept"];
-                                        //s = string.Empty;
-                                        //sWorkers = "," + (tc.Worker ?? "") + ",";
-
-                                        //foreach (DataRow r in dtEmp.Rows)
-                                        //{
-                                        //    if (dtEmp.Columns.Contains("DeptName"))
-                                        //    {
-                                        //        deptName = r["DeptName"].ToString();
-                                        //    }
-                                        //    else
-                                        //    {
-                                        //        rd = dtDept.Select(string.Format("No='{0}'", r["FK_Dept"]))[0];
-                                        //        deptName = rd["Name"].ToString();
-                                        //    }
-
-                                        //    s += "{\"no\": \"" + r["No"] + "\", \"name\": \"" + r["Name"] +
-                                        //        "\", \"dept\":\"" + deptName + "\"" + (sWorkers.IndexOf("," + r["No"] + ",") != -1 ? ", \"selected\": true" : "") + "},";
-                                        //}
-
+                                        
                                         re += "{\"id\": " + node.NodeID + ", \"name\": \"" + node.Name +
                                               "\", \"empNos\":\"" +
                                               tc.Worker + "\", \"empNames\":\"" + tc.WorkerName +
@@ -311,6 +282,7 @@ namespace CCFlow.WF.WorkOpt
             {
                 //2.发起流程
                 workID = Dev2Interface.Node_CreateStartNodeWork(flowNo, null, null, flowStarter);
+                Dev2Interface.Node_CreateBlankWork("001");
 
                 //3.发送
                 sres = Dev2Interface.Node_SendWork(flowNo, workID, null, null, 0, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null);

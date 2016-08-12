@@ -299,7 +299,8 @@
             var lastChar = tabText.substring(tabText.length - 1, tabText.length);
             if (lastChar == "*") {
                 var contentWidow = scope.contentWindow;
-                contentWidow.SaveDtlData();
+                if (typeof contentWidow.SaveDtlData != 'undefined')
+                    contentWidow.SaveDtlData();
                 $.each(p, function (i, val) {
                     if (val.className == "tabs-selected") {
                         $($(val).find("span")[0]).text(tabText.substring(0, tabText.length - 1));

@@ -3416,7 +3416,7 @@ function save(showInfo) {
                 }
             }
         } else {
-            Designer_ShowMsg('Unknown: ' + jsonData);
+            Designer_ShowMsg('Unknown: ' + data);
         }
     });
 }

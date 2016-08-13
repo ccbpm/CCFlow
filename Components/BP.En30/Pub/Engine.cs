@@ -620,6 +620,18 @@ namespace BP.Pub
                     return mypict.ToString();
                 }
 
+                //根据枚举值返回选中符号
+                if (strs[1].Contains("-EnumYes") == true)
+                {
+                    string relVal = this.HisGEEntity.GetValStringByKey(strs[0]);
+                    string[] checkVal = strs[1].Split('-');
+                    if (checkVal.Length == 1)
+                        return relVal;
+                    if(relVal.Equals(checkVal[0]))
+                        return "[√]";
+                    else
+                        return "[×]";
+                }
 
                 if (strs.Length == 2)
                 {
@@ -907,10 +919,12 @@ namespace BP.Pub
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains(".Yes") == true)
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
+                        else if (para.Contains("-EnumYes") == true)
+                            str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
                         else if (para.Contains(".") == true)
                             continue; /*有可能是明细表数据.*/
                         else
-                            str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para).Replace("\\","\\\\")));
+                            str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para).Replace("\\", "\\\\")));
                     }
                     catch (Exception ex)
                     {

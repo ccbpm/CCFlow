@@ -252,6 +252,9 @@ namespace BP.Sys
                 if (this.UIBindKey.Contains("."))
                 {
                     EntitiesNoName ens = (EntitiesNoName)BP.En.ClassFactory.GetEns(this.UIBindKey);
+                    if (ens == null)
+                        return null;
+
                     ens.RetrieveAll();
                     return ens;
                 }
@@ -263,6 +266,9 @@ namespace BP.Sys
                     if (sf.FK_SFDBSrc == "local")
                     {
                         GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
+                        if (myens == null)
+                            return null;
+
                         myens.RetrieveAll();
                         _ens = myens;
                     }

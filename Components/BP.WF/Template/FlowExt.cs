@@ -1774,14 +1774,14 @@ namespace BP.WF.Template
 
             #region 为systype设置，当前所在节点的第2级别目录。
             FlowSort fs = new FlowSort(fl.FK_FlowSort);
-            if (fs.ParentNo == "99")
+            if (fs.ParentNo == "99" || fs.ParentNo=="0")
             {
                 this.SysType = fl.FK_FlowSort;
             }
             else
             {
                 FlowSort fsP = new FlowSort(fs.ParentNo);
-                if (fsP.ParentNo == "99")
+                if (fsP.ParentNo == "99" || fsP.ParentNo=="0")
                 {
                     this.SysType = fsP.No;
                 }

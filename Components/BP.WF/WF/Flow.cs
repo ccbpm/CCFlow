@@ -592,7 +592,7 @@ namespace BP.WF
             Paras ps = new Paras();
             GERpt rpt = this.HisGERpt;
 
-            //是否新创建的WorKID
+            //是否新创建的WorkID
             bool IsNewWorkID = false;
             /*如果要启用草稿,就创建一个新的WorkID .*/
             if (this.DraftRole != Template.DraftRole.None && nd.IsStartNode)
@@ -622,7 +622,7 @@ namespace BP.WF
                 }
                 else
                 {
-                    ps.SQL = "SELECT OID,FlowEndNode FROM " + this.PTable + " WHERE FlowStarter=" + dbstr + "FlowStarter AND WFState=" + dbstr + "WFState ";
+                    ps.SQL = "SELECT WorkID,FK_Node FROM WF_GenerWorkFlow WHERE Starter=" + dbstr + "FlowStarter AND WFState=" + dbstr + "WFState ";
                     ps.Add(GERptAttr.FlowStarter, emp.No);
                     ps.Add(GERptAttr.WFState, (int)WFState.Blank);
                     // throw new Exception(ps.SQL);
@@ -695,6 +695,7 @@ namespace BP.WF
                         rpt.FK_Dept = emp.FK_Dept;
                         rpt.FlowEnder = emp.No;
                         rpt.FlowEndNode = this.StartNodeID;
+                        rpt.WFState = WFState.Blank;
 
                         //生成单据编号.
                         string billNoFormat = this.BillNoFormat.Clone() as string;

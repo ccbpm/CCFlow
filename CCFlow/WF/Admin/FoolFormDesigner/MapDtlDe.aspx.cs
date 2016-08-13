@@ -135,7 +135,7 @@ namespace CCFlow.WF.MapDef
                             this.Pub1.Add("<a href=\"javascript:EditEnum('" + this.MyPK + "','" + attr.MyPK + "');\" alt='" + attr.KeyOfEn + "' >" + attr.Name + "</a>");
                             break;
                         case FieldTypeS.FK:
-                            this.Pub1.Add("<a href=\"javascript:EditTable('" + this.MyPK + "','" + attr.MyPK + "','" + attr.MyDataTypeS + "');\"  alt='" + attr.KeyOfEn + "'>" + attr.Name + "</a>");
+                            this.Pub1.Add("<a href=\"javascript:EditTable('" + this.MyPK + "','" + attr.MyPK + "');\"  alt='" + attr.KeyOfEn + "'>" + attr.Name + "</a>");
                             break;
                         default:
                             break;

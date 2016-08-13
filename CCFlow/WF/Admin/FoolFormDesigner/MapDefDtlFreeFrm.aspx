@@ -82,10 +82,9 @@
         var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
         window.location.href = window.location.href;
     }
-     function EditTable(mypk,refno)
-    {
-        var url='EditTable.aspx?DoType=Edit&MyPK='+mypk+'&RefNo='+refno;
-        var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
+    function EditTable(fk_mapdata, attrMyPK) {
+        var url = 'EditTable.aspx?DoType=Edit&MyPK=' + fk_mapdata + '&RefNo=' + attrMyPK;
+        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         window.location.href = window.location.href;
     }
     

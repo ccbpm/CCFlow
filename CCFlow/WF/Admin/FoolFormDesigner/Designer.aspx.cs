@@ -807,9 +807,17 @@ namespace CCFlow.WF.MapDef
                         ddlFK.ID = "DDL_" + attr.KeyOfEn;
 
                         EntitiesNoName ens = attr.HisEntitiesNoName;
-                        ens.RetrieveAll();
-                        ddlFK.BindEntities(ens);
-                        ddlFK.SetSelectItem(attr.DefVal);
+                        if (ens == null)
+                        {
+                            ddlFK.Items.Add(new ListItem("数据错误"+attr.UIBindKey,"xx"));
+                        }
+                        else
+                        {
+                            if (ens.Count==0)
+                                ens.RetrieveAll();
+                            ddlFK.BindEntities(ens);
+                            ddlFK.SetSelectItem(attr.DefVal);
+                        }
                         ddlFK.Enabled = attr.UIIsEnable;
 
                         if (attr.ColSpan == 4 || attr.ColSpan == 3)

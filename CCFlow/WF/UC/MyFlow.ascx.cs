@@ -1936,6 +1936,16 @@ namespace CCFlow.WF.UC
                                 continue;
                             currWK.SetValByKey(attr.KeyOfEn, attr.DefVal);
                         }
+
+                        //如果有单据编号，让其在每次保存后生成.
+                        if (this.currND.IsStartNode && this.currFlow.BillNoFormat.Length >2)
+                        {
+                            string newBillNo= BP.WF.Glo.GenerBillNo(this.currFlow.BillNoFormat, this.WorkID, currWK, currWK.EnMap.PhysicsTable);
+                            currWK.SetValByKey("BillNo", newBillNo );
+
+                            this.UCEn1.GetTBByID("TB_BillNo").Text = newBillNo;
+                        }
+
                         break;
                     case NodeFormType.DisableIt:
                         currWK.Retrieve();

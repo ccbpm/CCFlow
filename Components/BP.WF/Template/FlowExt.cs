@@ -1411,7 +1411,7 @@ namespace BP.WF.Template
                     }
                 }
                 string sql = "";
-                string title = WorkNode.GenerTitle(fl, wk);
+                string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
                 Paras ps = new Paras();
                 ps.Add("Title", title);
                 ps.Add("OID", wk.OID);
@@ -1464,7 +1464,7 @@ namespace BP.WF.Template
                     }
                 }
                 string sql = "";
-                string title = WorkNode.GenerTitle(fl, wk);
+                string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
                 Paras ps = new Paras();
                 ps.Add("Title", title);
                 ps.Add("OID", wk.OID);
@@ -1667,7 +1667,6 @@ namespace BP.WF.Template
                 }
             }
             #endregion 校验 flowmark 是不是唯一.
-
 
             #region 同步事件实体.
             try

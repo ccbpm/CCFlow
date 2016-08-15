@@ -1090,20 +1090,6 @@ namespace BP.WF
             if (this.JumpToNode != null)
                 return this.JumpToNode;
 
-            #region delete by zhoupeng 14.11.12 如果执行了它，就不能执行自动跳转了.
-            //Nodes toNDs = this.HisNode.HisToNodes;
-            //if (toNDs.Count == 1)
-            //{
-            //    Node mynd = toNDs[0] as Node;
-            //    //写入到达信息.
-            //    this.addMsg(SendReturnMsgFlag.VarToNodeID, mynd.NodeID.ToString(), mynd.NodeID.ToString(),
-            //     SendReturnMsgType.SystemMsg);
-            //    this.addMsg(SendReturnMsgFlag.VarToNodeName, mynd.Name, mynd.Name, SendReturnMsgType.SystemMsg);
-            //    return mynd;
-            //}
-            #endregion delete by zhoupeng 14.11.12
-
-
             // 判断是否有用户选择的节点。
             if (this.HisNode.CondModel == CondModel.ByUserSelected)
             {
@@ -1129,6 +1115,7 @@ namespace BP.WF
             }
 
             Node nd = NodeSend_GenerNextStepNode_Ext1();
+
             //写入到达信息.
             this.addMsg(SendReturnMsgFlag.VarToNodeID, nd.NodeID.ToString(), nd.NodeID.ToString(),
              SendReturnMsgType.SystemMsg);
@@ -2601,7 +2588,7 @@ namespace BP.WF
         private void NodeSend_24_SameSheet(Node toNode)
         {
             if (this.HisGenerWorkFlow.Title == "未生成")
-                this.HisGenerWorkFlow.Title = WorkNode.GenerTitle(this.HisFlow, this.HisWork);
+                this.HisGenerWorkFlow.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this.HisFlow, this.HisWork);
 
             #region 删除到达节点的子线程如果有，防止退回信息垃圾数据问题,如果退回处理了这个部分就不需要处理了.
             ps = new Paras();
@@ -3169,7 +3156,7 @@ namespace BP.WF
                     gwf.FK_Node = toNode.NodeID;
 
                     if (this.HisNode.IsStartNode)
-                        gwf.Title = WorkNode.GenerTitle(this.HisFlow, this.HisWork) + "(" + wl.FK_EmpText + ")";
+                        gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this.HisFlow, this.HisWork) + "(" + wl.FK_EmpText + ")";
                     else
                         gwf.Title = this.HisGenerWorkFlow.Title + "(" + wl.FK_EmpText + ")";
 
@@ -5471,7 +5458,7 @@ namespace BP.WF
                 if (Glo.CheckIsCanStartFlow_SendStartFlow(this.HisFlow, this.HisWork) == false)
                     throw new Exception("@违反了流程发起限制条件:" + Glo.DealExp(this.HisFlow.StartLimitAlert, this.HisWork, null));
             }
-
+            
             // 第1.3: 判断当前流程状态.
             if (this.HisNode.IsStartNode == false
                 && this.HisGenerWorkFlow.WFState == WFState.Askfor)
@@ -6422,262 +6409,7 @@ namespace BP.WF
         private string oldSender = null;
         #endregion
 
-        #region 生成标题的方法.
-        /// <summary>
-        /// 生成标题
-        /// </summary>
-        /// <param name="wk">工作</param>
-        /// <param name="emp">人员</param>
-        /// <param name="rdt">日期</param>
-        /// <returns>生成string.</returns>
-        public static string GenerTitle(Flow fl, Work wk, Emp emp, string rdt)
-        {
-            string titleRole = fl.TitleRole.Clone() as string;
-            if (string.IsNullOrEmpty(titleRole))
-            {
-                // 为了保持与ccflow4.5的兼容,从开始节点属性里获取.
-                Attr myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
-                if (myattr == null)
-                    myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
-
-                if (myattr != null)
-                    titleRole = myattr.DefaultVal.ToString();
-
-                if (string.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
-                    titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
-            }
-
-
-            titleRole = titleRole.Replace("@WebUser.No", emp.No);
-            titleRole = titleRole.Replace("@WebUser.Name", emp.Name);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptName", emp.FK_DeptText);
-            titleRole = titleRole.Replace("@WebUser.FK_Dept", emp.FK_Dept);
-            titleRole = titleRole.Replace("@RDT", rdt);
-            if (titleRole.Contains("@")==true)
-            {
-                Attrs attrs = wk.EnMap.Attrs;
-
-                // 优先考虑外键的替换。
-                foreach (Attr attr in attrs)
-                {
-                    if (titleRole.Contains("@") == false)
-                        break;
-                    if (attr.IsRefAttr == false)
-                        continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
-                }
-
-                //在考虑其它的字段替换.
-                foreach (Attr attr in attrs)
-                {
-                    if (titleRole.Contains("@") == false)
-                        break;
-                    if (attr.IsRefAttr == true)
-                        continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
-                }
-            }
-            titleRole = titleRole.Replace('~', '-');
-            titleRole = titleRole.Replace("'", "”");
-
-            if (titleRole.Contains("@"))
-            {
-                /*如果没有替换干净，就考虑是用户字段拼写错误*/
-                throw new Exception("@请检查是否是字段拼写错误，标题中有变量没有被替换下来. @" + titleRole);
-            }
-
-            if (titleRole.Contains("@"))
-                titleRole = GenerTitleExt(fl, wk.NodeID, wk.OID, titleRole);
-
-            wk.SetValByKey("Title", titleRole);
-            return titleRole;
-        }
-        /// <summary>
-        /// 生成标题
-        /// </summary>
-        /// <param name="wk"></param>
-        /// <returns></returns>
-        public static string GenerTitle(Flow fl, Work wk)
-        {
-            string titleRole = fl.TitleRole.Clone() as string;
-            if (string.IsNullOrEmpty(titleRole))
-            {
-                // 为了保持与ccflow4.5的兼容,从开始节点属性里获取.
-                Attr myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
-                if (myattr == null)
-                    myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
-
-                if (myattr != null)
-                    titleRole = myattr.DefaultVal.ToString();
-
-                if (string.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
-                    titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
-            }
-
-            if (titleRole == "@OutPara" || string.IsNullOrEmpty(titleRole)==true)
-                titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
-
-            titleRole = titleRole.Replace("@WebUser.No", wk.Rec);
-            titleRole = titleRole.Replace("@WebUser.Name", wk.RecText);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptName", wk.RecOfEmp.FK_DeptText);
-            titleRole = titleRole.Replace("@WebUser.FK_Dept", wk.RecOfEmp.FK_Dept);
-            titleRole = titleRole.Replace("@RDT", wk.RDT);
-
-            if (titleRole.Contains("@"))
-            {
-                Attrs attrs = wk.EnMap.Attrs;
-
-                // 优先考虑外键的替换,因为外键文本的字段的长度相对较长。
-                foreach (Attr attr in attrs)
-                {
-                    if (titleRole.Contains("@") == false)
-                        break;
-                    if (attr.IsRefAttr == false)
-                        continue;
-                     
-                    string temp= wk.GetValStrByKey(attr.Key);
-                    if (string.IsNullOrEmpty(temp))
-                    {
-                        wk.DirectUpdate();
-                        wk.RetrieveFromDBSources();
-                    }
-
-                    titleRole = titleRole.Replace("@" + attr.Key, temp);
-                }
-
-                //在考虑其它的字段替换.
-                foreach (Attr attr in attrs)
-                {
-                    if (titleRole.Contains("@") == false)
-                        break;
-
-                    if (attr.IsRefAttr == true)
-                        continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
-                }
-            }
-            titleRole = titleRole.Replace('~', '-');
-            titleRole = titleRole.Replace("'", "”");
-
-            if (titleRole.Contains("@"))
-                titleRole = GenerTitleExt(fl,  wk.NodeID, wk.OID, titleRole);
-
-            // 为当前的工作设置title.
-            wk.SetValByKey("Title", titleRole);
-
-            return titleRole;
-        }
-        /// <summary>
-        /// 生成标题
-        /// </summary>
-        /// <param name="fl"></param>
-        /// <param name="wk"></param>
-        /// <returns></returns>
-        public static string GenerTitle(Flow fl, GERpt wk)
-        {
-            string titleRole = fl.TitleRole.Clone() as string;
-            if (string.IsNullOrEmpty(titleRole))
-            {
-                // 为了保持与ccflow4.5的兼容,从开始节点属性里获取.
-                Attr myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
-                if (myattr == null)
-                    myattr = wk.EnMap.Attrs.GetAttrByKey("Title");
-
-                if (myattr != null)
-                    titleRole = myattr.DefaultVal.ToString();
-
-                if (string.IsNullOrEmpty(titleRole) || titleRole.Contains("@") == false)
-                    titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
-            }
-
-            if (titleRole == "@OutPara" || string.IsNullOrEmpty(titleRole) == true )
-                titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
-
-
-            titleRole = titleRole.Replace("@WebUser.No", wk.FlowStarter);
-            titleRole = titleRole.Replace("@WebUser.Name", WebUser.Name);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-            titleRole = titleRole.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-            titleRole = titleRole.Replace("@RDT", wk.FlowStartRDT);
-            if (titleRole.Contains("@"))
-            {
-                Attrs attrs = wk.EnMap.Attrs;
-
-                // 优先考虑外键的替换,因为外键文本的字段的长度相对较长。
-                foreach (Attr attr in attrs)
-                {
-                    if (titleRole.Contains("@") == false)
-                        break;
-                    if (attr.IsRefAttr == false)
-                        continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
-                }
-
-                //在考虑其它的字段替换.
-                foreach (Attr attr in attrs)
-                {
-                    if (titleRole.Contains("@") == false)
-                        break;
-
-                    if (attr.IsRefAttr == true)
-                        continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
-                }
-            }
-            titleRole = titleRole.Replace('~', '-');
-            titleRole = titleRole.Replace("'", "”");
-
-            if (titleRole.Contains("@"))
-                titleRole = GenerTitleExt(fl, int.Parse(fl.No + "01"), wk.OID, titleRole);
-
-            // 为当前的工作设置title.
-            wk.SetValByKey("Title", titleRole);
-            return titleRole;
-        }
-        /// <summary>
-        /// 如果从节点表单上没有替换下来，就考虑独立表单的替换.
-        /// </summary>
-        /// <param name="fl">流程</param>
-        /// <param name="workid">工作ID</param>
-        /// <returns>返回生成的标题</returns>
-        private static string GenerTitleExt(Flow fl, int nodeId, Int64 workid, string titleRole)
-        {
-            FrmNodes nds = new FrmNodes(fl.No, nodeId);
-            foreach (FrmNode item in nds)
-            {
-                GEEntity en = new GEEntity(item.FK_Frm);
-                en.PKVal = workid;
-                if (en.RetrieveFromDBSources() == 0)
-                    continue;
-                Attrs attrs = en.EnMap.Attrs;
-                // 优先考虑外键的替换,因为外键文本的字段的长度相对较长。
-                foreach (Attr attr in attrs)
-                {
-                    if (titleRole.Contains("@") == false)
-                        break;
-                    if (attr.IsRefAttr == false)
-                        continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
-                }
-
-                //在考虑其它的字段替换.
-                foreach (Attr attr in attrs)
-                {
-                    if (titleRole.Contains("@") == false)
-                        break;
-                    
-                    if (attr.IsRefAttr == true)
-                        continue;
-                    titleRole = titleRole.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
-                }
-
-                //如果全部已经替换完成.
-                if (titleRole.Contains("@") == false)
-                    return titleRole;
-            }
-            return titleRole;
-        }
-        #endregion 生成标题的方法.
+        
 
 
         public GERpt rptGe = null;
@@ -6736,7 +6468,7 @@ namespace BP.WF
                 }
                 else
                 {
-                    gwf.Title = WorkNode.GenerTitle(this.HisFlow, this.HisWork);
+                    gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this.HisFlow, this.HisWork);
                 }
             }
             else
@@ -6754,7 +6486,7 @@ namespace BP.WF
                 string billNo = this.HisFlow.BillNoFormat.Clone() as string;
                 if (string.IsNullOrEmpty(billNo) == false)
                 {
-                    billNo = BP.WF.Glo.GenerBillNo(billNo, this.WorkID, this.rptGe, this.HisFlow.PTable);
+                    billNo = BP.WF.WorkFlowBuessRole.GenerBillNo(billNo, this.WorkID, this.rptGe, this.HisFlow.PTable);
                     gwf.BillNo = billNo;
                     this.rptGe.BillNo = billNo;
                 }

@@ -144,7 +144,7 @@ namespace BP.WF
                 ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,FK_Dept=" + dbstr + "FK_Dept,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
                 ps.Add(GERptAttr.WFState, (int)WFState.Blank);
                 ps.Add(GERptAttr.FK_Dept, empStarter.FK_Dept);
-                ps.Add(GERptAttr.Title, WorkNode.GenerTitle(fl, wk));
+                ps.Add(GERptAttr.Title, BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk));
                 ps.Add(GERptAttr.OID, wk.OID);
                 DBAccess.RunSQL(ps);
             }
@@ -183,7 +183,7 @@ namespace BP.WF
             gwf.NodeName = nd.Name;
             gwf.WFState = WFState.Runing;
             if (string.IsNullOrEmpty(title))
-                gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
+                gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
             else
                 gwf.Title = title;
             gwf.Starter = WebUser.No;

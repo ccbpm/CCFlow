@@ -665,7 +665,6 @@ namespace BP.WF
                     wk.FID = 0;
                     wk.DirectInsert();
               
-
                     //设置参数.
                     foreach (string k in paras.Keys)
                         rpt.SetValByKey(k, paras[k]);
@@ -678,7 +677,7 @@ namespace BP.WF
                         rpt.FID = 0;
                         rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
                         rpt.MyNum = 0;
-                        rpt.Title = WorkNode.GenerTitle(this, wk);
+                        rpt.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, wk);
                         //WebUser.No + "," + BP.Web.WebUser.Name + "在" + DataType.CurrentDataCNOfShort + "发起.";
                         rpt.WFState = WFState.Blank;
                         rpt.FlowStarter = emp.No;
@@ -697,12 +696,6 @@ namespace BP.WF
                         rpt.FlowEnder = emp.No;
                         rpt.FlowEndNode = this.StartNodeID;
                         rpt.WFState = WFState.Blank;
-
-                        //生成单据编号.
-                        string billNoFormat = this.BillNoFormat.Clone() as string;
-                        if (string.IsNullOrEmpty(billNoFormat) == false)
-                            rpt.BillNo = BP.WF.Glo.GenerBillNo(billNoFormat, rpt.OID, rpt, this.PTable);
-
                         rpt.FID = 0;
                         rpt.DirectUpdate();
                     }
@@ -714,7 +707,7 @@ namespace BP.WF
                         rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
                         rpt.MyNum = 0;
 
-                        rpt.Title = WorkNode.GenerTitle(this, wk);
+                        rpt.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, wk);
                         // rpt.Title = WebUser.No + "," + BP.Web.WebUser.Name + "在" + DataType.CurrentDataCNOfShort + "发起.";
 
                         rpt.WFState = WFState.Blank;
@@ -729,7 +722,6 @@ namespace BP.WF
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                             rpt.FlowEmps = "@" + emp.No + "," + emp.Name;
-
 
                         rpt.FK_NY = DataType.CurrentYearMonth;
                         rpt.FK_Dept = emp.FK_Dept;
@@ -954,10 +946,6 @@ namespace BP.WF
 
                     if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                         rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No + "," + emp.Name);
-                    //生成单据编号.
-                    string billNoFormat = this.BillNoFormat.Clone() as string;
-                    if (string.IsNullOrEmpty(billNoFormat) == false)
-                        rpt.SetValByKey(GERptAttr.BillNo, BP.WF.Glo.GenerBillNo(billNoFormat, rpt.OID, rpt, this.PTable));
                 }
 
                 if (rpt.EnMap.PhysicsTable != wk.EnMap.PhysicsTable)
@@ -1045,14 +1033,14 @@ namespace BP.WF
             {
                 string billNoFormat = this.BillNoFormat.Clone() as string;
 
-                if (billNoFormat.Contains("@"))
-                {
-                    foreach (string str in paras.Keys)
-                        billNoFormat = billNoFormat.Replace("@" + str, paras[str].ToString());
-                }
+                //if (billNoFormat.Contains("@"))
+                //{
+                //    foreach (string str in paras.Keys)
+                //        billNoFormat = billNoFormat.Replace("@" + str, paras[str].ToString());
+                //}
 
                 //生成单据编号.
-                rpt.BillNo = BP.WF.Glo.GenerBillNo(billNoFormat, rpt.OID, rpt, this.PTable);
+                rpt.BillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(billNoFormat, rpt.OID, rpt, this.PTable);
                 //rpt.Update(GERptAttr.BillNo, rpt.BillNo);
                 if (wk.Row.ContainsKey(GERptAttr.BillNo) == true)
                 {
@@ -1155,11 +1143,10 @@ namespace BP.WF
                     mygwf.DirectUpdate();
                 }
             }
-            #endregion 给generworkflow初始化数据.
+            #endregion 给 generworkflow 初始化数据.
 
             return wk;
         }
-
       
         #endregion 创建新工作.
 
@@ -1310,7 +1297,7 @@ namespace BP.WF
                     {
                         /*让他自动生成编号*/
                         wk.SetValByKey(NDXRptBaseAttr.BillNo,
-                            BP.WF.Glo.GenerBillNo(nd.HisFlow.BillNoFormat, wk.OID, wk, nd.HisFlow.PTable));
+                            BP.WF.WorkFlowBuessRole.GenerBillNo(nd.HisFlow.BillNoFormat, wk.OID, wk, nd.HisFlow.PTable));
                     }
                 }
                 catch
@@ -2755,7 +2742,7 @@ namespace BP.WF
 
                 //修复标题字段。
                 WorkNode wn = new WorkNode(startWork, this.HisStartNode);
-                rpt.Title = WorkNode.GenerTitle(this, startWork);
+                rpt.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, startWork);
                 try
                 {
                     TimeSpan ts = endWK.RDT_DateTime - startWork.RDT_DateTime;
@@ -4059,7 +4046,6 @@ namespace BP.WF
             }
             return str + msgAlert;
             #endregion 处理消息推送.
-
 
             return str;
         }

@@ -4091,7 +4091,7 @@ namespace BP.WF
             wk.OID = workid;
             wk.RetrieveFromDBSources();
             Flow fl = nd.HisFlow;
-            string title = BP.WF.WorkNode.GenerTitle(fl, wk);
+            string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
             return Flow_SetFlowTitle(flowNo, workid, title);
         }
         /// <summary>
@@ -4116,7 +4116,6 @@ namespace BP.WF
             {
                 if (string.IsNullOrEmpty(item))
                     continue;
-
                 //GroupMark=xxxx
                 string[] mystr = item.Split('=');
                 gwf.SetPara(mystr[0], mystr[1]);
@@ -4850,7 +4849,7 @@ namespace BP.WF
 
                 ps.Add(GERptAttr.WFState, (int)WFState.Blank);
                 ps.Add(GERptAttr.FK_Dept, empStarter.FK_Dept);
-                ps.Add(GERptAttr.Title, WorkNode.GenerTitle(fl, wk));
+                ps.Add(GERptAttr.Title, BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk));
                 ps.Add(GERptAttr.OID, wk.OID);
                 DBAccess.RunSQL(ps);
             }
@@ -4878,7 +4877,7 @@ namespace BP.WF
                 gwf.WFState = WFState.Draft;
 
             if (string.IsNullOrEmpty(title))
-                gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
+                gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
             else
                 gwf.Title = title;
             gwf.Starter = WebUser.No;
@@ -5056,7 +5055,7 @@ namespace BP.WF
             }
 
             if (string.IsNullOrEmpty(title))
-                gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
+                gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
             else
                 gwf.Title = title;
 
@@ -5899,7 +5898,7 @@ namespace BP.WF
 
                         gwf.FK_Dept = WebUser.FK_Dept;
                         gwf.DeptName = WebUser.FK_DeptName;
-                        gwf.Title = BP.WF.WorkNode.GenerTitle(fl, wk);
+                        gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
                         gwf.Starter = WebUser.No;
                         gwf.StarterName = WebUser.Name;
                         gwf.RDT = DataType.CurrentDataTime;

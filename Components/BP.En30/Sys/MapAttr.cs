@@ -1393,6 +1393,7 @@ namespace BP.Sys
         public void DoUp()
         {
             this.DoOrderUp(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+
             MapAttr attr = new MapAttr();
             attr.MyPK = this.FK_MapData + "_Title";
             if (attr.RetrieveFromDBSources() == 1)

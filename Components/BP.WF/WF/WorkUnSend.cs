@@ -146,18 +146,211 @@ namespace BP.WF
             return wn;
         }
         /// <summary>
+        /// 执行子线程的撤销.
+        /// </summary>
+        /// <returns></returns>
+        private string DoThreadUnSend()
+        {
+            //定义当前的节点.
+            WorkNode wn = this.GetCurrentWorkNode();
+
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            Node nd = new Node(gwf.FK_Node);
+
+
+            #region 求的撤销的节点.
+            int cancelToNodeID = 0;
+
+            if (nd.HisCancelRole == CancelRole.SpecNodes)
+            {
+                /*指定的节点可以撤销,首先判断当前人员是否有权限.*/
+                NodeCancels ncs = new NodeCancels();
+                ncs.Retrieve(NodeCancelAttr.FK_Node, wn.HisNode.NodeID);
+                if (ncs.Count == 0)
+                    throw new Exception("@流程设计错误, 您设置了当前节点(" + wn.HisNode.Name + ")可以让指定的节点人员撤销，但是您没有设置指定的节点.");
+
+                /* 查询出来. */
+                string sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + wn.HisWork.OID + " ORDER BY RDT DESC ";
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("@撤销流程错误,您没有权限执行撤销发送.");
+
+                // 找到将要撤销到的NodeID.
+                foreach (DataRow dr in dt.Rows)
+                {
+                    foreach (NodeCancel nc in ncs)
+                    {
+                        if (nc.CancelTo == int.Parse(dr[0].ToString()))
+                        {
+                            cancelToNodeID = nc.CancelTo;
+                            break;
+                        }
+                    }
+
+                    if (cancelToNodeID != 0)
+                        break;
+                }
+
+                if (cancelToNodeID == 0)
+                    throw new Exception("@撤销流程错误,您没有权限执行撤销发送,没有找到可以撤销的节点.");
+            }
+
+            if (nd.HisCancelRole == CancelRole.OnlyNextStep)
+            {
+                /*如果仅仅允许撤销上一步骤.*/
+                WorkNode wnPri = wn.GetPreviousWorkNode();
+
+                GenerWorkerList wl = new GenerWorkerList();
+                int num = wl.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No,
+                    GenerWorkerListAttr.FK_Node, wnPri.HisNode.NodeID);
+                if (num == 0)
+                    throw new Exception("@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。");
+                cancelToNodeID = wnPri.HisNode.NodeID;
+            }
+
+            if (cancelToNodeID == 0)
+                throw new Exception("@没有求出要撤销到的节点.");
+            #endregion 求的撤销的节点.
+
+            /********** 开始执行撤销. **********************/
+            Node cancelToNode = new Node(cancelToNodeID);
+            WorkNode wnOfCancelTo = new WorkNode(this.WorkID, cancelToNodeID);
+
+            // 调用撤消发送前事件。
+            string msg = nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wn.HisWork, null);
+
+            #region 删除当前节点数据。
+
+            // 删除产生的工作列表。
+            GenerWorkerLists wls = new GenerWorkerLists();
+            wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+
+            // 删除工作信息,如果是按照ccflow格式存储的。
+            if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
+                wn.HisWork.Delete();
+
+            // 删除附件信息。
+            DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + gwf.FK_Node + "' AND RefPKVal='" + this.WorkID + "'");
+            #endregion 删除当前节点数据。
+
+            // 更新.
+            gwf.FK_Node = cancelToNode.NodeID;
+            gwf.NodeName = cancelToNode.Name;
+
+            if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
+                gwf.TaskSta = TaskSta.Takeback;
+            else
+                gwf.TaskSta = TaskSta.None;
+
+            gwf.TodoEmps = WebUser.No + "," + WebUser.Name;
+            gwf.Update();
+
+            if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
+            {
+                //设置全部的人员不可用。
+                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=-1 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+
+                //设置当前人员可用。
+                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=1  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
+            }
+            else
+            {
+                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+            }
+
+            //更新当前节点，到rpt里面。
+            BP.DA.DBAccess.RunSQL("UPDATE " + this.HisFlow.PTable + " SET FlowEndNode=" + gwf.FK_Node + " WHERE OID=" + this.WorkID);
+
+            // 记录日志..
+            wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, cancelToNode.NodeID, cancelToNode.Name, "无");
+
+            // 删除数据.
+            if (wn.HisNode.IsStartNode)
+            {
+                DBAccess.RunSQL("DELETE FROM WF_GenerFH WHERE FID=" + this.WorkID);
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID);
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + nd.NodeID);
+            }
+
+            if (wn.HisNode.IsEval)
+            {
+                /*如果是质量考核节点，并且撤销了。*/
+                DBAccess.RunSQL("DELETE FROM WF_CHEval WHERE FK_Node=" + wn.HisNode.NodeID + " AND WorkID=" + this.WorkID);
+            }
+
+            #region 恢复工作轨迹，解决工作抢办。
+            if (cancelToNode.IsStartNode == false && cancelToNode.IsEnableTaskPool == false)
+            {
+                WorkNode ppPri = wnOfCancelTo.GetPreviousWorkNode();
+                GenerWorkerList wl = new GenerWorkerList();
+                wl.Retrieve(GenerWorkerListAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
+                // BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
+                RememberMe rm = new RememberMe();
+                rm.Retrieve(RememberMeAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, RememberMeAttr.FK_Emp, ppPri.HisWork.Rec);
+
+                string[] empStrs = rm.Objs.Split('@');
+                foreach (string s in empStrs)
+                {
+                    if (s == "" || s == null)
+                        continue;
+
+                    if (s == wl.FK_Emp)
+                        continue;
+                    GenerWorkerList wlN = new GenerWorkerList();
+                    wlN.Copy(wl);
+                    wlN.FK_Emp = s;
+
+                    WF.Port.WFEmp myEmp = new Port.WFEmp(s);
+                    wlN.FK_EmpText = myEmp.Name;
+
+                    wlN.Insert();
+                }
+            }
+            #endregion 恢复工作轨迹，解决工作抢办。
+
+            #region 如果是开始节点, 检查此流程是否有子线程，如果有则删除它们。
+            if (nd.IsStartNode)
+            {
+                /*要检查一个是否有 子流程，如果有，则删除它们。*/
+                GenerWorkFlows gwfs = new GenerWorkFlows();
+                gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
+                if (gwfs.Count > 0)
+                {
+                    foreach (GenerWorkFlow item in gwfs)
+                    {
+                        /*删除每个子线程.*/
+                        BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.FK_Flow, item.WorkID, true);
+                    }
+                }
+            }
+            #endregion
+
+            //调用撤消发送后事件。
+            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
+
+            if (wnOfCancelTo.HisNode.IsStartNode)
+                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/Do.aspx?ActionType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+            else
+                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>  . " + msg;
+
+            return "工作已经被您撤销到:" + cancelToNode.Name;
+        }
+        /// <summary>
         /// 执行撤消
         /// </summary>
         public string DoUnSend()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
             if (gwf.FID != 0)
             {
-                /*
-                 * 说明该流程是一个子线程，如果子线程的撤销，就需要删除该子线程。
-                 */
-                BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FlowNo, this.WorkID,"撤销方式删除");
-                return "@子线程已经被删除.";
+                //执行子线程的撤销.
+                return DoThreadUnSend();
+                ///*
+                // * 说明该流程是一个子线程，如果子线程的撤销，就需要删除该子线程。
+                // */
+                //BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FlowNo, this.WorkID, "撤销方式删除");
+                //return "@子线程已经被删除.";
             }
 
 

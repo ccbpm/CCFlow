@@ -555,7 +555,11 @@ namespace BP.WF
         /// <summary>
         /// 设置的SQL数据源为空,或者返回结果为零时不可以启动.
         /// </summary>
-        ResultIsNotZero=8
+        ResultIsNotZero=8,
+        /// <summary>
+        /// 为子流程时仅仅只能被调用1次.
+        /// </summary>
+        OnlyOneSubFlow=9
     }
     /// <summary>
     /// 装在前提示

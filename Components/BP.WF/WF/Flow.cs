@@ -969,6 +969,15 @@ namespace BP.WF
 
                             //new 一个实例.
                             GEDtl dtlData = new GEDtl(dtl.No);
+
+                            //检查该明细表是否有数据，如果没有数据，就copy过来，如果有，就说明已经copy过了。
+                            //  sql = "SELECT COUNT(OID) FROM "+dtlData.EnMap.PhysicsTable+" WHERE RefPK="+wk.OID;
+
+                            //删除以前的数据.
+                            sql = "DELETE FROM " + dtlData.EnMap.PhysicsTable + " WHERE RefPK=" + wk.OID;
+                            DBAccess.RunSQL(sql);
+
+
                             MapDtl dtlFrom = dtlsFrom[idx] as MapDtl;
 
                             GEDtls dtlsFromData = new GEDtls(dtlFrom.No);
@@ -978,9 +987,16 @@ namespace BP.WF
                                 dtlData.Copy(geDtlFromData);
                                 dtlData.RefPK = wk.OID.ToString();
                                 if (this.No == PFlowNo)
+                                {
                                     dtlData.InsertAsNew();
+                                }
                                 else
-                                    dtlData.SaveAsOID(geDtlFromData.OID);
+                                {
+                                    if (this.StartLimitRole == WF.StartLimitRole.OnlyOneSubFlow)
+                                        dtlData.SaveAsOID(geDtlFromData.OID); //为子流程的时候，仅仅允许被调用1次.
+                                    else
+                                        dtlData.InsertAsNew();
+                                }
                             }
                         }
                     }
@@ -1104,6 +1120,11 @@ namespace BP.WF
             #region 给generworkflow初始化数据. add 2015-08-06
             GenerWorkFlow mygwf = new GenerWorkFlow();
             mygwf.WorkID = wk.OID;
+            mygwf.Title = rpt.Title;
+
+            if (mygwf.Title.Contains("@") == true)
+                mygwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, rpt);
+
             if (mygwf.RetrieveFromDBSources() == 0)
             {
                 mygwf.Starter = WebUser.No;

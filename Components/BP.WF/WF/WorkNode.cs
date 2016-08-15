@@ -7244,6 +7244,13 @@ namespace BP.WF
                     emps += "@" + FK_Emp;
             }
 
+            if (string.IsNullOrEmpty(emps) == true)
+            {
+                /*没有找到，就到数据库里在找.*/
+                GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
+                emps = gwf.TodoEmps;
+            }
+
 
             /* 
             * 更新它的节点 worklist 信息, 说明当前节点已经完成了.

@@ -876,7 +876,7 @@ namespace CCFlow.WF
                     {
                         /*让他自动生成编号*/
                         wk.SetValByKey(NDXRptBaseAttr.BillNo,
-                            BP.WF.Glo.GenerBillNo(nd.HisFlow.BillNoFormat, this.WorkID, wk, nd.HisFlow.PTable));
+                            BP.WF.WorkFlowBuessRole.GenerBillNo(nd.HisFlow.BillNoFormat, this.WorkID, wk, nd.HisFlow.PTable));
                     }
                 }
                 catch
@@ -1631,7 +1631,7 @@ namespace CCFlow.WF
                 }
 
                 if (currND.IsStartNode && isSave)
-                    currWK.SetValByKey(StartWorkAttr.Title, WorkNode.GenerTitle(currND.HisFlow, this.currWK));
+                    currWK.SetValByKey(StartWorkAttr.Title, WorkFlowBuessRole.GenerTitle(currND.HisFlow, this.currWK));
 
                 currWK.Update();
                 /*如果是保存*/

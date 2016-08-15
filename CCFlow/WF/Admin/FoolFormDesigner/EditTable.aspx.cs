@@ -172,7 +172,7 @@ namespace CCFlow.WF.MapDef
 
             if (mapAttr.UIBindKey.Contains("."))
             {
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('../Comm/Search.aspx?EnsName=" + mapAttr.UIBindKey + "','df');\" >数据维护</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('../../Comm/Search.aspx?EnsName=" + mapAttr.UIBindKey + "','df');\" >数据维护</a>");
             }
             else
             {
@@ -379,6 +379,7 @@ namespace CCFlow.WF.MapDef
                 MapAttr attr = new MapAttr();
                 attr = (MapAttr)this.Pub1.Copy(attr);
                 attr.UIBindKey = this.FK_SFTable;
+                attr.UIContralType = UIContralType.DDL;
 
                 /*普通类型的外部字典字段.*/
                 if (this.MyPK == null || this.MyPK == "")
@@ -397,6 +398,7 @@ namespace CCFlow.WF.MapDef
                 {
                     attr.MyPK = this.MyPK;
                     attr.Retrieve();
+                    attr.UIContralType = UIContralType.DDL;
                 }
 
 
@@ -460,7 +462,6 @@ namespace CCFlow.WF.MapDef
                         attr.Retrieve();
                     }
 
-
                     attr = (MapAttr)this.Pub1.Copy(attr);
                     attr.FK_MapData = this.FK_MapData;
                     attr.LGType = FieldTypeS.FK;
@@ -469,7 +470,7 @@ namespace CCFlow.WF.MapDef
                     attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
                     attr.DefVal = this.Pub1.GetTBByID("TB_DefVal").Text;
                     attr.MyDataType = BP.DA.DataType.AppString;
-
+                    attr.UIContralType = UIContralType.DDL;
                     attr.Save();
 
                 }

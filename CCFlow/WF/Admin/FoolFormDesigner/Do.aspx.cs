@@ -192,8 +192,6 @@ namespace CCFlow.WF.MapDef
                     case "AddSFWS":
                         this.AddSFWS();
                         break;
-                  
-                  
                     case "AddFG": /*执行一个插入列组的命令.*/
                         switch (this.RefNo)
                         {

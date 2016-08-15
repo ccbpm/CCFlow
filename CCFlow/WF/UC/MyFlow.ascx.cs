@@ -1940,12 +1940,10 @@ namespace CCFlow.WF.UC
                         //如果有单据编号，让其在每次保存后生成.
                         if (this.currND.IsStartNode && this.currFlow.BillNoFormat.Length >2)
                         {
-                            string newBillNo= BP.WF.Glo.GenerBillNo(this.currFlow.BillNoFormat, this.WorkID, currWK, currWK.EnMap.PhysicsTable);
+                            string newBillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(this.currFlow.BillNoFormat, this.WorkID, currWK, currWK.EnMap.PhysicsTable);
                             currWK.SetValByKey("BillNo", newBillNo );
-
                             this.UCEn1.GetTBByID("TB_BillNo").Text = newBillNo;
                         }
-
                         break;
                     case NodeFormType.DisableIt:
                         currWK.Retrieve();
@@ -2010,7 +2008,7 @@ namespace CCFlow.WF.UC
                 }
 
                 if (currND.IsStartNode && isSave)
-                    currWK.SetValByKey(StartWorkAttr.Title, WorkNode.GenerTitle(currND.HisFlow, this.currWK));
+                    currWK.SetValByKey(StartWorkAttr.Title, BP.WF.WorkFlowBuessRole.GenerTitle(currND.HisFlow, this.currWK));
 
                 currWK.Update();
                 /*如果是保存*/
@@ -2020,7 +2018,7 @@ namespace CCFlow.WF.UC
                 {
                     if (this.currFlow.DraftRole != DraftRole.None)
                     {
-                        string title = WorkNode.GenerTitle(this.currFlow, currWK);
+                        string title = BP.WF.WorkFlowBuessRole.GenerTitle(this.currFlow, currWK);
                         BP.WF.Dev2Interface.Flow_SetFlowTitle(this.FK_Flow,this.WorkID, title);
                     }
                 }

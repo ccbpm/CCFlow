@@ -72,6 +72,20 @@ namespace CCFlow.WF.MapDef
             if (dtl.IsView == false)
                 return;
 
+            #region 查看有几个分组？从表的字段多于1个分组就需要把他们设置成一个分组就可以，否则排序出现问题.
+            string sqlGroup = "SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapDtl + "'";
+            if (DBAccess.RunSQLReturnValInt(sqlGroup) != 1)
+            {
+                BP.Sys.GroupField gf = new GroupField();
+                gf.EnName = this.FK_MapDtl;
+                gf.Lab = dtl.Name;
+                gf.Insert();
+                sqlGroup = "UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapDtl + "'";
+                DBAccess.RunSQL(sqlGroup);
+            }
+            #endregion 查看有几个分组？从表的字段多于1个分组就需要把他们设置成一个分组就可以，否则排序出现问题.
+
+
             MapAttrs attrs = new MapAttrs(this.MyPK);
             MapAttrs attrs2 = new MapAttrs();
             MapExts mes = new MapExts(this.MyPK);
@@ -161,8 +175,6 @@ namespace CCFlow.WF.MapDef
 
             if (dtl.IsEnableLink)
                 this.Pub1.AddTDTitle(dtl.LinkLabel);
-
-            //Pub1.AddTDTitle("&nbsp;");
 
             this.Pub1.AddTREnd();
             #endregion 输出标题.

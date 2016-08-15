@@ -48,7 +48,7 @@
             window.location.href = window.location.href;
         }
         function EditTable(fk_mapdata, refno) {
-            var url = 'EditTable.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&s=' + Math.random();
+            var url = 'EditTable.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + refno + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

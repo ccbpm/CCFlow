@@ -622,9 +622,10 @@ namespace BP.WF
                 }
                 else
                 {
-                    ps.SQL = "SELECT WorkID,FK_Node FROM WF_GenerWorkFlow WHERE Starter=" + dbstr + "FlowStarter AND WFState=" + dbstr + "WFState ";
+                    ps.SQL = "SELECT WorkID,FK_Node FROM WF_GenerWorkFlow WHERE Starter=" + dbstr + "FlowStarter AND WFState=" + dbstr + "WFState AND FK_Flow=" + dbstr + "FK_Flow ";
                     ps.Add(GERptAttr.FlowStarter, emp.No);
                     ps.Add(GERptAttr.WFState, (int)WFState.Blank);
+                    ps.Add(GenerWorkFlowAttr.FK_Flow, this.No);
                     // throw new Exception(ps.SQL);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
                     //如果没有启用草稿，并且存在草稿就取第一条 by dgq 5.28

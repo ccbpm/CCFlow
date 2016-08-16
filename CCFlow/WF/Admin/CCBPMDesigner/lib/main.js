@@ -3415,10 +3415,8 @@ function save(showInfo) {
                     Designer_ShowMsg("保存成功！");
                 }
             }
-        } else if (data == "true") {
-            //成功后不提示
         } else {
-            Designer_ShowMsg('Unknown: ' + data);
+            Designer_ShowMsg('Unknown: ' + jsonData);
         }
     });
 }

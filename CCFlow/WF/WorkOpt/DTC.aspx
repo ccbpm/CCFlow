@@ -4,8 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>流转自定义（动态生成配置Dom）</title>
-    <%--<link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />--%><link
-        href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
@@ -48,10 +47,6 @@
                 $.messager.alert('错误', '请选择流程！', 'error');
                 return;
             }
-
-            $('#aa').panel('refresh', "TransferCustomSimple.aspx?flowNo=" + flowNo);
-
-            return;
 
             var v = $('#workid').textbox('getValue');
             if (!v || v.length == 0) {
@@ -219,9 +214,7 @@
                     流转配置：
                 </td>
                 <td style="padding: 5px;">
-                <div class="easyui-panel" id="aa" style="height:auto; width:100%;" data-options="border:false">
-                </div>
-                    <%--<table id="nodes" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%;
+                    <table id="nodes" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%;
                         line-height: 26px;">
                         <tr>
                             <td style="width: 80px; text-align: center;" class="GroupTitle">
@@ -237,7 +230,7 @@
                                 预计处理日期
                             </td>
                         </tr>
-                    </table>--%>
+                    </table>
                 </td>
             </tr>
         </table>

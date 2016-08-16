@@ -73,6 +73,14 @@
 </fieldset>
 
 <fieldset>
+<legend> <asp:RadioButton ID="RB_OnlyOneSubFlow" Text="为子流程时，仅仅只能被调用1次." GroupName="xzgz" runat="server" /> </legend>
+
+<ul>
+<li>如果当前为子流程，仅仅只能被调用1次。</li>
+</ul>
+</fieldset>
+
+<fieldset>
 <legend><asp:RadioButton ID="RB_ColNotExit" Text="按照发起字段不能重复规则" GroupName="xzgz" runat="server" /></legend>
  
  <a href="javascript:ShowHidden('fields')">填写设置字段</a>

@@ -70,6 +70,9 @@ namespace CCFlow.WF.Admin.AttrFlow
                        this.TB_Alert.Text = fl.StartLimitAlert;
                         this.TB_ByTimePara.Text = fl.StartLimitPara;
                         break;
+                    case StartLimitRole.OnlyOneSubFlow: // 为子流程时仅仅只能被调用1此.
+                        this.RB_OnlyOneSubFlow.Checked = true;
+                        break;
                     case StartLimitRole.ColNotExit: //发起的列不能重复,(多个列可以用逗号分开).
                         this.RB_ColNotExit.Checked = true;
                         this.TB_ColNotExit_Fields.Text = fl.StartLimitPara;

@@ -14,10 +14,10 @@
     <script language="JavaScript" src="../Comm/JS/Calendar/WdatePicker.js" defer="defer"
         type="text/javascript"></script>
     <script type="text/javascript">
-        function SaveFTC() {
+        function Save() {
             try {
                 document.getElementById('Btn_Save').click(); //调用btn_save事件.
-                //alert('保存成功.');
+                alert('保存成功.');
                 return true; //保存成功，用户可以发送.
             } catch (e) {
                 alert(e.name + " :  " + e.message);

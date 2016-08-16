@@ -107,8 +107,10 @@ namespace BP.WF.Template
         /// 操作字段
         /// </summary>
         public const string SFFields = "SFFields";
-
-
+        /// <summary>
+        /// 显示控制方式
+        /// </summary>
+        public const string SFShowCtrl = "SFShowCtrl";
     }
     /// <summary>
     /// 父子流程
@@ -195,6 +197,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(FrmSubFlowAttr.SFSta, (int)value);
+            }
+        }
+        /// <summary>
+        /// 显示控制方式
+        /// </summary>
+        public SFShowCtrl SFShowCtrl
+        {
+            get
+            {
+                return (SFShowCtrl)this.GetValIntByKey(FrmSubFlowAttr.SFShowCtrl);
+            }
+            set
+            {
+                this.SetValByKey(FrmSubFlowAttr.SFShowCtrl, (int)value);
             }
         }
         /// <summary>
@@ -542,6 +558,10 @@ namespace BP.WF.Template
                 map.AddTBFloat(FrmSubFlowAttr.SF_W, 400, "宽度", true, false);
 
                 map.AddTBString(FrmSubFlowAttr.SFFields, null, "审批格式字段", true, false, 0, 1000, 10,true);
+
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFShowCtrl, (int)SFShowCtrl.All, "显示控制方式",
+                  true, true, FrmSubFlowAttr.SFShowCtrl, "@0=可以看所有的子流程@1=仅仅可以看自己发起的子流程"); //此属性暂时没有用.
+
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
                 this._enMap = map;

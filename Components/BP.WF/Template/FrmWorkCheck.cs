@@ -65,6 +65,20 @@ namespace BP.WF.Template
         Free
     }
     /// <summary>
+    /// 显示控制方式
+    /// </summary>
+    public enum SFShowCtrl
+    {
+        /// <summary>
+        /// 所有的子线城都可以看到
+        /// </summary>
+        All,
+        /// <summary>
+        /// 仅仅查看我自己的
+        /// </summary>
+        MySelf
+    }
+    /// <summary>
     /// 审核组件状态
     /// </summary>
     public enum FrmWorkCheckSta

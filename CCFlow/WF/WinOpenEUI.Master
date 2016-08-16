@@ -53,7 +53,7 @@
         });
 
         function chageURL() {
-            var url = "WorkOpt/WebOffice.aspx?FK_Node=<%=FK_Node %>&FID=<%=FID %>&WorkID=<%=WorkID %>&FK_Flow=<%=FK_Flow %>";
+            var url = "WorkOpt/WebOffice.aspx?FK_Node=<%=FK_Node %>&FID=<%=FID %>&WorkID=<%=WorkID %>&FK_Flow=<%=FK_Flow %>&DoType=<%=DoType %>";
             $("#officeIfream").attr("src", url);
         }         
     </script>

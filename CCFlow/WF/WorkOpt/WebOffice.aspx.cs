@@ -221,7 +221,8 @@ namespace CCFlow.WF.WorkOpt
                 string type = Request["action"];
                 if (string.IsNullOrEmpty(type))
                 {
-                    LoadMenu(true);
+                    isReadOnly = Request.QueryString["DoType"] == "View";
+                    LoadMenu(true && !isReadOnly);
                 }
                 else
                 {

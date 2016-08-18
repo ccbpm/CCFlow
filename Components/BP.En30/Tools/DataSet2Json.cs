@@ -122,13 +122,29 @@ namespace BP.Tools
                         {
                             foreach (string current in dictionary.Keys)
                             {
-                                dataTable.Columns.Add(current, dictionary[current].GetType());
+                                Type type = null;
+                                if (dictionary[current] == null)
+                                    type = typeof(string);
+                                else
+                                    type = dictionary[current].GetType();
+                                dataTable.Columns.Add(current, type);
                             }
                         }
                         DataRow dataRow = dataTable.NewRow();
                         foreach (string current in dictionary.Keys)
                         {
-                            dataRow[current] = dictionary[current];
+                            string colValue = "";
+                            if (dictionary[current] == null)
+                            {
+                                string dbTypeName = dataTable.Columns[current].DataType.Name;
+                                if (dbTypeName.ToLower() == "int32")
+                                    colValue = "0";
+                            }
+                            else
+                            {
+                                colValue = dictionary[current].ToString();
+                            }
+                            dataRow[current] = colValue;
                         }
                         dataTable.Rows.Add(dataRow); //循环添加行到DataTable中  
                     }

@@ -603,9 +603,15 @@ namespace CCFlow.WF.CCForm
             foreach (string sort in fileSorts)
             {
                 bSort_Add_TD = true;
+
+                string mysort = sort;
+                if (sort.Contains("@") == true)
+                    mysort = sort.Substring(sort.IndexOf('@') + 1);
+
+
                 foreach (FrmAttachmentDB db in dbs)
                 {
-                    if (haveAuthSort == true && db.Sort != sort) 
+                    if (haveAuthSort == true && db.Sort != mysort) 
                         continue;
 
                     i++;
@@ -616,7 +622,7 @@ namespace CCFlow.WF.CCForm
                         if (bSort_Add_TD == true)
                         {
                             bSort_Add_TD = false;
-                            int rowSpan = GetSortLenth_FromDB(sort, dbs);
+                            int rowSpan = GetSortLenth_FromDB(mysort, dbs);
                             this.Pub1.AddTD("rowspan=" + rowSpan, db.Sort);
                         }
                     }

@@ -286,7 +286,6 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
             #endregion 基本属性.
 
-
             #region 权限控制.
             this.Pub1.AddTR();
             this.Pub1.AddTDIdx(idx++);
@@ -391,8 +390,6 @@ namespace CCFlow.WF.MapDef
 
             }
             #endregion 权限控制.
-
-
 
             #region WebOffice控制方式.
 

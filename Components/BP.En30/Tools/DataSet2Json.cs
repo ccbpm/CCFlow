@@ -103,7 +103,6 @@ namespace BP.Tools
         public static DataTable ToDataTable(string json)
         {
             DataTable dataTable = new DataTable();  //实例化  
-            DataTable result;
             try
             {
                 JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
@@ -115,36 +114,30 @@ namespace BP.Tools
                     {
                         if (dictionary.Keys.Count<string>() == 0)
                         {
-                            result = dataTable;
-                            return result;
+                            return dataTable;
                         }
                         if (dataTable.Columns.Count == 0)
                         {
                             foreach (string current in dictionary.Keys)
                             {
-                                Type type = null;
                                 if (dictionary[current] == null)
-                                    type = typeof(string);
-                                else
-                                    type = dictionary[current].GetType();
-                                dataTable.Columns.Add(current, type);
+                                {
+                                    dataTable.Columns.Add(current, typeof(string));
+                                    continue;
+                                }
+                                dataTable.Columns.Add(current, dictionary[current].GetType());
                             }
                         }
                         DataRow dataRow = dataTable.NewRow();
                         foreach (string current in dictionary.Keys)
                         {
-                            string colValue = "";
                             if (dictionary[current] == null)
                             {
-                                string dbTypeName = dataTable.Columns[current].DataType.Name;
-                                if (dbTypeName.ToLower() == "int32")
-                                    colValue = "0";
+                                dataTable.Columns[current].AllowDBNull = true;
+                                dataRow[current] = DBNull.Value;
+                                continue;
                             }
-                            else
-                            {
-                                colValue = dictionary[current].ToString();
-                            }
-                            dataRow[current] = colValue;
+                            dataRow[current] = dictionary[current];
                         }
                         dataTable.Rows.Add(dataRow); //循环添加行到DataTable中  
                     }
@@ -153,8 +146,7 @@ namespace BP.Tools
             catch
             {
             }
-            result = dataTable;
-            return result;
+            return dataTable;
         }
         #endregion
 

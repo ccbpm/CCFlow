@@ -215,7 +215,12 @@ namespace CCFlow.WF.CCForm
                 string fileName = context.Request.Files[i].FileName.Substring(0, context.Request.Files[i].FileName.LastIndexOf('.'));
                 string ext = System.IO.Path.GetExtension(context.Request.Files[i].FileName);
                 string realSaveTo = savePath + "/" + guid + "." + fileName + ext;
-                string saveTo = realSaveTo;
+
+                realSaveTo = realSaveTo.Replace("~", "-");
+                realSaveTo = realSaveTo.Replace("'", "-");
+                realSaveTo = realSaveTo.Replace("*", "-");
+
+
                 context.Request.Files[i].SaveAs(realSaveTo);
 
                 FileInfo info = new FileInfo(realSaveTo);
@@ -232,7 +237,7 @@ namespace CCFlow.WF.CCForm
                 if (athDesc.SaveWay == 0)
                 {
                     //文件方式保存
-                    dbUpload.FileFullName = saveTo;
+                    dbUpload.FileFullName = realSaveTo;
                 }
 
                 if (athDesc.SaveWay == 1)
@@ -260,7 +265,7 @@ namespace CCFlow.WF.CCForm
                 if (athDesc.SaveWay == 1)
                 {
                     //执行文件保存.
-                    BP.DA.DBAccess.SaveFileToDB(saveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
+                    BP.DA.DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
                 }
             }
         }

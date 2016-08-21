@@ -147,8 +147,6 @@ namespace BP.Web.Port
             }
             #endregion 生成参数串.
 
-
-
             string nodeID = int.Parse(this.FK_Flow + "01").ToString();
             switch (this.DoWhat)
             {
@@ -235,6 +233,29 @@ namespace BP.Web.Port
                     }
                     this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);
                     break;
+                case DoWhatList.DealMsg: //处理消息的连接，比如待办、退回、移交的消息处理.
+                    string guid = this.Request.QueryString["GUID"];
+
+                    BP.WF.SMS sms = new SMS();
+                    sms.MyPK = guid;
+                    sms.Retrieve();
+
+                    //判断当前的登录人员.
+                    if (BP.Web.WebUser.No != sms.SendToEmpNo)
+                        BP.WF.Dev2Interface.Port_Login(sms.SendToEmpNo);
+
+                    BP.DA.AtPara ap = new AtPara(sms.AtPara);
+                    switch (sms.MsgType)
+                    {
+                        case SMSMsgType.SendSuccess: // 发送成功的提示.
+                            this.Response.Redirect("MyFlow.aspx?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
+                            return;
+                        default: //其他的情况都是查看工作报告.
+                            this.Response.Redirect("WFRpt.aspx?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
+                            return;
+                    }
+                    //this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);
+                    return ;
                 default:
                     this.ToErrorPage("没有约定的标记:DoWhat=" + this.DoWhat);
                     break;

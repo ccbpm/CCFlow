@@ -55,11 +55,21 @@ namespace CCFlow.WF.WebOffice
         /// <summary>
         /// 节点编号
         /// </summary>
-        public string FK_Node
+        public int FK_Node
         {
             get
             {
-                return this.Request.QueryString["FK_Node"];
+
+                string str= this.Request.QueryString["FK_Node"];
+                if (string.IsNullOrEmpty(str))
+                {
+                    GenerWorkFlow gwf = new GenerWorkFlow();
+                    gwf.WorkID = Int64.Parse(this.PKVal);
+                    if (gwf.RetrieveFromDBSources() == 0)
+                        return 0;
+                    return gwf.FK_Node;
+                }
+                return int.Parse(str);
             }
         }
         /// <summary>
@@ -136,7 +146,7 @@ namespace CCFlow.WF.WebOffice
         {
             get
             {
-                if (FK_Node == "999999")
+                if (FK_Node == 999999 || this.FK_Node == 0)
                     return WebUser.Name + "    时间:" + DateTime.Now.ToString("YYYY-MM-dd HH:mm:ss");
 
                 BP.WF.Node nodeInfo = new BP.WF.Node(FK_Node);
@@ -201,7 +211,7 @@ namespace CCFlow.WF.WebOffice
         {
             bool isCompleate = false;
             BP.WF.Node node = new BP.WF.Node();
-            node.NodeID = int.Parse( this.FK_Node);
+            node.NodeID = this.FK_Node; 
             node.RetrieveFromDBSources();
             try
             {

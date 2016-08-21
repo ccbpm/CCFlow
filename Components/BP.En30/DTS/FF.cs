@@ -88,8 +88,6 @@ namespace BP.DTS
 		{
 			this.Add( new FF( fromF , toF , dataType ,isPk ) );
 		}
-		 
-
 		/// <summary>
 		/// 根据索引访问集合内的元素Attr。
 		/// </summary>

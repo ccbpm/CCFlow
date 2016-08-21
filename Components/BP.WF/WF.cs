@@ -85,6 +85,10 @@ namespace BP.WF
         public const string MyFlow = "MyFlow";
         public const string FlowFX = "FlowFX";
         public const string DealWork = "DealWork";
+        /// <summary>
+        /// 处理消息连接
+        /// </summary>
+        public const string DealMsg = "DealMsg";
         public const string Tools = "Tools";
         public const string ToolsSmall = "ToolsSmall";
         public const string Runing = "Runing";

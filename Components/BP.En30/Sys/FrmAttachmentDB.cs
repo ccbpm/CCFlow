@@ -126,7 +126,12 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(FrmAttachmentDBAttr.FileFullName, value.Replace("/","\\"));
+                string str = value;
+                str = str.Replace("~", "-");
+                str = str.Replace("'", "-");
+                str = str.Replace("*", "-");
+                str = str.Replace("/","\\");
+                this.SetValByKey(FrmAttachmentDBAttr.FileFullName, str);
             }
         }
         /// <summary>
@@ -150,6 +155,7 @@ namespace BP.Sys
         {
             get
             {
+
                 return this.FileFullName.Substring(this.FileFullName.LastIndexOf('\\') + 1);
             }
         }
@@ -164,7 +170,12 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(FrmAttachmentDBAttr.FileName, value);
+                string str = value;
+                str = str.Replace("~", "-");
+                str = str.Replace("'", "-");
+                str = str.Replace("*", "-");
+
+                this.SetValByKey(FrmAttachmentDBAttr.FileName, str);
             }
         }
         /// <summary>

@@ -450,6 +450,9 @@ namespace BP.WF
                 SetValByKey(SMSAttr.EmailDoc, value);
             }
         }
+        /// <summary>
+        /// 邮件内容.
+        /// </summary>
         public string Doc
         {
             get
@@ -601,7 +604,7 @@ namespace BP.WF
                             break;
                         case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToWebServices(this.MyPK,WebUser.No, this.SendToEmpNo ,this.Mobile, this.MobileInfo);
+                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo ,this.Mobile, this.MobileInfo);
                             break;
                         case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();

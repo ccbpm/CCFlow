@@ -1583,7 +1583,7 @@ namespace BP.En
                 ver.RDT = rdt;
                 ver.Name = this.EnMap.EnDesc;
                 ver.Rec = BP.Web.WebUser.Name;
-                ver.Insert();
+                ver.Save();
 
                 // 保存字段数据.
                 Attrs attrs = this.EnMap.Attrs;

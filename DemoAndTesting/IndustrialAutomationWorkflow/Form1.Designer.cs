@@ -55,9 +55,9 @@
             // 
             this.TB_Url.Location = new System.Drawing.Point(70, 35);
             this.TB_Url.Name = "TB_Url";
-            this.TB_Url.Size = new System.Drawing.Size(428, 21);
+            this.TB_Url.Size = new System.Drawing.Size(334, 21);
             this.TB_Url.TabIndex = 1;
-            this.TB_Url.Text = "http://localhost:2779/DataUser/IndustrialAutomationWorkflowAPI.asmx";
+            this.TB_Url.Text = "http://localhost:41466/DataUser/IndustrialAutomationWorkflowAPI.asmx";
             // 
             // label1
             // 

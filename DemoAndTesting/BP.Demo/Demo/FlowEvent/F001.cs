@@ -72,9 +72,9 @@ namespace BP.Demo.FlowEvent
         /// <returns></returns>
         public override string SaveAfter()
         {
-            switch (this.HisNode.No)
+            switch (this.HisNode.NodeID)
             {
-                case "01":
+                case 101:
                     this.ND01_SaveAfter();
                     break;
                 default:
@@ -126,8 +126,11 @@ namespace BP.Demo.FlowEvent
                 if (this.HisNode.NodeID == 102)
                 {
                     /*根据不同的节点，执行不同的业务逻辑*/
+
+
                 }
-               
+              
+
                 //返回.
                 return base.SendSuccess();
             }

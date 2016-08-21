@@ -3849,7 +3849,23 @@ namespace BP.WF
             string str = nodeID.ToString();
             int len = str.Length - 2;
             if (str.Substring(len, 2) == "01")
-                return true;
+            {
+                //如果是开始节点，如何去判断是否可以处理当前节点的权限.
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                gwf.WorkID = workID;
+                if (gwf.RetrieveFromDBSources() == 0)
+                    return true;
+                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID="+workID+" AND FK_Node="+nodeID ;
+                DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
+                foreach (DataRow dr in mydt.Rows)
+                {
+                    string fk_emp = dr["FK_Emp"].ToString();
+                    string isPass = dr["IsPass"].ToString();
+                    if (fk_emp == userNo && isPass == "0")
+                        return true;
+                }
+                return false;
+            }
             #endregion 判断是否是开始节点.
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
@@ -3863,8 +3879,8 @@ namespace BP.WF
                 return false;
 
             //判断是否是待办.
-            int isPass = int.Parse(dt.Rows[0]["IsPass"].ToString());
-            if (isPass != 0)
+            int myisPass = int.Parse(dt.Rows[0]["IsPass"].ToString());
+            if (myisPass != 0)
                 return false;
 
             WFState wfsta = (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());

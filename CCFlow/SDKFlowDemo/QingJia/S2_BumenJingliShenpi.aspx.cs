@@ -88,8 +88,12 @@ namespace CCFlow.SDKFlowDemo.QingJia
             en.Retrieve();
 
             Hashtable ht = new Hashtable();
+            ht.Add("JinE",1000);
+
             ht.Add("QingJiaTianShu", en.QingJiaTianShu);
             ht.Add("SysIsReadReceipts", 1); //是否需要回执.
+
+            objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID,ht);
 
 
             /*
@@ -104,6 +108,8 @@ namespace CCFlow.SDKFlowDemo.QingJia
              * 开发人员可以根据系统变量,执行相关的业务逻辑操作.
              * 
              */
+
+           
 
          //   objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 0, null, ht);
 

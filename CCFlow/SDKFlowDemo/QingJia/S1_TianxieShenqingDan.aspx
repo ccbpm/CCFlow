@@ -71,7 +71,7 @@
 <fieldset>
 <legend>功能操作区域</legend>
     <asp:Button ID="Btn_Send" runat="server" Text="发送(发送给部门经理审批)" 
-        onclick="Btn_Send_Click" />
+        onclick="Btn_Send_Click" style="margin-bottom: 0px" />
     <asp:Button ID="Btn_Save" runat="server" onclick="Btn_Save_Click" Text="保存" />
 
     <% 

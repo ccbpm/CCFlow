@@ -106,14 +106,22 @@ namespace CCFlow.SDKFlowDemo.QingJia
                 //编写我的业务逻辑....
 
                 //调用发送api, 返回发送对象.
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
-
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID,204,"zhangsan,lisi");
+              //  objs = BP.WF.Dev2Interface.db_c(this.FK_Flow, this.WorkID);
+              //  objs.VarCurrNodeID
             }
             catch(Exception ex)
             {
                 this.Response.Write("<font color=red>发送期间出现异常:" + ex.Message + "</font>");
                 return;
             }
+
+
+            foreach (BP.WF.SendReturnObj obj in objs)
+            {
+                this.Response.Write("<font color=red>"+obj.MsgFlag+":" + obj.MsgOfHtml  + "</font><br>");
+            }
+           // objs.va
 
         //    objs.v
             /*

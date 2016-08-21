@@ -137,7 +137,7 @@
                     <div id="divWorkFlow">
                         <ul id="Ul1" class="menu" runat="server">
                             <li runat="server" id="Li3" style="background: url('Img/Menu/Start.jpg') -1px 0px">
-                                <a href="/WF/Comm/Ens.aspx?EnsName=BP.Demo.BanJis" target="main">班级维护</a></li>
+                                <a href="/WF/Comm/Ens.aspx?EnsName=BP.Demo.BPFramework.BanJis" target="main">班级维护</a></li>
 
                                  <li runat="server" id="Li1" style="background: url('Img/Menu/Start.jpg') -1px 0px">
                                 <a href="/WF/Comm/UIEn.aspx?EnsName=BP.Demo.BPFramework.Students" target="main">新建学生</a></li>

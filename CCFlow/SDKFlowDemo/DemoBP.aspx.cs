@@ -9,7 +9,6 @@ using BP.WF.Template;
 using BP.En;
 using BP.DA;
 using BP.Port;
-using BP.WF.Template;
 using BP.Demo.BPFramework;
 
 public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
@@ -31,11 +30,15 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         
         //执行开始节点的发发送,获得一个发送对象.
         BP.WF.SendReturnObjs objs=  BP.WF.Dev2Interface.Node_SendWork(flowNo, workid);
+
         //输出发送对象,流程在发送的时候会把发送的过程记录在这个对象里，比如：发送给谁？发送到那个节点了？提示的信息是什么？是否发送成功？
         foreach (BP.WF.SendReturnObj obj in objs)
         {
             this.Response.Write("Key=" + obj.MsgFlag + " Value=" + obj.MsgOfText);
         }
+
+        //输出发送成功信息.
+        this.Response.Write(objs.ToMsgOfHtml());
 
         //获取发送到节点ID.
         int nextNodeID = objs.VarToNodeID;
@@ -43,36 +46,35 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         //获取接受人, 多个的话，用逗号分开的，比如： zhangsan,lisi  
         string nextWorker=  objs.VarAcceptersID;
         
-        //如果发送人这个时间感到发送错误了，忘记了填写东西 ,需要撤销，就执行撤销API.
-        //if (1 == 2)
-        //{
-        //    //执行撤销API.
-        //    BP.WF.Dev2Interface.Flow_DoUnSend(flowNo, workid);
-        //}
+       // 如果发送人这个时间感到发送错误了，忘记了填写东西 ,需要撤销，就执行撤销API.
+        if (1 == 2)
+        {
+            //执行撤销API.
+           string undoMsg= BP.WF.Dev2Interface.Flow_DoUnSend(flowNo, workid);
+        }
 
-        ////让下一个接受人登录, 让其执行发送。
-        //BP.WF.Dev2Interface.Port_Login(nextWorker);
+        //让下一个接受人登录, 让其执行发送。
+        BP.WF.Dev2Interface.Port_Login(nextWorker);
 
-        //// 如果你要退回，就执行退回接口.
-        //if (1 == 2)
-        //{
-        //    BP.WF.Dev2Interface.Node_ReturnWork(flowNo, workid, 0, nextNodeID, 101, "退回测试", false);
-        //    return;
-        //}
+        // 如果你要退回，就执行退回接口.
+        if (1 == 2)
+        {
+           string returnMsg=  BP.WF.Dev2Interface.Node_ReturnWork(flowNo, workid, 0, nextNodeID, 101, "退回测试", false);
+        }
 
-        //// 如果你要删除，就执行删除接口.
-        //if (1 == 2)
-        //{
-        //    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(flowNo, workid, false);
-        //    return;
-        //}
+        // 如果你要删除，就执行删除接口.
+        if (1 == 2)
+        {
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(flowNo, workid, false);
+            return;
+        }
 
-        //// 如果你要移交，就执行移交接口.
-        //if (1 == 2)
-        //{
-        //    BP.WF.Dev2Interface.Node_Shift(flowNo,nextNodeID,workid,0,"fuhui","移交测试.");
-        //    return;
-        //}
+        // 如果你要移交，就执行移交接口.
+        if (1 == 2)
+        {
+            BP.WF.Dev2Interface.Node_Shift(flowNo,nextNodeID,workid,0,"fuhui","移交测试.");
+            return;
+        }
 
         // 执行下一步发送。
         objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid);
@@ -84,12 +86,6 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
-        BP.Demo.BPFramework.Student st = new BP.Demo.BPFramework.Student();
-        st.No = "sssss";
-        st.Name = "xcxcvasd";
-        st.Insert();
-
-        Student en = new Student("sssss");
 
     }
     /// <summary>
@@ -249,7 +245,6 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
             /*说明没有查询到数据。*/
         }
         #endregion.
-
 
         #region  数据复制.
         /*
@@ -504,7 +499,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         en.Insert(); //这里会自动给该学生编号，从0001开始，编号规则打开该类的Map.
 
         string xuehao = en.No;
-        this.Response.Write("信息已经加入,该学生的学好为:" + xuehao);
+        this.Response.Write("信息已经加入,该学生的学号为:" + xuehao);
 
         //查询出来该实体。
         BP.Demo.BPFramework.Student myen = new BP.Demo.BPFramework.Student(xuehao);

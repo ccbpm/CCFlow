@@ -3,6 +3,10 @@
 <%@ Register src="../../../WF/SDKComponents/FrmCheck.ascx" tagname="FrmCheck" tagprefix="uc1" %>
 <%@ Register src="../../../WF/SDKComponents/DocMultiAth.ascx" tagname="DocMultiAth" tagprefix="uc2" %>
 
+<%@ Register src="../../../WF/SDKComponents/DocMainAth.ascx" tagname="DocMainAth" tagprefix="uc3" %>
+<%@ Register src="../../../WF/SDKComponents/SubFlowDtl.ascx" tagname="SubFlowDtl" tagprefix="uc4" %>
+<%@ Register src="../../../WF/SDKComponents/ThreadDtl.ascx" tagname="ThreadDtl" tagprefix="uc5" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -36,7 +40,9 @@
     <td> </td>
 
     <td>所在部门 </td>
-    <td> </td>
+    <td> 
+        <uc4:SubFlowDtl ID="SubFlowDtl1" runat="server" />
+        </td>
     </tr>
 
         <td>日期从 </td>
@@ -49,6 +55,7 @@
     </table>
 
         <uc1:FrmCheck ID="FrmCheck1" runat="server" />
+        <uc5:ThreadDtl ID="ThreadDtl1" runat="server" />
     </div>
 
     <% if (fk_node == "102")
@@ -60,6 +67,10 @@
        } %>
     
     <uc2:DocMultiAth ID="DocMultiAth1" runat="server" />
+    
+    <uc2:DocMultiAth ID="DocMultiAth2" runat="server" />
+    <uc3:DocMainAth ID="DocMainAth1" runat="server" />
+    <uc1:FrmCheck ID="FrmCheck2" runat="server" />
     
     </form>
 </body>

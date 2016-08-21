@@ -14,8 +14,8 @@
                     x:Name="MuContentMenu" Visibility="Visible"  
                     ItemSelected="Menu_ItemSelected">
                     
-                    <liquidMenu:MenuItem  ID="menuNodePropertyNew" Text="节点属性(New)" Icon="../Images/MenuItem/Property.png"/>
-                    <liquidMenu:MenuItem  ID="menuNodeProperty" Text="节点属性" Icon="../Images/MenuItem/Property.png"/>
+                    <liquidMenu:MenuItem  ID="menuNodePropertyNew" Text="节点属性" Icon="../Images/MenuItem/Property.png"/>
+                    <!--<liquidMenu:MenuItem  ID="menuNodeProperty" Text="节点属性" Icon="../Images/MenuItem/Property.png"/>-->
                     
                     <liquidMenu:MenuItem 
                         ID="menuFlowType" Text="节点类型" Visibility="Visible"   >

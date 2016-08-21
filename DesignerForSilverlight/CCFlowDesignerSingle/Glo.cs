@@ -410,12 +410,11 @@ namespace BP
                     Glo.OpenDialog(Glo.BPMHost + url, "执行", 600, 500);
                     return;
                 case UrlFlag.NodeP:
-                    url = "/WF/Admin/XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Node&PK=" + node1 + "&Lang=CH";
+                    url = "/WF/Admin/XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Template.NodeExt&PK=" + node1 + "&Lang=CH";
                     Glo.OpenDialog(Glo.BPMHost + url, "执行", 600, 500);
                     return;
                 case UrlFlag.FlowP: // 节点属性与流程属性。
-                    
-                    url = "/WF/Admin/XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Template.FlowSheet&PK=" + fk_flow + "&Lang=CH";
+                    url = "/WF/Admin/XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Template.FlowExt&PK=" + fk_flow + "&Lang=CH";
                     Glo.OpenDialog(Glo.BPMHost + url, "", 500, 400);
                     return;
                 case UrlFlag.MapDefFixModel: // SDK表单设计。

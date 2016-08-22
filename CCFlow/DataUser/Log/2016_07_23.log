@@ -1,0 +1,795 @@
+-----------------------------------------------------------------------------------------------------
+23日06时56分52秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+23日09时18分08秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+-----------------------------------------------------------------------------------------------------
+23日09时30分08秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+-----------------------------------------------------------------------------------------------------
+23日09时32分27秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+-----------------------------------------------------------------------------------------------------
+23日09时39分27秒Info:System');"----------------------------------  start ------------------ 
+23日09时39分27秒Info:System');"----------------------------------  end ------------------ 
+23日09时39分31秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日09时40分35秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+23日09时54分09秒Info:System');"----------------------------------  start ------------------ 
+23日09时54分09秒Info:System');"----------------------------------  end ------------------ 
+23日09时56分48秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日09时56分49秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1605        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18001')) AS X ) AND FK_MapData='ND18001',异常信息:列名 'GroupID' 无效。
+23日09时57分42秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时57分49秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时57分49秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时57分49秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分28秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分33秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分33秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分33秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分35秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分35秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分35秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分48秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分50秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分50秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分50秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分52秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分52秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日09时58分52秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日10时02分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1605        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18001')) AS X ) AND FK_MapData='ND18001',异常信息:列名 'GroupID' 无效。
+23日10时02分46秒Fatal:System');"SQL= SELECT  TOP 1 ND18001.Dao Dao,ND18001.QingJiaShiJianCong QingJiaShiJianCong,ISNULL(ND18001.RDT,'2016-07-23') RDT,ISNULL(ND18001.Rec, '@WebUser.No') Rec, ND18001.Title,ISNULL(ND18001.CDT,'2016-07-23') CDT, ND18001.Emps,ISNULL(ND18001.FID,0)   FID, ND18001.FK_City, CN_City_FK_City.Name AS FK_CityText, ND18001.FK_Dept, ND18001.FK_DQ, CN_PQ_FK_DQ.Name AS FK_DQText, ND18001.FK_NY, ND18001.FK_SF, CN_SF_FK_SF.Name AS FK_SFText,ISNULL(ND18001.MyNum,1)   MyNum,ISNULL(ND18001.OID,0)   OID,ISNULL(ND18001.QingJiaLeiXingWoDe,0)   QingJiaLeiXingWoDe, CASE ND18001.QingJiaLeiXingWoDe WHEN 0 THEN '世家' WHEN 1 THEN '病假' WHEN 2 THEN '婚嫁' WHEN NULL THEN '世家' END QingJiaLeiXingWoDeTEXT,ISNULL(ND18001.QingJiaRen, '@WebUser.Name') QingJiaRen, ND18001.QingJiaRenBuMen FROM ND18001 LEFT JOIN CN_City AS CN_City_FK_City ON ND18001.FK_City=CN_City_FK_City.No LEFT JOIN CN_PQ AS CN_PQ_FK_DQ ON ND18001.FK_DQ=CN_PQ_FK_DQ.No LEFT JOIN CN_SF AS CN_SF_FK_SF ON ND18001.FK_SF=CN_SF_FK_SF.No WHERE (1=1)  AND ND18001.OID=@OID Exception=列名 'FK_City' 无效。
+列名 'FK_DQ' 无效。
+列名 'FK_SF' 无效。
+列名 'Dao' 无效。
+列名 'QingJiaShiJianCong' 无效。
+列名 'FK_City' 无效。
+列名 'FK_DQ' 无效。
+列名 'FK_SF' 无效。
+列名 'QingJiaLeiXingWoDe' 无效。
+列名 'QingJiaLeiXingWoDe' 无效。
+列名 'QingJiaLeiXingWoDe' 无效。
+列名 'QingJiaLeiXingWoDe' 无效。
+列名 'QingJiaLeiXingWoDe' 无效。
+列名 'QingJiaRen' 无效。
+列名 'QingJiaRenBuMen' 无效。
+23日10时03分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1605        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18001')) AS X ) AND FK_MapData='ND18001',异常信息:列名 'GroupID' 无效。
+23日10时04分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1605        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18001')) AS X ) AND FK_MapData='ND18001',异常信息:列名 'GroupID' 无效。
+23日10时06分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1605        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18001')) AS X ) AND FK_MapData='ND18001',异常信息:列名 'GroupID' 无效。
+23日10时06分24秒Fatal:System');"SQL= SELECT  TOP 1 ND18001.Dao Dao, ND18001.DianHua, ND18001.MingCheng,ND18001.QingJiaShiJianCong QingJiaShiJianCong, ND18001.YouJian, ND18001.BianHao,ISNULL(ND18001.CDT,'2016-07-23') CDT, ND18001.FK_NY, ND18001.Emps,ISNULL(ND18001.FID,0)   FID, ND18001.FK_City, CN_City_FK_City.Name AS FK_CityText, ND18001.FK_Dept,ISNULL(ND18001.RDT,'2016-07-23') RDT,ISNULL(ND18001.Rec, '@WebUser.No') Rec, ND18001.Title,ISNULL(ND18001.MyNum,1)   MyNum,ISNULL(ND18001.OID,0)   OID,ISNULL(ND18001.QingJiaLeiXingWoDe,0)   QingJiaLeiXingWoDe, CASE ND18001.QingJiaLeiXingWoDe WHEN 0 THEN '世家' WHEN 1 THEN '病假' WHEN 2 THEN '婚嫁' WHEN NULL THEN '世家' END QingJiaLeiXingWoDeTEXT,ISNULL(ND18001.QingJiaRen, '@WebUser.Name') QingJiaRen, ND18001.QingJiaRenBuMen, ND18001.FK_DQ, CN_PQ_FK_DQ.Name AS FK_DQText, ND18001.FK_SF, CN_SF_FK_SF.Name AS FK_SFText FROM ND18001 LEFT JOIN CN_City AS CN_City_FK_City ON ND18001.FK_City=CN_City_FK_City.No LEFT JOIN CN_PQ AS CN_PQ_FK_DQ ON ND18001.FK_DQ=CN_PQ_FK_DQ.No LEFT JOIN CN_SF AS CN_SF_FK_SF ON ND18001.FK_SF=CN_SF_FK_SF.No WHERE (1=1)  AND ND18001.OID=@OID Exception=列名 'DianHua' 无效。
+列名 'MingCheng' 无效。
+列名 'YouJian' 无效。
+列名 'BianHao' 无效。
+23日10时10分28秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日10时11分07秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+23日10时22分45秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日10时22分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1619        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18002')) AS X ) AND FK_MapData='ND18002',异常信息:列名 'GroupID' 无效。
+23日10时22分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1619        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18002')) AS X ) AND FK_MapData='ND18002',异常信息:列名 'GroupID' 无效。
+23日10时24分05秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日10时24分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1627        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18003')) AS X ) AND FK_MapData='ND18003',异常信息:列名 'GroupID' 无效。
+23日10时24分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1627        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18003')) AS X ) AND FK_MapData='ND18003',异常信息:列名 'GroupID' 无效。
+23日10时24分06秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日10时25分42秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日10时25分42秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+23日10时25分51秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日10时26分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1605        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18001')) AS X ) AND FK_MapData='ND18001',异常信息:列名 'GroupID' 无效。
+23日10时26分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1619        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18002')) AS X ) AND FK_MapData='ND18002',异常信息:列名 'GroupID' 无效。
+23日10时26分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1627        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18003')) AS X ) AND FK_MapData='ND18003',异常信息:列名 'GroupID' 无效。
+23日10时35分27秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日10时35分27秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日10时35分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1605        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18001')) AS X ) AND FK_MapData='ND18001',异常信息:列名 'GroupID' 无效。
+23日10时35分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1619        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18002')) AS X ) AND FK_MapData='ND18002',异常信息:列名 'GroupID' 无效。
+23日10时35分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1627        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND18003')) AS X ) AND FK_MapData='ND18003',异常信息:列名 'GroupID' 无效。
+23日10时46分15秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+23日10时47分56秒Info:System');"SQL=INSERT INTO WF_CH ([MyPK],[WorkID],[FID],[Title],[FK_Flow],[FK_FlowT],[FK_Node],[FK_NodeT],[DTFrom],[DTTo],[SDT],[TSpan],[UseMinutes],[UseTime],[OverMinutes],[OverTime],[FK_Dept],[FK_DeptT],[FK_Emp],[FK_EmpT],[FK_NY],[WeekNum],[CHSta],[MyNum] ) VALUES ( '18002_124_0_guoxiangbin',124,0,'服务部-fuhui,福惠在2016-07-23 10:35发起.','180','请假流程',18002,'部门经理审批','2016-07-23 10:35','2016-07-23 10:47','2016-07-27 10:35','0天8时0分',12,'0天0时12分',-468,'提前:0天7小时48分','4','服务部','guoxiangbin','郭祥斌','2016-07',30,0,1),异常信息:违反了 PRIMARY KEY 约束 'WF_CHpk'。不能在对象 'dbo.WF_CH' 中插入重复键。
+语句已终止。
+23日10时49分46秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+23日11时00分28秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日11时00分28秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日11时00分28秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=335        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11801')) AS X ) AND FK_MapData='ND11801',异常信息:列名 'GroupID' 无效。
+23日11时00分28秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=336        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11802')) AS X ) AND FK_MapData='ND11802',异常信息:列名 'GroupID' 无效。
+23日11时00分28秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=338        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11803')) AS X ) AND FK_MapData='ND11803',异常信息:列名 'GroupID' 无效。
+23日11时00分28秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=339        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11804')) AS X ) AND FK_MapData='ND11804',异常信息:列名 'GroupID' 无效。
+23日11时00分45秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日11时00分45秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日11时00分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=335        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11801')) AS X ) AND FK_MapData='ND11801',异常信息:列名 'GroupID' 无效。
+23日11时00分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=336        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11802')) AS X ) AND FK_MapData='ND11802',异常信息:列名 'GroupID' 无效。
+23日11时00分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=338        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11803')) AS X ) AND FK_MapData='ND11803',异常信息:列名 'GroupID' 无效。
+23日11时00分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=339        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11804')) AS X ) AND FK_MapData='ND11804',异常信息:列名 'GroupID' 无效。
+23日11时01分15秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+23日11时06分42秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日11时07分12秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日11时07分19秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日11时07分19秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日11时07分19秒Info:System');"成功[BP.WF.Template.Selector-413]放入缓存。
+23日11时07分30秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日11时07分31秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日11时07分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=335        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11801')) AS X ) AND FK_MapData='ND11801',异常信息:列名 'GroupID' 无效。
+23日11时07分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=336        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11802')) AS X ) AND FK_MapData='ND11802',异常信息:列名 'GroupID' 无效。
+23日11时07分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=338        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11803')) AS X ) AND FK_MapData='ND11803',异常信息:列名 'GroupID' 无效。
+23日11时07分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=339        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11804')) AS X ) AND FK_MapData='ND11804',异常信息:列名 'GroupID' 无效。
+23日11时07分59秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+23日11时09分45秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+23日11时11分06秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日11时11分06秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日11时11分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=421        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11701')) AS X ) AND FK_MapData='ND11701',异常信息:列名 'GroupID' 无效。
+23日11时11分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=426        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11702')) AS X ) AND FK_MapData='ND11702',异常信息:列名 'GroupID' 无效。
+23日11时11分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=427        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11703')) AS X ) AND FK_MapData='ND11703',异常信息:列名 'GroupID' 无效。
+23日11时11分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=425        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11704')) AS X ) AND FK_MapData='ND11704',异常信息:列名 'GroupID' 无效。
+23日11时11分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=423        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11705')) AS X ) AND FK_MapData='ND11705',异常信息:列名 'GroupID' 无效。
+23日11时11分07秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=424        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11706')) AS X ) AND FK_MapData='ND11706',异常信息:列名 'GroupID' 无效。
+23日11时11分17秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+23日11时20分03秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日11时20分03秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日11时20分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=638        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND501')) AS X ) AND FK_MapData='ND501',异常信息:列名 'GroupID' 无效。
+23日11时20分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=640        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND502')) AS X ) AND FK_MapData='ND502',异常信息:列名 'GroupID' 无效。
+23日11时20分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=641        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND599')) AS X ) AND FK_MapData='ND599',异常信息:列名 'GroupID' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3Track,异常信息:对象名 'ND3Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4Track,异常信息:对象名 'ND4Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6Track,异常信息:对象名 'ND6Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7Track,异常信息:对象名 'ND7Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8Track,异常信息:对象名 'ND8Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND9Track,异常信息:对象名 'ND9Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND10Track,异常信息:对象名 'ND10Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11Track,异常信息:对象名 'ND11Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12Track,异常信息:对象名 'ND12Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13Track,异常信息:对象名 'ND13Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14Track,异常信息:对象名 'ND14Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15Track,异常信息:对象名 'ND15Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND23Track,异常信息:对象名 'ND23Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND24Track,异常信息:对象名 'ND24Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND25Track,异常信息:对象名 'ND25Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND26Track,异常信息:对象名 'ND26Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND27Track,异常信息:对象名 'ND27Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND28Track,异常信息:对象名 'ND28Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND29Track,异常信息:对象名 'ND29Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND30Track,异常信息:对象名 'ND30Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND31Track,异常信息:对象名 'ND31Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND32Track,异常信息:对象名 'ND32Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND33Track,异常信息:对象名 'ND33Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND36Track,异常信息:对象名 'ND36Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND38Track,异常信息:对象名 'ND38Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND44Track,异常信息:对象名 'ND44Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND45Track,异常信息:对象名 'ND45Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND50Track,异常信息:对象名 'ND50Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND54Track,异常信息:对象名 'ND54Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND55Track,异常信息:对象名 'ND55Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND56Track,异常信息:对象名 'ND56Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND57Track,异常信息:对象名 'ND57Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND62Track,异常信息:对象名 'ND62Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND63Track,异常信息:对象名 'ND63Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND68Track,异常信息:对象名 'ND68Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND69Track,异常信息:对象名 'ND69Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND71Track,异常信息:对象名 'ND71Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND74Track,异常信息:对象名 'ND74Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND75Track,异常信息:对象名 'ND75Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND79Track,异常信息:对象名 'ND79Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND80Track,异常信息:对象名 'ND80Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND81Track,异常信息:对象名 'ND81Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND82Track,异常信息:对象名 'ND82Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND83Track,异常信息:对象名 'ND83Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND85Track,异常信息:对象名 'ND85Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND86Track,异常信息:对象名 'ND86Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND87Track,异常信息:对象名 'ND87Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND95Track,异常信息:对象名 'ND95Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND99Track,异常信息:对象名 'ND99Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND114Track,异常信息:对象名 'ND114Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND115Track,异常信息:对象名 'ND115Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND116Track,异常信息:对象名 'ND116Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND119Track,异常信息:对象名 'ND119Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND120Track,异常信息:对象名 'ND120Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND121Track,异常信息:对象名 'ND121Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND122Track,异常信息:对象名 'ND122Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND123Track,异常信息:对象名 'ND123Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND124Track,异常信息:对象名 'ND124Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND125Track,异常信息:对象名 'ND125Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND126Track,异常信息:对象名 'ND126Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND127Track,异常信息:对象名 'ND127Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND129Track,异常信息:对象名 'ND129Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND130Track,异常信息:对象名 'ND130Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND131Track,异常信息:对象名 'ND131Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND132Track,异常信息:对象名 'ND132Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND133Track,异常信息:对象名 'ND133Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND134Track,异常信息:对象名 'ND134Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND135Track,异常信息:对象名 'ND135Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND138Track,异常信息:对象名 'ND138Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND139Track,异常信息:对象名 'ND139Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND142Track,异常信息:对象名 'ND142Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND143Track,异常信息:对象名 'ND143Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND144Track,异常信息:对象名 'ND144Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND145Track,异常信息:对象名 'ND145Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND146Track,异常信息:对象名 'ND146Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND147Track,异常信息:对象名 'ND147Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND149Track,异常信息:对象名 'ND149Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND150Track,异常信息:对象名 'ND150Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND151Track,异常信息:对象名 'ND151Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND157Track,异常信息:对象名 'ND157Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND158Track,异常信息:对象名 'ND158Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND159Track,异常信息:对象名 'ND159Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND160Track,异常信息:对象名 'ND160Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND163Track,异常信息:对象名 'ND163Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND164Track,异常信息:对象名 'ND164Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND165Track,异常信息:对象名 'ND165Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND166Track,异常信息:对象名 'ND166Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND167Track,异常信息:对象名 'ND167Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND168Track,异常信息:对象名 'ND168Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND169Track,异常信息:对象名 'ND169Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND179Track,异常信息:对象名 'ND179Track' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_01Dtl1,异常信息:对象名 'Demo_01Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl1,异常信息:对象名 'Demo_03Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl2,异常信息:对象名 'Demo_03Dtl2' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl3,异常信息:对象名 'Demo_03Dtl3' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl4,异常信息:对象名 'Demo_03Dtl4' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl5,异常信息:对象名 'Demo_03Dtl5' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_05,异常信息:对象名 'Demo_05' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_06,异常信息:对象名 'Demo_06' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_06Dtl1,异常信息:对象名 'Demo_06Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_06Dtl2,异常信息:对象名 'Demo_06Dtl2' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Fields,异常信息:对象名 'Demo_Fields' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_FJDtl,异常信息:对象名 'Demo_FJDtl' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_FrmSLFixCol4,异常信息:对象名 'Demo_FrmSLFixCol4' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_FrmSLSelf,异常信息:对象名 'Demo_FrmSLSelf' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_FrmSLWord,异常信息:对象名 'Demo_FrmSLWord' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_FrmSLWordDtl1,异常信息:对象名 'Demo_FrmSLWordDtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_HK01,异常信息:对象名 'Demo_HK01' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_HK02,异常信息:对象名 'Demo_HK02' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_HK03,异常信息:对象名 'Demo_HK03' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_HNPrjInfo,异常信息:对象名 'Demo_HNPrjInfo' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_HNPrjInfo_HQ,异常信息:对象名 'Demo_HNPrjInfo_HQ' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_HNPrjInfo_HQYJ,异常信息:对象名 'Demo_HNPrjInfo_HQYJ' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_HNPrjInfo_HQYJDtl1,异常信息:对象名 'Demo_HNPrjInfo_HQYJDtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc01,异常信息:对象名 'Demo_Inc01' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc02,异常信息:对象名 'Demo_Inc02' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc03,异常信息:对象名 'Demo_Inc03' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc04,异常信息:对象名 'Demo_Inc04' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc04Dtl1,异常信息:对象名 'Demo_Inc04Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc05,异常信息:对象名 'Demo_Inc05' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc05Dtl1,异常信息:对象名 'Demo_Inc05Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc06,异常信息:对象名 'Demo_Inc06' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc06Dtl1,异常信息:对象名 'Demo_Inc06Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc07,异常信息:对象名 'Demo_Inc07' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc07Dtl1,异常信息:对象名 'Demo_Inc07Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc08,异常信息:对象名 'Demo_Inc08' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc08Dtl1,异常信息:对象名 'Demo_Inc08Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc09,异常信息:对象名 'Demo_Inc09' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc09Dtl1,异常信息:对象名 'Demo_Inc09Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc10,异常信息:对象名 'Demo_Inc10' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc10Dtl1,异常信息:对象名 'Demo_Inc10Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc11,异常信息:对象名 'Demo_Inc11' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc11Dtl1,异常信息:对象名 'Demo_Inc11Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc12,异常信息:对象名 'Demo_Inc12' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc12Dtl1,异常信息:对象名 'Demo_Inc12Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc13,异常信息:对象名 'Demo_Inc13' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_Inc14,异常信息:对象名 'Demo_Inc14' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_NewPrj,异常信息:对象名 'Demo_NewPrj' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_YWA,异常信息:对象名 'Demo_YWA' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_YWB,异常信息:对象名 'Demo_YWB' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_YWC,异常信息:对象名 'Demo_YWC' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM DtlDemo_FJDtl1,异常信息:对象名 'DtlDemo_FJDtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM gysjhcyxqdjb,异常信息:对象名 'gysjhcyxqdjb' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM jgyssq,异常信息:对象名 'jgyssq' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1001,异常信息:对象名 'ND1001' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1002,异常信息:对象名 'ND1002' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1003,异常信息:对象名 'ND1003' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1004,异常信息:对象名 'ND1004' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1005,异常信息:对象名 'ND1005' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1006,异常信息:对象名 'ND1006' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1007,异常信息:对象名 'ND1007' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1008,异常信息:对象名 'ND1008' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1099,异常信息:对象名 'ND1099' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1101,异常信息:对象名 'ND1101' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1102,异常信息:对象名 'ND1102' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1103,异常信息:对象名 'ND1103' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1104,异常信息:对象名 'ND1104' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1105,异常信息:对象名 'ND1105' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1106,异常信息:对象名 'ND1106' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1107,异常信息:对象名 'ND1107' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1108,异常信息:对象名 'ND1108' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11401,异常信息:对象名 'ND11401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11402,异常信息:对象名 'ND11402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11403,异常信息:对象名 'ND11403' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11501,异常信息:对象名 'ND11501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11502,异常信息:对象名 'ND11502' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11601,异常信息:对象名 'ND11601' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11602,异常信息:对象名 'ND11602' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11603,异常信息:对象名 'ND11603' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11604,异常信息:对象名 'ND11604' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11605,异常信息:对象名 'ND11605' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11803,异常信息:对象名 'ND11803' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11804,异常信息:对象名 'ND11804' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11901,异常信息:对象名 'ND11901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11902,异常信息:对象名 'ND11902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11903,异常信息:对象名 'ND11903' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11904,异常信息:对象名 'ND11904' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11905,异常信息:对象名 'ND11905' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11906,异常信息:对象名 'ND11906' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11907,异常信息:对象名 'ND11907' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND11908,异常信息:对象名 'ND11908' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1199,异常信息:对象名 'ND1199' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12001,异常信息:对象名 'ND12001' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12002,异常信息:对象名 'ND12002' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12003,异常信息:对象名 'ND12003' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12004,异常信息:对象名 'ND12004' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12005,异常信息:对象名 'ND12005' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12006,异常信息:对象名 'ND12006' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12007,异常信息:对象名 'ND12007' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1201,异常信息:对象名 'ND1201' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1203,异常信息:对象名 'ND1203' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12101,异常信息:对象名 'ND12101' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12102,异常信息:对象名 'ND12102' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12103,异常信息:对象名 'ND12103' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12201,异常信息:对象名 'ND12201' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12201_Dtl_122_0,异常信息:对象名 'ND12201_Dtl_122_0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12202,异常信息:对象名 'ND12202' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12203,异常信息:对象名 'ND12203' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12301,异常信息:对象名 'ND12301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12302,异常信息:对象名 'ND12302' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12303,异常信息:对象名 'ND12303' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12304,异常信息:对象名 'ND12304' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12401,异常信息:对象名 'ND12401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12402,异常信息:对象名 'ND12402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12403,异常信息:对象名 'ND12403' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12404,异常信息:对象名 'ND12404' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12501,异常信息:对象名 'ND12501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12502,异常信息:对象名 'ND12502' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12601,异常信息:对象名 'ND12601' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12602,异常信息:对象名 'ND12602' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12603,异常信息:对象名 'ND12603' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12604,异常信息:对象名 'ND12604' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12701,异常信息:对象名 'ND12701' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12702,异常信息:对象名 'ND12702' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12703,异常信息:对象名 'ND12703' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12901,异常信息:对象名 'ND12901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12902,异常信息:对象名 'ND12902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12903,异常信息:对象名 'ND12903' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1299,异常信息:对象名 'ND1299' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13001,异常信息:对象名 'ND13001' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13002,异常信息:对象名 'ND13002' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13003,异常信息:对象名 'ND13003' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13004,异常信息:对象名 'ND13004' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1301,异常信息:对象名 'ND1301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1303,异常信息:对象名 'ND1303' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND131,异常信息:对象名 'ND131' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13101,异常信息:对象名 'ND13101' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13102,异常信息:对象名 'ND13102' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND132,异常信息:对象名 'ND132' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13201,异常信息:对象名 'ND13201' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13201_Dtl1230,异常信息:对象名 'ND13201_Dtl1230' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13202,异常信息:对象名 'ND13202' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13202_Dtl1230,异常信息:对象名 'ND13202_Dtl1230' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13203,异常信息:对象名 'ND13203' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13203_Dtl1230,异常信息:对象名 'ND13203_Dtl1230' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13301,异常信息:对象名 'ND13301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13302,异常信息:对象名 'ND13302' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13303,异常信息:对象名 'ND13303' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13304,异常信息:对象名 'ND13304' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13305,异常信息:对象名 'ND13305' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13306,异常信息:对象名 'ND13306' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13307,异常信息:对象名 'ND13307' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13308,异常信息:对象名 'ND13308' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13309,异常信息:对象名 'ND13309' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13310,异常信息:对象名 'ND13310' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13311,异常信息:对象名 'ND13311' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13312,异常信息:对象名 'ND13312' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13313,异常信息:对象名 'ND13313' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13314,异常信息:对象名 'ND13314' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13315,异常信息:对象名 'ND13315' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13316,异常信息:对象名 'ND13316' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13317,异常信息:对象名 'ND13317' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13318,异常信息:对象名 'ND13318' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13401,异常信息:对象名 'ND13401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13402,异常信息:对象名 'ND13402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13501,异常信息:对象名 'ND13501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13502,异常信息:对象名 'ND13502' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13801,异常信息:对象名 'ND13801' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13801Dtl1,异常信息:对象名 'ND13801Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13802,异常信息:对象名 'ND13802' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13803,异常信息:对象名 'ND13803' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13901,异常信息:对象名 'ND13901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13902,异常信息:对象名 'ND13902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13903,异常信息:对象名 'ND13903' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13904,异常信息:对象名 'ND13904' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13905,异常信息:对象名 'ND13905' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13906,异常信息:对象名 'ND13906' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1399,异常信息:对象名 'ND1399' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1401,异常信息:对象名 'ND1401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1401Dtl1,异常信息:对象名 'ND1401Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1402,异常信息:对象名 'ND1402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND141,异常信息:对象名 'ND141' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND142,异常信息:对象名 'ND142' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14201,异常信息:对象名 'ND14201' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14202,异常信息:对象名 'ND14202' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14203,异常信息:对象名 'ND14203' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14301,异常信息:对象名 'ND14301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14302,异常信息:对象名 'ND14302' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14401,异常信息:对象名 'ND14401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14402,异常信息:对象名 'ND14402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14501,异常信息:对象名 'ND14501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14502,异常信息:对象名 'ND14502' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14601,异常信息:对象名 'ND14601' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14602,异常信息:对象名 'ND14602' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14701,异常信息:对象名 'ND14701' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14702,异常信息:对象名 'ND14702' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14703,异常信息:对象名 'ND14703' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14704,异常信息:对象名 'ND14704' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14705,异常信息:对象名 'ND14705' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14706,异常信息:对象名 'ND14706' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14707,异常信息:对象名 'ND14707' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14708,异常信息:对象名 'ND14708' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14709,异常信息:对象名 'ND14709' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14710,异常信息:对象名 'ND14710' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14711,异常信息:对象名 'ND14711' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14901,异常信息:对象名 'ND14901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND14903,异常信息:对象名 'ND14903' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1499,异常信息:对象名 'ND1499' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND149Rpt,异常信息:对象名 'ND149Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15001,异常信息:对象名 'ND15001' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15001Dtl1,异常信息:对象名 'ND15001Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15004,异常信息:对象名 'ND15004' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15004Dtl1,异常信息:对象名 'ND15004Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15005,异常信息:对象名 'ND15005' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15005Dtl1,异常信息:对象名 'ND15005Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15006,异常信息:对象名 'ND15006' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15006Dtl1,异常信息:对象名 'ND15006Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15007,异常信息:对象名 'ND15007' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15007Dtl1,异常信息:对象名 'ND15007Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1501,异常信息:对象名 'ND1501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1501Dtl1,异常信息:对象名 'ND1501Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1502,异常信息:对象名 'ND1502' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND150Rpt,异常信息:对象名 'ND150Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15101,异常信息:对象名 'ND15101' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15102,异常信息:对象名 'ND15102' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15103,异常信息:对象名 'ND15103' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15104,异常信息:对象名 'ND15104' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15105,异常信息:对象名 'ND15105' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND151Rpt,异常信息:对象名 'ND151Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15701,异常信息:对象名 'ND15701' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15702,异常信息:对象名 'ND15702' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15703,异常信息:对象名 'ND15703' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND157Rpt,异常信息:对象名 'ND157Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND158Rpt,异常信息:对象名 'ND158Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND158Rpt,异常信息:对象名 'ND158Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND158Rpt,异常信息:对象名 'ND158Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND159Rpt,异常信息:对象名 'ND159Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND159Rpt,异常信息:对象名 'ND159Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND159Rpt,异常信息:对象名 'ND159Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1599,异常信息:对象名 'ND1599' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND159Rpt,异常信息:对象名 'ND159Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16001,异常信息:对象名 'ND16001' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16002,异常信息:对象名 'ND16002' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16003,异常信息:对象名 'ND16003' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16004,异常信息:对象名 'ND16004' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND160Rpt,异常信息:对象名 'ND160Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND163Rpt,异常信息:对象名 'ND163Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND163Rpt,异常信息:对象名 'ND163Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND163Rpt,异常信息:对象名 'ND163Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16401,异常信息:对象名 'ND16401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16401Dtl1,异常信息:对象名 'ND16401Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16402,异常信息:对象名 'ND16402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16402Dtl1,异常信息:对象名 'ND16402Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16403,异常信息:对象名 'ND16403' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16403Dtl1,异常信息:对象名 'ND16403Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND164Rpt,异常信息:对象名 'ND164Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND165Rpt,异常信息:对象名 'ND165Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND165Rpt,异常信息:对象名 'ND165Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND165Rpt,异常信息:对象名 'ND165Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16601,异常信息:对象名 'ND16601' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16602,异常信息:对象名 'ND16602' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND166Rpt,异常信息:对象名 'ND166Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16701,异常信息:对象名 'ND16701' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16702,异常信息:对象名 'ND16702' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16703,异常信息:对象名 'ND16703' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND167Rpt,异常信息:对象名 'ND167Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16801,异常信息:对象名 'ND16801' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16802,异常信息:对象名 'ND16802' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND168Rpt,异常信息:对象名 'ND168Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16901,异常信息:对象名 'ND16901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16901Dtl1,异常信息:对象名 'ND16901Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16902,异常信息:对象名 'ND16902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND169Rpt,异常信息:对象名 'ND169Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17101,异常信息:对象名 'ND17101' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17301,异常信息:对象名 'ND17301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17303,异常信息:对象名 'ND17303' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17401,异常信息:对象名 'ND17401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17403,异常信息:对象名 'ND17403' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17404,异常信息:对象名 'ND17404' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17405,异常信息:对象名 'ND17405' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17406,异常信息:对象名 'ND17406' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17901,异常信息:对象名 'ND17901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17901Dtl0,异常信息:对象名 'ND17901Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17902,异常信息:对象名 'ND17902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17902Dtl0,异常信息:对象名 'ND17902Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17903,异常信息:对象名 'ND17903' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17903Dtl0,异常信息:对象名 'ND17903Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17905,异常信息:对象名 'ND17905' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17905Dtl0,异常信息:对象名 'ND17905Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17907,异常信息:对象名 'ND17907' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17907Dtl0,异常信息:对象名 'ND17907Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17910,异常信息:对象名 'ND17910' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17910Dtl0,异常信息:对象名 'ND17910Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17911,异常信息:对象名 'ND17911' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17911Dtl0,异常信息:对象名 'ND17911Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND179Rpt,异常信息:对象名 'ND179Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1805,异常信息:对象名 'ND1805' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1806,异常信息:对象名 'ND1806' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1807,异常信息:对象名 'ND1807' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2301,异常信息:对象名 'ND2301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2302,异常信息:对象名 'ND2302' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2399,异常信息:对象名 'ND2399' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND24Rpt,异常信息:对象名 'ND24Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND24Rpt,异常信息:对象名 'ND24Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND24Rpt,异常信息:对象名 'ND24Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND25Rpt,异常信息:对象名 'ND25Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND25Rpt,异常信息:对象名 'ND25Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND25Rpt,异常信息:对象名 'ND25Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND26Rpt,异常信息:对象名 'ND26Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND26Rpt,异常信息:对象名 'ND26Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND26Rpt,异常信息:对象名 'ND26Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND27Rpt,异常信息:对象名 'ND27Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2703,异常信息:对象名 'ND2703' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND27Rpt,异常信息:对象名 'ND27Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2705,异常信息:对象名 'ND2705' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2706,异常信息:对象名 'ND2706' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2799,异常信息:对象名 'ND2799' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2801,异常信息:对象名 'ND2801' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2802,异常信息:对象名 'ND2802' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2803,异常信息:对象名 'ND2803' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2899,异常信息:对象名 'ND2899' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2901,异常信息:对象名 'ND2901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2902,异常信息:对象名 'ND2902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND2999,异常信息:对象名 'ND2999' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3001,异常信息:对象名 'ND3001' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3002,异常信息:对象名 'ND3002' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND301,异常信息:对象名 'ND301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND302,异常信息:对象名 'ND302' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND303,异常信息:对象名 'ND303' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND304,异常信息:对象名 'ND304' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3099,异常信息:对象名 'ND3099' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3101,异常信息:对象名 'ND3101' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3102,异常信息:对象名 'ND3102' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3199,异常信息:对象名 'ND3199' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3201,异常信息:对象名 'ND3201' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3202,异常信息:对象名 'ND3202' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3203,异常信息:对象名 'ND3203' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3204,异常信息:对象名 'ND3204' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3205,异常信息:对象名 'ND3205' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3206,异常信息:对象名 'ND3206' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3207,异常信息:对象名 'ND3207' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3299,异常信息:对象名 'ND3299' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3301,异常信息:对象名 'ND3301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3302,异常信息:对象名 'ND3302' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3303,异常信息:对象名 'ND3303' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3303Dtl1,异常信息:对象名 'ND3303Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3399,异常信息:对象名 'ND3399' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3399Dtl1,异常信息:对象名 'ND3399Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3601,异常信息:对象名 'ND3601' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3602,异常信息:对象名 'ND3602' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3699,异常信息:对象名 'ND3699' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3801,异常信息:对象名 'ND3801' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3802,异常信息:对象名 'ND3802' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3802Dtl1,异常信息:对象名 'ND3802Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3899,异常信息:对象名 'ND3899' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3899Dtl1,异常信息:对象名 'ND3899Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND38Rpt,异常信息:对象名 'ND38Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND399,异常信息:对象名 'ND399' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND401,异常信息:对象名 'ND401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND402,异常信息:对象名 'ND402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND421,异常信息:对象名 'ND421' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND422,异常信息:对象名 'ND422' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4401,异常信息:对象名 'ND4401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4402,异常信息:对象名 'ND4402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4403,异常信息:对象名 'ND4403' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4403Dtl1,异常信息:对象名 'ND4403Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4404,异常信息:对象名 'ND4404' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4499,异常信息:对象名 'ND4499' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4499Dtl1,异常信息:对象名 'ND4499Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND44Rpt,异常信息:对象名 'ND44Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND499,异常信息:对象名 'ND499' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5001,异常信息:对象名 'ND5001' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5002,异常信息:对象名 'ND5002' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5003,异常信息:对象名 'ND5003' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5004,异常信息:对象名 'ND5004' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5099,异常信息:对象名 'ND5099' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5401,异常信息:对象名 'ND5401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5402,异常信息:对象名 'ND5402' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5403,异常信息:对象名 'ND5403' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5405,异常信息:对象名 'ND5405' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5406,异常信息:对象名 'ND5406' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5407,异常信息:对象名 'ND5407' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5499,异常信息:对象名 'ND5499' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5501,异常信息:对象名 'ND5501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5502,异常信息:对象名 'ND5502' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5503,异常信息:对象名 'ND5503' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5599,异常信息:对象名 'ND5599' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND55Rpt,异常信息:对象名 'ND55Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5601,异常信息:对象名 'ND5601' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5602,异常信息:对象名 'ND5602' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5699,异常信息:对象名 'ND5699' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5701,异常信息:对象名 'ND5701' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5702,异常信息:对象名 'ND5702' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5703,异常信息:对象名 'ND5703' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND5799,异常信息:对象名 'ND5799' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND601,异常信息:对象名 'ND601' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND601Dtl1,异常信息:对象名 'ND601Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND602,异常信息:对象名 'ND602' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND603,异常信息:对象名 'ND603' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND604,异常信息:对象名 'ND604' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND604Dtl1,异常信息:对象名 'ND604Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6201,异常信息:对象名 'ND6201' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6202,异常信息:对象名 'ND6202' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6203,异常信息:对象名 'ND6203' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6299,异常信息:对象名 'ND6299' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6301,异常信息:对象名 'ND6301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6302,异常信息:对象名 'ND6302' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6303,异常信息:对象名 'ND6303' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6304,异常信息:对象名 'ND6304' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6399,异常信息:对象名 'ND6399' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6801,异常信息:对象名 'ND6801' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6899,异常信息:对象名 'ND6899' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6901,异常信息:对象名 'ND6901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6901Dtl1,异常信息:对象名 'ND6901Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6902,异常信息:对象名 'ND6902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND699,异常信息:对象名 'ND699' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6999,异常信息:对象名 'ND6999' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6999Dtl1,异常信息:对象名 'ND6999Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND69Rpt,异常信息:对象名 'ND69Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND701,异常信息:对象名 'ND701' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND702,异常信息:对象名 'ND702' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND703,异常信息:对象名 'ND703' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND704,异常信息:对象名 'ND704' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7101,异常信息:对象名 'ND7101' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7102,异常信息:对象名 'ND7102' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7103,异常信息:对象名 'ND7103' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7199,异常信息:对象名 'ND7199' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7401,异常信息:对象名 'ND7401' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7499,异常信息:对象名 'ND7499' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7501,异常信息:对象名 'ND7501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7502,异常信息:对象名 'ND7502' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7599,异常信息:对象名 'ND7599' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7901,异常信息:对象名 'ND7901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7902,异常信息:对象名 'ND7902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND799,异常信息:对象名 'ND799' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND7999,异常信息:对象名 'ND7999' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8001,异常信息:对象名 'ND8001' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND801,异常信息:对象名 'ND801' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND801Dtl1,异常信息:对象名 'ND801Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND802,异常信息:对象名 'ND802' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8099,异常信息:对象名 'ND8099' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8101,异常信息:对象名 'ND8101' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8199,异常信息:对象名 'ND8199' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND81Rpt,异常信息:对象名 'ND81Rpt' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8201,异常信息:对象名 'ND8201' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8299,异常信息:对象名 'ND8299' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8301,异常信息:对象名 'ND8301' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8399,异常信息:对象名 'ND8399' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8501,异常信息:对象名 'ND8501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8599,异常信息:对象名 'ND8599' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8601,异常信息:对象名 'ND8601' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8601Dtl1,异常信息:对象名 'ND8601Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8699,异常信息:对象名 'ND8699' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8701,异常信息:对象名 'ND8701' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8799,异常信息:对象名 'ND8799' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND899,异常信息:对象名 'ND899' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND901,异常信息:对象名 'ND901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND902,异常信息:对象名 'ND902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND903,异常信息:对象名 'ND903' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND904,异常信息:对象名 'ND904' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND9501,异常信息:对象名 'ND9501' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND9502,异常信息:对象名 'ND9502' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND9599,异常信息:对象名 'ND9599' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND9901,异常信息:对象名 'ND9901' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND9902,异常信息:对象名 'ND9902' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND9903,异常信息:对象名 'ND9903' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND999,异常信息:对象名 'ND999' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND9999,异常信息:对象名 'ND9999' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND999Dtl1,异常信息:对象名 'ND999Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM QiYeKunNanDengJiBiao,异常信息:对象名 'QiYeKunNanDengJiBiao' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM CCFrom_WDBDCS,异常信息:对象名 'CCFrom_WDBDCS' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM YSXM,异常信息:对象名 'YSXM' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM YSXMDtl1,异常信息:对象名 'YSXMDtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM YSXX,异常信息:对象名 'YSXX' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_01Dtl1,异常信息:对象名 'Demo_01Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl1,异常信息:对象名 'Demo_03Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl2,异常信息:对象名 'Demo_03Dtl2' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl3,异常信息:对象名 'Demo_03Dtl3' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl4,异常信息:对象名 'Demo_03Dtl4' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_03Dtl5,异常信息:对象名 'Demo_03Dtl5' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_06Dtl1,异常信息:对象名 'Demo_06Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_06Dtl2,异常信息:对象名 'Demo_06Dtl2' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_FrmSLWordDtl1,异常信息:对象名 'Demo_FrmSLWordDtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM Demo_HNPrjInfo_HQYJDtl1,异常信息:对象名 'Demo_HNPrjInfo_HQYJDtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ent_manage_info,异常信息:对象名 'ent_manage_info' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM skill_work_list,异常信息:对象名 'skill_work_list' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM fina_work_list,异常信息:对象名 'fina_work_list' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM charge_WORK_LIST,异常信息:对象名 'charge_WORK_LIST' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM prj_manage_mume,异常信息:对象名 'prj_manage_mume' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM MANAGE_MUME,异常信息:对象名 'MANAGE_MUME' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM EQU_LIST,异常信息:对象名 'EQU_LIST' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM proj_list,异常信息:对象名 'proj_list' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM info9_QYDBGC,异常信息:对象名 'info9_QYDBGC' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM DtlDemo_FJDtl1,异常信息:对象名 'DtlDemo_FJDtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND12201Dtl,异常信息:对象名 'ND12201Dtl' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13201_Dtl1230,异常信息:对象名 'ND13201_Dtl1230' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13202_Dtl1230,异常信息:对象名 'ND13202_Dtl1230' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13203_Dtl1230,异常信息:对象名 'ND13203_Dtl1230' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND13801Dtl1,异常信息:对象名 'ND13801Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1401Dtl1,异常信息:对象名 'ND1401Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15001Dtl1,异常信息:对象名 'ND15001Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15004Dtl1,异常信息:对象名 'ND15004Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15005Dtl1,异常信息:对象名 'ND15005Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15006Dtl1,异常信息:对象名 'ND15006Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND15007Dtl1,异常信息:对象名 'ND15007Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND1501Dtl1,异常信息:对象名 'ND1501Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16401Dtl1,异常信息:对象名 'ND16401Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16401Dtl1,异常信息:对象名 'ND16401Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16401Dtl1,异常信息:对象名 'ND16401Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND16901Dtl1,异常信息:对象名 'ND16901Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17901Dtl0,异常信息:对象名 'ND17901Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17902Dtl0,异常信息:对象名 'ND17902Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17903Dtl0,异常信息:对象名 'ND17903Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17905Dtl0,异常信息:对象名 'ND17905Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17907Dtl0,异常信息:对象名 'ND17907Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17910Dtl0,异常信息:对象名 'ND17910Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND17911Dtl0,异常信息:对象名 'ND17911Dtl0' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3303Dtl1,异常信息:对象名 'ND3303Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3399Dtl1,异常信息:对象名 'ND3399Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3899Dtl1,异常信息:对象名 'ND3899Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND3899Dtl1,异常信息:对象名 'ND3899Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4403Dtl1,异常信息:对象名 'ND4403Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND4499Dtl1,异常信息:对象名 'ND4499Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND601Dtl1,异常信息:对象名 'ND601Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND604Dtl1,异常信息:对象名 'ND604Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6901Dtl1,异常信息:对象名 'ND6901Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND6999Dtl1,异常信息:对象名 'ND6999Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND801Dtl1,异常信息:对象名 'ND801Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND8601Dtl1,异常信息:对象名 'ND8601Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM ND999Dtl1,异常信息:对象名 'ND999Dtl1' 无效。
+23日11时20分10秒Info:System');"SQL=DELETE FROM YSXMDtl1,异常信息:对象名 'YSXMDtl1' 无效。
+23日11时20分41秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+23日11时34分36秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日11时34分36秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=225        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK01')) AS X ) AND FK_MapData='Demo_HK01',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=223        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK02')) AS X ) AND FK_MapData='Demo_HK02',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=221        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK03')) AS X ) AND FK_MapData='Demo_HK03',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1640        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1002')) AS X ) AND FK_MapData='ND1002',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=663        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1008')) AS X ) AND FK_MapData='ND1008',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1642        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1001')) AS X ) AND FK_MapData='ND1001',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1640        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1002')) AS X ) AND FK_MapData='ND1002',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1644        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1003')) AS X ) AND FK_MapData='ND1003',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1646        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1004')) AS X ) AND FK_MapData='ND1004',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1648        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1005')) AS X ) AND FK_MapData='ND1005',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1650        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1006')) AS X ) AND FK_MapData='ND1006',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1652        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1007')) AS X ) AND FK_MapData='ND1007',异常信息:列名 'GroupID' 无效。
+23日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=663        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1008')) AS X ) AND FK_MapData='ND1008',异常信息:列名 'GroupID' 无效。
+23日11时34分37秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=662        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1099')) AS X ) AND FK_MapData='ND1099',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日11时48分57秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=225        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK01')) AS X ) AND FK_MapData='Demo_HK01',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1642        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1001')) AS X ) AND FK_MapData='ND1001',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1640        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1002')) AS X ) AND FK_MapData='ND1002',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1644        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1003')) AS X ) AND FK_MapData='ND1003',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1646        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1004')) AS X ) AND FK_MapData='ND1004',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1648        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1005')) AS X ) AND FK_MapData='ND1005',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1650        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1006')) AS X ) AND FK_MapData='ND1006',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1652        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1007')) AS X ) AND FK_MapData='ND1007',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=663        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1008')) AS X ) AND FK_MapData='ND1008',异常信息:列名 'GroupID' 无效。
+23日11时48分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1642        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1001')) AS X ) AND FK_MapData='ND1001',异常信息:列名 'GroupID' 无效。
+23日11时48分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1640        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1002')) AS X ) AND FK_MapData='ND1002',异常信息:列名 'GroupID' 无效。
+23日11时48分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1644        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1003')) AS X ) AND FK_MapData='ND1003',异常信息:列名 'GroupID' 无效。
+23日11时48分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1646        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1004')) AS X ) AND FK_MapData='ND1004',异常信息:列名 'GroupID' 无效。
+23日11时48分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1648        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1005')) AS X ) AND FK_MapData='ND1005',异常信息:列名 'GroupID' 无效。
+23日11时48分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1650        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1006')) AS X ) AND FK_MapData='ND1006',异常信息:列名 'GroupID' 无效。
+23日11时48分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1652        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1007')) AS X ) AND FK_MapData='ND1007',异常信息:列名 'GroupID' 无效。
+23日11时48分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=663        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1008')) AS X ) AND FK_MapData='ND1008',异常信息:列名 'GroupID' 无效。
+23日11时48分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=662        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1099')) AS X ) AND FK_MapData='ND1099',异常信息:列名 'GroupID' 无效。
+23日11时49分20秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+23日12时01分25秒Info:System');"----------------------------------  start ------------------ 
+23日12时01分25秒Info:System');"----------------------------------  end ------------------ 
+23日12时17分54秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日12时17分54秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日12时17分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=755        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1801')) AS X ) AND FK_MapData='ND1801',异常信息:列名 'GroupID' 无效。
+23日12时17分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=756        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1802')) AS X ) AND FK_MapData='ND1802',异常信息:列名 'GroupID' 无效。
+23日12时17分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=757        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1803')) AS X ) AND FK_MapData='ND1803',异常信息:列名 'GroupID' 无效。
+23日12时17分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1442        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1804')) AS X ) AND FK_MapData='ND1804',异常信息:列名 'GroupID' 无效。
+23日12时17分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1444        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1899')) AS X ) AND FK_MapData='ND1899',异常信息:列名 'GroupID' 无效。
+23日12时26分06秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+23日12时26分06秒Info:System');"成功[BP.WF.Flow-111]放入缓存。
+23日12时26分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=761        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11001')) AS X ) AND FK_MapData='ND11001',异常信息:列名 'GroupID' 无效。
+23日12时26分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=767        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11002')) AS X ) AND FK_MapData='ND11002',异常信息:列名 'GroupID' 无效。
+23日12时26分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=771        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11003')) AS X ) AND FK_MapData='ND11003',异常信息:列名 'GroupID' 无效。

@@ -1,0 +1,207 @@
+-----------------------------------------------------------------------------------------------------
+28日09时00分09秒Info:System');"----------------------------------  start ------------------ 
+28日09时00分09秒Info:System');"----------------------------------  end ------------------ 
+28日09时00分20秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日09时00分22秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日09时00分22秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日09时00分46秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT MyPK, FK_MapData, KeyOfEn, Name, DefVal,NVL(UIContralType,0) UIContralType,NVL(MyDataType,0) MyDataType,NVL(LGType,0) LGType, CASE NVL(LGType,0) WHEN 0 THEN '普通' WHEN 1 THEN '枚举' WHEN 2 THEN '外键' WHEN NULL THEN '普通' END LGTypeTEXT, NVL( round(UIWidth,4) ,100) AS UIWidth, NVL( round(UIHeight,4) ,23) AS UIHeight,NVL(MinLen,0) MinLen,NVL(MaxLen,300) MaxLen, UIBindKey, UIRefKey, UIRefKeyText, NVL(UIVisible,1) UIVisible, NVL(UIIsEnable,1) UIIsEnable, NVL( UIIsLine,0) UIIsLine, NVL( UIIsInput,0) UIIsInput,NVL(IsSigan,0) IsSigan, NVL( round(X,4) ,5) AS X, NVL( round(Y,4) ,5) AS Y, GUID, Tag,NVL(EditType,0) EditType,NVL(ColSpan,1) ColSpan,NVL(GroupID,0) GroupID,NVL(Idx,0) Idx, AtPara FROM Sys_MapAttr WHERE ( ( Sys_MapAttr.MyPK IN ( SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='ND17001' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND17001' AND CtrlType='' ) ) )  @异常信息：ORA-00907: 缺失右括号
+@Para Num= 0
+-----------------------------------------------------------------------------------------------------
+28日09时04分09秒Info:System');"----------------------------------  start ------------------ 
+28日09时04分09秒Info:System');"----------------------------------  end ------------------ 
+-----------------------------------------------------------------------------------------------------
+28日09时17分21秒Info:System');"----------------------------------  start ------------------ 
+28日09时17分21秒Info:System');"----------------------------------  end ------------------ 
+28日09时19分27秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日09时19分38秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日09时19分38秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日09时20分35秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日09时20分35秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日09时35分05秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日09时38分04秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日09时38分04秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日09时43分04秒Info:System');"成功[BP.WF.Template.Selector-376]放入缓存。
+28日09时43分06秒Info:System');"成功[BP.WF.Template.Selector-376]放入缓存。
+28日09时43分06秒Info:System');"成功[BP.WF.Template.Selector-376]放入缓存。
+28日09时43分06秒Info:System');"成功[BP.WF.Template.Selector-376]放入缓存。
+28日09时43分31秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日09时43分31秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日09时43分39秒Info:System');"成功[BP.Sys.ToolbarExcel-697]放入缓存。
+28日09时43分41秒Info:System');"成功[BP.Sys.ToolbarExcel-697]放入缓存。
+28日09时43分45秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日09时43分45秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日09时43分45秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日09时44分02秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日09时44分02秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日10时00分45秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日10时01分26秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日10时01分37秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日10时01分37秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日10时01分59秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日10时02分20秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日10时02分20秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日10时02分34秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日10时03分06秒Info:System');"成功[BP.Sys.ToolbarExcel-697]放入缓存。
+28日10时03分07秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日10时03分07秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日10时03分08秒Info:System');"成功[BP.Sys.ToolbarExcel-697]放入缓存。
+28日10时03分09秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日10时03分09秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日10时17分04秒Info:System');"----------------------------------  start ------------------ 
+28日10时17分04秒Info:System');"----------------------------------  end ------------------ 
+28日10时18分31秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日10时18分58秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日10时18分58秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日10时20分22秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日10时20分22秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日11时50分08秒Info:System');"----------------------------------  start ------------------ 
+28日11时50分08秒Info:System');"----------------------------------  end ------------------ 
+28日11时51分29秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日11时52分48秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日11时52分48秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日11时53分04秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日15时00分37秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日15时00分39秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日15时00分39秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日16时01分35秒Info:System');"----------------------------------  start ------------------ 
+28日16时01分35秒Info:System');"----------------------------------  end ------------------ 
+28日16时01分45秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日16时01分51秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日16时01分51秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日16时04分04秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日16时04分04秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日16时06分02秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日16时06分02秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日16时08分34秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日16时08分34秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日16时08分54秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日16时39分58秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = CN_SF
+28日16时40分01秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = CN_SF
+28日16时40分52秒Fatal:System');"未将对象引用设置到对象的实例。
+-----------------------------------------------------------------------------------------------------
+28日16时42分30秒Info:System');"----------------------------------  start ------------------ 
+28日16时42分30秒Info:System');"----------------------------------  end ------------------ 
+28日16时43分17秒Fatal:System');"未将对象引用设置到对象的实例。
+28日16时43分54秒Fatal:System');"未将对象引用设置到对象的实例。
+-----------------------------------------------------------------------------------------------------
+28日16时50分36秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日16时50分37秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日16时50分37秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日17时02分06秒Info:System');"----------------------------------  start ------------------ 
+28日17时02分06秒Info:System');"----------------------------------  end ------------------ 
+28日17时02分20秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日17时20分27秒Info:System');"----------------------------------  start ------------------ 
+28日17时20分27秒Info:System');"----------------------------------  end ------------------ 
+28日17时21分02秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日17时22分53秒Info:System');"----------------------------------  start ------------------ 
+28日17时22分53秒Info:System');"----------------------------------  end ------------------ 
+28日17时23分22秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日18时14分17秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日18时14分17秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日18时45分27秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日18时45分27秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日18时49分16秒Info:System');"----------------------------------  start ------------------ 
+28日18时49分16秒Info:System');"----------------------------------  end ------------------ 
+28日18时49分38秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日18时49分38秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日19时26分39秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时26分39秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日19时26分52秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时26分52秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日19时37分49秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时37分49秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日19时38分31秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时38分31秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日19时40分40秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时40分40秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日19时41分27秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时41分27秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日19时43分34秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日19时44分05秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日19时51分13秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日19时51分13秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时52分10秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+28日19时52分17秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日19时52分17秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时52分36秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+28日19时55分35秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+28日19时57分52秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+28日19时57分52秒Fatal:System');"执行sql错误:ORA-12899: 列 "CCFLOW6"."ND17001"."ZUOZUO2323" 的值太大 (实际值: 89, 最大值: 50)
+UPDATE ND17001 SET Title=:Title,ZuoZuo2323=:ZuoZuo2323,WoDeZiDuan=:WoDeZiDuan,dddddd=:dddddd,XMMC=:XMMC,ShouWenLeiXing=:ShouWenLeiXing,DianHu=:DianHu,DiZhi1=:DiZhi1,JiMiChengDu=:JiMiChengDu,WoDeJinE=:WoDeJinE,FindLeader=:FindLeader,WoDeShuZi=:WoDeShuZi,WoDeRiQi=:WoDeRiQi,FK_DQ=:FK_DQ,FK_SF=:FK_SF,WoShiJian=:WoShiJian,RDT=:RDT,Rec=:Rec,CDT=:CDT,Emps=:Emps,MyNum=:MyNum,FK_NY=:FK_NY,FK_Dept=:FK_Dept,FID=:FID,FK_SFT=:FK_SFT,FK_DQT=:FK_DQT WHERE ND17001.OID=:OID Paras(27)=@Title=服务部-fuhui,福惠在2016-07-28 19:57发起.,String@ZuoZuo2323=ADSFASDFASDFASDF
+ASDFASDFSDFSD
+SDFSDFSDssdsdsdfsdfasdfasdfsadasdfas
+as
+dfasdfasdfasdf,String@WoDeZiDuan=ASDFASFDSDFASDFASD
+ASDFASDFSDSDsadfasdf
+as
+dfasdfasdf,String@dddddd=ASDFASDFASDFSDFSDFSDF
+SDFSDFSDF,String@XMMC=ADFSDF,String@ShouWenLeiXing=0,Int32@DianHu=,String@DiZhi1=,String@JiMiChengDu=0,Int32@WoDeJinE=0,Decimal@FindLeader=0,Int32@WoDeShuZi=0,Int32@WoDeRiQi=2016-07-28 19:57,String@FK_DQ=,String@FK_SF=,String@WoShiJian=2016-07-28,String@RDT=2016-07-28 19:57,String@Rec=fuhui,String@CDT=2016-07-28 19:57,String@Emps=fuhui,String@OID=104,Int32@MyNum=1,Int32@FK_NY=2016-07,String@FK_Dept=4,String@FID=0,Int32@FK_SFT=,String@FK_DQT=,String<hr>UPDATE ND17001 SET Title='服务部-fuhui,福惠在2016-07-28 19:57发起.',ZuoZuo2323='ADSFASDFASDFASDF
+ASDFASDFSDFSD
+SDFSDFSDssdsdsdfsdfasdfasdfsadasdfas
+as
+dfasdfasdfasdf',WoDeZiDuan='ASDFASFDSDFASDFASD
+ASDFASDFSDSDsadfasdf
+as
+dfasdfasdf',dddddd='ASDFASDFASDFSDFSDFSDF
+SDFSDFSDF',XMMC='ADFSDF',ShouWenLeiXing='0',DianHu='',DiZhi1='',JiMiChengDu='0',WoDeJinE='0',FindLeader='0',WoDeShuZi='0',WoDeRiQi='2016-07-28 19:57',FK_DQ='',FK_SF='',WoShiJian='2016-07-28',RDT='2016-07-28 19:57',Rec='fuhui',CDT='2016-07-28 19:57',Emps='fuhui',MyNum='1',FK_NY='2016-07',FK_Dept='4',FID='0',FK_SFT='',FK_DQT='' WHERE ND17001.OID='104'
+28日19时57分55秒Fatal:System');"执行sql错误:ORA-12899: 列 "CCFLOW6"."ND17001"."ZUOZUO2323" 的值太大 (实际值: 89, 最大值: 50)
+UPDATE ND17001 SET Title=:Title,ZuoZuo2323=:ZuoZuo2323,WoDeZiDuan=:WoDeZiDuan,dddddd=:dddddd,XMMC=:XMMC,ShouWenLeiXing=:ShouWenLeiXing,DianHu=:DianHu,DiZhi1=:DiZhi1,JiMiChengDu=:JiMiChengDu,WoDeJinE=:WoDeJinE,FindLeader=:FindLeader,WoDeShuZi=:WoDeShuZi,WoDeRiQi=:WoDeRiQi,FK_DQ=:FK_DQ,FK_SF=:FK_SF,WoShiJian=:WoShiJian,RDT=:RDT,Rec=:Rec,CDT=:CDT,Emps=:Emps,MyNum=:MyNum,FK_NY=:FK_NY,FK_Dept=:FK_Dept,FID=:FID,FK_SFT=:FK_SFT,FK_DQT=:FK_DQT WHERE ND17001.OID=:OID Paras(27)=@Title=服务部-fuhui,福惠在2016-07-28 19:57发起.,String@ZuoZuo2323=ADSFASDFASDFASDF
+ASDFASDFSDFSD
+SDFSDFSDssdsdsdfsdfasdfasdfsadasdfas
+as
+dfasdfasdfasdf,String@WoDeZiDuan=ASDFASFDSDFASDFASD
+ASDFASDFSDSDsadfasdf
+as
+dfasdfasdf,String@dddddd=ASDFASDFASDFSDFSDFSDF
+SDFSDFSDF,String@XMMC=ADFSDF,String@ShouWenLeiXing=0,Int32@DianHu=,String@DiZhi1=,String@JiMiChengDu=0,Int32@WoDeJinE=0,Decimal@FindLeader=0,Int32@WoDeShuZi=0,Int32@WoDeRiQi=2016-07-28 19:57,String@FK_DQ=,String@FK_SF=,String@WoShiJian=2016-07-28,String@RDT=2016-07-28 19:57,String@Rec=fuhui,String@CDT=2016-07-28 19:57,String@Emps=fuhui,String@OID=104,Int32@MyNum=1,Int32@FK_NY=2016-07,String@FK_Dept=4,String@FID=0,Int32@FK_SFT=,String@FK_DQT=,String<hr>UPDATE ND17001 SET Title='服务部-fuhui,福惠在2016-07-28 19:57发起.',ZuoZuo2323='ADSFASDFASDFASDF
+ASDFASDFSDFSD
+SDFSDFSDssdsdsdfsdfasdfasdfsadasdfas
+as
+dfasdfasdfasdf',WoDeZiDuan='ASDFASFDSDFASDFASD
+ASDFASDFSDSDsadfasdf
+as
+dfasdfasdf',dddddd='ASDFASDFASDFSDFSDFSDF
+SDFSDFSDF',XMMC='ADFSDF',ShouWenLeiXing='0',DianHu='',DiZhi1='',JiMiChengDu='0',WoDeJinE='0',FindLeader='0',WoDeShuZi='0',WoDeRiQi='2016-07-28 19:57',FK_DQ='',FK_SF='',WoShiJian='2016-07-28',RDT='2016-07-28 19:57',Rec='fuhui',CDT='2016-07-28 19:57',Emps='fuhui',MyNum='1',FK_NY='2016-07',FK_Dept='4',FID='0',FK_SFT='',FK_DQT='' WHERE ND17001.OID='104'
+28日19时57分58秒Fatal:System');"执行sql错误:ORA-12899: 列 "CCFLOW6"."ND17001"."ZUOZUO2323" 的值太大 (实际值: 89, 最大值: 50)
+UPDATE ND17001 SET Title=:Title,ZuoZuo2323=:ZuoZuo2323,WoDeZiDuan=:WoDeZiDuan,dddddd=:dddddd,XMMC=:XMMC,ShouWenLeiXing=:ShouWenLeiXing,DianHu=:DianHu,DiZhi1=:DiZhi1,JiMiChengDu=:JiMiChengDu,WoDeJinE=:WoDeJinE,FindLeader=:FindLeader,WoDeShuZi=:WoDeShuZi,WoDeRiQi=:WoDeRiQi,FK_DQ=:FK_DQ,FK_SF=:FK_SF,WoShiJian=:WoShiJian,RDT=:RDT,Rec=:Rec,CDT=:CDT,Emps=:Emps,MyNum=:MyNum,FK_NY=:FK_NY,FK_Dept=:FK_Dept,FID=:FID,FK_SFT=:FK_SFT,FK_DQT=:FK_DQT WHERE ND17001.OID=:OID Paras(27)=@Title=服务部-fuhui,福惠在2016-07-28 19:57发起.,String@ZuoZuo2323=ADSFASDFASDFASDF
+ASDFASDFSDFSD
+SDFSDFSDssdsdsdfsdfasdfasdfsadasdfas
+as
+dfasdfasdfasdf,String@WoDeZiDuan=ASDFASFDSDFASDFASD
+ASDFASDFSDSDsadfasdf
+as
+dfasdfasdf,String@dddddd=ASDFASDFASDFSDFSDFSDF
+SDFSDFSDF,String@XMMC=ADFSDF,String@ShouWenLeiXing=0,Int32@DianHu=,String@DiZhi1=,String@JiMiChengDu=0,Int32@WoDeJinE=0,Decimal@FindLeader=0,Int32@WoDeShuZi=0,Int32@WoDeRiQi=2016-07-28 19:57,String@FK_DQ=,String@FK_SF=,String@WoShiJian=2016-07-28,String@RDT=2016-07-28 19:57,String@Rec=fuhui,String@CDT=2016-07-28 19:57,String@Emps=fuhui,String@OID=104,Int32@MyNum=1,Int32@FK_NY=2016-07,String@FK_Dept=4,String@FID=0,Int32@FK_SFT=,String@FK_DQT=,String<hr>UPDATE ND17001 SET Title='服务部-fuhui,福惠在2016-07-28 19:57发起.',ZuoZuo2323='ADSFASDFASDFASDF
+ASDFASDFSDFSD
+SDFSDFSDssdsdsdfsdfasdfasdfsadasdfas
+as
+dfasdfasdfasdf',WoDeZiDuan='ASDFASFDSDFASDFASD
+ASDFASDFSDSDsadfasdf
+as
+dfasdfasdf',dddddd='ASDFASDFASDFSDFSDFSDF
+SDFSDFSDF',XMMC='ADFSDF',ShouWenLeiXing='0',DianHu='',DiZhi1='',JiMiChengDu='0',WoDeJinE='0',FindLeader='0',WoDeShuZi='0',WoDeRiQi='2016-07-28 19:57',FK_DQ='',FK_SF='',WoShiJian='2016-07-28',RDT='2016-07-28 19:57',Rec='fuhui',CDT='2016-07-28 19:57',Emps='fuhui',MyNum='1',FK_NY='2016-07',FK_Dept='4',FID='0',FK_SFT='',FK_DQT='' WHERE ND17001.OID='104'

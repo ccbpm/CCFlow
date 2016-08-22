@@ -1,0 +1,27 @@
+-----------------------------------------------------------------------------------------------------
+02日17时09分44秒Info:System');"----------------------------------  start ------------------ 
+02日17时09分44秒Info:System');"----------------------------------  end ------------------ 
+02日17时10分23秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+02日17时11分01秒Info:System');"----------------------------------  start ------------------ 
+02日17时11分01秒Info:System');"----------------------------------  end ------------------ 
+02日17时20分04秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+02日17时43分13秒Info:System');"----------------------------------  start ------------------ 
+02日17时43分13秒Info:System');"----------------------------------  end ------------------ 
+02日17时43分22秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+02日17时43分23秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+02日18时19分34秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT NVL(OID,0) OID,NVL(RefPK, '0') RefPK,NVL(FID,0) FID,NVL(RDT,'2016-08-02') RDT,NVL(Rec, '@WebUser.No') Rec,NVL(FYLX,0) FYLX, CASE NVL(FYLX,0) WHEN 0 THEN '汽车票' WHEN 1 THEN '打的票' WHEN 2 THEN '火车票' WHEN 3 THEN '飞机票' WHEN 4 THEN '其它' WHEN NULL THEN '汽车票' END FYLXTEXT, NVL( round(DanJia,4),0) DanJia,NVL(ShuLiang,0) ShuLiang, NVL( round(XiaoJi,4),0) XiaoJi, BeiZhu FROM Demo_01Dtl1 WHERE ( ( Demo_01Dtl1.RefPK =:RefPK) )  @异常信息：ORA-00942: 表或视图不存在
+@Para Num= 1@RefPK=0
+02日18时20分16秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+02日18时20分23秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+02日18时20分23秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+-----------------------------------------------------------------------------------------------------
+02日18时29分07秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+02日18时29分07秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+02日18时29分59秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+02日18时29分59秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+02日18时32分45秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+02日18时38分45秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+02日18时38分45秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+02日18时55分51秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT   Title, XMMC, FuZeRen, FuZeRenDianHua, ShuangJingDu, XiangMuDiZhi, ZiFuXing, XMGYJS, FK_DQ, RiQiShiJianXing, BooleXing, FK_SF, FK_SFT, FK_City, RiQiXing,NVL(CeShiMoShi,0)   CeShiMoShi, CASE NVL(CeShiMoShi,0) WHEN 0 THEN '强办模式' WHEN 1 THEN '协作模式' WHEN 2 THEN '队列模式' WHEN 3 THEN '共享模式' WHEN NULL THEN '强办模式' END CeShiMoShiTEXT,NVL(QiCaoRiQi,'@RDT') QiCaoRiQi,NVL(QiCaoRenBuMen, '@WebUser.FK_DeptName') QiCaoRenBuMen,NVL(QiCaoRen, '@WebUser.Name') QiCaoRen,NVL(OID,0)   OID, FK_CityT,NVL(FID,0)   FID, FK_Dept,NVL(RDT,'2016-08-02') RDT,NVL(Rec, '@WebUser.No') Rec,NVL(CDT,'2016-08-02') CDT, Emps,NVL(MyNum,1)   MyNum, FK_NY, FK_DQT FROM ND17001 WHERE (ND17001.OID=:OID ) @异常信息：ORA-00904: "CESHIMOSHI": 标识符无效
+@Para Num= 1@OID=106
+02日18时55分55秒Info:System');"成功[BP.WF.Template.Selector-376]放入缓存。

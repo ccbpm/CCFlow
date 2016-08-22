@@ -1,0 +1,8 @@
+-----------------------------------------------------------------------------------------------------
+18日15时37分28秒Info:System');"----------------------------------  start ------------------ 
+18日15时37分28秒Info:System');"----------------------------------  end ------------------ 
+18日15时37分47秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+18日15时48分41秒Fatal:System');"SQL= SELECT  TOP 1 ISNULL(ShuZhi,0)   ShuZhi,ISNULL(FaKuanJinE,0)   FaKuanJinE,ISNULL(OID,0)   OID, tt, ISNULL( WoDeZiDuan,0) WoDeZiDuan, QingJiaRenBuMen,ISNULL(RDT,'2016-07-18') RDT, WoDeEZiDuan,ISNULL(ShiFouDaoDa,'1') ShiFouDaoDa, QingJiaRen, WoDeXinQing,ISNULL(WoDeRiQi,'0') WoDeRiQi,ChuFaShiJian ChuFaShiJian,ISNULL(FaWenLeiXing,0)   FaWenLeiXing, CASE FaWenLeiXing WHEN 0 THEN 'XX银' WHEN 1 THEN 'XX银董' WHEN 2 THEN 'XX银监' WHEN 3 THEN 'XX银党' WHEN 4 THEN 'XX银党机' WHEN 5 THEN 'XX银工' WHEN NULL THEN 'XX银' END FaWenLeiXingTEXT,ISNULL(FaWenZhongLei,0)   FaWenZhongLei, CASE FaWenZhongLei WHEN 0 THEN '通知' WHEN 1 THEN '决定' WHEN 2 THEN '公告' WHEN 3 THEN '通告' WHEN 4 THEN '意见' WHEN 5 THEN '通报' WHEN 6 THEN '请示' WHEN 7 THEN '批复函' WHEN 8 THEN '纪要' WHEN NULL THEN '通知' END FaWenZhongLeiTEXT,ISNULL(JiMiChengDu,0)   JiMiChengDu, CASE JiMiChengDu WHEN 0 THEN '公开' WHEN 1 THEN '保密' WHEN 2 THEN '秘密' WHEN 3 THEN '机密' WHEN NULL THEN '公开' END JiMiChengDuTEXT, ISNULL( round(WoDeJinE,4) ,0) AS  WoDeJinE,WoRenRiQi WoRenRiQi, ZhiDuShuXing FROM ND174Rpt WHERE (1=1) AND ND174Rpt.OID=@OID Exception=对象名 'ND174Rpt' 无效。
+18日15时52分40秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+18日15时52分48秒Info:System');"成功[BP.WF.Flow-106]放入缓存。

@@ -1,0 +1,795 @@
+-----------------------------------------------------------------------------------------------------
+16日11时11分18秒Fatal:System');"@没有[流程查询  WF_GenerWorkFlow, 类[BP.WF.Data.GenerWorkFlowView], 物理表[WF_GenerWorkFlow] 实例。PK = 154
+-----------------------------------------------------------------------------------------------------
+16日11时12分13秒Fatal:System');"@没有[流程查询  WF_GenerWorkFlow, 类[BP.WF.Data.GenerWorkFlowView], 物理表[WF_GenerWorkFlow] 实例。PK = 154
+-----------------------------------------------------------------------------------------------------
+16日11时12分44秒Info:System');"----------------------------------  start ------------------ 
+16日11时12分44秒Info:System');"----------------------------------  end ------------------ 
+16日11时13分05秒Info:System');"成功[BP.Port.Emp-29]放入缓存。
+-----------------------------------------------------------------------------------------------------
+16日11时14分34秒Info:System');"成功[BP.Port.Emp-29]放入缓存。
+-----------------------------------------------------------------------------------------------------
+16日11时18分31秒Info:System');"----------------------------------  start ------------------ 
+16日11时18分31秒Info:System');"----------------------------------  end ------------------ 
+16日11时18分47秒Fatal:System');"SQL= SELECT TOP 99999 MyPK, Lab, EnumKey,ISNULL(IntKey,0) IntKey,ISNULL(Lang, 'CH') Lang FROM Sys_Enum WHERE (1=1) AND ( ( Sys_Enum.EnumKey =@EnumKey) AND ( Sys_Enum.Lang =@Lang) ) ORDER BY Sys_Enum.IntKey Exception=对象名 'Sys_Enum' 无效。
+16日11时18分53秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = 
+16日11时18分54秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = 
+16日11时18分59秒Info:System');"SQL=DROP TABLE Port_EmpDept,异常信息:无法对 表 'Port_EmpDept' 执行 删除，因为它不存在，或者您没有所需的权限。
+16日11时18分59秒Info:System');"SQL=DROP VIEW Port_EmpDept,异常信息:无法对 视图 'Port_EmpDept' 执行 删除，因为它不存在，或者您没有所需的权限。
+16日11时18分59秒Info:System');"SQL=
+CREATE VIEW  WF_EmpWorks
+(
+PRI,
+WorkID,
+IsRead,
+Starter,
+StarterName,
+WFState, 
+FK_Dept,
+DeptName,
+FK_Flow,
+FlowName,
+PWorkID,
+PFlowNo,
+FK_Node,
+NodeName,
+WorkerDept,
+Title,
+RDT,
+ADT,
+SDT,
+FK_Emp,
+FID,
+FK_FlowSort,
+SysType,
+SDTOfNode,
+PressTimes,
+GuestNo,
+GuestName,
+BillNo,
+FlowNote,
+TodoEmps,
+TodoEmpsNum,
+TodoSta,
+TaskSta,
+ListType,
+Sender,
+AtPara,
+MyNum
+)
+AS
+
+SELECT A.PRI,A.WorkID,B.IsRead, A.Starter,
+A.StarterName,
+A.WFState,
+A.FK_Dept,A.DeptName, A.FK_Flow, A.FlowName,A.PWorkID,
+A.PFlowNo,
+B.FK_Node, B.FK_NodeText AS NodeName, B.FK_Dept WorkerDept, A.Title, A.RDT, B.RDT AS ADT, 
+B.SDT, B.FK_Emp,B.FID ,A.FK_FlowSort,A.SysType,A.SDTOfNode,B.PressTimes,
+A.GuestNo,
+A.GuestName,
+A.BillNo,
+A.FlowNote,
+A.TodoEmps,
+A.TodoEmpsNum,
+A.TodoSta,
+A.TaskSta,
+0 as ListType,
+A.Sender,
+B.AtPara+''+A.AtPara,
+1 as MyNum
+FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B
+WHERE     (B.IsEnable = 1) AND (B.IsPass = 0)
+ AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node 
+ UNION
+SELECT A.PRI,A.WorkID,B.Sta AS IsRead, A.Starter,
+A.StarterName,
+2 AS WFState,
+A.FK_Dept,A.DeptName, A.FK_Flow, A.FlowName,A.PWorkID,
+A.PFlowNo,
+B.FK_Node, B.NodeName,  B.CCToDept as WorkerDept,A.Title, A.RDT, B.RDT AS ADT, 
+B.RDT AS SDT, B.CCTo as FK_Emp,B.FID ,A.FK_FlowSort,A.SDTOfNode, 0 as PressTimes,
+A.GuestNo,
+A.GuestName,
+A.BillNo,
+A.FlowNote,
+A.TodoEmps,
+A.TodoEmpsNum,
+0 as TodoSta,
+0 AS TaskSta,
+1 as ListType,
+B.Rec as Sender,
+'@IsCC=1'+A.AtPara as AtPara,
+1 as MyNum
+  FROM WF_GenerWorkFlow A, WF_CCList B WHERE A.WorkID=B.WorkID AND  B.Sta <=1 AND B.InEmpWorks = 1,异常信息:使用 UNION、INTERSECT 或 EXCEPT 运算符合并的所有查询必须在其目标列表中有相同数目的表达式。
+-----------------------------------------------------------------------------------------------------
+16日11时27分26秒Info:System');"----------------------------------  start ------------------ 
+16日11时27分26秒Info:System');"----------------------------------  end ------------------ 
+16日11时27分29秒Fatal:System');"SQL= SELECT TOP 99999 MyPK, Lab, EnumKey,ISNULL(IntKey,0) IntKey,ISNULL(Lang, 'CH') Lang FROM Sys_Enum WHERE (1=1) AND ( ( Sys_Enum.EnumKey =@EnumKey) AND ( Sys_Enum.Lang =@Lang) ) ORDER BY Sys_Enum.IntKey Exception=对象名 'Sys_Enum' 无效。
+16日11时27分35秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = 
+16日11时27分36秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = 
+16日11时27分39秒Info:System');"SQL=DROP TABLE Port_EmpDept,异常信息:无法对 表 'Port_EmpDept' 执行 删除，因为它不存在，或者您没有所需的权限。
+16日11时27分39秒Info:System');"SQL=DROP VIEW Port_EmpDept,异常信息:无法对 视图 'Port_EmpDept' 执行 删除，因为它不存在，或者您没有所需的权限。
+16日11时27分40秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+16日11时27分41秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=101        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_01')) AS X ) AND FK_MapData='Demo_01',异常信息:列名 'GroupID' 无效。
+16日11时27分42秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=113        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_02')) AS X ) AND FK_MapData='Demo_02',异常信息:列名 'GroupID' 无效。
+16日11时27分42秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=115        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_03')) AS X ) AND FK_MapData='Demo_03',异常信息:列名 'GroupID' 无效。
+16日11时27分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=137        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_04')) AS X ) AND FK_MapData='Demo_04',异常信息:列名 'GroupID' 无效。
+16日11时27分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=139        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_05')) AS X ) AND FK_MapData='Demo_05',异常信息:列名 'GroupID' 无效。
+16日11时27分43秒Info:System');"SQL=INSERT INTO Sys_MapM2M ([MyPK],[FK_MapData],[NoOfObj],[Name],[DBOfLists],[DBOfObjs],[DBOfGroups],[H],[W],[X],[Y],[ShowWay],[M2MType],[RowIdx],[GroupID],[Cols],[IsDelete],[IsInsert],[IsCheckAll] ) VALUES ( 'Demo_06Dtl1_M2M','Demo_06Dtl1','M2M','M2M','','SELECT No,Name,FK_Dept FROM Port_Emp','SELECT No,Name FROM Port_Dept',100,160,5,5,1,0,99,0,4,1,1,1),异常信息:违反了 PRIMARY KEY 约束 'Sys_MapM2Mpk'。不能在对象 'dbo.Sys_MapM2M' 中插入重复键。
+语句已终止。
+16日11时27分43秒Info:System');"SQL=INSERT INTO Sys_MapM2M ([MyPK],[FK_MapData],[NoOfObj],[Name],[DBOfLists],[DBOfObjs],[DBOfGroups],[H],[W],[X],[Y],[ShowWay],[M2MType],[RowIdx],[GroupID],[Cols],[IsDelete],[IsInsert],[IsCheckAll] ) VALUES ( 'Demo_06Dtl1_M2MM','Demo_06Dtl1','M2MM','M2MM','','SELECT No,Name,FK_Dept FROM Port_Emp','SELECT No,Name FROM Port_Dept',100,160,5,5,1,0,99,0,4,1,1,1),异常信息:违反了 PRIMARY KEY 约束 'Sys_MapM2Mpk'。不能在对象 'dbo.Sys_MapM2M' 中插入重复键。
+语句已终止。
+16日11时27分44秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=143        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_06')) AS X ) AND FK_MapData='Demo_06',异常信息:列名 'GroupID' 无效。
+16日11时27分44秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=149        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Fields')) AS X ) AND FK_MapData='Demo_Fields',异常信息:列名 'GroupID' 无效。
+16日11时27分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=151        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc01')) AS X ) AND FK_MapData='Demo_Inc01',异常信息:列名 'GroupID' 无效。
+16日11时27分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=153        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc02')) AS X ) AND FK_MapData='Demo_Inc02',异常信息:列名 'GroupID' 无效。
+16日11时27分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=155        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc03')) AS X ) AND FK_MapData='Demo_Inc03',异常信息:列名 'GroupID' 无效。
+16日11时27分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=157        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc04')) AS X ) AND FK_MapData='Demo_Inc04',异常信息:列名 'GroupID' 无效。
+16日11时27分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=163        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc05')) AS X ) AND FK_MapData='Demo_Inc05',异常信息:列名 'GroupID' 无效。
+16日11时27分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=169        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc06')) AS X ) AND FK_MapData='Demo_Inc06',异常信息:列名 'GroupID' 无效。
+16日11时27分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=175        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc07')) AS X ) AND FK_MapData='Demo_Inc07',异常信息:列名 'GroupID' 无效。
+16日11时27分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=181        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc08')) AS X ) AND FK_MapData='Demo_Inc08',异常信息:列名 'GroupID' 无效。
+16日11时27分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=187        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc09')) AS X ) AND FK_MapData='Demo_Inc09',异常信息:列名 'GroupID' 无效。
+16日11时27分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=193        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc10')) AS X ) AND FK_MapData='Demo_Inc10',异常信息:列名 'GroupID' 无效。
+16日11时27分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=199        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc11')) AS X ) AND FK_MapData='Demo_Inc11',异常信息:列名 'GroupID' 无效。
+16日11时27分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=205        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc12')) AS X ) AND FK_MapData='Demo_Inc12',异常信息:列名 'GroupID' 无效。
+16日11时27分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=211        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc13')) AS X ) AND FK_MapData='Demo_Inc13',异常信息:列名 'GroupID' 无效。
+16日11时27分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=213        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc14')) AS X ) AND FK_MapData='Demo_Inc14',异常信息:列名 'GroupID' 无效。
+16日11时27分49秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=215        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='QiYeKunNanDengJiBiao')) AS X ) AND FK_MapData='QiYeKunNanDengJiBiao',异常信息:列名 'GroupID' 无效。
+16日11时27分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=217        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='gysjhcyxqdjb')) AS X ) AND FK_MapData='gysjhcyxqdjb',异常信息:列名 'GroupID' 无效。
+16日11时27分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=219        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_NewPrj')) AS X ) AND FK_MapData='Demo_NewPrj',异常信息:列名 'GroupID' 无效。
+16日11时27分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=221        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK03')) AS X ) AND FK_MapData='Demo_HK03',异常信息:列名 'GroupID' 无效。
+16日11时27分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=223        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK02')) AS X ) AND FK_MapData='Demo_HK02',异常信息:列名 'GroupID' 无效。
+16日11时27分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=225        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK01')) AS X ) AND FK_MapData='Demo_HK01',异常信息:列名 'GroupID' 无效。
+16日11时27分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=227        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='SPGW')) AS X ) AND FK_MapData='SPGW',异常信息:列名 'GroupID' 无效。
+16日11时27分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=229        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='LXSQS')) AS X ) AND FK_MapData='LXSQS',异常信息:列名 'GroupID' 无效。
+16日11时27分52秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=231        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='GT_LXSQ')) AS X ) AND FK_MapData='GT_LXSQ',异常信息:列名 'GroupID' 无效。
+16日11时27分52秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=233        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='jgyssq')) AS X ) AND FK_MapData='jgyssq',异常信息:列名 'GroupID' 无效。
+16日11时27分53秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=235        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='YSXX')) AS X ) AND FK_MapData='YSXX',异常信息:列名 'GroupID' 无效。
+16日11时27分53秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=237        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='YSXM')) AS X ) AND FK_MapData='YSXM',异常信息:列名 'GroupID' 无效。
+16日11时27分53秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=241        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_FJDtl')) AS X ) AND FK_MapData='Demo_FJDtl',异常信息:列名 'GroupID' 无效。
+16日11时27分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=249        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_FrmSLExcel')) AS X ) AND FK_MapData='Demo_FrmSLExcel',异常信息:列名 'GroupID' 无效。
+16日11时27分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=253        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_FrmSLWord')) AS X ) AND FK_MapData='Demo_FrmSLWord',异常信息:列名 'GroupID' 无效。
+16日11时27分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=257        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_FrmSLFixCol4')) AS X ) AND FK_MapData='Demo_FrmSLFixCol4',异常信息:列名 'GroupID' 无效。
+16日11时27分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=261        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_FrmSLSelf')) AS X ) AND FK_MapData='Demo_FrmSLSelf',异常信息:列名 'GroupID' 无效。
+16日11时27分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=263        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HNPrjInfo_HQYJ')) AS X ) AND FK_MapData='Demo_HNPrjInfo_HQYJ',异常信息:列名 'GroupID' 无效。
+16日11时27分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=275        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HNPrjInfo_HQ')) AS X ) AND FK_MapData='Demo_HNPrjInfo_HQ',异常信息:列名 'GroupID' 无效。
+16日11时27分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=283        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HNPrjInfo')) AS X ) AND FK_MapData='Demo_HNPrjInfo',异常信息:列名 'GroupID' 无效。
+16日11时27分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=285        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWA')) AS X ) AND FK_MapData='Demo_YWA',异常信息:列名 'GroupID' 无效。
+16日11时27分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=287        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWB')) AS X ) AND FK_MapData='Demo_YWB',异常信息:列名 'GroupID' 无效。
+16日11时27分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=289        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWC')) AS X ) AND FK_MapData='Demo_YWC',异常信息:列名 'GroupID' 无效。
+16日11时32分55秒Info:System');"@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\01.表单元素\01.表单元素.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\01.表单元素\02.基础功能.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\01.表单元素\03.主从表基础功能.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\01.表单元素\04.一对多.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\01.表单元素\05.增加操作员申请单.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\01.表单元素\06.从表功能展示.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\01.表单元素\07.表单控件风格.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\01.企业基本情况.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\02.企业简介.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\03.企业组织机构框图.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\04.企业经理简历.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\05.企业技术负责人简历.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\06.企业财务负责人简历.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\07.企业经营负责人简历.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\08.工程技术和经济管理人员名单.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\09.企业注册建造师名单.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\10.企业自有的主要机械设备.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\11.企业代表工程业绩一览表.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\12.企业代表工程情况.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\13.审批承办信息填写.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\02.企业资质申请表单\14.企业法定代表人声明.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\03.经典表单\企业困难(问题)登记表.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\03.经典表单\工业设计和创意需求登记表.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\03.经典表单\新建工程(一对多多的应用).xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\04.航空考察\开行考察工作单-安全保卫部.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\04.航空考察\开行考察工作单-配餐部.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\04.航空考察\开行考察工作单-飞行部.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\05.项目立项\审批公文.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\05.项目立项\立项申请书.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\05.项目立项\计划信息.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\06.项目验收\竣工验收申请.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\06.项目验收\项目验收信息.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\06.项目验收\验收项目.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\07.测试案例\从表多附件权限控制.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\08.表单类型\Excel表单Demo.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\08.表单类型\Word表单Demo.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\08.表单类型\傻瓜表单.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\08.表单类型\自定义表单.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\09.数据汇总演示\会签意见汇总.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\09.数据汇总演示\项目会签.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\09.数据汇总演示\项目登记.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\10.动态表单树\A类型业务申请单.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\10.动态表单树\B类型业务申请单.xml@开始调度表单模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Form\10.动态表单树\C类型业务申请单.xml	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\共享任务测试.xml	
+@流程:共享任务测试装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\批量发起,批量审核.xml	
+@流程:批量发起,批量审核装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\批量发起-分组审核-启动父流程.xml	
+@流程:批量发起-分组审核-启动父流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\批量发起-分组审核父流程.xml	
+@流程:批量发起-分组审核父流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\接受人自定义.xml	
+@流程:接受人自定义装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\线性循环流程.xml	
+@流程:线性循环流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\自由流程-子流程.xml	
+@流程:请假测试深圳装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\自由流程.xml	
+@流程:自由流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\表单数据copy测试案例.xml	
+@流程:表单数据copy测试案例装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\请假流程(审核组件).xml	
+@流程:请假流程(审核组件)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\请假流程(按岗位控制走向).xml	
+@流程:请假流程(按岗位控制走向)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\财务报销演示.xml	
+@流程:财务报销演示装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\01.多人处理\多人处理规则.xml	
+@流程:多人处理规则装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\01.多人处理\多人待办工作处理模式.xml	
+@流程:多人待办工作处理模式装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\01.多人处理\多部门联合审批(协作模式).xml	
+@流程:多部门联合审批(协作模式)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\01.多人处理\特别控件特别用户权限-附件类.xml	
+@流程:特别控件特别用户权限-附件类装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\01.线性流程\04.外部用户流程\学生请假流程(Guest流程).xml	
+@流程:学生请假流程(Guest流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\一人多子线程模式(批次维度任务模式).xml	
+@流程:一人多子线程模式(批次维度任务模式)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\两个子线程分合流.xml	
+@流程:两个子线城分合流装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\两段分合流子线程集合不一致.xml	
+@流程:两段分合流子线程集合不一致装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\以SQL做为子线程的数据源与接受人.xml	
+@流程:以SQL做为子线程的数据源与接受人装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\以明细表做接受人与数据源.xml	
+@流程:以明细表做接受人与数据源装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\会议通知流程.xml	
+@流程:会议通知流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\具有两段同表单分合流Demo.xml	
+@流程:具有两段同表单分合流Demo装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\具有两段同表单分合流并且汇总明细表Demo.xml	
+@流程:具有两段同表单分合流Demo装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\具有质量考核的同表单流程.xml	
+@流程:具有质量考核的同表单流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\同表单分合流(二).xml	
+@流程:同表单分合流(二)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\子线程可以查看分流点明细表.xml	
+@流程:子线程可以查看分流点明细表装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\工作计划(具有明细表汇总).xml	
+@流程:工作计划(具有明细表汇总)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\月销售总结(同表单分合流).xml	
+@流程:月销售总结(同表单分合流)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\煤矿安检流程(从表分流).xml	
+@流程:煤矿安全检查(从表分流)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\02.同表单分合流\独立表单数据汇总.xml	
+@流程:独立表单数据汇总装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\03.异表单分合流\新航线考察流程.xml	
+@流程:新航线考察流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\03.异表单分合流\订单流程.xml	
+@流程:订单流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\03.异表单分合流\部门年计划流程.xml	
+@流程:部门年计划流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\子流程A.xml	
+@流程:子流程A装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\父流程(自动发起子流程).xml	
+@流程:父流程(自动发起子流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\01.经典调用方式\催款流程(子流程).xml	
+@流程:催款流程(子流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\01.经典调用方式\施工流程(子流程).xml	
+@流程:施工流程(子流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\01.经典调用方式\节点发送阻塞测试.xml	
+@流程:节点发送阻塞测试装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\01.经典调用方式\项目管理(父流程).xml	
+@流程:项目管理(父流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\主流程.xml	
+@流程:主流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\子流程1.xml	
+@流程:子流程1装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\子流程2.xml	
+@流程:子流程2装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\孙子流程1.xml	
+@流程:孙子流程1装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\孙子流程2.xml	
+@流程:孙子流程2装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\同表单分合流(子流程).xml	
+@流程:同表单分合流(子流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\同表单分合流.xml	
+@流程:同表单分合流装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\01.请假流程Demo\请假流程(SDK模式).xml	
+@流程:请假流程(SDK模式)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\01.请假流程Demo\请假流程(审批组件模式).xml	
+@流程:请假流程(审批组件模式)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\01.请假流程Demo\请假流程(自定义表单).xml	
+@流程:请假流程(自定义表单)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\02.通讯基站工单流程\网优-子子流程(设备维护).xml	
+@流程:网优-子子流程(设备维护)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\02.通讯基站工单流程\网优-子流程(市局).xml	
+@流程:网优-子流程(市局)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\02.通讯基站工单流程\网优-父流程(省局监控分合流子流程).xml	
+@流程:网优-父流程(省局监控分合流子流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\03.SDK表单通用组件\审核组件FrmCheck.xml	
+@流程:审核组件FrmCheck装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\05.SDK流程\03.SDK表单通用组件\工具栏组件Toolbar.xml	
+@流程:工具栏Toolbar装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\06.压力与速度测试\最简单的3节点(覆盖模式).xml	
+@流程:最简单的3节点(覆盖模式)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\06.压力与速度测试\最简单的3节点(轨迹模式).xml	
+@流程:最简单的3节点(轨迹模式)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\公文接受人模式.xml	
+@流程:公文接受人模式装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\工业自动化流程.xml	
+@流程:工业自动化流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\常用接收人规则测试流程.xml	
+@流程:常用接收人规则测试流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\找人规则(找领导).xml	
+@流程:找人规则(找领导)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\按轨迹退回.xml	
+@流程:按轨迹退回装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\测试表单字段类型流程.xml	
+@流程:测试表单字段类型流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\节点属性-超时处理.xml	
+@流程:节点属性-超时处理装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\阅读回执-请假流程.xml	
+@流程:阅读回执-请假流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\01.跳转\跳转1-处理人就是提交人1-1.xml	
+@流程:跳转1-处理人就是提交人1-1装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\01.跳转\跳转1-处理人就是提交人1-2.xml	
+@流程:跳转1-处理人就是提交人1-2装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\01.跳转\跳转1-处理人就是提交人1-3.xml	
+@流程:跳转1-处理人就是提交人1-3装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\01.跳转\跳转2-处理人出现过.xml	
+@流程:跳转2-处理人出现过装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\测试方向条件-开发者参数.xml	
+@流程:测试方向条件-开发者参数装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\测试方向条件-按SQL.xml	
+@流程:测试方向条件-按SQL装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\测试方向条件-按URL.xml	
+@流程:测试方向条件-按URL装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\测试方向条件-部门方向条件.xml	
+@流程:测试方向条件-部门方向条件装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\节点手工方向选择.xml	
+@流程:节点手工方向选择装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\03.业务表数据同步\人员入职申请单.xml	
+@流程:人员入职申请单装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\07.单元测试-用例流程\03.业务表数据同步\人员部门岗位变更.xml	
+@流程:人员部门岗位变更装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\请假流程(数据合并模式).xml	
+@流程:请假流程(数据合并模式)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\Excel表单-请假流程.xml	
+@流程:Excel表单装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\Word表单-请假流程.xml	
+@流程:Word表单装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\傻瓜表单工作模式.xml	
+@流程:傻瓜表单工作模式装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\嵌入式表单流程.xml	
+@流程:嵌入式表单流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\自由表单-审核组件-请假流程.xml	
+@流程:自由表单-审核组件装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\请假流程(轨迹模式).xml	
+@流程:请假流程(轨迹模式)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\Office类型表单权限控制demo.xml	
+@流程:Office类型表单权限控制demo装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\以表单字段为条件启用禁用独立表单.xml	
+@流程:以表单字段为条件启用禁用独立表单装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\动态绑定多表单流程.xml	
+@流程:动态绑定多表单流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\树形表单-立项申请.xml	
+@流程:树形表单-立项申请装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\树形表单-项目验收.xml	
+@流程:树形表单-项目验收装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\树形表单的附件权限.xml	
+@流程:树形表单的附件权限装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\03.多表单\建筑资质申请(多表单流程).xml	
+@流程:建筑资质申请(多表单流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\04.公文\公文发文.xml	
+@流程:公文发文装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\04.公文\公文收文.xml	
+@流程:公文收文装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\08.表单解决方案\04.公文\公文流程.xml	
+@流程:公文流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\09.数据列表前置导航\导航测试-立项流程.xml	
+@流程:导航测试-立项流程装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\09.数据列表前置导航\导航测试-项目单条验收(子流程).xml	
+@流程:导航测试-项目单条验收(子流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\09.数据列表前置导航\导航测试-项目合并验收(父流程).xml	
+@流程:导航测试-项目合并验收(父流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\09.数据列表前置导航\简单导航-单条模式.xml	
+@流程:简单导航-单条模式装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\09.数据列表前置导航\自定义URL前置导航.xml	
+@流程:自定义URL导航装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\09.数据列表前置导航\子父流程-前置导航-合卷审批模式\分段项目申请(子流程).xml	
+@流程:分段项目申请(子流程)装载成功。	
+@开始调度流程模板文件:D:\ccflow\CCFlow\WF\Data\FlowDemo\Flow\09.数据列表前置导航\子父流程-前置导航-合卷审批模式\总承包项目合卷审批(父流程).xml	
+@流程:总承包项目合卷审批(父流程)装载成功。
+16日11时32分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=111        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_01')) AS X ) AND FK_MapData='Demo_01',异常信息:列名 'GroupID' 无效。
+16日11时32分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=113        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_02')) AS X ) AND FK_MapData='Demo_02',异常信息:列名 'GroupID' 无效。
+16日11时32分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=133        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_03')) AS X ) AND FK_MapData='Demo_03',异常信息:列名 'GroupID' 无效。
+16日11时32分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=137        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_04')) AS X ) AND FK_MapData='Demo_04',异常信息:列名 'GroupID' 无效。
+16日11时32分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=418        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND101')) AS X ) AND FK_MapData='ND101',异常信息:列名 'GroupID' 无效。
+16日11时32分59秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+16日11时32分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=419        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND102')) AS X ) AND FK_MapData='ND102',异常信息:列名 'GroupID' 无效。
+16日11时32分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=421        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND103')) AS X ) AND FK_MapData='ND103',异常信息:列名 'GroupID' 无效。
+16日11时32分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=423        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND104')) AS X ) AND FK_MapData='ND104',异常信息:列名 'GroupID' 无效。
+16日11时33分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=425        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND199')) AS X ) AND FK_MapData='ND199',异常信息:列名 'GroupID' 无效。
+16日11时33分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=386        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND201')) AS X ) AND FK_MapData='ND201',异常信息:列名 'GroupID' 无效。
+16日11时33分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=391        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND202')) AS X ) AND FK_MapData='ND202',异常信息:列名 'GroupID' 无效。
+16日11时33分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=389        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND203')) AS X ) AND FK_MapData='ND203',异常信息:列名 'GroupID' 无效。
+16日11时33分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=393        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND204')) AS X ) AND FK_MapData='ND204',异常信息:列名 'GroupID' 无效。
+16日11时33分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=390        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND205')) AS X ) AND FK_MapData='ND205',异常信息:列名 'GroupID' 无效。
+16日11时33分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=394        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND206')) AS X ) AND FK_MapData='ND206',异常信息:列名 'GroupID' 无效。
+16日11时33分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=392        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND207')) AS X ) AND FK_MapData='ND207',异常信息:列名 'GroupID' 无效。
+16日11时33分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=388        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND299')) AS X ) AND FK_MapData='ND299',异常信息:列名 'GroupID' 无效。
+16日11时33分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1053        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND301')) AS X ) AND FK_MapData='ND301',异常信息:列名 'GroupID' 无效。
+16日11时33分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1055        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND302')) AS X ) AND FK_MapData='ND302',异常信息:列名 'GroupID' 无效。
+16日11时33分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=340        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND303')) AS X ) AND FK_MapData='ND303',异常信息:列名 'GroupID' 无效。
+16日11时33分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=341        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND304')) AS X ) AND FK_MapData='ND304',异常信息:列名 'GroupID' 无效。
+16日11时33分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1057        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND399')) AS X ) AND FK_MapData='ND399',异常信息:列名 'GroupID' 无效。
+16日11时33分07秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=151        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc01')) AS X ) AND FK_MapData='Demo_Inc01',异常信息:列名 'GroupID' 无效。
+16日11时33分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=153        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc02')) AS X ) AND FK_MapData='Demo_Inc02',异常信息:列名 'GroupID' 无效。
+16日11时33分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=155        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc03')) AS X ) AND FK_MapData='Demo_Inc03',异常信息:列名 'GroupID' 无效。
+16日11时33分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=161        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc04')) AS X ) AND FK_MapData='Demo_Inc04',异常信息:列名 'GroupID' 无效。
+16日11时33分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=167        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc05')) AS X ) AND FK_MapData='Demo_Inc05',异常信息:列名 'GroupID' 无效。
+16日11时33分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=173        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc06')) AS X ) AND FK_MapData='Demo_Inc06',异常信息:列名 'GroupID' 无效。
+16日11时33分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=179        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_Inc07')) AS X ) AND FK_MapData='Demo_Inc07',异常信息:列名 'GroupID' 无效。
+16日11时33分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1061        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND401')) AS X ) AND FK_MapData='ND401',异常信息:列名 'GroupID' 无效。
+16日11时33分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1063        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND402')) AS X ) AND FK_MapData='ND402',异常信息:列名 'GroupID' 无效。
+16日11时33分09秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1065        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND499')) AS X ) AND FK_MapData='ND499',异常信息:列名 'GroupID' 无效。
+16日11时33分12秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=668        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND501')) AS X ) AND FK_MapData='ND501',异常信息:列名 'GroupID' 无效。
+16日11时33分12秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=670        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND502')) AS X ) AND FK_MapData='ND502',异常信息:列名 'GroupID' 无效。
+16日11时33分12秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=671        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND599')) AS X ) AND FK_MapData='ND599',异常信息:列名 'GroupID' 无效。
+16日11时33分13秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=613        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND601')) AS X ) AND FK_MapData='ND601',异常信息:列名 'GroupID' 无效。
+16日11时33分13秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=612        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND602')) AS X ) AND FK_MapData='ND602',异常信息:列名 'GroupID' 无效。
+16日11时33分14秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=611        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND603')) AS X ) AND FK_MapData='ND603',异常信息:列名 'GroupID' 无效。
+16日11时33分14秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1071        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND604')) AS X ) AND FK_MapData='ND604',异常信息:列名 'GroupID' 无效。
+16日11时33分14秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1073        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND699')) AS X ) AND FK_MapData='ND699',异常信息:列名 'GroupID' 无效。
+16日11时33分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1077        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND701')) AS X ) AND FK_MapData='ND701',异常信息:列名 'GroupID' 无效。
+16日11时33分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1079        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND702')) AS X ) AND FK_MapData='ND702',异常信息:列名 'GroupID' 无效。
+16日11时33分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1081        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND703')) AS X ) AND FK_MapData='ND703',异常信息:列名 'GroupID' 无效。
+16日11时33分16秒Fatal:System');"SQL=select UserNo as No, UserName as Name from ND2701 where oid=0 Exception=对象名 'ND2701' 无效。
+16日11时33分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1083        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND704')) AS X ) AND FK_MapData='ND704',异常信息:列名 'GroupID' 无效。
+16日11时33分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1085        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND799')) AS X ) AND FK_MapData='ND799',异常信息:列名 'GroupID' 无效。
+16日11时33分18秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=530        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND801')) AS X ) AND FK_MapData='ND801',异常信息:列名 'GroupID' 无效。
+16日11时33分18秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=531        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND802')) AS X ) AND FK_MapData='ND802',异常信息:列名 'GroupID' 无效。
+16日11时33分18秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1089        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND899')) AS X ) AND FK_MapData='ND899',异常信息:列名 'GroupID' 无效。
+16日11时33分20秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=710        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND901')) AS X ) AND FK_MapData='ND901',异常信息:列名 'GroupID' 无效。
+16日11时33分20秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=711        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND902')) AS X ) AND FK_MapData='ND902',异常信息:列名 'GroupID' 无效。
+16日11时33分21秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=712        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND903')) AS X ) AND FK_MapData='ND903',异常信息:列名 'GroupID' 无效。
+16日11时33分21秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=713        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND904')) AS X ) AND FK_MapData='ND904',异常信息:列名 'GroupID' 无效。
+16日11时33分21秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=709        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND999')) AS X ) AND FK_MapData='ND999',异常信息:列名 'GroupID' 无效。
+16日11时33分23秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=225        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK01')) AS X ) AND FK_MapData='Demo_HK01',异常信息:列名 'GroupID' 无效。
+16日11时33分23秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=223        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK02')) AS X ) AND FK_MapData='Demo_HK02',异常信息:列名 'GroupID' 无效。
+16日11时33分23秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=221        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HK03')) AS X ) AND FK_MapData='Demo_HK03',异常信息:列名 'GroupID' 无效。
+16日11时33分23秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1095        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1001')) AS X ) AND FK_MapData='ND1001',异常信息:列名 'GroupID' 无效。
+16日11时33分23秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1097        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1002')) AS X ) AND FK_MapData='ND1002',异常信息:列名 'GroupID' 无效。
+16日11时33分23秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1099        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1003')) AS X ) AND FK_MapData='ND1003',异常信息:列名 'GroupID' 无效。
+16日11时33分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1101        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1004')) AS X ) AND FK_MapData='ND1004',异常信息:列名 'GroupID' 无效。
+16日11时33分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1103        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1005')) AS X ) AND FK_MapData='ND1005',异常信息:列名 'GroupID' 无效。
+16日11时33分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1105        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1006')) AS X ) AND FK_MapData='ND1006',异常信息:列名 'GroupID' 无效。
+16日11时33分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1107        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1007')) AS X ) AND FK_MapData='ND1007',异常信息:列名 'GroupID' 无效。
+16日11时33分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=693        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1008')) AS X ) AND FK_MapData='ND1008',异常信息:列名 'GroupID' 无效。
+16日11时33分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=692        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1099')) AS X ) AND FK_MapData='ND1099',异常信息:列名 'GroupID' 无效。
+16日11时33分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=739        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1101')) AS X ) AND FK_MapData='ND1101',异常信息:列名 'GroupID' 无效。
+16日11时33分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=740        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1103')) AS X ) AND FK_MapData='ND1103',异常信息:列名 'GroupID' 无效。
+16日11时33分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=741        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1199')) AS X ) AND FK_MapData='ND1199',异常信息:列名 'GroupID' 无效。
+16日11时33分28秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1113        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1201')) AS X ) AND FK_MapData='ND1201',异常信息:列名 'GroupID' 无效。
+16日11时33分28秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=727        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1299')) AS X ) AND FK_MapData='ND1299',异常信息:列名 'GroupID' 无效。
+16日11时33分30秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1117        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1301')) AS X ) AND FK_MapData='ND1301',异常信息:列名 'GroupID' 无效。
+16日11时33分30秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=729        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1399')) AS X ) AND FK_MapData='ND1399',异常信息:列名 'GroupID' 无效。
+16日11时33分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=723        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1401')) AS X ) AND FK_MapData='ND1401',异常信息:列名 'GroupID' 无效。
+16日11时33分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1121        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1402')) AS X ) AND FK_MapData='ND1402',异常信息:列名 'GroupID' 无效。
+16日11时33分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1123        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1499')) AS X ) AND FK_MapData='ND1499',异常信息:列名 'GroupID' 无效。
+16日11时33分34秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1127        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1501')) AS X ) AND FK_MapData='ND1501',异常信息:列名 'GroupID' 无效。
+16日11时33分34秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1129        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1599')) AS X ) AND FK_MapData='ND1599',异常信息:列名 'GroupID' 无效。
+16日11时33分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=785        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1801')) AS X ) AND FK_MapData='ND1801',异常信息:列名 'GroupID' 无效。
+16日11时33分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=786        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1802')) AS X ) AND FK_MapData='ND1802',异常信息:列名 'GroupID' 无效。
+16日11时33分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=787        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1803')) AS X ) AND FK_MapData='ND1803',异常信息:列名 'GroupID' 无效。
+16日11时33分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1133        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1804')) AS X ) AND FK_MapData='ND1804',异常信息:列名 'GroupID' 无效。
+16日11时33分37秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1135        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1899')) AS X ) AND FK_MapData='ND1899',异常信息:列名 'GroupID' 无效。
+16日11时33分38秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1139        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2301')) AS X ) AND FK_MapData='ND2301',异常信息:列名 'GroupID' 无效。
+16日11时33分38秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1141        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2302')) AS X ) AND FK_MapData='ND2302',异常信息:列名 'GroupID' 无效。
+16日11时33分39秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1143        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2399')) AS X ) AND FK_MapData='ND2399',异常信息:列名 'GroupID' 无效。
+16日11时33分40秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1147        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2401')) AS X ) AND FK_MapData='ND2401',异常信息:列名 'GroupID' 无效。
+16日11时33分40秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1149        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2402')) AS X ) AND FK_MapData='ND2402',异常信息:列名 'GroupID' 无效。
+16日11时33分41秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1151        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2499')) AS X ) AND FK_MapData='ND2499',异常信息:列名 'GroupID' 无效。
+16日11时33分42秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1155        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2501')) AS X ) AND FK_MapData='ND2501',异常信息:列名 'GroupID' 无效。
+16日11时33分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1157        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2502')) AS X ) AND FK_MapData='ND2502',异常信息:列名 'GroupID' 无效。
+16日11时33分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1159        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2599')) AS X ) AND FK_MapData='ND2599',异常信息:列名 'GroupID' 无效。
+16日11时33分44秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1163        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2601')) AS X ) AND FK_MapData='ND2601',异常信息:列名 'GroupID' 无效。
+16日11时33分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1165        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2602')) AS X ) AND FK_MapData='ND2602',异常信息:列名 'GroupID' 无效。
+16日11时33分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1167        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2699')) AS X ) AND FK_MapData='ND2699',异常信息:列名 'GroupID' 无效。
+16日11时33分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1171        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2701')) AS X ) AND FK_MapData='ND2701',异常信息:列名 'GroupID' 无效。
+16日11时33分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1173        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2703')) AS X ) AND FK_MapData='ND2703',异常信息:列名 'GroupID' 无效。
+16日11时33分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1175        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2704')) AS X ) AND FK_MapData='ND2704',异常信息:列名 'GroupID' 无效。
+16日11时33分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1177        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2705')) AS X ) AND FK_MapData='ND2705',异常信息:列名 'GroupID' 无效。
+16日11时33分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1179        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2706')) AS X ) AND FK_MapData='ND2706',异常信息:列名 'GroupID' 无效。
+16日11时33分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1181        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2799')) AS X ) AND FK_MapData='ND2799',异常信息:列名 'GroupID' 无效。
+16日11时33分49秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1185        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2801')) AS X ) AND FK_MapData='ND2801',异常信息:列名 'GroupID' 无效。
+16日11时33分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1187        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2802')) AS X ) AND FK_MapData='ND2802',异常信息:列名 'GroupID' 无效。
+16日11时33分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1189        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2803')) AS X ) AND FK_MapData='ND2803',异常信息:列名 'GroupID' 无效。
+16日11时33分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1191        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2899')) AS X ) AND FK_MapData='ND2899',异常信息:列名 'GroupID' 无效。
+16日11时33分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1195        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2901')) AS X ) AND FK_MapData='ND2901',异常信息:列名 'GroupID' 无效。
+16日11时33分52秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1197        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2902')) AS X ) AND FK_MapData='ND2902',异常信息:列名 'GroupID' 无效。
+16日11时33分52秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1199        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND2999')) AS X ) AND FK_MapData='ND2999',异常信息:列名 'GroupID' 无效。
+16日11时33分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1203        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3001')) AS X ) AND FK_MapData='ND3001',异常信息:列名 'GroupID' 无效。
+16日11时33分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1205        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3002')) AS X ) AND FK_MapData='ND3002',异常信息:列名 'GroupID' 无效。
+16日11时33分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1207        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3099')) AS X ) AND FK_MapData='ND3099',异常信息:列名 'GroupID' 无效。
+16日11时33分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1211        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3101')) AS X ) AND FK_MapData='ND3101',异常信息:列名 'GroupID' 无效。
+16日11时33分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1213        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3102')) AS X ) AND FK_MapData='ND3102',异常信息:列名 'GroupID' 无效。
+16日11时33分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1215        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3199')) AS X ) AND FK_MapData='ND3199',异常信息:列名 'GroupID' 无效。
+16日11时33分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1219        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3201')) AS X ) AND FK_MapData='ND3201',异常信息:列名 'GroupID' 无效。
+16日11时33分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1221        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3202')) AS X ) AND FK_MapData='ND3202',异常信息:列名 'GroupID' 无效。
+16日11时33分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1223        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3203')) AS X ) AND FK_MapData='ND3203',异常信息:列名 'GroupID' 无效。
+16日11时33分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1225        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3204')) AS X ) AND FK_MapData='ND3204',异常信息:列名 'GroupID' 无效。
+16日11时33分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1227        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3205')) AS X ) AND FK_MapData='ND3205',异常信息:列名 'GroupID' 无效。
+16日11时34分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1229        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3206')) AS X ) AND FK_MapData='ND3206',异常信息:列名 'GroupID' 无效。
+16日11时34分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1231        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3207')) AS X ) AND FK_MapData='ND3207',异常信息:列名 'GroupID' 无效。
+16日11时34分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1233        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3299')) AS X ) AND FK_MapData='ND3299',异常信息:列名 'GroupID' 无效。
+16日11时34分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=586        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3301')) AS X ) AND FK_MapData='ND3301',异常信息:列名 'GroupID' 无效。
+16日11时34分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=588        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3302')) AS X ) AND FK_MapData='ND3302',异常信息:列名 'GroupID' 无效。
+16日11时34分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=587        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3303')) AS X ) AND FK_MapData='ND3303',异常信息:列名 'GroupID' 无效。
+16日11时34分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=591        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3399')) AS X ) AND FK_MapData='ND3399',异常信息:列名 'GroupID' 无效。
+16日11时34分04秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1239        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3601')) AS X ) AND FK_MapData='ND3601',异常信息:列名 'GroupID' 无效。
+16日11时34分04秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=835        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3602')) AS X ) AND FK_MapData='ND3602',异常信息:列名 'GroupID' 无效。
+16日11时34分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1241        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3699')) AS X ) AND FK_MapData='ND3699',异常信息:列名 'GroupID' 无效。
+16日11时34分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=656        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3801')) AS X ) AND FK_MapData='ND3801',异常信息:列名 'GroupID' 无效。
+16日11时34分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=657        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3802')) AS X ) AND FK_MapData='ND3802',异常信息:列名 'GroupID' 无效。
+16日11时34分09秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=658        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND3899')) AS X ) AND FK_MapData='ND3899',异常信息:列名 'GroupID' 无效。
+16日11时34分11秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=567        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND4401')) AS X ) AND FK_MapData='ND4401',异常信息:列名 'GroupID' 无效。
+16日11时34分11秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=568        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND4402')) AS X ) AND FK_MapData='ND4402',异常信息:列名 'GroupID' 无效。
+16日11时34分11秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=569        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND4403')) AS X ) AND FK_MapData='ND4403',异常信息:列名 'GroupID' 无效。
+16日11时34分11秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=570        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND4404')) AS X ) AND FK_MapData='ND4404',异常信息:列名 'GroupID' 无效。
+16日11时34分11秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=571        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND4499')) AS X ) AND FK_MapData='ND4499',异常信息:列名 'GroupID' 无效。
+16日11时34分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=525        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5001')) AS X ) AND FK_MapData='ND5001',异常信息:列名 'GroupID' 无效。
+16日11时34分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=524        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5002')) AS X ) AND FK_MapData='ND5002',异常信息:列名 'GroupID' 无效。
+16日11时34分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1247        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5003')) AS X ) AND FK_MapData='ND5003',异常信息:列名 'GroupID' 无效。
+16日11时34分17秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1249        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5004')) AS X ) AND FK_MapData='ND5004',异常信息:列名 'GroupID' 无效。
+16日11时34分17秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1251        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5099')) AS X ) AND FK_MapData='ND5099',异常信息:列名 'GroupID' 无效。
+16日11时34分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=831        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5401')) AS X ) AND FK_MapData='ND5401',异常信息:列名 'GroupID' 无效。
+16日11时34分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1255        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5402')) AS X ) AND FK_MapData='ND5402',异常信息:列名 'GroupID' 无效。
+16日11时34分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1257        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5403')) AS X ) AND FK_MapData='ND5403',异常信息:列名 'GroupID' 无效。
+16日11时34分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1259        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5405')) AS X ) AND FK_MapData='ND5405',异常信息:列名 'GroupID' 无效。
+16日11时34分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1261        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5406')) AS X ) AND FK_MapData='ND5406',异常信息:列名 'GroupID' 无效。
+16日11时34分20秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1263        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5407')) AS X ) AND FK_MapData='ND5407',异常信息:列名 'GroupID' 无效。
+16日11时34分20秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1265        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5499')) AS X ) AND FK_MapData='ND5499',异常信息:列名 'GroupID' 无效。
+16日11时34分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=508        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5501')) AS X ) AND FK_MapData='ND5501',异常信息:列名 'GroupID' 无效。
+16日11时34分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=510        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5502')) AS X ) AND FK_MapData='ND5502',异常信息:列名 'GroupID' 无效。
+16日11时34分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=514        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5503')) AS X ) AND FK_MapData='ND5503',异常信息:列名 'GroupID' 无效。
+16日11时34分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=512        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5599')) AS X ) AND FK_MapData='ND5599',异常信息:列名 'GroupID' 无效。
+16日11时34分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=839        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5601')) AS X ) AND FK_MapData='ND5601',异常信息:列名 'GroupID' 无效。
+16日11时34分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=840        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5602')) AS X ) AND FK_MapData='ND5602',异常信息:列名 'GroupID' 无效。
+16日11时34分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=841        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5699')) AS X ) AND FK_MapData='ND5699',异常信息:列名 'GroupID' 无效。
+16日11时34分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=852        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5701')) AS X ) AND FK_MapData='ND5701',异常信息:列名 'GroupID' 无效。
+16日11时34分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=853        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5702')) AS X ) AND FK_MapData='ND5702',异常信息:列名 'GroupID' 无效。
+16日11时34分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=855        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5703')) AS X ) AND FK_MapData='ND5703',异常信息:列名 'GroupID' 无效。
+16日11时34分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=858        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND5799')) AS X ) AND FK_MapData='ND5799',异常信息:列名 'GroupID' 无效。
+16日11时34分28秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=863        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6201')) AS X ) AND FK_MapData='ND6201',异常信息:列名 'GroupID' 无效。
+16日11时34分29秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1273        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6202')) AS X ) AND FK_MapData='ND6202',异常信息:列名 'GroupID' 无效。
+16日11时34分29秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1275        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6203')) AS X ) AND FK_MapData='ND6203',异常信息:列名 'GroupID' 无效。
+16日11时34分29秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1277        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6299')) AS X ) AND FK_MapData='ND6299',异常信息:列名 'GroupID' 无效。
+16日11时34分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1281        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6301')) AS X ) AND FK_MapData='ND6301',异常信息:列名 'GroupID' 无效。
+16日11时34分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1283        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6302')) AS X ) AND FK_MapData='ND6302',异常信息:列名 'GroupID' 无效。
+16日11时34分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1285        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6303')) AS X ) AND FK_MapData='ND6303',异常信息:列名 'GroupID' 无效。
+16日11时34分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1287        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6304')) AS X ) AND FK_MapData='ND6304',异常信息:列名 'GroupID' 无效。
+16日11时34分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1289        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6399')) AS X ) AND FK_MapData='ND6399',异常信息:列名 'GroupID' 无效。
+16日11时34分34秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=292        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6801')) AS X ) AND FK_MapData='ND6801',异常信息:列名 'GroupID' 无效。
+16日11时34分35秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1293        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6899')) AS X ) AND FK_MapData='ND6899',异常信息:列名 'GroupID' 无效。
+16日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=541        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6901')) AS X ) AND FK_MapData='ND6901',异常信息:列名 'GroupID' 无效。
+16日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=542        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6902')) AS X ) AND FK_MapData='ND6902',异常信息:列名 'GroupID' 无效。
+16日11时34分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=544        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND6999')) AS X ) AND FK_MapData='ND6999',异常信息:列名 'GroupID' 无效。
+16日11时34分38秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=296        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7101')) AS X ) AND FK_MapData='ND7101',异常信息:列名 'GroupID' 无效。
+16日11时34分38秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=297        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7102')) AS X ) AND FK_MapData='ND7102',异常信息:列名 'GroupID' 无效。
+16日11时34分38秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1297        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7103')) AS X ) AND FK_MapData='ND7103',异常信息:列名 'GroupID' 无效。
+16日11时34分38秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1299        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7199')) AS X ) AND FK_MapData='ND7199',异常信息:列名 'GroupID' 无效。
+16日11时34分40秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=833        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7401')) AS X ) AND FK_MapData='ND7401',异常信息:列名 'GroupID' 无效。
+16日11时34分40秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1303        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7499')) AS X ) AND FK_MapData='ND7499',异常信息:列名 'GroupID' 无效。
+16日11时34分42秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=867        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7501')) AS X ) AND FK_MapData='ND7501',异常信息:列名 'GroupID' 无效。
+16日11时34分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1309        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7502')) AS X ) AND FK_MapData='ND7502',异常信息:列名 'GroupID' 无效。
+16日11时34分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1311        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7599')) AS X ) AND FK_MapData='ND7599',异常信息:列名 'GroupID' 无效。
+16日11时34分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=300        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7901')) AS X ) AND FK_MapData='ND7901',异常信息:列名 'GroupID' 无效。
+16日11时34分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=301        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7902')) AS X ) AND FK_MapData='ND7902',异常信息:列名 'GroupID' 无效。
+16日11时34分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1315        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND7999')) AS X ) AND FK_MapData='ND7999',异常信息:列名 'GroupID' 无效。
+16日11时34分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=304        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8001')) AS X ) AND FK_MapData='ND8001',异常信息:列名 'GroupID' 无效。
+16日11时34分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=305        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8099')) AS X ) AND FK_MapData='ND8099',异常信息:列名 'GroupID' 无效。
+16日11时34分49秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1027        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8101')) AS X ) AND FK_MapData='ND8101',异常信息:列名 'GroupID' 无效。
+16日11时34分49秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1028        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8199')) AS X ) AND FK_MapData='ND8199',异常信息:列名 'GroupID' 无效。
+16日11时34分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1017        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8201')) AS X ) AND FK_MapData='ND8201',异常信息:列名 'GroupID' 无效。
+16日11时34分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1321        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8299')) AS X ) AND FK_MapData='ND8299',异常信息:列名 'GroupID' 无效。
+16日11时34分52秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1019        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8301')) AS X ) AND FK_MapData='ND8301',异常信息:列名 'GroupID' 无效。
+16日11时34分52秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1325        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8399')) AS X ) AND FK_MapData='ND8399',异常信息:列名 'GroupID' 无效。
+16日11时34分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=231        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='GT_LXSQ')) AS X ) AND FK_MapData='GT_LXSQ',异常信息:列名 'GroupID' 无效。
+16日11时34分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=229        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='LXSQS')) AS X ) AND FK_MapData='LXSQS',异常信息:列名 'GroupID' 无效。
+16日11时34分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=227        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='SPGW')) AS X ) AND FK_MapData='SPGW',异常信息:列名 'GroupID' 无效。
+16日11时34分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=941        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8401')) AS X ) AND FK_MapData='ND8401',异常信息:列名 'GroupID' 无效。
+16日11时34分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1329        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8499')) AS X ) AND FK_MapData='ND8499',异常信息:列名 'GroupID' 无效。
+16日11时34分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=231        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='GT_LXSQ')) AS X ) AND FK_MapData='GT_LXSQ',异常信息:列名 'GroupID' 无效。
+16日11时34分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=233        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='jgyssq')) AS X ) AND FK_MapData='jgyssq',异常信息:列名 'GroupID' 无效。
+16日11时34分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=229        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='LXSQS')) AS X ) AND FK_MapData='LXSQS',异常信息:列名 'GroupID' 无效。
+16日11时34分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=227        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='SPGW')) AS X ) AND FK_MapData='SPGW',异常信息:列名 'GroupID' 无效。
+16日11时34分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=239        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='YSXM')) AS X ) AND FK_MapData='YSXM',异常信息:列名 'GroupID' 无效。
+16日11时34分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=235        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='YSXX')) AS X ) AND FK_MapData='YSXX',异常信息:列名 'GroupID' 无效。
+16日11时34分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=943        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8501')) AS X ) AND FK_MapData='ND8501',异常信息:列名 'GroupID' 无效。
+16日11时34分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1333        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8599')) AS X ) AND FK_MapData='ND8599',异常信息:列名 'GroupID' 无效。
+16日11时34分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1023        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8601')) AS X ) AND FK_MapData='ND8601',异常信息:列名 'GroupID' 无效。
+16日11时34分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1337        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8699')) AS X ) AND FK_MapData='ND8699',异常信息:列名 'GroupID' 无效。
+16日11时35分00秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = SheetEleRight
+16日11时35分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=945        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8701')) AS X ) AND FK_MapData='ND8701',异常信息:列名 'GroupID' 无效。
+16日11时35分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1341        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND8799')) AS X ) AND FK_MapData='ND8799',异常信息:列名 'GroupID' 无效。
+16日11时35分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=349        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND9501')) AS X ) AND FK_MapData='ND9501',异常信息:列名 'GroupID' 无效。
+16日11时35分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=351        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND9502')) AS X ) AND FK_MapData='ND9502',异常信息:列名 'GroupID' 无效。
+16日11时35分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=350        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND9599')) AS X ) AND FK_MapData='ND9599',异常信息:列名 'GroupID' 无效。
+16日11时35分04秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=521        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND9901')) AS X ) AND FK_MapData='ND9901',异常信息:列名 'GroupID' 无效。
+16日11时35分04秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1347        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND9902')) AS X ) AND FK_MapData='ND9902',异常信息:列名 'GroupID' 无效。
+16日11时35分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1349        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND9903')) AS X ) AND FK_MapData='ND9903',异常信息:列名 'GroupID' 无效。
+16日11时35分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1351        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND9999')) AS X ) AND FK_MapData='ND9999',异常信息:列名 'GroupID' 无效。
+16日11时35分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=791        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11001')) AS X ) AND FK_MapData='ND11001',异常信息:列名 'GroupID' 无效。
+16日11时35分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1355        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11002')) AS X ) AND FK_MapData='ND11002',异常信息:列名 'GroupID' 无效。
+16日11时35分07秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1357        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11003')) AS X ) AND FK_MapData='ND11003',异常信息:列名 'GroupID' 无效。
+16日11时35分09秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=767        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11401')) AS X ) AND FK_MapData='ND11401',异常信息:列名 'GroupID' 无效。
+16日11时35分09秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1361        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11402')) AS X ) AND FK_MapData='ND11402',异常信息:列名 'GroupID' 无效。
+16日11时35分09秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1363        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11403')) AS X ) AND FK_MapData='ND11403',异常信息:列名 'GroupID' 无效。
+16日11时35分11秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=757        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11501')) AS X ) AND FK_MapData='ND11501',异常信息:列名 'GroupID' 无效。
+16日11时35分11秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1367        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11502')) AS X ) AND FK_MapData='ND11502',异常信息:列名 'GroupID' 无效。
+16日11时35分13秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=819        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11601')) AS X ) AND FK_MapData='ND11601',异常信息:列名 'GroupID' 无效。
+16日11时35分13秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1371        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11602')) AS X ) AND FK_MapData='ND11602',异常信息:列名 'GroupID' 无效。
+16日11时35分13秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1373        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11603')) AS X ) AND FK_MapData='ND11603',异常信息:列名 'GroupID' 无效。
+16日11时35分14秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1375        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11604')) AS X ) AND FK_MapData='ND11604',异常信息:列名 'GroupID' 无效。
+16日11时35分14秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1377        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11605')) AS X ) AND FK_MapData='ND11605',异常信息:列名 'GroupID' 无效。
+16日11时35分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=451        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11701')) AS X ) AND FK_MapData='ND11701',异常信息:列名 'GroupID' 无效。
+16日11时35分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=456        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11702')) AS X ) AND FK_MapData='ND11702',异常信息:列名 'GroupID' 无效。
+16日11时35分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=457        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11703')) AS X ) AND FK_MapData='ND11703',异常信息:列名 'GroupID' 无效。
+16日11时35分17秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=455        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11704')) AS X ) AND FK_MapData='ND11704',异常信息:列名 'GroupID' 无效。
+16日11时35分17秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=453        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11705')) AS X ) AND FK_MapData='ND11705',异常信息:列名 'GroupID' 无效。
+16日11时35分17秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=454        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11706')) AS X ) AND FK_MapData='ND11706',异常信息:列名 'GroupID' 无效。
+16日11时35分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=365        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11801')) AS X ) AND FK_MapData='ND11801',异常信息:列名 'GroupID' 无效。
+16日11时35分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=366        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11802')) AS X ) AND FK_MapData='ND11802',异常信息:列名 'GroupID' 无效。
+16日11时35分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=368        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11803')) AS X ) AND FK_MapData='ND11803',异常信息:列名 'GroupID' 无效。
+16日11时35分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=369        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11804')) AS X ) AND FK_MapData='ND11804',异常信息:列名 'GroupID' 无效。
+16日11时35分21秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=869        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11901')) AS X ) AND FK_MapData='ND11901',异常信息:列名 'GroupID' 无效。
+16日11时35分21秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1381        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11902')) AS X ) AND FK_MapData='ND11902',异常信息:列名 'GroupID' 无效。
+16日11时35分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1383        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11903')) AS X ) AND FK_MapData='ND11903',异常信息:列名 'GroupID' 无效。
+16日11时35分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1385        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11904')) AS X ) AND FK_MapData='ND11904',异常信息:列名 'GroupID' 无效。
+16日11时35分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1387        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11905')) AS X ) AND FK_MapData='ND11905',异常信息:列名 'GroupID' 无效。
+16日11时35分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1389        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11906')) AS X ) AND FK_MapData='ND11906',异常信息:列名 'GroupID' 无效。
+16日11时35分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1391        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11907')) AS X ) AND FK_MapData='ND11907',异常信息:列名 'GroupID' 无效。
+16日11时35分23秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1393        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND11908')) AS X ) AND FK_MapData='ND11908',异常信息:列名 'GroupID' 无效。
+16日11时35分25秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=345        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12001')) AS X ) AND FK_MapData='ND12001',异常信息:列名 'GroupID' 无效。
+16日11时35分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1397        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12002')) AS X ) AND FK_MapData='ND12002',异常信息:列名 'GroupID' 无效。
+16日11时35分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1399        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12003')) AS X ) AND FK_MapData='ND12003',异常信息:列名 'GroupID' 无效。
+16日11时35分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1401        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12004')) AS X ) AND FK_MapData='ND12004',异常信息:列名 'GroupID' 无效。
+16日11时35分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1403        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12005')) AS X ) AND FK_MapData='ND12005',异常信息:列名 'GroupID' 无效。
+16日11时35分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1405        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12006')) AS X ) AND FK_MapData='ND12006',异常信息:列名 'GroupID' 无效。
+16日11时35分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1407        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12007')) AS X ) AND FK_MapData='ND12007',异常信息:列名 'GroupID' 无效。
+16日11时35分29秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=343        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12101')) AS X ) AND FK_MapData='ND12101',异常信息:列名 'GroupID' 无效。
+16日11时35分29秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1411        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12102')) AS X ) AND FK_MapData='ND12102',异常信息:列名 'GroupID' 无效。
+16日11时35分29秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1413        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12103')) AS X ) AND FK_MapData='ND12103',异常信息:列名 'GroupID' 无效。
+16日11时35分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=519        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12201')) AS X ) AND FK_MapData='ND12201',异常信息:列名 'GroupID' 无效。
+16日11时35分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1417        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12202')) AS X ) AND FK_MapData='ND12202',异常信息:列名 'GroupID' 无效。
+16日11时35分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1419        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12203')) AS X ) AND FK_MapData='ND12203',异常信息:列名 'GroupID' 无效。
+16日11时35分33秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=917        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12301')) AS X ) AND FK_MapData='ND12301',异常信息:列名 'GroupID' 无效。
+16日11时35分34秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=918        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12302')) AS X ) AND FK_MapData='ND12302',异常信息:列名 'GroupID' 无效。
+16日11时35分34秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=920        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12303')) AS X ) AND FK_MapData='ND12303',异常信息:列名 'GroupID' 无效。
+16日11时35分34秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=923        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12304')) AS X ) AND FK_MapData='ND12304',异常信息:列名 'GroupID' 无效。
+16日11时35分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=883        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12401')) AS X ) AND FK_MapData='ND12401',异常信息:列名 'GroupID' 无效。
+16日11时35分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=884        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12402')) AS X ) AND FK_MapData='ND12402',异常信息:列名 'GroupID' 无效。
+16日11时35分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=886        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12403')) AS X ) AND FK_MapData='ND12403',异常信息:列名 'GroupID' 无效。
+16日11时35分37秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=889        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12404')) AS X ) AND FK_MapData='ND12404',异常信息:列名 'GroupID' 无效。
+16日11时35分39秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=899        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12501')) AS X ) AND FK_MapData='ND12501',异常信息:列名 'GroupID' 无效。
+16日11时35分39秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=900        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12502')) AS X ) AND FK_MapData='ND12502',异常信息:列名 'GroupID' 无效。
+16日11时35分41秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=906        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12601')) AS X ) AND FK_MapData='ND12601',异常信息:列名 'GroupID' 无效。
+16日11时35分41秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=907        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12602')) AS X ) AND FK_MapData='ND12602',异常信息:列名 'GroupID' 无效。
+16日11时35分41秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1429        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12603')) AS X ) AND FK_MapData='ND12603',异常信息:列名 'GroupID' 无效。
+16日11时35分41秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1431        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12604')) AS X ) AND FK_MapData='ND12604',异常信息:列名 'GroupID' 无效。
+16日11时35分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=895        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12701')) AS X ) AND FK_MapData='ND12701',异常信息:列名 'GroupID' 无效。
+16日11时35分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1435        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12702')) AS X ) AND FK_MapData='ND12702',异常信息:列名 'GroupID' 无效。
+16日11时35分44秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1437        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12703')) AS X ) AND FK_MapData='ND12703',异常信息:列名 'GroupID' 无效。
+16日11时35分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=893        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12801')) AS X ) AND FK_MapData='ND12801',异常信息:列名 'GroupID' 无效。
+16日11时35分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1441        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12802')) AS X ) AND FK_MapData='ND12802',异常信息:列名 'GroupID' 无效。
+16日11时35分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1443        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12803')) AS X ) AND FK_MapData='ND12803',异常信息:列名 'GroupID' 无效。
+16日11时35分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=903        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12901')) AS X ) AND FK_MapData='ND12901',异常信息:列名 'GroupID' 无效。
+16日11时35分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1447        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12902')) AS X ) AND FK_MapData='ND12902',异常信息:列名 'GroupID' 无效。
+16日11时35分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1449        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND12903')) AS X ) AND FK_MapData='ND12903',异常信息:列名 'GroupID' 无效。
+16日11时35分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=733        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13001')) AS X ) AND FK_MapData='ND13001',异常信息:列名 'GroupID' 无效。
+16日11时35分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=734        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13002')) AS X ) AND FK_MapData='ND13002',异常信息:列名 'GroupID' 无效。
+16日11时35分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=735        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13003')) AS X ) AND FK_MapData='ND13003',异常信息:列名 'GroupID' 无效。
+16日11时35分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1453        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13004')) AS X ) AND FK_MapData='ND13004',异常信息:列名 'GroupID' 无效。
+16日11时35分53秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=249        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_FrmSLExcel')) AS X ) AND FK_MapData='Demo_FrmSLExcel',异常信息:列名 'GroupID' 无效。
+16日11时35分53秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=253        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_FrmSLWord')) AS X ) AND FK_MapData='Demo_FrmSLWord',异常信息:列名 'GroupID' 无效。
+16日11时35分53秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=927        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13101')) AS X ) AND FK_MapData='ND13101',异常信息:列名 'GroupID' 无效。
+16日11时35分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1457        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13102')) AS X ) AND FK_MapData='ND13102',异常信息:列名 'GroupID' 无效。
+16日11时35分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1007        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13201')) AS X ) AND FK_MapData='ND13201',异常信息:列名 'GroupID' 无效。
+16日11时35分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1008        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13202')) AS X ) AND FK_MapData='ND13202',异常信息:列名 'GroupID' 无效。
+16日11时35分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1009        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13203')) AS X ) AND FK_MapData='ND13203',异常信息:列名 'GroupID' 无效。
+16日11时35分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1463        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13301')) AS X ) AND FK_MapData='ND13301',异常信息:列名 'GroupID' 无效。
+16日11时35分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1465        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13302')) AS X ) AND FK_MapData='ND13302',异常信息:列名 'GroupID' 无效。
+16日11时35分58秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1467        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13303')) AS X ) AND FK_MapData='ND13303',异常信息:列名 'GroupID' 无效。
+16日11时35分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1469        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13304')) AS X ) AND FK_MapData='ND13304',异常信息:列名 'GroupID' 无效。
+16日11时35分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1471        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13305')) AS X ) AND FK_MapData='ND13305',异常信息:列名 'GroupID' 无效。
+16日11时35分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1473        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13306')) AS X ) AND FK_MapData='ND13306',异常信息:列名 'GroupID' 无效。
+16日11时36分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1475        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13307')) AS X ) AND FK_MapData='ND13307',异常信息:列名 'GroupID' 无效。
+16日11时36分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1477        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13308')) AS X ) AND FK_MapData='ND13308',异常信息:列名 'GroupID' 无效。
+16日11时36分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1479        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13309')) AS X ) AND FK_MapData='ND13309',异常信息:列名 'GroupID' 无效。
+16日11时36分00秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1481        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13310')) AS X ) AND FK_MapData='ND13310',异常信息:列名 'GroupID' 无效。
+16日11时36分01秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1483        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13311')) AS X ) AND FK_MapData='ND13311',异常信息:列名 'GroupID' 无效。
+16日11时36分01秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1485        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13312')) AS X ) AND FK_MapData='ND13312',异常信息:列名 'GroupID' 无效。
+16日11时36分01秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1487        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13313')) AS X ) AND FK_MapData='ND13313',异常信息:列名 'GroupID' 无效。
+16日11时36分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1489        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13314')) AS X ) AND FK_MapData='ND13314',异常信息:列名 'GroupID' 无效。
+16日11时36分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1491        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13315')) AS X ) AND FK_MapData='ND13315',异常信息:列名 'GroupID' 无效。
+16日11时36分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1493        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13316')) AS X ) AND FK_MapData='ND13316',异常信息:列名 'GroupID' 无效。
+16日11时36分02秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1495        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13317')) AS X ) AND FK_MapData='ND13317',异常信息:列名 'GroupID' 无效。
+16日11时36分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1497        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13318')) AS X ) AND FK_MapData='ND13318',异常信息:列名 'GroupID' 无效。
+16日11时36分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=871        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13401')) AS X ) AND FK_MapData='ND13401',异常信息:列名 'GroupID' 无效。
+16日11时36分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1501        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13402')) AS X ) AND FK_MapData='ND13402',异常信息:列名 'GroupID' 无效。
+16日11时36分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=873        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13501')) AS X ) AND FK_MapData='ND13501',异常信息:列名 'GroupID' 无效。
+16日11时36分08秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1505        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13502')) AS X ) AND FK_MapData='ND13502',异常信息:列名 'GroupID' 无效。
+16日11时36分10秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=805        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13701')) AS X ) AND FK_MapData='ND13701',异常信息:列名 'GroupID' 无效。
+16日11时36分10秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1509        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13702')) AS X ) AND FK_MapData='ND13702',异常信息:列名 'GroupID' 无效。
+16日11时36分10秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1511        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13703')) AS X ) AND FK_MapData='ND13703',异常信息:列名 'GroupID' 无效。
+16日11时36分12秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=677        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13801')) AS X ) AND FK_MapData='ND13801',异常信息:列名 'GroupID' 无效。
+16日11时36分12秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=678        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13802')) AS X ) AND FK_MapData='ND13802',异常信息:列名 'GroupID' 无效。
+16日11时36分13秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1515        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13803')) AS X ) AND FK_MapData='ND13803',异常信息:列名 'GroupID' 无效。
+16日11时36分14秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1519        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13901')) AS X ) AND FK_MapData='ND13901',异常信息:列名 'GroupID' 无效。
+16日11时36分15秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=698        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13902')) AS X ) AND FK_MapData='ND13902',异常信息:列名 'GroupID' 无效。
+16日11时36分15秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1521        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13903')) AS X ) AND FK_MapData='ND13903',异常信息:列名 'GroupID' 无效。
+16日11时36分15秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1523        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13904')) AS X ) AND FK_MapData='ND13904',异常信息:列名 'GroupID' 无效。
+16日11时36分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1525        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13905')) AS X ) AND FK_MapData='ND13905',异常信息:列名 'GroupID' 无效。
+16日11时36分16秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1527        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND13906')) AS X ) AND FK_MapData='ND13906',异常信息:列名 'GroupID' 无效。
+16日11时36分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=744        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14201')) AS X ) AND FK_MapData='ND14201',异常信息:列名 'GroupID' 无效。
+16日11时36分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=745        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14202')) AS X ) AND FK_MapData='ND14202',异常信息:列名 'GroupID' 无效。
+16日11时36分19秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1531        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14203')) AS X ) AND FK_MapData='ND14203',异常信息:列名 'GroupID' 无效。
+16日11时36分21秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1535        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14301')) AS X ) AND FK_MapData='ND14301',异常信息:列名 'GroupID' 无效。
+16日11时36分22秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1537        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14302')) AS X ) AND FK_MapData='ND14302',异常信息:列名 'GroupID' 无效。
+16日11时36分23秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=751        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14401')) AS X ) AND FK_MapData='ND14401',异常信息:列名 'GroupID' 无效。
+16日11时36分24秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1541        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14402')) AS X ) AND FK_MapData='ND14402',异常信息:列名 'GroupID' 无效。
+16日11时36分25秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=753        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14501')) AS X ) AND FK_MapData='ND14501',异常信息:列名 'GroupID' 无效。
+16日11时36分26秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1545        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14502')) AS X ) AND FK_MapData='ND14502',异常信息:列名 'GroupID' 无效。
+16日11时36分27秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1549        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14601')) AS X ) AND FK_MapData='ND14601',异常信息:列名 'GroupID' 无效。
+16日11时36分28秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1551        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14602')) AS X ) AND FK_MapData='ND14602',异常信息:列名 'GroupID' 无效。
+16日11时36分29秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=821        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14701')) AS X ) AND FK_MapData='ND14701',异常信息:列名 'GroupID' 无效。
+16日11时36分30秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1555        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14702')) AS X ) AND FK_MapData='ND14702',异常信息:列名 'GroupID' 无效。
+16日11时36分30秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1557        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14703')) AS X ) AND FK_MapData='ND14703',异常信息:列名 'GroupID' 无效。
+16日11时36分30秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1559        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14704')) AS X ) AND FK_MapData='ND14704',异常信息:列名 'GroupID' 无效。
+16日11时36分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1561        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14705')) AS X ) AND FK_MapData='ND14705',异常信息:列名 'GroupID' 无效。
+16日11时36分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1563        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14706')) AS X ) AND FK_MapData='ND14706',异常信息:列名 'GroupID' 无效。
+16日11时36分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1565        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14707')) AS X ) AND FK_MapData='ND14707',异常信息:列名 'GroupID' 无效。
+16日11时36分31秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1567        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14708')) AS X ) AND FK_MapData='ND14708',异常信息:列名 'GroupID' 无效。
+16日11时36分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1569        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14709')) AS X ) AND FK_MapData='ND14709',异常信息:列名 'GroupID' 无效。
+16日11时36分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1571        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14710')) AS X ) AND FK_MapData='ND14710',异常信息:列名 'GroupID' 无效。
+16日11时36分32秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1573        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14711')) AS X ) AND FK_MapData='ND14711',异常信息:列名 'GroupID' 无效。
+16日11时36分34秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=991        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14901')) AS X ) AND FK_MapData='ND14901',异常信息:列名 'GroupID' 无效。
+16日11时36分35秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=992        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND14903')) AS X ) AND FK_MapData='ND14903',异常信息:列名 'GroupID' 无效。
+16日11时36分36秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=967        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15001')) AS X ) AND FK_MapData='ND15001',异常信息:列名 'GroupID' 无效。
+16日11时36分37秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=968        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15004')) AS X ) AND FK_MapData='ND15004',异常信息:列名 'GroupID' 无效。
+16日11时36分37秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=969        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15005')) AS X ) AND FK_MapData='ND15005',异常信息:列名 'GroupID' 无效。
+16日11时36分37秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=970        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15006')) AS X ) AND FK_MapData='ND15006',异常信息:列名 'GroupID' 无效。
+16日11时36分38秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=971        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15007')) AS X ) AND FK_MapData='ND15007',异常信息:列名 'GroupID' 无效。
+16日11时36分40秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=434        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15101')) AS X ) AND FK_MapData='ND15101',异常信息:列名 'GroupID' 无效。
+16日11时36分40秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=436        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15102')) AS X ) AND FK_MapData='ND15102',异常信息:列名 'GroupID' 无效。
+16日11时36分40秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=437        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15103')) AS X ) AND FK_MapData='ND15103',异常信息:列名 'GroupID' 无效。
+16日11时36分40秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=438        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15104')) AS X ) AND FK_MapData='ND15104',异常信息:列名 'GroupID' 无效。
+16日11时36分41秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=439        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15105')) AS X ) AND FK_MapData='ND15105',异常信息:列名 'GroupID' 无效。
+16日11时36分42秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=283        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HNPrjInfo')) AS X ) AND FK_MapData='Demo_HNPrjInfo',异常信息:列名 'GroupID' 无效。
+16日11时36分42秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=275        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HNPrjInfo_HQ')) AS X ) AND FK_MapData='Demo_HNPrjInfo_HQ',异常信息:列名 'GroupID' 无效。
+16日11时36分42秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=263        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_HNPrjInfo_HQYJ')) AS X ) AND FK_MapData='Demo_HNPrjInfo_HQYJ',异常信息:列名 'GroupID' 无效。
+16日11时36分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=683        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15701')) AS X ) AND FK_MapData='ND15701',异常信息:列名 'GroupID' 无效。
+16日11时36分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=685        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15702')) AS X ) AND FK_MapData='ND15702',异常信息:列名 'GroupID' 无效。
+16日11时36分43秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=686        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15703')) AS X ) AND FK_MapData='ND15703',异常信息:列名 'GroupID' 无效。
+16日11时36分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=285        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWA')) AS X ) AND FK_MapData='Demo_YWA',异常信息:列名 'GroupID' 无效。
+16日11时36分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=287        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWB')) AS X ) AND FK_MapData='Demo_YWB',异常信息:列名 'GroupID' 无效。
+16日11时36分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=289        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWC')) AS X ) AND FK_MapData='Demo_YWC',异常信息:列名 'GroupID' 无效。
+16日11时36分45秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=937        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15801')) AS X ) AND FK_MapData='ND15801',异常信息:列名 'GroupID' 无效。
+16日11时36分46秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=939        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15802')) AS X ) AND FK_MapData='ND15802',异常信息:列名 'GroupID' 无效。
+16日11时36分47秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=814        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15901')) AS X ) AND FK_MapData='ND15901',异常信息:列名 'GroupID' 无效。
+16日11时36分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=816        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15902')) AS X ) AND FK_MapData='ND15902',异常信息:列名 'GroupID' 无效。
+16日11时36分48秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=817        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND15903')) AS X ) AND FK_MapData='ND15903',异常信息:列名 'GroupID' 无效。
+16日11时36分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=808        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16001')) AS X ) AND FK_MapData='ND16001',异常信息:列名 'GroupID' 无效。
+16日11时36分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1577        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16002')) AS X ) AND FK_MapData='ND16002',异常信息:列名 'GroupID' 无效。
+16日11时36分50秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1579        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16003')) AS X ) AND FK_MapData='ND16003',异常信息:列名 'GroupID' 无效。
+16日11时36分51秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1581        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16004')) AS X ) AND FK_MapData='ND16004',异常信息:列名 'GroupID' 无效。
+16日11时36分52秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1033        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16301')) AS X ) AND FK_MapData='ND16301',异常信息:列名 'GroupID' 无效。
+16日11时36分53秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1035        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16302')) AS X ) AND FK_MapData='ND16302',异常信息:列名 'GroupID' 无效。
+16日11时36分54秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1583        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16401')) AS X ) AND FK_MapData='ND16401',异常信息:列名 'GroupID' 无效。
+16日11时36分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1585        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16402')) AS X ) AND FK_MapData='ND16402',异常信息:列名 'GroupID' 无效。
+16日11时36分55秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1587        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16403')) AS X ) AND FK_MapData='ND16403',异常信息:列名 'GroupID' 无效。
+16日11时36分56秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=285        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWA')) AS X ) AND FK_MapData='Demo_YWA',异常信息:列名 'GroupID' 无效。
+16日11时36分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=287        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWB')) AS X ) AND FK_MapData='Demo_YWB',异常信息:列名 'GroupID' 无效。
+16日11时36分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=289        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='Demo_YWC')) AS X ) AND FK_MapData='Demo_YWC',异常信息:列名 'GroupID' 无效。
+16日11时36分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=931        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16501')) AS X ) AND FK_MapData='ND16501',异常信息:列名 'GroupID' 无效。
+16日11时36分57秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=933        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16502')) AS X ) AND FK_MapData='ND16502',异常信息:列名 'GroupID' 无效。
+16日11时36分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=493        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16601')) AS X ) AND FK_MapData='ND16601',异常信息:列名 'GroupID' 无效。
+16日11时36分59秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=495        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16602')) AS X ) AND FK_MapData='ND16602',异常信息:列名 'GroupID' 无效。
+16日11时37分01秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=474        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16701')) AS X ) AND FK_MapData='ND16701',异常信息:列名 'GroupID' 无效。
+16日11时37分01秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=483        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16702')) AS X ) AND FK_MapData='ND16702',异常信息:列名 'GroupID' 无效。
+16日11时37分01秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=476        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16703')) AS X ) AND FK_MapData='ND16703',异常信息:列名 'GroupID' 无效。
+16日11时37分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1040        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16801')) AS X ) AND FK_MapData='ND16801',异常信息:列名 'GroupID' 无效。
+16日11时37分03秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1041        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16802')) AS X ) AND FK_MapData='ND16802',异常信息:列名 'GroupID' 无效。
+16日11时37分04秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1048        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16901')) AS X ) AND FK_MapData='ND16901',异常信息:列名 'GroupID' 无效。
+16日11时37分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1050        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND16902')) AS X ) AND FK_MapData='ND16902',异常信息:列名 'GroupID' 无效。
+16日11时37分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=326        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND17001')) AS X ) AND FK_MapData='ND17001',异常信息:列名 'GroupID' 无效。
+16日11时37分07秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=329        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND17002')) AS X ) AND FK_MapData='ND17002',异常信息:列名 'GroupID' 无效。
+16日11时37分07秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=324        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND17003')) AS X ) AND FK_MapData='ND17003',异常信息:列名 'GroupID' 无效。
+16日11时37分07秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=333        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND17004')) AS X ) AND FK_MapData='ND17004',异常信息:列名 'GroupID' 无效。
+16日11时37分07秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=335        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND17005')) AS X ) AND FK_MapData='ND17005',异常信息:列名 'GroupID' 无效。
+16日11时37分09秒Info:System');"SQL=DROP TABLE Port_EmpDept,异常信息:无法将 DROP TABLE 用于 'Port_EmpDept'，因为 'Port_EmpDept' 是 视图。请使用 DROP VIEW。
+16日11时37分10秒Info:System');"SQL=UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='TBFullCtrl'UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='PopVal'UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='DDLFullCtrl'UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='ActiveDDL',异常信息:违反了 PRIMARY KEY 约束 'Sys_MapExtpk'。不能在对象 'dbo.Sys_MapExt' 中插入重复键。
+违反了 PRIMARY KEY 约束 'Sys_MapExtpk'。不能在对象 'dbo.Sys_MapExt' 中插入重复键。
+语句已终止。
+语句已终止。
+16日11时37分47秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = 
+16日11时37分47秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = 
+16日12时35分09秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+-----------------------------------------------------------------------------------------------------
+16日13时57分53秒Info:System');"----------------------------------  start ------------------ 
+16日13时57分53秒Info:System');"----------------------------------  end ------------------ 
+16日13时58分08秒Info:System');"----------------------------------  start ------------------ 
+16日13时58分08秒Info:System');"----------------------------------  end ------------------ 
+16日13时58分17秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+16日13时58分38秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+16日13时58分38秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+16日14时00分05秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+16日14时00分05秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+16日14时00分05秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=785        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1801')) AS X ) AND FK_MapData='ND1801',异常信息:列名 'GroupID' 无效。
+16日14时00分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=786        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1802')) AS X ) AND FK_MapData='ND1802',异常信息:列名 'GroupID' 无效。
+16日14时00分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=787        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1803')) AS X ) AND FK_MapData='ND1803',异常信息:列名 'GroupID' 无效。
+16日14时00分06秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1133        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1804')) AS X ) AND FK_MapData='ND1804',异常信息:列名 'GroupID' 无效。
+16日14时00分07秒Info:System');"SQL=UPDATE Sys_MapDtl SET GroupID=1135        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='ND1899')) AS X ) AND FK_MapData='ND1899',异常信息:列名 'GroupID' 无效。

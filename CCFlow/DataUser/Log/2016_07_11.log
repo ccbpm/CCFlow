@@ -1,0 +1,30 @@
+-----------------------------------------------------------------------------------------------------
+11日09时47分56秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+11日09时47分56秒Info:System');"成功[BP.WF.Flow-100]放入缓存。
+-----------------------------------------------------------------------------------------------------
+11日09时52分19秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+11日09时52分19秒Info:System');"成功[BP.WF.Flow-100]放入缓存。
+-----------------------------------------------------------------------------------------------------
+11日09时57分34秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+11日09时57分35秒Info:System');"成功[BP.WF.Flow-100]放入缓存。
+11日10时39分35秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+11日10时46分16秒Info:System');"成功[BP.Sys.EnCfg-5]放入缓存。
+-----------------------------------------------------------------------------------------------------
+11日14时26分08秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+11日14时26分29秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+11日14时28分20秒Info:System');"成功[BP.Sys.EnCfg-5]放入缓存。
+11日16时52分48秒Info:System');"----------------------------------  start ------------------ 
+11日16时52分48秒Info:System');"----------------------------------  end ------------------ 
+11日16时52分48秒Info:System');"----------------------------------  start ------------------ 
+11日16时52分48秒Info:System');"----------------------------------  end ------------------ 
+11日16时55分17秒Info:System');"成功[BP.WF.Node-374]放入缓存。
+11日16时55分23秒Info:System');"成功[BP.Sys.ToolbarExcel-695]放入缓存。
+-----------------------------------------------------------------------------------------------------
+11日17时09分59秒Info:System');"----------------------------------  start ------------------ 
+11日17时09分59秒Info:System');"----------------------------------  end ------------------ 
+11日17时10分20秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+11日17时10分43秒Info:System');"成功[BP.WF.Flow-101]放入缓存。
+11日17时10分43秒Info:System');"成功[BP.Sys.EnCfg-5]放入缓存。
+11日17时10分55秒Fatal:System');"SQL= SELECT  TOP 1 ISNULL(NodeID,0)   NodeID, Name,ISNULL(SFLab, '子流程') SFLab,ISNULL(SFSta,0)   SFSta, CASE SFSta WHEN 0 THEN '禁用' WHEN 1 THEN '启用' WHEN 2 THEN '只读' WHEN NULL THEN '禁用' END SFStaTEXT,ISNULL(SFShowModel,1)   SFShowModel, CASE SFShowModel WHEN 0 THEN '表格方式' WHEN 1 THEN '自由模式' WHEN NULL THEN '自由模式' END SFShowModelTEXT, SFCaption, SFDefInfo, SFActiveFlows, ISNULL( round(SF_X,4) ,5) AS  SF_X, ISNULL( round(SF_Y,4) ,5) AS  SF_Y, ISNULL( round(SF_H,4) ,300) AS  SF_H, ISNULL( round(SF_W,4) ,400) AS  SF_W, SFFields FROM WF_Node WHERE (1=1) AND WF_Node.NodeID=@NodeID Exception=列名 'SFLab' 无效。
+11日17时10分58秒Fatal:System');"SQL= SELECT  TOP 1 ISNULL(NodeID,0)   NodeID, Name,ISNULL(FrmThreadLab, '子线程') FrmThreadLab,ISNULL(FrmThreadSta,0)   FrmThreadSta, CASE FrmThreadSta WHEN 0 THEN '禁用' WHEN 1 THEN '启用' WHEN NULL THEN '禁用' END FrmThreadStaTEXT, ISNULL( round(FrmThread_X,4) ,5) AS  FrmThread_X, ISNULL( round(FrmThread_Y,4) ,5) AS  FrmThread_Y, ISNULL( round(FrmThread_H,4) ,500) AS  FrmThread_H, ISNULL( round(FrmThread_W,4) ,400) AS  FrmThread_W FROM WF_Node WHERE (1=1) AND WF_Node.NodeID=@NodeID Exception=列名 'FrmThreadLab' 无效。
+11日17时11分00秒Fatal:System');"SQL= SELECT  TOP 1 ISNULL(NodeID,0)   NodeID, Name,ISNULL(FrmTrackLab, '轨迹') FrmTrackLab,ISNULL(FrmTrackSta,0)   FrmTrackSta, CASE FrmTrackSta WHEN 0 THEN '禁用' WHEN 1 THEN '轨迹图' WHEN 2 THEN '轨迹表' WHEN NULL THEN '禁用' END FrmTrackStaTEXT, ISNULL( round(FrmTrack_X,4) ,5) AS  FrmTrack_X, ISNULL( round(FrmTrack_Y,4) ,5) AS  FrmTrack_Y, ISNULL( round(FrmTrack_H,4) ,500) AS  FrmTrack_H, ISNULL( round(FrmTrack_W,4) ,400) AS  FrmTrack_W FROM WF_Node WHERE (1=1) AND WF_Node.NodeID=@NodeID Exception=列名 'FrmTrackLab' 无效。

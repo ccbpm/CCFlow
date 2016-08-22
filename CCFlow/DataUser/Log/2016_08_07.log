@@ -1,0 +1,101 @@
+-----------------------------------------------------------------------------------------------------
+07日09时07分20秒Info:System');"----------------------------------  start ------------------ 
+07日09时07分20秒Info:System');"----------------------------------  end ------------------ 
+07日09时08分07秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日09时11分49秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日09时11分49秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日09时53分53秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日09时53分53秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日09时54分36秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日09时54分36秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日09时54分51秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+07日09时57分39秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日10时15分39秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日10时15分39秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日10时15分52秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日10时16分07秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日10时16分07秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日10时48分10秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日11时09分01秒Info:System');"成功[BP.Sys.ToolbarExcel-711]放入缓存。
+07日11时09分01秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日11时09分01秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日11时09分55秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日11时09分55秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日11时46分51秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日11时46分51秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日11时47分05秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+07日11时49分32秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日11时49分32秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日11时49分39秒Info:System');"成功[BP.Port.Dept-6]放入缓存。
+07日14时13分43秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日14时45分09秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日14时45分09秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+-----------------------------------------------------------------------------------------------------
+07日15时27分07秒Info:System');"----------------------------------  start ------------------ 
+07日15时27分07秒Info:System');"----------------------------------  end ------------------ 
+07日15时27分55秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日15时29分43秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日15时30分07秒Info:System');"----------------------------------  start ------------------ 
+07日15时30分07秒Info:System');"----------------------------------  end ------------------ 
+07日15时30分33秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日15时30分33秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日15时37分05秒Info:System');"@[财务报销演示]流程被[adminadmin]删除，WorkID[1110]。
+07日15时39分52秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日15时43分36秒Info:System');"成功[BP.WF.Template.Selector-384]放入缓存。
+07日15时43分41秒Info:System');"成功[BP.WF.Template.Selector-384]放入缓存。
+07日15时43分43秒Info:System');"成功[BP.WF.Template.Selector-384]放入缓存。
+07日15时43分44秒Info:System');"成功[BP.WF.Template.Selector-384]放入缓存。
+07日15时45分27秒Info:System');"成功[BP.WF.Template.Selector-384]放入缓存。
+07日15时45分28秒Info:System');"成功[BP.WF.Template.Selector-384]放入缓存。
+07日15时49分11秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分12秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分13秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分14秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+07日15时49分22秒Fatal:System');"@没有[月份  Pub_NY, 类[BP.WF.Data.GenerWorkFlowViewNY], 物理表[Pub_NY] 实例。PK = 2016-08
+-----------------------------------------------------------------------------------------------------
+07日16时08分36秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+-----------------------------------------------------------------------------------------------------
+07日16时12分08秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日16时14分44秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日16时17分55秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日16时43分19秒Info:System');"成功[BP.Port.Emp-13]放入缓存。
+07日16时43分19秒Info:System');"成功[BP.WF.Flow-103]放入缓存。
+07日16时45分03秒Info:System');"成功[BP.Port.Emp-14]放入缓存。
+07日16时50分03秒Info:System');"成功[BP.Sys.EnCfg-8]放入缓存。
+07日17时08分24秒Info:System');"成功[BP.WF.Rpt.MapRpt-713]放入缓存。

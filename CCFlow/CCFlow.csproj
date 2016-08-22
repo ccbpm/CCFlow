@@ -127,15 +127,6 @@
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="TKYApp\Bottom.aspx" />
-    <Content Include="TKYApp\Default.aspx" />
-    <Content Include="TKYApp\Img\btlogin.png" />
-    <Content Include="TKYApp\Img\TopLeft.jpg" />
-    <Content Include="TKYApp\Img\TopRight.png" />
-    <Content Include="TKYApp\Left.aspx" />
-    <Content Include="TKYApp\Login.aspx" />
-    <Content Include="TKYApp\Top.aspx" />
-    <Content Include="TKYApp\Welcome.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
@@ -3281,48 +3272,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="TKYApp\Bottom.aspx.cs">
-      <DependentUpon>Bottom.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TKYApp\Bottom.aspx.designer.cs">
-      <DependentUpon>Bottom.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="TKYApp\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TKYApp\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="TKYApp\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TKYApp\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="TKYApp\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TKYApp\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="TKYApp\Top.aspx.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TKYApp\Top.aspx.designer.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="TKYApp\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="TKYApp\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\ActionEvent.aspx.cs">
       <DependentUpon>ActionEvent.aspx</DependentUpon>
@@ -7870,7 +7819,6 @@
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
-    <Folder Include="TKYApp\Img\Menu\" />
     <Folder Include="WF\Admin\CCFormDesigner\lib\sets\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />
@@ -7881,10 +7829,6 @@
     <Folder Include="WF\WorkOpt\OneWork\Img\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\chichengsoft\TKY\BP.TKY\BP.TKY.csproj">
-      <Project>{4C4A9385-A3D7-44F9-A185-F6F2B1CB7FCA}</Project>
-      <Name>BP.TKY</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Components\BP.En30\BP.En30.csproj">
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>

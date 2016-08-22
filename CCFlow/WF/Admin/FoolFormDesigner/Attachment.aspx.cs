@@ -622,6 +622,9 @@ namespace CCFlow.WF.MapDef
                 ath.IsToHeLiuHZ = this.Pub1.GetCBByID("CB_" + FrmAttachmentAttr.IsToHeLiuHZ).Checked; //是否汇总到合流节点..
             }
 
+            //权限控制方式.
+            ath.UploadFileNumCheck = (UploadFileNumCheck)this.Pub1.GetDDLByID("DDL_UploadFileNumCheck").SelectedItemIntVal;
+
 
             //word附件相关.
             ath.IsWoEnableWF = this.Pub1.GetCBByID("CB_" + FrmAttachmentAttr.IsWoEnableWF).Checked;

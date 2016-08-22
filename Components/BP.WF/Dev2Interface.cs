@@ -3857,6 +3857,9 @@ namespace BP.WF
                     return true;
                 string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID="+workID+" AND FK_Node="+nodeID ;
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
+                if (mydt.Rows.Count == 0)
+                    return true;
+
                 foreach (DataRow dr in mydt.Rows)
                 {
                     string fk_emp = dr["FK_Emp"].ToString();

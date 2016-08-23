@@ -204,6 +204,10 @@ namespace BP.WF.Template
         #region 公文属性
         public const string DocLeftWord = "DocLeftWord";
         public const string DocRightWord = "DocRightWord";
+        /// <summary>
+        /// 工作方式
+        /// </summary>
+        public const string WebOfficeFrmModel = "WebOfficeFrmModel";
         #endregion 公文属性
     }
     /// <summary>

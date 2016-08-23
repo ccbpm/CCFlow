@@ -604,6 +604,7 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.WebOfficeEnable, (int)value);
             }
         }
+      
         /// <summary>
         /// 文档按钮标签
         /// </summary>
@@ -872,10 +873,11 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_Node", "节点标签");
-
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
 
-                map.AddTBIntPK(BtnAttr.NodeID, 0, "NodeID", true, false);
+
+                map.AddTBIntPK(BtnAttr.NodeID, 0, "节点ID", true, true);
+                map.AddTBString(BtnAttr.Name, null, "节点名称", true, true, 0, 200, 10);
 
                 map.AddTBString(BtnAttr.SendLab, "发送", "发送按钮标签", true, false, 0, 50, 10);
                 map.AddTBString(BtnAttr.SendJS, "", "发送按钮JS函数", true, false, 0, 50, 10, true);
@@ -884,7 +886,6 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.JumpWayLab, "跳转", "跳转按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(NodeAttr.JumpWay, false, "是否启用", true, true);
-
 
                 map.AddTBString(BtnAttr.SaveLab, "保存", "保存按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.SaveEnable, true, "是否启用", true, true);
@@ -958,7 +959,7 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.WebOfficeLab, "公文", "公文标签", true, false, 0, 50, 10);
                 //map.AddBoolean(BtnAttr.WebOfficeEnable, false, "是否启用", true, true);
                 map.AddDDLSysEnum(BtnAttr.WebOfficeEnable, 0, "文档启用方式", true, true, BtnAttr.WebOfficeEnable,
-                 "@0=不启用@1=按钮方式@2=标签页置后方式@3=标签页置前方式");  //edited by liuxc,2016-01-18,from xc
+                 "@0=不启用@1=按钮方式@2=标签页置后方式@3=标签页置前方式");  //edited by liuxc,2016-01-18,from xc.
 
                 // add by 周朋 2015-08-06. 重要性.
                 map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", true, false, 0, 50, 10);

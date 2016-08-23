@@ -583,6 +583,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 表单工作方式.
+        /// </summary>
+        public FrmType WebOfficeFrmModel
+        {
+            get
+            {
+                return (FrmType)this.WebOfficeEnable;
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.WebOfficeFrmModel, (int)value);
+            }
+        }
+        /// <summary>
         /// 文档按钮标签
         /// </summary>
         public string WebOfficeLab
@@ -853,7 +867,9 @@ namespace BP.WF.Template
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
 
-                map.AddTBIntPK(BtnAttr.NodeID, 0, "NodeID", true, false);
+                map.AddTBIntPK(BtnAttr.NodeID, 0, "节点ID", true, true);
+                map.AddTBString(BtnAttr.Name, null, "节点名称", true, true, 0, 200, 10);
+
 
                 #region 公文按钮
                 map.AddTBString(BtnAttr.OfficeOpen, "打开本地", "打开本地标签", true, false, 0, 50, 10);
@@ -906,13 +922,31 @@ namespace BP.WF.Template
 
                 map.AddBoolean(BtnAttr.OfficeIsTrueTH, false, "是否自动套红", true, true);
                 map.AddTBString(BtnAttr.OfficeTHTemplate, "", "自动套红模板", true, false, 0, 200, 10);
+
+                map.AddTBString(BtnAttr.WebOfficeLab, "公文", "公文标签", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.WebOfficeEnable, 0, "文档启用方式", true, true, BtnAttr.WebOfficeEnable,
+                 "@0=不启用@1=按钮方式@2=标签页置后方式@3=标签页置前方式");  //edited by liuxc,2016-01-18,from xc.
+
+                map.AddDDLSysEnum(BtnAttr.WebOfficeFrmModel, 0, "表单工作方式", true, true, "FrmType"); 
+
                 #endregion
+
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            //同步更新表单的工作模式.
+            MapData md = new MapData("ND" + this.NodeID);
+            md.HisFrmType = this.WebOfficeFrmModel;
+            md.Update();
+
+            return base.beforeUpdateInsertAction();
+        }
     }
     /// <summary>
     /// 公文属性控制s

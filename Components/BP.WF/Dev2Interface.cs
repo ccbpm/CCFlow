@@ -2681,7 +2681,7 @@ namespace BP.WF
         /// <param name="sender">发送人</param>
         /// <param name="msgPK">消息唯一标记，防止发送重复.</param>
         public static void Port_SendEmail(string mailAddress, string emilTitle, string emailBody,
-            string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null)
+            string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null, string paras=null)
         {
             if (string.IsNullOrEmpty(mailAddress))
                 return;
@@ -2719,6 +2719,9 @@ namespace BP.WF
 
             // 其他属性.
             sms.RDT = BP.DA.DataType.CurrentDataTime;
+
+            //消息参数.
+            sms.AtPara = paras;
 
             sms.MsgFlag = msgGroupFlag; // 消息标志.
             sms.MsgType = msgType;   // 消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...).
@@ -2774,6 +2777,8 @@ namespace BP.WF
             sms.MsgType = msgType; // 消息类型.
 
             sms.MsgFlag = msgGroupFlag; // 消息分组标志,用于批量删除.
+
+            sms.AtPara = atParas;
 
             // 先保留本机一份.
             sms.Insert();

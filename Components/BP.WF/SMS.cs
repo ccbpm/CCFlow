@@ -216,9 +216,6 @@ namespace BP.WF
             sms.MobileInfo = mobileInfo;
             sms.MsgFlag = msgFlag; // 消息标志.
 
-         
-
-
             if (string.IsNullOrEmpty(msgFlag))
             {
                 sms.MyPK = DBAccess.GenerGUID();

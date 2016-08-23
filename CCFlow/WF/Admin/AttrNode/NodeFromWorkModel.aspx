@@ -234,9 +234,13 @@
                 </a>
             </td>
             <td>
-                呈现风格：
-                <asp:RadioButton ID="RB_WebOffice_Frm2" runat="server" Checked="true" Text="表单在前面" GroupName="RB_Doc" />
-                <asp:RadioButton ID="RB_WebOffice_Frm3" runat="server" Text="公文在前面" GroupName="RB_Doc" />
+                <b>呈现风格：</b>
+                <asp:RadioButton ID="RB_WebOffice_FrmFirst" runat="server" Checked="true" Text="表单在前面" GroupName="RB_Doc" />
+                <asp:RadioButton ID="RB_WebOffice_WordFirst" runat="server" Text="公文在前面" GroupName="RB_Doc" />
+
+                <b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;表单工作模式：</b>
+                <asp:RadioButton ID="RB_WebOffice_FreeFrm" runat="server" Checked="true" Text="自由表单显示" GroupName="RBFRm" />
+                <asp:RadioButton ID="RB_WebOffice_FoolForm" runat="server" Text="傻瓜表单显示" GroupName="RBFRm" />
 
                 <ul>
                 <li> <a href="javascript:WinOpen('/WF/Admin/BindFrms.aspx?FK_Node=<%=nd.NodeID%>&FK_Flow=<%=nd.FK_Flow%>&DoType=SelectedFrm')">

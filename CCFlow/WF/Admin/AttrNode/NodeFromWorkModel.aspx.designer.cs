@@ -139,22 +139,40 @@ namespace CCFlow.WF.Admin {
         protected global::System.Web.UI.WebControls.RadioButton RB_WebOffice;
         
         /// <summary>
-        /// RB_WebOffice_Frm2 控件。
+        /// RB_WebOffice_FrmFirst 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_WebOffice_Frm2;
+        protected global::System.Web.UI.WebControls.RadioButton RB_WebOffice_FrmFirst;
         
         /// <summary>
-        /// RB_WebOffice_Frm3 控件。
+        /// RB_WebOffice_WordFirst 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_WebOffice_Frm3;
+        protected global::System.Web.UI.WebControls.RadioButton RB_WebOffice_WordFirst;
+        
+        /// <summary>
+        /// RB_WebOffice_FreeFrm 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RB_WebOffice_FreeFrm;
+        
+        /// <summary>
+        /// RB_WebOffice_FoolForm 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RB_WebOffice_FoolForm;
         
         /// <summary>
         /// Btn_Save 控件。

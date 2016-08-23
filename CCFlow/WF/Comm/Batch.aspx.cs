@@ -124,7 +124,7 @@ namespace CCFlow.WF.Comm
                 }
             }
 
-            this.ToolBar1.GetBtnByID("Btn_Search").Click += new System.EventHandler(this.ButtonClick);
+            this.ToolBar1.GetLinkBtnByID("Btn_Search").Click += new System.EventHandler(this.ButtonClick);
             //this.ToolBar1.Btn_Click();
             //   this.GenerLabel(this.Lab1, this.HisEn);
             //this.GenerLabel(this.Lab1, "<b>" + map.EnDesc + "</b>" + map.TitleExt);

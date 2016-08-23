@@ -644,7 +644,6 @@ namespace CCFlow.WF.UC
         public void ADDWork(Work en, ReturnWorks rws, int nodeId)
         {
 
-
             this.BindViewEn(en, "width=90%");
             foreach (ReturnWork rw in rws)
             {

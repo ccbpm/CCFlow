@@ -1334,7 +1334,19 @@ namespace CCFlow.WF.UC
                 case NodeFormType.WebOffice:
                 case NodeFormType.FixForm:
                     Frms frms = nd.HisFrms;
-                    if (nd.HisFormType == NodeFormType.FreeForm)
+                    NodeFormType frmType = nd.HisFormType;
+
+                    if (nd.HisFormType == NodeFormType.WebOffice)
+                    {
+                        BP.WF.Template.BtnLabExtWebOffice btn = new BtnLabExtWebOffice(this.FK_Node);
+                        if (btn.WebOfficeFrmModel == FrmType.FoolForm)
+                            frmType = NodeFormType.FixForm;
+
+                        if (btn.WebOfficeFrmModel == FrmType.FreeFrm)
+                            frmType = NodeFormType.FreeForm;
+                    }
+
+                    if (frmType == NodeFormType.FreeForm )
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /* 添加保存表单函数，以便自定义按钮调用，执行表单的保存前后事件。 */
@@ -1371,7 +1383,7 @@ namespace CCFlow.WF.UC
                         this.UCEn1.Add("</div>");
 
                     }
-                    else if (nd.HisFormType == NodeFormType.FixForm)
+                    else if (frmType == NodeFormType.FixForm)
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /*傻瓜表单*/
@@ -1418,6 +1430,13 @@ namespace CCFlow.WF.UC
                                 case NodeFormType.SelfForm:
                                     fnNode.HisFrmType = FrmType.Url;
                                     break;
+                                //case NodeFormType.WebOffice: //如果是weboffices.
+                                //    BP.WF.Template.BtnLabExtWebOffice btnOffice = new BtnLabExtWebOffice(this.FK_Node);
+                                //    if (btnOffice.WebOfficeFrmModel == BP.Sys.FrmType.FoolForm)
+                                //        fnNode.HisFrmType = FrmType.FoolForm;
+                                //    if (btnOffice.WebOfficeFrmModel == BP.Sys.FrmType.FreeFrm)
+                                //        fnNode.HisFrmType = FrmType.FreeFrm;
+                                //    break;
                                 default:
                                     throw new Exception("出现了未判断的异常。");
                             }
@@ -1918,6 +1937,8 @@ namespace CCFlow.WF.UC
                         break;
                     case NodeFormType.FixForm:
                     case NodeFormType.FreeForm:
+                    case NodeFormType.WebOffice:
+
                         currWK = (Work)this.UCEn1.Copy(this.currWK);
 
                         // 设置默认值....

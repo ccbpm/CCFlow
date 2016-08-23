@@ -105,12 +105,20 @@ namespace CCFlow.WF.Admin
                         break;
                     case NodeFormType.WebOffice: //公文表单.
                         this.RB_WebOffice.Checked = true;
-                        this.RB_WebOffice_Frm2.Checked = true;
+                        this.RB_WebOffice_FrmFirst.Checked = true; //默认为表单在前.
+
+                        BtnLabExtWebOffice mybtn = new BtnLabExtWebOffice(this.NodeID);
 
                         if (btn.WebOfficeWorkModel == WebOfficeWorkModel.FrmFirst)
-                            this.RB_WebOffice_Frm2.Checked = true;
+                            this.RB_WebOffice_FrmFirst.Checked = true;
                         else
-                            this.RB_WebOffice_Frm3.Checked = true;
+                            this.RB_WebOffice_WordFirst.Checked = true;
+
+                        this.RB_WebOffice_FreeFrm.Checked = true; //默认为自由表单工作模式.
+                        if (mybtn.WebOfficeFrmModel == BP.Sys.FrmType.FreeFrm)
+                            this.RB_WebOffice_FreeFrm.Checked = true;
+                        else
+                            this.RB_WebOffice_FoolForm.Checked = true;
                        
                       //  this.RB_tree.Checked = true;
                         break;
@@ -195,14 +203,22 @@ namespace CCFlow.WF.Admin
                 nd.FormType = NodeFormType.WebOffice;
                 nd.Update();
 
-                //按钮标签.
-                BtnLab btn = new BtnLab(this.NodeID);
 
-                if (this.RB_WebOffice_Frm2.Checked)
+                //按钮标签.
+                BtnLabExtWebOffice btn = new BtnLabExtWebOffice(this.NodeID);
+
+                // tab 页工作风格.
+                if (this.RB_WebOffice_FrmFirst.Checked)
                     btn.WebOfficeWorkModel = WebOfficeWorkModel.FrmFirst;
                 else
                     btn.WebOfficeWorkModel = WebOfficeWorkModel.WordFirst;
 
+                //表单工作模式.
+                if (this.RB_WebOffice_FreeFrm.Checked)
+                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm; 
+                else
+                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FoolForm; 
+                
                 btn.Update();
             }
 

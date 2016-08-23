@@ -586,7 +586,6 @@ namespace BP.WF
         {
             try
             {
-
                 CCInterface.PortalInterfaceSoapClient soap = null;
                 if (this.HisEmailSta == MsgSta.UnRun)
                 {

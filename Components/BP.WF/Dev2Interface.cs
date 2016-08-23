@@ -2738,8 +2738,8 @@ namespace BP.WF
         public static void Port_SendSMS(string tel, string smsDoc, string msgType, string msgGroupFlag,
             string sender = null, string msgPK = null, string sendToEmpNo = null, string atParas = null)
         {
-            if (string.IsNullOrEmpty(tel))
-                return;
+            //if (string.IsNullOrEmpty(tel))
+            //    return;
 
             SMS sms = new SMS();
             if (string.IsNullOrEmpty(msgPK) == false)

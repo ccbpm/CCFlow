@@ -5,7 +5,6 @@ DELETE FROM Port_EmpStation;
 DELETE FROM Port_DeptEmp;
 
 
- 
 -- Port_Dept ;
 INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1','总经理室','0');
 INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('2','市场部','1')  ;
@@ -13,6 +12,13 @@ INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('3','研发部','1')  ;
 INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('4','服务部','1')  ;
 INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('5','财务部','1')  ;
 INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('6','人力资源部','1');
+
+
+-- Port_StationType ;
+INSERT INTO Port_StationType (No,Name) VALUES('1','基层')  ;
+INSERT INTO Port_StationType (No,Name) VALUES('2','中层')  ;
+INSERT INTO Port_StationType (No,Name) VALUES('3','基层')  ;
+
 
 -- Port_Station ;
 INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('01','总经理','1')  ;

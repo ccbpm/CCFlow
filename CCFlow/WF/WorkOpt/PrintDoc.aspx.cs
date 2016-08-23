@@ -143,8 +143,8 @@ namespace CCFlow.WF.WorkOpt
             Node nd = new Node(this.FK_Node);
             Work wk = nd.HisWork;
             wk.OID = this.WorkID;
-            wk.Retrieve();
-            wk.ResetDefaultVal();
+            wk.RetrieveFromDBSources();
+            //wk.ResetDefaultVal();
 
             string file = DateTime.Now.Year + "_" + WebUser.FK_Dept + "_" + func.No + "_" + WorkID + ".doc";
             BP.Pub.RTFEngine rtf = new BP.Pub.RTFEngine();

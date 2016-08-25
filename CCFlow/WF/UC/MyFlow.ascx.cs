@@ -1961,10 +1961,13 @@ namespace CCFlow.WF.UC
                         //如果有单据编号，让其在每次保存后生成.
                         if (this.currND.IsStartNode && this.currFlow.BillNoFormat.Length >2)
                         {
-                            Flow fl = new Flow(this.FK_Flow);
-                            string newBillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(this.currFlow.BillNoFormat, this.WorkID, currWK, fl.PTable);
-                            currWK.SetValByKey("BillNo", newBillNo );
-                            this.UCEn1.GetTBByID("TB_BillNo").Text = newBillNo;
+                            if (this.UCEn1.IsExit("TB_BillNo") == true)
+                            {
+                                Flow fl = new Flow(this.FK_Flow);
+                                string newBillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(this.currFlow.BillNoFormat, this.WorkID, currWK, fl.PTable);
+                                currWK.SetValByKey("BillNo", newBillNo);
+                                this.UCEn1.GetTBByID("TB_BillNo").Text = newBillNo;
+                            }
                         }
                         break;
                     case NodeFormType.DisableIt:

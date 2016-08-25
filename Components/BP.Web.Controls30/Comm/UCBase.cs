@@ -440,8 +440,19 @@ namespace BP.Web.UC
                         //en.SetValByKey(key, ddl.SelectedValue);
 
                         //设置他的影子字段值.
-                        if (ddl.SelectedItem.Text != "请选择")
-                            en.SetValByKey(key + "T", ddl.SelectedItem.Text);
+                        //edited by liuxc,2016-8-17,增加级联下拉框的判断，级联下拉框时，其选择的项文本从HID隐藏控件中取出
+                        string hid = ddl.UniqueID.Replace("$DDL_", "$HID_") + "T";
+                        string[] vals = Request.Params.GetValues(hid);
+
+                        if (vals == null)
+                        {
+                            if (ddl.SelectedItem.Text != "请选择")
+                                en.SetValByKey(key + "T", ddl.SelectedItem.Text);
+                        }
+                        else
+                        {
+                            en.SetValByKey(key + "T", vals.Length == 0 ? "" : Request.Params[hid]);
+                        }
                         continue;
                     }
 
@@ -462,8 +473,19 @@ namespace BP.Web.UC
                         //en.SetValByKey(key, myddl.SelectedValue);
 
                         //设置他的影子字段值.
-                        if (myddl.SelectedItem.Text != "请选择")
-                            en.SetValByKey(key + "T", myddl.SelectedItem.Text);
+                        //edited by liuxc,2016-8-17,增加级联下拉框的判断，级联下拉框时，其选择的项文本从HID隐藏控件中取出
+                        string hid = myddl.UniqueID.Replace("$DDL_", "$HID_") + "T";
+                        string[] vals = Request.Params.GetValues(hid);
+
+                        if (vals == null)
+                        {
+                            if (myddl.SelectedItem.Text != "请选择")
+                                en.SetValByKey(key + "T", myddl.SelectedItem.Text);
+                        }
+                        else
+                        {
+                            en.SetValByKey(key + "T", vals.Length == 0 ? "" : Request.Params[hid]);
+                        }
                     }
                     continue;
                 }

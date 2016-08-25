@@ -18,6 +18,9 @@
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript">
+        var valctrlid = GetQueryString("valctrl");
+        var namectrlid = GetQueryString("namectrl");
+
         function getReturnText() {
             var length = $('#lbRight option').length;
             var text = new Array();
@@ -28,6 +31,7 @@
             }
             return text;
         }
+
         function getReturnValue() {
             var length = $('#lbRight option').length;
             var value = new Array();
@@ -38,7 +42,34 @@
             }
             return value;
         }
+
+        function getSelected() {
+            var vals = getReturnValue().join(',');
+            var names = getReturnText().join(',');
+            
+            if (valctrlid.length > 0) {
+                $(window.parent.document).find('input[id*="_TB_' + valctrlid + '"]').val(vals);
+            }
+
+            return { Name: names };
+        }
+
         $(function () {
+            if (namectrlid.length > 0 && valctrlid.length > 0) {
+                var lst_to = document.getElementById("lbRight");
+                var names = $(window.parent.document).find('[id$="_TB_' + namectrlid + '"]').val().split(',');
+                var values = $(window.parent.document).find('[id$="_TB_' + valctrlid + '"]').val().split(',');
+                var maxidx = Math.min(names.length, values.length);
+
+                for (var i = 0; i < maxidx; i++) {
+                    if (!values[i] || values[i].length == 0) {
+                        continue;
+                    }
+
+                    lst_to.options.add(new Option(names[i], values[i]));
+                }
+            }
+
             //初始化部门树
             $('#ddlDept').combotree({
                 url: "SearchUsers.ashx?method=getdepts&s=" + Math.random(),
@@ -249,7 +280,7 @@
 <body class="easyui-layout">
     <form id="form1" runat="server">
     <div data-options="region:'north',noheader:true,border:false" style="overflow-y: hidden;
-        height: 30px; padding: 5px">
+        height: 35px; padding: 5px">
         <input id="ddlDept" class="easyui-combotree" style="width: 300px;" />
         <input type="checkbox" id="cbContainChild" value="1" /><label for="cbContainChild">子部门</label>
         <asp:DropDownList ID="ddlStation" runat="server" Width="120px" onchange="search()">

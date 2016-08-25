@@ -7,9 +7,9 @@ using BP.Port;
 
 namespace BP.WF
 {
-	/// <summary>
-	/// 自定义运行路径 属性
-	/// </summary>
+    /// <summary>
+    /// 自定义运行路径 属性
+    /// </summary>
     public class TransferCustomAttr : EntityMyPKAttr
     {
         #region 基本属性
@@ -51,9 +51,9 @@ namespace BP.WF
         public const string TodolistModel = "TodolistModel";
         #endregion
     }
-	/// <summary>
-	/// 自定义运行路径
-	/// </summary>
+    /// <summary>
+    /// 自定义运行路径
+    /// </summary>
     public class TransferCustom : EntityMyPK
     {
         #region 属性
@@ -215,12 +215,18 @@ namespace BP.WF
                 map.AddTBInt(TransferCustomAttr.Idx, 0, "顺序号", true, false);
 
                 //map.AddTBString(TransferCustomAttr.StartDT, null, "发起时间", true, false, 0, 20, 10);
-                
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.MyPK = this.FK_Node + "_" + this.WorkID;
+            return base.beforeInsert();
+        }
 
         /// <summary>
         /// 获取下一个要到达的定义路径.
@@ -259,26 +265,26 @@ namespace BP.WF
             // return null;
         }
     }
-	/// <summary>
-	/// 自定义运行路径
-	/// </summary>
-	public class TransferCustoms: EntitiesMyPK
-	{
-		#region 方法
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new TransferCustom();
-			}
-		}
-		/// <summary>
+    /// <summary>
+    /// 自定义运行路径
+    /// </summary>
+    public class TransferCustoms : EntitiesMyPK
+    {
+        #region 方法
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new TransferCustom();
+            }
+        }
+        /// <summary>
         /// 自定义运行路径
-		/// </summary>
-		public TransferCustoms()
+        /// </summary>
+        public TransferCustoms()
         {
         }
         /// <summary>
@@ -298,7 +304,7 @@ namespace BP.WF
         {
             this.Retrieve(TransferCustomAttr.WorkID, workid, TransferCustomAttr.FK_Node, nodeID, TransferCustomAttr.Idx);
         }
-		#endregion
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -323,5 +329,5 @@ namespace BP.WF
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+    }
 }

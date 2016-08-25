@@ -382,6 +382,16 @@ namespace CCFlow.WF.UC
                 js += "\t\n</script>";
                 this.Add(js);
                 #endregion 处理iFrom  SaveM2M Save。
+
+                #region 处理iFrom  SaveFTC Save
+                js = "\t\n<script type='text/javascript' >";
+                js += "\t\n function SaveFTC(ftc) { ";
+                js += "\t\n document.getElementById('F' + ftc ).contentWindow.SaveFTC();";
+                js += "\t\n } ";
+                js += "\t\n</script>";
+                this.Add(js);
+                #endregion 处理iFrom  SaveFTC Save。
+
             }
         }
         public string _tempAddDtls = "";
@@ -984,7 +994,7 @@ namespace CCFlow.WF.UC
                         else
                         {
                             fwcOnload = "onload= 'FTC" + ftc.No + "load();'";
-                            AddLoadFunction("FTC" + ftc.No, "blur", "SaveDtl");
+                            AddLoadFunction("TC" + ftc.No, "blur", "SaveFTC");
                         }
 
                         src += "&r=q" + paras;
@@ -1568,6 +1578,15 @@ namespace CCFlow.WF.UC
                 js += "\t\n</script>";
                 this.Add(js);
                 #endregion 处理iFrom  SaveM2M Save。
+
+                #region 处理iFrom  SaveFTC Save
+                js = "\t\n<script type='text/javascript' >";
+                js += "\t\n function SaveFTC(ftc) { ";
+                js += "\t\n document.getElementById('F' + ftc ).contentWindow.SaveFTC();";
+                js += "\t\n } ";
+                js += "\t\n</script>";
+                this.Add(js);
+                #endregion 处理iFrom  SaveFTC Save。
             }
 
             // 处理扩展.
@@ -1883,7 +1902,8 @@ namespace CCFlow.WF.UC
                             {
                                 DataRow row = table.NewRow();
                                 row["No"] = "";
-                                row["Name"] = "*请选择";
+                                //row["Name"] = "*请选择";
+                                row["Name"] = "无数据";
                                 table.Rows.Add(row);
 
                             }
@@ -2712,6 +2732,15 @@ namespace CCFlow.WF.UC
                 js += "\t\n</script>";
                 this.Add(js);
                 #endregion 处理iFrom  SaveM2M Save。
+
+                #region 处理iFrom  SaveFTC Save
+                js = "\t\n<script type='text/javascript' >";
+                js += "\t\n function SaveFTC(ftc) { ";
+                js += "\t\n document.getElementById('F' + ftc ).contentWindow.SaveFTC();";
+                js += "\t\n } ";
+                js += "\t\n</script>";
+                this.Add(js);
+                #endregion 处理iFrom  SaveFTC Save。
             }
         }
         public void BindCCForm(Entity en, string enName, bool isReadonly, float srcWidth, bool IsEnableLoadData)
@@ -3334,12 +3363,26 @@ namespace CCFlow.WF.UC
                             ddl1.ID = "DDL_" + attr.KeyOfEn;
                             ddl1.Attributes["tabindex"] = attr.Idx.ToString();
                             ddl1.Enabled = attr.UIIsEnable;
+                            this.Add(ddl1);
+
                             if (ddl1.Enabled)
                             {
                                 string val = en.GetValStrByKey(attr.KeyOfEn);
                                 ddl1.Bind(attr.HisDT, "No", "Name", val);
                                 ddl1.Items.Insert(0, new ListItem("请选择", ""));
                                 ddl1.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
+
+                                MapExt me1 = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
+                                                                  MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
+                                if (me1 != null)
+                                {
+                                    HiddenField hidActiveT1 = new HiddenField();
+                                    hidActiveT1.ID = "HID_" + attr.KeyOfEn + "T";
+                                    this.Add(hidActiveT1);
+                                    hidActiveT1.Value = en.GetValStrByKey(attr.KeyOfEn + "T");
+
+                                    ddl1.Attributes["onchange"] += ";$('#" + hidActiveT1.ClientID + "').val(this.options[this.selectedIndex].text);";
+                                }
                             }
                             else
                             {
@@ -3359,7 +3402,6 @@ namespace CCFlow.WF.UC
                             }
                             if (attr.UIIsEnable == true && this.IsReadonly == true)
                                 ddl1.Enabled = false;
-                            this.Add(ddl1);
                             break;
                         }
                         #endregion 判断外部数据或WS类型.
@@ -3637,6 +3679,7 @@ namespace CCFlow.WF.UC
                         ddlFK.ID = "DDL_" + attr.KeyOfEn;
                         ddlFK.Attributes["tabindex"] = attr.Idx.ToString();
                         this.Add(ddlFK);
+                        HiddenField hidActiveT = null;
 
                            MapExt me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
                                                        MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
@@ -3662,6 +3705,10 @@ namespace CCFlow.WF.UC
                                                                   MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
                                    if (me != null)
                                    {
+                                       hidActiveT = new HiddenField();
+                                       hidActiveT.ID = "HID_" + attr.KeyOfEn + "T";
+                                       this.Add(hidActiveT);
+                                       
                                        string valOper = en.GetValStringByKey(me.AttrOfOper);
 
                                        if (IsPostBack)
@@ -3714,10 +3761,22 @@ namespace CCFlow.WF.UC
                                        ddlFK.SetSelectItem("");
                                    }
                                    else
+                                   {
                                        ddlFK.SetSelectItem(val);
+
+                                       if(hidActiveT != null)
+                                       {
+                                           hidActiveT.Value = ddlFK.Text;
+                                       }
+                                   }
 
                                    //add by dgq 2013-4-9,添加内容修改后的事件
                                    ddlFK.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
+
+                                   if(hidActiveT != null)
+                                   {
+                                       ddlFK.Attributes["onchange"] += ";$('#"+hidActiveT.ClientID+"').val(this.options[this.selectedIndex].text);";
+                                   }
                                }
                                else
                                {
@@ -3851,7 +3910,7 @@ namespace CCFlow.WF.UC
                         AddLoadFunction(dtl.No, "blur", "SaveDtl");
 
                     //this.Add("<iframe ID='F" + dtl.No + "' Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0  style='position:absolute;width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
-                    this.Add("<iframe ID='F" + dtl.No + "' onload= '" + dtl.No + "load();'  src='" + src + "' frameborder=0  style='position:absolute;width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+                    this.Add("<iframe ID='F" + dtl.No + "' onload= 'F" + dtl.No + "load();'  src='" + src + "' frameborder=0  style='position:absolute;width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
 
                 }
 
@@ -4307,7 +4366,7 @@ namespace CCFlow.WF.UC
         {
             string js = "";
             js = "\t\n<script type='text/javascript' >";
-            js += "\t\n function " + id + "load() { ";
+            js += "\t\n function F" + id + "load() { ";
             js += "\t\n  if (document.all) {";
             js += "\t\n     document.getElementById('F" + id + "').attachEvent('on" + eventName + "',function(event){" + method + "('" + id + "');});";
             js += "\t\n } ";

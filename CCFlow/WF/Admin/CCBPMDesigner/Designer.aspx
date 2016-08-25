@@ -5,7 +5,7 @@
 <head runat="server">
     <title>CCBPM2.0</title>
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
-    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     
     <link href="./Img/Menu/Designer.css" rel="stylesheet" type="text/css" />
 
@@ -15,7 +15,7 @@
 
     <script type="text/javascript" src="./assets/javascript/json2.js"></script>
     <script type="text/javascript" src="./assets/javascript/jquery-1.11.0.min.js"></script>
-    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="./lib/dashed.js"></script>
     <script type="text/javascript" src="./lib/canvasprops.js"></script>
     <script type="text/javascript" src="./lib/style.js"></script>

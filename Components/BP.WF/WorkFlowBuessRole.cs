@@ -133,9 +133,9 @@ namespace BP.WF
                     string temp = wk.GetValStrByKey(attr.Key);
                     if (string.IsNullOrEmpty(temp))
                     {
-                       #warning 为什么，加这个代码？牺牲了很多效率，我注销了. by zhoupeng 2016.8.15
-                      //  wk.DirectUpdate();
-                       // wk.RetrieveFromDBSources();
+#warning 为什么，加这个代码？牺牲了很多效率，我注销了. by zhoupeng 2016.8.15
+                        //  wk.DirectUpdate();
+                        // wk.RetrieveFromDBSources();
                     }
 
                     titleRole = titleRole.Replace("@" + attr.Key, temp);
@@ -338,25 +338,119 @@ namespace BP.WF
             {
                 string sql = "";
                 int num = 0;
+                string supposeBillNo = billNo;  //假设单据号，长度与真实单据号一致
+                List<KeyValuePair<int, int>> loc = new List<KeyValuePair<int, int>>();  //流水号位置，流水号位数
+                string lsh; //流水号设置码
+                int lshIdx = -1;    //流水号设置码所在位置
+
                 for (int i = 2; i < 7; i++)
                 {
-                    if (billNo.Contains("{LSH" + i + "}") == false)
+                    lsh = "{LSH" + i + "}";
+
+                    if (!supposeBillNo.Contains(lsh))
                         continue;
 
-                    billNo = billNo.Replace("{LSH" + i + "}", "");
-
-                    sql = "SELECT COUNT(*) FROM " + flowPTable + " WHERE BillNo LIKE '" + billNo + "%' AND WFState >1 ";
-                    if (DBAccess.AppCenterDBType == DBType.MSSQL)
+                    while (supposeBillNo.Contains(lsh))
                     {
-                        //改为取最大值
-                        sql = " SELECT isnull(convert(int,max(RIGHT(billno,len(billno)-len('" + billNo + "')-1))),0) FROM "
-                            + flowPTable + " WHERE BillNo LIKE '" + billNo + "%' AND WFState >1 ";
+                        //查找流水号所在位置
+                        lshIdx = supposeBillNo.IndexOf(lsh);
+                        //将找到的流水号码替换成假设的流水号
+                        supposeBillNo = (lshIdx == 0 ? "" : supposeBillNo.Substring(0, lshIdx))
+                                        + string.Empty.PadLeft(i, '_')
+                                        +
+                                        (lshIdx + 6 + 1 < supposeBillNo.Length
+                                             ? supposeBillNo.Substring(lshIdx + 6)
+                                             : "");
+                        //保存当前流程号所处位置，及流程号长度，以便之后使用替换成正确的流水号
+                        loc.Add(new KeyValuePair<int, int>(lshIdx, i));
+                    }
+                }
+
+                //数据库中查找符合的单据号集合,NOTE:此处需要注意，在LIKE中带有左广方括号时，要使用一对广播号将其转义
+                sql = "SELECT BillNo FROM " + flowPTable + " WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]") 
+                    + "'" + (flowPTable.ToLower() == "wf_generworkflow" || System.Text.RegularExpressions.Regex.IsMatch(flowPTable.ToLower(),@"^nd+[\d]+rpt$")  ? " AND WFState >1" : "")
+                    + (flowPTable.ToLower() == "wf_generworkflow" ? (" AND WorkID <> " + workid) : (" AND OID <> " + workid))
+                    + " ORDER BY BillNo DESC";
+                string maxBillNo = DBAccess.RunSQLReturnString(sql);
+                int ilsh = 0;
+
+                if (string.IsNullOrWhiteSpace(maxBillNo))
+                {
+                    //没有数据，则所有流水号都从1开始
+                    foreach (KeyValuePair<int, int> kv in loc)
+                    {
+                        supposeBillNo = (kv.Key == 0 ? "" : supposeBillNo.Substring(0, kv.Key))
+                                        + "1".PadLeft(kv.Value, '0')
+                                        +
+                                        (kv.Key + kv.Value + 1 < supposeBillNo.Length
+                                             ? supposeBillNo.Substring(kv.Key + kv.Value)
+                                             : "");
+                    }
+                }
+                else
+                {
+                    //有数据，则从右向左开始判断流水号，当右侧的流水号达到最大值，则左侧的流水号自动加1
+                    Dictionary<int, int> mlsh = new Dictionary<int, int>();
+                    int plus1idx = -1;
+
+                    for (int i = loc.Count - 1; i >= 0; i--)
+                    {
+                        //获取单据号中当前位的流水码数
+                        ilsh = Convert.ToInt32(maxBillNo.Substring(loc[i].Key, loc[i].Value));
+
+                        if (plus1idx >= 0)
+                        {
+                            //如果当前码位被置为+1，则+1，同时将标识置为-1
+                            ilsh++;
+                            plus1idx = -1;
+                        }
+                        else
+                        {
+                            mlsh.Add(loc[i].Key, i == loc.Count - 1 ? ilsh + 1 : ilsh);
+                            continue;
+                        }
+
+                        if (ilsh >= Convert.ToInt32(string.Empty.PadLeft(loc[i].Value, '9')))
+                        {
+                            //右侧已经达到最大值
+                            if (i > 0)
+                            {
+                                //记录前位的码
+                                mlsh.Add(loc[i].Key, 1);
+                            }
+                            else
+                            {
+                                supposeBillNo = "单据号超出范围";
+                                break;
+                            }
+
+                            //则将前一个流水码位，标记为+1
+                            plus1idx = i - 1;
+                        }
+                        else
+                        {
+                            mlsh.Add(loc[i].Key, ilsh + 1);
+                        }
                     }
 
-                    num = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0) + 1;
-                    billNo = billNo + num.ToString().PadLeft(i, '0');
+                    if (supposeBillNo == "单据号超出范围")
+                        return supposeBillNo;
+
+                    //拼接单据号
+                    foreach (KeyValuePair<int, int> kv in loc)
+                    {
+                        supposeBillNo = (kv.Key == 0 ? "" : supposeBillNo.Substring(0, kv.Key))
+                                        + mlsh[kv.Key].ToString().PadLeft(kv.Value, '0')
+                                        +
+                                        (kv.Key + kv.Value + 1 < supposeBillNo.Length
+                                             ? supposeBillNo.Substring(kv.Key + kv.Value)
+                                             : "");
+                    }
                 }
+
+                billNo = supposeBillNo;
             }
+
             return billNo;
         }
         #endregion 产生单据编号
@@ -498,7 +592,7 @@ namespace BP.WF
                 mydt.Rows.Add(dr);
                 return mydt;
             }
-             
+
             DataTable dt = new DataTable();
             dt.Columns.Add("No", typeof(string));
             string sql;
@@ -1243,7 +1337,7 @@ namespace BP.WF
                 }
 
                 //检查指定的部门下面是否有该人员.
-                DataTable mydtTemp = RequetNextNodeWorkers_DiGui(nowDeptID, empNo,toNode);
+                DataTable mydtTemp = RequetNextNodeWorkers_DiGui(nowDeptID, empNo, toNode);
                 if (mydtTemp == null)
                 {
                     /*如果父亲级没有，就找父级的平级. */
@@ -1253,7 +1347,7 @@ namespace BP.WF
                     {
                         if (item.No == nowDeptID)
                             continue;
-                        mydtTemp = RequetNextNodeWorkers_DiGui(item.No, empNo,toNode);
+                        mydtTemp = RequetNextNodeWorkers_DiGui(item.No, empNo, toNode);
                         if (mydtTemp == null)
                             continue;
                         else
@@ -1303,7 +1397,7 @@ namespace BP.WF
         /// <param name="deptNo"></param>
         /// <param name="emp1"></param>
         /// <returns></returns>
-        private static DataTable RequetNextNodeWorkers_DiGui(string deptNo, string empNo,Node toNode)
+        private static DataTable RequetNextNodeWorkers_DiGui(string deptNo, string empNo, Node toNode)
         {
             string sql;
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;

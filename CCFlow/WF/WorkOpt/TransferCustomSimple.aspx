@@ -91,7 +91,7 @@
         <tbody>
             <%
                 string flowNo = Request.QueryString["flowNo"];
-                if (string.IsNullOrWhiteSpace(flowNo)) flowNo = "002";
+                //if (string.IsNullOrWhiteSpace(flowNo)) flowNo = "002";
                 long workid = Dev2Interface.Node_CreateBlankWork(flowNo);
                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
                 TransferCustoms tcs = new TransferCustoms(workid);
@@ -204,7 +204,6 @@
                         data-options="url:'<%=host %>/WF/WorkOpt/TransferCustomSimple.aspx?method=findemps&workId=<%=workid %>&nodeId=<%=node.NodeID %>',
                     method:'get',
                     onChange:function(){
-                        var ids = this.id.split('_');
                         saveCfg(this);                        
                     },
                     multiple:true,

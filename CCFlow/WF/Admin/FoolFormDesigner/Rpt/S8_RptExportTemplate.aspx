@@ -110,12 +110,13 @@
                     $('#excel td').hover(function () {
                         currCellName = $(this).attr('data-name');
                         currCellFieldInfo = $(this).attr('data-field').split('`');
+                        var tip = $(this).attr('data-tooltip');
 
                         if (isBeginIdx == 0) {
                             $(this).addClass('tdhover');
                             $(this).tooltip({
                                 position: 'top',
-                                content: '<span style="font-size:16px;font-weight:bold;">' + currCellName + (currCellFieldInfo && currCellFieldInfo.length == 4 ? ('&nbsp;&nbsp;' + $(this).attr('data-tooltip')) : '') + '</span>',
+                                content: '<span style="font-size:16px;font-weight:bold;">' + currCellName + (tip && tip.length > 1 ? ('&nbsp;&nbsp;' + tip) : '') + '</span>',
                                 onShow: function () {
                                     $(this).tooltip('tip').css({
                                         backgroundColor: '#FFEF8B',
@@ -149,10 +150,10 @@
                         e.preventDefault();
 
                         if (isBeginDtlIdx) {
-                            //仅当该单元格已经设置主表字段对应，才可以设置明细表字段对应
-                            if ($(this).attr('data-field').length == 0) {
-                                return;
-                            }
+                            //仅当该单元格已经设置主表字段对应，才可以设置明细表字段对应。2016-08-18，暂去掉
+                            //                            if ($(this).attr('data-field').length == 0) {
+                            //                                return;
+                            //                            }
 
                             $('#mDtlAttrs').attr('data-td', $(this).attr('data-name'));
                             $('#mDtlAttrs').menu('show', {
@@ -191,15 +192,36 @@
                             if (item.name == 'deleteField') {
                                 td.css("background-color", '');
                                 td.attr('data-field', '');
-                                td.attr('data-dtlField', '');
-                                td.attr('data-tooltip', '');
+                                //td.attr('data-dtlField', '');
+                                //td.attr('data-tooltip', '');
+                                var dtlField = td.attr('data-dtlField');
+                                if (dtlField && dtlField.length > 0) {
+                                    var dtlArr = dtlField.split('.');
+                                    var dtlAttr = getDtlMapAttr(dtlArr[0] + '.' + dtlArr[2]);
+                                    td.attr('data-tooltip', '明细表：' + dtlAttr.FK_MAPDATA + '[' + dtlAttr.FK_MAPDATANAME + '] ' + dtlAttr.KEYOFEN + '[' + dtlAttr.NAME + ']');
+                                }
+                                else {
+                                    td.attr('data-tooltip', '');
+                                }
+
                                 currDtl = getCurrDtl();
                             }
                             else {
                                 var attr = getMapAttr(item.name);
                                 td.css("background-color", "#FFF5B1");
                                 td.attr('data-field', attr.FK_MAPDATA + '`' + attr.FK_MAPDATANAME + '`' + attr.KEYOFEN + '`' + attr.NAME);
-                                td.attr('data-tooltip', (attr.FK_MAPDATA == md ? '' : (attr.FK_MAPDATA + '[' + attr.FK_MAPDATANAME + '] ')) + attr.KEYOFEN + '[' + attr.NAME + ']');
+
+                                var dtlField = td.attr('data-dtlField');
+                                var tip = (attr.FK_MAPDATA == md ? '' : (attr.FK_MAPDATA + '[' + attr.FK_MAPDATANAME + '] ')) + attr.KEYOFEN + '[' + attr.NAME + ']';
+
+                                if (dtlField && dtlField.length > 0) {
+                                    var dtlArr = dtlField.split('.');
+                                    var dtlAttr = getDtlMapAttr(dtlArr[0] + '.' + dtlArr[2]);
+                                    td.attr('data-tooltip', tip + '<br />明细表：' + dtlAttr.FK_MAPDATA + '[' + dtlAttr.FK_MAPDATANAME + '] ' + dtlAttr.KEYOFEN + '[' + dtlAttr.NAME + ']');
+                                }
+                                else {
+                                    td.attr('data-tooltip', tip);
+                                }
                             }
                         }
                     });
@@ -212,7 +234,16 @@
 
                             if (item.name == 'deleteDtlField') {
                                 td.attr('data-dtlField', '');
-                                td.attr('data-tooltip', (attr[0] == md ? '' : (attr[0] + '[' + attr[1] + '] ')) + attr[2] + '[' + attr[3] + ']');
+
+                                var field = td.attr('data-field');
+
+                                if (field && field.length > 0) {
+                                    td.attr('data-tooltip', (attr[0] == md ? '' : (attr[0] + '[' + attr[1] + '] ')) + attr[2] + '[' + attr[3] + ']');
+                                }
+                                else {
+                                    td.attr('data-tooltip', '');
+                                }
+
                                 currDtl = getCurrDtl();
                             }
                             else {
@@ -224,14 +255,24 @@
                                 }
 
                                 td.attr('data-dtlField', dtlAttr.FK_MAPDATA + '`' + dtlAttr.FK_MAPDATANAME + '`' + dtlAttr.KEYOFEN + '`' + dtlAttr.NAME);
-                                td.attr('data-tooltip', (attr[0] == md ? '' : (attr[0] + '[' + attr[1] + '] ')) + attr[2] + '[' + attr[3] + ']'
-                                + '<br />明细表：' + dtlAttr.FK_MAPDATA + '[' + dtlAttr.FK_MAPDATANAME + '] ' + dtlAttr.KEYOFEN + '[' + dtlAttr.NAME + ']');
+                                td.css("background-color", "#FFF5B1");
+
+                                var field = td.attr('data-field');
+                                var tip = '明细表：' + dtlAttr.FK_MAPDATA + '[' + dtlAttr.FK_MAPDATANAME + '] ' + dtlAttr.KEYOFEN + '[' + dtlAttr.NAME + ']';
+
+                                if (field && field.length > 0) {
+                                    td.attr('data-tooltip', (attr[0] == md ? '' : (attr[0] + '[' + attr[1] + '] ')) + attr[2] + '[' + attr[3] + ']<br />' + tip);
+                                }
+                                else {
+                                    td.attr('data-tooltip', tip);
+                                }
                             }
                         }
                     });
 
                     //设置所有已定义单元格的背景颜色
                     $("#excel td[data-field!='']").css("background-color", "#FFF5B1");
+                    $("#excel td[data-dtlField!='']").css("background-color", "#FFF5B1");
 
                     //获取已定义明细表，只能配置一个明细表
                     currDtl = getCurrDtl();
@@ -397,7 +438,13 @@
             $.each($("#excel td[data-field!='']"), function () {
                 ns = $(this).attr('data-field').split('`');
                 nsDtl = $(this).attr('data-dtlField').split('`');
-                re += '`' + $(this).attr('data-rowid') + '^' + $(this).attr('data-colid') + '^' + ns[0] + '^' + ns[2] + '^' + (nsDtl.length == 4 ? nsDtl[0] : '') + '^' + (nsDtl.length == 4 ? nsDtl[2] : '');
+                re += '`' + $(this).attr('data-rowid') + '^' + $(this).attr('data-colid') + '^' + (ns.length == 4 ? ns[0] : '') + '^' + (ns.length == 4 ? ns[2] : '') + '^' + (nsDtl.length == 4 ? nsDtl[0] : '') + '^' + (nsDtl.length == 4 ? nsDtl[2] : '');
+            });
+
+            $.each($("#excel td[data-dtlField!='']"), function () {
+                ns = $(this).attr('data-field').split('`');
+                nsDtl = $(this).attr('data-dtlField').split('`');
+                re += '`' + $(this).attr('data-rowid') + '^' + $(this).attr('data-colid') + '^' + (ns.length == 4 ? ns[0] : '') + '^' + (ns.length == 4 ? ns[2] : '') + '^' + (nsDtl.length == 4 ? nsDtl[0] : '') + '^' + (nsDtl.length == 4 ? nsDtl[2] : '');
             });
 
             ajax({ method: 'save', FK_Flow: flowNo, FK_MapData: md, RptNo: rptNo, tmp: encodeURIComponent(tmpName), data: encodeURIComponent(re) }, function (msg) {

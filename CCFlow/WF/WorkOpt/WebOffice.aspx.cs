@@ -235,6 +235,8 @@ namespace CCFlow.WF.WorkOpt
                         GetFileBytes();
                     else if (type.Equals("SaveBak"))
                         SaveBak();
+                    else if (type.Equals("Download"))
+                        DownloadFile();
                     else
                         throw new Exception("传入的参数不正确!");
                 }
@@ -475,6 +477,39 @@ namespace CCFlow.WF.WorkOpt
                 throw;
             }
 
+        }
+
+        private void DownloadFile()
+        {
+            if(string.IsNullOrWhiteSpace(FK_Flow) || this.WorkID == 0)
+            {
+                Response.Write("参数不完整，必须具备FK_Flow和WorkID参数。");
+                Response.End();
+                return;
+            }
+
+            string docPath = Server.MapPath("~/DataUser/OfficeFile/" + FK_Flow + "/");
+            FileInfo docFile = null;
+            FileInfo[] docFiles = new DirectoryInfo(docPath).GetFiles(this.WorkID + ".doc*");
+            if (docFiles.Length > 0)
+            {
+                docFile = docFiles[0];
+            }
+
+            if(docFile == null)
+            {
+                Response.Write("未找到公文！");
+                Response.End();
+                return;
+            }
+
+            BP.Sys.PubClass.DownloadFile(docFile.FullName, docFile.Name);
+            this.WinClose();
+        }
+
+        protected void WinClose()
+        {
+            this.Response.Write("<script language='JavaScript'> window.close();</script>");
         }
 
         private void LoadAttachment()

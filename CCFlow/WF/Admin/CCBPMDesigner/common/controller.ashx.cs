@@ -177,7 +177,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
             {
                 //清空标签
                 LabNote labelNode = new LabNote();
-                labelNode.Delete();
+                labelNode.Delete(LabNoteAttr.FK_Flow, flowNo);
 
                 JsonData flowJsonData = JsonMapper.ToObject(diagram);
                 if (flowJsonData.IsObject == true)

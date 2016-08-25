@@ -711,7 +711,10 @@ namespace CCFlow.WF.Rpt
                                 //生成列
                                 foreach (RptExportTemplateCell tcell in tmp.Cells)
                                 {
-                                    mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
+                                    if (string.IsNullOrWhiteSpace(tcell.KeyOfEn))
+                                        mattr = frmAttrs[tcell.FK_DtlMapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_DtlMapData + "_" + tcell.DtlKeyOfEn) as MapAttr;
+                                    else
+                                        mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
 
                                     switch (mattr.MyDataType)
                                     {
@@ -750,6 +753,9 @@ namespace CCFlow.WF.Rpt
 
                                     foreach (RptExportTemplateCell tcell in tmp.Cells)
                                     {
+                                        if (string.IsNullOrWhiteSpace(tcell.KeyOfEn))
+                                            continue;
+
                                         mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
                                         tens = frmDatas[tcell.FK_MapData];
 
@@ -810,7 +816,11 @@ namespace CCFlow.WF.Rpt
                                             if (string.IsNullOrWhiteSpace(tcell.DtlKeyOfEn))
                                                 continue;
 
-                                            mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
+                                            if (string.IsNullOrWhiteSpace(tcell.KeyOfEn))
+                                                mattr = frmAttrs[tcell.FK_DtlMapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_DtlMapData + "_" + tcell.DtlKeyOfEn) as MapAttr;
+                                            else
+                                                mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
+
                                             newEn = gen;
 
                                             switch (mattr.MyDataType)
@@ -861,7 +871,7 @@ namespace CCFlow.WF.Rpt
                                 for (int i = 0; i < dtData.Rows.Count; i++)
                                 {
                                     dr1 = dtData.Rows[i];
-                                    
+
                                     foreach (RptExportTemplateCell tcell in tmp.Cells)
                                     {
                                         r = tmp.Direction == FillDirection.Vertical
@@ -878,7 +888,10 @@ namespace CCFlow.WF.Rpt
                                             cell = row.CreateCell(c);
                                         }
 
-                                        mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
+                                        if (string.IsNullOrWhiteSpace(tcell.KeyOfEn))
+                                            mattr = frmAttrs[tcell.FK_DtlMapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_DtlMapData + "_" + tcell.DtlKeyOfEn) as MapAttr;
+                                        else
+                                            mattr = frmAttrs[tcell.FK_MapData].GetEntityByKey(MapAttrAttr.MyPK, tcell.FK_MapData + "_" + tcell.KeyOfEn) as MapAttr;
 
                                         switch (mattr.MyDataType)
                                         {

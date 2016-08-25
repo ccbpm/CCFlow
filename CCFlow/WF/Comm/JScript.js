@@ -91,56 +91,55 @@ function WinShowModalDialog_Accepter(url) {//14.12.11   秦 选择器 注意参�
     //    }
     return;
 }
-//function ReturnVal(ctrl, url, winName) {
-//    //update by dgq 2013-4-12 判断有没有？
-//    if (ctrl && ctrl.value != "") {
-//        if (url.indexOf('?') > 0)
-//            url = url + '&CtrlVal=' + ctrl.value;
-//        else
-//            url = url + '?CtrlVal=' + ctrl.value;
-//    }
-//    //修改标题控制不进行保存
-//    if (typeof self.parent.TabFormExists != 'undefined') {
-//        var bExists = self.parent.TabFormExists();
-//        if (bExists) {
-//            self.parent.ChangTabFormTitleRemove();
-//        }
-//    }
-
-//    //OpenJbox();
-//    if (window.ActiveXObject) {//如果是IE浏览器，执行下列方法
-//        var v = window.showModalDialog(url, winName, 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
-//        if (v == null || v == '' || v == 'NaN') {
-//            return;
-//        }
-//        ctrl.value = v;
-//    }
-//    else {//如果是chrome，执行下列方法a
-//        try {
-//            //OpenJbox();
-//            $.jBox("iframe:" + url, {
-//                title: '标题',
-//                width: 800,
-//                height: 350,
-//                buttons: { 'Sure': 'ok' },
-//                submit: function (v, h, f) {
-//                    var row = h[0].firstChild.contentWindow.getSelected();
-//                    ctrl.value = row.Name;
-//                }
-//            });
-//        } catch (e) {
-//            alert(e);
-//        }
-//    }
-//    //修改标题，失去焦点时进行保存
-//    if (typeof self.parent.TabFormExists != 'undefined') {
-//        var bExists = self.parent.TabFormExists();
-//        if (bExists) {
-//            self.parent.ChangTabFormTitle();
-//        }
-//    }
-//    return;
-//}
+function ReturnVal(ctrl, url, winName) {
+    //update by dgq 2013-4-12 判断有没有？
+    if (ctrl && ctrl.value != "") {
+        if (url.indexOf('?') > 0)
+            url = url + '&CtrlVal=' + ctrl.value;
+        else
+            url = url + '?CtrlVal=' + ctrl.value;
+    }
+    //修改标题控制不进行保存
+    if (typeof self.parent.TabFormExists != 'undefined') {
+        var bExists = self.parent.TabFormExists();
+        if (bExists) {
+            self.parent.ChangTabFormTitleRemove();
+        }
+    }
+    //OpenJbox();
+    if (window.ActiveXObject) {//如果是IE浏览器，执行下列方法
+        var v = window.showModalDialog(url, winName, 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
+        if (v == null || v == '' || v == 'NaN') {
+            return;
+        }
+        ctrl.value = v;
+    }
+    else {//如果是chrome，执行下列方法a
+        try {
+            //OpenJbox();
+            $.jBox("iframe:" + url, {
+                title: '标题',
+                width: 800,
+                height: 350,
+                buttons: { '确定': 'ok' },
+                submit: function (v, h, f) {
+                    var row = h[0].firstChild.contentWindow.getSelected();
+                    ctrl.value = row.Name;
+                }
+            });
+        } catch (e) {
+            alert(e);
+        }
+    }
+    //修改标题，失去焦点时进行保存
+    if (typeof self.parent.TabFormExists != 'undefined') {
+        var bExists = self.parent.TabFormExists();
+        if (bExists) {
+            self.parent.ChangTabFormTitle();
+        }
+    }
+    return;
+}
 
 function WinOpen(url) {
     var newWindow = window.open(url, 'z', 'scroll:1;status:1;help:1;resizable:1;dialogWidth:680px;dialogHeight:420px');

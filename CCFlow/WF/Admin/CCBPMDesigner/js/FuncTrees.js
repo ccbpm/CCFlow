@@ -233,42 +233,42 @@ functrees.push({
 		  ]
 });
 //3.组织结构
-functrees.push({
-    Id: "OrgTree",
-    Name: "组织结构",
-    AttrCols: ["TTYPE"],
-    ServiceCount: 1,
-    Nodes: [
-			{ Type: "Node", Id: "OneOne", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneOne",
-			    Nodes: [
-						{ Type: "Node", Id: "OneOneDeptTypies", ParentId: "OneOne", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
-						{ Type: "Node", Id: "OneOneStations", ParentId: "OneOne", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
-					  ]
-			},
-            { Type: "Node", Id: "OneMore", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneMore",
-            			    Nodes: [
-						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "部门类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.DeptTypes" },
-						{ Type: "Node", Id: "Duties", ParentId: "OneMore", Name: "职务维护", TType: "DUTIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.Dutys" },
-						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
-						{ Type: "Node", Id: "Stations", ParentId: "OneMore", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
-					  ]
-            			},
-			{ Type: "Service", ServiceMethod: "GetStructureTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "0",
-			    ColDefine: "TTYPE", Defines: [
-											{ Value: "DEPT", ColDefine: "PARENTNO",
-											    Defines: [
-															{ Value: "0", IconCls: "icon-tree_folder", MenuId: "mDeptRoot", InheritForChild: [{ From: "@@id", To: "fk_dept"}], Opened: true },
-															{ IconCls: "icon-dept", MenuId: "mDept", InheritForChild: [{ From: "@@id", To: "fk_dept"}] }
-														]
-											},
-											{ Value: "STATION", IconCls: "icon-station", MenuId: "mStation", Inherits: ["fk_dept"], InheritForChild: [{ From: "`'@@id'.split('|')[1]`", To: "fk_station"}], LazyLoad: true, Nodes: [
-                                                { Type: "Service", ServiceMethod: "GetEmpsFromStation", Inherits: ["fk_dept", "fk_station"], MethodParams: { fk_dept: "@@fk_dept", fk_station: "@@fk_station" }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null, IconCls: "icon-user", MenuId: "mEmp", Url: "" }
-                                            ]
-											}
-										  ]
-			}
-		  ]
-});
+//functrees.push({
+//    Id: "OrgTree",
+//    Name: "组织结构",
+//    AttrCols: ["TTYPE"],
+//    ServiceCount: 1,
+//    Nodes: [
+//			{ Type: "Node", Id: "OneOne", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneOne",
+//			    Nodes: [
+//						{ Type: "Node", Id: "OneOneDeptTypies", ParentId: "OneOne", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
+//						{ Type: "Node", Id: "OneOneStations", ParentId: "OneOne", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
+//					  ]
+//			},
+//            { Type: "Node", Id: "OneMore", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneMore",
+//            			    Nodes: [
+//						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "部门类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.DeptTypes" },
+//						{ Type: "Node", Id: "Duties", ParentId: "OneMore", Name: "职务维护", TType: "DUTIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.Dutys" },
+//						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
+//						{ Type: "Node", Id: "Stations", ParentId: "OneMore", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
+//					  ]
+//            			},
+//			{ Type: "Service", ServiceMethod: "GetStructureTree", MethodParams: { rootid: '0' }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "0",
+//			    ColDefine: "TTYPE", Defines: [
+//											{ Value: "DEPT", ColDefine: "PARENTNO",
+//											    Defines: [
+//															{ Value: "0", IconCls: "icon-tree_folder", MenuId: "mDeptRoot", InheritForChild: [{ From: "@@id", To: "fk_dept"}], Opened: true },
+//															{ IconCls: "icon-dept", MenuId: "mDept", InheritForChild: [{ From: "@@id", To: "fk_dept"}] }
+//														]
+//											},
+//											{ Value: "STATION", IconCls: "icon-station", MenuId: "mStation", Inherits: ["fk_dept"], InheritForChild: [{ From: "`'@@id'.split('|')[1]`", To: "fk_station"}], LazyLoad: true, Nodes: [
+//                                                { Type: "Service", ServiceMethod: "GetEmpsFromStation", Inherits: ["fk_dept", "fk_station"], MethodParams: { fk_dept: "@@fk_dept", fk_station: "@@fk_station" }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null, IconCls: "icon-user", MenuId: "mEmp", Url: "" }
+//                                            ]
+//											}
+//										  ]
+//			}
+//		  ]
+//});
 //4.系统维护
 functrees.push({
     Id: "sysTree",
@@ -724,7 +724,7 @@ function RefreshNode(sTreeId, oNodeId) {
     /// <summary>刷新指定节点，此方法设计的只有刷新一级节点才可用此方法</summary>
     /// <param name="sTreeId" type="String">定义树Id</param>
     /// <param name="oNodeId" type="Object">要刷新节点的id</param> 
-    var node = $("#" + sTreeId).tree("find", "'" + oNodeId + "'");
+    var node = $("#" + sTreeId).tree("find", oNodeId);
     if (!node) {
         $.messager.alert('错误', '未检索到要刷新的节点！', 'error');
         return;
@@ -964,7 +964,7 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
     });
 
     //设置可以继承的属性值
-    var node = $("#" + oFuncTree.Id).tree("find", '\'' + oNode.Id + '\'');
+    var node = $("#" + oFuncTree.Id).tree("find", oNode.Id);
     if (node.attributes.InheritForChild) {
         $.each(node.attributes.InheritForChild, function () {
             node.attributes[this.To] = ReplaceParams(this.From, node, oFuncTree);

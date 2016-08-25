@@ -10,12 +10,12 @@
 	<link rel="stylesheet" type="text/css" href="normalize/css/ns-default.css" />
 	<link rel="stylesheet" type="text/css" href="normalize/css/ns-style-bar.css" />
     <script type="text/javascript" src="normalize/js/modernizr.custom.js"></script>
-    <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI/themes/gray/dialog.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/gray/dialog.css" rel="stylesheet" type="text/css" />
     <link href="./Img/Menu/Designer.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="lib/browserReady.js" type="text/javascript"></script>
     <script src="js/CCBPMDesignerData.js" type="text/javascript"></script>

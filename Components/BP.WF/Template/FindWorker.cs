@@ -373,7 +373,8 @@ namespace BP.WF.Template
 
                 //获取接受人并格式化接受人, 
                 string emps = this.currWn.HisWork.GetValStringByKey(specEmpFields);
-                emps = emps.Replace(" ", "");
+                emps = emps.Replace(" ", ""); //去掉空格.
+
                 if (emps.Contains(",") && emps.Contains(";"))
                 {
                     /*如果包含,; 例如 zhangsan,张三;lisi,李四;*/

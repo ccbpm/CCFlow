@@ -293,6 +293,14 @@ namespace BP.WF
             return null;
         }
         /// <summary>
+        /// 创建工作ID后的事件
+        /// </summary>
+        /// <returns></returns>
+        public virtual string CreateWorkID()
+        {
+            return null;
+        }
+        /// <summary>
         ///发送前
         /// </summary>
         public virtual string SendWhen()
@@ -433,6 +441,8 @@ namespace BP.WF
             #region 执行事件.
             switch (eventType)
             {
+                case EventListOfNode.CreateWorkID: // 节点表单事件。
+                    return this.CreateWorkID();
                 case EventListOfNode.FrmLoadAfter: // 节点表单事件。
                     return this.FrmLoadAfter();
                 case EventListOfNode.FrmLoadBefore: // 节点表单事件。

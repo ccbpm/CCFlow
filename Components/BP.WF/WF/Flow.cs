@@ -739,6 +739,9 @@ namespace BP.WF
                 throw new Exception("@创建工作失败：有可能是您在设计表单时候，新增加的控件，没有预览导致的，请您刷新一次应该可以解决，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
             }
 
+            //在创建WorkID的时候调用的事件.
+            this.DoFlowEventEntity(EventListOfNode.CreateWorkID, nd,wk,null);
+
             #region copy数据.
             // 记录这个id ,不让其它在复制时间被修改。
             Int64 newOID = wk.OID;

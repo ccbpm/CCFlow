@@ -110,6 +110,10 @@ namespace BP.Sys
         /// </summary>
         public const string DesignerContact = "DesignerContact";
         /// <summary>
+        /// 设计器
+        /// </summary>
+        public const string DesignerTool = "DesignerTool";
+        /// <summary>
         /// 表单类别
         /// </summary>
         public const string FK_FrmSort = "FK_FrmSort";
@@ -276,45 +280,53 @@ namespace BP.Sys
             FrmEles eles = new FrmEles();
             eles.Retrieve(FrmEleAttr.FK_MapData, fk_mapdata);
 
-            #region 生成组合PK.
+            #region 生成组合PK, 为了处理删除的元素使用.
             string lines = "";
-            string labs = "";
-            string links = "";
-            string btns = "";
-            foreach (FrmEle item in eles)
+            FrmLines linEns = new FrmLines();
+            linEns.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+            foreach (FrmLine lin in linEns)
             {
-                if (item.EleType == "Line")
-                {
-                    lines += item.MyPK + ",";
-                    continue;
-                }
-                if (item.EleType == "Lab")
-                {
-                    labs += item.MyPK + ",";
-                    continue;
-                }
-                if (item.EleType == "Line")
-                {
-                    lines += item.MyPK + ",";
-                    continue;
-                }
-                if (item.EleType == "Btn")
-                {
-                    btns += item.MyPK + ",";
-                    continue;
-                }
-                if (item.EleType == "Img")
-                {
-                    btns += item.MyPK + ",";
-                    continue;
-                }
+                lines += lin.MyPK+",";
+            }
+
+            string labs = "";
+            FrmLabs labEns = new FrmLabs();
+            labEns.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+            foreach (FrmLab ele in labEns)
+            {
+                labs += ele.MyPK + ",";
+            }
+
+
+            string links = "";
+            FrmLinks linkEns = new FrmLinks();
+            linkEns.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+            foreach (FrmLink ele in linkEns)
+            {
+                links += ele.MyPK + ",";
+            }
+
+
+            string btns = "";
+            FrmBtns btnEns = new FrmBtns();
+            btnEns.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+            foreach (FrmBtn ele in btnEns)
+            {
+                btns += ele.MyPK + ",";
+            }
+
+            string imgs = "";
+            FrmImgs imgEns = new FrmImgs();
+            imgEns.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+            foreach (FrmImg ele in imgEns)
+            {
+                imgs += ele.MyPK + ",";
             }
             #endregion 生成组合PK.
 
             //字段集合.
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(FrmEleAttr.FK_MapData, fk_mapdata);
-
 
             //循环这个集合,开始执行保存.
             foreach (DataTable dt in ds.Tables)
@@ -334,7 +346,7 @@ namespace BP.Sys
                         SaveCCForm20_Link(fk_mapdata, dt, links);
                         break;
                     case "Sys_FrmImg": //图片.
-                        SaveCCForm20_Img(fk_mapdata, dt, links);
+                        SaveCCForm20_Img(fk_mapdata, dt, imgs);
                         break;
                     case "Sys_FrmEle": //链接.
                         break;
@@ -345,6 +357,7 @@ namespace BP.Sys
                     case "Sys_MapData": //MapData.
                         break;
                     case "Sys_MapAttr": //字段属性.
+                        SaveCCForm20_MapAttr(fk_mapdata, dt);
                         break;
                     case "Sys_MapDtl": //明细表.
                         break;
@@ -357,7 +370,31 @@ namespace BP.Sys
                 }
             }
         }
+        /// <summary>
+        /// 保存字段属性.
+        /// </summary>
+        /// <param name="fk_mapdata"></param>
+        /// <param name="dt"></param>
+        public static void SaveCCForm20_MapAttr(string fk_mapdata, DataTable dt)
+        {
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
 
+            //求出已经有的属性.
+            string pks = "";
+            foreach (MapAttr attr in attrs)
+            {
+                pks += attr.KeyOfEn + ",";
+            }
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                string keyOfEn = dr[MapAttrAttr.KeyOfEn].ToString();
+                string name = dr[MapAttrAttr.Name].ToString();
+                
+            }
+
+        }
         #region 保存 frmEle控件。
         /// <summary>
         /// 保存line
@@ -368,22 +405,26 @@ namespace BP.Sys
         private static void SaveCCForm20_Line(string fk_mapdata, DataTable dt, string elePKs)
         {
             string lines = "";
-            FrmEle ele = new FrmEle();
+            FrmLine ele = new FrmLine();
             foreach (DataRow dr in dt.Rows)
             {
                 ele.MyPK = dr["MyPK"].ToString();
-                ele.EleType = "Line";
                 ele.FK_MapData = fk_mapdata;
 
+                ele.X1 = float.Parse( dr["X1"].ToString());
+                ele.Y1 = float.Parse( dr["Y1"].ToString());
 
-                ele.LineX1 = dr["X"].ToString();
-                ele.LineY1 = dr["Y"].ToString();
+                ele.X2 = float.Parse(dr["X2"].ToString());
+                ele.Y2 = float.Parse(dr["Y2"].ToString());
 
-                ele.LineX2 = dr["W"].ToString();
-                ele.LineY2 = dr["H"].ToString();
+                ele.BorderColor = dr["Color"].ToString();
+                ele.BorderWidth = float.Parse(dr["W"].ToString());
 
-                ele.LineBorderColor = dr["Tag1"].ToString();
-                ele.LineBorderWidth = dr["Tag2"].ToString();
+                if (string.IsNullOrEmpty(ele.MyPK))
+                {
+                    ele.MyPK = BP.DA.DBAccess.GenerGUID();
+                    ele.GUID = ele.MyPK;
+                }
 
                 if (elePKs.Contains(ele.MyPK + ",") == true)
                 {
@@ -401,7 +442,7 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(str))
                     continue;
-                sqls += "@DELETE FROM Sys_FrmEle WHERE MyPK='" + str + "'";
+                sqls += "@DELETE FROM Sys_FrmLine WHERE MyPK='" + str + "'";
             }
 
             if (sqls != "")
@@ -416,11 +457,11 @@ namespace BP.Sys
         private static void SaveCCForm20_Img(string fk_mapdata, DataTable dt, string elePKs)
         {
             string lines = "";
-            FrmEle ele = new FrmEle();
+            FrmImg ele = new FrmImg();
             foreach (DataRow dr in dt.Rows)
             {
                 ele.Copy(dr);
-                ele.EleType = "Img";
+                ele.MyPK = dr["MyPK"].ToString();
                 ele.FK_MapData = fk_mapdata;
 
                 //位置.
@@ -430,12 +471,9 @@ namespace BP.Sys
                 ele.W = float.Parse(dr["W"].ToString());
                 ele.H = float.Parse(dr["H"].ToString());
 
-
                 ele.ImgPath = dr["IMGURL"].ToString();
-                ele.ImgLinkUrl = dr["LINKURL"].ToString();
-                ele.ImgLinkTarget = dr["LINKTARGET"].ToString();
-                ele.ImgPath = dr["LINKURL"].ToString();
-
+                ele.LinkURL = dr["LINKURL"].ToString();
+                ele.LinkTarget = dr["LINKTARGET"].ToString();
 
                 if (elePKs.Contains(ele.MyPK + ",") == true)
                 {
@@ -453,7 +491,7 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(str))
                     continue;
-                sqls += "@DELETE FROM Sys_FrmEle WHERE MyPK='" + str + "'";
+                sqls += "@DELETE FROM Sys_FrmImg WHERE MyPK='" + str + "'";
             }
 
             if (sqls != "")
@@ -467,16 +505,17 @@ namespace BP.Sys
         /// <param name="elePKs">主键s</param>
         private static void SaveCCForm20_Lab(string fk_mapdata, DataTable dt, string elePKs)
         {
-            string lines = "";
-            FrmEle ele = new FrmEle();
+            string pks = "";
+            FrmLab ele = new FrmLab();
             foreach (DataRow dr in dt.Rows)
             {
-                ele.EleType = "Lab";
+                ele.MyPK = dr["MyPK"].ToString();
                 ele.FK_MapData = fk_mapdata;
-                ele.X = int.Parse( dr["X"].ToString());
-                ele.Y = int.Parse(dr["Y"].ToString());
-                ele.LabText = dr["Text"].ToString();
-                ele.LabStyle = dr["FontStyle"].ToString();
+                ele.X = float.Parse(dr["X"].ToString());
+                ele.Y = float.Parse(dr["Y"].ToString());
+                ele.Text = dr["Text"].ToString();
+                ele.FontStyle = dr["FontStyle"].ToString();
+
 
                 if (elePKs.Contains(ele.MyPK + ",") == true)
                 {
@@ -484,7 +523,9 @@ namespace BP.Sys
                     ele.DirectUpdate();
                 }
                 else
+                {
                     ele.DirectInsert();
+                }
             }
 
             //xxxx
@@ -494,7 +535,7 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(str))
                     continue;
-                sqls += "@DELETE FROM Sys_FrmEle WHERE MyPK='" + str + "'";
+                sqls += "@DELETE FROM Sys_FrmLab WHERE MyPK='" + str + "'";
             }
 
             if (sqls != "")
@@ -509,15 +550,15 @@ namespace BP.Sys
         private static void SaveCCForm20_Btn(string fk_mapdata, DataTable dt, string elePKs)
         {
             string lines = "";
-            FrmEle ele = new FrmEle();
+            FrmBtn ele = new FrmBtn();
             foreach (DataRow dr in dt.Rows)
             {
-                ele.EleType = "Btn";
+                ele.MyPK = dr["MyPK"].ToString();
                 ele.FK_MapData = fk_mapdata;
 
-                ele.BtnText = dr["TEXT"].ToString();
+                ele.Text = dr["TEXT"].ToString();
                 ele.BtnType = int.Parse( dr["EVENTTYPE"].ToString());
-                ele.BtnEventContext = dr["EVENTCONTEXT"].ToString(); //执行内容.
+                ele.EventContext = dr["EVENTCONTEXT"].ToString(); //执行内容.
 
                 ele.X = int.Parse(dr["X"].ToString());
                 ele.Y = int.Parse(dr["Y"].ToString());
@@ -533,7 +574,9 @@ namespace BP.Sys
                     ele.DirectUpdate();
                 }
                 else
+                {
                     ele.DirectInsert();
+                }
             }
 
             //xxxx
@@ -543,7 +586,7 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(str))
                     continue;
-                sqls += "@DELETE FROM Sys_FrmEle WHERE MyPK='" + str + "'";
+                sqls += "@DELETE FROM Sys_FrmBtn WHERE MyPK='" + str + "'";
             }
 
             if (sqls != "")
@@ -558,20 +601,20 @@ namespace BP.Sys
         private static void SaveCCForm20_Link(string fk_mapdata, DataTable dt, string elePKs)
         {
             string lines = "";
-            FrmEle ele = new FrmEle();
+            FrmLink ele = new FrmLink();
             foreach (DataRow dr in dt.Rows)
             {
-                ele.EleType = "Link";
+                ele.MyPK = dr["MyPK"].ToString(); 
                 ele.FK_MapData = fk_mapdata;
 
-                ele.X = int.Parse(dr["X"].ToString());
-                ele.Y = int.Parse(dr["Y"].ToString());
+                ele.X = float.Parse(dr["X"].ToString());
+                ele.Y = float.Parse(dr["Y"].ToString());
 
-                ele.LinkText = dr["Text"].ToString();
-                ele.LinkStyle = dr["FontStyle"].ToString();
+                ele.Text = dr["Text"].ToString();
+                ele.FontName = dr["FontStyle"].ToString();
 
-                ele.LinkURL = dr["URL"].ToString();
-                ele.LinkTarget = dr["Target"].ToString();
+                ele.URL = dr["URL"].ToString();
+                ele.Target = dr["Target"].ToString();
 
                 if (elePKs.Contains(ele.MyPK + ",") == true)
                 {
@@ -579,7 +622,9 @@ namespace BP.Sys
                     ele.DirectUpdate();
                 }
                 else
+                {
                     ele.DirectInsert();
+                }
             }
 
             //xxxx
@@ -589,7 +634,7 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(str))
                     continue;
-                sqls += "@DELETE FROM Sys_FrmEle WHERE MyPK='" + str + "'";
+                sqls += "@DELETE FROM Sys_FrmLink WHERE MyPK='" + str + "'";
             }
             if (sqls != "")
                 BP.DA.DBAccess.RunSQLs(sqls);
@@ -679,7 +724,20 @@ namespace BP.Sys
             #endregion 升级ccform控件.
         }
 
-         
+        /// <summary>
+        /// 表单设计器设计工具
+        /// </summary>
+        public string DesignerTool
+        {
+            get
+            {
+                return this.GetParaString(MapDataAttr.DesignerTool,"SL");
+            }
+            set
+            {
+                this.SetPara(MapDataAttr.DesignerTool, value);
+            }
+        }
 
         #region weboffice文档属性(参数属性)
         /// <summary>
@@ -901,7 +959,6 @@ namespace BP.Sys
                 this.SetPara(FrmAttachmentAttr.IsWoEnableDown, value);
             }
         }
-
         #endregion weboffice文档属性
 
         #region 自动计算属性.
@@ -1011,6 +1068,9 @@ namespace BP.Sys
         #endregion 报表属性(参数方式存储).
 
         #region 外键属性
+        /// <summary>
+        ///版本号.
+        /// </summary>
         public string Ver
         {
             get
@@ -1796,16 +1856,10 @@ namespace BP.Sys
                 // enumFrmType  @自由表单，@傻瓜表单，@嵌入式表单.  
                 map.AddTBInt(MapDataAttr.FrmType, 1, "表单类型", true, false);
 
-
-
                 // 应用类型.  0独立表单.1节点表单
                 map.AddTBInt(MapDataAttr.AppType, 0, "应用类型", true, false);
-
-
                 map.AddTBString(MapDataAttr.DBSrc, "local", "数据源", true, false, 0, 100, 20);
-
                 map.AddTBString(MapDataAttr.BodyAttr, null, "表单Body属性", true, false, 0, 100, 20);
-
                 #endregion 基础信息.
 
                 #region 设计者信息.
@@ -1814,12 +1868,12 @@ namespace BP.Sys
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
 
-                //增加参数字段.
-                map.AddTBAtParas(4000);
-
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", true, true);
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, false, 0, 30, 20);
+
+                //增加参数字段.
+                map.AddTBAtParas(4000);
                 #endregion
 
                 this._enMap = map;

@@ -248,7 +248,7 @@ function CCForm_ShowDialog(url, title) {
 }
 //预览表单
 function CCForm_BrowserView() {
-    var url = "../../CCForm/Frm.aspx?FK_MapData=" + CCForm_FK_MapData + "&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
+    var url = "../../CCForm/Frm.aspx?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
     OpenWindow(url);
 }
 //打开页面方法

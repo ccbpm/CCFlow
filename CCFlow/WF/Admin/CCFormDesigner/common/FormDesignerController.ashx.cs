@@ -75,7 +75,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     s_responsetext = Form_LoadFormJsonData();
                     break;
                 case "saveform"://保存表单数据
-                    s_responsetext = Form_Save();
+                    s_responsetext = SaveFrm();
                     break;
                 case "ParseStringToPinyin":// 转拼音方法
                     s_responsetext = ParseStringToPinyin();
@@ -187,6 +187,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             try
             {
                 MapData mapData = new MapData(this.FK_MapData);
+                //if (mapData.DesignerTool != "H5")
+                //    throw new Exception("@错误：当前的表单不是h5设计器设计的，所以您不能打开它。");
                 return mapData.FormJson;
             }
             catch (Exception ex)
@@ -204,7 +206,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         /// 保存表单图信息
         /// </summary>
         /// <returns></returns>
-        private string Form_Save()
+        private string SaveFrm()
         {
             try
             {
@@ -216,16 +218,19 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 if (jd.IsObject == true)
                 {
                     JsonData form_MapData = jd["c"];
-                    //直接保存表单图信息
+                    //直接保存表单图信息.
                     MapData mapData = new MapData(this.FK_MapData);
                     mapData.FrmW = float.Parse(form_MapData["width"].ToJson());
                     mapData.FrmH = float.Parse(form_MapData["height"].ToJson());
+                    mapData.DesignerTool = "H5";
                     mapData.Update();
                     //表单描述文件直接保存到数据库.
                     mapData.FormJson = diagram;
                     //格式化表单串
                     //FormatDiagram2Json(jd);
                     MapData.SaveCCForm20(this.FK_MapData, FormatDiagram2Json(jd));
+
+
                     return "true";
                 }
                 return "error:表单格式不正确，保存失败。";
@@ -233,7 +238,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             catch (Exception ex)
             {
                 Log.DebugWriteError(ex.StackTrace);
-                return ex.Message;
+                return "error:表单格式不正确，保存失败。"+ex.Message;
             }
         }
 
@@ -779,22 +784,30 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         {
             DataSet form_DS = Form_InitDataSource();
 
-            DataTable
-            dtLine = form_DS.Tables[EEleTableNames.Sys_FrmLine],
-            dtBtn = form_DS.Tables[EEleTableNames.Sys_FrmBtn],
-            dtLabel = form_DS.Tables[EEleTableNames.Sys_FrmLab],
-            dtLink = form_DS.Tables[EEleTableNames.Sys_FrmLink],
-            dtImg = form_DS.Tables[EEleTableNames.Sys_FrmImg],
-            dtEle = form_DS.Tables[EEleTableNames.Sys_FrmEle],
-            dtImgAth = form_DS.Tables[EEleTableNames.Sys_FrmImgAth],
-            dtMapAttr = form_DS.Tables[EEleTableNames.Sys_MapAttr],
-            dtRDB = form_DS.Tables[EEleTableNames.Sys_FrmRB],
-            dtlDT = form_DS.Tables[EEleTableNames.Sys_MapDtl],
-            dtWorkCheck = form_DS.Tables[EEleTableNames.WF_Node],
-            dtM2M = form_DS.Tables[EEleTableNames.Sys_MapM2M],
-            dtAth = form_DS.Tables[EEleTableNames.Sys_FrmAttachment];
+            //装饰类元素.
+            DataTable  dtLine = form_DS.Tables[EEleTableNames.Sys_FrmLine];
+            DataTable  dtBtn = form_DS.Tables[EEleTableNames.Sys_FrmBtn];
+            DataTable  dtLabel = form_DS.Tables[EEleTableNames.Sys_FrmLab];
+            DataTable  dtLink = form_DS.Tables[EEleTableNames.Sys_FrmLink];
+            DataTable  dtImg = form_DS.Tables[EEleTableNames.Sys_FrmImg];
 
-            //控件线集合 Line
+            //数据类.
+            DataTable  dtEle = form_DS.Tables[EEleTableNames.Sys_FrmEle];
+            DataTable  dtMapAttr = form_DS.Tables[EEleTableNames.Sys_MapAttr];
+            DataTable  dtRDB = form_DS.Tables[EEleTableNames.Sys_FrmRB];
+           
+            DataTable  dtM2M = form_DS.Tables[EEleTableNames.Sys_MapM2M];
+
+            //附件类.
+            DataTable  dtAth = form_DS.Tables[EEleTableNames.Sys_FrmAttachment];
+            DataTable dtImgAth = form_DS.Tables[EEleTableNames.Sys_FrmImgAth];
+
+            //组件类.
+            DataTable dtlDT = form_DS.Tables[EEleTableNames.Sys_MapDtl];
+            DataTable dtWorkCheck = form_DS.Tables[EEleTableNames.WF_Node];
+             
+
+            #region 控件线集合 Line.
             JsonData form_Lines = formData["m"]["connectors"];
             if (form_Lines.IsArray == true && form_Lines.Count > 0)
             {
@@ -831,13 +844,15 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         {
                             strBorderColor = borderColor["PropertyValue"].ToString();
                         }
-                        drline["BorderWidth"] = strborderWidth;
-                        drline["BorderColor"] = strBorderColor;
+                        drline["W"] = strborderWidth;
+                        drline["Color"] = strBorderColor;
                         dtLine.Rows.Add(drline);
                     }
                     #endregion
                 }
             }
+            #endregion 控件线集合 Line.
+
 
             //其他控件，Label,Img,TextBox
             JsonData form_Controls = formData["s"]["figures"];
@@ -1296,8 +1311,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             dtMapData.Columns.Add(new DataColumn("MaxRight", typeof(double)));
             dtMapData.Columns.Add(new DataColumn("MaxTop", typeof(double)));
             dtMapData.Columns.Add(new DataColumn("MaxEnd", typeof(double)));
-
             #region line
+
             DataTable dtLine = new DataTable();
             dtLine.TableName = EEleTableNames.Sys_FrmLine;
             dtLine.Columns.Add(new DataColumn("MYPK", typeof(string)));
@@ -1312,8 +1327,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             dtLine.Columns.Add(new DataColumn("X2", typeof(double)));
             dtLine.Columns.Add(new DataColumn("Y2", typeof(double)));
 
-            dtLine.Columns.Add(new DataColumn("BorderWidth", typeof(string)));
-            dtLine.Columns.Add(new DataColumn("BorderColor", typeof(string)));
+            dtLine.Columns.Add(new DataColumn("W", typeof(string)));
+            dtLine.Columns.Add(new DataColumn("Color", typeof(string)));
             // lineDT.Columns.Add(new DataColumn("BorderStyle", typeof(string)));
             #endregion line
 
@@ -1391,10 +1406,10 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             dtImg.Columns.Add(new DataColumn("ENPK", typeof(string)));//英文名
             #endregion img
 
-            #region eleDT
+            #region 公共元素存储表
             DataTable dtEle = new DataTable();
             dtEle.TableName = EEleTableNames.Sys_FrmEle;
-            dtEle.Columns.Add(new DataColumn("MYPK", typeof(string)));
+              dtEle.Columns.Add(new DataColumn("MYPK", typeof(string)));
             dtEle.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
 
             //eleDT.Columns.Add(new DataColumn("EleType", typeof(string)));

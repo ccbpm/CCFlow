@@ -2834,6 +2834,9 @@ namespace CCFlow.WF.UC
             string activeFilds = BP.WF.Glo.GenerActiveFiels(mes, null, en, md, mattrs);
 
             #region 输出Ele
+
+            //if (md.HisFrmType ==""
+
             FrmEles eles = this.mapData.FrmEles;
             if (eles.Count >= 1)
             {
@@ -2954,39 +2957,7 @@ namespace CCFlow.WF.UC
                 }
             }
             #endregion 输出Ele
-
-            #region 输出按钮
-            FrmBtns btns = this.mapData.FrmBtns;
-            foreach (FrmBtn btn in btns)
-            {
-                x = btn.X + wtX;
-                this.Add("\t\n<DIV id=u2 style='position:absolute;left:" + x + "px;top:" + btn.Y + "px;text-align:left;' >");
-                this.Add("\t\n<span >");
-
-                string doDoc = BP.WF.Glo.DealExp(btn.EventContext, en, null);
-                switch (btn.HisBtnEventType)
-                {
-                    case BtnEventType.Disable:
-                        this.Add("<input type=button class=Btn value='" + btn.Text.Replace("&nbsp;", " ") + "' disabled='disabled'/>");
-                        break;
-                    case BtnEventType.RunExe:
-                    case BtnEventType.RunJS:
-                        this.Add("<input type=button class=Btn value=\"" + btn.Text.Replace("&nbsp;", " ") + "\" enable=true onclick=\"" + doDoc + "\" />");
-                        break;
-                    default:
-                        Button myBtn = new Button();
-                        myBtn.Enabled = true;
-                        myBtn.CssClass = "Btn";
-                        myBtn.ID = btn.MyPK;
-                        myBtn.Text = btn.Text.Replace("&nbsp;", " ");
-                        myBtn.Click += new EventHandler(myBtn_Click);
-                        this.Add(myBtn);
-                        break;
-                }
-                this.Add("\t\n</span>");
-                this.Add("\t\n</DIV>");
-            }
-            #endregion
+            
 
             #region 输出竖线与标签 & 超连接 Img.
             FrmLabs labs = this.mapData.FrmLabs;
@@ -3245,6 +3216,38 @@ namespace CCFlow.WF.UC
                     }
                 }
                 #endregion
+            }
+
+
+            FrmBtns btns = this.mapData.FrmBtns;
+            foreach (FrmBtn btn in btns)
+            {
+                x = btn.X + wtX;
+                this.Add("\t\n<DIV id=u2 style='position:absolute;left:" + x + "px;top:" + btn.Y + "px;text-align:left;' >");
+                this.Add("\t\n<span >");
+
+                string doDoc = BP.WF.Glo.DealExp(btn.EventContext, en, null);
+                switch (btn.HisBtnEventType)
+                {
+                    case BtnEventType.Disable:
+                        this.Add("<input type=button class=Btn value='" + btn.Text.Replace("&nbsp;", " ") + "' disabled='disabled'/>");
+                        break;
+                    case BtnEventType.RunExe:
+                    case BtnEventType.RunJS:
+                        this.Add("<input type=button class=Btn value=\"" + btn.Text.Replace("&nbsp;", " ") + "\" enable=true onclick=\"" + doDoc + "\" />");
+                        break;
+                    default:
+                        Button myBtn = new Button();
+                        myBtn.Enabled = true;
+                        myBtn.CssClass = "Btn";
+                        myBtn.ID = btn.MyPK;
+                        myBtn.Text = btn.Text.Replace("&nbsp;", " ");
+                        myBtn.Click += new EventHandler(myBtn_Click);
+                        this.Add(myBtn);
+                        break;
+                }
+                this.Add("\t\n</span>");
+                this.Add("\t\n</DIV>");
             }
             #endregion 输出竖线与标签
 

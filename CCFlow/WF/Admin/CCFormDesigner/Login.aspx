@@ -1,8 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="CCFlow.WF.Admin.CCBPMDesigner.Login" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="CCFlow.WF.Admin.CCFormDesigner.Login" %>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
+<head id="Head1" runat="server">
     <title>ccbpm6</title>
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="lib/browserReady.js"></script>
@@ -383,15 +384,15 @@
             document.write('<div style="width:100%;"><span style="align:center;background-color: red;" >');
             document.write("当前浏览器不支持HTML5。");
             document.write("</span></div>");
-            
+
         }
     </script>
 </head>
 <body>
     <div class="container">
         <section id="content">
-		 <form action="Login.aspx?DoType=Login" runat="server">
-			<h1>驰骋<span style="color:Red;">CC</span><span style="color:Blue;">BPM</span>流程设计器</h1>
+		 <form id="Form1" action="Login.aspx?DoType=Login" runat="server">
+			<h1>驰骋<span style="color:Red;">cc</span><span style="color:Blue;">form</span>表单设计器</h1>
 			<div>
 				<input runat="server" type="text" placeholder="用户名" required="" value="admin" class="username" id="TB_UserName" />
 			</div>
@@ -399,15 +400,12 @@
 				<input runat="server" type="password" placeholder="密码" required="" class="password" id="TB_Password" />
 			</div>
 			<div>
-				<input type="submit" value="H5版(Beta)" /> 
+				<input type="submit" value="登录" /> 
 			</div>
 
-             <div>
-              <input type="button" value="Silverlight版" onclick="javascript:window.location.href='../XAP/Designer.aspx'" />
-			</div>
 		</form>
 		<div class="button">
-			<a href="http://ccbpm.mydoc.io/" target="_blank" > <img src="../../Img/Help.png" alt="" />帮助</a>|<a href="../CCFormDesigner/Login.aspx">独立表单引擎</a>
+			<a href="http://ccform.mydoc.io/" target="_blank" > <img src="../../Img/Help.png" alt="" />在线帮助</a>|<a href="../CCBPMDesigner/Login.aspx">流程设计器</a>
 		</div>
 	</section>
     </div>

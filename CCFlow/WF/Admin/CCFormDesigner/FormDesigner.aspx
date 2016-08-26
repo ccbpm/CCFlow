@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>CCForm表单设计器</title>
+    <title>CCForm 表单设计器 </title>
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
@@ -86,8 +86,16 @@
     </style>
 </head>
 <body id="body">
+<%
+  BP.Sys.MapData md = new BP.Sys.MapData(this.Request.QueryString["FK_MapData"]);
+            if (md.DesignerTool != "H5")
+            {
+               // BP.Sys.PubClass.WinCloseAndAlertMsg("@当前表单并非是H5表单设计器设计的，您不能打开。");
+               // return;
+            }
+ %>
     <div id="actions" class="actions" style="font-size: 12px;">
-        <a style="text-decoration: none;" href="javascript:save(true);" title="保存(Ctrl-S)">
+        <a style="text-decoration: none;" href="javascript:Save(true);" title="保存(Ctrl-S)">
             <img src="assets/images/icon_save.jpg" id="SaveImg" border="0" width="16" height="16" />
             <label for="SaveImg" class="toolbarText">保存</label>
         </a>
@@ -97,12 +105,12 @@
             <label for="BrowserView" class="toolbarText">预览</label>
         </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
-        <a style="text-decoration: none;" href="javascript:Run_Flow();" title="导出流程">
+        <a style="text-decoration: none;" href="javascript:Exp();" title="导出表单模版">
             <img src="Img/toolbar/Exp.png" id="ExpFrmXml" border="0" width="16" height="16" alt="" />
             <label for="ExpFrmXml" class="toolbarText">导出</label>
         </a>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
-        <a style="text-decoration: none;" href="javascript:Run_Flow();" title="导入流程">
+        <a style="text-decoration: none;" href="javascript:Imp();" title="导入表单模版">
             <img src="Img/toolbar/Imp.png" id="ImpFrmXml" border="0" width="16" height="16" alt="" />
             <label for="ImpFrmXml" class="toolbarText">导入</label>
         </a>
@@ -165,14 +173,14 @@
     </div>
     <br />
     <div id="mFormSheet" class="easyui-menu" style="width: 120px;">
-        <div onclick="NodeCreate_ByFlowMenu()" data-options="iconCls:'icon-AddNode'">添加节点</div>
+        <%--<div onclick="NodeCreate_ByFlowMenu()" data-options="iconCls:'icon-AddNode'">添加节点</div>
         <div onclick="action('connector-straight')" data-options="iconCls:'icon-Line'">添加连线</div>
         <div onclick="createFigure(figure_Text, 'assets/images/text.gif')" data-options="iconCls:'icon-Text'">添加标签</div>
         <div class="menu-sep">
         </div>
         <div onclick="FlowProperty()" data-options="iconCls:'icon-property'">流程属性</div>
-        <div onclick="Run_Flow()" data-options="iconCls:'icon-RunFlow'">运行流程</div>
-        <div onclick="Check_Flow()" data-options="iconCls:'icon-CheckFlow'">检查流程</div>
+        <div onclick="Run_Flow()" data-options="iconCls:'icon-RunFlow'">运行流程</div>--%>
+        <div onclick="View()" data-options="iconCls:'icon-CheckFlow'">预览</div>
         <div class="menu-sep">
         </div>
         <div onclick="GridLineVisible()" data-options="iconCls:'icon-new'">

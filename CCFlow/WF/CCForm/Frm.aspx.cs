@@ -228,7 +228,6 @@ namespace CCFlow.WF.CCForm
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             #region  属性
             string sealName = null;
             #endregion 属性
@@ -294,12 +293,20 @@ namespace CCFlow.WF.CCForm
                     Height = "800";
 
                 this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px' >");
-                
-                if (md.HisFrmType == FrmType.FreeFrm)
+
+                //类型.
+                string frmType = this.Request.QueryString["FrmType"];
+                FrmType ft= md.HisFrmType;
+                if (frmType == "FreeFrm")
+                    ft = FrmType.FreeFrm;
+                if (frmType == "FoolForm")
+                    ft = FrmType.FoolForm;
+
+                if (ft == FrmType.FreeFrm)
                     this.UCEn1.BindCCForm(dtlEn, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
 
-                if (md.HisFrmType == FrmType.FoolForm)
-                    this.UCEn1.BindCCForm(dtlEn, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
+                if (ft == FrmType.FoolForm)
+                    this.UCEn1.BindColumn4(dtlEn, this.FK_MapData);
 
                 this.AddJSEvent(dtlEn);
                 this.UCEn1.Add("</div>");
@@ -444,8 +451,16 @@ namespace CCFlow.WF.CCForm
                     if (ii == 0 || this.HisFrmNode.FrmSln == 0)
                     {
                         /*说明没有配置,或者方案编号为默认就不用处理,*/
-                        if ( md.HisFrmType == FrmType.FreeFrm)
-                        this.UCEn1.BindCCForm(en, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
+                        //类型.
+                        string frmType = this.Request.QueryString["FrmType"];
+                        FrmType ft = md.HisFrmType;
+                        if (frmType == "FreeFrm")
+                            ft = FrmType.FreeFrm;
+                        if (frmType == "FoolForm")
+                            ft = FrmType.FoolForm;
+
+                        if (ft == FrmType.FreeFrm)
+                            this.UCEn1.BindCCForm(en, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
                         else
                             this.UCEn1.BindColumn4(en, this.FK_MapData);
 
@@ -524,7 +539,7 @@ namespace CCFlow.WF.CCForm
                         {
                             isLoadData = false;
                         }
-                        
+
                         this.UCEn1.BindCCForm(en, md, mattrs, this.FK_MapData, !this.IsEdit, Int64.Parse(Width), isLoadData);
 
                         #region 检查必填项

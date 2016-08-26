@@ -28,7 +28,6 @@
             this.Response.Redirect("FormDesigner.aspx?FK_MapData=" + fk_mapdata, true);
             return;
         }
-        
          
        %>
     </div>

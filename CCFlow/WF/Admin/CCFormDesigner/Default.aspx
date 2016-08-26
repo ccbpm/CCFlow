@@ -1,28 +1,27 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CCFlow.WF.Admin.CCBPMDesigner.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CCFlow.WF.Admin.ccformDesigner.Default" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-    <title>CCBPM设计器</title>
+    <title>驰骋表单设计器 - ccform</title>
 	<link rel="stylesheet" type="text/css" href="normalize/css/demo.css" />
 	<link rel="stylesheet" type="text/css" href="normalize/css/ns-default.css" />
 	<link rel="stylesheet" type="text/css" href="normalize/css/ns-style-bar.css" />
     <script type="text/javascript" src="normalize/js/modernizr.custom.js"></script>
-    <link href="../../Scripts/easyUI15/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI15/themes/gray/dialog.css" rel="stylesheet" type="text/css" />
-    <link href="./Img/Menu/Designer.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/gray/dialog.css" rel="stylesheet" type="text/css" />
+    <link href="../CCBPMDesigner/Img/Menu/Designer.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="lib/browserReady.js" type="text/javascript"></script>
     <script src="js/CCBPMDesignerData.js" type="text/javascript"></script>
     <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
     <script src="js/FuncTrees.js" type="text/javascript"></script>
-    <script src="js/Left.js" type="text/javascript"></script>
-
+    <script src="../CCBPMDesigner/js/Left.js" type="text/javascript"></script>
     <style type="text/css">
     .icon-Search
     {
@@ -500,8 +499,7 @@
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
         z-index: 21006;">
     </div>
-    <div data-options="region:'west',border:true,split:true"
-     title="<div class='logpanel'><div class='icon-logPic'></div><div class='logPicspan'>驰骋BPM</div></div>" style="width: 280px;">
+    <div data-options="region:'west',border:true,split:true" title="<div class='logpanel'><div class='icon-logPic'></div><div class='logPicspan'>驰骋表单引擎</div></div>"   style="width: 280px;">
         <div id="menuTab" class="easyui-tabs" data-options="fit:true,border:false">
         </div>
     </div>
@@ -513,7 +511,8 @@
                 document.write("</span>");
             }
         </script>
-        <div id="tabs" class="easyui-tabs" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false"
+         data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
         </div>
         <div id="tab-tools">
             <a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="Login2App()"><b style="color: Blue;"><img alt='使用普通用户,登录前台demo系统' src='/WF/App/Classic/Img/Key.png' style="width:14px;height:14px;"/>登录前台</b></a> 

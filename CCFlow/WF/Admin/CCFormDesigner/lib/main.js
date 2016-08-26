@@ -3142,7 +3142,9 @@ function linkMap() {
 *  2 - from quick toolbar
 *  3 - from shortcut Ctrl-S (onKeyDown)
 **/
-function save(showInfo) {
+function Save(showInfo) {
+    alert(showInfo);
+
     if (state == STATE_TEXT_EDITING) {
         currentTextEditor.destroy();
         currentTextEditor = null;

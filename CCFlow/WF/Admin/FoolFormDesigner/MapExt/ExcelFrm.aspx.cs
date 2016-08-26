@@ -98,6 +98,8 @@ namespace CCFlow.WF.MapDef.MapExtUI
         void btn_SaveExcelFrm_Click(object sender, EventArgs e)
         {
             MapData ath = new MapData(this.FK_MapData);
+
+           
             ath.IsWoEnableWF = this.Pub1.GetCBByID("CB_" + FrmAttachmentAttr.IsWoEnableWF).Checked;
             ath.IsWoEnableSave = this.Pub1.GetCBByID("CB_" + FrmAttachmentAttr.IsWoEnableSave).Checked;
             ath.IsWoEnableReadonly = this.Pub1.GetCBByID("CB_" + FrmAttachmentAttr.IsWoEnableReadonly).Checked;

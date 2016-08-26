@@ -27,7 +27,7 @@ namespace CCFlow.WF.Admin
         {
             get
             {
-                string str= this.Request.QueryString["NodeID"];
+                string str = this.Request.QueryString["NodeID"];
                 if (string.IsNullOrEmpty(str))
                     return "0";
                 return str;
@@ -37,7 +37,16 @@ namespace CCFlow.WF.Admin
         {
             get
             {
-                return this.Request.QueryString["FK_MapData"];
+                string fk_md = this.Request.QueryString["FK_MapData"];
+                if (string.IsNullOrWhiteSpace(fk_md))
+                {
+                    if (this.NodeID == "0")
+                        return string.Empty;
+
+                    return "ND" + this.NodeID;
+                }
+
+                return fk_md;
             }
         }
         public new string ShowType
@@ -51,7 +60,7 @@ namespace CCFlow.WF.Admin
                 if (this.NodeID == "0" && string.IsNullOrEmpty(this.FK_Flow) == false && this.FK_Flow.Length >= 3)
                     return "Flow";
 
-                if (this.NodeID == "0" && string.IsNullOrEmpty(this.FK_MapData)==false )
+                if (this.NodeID == "0" && string.IsNullOrEmpty(this.FK_MapData) == false)
                     return "Frm";
 
                 return "Node";
@@ -61,8 +70,8 @@ namespace CCFlow.WF.Admin
         {
             get
             {
-               string fk_flow = this.Request.QueryString["FK_Flow"];
-               return fk_flow;
+                string fk_flow = this.Request.QueryString["FK_Flow"];
+                return fk_flow;
 
                 //if(string.IsNullOrWhiteSpace(fk_flow))
                 //{
@@ -103,9 +112,9 @@ namespace CCFlow.WF.Admin
             }
 
             FrmEvents ndevs = new FrmEvents();
-            if (this.FK_MapData!=null)
-              ndevs.Retrieve(FrmEventAttr.FK_MapData, this.FK_MapData);
 
+            if (!string.IsNullOrWhiteSpace(this.FK_MapData))
+                ndevs.Retrieve(FrmEventAttr.FK_MapData, this.FK_MapData);
 
             EventLists xmls = new EventLists();
             xmls.RetrieveAll();
@@ -119,9 +128,9 @@ namespace CCFlow.WF.Admin
             #region //生成事件列表
             foreach (EventSource item in ess)
             {
-                if (item.No != this.ShowType )
+                if (item.No != this.ShowType)
                     continue;
-                 
+
                 Pub1.Add(string.Format("<div title='{0}' style='padding:10px; overflow:auto' data-options=''>", item.Name));
                 Pub1.AddUL("class='navlist'");
 
@@ -189,7 +198,7 @@ namespace CCFlow.WF.Admin
                     this.Pub2.AddFieldSetEnd();
                 }
 
-                if (this.FK_Flow != null && this.NodeID =="0")
+                if (this.FK_Flow != null && this.NodeID == "0")
                 {
                     this.Pub2.AddFieldSet("流程事件");
                     this.Pub2.AddUL();
@@ -229,25 +238,25 @@ namespace CCFlow.WF.Admin
             this.Title = "设置:事件接口=》" + myEnentXml.Name;
             this.CurrentEvent = myEnentXml.Name;
 
-            Pub2.Add("<div id='tabMain' class='easyui-tabs' data-options='fit:true'>");
+            //Pub2.Add("<div id='tabMain' class='easyui-tabs' data-options='fit:true'>");
 
-            Pub2.Add("<div title='事件接口' style='padding:5px'>" + Environment.NewLine);
+            //Pub2.Add("<div title='事件接口' style='padding:5px'>" + Environment.NewLine);
             Pub2.Add("<iframe id='src1' frameborder='0' src='' style='width:100%;height:100%' scrolling='auto'></iframe>");
-            Pub2.Add("</div>" + Environment.NewLine);
+            //Pub2.Add("</div>" + Environment.NewLine);
 
-            if (myEnentXml.IsHaveMsg == true)
-            {
-                HaveMsg = true;
-                Pub2.Add("<div title='向当事人推送消息' style='padding:5px'>" + Environment.NewLine);
-                Pub2.Add("<iframe id='src2' frameborder='0' src='' style='width:100%;height:100%' scrolling='auto'></iframe>");
-                Pub2.Add("</div>" + Environment.NewLine);
+            //if (myEnentXml.IsHaveMsg == true)
+            //{
+            //    HaveMsg = true;
+            //    Pub2.Add("<div title='向当事人推送消息' style='padding:5px'>" + Environment.NewLine);
+            //    Pub2.Add("<iframe id='src2' frameborder='0' src='' style='width:100%;height:100%' scrolling='auto'></iframe>");
+            //    Pub2.Add("</div>" + Environment.NewLine);
 
-                Pub2.Add("<div title='向其他指定的人推送消息' style='padding:5px'>" + Environment.NewLine);
-                Pub2.Add("<iframe id='src3' frameborder='0' src='' style='width:100%;height:100%' scrolling='auto'></iframe>");
-                Pub2.Add("</div>" + Environment.NewLine);
-            }
+            //    Pub2.Add("<div title='向其他指定的人推送消息' style='padding:5px'>" + Environment.NewLine);
+            //    Pub2.Add("<iframe id='src3' frameborder='0' src='' style='width:100%;height:100%' scrolling='auto'></iframe>");
+            //    Pub2.Add("</div>" + Environment.NewLine);
+            //}
 
-            Pub2.Add("</div>");
+            //Pub2.Add("</div>");
         }
     }
 }

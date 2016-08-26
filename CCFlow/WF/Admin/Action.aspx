@@ -23,10 +23,10 @@
             var urlParams = "?NodeID=<%=this.NodeID %>&MyPK=<%=this.MyPK %>&Event=<%=this.Event %>&FK_MapData=<%=this.FK_MapData %>&FK_Flow=<%=this.FK_Flow %>&tk=";
             $("#src1").attr("src","ActionEvent.aspx" + urlParams + Math.random());
 
-            if(showMsg){
-                $("#src2").attr("src","ActionPush2Curr.aspx" + urlParams + Math.random());
-                $("#src3").attr("src","ActionPush2Spec.aspx" + urlParams + Math.random());
-            }
+//            if(showMsg){
+//                $("#src2").attr("src","ActionPush2Curr.aspx" + urlParams + Math.random());
+//                $("#src3").attr("src","ActionPush2Spec.aspx" + urlParams + Math.random());
+//            }
         });
     </script>
 </head>

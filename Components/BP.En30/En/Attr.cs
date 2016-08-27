@@ -226,7 +226,6 @@ namespace BP.En
             {
                 switch (this.MyDataType)
                 {
-                    case BP.DA.DataType.AppRate:
                     case BP.DA.DataType.AppMoney:
                         return BP.Web.Controls.TBType.Moneny;
                     case BP.DA.DataType.AppInt:
@@ -282,7 +281,6 @@ namespace BP.En
                     || MyDataType == DataType.AppFloat
                     || MyDataType == DataType.AppInt
                     || MyDataType == DataType.AppMoney
-                    || MyDataType == DataType.AppRate
                     )
                     return true;
                 else

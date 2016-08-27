@@ -684,7 +684,6 @@ namespace BP.Sys
             {
                 switch (this.MyDataType)
                 {
-                    case BP.DA.DataType.AppRate:
                     case BP.DA.DataType.AppMoney:
                         return BP.Web.Controls.TBType.Moneny;
                     case BP.DA.DataType.AppInt:

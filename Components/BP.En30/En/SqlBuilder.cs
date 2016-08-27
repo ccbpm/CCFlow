@@ -593,7 +593,6 @@ namespace BP.En
                                 sql += "[" + attr.Field + "]  NVARCHAR (" + attr.MaxLength + ") NULL,";
                         }
                         break;
-                    case DataType.AppRate:
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                         sql += "[" + attr.Field + "] FLOAT NULL,";
@@ -653,7 +652,6 @@ namespace BP.En
                                 sql += "[" + attr.Field + "] text,";
                         }
                         break;
-                    case DataType.AppRate:
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                         sql += "[" + attr.Field + "] float  NULL,";
@@ -726,7 +724,6 @@ namespace BP.En
                                 sql += attr.Field + " varchar (" + attr.MaxLength + ") NULL,";
                         }
                         break;
-                    case DataType.AppRate:
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                     case DataType.AppDouble:
@@ -790,7 +787,6 @@ namespace BP.En
                                 sql += attr.Field + " varchar (" + attr.MaxLength + "),";
                         }
                         break;
-                    case DataType.AppRate:
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                     case DataType.AppDouble:
@@ -855,7 +851,6 @@ namespace BP.En
                                 sql += attr.Field + " NVARCHAR (" + attr.MaxLength + ") NULL COMMENT '" + attr.Desc + "',";
                         }
                         break;
-                    case DataType.AppRate:
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                     case DataType.AppDouble:

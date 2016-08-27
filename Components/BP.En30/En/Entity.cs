@@ -967,7 +967,6 @@ namespace BP.En
                                     break;
                                 case DataType.AppDouble:
                                 case DataType.AppMoney:
-                                case DataType.AppRate:
                                     qo.AddWhere(pk, this.GetValDecimalByKey(attr.Key));
                                     break;
                                 default:
@@ -2515,7 +2514,6 @@ namespace BP.En
                             continue;
                         case DataType.AppFloat:
                         case DataType.AppMoney:
-                        case DataType.AppRate:
                         case DataType.AppDouble:
                             DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                             continue;
@@ -2603,8 +2601,6 @@ namespace BP.En
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
-                    case DataType.AppRate:
-                    case DataType.AppDouble:
                         if (FType != "float")
                         {
                             /*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
@@ -2794,7 +2790,6 @@ namespace BP.En
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
-                    case DataType.AppRate:
                     case DataType.AppDouble:
                         DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT  " + attr.DefaultVal + " ");
                         break;
@@ -2813,8 +2808,7 @@ namespace BP.En
                     || attr.MyDataType == DataType.AppFloat
                     || attr.MyDataType == DataType.AppInt
                     || attr.MyDataType == DataType.AppMoney
-                    || attr.MyDataType == DataType.AppBoolean
-                    || attr.MyDataType == DataType.AppRate)
+                    || attr.MyDataType == DataType.AppBoolean)
                     continue;
 
                 int maxLen = attr.MaxLength;
@@ -2954,7 +2948,6 @@ namespace BP.En
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
-                    case DataType.AppRate:
                     case DataType.AppDouble:
                         DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " FLOAT (11,2) DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
                         break;
@@ -2973,8 +2966,7 @@ namespace BP.En
                     || attr.MyDataType == DataType.AppFloat
                     || attr.MyDataType == DataType.AppInt
                     || attr.MyDataType == DataType.AppMoney
-                    || attr.MyDataType == DataType.AppBoolean
-                    || attr.MyDataType == DataType.AppRate)
+                    || attr.MyDataType == DataType.AppBoolean )
                     continue;
 
                 int maxLen = attr.MaxLength;
@@ -3108,8 +3100,6 @@ namespace BP.En
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
-                    case DataType.AppRate:
-                    case DataType.AppDouble:
                         DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                         break;
                     default:
@@ -3127,8 +3117,7 @@ namespace BP.En
                     || attr.MyDataType == DataType.AppFloat
                     || attr.MyDataType == DataType.AppInt
                     || attr.MyDataType == DataType.AppMoney
-                    || attr.MyDataType == DataType.AppBoolean
-                    || attr.MyDataType == DataType.AppRate)
+                    || attr.MyDataType == DataType.AppBoolean)
                     continue;
 
                 int maxLen = attr.MaxLength;

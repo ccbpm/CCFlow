@@ -1787,10 +1787,6 @@ namespace BP.DA
         /// AppMoney
         /// </summary>
         public const int AppMoney = 8;
-        /// <summary>
-        /// 率百分比。
-        /// </summary>
-        public const int AppRate = 9;
         #endregion
 
         #region 其他方法.

@@ -2504,7 +2504,6 @@ namespace BP.WF
                             break;
                         case DataType.AppMoney:
                         case DataType.AppDouble:
-                        case DataType.AppRate:
                         case DataType.AppFloat:
                             wk.SetValByKey(attr.Key, decimal.Parse(val));
                             break;
@@ -2559,7 +2558,6 @@ namespace BP.WF
                             break;
                         case DataType.AppMoney:
                         case DataType.AppDouble:
-                        case DataType.AppRate:
                         case DataType.AppFloat:
                             wkNext.SetValByKey(attr.Key, decimal.Parse(val));
                             break;

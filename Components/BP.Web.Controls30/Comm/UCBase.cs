@@ -2664,7 +2664,6 @@ namespace BP.Web.UC
                         this.AddTD("valign=top class='TDNum'", en.GetValDecimalByKey(ad.Attr).ToString("0.00"));
                         break;
                     case DataType.AppDouble:
-                    case DataType.AppRate:
                         this.AddTD("valign=top class='TDNum'", en.GetValStringByKey(ad.Attr));
                         break;
                     default:

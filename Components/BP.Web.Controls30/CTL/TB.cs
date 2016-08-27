@@ -306,7 +306,6 @@ namespace BP.Web.Controls
                     this.Attributes["onfocus"] = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});";
                     break;
                 case DataType.AppMoney:
-                case DataType.AppRate:
                     this.ShowType = TBType.Moneny;
                     break;
                 case DataType.AppString:
@@ -343,7 +342,6 @@ namespace BP.Web.Controls
                     this.Attributes["onfocus"] = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});";
                     break;
                 case DataType.AppMoney:
-                case DataType.AppRate:
                     this.ShowType = TBType.Moneny;
                     break;
                 case DataType.AppString:

@@ -939,7 +939,6 @@ namespace BP.DTS
 						case DataType.AppFloat:
 						case DataType.AppInt:
 						case DataType.AppMoney:
-						case DataType.AppRate:
 						case DataType.AppDate:
 						case DataType.AppDouble:
 							UpdateSQL+=  ff.ToField+ "="+FromDR[ff.FromField].ToString()+"," ;

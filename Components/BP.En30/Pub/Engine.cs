@@ -978,7 +978,6 @@ namespace BP.Pub
                                 {
                                     case DataType.AppDouble:
                                     case DataType.AppFloat:
-                                    case DataType.AppRate:
                                         rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStringByKey(attr.Key));
                                         break;
                                     case DataType.AppMoney:
@@ -1031,7 +1030,6 @@ namespace BP.Pub
                             case DataType.AppDouble:
                             case DataType.AppFloat:
                             case DataType.AppMoney:
-                            case DataType.AppRate:
                                 key = "<" + shortName + "." + attr.Key + ".SUM>";
                                 if (str.IndexOf(key) != -1)
                                     str = str.Replace(key, dtls.GetSumFloatByKey(attr.Key).ToString());

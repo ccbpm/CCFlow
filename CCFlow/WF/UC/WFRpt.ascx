@@ -7,7 +7,7 @@
     $(function () {
         var userStyle = "<%=BP.WF.Glo.GetUserStyle %>";
         $('#myFlowcss').attr('href', '/DataUser/Style/MyFlow.css');
-        var screenHeight = document.documentElement.clientHeight;
+        var screenHeight = window.screen.height; //document.documentElement.clientHeight;
         var topBarHeight = 40;
         var allHeight = topBarHeight;
         if ("<%=BtnWord %>" == "2")

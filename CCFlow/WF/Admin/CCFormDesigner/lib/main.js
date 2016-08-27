@@ -254,12 +254,21 @@ var CCForm_Controls = {
     HyperLink: 'HyperLink',
     Image: 'Image',
     TextBox: 'TextBox',
+    TextBoxInt: 'TextBoxInt',
+    TextBoxMoney: 'TextBoxMoney',
+    TextBoxFloat: 'TextBoxFloat',
     Date: 'Date',
     DateTime: 'DateTime',
     RadioButton: 'RadioButton',
     RadioButtList: 'RadioButtonList',
     CheckBox: 'CheckBox',
-    CheckBoxList: 'CheckBoxList'
+    DropDownListEnum: 'DropDownListEnum',
+    DropDownListTable: 'DropDownListTable',
+    CheckBoxList: 'CheckBoxList',
+    Dtl: 'Dtl',
+    HiddendField: 'HiddendField'
+
+
 };
 /**End - FormControl***********/
 

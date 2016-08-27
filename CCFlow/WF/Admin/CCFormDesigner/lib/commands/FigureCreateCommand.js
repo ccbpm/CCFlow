@@ -38,6 +38,7 @@ FigureCreateCommand.prototype = {
             createdFigure.style.lineWidth = defaultLineWidth;
             //ccflow business logic
             switch (createFigureName) {
+
                 case CCForm_Controls.Label:
                 case CCForm_Controls.Button:
                 case CCForm_Controls.HyperLink:
@@ -45,11 +46,23 @@ FigureCreateCommand.prototype = {
                     createdFigure.CCForm_MyPK = Util.NewGUID();
                     break;
                 case CCForm_Controls.TextBox:
+                case CCForm_Controls.TextBoxInt:
+                case CCForm_Controls.TextBoxFloat:
+                case CCForm_Controls.TextBoxMoney:
                 case CCForm_Controls.Date:
                 case CCForm_Controls.DateTime:
                 case CCForm_Controls.CheckBox:
                     canAddFigure = false;
                     this.DataFieldCreate(createdFigure, this.x, this.y);
+                    break;
+                case CCForm_Controls.ListBox:
+                case CCForm_Controls.HiddendField:
+                    alert('目前还没有对{' + createFigureName + '}提供该控件的支持.');
+                    return;
+                case CCForm_Controls.RadioButton:
+                case CCForm_Controls.DropDownListEnum:
+                    canAddFigure = false;
+                    this.RadioButtonCreate(createdFigure, this.x, this.y);
                     break;
                 case CCForm_Controls.RadioButton:
                     canAddFigure = false;
@@ -82,7 +95,18 @@ FigureCreateCommand.prototype = {
     },
     /**创建数据字段**/
     DataFieldCreate: function (createdFigure, x, y) {
+
         var dgId = "iframeTextBox";
+
+        //        switch (createFigureName) {
+        //            case CCForm_Controls.ListBox:
+        //                alert('尚未完成.');
+        //                return;
+        //            default:
+        //                break;
+        //        }
+        // alert(createFigureName);
+
         var url = "DialogCtr/FrmTextBox.htm?DataType=" + createFigureName + "&s=" + Math.random();
         var funIsExist = this.IsExist;
 
@@ -101,9 +125,10 @@ FigureCreateCommand.prototype = {
             //判断主键是否存在
             var isExit = funIsExist(newFormFieldInfo.En_FieldName);
             if (isExit == true) {
-                $.messager.alert("错误", "已存在ID为" + newFormFieldInfo.En_FieldName + "的元素，不允许添加同名元素！", "error");
+                $.messager.alert("错误", "已存在ID为(" + newFormFieldInfo.En_FieldName + ")的元素，不允许添加同名元素！", "error");
                 return false;
             }
+
             //控件数据类型
             if (newFormFieldInfo.FieldType == "1") {
                 createdFigure.CCForm_Shape = "TextBox_Str";
@@ -127,9 +152,29 @@ FigureCreateCommand.prototype = {
             if (newFormFieldInfo.IsHidenField == true) {
                 HidenFieldFun(newFormFieldInfo);
             } else {
+
                 //根据信息创建不同类型的数字控件
                 var transField = new TransFormDataField(createdFigure, newFormFieldInfo, x, y);
-                transField.paint();
+
+                // 定义参数，让其保存到数据库里。
+                var param = {
+                    action: "DoType",
+                    DoType: "NewField",
+                    v1: CCForm_FK_MapData,
+                    v2: newFormFieldInfo.En_FieldName,
+                    v3: newFormFieldInfo.ZH_CN_FieldName,
+                    v4: newFormFieldInfo.FieldType,
+                    v5: x,
+                    v6: y
+                };
+                ajaxService(param, function (json) {
+                    if (json == "true") {
+                        //开始画这个-元素.
+                        transField.paint();
+                    } else {
+                        Designer_ShowMsg(json);
+                    }
+                }, this);
             }
         }, this.HidenFieldCreate);
 
@@ -141,7 +186,9 @@ FigureCreateCommand.prototype = {
         var url = "DialogCtr/FrmEnumeration.htm?DataType=&s=" + Math.random();
         var funIsExist = this.IsExist;
 
-        OpenEasyUiDialog(url, dgId, '新建单选按钮', 650, 394, 'icon-new', true, function () {
+        var lab = '新建单选按钮';
+
+        OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
             var win = document.getElementById(dgId).contentWindow;
             var newFormFieldInfo = win.getNewTBInfo();
 
@@ -251,7 +298,7 @@ TransFormDataField.prototype = {
         this.LabelCreateForFigure();
         draw();
     },
-    /**根据控件类型，生成不同控件描述and propertys**/
+    /**根据控件类型，生成不同控件描述 and propertys**/
     Transform: function () {
         var createdFigure = this.figure;
         var propertys = CCForm_Control_Propertys.TextBox_Str;

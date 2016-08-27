@@ -99,12 +99,19 @@
             <img src="assets/images/icon_save.jpg" id="SaveImg" border="0" width="16" height="16" />
             <label for="SaveImg" class="toolbarText">保存</label>
         </a>
-        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt='预览表单工作模式.' />
         <a style="text-decoration: none;" href="javascript:CCForm_BrowserView();" title="预览">
             <img src="Img/toolbar/View.png" id="BrowserView" border="0" width="16" height="16" alt="" />
             <label for="BrowserView" class="toolbarText">预览</label>
         </a>
-        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+
+    <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt='设计傻瓜表单.' />
+        <a style="text-decoration: none;" href="javascript:CCForm_FoolFrm();" title="傻瓜表单">
+            <img src="Img/toolbar/View.png" id="Img2" border="0" width="16" height="16" alt="" />
+            <label for="BrowserView" class="toolbarText">设计傻瓜表单</label>
+        </a>
+
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt='导出表单模版.' />
         <a style="text-decoration: none;" href="javascript:Exp();" title="导出表单模版">
             <img src="Img/toolbar/Exp.png" id="ExpFrmXml" border="0" width="16" height="16" alt="" />
             <label for="ExpFrmXml" class="toolbarText">导出</label>

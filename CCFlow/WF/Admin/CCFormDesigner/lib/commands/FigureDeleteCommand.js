@@ -40,12 +40,12 @@ function FigureDeleteCommand(figureId){
 
 
 FigureDeleteCommand.prototype = {
-    
+
     /**This method got called every time the Command must execute*/
-    execute : function(){  
-        if(this.firstExecute){
+    execute: function () {
+        if (this.firstExecute) {
             //store deleted figure (safe copy)
-//            this.deletedFigure = STACK.figureGetById(this.figureId).clone();
+            //            this.deletedFigure = STACK.figureGetById(this.figureId).clone();
             this.deletedFigure = STACK.figureGetById(this.figureId);
 
             //store deleted ConnectionPoints of target figure (safe copy)
@@ -55,7 +55,7 @@ FigureDeleteCommand.prototype = {
             this.deletedGlues = [];
 
             var cpLength = this.deletedCPs.length;
-            for(var k = 0; k < cpLength; k++) {
+            for (var k = 0; k < cpLength; k++) {
                 var glues = CONNECTOR_MANAGER.glueGetByFirstConnectionPointId(this.deletedCPs[k].id);
                 if (glues.length) {
                     this.deletedGlues.push(glues[0]);
@@ -64,75 +64,76 @@ FigureDeleteCommand.prototype = {
 
             //delete it
             STACK.figureRemoveById(this.figureId);
-            
+
+
             //remove clues
             //TODO: implements
-            
+
             //remove connectors
             //TODO: implement
-            
+
             //interface settings            
             selectedFigureId = -1;
             setUpEditPanel(canvasProps);
-            state = STATE_NONE;            
-            
+            state = STATE_NONE;
+
             this.firstExecute = false;
         }
-        else{ //a redo
+        else { //a redo
             throw "Not implemented";
         }
     },
 
-//      Snippet from old delete action (in main)
-//                    if(selectedFigureId > -1){
-//                        //remove figure
-//
-//                        if(!ev.noAddUndo && doUndo){//only add an action, if we are not currently undo/redoing an action
-//                            var undo = new DeleteCommand(selectedFigureId, History.OBJECT_FIGURE, null, STACK.figureGetById(selectedFigureId),ev)
-//
-//                            History.addUndo(undo);
-//                        }
-//                        
-//                        STACK.figureRemoveById(selectedFigureId);
-//                        
-//                        
-//                        //remove glues
-//                        var xCPs = CONNECTOR_MANAGER.connectionPointGetAllByParent(selectedFigureId);
-//                        for(var k=0; k<xCPs.length; k++){
-//                            CONNECTOR_MANAGER.glueRemoveAllByFirstId(xCPs[k].id);
-//                            
-//                        }
-//                        
-//                        //remove connection points
-//                        CONNECTOR_MANAGER.connectionPointRemoveAllByParent(selectedFigureId);
-//                        selectedFigureId = -1;
-//                        setUpEditPanel(canvasProps);
-//                        state = STATE_NONE;
-//                        redraw = true;
-//                        
-//                    //                        alert('Delete done');
-//                    }
-    
+    //      Snippet from old delete action (in main)
+    //                    if(selectedFigureId > -1){
+    //                        //remove figure
+    //
+    //                        if(!ev.noAddUndo && doUndo){//only add an action, if we are not currently undo/redoing an action
+    //                            var undo = new DeleteCommand(selectedFigureId, History.OBJECT_FIGURE, null, STACK.figureGetById(selectedFigureId),ev)
+    //
+    //                            History.addUndo(undo);
+    //                        }
+    //                        
+    //                        STACK.figureRemoveById(selectedFigureId);
+    //                        
+    //                        
+    //                        //remove glues
+    //                        var xCPs = CONNECTOR_MANAGER.connectionPointGetAllByParent(selectedFigureId);
+    //                        for(var k=0; k<xCPs.length; k++){
+    //                            CONNECTOR_MANAGER.glueRemoveAllByFirstId(xCPs[k].id);
+    //                            
+    //                        }
+    //                        
+    //                        //remove connection points
+    //                        CONNECTOR_MANAGER.connectionPointRemoveAllByParent(selectedFigureId);
+    //                        selectedFigureId = -1;
+    //                        setUpEditPanel(canvasProps);
+    //                        state = STATE_NONE;
+    //                        redraw = true;
+    //                        
+    //                    //                        alert('Delete done');
+    //                    }
+
     /**This method should be called every time the Command should be undone*/
-    undo : function(){        
-        if(this.deletedFigure){
+    undo: function () {
+        if (this.deletedFigure) {
             //add deleted ConnectionPoints back
             var length = this.deletedCPs.length;
-            for(var i = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 CONNECTOR_MANAGER.connectionPointAdd(this.deletedCPs[i]);
             }
 
             //add deleted Glues back
             length = this.deletedGlues.length;
-            for(var j = 0; j < length; j++) {
+            for (var j = 0; j < length; j++) {
                 CONNECTOR_MANAGER.glueAdd(this.deletedGlues[j]);
             }
 
             //add deleted figure back
-//            STACK.figureAdd(this.deletedFigure.clone());  //safe copy
+            //            STACK.figureAdd(this.deletedFigure.clone());  //safe copy
             STACK.figureAdd(this.deletedFigure);
         }
-        else{
+        else {
             throw "No soted deleted figure";
         }
     }

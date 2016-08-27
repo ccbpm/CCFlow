@@ -251,6 +251,13 @@ function CCForm_BrowserView() {
     var url = "../../CCForm/Frm.aspx?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
     OpenWindow(url);
 }
+//预览表单
+function CCForm_FoolFrm() {
+    var url = '/WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData=' + CCForm_FK_MapData + '&FK_Flow=001&MyPK=ND101&IsEditMapData=True';
+   // var url = "../../CCForm/Frm.aspx?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
+    OpenWindow(url);
+}
+
 //打开页面方法
 function OpenWindow(url) {
     var winWidth = 850;

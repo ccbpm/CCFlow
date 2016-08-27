@@ -446,7 +446,6 @@ namespace CCFlow.WF.MapDef
         }
         public void EditBeforeEnd(MapAttr mapAttr)
         {
-          
 
             #region 字段分组
             isItem = this.Pub1.AddTR(isItem);
@@ -558,16 +557,24 @@ namespace CCFlow.WF.MapDef
             {
                 isItem = this.Pub1.AddTR(isItem);
                 this.Pub1.AddTDIdx(idx++);
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/PopVal.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.PopVal + "_" + mapAttr.MyPK + "')\">设置开窗返回值</a>");
-                string html = "<a href=\"javascript:WinOpen('./MapExt/RegularExpression.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&OperAttrKey=" + mapAttr.MyPK + "')\">正则表达式</a>";
-                html += " - <a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + mapAttr.KeyOfEn + "')\">文本框自动完成</a>";
-                html += " - <a href=\"javascript:WinOpen('./MapExt/AotuGenerNo.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "')\">自动生成编号</a>";
 
-                this.Pub1.AddTD(html);
-                //this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/AutoFull.aspx?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>");
-                html = "<a href=\"javascript:WinOpen('./MapExt/AutoFull.aspx?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>";
+                this.Pub1.AddTDBegin("colspan=3");
+                this.Pub1.Add("<a href=\"javascript:WinOpen('./MapExt/PopVal.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.PopVal + "_" + mapAttr.MyPK + "')\">设置开窗返回值</a>");
+
+                string html = " - <a href=\"javascript:WinOpen('./MapExt/RegularExpression.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&OperAttrKey=" + mapAttr.MyPK + "')\">正则表达式</a>";
+
+                if (mapAttr.MyDataType == DataType.AppString)
+                    html += " - <a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + mapAttr.KeyOfEn + "')\">文本框自动完成</a>";
+
+                if (mapAttr.IsNum)
+                    html += " - <a href=\"javascript:WinOpen('./MapExt/AutoFull.aspx?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>";
                 html += " - <a href=\"javascript:WinOpen('./MapExt/InputCheck.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.MyPK + "')\">脚本验证</a>";
-                this.Pub1.AddTD(html);
+
+
+                this.Pub1.Add(html);
+
+                this.Pub1.AddTDEnd();
+
                 this.Pub1.AddTREnd();
             }
             #endregion pop返回值.

@@ -18,12 +18,27 @@
             if (PageTransfer_value == "TextBox") {
                 $("#RB_String").attr("checked", true);
             }
-            if (PageTransfer_value == "DateTime") {
-                $("#RB_DataTime").attr("checked", true);
+
+            if (PageTransfer_value == "TextBoxInt") {
+                $("#RB_Int").attr("checked", true);
             }
+
+            if (PageTransfer_value == "TextBoxFloat") {
+                $("#RB_Float").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "TextBoxMoney") {
+                $("#RB_Money").attr("checked", true);
+            }
+
             if (PageTransfer_value == "Date") {
-                $("#RB_DataTime").attr("checked", true);
+                $("#RB_Date").attr("checked", true);
             }
+
+            if (PageTransfer_value == "DateTime") {
+                $("#RB_DateTime").attr("checked", true);
+            }
+           
             if (PageTransfer_value == "CheckBox") {
                 $("#RB_Boolen").attr("checked", true);
             }
@@ -100,8 +115,8 @@
                 <input id="RB_Int" type="radio" name="Field_Type" value="2" /><label for="RB_Int">整数类型(年龄、个数)</label><br />
                 <input id="RB_Float" type="radio" name="Field_Type" value="3" /><label for="RB_Float">浮点类型(身高、体重、长度)</label><br />
                 <input id="RB_Money" type="radio" name="Field_Type" value="8" /><label for="RB_Money">金额类型(应付、应收、单价)</label><br />
-                <input id="RB_Data" type="radio" name="Field_Type" value="6" /><label for="RB_Data">日期类型(出生日期、还款日期)</label><br />
-                <input id="RB_DataTime" type="radio" name="Field_Type" value="7" /><label for="RB_DataTime">日期时间类型(发生时间、出发时间)</label><br />
+                <input id="RB_Date" type="radio" name="Field_Type" value="6" /><label for="RB_Date">日期类型(出生日期、还款日期)</label><br />
+                <input id="RB_DateTime" type="radio" name="Field_Type" value="7" /><label for="RB_DateTime">日期时间类型(发生时间、出发时间)</label><br />
                 <input id="RB_Boolen" type="radio" name="Field_Type" value="4" /><label for="RB_Boolen">Boolen型(是否同意、是否结算)</label><br />
             </td>
         </tr>

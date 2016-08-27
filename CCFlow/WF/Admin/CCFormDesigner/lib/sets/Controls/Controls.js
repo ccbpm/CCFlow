@@ -224,16 +224,18 @@ figureSets["Data"] = {
     description: 'A Data set of Controls',
     figures: [
         { figureFunction: "TextBox", name: CCForm_Controls.TextBox, image: "TextBox.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.DateTime, image: "Datetime.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxInt, image: "TextBoxInt.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxMoney, image: "TextBoxMoney.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxFloat, image: "TextBoxFloat.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.Date, image: "TextBoxDate.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.DateTime, image: "TextBoxDateTime.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.CheckBox, image: "Checkbox.png" },
         { figureFunction: "Square", name: CCForm_Controls.RadioButton, image: "Radiobutton.png" },
-      //{ figureFunction: "Square", name: CCForm_Controls.RadioButtList, image: "RBL.png" },
-        {figureFunction: "TextBox", name: CCForm_Controls.CheckBox, image: "Checkbox.png" },
-      //{ figureFunction: "Square", name: CCForm_Controls.CheckBoxList, image: "Checkboxlist.png" },
-        {figureFunction: "Square", name: "DropDownList", image: "DropDownList.png" },
-        { figureFunction: "Square", name: "ListBox", image: "ListBox.png" },
-        { figureFunction: "Square", name: "Dtl", image: "Dtl.png" },
-        { figureFunction: "TextBox", name: "HiddendField", image: "HiddendField.png" }
-
+        { figureFunction: "TextBox", name: CCForm_Controls.DropDownListEnum, image: "DropDownListEnum.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.DropDownListTable, image: "DropDownListTable.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png" },
+        { figureFunction: "Square", name: CCForm_Controls.Dtl, image: "Dtl.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.HiddendField, image: "HiddendField.png" }
     ]
 };
 

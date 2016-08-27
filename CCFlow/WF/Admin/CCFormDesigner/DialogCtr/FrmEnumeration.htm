@@ -44,9 +44,9 @@
 
             $('#newsGrid').datagrid({
                 columns: [[
-                    { field: 'No', title: '编号', width: 100 },
-                    { field: 'Name', title: '名称', width: 140 },
-                    { field: 'CfgVal', title: '枚举值', width: 140 }
+                    { field: 'No', title: '编号', width: 80 },
+                    { field: 'Name', title: '名称', width: 90 },
+                    { field: 'CfgVal', title: '枚举值', width: 190 }
                 ]],
                 idField: 'No',
                 singleSelect: true,
@@ -93,8 +93,10 @@
                     &nbsp;&nbsp;
                     <input type="button" id="BT_DELETE" onclick="" value="删除" />
                 </div>
+                
                 <table id="newsGrid" toolbar="#tb" class="easyui-datagrid">
                 </table>
+
                 <table>
                     <tr>
                         <td colspan="2">

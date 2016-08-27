@@ -259,6 +259,23 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             {
                 switch (dotype)
                 {
+                    case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
+                        try
+                        {
+                            MapAttr ma = new MapAttr();
+                            ma.FK_MapData = v1;
+                            ma.KeyOfEn = v2;
+                            ma.Name = v3;
+                            ma.MyDataType = int.Parse(v4);
+                            ma.X = int.Parse(v5);
+                            ma.Y = int.Parse(getUTF8ToString("v6"));
+                            ma.Insert();
+                            return "true";
+                        }
+                        catch (Exception ex)
+                        {
+                            return ex.Message;
+                        }
                     case "CreateCheckGroup":
                         string gKey = v1;
                         string gName = v2;

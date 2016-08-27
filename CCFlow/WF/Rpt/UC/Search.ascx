@@ -2,7 +2,7 @@
 <%@ Register Src="../../Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <%@ Register Src="ToolBar.ascx" TagName="ToolBar" TagPrefix="uc2" %>
 <%@ Register Src="../../Comm/UC/UCSys.ascx" TagName="UCSys" TagPrefix="uc3" %>
-<script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" />
+<script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
 <script language="javascript" type="text/javascript">
     function ShowEn(url, wName, h, w) {
         h = 700;
@@ -11,9 +11,9 @@
         var val = window.showModalDialog(url, null, s);
         window.location.href = window.location.href;
     }
+
     function ImgClick() {
     }
-
 
     function OpenAttrs(ensName) {
         var url = './../../Sys/EnsAppCfg.aspx?EnsName=' + ensName;
@@ -21,7 +21,6 @@
         val = window.showModalDialog(url, null, s);
         window.location.href = window.location.href;
     }
-
 
     function Setting(rptNo, flowNo) {
         alert(rptNo);
@@ -31,13 +30,7 @@
         window.location.href = window.location.href;
     }
 
-    
-
     function DDL_mvals_OnChange(ctrl, ensName, attrKey) {
-
-        alert(ctrl);
-        alert(ensName);
-
         var idx_Old = ctrl.selectedIndex;
 
         if (ctrl.options[ctrl.selectedIndex].value != 'mvals')
@@ -45,16 +38,19 @@
 
         if (attrKey == null)
             return;
+
         var timestamp = Date.parse(new Date());
         var url = 'SelectMVals.aspx?EnsName=' + ensName + '&AttrKey=' + attrKey + '&D=' + timestamp;
         var val = window.showModalDialog(url, 'dg', 'dialogHeight: 450px; dialogWidth: 450px; center: yes; help: no');
+
         if (val == '' || val == null) {
             ctrl.selectedIndex = 0;
         }
     }
 </script>
 <div class="easyui-layout" data-options="fit:true">
-    <div data-options="region:'north',noheader:true,split:false" style="padding: 2px; height: auto;background-color:#E0ECFF; line-height:30px">
+    <div data-options="region:'north',noheader:true,split:false" style="padding: 2px;
+        height: auto; background-color: #E0ECFF; line-height: 30px">
         <uc2:ToolBar ID="ToolBar1" runat="server" />
     </div>
     <div data-options="region:'center',noheader:true,border:false">

@@ -9,6 +9,7 @@
     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <uc2:Search ID="Search1" runat="server" />

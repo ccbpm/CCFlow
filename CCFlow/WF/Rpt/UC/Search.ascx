@@ -2,7 +2,6 @@
 <%@ Register Src="../../Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <%@ Register Src="ToolBar.ascx" TagName="ToolBar" TagPrefix="uc2" %>
 <%@ Register Src="../../Comm/UC/UCSys.ascx" TagName="UCSys" TagPrefix="uc3" %>
-<script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
 <script language="javascript" type="text/javascript">
     function ShowEn(url, wName, h, w) {
         h = 700;

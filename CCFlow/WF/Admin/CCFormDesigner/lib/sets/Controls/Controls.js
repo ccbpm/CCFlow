@@ -271,11 +271,13 @@ function figure_TextBox(x, y) {
 }
 
 /**Controls set declaration*/
-figureSets["Func"] = {
+figureSets["Ath"] = {
     name: '附件控件',
-    description: 'A ccbpm set of Controls',
+    description: '附件类控件',
     figures: [
-
+     { figureFunction: "Square", name: "AthMulti", image: "AthMulti.png" },
+        { figureFunction: "Square", name: "AthSingle", image: "AthSingle.png" },
+        { figureFunction: "Square", name: "AthImg", image: "AthImg.png" }
     ]
 };
 

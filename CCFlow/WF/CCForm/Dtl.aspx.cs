@@ -799,7 +799,6 @@ namespace CCFlow.WF.CCForm
                                             this.Pub1.AddTD(tb);
                                             break;
                                         case DataType.AppMoney:
-                                        case DataType.AppRate:
                                             tb.Attributes["style"] = "width:" + attr.UIWidth + "px;border-width:0px;";
                                             if (attr.UIIsEnable == false)
                                             {
@@ -1199,7 +1198,6 @@ namespace CCFlow.WF.CCForm
                                         this.Pub1.AddTD(tb);
                                         break;
                                     case DataType.AppMoney:
-                                    case DataType.AppRate:
                                         tb.Attributes["style"] = "width:" + attr.UIWidth + "px;border-width:0px;";
                                         if (attr.UIIsEnable == false)
                                         {
@@ -1738,7 +1736,6 @@ namespace CCFlow.WF.CCForm
                         tb.BackColor = System.Drawing.Color.FromName("infobackground");
                         switch (attr.MyDataType)
                         {
-                            case DataType.AppRate:
                             case DataType.AppMoney:
                                 tb.Text = dtls.GetSumDecimalByKey(attr.KeyOfEn).ToString("0.00");
                                 tb.Attributes["style"] = "width:" + attr.UIWidth + "px;text-align:right;border:none";
@@ -2218,7 +2215,6 @@ namespace CCFlow.WF.CCForm
             switch (mattr.MyDataType)
             {
                 case BP.DA.DataType.AppMoney:
-                case BP.DA.DataType.AppRate:
                     return s += "\t\n  document.forms[0]." + this.Pub1.GetTextBoxByID("TB_" + mattr.KeyOfEn).ClientID + ".value= VirtyMoney(document.forms[0]." + this.Pub1.GetTextBoxByID("TB_" + mattr.KeyOfEn).ClientID + ".value ) ;";
                 default:
                     return s;

@@ -120,7 +120,7 @@ FigureCreateCommand.prototype = {
             } else if (newFormFieldInfo.FieldType == "7") {
                 createdFigure.CCForm_Shape = "TextBox_DateTime";
             } else if (newFormFieldInfo.FieldType == "8") {
-                createdFigure.CCForm_Shape = "TextBox_AppMoney";
+                createdFigure.CCForm_Shape = "TextBox_Money";
             }
 
             //如果为隐藏字段

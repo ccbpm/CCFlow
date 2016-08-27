@@ -782,6 +782,9 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         /// <returns></returns>
         private DataSet FormatDiagram2Json(JsonData formData)
         {
+
+           // BP.DA.DataType.WriteFile("c:\\temp.db", formData.ToString());
+
             DataSet form_DS = Form_InitDataSource();
 
             //装饰类元素.
@@ -795,7 +798,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             DataTable  dtEle = form_DS.Tables[EEleTableNames.Sys_FrmEle];
             DataTable  dtMapAttr = form_DS.Tables[EEleTableNames.Sys_MapAttr];
             DataTable  dtRDB = form_DS.Tables[EEleTableNames.Sys_FrmRB];
-           
             DataTable  dtM2M = form_DS.Tables[EEleTableNames.Sys_MapM2M];
 
             //附件类.
@@ -805,7 +807,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             //组件类.
             DataTable dtlDT = form_DS.Tables[EEleTableNames.Sys_MapDtl];
             DataTable dtWorkCheck = form_DS.Tables[EEleTableNames.WF_Node];
-             
 
             #region 控件线集合 Line.
             JsonData form_Lines = formData["m"]["connectors"];
@@ -1106,6 +1107,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     }
                 }
             }
+
+
             //TempSaveFrm(form_DS);
             return form_DS;
         }

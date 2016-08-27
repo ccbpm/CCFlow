@@ -318,7 +318,6 @@ namespace CCFlow.Web.Comm
 
                             switch (attr.MyDataType)
                             {
-                                case DataType.AppRate:
                                 case DataType.AppMoney:
                                 case DataType.AppInt:
                                 case DataType.AppFloat:

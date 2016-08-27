@@ -93,7 +93,6 @@ namespace CCFlow.WF
                             this.Ucsys1.AddTDNum(dtl.GetValIntByKey(attr.Key));
                             break;
                         case DataType.AppMoney:
-                        case DataType.AppRate:
                             this.Ucsys1.AddTDNum(dtl.GetValIntByKey(attr.Key).ToString("0.00"));
                             break;
                         case DataType.AppFloat:

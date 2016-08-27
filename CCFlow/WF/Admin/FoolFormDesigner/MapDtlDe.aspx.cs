@@ -731,7 +731,6 @@ namespace CCFlow.WF.MapDef
             switch (mattr.MyDataType)
             {
                 case BP.DA.DataType.AppMoney:
-                case BP.DA.DataType.AppRate:
                     return s += "\t\n  document.forms[0]." + this.Pub1.GetTextBoxByID("TB_" + mattr.KeyOfEn).ClientID + ".value= VirtyMoney(document.forms[0]." + this.Pub1.GetTextBoxByID("TB_" + mattr.KeyOfEn).ClientID + ".value ) ;";
                 default:
                     return s;

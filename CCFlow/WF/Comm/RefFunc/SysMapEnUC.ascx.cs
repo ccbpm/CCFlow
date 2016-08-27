@@ -243,7 +243,6 @@ namespace CCFlow.WF.Comm.RefFunc
                                     break;
 
                                 case BP.DA.DataType.AppMoney:
-                                case BP.DA.DataType.AppRate:
                                     this.AddTDDesc(attr.Name);
                                     tb.ShowType = TBType.Moneny;
                                     tb.Text = decimal.Parse(en.GetValStrByKey(attr.KeyOfEn)).ToString("0.00");

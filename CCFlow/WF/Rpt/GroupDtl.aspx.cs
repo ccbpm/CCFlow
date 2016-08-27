@@ -311,7 +311,6 @@ namespace CCFlow.WF.Rpt
                             break;
                         case DataType.AppFloat:
                         case DataType.AppInt:
-                        case DataType.AppRate:
                         case DataType.AppDouble:
                             this.Pub1.AddTDNum(str);
                             break;
@@ -464,7 +463,6 @@ namespace CCFlow.WF.Rpt
                     break;
                 case DataType.AppFloat:
                 case DataType.AppInt:
-                case DataType.AppRate:
                 case DataType.AppDouble:
                     foreach (BP.Sys.XML.Search pe in cfgs)
                     {

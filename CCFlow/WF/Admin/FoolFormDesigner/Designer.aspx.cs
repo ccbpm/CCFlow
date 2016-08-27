@@ -785,7 +785,7 @@ namespace CCFlow.WF.MapDef
                     #endregion AppDouble  AppFloat AppInt .
 
                     #region AppMoney  AppRate  .
-                    if (attr.MyDataType == DataType.AppMoney || attr.MyDataType == DataType.AppRate  )
+                    if (attr.MyDataType == DataType.AppMoney  )
                     {
                         if (isLeft == true)
                             this.Pub1.AddTR();

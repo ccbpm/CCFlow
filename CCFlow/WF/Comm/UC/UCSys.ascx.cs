@@ -1619,7 +1619,6 @@ namespace CCFlow.WF.Comm.UC
                             case DataType.AppDouble:
                             case DataType.AppFloat:
                             case DataType.AppMoney:
-                            case DataType.AppRate:
                                 this.AddTDNum(str);
                                 break;
                             default:
@@ -2550,7 +2549,6 @@ namespace CCFlow.WF.Comm.UC
                     break;
                 case DataType.AppFloat:
                 case DataType.AppInt:
-                case DataType.AppRate:
                 case DataType.AppDouble:
                     foreach (BP.Sys.XML.Search pe in cfgs)
                     {

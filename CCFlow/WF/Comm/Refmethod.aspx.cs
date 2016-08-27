@@ -147,7 +147,6 @@ namespace CCFlow.Web.Comm
                                 break;
                             case BP.DA.DataType.AppDouble:
                             case BP.DA.DataType.AppMoney:
-                            case BP.DA.DataType.AppRate:
                                 decimal myDoub = decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
                                 objs[idx] = myDoub;
                                 //attr.DefaultVal=myDoub;

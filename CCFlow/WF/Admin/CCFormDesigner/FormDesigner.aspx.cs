@@ -11,7 +11,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-          
+         // BP.DA.DataType.AppDate
         }
     }
 }

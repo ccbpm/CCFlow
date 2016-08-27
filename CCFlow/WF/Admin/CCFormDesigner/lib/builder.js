@@ -752,6 +752,7 @@ BuilderProperty.prototype = {
         div.className = "line";
 
         var href = document.createElement("a");
+
         href.href = "javascript:CCForm_ShowDialog('" + this.PropertyValue + "','" + this.name + "');";
         div.appendChild(href);
 

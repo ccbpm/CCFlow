@@ -227,7 +227,6 @@ public partial class CCFlow_Comm_UIEnsV10 : BP.Web.WebPage
                         switch (attr.MyDataType)
                         {
                             case DataType.AppMoney:
-                            case DataType.AppRate:
                                 tb.TextExtMoney = decimal.Parse(val);
                                 break;
                             default:

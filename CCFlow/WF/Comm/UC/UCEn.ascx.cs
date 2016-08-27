@@ -1265,7 +1265,6 @@ namespace CCFlow.Web.Comm.UC
                                     case DataType.AppInt:
                                     case DataType.AppFloat:
                                     case DataType.AppDouble:
-                                    case DataType.AppRate:
                                         tb.Attributes["Class"] = "TBNum";
                                         tb.Text = val.ToString();
                                         tb.ShowType = TBType.Num;
@@ -1420,7 +1419,6 @@ namespace CCFlow.Web.Comm.UC
                                 tb.ID = "TB_" + attr.Key;
                                 switch (attr.MyDataType)
                                 {
-                                    case DataType.AppRate:
                                     case DataType.AppMoney:
                                         try
                                         {
@@ -1962,7 +1960,6 @@ namespace CCFlow.Web.Comm.UC
                                 case DataType.AppInt:
                                 case DataType.AppFloat:
                                 case DataType.AppDouble:
-                                case DataType.AppRate:
                                     tb.Attributes["Class"] = "TBNum";
                                     tb.Text = val.ToString();
                                     tb.ShowType = TBType.Num;
@@ -2122,7 +2119,6 @@ namespace CCFlow.Web.Comm.UC
                             tb.ID = "TB_" + attr.Key;
                             switch (attr.MyDataType)
                             {
-                                case DataType.AppRate:
                                 case DataType.AppMoney:
                                     try
                                     {

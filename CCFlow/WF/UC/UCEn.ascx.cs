@@ -239,7 +239,6 @@ namespace CCFlow.WF.UC
                                     tb.Attributes.Add("onblur", @"value=value.replace(/[^-?\d]/g,'')");
                                     break;
                                 case BP.DA.DataType.AppMoney:
-                                case BP.DA.DataType.AppRate:
                                     tb.ShowType = TBType.Moneny;
                                     tb.Text = decimal.Parse(en.GetValStrByKey(attr.KeyOfEn)).ToString("0.00");
                                     //增加验证
@@ -1459,7 +1458,7 @@ namespace CCFlow.WF.UC
                     #endregion AppDouble  AppFloat AppInt .
 
                     #region AppMoney  AppRate  .
-                    if (attr.MyDataType == DataType.AppMoney || attr.MyDataType == DataType.AppRate)
+                    if (attr.MyDataType == DataType.AppMoney )
                     {
                         if (isLeft == true)
                             this.AddTR();
@@ -2590,7 +2589,6 @@ namespace CCFlow.WF.UC
                                     tb.Attributes.Add("onblur", @"value=value.replace(/[^-?\d]/g,'')");
                                     break;
                                 case BP.DA.DataType.AppMoney:
-                                case BP.DA.DataType.AppRate:
                                     tb.ShowType = TBType.Moneny;
                                     tb.Text = decimal.Parse(en.GetValStrByKey(attr.KeyOfEn)).ToString("0.00");
                                     //增加验证
@@ -3623,25 +3621,6 @@ namespace CCFlow.WF.UC
                                     tb.Text = en.GetValMoneyByKey(attr.KeyOfEn).ToString("0.00");
                                 }
 
-                                this.Add(tb);
-                                break;
-                            case BP.DA.DataType.AppRate:
-                                if ((attr.UIIsEnable && isReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
-                                    tb.Attributes["class"] = "TBNum";
-                                else
-                                    tb.Attributes["class"] = "TBReadonly";
-                                tb.ShowType = TBType.Moneny;
-                                tb.Text = en.GetValMoneyByKey(attr.KeyOfEn).ToString("0.00");
-
-                                fSize = attr.Para_FontSize;
-                                if (fSize == 0)
-                                    tb.Attributes["style"] = "width: " + attr.UIWidth + "px; text-align: right; height: 19px;";
-                                else
-                                    tb.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: right; height: " + fSize + "px;";
-
-                                //增加验证
-                                //tb.Attributes.Add("onkeyup", @"value=value.replace(/[^-?\d+\.*\d*$]/g,'')");
-                                tb.Attributes.Add("onblur", @"value=value.replace(/[^-?\d+\.*\d*$]/g,'')");
                                 this.Add(tb);
                                 break;
                             default:

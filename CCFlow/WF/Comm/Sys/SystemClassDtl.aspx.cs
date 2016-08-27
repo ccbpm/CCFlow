@@ -191,7 +191,6 @@ namespace CCFlow.Web.CT.Comm.Sys
                     || attr.MyDataType == DataType.AppFloat
                     || attr.MyDataType == DataType.AppInt
                     || attr.MyDataType == DataType.AppMoney
-                    || attr.MyDataType == DataType.AppRate
                     )
                     this.UCSys1.AddTD("нч");
                 else

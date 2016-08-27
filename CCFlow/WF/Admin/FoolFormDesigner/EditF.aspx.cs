@@ -248,7 +248,6 @@ namespace CCFlow.WF.MapDef
                         tb.Text = "0";
                     break;
                 case BP.DA.DataType.AppMoney:
-                case BP.DA.DataType.AppRate:
                     this.Pub1.AddTDNum(tb);
                     tb.ShowType = TBType.Moneny;
                     break;
@@ -312,7 +311,6 @@ namespace CCFlow.WF.MapDef
                 case BP.DA.DataType.AppInt:
                 case BP.DA.DataType.AppFloat:
                 case BP.DA.DataType.AppMoney:
-                case BP.DA.DataType.AppRate:
                     idx++;
                     this.Pub1.AddTR();
                     this.Pub1.AddTDIdx(idx);

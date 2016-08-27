@@ -172,7 +172,6 @@ namespace CCFlow.Web.Comm
                             case DataType.AppFloat:
                             case DataType.AppInt:
                             case DataType.AppMoney:
-                            case DataType.AppRate:
                                 this.DDL_GroupField.Items.Add(new ListItem(attr.Desc, attr.Key));
                                 break;
                             default:

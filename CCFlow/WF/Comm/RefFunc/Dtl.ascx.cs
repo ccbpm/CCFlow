@@ -218,7 +218,6 @@ namespace CCFlow.WF.Comm.RefFunc
                             switch (attr.MyDataType)
                             {
                                 case DataType.AppMoney:
-                                case DataType.AppRate:
                                     tb.TextExtMoney = decimal.Parse(val);
                                     break;
 

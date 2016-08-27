@@ -224,7 +224,6 @@ namespace CCFlow.WF.Rpt
                                 continue;
                             switch (attr.MyDataType)
                             {
-                                case DataType.AppRate:
                                 case DataType.AppMoney:
                                 case DataType.AppInt:
                                 case DataType.AppFloat:
@@ -388,7 +387,6 @@ namespace CCFlow.WF.Rpt
                             break;
                         case DataType.AppFloat:
                         case DataType.AppInt:
-                        case DataType.AppRate:
                         case DataType.AppDouble:
                             this.UCSys1.AddTDNum(str);
                             break;

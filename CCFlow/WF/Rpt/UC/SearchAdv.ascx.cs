@@ -228,8 +228,7 @@ namespace CCFlow.WF.Rpt
                             case DataType.AppInt:
                             case DataType.AppFloat:
                             case DataType.AppDouble:
-                            case DataType.AppMoney:
-                            case DataType.AppRate:      //数字，可用运算符为：等于、不等于、大于、大于等于、小于、小于等于、包含
+                            case DataType.AppMoney:  //数字，可用运算符为：等于、不等于、大于、大于等于、小于、小于等于、包含
                                 ddl.Items.Add(new ListItem("等于", "="));
                                 ddl.Items.Add(new ListItem("不等于", "!="));
                                 ddl.Items.Add(new ListItem("大于", ">"));
@@ -288,8 +287,7 @@ namespace CCFlow.WF.Rpt
                             case DataType.AppInt:
                             case DataType.AppFloat:
                             case DataType.AppDouble:
-                            case DataType.AppMoney:
-                            case DataType.AppRate:      //文本/数字都使用文本框
+                            case DataType.AppMoney:  //文本/数字都使用文本框
                                 tb = new TB();
                                 tb.ID = "TB_Val_" + condIdx;
                                 tb.Text = ap.GetValStrByKey("Val");
@@ -529,8 +527,7 @@ namespace CCFlow.WF.Rpt
                             case DataType.AppInt:
                             case DataType.AppFloat:
                             case DataType.AppDouble:
-                            case DataType.AppMoney:
-                            case DataType.AppRate:      //数字，可用运算符为：等于、不等于、大于、大于等于、小于、小于等于、包含
+                            case DataType.AppMoney:      //数字，可用运算符为：等于、不等于、大于、大于等于、小于、小于等于、包含
                                 switch (ap.GetValStrByKey("Exp"))
                                 {
                                     case "IN":
@@ -565,8 +562,7 @@ namespace CCFlow.WF.Rpt
                             case DataType.AppInt:
                             case DataType.AppFloat:
                             case DataType.AppDouble:
-                            case DataType.AppMoney:
-                            case DataType.AppRate:      //数字
+                            case DataType.AppMoney: //数字
                                 newSQL += ap.GetValStrByKey("Val") + " ";
                                 break;
                         }
@@ -671,8 +667,7 @@ namespace CCFlow.WF.Rpt
                             case DataType.AppInt:
                             case DataType.AppFloat:
                             case DataType.AppDouble:
-                            case DataType.AppMoney:
-                            case DataType.AppRate:      //数字，可用运算符为：等于、不等于、大于、大于等于、小于、小于等于、包含
+                            case DataType.AppMoney:   //数字，可用运算符为：等于、不等于、大于、大于等于、小于、小于等于、包含
                                 switch (ap.GetValStrByKey("Exp"))
                                 {
                                     case "IN":
@@ -708,7 +703,6 @@ namespace CCFlow.WF.Rpt
                             case DataType.AppFloat:
                             case DataType.AppDouble:
                             case DataType.AppMoney:
-                            case DataType.AppRate:      //数字
                                 newSQL += ap.GetValStrByKey("Val") + " ";
                                 break;
                         }
@@ -825,8 +819,7 @@ namespace CCFlow.WF.Rpt
                             case DataType.AppInt:
                             case DataType.AppFloat:
                             case DataType.AppDouble:
-                            case DataType.AppMoney:
-                            case DataType.AppRate:      //数字，可用运算符为：等于、不等于、大于、大于等于、小于、小于等于、包含
+                            case DataType.AppMoney:  //数字，可用运算符为：等于、不等于、大于、大于等于、小于、小于等于、包含
                                 switch (ps[i].GetValStrByKey("Exp"))
                                 {
                                     case "IN":
@@ -868,8 +861,7 @@ namespace CCFlow.WF.Rpt
                             case DataType.AppInt:
                             case DataType.AppFloat:
                             case DataType.AppDouble:
-                            case DataType.AppMoney:
-                            case DataType.AppRate:      //数字
+                            case DataType.AppMoney:  //数字
                                 qo.AddWhere(attr.KeyOfEn, ps[i].GetValStrByKey("Exp"), ps[i].GetValStrByKey("Val"), paramName);
                                 break;
                         }
@@ -1338,7 +1330,6 @@ namespace CCFlow.WF.Rpt
                             break;
                         case DataType.AppFloat:
                         case DataType.AppInt:
-                        case DataType.AppRate:
                         case DataType.AppDouble:
                             this.UCSys1.AddTDNum(str);
                             break;

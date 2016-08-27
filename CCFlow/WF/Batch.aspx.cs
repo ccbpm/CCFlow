@@ -344,16 +344,6 @@ namespace CCFlow.WF
                                         tb.Attributes["style"] = "width: " + attr.GetValStrByKey("UIWidth") + "px; text-align: right; height: 19px;";
                                         this.Pub1.AddTD(tb);
                                         break;
-                                    case BP.DA.DataType.AppRate:
-                                        if (attr.UIIsEnable)
-                                            tb.Attributes["class"] = "TBNum";
-                                        else
-                                            tb.Attributes["class"] = "TBReadonly";
-                                        tb.ShowType = TBType.Moneny;
-                                        tb.Text = wk.GetValMoneyByKey(attr.KeyOfEn).ToString("0.00");
-                                        tb.Attributes["style"] = "width: " + attr.GetValStrByKey("UIWidth") + "px; text-align: right; height: 19px;";
-                                        this.Pub1.AddTD(tb);
-                                        break;
                                     default:
                                         break;
                                 }

@@ -1204,7 +1204,6 @@ namespace CCFlow.Web.Comm
                     switch (attr.MyDataType)
                     {
                         case DataType.AppMoney:
-                        case DataType.AppRate:
                             if (StateNumKey.IndexOf(attr.Key + "=AMOUNT") != -1) /*  如果本数据列 包含累计 */
                             {
                                 this.UCSys1.AddTDJE(obj);
@@ -1300,7 +1299,6 @@ namespace CCFlow.Web.Comm
                 switch (attr.MyDataType)
                 {
                     case DataType.AppMoney:
-                    case DataType.AppRate:
                         if (StateNumKey.IndexOf(attr.Key + "=AMOUNT") != -1) /*  如果本数据列 包含累计 */
                         {
                             d = 0;

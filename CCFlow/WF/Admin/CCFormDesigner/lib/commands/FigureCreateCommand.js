@@ -28,7 +28,7 @@ FigureCreateCommand.prototype = {
     /**This method got called every time the Command must execute*/
     execute: function () {
         if (this.firstExecute) {
-            var canAddFigure = true;
+            var canAddFigure = true;  //是否拖上去之后，就立刻创建？
             //create figure
             var createdFigure = this.factoryFunction(this.x, this.y);
             //CCForm private Property
@@ -59,14 +59,18 @@ FigureCreateCommand.prototype = {
                 case CCForm_Controls.HiddendField:
                     alert('目前还没有对{' + createFigureName + '}提供该控件的支持.');
                     return;
-                case CCForm_Controls.RadioButton:
-                case CCForm_Controls.DropDownListEnum:
-                    canAddFigure = false;
-                    this.RadioButtonCreate(createdFigure, this.x, this.y);
+                case CCForm_Controls.DropDownListEnum: //枚举类型.
+                    canAddFigure = false; // 需要弹出对话框创建.
+                    this.RadioButtonCreate(createdFigure, this.x, this.y, 'DDL');
                     break;
                 case CCForm_Controls.RadioButton:
-                    canAddFigure = false;
-                    this.RadioButtonCreate(createdFigure, this.x, this.y);
+                    alert('@该类型的控件还没有完成，请使用下拉框实现同样的需求。');
+                    return;
+                    canAddFigure = false;  // 需要弹出对话框创建.
+                    this.RadioButtonCreate(createdFigure, this.x, this.y, 'RB');
+                    break;
+                default:
+                    alert('没有判断的控件类型{' + createFigureName + '}.');
                     break;
             }
 
@@ -97,80 +101,72 @@ FigureCreateCommand.prototype = {
     DataFieldCreate: function (createdFigure, x, y) {
 
         var dgId = "iframeTextBox";
-
-        //        switch (createFigureName) {
-        //            case CCForm_Controls.ListBox:
-        //                alert('尚未完成.');
-        //                return;
-        //            default:
-        //                break;
-        //        }
-        // alert(createFigureName);
-
         var url = "DialogCtr/FrmTextBox.htm?DataType=" + createFigureName + "&s=" + Math.random();
         var funIsExist = this.IsExist;
 
-        OpenEasyUiDialog(url, dgId, '新建文本', 600, 394, 'icon-new', true, function (HidenFieldFun) {
+        OpenEasyUiDialog(url, dgId, '新建文本字段', 600, 394, 'icon-new', true, function (HidenFieldFun) {
             var win = document.getElementById(dgId).contentWindow;
-            var newFormFieldInfo = win.getNewTBInfo();
+            var frmVal = win.GetFrmInfo();
 
-            if (newFormFieldInfo.ZH_CN_FieldName == null || newFormFieldInfo.ZH_CN_FieldName.length == 0) {
+            if (frmVal.Name == null || frmVal.Name.length == 0) {
                 $.messager.alert('错误', '字段名称不能为空。', 'error');
                 return false;
             }
-            if (newFormFieldInfo.En_FieldName == null || newFormFieldInfo.En_FieldName.length == 0) {
+            if (frmVal.KeyOfEn == null || frmVal.KeyOfEn.length == 0) {
                 $.messager.alert('错误', '英文字段不能为空。', 'error');
                 return false;
             }
             //判断主键是否存在
-            var isExit = funIsExist(newFormFieldInfo.En_FieldName);
+            var isExit = funIsExist(frmVal.KeyOfEn);
             if (isExit == true) {
-                $.messager.alert("错误", "已存在ID为(" + newFormFieldInfo.En_FieldName + ")的元素，不允许添加同名元素！", "error");
+                $.messager.alert("错误", "已存在ID为(" + frmVal.KeyOfEn + ")的元素，不允许添加同名元素！", "error");
                 return false;
             }
 
             //控件数据类型
-            if (newFormFieldInfo.FieldType == "1") {
-                createdFigure.CCForm_Shape = "TextBox_Str";
-            } else if (newFormFieldInfo.FieldType == "2") {
-                createdFigure.CCForm_Shape = "TextBox_Int";
-            } else if (newFormFieldInfo.FieldType == "3") {
-                createdFigure.CCForm_Shape = "TextBox_Float";
-            } else if (newFormFieldInfo.FieldType == "4") {
-                createdFigure.CCForm_Shape = "TextBox_Boolean";
-            } else if (newFormFieldInfo.FieldType == "5") {
-                createdFigure.CCForm_Shape = "TextBox_Double";
-            } else if (newFormFieldInfo.FieldType == "6") {
-                createdFigure.CCForm_Shape = "TextBox_Date";
-            } else if (newFormFieldInfo.FieldType == "7") {
-                createdFigure.CCForm_Shape = "TextBox_DateTime";
-            } else if (newFormFieldInfo.FieldType == "8") {
-                createdFigure.CCForm_Shape = "TextBox_Money";
+            if (frmVal.FieldType == "1") {
+                createdFigure.CCForm_Shape = "TextBoxStr";
+            } else if (frmVal.FieldType == "2") {
+                createdFigure.CCForm_Shape = "TextBoxInt";
+            } else if (frmVal.FieldType == "3") {
+                createdFigure.CCForm_Shape = "TextBoxFloat";
+            } else if (frmVal.FieldType == "4") {
+                createdFigure.CCForm_Shape = "TextBoxBoolean";
+            } else if (frmVal.FieldType == "5") {
+                createdFigure.CCForm_Shape = "TextBoxDouble";
+            } else if (frmVal.FieldType == "6") {
+                createdFigure.CCForm_Shape = "TextBoxDate";
+            } else if (frmVal.FieldType == "7") {
+                createdFigure.CCForm_Shape = "TextBoxDateTime";
+            } else if (frmVal.FieldType == "8") {
+                createdFigure.CCForm_Shape = "TextBoxMoney";
             }
 
             //如果为隐藏字段
-            if (newFormFieldInfo.IsHidenField == true) {
-                HidenFieldFun(newFormFieldInfo);
+            if (frmVal.IsHidenField == true) {
+                HidenFieldFun(frmVal);
             } else {
 
                 //根据信息创建不同类型的数字控件
-                var transField = new TransFormDataField(createdFigure, newFormFieldInfo, x, y);
+                var transField = new TransFormDataField(createdFigure, frmVal, x, y);
 
                 // 定义参数，让其保存到数据库里。
                 var param = {
                     action: "DoType",
                     DoType: "NewField",
                     v1: CCForm_FK_MapData,
-                    v2: newFormFieldInfo.En_FieldName,
-                    v3: newFormFieldInfo.ZH_CN_FieldName,
-                    v4: newFormFieldInfo.FieldType,
+                    v2: frmVal.KeyOfEn,
+                    v3: frmVal.Name,
+                    v4: frmVal.FieldType,
                     v5: x,
                     v6: y
                 };
                 ajaxService(param, function (json) {
                     if (json == "true") {
+
                         //开始画这个-元素.
                         transField.paint();
+
                     } else {
                         Designer_ShowMsg(json);
                     }
@@ -181,48 +177,83 @@ FigureCreateCommand.prototype = {
         return false;
     },
     /**创建单选按钮**/
-    RadioButtonCreate: function (createdFigure, x, y) {
+    RadioButtonCreate: function (createdFigure, x, y, dotype) {
+
         var dgId = "iframeRadioButton";
         var url = "DialogCtr/FrmEnumeration.htm?DataType=&s=" + Math.random();
         var funIsExist = this.IsExist;
 
-        var lab = '新建单选按钮';
+        var lab = '单选按钮枚举值';
+        if (dotype == 'DDL')
+            lab = '下拉框枚举值';
 
         OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
             var win = document.getElementById(dgId).contentWindow;
-            var newFormFieldInfo = win.getNewTBInfo();
+            var frmVal = win.getNewEnumInfo();
 
-            if (newFormFieldInfo.ZH_CN_FieldName == null || newFormFieldInfo.ZH_CN_FieldName.length == 0) {
+            if (frmVal.Name == null || frmVal.Name.length == 0) {
                 $.messager.alert('错误', '字段名称不能为空。', 'error');
                 return false;
             }
-            if (newFormFieldInfo.En_FieldName == null || newFormFieldInfo.En_FieldName.length == 0) {
+
+            if (frmVal.KeyOfEn == null || frmVal.KeyOfEn.length == 0) {
                 $.messager.alert('错误', '英文字段不能为空。', 'error');
                 return false;
             }
+
             //判断主键是否存在
-            var isExit = funIsExist(newFormFieldInfo.En_FieldName);
+            var isExit = funIsExist(frmVal.KeyOfEn);
             if (isExit == true) {
-                $.messager.alert("错误", "已存在ID为" + newFormFieldInfo.En_FieldName + "的元素，不允许添加同名元素！", "error");
+                $.messager.alert("错误", "@已存在ID为(" + frmVal.KeyOfEn + ")的元素，不允许添加同名元素！", "error");
                 return false;
             }
 
-            //根据信息创建不同类型的数字控件
-            var transField = new TransFormDataField(createdFigure, newFormFieldInfo, x, y);
-            transField.paint();
+            createdFigure.CCForm_Shape = "DropDownListEnum";
+
+            //根据信息创建不同类型的数字控件.
+            var transField = new TransFormDataField(createdFigure, frmVal, x, y);
+
+            // 定义参数，让其保存到数据库里。
+            var param = {
+                action: "DoType",
+                DoType: "NewEnumField",
+                FK_MapData: CCForm_FK_MapData,
+                Name: frmVal.Name,
+                KeyOfEn: frmVal.KeyOfEn,
+                UIBindKey: frmVal.UIBindKey,
+                CtrlDoType: dotype,
+                x: x,
+                y: y
+            };
+            ajaxService(param, function (json) {
+                if (json == "true") {
+
+                    try {
+                        //开始画这个 - 元素.
+                        transField.paint();
+                    } catch (e) {
+                        alert(e);
+                    }
+
+                } else {
+                    Designer_ShowMsg(json);
+                }
+            }, this);
+
+
         }, null);
 
         return false;
     },
     /**创建隐藏字段**/
-    HidenFieldCreate: function (newFormFieldInfo) {
+    HidenFieldCreate: function (frmVal) {
         var param = {
             action: "DoType",
             DoType: "NewHidF",
             v1: CCForm_FK_MapData,
-            v2: newFormFieldInfo.En_FieldName,
-            v3: newFormFieldInfo.ZH_CN_FieldName,
-            v4: newFormFieldInfo.FieldType
+            v2: frmVal.KeyOfEn,
+            v3: frmVal.Name,
+            v4: frmVal.FieldType
         };
         ajaxService(param, function (json) {
             if (json == "true") {
@@ -272,9 +303,9 @@ FigureCreateCommand.prototype = {
 **图片：Image
 **生成Label
 **/
-function TransFormDataField(newfigure, newFormFieldInfo, x, y) {
+function TransFormDataField(newfigure, frmVal, x, y) {
     this.figure = newfigure;
-    this.dataArrary = newFormFieldInfo;
+    this.dataArrary = frmVal;
     this.x = x;
     this.y = y;
 }
@@ -283,7 +314,9 @@ TransFormDataField.prototype = {
     /**输出控件**/
     paint: function () {
         var createdFigure = this.figure;
-        createdFigure.CCForm_MyPK = this.dataArrary.En_FieldName;
+
+        createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
+
         //添加到Figures
         //add to STACK
         STACK.figureAdd(createdFigure);
@@ -292,7 +325,7 @@ TransFormDataField.prototype = {
         //change text
         var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
         if (figureText != null) {
-            figureText.setTextStr(this.dataArrary.En_FieldName);
+            figureText.setTextStr(this.dataArrary.KeyOfEn);
         }
         //创建标签
         this.LabelCreateForFigure();
@@ -302,37 +335,41 @@ TransFormDataField.prototype = {
     Transform: function () {
         var createdFigure = this.figure;
         var propertys = CCForm_Control_Propertys.TextBox_Str;
-        var shap_src = "/Data/TextBoxBig.png";
-        switch (createdFigure.name) {
-            case CCForm_Controls.TextBox:
-                propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
-                break;
-            case CCForm_Controls.Date:
-            case CCForm_Controls.DateTime:
-                shap_src = "/Data/DatetimeBig.png";
-                break;
-            case CCForm_Controls.CheckBox:
-                shap_src = "/Data/TextBoxBig.png";
-                break;
-            case CCForm_Controls.RadioButton:
-                shap_src = "/Data/TextBoxBig.png";
-                break;
-        }
+        var shap_src = null;
+
+        shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
+
+        //  alert(createdFigure.CCForm_Shape);
+
+        propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
+
         //shap image
         var imageFrame = STACK.figuresImagePrimitiveGetByFigureId(createdFigure.id);
-        if (imageFrame != null) imageFrame.setUrl(figureSetsURL + shap_src);
+        if (imageFrame != null)
+            imageFrame.setUrl(figureSetsURL + shap_src);
+
+        // alert(figureSetsURL + shap_src);
+
         //push property
         createdFigure.properties.push(new BuilderProperty('控件属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
         createdFigure.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
         for (var i = 0; i < propertys.length; i++) {
             var defVal = propertys[i].DefVal ? propertys[i].DefVal : "";
-            if (defVal == "FieldText") {
-                //字段中文名
-                defVal = this.dataArrary.ZH_CN_FieldName;
-            } else if (defVal == "KeyOfEn") {
-                //字段英文名
-                defVal = this.dataArrary.En_FieldName;
+
+            switch (defVal) {
+                case "FieldText":  // 字段中文名
+                    defVal = this.dataArrary.Name;
+                    break;
+                case "KeyOfEn":    // 字段名.
+                    defVal = this.dataArrary.KeyOfEn;
+                    break;
+                case "UIBindKey":  // 字段中文名
+                    defVal = this.dataArrary.UIBindKey;
+                    break;
+                default:
+                    break;
             }
+
             //替换系统值
             defVal = this.DealExp(defVal);
             createdFigure.properties.push(new BuilderProperty(propertys[i].ProText, propertys[i].proName, propertys[i].ProType, defVal));
@@ -344,7 +381,7 @@ TransFormDataField.prototype = {
         var x = this.x;
         var y = this.y;
         //计算位移
-        var moveX = (this.dataArrary.ZH_CN_FieldName.length * 12) + 60;
+        var moveX = (this.dataArrary.Name.length * 12) + 60;
         moveX = moveX < 90 ? 90 : moveX;
         x = x - moveX;
         y = y - 15;
@@ -358,14 +395,14 @@ TransFormDataField.prototype = {
         //change text
         figureText = STACK.figuresTextPrimitiveGetByFigureId(selectedFigureId);
         if (figureText != null) {
-            figureText.setTextStr(this.dataArrary.ZH_CN_FieldName);
+            figureText.setTextStr(this.dataArrary.Name);
         }
     },
     /**替换系统表达式值**/
     DealExp: function (expString) {
         try {
             expString = expString.replace(/@NodeID@/g, CCForm_FK_MapData);
-            expString = expString.replace(/@KeyOfEn@/g, this.dataArrary.En_FieldName);
+            expString = expString.replace(/@KeyOfEn@/g, this.dataArrary.Name);
         } catch (e) {
         }
         return expString;

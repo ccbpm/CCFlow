@@ -1,8 +1,28 @@
-﻿//公共方法
+﻿//sArgName表示要获取哪个参数的值
+function getArgsFromHref(sArgName) {
+    var sHref = window.location.href;
+    var args = sHref.split("?");
+    var retval = "";
+    if (args[0] == sHref) /*参数为空*/
+    {
+        return retval; /*无需做任何处理*/
+    }
+    var str = args[1];
+    args = str.split("&");
+    for (var i = 0; i < args.length; i++) {
+        str = args[i];
+        var arg = str.split("=");
+        if (arg.length <= 1) continue;
+        if (arg[0] == sArgName) retval = arg[1];
+    }
+    return retval;
+}
+
+//公共方法
 function ajaxService(param, callback, scope, levPath) {
-    var url = "FormDesignerController.ashx";
+    var url = "common/CCBPMDesignerBase.ashx";
     if (levPath == "1")
-        url = "../FormDesignerController.ashx";
+        url = "../common/CCBPMDesignerBase.ashx";
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据
@@ -26,7 +46,7 @@ function checklogin(fCallback, oScope) {
     /// <summary>检测登录信息</summary>
     /// <param name="fCallback" type="Function">检测完之后，要运行的方法</param>
     /// <param name="oScope" type="Object">检测完之后，要运行的方法的参数</param>
-    ajaxService({ action: "LetLogin" }, function (re, scps) {
+    ajaxService({ method: "LetLogin" }, function (re, scps) {
         if (re == null || re.length == 0) {
             if (scps.length == 2 && scps[0]) {
                 scps[0](scps[1]);

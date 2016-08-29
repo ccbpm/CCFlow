@@ -65,7 +65,6 @@ FigureDeleteCommand.prototype = {
             //delete it
             STACK.figureRemoveById(this.figureId);
 
-
             //remove clues
             //TODO: implements
 

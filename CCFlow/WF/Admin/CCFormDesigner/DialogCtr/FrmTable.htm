@@ -15,10 +15,9 @@
             this.pageSize = pageSize;
 
             var params = {
-                action: "GetEnumerationList",
+                action: "GetSFTableList",
                 pageNumber: pageNumber,
                 pageSize: pageSize
-
             };
 
             ajaxService(params, LoadDataGridCallBack, this, 1);
@@ -58,7 +57,7 @@
                 fitColumns: true,
                 pageNumber: scorp.pageNumber,
                 pageSize: scorp.pageSize,
-                pageList: [10, 15, 20, 100],
+                pageList: [5, 10, 15, 20],
                 loadMsg: '数据加载中......',
                 onClickRow: function (rowIndex, rowData) {
                     $('#TB_Name').val(rowData["Name"]);
@@ -91,62 +90,6 @@
 
             };
         }
-
-        function New() {
-            var name = $.trim($("#TB_Name").val());
-            var key = $.trim($("#TB_KeyOfEn").val());
-            var v = window.confirm("您确定要删除枚举值["+name + " " +key+"]吗？");
-            if (v == false)
-                return;
-        }
-
-        function Del() {
-
-            var name = $.trim($("#TB_Name").val());
-            var key = $.trim($("#TB_KeyOfEn").val());
-
-            if (key == null || key == "") {
-                alert('您没有选择行.');
-                return;
-            }
-
-            var v = window.confirm("您确定要删除枚举值[" + name + " " + key + "]吗？");
-            if (v == false)
-                return;
-
-
-            alert('开始执行删除.');
-
-            // 定义参数，让其保存到数据库里。
-            var param = {
-                action: "DoType",
-                DoType: "DelEnum",
-                EnumKey: key
-            };
-
-            $.post("../FormDesignerController.ashx", param, function (data) {
-                if (data == "true") {
-                    alert('删除成功.');
-                } else {
-                    alert('删除失败:' + json);
-                }
-            });
-        }
-
-        function Edit() {
-
-            var name = $.trim($("#TB_Name").val());
-            var key =  $.trim($("#TB_KeyOfEn").val());
-            
-            if (key == null || key == "") {
-                alert('您没有选择行.');
-                return;
-            }
-
-            var v = window.confirm("您确定要删除枚举值[" + name + " " + key + "]吗？");
-            if (v == false)
-                return;
-        }
     </script>
 </head>
 <body class="easyui-layout">
@@ -154,11 +97,11 @@
         <div id="tabs" class="easyui-tabs" data-options="fit:true ,border:false">
             <div title="选择已有枚举值" style="width: 600px; height: 600px;">
                 <div id="tb" style="padding: 3px;">
-                    <input type="button" id="Btn_New" class="easyui-button" onclick="New()" value="新增" />
+                    <input type="button" id="Btn_NewlyAdded" onclick="New_event()" value="新增" />
                     &nbsp;&nbsp;
-                    <input type="button" id="Btn_Edit" onclick="Edit()" value="编辑" />
+                    <input type="button" id="Btn_Edit" onclick="" value="编辑" />
                     &nbsp;&nbsp;
-                    <input type="button" id="Btn_DELETE" onclick="Del()" value="删除" />
+                    <input type="button" id="Btn_Delete" onclick="" value="删除" />
                 </div>
                 
                 <table id="newsGrid" toolbar="#tb" class="easyui-datagrid">

@@ -3144,7 +3144,6 @@ function linkMap() {
     return csvBounds;
 }
 
-
 /** Save current diagram
 * Save can be triggered in 3 cases:
 *  1 - from menu
@@ -3152,7 +3151,6 @@ function linkMap() {
 *  3 - from shortcut Ctrl-S (onKeyDown)
 **/
 function Save(showInfo) {
-    alert(showInfo);
 
     if (state == STATE_TEXT_EDITING) {
         currentTextEditor.destroy();
@@ -3181,8 +3179,8 @@ function Save(showInfo) {
     //save the URLs of figures as a CSV 
     var lMap = linkMap();
 
-    $.post("./common/FormDesignerController.ashx", {
-        action: 'saveform',
+    $.post("FormDesignerController.ashx", {
+        action: 'SaveForm',
         diagram: serializedDiagram,
         png: dataURL,
         linkMap: lMap,
@@ -3303,7 +3301,7 @@ function exportCanvas() {
 *@param {String} tempDiagramName - the name of temporary diagram
 **/
 function loadTempDiagram(FK_MapData) {
-    $.post("./common/FormDesignerController.ashx", { action: 'loadform', FK_MapData: FK_MapData },
+    $.post("FormDesignerController.ashx", { action: 'loadform', FK_MapData: FK_MapData },
         function (data) {
             //alert(data);
             try {

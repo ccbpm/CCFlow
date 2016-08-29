@@ -230,11 +230,11 @@ figureSets["Data"] = {
         { figureFunction: "TextBox", name: CCForm_Controls.Date, image: "TextBoxDate.png" },
         { figureFunction: "TextBox", name: CCForm_Controls.DateTime, image: "TextBoxDateTime.png" },
         { figureFunction: "TextBox", name: CCForm_Controls.CheckBox, image: "Checkbox.png" },
-        { figureFunction: "Square", name: CCForm_Controls.RadioButton, image: "Radiobutton.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.RadioButton, image: "Radiobutton.png" },
         { figureFunction: "TextBox", name: CCForm_Controls.DropDownListEnum, image: "DropDownListEnum.png" },
         { figureFunction: "TextBox", name: CCForm_Controls.DropDownListTable, image: "DropDownListTable.png" },
         { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png" },
-        { figureFunction: "Square", name: CCForm_Controls.Dtl, image: "Dtl.png" },
+        { figureFunction: "TextBox", name: CCForm_Controls.Dtl, image: "Dtl.png" },
         { figureFunction: "TextBox", name: CCForm_Controls.HiddendField, image: "HiddendField.png" }
     ]
 };
@@ -242,6 +242,7 @@ figureSets["Data"] = {
 //文本框创建控件
 function figure_TextBox(x, y) {
     var f = new Figure("TextBox");
+
     //ccform Property
     f.CCForm_Shape = CCForm_Controls.TextBox;
 
@@ -254,15 +255,6 @@ function figure_TextBox(x, y) {
     var ifig = new ImageFrame(url, x, y, true, 150, 30);
     ifig.debug = true;
     f.addPrimitive(ifig);
-
-    //f.properties.push(new BuilderProperty('基本属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
-    //f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    //Text
-    //f.properties.push(new BuilderProperty('字体大小', 'primitives.1.size', BuilderProperty.TYPE_TEXT_FONT_SIZE));
-    //f.properties.push(new BuilderProperty('字体类型', 'primitives.1.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY));
-    //f.properties.push(new BuilderProperty('对齐方式', 'primitives.1.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
-    //f.properties.push(new BuilderProperty('下划线', 'primitives.1.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
-    //f.properties.push(new BuilderProperty('文本颜色', 'primitives.1.style.fillStyle', BuilderProperty.TYPE_COLOR));
 
     var t2 = new Text("", x, y, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = FigureDefaults.textColor;
@@ -302,6 +294,7 @@ function figure_Square(x, y) {
     r.addPoint(new Point(x + FigureDefaults.segmentSize, y + FigureDefaults.segmentSize));
     r.addPoint(new Point(x, y + FigureDefaults.segmentSize));
     var f = new Figure("Square");
+
     f.style.fillStyle = FigureDefaults.fillStyle;
     f.style.strokeStyle = FigureDefaults.strokeStyle;
 

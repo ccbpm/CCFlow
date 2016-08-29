@@ -234,11 +234,11 @@ function Show_HidenField_Panel() {
     var url = "DialogCtr/FrmHiddenField.htm?FK_MapData=" + CCForm_FK_MapData + "&s=" + Math.random();
     OpenEasyUiDialog(url, 'FrmHiddenField', '新建文本', 600, 394, 'icon-new', true, function (scope) {
         var win = document.getElementById(dgId).contentWindow;
-        var newFormFieldInfo = win.getNewTBInfo();
+        var frmVal = win.GetFrmInfo();
 
-        if (newFormFieldInfo.ZH_CN_FieldName == null || newFormFieldInfo.ZH_CN_FieldName.length == 0) {
+
+        if (frmVal.Name == null || frmVal.Name.length == 0) {
             $.messager.alert('错误', '字段名称不能为空。', 'error');
-
         }
     }, this);
 }

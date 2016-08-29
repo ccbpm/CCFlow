@@ -26,7 +26,7 @@
 
         //初始化
         $(function () {
-            LoadGridData(1, 5);
+            LoadGridData(1, 100);
         });
 
         //加载grid后回调函数
@@ -64,8 +64,11 @@
                     $('#TB_Name').val(rowData["Name"]);
                     $('#TB_KeyOfEn').val(rowData["No"]);
                     $('#TB_UIBindKey').val(rowData["No"]);
-                }
+                    $('#TB_Vals').val(rowData["CfgVal"]);
 
+                    //执行编辑函数.
+                    Edit(false);
+                }
             });
             //分页
             var pg = $("#newsGrid").datagrid("getPager");
@@ -87,17 +90,28 @@
                 Name: $.trim($("#TB_Name").val()),
                 KeyOfEn: $.trim($("#TB_KeyOfEn").val()),
                 IsCreateLabel: $("#CB_Generate_Tags").prop("checked"),
-                UIBindKey: $.trim($("#TB_UIBindKey").val())
-
+                UIBindKey: $.trim($("#TB_UIBindKey").val()),
+                Vals: $.trim($("#TB_Vals").val())
             };
         }
 
         function New() {
-            var name = $.trim($("#TB_Name").val());
-            var key = $.trim($("#TB_KeyOfEn").val());
-            var v = window.confirm("您确定要删除枚举值["+name + " " +key+"]吗？");
-            if (v == false)
-                return;
+
+            $("#TB_EnumName").val("");
+            $("#TB_EnumKey").val("");
+            $("#tabs").tabs('select', '枚举信息');
+
+            var str = '<table>';
+            for (var i = 0; i < 20; i++) {
+
+                str += '<tr>';
+                str += "<td> " + i + "</td> ";
+                str += "<td> <input id='TB" + i + "' class='easyui-textbox' style='width: 200px' /></td> ";
+                str += '</tr>';
+            }
+
+            var div = this.document.getElementById('DivEnumList');
+            div.innerHTML = str;
         }
 
         function Del() {
@@ -114,7 +128,6 @@
             if (v == false)
                 return;
 
-
             alert('开始执行删除.');
 
             // 定义参数，让其保存到数据库里。
@@ -127,25 +140,54 @@
             $.post("../FormDesignerController.ashx", param, function (data) {
                 if (data == "true") {
                     alert('删除成功.');
+                    LoadGridData(1, 100);
                 } else {
                     alert(data);
                 }
             });
         }
 
-        function Edit() {
+        function Edit( isSetTab ) {
 
-            var name = $.trim($("#TB_Name").val());
-            var key =  $.trim($("#TB_KeyOfEn").val());
+            var name =    $.trim($("#TB_Name").val());
+            var key =     $.trim($("#TB_KeyOfEn").val());
+            var cfgVal =  $.trim($("#TB_CfgVal").val());
             
             if (key == null || key == "") {
                 alert('您没有选择行.');
                 return;
             }
 
-            var v = window.confirm("您确定要删除枚举值[" + name + " " + key + "]吗？");
-            if (v == false)
-                return;
+            $("#TB_EnumName").val(name);
+            $("#TB_EnumKey").val(key);
+
+            //warning 设置为只读.
+            // $("#TB_EnumKey").s=;
+
+            var cfgVals = cfgVal.split('@');
+
+            if (isSetTab) {
+                $("#tabs").tabs('select', '枚举信息');
+            }
+
+            var str = '<table>';
+            for (var i = 0; i < 20; i++) {
+
+                var text = 'xxx';
+
+                str += '<tr>';
+                str += "<td> " + i + "</td> ";
+                str += "<td> <input id='TB" + i + "' value='"+text+"' class='easyui-textbox' style='width: 200px' /></td> ";
+                str += '</tr>';
+            }
+
+            var div = this.document.getElementById('DivEnumList');
+            div.innerHTML = str;
+        }
+
+        //执行保存.
+        function Save() {
+
         }
     </script>
 </head>
@@ -156,7 +198,7 @@
                 <div id="tb" style="padding: 3px;">
                     <input type="button" id="Btn_New" class="easyui-button" onclick="New()" value="新增" />
                     &nbsp;&nbsp;
-                    <input type="button" id="Btn_Edit" onclick="Edit()" value="编辑" />
+                    <input type="button" id="Btn_Edit" onclick="Edit(true)" value="编辑" />
                     &nbsp;&nbsp;
                     <input type="button" id="Btn_DELETE" onclick="Del()" value="删除" />
                 </div>
@@ -173,14 +215,55 @@
                             字段英文名：<input id="TB_KeyOfEn" class="easyui-textbox" style="width: 200px" />
 
                           <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+                          <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+
 
                             <input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label>
                         </td>
                     </tr>
                 </table>
             </div>
-            <div title="编辑" style="padding: 10px">
-               
+
+            <div title="枚举信息" id="tab_Edit" style="padding: 10px" >
+
+           <table> 
+           <tr>
+           <td valign=top>
+                 <table>
+                    <tr>
+                      <td>  标签 </td>
+                      <td> <input id="TB_EnumName" class="easyui-textbox" style="width: 200px" />  </td>
+                    </tr>
+                    <tr>
+                      <td>  枚举键值 </td>
+                      <td> <input id="TB_EnumKey" class="easyui-textbox" style="width: 200px" />  </td>
+                    </tr>
+                     
+                     <tr>
+                     <td colspan="2" >
+
+                     <input type="button"  value="新增" />
+                     <input type="button"  value="保存" />
+                     <input type="button"  value="删除" />
+                     
+                     </td>
+                     </tr>
+                 </table>
+                 </td>
+                  
+
+                  <td valign="top">
+
+                  <div  id='DivEnumList' ></div>
+                  
+  
+                  </td>
+                 </tr>
+
+
+                 </table>
+
+
             </div>
         </div>
     </div>

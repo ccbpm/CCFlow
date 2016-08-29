@@ -61,7 +61,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         {
             _Context = context;
 
-            if (_Context == null) return;
+            if (_Context == null) 
+                return;
 
             string action = string.Empty;
             //返回值
@@ -300,7 +301,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                                 ma.UIContralType = UIContralType.DDL;
                             else
                                 ma.UIContralType = UIContralType.RadioBtn;
-                            ma.KeyOfEn = getUTF8ToString("UIBindKey");
+
+                            ma.UIBindKey = getUTF8ToString("UIBindKey");
                             ma.Insert();
 
                             if (ma.UIContralType == UIContralType.RadioBtn)
@@ -877,7 +879,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         private DataSet FormatDiagram2Json(JsonData formData)
         {
 
-           // BP.DA.DataType.WriteFile("c:\\temp.db", formData.ToString());
+            BP.DA.DataType.WriteFile("c:\\temp.json", formData.ToJson());
 
             DataSet form_DS = Form_InitDataSource();
 
@@ -967,6 +969,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
 
                         drLab["MYPK"] = control["CCForm_MyPK"];
                         drLab["FK_MAPDATA"] = this.FK_MapData;
+
                         //坐标
                         JsonData style = control["style"];
                         JsonData vector = style["gradientBounds"];
@@ -982,43 +985,43 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             if (property == null || !property.Keys.Contains("type") || property["type"] == null)
                                 continue;
 
-                            if (property["type"].ToString() == "SingleText")
+                            switch (property["type"].ToString().Trim())
                             {
-                                drLab["TEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
-                            }
-                            else if (property["type"].ToString() == "Color")
-                            {
-                                drLab["FONTCOLOR"] = property["PropertyValue"] == null ? "#FF000000" : property["PropertyValue"].ToString();
-                                fontStyle.Append(string.Format("color:{0};", drLab["FONTCOLOR"]));
-                            }
-                            else if (property["type"].ToString() == "TextFontFamily")
-                            {
-                                drLab["FontName"] = property["PropertyValue"] == null ? "Portable User Interface" : property["PropertyValue"].ToString();
-                                if (property["PropertyValue"] != null)
-                                    fontStyle.Append(string.Format("font-family:{0};", property["PropertyValue"].ToJson()));
-                            }
-                            else if (property["type"].ToString() == "TextFontSize")
-                            {
-                                drLab["FONTSIZE"] = property["PropertyValue"] == null ? "14" : property["PropertyValue"].ToString();
-                                fontStyle.Append(string.Format("font-size:{0};", drLab["FONTSIZE"]));
-                            }
-                            else if (property["type"].ToString() == "FontWeight")
-                            {
-                                if (property["PropertyValue"] == null || property["PropertyValue"].ToString() == "normal")
-                                {
-                                    drLab["IsBold"] = "0";
-                                    fontStyle.Append(string.Format("font-weight:normal;"));
-                                }
-                                else
-                                {
-                                    drLab["IsBold"] = "1";
-                                    fontStyle.Append(string.Format("font-weight:{0};", property["PropertyValue"].ToString()));
-                                }
+                                case "SingleText":
+                                    drLab["TEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
+                                    break;
+                                case "Color":
+                                    drLab["FONTCOLOR"] = property["PropertyValue"] == null ? "#FF000000" : property["PropertyValue"].ToString();
+                                    fontStyle.Append(string.Format("color:{0};", drLab["FONTCOLOR"]));
+                                    break;
+                                case "TextFontFamily":
+                                    drLab["FontName"] = property["PropertyValue"] == null ? "Portable User Interface" : property["PropertyValue"].ToString();
+                                    if (property["PropertyValue"] != null)
+                                        fontStyle.Append(string.Format("font-family:{0};", property["PropertyValue"].ToJson()));
+                                    break;
+                                case "TextFontSize":
+                                    drLab["FONTSIZE"] = property["PropertyValue"] == null ? "14" : property["PropertyValue"].ToString();
+                                    fontStyle.Append(string.Format("font-size:{0};", drLab["FONTSIZE"]));
+                                    break;
+                                case "FontWeight":
+                                    if (property["PropertyValue"] == null || property["PropertyValue"].ToString() == "normal")
+                                    {
+                                        drLab["IsBold"] = "0";
+                                        fontStyle.Append(string.Format("font-weight:normal;"));
+                                    }
+                                    else
+                                    {
+                                        drLab["IsBold"] = "1";
+                                        fontStyle.Append(string.Format("font-weight:{0};", property["PropertyValue"].ToString()));
+                                    }
+                                    break;
+                                default:
+                                    break;
                             }
                         }
+
                         drLab["FontStyle"] = fontStyle.ToString();
                         drLab["IsItalic"] = "0";//暂不处理斜体
-
                         dtLabel.Rows.Add(drLab);
                         #endregion end 标签
                     }
@@ -1201,7 +1204,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     }
                 }
             }
-
 
             //TempSaveFrm(form_DS);
             return form_DS;

@@ -2601,6 +2601,7 @@ namespace BP.En
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
+                    case 9:
                         if (FType != "float")
                         {
                             /*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
@@ -2615,7 +2616,7 @@ namespace BP.En
                         }
                         break;
                     default:
-                        throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
+                      //  throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
                         break;
                 }
                 #endregion

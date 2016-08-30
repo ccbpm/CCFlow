@@ -1070,7 +1070,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 string guid = BP.DA.DBAccess.GenerGUID();
-                string realSaveTo = savePath + "/" + guid + "." + fu.FileName;
+                string realSaveTo = savePath + "/" + guid + "." + fu.FileName.Replace("~", "-").Replace("'", "-").Replace("*", "-");    //edited by liuxc,2016-08-30，此处如果不将特殊字符替换掉，则会与保存在数据库中的附件名可能不一致
                 string saveTo = realSaveTo;
 
                 try

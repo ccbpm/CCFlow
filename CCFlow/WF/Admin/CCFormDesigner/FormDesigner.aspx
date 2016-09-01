@@ -1,4 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FormDesigner.aspx.cs" Inherits="CCFlow.WF.Admin.CCFormDesigner.FormDesigner" %>
+﻿
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FormDesigner.aspx.cs" Inherits="CCFlow.WF.Admin.CCFormDesigner.FormDesigner" %>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -61,8 +63,8 @@
     <script type="text/javascript" src="./lib/commands/CanvasChangeSizeCommand.js"></script>
     <script type="text/javascript" src="./lib/commands/CanvasFitCommand.js"></script>
     <script type="text/javascript" src="./lib/commands/InsertedImageFigureCreateCommand.js"></script>
-    <script type="text/javascript" src="./lib/sets/Controls/Controls.js"></script>
-    <script type="text/javascript" src="./lib/sets/Controls/ControlsPropertys.js"></script>
+    <script type="text/javascript" src="./Controls/Controls.js"></script>
+    <script type="text/javascript" src="./Controls/ControlsPropertys.js"></script>
     <script type="text/javascript" src="./assets/javascript/colorPicker_new.js"></script>
     <link rel="stylesheet" media="screen" type="text/css" href="./assets/css/colorPicker_new.css" />
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>

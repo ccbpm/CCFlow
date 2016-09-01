@@ -25,7 +25,7 @@
         if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
         {
             /*自由表单*/
-            this.Response.Redirect("FormDesigner.aspx?FK_MapData=" + fk_mapdata, true);
+            this.Response.Redirect("FormDesigner.htm?FK_MapData=" + fk_mapdata, true);
             return;
         }
          

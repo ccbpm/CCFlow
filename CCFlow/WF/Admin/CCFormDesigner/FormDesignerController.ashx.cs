@@ -60,7 +60,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         public void ProcessRequest(HttpContext context)
         {
             _Context = context;
-
             if (_Context == null) 
                 return;
 
@@ -271,6 +270,11 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             string dotype = getUTF8ToString("DoType");
             string frmID = getUTF8ToString("FK_MapData");
 
+            float x=0;
+                float y = 0;
+            string no = "";
+            string name = "";
+
             string v1 = getUTF8ToString("v1");
             string v2 = getUTF8ToString("v2");
             string v3 = getUTF8ToString("v3");
@@ -279,16 +283,16 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             string sql = "";
             try
             {
-                switch (dotype)
+                switch (dotype.Trim())
                 {
-                    case "NewDtl": //创建从表.
+                    case "PublicNoNameCtrlCreate": //创建通用的控件.
+                        string ctrlType = getUTF8ToString("CtrlType");
                         try
                         {
-                            string noDtl = getUTF8ToString("No");
-                            string nameDtl = getUTF8ToString("Name");
-                            float x= float.Parse(getUTF8ToString("x"));
-                            float y = float.Parse(getUTF8ToString("y"));
-                            BP.Sys.CCFormAPI.CreateOrSaveDtl(frmID, noDtl, nameDtl, x, y);
+                            no = getUTF8ToString("No");
+                            name = getUTF8ToString("Name");
+
+                            BP.Sys.CCFormAPI.PublicNoNameCtrlCreate(frmID, ctrlType, no, name, x, y);
                             return "true";
                         }
                         catch (Exception ex)
@@ -302,8 +306,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             string keyOfEn=getUTF8ToString("KeyOfEn");
                             string fieldDesc=getUTF8ToString("Name");
                             string sftable = getUTF8ToString("UIBindKey");
-                            float x=float.Parse(getUTF8ToString("x"));
-                            float y=float.Parse(getUTF8ToString("y"));
+                              x=float.Parse(getUTF8ToString("x"));
+                              y=float.Parse(getUTF8ToString("y"));
 
                             //调用接口,执行保存.
                             BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
@@ -626,7 +630,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     case "NewHidF":
                         string fk_mapdataHid = v1;
                         string key = v2;
-                        string name = v3;
+                          name = v3;
                         int dataType = int.Parse(v4);
                         MapAttr mdHid = new MapAttr();
                         mdHid.MyPK = fk_mapdataHid + "_" + key;
@@ -761,7 +765,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         attr.Insert();
                         return fk_frm;
                     default:
-                        return "error:" + dotype + " , 未设置此标记.";
+                        return "error:" + dotype + " , 后台执行错误，未设置此标记.";
                 }
             }
             catch (Exception ex)

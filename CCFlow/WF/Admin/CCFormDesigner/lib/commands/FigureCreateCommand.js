@@ -74,10 +74,15 @@ FigureCreateCommand.prototype = {
                     this.DropDownListTableCreate(createdFigure, this.x, this.y);
                     break;
                 case CCForm_Controls.Dtl: //明细表.
+                case CCForm_Controls.AthMulti: //多附件.
+                case CCForm_Controls.AthSingle: //单附件.
+                case CCForm_Controls.AthImg: //图片附件.  以上控件都是用通用的 No,Name 数据框.
                     canAddFigure = false; // 需要弹出对话框创建.
-                    this.DtlCreate(createdFigure, this.x, this.y);
+                    this.PublicNoNameCtrlCreate(createdFigure, this.x, this.y, createFigureName);
                     break;
-                default:
+                default: //按照通用的接受编号，名称的方式来创建.
+                    //canAddFigure = false; // 需要弹出对话框创建.
+                    //this.PublicNoNameCtrlCreate(createdFigure, this.x, this.y, createFigureName);
                     alert('没有判断的控件类型{' + createFigureName + '}.');
                     break;
             }
@@ -315,6 +320,90 @@ FigureCreateCommand.prototype = {
 
         return false;
     },
+    /**通用的No,Name 明细表，多附件，单附件 存储**/
+    PublicNoNameCtrlCreate: function (createdFigure, x, y, ctrlType) {
+
+        var dgId = "iframeRadioButton";
+        var url = "DialogCtr/PublicNoNameCtrlCreate.htm?DataType=&s=" + Math.random();
+        var funIsExist = this.IsExist;
+
+        var lab = '创建从表';
+
+        switch (ctrlType) {
+            case "Dtl":
+                lab = "创建从表";
+                break;
+            case "AthMulti":
+                lab = "创建多附件";
+                break;
+            case "AthSingle":
+                lab = "创建单附件";
+                break;
+            case "AthSingle":
+                lab = "创建单附件";
+                break;
+            case "AthImg":
+                lab = "创建图片附件";
+                break;
+            default:
+                alert('没有判断的控件类型:' + ctrlType);
+                break;
+        }
+
+        OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
+            var win = document.getElementById(dgId).contentWindow;
+            var frmVal = win.GetFrmInfo();
+
+            if (frmVal.Name == null || frmVal.Name.length == 0) {
+                $.messager.alert('错误', '名称不能为空。', 'error');
+                return false;
+            }
+
+            if (frmVal.No == null || frmVal.No.length == 0) {
+                $.messager.alert('错误', '编号不能为空。', 'error');
+                return false;
+            }
+
+            //判断主键是否存在
+            var isExit = funIsExist(frmVal.No);
+            if (isExit == true) {
+                $.messager.alert("错误", "@已存在ID为(" + frmVal.No + ")的元素，不允许添加同名元素！", "error");
+                return false;
+            }
+
+            createdFigure.CCForm_Shape = ctrlType;
+
+            //根据信息创建不同类型的数字控件.
+            var transField = new TransFormDataField(createdFigure, frmVal, x, y);
+
+            // 定义参数，让其保存到数据库里。
+            var param = {
+                action: "DoType",
+                DoType: "PublicNoNameCtrlCreate",
+                CtrlType: ctrlType,
+                FK_MapData: CCForm_FK_MapData,
+                Name: frmVal.Name,
+                No: frmVal.No,
+                x: x,
+                y: y
+            };
+            ajaxService(param, function (json) {
+                if (json == "true") {
+                    try {
+                        //开始画这个 - 元素.
+                        transField.paint();
+                    } catch (e) {
+                        alert(e);
+                    }
+                } else {
+                    Designer_ShowMsg(json);
+                }
+            }, this);
+
+        }, null);
+
+        return false;
+    },
     /**创建外部数据源下拉框**/
     DropDownListTableCreate: function (createdFigure, x, y) {
 
@@ -337,7 +426,6 @@ FigureCreateCommand.prototype = {
                 $.messager.alert('错误', '英文字段不能为空。', 'error');
                 return false;
             }
-
 
             //判断主键是否存在
             var isExit = funIsExist(frmVal.KeyOfEn);
@@ -368,10 +456,9 @@ FigureCreateCommand.prototype = {
 
                     try {
                         //开始画这个 - 元素.
-                        alert('数据存储成功，开始画元素。');
                         transField.paint();
                     } catch (e) {
-                        alert('画元素失败。');
+                        alert('画元素失败');
                         alert(e);
                     }
 
@@ -455,7 +542,11 @@ TransFormDataField.prototype = {
     paint: function () {
         var createdFigure = this.figure;
 
-        createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
+        if (this.dataArrary.KeyOfEn != null)
+            createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
+
+        if (this.dataArrary.No != null)
+            createdFigure.CCForm_MyPK = this.dataArrary.No;
 
         //添加到Figures
         //add to STACK
@@ -483,11 +574,20 @@ TransFormDataField.prototype = {
         var shap_src = null;
 
         shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
+
+         alert(shap_src);
+
+         alert(figureSetsURL);
+
+         alert(figureSetsURL + shap_src);
+
         propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
         //shap image
         var imageFrame = STACK.figuresImagePrimitiveGetByFigureId(createdFigure.id);
-        if (imageFrame != null)
+        if (imageFrame != null) {
+            //alert(figureSetsURL + shap_src);
             imageFrame.setUrl(figureSetsURL + shap_src);
+        }
 
         // alert(figureSetsURL + shap_src);
 
@@ -495,6 +595,12 @@ TransFormDataField.prototype = {
         switch (createdFigure.CCForm_Shape) {
             case "Dtl":
                 ctrlLab = '从表/明细表属性';
+                break;
+            case "AthMulti":
+                ctrlLab = '多附件属性';
+                break;
+            case "AthSingle":
+                ctrlLab = '单附件属性';
                 break;
             default:
                 break;

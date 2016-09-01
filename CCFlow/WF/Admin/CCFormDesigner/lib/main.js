@@ -266,9 +266,13 @@ var CCForm_Controls = {
     DropDownListTable: 'DropDownListTable',
     CheckBoxList: 'CheckBoxList',
     Dtl: 'Dtl',
-    HiddendField: 'HiddendField'
-
-
+    AthMulti: 'AthMulti',
+    AthSingle: 'AthSingle',
+    AthImg: 'AthImg',
+    Chart: 'Chart',
+    FrmCheck: 'FrmCheck',
+    SubFlowDtl: 'SubFlowDtl',
+    ThreadDtl: 'ThreadDtl'
 };
 /**End - FormControl***********/
 

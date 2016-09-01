@@ -118,7 +118,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
             {
-                this.Response.Redirect("FormDesigner.aspx?FK_MapData=" + md.No);
+                this.Response.Redirect("FormDesigner.htm?FK_MapData=" + md.No);
             }
         }
     }

@@ -1,5 +1,5 @@
 ﻿//全局变量
-var figureSetsURL = 'lib/sets/Controls';
+var figureSetsURL = 'Controls';
 var CCPMB_Form_V = "2";
 
 $(function () {

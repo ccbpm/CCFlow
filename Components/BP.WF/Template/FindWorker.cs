@@ -469,7 +469,12 @@ namespace BP.WF.Template
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
-                    throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString()+ ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
+                {
+                    if (this.town.HisNode.HisWhenNoWorker == false)
+                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
+                    else
+                        return dt;
+                }
             }
             #endregion 按部门与岗位的交集计算.
 
@@ -550,7 +555,12 @@ namespace BP.WF.Template
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
-                    throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按岗位计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                {
+                    if (this.town.HisNode.HisWhenNoWorker == false)
+                        throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按岗位计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                    else
+                        return dt;  //可能处理跳转,在没有处理人的情况下.
+                }
             }
             #endregion
 
@@ -558,30 +568,20 @@ namespace BP.WF.Template
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept)
             {
                 /* 考虑当前操作人员的部门, 如果本部门没有这个岗位就不向上寻找. */
-                //sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                //      + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
-                //      + " AND  FK_Dept IN "
-                //      + "(SELECT  FK_Dept  FROM Port_EmpDept WHERE FK_Emp=" + dbStr + "FK_Emp)";
-                //sql += " ORDER BY No ";
-
                 ps = new Paras();
-
                 sql = "SELECT No,Name FROM Port_Emp WHERE No=" + dbStr + "FK_Emp ";
                 ps.Add("FK_Emp", WebUser.No);
                 dt = DBAccess.RunSQLReturnTable(ps);
 
-                //sql = "SELECT a.FK_Emp as No FROM Port_EmpDept A , Port_EmpStation B, WF_NodeStation C  ";
-                //sql += " WHERE A.FK_Emp=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+dbStr+"FK_Node ";
-                //sql += " AND A.FK_Dept IN ( SELECT FK_Dept from Port_EmpDept WHERE FK_Emp=" + dbStr + "FK_Emp ) ";
-                //ps.SQL = sql;
-                //ps.Add("FK_Node", town.HisNode.NodeID);
-                //ps.Add("FK_Emp", WebUser.No);
-                //dt = DBAccess.RunSQLReturnTable(ps);
-
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
-                    throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按岗位计算(以部门集合为纬度)。技术信息,执行的SQL=" + ps.SQLNoPara);
+                {
+                    if (this.town.HisNode.HisWhenNoWorker == false)
+                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按岗位计算(以部门集合为纬度)。技术信息,执行的SQL=" + ps.SQLNoPara);
+                    else
+                        return dt; //可能处理跳转,在没有处理人的情况下.
+                }
             }
             #endregion
 
@@ -833,10 +833,9 @@ namespace BP.WF.Template
             //递归出来子部门下有该岗位的人员
             DataTable mydt = Func_GenerWorkerList_DiGui_ByDepts(subDepts, empNo);
             if (mydt == null && this.town.HisNode.HisWhenNoWorker == false)
-            {
-                throw new Exception("@按岗位计算没有找到(" + town.HisNode.Name + ")接受人.");
-            }
+                throw new Exception("@按岗位智能计算没有找到(" + town.HisNode.Name + ")接受人.");
 
+            //add by zhoupeng  考虑到自动跳转，在没有接受人的情况下.
             if (mydt == null)
             {
                 mydt = new DataTable();

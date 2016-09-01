@@ -306,7 +306,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             float y=float.Parse(getUTF8ToString("y"));
 
                             //调用接口,执行保存.
-                            BP.Sys.CCFormAPI.SaveSFTableField(fk_mapdata, keyOfEn, fieldDesc,sftable, x, y);
+                            BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
 
                             return "true";
                         }

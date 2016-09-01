@@ -18,7 +18,7 @@
 	<body   >
 
   <center>
-  <table style="text-align:center; border:1px; width:70%; " >
+  <table style="text-align:center; border:1px; width:70%; border-color:Black;  " >
   <caption style="CaptionMsgLong"    >驰骋工作流程引擎ccbpm测试导航</caption>
   <tr>
   <th>多看文档少走弯路，学好ccflow受益一生。</th>
@@ -27,7 +27,7 @@
   <tr>
   <td>
     <ul>
-    <li> <a href="/WF/Admin/XAP/Designer.aspx" >进入流程设计器1.0(旧版本)</a> , <a href="/WF/Admin/CCBPMDesigner/Login.aspx" >进入html5流程设计器2.0(新版本)</a> : 用户名:admin 密码:pub</li>
+    <li> <a href="/WF/Admin/CCBPMDesigner/Login.aspx" >进入流程设计器</a> : 用户名:admin 密码:pub</li>
     <li> <a href='./WF/App/Classic/Login.aspx' >进入应用程序方式登录...</a></li>
     <li> <a href="http://ccflow.org" target="_blank" >ccflow 官方网站</a></li>
     <li> <a href="http://bbs.ccflow.org" target="_blank" >  技术论坛</a></li>

@@ -20,16 +20,44 @@ namespace CCFlow
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //BP.Port.Emp emp = new BP.Port.Emp();
-            //emp.No = "zhoupeng";
-            //emp.RetrieveFromDBSources();
 
-            //BP.Port.Emp emp = new BP.Port.Emp();
-            //emp.No = "zhoupeng";
-            //emp.RetrieveFromDBSources();
-            this.Response.Redirect("./WF/Admin/CCBPMDesigner/Login.aspx", true);
+            //BP.TKY.Port.DTSOrg dts = new BP.TKY.Port.DTSOrg();
+            //dts.Do();
+            //return;
+             
+            BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  start ------------------ ");
+            BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  end ------------------ ");
+
+            if (DBAccess.IsExitsObject("WF_Flow") == false)
+            {
+                this.Response.Redirect("./WF/Admin/DBInstall.aspx", true);
+                return;
+            }
+            else
+            {
+                this.Response.Redirect("./WF/Admin/CCBPMDesigner/Login.aspx", true);
+            }
             return;
-           
+        }
+
+        public void OutEntityDemo()
+        {
+            string str1 = "BP.En.EntityNoName";
+            ArrayList al = ClassFactory.GetObjects(str1);
+            foreach (BP.En.EntityNoName en in al)
+            {
+                this.Response.Write(en.ToString() + " " + en.EnDesc + " <br>");
+            }
+            this.Response.Write(" <hr>");
+
+
+            string str2 = "BP.En.EntitySimpleTree";
+            ArrayList al2 = ClassFactory.GetObjects(str2);
+            foreach (BP.En.EntitySimpleTree en in al2)
+            {
+                this.Response.Write(en.ToString() + " " + en.EnDesc + " <br>");
+            }
+            return;
         }
 
         public void AddNodeInfo()
@@ -74,7 +102,6 @@ namespace CCFlow
 
                 sql = "UPDATE WF_NodeEmp Set FK_Emp='" + deptName + "' WHERE FK_Emp='" + emp.No + "'";
                 BP.DA.DBAccess.RunSQL(sql);
-
 
 
                 sql = "UPDATE GPM_ByEmp Set FK_Emp='" + deptName + "' WHERE FK_Emp='" + emp.No + "'";

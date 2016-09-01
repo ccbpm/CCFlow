@@ -127,8 +127,54 @@
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Silverlight.js" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\Default.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\Designer.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTable.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmDtl.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
+    <Content Include="WF\Admin\CCFormDesigner\js\CCBPMDesignerData.js" />
+    <Content Include="WF\Admin\CCFormDesigner\js\FuncTrees.js" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\commands\ConnectorCloneCommand.js" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\basic\Button.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\basic\HyperLink.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\basic\Img.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\basic\Label.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\basic\Line.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\basic\Poiner.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\basic\TempleteFile.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\ccbpm\Chart.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\ccbpm\FrmCheck.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\ccbpm\SubFlowDtl.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\ccbpm\ThreadDtl.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Controls.js" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\ControlsPropertys.js" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\Checkbox.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\Checkboxlist.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\Datetime.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\DatetimeBig.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\DropDownList.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\Dtl.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\HiddendField.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\ListBox.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\Radiobutton.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\RBL.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\TextBox.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Data\TextBoxBig.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Func\Button.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\Func\HyperLink.png" />
+    <Content Include="WF\Admin\CCFormDesigner\lib\sets\Controls\readme.txt" />
+    <Content Include="WF\Admin\CCFormDesigner\Login.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-style-bar.css" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\fonts\readme.txt" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\js\classie.js" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\js\modernizr.custom.js" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\js\notificationFx.js" />
+    <Content Include="WF\Admin\CCFormDesigner\normalize\readme.txt" />
+    <Content Include="WF\Admin\CCFormDesigner\Welcome.aspx" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
     <Content Include="WF\Admin\ClientBin\CCFormDesigner.xap" />
@@ -780,6 +826,7 @@
     <Content Include="WF\Admin\Org\IntegrationDB.aspx" />
     <Content Include="WF\Admin\Org\IntegrationWS.aspx" />
     <Content Include="WF\Admin\Org\Working.png" />
+    <Content Include="WF\Admin\ReLogin.aspx" />
     <Content Include="WF\Admin\Templete\Uploade.aspx" />
     <Content Include="WF\Admin\Condition.aspx" />
     <Content Include="WF\Admin\ConditionLine.aspx" />
@@ -1223,7 +1270,7 @@
     <Content Include="WF\Comm\UIEn.aspx" />
     <Content Include="WF\Data\Install\SQLScript\InitView_Ora.sql" />
     <Content Include="WF\Admin\Org\Site.Master" />
-    <Content Include="WF\Admin\CCFormDesigner\common\FormDesignerController.ashx" />
+    <Content Include="WF\Admin\CCFormDesigner\FormDesignerController.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\common\CCBPMDesignerBase.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\common\controller.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Opt\Site.Master" />
@@ -1239,6 +1286,10 @@
     <Content Include="SDKFlowDemo\SDK\Site.Master" />
     <Content Include="SDKFlowDemo\WinOpen.master" />
     <None Include="Service References\CloundWS\WS.wsdl" />
+    <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
+    <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
+    <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
+    <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
     <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
@@ -3760,8 +3811,22 @@
     <Compile Include="WF\Admin\CCFormDesigner\CCFormDesignerSL.aspx.designer.cs">
       <DependentUpon>CCFormDesignerSL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\common\FormDesignerController.ashx.cs">
+    <Compile Include="WF\Admin\CCFormDesigner\FormDesignerController.ashx.cs">
       <DependentUpon>FormDesignerController.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Designer.aspx.cs">
+      <DependentUpon>Designer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Designer.aspx.designer.cs">
+      <DependentUpon>Designer.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx.cs">
       <DependentUpon>DesignerFrm.aspx</DependentUpon>
@@ -3811,6 +3876,13 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.aspx.cs">
       <DependentUpon>NewFrmGuideNew.aspx</DependentUpon>
@@ -3867,6 +3939,13 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Tables.aspx.designer.cs">
       <DependentUpon>Tables.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Welcome.aspx.cs">
+      <DependentUpon>Welcome.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Welcome.aspx.designer.cs">
+      <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Clound\DictData.aspx.cs">
       <DependentUpon>DictData.aspx</DependentUpon>
@@ -4182,6 +4261,13 @@
     </Compile>
     <Compile Include="WF\Admin\Org\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\ReLogin.aspx.cs">
+      <DependentUpon>ReLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\ReLogin.aspx.designer.cs">
+      <DependentUpon>ReLogin.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Templete\Uploade.aspx.cs">
       <DependentUpon>Uploade.aspx</DependentUpon>
@@ -7819,7 +7905,6 @@
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
-    <Folder Include="WF\Admin\CCFormDesigner\lib\sets\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />
     <Folder Include="WF\Data\FlowDemo\" />
@@ -7862,7 +7947,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>29109</DevelopmentServerPort>
+          <DevelopmentServerPort>26507</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

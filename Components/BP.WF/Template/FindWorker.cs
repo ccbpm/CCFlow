@@ -832,7 +832,7 @@ namespace BP.WF.Template
 
             //递归出来子部门下有该岗位的人员
             DataTable mydt = Func_GenerWorkerList_DiGui_ByDepts(subDepts, empNo);
-            if (mydt == null)
+            if (mydt == null && this.town.HisNode.HisWhenNoWorker==false)
                 throw new Exception("@按岗位计算没有找到(" + town.HisNode.Name + ")接受人.");
             return mydt;
             #endregion  按照岗位来执行。

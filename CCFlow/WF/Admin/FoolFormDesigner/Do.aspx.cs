@@ -73,7 +73,7 @@ namespace CCFlow.WF.MapDef
                         return;
                     case "DownTempFrm":
                         MapData md = new MapData(this.FK_MapData);
-                        DataSet ds = md.GenerHisDataSet();
+                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
                         string name = "ccflow表单模板." + md.Name + "." + md.No + ".xml";
                         string file = this.Request.PhysicalApplicationPath + "\\Temp\\" + this.FK_MapData + ".xml";
                         ds.WriteXml(file);

@@ -32,11 +32,11 @@
         function DeleteInformation(js, scorp) {
             if (js == 0) {
                 $.messager.alert('提示', '您请求的删除没有成功。', 'error');
-                LoadGridData(1, 100);
+                LoadGridData(1, 6);
             }
             if (js > 0) {
                 $.messager.alert('提示', '删除成功。', 'info');
-                LoadGridData(1, 100);
+                LoadGridData(1, 6);
             }
         }
 
@@ -79,7 +79,7 @@
         //初始化
         $(function () {
             FK_MapData = Application.common.getArgsFromHref("FK_MapData"); //取出页面传至
-            LoadGridData(1, 100);
+            LoadGridData(1, 6);
         });
 
         //加载grid后回调函数

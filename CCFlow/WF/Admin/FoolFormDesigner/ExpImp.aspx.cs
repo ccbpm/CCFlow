@@ -51,7 +51,7 @@ namespace CCFlow.WF.MapDef
             switch (this.DoType)
             {
                 case "Exp":
-                    DataSet ds = md.GenerHisDataSet();
+                    DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet( md.No);
                     string file = this.Request.PhysicalApplicationPath + "\\DataUser\\Temp\\" + this.FK_MapData + ".xml";
                     ds.WriteXml(file);
                     BP.Sys.PubClass.DownloadFile(file, md.Name + ".xml");
@@ -59,7 +59,7 @@ namespace CCFlow.WF.MapDef
                     break;
                 case "Imp":
                     MapData mdForm = new MapData(this.FromMap);
-                    MapData.ImpMapData(this.FK_MapData, mdForm.GenerHisDataSet(), true);
+                    MapData.ImpMapData(this.FK_MapData,BP.Sys.CCFormAPI.GenerHisDataSet( mdForm.No), true);
                     this.WinClose();
                     return;
                 case "Share":

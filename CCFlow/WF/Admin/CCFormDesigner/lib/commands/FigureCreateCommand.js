@@ -69,6 +69,14 @@ FigureCreateCommand.prototype = {
                     canAddFigure = false;  // 需要弹出对话框创建.
                     this.RadioButtonCreate(createdFigure, this.x, this.y, 'RB');
                     break;
+                case CCForm_Controls.DropDownListTable: //枚举类型.
+                    canAddFigure = false; // 需要弹出对话框创建.
+                    this.DropDownListTableCreate(createdFigure, this.x, this.y);
+                    break;
+                case CCForm_Controls.Dtl: //明细表.
+                    canAddFigure = false; // 需要弹出对话框创建.
+                    this.DtlCreate(createdFigure, this.x, this.y);
+                    break;
                 default:
                     alert('没有判断的控件类型{' + createFigureName + '}.');
                     break;
@@ -189,7 +197,7 @@ FigureCreateCommand.prototype = {
 
         OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
             var win = document.getElementById(dgId).contentWindow;
-            var frmVal = win.getNewEnumInfo();
+            var frmVal = win.GetFrmInfo();
 
             if (frmVal.Name == null || frmVal.Name.length == 0) {
                 $.messager.alert('错误', '字段名称不能为空。', 'error');
@@ -232,6 +240,138 @@ FigureCreateCommand.prototype = {
                         //开始画这个 - 元素.
                         transField.paint();
                     } catch (e) {
+                        alert(e);
+                    }
+
+                } else {
+                    Designer_ShowMsg(json);
+                }
+            }, this);
+
+
+        }, null);
+
+        return false;
+    },
+    /**创建明细表**/
+    DtlCreate: function (createdFigure, x, y) {
+
+        var dgId = "iframeRadioButton";
+        var url = "DialogCtr/FrmDtl.htm?DataType=&s=" + Math.random();
+        var funIsExist = this.IsExist;
+
+        var lab = '创建从表';
+
+        OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
+            var win = document.getElementById(dgId).contentWindow;
+            var frmVal = win.GetFrmInfo();
+
+            if (frmVal.Name == null || frmVal.Name.length == 0) {
+                $.messager.alert('错误', '从表名称不能为空。', 'error');
+                return false;
+            }
+
+            if (frmVal.No == null || frmVal.No.length == 0) {
+                $.messager.alert('错误', '从表编号不能为空。', 'error');
+                return false;
+            }
+
+            //判断主键是否存在
+            var isExit = funIsExist(frmVal.No);
+            if (isExit == true) {
+                $.messager.alert("错误", "@已存在ID为(" + frmVal.No + ")的元素，不允许添加同名元素！", "error");
+                return false;
+            }
+
+            createdFigure.CCForm_Shape = "Dtl";
+
+            //根据信息创建不同类型的数字控件.
+            var transField = new TransFormDataField(createdFigure, frmVal, x, y);
+
+            // 定义参数，让其保存到数据库里。
+            var param = {
+                action: "DoType",
+                DoType: "NewDtl",
+                FK_MapData: CCForm_FK_MapData,
+                Name: frmVal.Name,
+                No: frmVal.No,
+                x: x,
+                y: y
+            };
+            ajaxService(param, function (json) {
+                if (json == "true") {
+                    try {
+                        //开始画这个 - 元素.
+                        transField.paint();
+                    } catch (e) {
+                        alert(e);
+                    }
+                } else {
+                    Designer_ShowMsg(json);
+                }
+            }, this);
+
+        }, null);
+
+        return false;
+    },
+    /**创建外部数据源下拉框**/
+    DropDownListTableCreate: function (createdFigure, x, y) {
+
+        var dgId = "iframeRadioButton";
+        var url = "DialogCtr/FrmTable.htm?DataType=&s=" + Math.random();
+        var funIsExist = this.IsExist;
+
+        var lab = '外键表字段';
+
+        OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
+            var win = document.getElementById(dgId).contentWindow;
+            var frmVal = win.GetFrmInfo();
+
+            if (frmVal.Name == null || frmVal.Name.length == 0) {
+                $.messager.alert('错误', '字段名称不能为空。', 'error');
+                return false;
+            }
+
+            if (frmVal.KeyOfEn == null || frmVal.KeyOfEn.length == 0) {
+                $.messager.alert('错误', '英文字段不能为空。', 'error');
+                return false;
+            }
+
+
+            //判断主键是否存在
+            var isExit = funIsExist(frmVal.KeyOfEn);
+
+            if (isExit == true) {
+                $.messager.alert("错误", "@已存在ID为(" + frmVal.KeyOfEn + ")的元素，不允许添加同名元素！", "error");
+                return false;
+            }
+
+            createdFigure.CCForm_Shape = "DropDownListTable";
+
+            //根据信息创建不同类型的数字控件.
+            var transField = new TransFormDataField(createdFigure, frmVal, x, y);
+
+            // 定义参数，让其保存到数据库里。
+            var param = {
+                action: "DoType",
+                DoType: "NewSFTableField",
+                FK_MapData: CCForm_FK_MapData,
+                Name: frmVal.Name,
+                KeyOfEn: frmVal.KeyOfEn,
+                UIBindKey: frmVal.UIBindKey,
+                x: x,
+                y: y
+            };
+            ajaxService(param, function (json) {
+                if (json == "true") {
+
+                    try {
+                        //开始画这个 - 元素.
+                        alert('数据存储成功，开始画元素。');
+                        transField.paint();
+                    } catch (e) {
+                        alert('画元素失败。');
                         alert(e);
                     }
 
@@ -325,8 +465,13 @@ TransFormDataField.prototype = {
         //change text
         var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
         if (figureText != null) {
-            figureText.setTextStr(this.dataArrary.KeyOfEn);
+            if (this.dataArrary.KeyOfEn != null)
+                figureText.setTextStr(this.dataArrary.KeyOfEn);
+
+            if (this.dataArrary.No != null)
+                figureText.setTextStr(this.dataArrary.No);
         }
+
         //创建标签
         this.LabelCreateForFigure();
         draw();
@@ -338,11 +483,7 @@ TransFormDataField.prototype = {
         var shap_src = null;
 
         shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
-
-        //  alert(createdFigure.CCForm_Shape);
-
         propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
-
         //shap image
         var imageFrame = STACK.figuresImagePrimitiveGetByFigureId(createdFigure.id);
         if (imageFrame != null)
@@ -350,20 +491,37 @@ TransFormDataField.prototype = {
 
         // alert(figureSetsURL + shap_src);
 
+        var ctrlLab = '控件属性';
+        switch (createdFigure.CCForm_Shape) {
+            case "Dtl":
+                ctrlLab = '从表/明细表属性';
+                break;
+            default:
+                break;
+        }
+
         //push property
-        createdFigure.properties.push(new BuilderProperty('控件属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+        createdFigure.properties.push(new BuilderProperty(ctrlLab, 'group', BuilderProperty.TYPE_GROUP_LABEL));
         createdFigure.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+
         for (var i = 0; i < propertys.length; i++) {
+
             var defVal = propertys[i].DefVal ? propertys[i].DefVal : "";
 
             switch (defVal) {
+                case "No":  // 编号
+                    defVal = this.dataArrary.No;
+                    break;
+                case "Name":  // 名称
+                    defVal = this.dataArrary.Name;
+                    break;
                 case "FieldText":  // 字段中文名
                     defVal = this.dataArrary.Name;
                     break;
                 case "KeyOfEn":    // 字段名.
                     defVal = this.dataArrary.KeyOfEn;
                     break;
-                case "UIBindKey":  // 字段中文名
+                case "UIBindKey":  // 绑定的外键.
                     defVal = this.dataArrary.UIBindKey;
                     break;
                 default:
@@ -372,8 +530,11 @@ TransFormDataField.prototype = {
 
             //替换系统值
             defVal = this.DealExp(defVal);
+
+            //增加一个属性, 放到属性面板里.
             createdFigure.properties.push(new BuilderProperty(propertys[i].ProText, propertys[i].proName, propertys[i].ProType, defVal));
         }
+
         return createdFigure;
     },
     /**创建控件对应的标签**/
@@ -403,6 +564,7 @@ TransFormDataField.prototype = {
         try {
             expString = expString.replace(/@NodeID@/g, CCForm_FK_MapData);
             expString = expString.replace(/@KeyOfEn@/g, this.dataArrary.Name);
+            expString = expString.replace(/@No@/g, this.dataArrary.Name);
         } catch (e) {
         }
         return expString;

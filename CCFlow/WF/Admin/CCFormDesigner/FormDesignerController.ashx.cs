@@ -111,7 +111,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             context.Response.Write(s_responsetext);
             context.Response.End();
         }
-
         /// <summary>
         /// 删除隐藏字段
         /// </summary>
@@ -126,16 +125,13 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
 
             StrSuccess = Success.ToString();
             return StrSuccess;
-
         }
-
         /// <summary>
         /// 获取表单所有隐藏字段数据集
         /// </summary>
         /// <returns></returns>
         public string Hiddenfielddata()
         {
-
             string newsid = getUTF8ToString("FK_MapData");
             int RowCount = 0;
             //当前页
@@ -273,6 +269,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         public string DoType()
         {
             string dotype = getUTF8ToString("DoType");
+            string frmID = getUTF8ToString("FK_MapData");
+
             string v1 = getUTF8ToString("v1");
             string v2 = getUTF8ToString("v2");
             string v3 = getUTF8ToString("v3");
@@ -283,6 +281,39 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             {
                 switch (dotype)
                 {
+                    case "NewDtl": //创建从表.
+                        try
+                        {
+                            string noDtl = getUTF8ToString("No");
+                            string nameDtl = getUTF8ToString("Name");
+                            float x= float.Parse(getUTF8ToString("x"));
+                            float y = float.Parse(getUTF8ToString("y"));
+                            BP.Sys.CCFormAPI.CreateOrSaveDtl(frmID, noDtl, nameDtl, x, y);
+                            return "true";
+                        }
+                        catch (Exception ex)
+                        {
+                            return ex.Message;
+                        }
+                    case "NewSFTableField": //创建一个SFTable字段.
+                        try
+                        {
+                            string fk_mapdata=getUTF8ToString("FK_MapData");
+                            string keyOfEn=getUTF8ToString("KeyOfEn");
+                            string fieldDesc=getUTF8ToString("Name");
+                            string sftable = getUTF8ToString("UIBindKey");
+                            float x=float.Parse(getUTF8ToString("x"));
+                            float y=float.Parse(getUTF8ToString("y"));
+
+                            //调用接口,执行保存.
+                            BP.Sys.CCFormAPI.SaveSFTableField(fk_mapdata, keyOfEn, fieldDesc,sftable, x, y);
+
+                            return "true";
+                        }
+                        catch (Exception ex)
+                        {
+                            return ex.Message;
+                        }
                     case "NewEnumField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {
@@ -413,7 +444,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         /*
                          * 判断是否是节点设置的审核分组，如果是就为节点设置焦点字段。
                          */
-                        string frmID = attrN.FK_MapData;
                         frmID = frmID.Replace("ND", "");
                         int nodeid = 0;
                         try
@@ -433,24 +463,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             nd.FocusField = "@" + gKey + "_Note";
                             nd.Update();
                         }
-                        return "true";
-                    case "NewDtl":
-                        MapDtl dtlN = new MapDtl();
-                        dtlN.No = v1;
-                        if (dtlN.RetrieveFromDBSources() != 0)
-                            return "error:从表已存在";
-                        dtlN.Name = v1;
-                        dtlN.FK_MapData = v2;
-                        dtlN.PTable = v1;
-                        dtlN.Insert();
-                        dtlN.IntMapAttrs();
-                        return "true";
-                    case "DelM2M":
-                        MapM2M m2mDel = new MapM2M();
-                        m2mDel.MyPK = v1;
-                        m2mDel.Delete();
-                        //M2M m2mData = new M2M();
-                        //m2mData.Delete(M2MAttr.FK_MapData, v1);
                         return "true";
                     case "NewAthM": // 新建 NewAthM. 
                         string fk_mapdataAth = v1;
@@ -499,7 +511,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         string enumKey = getUTF8ToString("EnumKey");
 
                         // 检查这个物理表是否被使用.
-                        sql = "SELECT  * FROM Sys_MapAttr WHERE UIBindKey='" + enumKey + "'";
+                        sql = "SELECT  FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + enumKey + "'";
                         DataTable dtEnum = DBAccess.RunSQLReturnTable(sql);
                         string msgDelEnum = "";
                         foreach (DataRow dr in dtEnum.Rows)
@@ -517,7 +529,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
 
                     case "DelSFTable": /* 删除自定义的物理表. */
                         // 检查这个物理表是否被使用。
-                        sql = "SELECT  * FROM Sys_MapAttr WHERE UIBindKey='" + v1 + "'";
+                        sql = "SELECT FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + v1 + "'";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         string msgDel = "";
                         foreach (DataRow dr in dt.Rows)
@@ -596,7 +608,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             }
                         }
 
-                        DataSet ds = mdfrmtem.GenerHisDataSet();
+                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(mdfrmtem.No);
                         string file = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\Temp\\" + v1 + ".xml";
                         if (System.IO.File.Exists(file))
                             System.IO.File.Delete(file);
@@ -1046,18 +1058,19 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             JsonData property = properties[iProperty];
                             if (property == null || !property.Keys.Contains("property") || property["property"] == null)
                                 continue;
-
-                            if (property["property"].ToString() == "primitives.1.str")
+                            switch (property["property"].ToString())
                             {
-                                drBtn["TEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
-                            }
-                            else if (property["property"].ToString() == "ButtonEvent")
-                            {
-                                drBtn["EVENTTYPE"] = property["PropertyValue"] == null ? "0" : property["PropertyValue"].ToString();
-                            }
-                            else if (property["property"].ToString() == "BtnEventDoc")
-                            {
-                                drBtn["EVENTCONTEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
+                                case "primitives.1.str":
+                                    drBtn["TEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
+                                    break;
+                                case "ButtonEvent":
+                                    drBtn["EVENTTYPE"] = property["PropertyValue"] == null ? "0" : property["PropertyValue"].ToString();
+                                    break;
+                                case "BtnEventDoc":
+                                    drBtn["EVENTCONTEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
+                                    break;
+                                default:
+                                    break;
                             }
                         }
                         dtBtn.Rows.Add(drBtn);

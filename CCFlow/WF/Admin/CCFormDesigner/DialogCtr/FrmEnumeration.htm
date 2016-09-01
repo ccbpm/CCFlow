@@ -26,7 +26,7 @@
 
         //初始化
         $(function () {
-            LoadGridData(1, 100);
+            LoadGridData(1, 6);
         });
 
         //加载grid后回调函数
@@ -58,7 +58,7 @@
                 fitColumns: true,
                 pageNumber: scorp.pageNumber,
                 pageSize: scorp.pageSize,
-                pageList: [10, 15, 20, 100],
+                pageList: [6, 12, 18, 100],
                 loadMsg: '数据加载中......',
                 onClickRow: function (rowIndex, rowData) {
                     $('#TB_Name').val(rowData["Name"]);
@@ -85,7 +85,7 @@
         }
 
         //传入父窗体
-        function getNewEnumInfo() {
+        function GetFrmInfo() {
             return {
                 Name: $.trim($("#TB_Name").val()),
                 KeyOfEn: $.trim($("#TB_KeyOfEn").val()),
@@ -140,7 +140,7 @@
             $.post("../FormDesignerController.ashx", param, function (data) {
                 if (data == "true") {
                     alert('删除成功.');
-                    LoadGridData(1, 100);
+                    LoadGridData(1, 6);
                 } else {
                     alert(data);
                 }
@@ -211,14 +211,14 @@
                         <td colspan="2">
                             <br />
                             中文名：
-                            <input id="TB_Name" class="easyui-textbox" style="width: 200px" />
-                            字段英文名：<input id="TB_KeyOfEn" class="easyui-textbox" style="width: 200px" />
-
+                            <input id="TB_Name" class="easyui-textbox" style="width: 150px" />
+                            字段英文名：<input id="TB_KeyOfEn" class="easyui-textbox" style="width: 100px" />
+                             <input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label>
                           <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
                           <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
 
 
-                            <input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label>
+                           
                         </td>
                     </tr>
                 </table>

@@ -1082,7 +1082,7 @@ public class CCFlowAPI : CCForm
             if (md.RetrieveFromDBSources() == 0)
                 throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
 
-            DataSet myds = md.GenerHisDataSet();
+            DataSet myds  =BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
             #region 流程设置信息.
             Node nd = new Node(fk_node);
@@ -1461,7 +1461,7 @@ public class CCFlowAPI : CCForm
            // DataTable dtMapAttr = DBAccess.RunSQLReturnTable("");
             // md.GenerHisDataSet().Tables["Sys_MapAttr"];
 
-            DataTable dtMapAttr = md.GenerHisDataSet().Tables["Sys_MapAttr"];
+            DataTable dtMapAttr =BP.Sys.CCFormAPI.GenerHisDataSet( md.No).Tables["Sys_MapAttr"];
 
             foreach (DataRow dr in dtMapAttr.Rows)
             {
@@ -2519,7 +2519,7 @@ public class CCFlowAPI : CCForm
     public string CCForm_FrmTemplete(string fk_mapdata)
     {
         MapData md = new MapData(fk_mapdata);
-        DataSet ds = md.GenerHisDataSet();
+        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet( md.No);
         return BP.Tools.FormatToJson.ToJson(ds);
     }
     /// <summary>

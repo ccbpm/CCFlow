@@ -88,7 +88,7 @@ namespace CCFlow.WF.Admin.XAP
             switch (this.DoType)
             {
                 case "DownFormTemplete":
-                    DataSet ds = BP.Sys.MapData.GenerHisDataSet(FK_MapData);
+                    DataSet ds =BP.Sys.CCFormAPI.GenerHisDataSet(FK_MapData);
                     BP.Sys.MapData md = new BP.Sys.MapData(FK_MapData);
                     string file = BP.Sys.SystemConfig.PathOfTemp + md.No + ".xml";
                     ds.WriteXml(file);
@@ -280,7 +280,7 @@ namespace CCFlow.WF.Admin.XAP
                     }
                     else
                     {
-                        DataSet ds = MapData.GenerHisDataSet(FK_MapData);
+                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(FK_MapData);
                         if (!string.IsNullOrEmpty(file) && null != ds)
                             ds.WriteXml(file);
                     }

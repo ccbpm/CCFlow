@@ -847,17 +847,6 @@ namespace BP.Web
                             nd.Update();
                         }
                         return null;
-                    case "NewDtl":
-                        MapDtl dtlN = new MapDtl();
-                        dtlN.No = v1;
-                        if (dtlN.RetrieveFromDBSources() != 0)
-                            return "从表已存在";
-                        dtlN.Name = v1;
-                        dtlN.FK_MapData = v2;
-                        dtlN.PTable = v1;
-                        dtlN.Insert();
-                        dtlN.IntMapAttrs();
-                        return null;
                     case "DelM2M":
                         MapM2M m2mDel = new MapM2M();
                         m2mDel.MyPK = v1;
@@ -1006,7 +995,7 @@ namespace BP.Web
                             }
                         }
 
-                        DataSet ds = mdfrmtem.GenerHisDataSet();
+                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet( mdfrmtem.No);
                         string file = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\Temp\\" + v1 + ".xml";
                         if (System.IO.File.Exists(file))
                             System.IO.File.Delete(file);
@@ -1227,7 +1216,7 @@ namespace BP.Web
                 {
                     case "ShareFrm": /*共享模板*/
                         MapData md = new MapData();
-                        DataSet ds = md.GenerHisDataSet();
+                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
                         string file = BP.Sys.SystemConfig.PathOfTemp + v1 + "_" + v2 + "_" + DateTime.Now.ToString("MM-dd hh-mm") + ".xml";
                         ds.WriteXml(file);
                         conn.SetCurrentDirectory("/");
@@ -1321,7 +1310,7 @@ namespace BP.Web
 
             try
             {
-                this.ds = MapData.GenerHisDataSet(fk_mapdata);
+                this.ds =BP.Sys.CCFormAPI.GenerHisDataSet(fk_mapdata);
                 if (this.ds == null || this.ds.Tables.Count <= 0)
                 {
                     MapData md = new MapData();
@@ -1366,7 +1355,7 @@ namespace BP.Web
             this.LetAdminLogin();
 
             MapData md = new MapData(fromMapData);
-            MapData.ImpMapData(fk_mapdata, md.GenerHisDataSet(), isSetReadonly);
+            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet( md.No), isSetReadonly);
 
             // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
             if (fk_mapdata.Contains("ND") == true)

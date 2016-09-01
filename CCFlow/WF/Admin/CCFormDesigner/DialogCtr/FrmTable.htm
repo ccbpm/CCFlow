@@ -18,6 +18,7 @@
                 action: "GetSFTableList",
                 pageNumber: pageNumber,
                 pageSize: pageSize
+
             };
 
             ajaxService(params, LoadDataGridCallBack, this, 1);
@@ -25,7 +26,7 @@
 
         //初始化
         $(function () {
-            LoadGridData(1, 5);
+            LoadGridData(1, 6);
         });
 
         //加载grid后回调函数
@@ -42,9 +43,11 @@
 
             $('#newsGrid').datagrid({
                 columns: [[
-                    { field: 'No', title: '编号', width: 80 },
+                    { field: 'No', title: '编号', width: 60 },
                     { field: 'Name', title: '名称', width: 90 },
-                    { field: 'CfgVal', title: '枚举值', width: 190 }
+                    { field: 'FK_Val', title: '默认字段', width: 30 },
+                    { field: 'FK_SFDBSrcText', title: '数据源', width: 50 },
+                    { field: 'SrcTypeText', title: '数据类型', width: 50 }
                 ]],
                 idField: 'No',
                 singleSelect: true,
@@ -57,14 +60,16 @@
                 fitColumns: true,
                 pageNumber: scorp.pageNumber,
                 pageSize: scorp.pageSize,
-                pageList: [5, 10, 15, 20],
+                pageList: [6, 12, 18, 100],
                 loadMsg: '数据加载中......',
                 onClickRow: function (rowIndex, rowData) {
                     $('#TB_Name').val(rowData["Name"]);
-                    $('#TB_KeyOfEn').val(rowData["No"]);
+                    $('#TB_KeyOfEn').val(rowData["FK_Val"]);
                     $('#TB_UIBindKey').val(rowData["No"]);
+                  //  $('#TB_Vals').val(rowData["CfgVal"]);
+                    //执行编辑函数.
+                  //  Edit(false);
                 }
-
             });
             //分页
             var pg = $("#newsGrid").datagrid("getPager");
@@ -81,7 +86,7 @@
         }
 
         //传入父窗体
-        function getNewEnumInfo() {
+        function GetFrmInfo() {
             return {
                 Name: $.trim($("#TB_Name").val()),
                 KeyOfEn: $.trim($("#TB_KeyOfEn").val()),
@@ -89,18 +94,60 @@
                 UIBindKey: $.trim($("#TB_UIBindKey").val())
             };
         }
+
+        function Del() {
+
+            var name = $.trim($("#TB_Name").val());
+            var key = $.trim($("#TB_KeyOfEn").val());
+
+            if (key == null || key == "") {
+                alert('您没有选择行.');
+                return;
+            }
+
+            var v = window.confirm("您确定要删除枚举值[" + name + " " + key + "]吗？");
+            if (v == false)
+                return;
+
+            alert('开始执行删除.');
+
+            // 定义参数，让其保存到数据库里。
+            var param = {
+                action: "DoType",
+                DoType: "DelSFTable",
+                EnumKey: key
+            };
+
+            $.post("../FormDesignerController.ashx", param, function (data) {
+                if (data == "true") {
+                    alert('删除成功.');
+                    LoadGridData(1, 6);
+                } else {
+                    alert(data);
+                }
+            });
+        }
+
+        function Edit() {
+             
+        }
+
+        //执行保存.
+        function Save() {
+        }
     </script>
 </head>
 <body class="easyui-layout">
     <div data-options="region:'center'">
         <div id="tabs" class="easyui-tabs" data-options="fit:true ,border:false">
-            <div title="选择已有枚举值" style="width: 600px; height: 600px;">
+
+            <div title="外键、外部数据、webservices数据源." style="width: 600px; height: 900px;">
                 <div id="tb" style="padding: 3px;">
-                    <input type="button" id="Btn_NewlyAdded" onclick="New_event()" value="新增" />
+                    <input type="button" id="Btn_New" class="easyui-button" onclick="New()" value="新增" />
                     &nbsp;&nbsp;
-                    <input type="button" id="Btn_Edit" onclick="" value="编辑" />
+                    <input type="button" id="Btn_Edit" onclick="Edit(true)" value="编辑" />
                     &nbsp;&nbsp;
-                    <input type="button" id="Btn_Delete" onclick="" value="删除" />
+                    <input type="button" id="Btn_DELETE" onclick="Del()" value="删除" />
                 </div>
                 
                 <table id="newsGrid" toolbar="#tb" class="easyui-datagrid">
@@ -111,18 +158,15 @@
                         <td colspan="2">
                             <br />
                             中文名：
-                            <input id="TB_Name" class="easyui-textbox" style="width: 200px" />
-                            字段英文名：<input id="TB_KeyOfEn" class="easyui-textbox" style="width: 200px" />
-
-                          <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
-
+                            <input id="TB_Name" class="easyui-textbox" style="width: 150px" />
+                            字段英文名：<input id="TB_KeyOfEn" class="easyui-textbox" style="width: 100px" />
                             <input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label>
+                          <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+                          <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+                            
                         </td>
                     </tr>
                 </table>
-            </div>
-            <div title="编辑" style="padding: 10px">
-               
             </div>
         </div>
     </div>

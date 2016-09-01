@@ -1357,12 +1357,21 @@ namespace BP.Sys
             {
                 return this.GetValFloatByKey(FrmImgAttr.X);
             }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.X, value);
+            }
+
         }
         public float Y
         {
             get
             {
                 return this.GetValFloatByKey(FrmImgAttr.Y);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.Y, value);
             }
         }
         public float W
@@ -1371,12 +1380,20 @@ namespace BP.Sys
             {
                 return this.GetValFloatByKey(FrmImgAttr.W);
             }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.W, value);
+            }
         }
         public float H
         {
             get
             {
                 return this.GetValFloatByKey(FrmImgAttr.H);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.H, value);
             }
         }
         public float FrmW

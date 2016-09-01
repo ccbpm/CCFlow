@@ -1084,13 +1084,17 @@ namespace BP.WF
 
 
         #region NodeSend 的附属功能.
+        /// <summary>
+        /// 获得下一个节点.
+        /// </summary>
+        /// <returns></returns>
         public Node NodeSend_GenerNextStepNode()
         {
             //如果要是跳转到的节点，自动跳转规则规则就会失效。
             if (this.JumpToNode != null)
                 return this.JumpToNode;
 
-            // 判断是否有用户选择的节点。
+            // 判断是否有用户选择的节点.
             if (this.HisNode.CondModel == CondModel.ByUserSelected)
             {
                 // 获取用户选择的节点.
@@ -1103,7 +1107,8 @@ namespace BP.WF
                 {
                     if (string.IsNullOrEmpty(item))
                         continue;
-                    //排除到达自身节点
+
+                    //排除到达自身节点.
                     if (this.HisNode.NodeID.ToString() == item)
                         continue;
 
@@ -1117,8 +1122,7 @@ namespace BP.WF
             Node nd = NodeSend_GenerNextStepNode_Ext1();
 
             //写入到达信息.
-            this.addMsg(SendReturnMsgFlag.VarToNodeID, nd.NodeID.ToString(), nd.NodeID.ToString(),
-             SendReturnMsgType.SystemMsg);
+            this.addMsg(SendReturnMsgFlag.VarToNodeID, nd.NodeID.ToString(), nd.NodeID.ToString(),SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarToNodeName, nd.Name, nd.Name, SendReturnMsgType.SystemMsg);
             return nd;
         }
@@ -1187,11 +1191,13 @@ namespace BP.WF
 #warning 被 zhoupeng 删除 2014-06-20, 不应该存在这里.
                         if (this.HisWork.EnMap.PhysicsTable == nd.HisWork.EnMap.PhysicsTable)
                         {
-                            /*这是数据合并模式, 就不执行copy*/
+                            /*这是数据合并模式, 就不执行 copy */
                         }
                         else
                         {
+
                             /* 如果两个数据源不想等，就执行copy。 */
+
                             #region 复制附件。
                             FrmAttachments athDesc = this.HisNode.MapData.FrmAttachments;
                             if (athDesc.Count > 0 )
@@ -1524,33 +1530,38 @@ namespace BP.WF
                     mywork = skipWork;
                 }
 
-                //判断是否设置跳转了，没有设置就返回他.
-                if (nd.AutoJumpRole0 == false
-                    && nd.AutoJumpRole1 == false
-                    && nd.AutoJumpRole2 == false)
+                //如果没有设置跳转规则，就返回他们.
+                if (nd.AutoJumpRole0 == false && nd.AutoJumpRole1 == false && nd.AutoJumpRole2 == false && nd.HisWhenNoWorker == false)
                     return nd;
 
-                FindWorker fw = new FindWorker();
-                WorkNode toWn = new WorkNode(this.WorkID, nd.NodeID);
-                if (skipWork == null)
-                    skipWork = toWn.HisWork;  
-
-                DataTable dt = fw.DoIt(this.HisFlow, this, toWn); // 找到下一步骤的接受人.
-                if (dt == null || dt.Rows.Count == 0)
+                DataTable dt = null;
+                if (nd.HisWhenNoWorker == true)
                 {
-                    if (nd.HisWhenNoWorker == WhenNoWorker.Skip)
-                    {
-                        this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName,
-                            nd.NodeID, nd.Name, "自动跳转.(当没有找到处理人时)", ndFrom);
-                        ndFrom = nd;
-                        continue;
-                    }
-                    else
-                        throw new Exception("@没有找到人.");
-                }
+                    FindWorker fw = new FindWorker();
+                    WorkNode toWn = new WorkNode(this.WorkID, nd.NodeID);
+                    if (skipWork == null)
+                        skipWork = toWn.HisWork;
 
-                if (dt.Rows.Count == 0)
-                    throw new Exception("@没有找到下一个节点(" + nd.Name + ")的处理人");
+                    dt = fw.DoIt(this.HisFlow, this, toWn); // 找到下一步骤的接受人.
+                    if (dt == null || dt.Rows.Count == 0)
+                    {
+                        if (nd.HisWhenNoWorker == true)
+                        {
+                            this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName,
+                                nd.NodeID, nd.Name, "自动跳转.(当没有找到处理人时)", ndFrom);
+                            ndFrom = nd;
+                            continue;
+                        }
+                        else
+                        {
+                            //抛出异常.
+                            throw new Exception("@没有找到节点[" + nd.Name + "]的工作处理人.");
+                        }
+                    }
+
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("@没有找到下一个节点(" + nd.Name + ")的处理人");
+                }
 
                 if (nd.AutoJumpRole0)
                 {
@@ -1604,7 +1615,7 @@ namespace BP.WF
 
                     if (isHave == true)
                     {
-                        /*如果发现了，当前人员包含处理人集合.*/
+                        /*如果发现了，当前人员包含处理人集合. */
                         this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName, nd.NodeID, nd.Name, "自动跳转,(处理人就是提交人)", ndFrom);
                         ndFrom = nd;
                         continue;
@@ -1630,6 +1641,7 @@ namespace BP.WF
                             break;
                         }
                     }
+
                     if (isHave == true)
                     {
                         this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName, nd.NodeID, nd.Name, "自动跳转.(处理人已经出现过)", ndFrom);
@@ -7694,7 +7706,6 @@ namespace BP.WF
                 //如果当前的节点是按照ccbpm定义的方式运行的，就返回当前节点的多人待办模式，否则就返回自定义的模式。
                 if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
                     return this.HisNode.TodolistModel;
-
                 return this.HisGenerWorkFlow.TodolistModel;
             }
         }
@@ -7762,13 +7773,6 @@ namespace BP.WF
                     }
                 }
             }
-
-            //WorkNodes wns = this.GetPreviousWorkNodes_FHL();
-            //foreach (WorkNode wn in wns)
-            //{
-            //    if (wn.HisWork.OID == workid)
-            //        return wn;
-            //}
             return null;
         }
         public WorkNodes GetPreviousWorkNodes_FHL()

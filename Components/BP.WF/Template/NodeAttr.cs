@@ -351,13 +351,16 @@ namespace BP.WF.Template
         /// </summary>
         public const string BatchListCount = "BatchListCount";
         /// <summary>
-        /// 自动跳转规则
+        /// 自动跳转规则-1
         /// </summary>
         public const string AutoJumpRole0 = "AutoJumpRole0";
         /// <summary>
-        /// 
+        /// 自动跳转规则-2
         /// </summary>
         public const string AutoJumpRole1 = "AutoJumpRole1";
+        /// <summary>
+        /// 自动跳转规则-3
+        /// </summary>
         public const string AutoJumpRole2 = "AutoJumpRole2";
         /// <summary>
         /// 是否是客户执行节点?

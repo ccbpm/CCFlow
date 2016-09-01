@@ -1750,17 +1750,17 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 未找到处理人时的方式
+        /// 未找到处理人时是否跳转.
         /// </summary>
-        public WhenNoWorker HisWhenNoWorker
+        public bool HisWhenNoWorker
         {
             get
             {
-                return (WhenNoWorker)this.GetValIntByKey(NodeAttr.WhenNoWorker);
+                return this.GetValBooleanByKey(NodeAttr.WhenNoWorker);
             }
             set
             {
-                this.SetValByKey(NodeAttr.WhenNoWorker, (int)value);
+                this.SetValByKey(NodeAttr.WhenNoWorker,value);
             }
         }
         /// <summary>

@@ -24,7 +24,7 @@ namespace BP.Sys
         /// </summary>
         BPClass=0,
         /// <summary>
-        /// 创建表
+        /// 通过ccform创建表
         /// </summary>
         CreateTable=1,
         /// <summary>

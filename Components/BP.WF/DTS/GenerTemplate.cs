@@ -84,7 +84,7 @@ namespace BP.WF.DTS
                     foreach (Node nd in nds)
                     {
                         MapData md = new MapData("ND" + nd.NodeID);
-                        System.Data.DataSet ds = md.GenerHisDataSet();
+                        System.Data.DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
                         ds.WriteXml(pathFlowDir + "\\" + nd.NodeID + "." + nd.Name + ".Frm.xml");
                     }
                 }
@@ -102,7 +102,7 @@ namespace BP.WF.DTS
                 mds.Retrieve(MapDataAttr.FK_FrmSort, sort.No);
                 foreach (MapData md in mds)
                 {
-                    System.Data.DataSet ds = md.GenerHisDataSet();
+                    System.Data.DataSet ds =BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
                     ds.WriteXml(pathDir + "\\" + md.No + "." + md.Name + ".Frm.xml");
                 }
             }

@@ -258,20 +258,6 @@ namespace BP.WF
         SpecDataRel
     }
     /// <summary>
-    /// 当没有找到处理人时
-    /// </summary>
-    public enum WhenNoWorker
-    {
-         /// <summary>
-        /// 提示错误
-        /// </summary>
-        AlertErr,
-        /// <summary>
-        /// 跳转到下一步
-        /// </summary>
-        Skip
-    }
-    /// <summary>
     /// 自动跳转规则
     /// </summary>
     public enum AutoJumpRole

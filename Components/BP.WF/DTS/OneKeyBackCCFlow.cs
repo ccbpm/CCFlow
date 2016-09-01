@@ -159,7 +159,7 @@ namespace BP.WF.DTS
                 string pathDir = path + "\\Form\\" + fs.No + "." + fs.Name;
                 if (System.IO.Directory.Exists(pathDir) == false)
                     System.IO.Directory.CreateDirectory(pathDir);
-                DataSet ds = md.GenerHisDataSet();
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
                 ds.WriteXml(pathDir + "\\" + md.Name + ".xml");
             }
             #endregion 备份表单.

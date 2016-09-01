@@ -380,8 +380,10 @@ namespace BP.WF.Template
 
                 map.AddBoolean(NodeAttr.AutoJumpRole1, false, "处理人已经出现过", true, true, false);
                 map.AddBoolean(NodeAttr.AutoJumpRole2, false, "处理人与上一步相同", true, true, false);
-                map.AddDDLSysEnum(NodeAttr.WhenNoWorker, 0, "找不到处理人处理规则",
-       true, true, NodeAttr.WhenNoWorker, "@0=提示错误@1=自动转到下一步");
+                map.AddBoolean(NodeAttr.WhenNoWorker, false, "(是)找不到人就跳转,(否)提示错误.", true, true, false);
+
+       //         map.AddDDLSysEnum(NodeAttr.WhenNoWorker, 0, "找不到处理人处理规则",
+       //true, true, NodeAttr.WhenNoWorker, "@0=提示错误@1=自动转到下一步");
                 #endregion
 
                 #region  功能按钮状态

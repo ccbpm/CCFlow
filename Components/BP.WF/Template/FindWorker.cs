@@ -37,7 +37,7 @@ namespace BP.WF.Template
         public FindWorker()
         {
         }
-        private DataTable FindByWorkFlowModel()
+        public DataTable FindByWorkFlowModel()
         {
             this.town = town;
 
@@ -104,7 +104,7 @@ namespace BP.WF.Template
                 }
 
                 dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker != WhenNoWorker.Skip)
+                if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker==false)
                     throw new Exception("@没有找到可接受的工作人员。@技术信息：执行的SQL没有发现人员:" + sql);
                 return dt;
             }
@@ -117,12 +117,11 @@ namespace BP.WF.Template
 
                 sql = "SELECT No, Name,FK_Dept AS GroupMark FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + town.HisNode.NodeID + ")";
                 dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker != WhenNoWorker.Skip)
+                if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker == false)
                     throw new Exception("@没有找到可接受的工作人员,接受人方式为, ‘按绑定部门计算,该部门一人处理标识该工作结束(子线程)’ @技术信息：执行的SQL没有发现人员:" + sql);
                 return dt;
             }
             #endregion 按绑定部门计算,该部门一人处理标识该工作结束(子线程)..
-
 
             #region 按照明细表,作为子线程的接收人.
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDtlAsSubThreadEmps)
@@ -144,7 +143,7 @@ namespace BP.WF.Template
                         ps.SQL = "SELECT " + empFild + ", * FROM " + dtl.PTable + " WHERE RefPK=" + dbStr + "OID ORDER BY OID";
                         ps.Add("OID", this.WorkID);
                         dt = DBAccess.RunSQLReturnTable(ps);
-                        if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker != WhenNoWorker.Skip)
+                        if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker == false)
                             throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）在指定的节点中没有数据，无法找到子线程的工作人员。");
                         return dt;
                     }
@@ -491,7 +490,7 @@ namespace BP.WF.Template
                     ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
                     ps.Add("FK_Node", town.HisNode.NodeID);
                     dt = DBAccess.RunSQLReturnTable(ps);
-                    if (dt.Rows.Count > 0 && town.HisNode.HisWhenNoWorker != WhenNoWorker.Skip)
+                    if (dt.Rows.Count > 0 && town.HisNode.HisWhenNoWorker == false)
                         return dt;
                     else
                         throw new Exception("@按部门确定接受人的范围,没有找到人员.");

@@ -13,6 +13,101 @@ namespace BP.Sys
     public class CCFormAPI
     {
         /// <summary>
+        /// 创建通用组件入口
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="ctrlType">控件类型</param>
+        /// <param name="no">编号</param>
+        /// <param name="name">名称</param>
+        /// <param name="x">位置x</param>
+        /// <param name="y">位置y</param>
+        public static void PublicNoNameCtrlCreate(string fk_mapdata, string ctrlType, string no, string name, float x, float y)
+        {
+            switch (ctrlType)
+            {
+                case "Dtl":
+                    CreateOrSaveDtl(fk_mapdata, no, name, x, y);
+                    break;
+                case "AthMulti":
+                    CreateOrSaveAthMulti(fk_mapdata, no, name, x, y);
+                    break;
+                case "AthSingle":
+                    CreateOrSaveAthSingle(fk_mapdata, no, name, x, y);
+                    break;
+                case "AthImg":
+                    CreateOrSaveAthImg(fk_mapdata, no, name, x, y);
+                    break;
+                default:
+                    throw new Exception("@没有判断的存储控件:"+ctrlType+",存储该控件前,需要做判断.");
+            }
+        }
+        /// <summary>
+        /// 创建/修改-图片附件
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="dtlNo">明细表编号</param>
+        /// <param name="dtlName">名称</param>
+        /// <param name="x">位置x</param>
+        /// <param name="y">位置y</param>
+        public static void CreateOrSaveAthImg(string fk_mapdata, string no, string name, float x, float y)
+        {
+            FrmAttachment ath = new FrmAttachment();
+            ath.FK_MapData = fk_mapdata;
+            ath.NoOfObj = no;
+
+            ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
+            ath.RetrieveFromDBSources();
+            ath.UploadType = AttachmentUploadType.Single;
+            ath.Name = name;
+            ath.X = x;
+            ath.Y = y;
+            ath.Save();
+        }
+        /// <summary>
+        /// 创建/修改-多附件
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="dtlNo">明细表编号</param>
+        /// <param name="dtlName">名称</param>
+        /// <param name="x">位置x</param>
+        /// <param name="y">位置y</param>
+        public static void CreateOrSaveAthSingle(string fk_mapdata, string no, string name, float x, float y)
+        {
+            FrmAttachment ath = new FrmAttachment();
+            ath.FK_MapData = fk_mapdata;
+            ath.NoOfObj = no;
+
+            ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
+            ath.RetrieveFromDBSources();
+            ath.UploadType = AttachmentUploadType.Single;
+            ath.Name = name;
+            ath.X = x;
+            ath.Y = y;
+            ath.Save();
+        }
+        /// <summary>
+        /// 创建/修改-多附件
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="dtlNo">明细表编号</param>
+        /// <param name="dtlName">名称</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public static void CreateOrSaveAthMulti(string fk_mapdata, string no, string name, float x, float y)
+        {
+            FrmAttachment ath = new FrmAttachment();
+            ath.FK_MapData = fk_mapdata;
+            ath.NoOfObj = no;
+
+            ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
+            ath.RetrieveFromDBSources();
+            ath.UploadType = AttachmentUploadType.Multi;
+            ath.Name = name;
+            ath.X = x;
+            ath.Y = y;
+            ath.Save();
+        }
+        /// <summary>
         /// 创建/修改一个明细表
         /// </summary>
         /// <param name="fk_mapdata">表单ID</param>
@@ -31,6 +126,42 @@ namespace BP.Sys
             dtl.Name = dtlName;
             dtl.FK_MapData = fk_mapdata;
             dtl.Save();
+
+            #region 检查必要的字段是否存在.
+            MapAttr attr = new MapAttr();
+            if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, dtl.No) == false)
+            {
+                attr.FK_MapData = dtl.No;
+                attr.KeyOfEn = "OID";
+                attr.Name = "关联主键";
+                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.DefVal = "0";
+                attr.HisEditType = BP.En.EditType.Readonly;
+                attr.Insert();
+            }
+
+            if (attr.IsExit(MapAttrAttr.KeyOfEn, "RefPK", MapAttrAttr.FK_MapData, dtl.No) == false)
+            {
+                attr.FK_MapData = dtl.No;
+                attr.KeyOfEn = "RefPK";
+                attr.Name = "关联主键";
+                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.DefVal = "0";
+                attr.HisEditType = BP.En.EditType.Readonly;
+                attr.Insert();
+            }
+            #endregion 检查必要的字段是否存在.
+
+
+
         }
         /// <summary>
         /// 创建一个外部数据字段
@@ -158,7 +289,7 @@ namespace BP.Sys
         /// <returns>DataSet</returns>
         public static System.Data.DataSet GenerHisDataSet(string fk_mapdata)
         {
-            // 20150513 小周鹏修改，原因：手机端无法显示dtl Start
+            // 20150513 小周鹏修改，原因：手机端无法显示 dtl Start
             // string sql = "SELECT FK_MapData,No,X,Y,W,H  FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
             string sql = "SELECT *  FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
             // 20150513 小周鹏修改 End

@@ -86,7 +86,7 @@ namespace BP.En
                 if (this.EnMap.IsAutoGenerNo)
                     this.No = this.GenerNewNo;
                 else
-                    throw new Exception("@没有给[" + this.EnDesc + " , " + this.Name + "]设置主键.");
+                    throw new Exception("@没有给[" + this.EnDesc+" " + this.ToString() + " , " + this.Name + "]设置主键,能执行插入.");
             }
 
             if (this.EnMap.IsAllowRepeatName == false)

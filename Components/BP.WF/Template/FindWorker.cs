@@ -210,7 +210,7 @@ namespace BP.WF.Template
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySpecNodeEmp
                 || town.HisNode.HisDeliveryWay == DeliveryWay.ByStarter)
             {
-                /* 按指定节点岗位上的人员计算 */
+                /* 按指定节点的人员计算 */
                 string strs = town.HisNode.DeliveryParas;
                 if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStarter)
                 {
@@ -226,10 +226,18 @@ namespace BP.WF.Template
                     else
                     {
                         /* 有可能当前节点就是第一个节点，那个时间还没有初始化数据，就返回当前人. */
-                        DataRow dr = dt.NewRow();
-                        dr[0] = BP.Web.WebUser.No;
-                        dt.Rows.Add(dr);
-                        return dt;
+                        if (this.currWn.HisNode.IsStartNode)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr[0] = BP.Web.WebUser.No;
+                            dt.Rows.Add(dr);
+                            return dt;
+                        }
+
+                        if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker == false)
+                            throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）在指定的节点中没有数据，无法找到子线程的工作人员。");
+                        else
+                            return dt;
                     }
                 }
 

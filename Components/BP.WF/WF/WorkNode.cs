@@ -7242,6 +7242,7 @@ namespace BP.WF
             {
                 // 说明第一次到达河流节点。
                 current_gwls = this.Func_GenerWorkerLists(this.town);
+                gwls = current_gwls;
             }
 
             string FK_Emp = "";
@@ -7251,17 +7252,17 @@ namespace BP.WF
             {
                 toEmpsStr += BP.WF.Glo.DealUserInfoShowModel(wl.FK_Emp, wl.FK_EmpText);
                 if (gwls.Count == 1)
-                    emps = wl.FK_Emp;
+                    emps = toEmpsStr;
                 else
-                    emps += "@" + FK_Emp;
+                    emps += "@" + toEmpsStr;
             }
 
-            if (string.IsNullOrEmpty(emps) == true)
-            {
-                /*没有找到，就到数据库里在找.*/
-                GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
-                emps = gwf.TodoEmps;
-            }
+            //if (string.IsNullOrEmpty(emps) == true)
+            //{
+            //    /*没有找到，就到数据库里在找.*/
+            //    GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
+            //    emps = gwf.TodoEmps;
+            //}
 
 
             /* 

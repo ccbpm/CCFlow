@@ -170,7 +170,7 @@ function figure_HyperLink(x, y) {
     f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
     f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT));
     f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR));
-    
+
     f.properties.push(new BuilderProperty('控件属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
     f.properties.push(new BuilderProperty('连接地址', 'URL', BuilderProperty.TYPE_SINGLE_TEXT));
@@ -179,6 +179,7 @@ function figure_HyperLink(x, y) {
     var t2 = new Text("link", x, y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = "#0000ff";
     t2.underlined = true;
+
 
     f.addPrimitive(t2);
 
@@ -288,36 +289,67 @@ figureSets["ccbpm"] = {
 };
 
 function figure_Square(x, y) {
-    var r = new Polygon();
-    r.addPoint(new Point(x, y));
-    r.addPoint(new Point(x + FigureDefaults.segmentSize, y));
-    r.addPoint(new Point(x + FigureDefaults.segmentSize, y + FigureDefaults.segmentSize));
-    r.addPoint(new Point(x, y + FigureDefaults.segmentSize));
+
     var f = new Figure("Square");
+
+    //ccform Property
+    f.CCForm_Shape = CCForm_Controls.TextBox;
 
     f.style.fillStyle = FigureDefaults.fillStyle;
     f.style.strokeStyle = FigureDefaults.strokeStyle;
 
-    f.properties.push(new BuilderProperty('Text', 'primitives.1.str', BuilderProperty.TYPE_TEXT));
-    f.properties.push(new BuilderProperty('Text Size ', 'primitives.1.size', BuilderProperty.TYPE_TEXT_FONT_SIZE));
-    f.properties.push(new BuilderProperty('Font ', 'primitives.1.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY));
-    f.properties.push(new BuilderProperty('Alignment ', 'primitives.1.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
-    f.properties.push(new BuilderProperty('Text Underlined', 'primitives.1.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
-    f.properties.push(new BuilderProperty('Text Color', 'primitives.1.style.fillStyle', BuilderProperty.TYPE_COLOR));
+    //Image
+    var url = figureSetsURL + "/Data/TextBoxBig.png";
 
+    var ifig = new ImageFrame(url, x, y, true, 150, 30);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
 
-    //    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    f.properties.push(new BuilderProperty('Stroke Style', 'style.strokeStyle', BuilderProperty.TYPE_COLOR));
-    f.properties.push(new BuilderProperty('Fill Style', 'style.fillStyle', BuilderProperty.TYPE_COLOR));
-    f.properties.push(new BuilderProperty('Line Width', 'style.lineWidth', BuilderProperty.TYPE_LINE_WIDTH)); //f.properties.push(new BuilderProperty('Vertical Alignment ', 'primitives.1.valign', Text.VALIGNMENTS));
-    f.properties.push(new BuilderProperty('Line Style', 'style.lineStyle', BuilderProperty.TYPE_LINE_STYLE));
-
-    f.addPrimitive(r);
-
-    var t2 = new Text(FigureDefaults.textStr, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    var t2 = new Text("", x, y, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = FigureDefaults.textColor;
     f.addPrimitive(t2);
 
     f.finalise();
     return f;
+
+
+
+//    var r = new Polygon();
+//    r.addPoint(new Point(x, y));
+//    r.addPoint(new Point(x + FigureDefaults.segmentSize, y));
+//    r.addPoint(new Point(x + FigureDefaults.segmentSize, y + FigureDefaults.segmentSize));
+//    r.addPoint(new Point(x, y + FigureDefaults.segmentSize));
+//    var f = new Figure("Square");
+
+//    f.style.fillStyle = FigureDefaults.fillStyle;
+//    f.style.strokeStyle = FigureDefaults.strokeStyle;
+
+//    //Image
+//    var url = figureSetsURL + "/Data/TextBoxBig.png";
+//    var ifig = new ImageFrame(url, x, y, true, 350, 30);
+//    ifig.debug = true;
+//    f.addPrimitive(ifig);
+
+////    f.properties.push(new BuilderProperty('Text', 'primitives.1.str', BuilderProperty.TYPE_TEXT));
+////    f.properties.push(new BuilderProperty('Text Size ', 'primitives.1.size', BuilderProperty.TYPE_TEXT_FONT_SIZE));
+////    f.properties.push(new BuilderProperty('Font ', 'primitives.1.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY));
+////    f.properties.push(new BuilderProperty('Alignment ', 'primitives.1.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
+////    f.properties.push(new BuilderProperty('Text Underlined', 'primitives.1.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
+////    f.properties.push(new BuilderProperty('Text Color', 'primitives.1.style.fillStyle', BuilderProperty.TYPE_COLOR));
+
+
+//   // //    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+////    f.properties.push(new BuilderProperty('Stroke Style', 'style.strokeStyle', BuilderProperty.TYPE_COLOR));
+////    f.properties.push(new BuilderProperty('Fill Style', 'style.fillStyle', BuilderProperty.TYPE_COLOR));
+//    f.properties.push(new BuilderProperty('Line Width', 'style.lineWidth', BuilderProperty.TYPE_LINE_WIDTH)); //f.properties.push(new BuilderProperty('Vertical Alignment ', 'primitives.1.valign', Text.VALIGNMENTS));
+////    f.properties.push(new BuilderProperty('Line Style', 'style.lineStyle', BuilderProperty.TYPE_LINE_STYLE));
+
+//    f.addPrimitive(r);
+
+//    var t2 = new Text(FigureDefaults.textStr, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+//    t2.style.fillStyle = FigureDefaults.textColor;
+//    f.addPrimitive(t2);
+
+//    f.finalise();
+//    return f;
 }

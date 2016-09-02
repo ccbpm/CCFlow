@@ -575,11 +575,9 @@ TransFormDataField.prototype = {
 
         shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
 
-         alert(shap_src);
-
-         alert(figureSetsURL);
-
-         alert(figureSetsURL + shap_src);
+       //  alert(shap_src);
+       //  alert(figureSetsURL);
+       // alert(figureSetsURL + shap_src);
 
         propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
         //shap image

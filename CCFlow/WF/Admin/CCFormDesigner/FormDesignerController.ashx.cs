@@ -72,13 +72,29 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             switch (action)
             {
                 case "loadform"://获取表单数据
-                    s_responsetext = Form_LoadFormJsonData();
+                    MapData mapData = new MapData(this.FK_MapData);
+                    s_responsetext = mapData.FormJson; //要返回的值.
                     break;
                 case "SaveForm"://保存表单数据
-                    s_responsetext = SaveFrm();
+                    try
+                    {
+                        string diagram = getUTF8ToString("diagram");//表单格式.
+                        BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
+                        s_responsetext= "true";
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.DebugWriteError(ex.StackTrace);
+                        s_responsetext= "error:表单格式不正确，保存失败。" + ex.Message;
+                    }
                     break;
-                case "ParseStringToPinyin":// 转拼音方法
-                    s_responsetext = ParseStringToPinyin();
+                case "ParseStringToPinyin":// 转拼音方法.
+                    string name = getUTF8ToString("name");
+                    string flag = getUTF8ToString("flag");
+                    if (flag == "true")
+                        s_responsetext = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
+                    else
+                        s_responsetext = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
                     break;
                 case "LetLogin":    //使管理员登录
                     s_responsetext = WebUser.No == "admin" ? string.Empty : LetAdminLogin("CH", true);
@@ -87,16 +103,32 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     s_responsetext = DoType();
                     break;
                 case "GetEnumerationList": //获取所有枚举
-                    s_responsetext = GetEnumerationList();
-                    break;
                 case "GetSFTableList": //获取所有的外键表.
-                    s_responsetext = GetSFTableList();
+                    string pageNumberStr = getUTF8ToString("pageNumber");
+                    int pageNumber = 1;
+                    if (string.IsNullOrEmpty(pageNumberStr) == false)
+                        pageNumber = int.Parse(pageNumberStr);
+
+                    string pageSizeStr = getUTF8ToString("pageSize");
+                    int pageSize = 9999;
+                    if (string.IsNullOrEmpty(pageSizeStr) == false)
+                        pageSize = int.Parse(pageSizeStr);
+
+                    //调用API获得数据.
+                    if (action == "GetSFTableList")
+                        s_responsetext = BP.Sys.CCFormAPI.GetEnumerationList(pageNumber, pageSize);
+                    else
+                        s_responsetext = BP.Sys.CCFormAPI.GetSFTableList(pageNumber, pageSize); //调用API获得数据.
                     break;
-                case "Hiddenfielddata"://获取隐藏字段
-                    s_responsetext = Hiddenfielddata();
+                case "Hiddenfielddata"://获取隐藏字段.
+                    s_responsetext = BP.Sys.CCFormAPI.GetHiddenfielddata(this.FK_MapData);
                     break;
-                case "HiddenFieldDelete"://删除隐藏字段
-                    s_responsetext = HiddenFieldDelete();
+                case "HiddenFieldDelete": //删除隐藏字段.
+                    string records = getUTF8ToString("records");
+                    string FK_MapData = getUTF8ToString("FK_MapData");
+                    MapAttr mapAttrs = new MapAttr();
+                    int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
+                    s_responsetext = result.ToString();
                     break;
             }
             if (string.IsNullOrEmpty(s_responsetext))
@@ -110,157 +142,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             context.Response.Write(s_responsetext);
             context.Response.End();
         }
-        /// <summary>
-        /// 删除隐藏字段
-        /// </summary>
-        /// <returns></returns>
-        public string HiddenFieldDelete()
-        {
-            string StrSuccess = "";
-            string records = getUTF8ToString("records");
-            string FK_MapData = getUTF8ToString("FK_MapData");
-            MapAttr mapAttrs = new MapAttr();
-            int Success = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
 
-            StrSuccess = Success.ToString();
-            return StrSuccess;
-        }
-        /// <summary>
-        /// 获取表单所有隐藏字段数据集
-        /// </summary>
-        /// <returns></returns>
-        public string Hiddenfielddata()
-        {
-            string newsid = getUTF8ToString("FK_MapData");
-            int RowCount = 0;
-            //当前页
-            string pageNumber = getUTF8ToString("pageNumber");
-            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
-            //每页多少行
-            string pageSize = getUTF8ToString("pageSize");
-            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
-
-            MapAttrs mapAttrs = new MapAttrs();
-            QueryObject obj = new QueryObject(mapAttrs);
-            obj.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);
-            obj.addAnd();
-            obj.AddWhere(MapAttrAttr.UIVisible, "0");
-            obj.addAnd();
-            obj.AddWhere(MapAttrAttr.EditType, "0");
-            RowCount = obj.GetCount();
-            //查询
-            obj.DoQuery(MapAttrAttr.MyPK, iPageSize, iPageNumber);
-
-            return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(mapAttrs, RowCount);
-        }
-        /// <summary>
-        /// 获得外键表.
-        /// </summary>
-        /// <returns></returns>
-        public string GetSFTableList()
-        {
-            int RowCount = 0;
-            //当前页
-            string pageNumber = getUTF8ToString("pageNumber");
-            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
-            //每页多少行
-            string pageSize = getUTF8ToString("pageSize");
-            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
-
-            //获得查询.
-            SFTables sftables = new SFTables();
-            QueryObject obj = new QueryObject(sftables);
-            RowCount = obj.GetCount();
-            //查询
-            obj.DoQuery(SysEnumMainAttr.No, iPageSize, iPageNumber);
-
-            return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(sftables, RowCount);
-        }
-        /// <summary>
-        /// 获取所有枚举
-        /// </summary>
-        public string GetEnumerationList()
-        {
-            int RowCount = 0;
-            //当前页
-            string pageNumber = getUTF8ToString("pageNumber");
-            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
-            //每页多少行
-            string pageSize = getUTF8ToString("pageSize");
-            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
-
-            SysEnumMains enumMains = new SysEnumMains();
-            QueryObject obj = new QueryObject(enumMains);
-            RowCount = obj.GetCount();
-            //查询
-            obj.DoQuery(SysEnumMainAttr.No, iPageSize, iPageNumber);
-
-            return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(enumMains, RowCount);
-        }
-        /// <summary>
-        /// 获取表单Json数据
-        /// </summary>
-        /// <returns>string json</returns>
-        private string Form_LoadFormJsonData()
-        {
-            try
-            {
-                MapData mapData = new MapData(this.FK_MapData);
-                //if (mapData.DesignerTool != "H5")
-                //    throw new Exception("@错误：当前的表单不是h5设计器设计的，所以您不能打开它。");
-                return mapData.FormJson;
-            }
-            catch (Exception ex)
-            {
-                Log.DebugWriteError(ex.Message);
-
-                MapData mapData = new MapData(this.FK_MapData);
-                mapData.CheckPhysicsTable();
-                mapData.FormJson = "";
-                return "";
-            }
-        }
-
-        /// <summary>
-        /// 保存表单图信息
-        /// </summary>
-        /// <returns></returns>
-        private string SaveFrm()
-        {
-            try
-            {
-                //表单格式.
-                string diagram = getUTF8ToString("diagram");
-                //表单图.
-                string png = getUTF8ToString("png");
-                JsonData jd = JsonMapper.ToObject(diagram);
-                if (jd.IsObject == true)
-                {
-                    JsonData form_MapData = jd["c"];
-                    //直接保存表单图信息.
-                    MapData mapData = new MapData(this.FK_MapData);
-                    mapData.FrmW = float.Parse(form_MapData["width"].ToJson());
-                    mapData.FrmH = float.Parse(form_MapData["height"].ToJson());
-                    mapData.DesignerTool = "H5";
-                    mapData.Update();
-                    //表单描述文件直接保存到数据库.
-                    mapData.FormJson = diagram;
-                    //格式化表单串
-                    //FormatDiagram2Json(jd);
-                    MapData.SaveCCForm20(this.FK_MapData, FormatDiagram2Json(jd));
-
-
-                    return "true";
-                }
-                return "error:表单格式不正确，保存失败。";
-            }
-            catch (Exception ex)
-            {
-                Log.DebugWriteError(ex.StackTrace);
-                return "error:表单格式不正确，保存失败。"+ex.Message;
-            }
-        }
-
+      
         /// <summary>
         /// 处理表单事件方法
         /// </summary>
@@ -651,7 +534,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         dtl.Delete();
                         return "true";
                     case "DelWorkCheck":
-
                         FrmWorkCheck check = new FrmWorkCheck();
                         check.No = v1;
                         check.Delete();
@@ -773,7 +655,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 return "error:" + ex.Message;
             }
         }
-
         public string SaveEn(string vals)
         {
             Entity en = null;
@@ -810,60 +691,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 return "Error:" + ex.Message;
             }
         }
-
-        /// <summary>
-        /// 转拼音方法
-        /// </summary>
-        /// <returns></returns>
-        public string ParseStringToPinyin()
-        {
-            string name = getUTF8ToString("name");
-            string flag = getUTF8ToString("flag");
-            string s = string.Empty; ;
-            try
-            {
-                if (flag == "true")
-                {
-                    s = BP.DA.DataType.ParseStringToPinyin(name);
-                    if (s.Length > 15)
-                        s = BP.DA.DataType.ParseStringToPinyinWordFirst(name);
-                }
-                else
-                {
-                    s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
-                }
-
-                s = s.Trim().Replace(" ", "");
-                s = s.Trim().Replace(" ", "");
-                //常见符号
-                s = s.Replace(",", "").Replace(".", "").Replace("，", "").Replace("。", "").Replace("!", "");
-                s = s.Replace("*", "").Replace("@", "").Replace("#", "").Replace("~", "").Replace("|", "");
-                s = s.Replace("$", "").Replace("%", "").Replace("&", "").Replace("（", "").Replace("）", "").Replace("【", "").Replace("】", "");
-                s = s.Replace("(", "").Replace(")", "").Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "").Replace("/", "");
-                if (s.Length > 0)
-                {
-                    //去除开头数字
-                    int iHead = 0;
-                    string headStr = s.Substring(0, 1);
-                    while (int.TryParse(headStr, out iHead) == true)
-                    {
-                        //替换为空
-                        s = s.Substring(1);
-                        if (s.Length > 0) headStr = s.Substring(0, 1);
-                    }
-                }
-
-                //去掉空格，去掉点.
-                s = s.Replace(" ", "");
-                s = s.Replace(".", "");
-                return s;
-            }
-            catch
-            {
-                return "false";
-            }
-        }
-
         /// <summary>
         /// 让admin 登陆
         /// </summary>
@@ -887,344 +714,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         }
 
         #region 将表单串格式化存入数据库
-        /// <summary>
-        /// 将表单设计串格式化为Json
-        /// </summary>
-        /// <param name="formData"></param>
-        /// <returns></returns>
-        private DataSet FormatDiagram2Json(JsonData formData)
-        {
-
-            BP.DA.DataType.WriteFile("c:\\temp.json", formData.ToJson());
-
-            DataSet form_DS = Form_InitDataSource();
-
-            //装饰类元素.
-            DataTable  dtLine = form_DS.Tables[EEleTableNames.Sys_FrmLine];
-            DataTable  dtBtn = form_DS.Tables[EEleTableNames.Sys_FrmBtn];
-            DataTable  dtLabel = form_DS.Tables[EEleTableNames.Sys_FrmLab];
-            DataTable  dtLink = form_DS.Tables[EEleTableNames.Sys_FrmLink];
-            DataTable  dtImg = form_DS.Tables[EEleTableNames.Sys_FrmImg];
-
-            //数据类.
-            DataTable  dtEle = form_DS.Tables[EEleTableNames.Sys_FrmEle];
-            DataTable  dtMapAttr = form_DS.Tables[EEleTableNames.Sys_MapAttr];
-            DataTable  dtRDB = form_DS.Tables[EEleTableNames.Sys_FrmRB];
-            DataTable  dtM2M = form_DS.Tables[EEleTableNames.Sys_MapM2M];
-
-            //附件类.
-            DataTable  dtAth = form_DS.Tables[EEleTableNames.Sys_FrmAttachment];
-            DataTable dtImgAth = form_DS.Tables[EEleTableNames.Sys_FrmImgAth];
-
-            //组件类.
-            DataTable dtlDT = form_DS.Tables[EEleTableNames.Sys_MapDtl];
-            DataTable dtWorkCheck = form_DS.Tables[EEleTableNames.WF_Node];
-
-            #region 控件线集合 Line.
-            JsonData form_Lines = formData["m"]["connectors"];
-            if (form_Lines.IsArray == true && form_Lines.Count > 0)
-            {
-                for (int iLine = 0, jLine = form_Lines.Count; iLine < jLine; iLine++)
-                {
-                    #region 线集合
-                    JsonData line = form_Lines[iLine];
-                    if (line.IsObject == true)
-                    {
-                        DataRow drline = dtLine.NewRow();
-
-                        drline["MYPK"] = line["CCForm_MyPK"].ToString();
-                        drline["FK_MAPDATA"] = this.FK_MapData;
-
-                        drline["X"] = "0";
-                        drline["Y"] = "0";
-
-                        JsonData turningPoints = line["turningPoints"];
-                        drline["X1"] = turningPoints[0]["x"].ToString();
-                        drline["X2"] = turningPoints[1]["x"].ToString();
-                        drline["Y1"] = turningPoints[0]["y"].ToString();
-                        drline["Y2"] = turningPoints[1]["y"].ToString();
-
-                        JsonData properties = line["properties"];
-                        JsonData borderWidth = properties.GetObjectFromArrary_ByKeyValue("type", "LineWidth");
-                        JsonData borderColor = properties.GetObjectFromArrary_ByKeyValue("type", "Color");
-                        string strborderWidth = "2";
-                        if (borderWidth != null && borderWidth["PropertyValue"] != null && !string.IsNullOrEmpty(borderWidth["PropertyValue"].ToString()))
-                        {
-                            strborderWidth = borderWidth["PropertyValue"].ToString();
-                        }
-                        string strBorderColor = "Black";
-                        if (borderColor != null && borderColor["PropertyValue"] != null && !string.IsNullOrEmpty(borderColor["PropertyValue"].ToString()))
-                        {
-                            strBorderColor = borderColor["PropertyValue"].ToString();
-                        }
-                        drline["W"] = strborderWidth;
-                        drline["Color"] = strBorderColor;
-                        dtLine.Rows.Add(drline);
-                    }
-                    #endregion
-                }
-            }
-            #endregion 控件线集合 Line.
-
-
-            //其他控件，Label,Img,TextBox
-            JsonData form_Controls = formData["s"]["figures"];
-            if (form_Controls.IsArray == true && form_Controls.Count > 0)
-            {
-                for (int iControl = 0, jControl = form_Controls.Count; iControl < jControl; iControl++)
-                {
-                    JsonData control = form_Controls[iControl];
-                    //不存在控件类型不进行处理，继续循环
-                    if (control == null || control["CCForm_Shape"] == null)
-                        continue;
-
-                    if (control["CCForm_Shape"].ToString() == "Label")
-                    {
-                        #region 标签
-                        DataRow drLab = dtLabel.NewRow();
-
-                        drLab["MYPK"] = control["CCForm_MyPK"];
-                        drLab["FK_MAPDATA"] = this.FK_MapData;
-
-                        //坐标
-                        JsonData style = control["style"];
-                        JsonData vector = style["gradientBounds"];
-                        drLab["X"] = vector[0].ToJson();
-                        drLab["Y"] = vector[1].ToJson();
-
-                        //属性集合
-                        JsonData properties = control["properties"];
-                        StringBuilder fontStyle = new StringBuilder();
-                        for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                        {
-                            JsonData property = properties[iProperty];
-                            if (property == null || !property.Keys.Contains("type") || property["type"] == null)
-                                continue;
-
-                            switch (property["type"].ToString().Trim())
-                            {
-                                case "SingleText":
-                                    drLab["TEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
-                                    break;
-                                case "Color":
-                                    drLab["FONTCOLOR"] = property["PropertyValue"] == null ? "#FF000000" : property["PropertyValue"].ToString();
-                                    fontStyle.Append(string.Format("color:{0};", drLab["FONTCOLOR"]));
-                                    break;
-                                case "TextFontFamily":
-                                    drLab["FontName"] = property["PropertyValue"] == null ? "Portable User Interface" : property["PropertyValue"].ToString();
-                                    if (property["PropertyValue"] != null)
-                                        fontStyle.Append(string.Format("font-family:{0};", property["PropertyValue"].ToJson()));
-                                    break;
-                                case "TextFontSize":
-                                    drLab["FONTSIZE"] = property["PropertyValue"] == null ? "14" : property["PropertyValue"].ToString();
-                                    fontStyle.Append(string.Format("font-size:{0};", drLab["FONTSIZE"]));
-                                    break;
-                                case "FontWeight":
-                                    if (property["PropertyValue"] == null || property["PropertyValue"].ToString() == "normal")
-                                    {
-                                        drLab["IsBold"] = "0";
-                                        fontStyle.Append(string.Format("font-weight:normal;"));
-                                    }
-                                    else
-                                    {
-                                        drLab["IsBold"] = "1";
-                                        fontStyle.Append(string.Format("font-weight:{0};", property["PropertyValue"].ToString()));
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-
-                        drLab["FontStyle"] = fontStyle.ToString();
-                        drLab["IsItalic"] = "0";//暂不处理斜体
-                        dtLabel.Rows.Add(drLab);
-                        #endregion end 标签
-                    }
-                    else if (control["CCForm_Shape"].ToString() == "Button")
-                    {
-                        #region 按钮 Button
-                        DataRow drBtn = dtBtn.NewRow();
-
-                        drBtn["MYPK"] = control["CCForm_MyPK"];
-                        drBtn["FK_MAPDATA"] = this.FK_MapData;
-                        //坐标
-                        JsonData style = control["style"];
-                        JsonData vector = style["gradientBounds"];
-                        drBtn["X"] = vector[0].ToJson();
-                        drBtn["Y"] = vector[1].ToJson();
-                        drBtn["ISVIEW"] = "0";
-                        drBtn["ISENABLE"] = "0";
-                        //属性集合
-                        JsonData properties = control["properties"];
-                        for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                        {
-                            JsonData property = properties[iProperty];
-                            if (property == null || !property.Keys.Contains("property") || property["property"] == null)
-                                continue;
-                            switch (property["property"].ToString())
-                            {
-                                case "primitives.1.str":
-                                    drBtn["TEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
-                                    break;
-                                case "ButtonEvent":
-                                    drBtn["EVENTTYPE"] = property["PropertyValue"] == null ? "0" : property["PropertyValue"].ToString();
-                                    break;
-                                case "BtnEventDoc":
-                                    drBtn["EVENTCONTEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        dtBtn.Rows.Add(drBtn);
-                        #endregion
-                    }
-                    else if (control["CCForm_Shape"].ToString() == "HyperLink")
-                    {
-                        #region 超链接 HyperLink
-                        DataRow drLink = dtLink.NewRow();
-
-                        drLink["MYPK"] = control["CCForm_MyPK"];
-                        drLink["FK_MAPDATA"] = this.FK_MapData;
-                        //坐标
-                        JsonData vector = control["style"]["gradientBounds"];
-                        drLink["X"] = vector[0].ToJson();
-                        drLink["Y"] = vector[1].ToJson();
-
-                        //属性集合
-                        JsonData properties = control["properties"];
-                        StringBuilder fontStyle = new StringBuilder();
-                        for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                        {
-                            JsonData property = properties[iProperty];
-                            if (property == null || !property.Keys.Contains("property") || property["property"] == null)
-                                continue;
-
-                            if (property["property"].ToString() == "primitives.0.str")
-                            {
-                                drLink["TEXT"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
-                            }
-                            else if (property["property"].ToString() == "primitives.0.style.fillStyle")
-                            {
-                                drLink["FONTCOLOR"] = property["PropertyValue"] == null ? "#FF000000" : property["PropertyValue"].ToString();
-                                fontStyle.Append(string.Format("color:{0};", drLink["FONTCOLOR"]));
-                            }
-                            else if (property["property"].ToString() == "primitives.0.font")
-                            {
-                                drLink["FontName"] = property["PropertyValue"] == null ? "Portable User Interface" : property["PropertyValue"].ToString();
-                                if (property["PropertyValue"] != null)
-                                    fontStyle.Append(string.Format("font-family:{0};", property["PropertyValue"].ToJson()));
-                            }
-                            else if (property["property"].ToString() == "primitives.0.size")
-                            {
-                                drLink["FONTSIZE"] = property["PropertyValue"] == null ? "14" : property["PropertyValue"].ToString();
-                                fontStyle.Append(string.Format("font-size:{0};", drLink["FONTSIZE"]));
-                            }
-                            else if (property["property"].ToString() == "primitives.0.fontWeight")
-                            {
-                                if (property["PropertyValue"] == null || property["PropertyValue"].ToString() == "normal")
-                                {
-                                    drLink["IsBold"] = "0";
-                                    fontStyle.Append(string.Format("font-weight:normal;"));
-                                }
-                                else
-                                {
-                                    drLink["IsBold"] = "1";
-                                    fontStyle.Append(string.Format("font-weight:{0};", property["PropertyValue"].ToString()));
-                                }
-                            }
-                            else if (property["property"].ToString() == "URL")
-                            {
-                                drLink["URL"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
-                            }
-                            else if (property["property"].ToString() == "WinOpenModel")
-                            {
-                                drLink["TARGET"] = property["PropertyValue"] == null ? "_blank" : property["PropertyValue"].ToString();
-                            }
-                        }
-                        drLink["FontStyle"] = fontStyle.ToString();
-                        drLink["IsItalic"] = "0";//斜体暂不处理
-                        dtLink.Rows.Add(drLink);
-                        #endregion
-                    }
-                    else if (control["CCForm_Shape"].ToString() == "Image")
-                    {
-                        #region 装饰图片  Image
-                        DataRow drImg = dtImg.NewRow();
-
-                        drImg["MYPK"] = control["CCForm_MyPK"];
-                        drImg["FK_MAPDATA"] = this.FK_MapData;
-                        drImg["IMGAPPTYPE"] = "0";
-                        drImg["ISEDIT"] = "1";
-                        drImg["NAME"] = drImg["MYPK"];
-                        drImg["ENPK"] = drImg["MYPK"];
-                        //坐标
-                        JsonData vector = control["style"]["gradientBounds"];
-                        drImg["X"] = vector[0].ToJson();
-                        drImg["Y"] = vector[1].ToJson();
-                        //图片高、宽
-                        decimal minX = decimal.Parse(vector[0].ToJson());
-                        decimal minY = decimal.Parse(vector[1].ToJson());
-                        decimal maxX = decimal.Parse(vector[2].ToJson());
-                        decimal maxY = decimal.Parse(vector[3].ToJson());
-                        decimal imgWidth = maxX - minX;
-                        decimal imgHeight = maxY - minY;
-                        
-                        drImg["W"] = imgWidth.ToString("0.00");
-                        drImg["H"] = imgHeight.ToString("0.00");
-                        //属性集合
-                        JsonData properties = control["properties"];
-                        StringBuilder fontStyle = new StringBuilder();
-                        for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                        {
-                            JsonData property = properties[iProperty];
-                            if (property == null || !property.Keys.Contains("property") || property["property"] == null)
-                                continue;
-
-                            if (property["property"].ToString() == "LinkURL")
-                            {
-                                //图片连接到
-                                drImg["LINKURL"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
-                            }
-                            else if (property["property"].ToString() == "WinOpenModel")
-                            {
-                                //打开窗口方式
-                                drImg["LINKTARGET"] = property["PropertyValue"] == null ? "_blank" : property["PropertyValue"].ToString();
-                            }
-                            else if (property["property"].ToString() == "ImgAppType")
-                            {
-                                //应用类型：0本地图片，1指定路径
-                                drImg["SRCTYPE"] = property["PropertyValue"] == null ? "0" : property["PropertyValue"].ToString();
-                            }
-                            else if (property["property"].ToString() == "ImgPath")
-                            {
-                                //指定图片路径
-                                drImg["IMGURL"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
-                            }
-                        }
-
-                        //ImageFrame 本地图片路径
-                        JsonData primitives = control["primitives"];
-                        foreach (JsonData primitive in primitives)
-                        {
-                            if (primitive["oType"] == null)
-                                continue;
-                            if (primitive["oType"].ToJson() == "ImageFrame")
-                            {
-                                drImg["IMGPATH"] = primitive == null ? "" : primitive["url"].ToString();
-                            }
-                        }
-
-                        dtImg.Rows.Add(drImg);
-                        #endregion Image
-                    }
-                }
-            }
-
-            //TempSaveFrm(form_DS);
-            return form_DS;
-        }
 
         private void TempSaveFrm(DataSet ds)
         {
@@ -1247,7 +736,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 }
             }
         }
-
         public string SaveDT(DataTable dt)
         {
             if (dt.Rows.Count == 0)
@@ -1313,6 +801,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 }
             }
             #endregion
+
             return null;
         }
 
@@ -1411,262 +900,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             return tableSql;
         }
 
-        /// <summary>
-        /// 数据集表结构集合
-        /// </summary>
-        /// <returns></returns>
-        private DataSet Form_InitDataSource()
-        {
-            DataTable dtMapData = new DataTable();
-            dtMapData.TableName = EEleTableNames.Sys_MapData;
-            dtMapData.Columns.Add(new DataColumn("NO", typeof(string)));
-            dtMapData.Columns.Add(new DataColumn("NAME", typeof(string)));
-            dtMapData.Columns.Add(new DataColumn("FrmW", typeof(double)));
-            dtMapData.Columns.Add(new DataColumn("FrmH", typeof(double)));
-            dtMapData.Columns.Add(new DataColumn("MaxLeft", typeof(double)));
-            dtMapData.Columns.Add(new DataColumn("MaxRight", typeof(double)));
-            dtMapData.Columns.Add(new DataColumn("MaxTop", typeof(double)));
-            dtMapData.Columns.Add(new DataColumn("MaxEnd", typeof(double)));
-            #region line
-
-            DataTable dtLine = new DataTable();
-            dtLine.TableName = EEleTableNames.Sys_FrmLine;
-            dtLine.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            dtLine.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-
-            dtLine.Columns.Add(new DataColumn("X", typeof(double)));
-            dtLine.Columns.Add(new DataColumn("Y", typeof(double)));
-
-            dtLine.Columns.Add(new DataColumn("X1", typeof(double)));
-            dtLine.Columns.Add(new DataColumn("Y1", typeof(double)));
-
-            dtLine.Columns.Add(new DataColumn("X2", typeof(double)));
-            dtLine.Columns.Add(new DataColumn("Y2", typeof(double)));
-
-            dtLine.Columns.Add(new DataColumn("W", typeof(string)));
-            dtLine.Columns.Add(new DataColumn("Color", typeof(string)));
-            // lineDT.Columns.Add(new DataColumn("BorderStyle", typeof(string)));
-            #endregion line
-
-            #region btn
-            DataTable dtBtn = new DataTable();
-            dtBtn.TableName = EEleTableNames.Sys_FrmBtn;
-            dtBtn.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            dtBtn.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            dtBtn.Columns.Add(new DataColumn("TEXT", typeof(string)));
-            dtBtn.Columns.Add(new DataColumn("X", typeof(double)));
-            dtBtn.Columns.Add(new DataColumn("Y", typeof(double)));
-            dtBtn.Columns.Add(new DataColumn("ISVIEW", typeof(int)));
-            dtBtn.Columns.Add(new DataColumn("ISENABLE", typeof(int)));
-            dtBtn.Columns.Add(new DataColumn("EVENTTYPE", typeof(int)));
-            dtBtn.Columns.Add(new DataColumn("EVENTCONTEXT", typeof(string)));
-            #endregion line
-
-            #region label
-            DataTable dtLabel = new DataTable();
-            dtLabel.TableName = EEleTableNames.Sys_FrmLab;
-            dtLabel.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            dtLabel.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            dtLabel.Columns.Add(new DataColumn("X", typeof(double)));
-            dtLabel.Columns.Add(new DataColumn("Y", typeof(double)));
-            dtLabel.Columns.Add(new DataColumn("TEXT", typeof(string)));
-
-            dtLabel.Columns.Add(new DataColumn("FONTCOLOR", typeof(string)));
-            dtLabel.Columns.Add(new DataColumn("FontName", typeof(string)));
-            dtLabel.Columns.Add(new DataColumn("FontStyle", typeof(string)));
-            dtLabel.Columns.Add(new DataColumn("FONTSIZE", typeof(int)));
-            dtLabel.Columns.Add(new DataColumn("IsBold", typeof(int)));
-            dtLabel.Columns.Add(new DataColumn("IsItalic", typeof(int)));
-            #endregion label
-
-            #region Link
-            DataTable dtLikn = new DataTable();
-            dtLikn.TableName = EEleTableNames.Sys_FrmLink;
-            dtLikn.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            dtLikn.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            dtLikn.Columns.Add(new DataColumn("X", typeof(double)));
-            dtLikn.Columns.Add(new DataColumn("Y", typeof(double)));
-            dtLikn.Columns.Add(new DataColumn("TEXT", typeof(string)));
-            dtLikn.Columns.Add(new DataColumn("TARGET", typeof(string)));
-            dtLikn.Columns.Add(new DataColumn("URL", typeof(string)));
-
-            dtLikn.Columns.Add(new DataColumn("FONTCOLOR", typeof(string)));
-            dtLikn.Columns.Add(new DataColumn("FontName", typeof(string)));
-            dtLikn.Columns.Add(new DataColumn("FontStyle", typeof(string)));
-            dtLikn.Columns.Add(new DataColumn("FONTSIZE", typeof(int)));
-
-            dtLikn.Columns.Add(new DataColumn("IsBold", typeof(int)));
-            dtLikn.Columns.Add(new DataColumn("IsItalic", typeof(int)));
-            #endregion Link
-
-            #region img  ImgSeal
-            DataTable dtImg = new DataTable();
-            dtImg.TableName = EEleTableNames.Sys_FrmImg;
-            dtImg.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            dtImg.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            dtImg.Columns.Add(new DataColumn("X", typeof(double)));
-            dtImg.Columns.Add(new DataColumn("Y", typeof(double)));
-            dtImg.Columns.Add(new DataColumn("W", typeof(double)));
-            dtImg.Columns.Add(new DataColumn("H", typeof(double)));
-
-            dtImg.Columns.Add(new DataColumn("IMGURL", typeof(string)));
-            dtImg.Columns.Add(new DataColumn("IMGPATH", typeof(string))); //应用类型 0=图片，1签章..
-
-            dtImg.Columns.Add(new DataColumn("LINKURL", typeof(string)));
-            dtImg.Columns.Add(new DataColumn("LINKTARGET", typeof(string)));
-            dtImg.Columns.Add(new DataColumn("SRCTYPE", typeof(int))); //图片来源类型.
-            dtImg.Columns.Add(new DataColumn("IMGAPPTYPE", typeof(int))); //应用类型 0=图片，1签章..
-            dtImg.Columns.Add(new DataColumn("Tag0", typeof(string)));
-            dtImg.Columns.Add(new DataColumn("ISEDIT", typeof(int)));
-            dtImg.Columns.Add(new DataColumn("NAME", typeof(string)));//中文名
-            dtImg.Columns.Add(new DataColumn("ENPK", typeof(string)));//英文名
-            #endregion img
-
-            #region 公共元素存储表
-            DataTable dtEle = new DataTable();
-            dtEle.TableName = EEleTableNames.Sys_FrmEle;
-              dtEle.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            dtEle.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-
-            //eleDT.Columns.Add(new DataColumn("EleType", typeof(string)));
-            //eleDT.Columns.Add(new DataColumn("EleID", typeof(string)));
-            //eleDT.Columns.Add(new DataColumn("EleName", typeof(string)));
-
-            dtEle.Columns.Add(new DataColumn("X", typeof(double)));
-            dtEle.Columns.Add(new DataColumn("Y", typeof(double)));
-            dtEle.Columns.Add(new DataColumn("W", typeof(double)));
-            dtEle.Columns.Add(new DataColumn("H", typeof(double)));
-            #endregion eleDT
-
-            #region Sys_FrmImgAth
-            DataTable imgAthDT = new DataTable();
-            imgAthDT.TableName = EEleTableNames.Sys_FrmImgAth;
-            imgAthDT.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            imgAthDT.Columns.Add(new DataColumn("CTRLID", typeof(string)));
-            imgAthDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            imgAthDT.Columns.Add(new DataColumn("ISEDIT", typeof(double)));
-            imgAthDT.Columns.Add(new DataColumn("X", typeof(double)));
-            imgAthDT.Columns.Add(new DataColumn("Y", typeof(double)));
-            imgAthDT.Columns.Add(new DataColumn("W", typeof(double)));
-            imgAthDT.Columns.Add(new DataColumn("H", typeof(double)));
-            #endregion Sys_FrmImgAth
-
-            #region mapAttrDT
-            DataTable mapAttrDT = new DataTable();
-            mapAttrDT.TableName = EEleTableNames.Sys_MapAttr;
-            mapAttrDT.Columns.Add(new DataColumn("NAME", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("KEYOFEN", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("UICONTRALTYPE", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("MYDATATYPE", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("LGTYPE", typeof(string)));
-
-            mapAttrDT.Columns.Add(new DataColumn("UIWIDTH", typeof(double)));
-            mapAttrDT.Columns.Add(new DataColumn("UIHEIGHT", typeof(double)));
-
-            mapAttrDT.Columns.Add(new DataColumn("UIBINDKEY", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("UIRefKey", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("UIRefKeyText", typeof(string)));
-            //   mapAttrDT.Columns.Add(new DataColumn("UIVISIBLE", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("X", typeof(double)));
-            mapAttrDT.Columns.Add(new DataColumn("Y", typeof(double)));
-            #endregion mapAttrDT
-
-            #region frmRBDT
-            DataTable dtRdb = new DataTable();
-            dtRdb.TableName = EEleTableNames.Sys_FrmRB;
-            dtRdb.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            dtRdb.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            dtRdb.Columns.Add(new DataColumn("KEYOFEN", typeof(string)));
-            dtRdb.Columns.Add(new DataColumn("ENUMKEY", typeof(string)));
-            dtRdb.Columns.Add(new DataColumn("INTKEY", typeof(int)));
-            dtRdb.Columns.Add(new DataColumn("LAB", typeof(string)));
-            dtRdb.Columns.Add(new DataColumn("X", typeof(double)));
-            dtRdb.Columns.Add(new DataColumn("Y", typeof(double)));
-            #endregion frmRBDT
-
-            #region Dtl
-            DataTable dtlDT = new DataTable();
-
-            dtlDT.TableName = EEleTableNames.Sys_MapDtl;
-            dtlDT.Columns.Add(new DataColumn("NO", typeof(string)));
-            dtlDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-
-            dtlDT.Columns.Add(new DataColumn("X", typeof(double)));
-            dtlDT.Columns.Add(new DataColumn("Y", typeof(double)));
-
-            dtlDT.Columns.Add(new DataColumn("H", typeof(double)));
-            dtlDT.Columns.Add(new DataColumn("W", typeof(double)));
-            #endregion Dtl
-
-            // BPWorkCheck
-            DataTable dtWorkCheck = new DataTable();
-            dtWorkCheck.TableName = EEleTableNames.WF_Node;
-            dtWorkCheck.Columns.Add(new DataColumn("NodeID", typeof(string)));
-            dtWorkCheck.Columns.Add(new DataColumn("FWC_X", typeof(double)));
-            dtWorkCheck.Columns.Add(new DataColumn("FWC_Y", typeof(double)));
-            dtWorkCheck.Columns.Add(new DataColumn("FWC_H", typeof(double)));
-            dtWorkCheck.Columns.Add(new DataColumn("FWC_W", typeof(double)));
-
-            //子流程属性.
-            dtWorkCheck.Columns.Add(new DataColumn("SF_X", typeof(double)));
-            dtWorkCheck.Columns.Add(new DataColumn("SF_Y", typeof(double)));
-            dtWorkCheck.Columns.Add(new DataColumn("SF_H", typeof(double)));
-            dtWorkCheck.Columns.Add(new DataColumn("SF_W", typeof(double)));
-
-
-            #region m2mDT
-            DataTable m2mDT = new DataTable();
-            m2mDT.TableName = EEleTableNames.Sys_MapM2M;
-            m2mDT.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            m2mDT.Columns.Add(new DataColumn("NOOFOBJ", typeof(string)));
-            m2mDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-
-            m2mDT.Columns.Add(new DataColumn("X", typeof(double)));
-            m2mDT.Columns.Add(new DataColumn("Y", typeof(double)));
-
-            m2mDT.Columns.Add(new DataColumn("H", typeof(string)));
-            m2mDT.Columns.Add(new DataColumn("W", typeof(string)));
-            #endregion m2mDT
-
-            #region athDT
-            DataTable athDT = new DataTable();
-            athDT.TableName = EEleTableNames.Sys_FrmAttachment;
-            athDT.Columns.Add(new DataColumn("MYPK", typeof(string)));
-            athDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            athDT.Columns.Add(new DataColumn("NOOFOBJ", typeof(string)));
-
-            //athDT.Columns.Add(new DataColumn("NAME", typeof(string)));
-            //athDT.Columns.Add(new DataColumn("EXTS", typeof(string)));
-            //athDT.Columns.Add(new DataColumn("SAVETO", typeof(string)));
-            athDT.Columns.Add(new DataColumn("UPLOADTYPE", typeof(int)));
-
-            athDT.Columns.Add(new DataColumn("X", typeof(double)));
-            athDT.Columns.Add(new DataColumn("Y", typeof(double)));
-            athDT.Columns.Add(new DataColumn("W", typeof(double)));
-            athDT.Columns.Add(new DataColumn("H", typeof(double)));
-            #endregion athDT
-
-            DataSet dsLatest = new DataSet();
-
-            dsLatest.Tables.Add(dtWorkCheck);
-            dsLatest.Tables.Add(dtLabel);
-            dsLatest.Tables.Add(dtLikn);
-            dsLatest.Tables.Add(dtImg);
-            dsLatest.Tables.Add(dtEle);
-            dsLatest.Tables.Add(dtBtn);
-            dsLatest.Tables.Add(imgAthDT);
-            dsLatest.Tables.Add(mapAttrDT);
-            dsLatest.Tables.Add(dtRdb);
-            dsLatest.Tables.Add(dtLine);
-            dsLatest.Tables.Add(dtlDT);
-            dsLatest.Tables.Add(athDT);
-            dsLatest.Tables.Add(dtMapData);
-            dsLatest.Tables.Add(m2mDT);
-
-            return dsLatest;
-        }
+      
         #endregion End
 
         public bool IsReusable
@@ -1690,12 +924,11 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             Sys_FrmImgAth = "Sys_FrmImgAth",
             Sys_FrmRB = "Sys_FrmRB",
             Sys_FrmAttachment = "Sys_FrmAttachment",
-
             Sys_MapData = "Sys_MapData",
             Sys_MapAttr = "Sys_MapAttr",
             Sys_MapDtl = "Sys_MapDtl",
             Sys_MapM2M = "Sys_MapM2M",
-            WF_Node = "WF_Node";//BPWorkCheck
+            WF_Node = "WF_Node"; 
     }
 
     class TableSQL

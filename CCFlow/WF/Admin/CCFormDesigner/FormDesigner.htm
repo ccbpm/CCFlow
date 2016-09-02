@@ -1,7 +1,7 @@
-﻿
+﻿<!--
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FormDesigner.aspx.cs" Inherits="CCFlow.WF.Admin.CCFormDesigner.FormDesigner" %>
 
-
+-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -88,14 +88,14 @@
     </style>
 </head>
 <body id="body">
-<%
+<!--<%
   BP.Sys.MapData md = new BP.Sys.MapData(this.Request.QueryString["FK_MapData"]);
             if (md.DesignerTool != "H5")
             {
                // BP.Sys.PubClass.WinCloseAndAlertMsg("@当前表单并非是H5表单设计器设计的，您不能打开。");
                // return;
             }
- %>
+ %>-->
     <div id="actions" class="actions" style="font-size: 12px;">
         <a style="text-decoration: none;" href="javascript:Save(true);" title="保存(Ctrl-S)">
             <img src="assets/images/icon_save.jpg" id="SaveImg" border="0" width="16" height="16" />

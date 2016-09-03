@@ -327,13 +327,12 @@ namespace BP.Sys
 
             //表单描述文件直接保存到数据库.
             mapData.FormJson = jsonStrOfH5Frm;
+
             //格式化表单串
             //FormatDiagram2Json(jd);
 
-
             //第1步：构造一个空的数据结构.
             DataSet dsCCForm =  GenerBlankCCFormDataSet();
-
 
             //第2步：解析json数据到 dsCCForm.
             dsCCForm = SaveFrm_FullJsonToDataSet(fk_mapdata,dsCCForm, jd);
@@ -341,7 +340,6 @@ namespace BP.Sys
             //第3步：执行存盘.
             CCFormAPI.SaveCCForm20(fk_mapdata, dsCCForm);
         }
-
         /// <summary>
         /// 将表单设计串格式化为Json
         /// </summary>
@@ -713,7 +711,6 @@ namespace BP.Sys
                   
                     for (int iProperty = 0; iProperty < properties.Count; iProperty++)
                     {
-
                         JsonData property = properties[iProperty];  //获得一个属性.
                         if (property == null || !property.Keys.Contains("property")
                             || property["property"] == null
@@ -723,11 +720,9 @@ namespace BP.Sys
                         string val = null;
                         if (property["PropertyValue"] != null)
                             val = property["PropertyValue"].ToString();
-
                         string propertyName = property["property"].ToString();
                         switch (propertyName)
                         {
-                            case "KeyOfEn":
                             case "Name":
                             case "DefVal":
                             case "UIIsEnable":
@@ -735,22 +730,93 @@ namespace BP.Sys
                             case "MaxLen":
                             case "UIWidth":
                             case "UIHeight":
+                            case "":
                                 drAttr[propertyName] = val;
+                                break;
+                            case "FieldText":
+                                drAttr["Name"] = val;
+                                break;
+                            case "UIIsInput":
+                                if (val == "true")
+                                    drAttr["UIIsInput"] = "1";
+                                else
+                                    drAttr["UIIsInput"] = "0";
                                 break;
                             default:
                                 break;
                         }
 
+                        //Textbox 高、宽.
+                        decimal minX = decimal.Parse(vector[0].ToJson());
+                        decimal minY = decimal.Parse(vector[1].ToJson());
+                        decimal maxX = decimal.Parse(vector[2].ToJson());
+                        decimal maxY = decimal.Parse(vector[3].ToJson());
+                        decimal imgWidth = maxX - minX;
+                        decimal imgHeight = maxY - minY;
+                        drAttr["UIWidth"] = imgWidth.ToString("0.00");
+                        drAttr["UIHeight"] = imgHeight.ToString("0.00");
 
+                        drAttr["MinLen"] = "0";
+                        drAttr["MaxLen"] = "50";
 
+                        //控件类型.
                         switch (shape)
                         {
                             case "TextBoxStr":
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppString;
+                                drAttr["LGTYPE"] ="0" ;
+                                drAttr["UICONTRALTYPE"] = "0";
+                                break;
+                            case "TextBoxInt":
+                            case "TextBoxBoolean":
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppInt;
+                                drAttr["LGTYPE"] = "0";
+                                drAttr["UICONTRALTYPE"] = "0";
+                                break;
+                            case "TextBoxFloat":
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppFloat;
+                                drAttr["LGTYPE"] = "0";
+                                drAttr["UICONTRALTYPE"] = "0";
+                                break;
+                            case "TextBoxDouble":
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppDouble;
+                                drAttr["LGTYPE"] = "0";
+                                drAttr["UICONTRALTYPE"] = "0";
+                                break;
+                            case "TextBoxMoney": //金额类型.
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppMoney;
+                                drAttr["LGTYPE"] = "0";
+                                drAttr["UICONTRALTYPE"] = "0";
+                                break;
+                            case "TextBoxData": //金额类型.
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppDate;
+                                drAttr["LGTYPE"] = "0";
+                                drAttr["UICONTRALTYPE"] = "0";
+                                drAttr["MaxLen"] = "16";
+                                break;
+                            case "TextBoxDataTime": //金额类型.
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppDateTime;
+                                drAttr["LGTYPE"] = "0";
+                                drAttr["UICONTRALTYPE"] = "0";
+                                drAttr["MaxLen"] = "16";
+                                break;
+                            case "DropDownListEnum": //枚举类型.
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppInt;
+                                drAttr["LGTYPE"] = "1";
+                                drAttr["UICONTRALTYPE"] = "1";
+                                break;
+                            case "DropDownListTable": //外键类型.
+                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppString;
+                                drAttr["LGTYPE"] = "2";
+                                drAttr["UICONTRALTYPE"] = "1";
                                 break;
                             default:
                                 break;
                         }
                     }
+
+                    //增加到集合.
+                    dtMapAttr.Rows.Add(drAttr);
                 }
                 #endregion 数据类控件
 
@@ -906,10 +972,16 @@ namespace BP.Sys
             mapAttrDT.Columns.Add(new DataColumn("NAME", typeof(string)));
             mapAttrDT.Columns.Add(new DataColumn("MYPK", typeof(string)));
             mapAttrDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
+            mapAttrDT.Columns.Add(new DataColumn("DEFVAL", typeof(string))); //默认值.
+            mapAttrDT.Columns.Add(new DataColumn("UIIsEnable", typeof(string))); //默认值.
+            mapAttrDT.Columns.Add(new DataColumn("MAXLEN", typeof(int))); //最大长度.
+            mapAttrDT.Columns.Add(new DataColumn("MINLEN", typeof(int))); //最小长度.
+            mapAttrDT.Columns.Add(new DataColumn("UIIsInput", typeof(int))); //是否必填项目?
+
             mapAttrDT.Columns.Add(new DataColumn("KEYOFEN", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("UICONTRALTYPE", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("MYDATATYPE", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("LGTYPE", typeof(string)));
+            mapAttrDT.Columns.Add(new DataColumn("UICONTRALTYPE", typeof(int)));
+            mapAttrDT.Columns.Add(new DataColumn("MYDATATYPE", typeof(int)));
+            mapAttrDT.Columns.Add(new DataColumn("LGTYPE", typeof(int)));
 
             mapAttrDT.Columns.Add(new DataColumn("UIWIDTH", typeof(double)));
             mapAttrDT.Columns.Add(new DataColumn("UIHEIGHT", typeof(double)));
@@ -1133,6 +1205,10 @@ namespace BP.Sys
             string pks = "";
             foreach (MapAttr attr in attrs)
             {
+                if (attr.UIVisible == false)
+                    continue;
+                if (attr.IsPK == true)
+                    continue;
                 pks += attr.KeyOfEn + ",";
             }
 
@@ -1141,6 +1217,34 @@ namespace BP.Sys
                 string keyOfEn = dr[MapAttrAttr.KeyOfEn].ToString();
                 string name = dr[MapAttrAttr.Name].ToString();
 
+                MapAttr attr = (MapAttr)attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, keyOfEn);
+                attr.Name = dr["Name"].ToString();
+                attr.MyDataType = int.Parse(dr["MyDataType"].ToString());
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    attr.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                }
+                try
+                {
+                    attr.Save(); //执行保存.
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("@保存"+attr.Name+" 失败："+ex.Message);
+                }
+
+                //去掉字段.
+                pks = pks.Replace(attr.KeyOfEn+",", "");
+            }
+
+
+            //删除已经从界面上删除的.  没有去掉的都是需要删除的.
+            string[] strs = pks.Split(',');
+            foreach (string str in strs)
+            {
+                if (string.IsNullOrEmpty(str) == true)
+                    continue;
+                DBAccess.RunSQL("DELETE FROM Sys_MapAttr WHERE MyPK='"+fk_mapdata+"_"+str+"'");
             }
 
         }
@@ -1622,7 +1726,6 @@ namespace BP.Sys
                 throw new Exception(ex.Message);
             }
         }
-     
         /// <summary>
         /// 获得外键表
         /// </summary>
@@ -1638,6 +1741,7 @@ namespace BP.Sys
 
             //查询
             obj.DoQuery(SysEnumMainAttr.No, pageSize, pageNumber);
+
             return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(sftables, RowCount);
         }
         /// <summary>

@@ -3193,7 +3193,10 @@ function Save(showInfo) {
     }, function (data) {
         if (data == "true") {
             if (showInfo == true) {
-                Designer_ShowMsg("保存成功！");
+                //var btnText = document.getElementById("SaveImg");
+                //btnText.Text = '保存';
+                //    Designer_ShowMsg("保存成功！");
+                alert('保存成功!!!');
             }
         } else {
             Designer_ShowMsg(data);

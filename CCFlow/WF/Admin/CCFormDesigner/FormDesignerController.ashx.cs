@@ -45,7 +45,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             get;
             set;
         }
-
         /// <summary>
         /// 公共方法获取值
         /// </summary>
@@ -57,6 +56,10 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         }
         #endregion
 
+        /// <summary>
+        /// 调用方法
+        /// </summary>
+        /// <param name="context"></param>
         public void ProcessRequest(HttpContext context)
         {
             _Context = context;
@@ -66,7 +69,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             string action = string.Empty;
             //返回值
             string s_responsetext = string.Empty;
-            if (!string.IsNullOrEmpty(context.Request["action"]))
+            if (string.IsNullOrEmpty(context.Request["action"])==false)
                 action = context.Request["action"].ToString();
 
             switch (action)
@@ -78,7 +81,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 case "SaveForm": //保存表单数据.
                     try
                     {
-                        string diagram = getUTF8ToString("diagram");//表单格式.
+                        string diagram = getUTF8ToString("diagram");//表单 H5 格式.
                         BP.DA.DataType.WriteFile("c:\\diagram111.json", diagram);
 
                         BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
@@ -118,9 +121,9 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
 
                     //调用API获得数据.
                     if (action == "GetSFTableList")
-                        s_responsetext = BP.Sys.CCFormAPI.GetEnumerationList(pageNumber, pageSize);
+                        s_responsetext = BP.Sys.CCFormAPI.GetSFTableList(pageNumber, pageSize);
                     else
-                        s_responsetext = BP.Sys.CCFormAPI.GetSFTableList(pageNumber, pageSize); //调用API获得数据.
+                        s_responsetext = BP.Sys.CCFormAPI.GetEnumerationList(pageNumber, pageSize); //调用API获得数据.
                     break;
                 case "Hiddenfielddata"://获取隐藏字段.
                     s_responsetext = BP.Sys.CCFormAPI.GetHiddenfielddata(this.FK_MapData);
@@ -144,8 +147,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             context.Response.Write(s_responsetext);
             context.Response.End();
         }
-
-      
         /// <summary>
         /// 处理表单事件方法
         /// </summary>

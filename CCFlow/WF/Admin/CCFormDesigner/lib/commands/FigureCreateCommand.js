@@ -601,9 +601,10 @@ TransFormDataField.prototype = {
                 ctrlLab = '单附件属性';
                 break;
             case "TextBoxStr":
-                ctrlLab = '单附件属性';
+                ctrlLab = '控件属性-文本框';
                 break;
             default:
+                ctrlLab = '控件属性' + createdFigure.CCForm_Shape;
                 break;
         }
 

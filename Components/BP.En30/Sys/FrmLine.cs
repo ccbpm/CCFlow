@@ -15,14 +15,6 @@ namespace BP.Sys
         /// </summary>
         public const string FK_MapData = "FK_MapData";
         /// <summary>
-        /// X
-        /// </summary>
-        public const string X = "X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string Y = "Y";
-        /// <summary>
         /// X1
         /// </summary>
         public const string X1 = "X1";
@@ -57,34 +49,6 @@ namespace BP.Sys
     public class FrmLine : EntityMyPK
     {
         #region 属性
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmLineAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmLineAttr.Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmLineAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(FrmLineAttr.X, value);
-            }
-        }
         public string BorderColorHtml
         {
             get
@@ -216,10 +180,6 @@ namespace BP.Sys
                 map.AddMyPK();
                 map.AddTBString(FrmLineAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
 
-                //xy 没有用了.
-                map.AddTBFloat(FrmLineAttr.X, 5, "X", true, false);
-                map.AddTBFloat(FrmLineAttr.Y, 5, "Y", false, false);
-
                 map.AddTBFloat(FrmLineAttr.X1, 5, "X1", true, false);
                 map.AddTBFloat(FrmLineAttr.Y1, 5, "Y1", false, false);
 
@@ -242,7 +202,7 @@ namespace BP.Sys
         /// <returns></returns>
         public bool IsExitGenerPK()
         {
-            string sql = "SELECT COUNT(*) FROM " + this.EnMap.PhysicsTable + " WHERE FK_MapData='" + this.FK_MapData + "' AND X=" + this.X + " AND Y=" + this.Y + " and x1=" + this.X1 + " and x2=" + this.X2 + " and y1=" + this.Y1 + " and y2=" + this.Y2;
+            string sql = "SELECT COUNT(*) FROM " + this.EnMap.PhysicsTable + " WHERE FK_MapData='" + this.FK_MapData + "' AND x1=" + this.X1 + " and x2=" + this.X2 + " and y1=" + this.Y1 + " and y2=" + this.Y2;
             if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 return false;
             return true;

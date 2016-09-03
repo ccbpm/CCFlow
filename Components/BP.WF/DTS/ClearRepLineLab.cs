@@ -51,12 +51,11 @@ namespace BP.WF.DTS
             string sql = "";
             foreach (FrmLine item in ens)
             {
-                sql = "DELETE FROM " + item.EnMap.PhysicsTable + " WHERE FK_MapData='" + item.FK_MapData + "' AND X=" + item.X + " AND Y=" + item.Y + " and x1=" + item.X1 + " and x2=" + item.X2 + " and y1=" + item.Y1 + " and y2=" + item.Y2;
+                sql = "DELETE FROM " + item.EnMap.PhysicsTable + " WHERE FK_MapData='" + item.FK_MapData + "' AND  x1=" + item.X1 + " and x2=" + item.X2 + " and y1=" + item.Y1 + " and y2=" + item.Y2;
                 DBAccess.RunSQL(sql);
                 item.MyPK = BP.DA.DBAccess.GenerOIDByGUID().ToString();
                 item.Insert();
             }
-
 
             FrmLabs labs = new FrmLabs();
             labs.RetrieveAllFromDBSource();

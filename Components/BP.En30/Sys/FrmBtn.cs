@@ -234,17 +234,6 @@ namespace BP.Sys
                 this.SetValByKey(FrmBtnAttr.UACContext, value);
             }
         }
-        public bool EventType
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FrmBtnAttr.EventType);
-            }
-            set
-            {
-                this.SetValByKey(FrmBtnAttr.EventType, value);
-            }
-        }
         public bool UAC
         {
             get
@@ -308,15 +297,15 @@ namespace BP.Sys
         /// <summary>
         /// BtnType
         /// </summary>
-        public int BtnType
+        public int EventType
         {
             get
             {
-                return this.GetValIntByKey(FrmBtnAttr.BtnType);
+                return this.GetValIntByKey(FrmBtnAttr.EventType);
             }
             set
             {
-                this.SetValByKey(FrmBtnAttr.BtnType, value);
+                this.SetValByKey(FrmBtnAttr.EventType, value);
             }
         }
         /// <summary>
@@ -351,9 +340,9 @@ namespace BP.Sys
         {
             get
             {
-                if (this.EventType)
-                    return "<b>" + this.GetValStrByKey(FrmBtnAttr.Text).Replace("@","<br>") + "</b>";
-                else
+                //if (this.EventType)
+                //    return "<b>" + this.GetValStrByKey(FrmBtnAttr.Text).Replace("@","<br>") + "</b>";
+                //else
                     return this.GetValStrByKey(FrmBtnAttr.Text).Replace("@", "<br>");
             }
         }
@@ -392,7 +381,7 @@ namespace BP.Sys
                 map.EnType = EnType.Sys;
 
                 map.AddMyPK();
-                map.AddTBString(FrmBtnAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
+                map.AddTBString(FrmBtnAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
                 map.AddTBString(FrmBtnAttr.Text, null, "标签", true, false, 0, 3900, 20);
 
                 map.AddTBFloat(FrmBtnAttr.X, 5, "X", true, false);
@@ -401,7 +390,7 @@ namespace BP.Sys
                 map.AddTBInt(FrmBtnAttr.IsView, 0, "是否可见", false, false);
                 map.AddTBInt(FrmBtnAttr.IsEnable, 0, "是否起用", false, false);
 
-                map.AddTBInt(FrmBtnAttr.BtnType, 0, "类型", false, false);
+              //  map.AddTBInt(FrmBtnAttr.BtnType, 0, "类型", false, false);
 
                 map.AddTBInt(FrmBtnAttr.UAC, 0, "控制类型", false, false);
                 map.AddTBString(FrmBtnAttr.UACContext, null, "控制内容", true, false, 0, 3900, 20);

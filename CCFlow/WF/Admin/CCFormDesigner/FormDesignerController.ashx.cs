@@ -75,10 +75,12 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     MapData mapData = new MapData(this.FK_MapData);
                     s_responsetext = mapData.FormJson; //要返回的值.
                     break;
-                case "SaveForm"://保存表单数据
+                case "SaveForm": //保存表单数据.
                     try
                     {
                         string diagram = getUTF8ToString("diagram");//表单格式.
+                        BP.DA.DataType.WriteFile("c:\\diagram111.json", diagram);
+
                         BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
                         s_responsetext= "true";
                     }

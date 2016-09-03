@@ -52,6 +52,15 @@ CCForm_Control_Enum = {
                 { Text: '当前月份', Value: '@FK_YF' },
                 { Text: '当前工作可处理人员', Value: '@CurrWorker' }
     ],
+    
+    /** 
+       this enum use for SignType,
+     **/
+    SignType: [ { Text: '无', Value: '0' },
+                { Text: '图片签名', Value: '1' },
+                { Text: '山东CA签名', Value: '2' },
+                { Text: '山东CA签名', Value: '3' }
+                ],
     /**
     this enum use for TextBox,
     **/
@@ -91,10 +100,10 @@ CCForm_Control_Propertys = {
                   { proName: 'MinLen', ProText: '最小长度', DefVal: '0', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'MaxLen', ProText: '最大长度', DefVal: '300', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'UIWidth', ProText: '宽度', DefVal: '100', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
-                  { proName: 'UIHeight', ProText: '高度', DefVal: '23', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
+                  { proName: 'UIHeight', ProText: '高度11', DefVal: '23', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'MapExt', ProText: '扩展属性', DefVal: '', DType: 'grouplabel', ProType: BuilderProperty.TYPE_GROUP_LABEL },
                   { proName: BuilderProperty.SEPARATOR, ProText: '', DefVal: '', DType: 'hr', ProType: BuilderProperty.SEPARATOR },
-                  { proName: 'UIIsInput', ProText: '签名模式', DefVal: '0', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
+                  { proName: 'SignType', ProText: '签名模式', DefVal: '0', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'UIIsInput', ProText: '是否必填', DefVal: '0', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'WinPOP', ProText: '设置开窗返回值', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/PopVal.aspx?FK_MapData=@NodeID@&RefNo=@KeyOfEn@&MyPK=PopVal_@NodeID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'Expression', ProText: '正则表达式', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.aspx?FK_MapData=@NodeID@&RefNo=@KeyOfEn@&OperAttrKey=@NodeID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },

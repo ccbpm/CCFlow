@@ -575,9 +575,9 @@ TransFormDataField.prototype = {
 
         shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
 
-       //  alert(shap_src);
-       //  alert(figureSetsURL);
-       // alert(figureSetsURL + shap_src);
+        //  alert(shap_src);
+        //  alert(figureSetsURL);
+        // alert(figureSetsURL + shap_src);
 
         propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
         //shap image
@@ -598,6 +598,9 @@ TransFormDataField.prototype = {
                 ctrlLab = '多附件属性';
                 break;
             case "AthSingle":
+                ctrlLab = '单附件属性';
+                break;
+            case "TextBoxStr":
                 ctrlLab = '单附件属性';
                 break;
             default:
@@ -651,15 +654,30 @@ TransFormDataField.prototype = {
         x = x - moveX;
         y = y - 15;
         //create
-        var labelFigure = figure_Label(x, y);
-        labelFigure.CCForm_MyPK = Util.NewGUID();
+        var createdFigure = figure_Label(x, y);
+        createdFigure.CCForm_MyPK = Util.NewGUID();
+        createdFigure.CCForm_Shape = CCForm_Controls.Label;
+
+        //store id for later use
+        //TODO: maybe we should try to recreate it with same ID (in case further undo will recreate objects linked to this)
+        this.figureId = createdFigure.id;
+
         //add to STACK
-        STACK.figureAdd(labelFigure);
+        STACK.figureAdd(createdFigure);
+
         //make this the selected figure
-        selectedFigureId = labelFigure.id;
+        selectedFigureId = createdFigure.id;
+
+        //set up it's editor
+        setUpEditPanel(createdFigure);
+
+        //move to figure selected state
+        state = STATE_FIGURE_SELECTED;
+
         //change text
         figureText = STACK.figuresTextPrimitiveGetByFigureId(selectedFigureId);
         if (figureText != null) {
+            figureText.setTextStr(this.dataArrary.Name);
             figureText.setTextStr(this.dataArrary.Name);
         }
     },
@@ -667,8 +685,17 @@ TransFormDataField.prototype = {
     DealExp: function (expString) {
         try {
             expString = expString.replace(/@NodeID@/g, CCForm_FK_MapData);
-            expString = expString.replace(/@KeyOfEn@/g, this.dataArrary.Name);
-            expString = expString.replace(/@No@/g, this.dataArrary.Name);
+
+            if (this.dataArrary.No != null) {
+                expString = expString.replace(/@KeyOfEn@/g, this.dataArrary.No);
+                expString = expString.replace(/@No@/g, this.dataArrary.No);
+            }
+
+            if (this.dataArrary.KeyOfEn != null) {
+                expString = expString.replace(/@KeyOfEn@/g, this.dataArrary.KeyOfEn);
+                expString = expString.replace(/@No@/g, this.dataArrary.KeyOfEn);
+            }
+
         } catch (e) {
         }
         return expString;

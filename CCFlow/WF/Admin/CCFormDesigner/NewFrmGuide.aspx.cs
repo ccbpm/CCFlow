@@ -497,7 +497,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             {
-                this.Response.Redirect("/WF/Admin/FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=" + md.No);
+                this.Response.Redirect("/WF/Admin/FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No);
             }
 
         }

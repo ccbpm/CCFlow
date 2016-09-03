@@ -16,7 +16,7 @@
 
 <fieldset>
 <legend>表单设计</legend>
-设计自由表单  WF/Admin/FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=Demo_01
-  设计傻瓜表单  WF/Admin/FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=xxxxxx
+设计自由表单  WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=Demo_01
+  设计傻瓜表单  WF/Admin/FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=xxxxxx
 </fieldset>
 </asp:Content>

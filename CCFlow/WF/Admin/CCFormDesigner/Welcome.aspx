@@ -3,6 +3,6 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-<a href="FormDesigner.aspx?FK_MapData=ND201" target="_blank" > 测试编辑</a>
+<a href="FormDesigner.htm?FK_MapData=ND201" target="_blank" > 测试编辑</a>
 
 </asp:Content>

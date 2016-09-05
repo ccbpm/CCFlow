@@ -703,12 +703,38 @@ namespace BP.Sys
                     drAttr["MYPK"] = fk_mapdata + "_" + ctrlID;
                     drAttr["FK_MAPDATA"] = fk_mapdata;
 
+                    switch (shape)
+                    {
+                        case "TextBoxStr":
+                        case "TextBoxSFTable":
+                            drAttr["MyDataType"] = DataType.AppString;
+                            break;
+                        case "TextBoxInt":
+                        case "TextBoxEnum":
+                            drAttr["MyDataType"] = DataType.AppInt;
+                            break;
+                        case "TextBoxFloat":
+                            drAttr["MyDataType"] = DataType.AppFloat;
+                            break;
+                        case "TextBoxMoney":
+                            drAttr["MyDataType"] = DataType.AppMoney;
+                            break;
+                        case "TextBoxDate":
+                            drAttr["MyDataType"] = DataType.AppDate;
+                            break;
+                        case "TextBoxDateTime":
+                            drAttr["MyDataType"] = DataType.AppDateTime;
+                            break;
+                        default:
+                            break;
+                    }
+
                     //坐标
                     JsonData style = control["style"];
                     JsonData vector = style["gradientBounds"];
                     drAttr["X"] = vector[0].ToJson();
                     drAttr["Y"] = vector[1].ToJson();
-                  
+
                     for (int iProperty = 0; iProperty < properties.Count; iProperty++)
                     {
                         JsonData property = properties[iProperty];  //获得一个属性.
@@ -724,13 +750,16 @@ namespace BP.Sys
                         switch (propertyName)
                         {
                             case "Name":
-                            case "DefVal":
-                            case "UIIsEnable":
                             case "MinLen":
                             case "MaxLen":
-                            case "UIWidth":
-                            case "UIHeight":
-                            case "":
+                            case "DefVal":
+                                //case "UIWidth":
+                                //case "UIHeight":
+                                drAttr[propertyName] = val;
+                                break;
+                            case "UIIsEnable":
+                            case "UIVisible":
+                                string type = property["type"].ToString();
                                 drAttr[propertyName] = val;
                                 break;
                             case "FieldText":
@@ -756,15 +785,13 @@ namespace BP.Sys
                         drAttr["UIWidth"] = imgWidth.ToString("0.00");
                         drAttr["UIHeight"] = imgHeight.ToString("0.00");
 
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "50";
 
                         //控件类型.
                         switch (shape)
                         {
                             case "TextBoxStr":
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppString;
-                                drAttr["LGTYPE"] ="0" ;
+                                drAttr["LGTYPE"] = "0";
                                 drAttr["UICONTRALTYPE"] = "0";
                                 break;
                             case "TextBoxInt":
@@ -772,43 +799,57 @@ namespace BP.Sys
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppInt;
                                 drAttr["LGTYPE"] = "0";
                                 drAttr["UICONTRALTYPE"] = "0";
+                                drAttr["MinLen"] = "0";
+                                drAttr["MaxLen"] = "16";
                                 break;
                             case "TextBoxFloat":
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppFloat;
                                 drAttr["LGTYPE"] = "0";
                                 drAttr["UICONTRALTYPE"] = "0";
+                                drAttr["MinLen"] = "0";
+                                drAttr["MaxLen"] = "16";
                                 break;
                             case "TextBoxDouble":
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppDouble;
                                 drAttr["LGTYPE"] = "0";
                                 drAttr["UICONTRALTYPE"] = "0";
+                                drAttr["MinLen"] = "0";
+                                drAttr["MaxLen"] = "16";
                                 break;
                             case "TextBoxMoney": //金额类型.
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppMoney;
                                 drAttr["LGTYPE"] = "0";
                                 drAttr["UICONTRALTYPE"] = "0";
+                                drAttr["MinLen"] = "0";
+                                drAttr["MaxLen"] = "16";
                                 break;
-                            case "TextBoxData": //金额类型.
+                            case "TextBoxDate": //日期.
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppDate;
                                 drAttr["LGTYPE"] = "0";
                                 drAttr["UICONTRALTYPE"] = "0";
+                                drAttr["MinLen"] = "0";
                                 drAttr["MaxLen"] = "16";
                                 break;
-                            case "TextBoxDataTime": //金额类型.
+                            case "TextBoxDateTime": //金额类型.
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppDateTime;
                                 drAttr["LGTYPE"] = "0";
                                 drAttr["UICONTRALTYPE"] = "0";
+                                drAttr["MinLen"] = "0";
                                 drAttr["MaxLen"] = "16";
                                 break;
                             case "DropDownListEnum": //枚举类型.
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppInt;
                                 drAttr["LGTYPE"] = "1";
                                 drAttr["UICONTRALTYPE"] = "1";
+                                drAttr["MinLen"] = "0";
+                                drAttr["MaxLen"] = "16";
                                 break;
                             case "DropDownListTable": //外键类型.
                                 drAttr["MYDATATYPE"] = BP.DA.DataType.AppString;
                                 drAttr["LGTYPE"] = "2";
                                 drAttr["UICONTRALTYPE"] = "1";
+                                drAttr["MinLen"] = "0";
+                                drAttr["MaxLen"] = "100";
                                 break;
                             default:
                                 break;
@@ -972,7 +1013,7 @@ namespace BP.Sys
             mapAttrDT.Columns.Add(new DataColumn("NAME", typeof(string)));
             mapAttrDT.Columns.Add(new DataColumn("MYPK", typeof(string)));
             mapAttrDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("DEFVAL", typeof(string))); //默认值.
+            mapAttrDT.Columns.Add(new DataColumn("DefVal", typeof(string))); //默认值.
             mapAttrDT.Columns.Add(new DataColumn("UIIsEnable", typeof(string))); //默认值.
             mapAttrDT.Columns.Add(new DataColumn("MAXLEN", typeof(int))); //最大长度.
             mapAttrDT.Columns.Add(new DataColumn("MINLEN", typeof(int))); //最小长度.
@@ -987,8 +1028,12 @@ namespace BP.Sys
             mapAttrDT.Columns.Add(new DataColumn("UIHEIGHT", typeof(double)));
 
             mapAttrDT.Columns.Add(new DataColumn("UIBINDKEY", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("UIRefKey", typeof(string)));
-            mapAttrDT.Columns.Add(new DataColumn("UIRefKeyText", typeof(string)));
+            //mapAttrDT.Columns.Add(new DataColumn("UIRefKey", typeof(string)));
+            //mapAttrDT.Columns.Add(new DataColumn("UIRefKeyText", typeof(string)));
+
+            //是否可见.
+            mapAttrDT.Columns.Add(new DataColumn("UIVisible", typeof(string)));
+            
             //   mapAttrDT.Columns.Add(new DataColumn("UIVISIBLE", typeof(string)));
             mapAttrDT.Columns.Add(new DataColumn("X", typeof(double)));
             mapAttrDT.Columns.Add(new DataColumn("Y", typeof(double)));
@@ -1220,10 +1265,59 @@ namespace BP.Sys
                 MapAttr attr = (MapAttr)attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, keyOfEn);
                 attr.Name = dr["Name"].ToString();
                 attr.MyDataType = int.Parse(dr["MyDataType"].ToString());
+
                 foreach (DataColumn dc in dt.Columns)
                 {
-                    attr.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                    string key =dc.ColumnName;
+                    var val=  dr[dc.ColumnName].ToString();
+
+                    if (string.IsNullOrEmpty(val)==true)
+                    {
+                        if (key == "DefVal" || key=="UIBINDKEY" )
+                            continue;
+
+                        if (key == "UIIsEnable")
+                        {
+                            attr.UIIsEnable = true;
+                            continue;
+                        }
+
+                        if (key == "UIIsInput" )
+                        {
+                            attr.UIIsInput = false;
+                            continue;
+                        }
+
+                        if (key == "UIVisible")
+                        {
+                            attr.UIVisible = true;
+                            continue;
+                        }
+
+                        if (key == "DEFVAL" && attr.UIContralType == UIContralType.CheckBok)
+                        {
+                            attr.DefVal = "0";
+                            continue;
+                        }
+                         
+
+                        throw new Exception("@给字段属性赋值, 没有判断的异常 Key="+key+" val=null.");
+                    }
+
+                    //switch (attr.MyDataType)
+                    //{
+                    //    case DataType.AppString:
+                    //        break;
+                    //    case DataType.AppDate:
+                    //    case DataType.AppDateTime:
+                    //        break;
+                    //    default:
+                    //        break;
+                    //}
+
+                    //attr.SetValByKey(dc.ColumnName, val);
                 }
+
                 try
                 {
                     attr.Save(); //执行保存.

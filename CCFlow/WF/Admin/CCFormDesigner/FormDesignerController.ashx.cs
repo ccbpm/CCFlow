@@ -188,12 +188,12 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     case "NewSFTableField": //创建一个SFTable字段.
                         try
                         {
-                            string fk_mapdata=getUTF8ToString("FK_MapData");
-                            string keyOfEn=getUTF8ToString("KeyOfEn");
-                            string fieldDesc=getUTF8ToString("Name");
+                            string fk_mapdata = getUTF8ToString("FK_MapData");
+                            string keyOfEn = getUTF8ToString("KeyOfEn");
+                            string fieldDesc = getUTF8ToString("Name");
                             string sftable = getUTF8ToString("UIBindKey");
-                              x=float.Parse(getUTF8ToString("x"));
-                              y=float.Parse(getUTF8ToString("y"));
+                            x = float.Parse(getUTF8ToString("x"));
+                            y = float.Parse(getUTF8ToString("y"));
 
                             //调用接口,执行保存.
                             BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
@@ -216,7 +216,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             ma.Y = int.Parse(getUTF8ToString("y"));
                             ma.UIIsEnable = true;
                             ma.LGType = FieldTypeS.Enum;
-                            
+
                             string ctrlDoType = getUTF8ToString("ctrlDoType");
                             if (ctrlDoType == "DDL")
                                 ma.UIContralType = UIContralType.DDL;
@@ -235,13 +235,13 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                                     idx++;
                                     FrmRB rb = new FrmRB();
                                     rb.FK_MapData = ma.FK_MapData;
-                                    rb.KeyOfEn  =ma.KeyOfEn;
+                                    rb.KeyOfEn = ma.KeyOfEn;
                                     rb.EnumKey = ma.UIBindKey;
                                     rb.Lab = item.Lab;
                                     rb.X = ma.X;
 
                                     //让其变化y值.
-                                    rb.Y = ma.Y + idx*30;
+                                    rb.Y = ma.Y + idx * 30;
                                     rb.Insert();
                                 }
                             }
@@ -516,7 +516,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     case "NewHidF":
                         string fk_mapdataHid = v1;
                         string key = v2;
-                          name = v3;
+                        name = v3;
                         int dataType = int.Parse(v4);
                         MapAttr mdHid = new MapAttr();
                         mdHid.MyPK = fk_mapdataHid + "_" + key;
@@ -584,7 +584,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         if (fn.Retrieve(FrmNodeAttr.FK_Frm, fk_frm,
                             FrmNodeAttr.FK_Node, fk_Node) == 1)
                         {
-                          //  fn.IsEdit = !isReadonly;
+                            //  fn.IsEdit = !isReadonly;
                             fn.IsPrint = isPrint;
                             fn.FK_Flow = fk_flow;
                             fn.Update();
@@ -595,7 +595,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         fn.FK_Frm = fk_frm;
                         fn.FK_Flow = fk_flow;
                         fn.FK_Node = int.Parse(fk_Node);
-                       // fn.IsEdit = !isReadonly;
+                        // fn.IsEdit = !isReadonly;
                         fn.IsPrint = isPrint;
                         fn.Idx = 100;
                         fn.FK_Flow = fk_flow;
@@ -717,192 +717,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         }
 
         #region 将表单串格式化存入数据库
-
-        private void TempSaveFrm(DataSet ds)
-        {
-            string str = "";
-            foreach (DataTable dt in ds.Tables)
-            {
-                try
-                {
-                    str += SaveDT(dt);
-                    if (dt.TableName.ToUpper() == "WF_NODE" && dt.Columns.Count > 0 && dt.Rows.Count == 1)
-                    {
-                        /* 更新审核组件状态. */
-                        // string nodeid = fk_mapdata.Replace("ND", "");
-                        // BP.DA.DBAccess.RunSQL("UPDATE WF_Node SET FWCSta=1 WHERE FWCSta =0 AND NodeID=" + nodeid);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    str += "@保存" + dt.TableName + "失败:" + ex.Message;
-                }
-            }
-        }
-        public string SaveDT(DataTable dt)
-        {
-            if (dt.Rows.Count == 0)
-                return "";
-
-            string tableName = dt.TableName.Replace("CopyOf", "").ToUpper();
-            //MaxTop,MaxLeft,MaxRight,MaxEnd合并到AtPara
-            if (tableName == "SYS_MAPDATA" && dt.Columns.Contains("MaxLeft") && dt.Columns.Contains("MaxTop"))
-                return "";
-
-            if (dt.Columns.Count == 0)
-                return null;
-
-            TableSQL sqls = getTableSql(tableName, dt.Columns);
-            string updataSQL = sqls.UPDATED;
-            string pk = sqls.PK;
-            string insertSQL = sqls.INSERTED;
-
-            #region save data.
-            foreach (DataRow dr in dt.Rows)
-            {
-                BP.DA.Paras ps = new BP.DA.Paras();
-                foreach (DataColumn dc in dt.Columns)
-                {
-                    if (dc.ColumnName == pk)
-                        continue;
-
-                    if (tableName == "SYS_MAPATTR" && dc.ColumnName.Trim() == "UIBINDKEY")
-                        continue;
-
-                    if (updataSQL.Contains(BP.Sys.SystemConfig.AppCenterDBVarStr + dc.ColumnName.Trim()))
-                        ps.Add(dc.ColumnName.Trim(), dr[dc.ColumnName.Trim()]);
-                }
-
-                ps.Add(pk, dr[pk]);
-                ps.SQL = updataSQL;
-                try
-                {
-                    if (BP.DA.DBAccess.RunSQL(ps) == 0)
-                    {
-                        ps.Clear();
-                        foreach (DataColumn dc in dt.Columns)
-                        {
-                            if (tableName == "SYS_MAPATTR" && dc.ColumnName == "UIBINDKEY")
-                                continue;
-
-                            if (updataSQL.Contains(BP.Sys.SystemConfig.AppCenterDBVarStr + dc.ColumnName.Trim()))
-                                ps.Add(dc.ColumnName.Trim(), dr[dc.ColumnName.Trim()]);
-                        }
-                        ps.SQL = insertSQL;
-                        BP.DA.DBAccess.RunSQL(ps);
-                        continue;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string pastrs = "";
-                    foreach (Para p in ps)
-                    {
-                        pastrs += "\t\n@" + p.ParaName + "=" + p.val;
-                    }
-                    throw new Exception("@执行sql=" + ps.SQL + "失败." + ex.Message + "\t\n@paras=" + pastrs);
-                }
-            }
-            #endregion
-
-            return null;
-        }
-
-        Dictionary<string, TableSQL> dicTableSql = new Dictionary<string, TableSQL>();
-        TableSQL getTableSql(string tableName, DataColumnCollection columns = null)
-        {
-            TableSQL tableSql = null;
-            if (dicTableSql.ContainsKey(tableName))
-            {
-                tableSql = dicTableSql[tableName];
-            }
-            else
-            {
-                if (columns != null && columns.Count > 0)
-                {
-                    string igF = "@RowIndex@RowState@";
-
-                    #region gener sql.
-                    //生成sqlUpdate
-                    string sqlUpdate = "UPDATE " + tableName + " SET ";
-                    foreach (DataColumn dc in columns)
-                    {
-                        if (igF.Contains("@" + dc.ColumnName + "@"))
-                            continue;
-
-                        switch (dc.ColumnName)
-                        {
-                            case "MYPK":
-                            case "OID":
-                            case "NO":
-                                continue;
-                            default:
-                                break;
-                        }
-
-                        if (tableName == "SYS_MAPATTR" && dc.ColumnName == "UIBINDKEY")
-                            continue;
-                        try
-                        {
-                            sqlUpdate += dc.ColumnName + "=" + BP.Sys.SystemConfig.AppCenterDBVarStr + dc.ColumnName.Trim() + ",";
-                        }
-                        catch
-                        {
-                        }
-                    }
-                    sqlUpdate = sqlUpdate.Substring(0, sqlUpdate.Length - 1);
-                    string pk = "";
-                    if (columns.Contains("NODEID"))
-                        pk = "NODEID";
-                    if (columns.Contains("MYPK"))
-                        pk = "MYPK";
-                    if (columns.Contains("OID"))
-                        pk = "OID";
-                    if (columns.Contains("NO"))
-                        pk = "NO";
-
-                    sqlUpdate += " WHERE " + pk + "=" + BP.Sys.SystemConfig.AppCenterDBVarStr + pk;
-
-                    //生成sqlInsert
-                    string sqlInsert = "INSERT INTO " + tableName + " ( ";
-                    foreach (DataColumn dc in columns)
-                    {
-                        if (igF.Contains("@" + dc.ColumnName.Trim() + "@"))
-                            continue;
-
-                        if (tableName == "SYS_MAPATTR" && dc.ColumnName.Trim() == "UIBINDKEY")
-                            continue;
-
-                        sqlInsert += dc.ColumnName.Trim() + ",";
-                    }
-                    sqlInsert = sqlInsert.Substring(0, sqlInsert.Length - 1);
-                    sqlInsert += ") VALUES (";
-                    foreach (DataColumn dc in columns)
-                    {
-                        if (igF.Contains("@" + dc.ColumnName + "@"))
-                            continue;
-
-                        if (tableName == "SYS_MAPATTR" && dc.ColumnName.Trim() == "UIBINDKEY")
-                            continue;
-
-                        sqlInsert += BP.Sys.SystemConfig.AppCenterDBVarStr + dc.ColumnName.Trim() + ",";
-                    }
-                    sqlInsert = sqlInsert.Substring(0, sqlInsert.Length - 1);
-                    sqlInsert += ")";
-                    #endregion gener sql.
-
-                    tableSql = new TableSQL();
-                    tableSql.UPDATED = sqlUpdate;
-                    tableSql.INSERTED = sqlInsert;
-                    tableSql.PK = pk;
-
-                    dicTableSql.Add(tableName, tableSql);
-                }
-            }
-
-            return tableSql;
-        }
-
       
         #endregion End
 
@@ -932,12 +746,5 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             Sys_MapDtl = "Sys_MapDtl",
             Sys_MapM2M = "Sys_MapM2M",
             WF_Node = "WF_Node"; 
-    }
-
-    class TableSQL
-    {
-        public string PK;
-        public string INSERTED;
-        public string UPDATED;
     }
 }

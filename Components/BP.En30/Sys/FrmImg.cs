@@ -14,9 +14,13 @@ namespace BP.Sys
         /// </summary>
         Img,
         /// <summary>
-        /// 公章
+        /// 图片公章
         /// </summary>
-        Seal
+        Seal,
+        /// <summary>
+        /// 北京安证通公章CA
+        /// </summary>
+        SealESA
     }
     /// <summary>
     /// 图片
@@ -384,7 +388,10 @@ namespace BP.Sys
                 return false;
             return true;
         }
-
+        protected override void afterInsertUpdateAction()
+        {
+            base.afterInsertUpdateAction();
+        }
     }
     /// <summary>
     /// 图片s

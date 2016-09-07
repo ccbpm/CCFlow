@@ -1419,7 +1419,7 @@ namespace BP.Sys
 
             // btn.
             listNames.Add("Sys_FrmBtn");
-            sql = "@SELECT FK_MapData,MyPK,Text,BtnType,EventType,EventContext,MsgErr,MsgOK,X,Y FROM Sys_FrmBtn WHERE " + where;
+            sql = "@SELECT FK_MapData,MyPK,Text,EventType,EventContext,MsgErr,MsgOK,X,Y FROM Sys_FrmBtn WHERE " + where;
             sqls += sql;
 
             // Sys_FrmImg.
@@ -1429,7 +1429,7 @@ namespace BP.Sys
 
             // Sys_FrmLab.
             listNames.Add("Sys_FrmLab");
-            sql = "@SELECT MyPK,FK_MapData,Text,X,Y,FontColor,FontName,FontSize,FontStyle,FontWeight,IsBold,IsItalic from Sys_FrmLab WHERE " + where;
+            sql = "@SELECT MyPK,FK_MapData,Text,X,Y,FontColor,FontName,FontSize,FontStyle,FontWeight,IsBold,IsItalic FROM Sys_FrmLab WHERE " + where;
             sqls += sql;
 
             // Sys_FrmRB.

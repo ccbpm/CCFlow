@@ -51,7 +51,6 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                 catch (System.Exception ex)
                 {
                     BP.Sys.PubClass.Alert("用户名密码错误，注意密码区分大小写，请检查是否按下了CapsLock.。");
-
                     this.Page.ClientScript.RegisterStartupScript(this.GetType(), "kesy", "<script language=JavaScript>alert('@用户名密码错误!@检查是否按下了CapsLock.@更详细的信息:" + ex.Message + "');</script>");
                 }
             }

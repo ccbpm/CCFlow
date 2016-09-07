@@ -3435,9 +3435,6 @@ function init(diagramId) {
     canvasProps.setWidth(canvasProps.getWidth());
     canvasProps.setHeight(canvasProps.getHeight());
 
-
-
-
     //Browser support and warnings
     if (isBrowserReady() == 0) { //no support at all
         modal();

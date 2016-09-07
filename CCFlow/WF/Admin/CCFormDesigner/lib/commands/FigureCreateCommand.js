@@ -167,12 +167,12 @@ FigureCreateCommand.prototype = {
                 var param = {
                     action: "DoType",
                     DoType: "NewField",
-                    v1: CCForm_FK_MapData,
-                    v2: frmVal.KeyOfEn,
-                    v3: frmVal.Name,
-                    v4: frmVal.FieldType,
-                    v5: x,
-                    v6: y
+                    FrmID: CCForm_FK_MapData,
+                    KeyOfEn: frmVal.KeyOfEn,
+                    Name: frmVal.Name,
+                    FieldType: frmVal.FieldType,
+                    x: x,
+                    y: y
                 };
                 ajaxService(param, function (json) {
                     if (json == "true") {
@@ -685,7 +685,7 @@ TransFormDataField.prototype = {
     /**替换系统表达式值**/
     DealExp: function (expString) {
         try {
-            expString = expString.replace(/@NodeID@/g, CCForm_FK_MapData);
+            expString = expString.replace(/@FrmID@/g, CCForm_FK_MapData);
 
             if (this.dataArrary.No != null) {
                 expString = expString.replace(/@KeyOfEn@/g, this.dataArrary.No);

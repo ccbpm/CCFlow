@@ -93,7 +93,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         s_responsetext= "error:表单格式不正确，保存失败。" + ex.Message;
                     }
                     break;
-                case "ParseStringToPinyin":// 转拼音方法.
+                case "ParseStringToPinyin": //转拼音方法.
                     string name = getUTF8ToString("name");
                     string flag = getUTF8ToString("flag");
                     if (flag == "true")
@@ -121,12 +121,12 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
 
                     //调用API获得数据.
                     if (action == "GetSFTableList")
-                        s_responsetext = BP.Sys.CCFormAPI.GetSFTableList(pageNumber, pageSize);
+                        s_responsetext = BP.Sys.CCFormAPI.DB_SFTableList(pageNumber, pageSize);
                     else
-                        s_responsetext = BP.Sys.CCFormAPI.GetEnumerationList(pageNumber, pageSize); //调用API获得数据.
+                        s_responsetext = BP.Sys.CCFormAPI.DB_EnumerationList(pageNumber, pageSize); //调用API获得数据.
                     break;
                 case "Hiddenfielddata"://获取隐藏字段.
-                    s_responsetext = BP.Sys.CCFormAPI.GetHiddenfielddata(this.FK_MapData);
+                    s_responsetext = BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
                     break;
                 case "HiddenFieldDelete": //删除隐藏字段.
                     string records = getUTF8ToString("records");
@@ -177,7 +177,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         {
                             no = getUTF8ToString("No");
                             name = getUTF8ToString("Name");
-
+                            x = float.Parse(getUTF8ToString("x"));
+                            y = float.Parse(getUTF8ToString("y"));
                             BP.Sys.CCFormAPI.PublicNoNameCtrlCreate(frmID, ctrlType, no, name, x, y);
                             return "true";
                         }
@@ -197,7 +198,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
 
                             //调用接口,执行保存.
                             BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
-
                             return "true";
                         }
                         catch (Exception ex)
@@ -207,45 +207,21 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     case "NewEnumField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {
-                            MapAttr ma = new MapAttr();
-                            ma.FK_MapData = getUTF8ToString("FK_MapData");
-                            ma.KeyOfEn = getUTF8ToString("KeyOfEn");
-                            ma.Name = getUTF8ToString("Name");
-                            ma.MyDataType = DataType.AppInt;
-                            ma.X = int.Parse(getUTF8ToString("x"));
-                            ma.Y = int.Parse(getUTF8ToString("y"));
-                            ma.UIIsEnable = true;
-                            ma.LGType = FieldTypeS.Enum;
-
+                            UIContralType ctrl = UIContralType.RadioBtn;
                             string ctrlDoType = getUTF8ToString("ctrlDoType");
                             if (ctrlDoType == "DDL")
-                                ma.UIContralType = UIContralType.DDL;
+                               ctrl = UIContralType.DDL;
                             else
-                                ma.UIContralType = UIContralType.RadioBtn;
+                                ctrl = UIContralType.RadioBtn;
 
-                            ma.UIBindKey = getUTF8ToString("UIBindKey");
-                            ma.Insert();
+                            string fk_mapdata = getUTF8ToString("FK_MapData");
+                            string keyOfEn = getUTF8ToString("KeyOfEn");
+                            string fieldDesc = getUTF8ToString("Name");
+                            string enumKeyOfBind = getUTF8ToString("UIBindKey"); //要绑定的enumKey.
+                            x = float.Parse(getUTF8ToString("x"));
+                            y = float.Parse(getUTF8ToString("y"));
 
-                            if (ma.UIContralType == UIContralType.RadioBtn)
-                            {
-                                SysEnums ses = new SysEnums(ma.UIBindKey);
-                                int idx = 0;
-                                foreach (SysEnum item in ses)
-                                {
-                                    idx++;
-                                    FrmRB rb = new FrmRB();
-                                    rb.FK_MapData = ma.FK_MapData;
-                                    rb.KeyOfEn = ma.KeyOfEn;
-                                    rb.EnumKey = ma.UIBindKey;
-                                    rb.Lab = item.Lab;
-                                    rb.X = ma.X;
-
-                                    //让其变化y值.
-                                    rb.Y = ma.Y + idx * 30;
-                                    rb.Insert();
-                                }
-                            }
-
+                            BP.Sys.CCFormAPI.NewEnumField(frmID, keyOfEn, fieldDesc, enumKeyOfBind, ctrl, x, y);
                             return "true";
                         }
                         catch (Exception ex)
@@ -255,119 +231,19 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {
-                            MapAttr ma = new MapAttr();
-                            ma.FK_MapData = v1;
-                            ma.KeyOfEn = v2;
-                            ma.Name = v3;
-                            ma.MyDataType = int.Parse(v4);
-                            ma.X = int.Parse(v5);
-                            ma.Y = int.Parse(getUTF8ToString("v6"));
-                            ma.Insert();
+                            BP.Sys.CCFormAPI.NewField(getUTF8ToString("FrmID"), getUTF8ToString("KeyOfEn"),getUTF8ToString("Name"),
+                                int.Parse(getUTF8ToString("MyDataType")),
+                                float.Parse(getUTF8ToString("x")),
+                               float.Parse(getUTF8ToString("y"))
+                               );
                             return "true";
                         }
                         catch (Exception ex)
                         {
                             return ex.Message;
                         }
-                    case "CreateCheckGroup":
-                        string gKey = v1;
-                        string gName = v2;
-                        string enName1 = v3;
-
-                        MapAttr attrN = new MapAttr();
-                        int i = attrN.Retrieve(MapAttrAttr.FK_MapData, enName1, MapAttrAttr.KeyOfEn, gKey + "_Note");
-                        i += attrN.Retrieve(MapAttrAttr.FK_MapData, enName1, MapAttrAttr.KeyOfEn, gKey + "_Checker");
-                        i += attrN.Retrieve(MapAttrAttr.FK_MapData, enName1, MapAttrAttr.KeyOfEn, gKey + "_RDT");
-                        if (i > 0)
-                            return "error:前缀已经使用：" + gKey + " ， 请确认您是否增加了这个审核分组或者，请您更换其他的前缀。";
-
-                        GroupField gf = new GroupField();
-                        gf.Lab = gName;
-                        gf.EnName = enName1;
-                        gf.Insert();
-
-                        attrN = new MapAttr();
-                        attrN.FK_MapData = enName1;
-                        attrN.KeyOfEn = gKey + "_Note";
-                        attrN.Name = "审核意见";
-                        attrN.MyDataType = DataType.AppString;
-                        attrN.UIContralType = UIContralType.TB;
-                        attrN.UIIsEnable = true;
-                        attrN.UIIsLine = true;
-                        attrN.MaxLen = 4000;
-                        attrN.GroupID = gf.OID;
-                        attrN.UIHeight = 23 * 3;
-                        attrN.Idx = 1;
-                        attrN.Insert();
-
-                        attrN = new MapAttr();
-                        attrN.FK_MapData = enName1;
-                        attrN.KeyOfEn = gKey + "_Checker";
-                        attrN.Name = "审核人";// "审核人";
-                        attrN.MyDataType = DataType.AppString;
-                        attrN.UIContralType = UIContralType.TB;
-                        attrN.MaxLen = 50;
-                        attrN.MinLen = 0;
-                        attrN.UIIsEnable = true;
-                        attrN.UIIsLine = false;
-                        attrN.DefVal = "@WebUser.No";
-                        attrN.UIIsEnable = false;
-                        attrN.GroupID = gf.OID;
-                        attrN.IsSigan = true;
-                        attrN.Idx = 2;
-                        attrN.Insert();
-
-                        attrN = new MapAttr();
-                        attrN.FK_MapData = enName1;
-                        attrN.KeyOfEn = gKey + "_RDT";
-                        attrN.Name = "审核日期"; // "审核日期";
-                        attrN.MyDataType = DataType.AppDateTime;
-                        attrN.UIContralType = UIContralType.TB;
-                        attrN.UIIsEnable = true;
-                        attrN.UIIsLine = false;
-                        attrN.DefVal = "@RDT";
-                        attrN.UIIsEnable = false;
-                        attrN.GroupID = gf.OID;
-                        attrN.Idx = 3;
-                        attrN.Insert();
-
-                        /*
-                         * 判断是否是节点设置的审核分组，如果是就为节点设置焦点字段。
-                         */
-                        frmID = frmID.Replace("ND", "");
-                        int nodeid = 0;
-                        try
-                        {
-                            nodeid = int.Parse(frmID);
-                        }
-                        catch
-                        {
-                            //转化不成功就是不是节点表单字段.
-                            return "error:只能节点表单才可以使用审核分组组件。";
-                        }
-
-                        Node nd = new Node();
-                        nd.NodeID = nodeid;
-                        if (nd.RetrieveFromDBSources() != 0 && string.IsNullOrEmpty(nd.FocusField) == true)
-                        {
-                            nd.FocusField = "@" + gKey + "_Note";
-                            nd.Update();
-                        }
-                        return "true";
-                    case "NewAthM": // 新建 NewAthM. 
-                        string fk_mapdataAth = v1;
-                        string athName = v2;
-
-                        BP.Sys.FrmAttachment athM = new FrmAttachment();
-                        athM.MyPK = athName;
-                        if (athM.IsExits)
-                            return "error:多选名称:" + athName + "，已经存在。";
-
-                        athM.X = float.Parse(v3);
-                        athM.Y = float.Parse(v4);
-                        athM.Name = "多文件上传";
-                        athM.FK_MapData = fk_mapdataAth;
-                        athM.Insert();
+                    case "CreateCheckGroup": //创建审核分组，暂时未实现.
+                        BP.Sys.CCFormAPI.NewCheckGroup(FK_MapData, null, null); 
                         return "true";
                     case "NewM2M":
                         string fk_mapdataM2M = v1;
@@ -416,7 +292,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         sql += "@DELETE FROM Sys_Enum WHERE EnumKey='" + enumKey + "' ";
                         DBAccess.RunSQLs(sql);
                         return "true";
-
                     case "DelSFTable": /* 删除自定义的物理表. */
                         // 检查这个物理表是否被使用。
                         sql = "SELECT FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + v1 + "'";
@@ -426,7 +301,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         {
                             msgDel += "\n 表单编号:" + dr["FK_MapData"] + " , 字段:" + dr["KeyOfEn"] + ", 名称:" + dr["Name"];
                         }
-
                         if (msgDel != "")
                             return "error:该数据表已经被如下字段所引用，您不能删除它。" + msgDel;
 
@@ -503,7 +377,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         if (System.IO.File.Exists(file))
                             System.IO.File.Delete(file);
                         ds.WriteXml(file);
-
                         // BP.Sys.PubClass.DownloadFile(file, mdfrmtem.Name + ".xml");
                         //this.DownLoadFile(System.Web.HttpContext.Current, file, mdfrmtem.Name);
                         return null;
@@ -558,97 +431,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         else
                             myfn.DoDown();
                         return "true";
-                    case "SaveFlowFrm":
-                        // 转化参数意义.
-                        string vals = v1;
-                        string fk_Node = v2;
-                        string fk_flow = v3;
-                        bool isPrint = false;
-                        if (v5 == "1")
-                            isPrint = true;
-
-                        bool isReadonly = false;
-                        if (v4 == "1")
-                            isReadonly = true;
-
-                        string msg = this.SaveEn(vals);
-                        if (msg.Contains("Error"))
-                            return msg;
-
-                        string fk_frm = msg;
-                        Frm fm = new Frm();
-                        fm.No = fk_frm;
-                        fm.Retrieve();
-
-                        FrmNode fn = new FrmNode();
-                        if (fn.Retrieve(FrmNodeAttr.FK_Frm, fk_frm,
-                            FrmNodeAttr.FK_Node, fk_Node) == 1)
-                        {
-                            //  fn.IsEdit = !isReadonly;
-                            fn.IsPrint = isPrint;
-                            fn.FK_Flow = fk_flow;
-                            fn.Update();
-                            BP.DA.DBAccess.RunSQL("UPDATE Sys_MapData SET FK_FrmSort='01',AppType=1  WHERE No='" + fk_frm + "'");
-                            return fk_frm;
-                        }
-
-                        fn.FK_Frm = fk_frm;
-                        fn.FK_Flow = fk_flow;
-                        fn.FK_Node = int.Parse(fk_Node);
-                        // fn.IsEdit = !isReadonly;
-                        fn.IsPrint = isPrint;
-                        fn.Idx = 100;
-                        fn.FK_Flow = fk_flow;
-                        fn.Insert();
-
-                        MapData md = new MapData();
-                        md.No = fm.No;
-                        if (md.RetrieveFromDBSources() == 0)
-                        {
-                            md.Name = fm.Name;
-                            md.EnPK = "OID";
-                            md.Insert();
-                        }
-
-                        MapAttr attr = new MapAttr();
-                        attr.FK_MapData = md.No;
-                        attr.KeyOfEn = "OID";
-                        attr.Name = "WorkID";
-                        attr.MyDataType = BP.DA.DataType.AppInt;
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
-                        attr.UIVisible = false;
-                        attr.UIIsEnable = false;
-                        attr.DefVal = "0";
-                        attr.HisEditType = BP.En.EditType.Readonly;
-                        attr.Insert();
-
-                        attr = new MapAttr();
-                        attr.FK_MapData = md.No;
-                        attr.KeyOfEn = "FID";
-                        attr.Name = "FID";
-                        attr.MyDataType = BP.DA.DataType.AppInt;
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
-                        attr.UIVisible = false;
-                        attr.UIIsEnable = false;
-                        attr.DefVal = "0";
-                        attr.HisEditType = BP.En.EditType.Readonly;
-                        attr.Insert();
-
-                        attr = new MapAttr();
-                        attr.FK_MapData = md.No;
-                        attr.KeyOfEn = "RDT";
-                        attr.Name = "记录日期";
-                        attr.MyDataType = BP.DA.DataType.AppDateTime;
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
-                        attr.UIVisible = false;
-                        attr.UIIsEnable = false;
-                        attr.DefVal = "@RDT";
-                        attr.HisEditType = BP.En.EditType.Readonly;
-                        attr.Insert();
-                        return fk_frm;
                     default:
                         return "error:" + dotype + " , 后台执行错误，未设置此标记.";
                 }

@@ -7920,7 +7920,9 @@
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />
-    <Folder Include="WF\Data\FlowDemo\" />
+    <Folder Include="WF\Data\FlowDemo\Flow.Buess\01.日常办公\" />
+    <Folder Include="WF\Data\FlowDemo\Flow.Buess\02.人事管理\" />
+    <Folder Include="WF\Data\FlowDemo\Flow.Buess\03.业务管理\" />
     <Folder Include="WF\Data\JSLib\onchange\" />
     <Folder Include="WF\Data\JSLib\ondblclick\" />
     <Folder Include="WF\Data\JSLib\onkeyup\" />

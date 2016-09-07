@@ -123,7 +123,7 @@ namespace BP.Web
             return PubClass.GenerLabelStr(title);
             //return str;
         }
-        
+
         public Control GenerLabel(string title)
         {
             string path = this.Request.ApplicationPath;
@@ -521,6 +521,13 @@ namespace BP.Web
         {
             //经测试谷歌,IE都走window.top.returnValue 方法
             string clientscript = "<script language='javascript'> if(window.opener != undefined){window.top.returnValue = '" + val + "';} else { window.returnValue = '" + val + "';} window.close(); </script>";
+
+            if (Request.QueryString["inlayer"] == "1")
+            {
+                clientscript = "<script type='text/javascript'>var reval = '" + val + "';window.parent.closeDlg();</script>";
+                ClientScript.RegisterStartupScript(this.GetType(), "csg", clientscript);
+                return;
+            }
             //string clientscript = "<script language='javascript'>  window.returnValue = '" + val + "'; window.close(); </script>";
             this.Page.Response.Write(clientscript);
         }
@@ -584,14 +591,14 @@ namespace BP.Web
             System.Web.HttpContext.Current.Session["info"] = msg;
             System.Web.HttpContext.Current.Application["info" + WebUser.No] = msg;
 
-            string url =    SystemConfig.CCFlowWebPath+ "WF/Comm/Port/ErrorPage.aspx?d=" + DateTime.Now.ToString();
+            string url = SystemConfig.CCFlowWebPath + "WF/Comm/Port/ErrorPage.aspx?d=" + DateTime.Now.ToString();
             this.WinOpen(url, "警告", "errmsg", 500, 400, 150, 270);
         }
         protected void ResponseWriteShowModalDialogRedMsg(string msg)
         {
             msg = msg.Replace("@", "<BR>@");
             System.Web.HttpContext.Current.Session["info"] = msg;
-           
+
             string url = SystemConfig.CCFlowWebPath + "WF/Comm/Port/ErrorPage.aspx?d=" + DateTime.Now.ToString();
             this.WinOpenShowModalDialog(url, "警告", "msg", 500, 400, 120, 270);
         }
@@ -599,7 +606,7 @@ namespace BP.Web
         {
             msg = msg.Replace("@", "<BR>@");
             System.Web.HttpContext.Current.Session["info"] = msg;
-          
+
             string url = SystemConfig.CCFlowWebPath + "WF/Comm/Port/InfoPage.aspx?d=" + DateTime.Now.ToString();
             this.WinOpenShowModalDialog(url, "提示", "msg", 500, 400, 120, 270);
         }

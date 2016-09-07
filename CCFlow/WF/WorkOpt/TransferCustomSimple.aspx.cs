@@ -59,9 +59,26 @@ namespace CCFlow.WF.WorkOpt
                                 dtEmp = ds.Tables["Port_Emp"];
                                 dtDept = ds.Tables["Port_Dept"];
 
-                                foreach (DataRow r in dtEmp.Rows)
+                                //edited by liuxc,2016--8-29
+                                //因处理人按照部门绑定时，前端的部门列表，分组没有按照部门来显示，做以下处理，先将人员按照部门排好序
+                                DataTable dtEmpNews = dtEmp.Clone();
+                                string dept = string.Empty;
+                                DataRow[] empRows = null;
+                                
+                                foreach(DataRow r in dtDept.Rows)
                                 {
-                                    if (dtEmp.Columns.Contains("DeptName"))
+                                    dept = r["No"].ToString();
+                                    empRows = dtEmp.Select(string.Format("FK_Dept='{0}'", dept));
+
+                                    foreach(DataRow r1 in empRows)
+                                    {
+                                        dtEmpNews.Rows.Add(r1.ItemArray);
+                                    }
+                                }
+
+                                foreach (DataRow r in dtEmpNews.Rows)
+                                {
+                                    if (dtEmpNews.Columns.Contains("DeptName"))
                                     {
                                         deptName = r["DeptName"].ToString();
                                     }

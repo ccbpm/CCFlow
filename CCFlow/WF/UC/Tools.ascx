@@ -9,7 +9,7 @@
 </style>
 <table border=0 width='100%' align='left'  >
 
-<caption class="CaptionMsg" >系统设置</caption>
+<caption><div class="CaptionMsg" >系统设置</div></caption>
 
 <tr>
 <td  valign=top width='20%' align='center' style="font-size:14px;  height:100%;color:#026ac1" >

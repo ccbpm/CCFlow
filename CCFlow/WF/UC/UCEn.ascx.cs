@@ -2126,12 +2126,12 @@ namespace CCFlow.WF.UC
                                 if (me.PopValWorkModel == 0)
                                 {
                                     tb.Attributes["onclick"] = "ShowHelpDiv('" + tb.ID + "','" + BP.WF.Glo.DealExp(me.Doc, en, null) + "','','','returnval');";
-                                    tb.Attributes["ondblclick"] = "ReturnVal(this,'" + BP.WF.Glo.DealExp(me.Doc, en, null) + "','sd');";
+                                    tb.Attributes["ondblclick"] = "ReturnVal(this,'" + BP.WF.Glo.DealExp(me.Doc, en, null) + "','sd', " + me.W + "," + me.H + ",'" + me.GetParaString("Title") + "');";
                                 }
                                 else
                                 {
                                     tb.Attributes["onclick"] = "ShowHelpDiv('" + tb.ID + "','','" + me.MyPK + "','" + en.PKVal + "','returnvalccformpopval');";
-                                    tb.Attributes["ondblclick"] = "ReturnValCCFormPopVal(this,'" + me.MyPK + "','" + en.PKVal + "');";
+                                    tb.Attributes["ondblclick"] = "ReturnValCCFormPopVal(this,'" + me.MyPK + "','" + en.PKVal + "', " + me.W + "," + me.H + ",'" + me.GetParaString("Title") + "');";
                                 }
 
                                 //tb.Attributes["onkeyup"] = "this.value='';";    //added by liuxc,2015.6.26,应新昌增加不允许修改

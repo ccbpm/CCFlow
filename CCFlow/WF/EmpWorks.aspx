@@ -2,6 +2,18 @@
     Title="待办工作" CodeBehind="EmpWorks.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <style type="text/css">    
+        a
+        {
+            color:#0066CC;
+            text-decoration:none;
+        }
+        a:hover
+        {
+            color:#0084C5;
+            text-decoration:underline;
+        }
+    </style>
     <script type="text/javascript">
         var NS4 = (document.layers);
         var IE4 = (document.all);

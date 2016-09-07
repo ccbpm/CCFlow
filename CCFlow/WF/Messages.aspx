@@ -139,6 +139,7 @@
                         qo.AddWhere(BP.WF.SMSAttr.MsgFlag, msgType); // 设置查询条件.
                     }
                     int allNum = qo.GetCount();
+                    qo.addOrderByDesc(BP.WF.SMSAttr.RDT);
                     qo.DoQuery(BP.WF.SMSAttr.MyPK, pageSize, pageIdx);
                     int idx = 0;
                     foreach (BP.WF.SMS msg in sms)//循环输出信息 单个table

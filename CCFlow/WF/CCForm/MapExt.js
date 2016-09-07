@@ -170,12 +170,12 @@ function getoffset(e) {
 }
 
 /* 内置的Pop自动返回值. */
-function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK) {
+function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK, width, height, title) {
     //update by dgq 修改路径
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
     var wfpreHref = GetLocalWFPreHref();
     url = wfpreHref + '/WF/CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
-    var v = window.showModalDialog(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
+    var v = window.showModalDialog(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
     if (v == null || v == '' || v == 'NaN') {
         return;
     }
@@ -265,9 +265,11 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
         },
         complete: function (XMLHttpRequest, textStatus) {
             //HideLoading();
+            //alert(XMLHttpRequest);
         },
-        error: function () {
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
             //请求出错处理
+            var msg = textStatus;
         }
     });
 }

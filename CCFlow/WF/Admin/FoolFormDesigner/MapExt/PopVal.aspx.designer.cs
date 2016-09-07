@@ -121,6 +121,33 @@ namespace CCFlow.WF.MapDef {
         protected global::System.Web.UI.WebControls.TextBox TB_URL;
         
         /// <summary>
+        /// TB_Width 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TB_Width;
+        
+        /// <summary>
+        /// TB_Height 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TB_Height;
+        
+        /// <summary>
+        /// TB_Title 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TB_Title;
+        
+        /// <summary>
         /// Btn_Save 控件。
         /// </summary>
         /// <remarks>

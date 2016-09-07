@@ -23,7 +23,17 @@
             return;
         }
     </script>
-    <style type="text/css">
+    <style type="text/css">        
+        a
+        {
+            color:#0066CC;
+            text-decoration:none;
+        }
+        a:hover
+        {
+            color:#0084C5;
+            text-decoration:underline;
+        }
         table
         {
             margin: 0px;

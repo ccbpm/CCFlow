@@ -36,7 +36,7 @@
             $.ajax({ url: "Do.aspx?ActionType=Focus&WorkID=" + workid, async: false });
         }
 
-        function ReturnVal(ctrl, url, winName) {
+        function ReturnVal(ctrl, url, winName, width, height, title) {
             if (url == "")
                 return;
             //update by dgq 2013-4-12 判断有没有？
@@ -57,9 +57,9 @@
             //OpenJbox();
             try {
                 $.jBox("iframe:" + url, {
-                    title: '选择窗',
-                    width: 760,
-                    height: 450,
+                    title: title,
+                    width: width || 760,
+                    height: height || 450,
                     buttons: { '确定': 'ok' },
                     submit: function (v, h, f) {
                         var iframeWin = h[0].firstChild.contentWindow;

@@ -48,6 +48,10 @@
                 return;
             }
 
+            $('#aa').panel('refresh', "TransferCustomSimple.aspx?flowNo=" + flowNo);
+
+            return;
+
             var v = $('#workid').textbox('getValue');
             if (!v || v.length == 0) {
                 $.messager.alert('错误', '请输入workid！', 'error');
@@ -214,7 +218,8 @@
                     流转配置：
                 </td>
                 <td style="padding: 5px;">
-                    <table id="nodes" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%;
+                    <div class="easyui-panel" id="aa" style="height:auto;width:100%;"></div>
+                    <%--<table id="nodes" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%;
                         line-height: 26px;">
                         <tr>
                             <td style="width: 80px; text-align: center;" class="GroupTitle">
@@ -230,7 +235,7 @@
                                 预计处理日期
                             </td>
                         </tr>
-                    </table>
+                    </table>--%>
                 </td>
             </tr>
         </table>

@@ -311,6 +311,7 @@ namespace CCFlow.WF.WorkOpt
             {
                 //2.发起流程
                 workID = Dev2Interface.Node_CreateStartNodeWork(flowNo, null, null, flowStarter);
+                //Dev2Interface.Node_CreateBlankWork("001");
 
                 //3.发送
                 sres = Dev2Interface.Node_SendWork(flowNo, workID, null, null, 0, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null);

@@ -129,9 +129,9 @@ namespace CCFlow.WF
                 sms.RetrieveByAttr(SMSAttr.MyPK, MyPK);
 
                 sms.MyPK = DBAccess.GenerGUID();
-                sms.RDT = DataType.CurrentDataTime;  
+                sms.RDT = DataType.CurrentDataTime;
+                sms.SendToEmpNo = sms.Sender;   //先赋发给谁，然后再赋发送人
                 sms.Sender = WebUser.No;
-                sms.SendToEmpNo = sms.Sender;
 
                 sms.Title = title;
                 sms.DocOfEmail = doc;

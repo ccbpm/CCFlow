@@ -128,6 +128,12 @@
     <asp:TextBox ID="TB_URL" runat="server" ToolTip="参数支持ccbpm的表达式,点击标签显示帮助."  Width="95%"></asp:TextBox>
 </fieldset>
 
+<fieldset style="line-height:30px">
+<legend>其它配置</legend>
+宽度：<asp:TextBox ID="TB_Width" runat="server"  Width="100px" Text="760"></asp:TextBox>&nbsp;&nbsp;
+高度：<asp:TextBox ID="TB_Height" runat="server"  Width="100px" Text="450"></asp:TextBox><br />
+标题：<asp:TextBox ID="TB_Title" runat="server"  Width="300px" Text="选择"></asp:TextBox>
+</fieldset>
   </td>
 
    

@@ -12,7 +12,7 @@ function CtrlFactory(sId) {
         CtrlFactory.prototype.getQueryString = function (sName) {
             ///<summary>获取URL中的参数值</summary>
             ///<param name="sName" type="String">url参数名</param>
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var reg = new RegExp("(^|&)" + sName + "=([^&]*)(&|$)", "i");
             var r = window.location.search.substr(1).match(reg);
             if (r != null) return encodeURIComponent(r[2]); return null;
         }
@@ -44,6 +44,42 @@ function CtrlFactory(sId) {
                     }
                 }
             });
+        }
+
+        CtrlFactory.prototype.disabled = function (sCtrlId) {
+            ///<summary>将指定控件设置为不可编辑</summary>
+            ///<param name="sCtrlId" type="String">对象ID，必须是准确的ID，包含DDL_/TB_等</param>
+            $('#' + sCtrlId).attr('disabled', 'disabled');
+        }
+
+        CtrlFactory.prototype.getValue = function (sCtrlId) {
+            ///<summary>获取控件的值</summary>
+            ///<param name="sCtrlId" type="String">对象ID，必须是准确的ID，包含DDL_/TB_等</param>
+            var ctrl = $('#' + sCtrlId);
+
+            if (ctrl.length == 0) {
+                alert(sCtrlId + " 控件不存在！");
+                return null;
+            }
+
+            return ctrl.val();
+        }
+
+        CtrlFactory.prototype.getText = function (sCtrlId) {
+            ///<summary>获取控件的文本</summary>
+            ///<param name="sCtrlId" type="String">对象ID，必须是准确的ID，包含DDL_/TB_等</param>
+            var ctrl = $('#' + sCtrlId);
+
+            if (ctrl.length == 0) {
+                alert(sCtrlId + " 控件不存在！");
+                return null;
+            }
+
+            if (sCtrlId.indexOf("DDL_") == 0) {
+                return ctrl[0].selectedIndex != -1 ? ctrl[0].options[ctrl[0].selectedIndex].text : '';
+            }
+
+            return ctrl.text();
         }
 
         //增加控件
@@ -144,7 +180,7 @@ function CtrlFactory(sId) {
             ///<param name="sCtrlId" type="String">对象ID</param>
             ///<param name="sAttr" type="String">文本框的属性</param>
             ///<param name="sValue" type="String">文本框的值</param>
-            var ctrlId = sCtrlId;
+            var ctrlId = 'TB_' + sCtrlId;
             var html = '<input type="text" id="' + ctrlId + '"' + (sAttr ? (' ' + sAttr) : '') + ' value="' + sValue + '" />';
 
             if (sParentCtrlId) {

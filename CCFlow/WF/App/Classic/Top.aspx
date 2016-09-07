@@ -11,6 +11,16 @@
     {
         margin: 0 auto;
     }
+    a
+    {
+        color:#0066CC;
+        text-decoration:none;
+    }
+    a:hover
+    {
+        color:#0084C5;
+        text-decoration:underline;
+    }
     .top
     {
         width: 100%;

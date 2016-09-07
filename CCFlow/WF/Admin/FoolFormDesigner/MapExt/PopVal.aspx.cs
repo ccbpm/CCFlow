@@ -87,6 +87,11 @@ namespace CCFlow.WF.MapDef
                 if (ext.PopValFormat == 2)
                     this.RB_PopValFormat_2.Checked = true;
 
+                //宽度/高度/标题
+                this.TB_Width.Text = ext.W == 0 ? "760" : ext.W.ToString();
+                this.TB_Height.Text = ext.H == 0 ? "450" : ext.H.ToString();
+                this.TB_Title.Text = ext.GetParaString("Title");
+                
                 //数据源分组sql
                 this.TB_Group.Text = ext.Tag1;
                 //数据源sql
@@ -162,6 +167,21 @@ namespace CCFlow.WF.MapDef
                 ext.Doc = this.TB_URL.Text;
             else
                 ext.Doc = "";
+
+            //弹窗宽度/高度
+            int d;
+            if (!string.IsNullOrWhiteSpace(this.TB_Width.Text) && int.TryParse(this.TB_Width.Text, out d))
+                ext.W = d;
+            else
+                ext.W = 760;
+
+            if (!string.IsNullOrWhiteSpace(this.TB_Height.Text) && int.TryParse(this.TB_Height.Text, out d))
+                ext.H = d;
+            else
+                ext.H = 450;
+
+            //弹窗标题
+            ext.SetPara("Title", this.TB_Title.Text);
 
             //操作的文本框
             ext.AttrOfOper = this.RefNo;

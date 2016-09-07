@@ -55,7 +55,7 @@
         }
 
         $(function () {
-            if (namectrlid.length > 0 && valctrlid.length > 0) {
+            if (namectrlid && namectrlid.length > 0 && valctrlid && valctrlid.length > 0) {
                 var lst_to = document.getElementById("lbRight");
                 var names = $(window.parent.document).find('[id$="_TB_' + namectrlid + '"]').val().split(',');
                 var values = $(window.parent.document).find('[id$="_TB_' + valctrlid + '"]').val().split(',');

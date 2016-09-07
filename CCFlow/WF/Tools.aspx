@@ -3,7 +3,18 @@
 <%@ Register src="UC/Tools.ascx" tagname="Tools" tagprefix="uc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-
+    <style type="text/css">    
+        a
+        {
+            color:#0066CC;
+            text-decoration:none;
+        }
+        a:hover
+        {
+            color:#0084C5;
+            text-decoration:underline;
+        }
+    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <uc1:Tools ID="Tools1" runat="server" />

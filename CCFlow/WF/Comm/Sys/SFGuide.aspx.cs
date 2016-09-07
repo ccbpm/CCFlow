@@ -100,7 +100,70 @@ namespace CCFlow.WF.Comm.Sys
                             sftable = new SFTable(sfno);
                             dt = sftable.ToDataTableField("info");
 
+                            foreach (DataColumn col in dt.Columns)
+                                col.ColumnName = col.ColumnName.ToUpper();
+
                             resultString = ReturnJson(true, BP.Tools.Json.ToJson(dt), true);// "{\"success\": true, \"data\": " + +"\"}";
+                        }
+                        break;
+                    case "saveinfo":    //保存
+                        bool isnew = Convert.ToBoolean(Request.QueryString["isnew"]);
+                        sfno = Request.QueryString["NO"];
+                        string name = Request.QueryString["NAME"];
+                        int srctype = int.Parse(Request.QueryString["SRCTYPE"]);
+                        int codestruct = int.Parse(Request.QueryString["CODESTRUCT"]);
+                        string defval = Request.QueryString["DEFVAL"];
+                        string sfdbsrc = Request.QueryString["FK_SFDBSRC"];
+                        string srctable = Request.QueryString["SRCTABLE"];
+                        string columnvalue = Request.QueryString["COLUMNVALUE"];
+                        string columntext = Request.QueryString["COLUMNTEXT"];
+                        string parentvalue = Request.QueryString["PARENTVALUE"];
+                        string tabledesc = Request.QueryString["TABLEDESC"];
+                        string selectstatement = Request.QueryString["SELECTSTATEMENT"];
+
+                        //判断是否已经存在
+                        sftable = new SFTable();
+                        sftable.No = sfno;
+
+                        if (isnew && sftable.RetrieveFromDBSources() > 0)
+                        {
+                            resultString = ReturnJson(false, "字典编号" + sfno + "已经存在，不允许重复。", false);
+                        }
+                        else
+                        {
+                            sftable.Name = name;
+                            sftable.SrcType = (SrcType) srctype;
+                            sftable.CodeStruct = (CodeStruct) codestruct;
+                            sftable.DefVal = defval;
+                            sftable.FK_SFDBSrc = sfdbsrc;
+                            sftable.SrcTable = srctable;
+                            sftable.ColumnValue = columnvalue;
+                            sftable.ColumnText = columntext;
+                            sftable.ParentValue = parentvalue;
+                            sftable.TableDesc = tabledesc;
+                            sftable.SelectStatement = selectstatement;
+
+                            switch(sftable.SrcType)
+                            {
+                                case SrcType.BPClass:
+                                    string[] nos = sftable.No.Split('.');
+                                    sftable.FK_Val = "FK_" + nos[nos.Length - 1].TrimEnd('s');
+                                    sftable.FK_SFDBSrc = "local";
+                                    break;
+                                default:
+                                    sftable.FK_Val = "FK_" + sftable.No;
+                                    break;
+                            }
+
+                            try
+                            {
+                                sftable.Save();
+                                resultString = ReturnJson(true, "保存成功！", false);
+                            }
+                            catch(Exception ex)
+                            {
+                                resultString = ReturnJson(false, ex.Message, false);
+                            }
                         }
                         break;
                     case "getclass": //获取类列表
@@ -116,6 +179,7 @@ namespace CCFlow.WF.Comm.Sys
                             ArrayList arr = null;
                             SFTables sfs = new SFTables();
                             Entities ens = null;
+                            SFTable sf = null;
                             sfs.Retrieve(SFTableAttr.SrcType, (int)SrcType.BPClass);
 
                             switch (st)
@@ -133,8 +197,9 @@ namespace CCFlow.WF.Comm.Sys
                             foreach (BP.En.Entity en in arr)
                             {
                                 ens = en.GetNewEntities;
+                                sf = sfs.GetEntityByKey(ens.ToString()) as SFTable;
 
-                                if (sfs.GetEntityByKey(ens.ToString()) != null ||
+                                if ((sf != null && sf.No != sfno) ||
                                     string.IsNullOrWhiteSpace(ens.ToString()))
                                     continue;
 
@@ -167,11 +232,11 @@ namespace CCFlow.WF.Comm.Sys
                         foreach (DataColumn col in dt.Columns)
                             col.ColumnName = col.ColumnName.ToUpper();
 
-                        if(!onlyWS)
+                        if (!onlyWS)
                         {
                             List<DataRow> wsRows = new List<DataRow>();
 
-                            foreach(DataRow r in dt.Rows)
+                            foreach (DataRow r in dt.Rows)
                             {
                                 if (Equals(r["DBSRCTYPE"], (int)DBSrcType.WebServices))
                                     wsRows.Add(r);
@@ -209,7 +274,7 @@ namespace CCFlow.WF.Comm.Sys
                         {
                             resultString = ReturnJson(false, "参数不正确", false);
                         }
-                        else if( string.IsNullOrWhiteSpace(table))
+                        else if (string.IsNullOrWhiteSpace(table))
                         {
                             resultString = ReturnJson(true, "[]", true);
                         }
@@ -221,7 +286,7 @@ namespace CCFlow.WF.Comm.Sys
                             foreach (DataColumn col in dt.Columns)
                                 col.ColumnName = col.ColumnName.ToUpper();
 
-                            foreach(DataRow r in dt.Rows)
+                            foreach (DataRow r in dt.Rows)
                             {
                                 r["NAME"] = r["NO"] +
                                             (r["NAME"] == null || r["NAME"] == DBNull.Value ||
@@ -243,8 +308,8 @@ namespace CCFlow.WF.Comm.Sys
                         else
                         {
                             SFDBSrc sr = new SFDBSrc(src);
-                            
-                            if(sr.DBSrcType != DBSrcType.WebServices)
+
+                            if (sr.DBSrcType != DBSrcType.WebServices)
                             {
                                 resultString = ReturnJson(false, "数据源“" + sr.Name + "”不是WebService数据源", false);
                             }

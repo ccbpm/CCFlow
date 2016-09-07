@@ -118,9 +118,9 @@ namespace BP.Sys
             FrmAttachment ath = new FrmAttachment();
             ath.FK_MapData = fk_mapdata;
             ath.NoOfObj = no;
-
             ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
             ath.RetrieveFromDBSources();
+
             ath.UploadType = AttachmentUploadType.Multi;
             ath.Name = name;
             ath.X = x;
@@ -147,41 +147,8 @@ namespace BP.Sys
             dtl.FK_MapData = fk_mapdata;
             dtl.Save();
 
-            #region 检查必要的字段是否存在.
-            MapAttr attr = new MapAttr();
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, dtl.No) == false)
-            {
-                attr.FK_MapData = dtl.No;
-                attr.KeyOfEn = "OID";
-                attr.Name = "关联主键";
-                attr.MyDataType = BP.DA.DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.DefVal = "0";
-                attr.HisEditType = BP.En.EditType.Readonly;
-                attr.Insert();
-            }
-
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, "RefPK", MapAttrAttr.FK_MapData, dtl.No) == false)
-            {
-                attr.FK_MapData = dtl.No;
-                attr.KeyOfEn = "RefPK";
-                attr.Name = "关联主键";
-                attr.MyDataType = BP.DA.DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.DefVal = "0";
-                attr.HisEditType = BP.En.EditType.Readonly;
-                attr.Insert();
-            }
-            #endregion 检查必要的字段是否存在.
-
-
-
+            //初始化他的map.
+            dtl.IntMapAttrs();
         }
         /// <summary>
         /// 创建一个外部数据字段
@@ -301,6 +268,161 @@ namespace BP.Sys
                 }
             }
             ma.Save();
+        }
+        /// <summary>
+        /// 创建字段
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="field"></param>
+        /// <param name="fieldDesc"></param>
+        /// <param name="mydataType"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="colSpan"></param>
+        public static void NewField(string frmID, string field, string fieldDesc,int mydataType, float x, float y, int colSpan = 1)
+        {
+            MapAttr ma = new MapAttr();
+            ma.FK_MapData = frmID;
+            ma.KeyOfEn = field;
+            ma.Name = fieldDesc;
+            ma.MyDataType = mydataType;
+            ma.X = x;
+            ma.Y =y;
+            ma.Insert();
+
+        }
+        public static void NewEnumField(string fk_mapdata, string field, string fieldDesc, string enumKey, UIContralType ctrlType,
+           float x, float y, int colSpan = 1)
+        {
+
+            MapAttr ma = new MapAttr();
+            ma.FK_MapData = fk_mapdata; 
+            ma.KeyOfEn =field;
+            ma.Name = fieldDesc; 
+            ma.MyDataType = DataType.AppInt;
+            ma.X =x;
+            ma.Y = y;
+            ma.UIIsEnable = true;
+            ma.LGType = FieldTypeS.Enum;
+                ma.UIContralType = ctrlType ;
+                ma.UIBindKey = enumKey;
+            ma.Insert();
+
+            if (ma.UIContralType == UIContralType.RadioBtn)
+            {
+                SysEnums ses = new SysEnums(ma.UIBindKey);
+                int idx = 0;
+                foreach (SysEnum item in ses)
+                {
+                    idx++;
+                    FrmRB rb = new FrmRB();
+                    rb.FK_MapData = ma.FK_MapData;
+                    rb.KeyOfEn = ma.KeyOfEn;
+                    rb.EnumKey = ma.UIBindKey;
+                    rb.Lab = item.Lab;
+                    rb.X = ma.X;
+
+                    //让其变化y值.
+                    rb.Y = ma.Y + idx * 30;
+                    rb.Insert();
+                }
+            }
+        }
+        /// <summary>
+        /// 创建字段分组
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="gKey"></param>
+        /// <param name="gName"></param>
+        /// <returns></returns>
+        public static string NewCheckGroup(string frmID, string gKey, string gName)
+        {
+            //string gKey = v1;
+            //string gName = v2;
+            //string enName1 = v3;
+
+            MapAttr attrN = new MapAttr();
+            int i = attrN.Retrieve(MapAttrAttr.FK_MapData, frmID, MapAttrAttr.KeyOfEn, gKey + "_Note");
+            i += attrN.Retrieve(MapAttrAttr.FK_MapData, frmID, MapAttrAttr.KeyOfEn, gKey + "_Checker");
+            i += attrN.Retrieve(MapAttrAttr.FK_MapData, frmID, MapAttrAttr.KeyOfEn, gKey + "_RDT");
+            if (i > 0)
+                return "error:前缀已经使用：" + gKey + " ， 请确认您是否增加了这个审核分组或者，请您更换其他的前缀。";
+
+            GroupField gf = new GroupField();
+            gf.Lab = gName;
+            gf.EnName = frmID;
+            gf.Insert();
+
+            attrN = new MapAttr();
+            attrN.FK_MapData = frmID;
+            attrN.KeyOfEn = gKey + "_Note";
+            attrN.Name = "审核意见";
+            attrN.MyDataType = DataType.AppString;
+            attrN.UIContralType = UIContralType.TB;
+            attrN.UIIsEnable = true;
+            attrN.UIIsLine = true;
+            attrN.MaxLen = 4000;
+            attrN.GroupID = gf.OID;
+            attrN.UIHeight = 23 * 3;
+            attrN.Idx = 1;
+            attrN.Insert();
+
+            attrN = new MapAttr();
+            attrN.FK_MapData = frmID;
+            attrN.KeyOfEn = gKey + "_Checker";
+            attrN.Name = "审核人";// "审核人";
+            attrN.MyDataType = DataType.AppString;
+            attrN.UIContralType = UIContralType.TB;
+            attrN.MaxLen = 50;
+            attrN.MinLen = 0;
+            attrN.UIIsEnable = true;
+            attrN.UIIsLine = false;
+            attrN.DefVal = "@WebUser.No";
+            attrN.UIIsEnable = false;
+            attrN.GroupID = gf.OID;
+            attrN.IsSigan = true;
+            attrN.Idx = 2;
+            attrN.Insert();
+
+            attrN = new MapAttr();
+            attrN.FK_MapData = frmID;
+            attrN.KeyOfEn = gKey + "_RDT";
+            attrN.Name = "审核日期"; // "审核日期";
+            attrN.MyDataType = DataType.AppDateTime;
+            attrN.UIContralType = UIContralType.TB;
+            attrN.UIIsEnable = true;
+            attrN.UIIsLine = false;
+            attrN.DefVal = "@RDT";
+            attrN.UIIsEnable = false;
+            attrN.GroupID = gf.OID;
+            attrN.Idx = 3;
+            attrN.Insert();
+
+            /*
+             * 判断是否是节点设置的审核分组，如果是就为节点设置焦点字段。
+             */
+            frmID = frmID.Replace("ND", "");
+            int nodeid = 0;
+            try
+            {
+                nodeid = int.Parse(frmID);
+            }
+            catch
+            {
+                //转化不成功就是不是节点表单字段.
+                return "error:只能节点表单才可以使用审核分组组件。";
+            }
+            return null;
+
+            /*
+            Node nd = new Node();
+            nd.NodeID = nodeid;
+            if (nd.RetrieveFromDBSources() != 0 && string.IsNullOrEmpty(nd.FocusField) == true)
+            {
+                nd.FocusField = "@" + gKey + "_Note";
+                nd.Update();
+            }
+             * */
         }
         #endregion 创建修改字段.
 
@@ -425,442 +547,51 @@ namespace BP.Sys
                 string shape = control["CCForm_Shape"].ToString();
                 string ctrlID = control["CCForm_MyPK"].ToString();
                 JsonData properties = control["properties"];  //属性集合
+               
 
                 #region 装饰类控件.
-                if (shape == "Label")
+                switch (shape)
                 {
-                    #region 标签
-                    DataRow drLab = dtLabel.NewRow();
-
-                    drLab["MYPK"] = control["CCForm_MyPK"];
-                    drLab["FK_MAPDATA"] = fk_mapdata;
-
-                    //坐标.
-                    JsonData style = control["style"];
-                    JsonData vector = style["gradientBounds"];
-                    drLab["X"] = vector[0].ToJson();
-                    drLab["Y"] = vector[1].ToJson();
-
-                    StringBuilder fontStyle = new StringBuilder();
-                    for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                    {
-                        JsonData property = properties[iProperty];
-                        if (property == null || !property.Keys.Contains("type") || property["type"] == null)
-                            continue;
-
-                        string type=property["type"].ToString().Trim();
-
-                        string val=null;
-                        if (property["PropertyValue"]!=null)
-                            val = property["PropertyValue"].ToString();
-
-                        switch (type)
-                        {
-                            case "SingleText":
-                                drLab["TEXT"] = val == null ? "" : val.ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
-                                break;
-                            case "Color":
-                                drLab["FONTCOLOR"] = val == null ? "#FF000000" : val.ToString();
-                                fontStyle.Append(string.Format("color:{0};", drLab["FONTCOLOR"]));
-                                break;
-                            case "TextFontFamily":
-                                drLab["FontName"] = val == null ? "Portable User Interface" : val.ToString();
-                                if (val != null)
-                                    fontStyle.Append(string.Format("font-family:{0};", property["PropertyValue"].ToJson()));
-                                break;
-                            case "TextFontSize":
-                                drLab["FONTSIZE"] = val == null ? "14" : val.ToString();
-                                fontStyle.Append(string.Format("font-size:{0};", drLab["FONTSIZE"]));
-                                break;
-                            case "FontWeight":
-                                if (val == null || val.ToString() == "normal")
-                                {
-                                    drLab["IsBold"] = "0";
-                                    fontStyle.Append(string.Format("font-weight:normal;"));
-                                }
-                                else
-                                {
-                                    drLab["IsBold"] = "1";
-                                    fontStyle.Append(string.Format("font-weight:{0};", val));
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                    if (drLab["TEXT"] == null || drLab["TEXT"] == "")
-                    {
-                        /*如果没有取到标签， 从这里获取，系统有一个. */
-                        JsonData primitives = control["primitives"][0];
-                        drLab["TEXT"] = primitives["str"].ToString().Trim();
-                        drLab["FontName"] = primitives["font"].ToString().Trim();
-                        drLab["FontSize"] = primitives["size"].ToString().Trim();
-                    }
-
-                    drLab["FontStyle"] = fontStyle.ToString();
-                    drLab["IsItalic"] = "0";//暂不处理斜体
-                    dtLabel.Rows.Add(drLab);
-                    #endregion end 标签
-                }
-
-                if (shape == "Button")
-                {
-                    #region 按钮 Button
-                    DataRow drBtn = dtBtn.NewRow();
-
-                    drBtn["MYPK"] = control["CCForm_MyPK"];
-                    drBtn["FK_MAPDATA"] = fk_mapdata;
-                    //坐标
-                    JsonData style = control["style"];
-                    JsonData vector = style["gradientBounds"];
-                    drBtn["X"] = vector[0].ToJson();
-                    drBtn["Y"] = vector[1].ToJson();
-                    drBtn["ISVIEW"] = "1";
-                    drBtn["ISENABLE"] = "1";
-                    for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                    {
-                        JsonData property = properties[iProperty];
-                        if (property == null || !property.Keys.Contains("property") || property["property"] == null)
-                            continue;
-
-                        string val = null;
-                        if (property["PropertyValue"] != null)
-                            val = property["PropertyValue"].ToString();
-
-                        string propertyBtn=property["property"].ToString();
-                        switch (propertyBtn)
-                        {
-                            case "primitives.1.str":
-                                drBtn["TEXT"] = val == null ? "" : val.Replace(" ", "&nbsp;").Replace("\n", "@");
-                                break;
-                            case "ButtonEvent":
-                                drBtn["EVENTTYPE"] = val == null ? "0" : val;
-                                break;
-                            case "BtnEventDoc":
-                                drBtn["EVENTCONTEXT"] = val == null ? "" : val;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    dtBtn.Rows.Add(drBtn);
-                    #endregion
-                }
-
-                if (shape == "HyperLink")
-                {
-                    #region 超链接 HyperLink
-                    DataRow drLink = dtLink.NewRow();
-
-                    drLink["MYPK"] = control["CCForm_MyPK"];
-                    drLink["FK_MAPDATA"] = fk_mapdata;
-                    //坐标
-                    JsonData vector = control["style"]["gradientBounds"];
-                    drLink["X"] = vector[0].ToJson();
-                    drLink["Y"] = vector[1].ToJson();
-
-                    //属性集合
-                    StringBuilder fontStyle = new StringBuilder();
-                    for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                    {
-                        JsonData property = properties[iProperty];
-                        if (property == null || !property.Keys.Contains("property") || property["property"] == null)
-                            continue;
-
-                        string propertyLink = property["property"].ToString();
-                        var valLink = property["PropertyValue"];
-
-                        switch (propertyLink)
-                        {
-                            case "primitives.0.str":
-                            case "SingleText":
-                                drLink["TEXT"] = valLink == null ? "" : valLink.ToString();
-                                break;
-                            case "primitives.0.style.fillStyle":
-                                drLink["FONTCOLOR"] = valLink == null ? "#FF000000" : valLink.ToString();
-                                fontStyle.Append(string.Format("color:{0};", drLink["FONTCOLOR"]));
-                                break;
-                            case "FontName":
-                                drLink["FontName"] = valLink == null ? "Portable User Interface" : valLink.ToString();
-                                if (valLink != null)
-                                    fontStyle.Append(string.Format("font-family:{0};", valLink.ToJson()));
-                                continue;
-                            case "FontSize":
-                                drLink["FONTSIZE"] = valLink == null ? "14" : valLink.ToString();
-                                fontStyle.Append(string.Format("font-size:{0};", drLink["FONTSIZE"]));
-                                continue;
-                            case "primitives.0.fontWeight":
-                                if (valLink == null || valLink.ToString() == "normal")
-                                {
-                                    drLink["IsBold"] = "0";
-                                    fontStyle.Append(string.Format("font-weight:normal;"));
-                                }
-                                else
-                                {
-                                    drLink["IsBold"] = "1";
-                                    fontStyle.Append(string.Format("font-weight:{0};", valLink.ToString()));
-                                }
-                                continue;
-                            case "FontColor":
-                                drLink["FontColor"] = valLink == null ? "" : valLink.ToString();
-                                continue;
-                            case "URL":
-                                drLink["URL"] = valLink == null ? "" : valLink.ToString();
-                                continue;
-                            case "WinOpenModel":
-                                drLink["TARGET"] = valLink == null ? "_blank" : valLink.ToString();
-                                continue;
-                            default:
-                                break;
-                        }
-                    }
-                    drLink["FontStyle"] = fontStyle.ToString();
-                    drLink["IsItalic"] = "0"; //斜体暂不处理.
-                    dtLink.Rows.Add(drLink);
-                    #endregion
-                }
-
-                if (shape == "Image")
-                {
-                    #region 装饰图片  Image
-                    DataRow drImg = dtImg.NewRow();
-
-                    drImg["MYPK"] = control["CCForm_MyPK"];
-                    drImg["FK_MAPDATA"] = fk_mapdata;
-                    drImg["IMGAPPTYPE"] = "0";
-                    drImg["ISEDIT"] = "1";
-                    drImg["NAME"] = drImg["MYPK"];
-                    drImg["ENPK"] = drImg["MYPK"];
-                    //坐标
-                    JsonData vector = control["style"]["gradientBounds"];
-                    drImg["X"] = vector[0].ToJson();
-                    drImg["Y"] = vector[1].ToJson();
-                    //图片高、宽
-                    decimal minX = decimal.Parse(vector[0].ToJson());
-                    decimal minY = decimal.Parse(vector[1].ToJson());
-                    decimal maxX = decimal.Parse(vector[2].ToJson());
-                    decimal maxY = decimal.Parse(vector[3].ToJson());
-                    decimal imgWidth = maxX - minX;
-                    decimal imgHeight = maxY - minY;
-
-                    drImg["W"] = imgWidth.ToString("0.00");
-                    drImg["H"] = imgHeight.ToString("0.00");
-
-                    StringBuilder fontStyle = new StringBuilder();
-                    for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                    {
-                        JsonData property = properties[iProperty];
-                        if (property == null || !property.Keys.Contains("property") || property["property"] == null)
-                            continue;
-
-                        if (property["property"].ToString() == "LinkURL")
-                        {
-                            //图片连接到
-                            drImg["LINKURL"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
-                        }
-                        else if (property["property"].ToString() == "WinOpenModel")
-                        {
-                            //打开窗口方式
-                            drImg["LINKTARGET"] = property["PropertyValue"] == null ? "_blank" : property["PropertyValue"].ToString();
-                        }
-                        else if (property["property"].ToString() == "ImgAppType")
-                        {
-                            //应用类型：0本地图片，1指定路径
-                            drImg["SRCTYPE"] = property["PropertyValue"] == null ? "0" : property["PropertyValue"].ToString();
-                        }
-                        else if (property["property"].ToString() == "ImgPath")
-                        {
-                            //指定图片路径
-                            drImg["IMGURL"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
-                        }
-                    }
-
-                    //ImageFrame 本地图片路径
-                    JsonData primitives = control["primitives"];
-                    foreach (JsonData primitive in primitives)
-                    {
-                        if (primitive["oType"] == null)
-                            continue;
-                        if (primitive["oType"].ToJson() == "ImageFrame")
-                        {
-                            drImg["IMGPATH"] = primitive == null ? "" : primitive["url"].ToString();
-                        }
-                    }
-
-                    dtImg.Rows.Add(drImg);
-                    #endregion Image
+                    case "Label": //保存标签.
+                        BP.Sys.CCFormParse.SaveLabel(fk_mapdata, dtLabel, control, properties);
+                        continue;
+                    case "Button": //保存Button.
+                        BP.Sys.CCFormParse.SaveButton(fk_mapdata, dtLabel, control, properties);
+                        continue;
+                    case "HyperLink": //保存Button.
+                        BP.Sys.CCFormParse.SaveHyperLink(fk_mapdata, dtLabel, control, properties);
+                        continue;
+                    case "Image": //保存Button.
+                        BP.Sys.CCFormParse.SaveImage(fk_mapdata, dtLabel, control, properties);
+                        continue;
+                    default:
+                        break;
                 }
                 #endregion 装饰类控件.
 
 
                 #region 数据类控件.
-                if (shape.Contains("TextBox"))
+                if (shape.Contains("TextBox")==true)
                 {
-                    DataRow drAttr = dtMapAttr.NewRow();
-
-                    drAttr["KeyOfEn"] = ctrlID;
-                    drAttr["MYPK"] = fk_mapdata + "_" + ctrlID;
-                    drAttr["FK_MAPDATA"] = fk_mapdata;
-
-                    switch (shape)
-                    {
-                        case "TextBoxStr":
-                        case "TextBoxSFTable":
-                            drAttr["MyDataType"] = DataType.AppString;
-                            break;
-                        case "TextBoxInt":
-                        case "TextBoxEnum":
-                            drAttr["MyDataType"] = DataType.AppInt;
-                            break;
-                        case "TextBoxFloat":
-                            drAttr["MyDataType"] = DataType.AppFloat;
-                            break;
-                        case "TextBoxMoney":
-                            drAttr["MyDataType"] = DataType.AppMoney;
-                            break;
-                        case "TextBoxDate":
-                            drAttr["MyDataType"] = DataType.AppDate;
-                            break;
-                        case "TextBoxDateTime":
-                            drAttr["MyDataType"] = DataType.AppDateTime;
-                            break;
-                        default:
-                            break;
-                    }
-
-                    //坐标
-                    JsonData style = control["style"];
-                    JsonData vector = style["gradientBounds"];
-                    drAttr["X"] = vector[0].ToJson();
-                    drAttr["Y"] = vector[1].ToJson();
-
-                    for (int iProperty = 0; iProperty < properties.Count; iProperty++)
-                    {
-                        JsonData property = properties[iProperty];  //获得一个属性.
-                        if (property == null || !property.Keys.Contains("property")
-                            || property["property"] == null
-                            || property["property"].ToString() == "group")
-                            continue;
-
-                        string val = null;
-                        if (property["PropertyValue"] != null)
-                            val = property["PropertyValue"].ToString();
-                        string propertyName = property["property"].ToString();
-                        switch (propertyName)
-                        {
-                            case "Name":
-                            case "MinLen":
-                            case "MaxLen":
-                            case "DefVal":
-                                //case "UIWidth":
-                                //case "UIHeight":
-                                drAttr[propertyName] = val;
-                                break;
-                            case "UIIsEnable":
-                            case "UIVisible":
-                                string type = property["type"].ToString();
-                                drAttr[propertyName] = val;
-                                break;
-                            case "FieldText":
-                                drAttr["Name"] = val;
-                                break;
-                            case "UIIsInput":
-                                if (val == "true")
-                                    drAttr["UIIsInput"] = "1";
-                                else
-                                    drAttr["UIIsInput"] = "0";
-                                break;
-                            default:
-                                break;
-                        }
-
-                        //Textbox 高、宽.
-                        decimal minX = decimal.Parse(vector[0].ToJson());
-                        decimal minY = decimal.Parse(vector[1].ToJson());
-                        decimal maxX = decimal.Parse(vector[2].ToJson());
-                        decimal maxY = decimal.Parse(vector[3].ToJson());
-                        decimal imgWidth = maxX - minX;
-                        decimal imgHeight = maxY - minY;
-                        drAttr["UIWidth"] = imgWidth.ToString("0.00");
-                        drAttr["UIHeight"] = imgHeight.ToString("0.00");
-
-
-                        //控件类型.
-                        switch (shape)
-                        {
-                            case "TextBoxStr":
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppString;
-                                drAttr["LGTYPE"] = "0";
-                                drAttr["UICONTRALTYPE"] = "0";
-                                break;
-                            case "TextBoxInt":
-                            case "TextBoxBoolean":
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppInt;
-                                drAttr["LGTYPE"] = "0";
-                                drAttr["UICONTRALTYPE"] = "0";
-                                drAttr["MinLen"] = "0";
-                                drAttr["MaxLen"] = "16";
-                                break;
-                            case "TextBoxFloat":
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppFloat;
-                                drAttr["LGTYPE"] = "0";
-                                drAttr["UICONTRALTYPE"] = "0";
-                                drAttr["MinLen"] = "0";
-                                drAttr["MaxLen"] = "16";
-                                break;
-                            case "TextBoxDouble":
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppDouble;
-                                drAttr["LGTYPE"] = "0";
-                                drAttr["UICONTRALTYPE"] = "0";
-                                drAttr["MinLen"] = "0";
-                                drAttr["MaxLen"] = "16";
-                                break;
-                            case "TextBoxMoney": //金额类型.
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppMoney;
-                                drAttr["LGTYPE"] = "0";
-                                drAttr["UICONTRALTYPE"] = "0";
-                                drAttr["MinLen"] = "0";
-                                drAttr["MaxLen"] = "16";
-                                break;
-                            case "TextBoxDate": //日期.
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppDate;
-                                drAttr["LGTYPE"] = "0";
-                                drAttr["UICONTRALTYPE"] = "0";
-                                drAttr["MinLen"] = "0";
-                                drAttr["MaxLen"] = "16";
-                                break;
-                            case "TextBoxDateTime": //金额类型.
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppDateTime;
-                                drAttr["LGTYPE"] = "0";
-                                drAttr["UICONTRALTYPE"] = "0";
-                                drAttr["MinLen"] = "0";
-                                drAttr["MaxLen"] = "16";
-                                break;
-                            case "DropDownListEnum": //枚举类型.
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppInt;
-                                drAttr["LGTYPE"] = "1";
-                                drAttr["UICONTRALTYPE"] = "1";
-                                drAttr["MinLen"] = "0";
-                                drAttr["MaxLen"] = "16";
-                                break;
-                            case "DropDownListTable": //外键类型.
-                                drAttr["MYDATATYPE"] = BP.DA.DataType.AppString;
-                                drAttr["LGTYPE"] = "2";
-                                drAttr["UICONTRALTYPE"] = "1";
-                                drAttr["MinLen"] = "0";
-                                drAttr["MaxLen"] = "100";
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                    //增加到集合.
-                    dtMapAttr.Rows.Add(drAttr);
+                    BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata,ctrlID,shape,dtMapAttr,control, properties);
+                    continue;
                 }
-                #endregion 数据类控件
 
+                //坐标.
+                JsonData style = control["style"];
+                JsonData vector = style["gradientBounds"];
+                float x= float.Parse( vector[0].ToJson());
+                float y = float.Parse(vector[1].ToJson());
+
+                if (shape =="Dtl")
+                {
+                    BP.Sys.CCFormParse.SaveDtl(fk_mapdata,dtlDT, ctrlID,x,y);
+                    continue;
+                }
+                #endregion 数据类控件.
+
+
+                throw new Exception("@没有判断的类型:shape = " + shape);
             }
 
             //TempSaveFrm(form_DS);
@@ -1673,7 +1404,7 @@ namespace BP.Sys
 
             // line.
             listNames.Add("Sys_FrmLine");
-            sql = "@SELECT MyPK,FK_MapData,X,X1,X2,Y,Y1,Y2,BorderColor,BorderWidth from Sys_FrmLine WHERE " + where;
+            sql = "@SELECT MyPK,FK_MapData, X1,X2, Y1,Y2,BorderColor,BorderWidth from Sys_FrmLine WHERE " + where;
             sqls += sql;
 
             // ele.
@@ -1826,7 +1557,7 @@ namespace BP.Sys
         /// <param name="pageNumber">第几页</param>
         /// <param name="pageSize">每页大小</param>
         /// <returns>json</returns>
-        public static string GetSFTableList(int pageNumber, int pageSize)
+        public static string DB_SFTableList(int pageNumber, int pageSize)
         {
             //获得查询.
             SFTables sftables = new SFTables();
@@ -1844,7 +1575,7 @@ namespace BP.Sys
         /// <param name="pageNumber">第几页</param>
         /// <param name="pageSize">每页大小</param>
         /// <returns>json</returns>
-        public static string GetEnumerationList(int pageNumber, int pageSize)
+        public static string DB_EnumerationList(int pageNumber, int pageSize)
         {
             SysEnumMains enumMains = new SysEnumMains();
             QueryObject obj = new QueryObject(enumMains);
@@ -1859,7 +1590,7 @@ namespace BP.Sys
         /// </summary>
         /// <param name="fk_mapdata"></param>
         /// <returns></returns>
-        public static string GetHiddenfielddata(string fk_mapdata)
+        public static string DB_Hiddenfielddata(string fk_mapdata)
         {
             int RowCount = 0;
             MapAttrs mapAttrs = new MapAttrs();

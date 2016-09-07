@@ -2214,6 +2214,10 @@ namespace CCFlow.WF.UC
                             break;
                         myurl = myurl.Replace("@" + attr.Key, hisWK.GetValStrByKey(attr.Key));
                     }
+                    myurl = myurl.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    myurl = myurl.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    myurl = myurl.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
                     if (myurl.Contains("@"))
                     {
                         BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + currND.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
@@ -2257,11 +2261,12 @@ namespace CCFlow.WF.UC
                             return;
                         }
                     }
-
                     this.ToMsg(msg, "info");
-                    //throw new Exception("您定义的转向条件不成立，没有出口。");
                     break;
                 default:
+                    msg = msg.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    msg = msg.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    msg = msg.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
                     this.ToMsg(msg, "info");
                     break;
             }

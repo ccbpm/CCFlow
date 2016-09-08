@@ -18,6 +18,9 @@ namespace BP.Sys
             FrmAttachment en = new FrmAttachment();
             en.MyPK = fk_mapdata + "_" + ctrlID;
             en.RetrieveFromDBSources();
+
+            en.FK_MapData = fk_mapdata;
+
             en.X = x;
             en.Y = y;
             en.W = w;
@@ -29,6 +32,9 @@ namespace BP.Sys
             MapDtl dtl = new MapDtl();
             dtl.No = ctrlID;
             dtl.RetrieveFromDBSources();
+
+            dtl.FK_MapData = fk_mapdata;
+
             dtl.X = x;
             dtl.Y = y;
             dtl.W = w;
@@ -54,7 +60,6 @@ namespace BP.Sys
                     attr.MyDataType = DataType.AppInt;
                     attr.LGType = En.FieldTypeS.Normal;
                     attr.UIContralType = En.UIContralType.TB;
-
                     break;
                 case "TextBoxEnum":
                     attr.MyDataType = DataType.AppInt;
@@ -64,27 +69,21 @@ namespace BP.Sys
                     attr.UIContralType = En.UIContralType.CheckBok;
                     attr.MyDataType = DataType.AppInt;
                     attr.LGType = En.FieldTypeS.Normal;
-
                     break;
                 case "TextBoxFloat":
                     attr.MyDataType = DataType.AppFloat;
                     attr.LGType = En.FieldTypeS.Normal;
                     attr.UIContralType = En.UIContralType.TB;
-
-
                     break;
                 case "TextBoxMoney":
                     attr.MyDataType = DataType.AppMoney;
                     attr.LGType = En.FieldTypeS.Normal;
                     attr.UIContralType = En.UIContralType.TB;
-
-
                     break;
                 case "TextBoxDate":
                     attr.MyDataType = DataType.AppDate;
                     attr.LGType = En.FieldTypeS.Normal;
                     attr.UIContralType = En.UIContralType.TB;
-
                     break;
                 case "TextBoxDateTime":
                     attr.MyDataType = DataType.AppDateTime;
@@ -231,7 +230,7 @@ namespace BP.Sys
                         lineEn.GUID = lineEn.MyPK;
                     }
 
-                    if (linePKs.Contains(lineEn.MyPK + ",") == true)
+                    if (linePKs.Contains("@"+lineEn.MyPK + "@") == true)
                     {
                         linePKs = linePKs.Replace(lineEn.MyPK + "@", "");
                         lineEn.DirectUpdate();
@@ -258,6 +257,7 @@ namespace BP.Sys
             // New lab 对象.
             FrmLab lab = new FrmLab();
             lab.MyPK = ctrlID;
+            lab.FK_MapData = fk_mapdata;
 
             //坐标.
             JsonData style = control["style"];
@@ -322,9 +322,9 @@ namespace BP.Sys
             }
 
             lab.FontStyle = fontStyle.ToString();
-            if (pks.Contains("@" + lab.PK + "@") == true)
+            if (pks.Contains(lab.MyPK + "@") == true)
             {
-                pks = pks.Replace(lab.PK, "");
+                pks = pks.Replace(lab.PK+"@", "");
                 lab.DirectUpdate();
             }
             else
@@ -371,16 +371,13 @@ namespace BP.Sys
                 }
             }
 
-            //执行保存.
-            if (pks.Contains("@" + btn.PK + "@") == true)
-            {
-                pks = pks.Replace(btn.PK, "");
+
+          
+
+            if (pks.Contains("@" + btn.MyPK + "@") == true)
                 btn.DirectUpdate();
-            }
             else
-            {
                 btn.DirectInsert();
-            }
         }
 
         public static void SaveHyperLink(string fk_mapdata,JsonData control, JsonData properties, string pks, string ctrlID)
@@ -450,8 +447,17 @@ namespace BP.Sys
             }
             link.FontStyle = fontStyle.ToString();
 
+            if (link.Text == null || link.Text == "")
+            {
+                /*如果没有取到标签， 从这里获取，系统有一个. */
+                JsonData primitives = control["primitives"][0];
+                link.Text = primitives["str"].ToString().Trim();
+                link.FontName = primitives["font"].ToString().Trim();
+                link.FontSize = int.Parse(primitives["size"].ToString().Trim());
+            }
+
             //执行保存.
-            if (pks.Contains("@" + link.PK + "@") == true)
+            if (pks.Contains("@" + link.MyPK + "@") == true)
             {
                 link.DirectUpdate();
             }
@@ -531,7 +537,7 @@ namespace BP.Sys
             }
 
             //执行保存.
-            if (pks.Contains("@" + img.PK + "@") == true)
+            if (pks.Contains(img.MyPK + "@") == true)
                 img.DirectUpdate();
             else
                 img.DirectInsert();

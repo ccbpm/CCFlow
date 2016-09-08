@@ -13,54 +13,95 @@ namespace BP.Sys
     /// </summary>
     public class CCFormParse
     {
-
-        public static void SaveDtl(string fk_mapdata, DataTable dtlDT, string ctrlID, float x, float y)
+        public static void SaveAthMulti(string fk_mapdata, DataTable dt, string ctrlID, float x, float y, float h, float w)
         {
-            //dtlDT
-            DataRow dr = dtlDT.NewRow();
-            dr["No"] =  ctrlID;
-
-            //增加到集合里.
-            dtlDT.Rows.Add(dr);
-
+            FrmAttachment en = new FrmAttachment();
+            en.MyPK = fk_mapdata + "_" + ctrlID;
+            en.RetrieveFromDBSources();
+            en.X = x;
+            en.Y = y;
+            en.W = w;
+            en.H = h;
+            en.Update();
+        }
+        public static void SaveDtl(string fk_mapdata, string ctrlID, float x, float y, float h, float w)
+        {
             MapDtl dtl = new MapDtl();
             dtl.No = ctrlID;
             dtl.RetrieveFromDBSources();
-
             dtl.X = x;
             dtl.Y = y;
-
+            dtl.W = w;
+            dtl.H = h;
             dtl.Update();
         }
-        public static void SaveMapAttr(string fk_mapdata, string ctrlID, string shape, DataTable dtMapAttr, JsonData control, JsonData properties)
+        public static void SaveMapAttr(string fk_mapdata, string ctrlID, string shape, JsonData control, JsonData properties, string pks)
         {
-            DataRow drAttr = dtMapAttr.NewRow();
-
-            drAttr["KeyOfEn"] = ctrlID;
-            drAttr["MYPK"] = fk_mapdata + "_" + ctrlID;
-            drAttr["FK_MAPDATA"] = fk_mapdata;
+            MapAttr attr = new MapAttr();
+            attr.FK_MapData = fk_mapdata;
+            attr.KeyOfEn = ctrlID;
+            attr.MyPK = fk_mapdata + "_" + ctrlID;
 
             switch (shape)
             {
                 case "TextBoxStr":
                 case "TextBoxSFTable":
-                    drAttr["MyDataType"] = DataType.AppString;
+                    attr.MyDataType = DataType.AppString;
+                    attr.LGType = En.FieldTypeS.Normal;
+                    attr.UIContralType = En.UIContralType.TB;
                     break;
                 case "TextBoxInt":
+                    attr.MyDataType = DataType.AppInt;
+                    attr.LGType = En.FieldTypeS.Normal;
+                    attr.UIContralType = En.UIContralType.TB;
+
+                    break;
                 case "TextBoxEnum":
-                    drAttr["MyDataType"] = DataType.AppInt;
+                    attr.MyDataType = DataType.AppInt;
+                    attr.LGType = En.FieldTypeS.Enum;
+                    break;
+                case "TextBoxBoolean":
+                    attr.UIContralType = En.UIContralType.CheckBok;
+                    attr.MyDataType = DataType.AppInt;
+                    attr.LGType = En.FieldTypeS.Normal;
+
                     break;
                 case "TextBoxFloat":
-                    drAttr["MyDataType"] = DataType.AppFloat;
+                    attr.MyDataType = DataType.AppFloat;
+                    attr.LGType = En.FieldTypeS.Normal;
+                    attr.UIContralType = En.UIContralType.TB;
+
+
                     break;
                 case "TextBoxMoney":
-                    drAttr["MyDataType"] = DataType.AppMoney;
+                    attr.MyDataType = DataType.AppMoney;
+                    attr.LGType = En.FieldTypeS.Normal;
+                    attr.UIContralType = En.UIContralType.TB;
+
+
                     break;
                 case "TextBoxDate":
-                    drAttr["MyDataType"] = DataType.AppDate;
+                    attr.MyDataType = DataType.AppDate;
+                    attr.LGType = En.FieldTypeS.Normal;
+                    attr.UIContralType = En.UIContralType.TB;
+
                     break;
                 case "TextBoxDateTime":
-                    drAttr["MyDataType"] = DataType.AppDateTime;
+                    attr.MyDataType = DataType.AppDateTime;
+                    attr.LGType = En.FieldTypeS.Normal;
+                    attr.UIContralType = En.UIContralType.TB;
+                    break;
+                case "DropDownListEnum": //枚举类型.
+                    attr.MyDataType = BP.DA.DataType.AppInt;
+                    attr.LGType = En.FieldTypeS.Enum;
+                    attr.UIContralType = En.UIContralType.DDL;
+                    break;
+                case "DropDownListTable": //外键类型.
+                    attr.MyDataType = BP.DA.DataType.AppString;
+                    attr.LGType = En.FieldTypeS.FK;
+                    attr.UIContralType = En.UIContralType.DDL;
+                    attr.MaxLen = 100;
+                    attr.MinLen = 0;
                     break;
                 default:
                     break;
@@ -69,8 +110,8 @@ namespace BP.Sys
             //坐标
             JsonData style = control["style"];
             JsonData vector = style["gradientBounds"];
-            drAttr["X"] = vector[0].ToJson();
-            drAttr["Y"] = vector[1].ToJson();
+            attr.X = float.Parse(vector[0].ToJson());
+            attr.Y = float.Parse(vector[1].ToJson());
 
             for (int iProperty = 0; iProperty < properties.Count; iProperty++)
             {
@@ -90,23 +131,20 @@ namespace BP.Sys
                     case "MinLen":
                     case "MaxLen":
                     case "DefVal":
-                        //case "UIWidth":
-                        //case "UIHeight":
-                        drAttr[propertyName] = val;
+                        attr.SetValByKey(propertyName, val);
                         break;
                     case "UIIsEnable":
                     case "UIVisible":
-                        string type = property["type"].ToString();
-                        drAttr[propertyName] = val;
+                        attr.SetValByKey(propertyName, val);
                         break;
                     case "FieldText":
-                        drAttr["Name"] = val;
+                        attr.Name = val;
                         break;
                     case "UIIsInput":
                         if (val == "true")
-                            drAttr["UIIsInput"] = "1";
+                            attr.UIIsInput = true;
                         else
-                            drAttr["UIIsInput"] = "0";
+                            attr.UIIsInput = false;
                         break;
                     default:
                         break;
@@ -119,95 +157,113 @@ namespace BP.Sys
                 decimal maxY = decimal.Parse(vector[3].ToJson());
                 decimal imgWidth = maxX - minX;
                 decimal imgHeight = maxY - minY;
-                drAttr["UIWidth"] = imgWidth.ToString("0.00");
-                drAttr["UIHeight"] = imgHeight.ToString("0.00");
 
-                //控件类型.
-                switch (shape)
-                {
-                    case "TextBoxStr":
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppString;
-                        drAttr["LGTYPE"] = "0";
-                        drAttr["UICONTRALTYPE"] = "0";
-                        break;
-                    case "TextBoxInt":
-                    case "TextBoxBoolean":
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppInt;
-                        drAttr["LGTYPE"] = "0";
-                        drAttr["UICONTRALTYPE"] = "0";
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "16";
-                        break;
-                    case "TextBoxFloat":
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppFloat;
-                        drAttr["LGTYPE"] = "0";
-                        drAttr["UICONTRALTYPE"] = "0";
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "16";
-                        break;
-                    case "TextBoxDouble":
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppDouble;
-                        drAttr["LGTYPE"] = "0";
-                        drAttr["UICONTRALTYPE"] = "0";
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "16";
-                        break;
-                    case "TextBoxMoney": //金额类型.
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppMoney;
-                        drAttr["LGTYPE"] = "0";
-                        drAttr["UICONTRALTYPE"] = "0";
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "16";
-                        break;
-                    case "TextBoxDate": //日期.
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppDate;
-                        drAttr["LGTYPE"] = "0";
-                        drAttr["UICONTRALTYPE"] = "0";
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "16";
-                        break;
-                    case "TextBoxDateTime": //金额类型.
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppDateTime;
-                        drAttr["LGTYPE"] = "0";
-                        drAttr["UICONTRALTYPE"] = "0";
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "16";
-                        break;
-                    case "DropDownListEnum": //枚举类型.
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppInt;
-                        drAttr["LGTYPE"] = "1";
-                        drAttr["UICONTRALTYPE"] = "1";
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "16";
-                        break;
-                    case "DropDownListTable": //外键类型.
-                        drAttr["MYDATATYPE"] = BP.DA.DataType.AppString;
-                        drAttr["LGTYPE"] = "2";
-                        drAttr["UICONTRALTYPE"] = "1";
-                        drAttr["MinLen"] = "0";
-                        drAttr["MaxLen"] = "100";
-                        break;
-                    default:
-                        break;
-                }
+                attr.UIWidth = float.Parse(imgWidth.ToString("0.00"));
+                attr.UIHeight = float.Parse(imgHeight.ToString("0.00"));
             }
 
-            //增加到集合.
-            dtMapAttr.Rows.Add(drAttr);
+            if (pks.Contains("@" + attr.PK + "@") == true)
+            {
+                pks = pks.Replace(attr.PK, "");
+                attr.Update();
+            }
+            else
+            {
+                attr.Insert();
+            }
         }
 
         #region 装饰类控件.
-        public static void SaveLabel(string fk_mapdata, DataTable dtLabel,JsonData control, JsonData properties )
+        /// <summary>
+        /// 保存线.
+        /// </summary>
+        /// <param name="fk_mapdata"></param>
+        /// <param name="form_Lines"></param>
+        public static void SaveLine(string fk_mapdata,JsonData form_Lines)
         {
-            DataRow drLab = dtLabel.NewRow();
-            drLab["MYPK"] = control["CCForm_MyPK"];
-            drLab["FK_MAPDATA"] = fk_mapdata;
+            //标签.
+            string linePKs = "@";
+            FrmLines lines = new FrmLines();
+            lines.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
+            foreach (FrmLine item in lines)
+                linePKs += item.MyPK + "@";
+
+            if (form_Lines.IsArray == true && form_Lines.Count > 0)
+            {
+                for (int idx = 0, jLine = form_Lines.Count; idx < jLine; idx++)
+                {
+                    JsonData line = form_Lines[idx];
+                    if (line.IsObject == false)
+                        continue;
+
+                    FrmLine lineEn = new FrmLine();
+
+                    lineEn.MyPK = line["CCForm_MyPK"].ToString();
+                    lineEn.FK_MapData = fk_mapdata;
+
+                    JsonData turningPoints = line["turningPoints"];
+                    lineEn.X1 = float.Parse(turningPoints[0]["x"].ToString());
+                    lineEn.X2 = float.Parse(turningPoints[1]["x"].ToString());
+                    lineEn.Y1 = float.Parse(turningPoints[0]["y"].ToString());
+                    lineEn.Y2 = float.Parse(turningPoints[1]["y"].ToString());
+
+                    JsonData properties = line["properties"];
+                    JsonData borderWidth = properties.GetObjectFromArrary_ByKeyValue("type", "LineWidth");
+                    JsonData borderColor = properties.GetObjectFromArrary_ByKeyValue("type", "Color");
+                    string strborderWidth = "2";
+                    if (borderWidth != null && borderWidth["PropertyValue"] != null && !string.IsNullOrEmpty(borderWidth["PropertyValue"].ToString()))
+                    {
+                        strborderWidth = borderWidth["PropertyValue"].ToString();
+                    }
+                    string strBorderColor = "Black";
+                    if (borderColor != null && borderColor["PropertyValue"] != null && !string.IsNullOrEmpty(borderColor["PropertyValue"].ToString()))
+                    {
+                        strBorderColor = borderColor["PropertyValue"].ToString();
+                    }
+                    lineEn.BorderWidth = float.Parse(strborderWidth);
+                    lineEn.BorderColor = strBorderColor;
+
+
+                    //执行保存.
+                    if (string.IsNullOrEmpty(lineEn.MyPK))
+                    {
+                        lineEn.MyPK = BP.DA.DBAccess.GenerGUID();
+                        lineEn.GUID = lineEn.MyPK;
+                    }
+
+                    if (linePKs.Contains(lineEn.MyPK + ",") == true)
+                    {
+                        linePKs = linePKs.Replace(lineEn.MyPK + "@", "");
+                        lineEn.DirectUpdate();
+                    }
+                    else
+                        lineEn.DirectInsert();
+                }
+
+                //删除找不到的Line.
+                string[] strs = linePKs.Split('@');
+                string sqls = "";
+                foreach (string str in strs)
+                {
+                    if (string.IsNullOrEmpty(str))
+                        continue;
+                    sqls += "@DELETE FROM Sys_FrmLine WHERE MyPK='" + str + "'";
+                }
+                if (sqls != "")
+                    BP.DA.DBAccess.RunSQLs(sqls);
+            }
+        }
+        public static void SaveLabel(string fk_mapdata, JsonData control, JsonData properties, string pks, string ctrlID)
+        {
+            // New lab 对象.
+            FrmLab lab = new FrmLab();
+            lab.MyPK = ctrlID;
 
             //坐标.
             JsonData style = control["style"];
             JsonData vector = style["gradientBounds"];
-            drLab["X"] = vector[0].ToJson();
-            drLab["Y"] = vector[1].ToJson();
+            lab.X = float.Parse(vector[0].ToJson());
+            lab.Y = float.Parse(vector[1].ToJson());
 
             StringBuilder fontStyle = new StringBuilder();
             for (int iProperty = 0; iProperty < properties.Count; iProperty++)
@@ -217,7 +273,6 @@ namespace BP.Sys
                     continue;
 
                 string type = property["type"].ToString().Trim();
-
                 string val = null;
                 if (property["PropertyValue"] != null)
                     val = property["PropertyValue"].ToString();
@@ -225,30 +280,30 @@ namespace BP.Sys
                 switch (type)
                 {
                     case "SingleText":
-                        drLab["TEXT"] = val == null ? "" : val.ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
+                        lab.Text = val == null ? "" : val.ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
                         break;
                     case "Color":
-                        drLab["FONTCOLOR"] = val == null ? "#FF000000" : val.ToString();
-                        fontStyle.Append(string.Format("color:{0};", drLab["FONTCOLOR"]));
+                        lab.FontColor = val == null ? "#FF000000" : val.ToString();
+                        fontStyle.Append(string.Format("color:{0};", lab.FontColor));
                         break;
                     case "TextFontFamily":
-                        drLab["FontName"] = val == null ? "Portable User Interface" : val.ToString();
+                        lab.FontName = val == null ? "Portable User Interface" : val.ToString();
                         if (val != null)
                             fontStyle.Append(string.Format("font-family:{0};", property["PropertyValue"].ToJson()));
                         break;
                     case "TextFontSize":
-                        drLab["FONTSIZE"] = val == null ? "14" : val.ToString();
-                        fontStyle.Append(string.Format("font-size:{0};", drLab["FONTSIZE"]));
+                        lab.FontSize = val == null ? 14 : int.Parse(val.ToString());
+                        fontStyle.Append(string.Format("font-size:{0};", lab.FontSize));
                         break;
                     case "FontWeight":
                         if (val == null || val.ToString() == "normal")
                         {
-                            drLab["IsBold"] = "0";
+                            lab.IsBold = false;
                             fontStyle.Append(string.Format("font-weight:normal;"));
                         }
                         else
                         {
-                            drLab["IsBold"] = "1";
+                            lab.IsBold = true;
                             fontStyle.Append(string.Format("font-weight:{0};", val));
                         }
                         break;
@@ -257,33 +312,38 @@ namespace BP.Sys
                 }
             }
 
-            if (drLab["TEXT"] == null || drLab["TEXT"] == "")
+            if (lab.Text == null || lab.Text == "")
             {
                 /*如果没有取到标签， 从这里获取，系统有一个. */
                 JsonData primitives = control["primitives"][0];
-                drLab["TEXT"] = primitives["str"].ToString().Trim();
-                drLab["FontName"] = primitives["font"].ToString().Trim();
-                drLab["FontSize"] = primitives["size"].ToString().Trim();
+                lab.Text = primitives["str"].ToString().Trim();
+                lab.FontName = primitives["font"].ToString().Trim();
+                lab.FontSize = int.Parse(primitives["size"].ToString().Trim());
             }
 
-            drLab["FontStyle"] = fontStyle.ToString();
-            drLab["IsItalic"] = "0";//暂不处理斜体
-            dtLabel.Rows.Add(drLab);
+            lab.FontStyle = fontStyle.ToString();
+            if (pks.Contains("@" + lab.PK + "@") == true)
+            {
+                pks = pks.Replace(lab.PK, "");
+                lab.DirectUpdate();
+            }
+            else
+            {
+                lab.DirectInsert();
+            }
         }
-
-        public static void SaveButton(string fk_mapdata, DataTable dtBtn, JsonData control, JsonData properties)
+        public static void SaveButton(string fk_mapdata, JsonData control, JsonData properties, string pks,string ctrlID)
         {
-            DataRow drBtn = dtBtn.NewRow();
+            FrmBtn btn = new FrmBtn();
+            btn.MyPK = ctrlID;
+            btn.FK_MapData = fk_mapdata;
 
-            drBtn["MYPK"] = control["CCForm_MyPK"];
-            drBtn["FK_MAPDATA"] = fk_mapdata;
             //坐标
             JsonData style = control["style"];
             JsonData vector = style["gradientBounds"];
-            drBtn["X"] = vector[0].ToJson();
-            drBtn["Y"] = vector[1].ToJson();
-            drBtn["ISVIEW"] = "1";
-            drBtn["ISENABLE"] = "1";
+            btn.X = float.Parse( vector[0].ToJson());
+            btn.Y = float.Parse(vector[1].ToJson());
+            btn.IsEnable = true;
             for (int iProperty = 0; iProperty < properties.Count; iProperty++)
             {
                 JsonData property = properties[iProperty];
@@ -298,31 +358,40 @@ namespace BP.Sys
                 switch (propertyBtn)
                 {
                     case "primitives.1.str":
-                        drBtn["TEXT"] = val == null ? "" : val.Replace(" ", "&nbsp;").Replace("\n", "@");
+                        btn.Text = val == null ? "" : val.Replace(" ", "&nbsp;").Replace("\n", "@");
                         break;
                     case "ButtonEvent":
-                        drBtn["EVENTTYPE"] = val == null ? "0" : val;
+                        btn.EventType = val == null ? 0 : int.Parse(val);
                         break;
                     case "BtnEventDoc":
-                        drBtn["EVENTCONTEXT"] = val == null ? "" : val;
+                        btn.EventContext = val == null ? "" : val;
                         break;
                     default:
                         break;
                 }
             }
-            dtBtn.Rows.Add(drBtn);
+
+            //执行保存.
+            if (pks.Contains("@" + btn.PK + "@") == true)
+            {
+                pks = pks.Replace(btn.PK, "");
+                btn.DirectUpdate();
+            }
+            else
+            {
+                btn.DirectInsert();
+            }
         }
 
-        public static void SaveHyperLink(string fk_mapdata, DataTable dtLink, JsonData control, JsonData properties)
+        public static void SaveHyperLink(string fk_mapdata,JsonData control, JsonData properties, string pks, string ctrlID)
         {
-            DataRow drLink = dtLink.NewRow();
-
-            drLink["MYPK"] = control["CCForm_MyPK"];
-            drLink["FK_MAPDATA"] = fk_mapdata;
+            FrmLink link = new FrmLink();
+            link.MyPK = ctrlID;
+            link.FK_MapData = fk_mapdata;
             //坐标
             JsonData vector = control["style"]["gradientBounds"];
-            drLink["X"] = vector[0].ToJson();
-            drLink["Y"] = vector[1].ToJson();
+            link.X = float.Parse( vector[0].ToJson());
+            link.Y= float.Parse( vector[1].ToJson());
 
             //属性集合
             StringBuilder fontStyle = new StringBuilder();
@@ -339,64 +408,76 @@ namespace BP.Sys
                 {
                     case "primitives.0.str":
                     case "SingleText":
-                        drLink["TEXT"] = valLink == null ? "" : valLink.ToString();
+                        link.Text  = valLink == null ? "" : valLink.ToString();
                         break;
                     case "primitives.0.style.fillStyle":
-                        drLink["FONTCOLOR"] = valLink == null ? "#FF000000" : valLink.ToString();
-                        fontStyle.Append(string.Format("color:{0};", drLink["FONTCOLOR"]));
+                        link.FontColor = valLink == null ? "#FF000000" : valLink.ToString();
+                        fontStyle.Append(string.Format("color:{0};", link.FontColor));
                         break;
                     case "FontName":
-                        drLink["FontName"] = valLink == null ? "Portable User Interface" : valLink.ToString();
+                        link.FontName= valLink == null ? "Portable User Interface" : valLink.ToString();
                         if (valLink != null)
                             fontStyle.Append(string.Format("font-family:{0};", valLink.ToJson()));
                         continue;
                     case "FontSize":
-                        drLink["FONTSIZE"] = valLink == null ? "14" : valLink.ToString();
-                        fontStyle.Append(string.Format("font-size:{0};", drLink["FONTSIZE"]));
+                       link.FontSize = valLink == null ? 14 : int.Parse(  valLink.ToString());
+                       fontStyle.Append(string.Format("font-size:{0};", link.FontSize));
                         continue;
                     case "primitives.0.fontWeight":
                         if (valLink == null || valLink.ToString() == "normal")
                         {
-                            drLink["IsBold"] = "0";
+                            link.IsBold = false;
                             fontStyle.Append(string.Format("font-weight:normal;"));
                         }
                         else
                         {
-                            drLink["IsBold"] = "1";
+                            link.IsBold = true;
                             fontStyle.Append(string.Format("font-weight:{0};", valLink.ToString()));
                         }
                         continue;
                     case "FontColor":
-                        drLink["FontColor"] = valLink == null ? "" : valLink.ToString();
+                        link.FontColor = valLink == null ? "" : valLink.ToString();
                         continue;
                     case "URL":
-                        drLink["URL"] = valLink == null ? "" : valLink.ToString();
+                        link.URL = valLink == null ? "" : valLink.ToString();
                         continue;
                     case "WinOpenModel":
-                        drLink["TARGET"] = valLink == null ? "_blank" : valLink.ToString();
+                        link.Target = valLink == null ? "_blank" : valLink.ToString();
                         continue;
                     default:
                         break;
                 }
             }
-            drLink["FontStyle"] = fontStyle.ToString();
-            drLink["IsItalic"] = "0"; //斜体暂不处理.
-            dtLink.Rows.Add(drLink);
-        }
-        public static void SaveImage(string fk_mapdata, DataTable dtImg, JsonData control, JsonData properties)
-        {
-            DataRow drImg = dtImg.NewRow();
+            link.FontStyle = fontStyle.ToString();
 
-            drImg["MYPK"] = control["CCForm_MyPK"];
-            drImg["FK_MAPDATA"] = fk_mapdata;
-            drImg["IMGAPPTYPE"] = "0";
-            drImg["ISEDIT"] = "1";
-            drImg["NAME"] = drImg["MYPK"];
-            drImg["ENPK"] = drImg["MYPK"];
+            //执行保存.
+            if (pks.Contains("@" + link.PK + "@") == true)
+            {
+                link.DirectUpdate();
+            }
+            else
+            {
+                link.DirectInsert();
+            }
+        }
+        public static void SaveImage(string fk_mapdata,  JsonData control, JsonData properties, string pks, string ctrlID)
+        {
+            FrmImg img = new FrmImg();
+            img.MyPK = ctrlID;
+            img.FK_MapData = fk_mapdata;
+            img.IsEdit = 1;
+            img.HisImgAppType = ImgAppType.Img;
+
+            //drImg["MYPK"] = control["CCForm_MyPK"];
+            //drImg["FK_MAPDATA"] = fk_mapdata;
+            //drImg["IMGAPPTYPE"] = "0";
+            //drImg["ISEDIT"] = "1";
+            //drImg["NAME"] = drImg["MYPK"];
+            //drImg["ENPK"] = drImg["MYPK"];
             //坐标
             JsonData vector = control["style"]["gradientBounds"];
-            drImg["X"] = vector[0].ToJson();
-            drImg["Y"] = vector[1].ToJson();
+            img.X = float.Parse( vector[0].ToJson());
+            img.Y = float.Parse( vector[1].ToJson());
             //图片高、宽
             decimal minX = decimal.Parse(vector[0].ToJson());
             decimal minY = decimal.Parse(vector[1].ToJson());
@@ -405,8 +486,8 @@ namespace BP.Sys
             decimal imgWidth = maxX - minX;
             decimal imgHeight = maxY - minY;
 
-            drImg["W"] = imgWidth.ToString("0.00");
-            drImg["H"] = imgHeight.ToString("0.00");
+            img.W = float.Parse( imgWidth.ToString("0.00"));
+            img.H = float.Parse(imgHeight.ToString("0.00"));
 
             StringBuilder fontStyle = new StringBuilder();
             for (int iProperty = 0; iProperty < properties.Count; iProperty++)
@@ -418,22 +499,22 @@ namespace BP.Sys
                 if (property["property"].ToString() == "LinkURL")
                 {
                     //图片连接到
-                    drImg["LINKURL"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
+                    img.LinkURL = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
                 }
                 else if (property["property"].ToString() == "WinOpenModel")
                 {
                     //打开窗口方式
-                    drImg["LINKTARGET"] = property["PropertyValue"] == null ? "_blank" : property["PropertyValue"].ToString();
+                    img.LinkTarget = property["PropertyValue"] == null ? "_blank" : property["PropertyValue"].ToString();
                 }
                 else if (property["property"].ToString() == "ImgAppType")
                 {
                     //应用类型：0本地图片，1指定路径
-                    drImg["SRCTYPE"] = property["PropertyValue"] == null ? "0" : property["PropertyValue"].ToString();
+                    img.SrcType = property["PropertyValue"] == null ? 0 : int.Parse( property["PropertyValue"].ToString());
                 }
                 else if (property["property"].ToString() == "ImgPath")
                 {
                     //指定图片路径
-                    drImg["IMGURL"] = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
+                    img.ImgURL = property["PropertyValue"] == null ? "" : property["PropertyValue"].ToString();
                 }
             }
 
@@ -445,10 +526,15 @@ namespace BP.Sys
                     continue;
                 if (primitive["oType"].ToJson() == "ImageFrame")
                 {
-                    drImg["IMGPATH"] = primitive == null ? "" : primitive["url"].ToString();
+                    img.ImgPath= primitive == null ? "" : primitive["url"].ToString();
                 }
             }
-            dtImg.Rows.Add(drImg);
+
+            //执行保存.
+            if (pks.Contains("@" + img.PK + "@") == true)
+                img.DirectUpdate();
+            else
+                img.DirectInsert();
         }
         #endregion 装饰类控件.
 

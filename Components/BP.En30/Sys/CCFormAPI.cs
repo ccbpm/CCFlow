@@ -469,68 +469,66 @@ namespace BP.Sys
         /// <returns></returns>
         private static DataSet SaveFrm_FullJsonToDataSet(string fk_mapdata, DataSet form_DS, LitJson.JsonData formData)
         {
-            //装饰类元素.
-            DataTable dtLine = form_DS.Tables[EEleTableNames.Sys_FrmLine];
-            DataTable dtBtn = form_DS.Tables[EEleTableNames.Sys_FrmBtn];
-            DataTable dtLabel = form_DS.Tables[EEleTableNames.Sys_FrmLab];
-            DataTable dtLink = form_DS.Tables[EEleTableNames.Sys_FrmLink];
-            DataTable dtImg = form_DS.Tables[EEleTableNames.Sys_FrmImg];
+            #region 求PKs.
+            //标签.
+            string labelPKs = "@";
+            FrmLabs labs = new FrmLabs();
+            labs.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
+            foreach (FrmLab item in labs)
+                labelPKs +=  item.MyPK+"@";
 
-            //数据类.
-            DataTable dtEle = form_DS.Tables[EEleTableNames.Sys_FrmEle];
-            DataTable dtMapAttr = form_DS.Tables[EEleTableNames.Sys_MapAttr];
-            DataTable dtRDB = form_DS.Tables[EEleTableNames.Sys_FrmRB];
-            DataTable dtM2M = form_DS.Tables[EEleTableNames.Sys_MapM2M];
+            //超链接.
+            string linkPKs = "@";
+            FrmLinks links = new FrmLinks();
+            links.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
+            foreach (FrmLink item in links)
+                linkPKs += item.MyPK + "@";
 
-            //附件类.
-            DataTable dtAth = form_DS.Tables[EEleTableNames.Sys_FrmAttachment];
-            DataTable dtImgAth = form_DS.Tables[EEleTableNames.Sys_FrmImgAth];
+            //按钮.
+            string btnsPKs = "@";
+            FrmBtns btns = new FrmBtns();
+            btns.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
+            foreach (FrmBtn item in btns)
+                btnsPKs += item.MyPK + "@";
 
-            //组件类.
-            DataTable dtlDT = form_DS.Tables[EEleTableNames.Sys_MapDtl];
-            DataTable dtWorkCheck = form_DS.Tables[EEleTableNames.WF_Node];
+            //图片.
+            string imgPKs = "@";
+            FrmImgs imgs = new FrmImgs();
+            imgs.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
+            foreach (FrmImg item in imgs)
+                imgPKs += item.MyPK + "@";
 
+            //求已经存在的字段.
+            string attrPKs = "@";
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
+            foreach (MapAttr item in attrs)
+                attrPKs += item.MyPK + "@";
+            attrPKs += "@";
+
+
+            //求明细表.
+            string dtlPKs = "@";
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
+            foreach (MapDtl item in dtls)
+                dtlPKs += item.No + "@";
+            dtlPKs += "@";
+
+            //求明细表.
+            string athMultis = "@";
+            FrmAttachments aths = new FrmAttachments();
+            aths.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
+            foreach (FrmAttachment item in aths)
+                athMultis += item.NoOfObj + "@";
+            athMultis += "@";
+
+            #endregion 求PKs.
+
+            //保存线.
             JsonData form_Lines = formData["m"]["connectors"];
-            if (form_Lines.IsArray == true && form_Lines.Count > 0)
-            {
-                for (int idx = 0, jLine = form_Lines.Count; idx < jLine; idx++)
-                {
-                    #region 线集合
-                    JsonData line = form_Lines[idx];
-                    if (line.IsObject == false)
-                        continue;
-
-                    DataRow drline = dtLine.NewRow();
-
-                    drline["MYPK"] = line["CCForm_MyPK"].ToString();
-                    drline["FK_MAPDATA"] = fk_mapdata;
-
-                    JsonData turningPoints = line["turningPoints"];
-                    drline["X1"] = turningPoints[0]["x"].ToString();
-                    drline["X2"] = turningPoints[1]["x"].ToString();
-                    drline["Y1"] = turningPoints[0]["y"].ToString();
-                    drline["Y2"] = turningPoints[1]["y"].ToString();
-
-                    JsonData properties = line["properties"];
-                    JsonData borderWidth = properties.GetObjectFromArrary_ByKeyValue("type", "LineWidth");
-                    JsonData borderColor = properties.GetObjectFromArrary_ByKeyValue("type", "Color");
-                    string strborderWidth = "2";
-                    if (borderWidth != null && borderWidth["PropertyValue"] != null && !string.IsNullOrEmpty(borderWidth["PropertyValue"].ToString()))
-                    {
-                        strborderWidth = borderWidth["PropertyValue"].ToString();
-                    }
-                    string strBorderColor = "Black";
-                    if (borderColor != null && borderColor["PropertyValue"] != null && !string.IsNullOrEmpty(borderColor["PropertyValue"].ToString()))
-                    {
-                        strBorderColor = borderColor["PropertyValue"].ToString();
-                    }
-                    drline["W"] = strborderWidth;
-                    drline["Color"] = strBorderColor;
-
-                    dtLine.Rows.Add(drline); //增加到里面.
-                }
-            }
-
+            BP.Sys.CCFormParse.SaveLine(fk_mapdata, form_Lines);
+                
             //其他控件，Label,Img,TextBox
             JsonData form_Controls = formData["s"]["figures"];
             if (form_Controls.IsArray == false)
@@ -538,6 +536,7 @@ namespace BP.Sys
             if (form_Controls.Count == 0)
                 return form_DS;
 
+            //循环元素.
             for (int idx = 0, jControl = form_Controls.Count; idx < jControl; idx++)
             {
                 JsonData control = form_Controls[idx];  //不存在控件类型不进行处理，继续循环.
@@ -546,50 +545,65 @@ namespace BP.Sys
 
                 string shape = control["CCForm_Shape"].ToString();
                 string ctrlID = control["CCForm_MyPK"].ToString();
-                JsonData properties = control["properties"];  //属性集合
-               
+                JsonData properties = control["properties"];  //属性集合.
 
                 #region 装饰类控件.
                 switch (shape)
                 {
                     case "Label": //保存标签.
-                        BP.Sys.CCFormParse.SaveLabel(fk_mapdata, dtLabel, control, properties);
+                        BP.Sys.CCFormParse.SaveLabel(fk_mapdata, control, properties, labelPKs, ctrlID);
+                        labelPKs = labelPKs.Replace(ctrlID + "@", "@");
                         continue;
                     case "Button": //保存Button.
-                        BP.Sys.CCFormParse.SaveButton(fk_mapdata, dtLabel, control, properties);
+                        BP.Sys.CCFormParse.SaveButton(fk_mapdata, control, properties, btnsPKs, ctrlID);
+                        btnsPKs = btnsPKs.Replace(ctrlID + "@", "@");
                         continue;
-                    case "HyperLink": //保存Button.
-                        BP.Sys.CCFormParse.SaveHyperLink(fk_mapdata, dtLabel, control, properties);
+                    case "HyperLink": //保存link.
+                        BP.Sys.CCFormParse.SaveHyperLink(fk_mapdata, control, properties, linkPKs, ctrlID);
+                        linkPKs = linkPKs.Replace(ctrlID + "@", "@");
                         continue;
-                    case "Image": //保存Button.
-                        BP.Sys.CCFormParse.SaveImage(fk_mapdata, dtLabel, control, properties);
+                    case "Image": //保存Img.
+                        BP.Sys.CCFormParse.SaveImage(fk_mapdata, control, properties, imgPKs, ctrlID);
+                        imgPKs = imgPKs.Replace(ctrlID + "@", "@");
                         continue;
                     default:
                         break;
                 }
                 #endregion 装饰类控件.
 
-
                 #region 数据类控件.
                 if (shape.Contains("TextBox")==true)
                 {
-                    BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata,ctrlID,shape,dtMapAttr,control, properties);
+                    BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata,ctrlID,shape,control, properties,attrPKs);
                     continue;
                 }
 
-                //坐标.
+                //求出公共的属性-坐标.
                 JsonData style = control["style"];
                 JsonData vector = style["gradientBounds"];
-                float x= float.Parse( vector[0].ToJson());
+                float x = float.Parse(vector[0].ToJson());
                 float y = float.Parse(vector[1].ToJson());
+                float maxX = float.Parse(vector[2].ToJson());
+                float maxY = float.Parse(vector[3].ToJson());
+                float width = maxX - x;
+                float height = maxY - y;
 
                 if (shape =="Dtl")
                 {
-                    BP.Sys.CCFormParse.SaveDtl(fk_mapdata,dtlDT, ctrlID,x,y);
+                    //记录已经存在的ID， 需要当时保存.
+                    BP.Sys.CCFormParse.SaveDtl(fk_mapdata, ctrlID, x, y, height, width);
                     continue;
                 }
-                #endregion 数据类控件.
 
+                if (shape == "AthMulti")
+                {
+                    //记录已经存在的ID， 需要当时保存.
+                    athMultis += "@" + ctrlID; 
+                   // BP.Sys.CCFormParse.SaveAthMulti(fk_mapdata, dtAth, ctrlID, x, y, height, width);
+                    continue;
+                }
+
+                #endregion 数据类控件.
 
                 throw new Exception("@没有判断的类型:shape = " + shape);
             }
@@ -789,11 +803,8 @@ namespace BP.Sys
             dtlDT.TableName = EEleTableNames.Sys_MapDtl;
             dtlDT.Columns.Add(new DataColumn("NO", typeof(string)));
             dtlDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
-            dtlDT.Columns.Add(new DataColumn("Name", typeof(string)));
-
             dtlDT.Columns.Add(new DataColumn("X", typeof(double)));
             dtlDT.Columns.Add(new DataColumn("Y", typeof(double)));
-
             dtlDT.Columns.Add(new DataColumn("H", typeof(double)));
             dtlDT.Columns.Add(new DataColumn("W", typeof(double)));
             #endregion Dtl
@@ -823,7 +834,6 @@ namespace BP.Sys
 
             m2mDT.Columns.Add(new DataColumn("X", typeof(double)));
             m2mDT.Columns.Add(new DataColumn("Y", typeof(double)));
-
             m2mDT.Columns.Add(new DataColumn("H", typeof(string)));
             m2mDT.Columns.Add(new DataColumn("W", typeof(string)));
             #endregion m2mDT
@@ -838,7 +848,7 @@ namespace BP.Sys
             //athDT.Columns.Add(new DataColumn("NAME", typeof(string)));
             //athDT.Columns.Add(new DataColumn("EXTS", typeof(string)));
             //athDT.Columns.Add(new DataColumn("SAVETO", typeof(string)));
-            athDT.Columns.Add(new DataColumn("UPLOADTYPE", typeof(int)));
+           // athDT.Columns.Add(new DataColumn("UPLOADTYPE", typeof(int)));
 
             athDT.Columns.Add(new DataColumn("X", typeof(double)));
             athDT.Columns.Add(new DataColumn("Y", typeof(double)));
@@ -846,8 +856,8 @@ namespace BP.Sys
             athDT.Columns.Add(new DataColumn("H", typeof(double)));
             #endregion athDT
 
+            //把他们放入dataset里面.
             DataSet dsLatest = new DataSet();
-
             dsLatest.Tables.Add(dtWorkCheck);
             dsLatest.Tables.Add(dtLabel);
             dsLatest.Tables.Add(dtLikn);
@@ -862,11 +872,8 @@ namespace BP.Sys
             dsLatest.Tables.Add(athDT);
             dsLatest.Tables.Add(dtMapData);
             dsLatest.Tables.Add(m2mDT);
-
             return dsLatest;
-
         }
-
         /// <summary>
         /// 保存表单信息
         /// </summary>
@@ -931,7 +938,7 @@ namespace BP.Sys
                 switch (dt.TableName)
                 {
                     case "Sys_FrmLine": //线.
-                        SaveCCForm20_Line(fk_mapdata, dt, lines);
+                       // SaveCCForm20_Line(fk_mapdata, dt, lines);
                         break;
                     case "Sys_FrmBtn": //按钮.
                         SaveCCForm20_Btn(fk_mapdata, dt, btns);
@@ -1074,58 +1081,6 @@ namespace BP.Sys
 
         }
         #region 保存 frmEle控件。
-        /// <summary>
-        /// 保存line
-        /// </summary>
-        /// <param name="fk_mapdata">表单ID</param>
-        /// <param name="dt">数据</param>
-        /// <param name="elePKs">主键s</param>
-        private static void SaveCCForm20_Line(string fk_mapdata, DataTable dt, string elePKs)
-        {
-            string lines = "";
-            FrmLine ele = new FrmLine();
-            foreach (DataRow dr in dt.Rows)
-            {
-                ele.MyPK = dr["MyPK"].ToString();
-                ele.FK_MapData = fk_mapdata;
-
-                ele.X1 = float.Parse(dr["X1"].ToString());
-                ele.Y1 = float.Parse(dr["Y1"].ToString());
-
-                ele.X2 = float.Parse(dr["X2"].ToString());
-                ele.Y2 = float.Parse(dr["Y2"].ToString());
-
-                ele.BorderColor = dr["Color"].ToString();
-                ele.BorderWidth = float.Parse(dr["W"].ToString());
-
-                if (string.IsNullOrEmpty(ele.MyPK))
-                {
-                    ele.MyPK = BP.DA.DBAccess.GenerGUID();
-                    ele.GUID = ele.MyPK;
-                }
-
-                if (elePKs.Contains(ele.MyPK + ",") == true)
-                {
-                    elePKs = elePKs.Replace(ele.MyPK + ",", "");
-                    ele.DirectUpdate();
-                }
-                else
-                    ele.DirectInsert();
-            }
-
-            //xxxx
-            string[] strs = elePKs.Split(',');
-            string sqls = "";
-            foreach (string str in strs)
-            {
-                if (string.IsNullOrEmpty(str))
-                    continue;
-                sqls += "@DELETE FROM Sys_FrmLine WHERE MyPK='" + str + "'";
-            }
-
-            if (sqls != "")
-                BP.DA.DBAccess.RunSQLs(sqls);
-        }
         /// <summary>
         /// 保存img
         /// </summary>
@@ -1334,7 +1289,6 @@ namespace BP.Sys
         }
         #endregion 保存 frmEle控件。
 
-        #endregion 执行 ccform2.0 的保存.
 
         /// <summary>
         /// 获得表单模版dataSet格式.

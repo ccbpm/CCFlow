@@ -466,39 +466,6 @@ namespace CCFlow.WF
             }
             #endregion 校验用户是否被禁用
 
-            #region 判断是否有IsRead
-            try
-            {
-                if (this.IsCC)
-                {
-                    if (this.Request.QueryString["IsRead"] == "0")
-                        BP.WF.Dev2Interface.Node_CC_SetRead(this.FK_Node, this.WorkID, BP.Web.WebUser.No);
-                }
-                else
-                {
-                    if (this.Request.QueryString["IsRead"] == "0")
-                        BP.WF.Dev2Interface.Node_SetWorkRead(this.FK_Node, this.WorkID);
-                }
-            }
-            catch (Exception ex)
-            {
-                this.ToMsg("设置读取状态错误,或者当前工作已经被处理,或者当前登录人员已经改变.", ex.Message);
-                return;
-            }
-            #endregion
-
-            #region 检查是否是抄送状态,如果是就让他转入OneWork
-            //if (string.IsNullOrEmpty(this.Request.QueryString["Paras"]) ==false)
-            //{
-            //    string myps = this.Request.QueryString["Paras"];
-            //    if (myps.Contains("IsCC=1") == true)
-            //    {
-            //        this.Response.Redirect("WorkOpt/OneWork/Track.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node, true);
-            //        return;
-            //    }
-            //}
-            #endregion
-
             #region 判断前置导航.
             this.currFlow = new Flow(this.FK_Flow);
             this.currND = new BP.WF.Node(this.FK_Node);
@@ -774,17 +741,7 @@ namespace CCFlow.WF
             }
             #endregion 判断是否有workid
 
-            #region 判断权限 toolbar.
-            if (this.IsPostBack == false)
-            {
-                if (this.IsCC == false && currND.IsStartNode == false && Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No) == false)
-                {
-                    this.ToMsg(" @当前的工作已经被处理，或者您没有执行此工作的权限。", "Info");
-                    return;
-                }
-            }
-            #endregion 判断权限
-
+            
             #region 处理ctrl显示
             this.ToolBar1.Visible = false;
             this.ToolBar2.Visible = false;
@@ -856,34 +813,10 @@ namespace CCFlow.WF
             if (nd.HisFlow.IsMD5 && nd.IsStartNode == false && wk.IsPassCheckMD5() == false)
             {
                 this.ToMsg("<font color=red>数据已经被非法篡改，请通知管理员解决问题。</font>", "Info");
-                //this.UCEn1.AddMsgOfWarning("错误", "<h2><font color=red>数据已经被非法篡改，请通知管理员解决问题。</font></h2>");
-                //this.ToolBar1.EnableAllBtn(false);
-                //this.ToolBar1.Clear();
                 return;
             }
 
-            if (this.IsPostBack == true)
-                this.UCEn1.IsLoadData = false;
-            else
-                this.UCEn1.IsLoadData = true;
-
-            if (nd.IsStartNode)
-            {
-                try
-                {
-                    string billNo = wk.GetValStringByKey(NDXRptBaseAttr.BillNo);
-                    if (string.IsNullOrEmpty(billNo) && nd.HisFlow.BillNoFormat.Length > 2)
-                    {
-                        /*让他自动生成编号*/
-                        wk.SetValByKey(NDXRptBaseAttr.BillNo,
-                            BP.WF.WorkFlowBuessRole.GenerBillNo(nd.HisFlow.BillNoFormat, this.WorkID, wk, nd.HisFlow.PTable));
-                    }
-                }
-                catch
-                {
-                    // 可能是没有billNo这个字段,也不需要处理它.
-                }
-            }
+            this.UCEn1.IsLoadData = false;
             switch (nd.HisNodeWorkType)
             {
                 case NodeWorkType.StartWorkFL:
@@ -959,18 +892,6 @@ namespace CCFlow.WF
                 }
             }
 
-            // 处理传递过来的参数。
-            foreach (string k in this.Request.QueryString.AllKeys)
-            {
-                wk.SetValByKey(k, this.Request.QueryString[k]);
-            }
-            wk.ResetDefaultVal();
-
-            if (nd.HisFormType == NodeFormType.DisableIt)
-                wk.DirectUpdate();
-            else
-                wk.DirectUpdate(); //需要把默认值保存里面去，不然，就会导致当前默认信息存储不了。
-
             NodeFormType ft = nd.HisFormType;
             if (BP.Web.WebUser.IsWap)
                 ft = NodeFormType.FixForm;
@@ -1003,7 +924,7 @@ namespace CCFlow.WF
 
                         //this.UCEn1.Add("<div id=divCCForm style='width:" + map.FrmW + "px;height:" + map.FrmH + "px' >");
                         this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px' >");
-                        this.UCEn1.BindCCForm(wk, nd.NodeFrmID, false, 0, true); //, false, false, null);
+                        this.UCEn1.BindCCForm(wk, nd.NodeFrmID, true, 0, false); //, false, false, null);
                         if (wk.WorkEndInfo.Length > 2)
                             this.Pub3.Add(wk.WorkEndInfo);
                         this.UCEn1.Add("</div>");
@@ -1044,7 +965,7 @@ namespace CCFlow.WF
 
                             FrmNode fnNode = new FrmNode();
                             fnNode.FK_Frm = myfrm.No;
-                           // fnNode.IsEdit = true;
+                            // fnNode.IsEdit = true;
                             fnNode.IsPrint = false;
                             switch (nd.HisFormType)
                             {
@@ -1535,10 +1456,6 @@ namespace CCFlow.WF
         private void Send(bool isSave)
         {
             // 判断当前人员是否有执行该人员的权限。
-            if (currND.IsStartNode == false
-                && BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No) == false)
-                throw new Exception("您好：" + WebUser.No + "," + WebUser.Name + "：<br> 当前工作已经被其它人处理，您不能在执行保存或者发送!!!");
-
             Paras ps = new Paras();
             string dtStr = SystemConfig.AppCenterDBVarStr;
             try

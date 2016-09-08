@@ -190,6 +190,9 @@ namespace CCFlow.WF.Comm.Sys
                                 case 1:
                                     arr = ClassFactory.GetObjects("BP.En.EntitySimpleTree");
                                     break;
+                                default:
+                                    arr = new ArrayList();
+                                    break;
                             }
 
                             s = new StringBuilder("[");
@@ -197,6 +200,9 @@ namespace CCFlow.WF.Comm.Sys
                             foreach (BP.En.Entity en in arr)
                             {
                                 ens = en.GetNewEntities;
+
+                                if (ens == null) continue;
+
                                 sf = sfs.GetEntityByKey(ens.ToString()) as SFTable;
 
                                 if ((sf != null && sf.No != sfno) ||

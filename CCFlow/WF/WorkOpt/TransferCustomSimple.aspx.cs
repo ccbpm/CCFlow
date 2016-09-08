@@ -64,15 +64,35 @@ namespace CCFlow.WF.WorkOpt
                                 DataTable dtEmpNews = dtEmp.Clone();
                                 string dept = string.Empty;
                                 DataRow[] empRows = null;
-                                
-                                foreach(DataRow r in dtDept.Rows)
-                                {
-                                    dept = r["No"].ToString();
-                                    empRows = dtEmp.Select(string.Format("FK_Dept='{0}'", dept));
 
-                                    foreach(DataRow r1 in empRows)
+                                if (dtDept != null)
+                                {
+                                    foreach (DataRow r in dtDept.Rows)
                                     {
-                                        dtEmpNews.Rows.Add(r1.ItemArray);
+                                        dept = r["No"].ToString();
+                                        empRows = dtEmp.Select(string.Format("FK_Dept='{0}'", dept));
+
+                                        foreach (DataRow r1 in empRows)
+                                        {
+                                            dtEmpNews.Rows.Add(r1.ItemArray);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    foreach (DataRow r in dtEmp.Rows)
+                                    {
+                                        dept = r["FK_Dept"].ToString();
+
+                                        if (dtEmpNews.Select(string.Format("FK_Dept='{0}'", dept)).Length > 0)
+                                            continue;
+
+                                        empRows = dtEmp.Select(string.Format("FK_Dept='{0}'", dept));
+
+                                        foreach (DataRow r1 in empRows)
+                                        {
+                                            dtEmpNews.Rows.Add(r1.ItemArray);
+                                        }
                                     }
                                 }
 

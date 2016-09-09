@@ -513,7 +513,6 @@ namespace BP.Sys
             foreach (FrmAttachment item in aths)
                 athMultis += item.NoOfObj + "@";
             athMultis += "@";
-
             #endregion 求PKs.
 
             //保存线.
@@ -522,10 +521,22 @@ namespace BP.Sys
                 
             //其他控件，Label,Img,TextBox
             JsonData form_Controls = formData["s"]["figures"];
-            if (form_Controls.IsArray == false)
-                return ;
-            if (form_Controls.Count == 0)
-                return ;
+            if (form_Controls.IsArray == false || form_Controls.Count == 0)
+            {
+                /*画布里没有任何东西, 清楚所有的元素.*/
+                string delSqls = "";
+                delSqls += "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapdata + "' AND KeyOfEn NOT IN ('OID')";
+                delSqls += "DELETE FROM Sys_MapDtl WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "DELETE FROM Sys_FrmBtn WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "DELETE FROM Sys_FrmLine WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "DELETE FROM Sys_FrmLab WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "DELETE FROM Sys_FrmLink WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + fk_mapdata + "'";
+
+                BP.DA.DBAccess.RunSQLs(delSqls);
+                return;
+            }
 
             //循环元素.
             for (int idx = 0, jControl = form_Controls.Count; idx < jControl; idx++)
@@ -563,9 +574,11 @@ namespace BP.Sys
                 #endregion 装饰类控件.
 
                 #region 数据类控件.
-                if (shape.Contains("TextBox")==true)
+                if (shape.Contains("TextBox")==true
+                    || shape.Contains("DropDownList")==true)
                 {
                     BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata,ctrlID,shape,control, properties,attrPKs);
+                    attrPKs = attrPKs.Replace(ctrlID + "@", "@");
                     continue;
                 }
 
@@ -583,14 +596,15 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveDtl(fk_mapdata, ctrlID, x, y, height, width);
+                    dtlPKs = dtlPKs.Replace(ctrlID + "@", "@");
                     continue;
                 }
 
-                if (shape == "AthMulti")
+                if (shape == "AthMulti" || shape == "AthSingle")
                 {
                     //记录已经存在的ID， 需要当时保存.
-                    athMultis += "@" + ctrlID; 
-                   // BP.Sys.CCFormParse.SaveAthMulti(fk_mapdata, dtAth, ctrlID, x, y, height, width);
+                    BP.Sys.CCFormParse.SaveAthMulti(fk_mapdata, ctrlID, x, y, height, width);
+                    athMultis = athMultis.Replace(ctrlID + "@", "@");
                     continue;
                 }
                 #endregion 数据类控件.
@@ -633,6 +647,34 @@ namespace BP.Sys
                     continue;
 
                 sqls += "@DELETE FROM Sys_FrmImg WHERE MyPK='" + pk + "'";
+            }
+
+            pks = attrPKs.Split('@');
+            foreach (string pk in pks)
+            {
+                if (string.IsNullOrEmpty(pk))
+                    continue;
+
+                sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + pk + "' AND FK_MapData='"+fk_mapdata+"'";
+            }
+
+            pks = dtlPKs.Split('@');
+            foreach (string pk in pks)
+            {
+                if (string.IsNullOrEmpty(pk))
+                    continue;
+
+                sqls += "@DELETE FROM Sys_MapDtl WHERE No='" + pk + "'";
+            }
+
+
+            pks = athMultis.Split('@');
+            foreach (string pk in pks)
+            {
+                if (string.IsNullOrEmpty(pk))
+                    continue;
+
+                sqls += "@DELETE FROM Sys_FrmAttachment WHERE NoOfObj='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }
 
             //删除这些，没有替换下来的数据.

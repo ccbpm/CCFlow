@@ -13,13 +13,14 @@ namespace BP.Sys
     /// </summary>
     public class CCFormParse
     {
-        public static void SaveAthMulti(string fk_mapdata, DataTable dt, string ctrlID, float x, float y, float h, float w)
+ 
+        public static void SaveAthMulti(string fk_mapdata,string ctrlID, float x, float y, float h, float w)
         {
             FrmAttachment en = new FrmAttachment();
             en.MyPK = fk_mapdata + "_" + ctrlID;
-            en.RetrieveFromDBSources();
-
             en.FK_MapData = fk_mapdata;
+            en.NoOfObj = ctrlID;
+                en.RetrieveFromDBSources();
 
             en.X = x;
             en.Y = y;
@@ -34,7 +35,6 @@ namespace BP.Sys
             dtl.RetrieveFromDBSources();
 
             dtl.FK_MapData = fk_mapdata;
-
             dtl.X = x;
             dtl.Y = y;
             dtl.W = w;
@@ -48,30 +48,33 @@ namespace BP.Sys
             attr.KeyOfEn = ctrlID;
             attr.MyPK = fk_mapdata + "_" + ctrlID;
 
+            //执行一次查询,以防止其他的属性更新错误.
+            if (pks.Contains("@" + attr.MyPK + "@") == true)
+                attr.RetrieveFromDBSources();
+
             switch (shape)
             {
                 case "TextBoxStr":
                 case "TextBoxSFTable":
-                    attr.MyDataType = DataType.AppString;
                     attr.LGType = En.FieldTypeS.Normal;
                     attr.UIContralType = En.UIContralType.TB;
                     break;
                 case "TextBoxInt":
-                    attr.MyDataType = DataType.AppInt;
                     attr.LGType = En.FieldTypeS.Normal;
+                    attr.MyDataType = DataType.AppInt;
                     attr.UIContralType = En.UIContralType.TB;
                     break;
                 case "TextBoxEnum":
                     attr.MyDataType = DataType.AppInt;
                     attr.LGType = En.FieldTypeS.Enum;
+                    attr.UIContralType = En.UIContralType.DDL;
                     break;
                 case "TextBoxBoolean":
+                    attr.MyDataType = DataType.AppBoolean;
                     attr.UIContralType = En.UIContralType.CheckBok;
-                    attr.MyDataType = DataType.AppInt;
                     attr.LGType = En.FieldTypeS.Normal;
                     break;
                 case "TextBoxFloat":
-                    attr.MyDataType = DataType.AppFloat;
                     attr.LGType = En.FieldTypeS.Normal;
                     attr.UIContralType = En.UIContralType.TB;
                     break;
@@ -161,9 +164,9 @@ namespace BP.Sys
                 attr.UIHeight = float.Parse(imgHeight.ToString("0.00"));
             }
 
-            if (pks.Contains("@" + attr.PK + "@") == true)
+            if (pks.Contains("@" + attr.MyPK + "@") == true)
             {
-                pks = pks.Replace(attr.PK, "");
+                pks = pks.Replace(attr.MyPK, "");
                 attr.Update();
             }
             else
@@ -370,10 +373,6 @@ namespace BP.Sys
                         break;
                 }
             }
-
-
-          
-
             if (pks.Contains("@" + btn.MyPK + "@") == true)
                 btn.DirectUpdate();
             else

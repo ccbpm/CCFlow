@@ -42,7 +42,7 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditEnum(fk_mapdata, refNo) {
+        function EditEnum(fk_mapdata, mypk) {
             var url = 'EditEnum.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;

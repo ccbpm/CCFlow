@@ -78,7 +78,7 @@
                         </td>
                         <td>
 
-                            [<a href="javascript:alert('开发中，敬请期待。');WinOpen('../CCFormDesigner/FormDesigner.aspx?FK_MapData=ND<%=nodeIDstr %>');">
+                            [<a href="javascript:WinOpen('../CCFormDesigner/FormDesigner.htm?FK_MapData=ND<%=nodeIDstr %>');">
                                 设计自由表单(Html5)</a>]
 
                                  [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
@@ -249,7 +249,7 @@
                         设置公文按钮权限</a>
                         </li>
                 <li>
-                         [<a href="javascript:WinOpen('../CCFormDesigner/FormDesigner.aspx?FK_MapData=ND<%=nodeIDstr %>');">
+                         [<a href="javascript:WinOpen('../CCFormDesigner/FormDesigner.htm?FK_MapData=ND<%=nodeIDstr %>');">
                                 设计自由表单(Html5)</a>]
 
                                  [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">

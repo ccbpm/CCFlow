@@ -19,7 +19,7 @@
 
         // 设计自由表单
         function OpenFreeFrm(nodeID) {
-            var url = "../CCFormDesigner/FormDesigner.aspx?FK_MapData=ND" + nodeID;
+            var url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + nodeID;
            // window.open(url, 'OpenFreeFrm', 'height=auto, width=auto, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
         }
 

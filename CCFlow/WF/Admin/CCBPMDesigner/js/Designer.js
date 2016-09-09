@@ -435,7 +435,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "DesignerNodeForm": //设计表单
-            url = "../CCFormDesigner/FormDesigner.aspx?FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
+            url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "设计表单" + FK_Node, url, item.iconCls);
             } else {

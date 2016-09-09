@@ -705,11 +705,12 @@ namespace CCFlow.WF.CCForm
                     hLink.Target = "_blank";
                     this.Pub1.Add(hLink);
 
-                    Button btn = new Button();
-                    btn.Text = "打包下载";
+                    ImageButton btn = new ImageButton();
+                    btn.ImageUrl = "../Img/FileType/zip.png";
                     btn.ID = "Btn_DownLoad_Zip";
                     btn.CssClass = "Btn";
-                    btn.Click += new EventHandler(btn_DownLoad_Zip);
+                    btn.ToolTip = "压缩打包下载";
+                    btn.Click += new ImageClickEventHandler(btn_DownLoad_Zip);
                     this.Pub1.Add(btn);
 
                     this.Pub1.AddTDEnd();

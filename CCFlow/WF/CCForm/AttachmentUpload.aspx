@@ -57,7 +57,10 @@
         .Btn
         {
             font-size: 12px;
-             
+            width:36px;
+            height:30px;
+            float:right;
+            margin-right:15px;
         }
     </style>
 

@@ -1535,33 +1535,30 @@ namespace BP.WF
                     return nd;
 
                 DataTable dt = null;
-                if (nd.HisWhenNoWorker == true)
+                FindWorker fw = new FindWorker();
+                WorkNode toWn = new WorkNode(this.WorkID, nd.NodeID);
+                if (skipWork == null)
+                    skipWork = toWn.HisWork;
+
+                dt = fw.DoIt(this.HisFlow, this, toWn); // 找到下一步骤的接受人.
+                if (dt == null || dt.Rows.Count == 0)
                 {
-                    FindWorker fw = new FindWorker();
-                    WorkNode toWn = new WorkNode(this.WorkID, nd.NodeID);
-                    if (skipWork == null)
-                        skipWork = toWn.HisWork;
-
-                    dt = fw.DoIt(this.HisFlow, this, toWn); // 找到下一步骤的接受人.
-                    if (dt == null || dt.Rows.Count == 0)
+                    if (nd.HisWhenNoWorker == true)
                     {
-                        if (nd.HisWhenNoWorker == true)
-                        {
-                            this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName,
-                                nd.NodeID, nd.Name, "自动跳转.(当没有找到处理人时)", ndFrom);
-                            ndFrom = nd;
-                            continue;
-                        }
-                        else
-                        {
-                            //抛出异常.
-                            throw new Exception("@没有找到节点[" + nd.Name + "]的工作处理人.");
-                        }
+                        this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName,
+                            nd.NodeID, nd.Name, "自动跳转.(当没有找到处理人时)", ndFrom);
+                        ndFrom = nd;
+                        continue;
                     }
-
-                    if (dt.Rows.Count == 0)
-                        throw new Exception("@没有找到下一个节点(" + nd.Name + ")的处理人");
+                    else
+                    {
+                        //抛出异常.
+                        throw new Exception("@没有找到节点[" + nd.Name + "]的工作处理人.");
+                    }
                 }
+
+                if (dt.Rows.Count == 0)
+                    throw new Exception("@没有找到下一个节点(" + nd.Name + ")的处理人");
 
                 if (nd.AutoJumpRole0)
                 {

@@ -492,27 +492,26 @@ namespace CCFlow.WF.MapDef
                     sigan.Text = mapAttr.Para_SiganField;
                     this.Pub1.AddTD(sigan);
                 }
+                else if (mapAttr.SignType == SignType.GDCA)
+                {
+                    TB sigan = new TB();
+                    sigan.ID = "TB_SiganField";
+                    sigan.Text = mapAttr.Para_SiganField;
+                    this.Pub1.AddTD(sigan);
+                }
+                else if (mapAttr.SignType == SignType.Pic)
+                {
+                    DDL ddlPic = new DDL();
+                    ddlPic.ID = "DDL_PicType";
+                    ddlPic.Items.Add(new ListItem("自动签名", "0"));
+                    ddlPic.Items.Add(new ListItem("手动签名", "1"));
+                    ddlPic.SetSelectItem((int)mapAttr.PicType);
+                    this.Pub1.AddTD(ddlPic);
+                }
                 else
-                    if (mapAttr.SignType == SignType.GDCA)
-                    {
-                        TB sigan = new TB();
-                        sigan.ID = "TB_SiganField";
-                        sigan.Text = mapAttr.Para_SiganField;
-                        this.Pub1.AddTD(sigan);
-                    }
-                    else if (mapAttr.SignType == SignType.Pic)
-                    {
-                        DDL ddlPic = new DDL();
-                        ddlPic.ID = "DDL_PicType";
-                        ddlPic.Items.Add(new ListItem("自动签名", "0"));
-                        ddlPic.Items.Add(new ListItem("手动签名", "1"));
-                        ddlPic.SetSelectItem((int)mapAttr.PicType);
-                        this.Pub1.AddTD(ddlPic);
-                    }
-                    else
-                    {
-                        this.Pub1.AddTD();
-                    }
+                {
+                    this.Pub1.AddTD();
+                }
                 this.Pub1.AddTREnd();
             }
             #endregion 字段分组
@@ -791,7 +790,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.GetTBByID("TB_DefVal").Text = "";
             }
         }
-     
+
         public void EditInt(MapAttr mapAttr)
         {
             this.EditBeforeAdd(mapAttr);
@@ -1015,7 +1014,7 @@ namespace CCFlow.WF.MapDef
                 attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
 
                 if (attr.MyDataType == DataType.AppString && this.Pub1.IsExit("DDL_ColSpan") == true)
-                   attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
+                    attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
 
                 if (attr.UIIsEnable == false && attr.MyDataType == DataType.AppString)
                 {
@@ -1062,12 +1061,15 @@ namespace CCFlow.WF.MapDef
                     //签名类型.
                     attr.SignType = (SignType)this.Pub1.GetDDLByID("DDL_SignType").SelectedItemIntVal;
                     if (attr.SignType == SignType.Pic)
-                        attr.PicType = (PicType)this.Pub1.GetDDLByID("DDL_PicType").SelectedItemIntVal;//是否为自动签名
-                    else if (attr.SignType == SignType.CA)
+                    {
+                        attr.PicType = this.Pub1.IsExit("DDL_PicType") == true ? (PicType)this.Pub1.GetDDLByID("DDL_PicType").SelectedItemIntVal : PicType.Auto;//是否为自动签名
+                    }
+                    else if (attr.SignType == SignType.CA && this.Pub1.IsExit("TB_SiganField") == true)
+                    {
                         attr.Para_SiganField = this.Pub1.GetTBByID("TB_SiganField").Text;//数字签名字段.
-
+                    }
                     attr.UIHeightInt = this.Pub1.GetDDLByID("DDL_UIRows").SelectedItemIntVal * 23;
-                 //   attr.TBModel = (TBModel)this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemIntVal;
+                    //   attr.TBModel = (TBModel)this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemIntVal;
                 }
 
                 //字体大小.

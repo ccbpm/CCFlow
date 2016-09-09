@@ -155,6 +155,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         {
             string dotype = getUTF8ToString("DoType");
             string frmID = getUTF8ToString("FK_MapData");
+            if (frmID==null)
+                frmID = getUTF8ToString("FrmID");
 
             float x=0;
                 float y = 0;
@@ -232,7 +234,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         try
                         {
                             BP.Sys.CCFormAPI.NewField(getUTF8ToString("FrmID"), getUTF8ToString("KeyOfEn"),getUTF8ToString("Name"),
-                                int.Parse(getUTF8ToString("MyDataType")),
+                                int.Parse(getUTF8ToString("FieldType")),
                                 float.Parse(getUTF8ToString("x")),
                                float.Parse(getUTF8ToString("y"))
                                );

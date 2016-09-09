@@ -245,7 +245,7 @@ FigureCreateCommand.prototype = {
                         //开始画这个 - 元素.
                         transField.paint();
                     } catch (e) {
-                        alert(e);
+                        alert('画元素错误：' + e);
                     }
 
                 } else {

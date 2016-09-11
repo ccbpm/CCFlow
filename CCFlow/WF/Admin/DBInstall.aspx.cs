@@ -23,8 +23,6 @@ namespace CCFlow.WF.Admin
             //BP.WF.Node nd = new BP.WF.Node();
             //nd.NodeFrmID
 
-        
-
             if (this.Request.QueryString["DoType"] == "OK")
             {
                 this.Pub1.AddFieldSet("提示");
@@ -220,17 +218,26 @@ namespace CCFlow.WF.Admin
             //this.Pub1.AddFieldSetEndBR();
 
 
-            this.Pub1.AddFieldSet("是否装载演示流程模板?");
+            this.Pub1.AddFieldSet("装载演示流程模版?");
             rb = new RadioButton();
-            rb.Text = "是:我要安装demo组织结构体系、demo流程模板、表单模板，以方便我学习ccflow与ccform.(估计在<font color=red>8-15分钟</font>内安装完成)。";
-            rb.ID = "RB_DemoOn";
+            rb.Text = "我是技术人员，我安装技术类的设计演示模版.(估计在<font color=red>8-15分钟</font>内安装完成)。";
+            rb.ID = "RB_DemoOn0";
             rb.GroupName = "hjd";
             rb.Checked = true;
             this.Pub1.Add(rb);
             this.Pub1.AddBR();
+
+            rb = new RadioButton();
+            rb.Text = "我是业务人员，我想了解与使用常用的业务流程(估计在<font color=red>5-13分钟</font>内安装完成)。";
+            rb.ID = "RB_DemoOn1";
+            rb.GroupName = "hjd";
+            rb.Checked = false;
+            this.Pub1.Add(rb);
+            this.Pub1.AddBR();
+
             rb = new RadioButton();
             rb.Text = "否:不安装demo，仅仅安装空白的ccbpm环境(估计在<font color=red >2-3分钟</font>内安装完成)。";
-            rb.ID = "RB_DemoOff";
+            rb.ID = "RB_DemoOn2";
             rb.GroupName = "hjd";
             this.Pub1.Add(rb);
             this.Pub1.AddBR();
@@ -260,10 +267,19 @@ namespace CCFlow.WF.Admin
             string lang = "CH";
           
             //是否要安装demo.
-            bool isDemo = this.Pub1.GetRadioButtonByID("RB_DemoOn").Checked;
-         
+            int demoTye = 0;
+
+            if (this.Pub1.GetRadioButtonByID("RB_DemoOn0").Checked)
+                demoTye = 0;
+
+            if (this.Pub1.GetRadioButtonByID("RB_DemoOn1").Checked)
+                demoTye = 1;
+
+            if (this.Pub1.GetRadioButtonByID("RB_DemoOn2").Checked)
+                demoTye = 2;
+
             //运行ccflow的安装
-            BP.WF.Glo.DoInstallDataBase(lang, isDemo);
+            BP.WF.Glo.DoInstallDataBase(lang, demoTye);
 
             //执行ccflow的升级。
             BP.WF.Glo.UpdataCCFlowVer();

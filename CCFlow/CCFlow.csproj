@@ -13,8 +13,7 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>
-    </SilverlightApplicationList>
+    <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|ClientBin|False</SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -127,6 +126,8 @@
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="ClientBin\CCFlowDesigner.xap" />
+    <Content Include="Silverlight.js" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
@@ -1313,6 +1314,8 @@
     <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
+    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH.sql" />
+    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
     <Content Include="WF\Data\UpdataCCFlowVer.sql" />
     <Content Include="WF\Data\XML\BPMMenu.xml">
       <SubType>Designer</SubType>
@@ -7929,6 +7932,14 @@
     <Folder Include="WF\WorkOpt\OneWork\Img\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="WF\WorkOpt\CCFlowAPI.resx">
+      <DependentUpon>CCFlowAPI.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Components\BP.En30\BP.En30.csproj">
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
@@ -7945,14 +7956,6 @@
       <Project>{8E48D1DF-CEED-4F0C-B863-3359B2A99134}</Project>
       <Name>BP.Demo</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="WF\WorkOpt\CCFlowAPI.resx">
-      <DependentUpon>CCFlowAPI.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

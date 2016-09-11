@@ -50,7 +50,9 @@ figureSets["basic"] = {
         { figureFunction: "Label", name: CCForm_Controls.Label, image: "Label.png" },
         { figureFunction: "Button", name: CCForm_Controls.Button, image: "Button.png" },
         { figureFunction: "HyperLink", name: CCForm_Controls.HyperLink, image: "HyperLink.png" },
-        { figureFunction: "Image", name: CCForm_Controls.Image, image: "Img.png" }
+        { figureFunction: "Image", name: CCForm_Controls.Image, image: "Img.png" },
+        { figureFunction: "Fieldset", name: CCForm_Controls.Fieldset, image: "Fieldset.png" }
+
     ]
 };
 

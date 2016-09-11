@@ -181,7 +181,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             name = getUTF8ToString("Name");
                             x = float.Parse(getUTF8ToString("x"));
                             y = float.Parse(getUTF8ToString("y"));
-                            BP.Sys.CCFormAPI.PublicNoNameCtrlCreate(frmID, ctrlType, no, name, x, y);
+                            BP.Sys.CCFormAPI.CreatePublicNoNameCtrl(frmID, ctrlType, no, name, x, y);
                             return "true";
                         }
                         catch (Exception ex)

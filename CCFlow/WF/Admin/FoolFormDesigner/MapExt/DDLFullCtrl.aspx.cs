@@ -49,44 +49,15 @@ namespace CCFlow.WF.MapDef
             if (IsPostBack == false)
             {
                 MapExt me = new MapExt();
-
                 me.Retrieve(MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.ExtType, this.ExtType, MapExtAttr.AttrOfOper, this.RefNo);
                 this.TB_SQL.Text = me.Doc;
-                ArrayList arr = new ArrayList();
-                SysEnums ens = new SysEnums("DBSrcType");
 
-                foreach (SysEnum en in ens)
-                {
-                    arr.Add(en.Lab);
+                SFDBSrcs ens = new SFDBSrcs();
+                ens.RetrieveAll();
+                BP.Web.Controls.Glo.DDL_BindEns(this.DDL_DBSrc, ens, me.FK_DBSrc);
 
-                }
-
-                switch (me.FK_DBSrc)
-                {
-                    case "1":
-                        this.DDL_DBSrc.SelectedValue = "SQLServer数据库";
-                        break;
-                    case "100":
-                        this.DDL_DBSrc.SelectedValue = "WebService数据源";
-                        break;
-                    case "2":
-                        this.DDL_DBSrc.SelectedValue = "Oracle数据库";
-                        break;
-                    case "3":
-                        this.DDL_DBSrc.SelectedValue = "MySQL数据库";
-                        break;
-                    case "4":
-                        this.DDL_DBSrc.SelectedValue = "Informix数据库";
-                        break;
-                    default:
-                        this.DDL_DBSrc.SelectedValue = "应用系统主数据库(默认)";
-                        break;
-
-                }
-                this.DDL_DBSrc.DataSource = arr;
-                this.DDL_DBSrc.DataBind();
-
-
+                //this.DDL_DBSrc.DataSource = arr;
+                //this.DDL_DBSrc.DataBind();
             }
 
         }
@@ -102,29 +73,8 @@ namespace CCFlow.WF.MapDef
             me.FK_MapData = this.FK_MapData;
             me.MyPK = this.FK_MapData + "_" + me.ExtType + "_" + me.AttrOfOper;
 
-            switch (this.DDL_DBSrc.Text)
-            {
-                case "应用系统主数据库(默认)":
-                    me.FK_DBSrc = "0";
-                    break;
-                case "SQLServer数据库":
-                    me.FK_DBSrc = "1";
-                    break;
-                case "WebService数据源":
-                    me.FK_DBSrc = "100";
-                    break;
-                case "Oracle数据库":
-                    me.FK_DBSrc = "2";
-                    break;
-                case "MySQL数据库":
-                    me.FK_DBSrc = "3";
-                    break;
-                case "Informix数据库":
-                    me.FK_DBSrc = "4";
-                    break;
-                default:
-                    break;
-            }
+            me.FK_DBSrc = this.DDL_DBSrc.SelectedValue;
+             
 
             me.Save();
         }

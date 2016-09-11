@@ -253,6 +253,7 @@ var CCForm_Controls = {
     Button: 'Button',
     HyperLink: 'HyperLink',
     Image: 'Image',
+    Fieldset: 'Fieldset',
     TextBox: 'TextBox',
     TextBoxInt: 'TextBoxInt',
     TextBoxMoney: 'TextBoxMoney',

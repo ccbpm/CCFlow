@@ -156,7 +156,7 @@ namespace BP.WF.Template
             //修改权限管理
             if (BP.WF.Glo.OSModel == OSModel.OneMore)
             {
-                DBAccess.RunSQL("UPDATE  GPM_Menu SET Name='" + this.Name + "' WHERE Flag='FlowSort" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
+              //  DBAccess.RunSQL("UPDATE  GPM_Menu SET Name='" + this.Name + "' WHERE Flag='FlowSort" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
             }
             return base.beforeUpdate();
         }

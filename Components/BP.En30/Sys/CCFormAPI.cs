@@ -41,7 +41,7 @@ namespace BP.Sys
         /// <param name="name">名称</param>
         /// <param name="x">位置x</param>
         /// <param name="y">位置y</param>
-        public static void PublicNoNameCtrlCreate(string fk_mapdata, string ctrlType, string no, string name, float x, float y)
+        public static void CreatePublicNoNameCtrl(string fk_mapdata, string ctrlType, string no, string name, float x, float y)
         {
             switch (ctrlType)
             {
@@ -57,6 +57,20 @@ namespace BP.Sys
                 case "AthImg":
                     CreateOrSaveAthImg(fk_mapdata, no, name, x, y);
                     break;
+                case "Fieldset": //分组.
+                    FrmEle fe = new FrmEle();
+                    fe.MyPK = fk_mapdata + "_" + no;
+                    if (fe.RetrieveFromDBSources() != 0)
+                        throw new Exception("@创建失败，已经有同名元素["+no+"]的控件.");
+                    fe.FK_MapData = fk_mapdata;
+                    fe.EleType = "Fieldset";
+                    fe.EleName = name;
+                    fe.EleID = no;
+                    fe.X = x;
+                    fe.Y = y;
+                    fe.Insert();
+                    //CreateOrSaveAthImg(fk_mapdata, no, name, x, y);
+                    break;
                 default:
                     throw new Exception("@没有判断的存储控件:"+ctrlType+",存储该控件前,需要做判断.");
             }
@@ -71,17 +85,22 @@ namespace BP.Sys
         /// <param name="y">位置y</param>
         public static void CreateOrSaveAthImg(string fk_mapdata, string no, string name, float x, float y)
         {
-            FrmAttachment ath = new FrmAttachment();
+            FrmImg ath = new FrmImg();
             ath.FK_MapData = fk_mapdata;
-            ath.NoOfObj = no;
-
-            ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
-            ath.RetrieveFromDBSources();
-            ath.UploadType = AttachmentUploadType.Single;
+            ath.HisImgAppType = ImgAppType.Img;
+            ath.MyPK = fk_mapdata + "_" + no;
             ath.Name = name;
             ath.X = x;
             ath.Y = y;
-            ath.Save();
+            ath.Insert();
+
+            //ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
+            //ath.RetrieveFromDBSources();
+            //ath.UploadType = AttachmentUploadType.Single;
+            //ath.Name = name;
+            //ath.X = x;
+            //ath.Y = y;
+            //ath.Save();
         }
         /// <summary>
         /// 创建/修改-多附件
@@ -494,7 +513,7 @@ namespace BP.Sys
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
             foreach (MapAttr item in attrs)
-                attrPKs += item.MyPK + "@";
+                attrPKs += item.KeyOfEn + "@";
             attrPKs += "@";
 
 
@@ -506,13 +525,30 @@ namespace BP.Sys
                 dtlPKs += item.No + "@";
             dtlPKs += "@";
 
-            //求明细表.
+            //求附件.
             string athMultis = "@";
             FrmAttachments aths = new FrmAttachments();
             aths.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
             foreach (FrmAttachment item in aths)
                 athMultis += item.NoOfObj + "@";
             athMultis += "@";
+
+            //图片附件.
+            string athImgs = "@";
+            FrmImgAths fias = new FrmImgAths();;
+            fias.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
+            foreach (FrmImgAth item in fias)
+                athImgs += item.CtrlID + "@";
+            athImgs += "@";
+
+
+            //附加元素..
+            string eleIDs = "@";
+            FrmEles feles = new FrmEles(); ;
+            feles.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
+            foreach (FrmEle item in feles)
+                eleIDs += item.EleID + "@";
+            eleIDs += "@";
             #endregion 求PKs.
 
             //保存线.
@@ -533,7 +569,6 @@ namespace BP.Sys
                 delSqls += "DELETE FROM Sys_FrmLink WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + fk_mapdata + "'";
-
                 BP.DA.DBAccess.RunSQLs(delSqls);
                 return;
             }
@@ -568,6 +603,7 @@ namespace BP.Sys
                         BP.Sys.CCFormParse.SaveImage(fk_mapdata, control, properties, imgPKs, ctrlID);
                         imgPKs = imgPKs.Replace(ctrlID + "@", "@");
                         continue;
+                  
                     default:
                         break;
                 }
@@ -599,7 +635,9 @@ namespace BP.Sys
                     dtlPKs = dtlPKs.Replace(ctrlID + "@", "@");
                     continue;
                 }
+                #endregion 数据类控件.
 
+                #region 附件.
                 if (shape == "AthMulti" || shape == "AthSingle")
                 {
                     //记录已经存在的ID， 需要当时保存.
@@ -607,7 +645,23 @@ namespace BP.Sys
                     athMultis = athMultis.Replace(ctrlID + "@", "@");
                     continue;
                 }
-                #endregion 数据类控件.
+                if (shape == "AthImg")
+                {
+                    //记录已经存在的ID， 需要当时保存.
+                    BP.Sys.CCFormParse.SaveAthImg(fk_mapdata, ctrlID, x, y, height, width);
+                    athImgs = athImgs.Replace(ctrlID + "@", "@");
+                    continue;
+                }
+
+                if (shape == "Fieldset")
+                {
+                    //记录已经存在的ID， 需要当时保存.
+                    BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, "Fieldset", ctrlID, x, y, height, width);
+                    eleIDs = eleIDs.Replace(ctrlID + "@", "@");
+                    continue;
+                }
+                #endregion 附件.
+
 
                 throw new Exception("@没有判断的类型:shape = " + shape);
             }
@@ -627,7 +681,6 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(pk))
                     continue;
-
                 sqls += "@DELETE FROM Sys_FrmBtn WHERE MyPK='" + pk + "'";
             }
 
@@ -654,8 +707,8 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(pk))
                     continue;
-
                 sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + pk + "' AND FK_MapData='"+fk_mapdata+"'";
+                sqls += "@DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }
 
             pks = dtlPKs.Split('@');

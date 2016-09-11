@@ -1180,7 +1180,7 @@ namespace BP.WF.Template
 
             if (Glo.OSModel == OSModel.OneMore)
             {
-                DBAccess.RunSQL("UPDATE  GPM_Menu SET Name='" + this.Name + "' WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
+               // DBAccess.RunSQL("UPDATE  GPM_Menu SET Name='" + this.Name + "' WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
             }
         }
         protected override bool beforeUpdate()

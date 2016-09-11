@@ -346,6 +346,7 @@ namespace BP.Sys
                 map.EnDesc = "图片";
                 map.EnType = EnType.Sys;
                 map.AddMyPK();
+
                 map.AddTBString(FrmImgAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
                 map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
                 

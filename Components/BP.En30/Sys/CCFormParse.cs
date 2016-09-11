@@ -13,6 +13,38 @@ namespace BP.Sys
     /// </summary>
     public class CCFormParse
     {
+
+        public static void SaveFrmEle(string fk_mapdata,string eleType, string ctrlID, float x, float y, float h, float w)
+        {
+            FrmEle en = new FrmEle();
+            en.MyPK = fk_mapdata + "_" + ctrlID;
+            en.RetrieveFromDBSources();
+
+            en.EleType = eleType;
+            en.FK_MapData = fk_mapdata;
+            en.EleID = ctrlID;
+
+            en.X = x;
+            en.Y = y;
+            en.W = w;
+            en.H = h;
+            en.Update();
+        }
+
+        public static void SaveAthImg(string fk_mapdata, string ctrlID, float x, float y, float h, float w)
+        {
+            FrmImgAth en = new FrmImgAth();
+            en.MyPK = fk_mapdata + "_" + ctrlID;
+            en.FK_MapData = fk_mapdata;
+            en.CtrlID = ctrlID;
+            en.RetrieveFromDBSources();
+
+            en.X = x;
+            en.Y = y;
+            en.W = w;
+            en.H = h;
+            en.Update();
+        }
  
         public static void SaveAthMulti(string fk_mapdata,string ctrlID, float x, float y, float h, float w)
         {
@@ -49,7 +81,7 @@ namespace BP.Sys
             attr.MyPK = fk_mapdata + "_" + ctrlID;
 
             //执行一次查询,以防止其他的属性更新错误.
-            if (pks.Contains("@" + attr.MyPK + "@") == true)
+            if (pks.Contains("@" + attr.KeyOfEn + "@") == true)
                 attr.RetrieveFromDBSources();
 
             switch (shape)
@@ -164,9 +196,8 @@ namespace BP.Sys
                 attr.UIHeight = float.Parse(imgHeight.ToString("0.00"));
             }
 
-            if (pks.Contains("@" + attr.MyPK + "@") == true)
+            if (pks.Contains("@" + attr.KeyOfEn + "@") == true)
             {
-                pks = pks.Replace(attr.MyPK, "");
                 attr.Update();
             }
             else
@@ -224,15 +255,6 @@ namespace BP.Sys
                     }
                     lineEn.BorderWidth = float.Parse(strborderWidth);
                     lineEn.BorderColor = strBorderColor;
-
-
-                    //执行保存.
-                    if (string.IsNullOrEmpty(lineEn.MyPK))
-                    {
-                        lineEn.MyPK = BP.DA.DBAccess.GenerGUID();
-                        lineEn.GUID = lineEn.MyPK;
-                    }
-
                     if (linePKs.Contains("@"+lineEn.MyPK + "@") == true)
                     {
                         linePKs = linePKs.Replace(lineEn.MyPK + "@", "");
@@ -241,19 +263,19 @@ namespace BP.Sys
                     else
                         lineEn.DirectInsert();
                 }
-
-                //删除找不到的Line.
-                string[] strs = linePKs.Split('@');
-                string sqls = "";
-                foreach (string str in strs)
-                {
-                    if (string.IsNullOrEmpty(str))
-                        continue;
-                    sqls += "@DELETE FROM Sys_FrmLine WHERE MyPK='" + str + "'";
-                }
-                if (sqls != "")
-                    BP.DA.DBAccess.RunSQLs(sqls);
             }
+
+            //删除找不到的Line.
+            string[] strs = linePKs.Split('@');
+            string sqls = "";
+            foreach (string str in strs)
+            {
+                if (string.IsNullOrEmpty(str))
+                    continue;
+                sqls += "@DELETE FROM Sys_FrmLine WHERE MyPK='" + str + "'";
+            }
+            if (sqls != "")
+                BP.DA.DBAccess.RunSQLs(sqls);
         }
         public static void SaveLabel(string fk_mapdata, JsonData control, JsonData properties, string pks, string ctrlID)
         {

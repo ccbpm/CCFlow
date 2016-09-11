@@ -2276,7 +2276,9 @@ namespace BP.WF
             path = PathFlowDesc + path + "\\";
             this.DoExpFlowXmlTemplete(path);
 
-            name = path + name + "." + this.Ver.Replace(":", "_") + ".xml";
+           // name = path + name + "." + this.Ver.Replace(":", "_") + ".xml";
+
+            name = path + name + ".xml";
             return name;
         }
         /// <summary>
@@ -2288,13 +2290,13 @@ namespace BP.WF
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-
             DataSet ds = GetFlow(path);
             if (ds != null)
             {
                 string name = this.Name;
                 name = BP.Tools.StringExpressionCalculate.ReplaceBadCharOfFileName(name);
-                name = name + "." + this.Ver.Replace(":", "_") + ".xml";
+               // name = name + "." + this.Ver.Replace(":", "_") + ".xml";
+                name = name + ".xml";
                 string filePath = path + name;
                 ds.WriteXml(filePath);
             }

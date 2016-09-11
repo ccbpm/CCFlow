@@ -186,6 +186,10 @@ namespace BP.Sys
                 map.AddTBFloat(FrmLineAttr.X2, 9, "X2", false, false);
                 map.AddTBFloat(FrmLineAttr.Y2, 9, "Y2", false, false);
 
+                //不再用的两个字段,但是还不能删除.
+                map.AddTBFloat("X", 9, "X", false, false);
+                map.AddTBFloat("Y", 9, "Y", false, false);
+
                 map.AddTBFloat(FrmLineAttr.BorderWidth, 1, "宽度", false, false);
                 map.AddTBString(FrmLineAttr.BorderColor, "black", "颜色", true, false, 0, 30, 20);
 

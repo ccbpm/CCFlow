@@ -721,11 +721,17 @@ namespace BP.WF
             }
             return true;
         }
+       
         /// <summary>
         /// 安装包
         /// </summary>
-        public static void DoInstallDataBase(string lang, bool isInstallFlowDemo)
+        /// <param name="lang">语言</param>
+        /// <param name="demoType">0开发人员流程, 1,业务流程 , 2不安装流程.</param>
+        public static void DoInstallDataBase(string lang, int demoType)
         {
+            bool isInstallFlowDemo = true;
+            if (demoType == 2)
+                isInstallFlowDemo = false;
 
             #region 检查是否是空白的数据库。
             //if (BP.DA.DBAccess.IsExitsObject("WF_Emp")
@@ -741,7 +747,6 @@ namespace BP.WF
             string info = "BP.En.Entity";
             al = BP.En.ClassFactory.GetObjects(info);
 
-
             #region 先创建表，否则列的顺序就会变化.
             FlowExt fe = new FlowExt();
             fe.CheckPhysicsTable();
@@ -749,7 +754,6 @@ namespace BP.WF
             NodeExt ne = new NodeExt();
             ne.CheckPhysicsTable();
             #endregion 先创建表，否则列的顺序就会变化.
-
 
             #region 1, 创建or修复表
             foreach (Object obj in al)
@@ -883,7 +887,7 @@ namespace BP.WF
             if (Glo.OSModel == BP.Sys.OSModel.OneMore)
             {
                 /*如果是OneMore模式*/
-                sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\GPM\\SQLScript\\Port_Inc_CH_BPM.sql";
+                sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
             }
             #endregion 修复
@@ -987,9 +991,19 @@ namespace BP.WF
                 BP.Port.Emp emp = new BP.Port.Emp("admin");
                 BP.Web.WebUser.SignInOfGener(emp);
 
-                //装载数据模版.
-                BP.WF.DTS.LoadTemplete l = new BP.WF.DTS.LoadTemplete();
-                string msg = l.Do() as string;
+                string msg = "";
+                if (demoType == 0)
+                {
+                    //装载数据模版.
+                    BP.WF.DTS.LoadTemplete l = new BP.WF.DTS.LoadTemplete();
+                    msg = l.Do() as string;
+                }
+                else
+                {
+                    //装载数据模版.
+                    BP.WF.DTS.LoadTempleteOfBuess l2 = new BP.WF.DTS.LoadTempleteOfBuess();
+                    msg = l2.Do() as string;
+                }
 
                 //修复视图.
                 Flow.RepareV_FlowData_View();
@@ -1056,10 +1070,18 @@ namespace BP.WF
                 Flows fls = new Flows();
                 fls.RetrieveAllFromDBSource();
                 foreach (Flow fl in fls)
-                    fl.DoCheck();
+                {
+                    try
+                    {
+                        fl.DoCheck();
+                    }
+                    catch(Exception ex)
+                    {
+                        BP.DA.Log.DebugWriteError(ex.Message);
+                    }
+                }
             }
             #endregion 如果是第一次运行，就执行检查。
-
         }
         /// <summary>
         /// 检查树结构是否符合需求
@@ -1067,7 +1089,6 @@ namespace BP.WF
         /// <returns></returns>
         public static bool CheckTreeRoot()
         {
-
             // 流程树根节点校验
             string tmp = "SELECT Name FROM WF_FlowSort WHERE ParentNo='0'";
             tmp = DBAccess.RunSQLReturnString(tmp);
@@ -1887,6 +1908,7 @@ namespace BP.WF
         {
             flowNo = int.Parse(flowNo).ToString();
             string len = BP.Sys.SystemConfig.AppCenterDBLengthStr;
+
             //edited by liuxc,2016-02-22,合并逻辑，原来分流程编号的位数，现在统一处理
             return " (" + colName + " LIKE 'ND" + flowNo + "%' AND " + len + "(" + colName + ")=" +
                    ("ND".Length + flowNo.Length + 2) + ") OR (" + colName +

@@ -120,10 +120,20 @@ namespace BP.WF.DTS
                 if (item.No.Contains("."))
                     continue;
 
-                string sql = "SELECT * FROM " + item.No + " ";
-                DataSet ds = new DataSet();
-                ds.Tables.Add(BP.DA.DBAccess.RunSQLReturnTable(sql));
-                ds.WriteXml(pathOfTables + "\\" + item.No + ".xml");
+                if (item.SrcType != SrcType.CreateTable)
+                    continue;
+
+                try
+                {
+                    string sql = "SELECT * FROM " + item.No + " ";
+                    DataSet ds = new DataSet();
+                    ds.Tables.Add(BP.DA.DBAccess.RunSQLReturnTable(sql));
+                    ds.WriteXml(pathOfTables + "\\" + item.No + ".xml");
+                }
+                catch
+                {
+
+                }
             }
             #endregion 备份表单相关数据.
 

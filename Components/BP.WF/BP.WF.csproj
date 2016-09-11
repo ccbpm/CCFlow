@@ -196,6 +196,7 @@
     <Compile Include="DINGTalk\WeiXinMessage.cs" />
     <Compile Include="DTS\ChangeUserNo.cs" />
     <Compile Include="DTS\DeleteBlankGroupField.cs" />
+    <Compile Include="DTS\LoadTempleteOfBuess.cs" />
     <Compile Include="DTS\OrgInit_Ding.cs" />
     <Compile Include="DTS\OrgInit_NameOfPath.cs" />
     <Compile Include="DTS\OrgInit_WeiXinUserIcon.cs" />

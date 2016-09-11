@@ -13,6 +13,19 @@ namespace BP.WF.Template
     {
         #region 导入导出属性.
         /// <summary>
+        /// 用户访问.
+        /// </summary>
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.OpenForAppAdmin();
+                uac.IsInsert = false;
+                return uac;
+            }
+        }
+        /// <summary>
         /// 是否可以导出
         /// </summary>
         public bool IsExp

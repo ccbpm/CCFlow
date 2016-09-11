@@ -95,6 +95,9 @@ namespace CCFlow.WF.MapDef.Rpt
 
             foreach (MapAttr mattr in attrs)
             {
+                if (mattr.UIVisible == false)
+                    continue;
+
                 if (mattr.MyDataType == DataType.AppDate || mattr.MyDataType == DataType.AppDateTime)
                 {
                     isHave = true;

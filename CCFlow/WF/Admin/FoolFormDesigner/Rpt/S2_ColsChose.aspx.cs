@@ -189,6 +189,7 @@ namespace CCFlow.WF.MapDef.Rpt
 
         private void Save()
         {
+           
             MapAttrs mattrs = new MapAttrs(this.FK_MapData);
             mattrs.Delete(MapAttrAttr.FK_MapData, this.RptNo);
 
@@ -202,6 +203,12 @@ namespace CCFlow.WF.MapDef.Rpt
                     continue;
 
                 attr.FK_MapData = this.RptNo;
+                if (attr.KeyOfEn == "FK_NY")
+                {
+                    attr.LGType = BP.En.FieldTypeS.FK;
+                    attr.UIBindKey = "BP.Pub.NYs";
+                    attr.UIContralType = BP.En.UIContralType.DDL;
+                }
                 attr.Insert();
             }
         }

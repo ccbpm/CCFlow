@@ -67,13 +67,51 @@ namespace CCFlow.WF.Admin
             }
             this.Pub1.AddTableEnd();
 
-            this.Pub1.Add("格式为: @Para1=Value1@Para2=Value2）比如:@QingJiaTianShu=20");
 
             Button btn = new Button();
             btn.ID = "ss";
             btn.Text = "执行";
             btn.Click += new EventHandler(btn_Click);
             this.Pub1.Add(btn);
+
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
+            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + int.Parse(this.FK_Flow) + "Rpt");
+
+            string strs = "";
+            foreach (BP.Sys.MapAttr attr in attrs)
+            {
+                switch (attr.KeyOfEn)
+                {
+                    case BP.WF.Data.NDXRptBaseAttr.AtPara:
+                    case BP.WF.Data.NDXRptBaseAttr.BillNo:
+                    case BP.WF.Data.NDXRptBaseAttr.FID:
+                    case BP.WF.Data.NDXRptBaseAttr.FK_Dept:
+                    case BP.WF.Data.NDXRptBaseAttr.FK_NY:
+                    case BP.WF.Data.NDXRptBaseAttr.FlowDaySpan:
+                    case BP.WF.Data.NDXRptBaseAttr.FlowEmps:
+                    case BP.WF.Data.NDXRptBaseAttr.FlowEnder:
+                    case BP.WF.Data.NDXRptBaseAttr.FlowEndNode:
+                    case BP.WF.Data.NDXRptBaseAttr.FlowStarter:
+                    case BP.WF.Data.NDXRptBaseAttr.FlowStartRDT:
+                    case BP.WF.Data.NDXRptBaseAttr.GuestName:
+                    case BP.WF.Data.NDXRptBaseAttr.GuestNo:
+                    case BP.WF.Data.NDXRptBaseAttr.MyNum:
+                    case BP.WF.Data.NDXRptBaseAttr.OID:
+                    case BP.WF.Data.NDXRptBaseAttr.PEmp:
+                    case BP.WF.Data.NDXRptBaseAttr.PFlowNo:
+                    case BP.WF.Data.NDXRptBaseAttr.PWorkID:
+                    case BP.WF.Data.NDXRptBaseAttr.Title:
+                    case BP.WF.Data.NDXRptBaseAttr.WFSta:
+                    case BP.WF.Data.NDXRptBaseAttr.WFState:
+                    case BP.WF.Data.NDXRptBaseAttr.PRI:
+                        continue;
+                    default:
+                        break;
+                }
+                strs += "<br>" + attr.Name + "@" + attr.KeyOfEn + "=";
+            }
+
+            this.Pub1.Add("格式为: @Para1=Value1@Para2=Value2）比如:@QingJiaTianShu=20 ，可以参考的字段为.<hr>"+strs );
         }
 
         void btn_Click(object sender, EventArgs e)

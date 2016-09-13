@@ -1,8 +1,6 @@
 ﻿//公共方法
 function ajaxService(param, callback, scope) {
-
-    alert('ajaxService:' + param);
-
+    
     var url = controllerURLConfig;  //  "FormDesignerController.ashx";
 
     $.ajax({

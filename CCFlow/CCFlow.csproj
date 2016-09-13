@@ -180,10 +180,10 @@
     <Content Include="WF\Admin\CCFormDesigner\Default.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Designer.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTable.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmDtl.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
     <Content Include="WF\Admin\CCFormDesigner\js\CCBPMDesignerData.js" />
+    <Content Include="WF\Admin\CCFormDesigner\js\config.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\FuncTrees.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\commands\ConnectorCloneCommand.js" />
     <Content Include="WF\Admin\CCFormDesigner\Login.aspx" />
@@ -706,7 +706,6 @@
     <Content Include="WF\Admin\CCFormDesigner\BasicData.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\CCFormDesignerSL.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx" />
-    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\ControlDemo.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmEnumeration.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmHiddenField.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmImg.htm" />
@@ -3857,13 +3856,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx.designer.cs">
       <DependentUpon>DesignerFrm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\DialogCtr\ControlDemo.aspx.cs">
-      <DependentUpon>ControlDemo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\DialogCtr\ControlDemo.aspx.designer.cs">
-      <DependentUpon>ControlDemo.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Exp.aspx.cs">
       <DependentUpon>Exp.aspx</DependentUpon>

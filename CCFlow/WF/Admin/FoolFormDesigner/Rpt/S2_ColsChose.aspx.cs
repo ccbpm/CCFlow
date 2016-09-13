@@ -209,6 +209,14 @@ namespace CCFlow.WF.MapDef.Rpt
                     attr.UIBindKey = "BP.Pub.NYs";
                     attr.UIContralType = BP.En.UIContralType.DDL;
                 }
+
+                if (attr.KeyOfEn == "FK_Dept")
+                {
+                    attr.LGType = BP.En.FieldTypeS.FK;
+                    attr.UIBindKey = "BP.Port.Depts";
+                    attr.UIContralType = BP.En.UIContralType.DDL;
+                }
+
                 attr.Insert();
             }
         }

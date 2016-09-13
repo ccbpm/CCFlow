@@ -11,7 +11,7 @@ namespace CCFlow.WF.Admin.ccformDesigner
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //让admin登录
+            //让admin登录.
             if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.No != "admin")
             {
                 Response.Redirect("Login.aspx?DoType=Logout");

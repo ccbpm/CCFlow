@@ -178,7 +178,6 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\Data\TextBoxMoney.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\readme.txt" />
     <Content Include="WF\Admin\CCFormDesigner\Default.aspx" />
-    <Content Include="WF\Admin\CCFormDesigner\Designer.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTable.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
@@ -710,7 +709,6 @@
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmHiddenField.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmImg.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTextBox.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\Exp.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\FiledsList.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesigner.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Home.aspx" />
@@ -3843,26 +3841,12 @@
     <Compile Include="WF\Admin\CCFormDesigner\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Designer.aspx.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Designer.aspx.designer.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx.cs">
       <DependentUpon>DesignerFrm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx.designer.cs">
       <DependentUpon>DesignerFrm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Exp.aspx.cs">
-      <DependentUpon>Exp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Exp.aspx.designer.cs">
-      <DependentUpon>Exp.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\FiledsList.aspx.cs">
       <DependentUpon>FiledsList.aspx</DependentUpon>

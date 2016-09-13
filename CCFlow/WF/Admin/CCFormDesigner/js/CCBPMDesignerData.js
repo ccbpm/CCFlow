@@ -54,7 +54,7 @@ function checklogin(fCallback, oScope) {
             }
         }
         else {
-            $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
+         //  $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
         }
     }, [fCallback, oScope]);
 }

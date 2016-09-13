@@ -10,8 +10,10 @@ $(function () {
     CanvasProps.DEFAULT_HEIGHT = 1200;
     /**default width for canvas*/
     CanvasProps.DEFAULT_WIDTH = 900;
+
     //验证登录用户
     checklogin();
+
     //初始化画板
     init(CCForm_FK_MapData);
     //显示网格

@@ -1,6 +1,6 @@
 ﻿//公共方法
 function ajaxService(param, callback, scope, levPath) {
-    var url = "FormDesignerController.ashx";
+    var url = controllerURLConfig; //  "FormDesignerController.ashx";
     if (levPath == "1")
         url = "../FormDesignerController.ashx";
     $.ajax({

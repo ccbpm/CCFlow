@@ -258,68 +258,6 @@ FigureCreateCommand.prototype = {
 
         return false;
     },
-    /**创建明细表**/
-    DtlCreate: function (createdFigure, x, y) {
-
-        var dgId = "iframeRadioButton";
-        var url = "DialogCtr/FrmDtl.htm?DataType=&s=" + Math.random();
-        var funIsExist = this.IsExist;
-
-        var lab = '创建从表';
-
-        OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
-            var win = document.getElementById(dgId).contentWindow;
-            var frmVal = win.GetFrmInfo();
-
-            if (frmVal.Name == null || frmVal.Name.length == 0) {
-                $.messager.alert('错误', '从表名称不能为空。', 'error');
-                return false;
-            }
-
-            if (frmVal.No == null || frmVal.No.length == 0) {
-                $.messager.alert('错误', '从表编号不能为空。', 'error');
-                return false;
-            }
-
-            //判断主键是否存在
-            var isExit = funIsExist(frmVal.No);
-            if (isExit == true) {
-                $.messager.alert("错误", "@已存在ID为(" + frmVal.No + ")的元素，不允许添加同名元素！", "error");
-                return false;
-            }
-
-            createdFigure.CCForm_Shape = "Dtl";
-
-            //根据信息创建不同类型的数字控件.
-            var transField = new TransFormDataField(createdFigure, frmVal, x, y);
-
-            // 定义参数，让其保存到数据库里。
-            var param = {
-                action: "DoType",
-                DoType: "NewDtl",
-                FK_MapData: CCForm_FK_MapData,
-                Name: frmVal.Name,
-                No: frmVal.No,
-                x: x,
-                y: y
-            };
-            ajaxService(param, function (json) {
-                if (json == "true") {
-                    try {
-                        //开始画这个 - 元素.
-                        transField.paint();
-                    } catch (e) {
-                        alert(e);
-                    }
-                } else {
-                    Designer_ShowMsg(json);
-                }
-            }, this);
-
-        }, null);
-
-        return false;
-    },
     /**通用的No,Name 明细表，多附件，单附件 存储**/
     PublicNoNameCtrlCreate: function (createdFigure, x, y, ctrlType) {
 

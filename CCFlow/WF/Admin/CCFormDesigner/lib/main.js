@@ -3184,7 +3184,7 @@ function Save(showInfo) {
     //save the URLs of figures as a CSV 
     var lMap = linkMap();
 
-    $.post("FormDesignerController.ashx", {
+    $.post(controllerURLConfig, {
         action: 'SaveForm',
         diagram: serializedDiagram,
         png: dataURL,
@@ -3309,7 +3309,7 @@ function exportCanvas() {
 *@param {String} tempDiagramName - the name of temporary diagram
 **/
 function loadTempDiagram(FK_MapData) {
-    $.post("FormDesignerController.ashx", { action: 'loadform', FK_MapData: FK_MapData },
+    $.post(controllerURLConfig, { action: 'loadform', FK_MapData: FK_MapData },
         function (data) {
             //alert(data);
             try {

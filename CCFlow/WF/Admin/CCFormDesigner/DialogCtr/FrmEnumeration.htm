@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <!-- 引用配置文件.-->
+    <script src="../js/config.js" type="text/javascript"></script>
+
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -137,7 +140,7 @@
                 EnumKey: key
             };
 
-            $.post("../FormDesignerController.ashx", param, function (data) {
+            $.post(controllerURLConfig, param, function (data) {
                 if (data == "true") {
                     alert('删除成功.');
                     LoadGridData(1, 6);

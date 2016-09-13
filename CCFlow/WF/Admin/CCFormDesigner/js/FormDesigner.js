@@ -283,6 +283,10 @@ function GetDateString() {
 
     return strTimeKey;
 }
+function Exp() {
+    window.open('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData, 'ss', '', '');
+    return;
+}
 
 //设置属性样式
 function ReSetEditDivCss() {

@@ -178,6 +178,7 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\Data\TextBoxMoney.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\readme.txt" />
     <Content Include="WF\Admin\CCFormDesigner\Default.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Exp.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTable.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />

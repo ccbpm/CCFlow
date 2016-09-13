@@ -149,8 +149,6 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Datetime.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\DropDownListEnum.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\DropDownListTable.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Dtl - 副本 %282%29.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Dtl - 副本 %283%29.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Dtl.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Radiobutton.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\TextBoxBoolean.png" />
@@ -182,9 +180,10 @@
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTable.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
-    <Content Include="WF\Admin\CCFormDesigner\js\CCBPMDesignerData.js" />
+    <Content Include="WF\Admin\CCFormDesigner\js\Default.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\config.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\FuncTrees.js" />
+    <Content Include="WF\Admin\CCFormDesigner\js\Left.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\commands\ConnectorCloneCommand.js" />
     <Content Include="WF\Admin\CCFormDesigner\Login.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />

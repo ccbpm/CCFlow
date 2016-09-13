@@ -1,9 +1,10 @@
 ﻿//公共方法
-function ajaxService(param, callback, scope, levPath) {
-    var url = controllerURLConfig; //  "FormDesignerController.ashx";
-   // var url =   "FormDesignerController.ashx";
-    if (levPath == "1")
-        url = "../FormDesignerController.ashx";
+function ajaxService(param, callback, scope) {
+
+    alert('ajaxService:' + param);
+
+    var url = controllerURLConfig;  //  "FormDesignerController.ashx";
+
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据
@@ -34,7 +35,7 @@ function checklogin(fCallback, oScope) {
             }
         }
         else {
-           // $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
+            $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
         }
     }, [fCallback, oScope]);
 }

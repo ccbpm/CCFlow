@@ -5,7 +5,7 @@ function getArgsFromHref(sArgName) {
     var retval = "";
     if (args[0] == sHref) /*参数为空*/
     {
-        return retval; /*无需做任何处理*/
+        return retval; /* 无需做任何处理 */
     }
     var str = args[1];
     args = str.split("&");
@@ -14,13 +14,15 @@ function getArgsFromHref(sArgName) {
         var arg = str.split("=");
         if (arg.length <= 1)
            continue;
-        if (arg[0] == sArgName) retval = arg[1];
+        if (arg[0] == sArgName) 
+            retval = arg[1];
     }
     return retval;
 }
 
 //公共方法
-function ajaxService(param, callback, scope, levPath) {
+function ajaxServiceDefault(param, callback, scope, levPath) {
+
     var url = "common/CCBPMDesignerBase.ashx";
     if (levPath == "1")
         url = "../common/CCBPMDesignerBase.ashx";
@@ -36,7 +38,7 @@ function ajaxService(param, callback, scope, levPath) {
         error: function (XMLHttpRequest, errorThrown) {
             callback(XMLHttpRequest);
         },
-        success: function (msg) {//msg为返回的数据，在这里做数据绑定
+        success: function (msg) { //msg为返回的数据，在这里做数据绑定.
             var data = msg;
             callback(data, scope);
         }
@@ -47,14 +49,14 @@ function checklogin(fCallback, oScope) {
     /// <summary>检测登录信息</summary>
     /// <param name="fCallback" type="Function">检测完之后，要运行的方法</param>
     /// <param name="oScope" type="Object">检测完之后，要运行的方法的参数</param>
-    ajaxService({ method: "LetLogin" }, function (re, scps) {
+    ajaxServiceDefault({ method: "LetLogin" }, function (re, scps) {
         if (re == null || re.length == 0) {
             if (scps.length == 2 && scps[0]) {
                 scps[0](scps[1]);
             }
         }
         else {
-         //  $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
+          $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
         }
     }, [fCallback, oScope]);
 }

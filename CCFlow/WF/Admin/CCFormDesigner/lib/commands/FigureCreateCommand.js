@@ -160,6 +160,7 @@ FigureCreateCommand.prototype = {
                 HidenFieldFun(frmVal);
             } else {
 
+
                 //根据信息创建不同类型的数字控件
                 var transField = new TransFormDataField(createdFigure, frmVal, x, y);
 
@@ -174,9 +175,9 @@ FigureCreateCommand.prototype = {
                     x: x,
                     y: y
                 };
+
                 ajaxService(param, function (json) {
                     if (json == "true") {
-
                         //开始画这个-元素.
                         transField.paint();
 

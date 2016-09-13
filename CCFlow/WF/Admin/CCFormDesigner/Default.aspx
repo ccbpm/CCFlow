@@ -18,10 +18,10 @@
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="lib/browserReady.js" type="text/javascript"></script>
-    <script src="js/CCBPMDesignerData.js" type="text/javascript"></script>
+    <script src="js/Default.js" type="text/javascript"></script>
     <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
     <script src="js/FuncTrees.js" type="text/javascript"></script>
-    <script src="../CCBPMDesigner/js/Left.js" type="text/javascript"></script>
+    <script src="js/Left.js" type="text/javascript"></script>
     <style type="text/css">
     .icon-Search
     {

@@ -4,8 +4,8 @@ var functrees = [];
 easyui-tabs功能导航区定义，added by liuxc
 说明：
 1.functrees数组下元素：(1)Id:tab页中的tree控件的id值，tab页的id为"tab_" + 此id；(2)Name:tab页标题；(3)AttrCols:定义WebService获取数据时，要写入node.attributes中的属性列表；(4)ServiceCount:定义此树结构中一共要连接WebService的次数，此处是为便于编程而设置的，一定要设置正确；(5)RootASC:树结构中，如果存在多个根节点，则此项设置是为这多个根节点进行排序，其中Field即排序依据的属性名称，Index即为按Field值排列的顺序；(6)Nodes:tree中的节点数组，功能支持如下：
-①支持无限级节点设置；②支持任一级别从WebService获取DataTable的Json数据填充（此连接WebService使用的是CCBPMDesignerData.js文件中的ajaxService方法，未另写方法，请注意）；③支持各级节点的图标、右键绑定菜单、展开状态、双击链接Url的规则设置，支持多级嵌套规则设置；④链接Url支持node属性值、node.attributes属性值及WebUser属性值、JS表达式计算结果的自动替换（使用“@@属性字段名”来代替要替换的属性；使用`符号来将要计算结果的JS表达式前后包含起来，表达式中允许含有@@参数名，计算时，先将@@参数名替换成对应的参数值，然后进行计算JS表达式。如设置Url: "Rpt/Group.aspx?FK_Flow=@@fk_flow&RptNo=`'ND'+parseInt('@@fk_flow')+'MyRpt'`"，@@fk_flow=001，则打开页面时，自动计算为："Rpt/Group.aspx?FK_Flow=001&RptNo=ND1MyRpt"）
-2.Nodes数组下元素：(1)Type:节点类型，Node=普通定义节点，Service=通过获取WebService数据填充的节点；(2)ServiceMethod:ajaxService方法传参中method的值，即调用的获取数据的方法，Service类型节点特有属性；(3)CodId:WebService返回的DataTable Json数据代表节点Id的列名，Service类型节点特有属性；(4)ColParentId:WebService返回的DataTable Json数据代表父级节点Id的列名，Service类型节点特有属性；(5)ColName:WebService返回的DataTable Json数据代表节点文字的列名，Service类型节点特有属性；(6)RootParentId:WebService返回的DataTable Json数据代表根节点的父级Id的值，Service类型节点特有属性；(7)ColDefine:WebService返回的DataTable Json数据，设置的此列，根据此列的值进行设置各节点的图标、右链菜单以及双击打开页面，Service类型节点特有属性；(8)Defines:此数组的元素代表ColDefine所设列的详细规则设置，每个元素代表一种情况，整个设置可以理解为：
+①支持无限级节点设置；②支持任一级别从WebService获取DataTable的Json数据填充（此连接WebService使用的是CCBPMDesignerData.js文件中的ajaxServiceDefault方法，未另写方法，请注意）；③支持各级节点的图标、右键绑定菜单、展开状态、双击链接Url的规则设置，支持多级嵌套规则设置；④链接Url支持node属性值、node.attributes属性值及WebUser属性值、JS表达式计算结果的自动替换（使用“@@属性字段名”来代替要替换的属性；使用`符号来将要计算结果的JS表达式前后包含起来，表达式中允许含有@@参数名，计算时，先将@@参数名替换成对应的参数值，然后进行计算JS表达式。如设置Url: "Rpt/Group.aspx?FK_Flow=@@fk_flow&RptNo=`'ND'+parseInt('@@fk_flow')+'MyRpt'`"，@@fk_flow=001，则打开页面时，自动计算为："Rpt/Group.aspx?FK_Flow=001&RptNo=ND1MyRpt"）
+2.Nodes数组下元素：(1)Type:节点类型，Node=普通定义节点，Service=通过获取WebService数据填充的节点；(2)ServiceMethod:ajaxServiceDefault方法传参中method的值，即调用的获取数据的方法，Service类型节点特有属性；(3)CodId:WebService返回的DataTable Json数据代表节点Id的列名，Service类型节点特有属性；(4)ColParentId:WebService返回的DataTable Json数据代表父级节点Id的列名，Service类型节点特有属性；(5)ColName:WebService返回的DataTable Json数据代表节点文字的列名，Service类型节点特有属性；(6)RootParentId:WebService返回的DataTable Json数据代表根节点的父级Id的值，Service类型节点特有属性；(7)ColDefine:WebService返回的DataTable Json数据，设置的此列，根据此列的值进行设置各节点的图标、右链菜单以及双击打开页面，Service类型节点特有属性；(8)Defines:此数组的元素代表ColDefine所设列的详细规则设置，每个元素代表一种情况，整个设置可以理解为：
 swith(ColDefine1.Value){
 case 'aaa':
 node.IconCls='icon-aaa';
@@ -234,7 +234,7 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
             }
         }
 
-        ajaxService(params, function (data, nd) {
+        ajaxServiceDefault(params, function (data, nd) {
             var re = $.parseJSON(data);
 
             //将所有获取的数据转换为Node

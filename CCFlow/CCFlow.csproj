@@ -127,7 +127,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="ClientBin\CCFlowDesigner.xap" />
-    <Content Include="Silverlight.js" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
@@ -143,8 +142,8 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\FrmCheck.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\SubFlowDtl.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\ThreadDtl.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Controls.js" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\ControlsPropertys.js" />
+    <Content Include="WF\Admin\CCFormDesigner\js\Controls.js" />
+    <Content Include="WF\Admin\CCFormDesigner\js\ControlsPropertys.js" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\AthMulti.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Datetime.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\DropDownListEnum.png" />

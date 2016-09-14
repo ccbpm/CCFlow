@@ -73,6 +73,7 @@ FigureCreateCommand.prototype = {
                     canAddFigure = false; // 需要弹出对话框创建.
                     this.DropDownListTableCreate(createdFigure, this.x, this.y);
                     break;
+                case "Fieldset":
                 case CCForm_Controls.Dtl: //明细表.
                 case CCForm_Controls.AthMulti: //多附件.
                 case CCForm_Controls.AthSingle: //单附件.
@@ -271,6 +272,9 @@ FigureCreateCommand.prototype = {
         switch (ctrlType) {
             case "Dtl":
                 lab = "创建从表";
+                break;
+            case "Fieldset":
+                lab = "创建分组";
                 break;
             case "AthMulti":
                 lab = "创建多附件";

@@ -161,7 +161,7 @@ namespace CCFlow.WF.Admin
                             if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
                             {
                                 sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                                sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ";
+                                sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
                                 sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + nodeid + ")";
                                 sql += ")";
                                 sql += "AND No IN ";

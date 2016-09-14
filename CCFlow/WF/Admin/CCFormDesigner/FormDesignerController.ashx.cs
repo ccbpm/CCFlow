@@ -82,7 +82,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     try
                     {
                         string diagram = getUTF8ToString("diagram");//表单 H5 格式.
-                        BP.DA.DataType.WriteFile("c:\\diagram111.json", diagram);
+
+                       // BP.DA.DataType.WriteFile("c:\\diagram111.json", diagram);
 
                         BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
                         s_responsetext= "true";
@@ -124,6 +125,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         s_responsetext = BP.Sys.CCFormAPI.DB_SFTableList(pageNumber, pageSize);
                     else
                         s_responsetext = BP.Sys.CCFormAPI.DB_EnumerationList(pageNumber, pageSize); //调用API获得数据.
+
+                    BP.DA.DataType.WriteFile("c:\\sss.txt",s_responsetext);
                     break;
                 case "Hiddenfielddata"://获取隐藏字段.
                     s_responsetext = BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);

@@ -176,6 +176,9 @@ CCForm_Control_Propertys = {
                   { proName: 'PTable', ProText: '存储表', DefVal: 'No', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'Set', ProText: '设置', DefVal: '/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.aspx?FK_MapData=@FrmID@&FK_MapDtl=@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
                  ],
+    Fieldset: [{ proName: 'No', ProText: '编号', DefVal: 'No', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
+                  { proName: 'Name', ProText: '名称', DefVal: 'Name', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT }
+                 ],
     AthMulti: [{ proName: 'No', ProText: '编号', DefVal: 'No', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'Name', ProText: '名称', DefVal: 'Name', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'Set', ProText: '设置', DefVal: '/WF/Admin/FoolFormDesigner/Attachment.aspx?FK_MapData=@FrmID@&Ath=@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }

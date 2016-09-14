@@ -5,6 +5,7 @@
 <!-- 徐淑豪: 2016-07-05 -->
 
 <table>
+
 <tr>
 <th>序</th>
 <th>引用表单</th>
@@ -25,6 +26,7 @@
 <td><%=attr.FK_MapData%></td>
 <td><%=attr.KeyOfEn%></td>
 <td><%=attr.Name%></td>
+
 </tr>
 <%
     } %>

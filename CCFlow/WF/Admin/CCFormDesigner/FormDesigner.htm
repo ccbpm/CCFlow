@@ -67,8 +67,8 @@
     <script type="text/javascript" src="./lib/commands/CanvasChangeSizeCommand.js"></script>
     <script type="text/javascript" src="./lib/commands/CanvasFitCommand.js"></script>
     <script type="text/javascript" src="./lib/commands/InsertedImageFigureCreateCommand.js"></script>
-    <script type="text/javascript" src="./Controls/Controls.js"></script>
-    <script type="text/javascript" src="./Controls/ControlsPropertys.js"></script>
+    <script type="text/javascript" src="./js/Controls.js"></script>
+    <script type="text/javascript" src="./js/ControlsPropertys.js"></script>
     <script type="text/javascript" src="./assets/javascript/colorPicker_new.js"></script>
     <link rel="stylesheet" media="screen" type="text/css" href="./assets/css/colorPicker_new.css" />
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
@@ -90,17 +90,24 @@
             font-size: 19px;
         }
     </style>
+
+    <script type="text/javascript" type="text/javascript">
+    
+function Exp() {
+    CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData,'导出');
+    window.open(, 'ss', '', '');
+    return;
+}
+
+function Srcipt() {
+ 
+ alert('ddd');
+    CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData,'Javascript编程');
+    return;
+}
+    </script>
 </head>
 <body id="body">
-<!--<%
-  BP.Sys.MapData md = new BP.Sys.MapData(this.Request.QueryString["FK_MapData"]);
-            if (md.DesignerTool != "H5")
-            {
-               // BP.Sys.PubClass.WinCloseAndAlertMsg("@当前表单并非是H5表单设计器设计的，您不能打开。");
-               // return;
-            }
- %>-->
- 
     <div id="actions" class="actions" style="font-size: 12px;">
         <a style="text-decoration: none;" href="javascript:Save(true);" title="保存(Ctrl-S)">
             <img src="assets/images/icon_save.jpg" id="SaveImg" border="0" width="16" height="16" />
@@ -118,11 +125,16 @@
             <label for="BrowserView" class="toolbarText">设计傻瓜表单</label>
         </a>
 
-        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt='导出表单模版.' />
+
+        <a style="text-decoration: none;" href="javascript:Srcipt();" title="JS编程">
+            <img src="/WF/Img/Script.png" id="Img3" border="0" width="16" height="16" alt="" />
+            <label for="ExpFrmXml" class="toolbarText">JS编程</label>
+        </a>
         <a style="text-decoration: none;" href="javascript:Exp();" title="导出表单模版">
             <img src="Img/toolbar/Exp.png" id="ExpFrmXml" border="0" width="16" height="16" alt="" />
             <label for="ExpFrmXml" class="toolbarText">导出</label>
         </a>
+
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none;" href="javascript:Imp();" title="导入表单模版">
             <img src="Img/toolbar/Imp.png" id="ImpFrmXml" border="0" width="16" height="16" alt="" />

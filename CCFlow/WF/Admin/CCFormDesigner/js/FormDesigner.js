@@ -6,6 +6,7 @@ $(function () {
     CCForm_FK_MapData = Application.common.getArgsFromHref("FK_MapData");
     CCForm_NodeID = CCForm_FK_MapData.replace("ND", "");
     CCPMB_Form_V = 1;
+
     /**default height for canvas*/
     CanvasProps.DEFAULT_HEIGHT = 1200;
     /**default width for canvas*/
@@ -246,8 +247,15 @@ function Show_HidenField_Panel() {
 }
 //打开窗体
 function CCForm_ShowDialog(url, title) {
-    OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
+
+    if (plant == 'JFlow') {
+        url = url.replace('.aspx', '.jsp');
+        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
+    } else {
+        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
+    }
 }
+
 //预览表单
 function CCForm_BrowserView() {
     var url = "../../CCForm/Frm.aspx?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
@@ -283,10 +291,7 @@ function GetDateString() {
 
     return strTimeKey;
 }
-function Exp() {
-    window.open('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData, 'ss', '', '');
-    return;
-}
+
 
 //设置属性样式
 function ReSetEditDivCss() {

@@ -1,13 +1,10 @@
 ﻿//公共方法
 function ajaxService(param, callback, scope) {
-    
-    var url = controllerURLConfig;  //  "FormDesignerController.ashx";
-
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据
         contentType: "application/json; charset=utf-8",
-        url: url, //要访问的后台地址
+        url: controllerURLConfig, //要访问的后台地址
         data: param, //要发送的数据
         async: true,
         cache: false,

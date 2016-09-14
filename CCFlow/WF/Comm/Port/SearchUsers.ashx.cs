@@ -73,7 +73,7 @@ namespace CCFlow.Web.Comm.Port
         private DataTable GetSearchedEmps1(string deptId, bool searchChildDept, string stationId, string name)
         {
             DataTable dt = null;
-            if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
+            if (BP.Sys.SystemConfig.OSModel == BP.Sys.OSModel.OneMore)
             {
                 dt = GetSearchedEmps(deptId, searchChildDept, stationId, name);
             }
@@ -111,13 +111,18 @@ namespace CCFlow.Web.Comm.Port
 
             string filter_dept="";
             
-            if (BP.WF.Glo.OSModel  == BP.Sys.OSModel.OneOne)
+            if (BP.Sys.SystemConfig.OSModel  == BP.Sys.OSModel.OneOne)
               filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select No from Port_Emp where FK_Dept in ({0}))", deptId);
             else
                 filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_DeptEmp where FK_Dept in ({0}))", deptId);
 
 
-            string filter_station = stationId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from " + BP.WF.Glo.EmpStation + " where FK_Station='{0}')", stationId);
+            string filter_station="";
+            if (BP.Sys.SystemConfig.OSModel  == BP.Sys.OSModel.OneOne)
+              filter_station = stationId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from  Port_EmpStation  where FK_Station='{0}')", stationId);
+            else
+                filter_station = stationId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_DeptEmpStation where FK_Station='{0}')", stationId);
+
             string filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
             if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
             {

@@ -72,7 +72,6 @@ namespace CCFlow.WF.Admin.Clound
             //BP.WF.Cloud.CCLover.UserNo = userNo;
             //BP.WF.Cloud.CCLover.Password = pwd;
             //BP.WF.Cloud.CCLover.GUID = guid;
-
             this.Response.Redirect("PriFlow.aspx");
         }
 

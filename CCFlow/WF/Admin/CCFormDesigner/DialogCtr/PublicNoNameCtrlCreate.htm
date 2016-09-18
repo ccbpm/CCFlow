@@ -15,9 +15,8 @@
     <script type="text/javascript">
         $(function () {
 
-            var Ele_TBName = document.getElementById("TB_Name");
-            Ele_TBName.focus();
-
+            var mytb = document.getElementById("TB_Name");
+            mytb.focus();
             $('#TB_Name').blur(function () //文本失去焦点时触发的事件
             {
                 var TB_Name = document.getElementById("TB_Name").value;

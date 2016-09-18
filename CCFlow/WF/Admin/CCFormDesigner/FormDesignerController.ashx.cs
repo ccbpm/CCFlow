@@ -158,11 +158,11 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         {
             string dotype = getUTF8ToString("DoType");
             string frmID = getUTF8ToString("FK_MapData");
-            if (frmID==null)
+            if (frmID == null)
                 frmID = getUTF8ToString("FrmID");
 
-            float x=0;
-                float y = 0;
+            float x = 0;
+            float y = 0;
             string no = "";
             string name = "";
 
@@ -176,6 +176,15 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             {
                 switch (dotype.Trim())
                 {
+                    case "SaveEnum":
+                    case "NewEnum":
+                        string enumName = getUTF8ToString("EnumName");
+                        string enumKey1 = getUTF8ToString("EnumKey");
+                        string cfgVal = getUTF8ToString("Vals");
+
+                        //调用接口执行保存.
+                        BP.Sys.CCFormAPI.SaveEnum(enumKey1, enumName, cfgVal);
+                        return "true";
                     case "PublicNoNameCtrlCreate": //创建通用的控件.
                         string ctrlType = getUTF8ToString("CtrlType");
                         try
@@ -215,7 +224,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             UIContralType ctrl = UIContralType.RadioBtn;
                             string ctrlDoType = getUTF8ToString("ctrlDoType");
                             if (ctrlDoType == "DDL")
-                               ctrl = UIContralType.DDL;
+                                ctrl = UIContralType.DDL;
                             else
                                 ctrl = UIContralType.RadioBtn;
 
@@ -236,7 +245,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {
-                            BP.Sys.CCFormAPI.NewField(getUTF8ToString("FrmID"), getUTF8ToString("KeyOfEn"),getUTF8ToString("Name"),
+                            BP.Sys.CCFormAPI.NewField(getUTF8ToString("FrmID"), getUTF8ToString("KeyOfEn"), getUTF8ToString("Name"),
                                 int.Parse(getUTF8ToString("FieldType")),
                                 float.Parse(getUTF8ToString("x")),
                                float.Parse(getUTF8ToString("y"))
@@ -248,7 +257,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                             return ex.Message;
                         }
                     case "CreateCheckGroup": //创建审核分组，暂时未实现.
-                        BP.Sys.CCFormAPI.NewCheckGroup(FK_MapData, null, null); 
+                        BP.Sys.CCFormAPI.NewCheckGroup(FK_MapData, null, null);
                         return "true";
                     case "NewM2M":
                         string fk_mapdataM2M = v1;

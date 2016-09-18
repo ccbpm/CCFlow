@@ -5,6 +5,7 @@
 <head id="Head1" runat="server">
     <title>导航</title>
     <style type="text/css">
+        
 *{  margin:0; padding:0; font-size:12px; font-family:"微软雅黑","宋体";}
 html,body,form
 {

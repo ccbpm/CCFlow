@@ -91,7 +91,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                     catch (Exception ex)
                     {
                         Log.DebugWriteError(ex.StackTrace);
-                        s_responsetext= "error:表单格式不正确，保存失败。" + ex.Message;
+                        s_responsetext= "error:表单格式不正确，保存失败。" + ex.StackTrace;
                     }
                     break;
                 case "ParseStringToPinyin": //转拼音方法.
@@ -523,24 +523,5 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 return false;
             }
         }
-    }
-
-    public class EEleTableNames
-    {
-        public const string
-            Sys_FrmLine = "Sys_FrmLine",
-            Sys_FrmBtn = "Sys_FrmBtn",
-            Sys_FrmLab = "Sys_FrmLab",
-            Sys_FrmLink = "Sys_FrmLink",
-            Sys_FrmImg = "Sys_FrmImg",
-            Sys_FrmEle = "Sys_FrmEle",
-            Sys_FrmImgAth = "Sys_FrmImgAth",
-            Sys_FrmRB = "Sys_FrmRB",
-            Sys_FrmAttachment = "Sys_FrmAttachment",
-            Sys_MapData = "Sys_MapData",
-            Sys_MapAttr = "Sys_MapAttr",
-            Sys_MapDtl = "Sys_MapDtl",
-            Sys_MapM2M = "Sys_MapM2M",
-            WF_Node = "WF_Node"; 
     }
 }

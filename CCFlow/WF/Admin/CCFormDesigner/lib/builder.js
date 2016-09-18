@@ -254,7 +254,6 @@ Builder.constructCanvasPropertiesPanel = function (DOMObject, canvasProps) {
     //            draw();
     //        }
     //    };
-
     //    divButton.appendChild(btnFit);
 
     div.appendChild(divButton);

@@ -155,7 +155,12 @@ namespace BP.Web
             {
                 if (string.IsNullOrEmpty(em.FK_Dept) == true)
                 {
-                    string sql = "SELECT FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + em.No + "'";
+                    string sql = "";
+                    if (BP.Sys.SystemConfig.OSModel== OSModel.OneOne)
+                        sql = "SELECT No FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + em.No + "'";
+                    else
+                        sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
+                   
                     string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
                     if (string.IsNullOrEmpty(deptNo) == true)
                     {
@@ -167,6 +172,7 @@ namespace BP.Web
                         em.FK_Dept = mydept.No;
                         em.Update();
                     }
+
                 }
 
                 BP.Port.Dept dept = new Dept();
@@ -536,7 +542,7 @@ namespace BP.Web
 
                     string sql = "SELECT FK_Dept FROM Port_Emp WHERE No='"+WebUser.No+"'";
                     string dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
-                    if (dept == null)
+                    if (dept == null && SystemConfig.OSModel == OSModel.OneMore)
                     {
                         sql = "SELECT FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + WebUser.No + "'";
                         dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);

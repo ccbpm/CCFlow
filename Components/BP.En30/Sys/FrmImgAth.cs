@@ -10,9 +10,9 @@ namespace BP.Sys
     public class FrmImgAthAttr : EntityMyPKAttr
     {
         /// <summary>
-        /// Text
+        /// 名称
         /// </summary>
-        public const string Text = "Text";
+        public const string Name = "Name";
         /// <summary>
         /// 主表
         /// </summary>
@@ -48,6 +48,20 @@ namespace BP.Sys
     public class FrmImgAth : EntityMyPK
     {
         #region 属性
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmImgAthAttr.Name);
+            }
+            set
+            {
+                this.SetValByKey(FrmImgAthAttr.Name, value);
+            }
+        }
         /// <summary>
         /// 控件ID
         /// </summary>
@@ -176,12 +190,14 @@ namespace BP.Sys
                 Map map = new Map("Sys_FrmImgAth");
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "图片附件描述";
+                map.EnDesc = "图片附件";
                 map.EnType = EnType.Sys;
                 map.AddMyPK();
 
                 map.AddTBString(FrmImgAthAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
                 map.AddTBString(FrmImgAthAttr.CtrlID, null, "控件ID", true, false, 0, 200, 20);
+                map.AddTBString(FrmImgAthAttr.Name, null, "中文名称", true, false, 0, 200, 20);
+
 
                 map.AddTBFloat(FrmImgAthAttr.X, 5, "X", true, false);
                 map.AddTBFloat(FrmImgAthAttr.Y, 5, "Y", false, false);

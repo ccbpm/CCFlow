@@ -96,7 +96,10 @@ namespace BP.WF.Template
 
             if (this.CCIsDepts == true)
             {
-                sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
+                if (Glo.OSModel == Sys.OSModel.OneMore)
+                    sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
+                else
+                    sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT No FROM Port_Emp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
             }
 
             if (this.CCIsStations == true)

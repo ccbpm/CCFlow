@@ -102,14 +102,7 @@ namespace BP.Sys
                 //抛出异常，阻止删除.
                 throw new Exception(msg);
             }
-
             return base.beforeDelete();
-        }
-
-        private void InitUnRegEnum()
-        {
-            //   DataTable dt = BP.DA.DBAccess.RunSQL("SELECT DISTINCT EnumKey FROM SYS_Enum WHERE EnumKey Not IN (SELECT No FROM SYS_EnumMain )");
-            //stringSELECT DISTINCT EnumKey FROM SYS_ENUM
         }
         /// <summary>
         /// Map

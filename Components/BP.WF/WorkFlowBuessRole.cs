@@ -1045,7 +1045,13 @@ namespace BP.WF
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。*/
                         sql = "SELECT NO FROM Port_Emp WHERE NO IN ";
-                        sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ";
+                        
+                        if (Glo.OSModel== OSModel.OneOne)
+                           sql += "(SELECT No FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
+                        else
+                            sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ";
+
+
                         sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
                         sql += ")";
                         sql += "AND NO IN ";
@@ -1091,25 +1097,13 @@ namespace BP.WF
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept)
             {
                 /* 考虑当前操作人员的部门, 如果本部门没有这个岗位就不向上寻找. */
-                //sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                //      + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
-                //      + " AND  FK_Dept IN "
-                //      + "(SELECT  FK_Dept  FROM Port_EmpDept WHERE FK_Emp=" + dbStr + "FK_Emp)";
-                //sql += " ORDER BY No ";
-
+                
                 ps = new Paras();
-
                 sql = "SELECT No,Name FROM Port_Emp WHERE No=" + dbStr + "FK_Emp ";
                 ps.Add("FK_Emp", WebUser.No);
                 dt = DBAccess.RunSQLReturnTable(ps);
 
-                //sql = "SELECT a.FK_Emp as No FROM Port_EmpDept A , Port_EmpStation B, WF_NodeStation C  ";
-                //sql += " WHERE A.FK_Emp=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+dbStr+"FK_Node ";
-                //sql += " AND A.FK_Dept IN ( SELECT FK_Dept from Port_EmpDept WHERE FK_Emp=" + dbStr + "FK_Emp ) ";
-                //ps.SQL = sql;
-                //ps.Add("FK_Node", toNode.NodeID);
-                //ps.Add("FK_Emp", WebUser.No);
-                //dt = DBAccess.RunSQLReturnTable(ps);
+              
 
                 if (dt.Rows.Count > 0)
                     return dt;
@@ -1272,12 +1266,24 @@ namespace BP.WF
                     if (dt.Rows.Count == 0)
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。 */
-                        sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                      + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
-                      + " AND  NO IN "
-                      + "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept =" + dbStr + "FK_Dept)";
 
-                        sql += " ORDER BY No ";
+                        if (Glo.OSModel == OSModel.OneMore)
+                        {
+                            sql = "SELECT No FROM Port_Emp WHERE NO IN "
+                          + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
+                          + " AND  NO IN "
+                          + "(SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
+                            sql += " ORDER BY No ";
+                        }
+                        else
+                        {
+                            sql = "SELECT No FROM Port_Emp WHERE NO IN "
+                        + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
+                        + " AND  NO IN "
+                        + "(SELECT No FK_Emp FROM Port_Emp WHERE FK_Dept =" + dbStr + "FK_Dept)";
+                            sql += " ORDER BY No ";
+                        }
+
 
                         ps = new Paras();
                         ps.SQL = sql;

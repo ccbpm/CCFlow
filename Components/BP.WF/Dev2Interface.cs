@@ -7345,7 +7345,7 @@ namespace BP.WF
                 sql = "SELECT A.No,A.Name, A.FK_Dept, B.Name as DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND a.NO IN ( ";
                 sql += "SELECT FK_EMP FROM " + BP.WF.Glo.EmpStation + " WHERE FK_STATION ";
                 sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
-                sql += ") AND a.No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
+                sql += ") AND a.No IN (SELECT No FROM Port_Emp WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
                 sql += " ORDER BY A.FK_DEPT,A.No ";
             }
 

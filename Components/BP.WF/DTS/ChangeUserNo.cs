@@ -57,7 +57,7 @@ namespace BP.WF.DTS
             string sqls = "";
 
             sqls += "UPDATE Port_Emp Set No='" + newNo + "' WHERE No='" + oldNo + "'";
-            sqls += "\t\n UPDATE Port_EmpDept Set FK_Emp='" + newNo + "' WHERE FK_Emp='" + oldNo + "'";
+           // sqls += "\t\n UPDATE Port_EmpDept Set FK_Emp='" + newNo + "' WHERE FK_Emp='" + oldNo + "'";
             sqls += "\t\n UPDATE " + BP.WF.Glo.EmpStation + " Set FK_Emp='" + newNo + "' WHERE FK_Emp='" + oldNo + "'";
 
             MapDatas mds = new MapDatas();

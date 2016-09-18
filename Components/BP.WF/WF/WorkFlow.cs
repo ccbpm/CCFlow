@@ -1732,21 +1732,6 @@ namespace BP.WF
                 return true;
         }
         /// <summary>
-        /// 是否这个工作人员能执行这个工作
-        /// </summary>
-        /// <param name="nodeId">节点</param>
-        /// <param name="DeptNo">工作人员</param>
-        /// <returns>能不能执行</returns> 
-        public static bool IsCanDoWorkCheckByEmpDept(int nodeId, string DeptNo)
-        {
-            string sql = "SELECT a.FK_Node FROM WF_NodeDept  a,  Port_EmpDept b WHERE (a.FK_Dept=b.FK_Dept) AND (a.FK_Node=" + nodeId + " AND b.FK_Dept=" + DeptNo + ")";
-            if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
-                return false;
-            else
-                return true;
-        }
-
-        /// <summary>
         /// 在物理上能构作这项工作的人员。
         /// </summary>
         /// <param name="nodeId">节点ID</param>		 

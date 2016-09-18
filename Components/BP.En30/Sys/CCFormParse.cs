@@ -13,7 +13,16 @@ namespace BP.Sys
     /// </summary>
     public class CCFormParse
     {
-
+        /// <summary>
+        /// 保存元素
+        /// </summary>
+        /// <param name="fk_mapdata"></param>
+        /// <param name="eleType"></param>
+        /// <param name="ctrlID"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="h"></param>
+        /// <param name="w"></param>
         public static void SaveFrmEle(string fk_mapdata,string eleType, string ctrlID, float x, float y, float h, float w)
         {
             FrmEle en = new FrmEle();
@@ -73,12 +82,12 @@ namespace BP.Sys
             dtl.H = h;
             dtl.Update();
         }
-        public static void SaveMapAttr(string fk_mapdata, string ctrlID, string shape, JsonData control, JsonData properties, string pks)
+        public static void SaveMapAttr(string fk_mapdata, string fieldID, string shape, JsonData control, JsonData properties, string pks)
         {
             MapAttr attr = new MapAttr();
             attr.FK_MapData = fk_mapdata;
-            attr.KeyOfEn = ctrlID;
-            attr.MyPK = fk_mapdata + "_" + ctrlID;
+            attr.KeyOfEn = fieldID;
+            attr.MyPK = fk_mapdata + "_" + fieldID;
 
             //执行一次查询,以防止其他的属性更新错误.
             if (pks.Contains("@" + attr.KeyOfEn + "@") == true)
@@ -86,20 +95,15 @@ namespace BP.Sys
 
             switch (shape)
             {
-                case "TextBoxStr":
+                case "TextBoxStr":  //文本类型.
                 case "TextBoxSFTable":
                     attr.LGType = En.FieldTypeS.Normal;
                     attr.UIContralType = En.UIContralType.TB;
                     break;
-                case "TextBoxInt":
+                case "TextBoxInt": //数值
                     attr.LGType = En.FieldTypeS.Normal;
                     attr.MyDataType = DataType.AppInt;
                     attr.UIContralType = En.UIContralType.TB;
-                    break;
-                case "TextBoxEnum":
-                    attr.MyDataType = DataType.AppInt;
-                    attr.LGType = En.FieldTypeS.Enum;
-                    attr.UIContralType = En.UIContralType.DDL;
                     break;
                 case "TextBoxBoolean":
                     attr.MyDataType = DataType.AppBoolean;
@@ -180,21 +184,25 @@ namespace BP.Sys
                         else
                             attr.UIIsInput = false;
                         break;
+                    case "UIBindKey":
+                        attr.UIBindKey =val;
+                        break;
                     default:
                         break;
                 }
-
-                //Textbox 高、宽.
-                decimal minX = decimal.Parse(vector[0].ToJson());
-                decimal minY = decimal.Parse(vector[1].ToJson());
-                decimal maxX = decimal.Parse(vector[2].ToJson());
-                decimal maxY = decimal.Parse(vector[3].ToJson());
-                decimal imgWidth = maxX - minX;
-                decimal imgHeight = maxY - minY;
-
-                attr.UIWidth = float.Parse(imgWidth.ToString("0.00"));
-                attr.UIHeight = float.Parse(imgHeight.ToString("0.00"));
             }
+
+
+            //Textbox 高、宽.
+            decimal minX = decimal.Parse(vector[0].ToJson());
+            decimal minY = decimal.Parse(vector[1].ToJson());
+            decimal maxX = decimal.Parse(vector[2].ToJson());
+            decimal maxY = decimal.Parse(vector[3].ToJson());
+            decimal imgWidth = maxX - minX;
+            decimal imgHeight = maxY - minY;
+
+            attr.UIWidth = float.Parse(imgWidth.ToString("0.00"));
+            attr.UIHeight = float.Parse(imgHeight.ToString("0.00"));
 
             if (pks.Contains("@" + attr.KeyOfEn + "@") == true)
             {
@@ -349,7 +357,6 @@ namespace BP.Sys
             lab.FontStyle = fontStyle.ToString();
             if (pks.Contains(lab.MyPK + "@") == true)
             {
-                pks = pks.Replace(lab.PK+"@", "");
                 lab.DirectUpdate();
             }
             else

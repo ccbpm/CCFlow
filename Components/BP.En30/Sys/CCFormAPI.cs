@@ -8,24 +8,7 @@ using LitJson;
 
 namespace BP.Sys
 {
-      public class EEleTableNames
-      {
-        public const string
-            Sys_FrmLine = "Sys_FrmLine",
-            Sys_FrmBtn = "Sys_FrmBtn",
-            Sys_FrmLab = "Sys_FrmLab",
-            Sys_FrmLink = "Sys_FrmLink",
-            Sys_FrmImg = "Sys_FrmImg",
-            Sys_FrmEle = "Sys_FrmEle",
-            Sys_FrmImgAth = "Sys_FrmImgAth",
-            Sys_FrmRB = "Sys_FrmRB",
-            Sys_FrmAttachment = "Sys_FrmAttachment",
-            Sys_MapData = "Sys_MapData",
-            Sys_MapAttr = "Sys_MapAttr",
-            Sys_MapDtl = "Sys_MapDtl",
-            Sys_MapM2M = "Sys_MapM2M",
-            WF_Node = "WF_Node"; 
-      }
+      
     /// <summary>
     /// 表单API
     /// </summary>
@@ -85,11 +68,11 @@ namespace BP.Sys
         /// <param name="y">位置y</param>
         public static void CreateOrSaveAthImg(string fk_mapdata, string no, string name, float x, float y)
         {
-            FrmImg ath = new FrmImg();
+            FrmImgAth ath = new FrmImgAth();
             ath.FK_MapData = fk_mapdata;
-            ath.HisImgAppType = ImgAppType.Img;
+            ath.CtrlID = no;
             ath.MyPK = fk_mapdata + "_" + no;
-            ath.Name = name;
+
             ath.X = x;
             ath.Y = y;
             ath.Insert();
@@ -479,7 +462,7 @@ namespace BP.Sys
         /// <returns></returns>
         private static void SaveFrm(string fk_mapdata, LitJson.JsonData formData)
         {
-            #region 求PKs.
+            #region 求 PKs.
             //标签.
             string labelPKs = "@";
             FrmLabs labs = new FrmLabs();
@@ -551,7 +534,7 @@ namespace BP.Sys
             eleIDs += "@";
             #endregion 求PKs.
 
-            //保存线.
+            // 保存线.
             JsonData form_Lines = formData["m"]["connectors"];
             BP.Sys.CCFormParse.SaveLine(fk_mapdata, form_Lines);
                 
@@ -569,6 +552,9 @@ namespace BP.Sys
                 delSqls += "DELETE FROM Sys_FrmLink WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "DELETE FROM Sys_FrmEle WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "DELETE FROM Sys_FrmImgAth WHERE FK_MapData='" + fk_mapdata + "'";
+
                 BP.DA.DBAccess.RunSQLs(delSqls);
                 return;
             }
@@ -581,7 +567,11 @@ namespace BP.Sys
                     continue;
 
                 string shape = control["CCForm_Shape"].ToString();
+                if (control["CCForm_MyPK"] == null)
+                    continue;
+
                 string ctrlID = control["CCForm_MyPK"].ToString();
+
                 JsonData properties = control["properties"];  //属性集合.
 
                 #region 装饰类控件.
@@ -656,12 +646,16 @@ namespace BP.Sys
                 if (shape == "Fieldset")
                 {
                     //记录已经存在的ID， 需要当时保存.
-                    BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, "Fieldset", ctrlID, x, y, height, width);
+                    BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);
                     eleIDs = eleIDs.Replace(ctrlID + "@", "@");
                     continue;
                 }
-                #endregion 附件.
 
+                
+            
+
+                
+                #endregion 附件.
 
                 throw new Exception("@没有判断的类型:shape = " + shape);
             }
@@ -729,6 +723,17 @@ namespace BP.Sys
 
                 sqls += "@DELETE FROM Sys_FrmAttachment WHERE NoOfObj='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }
+
+            //删除图片附件.
+            pks = athImgs.Split('@');
+            foreach (string pk in pks)
+            {
+                if (string.IsNullOrEmpty(pk))
+                    continue;
+
+                sqls += "@DELETE FROM Sys_FrmImgAth WHERE CtrlID='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
+            }
+            
 
             //删除这些，没有替换下来的数据.
             BP.DA.DBAccess.RunSQLs(sqls);
@@ -893,12 +898,57 @@ namespace BP.Sys
             }
 
             ds.Tables.Add(dtMapDtl);
+
+            //ds.WriteXml(
             return ds;
         }
 
         #endregion 模版操作.
 
         #region 其他功能.
+        /// <summary>
+        /// 保存枚举
+        /// </summary>
+        /// <param name="enumKey">键值对</param>
+        /// <param name="enumLab">标签</param>
+        /// <param name="cfg">配置 @0=xxx@1=yyyy@n=xxxxxc</param>
+        /// <param name="lang">语言</param>
+        /// <returns></returns>
+        public static string SaveEnum(string enumKey, string enumLab, string cfg, string lang="CH")
+        {
+            SysEnumMain sem = new SysEnumMain();
+            sem.No = enumKey;
+            if (sem.RetrieveFromDBSources() == 0)
+            {
+                sem.Name = enumLab;
+                sem.CfgVal = cfg;
+                sem.Lang = lang;
+                sem.Insert();
+            }
+            else
+            {
+                sem.Name = enumLab;
+                sem.CfgVal = cfg;
+                sem.Lang = lang;
+                sem.Update();
+            }
+
+            string[] strs = cfg.Split('@');
+            foreach (string str in strs)
+            {
+                if (string.IsNullOrEmpty(str))
+                    continue;
+                string[] kvs = str.Split('=');
+                SysEnum se = new SysEnum();
+                se.EnumKey = enumKey;
+                se.Lang = lang;
+                se.IntKey = int.Parse(kvs[0]);
+                se.Lab = kvs[1];
+                se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey;
+                se.Save();
+            }
+            return "保存成功.";
+        }
         /// <summary>
         /// 转拼音方法
         /// </summary>

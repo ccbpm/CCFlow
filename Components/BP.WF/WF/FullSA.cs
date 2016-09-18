@@ -157,7 +157,7 @@ namespace BP.WF
                     if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
                     {
                         sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                        sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ";
+                        sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
                         sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
                         sql += ")";
                         sql += "AND No IN ";
@@ -230,16 +230,36 @@ namespace BP.WF
                         {
                             case DBType.MySQL:
                             case DBType.MSSQL:
-                                sql = "select No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
-                                sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x.No=y.FK_Emp inner join Port_EmpDept z on";
-                                sql += " x.No=z.FK_Emp where z.FK_Dept =" + dbStr + "FK_Dept order by x.No";
+                                if (Glo.OSModel == Sys.OSModel.OneOne)
+                                {
+                                    sql = "select No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
+                                    sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x.No=y.FK_Emp inner join Port_Emp z on";
+                                    sql += " x.No=z.No where z.FK_Dept =" + dbStr + "FK_Dept order by x.No";
+                                }
+                                else
+                                {
+                                    sql = "select No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
+                                    sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x.No=y.FK_Emp inner join Port_DeptEmp z on";
+                                    sql += " x.No=z.FK_Emp where z.FK_Dept =" + dbStr + "FK_Dept order by x.No";
+                                }
                                 break;
                             default:
-                                sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                              + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
-                              + " AND  NO IN "
-                              + "(SELECT  FK_Emp  FROM Port_EmpDept WHERE FK_Dept =" + dbStr + "FK_Dept)";
-                                sql += " ORDER BY No ";
+                                if (Glo.OSModel == Sys.OSModel.OneOne)
+                                {
+                                    sql = "SELECT No FROM Port_Emp WHERE NO IN "
+                                  + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
+                                  + " AND  NO IN "
+                                  + "(SELECT No as FK_Emp  FROM Port_Emp WHERE FK_Dept =" + dbStr + "FK_Dept)";
+                                    sql += " ORDER BY No ";
+                                }
+                                else
+                                {
+                                    sql = "SELECT No FROM Port_Emp WHERE NO IN "
+                                + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
+                                + " AND  NO IN "
+                                + "(SELECT  FK_Emp  FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
+                                    sql += " ORDER BY No ";
+                                }
                                 break;
                         }
 

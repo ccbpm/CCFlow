@@ -281,9 +281,10 @@ figureSets["Ath"] = {
 /**Controls set declaration*/
 figureSets["ccbpm"] = {
     name: '流程控件',
-    description: 'A Data set of Controls',
+    description: '流程组件',
     figures: [
-        { figureFunction: "Square", name: "Chart", image: "Chart.png" },
+        { figureFunction: "Square", name: "CheckGroup", image: "CheckGroup.png" },
+        { figureFunction: "Square", name: "FlowChart", image: "FlowChart.png" },
         { figureFunction: "Square", name: "FrmCheck", image: "FrmCheck.png" },
         { figureFunction: "Square", name: "SubFlowDtl", image: "SubFlowDtl.png" },
         { figureFunction: "Square", name: "ThreadDtl", image: "ThreadDtl.png" }

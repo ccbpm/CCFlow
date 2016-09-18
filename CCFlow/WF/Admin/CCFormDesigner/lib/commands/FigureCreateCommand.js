@@ -85,7 +85,7 @@ FigureCreateCommand.prototype = {
                     //canAddFigure = false; // 需要弹出对话框创建.
                     //this.PublicNoNameCtrlCreate(createdFigure, this.x, this.y, createFigureName);
                     alert('没有判断的控件类型{' + createFigureName + '}.');
-                    break;
+                    return;
             }
 
             if (canAddFigure == true) {
@@ -290,7 +290,7 @@ FigureCreateCommand.prototype = {
                 break;
             default:
                 alert('没有判断的控件类型:' + ctrlType);
-                break;
+                return;
         }
 
         OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {

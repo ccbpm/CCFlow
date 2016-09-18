@@ -418,7 +418,6 @@
 
         function loadWSMethods(value, text) {
             $('#DDL_SrcTable').remove();
-
             t.addSelect('c51', 'SrcTable', getWSMethods(value), sftable.SRCTABLE ? sftable.SRCTABLE : '')
         }
 

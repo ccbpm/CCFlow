@@ -445,11 +445,11 @@
                                 <ul>
                                     <li id="node_8">
                                         <div>
-                                            <a  class='l-link' onclick="onclickSJ(8)" href=" #"><span class="nav">与上一节点处理人员相同</span></a></div>
+                                            <a  class='l-link' onclick="onclickSJ(8)" href=" #"><span class="nav">与开始节点处理人相同</span></a></div>
                                     </li>
                                     <li id="node_9">
                                         <div>
-                                            <a  class='l-link' onclick="onclickSJ(9)" href="#"><span class="nav">与开始节点处理人相同</span></a></div>
+                                            <a  class='l-link' onclick="onclickSJ(9)" href="#"><span class="nav">与上一节点处理人员相同</span></a></div>
                                     </li>
                                     <li id="node_10">
                                         <div>

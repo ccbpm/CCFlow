@@ -25,7 +25,7 @@
                 }
 
                 if (val == "ziduanquanpin") {
-                    ParseStringToPinYin(tbName, true);
+                    ParseStringToPinYin(tbName, true);                 
                 }
                 else {
                     ParseStringToPinYin(tbName, false);
@@ -34,7 +34,8 @@
             });
             //点击全拼
             $('input[id=RB_QP]').change(function () {
-                var tbName = document.getElementById("TB_EnumName").value;
+
+                var tbName = document.getElementById("TB_EnumName").value; 
                 ParseStringToPinYin(tbName, true);
             });
             //点击简拼
@@ -50,8 +51,8 @@
             if (parseString != "") {
                 $.post(controllerURLConfig, { action: 'ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
                     if (data != "false") {
-                        document.getElementById("TB_No").value = data;
-                    }
+                        document.getElementById("TB_EnumKey").value = data;
+                    }                        
                 });
             }
         }
@@ -148,7 +149,7 @@
             $("#tabs").tabs('select', '枚举信息');
 
             var str = '<table>';
-            for (var i = 0; i < 20; i++) {
+            for (var i = 1; i < 21; i++) {
 
                 str += '<tr>';
                 str += "<td> " + i + "</td> ";
@@ -215,28 +216,28 @@
 
             var cfgVals = cfgVal.split('@');
             var str = '<table>';
-            var ii = 0;
-            for (var i = 0; i < 20; i++) {
-
-                ii++;
-                if (cfgVals[i] == '' || cfgVals[i] == null)
-                    continue;
-
+            var long = 0;
+            for (var i = 0; i < 20; i++) {  
+                      
+                if (cfgVals[i] == '' || cfgVals[i] == null) {
+                   
+                     continue;
+                   }
+                   
                 var vls = cfgVals[i].split('=');
-//                alert( vls[0] );
-//                alert(i);
-//                if ( vls[0] != i)
-//                    continue;
-
                 var text = vls[1];
+                if(text == undefined){
+                 continue;
+                }
                 str += '<tr>';
                 str += "<td> " + i + "</td> ";
                 str += "<td> <input id='TB" + i + "'  class='easyui-textbox'  value='"+text+"' class='easyui-textbox' style='width: 200px' /></td> ";
                 str += '</tr>';
+                long = i+1;
             }
 
-            for (var i = ii; i < 20; i++) {
-
+            for (var i = long; i < 21; i++) {
+             
                 var text ='';
                 str += '<tr>';
                 str += "<td> " + i + "</td> ";

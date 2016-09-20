@@ -430,6 +430,22 @@ namespace BP.Sys
 
         #region 模版操作.
         /// <summary>
+        /// 创建表单
+        /// </summary>
+        /// <param name="fk_mapdata"></param>
+        /// <param name="jsonStrOfH5Frm"></param>
+        public static void CreateFrm(string fk_mapdata, string frmName, FrmType frmType, string frmTreeID)
+        {
+            MapData md = new MapData();
+            md.No = fk_mapdata;
+            if (md.IsExits == true)
+                throw new Exception("@表单ID为:"+fk_mapdata+" 已经存在.");
+
+            md.Name = frmName;
+            md.HisFrmType = frmType;
+            md.Insert();
+        }
+        /// <summary>
         /// 执行保存
         /// </summary>
         /// <param name="fk_mapdata"></param>
@@ -720,7 +736,6 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(pk))
                     continue;
-
                 sqls += "@DELETE FROM Sys_FrmAttachment WHERE NoOfObj='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }
 

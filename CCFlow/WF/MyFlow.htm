@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+     <script src="Comm/JScript.js" type="text/javascript"></script>
+    <script src="Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
+    <script src="CCForm/MapExt.js" type="text/javascript"></script>
+    <script src="../DataUser/JSLibData/MyFlowPublic.js" type="text/javascript"></script>
+    <script src="Style/Frm/jquery.idTabs.min.js" type="text/javascript"></script>
+    <script src="Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
+    <script type="text/javascript" language="javascript" src="Scripts/MyFlow.js"></script>
+    <script type="text/javascript">
+        function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
+            var date = new Date();
+            var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+
+            var url = 'WebOffice/AttachOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
+            //var url = 'WebOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal;
+            // var str = window.showModalDialog(url, '', 'dialogHeight: 1250px; dialogWidth:900px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
+            //var str = window.open(url, '', 'dialogHeight: 1200px; dialogWidth:1110px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
+            window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+
+        }
+
+        //按钮.
+        function FocusBtn(btn, workid) {
+            if (btn.value == '关注') {
+                btn.value = '取消关注';
+            }
+            else {
+                btn.value = '关注';
+            }
+            $.ajax({ url: "Do.aspx?ActionType=Focus&WorkID=" + workid, async: false });
+        }
+
+        function ReturnVal(ctrl, url, winName, width, height, title) {
+            if (url == "")
+                return;
+            //update by dgq 2013-4-12 判断有没有？
+            if (ctrl && ctrl.value != "") {
+                if (url.indexOf('?') > 0)
+                    url = url + '&CtrlVal=' + ctrl.value;
+                else
+                    url = url + '?CtrlVal=' + ctrl.value;
+            }
+            //修改标题控制不进行保存
+            if (typeof self.parent.TabFormExists != 'undefined') {
+                var bExists = self.parent.TabFormExists();
+                if (bExists) {
+                    self.parent.ChangTabFormTitleRemove();
+                }
+            }
+
+            //OpenJbox();
+            try {
+                $.jBox("iframe:" + url, {
+                    title: title,
+                    width: width || 760,
+                    height: height || 450,
+                    buttons: { '确定': 'ok' },
+                    submit: function (v, h, f) {
+                        var iframeWin = h[0].firstChild.contentWindow;
+                        if (iframeWin) {
+                            if (typeof iframeWin.getReturnText != 'undefined') {
+                                var txtId = ctrl.id;
+                                ctrl.value = iframeWin.getReturnText();
+                                if (typeof iframeWin.getReturnValue != 'undefined') {
+                                    $('#' + txtId + "_ReValue").val(iframeWin.getReturnValue());
+                                }
+                            } else {
+                                ctrl.value = iframeWin.returnValue;
+                            }
+                        }
+                        //移除
+                        $(".jbox-body").remove();
+                    }
+                });
+            } catch (e) {
+                alert(e);
+            }
+            //            if (window.ActiveXObject) {//如果是IE浏览器，执行下列方法
+            //                var v = window.showModalDialog(url, winName, 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
+            //                if (v == null || v == '' || v == 'NaN') {
+            //                    return;
+            //                }
+            //                ctrl.value = v;
+            //            }
+            //            else {//如果是chrome，执行下列方法a
+            //                try {
+            //                    $.jBox("iframe:" + url, {
+            //                        title: '标题',
+            //                        width: 800,
+            //                        height: 350,
+            //                        buttons: { 'Sure': 'ok' },
+            //                        submit: function (v, h, f) {
+            //                            var row = h[0].firstChild.contentWindow.getSelected();
+            //                            ctrl.value = row.Name;
+            //                        }
+            //                    });
+            //                } catch (e) {
+            //                    alert(e);
+            //                }
+            //            }
+            //修改标题，失去焦点时进行保存
+            if (typeof self.parent.TabFormExists != 'undefined') {
+                var bExists = self.parent.TabFormExists();
+                if (bExists) {
+                    self.parent.ChangTabFormTitle();
+                }
+            }
+            return;
+        }
+        //然浏览器最大化.
+        function ResizeWindow() {
+            if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     
+                var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽     
+                var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高     
+                window.moveTo(0, 0);           //把window放在左上角     
+                window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
+            }
+        }
+        window.onload = ResizeWindow;
+    </script>
+     <script src="Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
+    <link href="Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />  
+</head>
+<body>
+
+<div style="width: 0px; height: 0px">
+    <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0"  height="0">
+        <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="/DataUser/PrintTools/install_lodop32.exe" />
+    </object>
+</div>
+
+<div style="margin: 0; padding: 0;" id="D">
+
+    <div style="width: <%=this.Width %>px;" class="topBar" id="topBar">
+
+       <!-- <uc3:ToolBar ID="ToolBar1" runat="server" />-->
+        <div style="float:right; font-weight:bold; font-size:17px; vertical-align:middle; margin:5px;" > <%= this.currND.Tip%></div>
+
+    </div>
+
+
+    <div style="width: <%=Width %>px;" class="flowInfo" id="flowInfo">
+        <uc1:Pub ID="Pub1" runat="server" />
+    </div>
+    <div style="width: <%=Width %>px;" class="Message" id='Message'>
+        <uc1:Pub ID="FlowMsg" runat="server" />
+    </div>
+    <div style="width: <%=Width %>px;" class="childThread" id='childThread'>
+        <uc1:Pub ID="Pub3" runat="server" />
+    </div>
+    <center>
+        <div style="width: <%=Width %>px; text-align: center;">
+            <uc2:UCEn ID="UCEn1" runat="server" />
+        </div>
+    </center>
+    <div style="width: <%=Width %>px;" class="pub2Class">
+        <uc1:Pub ID="Pub2" runat="server" />
+    </div>
+    <div id="bottomToolBar" style="<%=Width %>px; text-align: left; display: none;" class="Bar">
+        <uc3:ToolBar ID="ToolBar2" runat="server" />
+    </div>
+    <input type="hidden" id="FrmHeight" value="<%=Height %>" />
+    <input type="hidden" id="BtnWord" value="<%=BtnWord %>" />
+    <input type="hidden" id="HidWorkID" value="<%=this.WorkID %>" />
+    <input type="hidden" id="CC_Url" value="./WorkOpt/CC.aspx?FK_Flow=<%=this.FK_Flow%>&FK_Node=<%=this.FK_Node %>&FID=<%=this.FID %>&WorkID=<%=this.WorkID %>&AtPara=23" />
+    <input type="hidden" id="PrintFrom_Url" value="PrintSample.aspx?FK_Flow=<%=this.FK_Flow%>&FK_Node=<%=this.FK_Node %>&FID=<%=this.FID %>&WorkID=<%=this.WorkID %>&AtPara=" />
+
+</body>
+</html>

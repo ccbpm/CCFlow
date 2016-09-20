@@ -902,10 +902,7 @@ namespace CCFlow.WF.UC
 
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
-                 || this.currND.HisFormType == NodeFormType.SheetAutoTree
-                 //|| this.currND.HisFormType == NodeFormType.ExcelForm
-                 //|| this.currND.HisFormType == NodeFormType.WordForm
-                )
+                 || this.currND.HisFormType == NodeFormType.SheetAutoTree  )
             {
                 /*如果是多表单流程.*/
                 string pFlowNo = this.Request.QueryString["PFlowNo"];
@@ -955,7 +952,6 @@ namespace CCFlow.WF.UC
                     toUrl = "./WebOffice/Default.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&CWorkID=" + this.CWorkID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
 
                 string[] ps = this.RequestParas.Split('&');
-
                 foreach (string s in ps)
                 {
                     if (string.IsNullOrEmpty(s))
@@ -1004,6 +1000,25 @@ namespace CCFlow.WF.UC
                     this.ToMsg("设置读取状流程设计错误态错误", "没有设置表单url.");
                     return;
                 }
+
+                //处理连接.
+                url = this.DealUrl(currND);
+
+                //sdk表单就让其跳转.
+                this.Response.Redirect(url, true);
+                return;
+            }
+
+            if (this.currND.HisFormType == NodeFormType.FixForm)
+            {
+                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
+                if (this.WorkID == 0)
+                {
+                    currWK = this.currFlow.NewWork();
+                    this.WorkID = currWK.OID;
+                }
+
+                string url = "MyFlow.htm";
 
                 //处理连接.
                 url = this.DealUrl(currND);

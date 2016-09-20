@@ -1365,6 +1365,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx" />
     <Content Include="WF\Messages.aspx" />
     <Content Include="WF\MessagesReplay.aspx" />
+    <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\OneFlow\Archive.aspx" />
     <Content Include="WF\OneFlow\Cancel.aspx" />
     <Content Include="WF\OneFlow\Do.aspx" />
@@ -5183,6 +5184,9 @@
     <Compile Include="WF\MessagesReplay.aspx.designer.cs">
       <DependentUpon>MessagesReplay.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\MyFlow.ashx.cs">
+      <DependentUpon>MyFlow.ashx</DependentUpon>
+    </Compile>
     <Compile Include="WF\OneFlow\Archive.aspx.cs">
       <DependentUpon>Archive.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7877,6 +7881,7 @@
     <Content Include="WF\OneFlow\MasterPage.master" />
     <Content Include="WF\SDKComponents\Site.Master" />
     <Content Include="WF\SDKComponents\AccSite.Master" />
+    <Content Include="WF\MyFlow.ashx" />
     <None Include="WF\Scripts\easyUI\themes\gray\images\Thumbs.db" />
     <None Include="WF\Style\Skin\t2\Thumbs.db" />
     <None Include="WF\Style\Skin\t3\Thumbs.db" />

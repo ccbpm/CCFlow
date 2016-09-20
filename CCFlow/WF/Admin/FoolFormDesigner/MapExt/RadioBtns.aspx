@@ -28,7 +28,6 @@
 <tr>
 
 <td valign="top">
-
 <fieldset>
 <legend> 列表值 </legend>
 <ul>
@@ -51,11 +50,6 @@
 
 <td  valign="top"> 
 
- 
-<%
-    
- %>
-
  <fieldset>
  <legend><asp:RadioButton ID="RB_0" runat="server"  GroupName="xx" Text="不设置" /> </legend>
  
@@ -71,9 +65,9 @@
     </div>
     </fieldset>
 
-
     <fieldset>
  <legend>
+
     <asp:RadioButton ID="RB_2" runat="server"  GroupName="xx" Text="联动其他的控件使其属性该表(可见，只读)" /></legend>
 
     <div id="Fields" >
@@ -109,13 +103,12 @@
 
      </fieldset>
 
-
 </td>
 
 </tr>
 <tr>
 <td colspan="2">  
-    <asp:Button ID="Btn_Save" runat="server" Text="保存" />
+    <asp:Button ID="Btn_Save" runat="server" Text="保存" onclick="Btn_Save_Click" />
     <asp:Button ID="Btn_SaveAndClose" runat="server" Text="保存并关闭" />
     <asp:Button ID="Btn_Close" runat="server" Text="关闭" />
     </td>

@@ -39,7 +39,6 @@
  </tr>
 
  <tr> 
-
  <td colspan="2" >
  <a href="javascript:ShowHidden('en')">数据源SQL:</a>
  <div id="en" style="color:Gray; display:none">
@@ -53,7 +52,23 @@
 
    <asp:TextBox ID="TB_Entity" runat="server" TextMode="MultiLine"  Rows="2" ToolTip="参数支持ccbpm的表达式,点击标签显示帮助." Width="95%"></asp:TextBox> </td>
  </tr>
+
+
  
+ <tr> 
+ <td colspan="2" >
+ <a href="javascript:ShowHidden('searchSQL')">搜索SQL(可以为空):</a>
+ <div id="searchSQL" style="color:Gray; display:none">
+ <ul>
+ <li>该参数可以为空. </li>
+ <li>可以配置一个查询语句，该语句，支持ccbpm的表达式。</li>
+ <li>Demo:有分组, SELECT No,Name,FK_Dept FROM Port_Emp WHERE Name LIKE '%@Key%' </li>
+ <li>Demo:无分组: SELECT No,Name FROM Port_Emp  WHERE Name LIKE '%@Key%' </li>
+ </ul>
+ </div>
+   <asp:TextBox ID="TB_SearchSQL" runat="server" TextMode="MultiLine"  Rows="2" ToolTip="参数支持ccbpm的表达式,点击标签显示帮助." Width="95%"></asp:TextBox> </td>
+ </tr>
+
   <tr> 
 
  <td style="width:30%">

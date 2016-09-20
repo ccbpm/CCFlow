@@ -169,7 +169,6 @@ namespace CCFlow.WF.Comm.Sys
                     case "getclass": //获取类列表
                         string stru = Request.QueryString["struct"];
                         int st = 0;
-
                         if (string.IsNullOrWhiteSpace(stru) || !int.TryParse(stru, out st))
                         {
                             resultString = ReturnJson(false, "参数不正确", false);
@@ -201,18 +200,24 @@ namespace CCFlow.WF.Comm.Sys
                             {
                                 ens = en.GetNewEntities;
 
-                                if (ens == null) continue;
+                                if (ens == null) 
+                                    continue;
 
                                 sf = sfs.GetEntityByKey(ens.ToString()) as SFTable;
 
                                 if ((sf != null && sf.No != sfno) ||
                                     string.IsNullOrWhiteSpace(ens.ToString()))
                                     continue;
-
-                                s.Append(string.Format("{{\"NO\":\"{0}\",\"NAME\":\"{0}[{1}]\",\"DESC\":\"{1}\"}},", ens,
-                                                       en.EnDesc));
+                                try
+                                {
+                                    s.Append(string.Format("{{\"NO\":\"{0}\",\"NAME\":\"{0}[{1}]\",\"DESC\":\"{1}\"}},", ens,
+                                                           en.EnDesc));
+                                }
+                                catch
+                                {
+                                    continue;
+                                }
                             }
-
                             resultString = ReturnJson(true, s.ToString().TrimEnd(',') + "]", true);
                         }
                         break;
@@ -222,7 +227,6 @@ namespace CCFlow.WF.Comm.Sys
                         bool onlyWS = false;
 
                         SFDBSrcs srcs = new SFDBSrcs();
-
                         if (!string.IsNullOrWhiteSpace(type) && int.TryParse(type, out itype))
                         {
                             onlyWS = true;
@@ -241,17 +245,14 @@ namespace CCFlow.WF.Comm.Sys
                         if (!onlyWS)
                         {
                             List<DataRow> wsRows = new List<DataRow>();
-
                             foreach (DataRow r in dt.Rows)
                             {
                                 if (Equals(r["DBSRCTYPE"], (int)DBSrcType.WebServices))
                                     wsRows.Add(r);
                             }
-
                             foreach (DataRow r in wsRows)
                                 dt.Rows.Remove(r);
                         }
-
                         resultString = ReturnJson(true, BP.Tools.Json.ToJson(dt), true);
                         break;
                     case "gettvs": //获取表/视图列表

@@ -58,7 +58,6 @@ namespace CCFlow.WF.MapDef
                else
                     this.Btn_Delete.Visible = true;
 
-
                 #region 给控件赋值.  2016.4.19 by liuhui.
                 // 工作模式 0 -url .1-内置
                 if (ext.PopValWorkModel == 1)
@@ -161,6 +160,17 @@ namespace CCFlow.WF.MapDef
             {
                 ext.Tag2 = "";
             }
+
+            //查询sql
+            if (!string.IsNullOrEmpty(this.TB_SearchSQL.Text))
+            {
+                ext.Tag3 = this.TB_SearchSQL.Text;
+            }
+            else
+            {
+                ext.Tag3 = "";
+            }
+
 
             //URL
             if (string.IsNullOrEmpty(this.TB_URL.Text)==false)

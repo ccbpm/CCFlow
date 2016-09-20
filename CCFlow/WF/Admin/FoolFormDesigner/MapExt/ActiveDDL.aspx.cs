@@ -114,9 +114,18 @@ namespace CCFlow.WF.MapDef.MapExtUI
             if (me.DoWay == 0)
                 rb.Checked = true;
 
+
+            this.Pub1.Add("<a href=\"javascript:ShowHidden('sqlexp')\"  >自动级联SQL: </a>");
+
+            this.Pub1.Add("<div id='sqlexp'  style='color:Gray; display:none'>");
             this.Pub1.Add("在下面文本框中输入一个SQL,具有编号，标签列，用来绑定下从动下拉框。<br />");
             this.Pub1.Add("比如: SELECT No, Name FROM CN_SF WHERE FK_PQ = '@Key' ");
             this.Pub1.AddBR("SELECT No, Name FROM CN_City WHERE FK_SF = '@Key' ");
+            this.Pub1.AddBR("说明:@Key是ccflow约定的关键字，是主下拉框传递过来的值");
+            this.Pub1.Add("主菜单是编号的是从动菜单编号的前几位，不必联动内容。");
+            this.Pub1.Add("比如: 主下拉框是省份，联动菜单是城市。");
+            this.Pub1.Add("</div>");
+
 
             this.Pub1.AddBR();
             TextBox tb = new TextBox();
@@ -129,8 +138,6 @@ namespace CCFlow.WF.MapDef.MapExtUI
             tb.Style.Add("width", "99%");
             this.Pub1.Add(tb);
             this.Pub1.AddBR();
-            this.Pub1.Add("说明:@Key是ccflow约定的关键字，是主下拉框传递过来的值");
-            //this.Pub1.AddFieldSetEnd();
 
             rb = new RadioButton();
             rb.Text = "通过编码标识获取";
@@ -140,9 +147,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
             if (me.DoWay == 1)
                 rb.Checked = true;
 
-            //this.Pub1.AddFieldSet(rb);
-            this.Pub1.Add("主菜单是编号的是从动菜单编号的前几位，不必联动内容。<br />");
-            this.Pub1.Add("比如: 主下拉框是省份，联动菜单是城市。");
+         
             //this.Pub1.AddFieldSetEnd();
 
             //this.Pub1.Add("</TD>");

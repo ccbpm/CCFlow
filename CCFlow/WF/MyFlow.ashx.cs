@@ -19,6 +19,8 @@ namespace CCFlow.WF
     /// </summary>
     public class MyFlow : IHttpHandler
     {
+        HttpRequest Request;
+
         #region  运行变量
         /// <summary>
         /// 当前的流程编号
@@ -116,19 +118,11 @@ namespace CCFlow.WF
         {
             get
             {
-                if (ViewState["WorkID"] == null)
-                {
-                    if (this.Request.QueryString["WorkID"] == null)
-                        return 0;
-                    else
-                        return Int64.Parse(this.Request.QueryString["WorkID"]);
-                }
+
+                if (this.Request.QueryString["WorkID"] == null)
+                    return 0;
                 else
-                    return Int64.Parse(ViewState["WorkID"].ToString());
-            }
-            set
-            {
-                ViewState["WorkID"] = value;
+                    return Int64.Parse(this.Request.QueryString["WorkID"]);
             }
         }
         /// <summary>
@@ -138,19 +132,11 @@ namespace CCFlow.WF
         {
             get
             {
-                if (ViewState["CWorkID"] == null)
-                {
+                
                     if (this.Request.QueryString["CWorkID"] == null)
                         return 0;
                     else
                         return Int64.Parse(this.Request.QueryString["CWorkID"]);
-                }
-                else
-                    return Int64.Parse(ViewState["CWorkID"].ToString());
-            }
-            set
-            {
-                ViewState["CWorkID"] = value;
             }
         }
         private int _FK_Node = 0;
@@ -262,7 +248,13 @@ namespace CCFlow.WF
         }
         public string Send()
         {
+            //表单的值  KEY/VALUE
+
+            string titleValue = Request.Form["Title"];
             return "发送成功.";
+        }
+        public string Save() {
+            return "";
         }
         public string GenerMyFlowData()
         {
@@ -270,8 +262,26 @@ namespace CCFlow.WF
         }
         public void ProcessRequest(HttpContext context)
         {
+            this.Request = context.Request;
+
             context.Response.ContentType = "text/plain";
-            context.Response.Write("Hello World");
+            string method = context.Request.QueryString["Method"].ToString();
+            string resultValue = "";
+            switch (method)
+            {
+                case "send":
+                    resultValue = Send();
+                    break;
+                case "getBar":
+                    resultValue = InitToolBarHtml();
+                    break;
+                default:
+                    resultValue = method + "没有";
+                    break;
+            }
+
+            context.Response.ContentType = "text/plain";
+            context.Response.Write(resultValue);
         }
 
         public bool IsReusable

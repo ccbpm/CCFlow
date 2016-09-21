@@ -13,9 +13,6 @@
     <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
     <script type="text/javascript" language="javascript" src="Scripts/MyFlow.js"></script>
     <script type="text/javascript" src="Scripts/QueryString.js"></script>
-
-
-
     <link href="Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
     <link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />
@@ -111,6 +108,10 @@
             }
         }
         window.onload = ResizeWindow;
+
+
+      
+
     </script>
 
     <script src="Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
@@ -128,8 +129,11 @@
         var pageData = {};
 
         $(function () {
-            initPageParam();
-            initBar();
+            initPageParam(); //初始化参数
+            initBar(); //工具栏.
+
+            GenerWorkNode(); //表单数据.
+
 
             console.log(pageData);
         });
@@ -156,12 +160,26 @@
                 type: 'post',
                 async: true,
                 data: pageData,
-                url: "MyFlow.ashx?Method=getBar&m=" + Math.random(),
+                url: "MyFlow.ashx?Method=InitToolBar&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     var barHtml = data;
                     $('.Bar').html(barHtml);
-
+                    console.log('ok');
+                }
+            });
+        }
+        function GenerWorkNode() {
+            $.ajax({
+                type: 'post',
+                async: true,
+                data: pageData,
+                url: "MyFlow.ashx?Method=GenerWorkNode&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    var barHtml = data;
+                 //   $('.Bar').html(barHtml);
+                    alert(data);
                     console.log('ok');
                 }
             });
@@ -170,10 +188,7 @@
         //初始化表单。。按钮
         function initForm() {
             //bottomToolBar  flowInfo  Message childThread CCForm pub2Class
-
             //{"IsSuccess":true,"Msg":null,"ErrMsg":null,"List":null,"Data":2}
-
-
         }
 
         //发送
@@ -201,20 +216,17 @@
                  success: function (data) {
                  }
              });
-
-            
-
         }
 
         //保存
         function save() {
-
         }
 
         //退回
         function returnBack() {
-            
+
         }
+
         //移交
 
         //子线程

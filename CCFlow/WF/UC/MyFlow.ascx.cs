@@ -708,9 +708,11 @@ namespace CCFlow.WF.UC
 
 
         }
-        public string DealUrl(BP.WF.Node currND)
+        public string DealUrl(BP.WF.Node currND, string url=null)
         {
-            string url = currND.FormUrl;
+            if (url==null)
+               url = currND.FormUrl;
+
             string urlExt = this.RequestParas;
 
             //防止查询不到.
@@ -1021,7 +1023,7 @@ namespace CCFlow.WF.UC
                 string url = "MyFlow.htm";
 
                 //处理连接.
-                url = this.DealUrl(currND);
+                url = this.DealUrl(currND, url);
 
                 //sdk表单就让其跳转.
                 this.Response.Redirect(url, true);

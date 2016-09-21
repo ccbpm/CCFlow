@@ -29,7 +29,7 @@ namespace CCFlow.WF
         {
             get
             {
-                string s = this.Request.QueryString["FK_Flow"];
+                string s = this.Request.Form["FK_Flow"];
                 if (string.IsNullOrEmpty(s))
                     throw new Exception("@流程编号参数错误...");
 
@@ -43,7 +43,7 @@ namespace CCFlow.WF
         {
             get
             {
-                return this.Request.QueryString["FromNode"];
+                return this.Request.Form["FromNode"];
             }
         }
         /// <summary>
@@ -53,7 +53,7 @@ namespace CCFlow.WF
         {
             get
             {
-                return this.Request.QueryString["DoFunc"];
+                return this.Request.Form["DoFunc"];
             }
         }
         /// <summary>
@@ -63,7 +63,7 @@ namespace CCFlow.WF
         {
             get
             {
-                return this.Request.QueryString["CFlowNo"];
+                return this.Request.Form["CFlowNo"];
             }
         }
         /// <summary>
@@ -73,7 +73,7 @@ namespace CCFlow.WF
         {
             get
             {
-                return this.Request.QueryString["WorkIDs"];
+                return this.Request.Form["WorkIDs"];
             }
         }
         /// <summary>
@@ -83,7 +83,7 @@ namespace CCFlow.WF
         {
             get
             {
-                return this.Request.QueryString["Nos"];
+                return this.Request.Form["Nos"];
             }
         }
         /// <summary>
@@ -94,16 +94,16 @@ namespace CCFlow.WF
             get
             {
 
-                if (string.IsNullOrEmpty(this.Request.QueryString["Paras"]) == false)
+                if (string.IsNullOrEmpty(this.Request.Form["Paras"]) == false)
                 {
-                    string myps = this.Request.QueryString["Paras"];
+                    string myps = this.Request.Form["Paras"];
 
                     if (myps.Contains("IsCC=1") == true)
                         return true;
                 }
-                if (string.IsNullOrEmpty(this.Request.QueryString["AtPara"]) == false)
+                if (string.IsNullOrEmpty(this.Request.Form["AtPara"]) == false)
                 {
-                    string myps = this.Request.QueryString["AtPara"];
+                    string myps = this.Request.Form["AtPara"];
 
                     if (myps.Contains("IsCC=1") == true)
                         return true;
@@ -119,10 +119,10 @@ namespace CCFlow.WF
             get
             {
 
-                if (this.Request.QueryString["WorkID"] == null)
+                if (this.Request.Form["WorkID"] == null)
                     return 0;
                 else
-                    return Int64.Parse(this.Request.QueryString["WorkID"]);
+                    return Int64.Parse(this.Request.Form["WorkID"]);
             }
         }
         /// <summary>
@@ -133,10 +133,10 @@ namespace CCFlow.WF
             get
             {
                 
-                    if (this.Request.QueryString["CWorkID"] == null)
+                    if (this.Request.Form["CWorkID"] == null)
                         return 0;
                     else
-                        return Int64.Parse(this.Request.QueryString["CWorkID"]);
+                        return Int64.Parse(this.Request.Form["CWorkID"]);
             }
         }
         private int _FK_Node = 0;
@@ -147,16 +147,16 @@ namespace CCFlow.WF
         {
             get
             {
-                string fk_nodeReq = this.Request.QueryString["FK_Node"];
+                string fk_nodeReq = this.Request.Form["FK_Node"];
                 if (string.IsNullOrEmpty(fk_nodeReq))
-                    fk_nodeReq = this.Request.QueryString["NodeID"];
+                    fk_nodeReq = this.Request.Form["NodeID"];
 
                 if (string.IsNullOrEmpty(fk_nodeReq) == false)
                     return int.Parse(fk_nodeReq);
 
                 if (_FK_Node == 0)
                 {
-                    if (this.Request.QueryString["WorkID"] != null)
+                    if (this.Request.Form["WorkID"] != null)
                     {
                         string sql = "SELECT FK_Node from  WF_GenerWorkFlow where WorkID=" + this.WorkID;
                         _FK_Node = DBAccess.RunSQLReturnValInt(sql);
@@ -178,7 +178,7 @@ namespace CCFlow.WF
             {
                 try
                 {
-                    return int.Parse(this.Request.QueryString["FID"]);
+                    return int.Parse(this.Request.Form["FID"]);
                 }
                 catch
                 {
@@ -195,9 +195,9 @@ namespace CCFlow.WF
             {
                 try
                 {
-                    string s = this.Request.QueryString["PWorkID"];
+                    string s = this.Request.Form["PWorkID"];
                     if (string.IsNullOrEmpty(s) == true)
-                        s = this.Request.QueryString["PWorkID"];
+                        s = this.Request.Form["PWorkID"];
                     if (string.IsNullOrEmpty(s) == true)
                         s = "0";
                     return int.Parse(s);
@@ -240,7 +240,7 @@ namespace CCFlow.WF
         #endregion
 
 
-        public string InitToolBarHtml()
+        public string InitToolBar()
         {
             string toolbar = "";
             toolbar += "<input type=button onclick='Send()' value='发送'/>";
@@ -249,15 +249,28 @@ namespace CCFlow.WF
         public string Send()
         {
             //表单的值  KEY/VALUE
-
             string titleValue = Request.Form["Title"];
             return "发送成功.";
         }
         public string Save() {
+
             return "";
         }
-        public string GenerMyFlowData()
+        /// <summary>
+        /// 产生一个工作节点
+        /// </summary>
+        /// <returns></returns>
+        public string GenerWorkNode()
         {
+            DataSet ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID, 
+                this.FID, BP.Web.WebUser.No);
+
+            string xml = "c:\\WorkNode.xml";
+            ds.WriteXml(xml);
+
+            string json = BP.Tools.Json.ToJson(ds);
+            BP.DA.DataType.WriteFile("c:\\WorkNode.json", json);
+
             return "";
         }
         public void ProcessRequest(HttpContext context)
@@ -272,8 +285,11 @@ namespace CCFlow.WF
                 case "send":
                     resultValue = Send();
                     break;
-                case "getBar":
-                    resultValue = InitToolBarHtml();
+                case "InitToolBar":
+                    resultValue = InitToolBar();
+                    break;
+                case "GenerWorkNode":
+                    resultValue = GenerWorkNode();
                     break;
                 default:
                     resultValue = method + "没有";

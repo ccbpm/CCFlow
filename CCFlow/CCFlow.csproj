@@ -1366,6 +1366,7 @@
     <Content Include="WF\Messages.aspx" />
     <Content Include="WF\MessagesReplay.aspx" />
     <Content Include="WF\MyFlow.htm" />
+    <Content Include="WF\MyFlow.js" />
     <Content Include="WF\OneFlow\Archive.aspx" />
     <Content Include="WF\OneFlow\Cancel.aspx" />
     <Content Include="WF\OneFlow\Do.aspx" />

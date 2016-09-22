@@ -1021,7 +1021,6 @@ namespace CCFlow.WF.UC
                     #region 过滤不需要显示的字段.
                     if (attr.GroupID == 0)
                     {
-                        // attr.GroupID = gf.OID;
                         attr.Update(MapAttrAttr.GroupID, gf.OID);
                     }
 
@@ -1345,7 +1344,7 @@ namespace CCFlow.WF.UC
                             }
                             this.AddTR();
                             this.AddTDDesc(attr.Name + str);
-                            this.AddTD(" colspan=3", cb);
+                            this.AddTD("colspan=3", cb);
                             this.AddTREnd();
                             continue;
                         }

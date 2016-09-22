@@ -1063,7 +1063,7 @@ public class CCFlowAPI : CCForm
     public string GenerWorkNode_JSON(string fk_flow, int fk_node, Int64 workID, Int64 fid, string userNo, string sid)
     {
         this.LetUserLogin(userNo, sid);
-        DataSet ds = BP.WF.CCFlowAPI.GenerWorkNode(fk_flow, fk_node, workID, fid, userNo);
+        DataSet ds = BP.WF.CCFlowAPI.GenerWorkNodeForAndroid(fk_flow, fk_node, workID, fid, userNo);
         return BP.Tools.FormatToJson.ToJson(ds);
     }
     /// <summary>

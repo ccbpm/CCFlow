@@ -33,6 +33,11 @@ namespace CCFlow.WF.Web.CCForm
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //string url = this.Request.RawUrl;
+            //url = url.Replace("FrmPopVal.aspx", "FrmPopVal.htm");
+            //this.Response.Redirect(url,true);
+            //return;
+
             me = new MapExt();
             me.MyPK = this.FK_MapExt;
           
@@ -42,7 +47,7 @@ namespace CCFlow.WF.Web.CCForm
                 me.Copy(pv);
             }
 
-            if (me.PopValShowModel == 1)
+            if (me.PopValWorkModel == PopValWorkModel.GroupModel )
             {
                 this.Response.Redirect("FrmPopValDir.aspx?a=2"+this.RequestParas,true);
                 return;

@@ -25,7 +25,6 @@ namespace CCFlow.WF.CCForm
 
         public void ProcessRequest(HttpContext context)
         {
-
             context.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
             string doType = context.Request["DoType"];
             string attachPk = context.Request["AttachPK"];
@@ -40,6 +39,9 @@ namespace CCFlow.WF.CCForm
             {
                 switch (doType)
                 {
+                    case "InitPopVal":
+                        message = InitPopVal(context);
+                        break;
                     case "SingelAttach"://单附件上传
                         SingleAttach(context, attachPk, workid, fk_node, ensName);
                         break;
@@ -67,6 +69,45 @@ namespace CCFlow.WF.CCForm
             context.Response.Expires = 0;
             context.Response.Write(message);
             context.Response.End();
+        }
+        /// <summary>
+        /// 初始化PopVal的值
+        /// </summary>
+        /// <returns></returns>
+        public string InitPopVal(HttpContext context)
+        {
+            string mypk = context.Request.QueryString["FK_MapExt"];
+            DataSet ds = new DataSet();
+
+            MapExt me = new MapExt();
+            me.MyPK = mypk;
+            me.Retrieve();
+
+            string sqlGroup = me.Tag1;
+            sqlGroup = sqlGroup.Replace("@WebUser.No", BP.Web.WebUser.No);
+            sqlGroup = sqlGroup.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            sqlGroup = sqlGroup.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            if (sqlGroup.Length > 10)
+            {
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);
+                dt.TableName = "DTGroup";
+                ds.Tables.Add(dt);
+            }
+
+            string sqlObjs = me.Tag2;
+            sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+            sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            if (sqlObjs.Length > 10)
+            {
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                dt.TableName = "DTObjs";
+                ds.Tables.Add(dt);
+            }
+
+            //把配置信息放入进去.
+            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
+            return BP.Tools.Json.ToJson(ds);
         }
 
         //单附件上传方法

@@ -85,7 +85,7 @@ namespace CCFlow.WF.CCForm
             DataTable dtObjs = DBAccess.RunSQLReturnTable(sqlObjs);
 
             bool isCheckbox = false;
-            if (me.PopValSelectModel == 1)
+            if (me.PopValSelectModel == PopValSelectModel.One)
                 isCheckbox = true;
 
             foreach (DataRow dr in dtObjs.Rows)

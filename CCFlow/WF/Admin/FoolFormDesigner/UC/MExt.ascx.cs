@@ -1709,195 +1709,195 @@ public partial class WF_MapDef_UC_MExt : BP.Web.UC.UCBase3
     }
     public void Edit_PopVal()
     {
-        //this.Pub2.AddTable("border=0");
-        this.Pub2.AddTable("class='Table' cellpadding='0' cellspacing='0' border='0' style='width:100%'");
-        MapExt me = null;
-        if (this.MyPK == null)
-        {
-            me = new MapExt();
-            //this.Pub2.AddCaptionLeft("新建:" + this.Lab + "-帮助请详见驰骋表单设计器说明书");
-            this.Pub2.AddTRGroupTitle(3, "新建:" + this.Lab + "-帮助请详见驰骋表单设计器说明书");
-        }
-        else
-        {
-            me = new MapExt(this.MyPK);
-            //this.Pub2.AddCaptionLeft("编辑:" + this.Lab + "-帮助请详见驰骋表单设计器说明书");
-            this.Pub2.AddTRGroupTitle(3, "编辑:" + this.Lab + "-帮助请详见驰骋表单设计器说明书");
-        }
+        ////this.Pub2.AddTable("border=0");
+        //this.Pub2.AddTable("class='Table' cellpadding='0' cellspacing='0' border='0' style='width:100%'");
+        //MapExt me = null;
+        //if (this.MyPK == null)
+        //{
+        //    me = new MapExt();
+        //    //this.Pub2.AddCaptionLeft("新建:" + this.Lab + "-帮助请详见驰骋表单设计器说明书");
+        //    this.Pub2.AddTRGroupTitle(3, "新建:" + this.Lab + "-帮助请详见驰骋表单设计器说明书");
+        //}
+        //else
+        //{
+        //    me = new MapExt(this.MyPK);
+        //    //this.Pub2.AddCaptionLeft("编辑:" + this.Lab + "-帮助请详见驰骋表单设计器说明书");
+        //    this.Pub2.AddTRGroupTitle(3, "编辑:" + this.Lab + "-帮助请详见驰骋表单设计器说明书");
+        //}
 
-        me.FK_MapData = this.FK_MapData;
-        this.Pub2.AddTR();
-        this.Pub2.AddTDGroupTitle("style='text-align:center'", "项目");
-        this.Pub2.AddTDGroupTitle("style='text-align:center'", "采集");
-        this.Pub2.AddTDGroupTitle("style='text-align:center'", "说明");
-        this.Pub2.AddTREnd();
-
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("作用字段：");
-        BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
-        ddl.ID = "DDL_Oper";
-        MapAttrs attrs = new MapAttrs(this.FK_MapData);
-        foreach (MapAttr attr in attrs)
-        {
-            if (attr.UIVisible == false)
-                continue;
-
-            if (attr.UIIsEnable == false)
-                continue;
-
-            if (attr.UIContralType == UIContralType.TB)
-            {
-                ddl.Items.Add(new ListItem(attr.KeyOfEn + " - " + attr.Name, attr.KeyOfEn));
-                continue;
-            }
-        }
-        ddl.SetSelectItem(me.AttrOfOper);
-        this.Pub2.AddTD(ddl);
-        this.Pub2.AddTD("处理pop窗体的字段.");
-        this.Pub2.AddTREnd();
-
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("设置类型：");
-        this.Pub2.AddTDBegin();
-
-        RadioButton rb = new RadioButton();
-        rb.Text = "自定义URL";
-        rb.ID = "RB_Tag_0";
-        rb.GroupName = "sd";
-        if (me.PopValWorkModel == 0)
-            rb.Checked = true;
-        else
-            rb.Checked = false;
-        this.Pub2.Add(rb);
-        rb = new RadioButton();
-        rb.ID = "RB_Tag_1";
-        rb.Text = "ccform内置";
-        rb.GroupName = "sd";
-        if (me.PopValWorkModel == 1)
-            rb.Checked = true;
-        else
-            rb.Checked = false;
-        this.Pub2.Add(rb);
-        this.Pub2.AddTDEnd();
-        this.Pub2.AddTD("如果是自定义URL,仅填写URL字段.");
-        this.Pub2.AddTREnd();
-
-
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("URL：");
-        TextBox tb = new TextBox();
-        tb.ID = "TB_" + MapExtAttr.Doc;
-        tb.Text = me.Doc;
-        tb.Columns = 50;
-        tb.Style.Add("width", "99%");
-        this.Pub2.AddTD("colspan=2", tb);
-        this.Pub2.AddTREnd();
-
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("colspan=3", "URL填写说明:请输入一个弹出窗口的url,当操作员关闭后返回值就会被设置在当前控件中<br />测试URL:http://localhost/Flow/SDKFlowDemo/PopSelectVal.aspx.");
-        this.Pub2.AddTREnd();
-
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("数据分组SQL：");
-        tb = new TextBox();
-        tb.ID = "TB_" + MapExtAttr.Tag1;
-        tb.Text = me.Tag1;
-        tb.Columns = 50;
-        tb.Style.Add("width", "99%");
-        this.Pub2.AddTD("colspan=2", tb);
-        this.Pub2.AddTREnd();
-
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("数据源SQL：");
-        tb = new TextBox();
-        tb.ID = "TB_" + MapExtAttr.Tag2;
-        tb.Text = me.Tag2;
-        tb.Columns = 50;
-        tb.Style.Add("width", "99%");
-        this.Pub2.AddTD("colspan=2", tb);
-        this.Pub2.AddTREnd();
+        //me.FK_MapData = this.FK_MapData;
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTDGroupTitle("style='text-align:center'", "项目");
+        //this.Pub2.AddTDGroupTitle("style='text-align:center'", "采集");
+        //this.Pub2.AddTDGroupTitle("style='text-align:center'", "说明");
         //this.Pub2.AddTREnd();
 
-        #region 选择方式
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("选择方式：");
-        this.Pub2.AddTDBegin();
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("作用字段：");
+        //BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
+        //ddl.ID = "DDL_Oper";
+        //MapAttrs attrs = new MapAttrs(this.FK_MapData);
+        //foreach (MapAttr attr in attrs)
+        //{
+        //    if (attr.UIVisible == false)
+        //        continue;
 
-        rb = new RadioButton();
-        rb.Text = "多项选择";
-        rb.ID = "RB_Tag3_0";
-        rb.GroupName = "dd";
-        if (me.PopValSelectModel == 0)
-            rb.Checked = true;
-        else
-            rb.Checked = false;
-        this.Pub2.Add(rb);
+        //    if (attr.UIIsEnable == false)
+        //        continue;
 
-        rb = new RadioButton();
-        rb.ID = "RB_Tag3_1";
-        rb.Text = "单项选择";
-        rb.GroupName = "dd";
-        if (me.PopValSelectModel == 1)
-            rb.Checked = true;
-        else
-            rb.Checked = false;
-        this.Pub2.Add(rb);
-        this.Pub2.AddTDEnd();
-        this.Pub2.AddTD("");
-        this.Pub2.AddTREnd();
-        #endregion 选择方式
+        //    if (attr.UIContralType == UIContralType.TB)
+        //    {
+        //        ddl.Items.Add(new ListItem(attr.KeyOfEn + " - " + attr.Name, attr.KeyOfEn));
+        //        continue;
+        //    }
+        //}
+        //ddl.SetSelectItem(me.AttrOfOper);
+        //this.Pub2.AddTD(ddl);
+        //this.Pub2.AddTD("处理pop窗体的字段.");
+        //this.Pub2.AddTREnd();
 
-        #region 呈现方式
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("数据源呈现方式：");
-        this.Pub2.AddTDBegin();
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("设置类型：");
+        //this.Pub2.AddTDBegin();
 
-        rb = new RadioButton();
-        rb.Text = "表格方式";
-        rb.ID = "RB_Tag4_0";
-        rb.GroupName = "dsd";
-        if (me.PopValShowModel == 0)
-            rb.Checked = true;
-        else
-            rb.Checked = false;
-        this.Pub2.Add(rb);
+        //RadioButton rb = new RadioButton();
+        //rb.Text = "自定义URL";
+        //rb.ID = "RB_Tag_0";
+        //rb.GroupName = "sd";
+        //if (me.PopValWorkModel == 0)
+        //    rb.Checked = true;
+        //else
+        //    rb.Checked = false;
+        //this.Pub2.Add(rb);
+        //rb = new RadioButton();
+        //rb.ID = "RB_Tag_1";
+        //rb.Text = "ccform内置";
+        //rb.GroupName = "sd";
+        //if (me.PopValWorkModel == 1)
+        //    rb.Checked = true;
+        //else
+        //    rb.Checked = false;
+        //this.Pub2.Add(rb);
+        //this.Pub2.AddTDEnd();
+        //this.Pub2.AddTD("如果是自定义URL,仅填写URL字段.");
+        //this.Pub2.AddTREnd();
 
-        rb = new RadioButton();
-        rb.ID = "RB_Tag4_1";
-        rb.Text = "目录方式";
-        rb.GroupName = "dsd";
-        if (me.PopValShowModel == 1)
-            rb.Checked = true;
-        else
-            rb.Checked = false;
-        this.Pub2.Add(rb);
-        this.Pub2.AddTDEnd();
-        this.Pub2.AddTD("");
-        this.Pub2.AddTREnd();
-        #endregion 呈现方式
 
-        this.Pub2.AddTR();
-        this.Pub2.AddTD("返回值格式：");
-        ddl = new BP.Web.Controls.DDL();
-        ddl.ID = "DDL_PopValFormat";
-        ddl.BindSysEnum("PopValFormat");
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("URL：");
+        //TextBox tb = new TextBox();
+        //tb.ID = "TB_" + MapExtAttr.Doc;
+        //tb.Text = me.Doc;
+        //tb.Columns = 50;
+        //tb.Style.Add("width", "99%");
+        //this.Pub2.AddTD("colspan=2", tb);
+        //this.Pub2.AddTREnd();
 
-        ddl.SetSelectItem(me.PopValFormat);
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("colspan=3", "URL填写说明:请输入一个弹出窗口的url,当操作员关闭后返回值就会被设置在当前控件中<br />测试URL:http://localhost/Flow/SDKFlowDemo/PopSelectVal.aspx.");
+        //this.Pub2.AddTREnd();
 
-        this.Pub2.AddTD("colspan=2", ddl);
-        this.Pub2.AddTREnd();
-        this.Pub2.AddTREnd();
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("数据分组SQL：");
+        //tb = new TextBox();
+        //tb.ID = "TB_" + MapExtAttr.Tag1;
+        //tb.Text = me.Tag1;
+        //tb.Columns = 50;
+        //tb.Style.Add("width", "99%");
+        //this.Pub2.AddTD("colspan=2", tb);
+        //this.Pub2.AddTREnd();
 
-        this.Pub2.AddTRSum();
-        //Button btn = new Button();
-        //btn.ID = "BtnSave";
-        //btn.CssClass = "Btn";
-        //btn.Text = "保存";
-        var btn = new LinkBtn(false, NamesOfBtn.Save, "保存");
-        btn.Click += new EventHandler(btn_SavePopVal_Click);
-        this.Pub2.AddTD("colspan=3", btn);
-        this.Pub2.AddTREnd();
-        this.Pub2.AddTableEnd();
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("数据源SQL：");
+        //tb = new TextBox();
+        //tb.ID = "TB_" + MapExtAttr.Tag2;
+        //tb.Text = me.Tag2;
+        //tb.Columns = 50;
+        //tb.Style.Add("width", "99%");
+        //this.Pub2.AddTD("colspan=2", tb);
+        //this.Pub2.AddTREnd();
+        ////this.Pub2.AddTREnd();
+
+        //#region 选择方式
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("选择方式：");
+        //this.Pub2.AddTDBegin();
+
+        //rb = new RadioButton();
+        //rb.Text = "多项选择";
+        //rb.ID = "RB_Tag3_0";
+        //rb.GroupName = "dd";
+        //if (me.PopValSelectModel == 0)
+        //    rb.Checked = true;
+        //else
+        //    rb.Checked = false;
+        //this.Pub2.Add(rb);
+
+        //rb = new RadioButton();
+        //rb.ID = "RB_Tag3_1";
+        //rb.Text = "单项选择";
+        //rb.GroupName = "dd";
+        //if (me.PopValSelectModel == 1)
+        //    rb.Checked = true;
+        //else
+        //    rb.Checked = false;
+        //this.Pub2.Add(rb);
+        //this.Pub2.AddTDEnd();
+        //this.Pub2.AddTD("");
+        //this.Pub2.AddTREnd();
+        //#endregion 选择方式
+
+        //#region 呈现方式
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("数据源呈现方式：");
+        //this.Pub2.AddTDBegin();
+
+        //rb = new RadioButton();
+        //rb.Text = "表格方式";
+        //rb.ID = "RB_Tag4_0";
+        //rb.GroupName = "dsd";
+        //if (me.PopValShowModel == 0)
+        //    rb.Checked = true;
+        //else
+        //    rb.Checked = false;
+        //this.Pub2.Add(rb);
+
+        //rb = new RadioButton();
+        //rb.ID = "RB_Tag4_1";
+        //rb.Text = "目录方式";
+        //rb.GroupName = "dsd";
+        //if (me.PopValShowModel == 1)
+        //    rb.Checked = true;
+        //else
+        //    rb.Checked = false;
+        //this.Pub2.Add(rb);
+        //this.Pub2.AddTDEnd();
+        //this.Pub2.AddTD("");
+        //this.Pub2.AddTREnd();
+        //#endregion 呈现方式
+
+        //this.Pub2.AddTR();
+        //this.Pub2.AddTD("返回值格式：");
+        //ddl = new BP.Web.Controls.DDL();
+        //ddl.ID = "DDL_PopValFormat";
+        //ddl.BindSysEnum("PopValFormat");
+
+        //ddl.SetSelectItem(me.PopValFormat);
+
+        //this.Pub2.AddTD("colspan=2", ddl);
+        //this.Pub2.AddTREnd();
+        //this.Pub2.AddTREnd();
+
+        //this.Pub2.AddTRSum();
+        ////Button btn = new Button();
+        ////btn.ID = "BtnSave";
+        ////btn.CssClass = "Btn";
+        ////btn.Text = "保存";
+        //var btn = new LinkBtn(false, NamesOfBtn.Save, "保存");
+        //btn.Click += new EventHandler(btn_SavePopVal_Click);
+        //this.Pub2.AddTD("colspan=3", btn);
+        //this.Pub2.AddTREnd();
+        //this.Pub2.AddTableEnd();
     }
     public string EventName
     {
@@ -2116,7 +2116,7 @@ public partial class WF_MapDef_UC_MExt : BP.Web.UC.UCBase3
         //btn.ID = "BtnSave";
         //btn.Text = "保存";
         var btn = new LinkBtn(false, NamesOfBtn.Save, "保存");
-        btn.Click += new EventHandler(btn_SaveAutoFull_Click);
+       // btn.Click += new EventHandler(btn_SaveAutoFull_Click);
         this.Pub2.Add(btn);
 
         if (this.MyPK == null)
@@ -2226,7 +2226,7 @@ public partial class WF_MapDef_UC_MExt : BP.Web.UC.UCBase3
         //btn.ID = "BtnSave";
         //btn.Text = "保存";
         var btn = new LinkBtn(false, NamesOfBtn.Save, "保存");
-        btn.Click += new EventHandler(btn_SaveAutoFull_Click);
+     //   btn.Click += new EventHandler(btn_SaveAutoFull_Click);
         //this.Pub2.AddTD("colspan=2", btn);
         this.Pub2.AddTDBegin("colspan=3");
         this.Pub2.Add(btn);
@@ -2346,88 +2346,88 @@ public partial class WF_MapDef_UC_MExt : BP.Web.UC.UCBase3
     }
     void btn_SavePopVal_Click(object sender, EventArgs e)
     {
-        MapExt me = new MapExt();
-        me.MyPK = this.MyPK;
-        if (me.MyPK.Length > 2)
-            me.RetrieveFromDBSources();
-        me = (MapExt)this.Pub2.Copy(me);
-        me.ExtType = this.ExtType;
-        me.Doc = this.Pub2.GetTextBoxByID("TB_Doc").Text;
-        me.AttrOfOper = this.Pub2.GetDDLByID("DDL_Oper").SelectedItemStringVal;
-        me.SetPara("PopValFormat", this.Pub2.GetDDLByID("DDL_PopValFormat").SelectedItemStringVal);
+    //    MapExt me = new MapExt();
+    //    me.MyPK = this.MyPK;
+    //    if (me.MyPK.Length > 2)
+    //        me.RetrieveFromDBSources();
+    //    me = (MapExt)this.Pub2.Copy(me);
+    //    me.ExtType = this.ExtType;
+    //    me.Doc = this.Pub2.GetTextBoxByID("TB_Doc").Text;
+    //    me.AttrOfOper = this.Pub2.GetDDLByID("DDL_Oper").SelectedItemStringVal;
+    //    me.SetPara("PopValFormat", this.Pub2.GetDDLByID("DDL_PopValFormat").SelectedItemStringVal);
 
-        RadioButton rb = this.Pub2.GetRadioButtonByID("RB_Tag_0");
-        if (rb.Checked)
-            me.PopValWorkModel = 0;
-        else
-            me.PopValWorkModel = 1;
+    //    RadioButton rb = this.Pub2.GetRadioButtonByID("RB_Tag_0");
+    //    if (rb.Checked)
+    //        me.PopValWorkModel = 0;
+    //    else
+    //        me.PopValWorkModel = 1;
 
-        rb = this.Pub2.GetRadioButtonByID("RB_Tag3_0");
-        if (rb.Checked)
-            me.PopValSelectModel = 0;
-        else
-            me.PopValSelectModel = 1;
+    //    rb = this.Pub2.GetRadioButtonByID("RB_Tag3_0");
+    //    if (rb.Checked)
+    //        me.PopValSelectModel = 0;
+    //    else
+    //        me.PopValSelectModel = 1;
 
-        rb = this.Pub2.GetRadioButtonByID("RB_Tag4_0");
-        if (rb.Checked)
-            me.PopValShowModel = 0;
-        else
-            me.PopValShowModel = 1;
+    //    rb = this.Pub2.GetRadioButtonByID("RB_Tag4_0");
+    //    if (rb.Checked)
+    //        me.PopValShowModel = 0;
+    //    else
+    //        me.PopValShowModel = 1;
 
 
-        me.FK_MapData = this.FK_MapData;
-        me.MyPK = this.FK_MapData + "_" + me.ExtType + "_" + me.AttrOfOper;
-        me.Save();
-        this.Response.Redirect("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + this.ExtType + "&RefNo=" + this.RefNo, true);
-    }
-    void btn_SaveAutoFull_Click(object sender, EventArgs e)
-    {
-        MapExt me = new MapExt();
-        me.MyPK = this.MyPK;
-        if (me.MyPK.Length > 2)
-            me.RetrieveFromDBSources();
+    //    me.FK_MapData = this.FK_MapData;
+    //    me.MyPK = this.FK_MapData + "_" + me.ExtType + "_" + me.AttrOfOper;
+    //    me.Save();
+    //    this.Response.Redirect("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + this.ExtType + "&RefNo=" + this.RefNo, true);
+    //}
+    //void btn_SaveAutoFull_Click(object sender, EventArgs e)
+    //{
+    //    MapExt me = new MapExt();
+    //    me.MyPK = this.MyPK;
+    //    if (me.MyPK.Length > 2)
+    //        me.RetrieveFromDBSources();
 
-        me = (MapExt)this.Pub2.Copy(me);
-        me.ExtType = this.ExtType;
-        me.Doc = this.Pub2.GetTextBoxByID("TB_Doc").Text;
-        me.AttrOfOper = this.Pub2.GetDDLByID("DDL_Oper").SelectedItemStringVal;
-        me.FK_MapData = this.FK_MapData;
-        me.MyPK = this.FK_MapData + "_" + me.ExtType + "_" + me.AttrOfOper;
+    //    me = (MapExt)this.Pub2.Copy(me);
+    //    me.ExtType = this.ExtType;
+    //    me.Doc = this.Pub2.GetTextBoxByID("TB_Doc").Text;
+    //    me.AttrOfOper = this.Pub2.GetDDLByID("DDL_Oper").SelectedItemStringVal;
+    //    me.FK_MapData = this.FK_MapData;
+    //    me.MyPK = this.FK_MapData + "_" + me.ExtType + "_" + me.AttrOfOper;
 
-        try
-        {
-            //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(me.Doc);
-            //if (string.IsNullOrEmpty(me.Tag) == false)
-            //{
-            //    dt = BP.DA.DBAccess.RunSQLReturnTable(me.Tag);
-            //    if (dt.Columns.Contains("Name") == false || dt.Columns.Contains("No") == false)
-            //        throw new Exception("在您的sql表达式里，必须有No,Name 还两个列。");
-            //}
+    //    try
+    //    {
+    //        //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(me.Doc);
+    //        //if (string.IsNullOrEmpty(me.Tag) == false)
+    //        //{
+    //        //    dt = BP.DA.DBAccess.RunSQLReturnTable(me.Tag);
+    //        //    if (dt.Columns.Contains("Name") == false || dt.Columns.Contains("No") == false)
+    //        //        throw new Exception("在您的sql表达式里，必须有No,Name 还两个列。");
+    //        //}
 
-            //if (this.ExtType == MapExtXmlList.TBFullCtrl)
-            //{
-            //    if (dt.Columns.Contains("Name") == false || dt.Columns.Contains("No") == false)
-            //        throw new Exception("在您的sql表达式里，必须有No,Name 还两个列。");
-            //}
+    //        //if (this.ExtType == MapExtXmlList.TBFullCtrl)
+    //        //{
+    //        //    if (dt.Columns.Contains("Name") == false || dt.Columns.Contains("No") == false)
+    //        //        throw new Exception("在您的sql表达式里，必须有No,Name 还两个列。");
+    //        //}
 
-            //MapAttrs attrs = new MapAttrs(this.FK_MapData);
-            //foreach (DataColumn dc in dt.Columns)
-            //{
-            //    if (dc.ColumnName.ToLower() == "no" || dc.ColumnName.ToLower() == "name")
-            //        continue;
+    //        //MapAttrs attrs = new MapAttrs(this.FK_MapData);
+    //        //foreach (DataColumn dc in dt.Columns)
+    //        //{
+    //        //    if (dc.ColumnName.ToLower() == "no" || dc.ColumnName.ToLower() == "name")
+    //        //        continue;
 
-            //    if (attrs.Contains(MapAttrAttr.KeyOfEn, dc.ColumnName) == false)
-            //        throw new Exception("@系统没有找到您要匹配的列(" + dc.ColumnName + ")，注意:您要指定的列名区分大小写。");
-            //}
-            me.Save();
-        }
-        catch (Exception ex)
-        {
-            //this.Alert(ex.Message);
-            this.AlertMsg_Warning("SQL错误", ex.Message);
-            return;
-        }
-        this.Response.Redirect("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + this.ExtType + "&RefNo=" + this.RefNo, true);
+    //        //    if (attrs.Contains(MapAttrAttr.KeyOfEn, dc.ColumnName) == false)
+    //        //        throw new Exception("@系统没有找到您要匹配的列(" + dc.ColumnName + ")，注意:您要指定的列名区分大小写。");
+    //        //}
+    //        me.Save();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        //this.Alert(ex.Message);
+    //        this.AlertMsg_Warning("SQL错误", ex.Message);
+    //        return;
+    //    }
+    //    this.Response.Redirect("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + this.ExtType + "&RefNo=" + this.RefNo, true);
     }
     public void MapExtList(MapExts ens)
     {

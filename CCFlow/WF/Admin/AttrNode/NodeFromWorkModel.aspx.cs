@@ -49,10 +49,10 @@ namespace CCFlow.WF.Admin
 
 
                 BP.WF.Node nd = new Node(this.NodeID);
-
                 BtnLab btn = new BtnLab(this.NodeID);
 
-                if (btn.WebOfficeWorkModel == WebOfficeWorkModel.FrmFirst || btn.WebOfficeWorkModel == WebOfficeWorkModel.WordFirst)
+                if (btn.WebOfficeWorkModel == WebOfficeWorkModel.FrmFirst 
+                    || btn.WebOfficeWorkModel == WebOfficeWorkModel.WordFirst)
                     nd.FormType = NodeFormType.WebOffice;
 
                 switch (nd.FormType)
@@ -138,12 +138,15 @@ namespace CCFlow.WF.Admin
 
         protected void Btn_Cancel_Click(object sender, EventArgs e)
         {
-            Save();
+            // Save();
             BP.Sys.PubClass.WinClose();
         }
         protected void Save()
         {
             Node nd = new Node(this.NodeID);
+
+            BP.Sys.MapData md = new BP.Sys.MapData("ND" + this.NodeID);
+
             //使用ccbpm内置的节点表单
             if (this.RB_FixFrm.Checked)
             {
@@ -151,12 +154,19 @@ namespace CCFlow.WF.Admin
                 {
                     nd.FormType = NodeFormType.FreeForm;
                     nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;
+                    md.Update();
                 }
                 else
                 {
                     nd.FormType = NodeFormType.FixForm;
                     nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm;
+                    md.Update();
                 }
+
                 if (this.RB_CurrentForm.Checked)
                 {
                     nd.NodeFrmID = "";
@@ -174,6 +184,11 @@ namespace CCFlow.WF.Admin
                 nd.FormType = NodeFormType.SelfForm;
                 nd.FormUrl = this.TB_CustomURL.Text;
                 nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.Url;  //同事更新表单表住表.
+                md.Url = this.TB_CustomURL.Text;
+                md.Update();
+
             }
             //使用SDK表单
             if (this.RB_SDKForm.Checked)
@@ -181,6 +196,11 @@ namespace CCFlow.WF.Admin
                 nd.FormType = NodeFormType.SDKForm;
                 nd.FormUrl = this.TB_FormURL.Text;
                 nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.Url;
+                md.Url = this.TB_CustomURL.Text;
+                md.Update();
+
             }
             //绑定多表单
             if (this.RB_SheetTree.Checked)
@@ -189,11 +209,18 @@ namespace CCFlow.WF.Admin
                 {
                     nd.FormType = NodeFormType.SheetTree;
                     nd.DirectUpdate();
+
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同事更新表单表住表.
+                    md.Update();
                 }
                 else
                 {
                     nd.FormType = NodeFormType.DisableIt;
                     nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同事更新表单表住表.
+                    md.Update();
                 }
             }
 
@@ -215,13 +242,22 @@ namespace CCFlow.WF.Admin
 
                 //表单工作模式.
                 if (this.RB_WebOffice_FreeFrm.Checked)
-                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm; 
+                {
+                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm;
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;  //同事更新表单表住表.
+                    md.Update();
+                }
                 else
-                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FoolForm; 
+                {
+                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FoolForm;
+
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同事更新表单表住表.
+                    md.Update();
+                }
                 
                 btn.Update();
             }
-
         }
         protected void DDL_Frm1()
         {

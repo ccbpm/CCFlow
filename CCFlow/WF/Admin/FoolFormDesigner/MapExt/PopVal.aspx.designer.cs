@@ -40,6 +40,15 @@ namespace CCFlow.WF.MapDef {
         protected global::System.Web.UI.WebControls.TextBox TB_Entity;
         
         /// <summary>
+        /// TB_SQL 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TB_SQL;
+        
+        /// <summary>
         /// TB_SearchSQL 控件。
         /// </summary>
         /// <remarks>
@@ -49,67 +58,58 @@ namespace CCFlow.WF.MapDef {
         protected global::System.Web.UI.WebControls.TextBox TB_SearchSQL;
         
         /// <summary>
-        /// RB_Table 控件。
+        /// RB_PageModel 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_Table;
+        protected global::System.Web.UI.WebControls.RadioButton RB_PageModel;
         
         /// <summary>
-        /// RB_Tree 控件。
+        /// TextBox2 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_Tree;
+        protected global::System.Web.UI.WebControls.TextBox TextBox2;
         
         /// <summary>
-        /// RB_PopValSelectModel_0 控件。
+        /// TextBox3 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_PopValSelectModel_0;
+        protected global::System.Web.UI.WebControls.TextBox TextBox3;
         
         /// <summary>
-        /// RB_PopValSelectModel_1 控件。
+        /// TextBox4 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_PopValSelectModel_1;
+        protected global::System.Web.UI.WebControls.TextBox TextBox4;
         
         /// <summary>
-        /// RB_PopValFormat_0 控件。
+        /// RadioButton2 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_PopValFormat_0;
+        protected global::System.Web.UI.WebControls.RadioButton RadioButton2;
         
         /// <summary>
-        /// RB_PopValFormat_1 控件。
+        /// RadioButton3 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_PopValFormat_1;
-        
-        /// <summary>
-        /// RB_PopValFormat_2 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RB_PopValFormat_2;
+        protected global::System.Web.UI.WebControls.RadioButton RadioButton3;
         
         /// <summary>
         /// RB_Model_Url 控件。
@@ -155,6 +155,33 @@ namespace CCFlow.WF.MapDef {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TB_Title;
+        
+        /// <summary>
+        /// RB_PopValFormat_0 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RB_PopValFormat_0;
+        
+        /// <summary>
+        /// RB_PopValFormat_1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RB_PopValFormat_1;
+        
+        /// <summary>
+        /// RB_PopValFormat_2 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RB_PopValFormat_2;
         
         /// <summary>
         /// Btn_Save 控件。

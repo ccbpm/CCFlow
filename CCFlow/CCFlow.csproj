@@ -830,6 +830,7 @@
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
@@ -990,6 +991,7 @@
     <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
     <Content Include="WF\CCForm\DtlOpSelectItems.aspx" />
     <Content Include="WF\CCForm\FrmExcel.aspx" />
+    <Content Include="WF\CCForm\FrmPopVal.htm" />
     <Content Include="WF\CCForm\Img\loading.gif" />
     <Content Include="WF\CCForm\FrmWord.aspx" />
     <Content Include="WF\CCForm\Port.aspx" />

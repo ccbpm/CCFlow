@@ -380,6 +380,7 @@ namespace CCFlow.WF.MapDef
                 attr = (MapAttr)this.Pub1.Copy(attr);
                 attr.UIBindKey = this.FK_SFTable;
                 attr.UIContralType = UIContralType.DDL;
+                attr.LGType = FieldTypeS.FK;
 
                 /*普通类型的外部字典字段.*/
                 if (this.MyPK == null || this.MyPK == "")
@@ -399,6 +400,7 @@ namespace CCFlow.WF.MapDef
                     attr.MyPK = this.MyPK;
                     attr.Retrieve();
                     attr.UIContralType = UIContralType.DDL;
+                    attr.LGType = FieldTypeS.FK;
                 }
 
 
@@ -420,6 +422,9 @@ namespace CCFlow.WF.MapDef
                     if (string.IsNullOrEmpty(this.FK_SFTable) == false)
                         attr.UIBindKey = this.FK_SFTable;
 
+                    attr.UIContralType = UIContralType.DDL;
+                    attr.LGType = FieldTypeS.FK;
+
                     if (this.MyPK == null || this.MyPK == "")
                         attr.Insert();
                     else
@@ -437,12 +442,13 @@ namespace CCFlow.WF.MapDef
                     attrH.UIVisible = false;
                     attrH.UIIsEnable = false;
                     attrH.MyPK = attrH.FK_MapData + "_" + attrH.KeyOfEn;
+                    attrH.LGType = FieldTypeS.Normal;
+                    attrH.HisEditType = EditType.UnDel;
                     attrH.Save();
                     #endregion
                 }
                 else
                 {
-
                     /*普通类型的外部字典字段.*/
                     if (this.MyPK == null || this.MyPK == "")
                     {
@@ -464,6 +470,8 @@ namespace CCFlow.WF.MapDef
 
                     attr = (MapAttr)this.Pub1.Copy(attr);
                     attr.FK_MapData = this.FK_MapData;
+
+                    attr.UIContralType = UIContralType.DDL;
                     attr.LGType = FieldTypeS.FK;
 
                     attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
@@ -472,7 +480,6 @@ namespace CCFlow.WF.MapDef
                     attr.MyDataType = BP.DA.DataType.AppString;
                     attr.UIContralType = UIContralType.DDL;
                     attr.Save();
-
                 }
 
                 switch (btn.ID)

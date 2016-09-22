@@ -46,12 +46,10 @@ function OpenAccepter() {
     }
     ctrl.value = v;
     return;
-    window.sho
 }
 
 function SetHegiht() {
     var screenHeight = document.documentElement.clientHeight;
-
 
     var messageHeight = $('#Message').height();
     var topBarHeight = 40;
@@ -116,7 +114,6 @@ function ReqDDL(ddlID) {
     return v;
 }
 
-
 //20160106 by 柳辉
 //获取页面参数
 //sArgName表示要获取哪个参数的值
@@ -139,11 +136,7 @@ function GetPageParas(sArgName) {
     return retval;
 }
 
-
-
-
 //获取Dtl中TB的值 20160106 from 柳辉
-
 function ReqDtlBObj(dtlTable,DtlColumn, onValue) {
 
     var getworkid = $('#HidWorkID').val();//hiddenValue
@@ -154,7 +147,6 @@ function ReqDtlBObj(dtlTable,DtlColumn, onValue) {
         data: { getworkid: getworkid, dtlTable: dtlTable, DtlColumn: DtlColumn, onValue: onValue },
         success: function (arr) {
             alert(arr);
-
             if (arr == "true") {
                 return true;
             }
@@ -168,8 +160,6 @@ function ReqDtlBObj(dtlTable,DtlColumn, onValue) {
 }
 // 获取TB值
 function ReqTB(tbID) {
-  
-
     var v = document.getElementById(longCtlID + 'TB_' + tbID).value;
     if (v == null) {
         alert('没有找到ID=' + tbID + '的文本框控件.');

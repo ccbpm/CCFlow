@@ -60,22 +60,15 @@ namespace CCFlow.WF.MapDef
 
                 #region 给控件赋值.  2016.4.19 by liuhui.
                 // 工作模式 0 -url .1-内置
-                if (ext.PopValWorkModel == 1)
-                    this.RB_Model_Inntel.Checked = true;
-                else
+                if (ext.PopValWorkModel == PopValWorkModel.SelfUrl)
                     this.RB_Model_Url.Checked = true;
 
-                // 数据呈现方式
-                if (ext.PopValShowModel == 0)
-                    this.RB_Table.Checked = true;
-                else
-                    this.RB_Tree.Checked = true;
 
-                //选择数据方式
-                if (ext.PopValSelectModel == 0)
-                    this.RB_PopValSelectModel_0.Checked = true;
-                else
-                    this.RB_PopValSelectModel_1.Checked = true;
+                ////选择数据方式
+                //if (ext.PopValSelectModel == PopValSelectModel.One)
+                //    this.RB_PopValSelectModel_0.Checked = true;
+                //else
+                //    this.RB_PopValSelectModel_1.Checked = true;
 
                 if (ext.PopValFormat == 0)
                     this.RB_PopValFormat_0.Checked = true;
@@ -111,22 +104,7 @@ namespace CCFlow.WF.MapDef
 
             // 工作模式 0 -url .1-内置
             if (this.RB_Model_Inntel.Checked)
-                ext.PopValWorkModel = 1;
-            else
-                ext.PopValWorkModel = 0;
-
-            // 数据呈现方式
-            if (this.RB_Table.Checked)
-                ext.PopValShowModel = 0;
-            else
-                ext.PopValShowModel = 1;
-
-            //选择数据方式
-
-            if (this.RB_PopValSelectModel_0.Checked)
-                ext.PopValSelectModel = 0;
-            else
-                ext.PopValSelectModel = 1;
+                ext.PopValWorkModel = PopValWorkModel.SelfUrl;
 
             //返回值格式
             if (this.RB_PopValFormat_0.Checked)

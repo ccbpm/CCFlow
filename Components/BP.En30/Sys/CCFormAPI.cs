@@ -8,7 +8,6 @@ using LitJson;
 
 namespace BP.Sys
 {
-      
     /// <summary>
     /// 表单API
     /// </summary>
@@ -432,14 +431,16 @@ namespace BP.Sys
         /// <summary>
         /// 创建表单
         /// </summary>
-        /// <param name="fk_mapdata"></param>
-        /// <param name="jsonStrOfH5Frm"></param>
-        public static void CreateFrm(string fk_mapdata, string frmName, FrmType frmType, string frmTreeID)
+        /// <param name="frmID">表单ID</param>
+        /// <param name="frmName">表单名称</param>
+        /// <param name="frmTreeID">表单类别编号（表单树ID）</param>
+        /// <param name="frmType">表单类型</param>
+        public static void CreateFrm(string frmID, string frmName, string frmTreeID, FrmType frmType= FrmType.FreeFrm)
         {
             MapData md = new MapData();
-            md.No = fk_mapdata;
+            md.No = frmID;
             if (md.IsExits == true)
-                throw new Exception("@表单ID为:"+fk_mapdata+" 已经存在.");
+                throw new Exception("@表单ID为:" + frmID + " 已经存在.");
 
             md.Name = frmName;
             md.HisFrmType = frmType;
@@ -759,9 +760,12 @@ namespace BP.Sys
         /// 获得表单模版dataSet格式.
         /// </summary>
         /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="isCheckFrmType">是否检查表单类型</param>
         /// <returns>DataSet</returns>
-        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata)
+        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata, bool isCheckFrmType = false)
         {
+            MapData md = new MapData(fk_mapdata);
+
             // 20150513 小周鹏修改，原因：手机端无法显示 dtl Start
             // string sql = "SELECT FK_MapData,No,X,Y,W,H  FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
             string sql = "SELECT *  FROM Sys_MapDtl WHERE FK_MapData ='{0}'";
@@ -821,39 +825,42 @@ namespace BP.Sys
             sql = "@SELECT * FROM Sys_MapExt WHERE " + where;
             sqls += sql;
 
-            // line.
-            listNames.Add("Sys_FrmLine");
-            sql = "@SELECT MyPK,FK_MapData, X1,X2, Y1,Y2,BorderColor,BorderWidth from Sys_FrmLine WHERE " + where;
+            //if (isCheckFrmType == true && md.HisFrmType == FrmType.FreeFrm)
+            //{
+                // line.
+                listNames.Add("Sys_FrmLine");
+                sql = "@SELECT MyPK,FK_MapData, X1,X2, Y1,Y2,BorderColor,BorderWidth from Sys_FrmLine WHERE " + where;
+                sqls += sql;
+
+                // link.
+                listNames.Add("Sys_FrmLink");
+                sql = "@SELECT FK_MapData,MyPK,Text,URL,Target,FontSize,FontColor,X,Y from Sys_FrmLink WHERE " + where;
+                sqls += sql;
+
+                // btn.
+                listNames.Add("Sys_FrmBtn");
+                sql = "@SELECT FK_MapData,MyPK,Text,EventType,EventContext,MsgErr,MsgOK,X,Y FROM Sys_FrmBtn WHERE " + where;
+                sqls += sql;
+
+                // Sys_FrmImg.
+                listNames.Add("Sys_FrmImg");
+                sql = "@SELECT * FROM Sys_FrmImg WHERE " + where;
+                sqls += sql;
+
+                // Sys_FrmLab.
+                listNames.Add("Sys_FrmLab");
+                sql = "@SELECT MyPK,FK_MapData,Text,X,Y,FontColor,FontName,FontSize,FontStyle,FontWeight,IsBold,IsItalic FROM Sys_FrmLab WHERE " + where;
+                sqls += sql;
+            //}
+
+            // Sys_FrmRB.
+            listNames.Add("Sys_FrmRB");
+            sql = "@SELECT * FROM Sys_FrmRB WHERE " + where;
             sqls += sql;
 
             // ele.
             listNames.Add("Sys_FrmEle");
             sql = "@SELECT FK_MapData,MyPK,EleType,EleID,EleName,X,Y,W,H FROM Sys_FrmEle WHERE " + where;
-            sqls += sql;
-
-            // link.
-            listNames.Add("Sys_FrmLink");
-            sql = "@SELECT FK_MapData,MyPK,Text,URL,Target,FontSize,FontColor,X,Y from Sys_FrmLink WHERE " + where;
-            sqls += sql;
-
-            // btn.
-            listNames.Add("Sys_FrmBtn");
-            sql = "@SELECT FK_MapData,MyPK,Text,EventType,EventContext,MsgErr,MsgOK,X,Y FROM Sys_FrmBtn WHERE " + where;
-            sqls += sql;
-
-            // Sys_FrmImg.
-            listNames.Add("Sys_FrmImg");
-            sql = "@SELECT * FROM Sys_FrmImg WHERE " + where;
-            sqls += sql;
-
-            // Sys_FrmLab.
-            listNames.Add("Sys_FrmLab");
-            sql = "@SELECT MyPK,FK_MapData,Text,X,Y,FontColor,FontName,FontSize,FontStyle,FontWeight,IsBold,IsItalic FROM Sys_FrmLab WHERE " + where;
-            sqls += sql;
-
-            // Sys_FrmRB.
-            listNames.Add("Sys_FrmRB");
-            sql = "@SELECT * FROM Sys_FrmRB WHERE " + where;
             sqls += sql;
 
             // Sys_FrmAttachment. 
@@ -896,28 +903,12 @@ namespace BP.Sys
             foreach (DataTable item in ds.Tables)
             {
                 if (item.TableName == "Sys_MapAttr" && item.Rows.Count == 0)
-                {
-                    BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = fk_mapdata;
-                    attr.KeyOfEn = "OID";
-                    attr.Name = "OID";
-                    attr.MyDataType = BP.DA.DataType.AppInt;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.DefVal = "0";
-                    attr.HisEditType = BP.En.EditType.Readonly;
-                    attr.Insert();
-                }
+                    md.RepairMap();
             }
 
             ds.Tables.Add(dtMapDtl);
-
-            //ds.WriteXml(
             return ds;
         }
-
         #endregion 模版操作.
 
         #region 其他功能.

@@ -541,10 +541,15 @@ namespace BP.Sys
         {
             get
             {
-                if (this.No.Contains("BP.") == true )
+                if (this.No.Contains("BP.") == true)
                     return SrcType.BPClass;
                 else
-                    return (SrcType)this.GetValIntByKey(SFTableAttr.SrcType);
+                {
+                    SrcType src= (SrcType)this.GetValIntByKey(SFTableAttr.SrcType);
+                    if (src == Sys.SrcType.BPClass)
+                        return Sys.SrcType.CreateTable;
+                    return src;
+                }
             }
             set
             {

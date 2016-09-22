@@ -1520,15 +1520,17 @@ namespace BP.Sys
         /// <returns></returns>
         protected override bool beforeDelete()
         {
-            string sql = "DELETE FROM Sys_MapExt WHERE (AttrOfOper='" + this.KeyOfEn + "' OR AttrsOfActive='" + this.KeyOfEn + "' ) AND (FK_MapData='')";
+            string sqls = "DELETE FROM Sys_MapExt WHERE (AttrOfOper='" + this.KeyOfEn + "' OR AttrsOfActive='" + this.KeyOfEn + "' ) AND (FK_MapData='')";
             //删除权限管理字段.
-            sql += "@DELETE FROM Sys_FrmSln WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='"+this.FK_MapData+"'";
+            sqls += "@DELETE FROM Sys_FrmSln WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
 
             //如果外部数据，或者ws数据，就删除其影子字段.
             if (this.UIContralType== En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
-                sql += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FK_MapData + "'";
+                sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FK_MapData + "'";
 
-            BP.DA.DBAccess.RunSQLs(sql);
+
+
+            BP.DA.DBAccess.RunSQLs(sqls);
             return base.beforeDelete();
         }
     }

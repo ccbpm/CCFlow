@@ -6,12 +6,52 @@ using BP.En;
 namespace BP.Sys
 {
     /// <summary>
+    /// 选择模式
+    /// </summary>
+    public enum PopValSelectModel
+    {
+        /// <summary>
+        /// 单选
+        /// </summary>
+        One,
+        /// <summary>
+        /// 多选
+        /// </summary>
+        More
+    }
+    /// <summary>
+    /// PopVal - 工作方式
+    /// </summary>
+    public enum PopValWorkModel
+    {
+        /// <summary>
+        /// 自定义URL
+        /// </summary>
+        SelfUrl =1,
+        /// <summary>
+        /// 表格模式
+        /// </summary>
+        TableOnlyModel,
+        /// <summary>
+        /// 表格分页模式
+        /// </summary>
+        TablePageModel,
+        /// <summary>
+        /// 分组模式
+        /// </summary>
+        GroupModel,
+        /// <summary>
+        /// 树展现模式
+        /// </summary>
+        TreeModel
+    }
+    /// <summary>
     /// 扩展
     /// </summary>
     public class MapExtAttr : EntityNoNameAttr
     {
         /// <summary>
-        /// 主表
+        /// 表单ID
         /// </summary>
         public const string FK_MapData = "FK_MapData";
         /// <summary>
@@ -111,48 +151,29 @@ namespace BP.Sys
         /// pop 选择方式
         /// 0,多选,1=单选.
         /// </summary>
-        public int PopValSelectModel
+        public PopValSelectModel PopValSelectModel
         {
             get
             {
-                return this.GetParaInt("PopValSelectModel");
+                return (PopValSelectModel)this.GetParaInt("PopValSelectModel");
             }
             set
             {
-                this.SetPara("PopValSelectModel", value);
+                this.SetPara("PopValSelectModel", (int)value);
             }
         }
-
         /// <summary>
-        /// 工作模式
-        /// 0=url, 1=内置.
+        /// PopVal工作模式
         /// </summary>
-        public int PopValWorkModel
+        public PopValWorkModel PopValWorkModel
         {
             get
             {
-                return this.GetParaInt("PopValWorkModel");
+                return (PopValWorkModel)this.GetParaInt("PopValWorkModel");
             }
             set
             {
-                this.SetPara("PopValWorkModel", value);
-            }
-        }
-
-
-        /// <summary>
-        /// pop 呈现方式
-        /// 0,表格,1=目录.
-        /// </summary>
-        public int PopValShowModel
-        {
-            get
-            {
-                return this.GetParaInt("PopValShowModel");
-            }
-            set
-            {
-                this.SetPara("PopValShowModel", value);
+                this.SetPara("PopValWorkModel", (int)value);
             }
         }
         /// <summary>

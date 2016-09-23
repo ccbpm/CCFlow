@@ -99,8 +99,8 @@ namespace BP.Tools
                 foreach (DataColumn column in table.Columns)
                 {
                     jsonString += "\"" + ToJson(column.ColumnName) + "\":";
-                    if (column.DataType == typeof(DateTime) 
-                        || column.DataType == typeof(string) 
+                    if (column.DataType == typeof(DateTime)
+                        || column.DataType == typeof(string)
                         || column.DataType == typeof(bool)
                         || column.DataType == typeof(Boolean))
                     {
@@ -108,7 +108,11 @@ namespace BP.Tools
                     }
                     else
                     {
-                        jsonString += ToJson(drc[i][column.ColumnName].ToString()) + ",";
+                        string val = ToJson(drc[i][column.ColumnName].ToString());
+                        if (string.IsNullOrEmpty(val) == true)
+                            val = "0";
+
+                        jsonString += val + ",";
                     }
                 }
                 jsonString = DeleteLast(jsonString) + "},";

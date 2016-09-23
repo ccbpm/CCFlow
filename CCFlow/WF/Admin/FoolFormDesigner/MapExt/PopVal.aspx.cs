@@ -45,6 +45,12 @@ namespace CCFlow.WF.MapDef
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            string url = this.Request.RawUrl;
+            url = url.Replace("PopVal.aspx", "PopVal.htm");
+            this.Response.Redirect(url, true);
+            return;
+
+
             if ( this.IsPostBack==false)
             {
                 //实例化控件值.

@@ -2,46 +2,128 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>弹窗工作模式设置</title>
+     <link href="/WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="/WF/Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="/WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jsTree.ddl.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jstree.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/commonYangYH.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
     <style type="text/css">
-        #TB_Tree_SQL
+        #TBSQL
         {
-            width: 759px;
+            width: 1159px;
+             height:200px;
+        }
+        #TB_Url
+        {
+            width: 789px;
+        }
+        #TB_ColNames
+        {
+            width: 383px;
         }
     </style>
-</head>
-<body>
+    <base target="_self" />
+    <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+        function WinOpen(url, name) {
+            window.open(url, name, 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+        }
+        function TROver(ctrl) {
+            ctrl.style.backgroundColor = 'LightSteelBlue';
+        }
 
+        function TROut(ctrl) {
+            ctrl.style.backgroundColor = 'white';
+        }
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID) {
+
+            var ctrl = document.getElementById(ctrlID);
+            if (ctrl.style.display == "block") {
+                ctrl.style.display = 'none';
+            } else {
+                ctrl.style.display = 'block';
+            }
+        }
+
+        function Save() {
+
+            alert('开始执行保存');
+        }
+        function SaveAndClose() {
+            Save();
+            window.close();
+        }
+
+        function Close() {
+            window.close();
+        }
+
+       $(function () {
+            InitPage();
+        });
+
+        function InitPage() {
+            var fk_mapExt = GetQueryString("FK_MapExt");
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_mapExt + '&m=' + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    var html = "";
+                    alert(data);
+                   }
+            });
+        }
+     
+    </script>
+</head>
+<body onkeypress="Esc();">
+
+<!---------------------------- 模式1 ：自定义URL ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_SelfUrl" type="radio" name="" value="0" /><label for="RB_PopWorkModel_SelfUrl">自定义URL</label>  </legend>
-<a href="javascript:ShowHidden('url')">&nbsp;请输入一个URL:</a>
+<legend><input id="RB_PopWorkModel_SelfUrl" type="radio" name="Model" value="0"  /><label for="RB_PopWorkModel_SelfUrl">自定义URL</label>  </legend>
+<a href="javascript:ShowHidden('url')">自定义URL:</a>
  <div id="url" style="color:Gray; display:none">
  <ul>
  <li>您选择了使用外部的URL. </li>
  <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
  <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
  </ul>
  </div>
-<input type="text" id="TB_Url"  value="" />
+<input type="text" id="TB_Url"  value=""   />
 </fieldset>
 
-
+<!---------------------------- 模式2：Table  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_Table" type="radio" name="" value="0" /><label for="RB_PopWorkModel_Table">表格模式</label>  </legend>
-<a href="javascript:ShowHidden('Table')">&nbsp;查询SQL</a>
+<legend><input id="RB_PopWorkModel_Table" type="radio" name="Model" value="1"  /><label for="RB_PopWorkModel_Table">表格模式</label>  </legend>
+<a href="javascript:ShowHidden('Table')">初始化表格的查询SQL</a>
  <div id="Table" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
  <li>比如:SELECT No, Name FROM Port_Emp </li>
  <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
 <input type="text" id="TB_Table_SQL"  value="" />
 </fieldset>
 
 
+<!---------------------------- 模式3 ：分页的Table  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_TablePageModel" type="radio" name="" value="0" /><label for="RB_PopWorkModel_TablePageModel">表格分页模式</label>  </legend>
-<a href="javascript:ShowHidden('TablePageModel')">&nbsp;数据展现SQL</a>
+<legend><input id="RB_PopWorkModel_TablePageModel" type="radio" name="Model"  value="2"  /><label for="RB_PopWorkModel_TablePageModel">表格分页模式</label>  </legend>
+<a href="javascript:ShowHidden('TablePageModel')">数据展现SQL</a>
  <div id="TablePageModel" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
@@ -51,29 +133,29 @@
  </div>
 <input type="text" id="TB_TablePageModel_SQL"  value="" />
 
-
-<a href="javascript:ShowHidden('SearchSQL')">&nbsp;查询SQL</a>
+<a href="javascript:ShowHidden('SearchSQL')">查询SQL</a>
  <div id="SearchSQL" style="color:Gray; display:none">
- <ul>
- <li>您选择了使用外部的URL. </li>
- <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
- <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+  <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
 <input type="text" id="TB_TablePageModel_SearchSQL"  value="" />
 
 </fieldset>
 
-
-
+<!---------------------------- 模式4 ：分组显示,但是不分页.  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_GroupModel" type="radio" name="" value="0" /><label for="RB_PopWorkModel_GroupModel">表格分页模式</label>  </legend>
-<a href="javascript:ShowHidden('TablePageModel')">&nbsp;分组查询SQL</a>
- <div id="TablePageModel" style="color:Gray; display:none">
+<legend><input id="RB_PopWorkModel_GroupModel" type="radio" name="Model" value="3"  /><label for="RB_PopWorkModel_GroupModel">分组模式</label>  </legend>
+<a href="javascript:ShowHidden('GroupModel')">分组查询SQL</a>
+ <div id="GroupModel" style="color:Gray; display:none">
  <ul>
- <li>您选择了使用外部的URL. </li>
- <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
- <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
 <input type="text" id="TB_GroupModel_Group"  value="" />
@@ -81,31 +163,65 @@
 <a href="javascript:ShowHidden('TablePageModelEntity')">&nbsp;实体查询SQL</a>
  <div id="TablePageModelEntity" style="color:Gray; display:none">
  <ul>
- <li>您选择了使用外部的URL. </li>
- <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
- <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
 <input type="text" id="TB_GroupModel_Entity"  value="" />
 </fieldset>
 
 
-
+<!---------------------------- 模式5 ：树模式,没有关键字查询.  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_Tree" type="radio" name="" value="0" /><label for="RB_PopWorkModel_Tree">树模式</label>  </legend>
-<a href="javascript:ShowHidden('Tree')">&nbsp;树查询SQL</a>
+<legend><input id="RB_PopWorkModel_Tree" type="radio" name="Model" value="4"  /><label for="RB_PopWorkModel_Tree">树模式</label>  </legend>
+<a href="javascript:ShowHidden('Tree')">查询SQL</a>
  <div id="Tree" style="color:Gray; display:none">
  <ul>
- <li>您选择了使用外部的URL. </li>
- <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
- <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
 <input type="text" id="TB_Tree_SQL"  value="" />
 </fieldset>
 
+<!---------------------------- 高级设置.  ---------------------------------------------------->
+<fieldset>
+<legend><label for="RB_PopWorkModel_Tree">高级设置</label>  </legend>
+宽度(px)： <input type="text" id="TB_Width"  value="" />  
+高度(px)：<input type="text" id="TB_Height"  value="" />   
+开窗标题：<input type="text" id="TB_Title"  value="" />
+<br />
 
 
+<a href="javascript:ShowHidden('ColName')">显示的中文列名(可以为空)：</a>
+ <div id="ColName" style="color:Gray; display:none">
+ <ul>
+ <li>适用于表格方式数据显示，是为了避免在列表的表头上显示英文字段名对使用者不友好。</li>
+ <li>可以为空，如果为空列名就按照英文名字显示。</li>
+ <li>格式为: @col1=列名1@col2=列名2@col3=列名3 </li>
+ </ul>
+ </div>
+
+<input type="text" id="TB_ColNames"  value="" />
+
+</fieldset>
+
+<fieldset>
+<legend> 返回值格式  </legend>
+<input id="RB_PopValFormat_0" type="radio" name="PopValFormat" value="4"  /><label for="RB_PopValFormat_0">No(仅编号)</label> 
+<input id="RB_PopValFormat_1" type="radio" name="PopValFormat" value="4"  /><label for="RB_PopValFormat_1">Name(仅名称)</label> 
+<input id="RB_PopValFormat_2" type="radio" name="PopValFormat" value="4"   /><label for="RB_PopValFormat_2">No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)</label> 
+<br />
+<input id="RB_PopValFormat_3" type="radio" name="PopValFormat" value="4"  /><label for="RB_PopValFormat_3">全行数据格式(适用于表格模式，把选择一行的数据放入到当前表单里，按照字段名相同)</label> 
+</fieldset>
+
+<input type="Button" value="保存"  onclick="Save()" />
+<input type="Button" value="保存并关闭"  onclick="SaveAndClose()" />
+<input type="Button" value="关闭"  onclick="Close()" />
 
 </body>
 </html>

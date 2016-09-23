@@ -22,7 +22,7 @@ namespace CCFlow.WF.MapDef
                         context.Response.Clear();
                         using (FileStream iStream = File.OpenRead(fileFullName))
                         {
-                            long dataLengthToRead = iStream.Length; //获取下载的文件总大小
+                            long dataLengthToRead = iStream.Length; //获取下载的文件总大小.
 
                             context.Response.ContentType = "application/octet-stream";
                             context.Response.AddHeader("Content-Disposition", "attachment;  filename=" +

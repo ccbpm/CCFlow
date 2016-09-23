@@ -63,11 +63,37 @@ namespace CCFlow.WF.MapDef
             }
             return sql;
         }
-        public void ProcessRequest(HttpContext context)
+        public string InitPopValSetting()
         {
+            string fk_mapExt = context.Request.QueryString["FK_MapExt"].ToString();
+
+            MapExt ext = new MapExt();
+            ext.MyPK = fk_mapExt;
+            ext.RetrieveFromDBSources();
+            
+            DataTable dt=ext.ToDataTableField("Table");
+            return BP.Tools.Json.ToJson(dt);
+        }
+
+        public HttpContext context = null;
+ 
+        public void ProcessRequest(HttpContext mycontext)
+        {
+           context = mycontext;
+           string doType = context.Request.QueryString["DoType"];
+           switch (doType)
+           {
+               case "InitPopValSetting":
+                   context.Response.Write(this.InitPopValSetting());
+                   return;
+               default:
+                   break;
+           }
+            
             string fk_mapExt = context.Request.QueryString["FK_MapExt"].ToString();
             if (context.Request.QueryString["Key"] == null)
                 return;
+            
             no = context.Request.QueryString["WebUserNo"];
             name = context.Request.QueryString["WebUserName"];
             fk_dept = context.Request.QueryString["WebUserFK_Dept"];

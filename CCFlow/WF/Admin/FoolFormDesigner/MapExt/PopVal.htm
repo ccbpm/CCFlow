@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>弹窗工作模式设置</title>
-     <link href="/WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link href="/WF/Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
-    <link href="/WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jsTree.ddl.js"></script>
@@ -58,6 +55,7 @@
 
             alert('开始执行保存');
         }
+
         function SaveAndClose() {
             Save();
             window.close();
@@ -72,16 +70,17 @@
         });
 
         function InitPage() {
-            var fk_mapExt = GetQueryString("FK_MapExt");
+            var fk_mapExt = GetQueryString("MyPK");
+            alert(fk_mapExt);
+
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_mapExt + '&m=' + Math.random(),
+                url: "/WF/Admin/FoolFormDesigner/HanderMapExt.ashx?DoType=InitPopValSetting&FK_MapExt=" + fk_mapExt + '&m=' + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    var html = "";
                     alert(data);
-                   }
+                }
             });
         }
      

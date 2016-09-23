@@ -99,7 +99,10 @@ namespace BP.Tools
                 foreach (DataColumn column in table.Columns)
                 {
                     jsonString += "\"" + ToJson(column.ColumnName) + "\":";
-                    if (column.DataType == typeof(DateTime) || column.DataType == typeof(string))
+                    if (column.DataType == typeof(DateTime) 
+                        || column.DataType == typeof(string) 
+                        || column.DataType == typeof(bool)
+                        || column.DataType == typeof(Boolean))
                     {
                         jsonString += "\"" + ToJson(drc[i][column.ColumnName].ToString()) + "\",";
                     }

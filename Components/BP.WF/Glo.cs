@@ -2809,15 +2809,11 @@ namespace BP.WF
                 p.SQL = "SELECT Msg FROM WF_Emp where No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
                 p.AddFK_Emp();
                 return DBAccess.RunSQLReturnString(p);
-
-                //string SQL = "SELECT Msg FROM WF_Emp where No='"+BP.Web.WebUser.No+"'";
-                //return DBAccess.RunSQLReturnString(SQL);
             }
             set
             {
                 if (string.IsNullOrEmpty(value) == true)
                     return;
-
                 Paras p = new Paras();
                 p.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "v WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
                 p.Add("v", value);
@@ -2834,9 +2830,6 @@ namespace BP.WF
                     emp.Insert();
                     DBAccess.RunSQL(p);
                 }
-
-                //string SQL = "UPDATE WF_Emp SET Msg='" + value + "' WHERE No='" + BP.Web.WebUser.No + "'";
-                //DBAccess.RunSQL(SQL);
             }
         }
 

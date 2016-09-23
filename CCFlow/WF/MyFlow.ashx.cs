@@ -276,7 +276,6 @@ namespace CCFlow.WF
         public bool isAskFor = false;
         #endregion
 
-
         public string InitToolBar()
         {
             string tKey = DateTime.Now.ToString();
@@ -600,6 +599,10 @@ namespace CCFlow.WF
 
             return toolbar;
         }
+        /// <summary>
+        /// 获取主表的方法.
+        /// </summary>
+        /// <returns></returns>
         private Hashtable GetMainTableHT()
         {
             Hashtable htMain = new Hashtable();
@@ -626,26 +629,133 @@ namespace CCFlow.WF
                     continue;
                 }
             }
-
             return htMain;
         }
+        /// <summary>
+        /// 发送
+        /// </summary>
+        /// <returns></returns>
         public string Send()
         {
             try
             {
                 Hashtable ht = this.GetMainTableHT();
                 SendReturnObjs objs = null;
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null);
-                return objs.ToMsgOfText();
+                string msg = "";
+                try
+                {
+                    objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null);
+                      msg = objs.ToMsgOfHtml();
+                    BP.WF.Glo.SessionMsg = msg;
+                }
+                catch (Exception exSend)
+                {
+                    if (exSend.Message.Contains("请选择下一步骤工作") == true || exSend.Message.Contains("用户没有选择发送到的节点") == true)
+                    {
+                        /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
+                        return "url@./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
+                    }
+                    //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示
+                    if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && exSend.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
+                    {
+                        return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
+                    }
+                }
+
+
+                //当前节点.
+                Node currNode = new Node(this.FK_Node);
+
+                #region 处理发送后转向.
+                /*处理转向问题.*/
+                switch (currNode.HisTurnToDeal)
+                {
+                    case TurnToDeal.SpecUrl:
+                        string myurl = currNode.TurnToDealDoc.Clone().ToString();
+                        if (myurl.Contains("?") == false)
+                            myurl += "?1=1";
+                        Attrs myattrs = currNode.HisWork.EnMap.Attrs;
+                        Work hisWK = currNode.HisWork;
+                        foreach (Attr attr in myattrs)
+                        {
+                            if (myurl.Contains("@") == false)
+                                break;
+                            myurl = myurl.Replace("@" + attr.Key, hisWK.GetValStrByKey(attr.Key));
+                        }
+                        myurl = myurl.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        myurl = myurl.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        myurl = myurl.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                        if (myurl.Contains("@"))
+                        {
+                            BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + currND.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                            throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl);
+                        }
+
+                        if (myurl.Contains("PWorkID") == false)
+                            myurl += "&PWorkID=" + this.WorkID;
+
+                        myurl += "&FromFlow=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
+                        return "url@" + myurl;
+                    case TurnToDeal.TurnToByCond:
+                        TurnTos tts = new TurnTos(this.FK_Flow);
+                        if (tts.Count == 0)
+                        {
+                            BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", "您没有设置节点完成后的转向条件。", "Err" + currND.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                            throw new Exception("@您没有设置节点完成后的转向条件。");
+                        }
+                        foreach (TurnTo tt in tts)
+                        {
+                            tt.HisWork = currNode.HisWork;
+                            if (tt.IsPassed == true)
+                            {
+                                string url = tt.TurnToURL.Clone().ToString();
+                                if (url.Contains("?") == false)
+                                    url += "?1=1";
+                                Attrs attrs = currNode.HisWork.EnMap.Attrs;
+                                Work hisWK1 = currNode.HisWork;
+                                foreach (Attr attr in attrs)
+                                {
+                                    if (url.Contains("@") == false)
+                                        break;
+                                    url = url.Replace("@" + attr.Key, hisWK1.GetValStrByKey(attr.Key));
+                                }
+                                if (url.Contains("@"))
+                                    throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + url);
+
+                                url += "&PFlowNo=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&PWorkID=" + this.WorkID + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
+                                return "url@" + url;
+                            }
+                        }
+                        return msg;
+                    default:
+                        msg = msg.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        msg = msg.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        msg = msg.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                        return msg;
+                }
+                #endregion
+
             }
             catch (Exception ex)
             {
                 return "err@发送工作出现错误:" + ex.Message;
             }
         }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
         public string Save()
         {
-            return BP.WF.Dev2Interface.Node_SaveWork(this.FK_Flow, this.FK_Node, this.WorkID, this.GetMainTableHT() , null);
+            try
+            {
+                return BP.WF.Dev2Interface.Node_SaveWork(this.FK_Flow, this.FK_Node, this.WorkID, this.GetMainTableHT(), null);
+            }
+            catch(Exception ex)
+            {
+                return "err@保存失败:" + ex.Message;
+            }
         }
         /// <summary>
         /// 产生一个工作节点
@@ -661,7 +771,6 @@ namespace CCFlow.WF
 
             string json = BP.Tools.Json.ToJson(ds);
             BP.DA.DataType.WriteFile("c:\\WorkNode.json", json);
-
             return "";
         }
         public void ProcessRequest(HttpContext context)

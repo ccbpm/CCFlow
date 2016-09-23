@@ -2188,6 +2188,7 @@ namespace CCFlow.WF.UC
                     this.Response.Redirect("./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID, true);
                     return;
                 }
+
                 //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示
                 if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && exSend.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
                 {
@@ -2198,7 +2199,6 @@ namespace CCFlow.WF.UC
                 this.FlowMsg.AddFieldSetGreen("错误");
                 this.FlowMsg.Add(exSend.Message.Replace("@@", "@").Replace("@", "<BR>@"));
                 this.FlowMsg.AddFieldSetEnd();
-                return;
             }
 
             #region 处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.

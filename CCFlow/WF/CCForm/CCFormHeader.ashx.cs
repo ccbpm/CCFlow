@@ -39,9 +39,7 @@ namespace CCFlow.WF.CCForm
             {
                 switch (doType)
                 {
-                    case "InitPopVal":
-                        message = InitPopVal(context);
-                        break;
+                   
                     case "SingelAttach"://单附件上传
                         SingleAttach(context, attachPk, workid, fk_node, ensName);
                         break;
@@ -54,8 +52,14 @@ namespace CCFlow.WF.CCForm
             {
                 switch (doType)
                 {
+                    case "InitPopVal":
+                        message = InitPopVal(context);
+                        BP.DA.DataType.WriteFile("C:\\ccform_InitPopVal.json", message);
+                        break;
                     case "DelWorkCheckAttach"://删除附件
                         message = DelWorkCheckAttach(pkVal);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -77,6 +81,7 @@ namespace CCFlow.WF.CCForm
         public string InitPopVal(HttpContext context)
         {
             string mypk = context.Request.QueryString["FK_MapExt"];
+
             DataSet ds = new DataSet();
 
             MapExt me = new MapExt();

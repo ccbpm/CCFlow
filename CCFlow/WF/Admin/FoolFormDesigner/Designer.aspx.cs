@@ -924,7 +924,10 @@ namespace CCFlow.WF.MapDef
                         break;
                     case MapExtXmlList.PopVal: //弹出窗.
                         TB tbPop = this.Pub1.GetTBByID("TB_" + me.AttrOfOper);
-                        //tb.Attributes["ondblclick"] = "ReturnVal(this,'" + me.Doc + "','sd');";
+                        tbPop.Attributes["onclick"] = "ShowHelpDiv('" + tbPop.ID + "','','" + me.MyPK + "','111','returnvalccformpopval');";
+                        tbPop.Attributes["ondblclick"] = "ReturnValCCFormPopVal(this,'" + me.MyPK + "','111', " + me.W + "," + me.H + ",'" + me.GetParaString("Title") + "');";
+
+                       // tbPop.Attributes["ondblclick"] = "ReturnVal(this,'" + me.Doc + "','sd');";
                         break;
                     case MapExtXmlList.AutoFull: //自动填充.
                         string js = "\t\n <script type='text/javascript' >";

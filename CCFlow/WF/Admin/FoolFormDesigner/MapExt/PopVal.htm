@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>弹窗工作模式设置</title>
+    <style type="text/css">
+        #TB_Tree_SQL
+        {
+            width: 759px;
+        }
+    </style>
+</head>
+<body>
+
+<fieldset>
+<legend><input id="RB_PopWorkModel_SelfUrl" type="radio" name="" value="0" /><label for="RB_PopWorkModel_SelfUrl">自定义URL</label>  </legend>
+<a href="javascript:ShowHidden('url')">&nbsp;请输入一个URL:</a>
+ <div id="url" style="color:Gray; display:none">
+ <ul>
+ <li>您选择了使用外部的URL. </li>
+ <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+ <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ </ul>
+ </div>
+<input type="text" id="TB_Url"  value="" />
+</fieldset>
+
+
+<fieldset>
+<legend><input id="RB_PopWorkModel_Table" type="radio" name="" value="0" /><label for="RB_PopWorkModel_Table">表格模式</label>  </legend>
+<a href="javascript:ShowHidden('Table')">&nbsp;查询SQL</a>
+ <div id="Table" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ </ul>
+ </div>
+<input type="text" id="TB_Table_SQL"  value="" />
+</fieldset>
+
+
+<fieldset>
+<legend><input id="RB_PopWorkModel_TablePageModel" type="radio" name="" value="0" /><label for="RB_PopWorkModel_TablePageModel">表格分页模式</label>  </legend>
+<a href="javascript:ShowHidden('TablePageModel')">&nbsp;数据展现SQL</a>
+ <div id="TablePageModel" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No,Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ </ul>
+ </div>
+<input type="text" id="TB_TablePageModel_SQL"  value="" />
+
+
+<a href="javascript:ShowHidden('SearchSQL')">&nbsp;查询SQL</a>
+ <div id="SearchSQL" style="color:Gray; display:none">
+ <ul>
+ <li>您选择了使用外部的URL. </li>
+ <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+ <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ </ul>
+ </div>
+<input type="text" id="TB_TablePageModel_SearchSQL"  value="" />
+
+</fieldset>
+
+
+
+<fieldset>
+<legend><input id="RB_PopWorkModel_GroupModel" type="radio" name="" value="0" /><label for="RB_PopWorkModel_GroupModel">表格分页模式</label>  </legend>
+<a href="javascript:ShowHidden('TablePageModel')">&nbsp;分组查询SQL</a>
+ <div id="TablePageModel" style="color:Gray; display:none">
+ <ul>
+ <li>您选择了使用外部的URL. </li>
+ <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+ <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ </ul>
+ </div>
+<input type="text" id="TB_GroupModel_Group"  value="" />
+
+<a href="javascript:ShowHidden('TablePageModelEntity')">&nbsp;实体查询SQL</a>
+ <div id="TablePageModelEntity" style="color:Gray; display:none">
+ <ul>
+ <li>您选择了使用外部的URL. </li>
+ <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+ <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ </ul>
+ </div>
+<input type="text" id="TB_GroupModel_Entity"  value="" />
+</fieldset>
+
+
+
+<fieldset>
+<legend><input id="RB_PopWorkModel_Tree" type="radio" name="" value="0" /><label for="RB_PopWorkModel_Tree">树模式</label>  </legend>
+<a href="javascript:ShowHidden('Tree')">&nbsp;树查询SQL</a>
+ <div id="Tree" style="color:Gray; display:none">
+ <ul>
+ <li>您选择了使用外部的URL. </li>
+ <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+ <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ </ul>
+ </div>
+<input type="text" id="TB_Tree_SQL"  value="" />
+</fieldset>
+
+
+
+
+</body>
+</html>

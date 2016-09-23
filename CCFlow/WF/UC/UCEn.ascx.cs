@@ -2131,6 +2131,7 @@ namespace CCFlow.WF.UC
                                 {
                                     tb.Attributes["onclick"] = "ShowHelpDiv('" + tb.ID + "','','" + me.MyPK + "','" + en.PKVal + "','returnvalccformpopval');";
                                     tb.Attributes["ondblclick"] = "ReturnValCCFormPopVal(this,'" + me.MyPK + "','" + en.PKVal + "', " + me.W + "," + me.H + ",'" + me.GetParaString("Title") + "');";
+
                                 }
 
                                 //tb.Attributes["onkeyup"] = "this.value='';";    //added by liuxc,2015.6.26,应新昌增加不允许修改

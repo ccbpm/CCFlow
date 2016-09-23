@@ -173,8 +173,9 @@ function getoffset(e) {
 function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK, width, height, title) {
     //update by dgq 修改路径
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
+
     var wfpreHref = GetLocalWFPreHref();
-    url = wfpreHref + '/WF/CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
+    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
     var v = window.showModalDialog(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
     if (v == null || v == '' || v == 'NaN') {
         return;

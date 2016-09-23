@@ -1,9 +1,189 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        body .table tbody tr td {
+            line-height: 18px;
+        }
+
+        .portlet-body, body, .portlet-title {
+            background: #f4f9ff !important;
+            border-bottom: 0px;
+        }
+
+        .customthr tr:nth-child(2n) {
+            background: #d4e6fe;
+        }
+
+        .customthr tr:nth-child(2n+1) {
+            background: #f4f9ff;
+        }
+
+        .customthr thead tr {
+            background: #d4e6fe !important;
+        }
+
+        .btn {
+            background: #2884fa !important;
+            border-radius: 20px !important;
+            color: white !important;
+            padding: 4px 17px !important;
+        }
+
+        input[type=text], select {
+            border-radius: 15px !important;
+            border: #2884fa 1px solid !important;
+            margin: 8px 0px !important;
+            line-height: 25px;
+            padding-left: 6px;
+        }
+
+        #btnSearch {
+            height: 30px;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            background: #2884fa !important;
+            color: #fff;
+        }
+
+        #txbSearchVal {
+            font-size: 14px;
+        }
+        /*#poptable {
+            display: none;
+        }*/
+        #test {
+            border-radius: 0px 15px 15px 0px !important;
+            background: #2884fa;
+            border: #2884fa 1px solid !important;
+        }
+
+        .form_tree {
+            background: #f4f9ff;
+        }
+
+            .form_tree .form-control {
+                border-radius: 15px 0px 0px 15px;
+                /*border:#2884fa 1px solid;*/
+            }
+
+            .form_tree .input-group-addon {
+                border-radius: 0px 15px 15px 0px;
+                /*broder:#2884fa 1px solid;*/
+            }
+    </style>
+    <script>
+        $(function () {
+            alert('sdsdsssssss');
+            dtTable();
+            alert('sdsdsss');
+        });
+
+        function dtTable() {
+            var fk_mapExt =  GetQueryString("FK_MapExt");
+            $.ajax({
+                type: 'post',
+                async : true,
+                url: "CCFormHeader.ashx?DoType=InitPopVal&m=" + "&FK_MapExt=" + fk_mapExt+'&m=' + Math.random(),
+                dataType: 'json',
+                success: function (data) {
+            alert(data);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-
+    <div id="poptable">
+        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding:0px;margin:0px;overflow:auto;">
+            <div class="portlet-title col-md-12" style="border-radius:0px;padding-top:10px;border:none;">
+                <div>
+                    <div style="font-size:20px;float:left;width:100%;">
+                        <input id="txbSearchVal" value="" type="text" placeholder="系统标题" style="width:95%;padding:5px;text-align:center;" />
+                        <button class="Btn" id="btnSearch">搜索</button>
+                    </div>
+                    <div style="font-size:20px;float:left;width:100%;display:none;">
+                        已选择列表：
+                        <span id="selectedlist" style="word-break:break-all;"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body " id="merDiv" style="overflow:auto;">
+                <div class="tab-content" style="margin:4px 0px;">
+                    <div class="tab-pane active portlet_tab" id="flowList">
+                        <div id="" style="min-height:520px;overflow:auto;">
+                            <table class="table customthr">
+                                <thead>
+                                    <tr data-data="true">
+                                        <th style="text-align: center;width:60px;" data-coltype="SN">序号</th>
+                                        <th style="width:70px; text-align:center;" data-custom="true"
+                                            data-customcontent="1" data-customcontent1='input@type="checkbox"@' data-coltype="Operation1">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="loadDate" style="text-align: center;">
+                            <img src="../Scripts/bootstrap/fonts/loading.gif" />
+                        </div>
+                        <div class="pagination-panel">
+                            页码 <button class="btn btnTxt  btn-sm default prev" title="上一页"><i class="fa fa-angle-left"></i></button>
+                            <button class="btn btnTxt btn-sm default next" title="下一页">
+                                <i class="fa fa-angle-right"></i>
+                            </button>
+                            <span class="seperator">|</span>
+                            <button class="btn btnTxt btn-sm default prev" title="转到">转到</button>
+                            <input type="text" class="pagination-panel-input form-control input-mini input-inline input-sm" maxlenght="5" style="text-align:center; margin: 0 5px;" />
+                            页<span class="seperator">|</span>
+                            <span class="pagination-panel-total">0</span>
+                            <label>
+                                页
+                                <span class="seperator">|</span>每页
+                                <select onchange="" style="width:auto !important;" class="form-control input-xsmall input-sm input-inline">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                    <option value="-1">全部</option>
+                                </select> 条
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="poptree">
+        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding:0px;margin:0px;overflow:auto;">
+            <div class="portlet-body " id="" style="overflow:auto;">
+                <div class="tab-content">
+                    <div class="tab-pane active portlet_tab" id="">
+                        <div class="input-group form_tree">
+                            <input class="form-control" type="text" id="orgTxt" readonly="readonly" style="border-radius: 15px 0px 0px 15px !important; margin: 0px !important;" />
+                            <span class="input-group-addon" id="test"><span class="glyphicon glyphicon-tree-deciduous" style="color:#fff;"></span></span>
+                        </div>
+                        <div id="orgjstree" style="position:absolute;display:none;overflow:auto;width:95%;" class="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

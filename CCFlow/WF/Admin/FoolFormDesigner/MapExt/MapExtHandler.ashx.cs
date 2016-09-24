@@ -59,7 +59,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
             return sql;
         }
-        public string InitPopValSetting()
+        public string PopVal_Init()
         {
             string fk_mapExt = context.Request.QueryString["MyPK"].ToString();
 
@@ -76,26 +76,24 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             //创建一个ht, 然后把他转化成json返回出去。
             Hashtable ht = new Hashtable();
 
-            
-
             switch (ext.PopValWorkModel)
             {
                 case  PopValWorkModel.SelfUrl:
-                    ht.Add("URL", ext.Doc);
+                    ht.Add("URL", ext.PopValUrl);
                     break;
                 case PopValWorkModel.TableOnlyModel:
-                    ht.Add("EntitySQL", ext.Tag2);
+                    ht.Add("EntitySQL", ext.PopValEntitySQL);
                     break;
                 case PopValWorkModel.TablePageModel:
-                    ht.Add("TableIntSQL", ext.Tag1);
-                    ht.Add("EntitySQL", ext.Tag2);
+                    ht.Add("TablePageSQL", ext.PopValTablePageSQL);
+                    ht.Add("EntitySQL", ext.PopValEntitySQL);
                     break;
                 case PopValWorkModel.GroupModel:
                     ht.Add("GroupSQL", ext.Tag1);
-                    ht.Add("EntitySQL", ext.Tag2);
+                    ht.Add("EntitySQL", ext.PopValEntitySQL);
                     break;
                 case PopValWorkModel.TreeModel:
-                    ht.Add("EntitySQL", ext.Tag2);
+                    ht.Add("EntitySQL", ext.PopValEntitySQL);
                     break;
                 default:
                     break;
@@ -106,11 +104,103 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             ht.Add("PopValWorkModel", ext.PopValWorkModel);
             ht.Add("PopValSelectModel", ext.PopValSelectModel);
+
             ht.Add("PopValFormat", ext.PopValFormat);
             ht.Add("PopValTitle", ext.PopValTitle);
+            ht.Add("PopValColNames", ext.PopValColNames);
 
             //转化为Json.
-            return BP.Tools.Json.ToJson(ht); 
+            return BP.Tools.Json.ToJson(ht,false); 
+        }
+        /// <summary>
+        /// 保存设置.
+        /// </summary>
+        /// <returns></returns>
+        public string PopVal_Save()
+        {
+            try
+            {
+                MapExt me = new MapExt();
+                me.MyPK = context.Request.QueryString["FK_MapExt"];
+                me.FK_MapData = context.Request.QueryString["FK_MapData"];
+                me.AttrOfOper = context.Request.QueryString["KeyOfEn"];
+                me.RetrieveFromDBSources();
+
+                string valWorkModel = this.GetValFromFrmByKey("Model");
+                switch (valWorkModel)
+                {
+                    case "SelfUrl": //URL模式.
+                        me.PopValWorkModel = PopValWorkModel.SelfUrl;
+                        me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
+                        break;
+                    case "TableOnlyModel": //表格模式.
+                        me.PopValWorkModel = PopValWorkModel.TableOnlyModel;
+                        me.PopValEntitySQL = this.GetValFromFrmByKey("TB_Table_SQL");
+                        break;
+                    case "TablePageModel": //分页模式.
+                        me.PopValWorkModel = PopValWorkModel.TablePageModel;
+                        me.PopValGroupSQL = this.GetValFromFrmByKey("TB_TablePageModel_SQL");
+                        me.PopValEntitySQL = this.GetValFromFrmByKey("TB_EntitySQL");
+                        break;
+                    case "GroupModel": //分组模式.
+                        me.PopValWorkModel = PopValWorkModel.GroupModel;
+                        me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
+                        break;
+                    case "TreeModel": //树模式.
+                        me.PopValWorkModel = PopValWorkModel.TreeModel;
+                        me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
+                        break;
+                    default:
+                        break;
+                }
+
+                //高级属性.
+                me.W = int.Parse(this.GetValFromFrmByKey("TB_Width"));
+                me.H = int.Parse(this.GetValFromFrmByKey("TB_Height"));
+                me.PopValColNames = this.GetValFromFrmByKey("TB_ColNames"); //中文列名的对应.
+                me.PopValTitle = this.GetValFromFrmByKey("TB_Title"); //标题.
+
+
+                //数据返回格式.
+                string popValFormat = this.GetValFromFrmByKey("PopValFormat");
+                switch (popValFormat)
+                {
+                    case "OnlyNo":
+                        me.PopValFormat = PopValFormat.OnlyNo;
+                        break;
+                    case "OnlyName":
+                        me.PopValFormat = PopValFormat.OnlyName;
+                        break;
+                    case "NoName":
+                        me.PopValFormat = PopValFormat.NoName;
+                        break;
+                    default:
+                        break;
+                }
+
+                //选择模式.
+                string seleModel = this.GetValFromFrmByKey("PopValSelectModel");
+                if (seleModel == "On")
+                    me.PopValSelectModel = PopValSelectModel.One;
+                else
+                    me.PopValSelectModel = PopValSelectModel.More;
+
+                me.Save();
+                return "保存成功.";
+            }
+            catch(Exception ex)
+            {
+                return "@保存失败:" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 获得Form数据.
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <returns>返回值</returns>
+        public string GetValFromFrmByKey(string key)
+        {
+            return context.Request.Form[key];
         }
 
         public HttpContext context = null;
@@ -121,8 +211,11 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string doType = context.Request.QueryString["DoType"];
             switch (doType)
             {
-                case "InitPopValSetting":
-                    context.Response.Write(this.InitPopValSetting());
+                case "PopVal_Init":
+                    context.Response.Write(this.PopVal_Init());
+                    return;
+                case "PopVal_Save":
+                    context.Response.Write(this.PopVal_Save());
                     return;
                 default:
                     break;

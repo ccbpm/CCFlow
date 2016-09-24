@@ -2,12 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>弹窗工作模式设置</title>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jsTree.ddl.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jstree.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/commonYangYH.js"></script>
-    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <style type="text/css">
         #TBSQL
         {
@@ -21,6 +18,19 @@
         #TB_ColNames
         {
             width: 383px;
+        }
+        #TB_RootVal
+        {
+            width: 52px;
+        }
+        #TB_Tree_SQL0
+        {
+            width: 299px;
+        }
+        #TB_Tree_SQL
+        {
+            height: 23px;
+            width: 177px;
         }
     </style>
     <base target="_self" />
@@ -50,10 +60,20 @@
                 ctrl.style.display = 'block';
             }
         }
-
+        //执行保存
         function Save() {
-
-            alert('开始执行保存');
+            var fk_mapExt = GetQueryString("MyPK");
+            var frmData = $("#cc").serialize();
+            $.ajax({
+                data:frmData ,
+                type: 'post',
+                async: true,
+                url: "MapExtHandler.ashx?DoType=PopVal_Save&FK_MapExt=" + fk_mapExt + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                }
+            });
         }
 
         function SaveAndClose() {
@@ -65,40 +85,47 @@
             window.close();
         }
 
+       //页面启动函数.
        $(function () {
             InitPage();
         });
 
         function InitPage() {
+
             var fk_mapExt = GetQueryString("MyPK");
+            var keyOfEn = GetQueryString("RefNo");
+            var fk_mapData = GetQueryString("FK_MapData");
 
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "MapExtHandler.ashx?DoType=InitPopValSetting&MyPK=" + fk_mapExt + '&m=' + Math.random(),
+                url: "MapExtHandler.ashx?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn="  + keyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
-                    console.log(data);
+                    // console.log(data);
+                    // alert(data);
+
                     data = JSON.parse(data);
+
+                    //设置选择的模式.
+                    $("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked", "checked");
+
+                    //alert($("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked"));
 
                     switch (data.PopValWorkModel) {
                         case "SelfUrl":
-                            $("#RB_PopWorkModel_SelfUrl").attr("checked", "checked");
                             $("#TB_Url").val(data.URL);
                             break;
                         case "TableOnlyModel":
-                            $("#RB_PopWorkModel_Table").attr("checked", "checked");
                             $("#TB_Table_SQL").val(data.EntitySQL);
+                            $("#TB_ColNames").val(data.PopValColNames);
                             break;
                         case "TablePageModel":
-                            $("#RB_PopWorkModel_TablePageModel").attr("checked", "checked");
                             break;
                         case "GroupModel":
-                            $("#RB_PopWorkModel_GroupModel").attr("checked", "checked");
                             break;
                         case "TreeModel":
-                            $("#RB_PopWorkModel_Tree").attr("checked", "checked");
                             break;
                         default:
                             alert('没有判断的元素.');
@@ -111,7 +138,11 @@
                     $("#TB_Title").val(data.Title);
 
                     //设置返回值模式.
-                    $("#RB_PopValFormat_" + data.PopValFormat ).attr('checked', 'checked');
+                    $("#RB_PopValFormat_" + data.PopValFormat).attr('checked', 'checked');
+                   // alert(data.PopValFormat);
+
+                    //设置选择模式.
+                    $("#RB_PopValSelectModel_" + data.PopValSelectModel).attr('checked', 'checked');
                 }
             });
         }
@@ -119,10 +150,10 @@
     </script>
 </head>
 <body onkeypress="Esc();">
-
+<form id="cc"   >
 <!---------------------------- 模式1 ：自定义URL ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_SelfUrl" type="radio" name="Model" value="0"  /><label for="RB_PopWorkModel_SelfUrl">自定义URL</label>  </legend>
+<legend><input id="RB_PopWorkModel_SelfUrl" type="radio" name="Model" value="SelfUrl"  /><label for="RB_PopWorkModel_SelfUrl">自定义URL</label>  </legend>
 <a href="javascript:ShowHidden('url')">自定义URL:</a>
  <div id="url" style="color:Gray; display:none">
  <ul>
@@ -137,7 +168,7 @@
 
 <!---------------------------- 模式2：Table  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_Table" type="radio" name="Model" value="1"  /><label for="RB_PopWorkModel_Table">表格模式</label>  </legend>
+<legend><input id="RB_PopWorkModel_Table" type="radio" name="Model" value="TableOnlyModel"  /><label for="RB_PopWorkModel_Table">表格模式</label>  </legend>
 <a href="javascript:ShowHidden('Table')">初始化表格的查询SQL</a>
  <div id="Table" style="color:Gray; display:none">
  <ul>
@@ -153,7 +184,7 @@
 
 <!---------------------------- 模式3 ：分页的Table  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_TablePageModel" type="radio" name="Model"  value="2"  /><label for="RB_PopWorkModel_TablePageModel">表格分页模式</label>  </legend>
+<legend><input id="RB_PopWorkModel_TablePageModel" type="radio" name="Model"  value="TablePageModel"  /><label for="RB_PopWorkModel_TablePageModel">表格分页模式</label>  </legend>
 <a href="javascript:ShowHidden('TablePageModel')">数据展现SQL</a>
  <div id="TablePageModel" style="color:Gray; display:none">
  <ul>
@@ -179,7 +210,7 @@
 
 <!---------------------------- 模式4 ：分组显示,但是不分页.  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_GroupModel" type="radio" name="Model" value="3"  /><label for="RB_PopWorkModel_GroupModel">分组模式</label>  </legend>
+<legend><input id="RB_PopWorkModel_GroupModel" type="radio" name="Model" value="GroupModel"  /><label for="RB_PopWorkModel_GroupModel">分组模式</label>  </legend>
 <a href="javascript:ShowHidden('GroupModel')">分组查询SQL</a>
  <div id="GroupModel" style="color:Gray; display:none">
  <ul>
@@ -206,18 +237,31 @@
 
 <!---------------------------- 模式5 ：树模式,没有关键字查询.  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_Tree" type="radio" name="Model" value="4"  /><label for="RB_PopWorkModel_Tree">树模式</label>  </legend>
-<a href="javascript:ShowHidden('Tree')">查询SQL</a>
+<legend><input id="RB_PopWorkModel_Tree" type="radio" name="Model" value="TreeModel"  /><label for="RB_PopWorkModel_Tree">树模式</label>  </legend>
+<a href="javascript:ShowHidden('Tree')">初始化树SQL</a>
  <div id="Tree" style="color:Gray; display:none">
  <ul>
- <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
- <li>比如:SELECT No, Name FROM Port_Emp </li>
- <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
- <li>该方式不考虑分页，不关键字查询。</li>
+ <li>设置一个查询的SQL语句，必须返回No,Name,Parent三个列。</li>
+ <li>比如:SELECT No, Name,ParentNo FROM Port_Dept </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name,ParentNo FROM Port_Dept WHERE No='@WebUser.FK_Dept'</li>
+ <li>返回的数据源里，必须有根节点。</li>
  </ul>
  </div>
-<input type="text" id="TB_Tree_SQL"  value="" />
-</fieldset>
+
+<input type="text" id="TB_Tree_SQL"  value="" /> 根节点值:<input type="text" id="TB_RootVal"  value="" />
+<br /> 
+<a href="javascript:ShowHidden('TreeLJZ')">懒加载SQL:</a>
+
+ <div id="TreeLJZ" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name,Parent三个列。</li>
+ <li>格式:SELECT No, Name, ParentNo FROM Port_Dept WHERE ParentNo='@ParentNo' </li>
+ </ul>
+ </div>
+ </div>
+
+    
+    <input type="text" id="TB_Tree_SQL0"  value="" /></fieldset>
 
 <!---------------------------- 高级设置.  ---------------------------------------------------->
 <fieldset>
@@ -226,7 +270,6 @@
 高度(px)：<input type="text" id="TB_Height"  value="" />   
 开窗标题：<input type="text" id="TB_Title"  value="" />
 <br />
-
 
 <a href="javascript:ShowHidden('ColName')">显示的中文列名(可以为空)：</a>
  <div id="ColName" style="color:Gray; display:none">
@@ -243,14 +286,21 @@
 
 <fieldset>
 <legend> 返回值格式  </legend>
-<input id="RB_PopValFormat_0" type="radio" name="PopValFormat" value="0"  /><label for="RB_PopValFormat_0">No(仅编号)</label> 
-<input id="RB_PopValFormat_1" type="radio" name="PopValFormat" value="1"  /><label for="RB_PopValFormat_1">Name(仅名称)</label> 
-<input id="RB_PopValFormat_2" type="radio" name="PopValFormat" value="2"   /><label for="RB_PopValFormat_2">No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)</label> 
+<input id="RB_PopValFormat_OnlyNo" type="radio" name="PopValFormat" value="0"  /><label for="RB_PopValFormat_OnlyNo">No(仅编号)</label> 
+<input id="RB_PopValFormat_OnlyName" type="radio" name="PopValFormat" value="1"  /><label for="RB_PopValFormat_OnlyName">Name(仅名称)</label> 
+<input id="RB_PopValFormat_NoName" type="radio" name="PopValFormat" value="2"   /><label for="RB_PopValFormat_NoName">No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)</label> 
+</fieldset> 
+
+<fieldset>
+<legend> 选择模式  </legend>
+<input id="RB_PopValSelectModel_One" type="radio" name="PopValSelectModel" value="One"  /><label for="RB_PopValSelectModel_One">单选</label> 
+<input id="RB_PopValSelectModel_More" type="radio" name="PopValSelectModel" value="More"  /><label for="RB_PopValSelectModel_More">多选</label> 
 </fieldset>
 
 <input type="Button" value="保存"  onclick="Save()" />
 <input type="Button" value="保存并关闭"  onclick="SaveAndClose()" />
 <input type="Button" value="关闭"  onclick="Close()" />
 
+</form>
 </body>
 </html>

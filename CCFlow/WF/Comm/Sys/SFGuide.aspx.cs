@@ -204,7 +204,6 @@ namespace CCFlow.WF.Comm.Sys
                                 Entity en = myens.GetNewEntity;
                                 if (en == null)
                                     continue;
-
                                 ht.Add(myens.ToString(), en.EnDesc);
 
                             }

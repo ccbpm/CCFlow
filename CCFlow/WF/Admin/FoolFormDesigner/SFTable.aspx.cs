@@ -32,7 +32,10 @@ namespace CCFlow.WF.MapDef
         {
             get
             {
-                return this.Request.QueryString["FK_SFTable"];
+                string str= this.Request.QueryString["FK_SFTable"];
+                if (str==null)
+                    str=this.Request.QueryString["RefNo"];
+                return str;
             }
         }
         public string FK_MapData

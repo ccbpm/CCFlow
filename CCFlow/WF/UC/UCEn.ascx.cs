@@ -876,7 +876,7 @@ namespace CCFlow.WF.UC
                         this.AddTREnd();
 
                         this.AddTR();
-                        this.Add("<TD colspan=4 ID='TDFWC" + subflow.No + "' height='" + subflow.SF_H + "px' width='100%' >");
+                        this.Add("<TD colspan=4 ID='TDFWCSubFlow' height='" + subflow.SF_H + "px' width='100%' >");
                         src = appPath + "WF/WorkOpt/SubFlow.aspx?s=2";
                         fwcOnload = "";
                         paras = this.RequestParas;

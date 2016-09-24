@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>退回</title>
+    <!--
+    1, 退回界面。
+    2，需要 FK_Flow, FK_Node,WorkID, FID.
+    3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
+    -->
+
+    <style type="text/css">
+        #TB_Doc
+        {
+            height: 132px;
+            width: 433px;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+<caption>工作退回</caption>
+<tr>
+<td> 请选择要退回到的节点: <select id="DDL_Nodes" > 
+ <option>xxxxxx</option> 
+ <option>xxxxxx</option> 
+ <option>xxxxxx</option> 
+ <option>xxxxxx</option> 
+ </select> </td>
+</tr>
+
+<tr>
+<td> <textarea id="TB_Doc" ></textarea> </td>
+</tr>
+
+
+<tr>
+<td> 上传附件：</td>
+</tr>
+
+
+<tr>
+<td><input type="button" value="确定退回" onclick="ReturnWork();" ><input type="button" value="关闭" onclick="Close();" ></td>
+</tr>
+</table>
+
+</body>
+</html>

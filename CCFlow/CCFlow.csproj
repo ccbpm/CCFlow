@@ -2748,6 +2748,7 @@
     <Content Include="WF\WorkOpt\PRI.aspx" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.aspx" />
+    <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.aspx" />
     <Content Include="WF\WorkOpt\SelectNode.aspx" />
     <Content Include="WF\WorkOpt\SelectUser.aspx" />

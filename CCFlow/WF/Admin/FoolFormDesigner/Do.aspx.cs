@@ -55,11 +55,18 @@ namespace CCFlow.WF.MapDef
                         break;
                     case "EditSFTable":
                         BP.Sys.SFTable mysf1 = new SFTable(this.RefNo);
+                        if (mysf1.SrcType == SrcType.CreateTable)
+                        {
+                            this.Response.Redirect("SFTable.aspx?RefNo=" + mysf1.No + "&FromApp=SL", true);
+                            return;
+                        }
+
                         if (mysf1.SrcType == SrcType.TableOrView)
                         {
                             this.Response.Redirect("SFTable.aspx?RefNo=" + mysf1.No + "&FromApp=SL", true);
                             return;
                         }
+
                         if (mysf1.SrcType == SrcType.SQL)
                         {
                             this.Response.Redirect("SFSQL.aspx?RefNo=" + mysf1.No + "&FromApp=SL", true);

@@ -664,10 +664,8 @@ public class CCFlowAPI : CCForm
             //throw new Exception("@当前登录用户非(" + WebUser.No + ")");
         }
 
-
         System.Data.DataSet ds = new System.Data.DataSet();
         ds.Tables.Add(BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo, null, null, starter, title).ToString());
-
         return BP.DA.DataType.ToJson(ds.Tables[0]);
     }
     /// <summary>

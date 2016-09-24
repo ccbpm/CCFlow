@@ -134,11 +134,10 @@ namespace CCFlow.WF
         {
             get
             {
-                
-                    if (this.Request.Form["CWorkID"] == null)
-                        return 0;
-                    else
-                        return Int64.Parse(this.Request.Form["CWorkID"]);
+                if (this.Request.Form["CWorkID"] == null)
+                    return 0;
+                else
+                    return Int64.Parse(this.Request.Form["CWorkID"]);
             }
         }
         private int _FK_Node = 0;
@@ -704,6 +703,7 @@ namespace CCFlow.WF
                             BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", "您没有设置节点完成后的转向条件。", "Err" + currND.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
                             throw new Exception("@您没有设置节点完成后的转向条件。");
                         }
+
                         foreach (TurnTo tt in tts)
                         {
                             tt.HisWork = currNode.HisWork;
@@ -795,13 +795,38 @@ namespace CCFlow.WF
                 case "GenerWorkNode":
                     resultValue = GenerWorkNode();
                     break;
+                case "ReturnToNodes": //执行退回窗口.
+                    resultValue = ReturnToNodes();
+                    break;
+                case "DoReturnWork": //执行退回.
+                    resultValue = ReturnWork();
+                    break;
                 default:
-                    resultValue = method + "没有";
+                    resultValue = method + "没有判断.";
                     break;
             }
 
             context.Response.ContentType = "text/plain";
             context.Response.Write(resultValue);
+        }
+        /// <summary>
+        /// 获得退回的节点.
+        /// </summary>
+        /// <returns></returns>
+        public string ReturnToNodes()
+        {
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 执行退回.
+        /// </summary>
+        /// <returns></returns>
+        public string ReturnWork()
+        {
+            int toNodeID = int.Parse(this.Request.QueryString["ReturnToNode"]);
+            string reMesage = this.Request.QueryString["ReturnMsg"];
+            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, true);
         }
 
         public bool IsReusable

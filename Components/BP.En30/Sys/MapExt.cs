@@ -152,6 +152,62 @@ namespace BP.Sys
     {
         #region 关于 Pop at 参数
         /// <summary>
+        /// 连接
+        /// </summary>
+        public string PopValUrl
+        {
+            get
+            {
+                return this.Doc;
+            }
+            set
+            {
+                this.Doc = value;
+            }
+        }
+        /// <summary>
+        /// 实体SQL
+        /// </summary>
+        public string PopValEntitySQL
+        {
+            get
+            {
+                return this.Tag2;
+            }
+            set
+            {
+                this.Tag2 = value;
+            }
+        }
+        /// <summary>
+        /// 分组SQL
+        /// </summary>
+        public string PopValGroupSQL
+        {
+            get
+            {
+                return this.Tag1;
+            }
+            set
+            {
+                this.Tag1 = value;
+            }
+        }
+        /// <summary>
+        /// 分页SQL
+        /// </summary>
+        public string PopValTablePageSQL
+        {
+            get
+            {
+                return this.Tag2;
+            }
+            set
+            {
+                this.Tag2 = value;
+            }
+        }
+        /// <summary>
         /// 标题
         /// </summary>
         public string PopValTitle
@@ -206,6 +262,20 @@ namespace BP.Sys
             set
             {
                 this.SetPara("PopValWorkModel", (int)value);
+            }
+        }
+        /// <summary>
+        /// 开窗的列中文名称.
+        /// </summary>
+        public string PopValColNames
+        {
+            get
+            {
+              return  this.Tag3;
+            }
+            set
+            {
+                this.Tag3 = value;
             }
         }
         /// <summary>
@@ -375,7 +445,6 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(this.Tag))
                     return this.DocOfSQLDeal;
-                
 
                 string sql = this.Tag;
                 sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);

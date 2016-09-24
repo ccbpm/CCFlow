@@ -6,6 +6,24 @@ using BP.En;
 namespace BP.Sys
 {
     /// <summary>
+    /// Pop返回值类型
+    /// </summary>
+    public enum PopValFormat
+    {
+        /// <summary>
+        /// 编号
+        /// </summary>
+        OnlyNo,
+        /// <summary>
+        /// 名称
+        /// </summary>
+        OnlyName,
+        /// <summary>
+        /// 编号与名称
+        /// </summary>
+        NoName
+    }
+    /// <summary>
     /// 选择模式
     /// </summary>
     public enum PopValSelectModel
@@ -132,19 +150,33 @@ namespace BP.Sys
     /// </summary>
     public class MapExt : EntityMyPK
     {
-        #region 关于 at 参数
+        #region 关于 Pop at 参数
         /// <summary>
-        /// Pop参数.
+        /// 标题
         /// </summary>
-        public int PopValFormat
+        public string PopValTitle
         {
             get
             {
-                return this.GetParaInt("PopValFormat");
+                return this.GetParaString("PopValTitle");
             }
             set
             {
-                this.SetPara("PopValFormat", value);
+                this.SetPara("PopValTitle", value);
+            }
+        }
+        /// <summary>
+        /// Pop 返回值的格式.
+        /// </summary>
+        public PopValFormat PopValFormat
+        {
+            get
+            {
+                return (PopValFormat)this.GetParaInt("PopValFormat");
+            }
+            set
+            {
+                this.SetPara("PopValFormat", (int)value);
             }
         }
         /// <summary>
@@ -491,7 +523,6 @@ namespace BP.Sys
 
                 map.AddTBString(MapExtAttr.AtPara, null, "参数", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.DBSrc, null, "数据源", true, false, 0, 20, 20);
-
 
                 map.AddTBInt(MapExtAttr.H, 500, "高度", false, false);
                 map.AddTBInt(MapExtAttr.W, 400, "宽度", false, false);

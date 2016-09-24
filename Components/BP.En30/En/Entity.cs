@@ -104,6 +104,14 @@ namespace BP.En
             }
             return kvs;
         }
+        /// <summary>
+        /// 把一个实体转化成Json.
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            return BP.Tools.Json.ToJson(this.Row);
+        }
 
         public DataTable ToDataTableField(string tableName)
         {
@@ -4709,6 +4717,14 @@ namespace BP.En
             return ds;
         }
         /// <summary>
+        /// ToJson.
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            return BP.Tools.Json.ToJson(this.ToDataTableField());
+        }
+        /// <summary>
         /// 把当前实体集合的数据库转换成Dataset。
         /// </summary>
         /// <returns></returns>
@@ -5007,7 +5023,6 @@ namespace BP.En
             DataTable dt = new DataTable();
             Entity en = this.GetNewEntity;
             dt.TableName = en.EnMap.PhysicsTable;
-
             foreach (Attr attr in en.EnMap.Attrs)
             {
                 dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));

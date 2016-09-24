@@ -85,6 +85,48 @@ namespace BP.Tools
             return str;
         }
         /// <summary>
+        /// 转化成Json.
+        /// </summary>
+        /// <param name="ht">Hashtable</param>
+        /// <param name="isNoNameFormat">是否编号名称格式</param>
+        /// <returns></returns>
+        public static string ToJson(Hashtable ht,bool isNoNameFormat)
+        {
+            if (isNoNameFormat)
+            {
+                /*如果是datatable 模式. */
+                DataTable dt = new DataTable();
+                dt.TableName = "DT";
+                dt.Columns.Add(new DataColumn("No", typeof(string)));
+                dt.Columns.Add(new DataColumn("Name", typeof(string)));
+                foreach (string key in ht.Keys)
+                {
+                    if (key == null || key == "")
+                        continue;
+
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = key;
+
+                    var v = ht[key] as string;
+                    if (v == null)
+                        v = "";
+                    dr["Name"] = v;
+                    dt.Rows.Add(dr);
+                }
+                return ToJson(dt);
+            }
+
+            string strs = "{";
+            foreach (string key in ht.Keys)
+            {
+                strs += "\"" + key + "\":\"" + ht[key] + "\",";
+            }
+            strs += "\"OutEnd\":\"1\"";
+            strs += "}";
+            return strs;
+        }
+        
+        /// <summary>
         /// Datatable转换为Json
         /// </summary>
         /// <param name="table">Datatable对象</param>

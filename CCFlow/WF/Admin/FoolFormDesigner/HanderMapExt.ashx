@@ -20,7 +20,7 @@ using BP.En;
 
 namespace CCFlow.WF.MapDef
 {
-    public class Handler : IHttpHandler, IRequiresSessionState
+    public class HanderMapExt : IHttpHandler
     {
         string no;
         string name;

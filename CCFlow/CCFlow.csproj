@@ -142,6 +142,7 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\FrmCheck.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\SubFlowDtl.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\ThreadDtl.png" />
+    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTableAttrEdit.htm" />
     <Content Include="WF\Admin\CCFormDesigner\js\Controls.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\ControlsPropertys.js" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\AthMulti.png" />
@@ -1309,6 +1310,7 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\MapExtHandler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
@@ -4165,6 +4167,9 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx.designer.cs">
       <DependentUpon>FieldTypeList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\MapExtHandler.ashx.cs">
+      <DependentUpon>MapExtHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx.cs">
       <DependentUpon>InputCheck.aspx</DependentUpon>

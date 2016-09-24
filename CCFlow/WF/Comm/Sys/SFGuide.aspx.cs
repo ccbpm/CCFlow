@@ -175,50 +175,40 @@ namespace CCFlow.WF.Comm.Sys
                         }
                         else
                         {
+                            Hashtable ht = new Hashtable();
+
                             ArrayList arr = null;
                             SFTables sfs = new SFTables();
-                            Entities ens = null;
-                            SFTable sf = null;
                             sfs.Retrieve(SFTableAttr.SrcType, (int)SrcType.BPClass);
 
                             switch (st)
                             {
                                 case 0:
-                                    arr = ClassFactory.GetObjects("BP.En.EntityNoName");
+                                    arr = ClassFactory.GetObjects("BP.En.EntitiesNoName");
                                     break;
                                 case 1:
-                                    arr = ClassFactory.GetObjects("BP.En.EntitySimpleTree");
+                                    arr = ClassFactory.GetObjects("BP.En.EntitiesSimpleTree");
                                     break;
                                 default:
                                     arr = new ArrayList();
                                     break;
                             }
 
-                            s = new StringBuilder("[");
-
-                            foreach (BP.En.Entity en in arr)
+                            foreach (BP.En.Entities myens in arr)
                             {
-                                ens = en.GetNewEntities;
-
-                                if (ens == null) 
+                                if (myens == null)
+                                    continue;
+                                if (sfs.Contains(myens.ToString()))
                                     continue;
 
-                                sf = sfs.GetEntityByKey(ens.ToString()) as SFTable;
+                                Entity en = myens.GetNewEntity;
+                                if (en == null)
+                                    continue;
 
-                                if ((sf != null && sf.No != sfno) ||
-                                    string.IsNullOrWhiteSpace(ens.ToString()))
-                                    continue;
-                                try
-                                {
-                                    s.Append(string.Format("{{\"NO\":\"{0}\",\"NAME\":\"{0}[{1}]\",\"DESC\":\"{1}\"}},", ens,
-                                                           en.EnDesc));
-                                }
-                                catch
-                                {
-                                    continue;
-                                }
+                                ht.Add(myens.ToString(), en.EnDesc);
+
                             }
-                            resultString = ReturnJson(true, s.ToString().TrimEnd(',') + "]", true);
+                            resultString = BP.Tools.Json.ToJson(ht,true); 
                         }
                         break;
                     case "getsrcs": //获取数据源列表

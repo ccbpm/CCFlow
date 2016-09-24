@@ -119,7 +119,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             int idx = 0;
             bool istr = false;
-            while (idx < 20)
+            while (idx < 100)
             {
                 istr = this.Pub1.AddTR(istr);
                 this.Pub1.AddTDIdx(idx);

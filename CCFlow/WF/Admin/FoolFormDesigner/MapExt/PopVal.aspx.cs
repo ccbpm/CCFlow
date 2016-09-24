@@ -76,13 +76,13 @@ namespace CCFlow.WF.MapDef
                 //else
                 //    this.RB_PopValSelectModel_1.Checked = true;
 
-                if (ext.PopValFormat == 0)
+                if (ext.PopValFormat == PopValFormat.OnlyNo)
                     this.RB_PopValFormat_0.Checked = true;
 
-                if (ext.PopValFormat == 1)
+                if (ext.PopValFormat == PopValFormat.OnlyName)
                     this.RB_PopValFormat_1.Checked = true;
 
-                if (ext.PopValFormat == 2)
+                if (ext.PopValFormat == PopValFormat.NoName)
                     this.RB_PopValFormat_2.Checked = true;
 
                 //宽度/高度/标题
@@ -115,16 +115,16 @@ namespace CCFlow.WF.MapDef
             //返回值格式
             if (this.RB_PopValFormat_0.Checked)
             {
-                ext.PopValFormat = 0;
+                ext.PopValFormat = PopValFormat.OnlyNo;
             }
             if (this.RB_PopValFormat_1.Checked)
             {
-                ext.PopValFormat = 1;
+                ext.PopValFormat = PopValFormat.OnlyName;
             }
 
             if (this.RB_PopValFormat_2.Checked)
             {
-                ext.PopValFormat = 2;
+                ext.PopValFormat = PopValFormat.NoName;
             }
             //数据源分组sql
             if (!string.IsNullOrEmpty(this.TB_Group.Text ))

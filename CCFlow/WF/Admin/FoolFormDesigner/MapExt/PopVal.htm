@@ -71,15 +71,47 @@
 
         function InitPage() {
             var fk_mapExt = GetQueryString("MyPK");
-            alert(fk_mapExt);
 
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "/WF/Admin/FoolFormDesigner/HanderMapExt.ashx?DoType=InitPopValSetting&FK_MapExt=" + fk_mapExt + '&m=' + Math.random(),
+                url: "MapExtHandler.ashx?DoType=InitPopValSetting&MyPK=" + fk_mapExt + '&m=' + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    alert(data);
+
+                    console.log(data);
+                    data = JSON.parse(data);
+
+                    switch (data.PopValWorkModel) {
+                        case "SelfUrl":
+                            $("#RB_PopWorkModel_SelfUrl").attr("checked", "checked");
+                            $("#TB_Url").val(data.URL);
+                            break;
+                        case "TableOnlyModel":
+                            $("#RB_PopWorkModel_Table").attr("checked", "checked");
+                            $("#TB_Table_SQL").val(data.EntitySQL);
+                            break;
+                        case "TablePageModel":
+                            $("#RB_PopWorkModel_TablePageModel").attr("checked", "checked");
+                            break;
+                        case "GroupModel":
+                            $("#RB_PopWorkModel_GroupModel").attr("checked", "checked");
+                            break;
+                        case "TreeModel":
+                            $("#RB_PopWorkModel_Tree").attr("checked", "checked");
+                            break;
+                        default:
+                            alert('没有判断的元素.');
+                            break;
+                    }
+
+                    //给公共属性赋值.
+                    $("#TB_Width").val(data.W);
+                    $("#TB_Height").val(data.H);
+                    $("#TB_Title").val(data.Title);
+
+                    //设置返回值模式.
+                    $("#RB_PopValFormat_" + data.PopValFormat ).attr('checked', 'checked');
                 }
             });
         }
@@ -211,11 +243,9 @@
 
 <fieldset>
 <legend> 返回值格式  </legend>
-<input id="RB_PopValFormat_0" type="radio" name="PopValFormat" value="4"  /><label for="RB_PopValFormat_0">No(仅编号)</label> 
-<input id="RB_PopValFormat_1" type="radio" name="PopValFormat" value="4"  /><label for="RB_PopValFormat_1">Name(仅名称)</label> 
-<input id="RB_PopValFormat_2" type="radio" name="PopValFormat" value="4"   /><label for="RB_PopValFormat_2">No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)</label> 
-<br />
-<input id="RB_PopValFormat_3" type="radio" name="PopValFormat" value="4"  /><label for="RB_PopValFormat_3">全行数据格式(适用于表格模式，把选择一行的数据放入到当前表单里，按照字段名相同)</label> 
+<input id="RB_PopValFormat_0" type="radio" name="PopValFormat" value="0"  /><label for="RB_PopValFormat_0">No(仅编号)</label> 
+<input id="RB_PopValFormat_1" type="radio" name="PopValFormat" value="1"  /><label for="RB_PopValFormat_1">Name(仅名称)</label> 
+<input id="RB_PopValFormat_2" type="radio" name="PopValFormat" value="2"   /><label for="RB_PopValFormat_2">No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)</label> 
 </fieldset>
 
 <input type="Button" value="保存"  onclick="Save()" />

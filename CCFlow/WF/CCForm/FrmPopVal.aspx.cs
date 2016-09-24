@@ -253,7 +253,7 @@ namespace CCFlow.WF.Web.CCForm
 
             // MapExt me = new MapExt(this.FK_MapExt);
 
-            int popValFormat = me.PopValFormat;
+            int popValFormat = (int)me.PopValFormat;
             string val = "";
             foreach (Control ctl in this.Pub1.Controls)
             {

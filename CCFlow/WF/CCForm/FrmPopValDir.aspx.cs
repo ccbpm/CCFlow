@@ -124,8 +124,8 @@ namespace CCFlow.WF.CCForm
                 BP.Web.Controls.FrmPopVal pv = new BP.Web.Controls.FrmPopVal(this.FK_MapExt);
                 me.Copy(pv);
             }
-  
-            int popValFormat = me.PopValFormat;
+
+            int popValFormat = (int)me.PopValFormat;
             string val = "";
             foreach (Control ctl in this.Pub1.Controls)
             {

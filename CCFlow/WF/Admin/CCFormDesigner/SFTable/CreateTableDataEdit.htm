@@ -1,15 +1,44 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html ng-app="CCFlowAdmin"  xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>本机表的创建</title>
-     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    
+    <!--<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jsTree.ddl.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jstree.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/commonYangYH.js"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/commonYangYH.js"></script>-->
+
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+
+    <script src="../../../Scripts/angularjs/angular.js"></script>
+    <script src="../../../Scripts/angularjs/angular.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-aria.js"></script>
+    <script src="../../../Scripts/angularjs/angular-aria.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-animate.js"></script>
+    <script src="../../../Scripts/angularjs/angular-animate.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-cookies.js"></script>
+    <script src="../../../Scripts/angularjs/angular-cookies.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-loader.js"></script>
+    <script src="../../../Scripts/angularjs/angular-loader.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-message-format.js"></script>
+    <script src="../../../Scripts/angularjs/angular-message-format.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-messages.js"></script>
+    <script src="../../../Scripts/angularjs/angular-messages.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-mocks.js"></script>
+    <script src="../../../Scripts/angularjs/angular-resource.js"></script>
+    <script src="../../../Scripts/angularjs/angular-resource.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-route.js"></script>
+    <script src="../../../Scripts/angularjs/angular-route.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-sanitize.js"></script>
+    <script src="../../../Scripts/angularjs/angular-sanitize.min.js"></script>
+    <script src="../../../Scripts/angularjs/angular-scenario.js"></script>
+    <script src="../../../Scripts/angularjs/angular-touch.js"></script>
+    <script src="../../../Scripts/angularjs/angular-touch.min.js"></script>
+    <script src="../../../Scripts/app.js"></script>
+
     <base target="_self" />
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
         function Esc() {
             if (event.keyCode == 27)
                 window.close();
@@ -57,38 +86,177 @@
             });
         }
      
-    </script>
+    </script>-->
 </head>
+
+
+
 <body>
+    <div ng-controller="CCFlow_SFConfCreationController" ng-init="onInit()">
 
-<table> 
-<tr>
-<th class="style4">顺序号 </th>
-<th class="style5"> 编号</th>
-<th class="style6">名称 </th>
-<th class="style7">操作 </th>
+        <table>
+            <tr>
+                <th class="style4">顺序号 </th>
+                <th class="style5"> 编号</th>
+                <th class="style6">名称 </th>
+                <th class="style7">操作 </th>
+            </tr>
 
-</tr>
+            <tr ng-repeat="conf in confs">
+                <td>{{$index}} </td>
+                <td class="style3">
+                    <input ng-model="conf.id" class="" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                </td>
+                <td class="style2">
+                    <input ng-model="conf.value" class="" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                </td>
+                <td class="style1">
+                    <a href="#" ng-click="removeConf($index)"><span class=""></span>删除</a>
+                </td>
+            </tr>
 
-<tr>
-<td>1 </td>
-<td class="style3"> 001</td>
-<td class="style2"> </td>
-<td class="style1"> 删除</td>
-</tr>
+        </table>
 
+        <input type=button value="添加" ng-click="addConf()" />
+        <input type=button value="保存" ng-click="doSubmit()" />
+        <input type=button value="保存并关闭" />
+        <input type=button value="关闭" />
+    </div>
 
-<tr>
-<td> 2</td>
-<td class="style3"> 002</td>
-<td class="style2"> </td>
-<td class="style1"> 删除</td>
-</tr>
+    <script type="text/javascript">
+        function createGuid() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
 
-</table> 
-<input type=button  value="保存" /> 
-<input type=button  value="保存并关闭" /> 
-<input type=button  value="关闭" /> 
+        var valuePolicy = {
+            AlphaNum: "alpha_num",
+            Int: "int",
+            Decimal: "decimal",
+            DateTime: "datetime",
+            Password: "password",
+            DBCCase: "dbc_case"
+        };
 
+        function purgeValue(policy, source) {
+            switch (policy) {
+                case valuePolicy.AlphaNum:
+                    {
+                        source.value = source.value.replace(/[^a-zA-Z0-9_\-\.]/g, '');
+                        break;
+                    }
+                case valuePolicy.Int:
+                    {
+                        source.value = source.value.replace(/[^\d]/g, '');
+                        break;
+                    }
+                case valuePolicy.Decimal:
+                    {
+                        source.value = source.value.replace(/[^0-9\.]/g, '');
+                        break;
+                    }
+                case valuePolicy.Password:
+                    {
+                        break;
+                    }
+                case valuePolicy.DBCCase:
+                    {
+                        source.value = source.value.replace(/[\uFF00-\uFFFF]/g, '');
+                        source.value = source.value.replace(/[\u4E00-\u9FA5]/g, '');
+                        break;
+                    }
+                default:
+                    {
+                        source.value = source.value.replace(/[\uFF00-\uFFFF]/g, '');
+                        source.value = source.value.replace(/[\u4E00-\u9FA5]/g, '');
+                        break;
+                    }
+            }
+        }
+
+        var appModule = angular.module("CCFlowAdmin", []);
+
+        appModule.controller("CCFlow_SFConfCreationController",
+
+        function ($scope, $location, $http) {
+
+            $scope.confs = [{ id: "001", value: "" }, { id: "002", value: "" }];
+
+            $scope.addConf = function () {
+                var id = Math.random().toString(); //createGuid();
+                $scope.confs.push({ id: id, value: "" });
+            };
+            
+            $scope.removeConf = function (index) {
+                $scope.confs.splice(index, 1);
+            };
+
+            $scope.shouldShowAddButton = function () {
+                return ($scope.confs.length < 100);
+            };
+
+            $scope.shouldShowRemoveButton = function () {
+                return (($scope.confs.length >= 1) && ($scope.confs.length <= 3));
+            };
+
+            $scope.onInit = function () {
+                var sf_Table = GetQueryString("FK_SFTable");
+
+                var protocol = $location.protocol();
+                var host = $location.host();
+                var port = $location.port();
+
+                var url = protocol + "://" + host + ":" + port + "/WF/Admin/CCFormDesigner/SFTable/";
+
+                var servicePoint = "SFTableHandler.ashx?DoType=CreateTableDataInit&FK_SFTable=" + sf_Table + '&m=' + Math.random();
+
+                alert(url + servicePoint);
+
+                $http.get(url + servicePoint).success(function (data, status, headers, config) {
+                    $scope.confs = [];
+
+                    for (var key in data) {
+                        $scope.confs.push({ id: key, value: data[key] });
+                    }
+
+                }).error(function (data, status, headers, config) {
+                    //for (var key in data) {
+                    //    alert(key + ": " + data[key]);
+                    //}
+
+                    alert("Error!");
+                });
+            };
+
+            $scope.doSubmit = function () {
+                var sf_Table = GetQueryString("FK_SFTable");
+
+                var protocol = $location.protocol();
+                var host = $location.host();
+                var port = $location.port();
+
+                var url = protocol + "://" + host + ":" + port + "/WF/Admin/CCFormDesigner/SFTable/";
+
+                var servicePoint = "SFTableHandler.ashx?DoType=CreateTableDataSave&FK_SFTable=" + sf_Table + '&m=' + Math.random();
+
+                $http.post(url + servicePoint, $scope.confs).success(function (data, status, headers, config) {
+                    var result = data;
+
+                    alert(result);
+
+                    //window.location = url + "/";
+
+                }).error(function (data, status, headers, config) {
+                    //for (var key in data) {
+                    //    alert(key + ": " + data[key]);
+                    //}
+
+                    alert("Error!");
+                });
+            };
+        });
+    </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -15,6 +16,15 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|ClientBin|False</SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -194,6 +204,7 @@
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\modernizr.custom.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\notificationFx.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\readme.txt" />
+    <Content Include="WF\Admin\CCFormDesigner\SFTable\CreateTableDataEdit.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Welcome.aspx" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
@@ -1311,6 +1322,7 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\MapExtHandler.ashx" />
+    <Content Include="WF\Admin\CCFormDesigner\SFTable\SFTableHandler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
@@ -1401,6 +1413,21 @@
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\S4_ColsOrder.aspx" />
     <Content Include="WF\Rpt\SearchEUIReadOnly.aspx" />
     <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
+    <Content Include="WF\Scripts\angularjs\angular-animate.js" />
+    <Content Include="WF\Scripts\angularjs\angular-animate.min.js" />
+    <Content Include="WF\Scripts\angularjs\angular-cookies.js" />
+    <Content Include="WF\Scripts\angularjs\angular-cookies.min.js" />
+    <Content Include="WF\Scripts\angularjs\angular-mocks.js" />
+    <Content Include="WF\Scripts\angularjs\angular-resource.js" />
+    <Content Include="WF\Scripts\angularjs\angular-resource.min.js" />
+    <Content Include="WF\Scripts\angularjs\angular-route.js" />
+    <Content Include="WF\Scripts\angularjs\angular-route.min.js" />
+    <Content Include="WF\Scripts\angularjs\angular-sanitize.js" />
+    <Content Include="WF\Scripts\angularjs\angular-sanitize.min.js" />
+    <Content Include="WF\Scripts\angularjs\angular-touch.js" />
+    <Content Include="WF\Scripts\angularjs\angular-touch.min.js" />
+    <Content Include="WF\Scripts\angularjs\angular.js" />
+    <Content Include="WF\Scripts\angularjs\angular.min.js" />
     <Content Include="WF\Scripts\ccflow.js" />
     <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
     <Content Include="WF\Scripts\CommonUnite.js" />
@@ -2784,6 +2811,7 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\DictionaryItemViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SDKFlowDemo\App\DictList.aspx.cs">
       <DependentUpon>DictList.aspx</DependentUpon>
@@ -3915,6 +3943,9 @@
     </Compile>
     <Compile Include="WF\Admin\BindFrms.aspx.designer.cs">
       <DependentUpon>BindFrms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\SFTable\SFTableHandler.ashx.cs">
+      <DependentUpon>SFTableHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -7890,6 +7921,13 @@
     <Content Include="WF\SDKComponents\Site.Master" />
     <Content Include="WF\SDKComponents\AccSite.Master" />
     <Content Include="WF\MyFlow.ashx" />
+    <Content Include="WF\Scripts\angularjs\angular-animate.min.js.map" />
+    <Content Include="WF\Scripts\angularjs\angular-cookies.min.js.map" />
+    <Content Include="WF\Scripts\angularjs\angular-resource.min.js.map" />
+    <Content Include="WF\Scripts\angularjs\angular-route.min.js.map" />
+    <Content Include="WF\Scripts\angularjs\angular-sanitize.min.js.map" />
+    <Content Include="WF\Scripts\angularjs\angular-touch.min.js.map" />
+    <Content Include="WF\Scripts\angularjs\angular.min.js.map" />
     <None Include="WF\Scripts\easyUI\themes\gray\images\Thumbs.db" />
     <None Include="WF\Style\Skin\t2\Thumbs.db" />
     <None Include="WF\Style\Skin\t3\Thumbs.db" />
@@ -7945,8 +7983,13 @@
       <Name>BP.Demo</Name>
     </ProjectReference>
   </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

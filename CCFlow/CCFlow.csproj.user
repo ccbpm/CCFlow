@@ -24,9 +24,8 @@
           <EnableENC>False</EnableENC>
           <AlwaysStartWebServerOnDebug>True</AlwaysStartWebServerOnDebug>
           <ProjectOutputReferences>
-            <Ref Project="{83D53118-9A8D-4970-9A88-A2909B13FF64}" Folder="WF\Admin\ClientBin">CCFormDesigner.xap</Ref>
-            <Ref Project="{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}" Folder="WF\Admin\ClientBin">CCFlowDesigner.xap</Ref>
-            <Ref Project="{1D0E0295-4702-46E2-9766-1A33EE418465}" Folder="WF\Admin\ClientBin">CCFlowDesignerSingle.xap</Ref>
+            <Ref Project="{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}" Folder="ClientBin">
+            </Ref>
           </ProjectOutputReferences>
         </WebProjectProperties>
       </FlavorProperties>

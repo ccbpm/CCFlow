@@ -17,6 +17,9 @@ using BP.WF.Template;
 using System.Collections.Generic;
 using BP.WF;
 using LitJson;
+using CCFlow.ViewModels;
+using Newtonsoft.Json.Utilities;
+using System.IO;
 
 namespace CCFlow.WF.Admin.CCFormDesigner
 {
@@ -54,7 +57,15 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                     WriteInfo( CreateTableDataInit()); //输出数据.
                     break;
                 case "CreateTableDataSave":
-                    WriteInfo( CreateTableDataSave()); //输出保存结果..
+
+                    string json = "";
+
+                    using (StreamReader reader = new System.IO.StreamReader(context.Request.InputStream))
+                    {
+                        json = reader.ReadToEnd();
+                    }
+
+                    WriteInfo( CreateTableDataSave(json)); //输出保存结果..
                     break;
                 default:
                     break;
@@ -63,6 +74,11 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
         public string CreateTableDataInit()
         {
+            if (String.IsNullOrEmpty(this.FK_SFTable))
+            {
+                return "";
+            }
+
             SFTable sf = new SFTable(this.FK_SFTable);
             string sql = "SELECT * FROM "+sf.No;
             DataTable dt = sf.RunSQLReturnTable(sql);
@@ -78,23 +94,43 @@ namespace CCFlow.WF.Admin.CCFormDesigner
         /// 执行保存.
         /// </summary>
         /// <returns></returns>
-        public string CreateTableDataSave()
+        public string CreateTableDataSave(string json= "@001=xxxx@002=xxxxx")
         {
-            string json=  "@001=xxxx@002=xxxxx";
-            DataTable dt = BP.Tools.Json.ToDataTable(json);
-            if (dt.Rows.Count == 0)
+            //DataTable dt = null; //BP.Tools.Json.ToDataTable(json);
+            //if (dt.Rows.Count == 0)
+            //    return "err@数据错误,保存的值为空.";
+
+            DictionaryItemViewModel[] items = Newtonsoft.Json.JsonConvert.DeserializeObject<DictionaryItemViewModel[]>(json);
+
+            if (items.Length <= 0)
+            {
                 return "err@数据错误,保存的值为空.";
+            }
+
+            if (String.IsNullOrEmpty(this.FK_SFTable))
+            {
+                return "";
+            }
 
             //删除原来的数据.
             BP.Sys.SFTable sf = new BP.Sys.SFTable(this.FK_SFTable);
             sf.RunSQL("DELETE FROM " + sf.No);
 
             //把新数据插入到数据库.
-            foreach (DataRow dr in dt.Rows)
+            //foreach (DataRow dr in dt.Rows)
+            //{
+            //    string sql = "INSERT INTO "+sf.SrcTable+" (No,Name)Values('"+dr[0]+"','"+dr[1]+"')";
+            //    sf.RunSQL(sql);
+            //}
+
+            string sql = "";
+
+            foreach (var item in items)
             {
-                string sql = "INSERT INTO "+sf.SrcTable+" (No,Name)Values('"+dr[0]+"','"+dr[1]+"')";
-                sf.RunSQL(sql);
+               sql = "INSERT INTO " + sf.SrcTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
+               sf.RunSQL(sql);
             }
+
             return "保存成功";
         }
 

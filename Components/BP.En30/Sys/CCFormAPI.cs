@@ -863,6 +863,11 @@ namespace BP.Sys
             sql = "@SELECT FK_MapData,MyPK,EleType,EleID,EleName,X,Y,W,H FROM Sys_FrmEle WHERE " + where;
             sqls += sql;
 
+            //Sys_MapFrame.
+            listNames.Add("Sys_MapFrame");
+            sql = "@SELECT MyPK,FK_MapData,Name,URL,W,H,GroupID FROM Sys_MapFrame WHERE " + where;
+            sqls += sql;
+            
             // Sys_FrmAttachment. 
             listNames.Add("Sys_FrmAttachment");
             /* 20150730 小周鹏修改 添加AtPara 参数 START */

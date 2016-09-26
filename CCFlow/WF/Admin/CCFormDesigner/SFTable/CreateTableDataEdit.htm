@@ -119,8 +119,8 @@
 
         <input type=button value="添加" ng-click="addConf()" />
         <input type=button value="保存" ng-click="doSubmit()" />
-        <input type=button value="保存并关闭" />
-        <input type=button value="关闭" />
+        <input type=button value="保存并关闭" ng-click="doSubmit();window.close();" />
+        <input type=button value="关闭" onclick="window.close();" />
     </div>
 
     <script type="text/javascript">
@@ -176,8 +176,16 @@
             }
         }
 
-        var appModule = angular.module("CCFlowAdmin", []);
+        function setItemID(items)
+        {
+            for (var i = 0; i < items.length; i++) {
 
+                items[i].id = (i + 1).toString();
+            }
+        }
+
+        var appModule = angular.module("CCFlowAdmin", []);
+        
         appModule.controller("CCFlow_SFConfCreationController",
 
         function ($scope, $location, $http) {
@@ -187,10 +195,14 @@
             $scope.addConf = function () {
                 var id = Math.random().toString(); //createGuid();
                 $scope.confs.push({ id: id, value: "" });
+
+                setItemID($scope.confs);
             };
             
             $scope.removeConf = function (index) {
                 $scope.confs.splice(index, 1);
+
+                setItemID($scope.confs);
             };
 
             $scope.shouldShowAddButton = function () {

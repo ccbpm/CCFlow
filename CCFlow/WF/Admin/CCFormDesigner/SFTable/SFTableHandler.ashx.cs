@@ -82,6 +82,26 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             SFTable sf = new SFTable(this.FK_SFTable);
             string sql = "SELECT * FROM "+sf.No;
             DataTable dt = sf.RunSQLReturnTable(sql);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                List<DictionaryItemViewModel> models = new List<DictionaryItemViewModel>();
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    if (dt.Rows[i] != null)
+                    {
+                        models.Add(new DictionaryItemViewModel()
+                        {
+                            ID = dt.Rows[i]["No"].ToString(),
+                            Value = dt.Rows[i]["Name"].ToString()
+                        });
+                    }
+                }
+
+                return BP.Tools.Json.ToJson(models.ToArray());
+            }
+
             return BP.Tools.Json.ToJson(dt);
         }
 

@@ -173,10 +173,13 @@ namespace CCFlow.ViewModels
 {
     public class DictionaryItemViewModel
     {
+        [Newtonsoft.Json.JsonProperty(PropertyName = "id")]
         public string ID { get; set; }
 
+        [Newtonsoft.Json.JsonProperty(PropertyName = "value")]
         public string Value { get; set; }
 
+        [Newtonsoft.Json.JsonProperty(PropertyName = "parent")]
         public string Parent { get; set; }
     }
 }

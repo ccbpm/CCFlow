@@ -2812,7 +2812,6 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Models\DictionaryItemViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SDKFlowDemo\App\DictList.aspx.cs">
       <DependentUpon>DictList.aspx</DependentUpon>

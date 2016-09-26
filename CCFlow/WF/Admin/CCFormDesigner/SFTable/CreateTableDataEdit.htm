@@ -9,6 +9,11 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jstree.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/commonYangYH.js"></script>-->
 
+    <!--<link href="../Style/Table0.css" rel="stylesheet" type="text/css" />-->
+
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
 
     <script src="../../../Scripts/angularjs/angular.js"></script>
@@ -89,38 +94,35 @@
     </script>-->
 </head>
 
-
-
-<body>
+<body class="easyui-layout">
     <div ng-controller="CCFlow_SFConfCreationController" ng-init="onInit()">
 
         <table>
             <tr>
-                <th class="style4">顺序号 </th>
-                <th class="style5"> 编号</th>
-                <th class="style6">名称 </th>
-                <th class="style7">操作 </th>
+                <th>顺序号 </th>
+                <th> 编号</th>
+                <th>名称 </th>
+                <th>操作 </th>
             </tr>
 
             <tr ng-repeat="conf in confs">
                 <td>{{$index}} </td>
                 <td class="style3">
-                    <input ng-model="conf.id" class="" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                    <input ng-model="conf.id" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
                 </td>
                 <td class="style2">
-                    <input ng-model="conf.value" class="" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                    <input ng-model="conf.value" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
                 </td>
                 <td class="style1">
-                    <a href="#" ng-click="removeConf($index)"><span class=""></span>删除</a>
+                    <a href="#" ng-click="removeConf($index)"><span></span>删除</a>
                 </td>
             </tr>
-
         </table>
 
-        <input type=button value="添加" ng-click="addConf()" />
-        <input type=button value="保存" ng-click="doSubmit()" />
-        <input type=button value="保存并关闭" ng-click="doSubmit();window.close();" />
-        <input type=button value="关闭" onclick="window.close();" />
+        <input type=button value="添加" class="easyui-button" ng-click="addConf()" />
+        <input type=button value="保存" class="easyui-button" ng-click="doSubmit()" />
+        <input type=button value="保存并关闭" class="easyui-button" ng-click="doSubmit();window.close();" />
+        <input type=button value="关闭" class="easyui-button" onclick="window.close();" />
     </div>
 
     <script type="text/javascript">
@@ -176,8 +178,7 @@
             }
         }
 
-        function setItemID(items)
-        {
+        function setItemID(items) {
             for (var i = 0; i < items.length; i++) {
 
                 items[i].id = (i + 1).toString();
@@ -185,7 +186,7 @@
         }
 
         var appModule = angular.module("CCFlowAdmin", []);
-        
+
         appModule.controller("CCFlow_SFConfCreationController",
 
         function ($scope, $location, $http) {
@@ -196,13 +197,13 @@
                 var id = Math.random().toString(); //createGuid();
                 $scope.confs.push({ id: id, value: "" });
 
-                setItemID($scope.confs);
+                //setItemID($scope.confs);
             };
-            
+
             $scope.removeConf = function (index) {
                 $scope.confs.splice(index, 1);
 
-                setItemID($scope.confs);
+                //setItemID($scope.confs);
             };
 
             $scope.shouldShowAddButton = function () {
@@ -229,8 +230,12 @@
                 $http.get(url + servicePoint).success(function (data, status, headers, config) {
                     $scope.confs = [];
 
-                    for (var key in data) {
-                        $scope.confs.push({ id: key, value: data[key] });
+                    //for (var key in data) {
+                    //    $scope.confs.push({ id: key, value: data[key] });
+                    //}
+
+                    for (i = 0; i < data.length; i++) {
+                        $scope.confs.push({ id: data[i].ID, value: data[i].Value });
                     }
 
                 }).error(function (data, status, headers, config) {
@@ -271,4 +276,5 @@
         });
     </script>
 </body>
+
 </html>

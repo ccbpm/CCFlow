@@ -99,7 +99,11 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                     }
                 }
 
-                return BP.Tools.Json.ToJson(models.ToArray());
+                //return BP.Tools.Json.ToJson(models.ToArray());
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(models.ToArray());
+
+                return json;
             }
 
             return BP.Tools.Json.ToJson(dt);
@@ -147,7 +151,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             foreach (var item in items)
             {
-               sql = "INSERT INTO " + sf.SrcTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
+               sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
                sf.RunSQL(sql);
             }
 
@@ -161,5 +165,18 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 return false;
             }
         }
+    }
+}
+
+
+namespace CCFlow.ViewModels
+{
+    public class DictionaryItemViewModel
+    {
+        public string ID { get; set; }
+
+        public string Value { get; set; }
+
+        public string Parent { get; set; }
     }
 }

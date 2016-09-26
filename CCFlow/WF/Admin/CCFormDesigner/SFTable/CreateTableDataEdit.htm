@@ -120,8 +120,8 @@
         </table>
 
         <input type=button value="添加" class="easyui-button" ng-click="addConf()" />
-        <input type=button value="保存" class="easyui-button" ng-click="doSubmit()" />
-        <input type=button value="保存并关闭" class="easyui-button" ng-click="doSubmit();window.close();" />
+        <input type=button value="保存" class="easyui-button" ng-click="doSubmit(false)" />
+        <input type=button value="保存并关闭" class="easyui-button" ng-click="doSubmit(true)" />
         <input type=button value="关闭" class="easyui-button" onclick="window.close();" />
     </div>
 
@@ -247,7 +247,7 @@
                 });
             };
 
-            $scope.doSubmit = function () {
+            $scope.doSubmit = function (shouldCloseWindow) {
                 var sf_Table = GetQueryString("FK_SFTable");
 
                 var protocol = $location.protocol();
@@ -261,8 +261,12 @@
                 $http.post(url + servicePoint, $scope.confs).success(function (data, status, headers, config) {
                     var result = data;
 
-                    alert(result);
+                    alert("保存成功！");
 
+                    if (shouldCloseWindow == true) {
+                        window.close();
+                    }
+                    
                     //window.location = url + "/";
 
                 }).error(function (data, status, headers, config) {

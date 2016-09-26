@@ -206,13 +206,13 @@
                 //setItemID($scope.confs);
             };
 
-            $scope.shouldShowAddButton = function () {
-                return ($scope.confs.length < 100);
-            };
+            //$scope.shouldShowAddButton = function () {
+            //    return ($scope.confs.length < 100);
+            //};
 
-            $scope.shouldShowRemoveButton = function () {
-                return (($scope.confs.length >= 1) && ($scope.confs.length <= 3));
-            };
+            //$scope.shouldShowRemoveButton = function () {
+            //    return (($scope.confs.length >= 1) && ($scope.confs.length <= 100));
+            //};
 
             $scope.onInit = function () {
                 var sf_Table = GetQueryString("FK_SFTable");

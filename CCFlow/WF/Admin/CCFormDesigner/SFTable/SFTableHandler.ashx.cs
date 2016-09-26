@@ -83,10 +83,11 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             string sql = "SELECT * FROM "+sf.No;
             DataTable dt = sf.RunSQLReturnTable(sql);
 
+            string json = "";
+            List<DictionaryItemViewModel> models = new List<DictionaryItemViewModel>();
+
             if (dt != null && dt.Rows.Count > 0)
             {
-                List<DictionaryItemViewModel> models = new List<DictionaryItemViewModel>();
-
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     if (dt.Rows[i] != null)
@@ -101,12 +102,43 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
                 //return BP.Tools.Json.ToJson(models.ToArray());
 
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(models.ToArray());
+                json = Newtonsoft.Json.JsonConvert.SerializeObject(models.ToArray());
 
-                return json;
+                //return json;
+            }
+            else//如果表中没有数据，则自动向该表插入3条默认数据
+            {
+                models.AddRange(new DictionaryItemViewModel[] 
+                {
+                    new DictionaryItemViewModel()
+                    { 
+                        ID = String.Format("{0}-Item-001", this.FK_SFTable), 
+                        Value = String.Format("{0}-Item-001", this.FK_SFTable)
+                    },
+                    new DictionaryItemViewModel()
+                    {
+                        ID = String.Format("{0}-Item-002", this.FK_SFTable), 
+                        Value = String.Format("{0}-Item-002", this.FK_SFTable)
+                    },
+                    new DictionaryItemViewModel()
+                    {
+                        ID = String.Format("{0}-Item-003", this.FK_SFTable), 
+                        Value = String.Format("{0}-Item-003", this.FK_SFTable)
+                    }
+                });
+
+                json = Newtonsoft.Json.JsonConvert.SerializeObject(models.ToArray());
+
+                foreach (var item in models)
+                {
+                    sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
+                    sf.RunSQL(sql);
+                }
             }
 
-            return BP.Tools.Json.ToJson(dt);
+            return json;
+
+            //return BP.Tools.Json.ToJson(dt);
         }
 
         public void WriteInfo(string info)

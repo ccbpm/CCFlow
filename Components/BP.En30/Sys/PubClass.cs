@@ -1504,6 +1504,29 @@ namespace BP.Sys
         }
         #endregion
 
+        /// <summary>
+        /// 转换
+        /// </summary>
+        /// <param name="ht"></param>
+        /// <returns></returns>
+        public static DataTable HashtableToDataTable(Hashtable ht)
+        {
+            DataTable dt = new DataTable();
+            dt.TableName = "Hashtable";
+            foreach (string key in ht.Keys)
+            {
+                dt.Columns.Add(key, typeof(string));
+            }
+
+            DataRow dr = dt.NewRow();
+            foreach (string key in ht.Keys)
+            {
+                dr[key] = ht[key] as string;
+            }
+            dt.Rows.Add(dr);
+            return dt;
+        }
+
         #region
 
         #region

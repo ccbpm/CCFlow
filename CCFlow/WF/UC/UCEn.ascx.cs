@@ -661,7 +661,6 @@ namespace CCFlow.WF.UC
             if (this.IsLoadData == false)
                 return;
 
-
             MapExt item = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull) as MapExt;
             if (item == null)
                 return;

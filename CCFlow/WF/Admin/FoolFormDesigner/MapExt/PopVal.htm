@@ -32,6 +32,14 @@
             height: 23px;
             width: 177px;
         }
+        #TB_TablePage_SQL
+        {
+            width: 90%;
+        }
+        #TB_TablePage_SQLCount
+        {
+            width: 90%;
+        }
     </style>
     <base target="_self" />
     <script type="text/javascript">
@@ -64,8 +72,11 @@
         function Save() {
             var fk_mapExt = GetQueryString("MyPK");
             var frmData = $("#cc").serialize();
+
+           // alert(frmData);
+
             $.ajax({
-                data:frmData ,
+                data:frmData,
                 type: 'post',
                 async: true,
                 url: "MapExtHandler.ashx?DoType=PopVal_Save&FK_MapExt=" + fk_mapExt + "&m=" + Math.random(),
@@ -87,8 +98,48 @@
 
        //页面启动函数.
        $(function () {
-            InitPage();
-        });
+           InitPage();
+
+       });
+
+       function TestData() {
+         
+            var fk_mapExt = GetQueryString("MyPK");
+            var keyOfEn = GetQueryString("RefNo");
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: "/WF/CCForm/CCFormHeader.ashx?DoType=InitPopVal&pageIndex=1&pageSize=12&ReqCount=0&MyPK=" + fk_mapExt + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                }
+            })
+        }
+
+        function GetJson() {
+
+            alert('ss');
+            var fk_mapExt = GetQueryString("MyPK");
+            var keyOfEn = GetQueryString("RefNo");
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            alert('ssss');
+
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: "/WF/CCForm/CCFormHeader.ashx?DoType=InitPopSetting&MyPK=" + fk_mapExt + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                }
+            })
+        }
+
 
         function InitPage() {
 
@@ -99,12 +150,17 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "MapExtHandler.ashx?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn="  + keyOfEn + "&m=" + Math.random(),
+                url: "MapExtHandler.ashx?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
-                    // console.log(data);
-                    // alert(data);
+                    data = data.replace("\t\n", "");
+                    data = data.replace("\t\n", "");
+                    data = data.replace("\t\n", "");
+                    data = data.replace("\t\n", "");
+                    data = data.replace("\t\n", "");
+                    data = data.replace("\t\n", "");
+                    data = data.replace("\t\n", "");
 
                     data = JSON.parse(data);
 
@@ -117,15 +173,16 @@
                         case "SelfUrl":
                             $("#TB_Url").val(data.URL);
                             break;
-                        case "TableOnlyModel":
+                        case "TableOnly": //仅仅表格.
                             $("#TB_Table_SQL").val(data.EntitySQL);
-                            $("#TB_ColNames").val(data.PopValColNames);
                             break;
-                        case "TablePageModel":
+                        case "TablePage":  //表格分页模式.
+                            $("#TB_TablePage_SQL").val(data.PopValTablePageSQL);
+                            $("#TB_TablePage_SQLCount").val(data.PopValTablePageSQLCount);
                             break;
-                        case "GroupModel":
+                        case "Group":
                             break;
-                        case "TreeModel":
+                        case "Tree":
                             break;
                         default:
                             alert('没有判断的元素.');
@@ -137,9 +194,16 @@
                     $("#TB_Height").val(data.H);
                     $("#TB_Title").val(data.Title);
 
+                    //搜索提示.
+                    $("#TB_PopValSearchTip").val(data.PopValSearchTip);
+
+                    //替换列信息.
+                    $("#TB_ColNames").val(data.PopValColNames);
+
+
                     //设置返回值模式.
                     $("#RB_PopValFormat_" + data.PopValFormat).attr('checked', 'checked');
-                   // alert(data.PopValFormat);
+                    // alert(data.PopValFormat);
 
                     //设置选择模式.
                     $("#RB_PopValSelectModel_" + data.PopValSelectModel).attr('checked', 'checked');
@@ -163,49 +227,79 @@
  <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
  </ul>
  </div>
-<input type="text" id="TB_Url"  value=""   />
+<input type="text" id="TB_Url" name="TB_Url" value=""   />
 </fieldset>
 
 <!---------------------------- 模式2：Table  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_Table" type="radio" name="Model" value="TableOnlyModel"  /><label for="RB_PopWorkModel_Table">表格模式</label>  </legend>
-<a href="javascript:ShowHidden('Table')">初始化表格的查询SQL</a>
+<legend><input id="RB_PopWorkModel_Table" type="radio" name="Model" value="TableOnly"  /><label for="RB_PopWorkModel_Table">表格模式</label>  </legend>
+<a href="javascript:ShowHidden('Table')">初始化表格的查询 SQL </a>
  <div id="Table" style="color:Gray; display:none">
- <ul>
- <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
- <li>比如:SELECT No, Name FROM Port_Emp </li>
- <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
- <li>该方式不考虑分页，不关键字查询。</li>
- </ul>
- </div>
-<input type="text" id="TB_Table_SQL"  value="" />
-</fieldset>
-
-
-<!---------------------------- 模式3 ：分页的Table  ---------------------------------------------------->
-<fieldset>
-<legend><input id="RB_PopWorkModel_TablePageModel" type="radio" name="Model"  value="TablePageModel"  /><label for="RB_PopWorkModel_TablePageModel">表格分页模式</label>  </legend>
-<a href="javascript:ShowHidden('TablePageModel')">数据展现SQL</a>
- <div id="TablePageModel" style="color:Gray; display:none">
+ 
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
  <li>比如:SELECT No,Name FROM Port_Emp </li>
  <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
  </ul>
- </div>
-<input type="text" id="TB_TablePageModel_SQL"  value="" />
 
-<a href="javascript:ShowHidden('SearchSQL')">查询SQL</a>
- <div id="SearchSQL" style="color:Gray; display:none">
-  <ul>
+ </div>
+</fieldset>
+<input type="text" id="TB_Table_SQL" name="TB_Table_SQL" value="" />
+
+
+
+<!---------------------------- 模式3 ：分页的Table  ---------------------------------------------------->
+<fieldset>
+
+
+<legend><input id="RB_PopWorkModel_TablePage" type="radio" name="Model"  value="TablePage"  /><label for="RB_PopWorkModel_TablePage">表格分页模式</label>  </legend>
+<a href="javascript:ShowHidden('TablePage')">数据展现SQL</a>
+ <div id="TablePage" style="color:Gray; display:none">
+ <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
  <li>比如:SELECT No, Name FROM Port_Emp </li>
  <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
- <li>该方式不考虑分页，不关键字查询。</li>
+ <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
+ <li>比如For SQLServer: SELECT TOP @PageSize * FROM
+(
+ SELECT  row_number() over(order by t.No) as rownumber,No,Name,Addr,Tel,Email FROM WF_Emp t
+) A WHERE rownumber > @PageCount
+
+<br />
+总条数: SELECT COUNT(no) FROM WF_Emp WHERE Name LIKE '%@Key%'
+ </li>
+ <li>比如For Oracle: SELECT No,Name,Addr,Email,Tel FROM Port_Emp WHERE Name like '%@Key%'  </li>
+ <li>比如For MySQL: SELECT No,Name,Addr,Email,Tel FROM Port_Emp WHERE Name like '%@Key%'  </li>
  </ul>
  </div>
-<input type="text" id="TB_TablePageModel_SearchSQL"  value="" />
+ <br />
 
+
+<input type="text" id="TB_TablePage_SQL" name="TB_TablePage_SQL" value="" />
+
+
+ <br />
+
+<a href="javascript:ShowHidden('TablePage_Count')">总条数</a>
+ <br />
+
+ <div id="TablePage_Count" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>必须有： @Key 参数. @Key=关键字</li>
+ <li>比如For SQLServer: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
+ <li>比如For Oracle: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
+ <li>比如For MySQL: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
+ </ul>
+ </div>
+<textarea  rows="3" id="TB_TablePage_SQLCount"  name="TB_TablePage_SQLCount" ></textarea>
+
+<br />
+<input type=button   onclick='TestData()' value='测试数据' />
+
+ 
 </fieldset>
 
 <!---------------------------- 模式4 ：分组显示,但是不分页.  ---------------------------------------------------->
@@ -220,10 +314,10 @@
  <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
-<input type="text" id="TB_GroupModel_Group"  value="" />
+<input type="text" id="TB_GroupModel_Group"  name="TB_GroupModel_Group" value="" />
 
-<a href="javascript:ShowHidden('TablePageModelEntity')">&nbsp;实体查询SQL</a>
- <div id="TablePageModelEntity" style="color:Gray; display:none">
+<a href="javascript:ShowHidden('TablePageEntity')">&nbsp;实体查询SQL</a>
+ <div id="TablePageEntity" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
  <li>比如:SELECT No, Name FROM Port_Emp </li>
@@ -231,7 +325,7 @@
  <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
-<input type="text" id="TB_GroupModel_Entity"  value="" />
+<input type="text" id="TB_GroupModel_Entity" name="TB_GroupModel_Entity" value="" />
 </fieldset>
 
 
@@ -248,7 +342,7 @@
  </ul>
  </div>
 
-<input type="text" id="TB_Tree_SQL"  value="" /> 根节点值:<input type="text" id="TB_RootVal"  value="" />
+<input type="text" id="TB_InitTree_SQL" name="TB_InitTree_SQL" value="" /> 根节点值:<input type="text" id="TB_RootVal" name="TB_RootVal"   value="" />
 <br /> 
 <a href="javascript:ShowHidden('TreeLJZ')">懒加载SQL:</a>
 
@@ -258,17 +352,17 @@
  <li>格式:SELECT No, Name, ParentNo FROM Port_Dept WHERE ParentNo='@ParentNo' </li>
  </ul>
  </div>
- </div>
-
     
-    <input type="text" id="TB_Tree_SQL0"  value="" /></fieldset>
+    <input type="text" id="TB_LJZTree_SQL" name="TB_LJZTree_SQL"  value="" />
+    </fieldset>
 
 <!---------------------------- 高级设置.  ---------------------------------------------------->
-<fieldset>
-<legend><label for="RB_PopWorkModel_Tree">高级设置</label>  </legend>
-宽度(px)： <input type="text" id="TB_Width"  value="" />  
-高度(px)：<input type="text" id="TB_Height"  value="" />   
-开窗标题：<input type="text" id="TB_Title"  value="" />
+<!--<fieldset>
+<legend><label for="RB_PopWorkModel_Tree">高级设置</label>  </legend>-->
+宽度(px)： <input type="text" id="TB_Width" name="TB_Width"  value="" />  
+高度(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />   
+开窗标题：<input type="text" id="TB_Title"  name="TB_Title"  value="" />
+搜索关键字提示：<input type="text" id="TB_PopValSearchTip" name="TB_PopValSearchTip" value="" />
 <br />
 
 <a href="javascript:ShowHidden('ColName')">显示的中文列名(可以为空)：</a>
@@ -280,15 +374,15 @@
  </ul>
  </div>
 
-<input type="text" id="TB_ColNames"  value="" />
+<input type="text" id="TB_ColNames" name="TB_ColNames"  value="" />
 
-</fieldset>
+<!--</fieldset>-->
 
 <fieldset>
 <legend> 返回值格式  </legend>
-<input id="RB_PopValFormat_OnlyNo" type="radio" name="PopValFormat" value="0"  /><label for="RB_PopValFormat_OnlyNo">No(仅编号)</label> 
-<input id="RB_PopValFormat_OnlyName" type="radio" name="PopValFormat" value="1"  /><label for="RB_PopValFormat_OnlyName">Name(仅名称)</label> 
-<input id="RB_PopValFormat_NoName" type="radio" name="PopValFormat" value="2"   /><label for="RB_PopValFormat_NoName">No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)</label> 
+<input id="RB_PopValFormat_OnlyNo" type="radio" name="PopValFormat" value="OnlyNo"  /><label for="RB_PopValFormat_OnlyNo">No(仅编号)</label> 
+<input id="RB_PopValFormat_OnlyName" type="radio" name="PopValFormat" value="OnlyName"  /><label for="RB_PopValFormat_OnlyName">Name(仅名称)</label> 
+<input id="RB_PopValFormat_NoName" type="radio" name="PopValFormat" value="NoName"   /><label for="RB_PopValFormat_NoName">No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)</label> 
 </fieldset> 
 
 <fieldset>
@@ -297,10 +391,14 @@
 <input id="RB_PopValSelectModel_More" type="radio" name="PopValSelectModel" value="More"  /><label for="RB_PopValSelectModel_More">多选</label> 
 </fieldset>
 
+<input type="Button" value="获得Json"  onclick="GetJson()" />
 <input type="Button" value="保存"  onclick="Save()" />
 <input type="Button" value="保存并关闭"  onclick="SaveAndClose()" />
 <input type="Button" value="关闭"  onclick="Close()" />
 
+
 </form>
+
+
 </body>
 </html>

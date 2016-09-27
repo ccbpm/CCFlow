@@ -51,6 +51,9 @@ namespace CCFlow.WF.CCForm
             {
                 switch (doType)
                 {
+                    case "InitPopSetting": //获得pop的设置。
+                        message = InitPopSetting(context);
+                        break;
                     case "InitPopVal":
                         message = InitPopVal(context);
                         break;
@@ -64,6 +67,9 @@ namespace CCFlow.WF.CCForm
                         break;
                 }
             }
+
+            BP.DA.DataType.WriteFile("c:\\111.json",message);
+
             context.Response.Charset = "UTF-8";
             context.Response.ContentEncoding = System.Text.Encoding.UTF8;
             context.Response.ContentType = "text/html";
@@ -86,7 +92,24 @@ namespace CCFlow.WF.CCForm
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("");
             return null;
         }
+        public string InitPopSetting(HttpContext context)
+        {
+            string fk_mapExt = context.Request.QueryString["MyPK"].ToString();
 
+            MapExt ext = new MapExt();
+            ext.MyPK = fk_mapExt;
+            int i = ext.RetrieveFromDBSources();
+
+            if (i == 0)
+            {
+                ext.FK_DBSrc = "local";
+                ext.PopValSelectModel = PopValSelectModel.One;
+                ext.PopValWorkModel = PopValWorkModel.TableOnly;
+            }
+
+            return ext.PopValToJson();
+         
+        }
         /// <summary>
         /// 初始化PopVal的值
         /// </summary>
@@ -94,35 +117,68 @@ namespace CCFlow.WF.CCForm
         public string InitPopVal(HttpContext context)
         {
             string mypk = context.Request.QueryString["FK_MapExt"];
+            if (mypk == null || mypk == "")
+                mypk = context.Request.QueryString["MyPK"];
+
             MapExt me = new MapExt();
             me.MyPK = mypk;
             me.Retrieve();
 
-            DataSet ds = new DataSet();
-            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
-
             if (me.PopValWorkModel == PopValWorkModel.SelfUrl)
             {
-                return BP.Tools.Json.ToJson(ds);
+                return BP.Tools.Json.ToJson(me.ToJson());
             }
 
-            if (me.PopValWorkModel == PopValWorkModel.TableOnlyModel)
+            //表格.
+            if (me.PopValWorkModel == PopValWorkModel.TableOnly)
             {
-                string sqlObjs = me.PopValEntitySQL;
-                if (sqlObjs.Length > 10)
-                {
-                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
-                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                string sql = me.PopValEntitySQL.Clone() as string;
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
-                    dt.TableName = "DTObjs";
-                    ds.Tables.Add(dt);
-                }
-                return BP.Tools.Json.ToJson(ds);
+                sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "DTObjs";
+                return BP.Tools.Json.ToJson(dt);
             }
 
-            if (me.PopValWorkModel == PopValWorkModel.GroupModel)
+            // 分页.
+            if (me.PopValWorkModel == PopValWorkModel.TablePage)
+            {
+                string searchKey = "";
+                string sql = "";
+
+                //如果是求总条数.
+                if (context.Request.QueryString["ReqCount"] == "1")
+                {
+                    sql = me.PopValTablePageSQLCount.Clone() as string;
+                    sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sql = sql.Replace("@Key", searchKey.ToString());
+                    return BP.DA.DBAccess.RunSQLReturnValInt(sql).ToString();
+                }
+
+                int pageSize = int.Parse(context.Request.QueryString["pageSize"]);
+                int pageCount = (int.Parse(context.Request.QueryString["pageIndex"]) - 1) * pageSize;
+
+                sql = me.PopValTablePageSQL.Clone() as string;
+                sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                sql = sql.Replace("@PageSize", pageSize.ToString());
+                sql = sql.Replace("@PageCount", pageCount.ToString());
+                sql = sql.Replace("@Key", searchKey.ToString());
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "DTObjs";
+                return BP.Tools.Json.ToJson(dt);
+            }
+
+
+            if (me.PopValWorkModel == PopValWorkModel.Group)
             {
                 string sqlObjs = me.PopValGroupSQL;
                 if (sqlObjs.Length > 10)
@@ -133,7 +189,7 @@ namespace CCFlow.WF.CCForm
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                     dt.TableName = "DTGroup";
-                    ds.Tables.Add(dt);
+                    return BP.Tools.Json.ToJson(dt);
                 }
 
                 sqlObjs = me.PopValEntitySQL;
@@ -145,14 +201,16 @@ namespace CCFlow.WF.CCForm
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                     dt.TableName = "DTEntity";
-                    ds.Tables.Add(dt);
+                    //   ds.Tables.Add(dt);
                 }
-                return BP.Tools.Json.ToJson(ds);
+                //  return BP.Tools.Json.ToJson(ds);
             }
-          
+
+            return null;
+
             //把配置信息放入进去.
-            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
-            return BP.Tools.Json.ToJson(ds);
+            //  ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
+            // return BP.Too/s.Json.ToJson(ds);
         }
 
         //单附件上传方法

@@ -47,7 +47,7 @@ namespace CCFlow.WF.Web.CCForm
                 me.Copy(pv);
             }
 
-            if (me.PopValWorkModel == PopValWorkModel.GroupModel )
+            if (me.PopValWorkModel == PopValWorkModel.Group )
             {
                 this.Response.Redirect("FrmPopValDir.aspx?a=2"+this.RequestParas,true);
                 return;

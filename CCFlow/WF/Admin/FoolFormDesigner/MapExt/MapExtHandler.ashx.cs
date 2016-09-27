@@ -66,51 +66,15 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             MapExt ext = new MapExt();
             ext.MyPK = fk_mapExt;
             int i = ext.RetrieveFromDBSources();
+
             if (i == 0)
             {
                 ext.FK_DBSrc = "local";
                 ext.PopValSelectModel = PopValSelectModel.One;
-                ext.PopValWorkModel = PopValWorkModel.TableOnlyModel;
+                ext.PopValWorkModel = PopValWorkModel.TableOnly;
             }
 
-            //创建一个ht, 然后把他转化成json返回出去。
-            Hashtable ht = new Hashtable();
-
-            switch (ext.PopValWorkModel)
-            {
-                case  PopValWorkModel.SelfUrl:
-                    ht.Add("URL", ext.PopValUrl);
-                    break;
-                case PopValWorkModel.TableOnlyModel:
-                    ht.Add("EntitySQL", ext.PopValEntitySQL);
-                    break;
-                case PopValWorkModel.TablePageModel:
-                    ht.Add("TablePageSQL", ext.PopValTablePageSQL);
-                    ht.Add("EntitySQL", ext.PopValEntitySQL);
-                    break;
-                case PopValWorkModel.GroupModel:
-                    ht.Add("GroupSQL", ext.Tag1);
-                    ht.Add("EntitySQL", ext.PopValEntitySQL);
-                    break;
-                case PopValWorkModel.TreeModel:
-                    ht.Add("EntitySQL", ext.PopValEntitySQL);
-                    break;
-                default:
-                    break;
-            }
-
-            ht.Add(MapExtAttr.W, ext.W);
-            ht.Add(MapExtAttr.H, ext.H);
-
-            ht.Add("PopValWorkModel", ext.PopValWorkModel);
-            ht.Add("PopValSelectModel", ext.PopValSelectModel);
-
-            ht.Add("PopValFormat", ext.PopValFormat);
-            ht.Add("PopValTitle", ext.PopValTitle);
-            ht.Add("PopValColNames", ext.PopValColNames);
-
-            //转化为Json.
-            return BP.Tools.Json.ToJson(ht,false); 
+            return ext.PopValToJson();
         }
         /// <summary>
         /// 保存设置.
@@ -127,27 +91,32 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 me.RetrieveFromDBSources();
 
                 string valWorkModel = this.GetValFromFrmByKey("Model");
+                
                 switch (valWorkModel)
                 {
                     case "SelfUrl": //URL模式.
                         me.PopValWorkModel = PopValWorkModel.SelfUrl;
                         me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
                         break;
-                    case "TableOnlyModel": //表格模式.
-                        me.PopValWorkModel = PopValWorkModel.TableOnlyModel;
+                    case "TableOnly": //表格模式.
+                        me.PopValWorkModel = PopValWorkModel.TableOnly;
+
                         me.PopValEntitySQL = this.GetValFromFrmByKey("TB_Table_SQL");
+
                         break;
-                    case "TablePageModel": //分页模式.
-                        me.PopValWorkModel = PopValWorkModel.TablePageModel;
-                        me.PopValGroupSQL = this.GetValFromFrmByKey("TB_TablePageModel_SQL");
-                        me.PopValEntitySQL = this.GetValFromFrmByKey("TB_EntitySQL");
+                    case "TablePage": //分页模式.
+                        me.PopValWorkModel = PopValWorkModel.TablePage;
+                        
+                        me.PopValTablePageSQL = this.GetValFromFrmByKey("TB_TablePage_SQL");
+                        me.PopValTablePageSQLCount = this.GetValFromFrmByKey("TB_TablePage_SQLCount");
                         break;
-                    case "GroupModel": //分组模式.
-                        me.PopValWorkModel = PopValWorkModel.GroupModel;
+                    case "Group": //分组模式.
+                        me.PopValWorkModel = PopValWorkModel.Group;
+                        
                         me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
                         break;
-                    case "TreeModel": //树模式.
-                        me.PopValWorkModel = PopValWorkModel.TreeModel;
+                    case "Tree": //树模式.
+                        me.PopValWorkModel = PopValWorkModel.Tree;
                         me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
                         break;
                     default:
@@ -159,6 +128,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 me.H = int.Parse(this.GetValFromFrmByKey("TB_Height"));
                 me.PopValColNames = this.GetValFromFrmByKey("TB_ColNames"); //中文列名的对应.
                 me.PopValTitle = this.GetValFromFrmByKey("TB_Title"); //标题.
+                me.PopValSearchTip = this.GetValFromFrmByKey("TB_PopValSearchTip"); //提示.
 
 
                 //数据返回格式.
@@ -200,7 +170,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         /// <returns>返回值</returns>
         public string GetValFromFrmByKey(string key)
         {
-            return context.Request.Form[key];
+            string val= context.Request.Form[key];
+            val = val.Replace("'", "~");
+            return val;
         }
 
         public HttpContext context = null;

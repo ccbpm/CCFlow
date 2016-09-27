@@ -82,12 +82,24 @@ namespace BP.WF
                     wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
                 }
 
-                // 执行一次装载前填充.
+                // 执行表单事件..
                 string msg = md.FrmEvents.DoEventNode(FrmEventList.FrmLoadBefore, wk);
                 if (string.IsNullOrEmpty(msg) == false)
-                    throw new Exception("错误:" + msg);
+                    throw new Exception("err@错误:" + msg);
 
+                //重设默认值.
                 wk.ResetDefaultVal();
+
+                //执行装载填充》
+                MapExt me = new MapExt();
+                me.MyPK = wk.ToString() + "_" + MapExtXmlList.PageLoadFull;
+                if (me.RetrieveFromDBSources() == 1)
+                {
+                    //执行通用的装载方法.
+                    MapAttrs attrs = new MapAttrs("ND" + fk_node);
+                    MapDtls dtls=new MapDtls( "ND"+fk_node);
+                    wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as Work;
+                }
 
                 DataTable mainTable = wk.ToDataTableField(md.No);
                 mainTable.TableName = "MainTable";
@@ -223,15 +235,7 @@ namespace BP.WF
                     hups.Retrieve(HungUpAttr.WorkID, workID, HungUpAttr.FK_Node, fk_node);
                     myds.Tables.Add(hups.ToDataTableField("WF_HungUp"));
                 }
-
-                //if (gwf.WFState == WFState.Askfor)
-                //{
-                //    //如果是加签.
-                //    BP.WF.ShiftWorks fws = new ShiftWorks();
-                //    fws.Retrieve(ShiftWorkAttr.WorkID, workID, ShiftWorkAttr.FK_Node, fk_node);
-                //    myds.Tables.Add(fws.ToDataTableField("WF_ShiftWork"));
-                //}
-
+               
                 Int64 wfid = workID;
                 if (fid != 0)
                     wfid = fid;

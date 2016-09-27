@@ -429,7 +429,10 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStringByKey(SFTableAttr.SrcTable);
+                string str= this.GetValStringByKey(SFTableAttr.SrcTable);
+                if (str == "" || str == null)
+                    return this.No;
+                return str;
             }
             set
             {
@@ -835,7 +838,88 @@ namespace BP.Sys
         {
             //利用这个时间串进行排序.
             this.RDT = DataType.CurrentDataTime;
+
+            if (this.SrcType == Sys.SrcType.CreateTable)
+            {
+                /*
+                 * 要创建表。
+                 */
+
+                string sql = "";
+                if (this.src
+                string sql = "CREATE TABLE " + this.No + " (";
+                sql += "[No] [nvarchar](30) NOT NULL,";
+                sql += "[Name] [nvarchar](3900) NOT NULL,";
+                sql += "[ParentNo] [nvarchar](3900) NOT NULL";
+                sql += ")";
+
+                this.RunSQL(sql);
+            }
+
+           
             return base.beforeInsert();
+        }
+        /// <summary>
+        /// 获得该数据源的数据
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GenerData()
+        {
+
+            string sql = "";
+            if (this.SrcType == Sys.SrcType.CreateTable)
+            {
+                sql = "SELECT * FROM " + this.SrcTable;
+                return this.RunSQLReturnTable(sql);
+            }
+
+            if (this.SrcType == Sys.SrcType.TableOrView)
+            {
+                sql = "SELECT * FROM " + this.SrcTable;
+                return this.RunSQLReturnTable(sql);
+            }
+
+            throw new Exception("@没有判断的数据.");
+        }
+
+        /// <summary>
+        /// 初始化数据.
+        /// </summary>
+        public void InitDataTable()
+        {
+
+            DataTable dt = this.GenerData();
+
+            if (this.SrcType == Sys.SrcType.CreateTable)
+            {
+                /*
+                 * 要创建表。
+                 */
+                string sql = "CREATE TABLE " + this.No + " (";
+                sql += "[No] [nvarchar](30) NOT NULL,";
+                sql += "[Name] [nvarchar](3900) NOT NULL,";
+                sql += "[ParentNo] [nvarchar](3900) NOT NULL";
+                sql += ")";
+                this.RunSQL(sql);
+
+                //初始化数据.
+                for (int i = 0; i < 3; i++)
+                {
+                    string no = i.ToString();
+                    no = no.PadLeft(3, '0');
+                    sql = "INSERT INTO " + this.No + " (No,Name,ParentNo) VALUES ('" + no + "','Item" + no + "','0')";
+                    this.RunSQL(sql);
+                }
+
+                sql = "INSERT INTO " + this.No + " (No,Name,ParentNo) VALUES ('0','根目录','0')";
+                this.RunSQL(sql);
+            }
+
+            if (dt.Rows.Count == 0)
+            {
+
+            }
+
         }
  
     }

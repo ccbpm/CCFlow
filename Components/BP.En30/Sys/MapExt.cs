@@ -49,19 +49,19 @@ namespace BP.Sys
         /// <summary>
         /// 表格模式
         /// </summary>
-        TableOnlyModel,
+        TableOnly,
         /// <summary>
         /// 表格分页模式
         /// </summary>
-        TablePageModel,
+        TablePage,
         /// <summary>
         /// 分组模式
         /// </summary>
-        GroupModel,
+        Group,
         /// <summary>
         /// 树展现模式
         /// </summary>
-        TreeModel
+        Tree
     }
     /// <summary>
     /// 扩展
@@ -151,6 +151,49 @@ namespace BP.Sys
     public class MapExt : EntityMyPK
     {
         #region 关于 Pop at 参数
+        public string PopValToJson()
+        {
+
+            //创建一个ht, 然后把他转化成json返回出去。
+            Hashtable ht = new Hashtable();
+
+            switch (this.PopValWorkModel)
+            {
+                case PopValWorkModel.SelfUrl:
+                    ht.Add("URL", this.PopValUrl);
+                    break;
+                case PopValWorkModel.TableOnly:
+                    ht.Add("EntitySQL", this.PopValEntitySQL);
+                    break;
+                case PopValWorkModel.TablePage:
+                    ht.Add("PopValTablePageSQL", this.PopValTablePageSQL);
+                    ht.Add("PopValTablePageSQLCount", this.PopValTablePageSQLCount);
+                    break;
+                case PopValWorkModel.Group:
+                    ht.Add("GroupSQL", this.Tag1);
+                    ht.Add("EntitySQL", this.PopValEntitySQL);
+                    break;
+                case PopValWorkModel.Tree:
+                    ht.Add("EntitySQL", this.PopValEntitySQL);
+                    break;
+                default:
+                    break;
+            }
+
+            ht.Add(MapExtAttr.W, this.W);
+            ht.Add(MapExtAttr.H, this.H);
+
+            ht.Add("PopValWorkModel", this.PopValWorkModel); //工作模式.
+            ht.Add("PopValSelectModel", this.PopValSelectModel); //单选，多选.
+
+            ht.Add("PopValFormat", this.PopValFormat); //返回值格式.
+            ht.Add("PopValTitle", this.PopValTitle); //窗口标题.
+            ht.Add("PopValColNames", this.PopValColNames); //列名 @No=编号@Name=名称@Addr=地址.
+            ht.Add("PopValSearchTip", this.PopValSearchTip); //搜索提示..
+
+            //转化为Json.
+            return BP.Tools.Json.ToJson(ht, false); 
+        }
         /// <summary>
         /// 连接
         /// </summary>
@@ -194,17 +237,31 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 分页SQL
+        /// 分页SQL带有关键字
         /// </summary>
         public string PopValTablePageSQL
         {
             get
             {
-                return this.Tag2;
+                return this.Tag;
             }
             set
             {
-                this.Tag2 = value;
+                this.Tag = value;
+            }
+        }
+        /// <summary>
+        /// 分页SQL获取总行数
+        /// </summary>
+        public string PopValTablePageSQLCount
+        {
+            get
+            {
+                return this.Tag1;
+            }
+            set
+            {
+                this.Tag1 = value;
             }
         }
         /// <summary>
@@ -279,6 +336,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 搜索提示关键字
+        /// </summary>
+        public string PopValSearchTip
+        {
+            get
+            {
+                return this.GetParaString("PopValSearchTip", "请输入关键字");
+            }
+            set
+            {
+                this.SetPara("PopValSearchTip", value);
+            }
+        }
+        /// <summary>
         /// 数据源
         /// </summary>
         public string FK_DBSrc
@@ -293,6 +364,8 @@ namespace BP.Sys
             }
         }
         #endregion
+
+
 
         #region 属性
         public string ExtDesc

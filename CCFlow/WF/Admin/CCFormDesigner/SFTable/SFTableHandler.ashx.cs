@@ -19,7 +19,6 @@ using BP.WF;
 using LitJson;
 using CCFlow.ViewModels;
 using Newtonsoft.Json.Utilities;
-using System.IO;
 
 namespace CCFlow.WF.Admin.CCFormDesigner
 {
@@ -95,7 +94,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                         items.Add(new CodeItem()
                         {
                             ID = dt.Rows[i]["No"].ToString(),
-                            Value = dt.Rows[i]["Name"].ToString()
+                            Value = dt.Rows[i]["Name"].ToString(),
+                            Parent = dt.Columns.Contains("ParentNo") ? dt.Rows[i]["ParentNo"].ToString() : ""
                         });
                     }
                 }
@@ -192,8 +192,17 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             foreach (var item in items)
             {
-               sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
-               sf.RunSQL(sql);
+                if (!String.IsNullOrEmpty(sf.ParentValue))
+                {
+                    //sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
+                    sql = String.Format("INSERT INTO {0} (No, Name, {1}) Values ('{2}', '{3}', '{4}')", this.FK_SFTable, sf.ParentValue, item.ID, item.Value, item.Parent);
+                }
+                else
+                {
+                    sql = String.Format("INSERT INTO {0} (No, Name) Values ('{1}', '{2}')", this.FK_SFTable, item.ID, item.Value);
+                }
+               
+                sf.RunSQL(sql);
             }
 
             return "保存成功";

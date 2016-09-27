@@ -99,7 +99,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_mapExt + '&m=' + Math.random(),
+                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_mapExt + '&pageIndex=1&pageSize=12&ReqCount=0&m=' + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     var html = "";

@@ -50,25 +50,89 @@ namespace CCFlow.WF.Admin.CCFormDesigner
         {
             context = _context;
 
+            string json = "";
+
             switch (this.DoType)
             {
                 case "CreateTableDataInit":
                     WriteInfo( CreateTableDataInit()); //输出数据.
                     break;
                 case "CreateTableDataSave":
-
-                    string json = "";
-
-                    using (StreamReader reader = new System.IO.StreamReader(context.Request.InputStream))
                     {
-                        json = reader.ReadToEnd();
-                    }
+                        using (StreamReader reader = new System.IO.StreamReader(context.Request.InputStream))
+                        {
+                            json = reader.ReadToEnd();
+                        }
 
-                    WriteInfo( CreateTableDataSave(json)); //输出保存结果..
-                    break;
+                        WriteInfo( CreateTableDataSave(json)); //输出保存结果..
+                        break;
+                    }
+                case "CreateTreeDataInit":
+                    {
+                        WriteInfo(CreateTreeDataInit()); //输出数据.
+                        break;
+                    }
+                case "CreateTreeDataSave": 
+                    {
+                        using (StreamReader reader = new System.IO.StreamReader(context.Request.InputStream))
+                        {
+                            json = reader.ReadToEnd();
+                        }
+
+                        WriteInfo(CreateTreeDataSave(json));
+
+                        break;
+                    }
                 default:
                     break;
             }
+        }
+
+        public string CreateTreeDataInit()
+        {
+            return "";
+        }
+
+        private void buildTreeItems(CodeItem[] codeItems) 
+        {
+        }
+
+        public string CreateTreeDataSave(string json) 
+        {
+            CodeItem[] items = Newtonsoft.Json.JsonConvert.DeserializeObject<CodeItem[]>(json);
+
+            if (items.Length <= 0)
+            {
+                return "err@数据错误,保存的值为空.";
+            }
+
+            foreach (var item in items)
+            {
+                saveTreeItem(item);
+
+                if (item.Children != null && item.Children.Length > 0)
+                {
+                    foreach (var child in item.Children)
+                    {
+                        saveTreeItem(child);
+
+                        if (child.Children != null && child.Children.Length> 0)
+                        {
+                            foreach (var chld in child.Children)
+                            {
+                                saveTreeItem(chld);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return "";
+        }
+
+        private string saveTreeItem(CodeItem codeItem) 
+        {
+            return codeItem.ID;
         }
 
         public string CreateTableDataInit()

@@ -292,7 +292,7 @@
 
                 var url = protocol + "://" + host + ":" + port + "/WF/Admin/CCFormDesigner/SFTable/";
 
-                var servicePoint = "SFTableHandler.ashx?DoType=CreateTableDataInit&FK_SFTable=" + sf_Table + '&m=' + Math.random();
+                var servicePoint = "SFTableHandler.ashx?DoType=CreateTreeDataInit&FK_SFTable=" + sf_Table + '&m=' + Math.random();
 
                 alert(url + servicePoint);
 
@@ -325,7 +325,7 @@
 
                 var url = protocol + "://" + host + ":" + port + "/WF/Admin/CCFormDesigner/SFTable/";
 
-                var servicePoint = "SFTableHandler.ashx?DoType=CreateTableDataSave&FK_SFTable=" + sf_Table + '&m=' + Math.random();
+                var servicePoint = "SFTableHandler.ashx?DoType=CreateTreeDataSave&FK_SFTable=" + sf_Table + '&m=' + Math.random();
 
                 $http.post(url + servicePoint, $scope.confs).success(function (data, status, headers, config) {
                     var result = data;

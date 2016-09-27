@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Web;
 using BP.Sys;
 using System.IO;
@@ -119,27 +120,33 @@ namespace CCFlow.WF.CCForm
             me.MyPK = this.FK_MapExt;
             me.Retrieve();
 
+            //数据对象，将要返回的.
             DataSet ds = new DataSet();
 
+            //获得配置信息.
+            Hashtable ht=me.PopValToJson();
+            DataTable dtcfg=BP.Sys.PubClass.HashtableToDataTable(ht);
+
+            //增加到数据源.
+            ds.Tables.Add(dtcfg);
+
+
             if (me.PopValWorkModel == PopValWorkModel.SelfUrl)
-            {
-                return BP.Tools.Json.ToJson(ds);
-            }
+                return me.PopValUrl;
 
             if (me.PopValWorkModel == PopValWorkModel.TableOnly)
             {
                 string sqlObjs = me.PopValEntitySQL;
-
                 sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
                 sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                 sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
-                return BP.Tools.Json.ToJson(dt);
-            }
 
-            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
+                ds.Tables.Add(dt);
+                return BP.Tools.Json.ToJson(ds);
+            }
 
             if (me.PopValWorkModel == PopValWorkModel.Group)
             {
@@ -168,9 +175,8 @@ namespace CCFlow.WF.CCForm
                 }
                 return BP.Tools.Json.ToJson(ds);
             }
-          
-            //把配置信息放入进去.
-            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
+
+            //返回数据.
             return BP.Tools.Json.ToJson(ds);
         }
 

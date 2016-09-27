@@ -74,7 +74,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 ext.PopValWorkModel = PopValWorkModel.TableOnly;
             }
 
-            return ext.PopValToJson();
+            return null;
+
+            //return ext.PopValToJson();
         }
         /// <summary>
         /// 保存设置.

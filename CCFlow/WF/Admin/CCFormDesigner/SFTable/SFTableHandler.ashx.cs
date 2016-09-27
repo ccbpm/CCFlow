@@ -161,12 +161,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
         /// <returns></returns>
         public string CreateTableDataSave(string json= "@001=xxxx@002=xxxxx")
         {
-            //DataTable dt = null; //BP.Tools.Json.ToDataTable(json);
-            //if (dt.Rows.Count == 0)
-            //    return "err@数据错误,保存的值为空.";
-
             CodeItem[] items = Newtonsoft.Json.JsonConvert.DeserializeObject<CodeItem[]>(json);
-
             if (items.Length <= 0)
             {
                 return "err@数据错误,保存的值为空.";
@@ -174,34 +169,24 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             if (String.IsNullOrEmpty(this.FK_SFTable))
             {
-                return "";
+                return "err@参数错误.";
             }
 
             //删除原来的数据.
             BP.Sys.SFTable sf = new BP.Sys.SFTable(this.FK_SFTable);
             sf.RunSQL("DELETE FROM " + sf.No);
 
-            //把新数据插入到数据库.
-            //foreach (DataRow dr in dt.Rows)
-            //{
-            //    string sql = "INSERT INTO "+sf.SrcTable+" (No,Name)Values('"+dr[0]+"','"+dr[1]+"')";
-            //    sf.RunSQL(sql);
-            //}
-
             string sql = "";
-
             foreach (var item in items)
             {
                 if (!String.IsNullOrEmpty(sf.ParentValue))
                 {
-                    //sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
                     sql = String.Format("INSERT INTO {0} (No, Name, {1}) Values ('{2}', '{3}', '{4}')", this.FK_SFTable, sf.ParentValue, item.ID, item.Value, item.Parent);
                 }
                 else
                 {
                     sql = String.Format("INSERT INTO {0} (No, Name) Values ('{1}', '{2}')", this.FK_SFTable, item.ID, item.Value);
                 }
-               
                 sf.RunSQL(sql);
             }
 

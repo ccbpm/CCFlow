@@ -21,24 +21,33 @@
         }
         #TB_RootVal
         {
-            width: 52px;
+             width: 7%;
         }
         #TB_Tree_SQL0
         {
-            width: 299px;
+            width: 90%;
         }
         #TB_Tree_SQL
         {
             height: 23px;
-            width: 177px;
+            width: 90%;
         }
         #TB_TablePage_SQL
         {
             width: 90%;
+            height: 82px;
         }
         #TB_TablePage_SQLCount
         {
             width: 90%;
+        }
+        #TB_Table_SQL
+        {
+            width: 90%;
+        }
+        #TB_LJZTree_SQL
+        {
+            width: 561px;
         }
     </style>
     <base target="_self" />
@@ -121,13 +130,9 @@
 
         function GetJson() {
 
-            alert('ss');
             var fk_mapExt = GetQueryString("MyPK");
             var keyOfEn = GetQueryString("RefNo");
             var fk_mapData = GetQueryString("FK_MapData");
-
-            alert('ssss');
-
 
             $.ajax({
                 type: 'post',
@@ -136,6 +141,13 @@
                 dataType: 'html',
                 success: function (data) {
                     alert(data);
+                },
+                error: function (xml, textSta, errorThrown) {
+                    alert(xml);
+
+                    console.log(xml);
+                    console.log(textSta);
+                    console.log(errorThrown);
                 }
             })
         }
@@ -167,8 +179,6 @@
                     //设置选择的模式.
                     $("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked", "checked");
 
-                    //alert($("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked"));
-
                     switch (data.PopValWorkModel) {
                         case "SelfUrl":
                             $("#TB_Url").val(data.URL);
@@ -199,7 +209,6 @@
 
                     //替换列信息.
                     $("#TB_ColNames").val(data.PopValColNames);
-
 
                     //设置返回值模式.
                     $("#RB_PopValFormat_" + data.PopValFormat).attr('checked', 'checked');
@@ -244,8 +253,7 @@
 
  </div>
 </fieldset>
-<input type="text" id="TB_Table_SQL" name="TB_Table_SQL" value="" />
-
+<textarea type="text" rows=3 id="TB_Table_SQL" name="TB_Table_SQL" value="" ></textarea>
 
 
 <!---------------------------- 模式3 ：分页的Table  ---------------------------------------------------->
@@ -253,11 +261,10 @@
 
 
 <legend><input id="RB_PopWorkModel_TablePage" type="radio" name="Model"  value="TablePage"  /><label for="RB_PopWorkModel_TablePage">表格分页模式</label>  </legend>
-<a href="javascript:ShowHidden('TablePage')">数据展现SQL</a>
+<a href="javascript:ShowHidden('TablePage')">数据SQL</a>
  <div id="TablePage" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
- <li>比如:SELECT No, Name FROM Port_Emp </li>
  <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
  <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
  <li>比如For SQLServer: SELECT TOP @PageSize * FROM
@@ -274,27 +281,21 @@
  </div>
  <br />
 
-
-<input type="text" id="TB_TablePage_SQL" name="TB_TablePage_SQL" value="" />
-
+<textarea rows=4 type="text" id="TB_TablePage_SQL" name="TB_TablePage_SQL" value="" > </textarea>
 
  <br />
 
-<a href="javascript:ShowHidden('TablePage_Count')">总条数</a>
+<a href="javascript:ShowHidden('TablePage_Count')">总条数SQL</a>
  <br />
 
  <div id="TablePage_Count" style="color:Gray; display:none">
  <ul>
- <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
- <li>比如:SELECT No, Name FROM Port_Emp </li>
- <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
- <li>必须有： @Key 参数. @Key=关键字</li>
  <li>比如For SQLServer: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
  <li>比如For Oracle: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
  <li>比如For MySQL: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
  </ul>
  </div>
-<textarea  rows="3" id="TB_TablePage_SQLCount"  name="TB_TablePage_SQLCount" ></textarea>
+<textarea   rows="3" id="TB_TablePage_SQLCount"  name="TB_TablePage_SQLCount" ></textarea>
 
 <br />
 <input type=button   onclick='TestData()' value='测试数据' />

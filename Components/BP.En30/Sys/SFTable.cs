@@ -846,12 +846,22 @@ namespace BP.Sys
                  */
 
                 string sql = "";
-                if (this.src
-                string sql = "CREATE TABLE " + this.No + " (";
-                sql += "[No] [nvarchar](30) NOT NULL,";
-                sql += "[Name] [nvarchar](3900) NOT NULL,";
-                sql += "[ParentNo] [nvarchar](3900) NOT NULL";
-                sql += ")";
+                if (this.CodeStruct == Sys.CodeStruct.NoName)
+                {
+                    sql = "CREATE TABLE " + this.No + " (";
+                    sql += "[No] [nvarchar](30) NOT NULL,";
+                    sql += "[Name] [nvarchar](3900) NOT NULL";
+                    sql += ")";
+                }
+
+                if (this.CodeStruct == Sys.CodeStruct.Tree)
+                {
+                    sql = "CREATE TABLE " + this.No + " (";
+                    sql += "[No] [nvarchar](30) NOT NULL,";
+                    sql += "[Name] [nvarchar](3900) NOT NULL,";
+                    sql += "[ParentNo] [nvarchar](3900) NOT NULL";
+                    sql += ")";
+                }
 
                 this.RunSQL(sql);
             }
@@ -865,7 +875,6 @@ namespace BP.Sys
         /// <returns></returns>
         public DataTable GenerData()
         {
-
             string sql = "";
             if (this.SrcType == Sys.SrcType.CreateTable)
             {

@@ -80,11 +80,11 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             }
 
             SFTable sf = new SFTable(this.FK_SFTable);
-            string sql = "SELECT * FROM "+sf.No;
+            string sql = "SELECT * FROM "+ sf.No;
             DataTable dt = sf.RunSQLReturnTable(sql);
 
             string json = "";
-            List<DictionaryItemViewModel> models = new List<DictionaryItemViewModel>();
+            List<CodeItem> items = new List<CodeItem>();
 
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -92,7 +92,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 {
                     if (dt.Rows[i] != null)
                     {
-                        models.Add(new DictionaryItemViewModel()
+                        items.Add(new CodeItem()
                         {
                             ID = dt.Rows[i]["No"].ToString(),
                             Value = dt.Rows[i]["Name"].ToString()
@@ -102,34 +102,43 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
                 //return BP.Tools.Json.ToJson(models.ToArray());
 
-                json = Newtonsoft.Json.JsonConvert.SerializeObject(models.ToArray());
+                json = Newtonsoft.Json.JsonConvert.SerializeObject(items.ToArray());
 
                 //return json;
             }
             else//如果表中没有数据，则自动向该表插入3条默认数据
             {
-                models.AddRange(new DictionaryItemViewModel[] 
+                //items.AddRange(new CodeItem[] 
+                //{
+                //    new CodeItem()
+                //    { 
+                //        ID = String.Format("{0}-Item-001", this.FK_SFTable), 
+                //        Value = String.Format("{0}-Item-001", this.FK_SFTable)
+                //    },
+                //    new CodeItem()
+                //    {
+                //        ID = String.Format("{0}-Item-002", this.FK_SFTable), 
+                //        Value = String.Format("{0}-Item-002", this.FK_SFTable)
+                //    },
+                //    new CodeItem()
+                //    {
+                //        ID = String.Format("{0}-Item-003", this.FK_SFTable), 
+                //        Value = String.Format("{0}-Item-003", this.FK_SFTable)
+                //    }
+                //});
+
+                for (int i = 0; i < 3; i++)
                 {
-                    new DictionaryItemViewModel()
+                    items.Add(new CodeItem()
                     { 
-                        ID = String.Format("{0}-Item-001", this.FK_SFTable), 
-                        Value = String.Format("{0}-Item-001", this.FK_SFTable)
-                    },
-                    new DictionaryItemViewModel()
-                    {
-                        ID = String.Format("{0}-Item-002", this.FK_SFTable), 
-                        Value = String.Format("{0}-Item-002", this.FK_SFTable)
-                    },
-                    new DictionaryItemViewModel()
-                    {
-                        ID = String.Format("{0}-Item-003", this.FK_SFTable), 
-                        Value = String.Format("{0}-Item-003", this.FK_SFTable)
-                    }
-                });
+                        ID = String.Format("{0}", (i + 1)),
+                        Value = String.Format("{0}-Item-{1}", this.FK_SFTable, (i + 1))
+                    });
+                }
 
-                json = Newtonsoft.Json.JsonConvert.SerializeObject(models.ToArray());
+                json = Newtonsoft.Json.JsonConvert.SerializeObject(items.ToArray());
 
-                foreach (var item in models)
+                foreach (var item in items)
                 {
                     sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
                     sf.RunSQL(sql);
@@ -156,7 +165,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             //if (dt.Rows.Count == 0)
             //    return "err@数据错误,保存的值为空.";
 
-            DictionaryItemViewModel[] items = Newtonsoft.Json.JsonConvert.DeserializeObject<DictionaryItemViewModel[]>(json);
+            CodeItem[] items = Newtonsoft.Json.JsonConvert.DeserializeObject<CodeItem[]>(json);
 
             if (items.Length <= 0)
             {
@@ -203,7 +212,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
 namespace CCFlow.ViewModels
 {
-    public class DictionaryItemViewModel
+    public class CodeItem
     {
         [Newtonsoft.Json.JsonProperty(PropertyName = "id")]
         public string ID { get; set; }
@@ -213,5 +222,8 @@ namespace CCFlow.ViewModels
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "parent")]
         public string Parent { get; set; }
+
+        [Newtonsoft.Json.JsonProperty(PropertyName = "children")]
+        public CodeItem[] Children { get; set; }
     }
 }

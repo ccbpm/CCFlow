@@ -99,19 +99,25 @@
 
         <table>
             <tr>
-                <th>顺序号 </th>
-                <th> 编号</th>
-                <th>名称 </th>
-                <th>操作 </th>
+                <th>顺序号</th>
+                <th>编号</th>
+                <th>名称</th>
+                <th>父级</th>
+                <th>操作</th>
             </tr>
 
             <tr ng-repeat="conf in confs">
                 <td>{{$index}} </td>
                 <td class="style3">
-                    <input ng-model="conf.id" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                    <input ng-model="conf.id" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.Int, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
                 </td>
                 <td class="style2">
                     <input ng-model="conf.value" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                </td>
+                <td>
+                    <select ng-model="conf.parent">
+                        <option ng-repeat="config in confs" value="config.id">{{config.value}}</option>
+                    </select>
                 </td>
                 <td class="style1">
                     <a href="#" ng-click="removeConf($index)"><span></span>删除</a>
@@ -191,11 +197,20 @@
 
         function ($scope, $location, $http) {
 
-            $scope.confs = [{ id: "001", value: "" }, { id: "002", value: "" }];
+            $scope.confs = [{ id: "1", value: "", parent: "" }, { id: "2", value: "", parent: "1" }];
 
-            $scope.addConf = function () {
-                var id = Math.random().toString(); //createGuid();
-                $scope.confs.push({ id: id, value: "" });
+            var sf_Table = GetQueryString("FK_SFTable");
+
+            $scope.addConf = function ()
+            {
+                var id = "1"; //Math.random().toString(); //createGuid();
+
+                if ($scope.confs.length > 0)
+                {
+                   id = (Number($scope.confs[$scope.confs.length - 1].id) + 1).toString();
+                }
+
+                $scope.confs.push({ id: id, value: (sf_Table + "-Item-"+ id) });
 
                 //setItemID($scope.confs);
             };
@@ -215,7 +230,7 @@
             //};
 
             $scope.onInit = function () {
-                var sf_Table = GetQueryString("FK_SFTable");
+                //var sf_Table = GetQueryString("FK_SFTable");
 
                 var protocol = $location.protocol();
                 var host = $location.host();
@@ -248,7 +263,7 @@
             };
 
             $scope.doSubmit = function (shouldCloseWindow) {
-                var sf_Table = GetQueryString("FK_SFTable");
+                //var sf_Table = GetQueryString("FK_SFTable");
 
                 var protocol = $location.protocol();
                 var host = $location.host();
@@ -280,5 +295,4 @@
         });
     </script>
 </body>
-
 </html>

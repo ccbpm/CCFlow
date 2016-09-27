@@ -16,6 +16,15 @@ namespace BP.Tools
     public class Json
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ht"></param>
+        /// <returns></returns>
+        public static string Hastable2Json(Hashtable ht)
+        {
+            return ToJson(ht, false);
+        }
+        /// <summary>
         /// 把一个json转化一个datatable
         /// </summary>
         /// <param name="json">一个json字符串</param>

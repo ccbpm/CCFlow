@@ -151,7 +151,15 @@ namespace BP.Sys
     public class MapExt : EntityMyPK
     {
         #region 关于 Pop at 参数
-        public Hashtable PopValToJson()
+        /// <summary>
+        /// 转化JSON
+        /// </summary>
+        /// <returns></returns>
+        public string PopValToJson()
+        {
+            return BP.Tools.Json.ToJson(this.PopValToHashtable(),false);
+        }
+        public Hashtable PopValToHashtable()
         {
 
             //创建一个ht, 然后把他转化成json返回出去。

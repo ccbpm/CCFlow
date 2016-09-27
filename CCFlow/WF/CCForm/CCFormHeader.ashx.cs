@@ -22,9 +22,17 @@ namespace CCFlow.WF.CCForm
     /// </summary>
     public class CCFormHeader : IHttpHandler
     {
-
-        public void ProcessRequest(HttpContext context)
+        public HttpContext context=null;
+        public string FK_MapExt
         {
+            get
+            {
+                return context.Request.QueryString["FK_MapExt"];
+            }
+        }
+        public void ProcessRequest(HttpContext mycontext)
+        {
+            context= mycontext;
             context.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
             string doType = context.Request["DoType"];
             string attachPk = context.Request["AttachPK"];
@@ -51,11 +59,14 @@ namespace CCFlow.WF.CCForm
             {
                 switch (doType)
                 {
+                    case "InitPopSetting":
+                        message = InitPopSetting();
+                        break;
                     case "InitPopVal":
-                        message = InitPopVal(context);
+                        message = InitPopVal();
                         break;
                     case "InitLJZData":
-                        message = InitPopValLJZ_Tree(context);
+                        message = InitPopValLJZ_Tree();
                         break;
                     case "DelWorkCheckAttach"://删除附件
                         message = DelWorkCheckAttach(pkVal);
@@ -72,11 +83,22 @@ namespace CCFlow.WF.CCForm
             context.Response.End();
         }
         /// <summary>
+        /// 获得Pop的设置.
+        /// </summary>
+        /// <returns></returns>
+        public string InitPopSetting()
+        {
+            MapExt me = new MapExt();
+            me.MyPK = this.FK_MapExt;
+            me.Retrieve();
+            return me.PopValToJson();
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public string InitPopValLJZ_Tree(HttpContext context)
+        public string InitPopValLJZ_Tree()
         {
             string mypk = context.Request.QueryString["FK_MapExt"];
             MapExt me = new MapExt();
@@ -91,38 +113,35 @@ namespace CCFlow.WF.CCForm
         /// 初始化PopVal的值
         /// </summary>
         /// <returns></returns>
-        public string InitPopVal(HttpContext context)
+        public string InitPopVal()
         {
-            string mypk = context.Request.QueryString["FK_MapExt"];
             MapExt me = new MapExt();
-            me.MyPK = mypk;
+            me.MyPK = this.FK_MapExt;
             me.Retrieve();
 
             DataSet ds = new DataSet();
-            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
 
             if (me.PopValWorkModel == PopValWorkModel.SelfUrl)
             {
                 return BP.Tools.Json.ToJson(ds);
             }
 
-            if (me.PopValWorkModel == PopValWorkModel.TableOnlyModel)
+            if (me.PopValWorkModel == PopValWorkModel.TableOnly)
             {
                 string sqlObjs = me.PopValEntitySQL;
-                if (sqlObjs.Length > 10)
-                {
-                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
-                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
-                    dt.TableName = "DTObjs";
-                    ds.Tables.Add(dt);
-                }
-                return BP.Tools.Json.ToJson(ds);
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                dt.TableName = "DTObjs";
+                return BP.Tools.Json.ToJson(dt);
             }
 
-            if (me.PopValWorkModel == PopValWorkModel.GroupModel)
+            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
+
+            if (me.PopValWorkModel == PopValWorkModel.Group)
             {
                 string sqlObjs = me.PopValGroupSQL;
                 if (sqlObjs.Length > 10)

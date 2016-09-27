@@ -109,10 +109,10 @@
             <tr ng-repeat="conf in confs">
                 <td>{{$index}} </td>
                 <td class="style3">
-                    <input ng-model="conf.id" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.Int, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                    <input ng-model="conf.id" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.Int, this)" onmouseout="purgeValue(valuePolicy.Int, this)" />
                 </td>
                 <td class="style2">
-                    <input ng-model="conf.value" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                    <input ng-model="conf.value" class="easyui-textbox" maxlength="20" />
                 </td>
                 <td>
                     <select ng-model="conf.parent">

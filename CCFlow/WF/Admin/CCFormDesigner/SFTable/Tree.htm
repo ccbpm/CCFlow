@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html ng-app="CCFlowAdmin"  xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html ng-app="CCFlowAdmin" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>本机表的创建</title>
-    
+
     <!--<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jsTree.ddl.js"></script>
@@ -78,7 +78,7 @@
 
                     console.log(data);
                     data = JSON.parse(data);
-                     
+
                     //给公共属性赋值.
                     $("#TB_Width").val(data.W);
                     $("#TB_Height").val(data.H);
@@ -89,39 +89,61 @@
                 }
             });
         }
-     
+
     </script>-->
 </head>
 
 <body class="easyui-layout">
-    <div ng-controller="CCFlow_SFConfCreationController" ng-init="onInit()">
+    <div ng-controller="CCFlow_SFTreeConfCreationController" ng-init="">
 
-        <table>
+        <!--<table>
             <tr>
-                <th>顺序号 </th>
-                <th> 编号</th>
-                <th>名称 </th>
-                <th>操作 </th>
+                <th>顺序号</th>
+                <th>编号</th>
+                <th>名称</th>
+                <th>父级</th>
+                <th>操作</th>
             </tr>
 
             <tr ng-repeat="conf in confs">
                 <td>{{$index}} </td>
                 <td class="style3">
-                    <input ng-model="conf.id" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                    <input ng-model="conf.id" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.Int, this)" onmouseout="purgeValue(valuePolicy.Int, this)" />
                 </td>
                 <td class="style2">
-                    <input ng-model="conf.value" class="easyui-textbox" maxlength="20" onkeyup="purgeValue(valuePolicy.DBCCase, this)" onmouseout="purgeValue(valuePolicy.DBCCase, this)" />
+                    <input ng-model="conf.value" class="easyui-textbox" maxlength="20" />
+                </td>
+                <td>
+                    <select ng-model="conf.parent">
+                        <option ng-repeat="config in confs" value="config.id">{{config.value}}</option>
+                    </select>
                 </td>
                 <td class="style1">
                     <a href="#" ng-click="removeConf($index)"><span></span>删除</a>
                 </td>
             </tr>
-        </table>
+        </table>-->
 
-        <input type=button value="添加" class="easyui-button" ng-click="addConf()" />
+        <!--<input type=button value="添加" class="easyui-button" ng-click="addConf()" />-->
         <input type=button value="保存" class="easyui-button" ng-click="doSubmit(false)" />
         <input type=button value="保存并关闭" class="easyui-button" ng-click="doSubmit(true)" />
         <input type=button value="关闭" class="easyui-button" onclick="window.close();" />
+
+        <ul ng-repeat="conf in confs">
+            <li ng-model="conf.id">
+                {{conf.value}}<input ng-model="conf.value"/><a href="#" ng-click="removeConf($index, confs)"><span>删除</span></a>&nbsp;| &nbsp;<a href="#" ng-click="addConf($index, confs, '')"><span>增加</span></a>&nbsp;| &nbsp;<a href="#" ng-click="addConf($index, conf.children, conf.id)"><span>增加子节点</span></a>
+                <ul ng-repeat="child in conf.children">
+                    <li ng-model="child.id">
+                       {{child.value}}<input ng-model="child.value" /><a href="#" ng-click="removeConf($index, conf.children)"><span>删除</span></a>&nbsp;| &nbsp;<a href="#" ng-click="addConf($index, conf.children, conf.parent)"><span>增加</span></a>&nbsp;| &nbsp;<a href="#" ng-click="addConf($index, child.children, child.id)"><span>增加子节点</span></a>
+                        <ul ng-repeat="chld in child.children">
+                            <li ng-model="chld.id">
+                                {{chld.value}}<input ng-model="chld.value" /><a href="#" ng-click="removeConf($index, child.children)"><span>删除</span></a>&nbsp;| &nbsp;<a href="#" ng-click="addConf($index, child.children, child.parent)"><span>增加</span></a><!--&nbsp;<a href="#" ng-click="addConf($index, chld.children, chld.id)"><span>增加子节点</span></a>-->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
 
     <script type="text/javascript">
@@ -186,35 +208,83 @@
 
         var appModule = angular.module("CCFlowAdmin", []);
 
-        appModule.controller("CCFlow_SFConfCreationController",
+        appModule.controller("CCFlow_SFTreeConfCreationController",
 
         function ($scope, $location, $http) {
 
-            $scope.confs = [{ id: "001", value: "" }, { id: "002", value: "" }];
+            $scope.confs = [
+                {
+                    id: "1", value: "1", parent: "", children:
+                      [
+                          {
+                              id: "11", value: "11", parent: "1", children:
+                              [
+                                  { id: "1111", value: "1111", parent: "11", children: [] },
+                                  { id: "1112", value: "1112", parent: "11", children: [] },
+                                  { id: "1113", value: "1113", parent: "11", children: [] }
+                              ]
+                          },
+                          {
+                              id: "12", value: "12", parent: "1", children:
+                              [
+                                  { id: "1211", value: "1211", parent: "12", children: [] },
+                                  { id: "1212", value: "1212", parent: "12", children: [] },
+                                  { id: "1213", value: "1213", parent: "12", children: [] }
+                              ]
+                          },
+                          { id: "13", value: "13", parent: "1", children: [] }
+                      ]
+                },
+                {
+                    id: "2", value: "2", parent: "", children:
+                        [
+                            { id: "21", value: "21", parent: "2", children: [] },
+                            { id: "22", value: "22", parent: "2", children: [] },
+                            { id: "23", value: "23", parent: "2", children: [] }
+                        ]
+                },
+                {
+                    id: "3", value: "3", parent: "", children:
+                        [
+                            { id: "31", value: "31", parent: "3", children: [] },
+                            { id: "32", value: "32", parent: "3", children: [] },
+                            { id: "33", value: "33", parent: "3", children: [] }
+                        ]
+                }
+            ];
 
-            $scope.addConf = function () {
-                var id = Math.random().toString(); //createGuid();
-                $scope.confs.push({ id: id, value: "" });
+            var sf_Table = GetQueryString("FK_SFTable");
+
+            $scope.addConf = function (index, collection, parentId) {
+                var id = "1"; //Math.random().toString(); //createGuid();
+
+                if ($scope.confs.length > 0) {
+                    id = (Number($scope.confs[$scope.confs.length - 1].id) + 1).toString();
+                }
+
+                //$scope.confs.push({ id: id, value: (sf_Table + "-Item-" + id) });
+
+                //setItemID($scope.confs);
+
+                collection.push({ id: id, value: (sf_Table + "-Item-" + id), parent: parentId, children: [] });
+            };
+
+            $scope.removeConf = function (index, collection) {
+                collection.splice(index, 1);
 
                 //setItemID($scope.confs);
             };
 
-            $scope.removeConf = function (index) {
-                $scope.confs.splice(index, 1);
+            //$scope.shouldShowAddButton = function () {
+            //    return ($scope.confs.length < 100);
+            //};
 
-                //setItemID($scope.confs);
-            };
-
-            $scope.shouldShowAddButton = function () {
-                return ($scope.confs.length < 100);
-            };
-
-            $scope.shouldShowRemoveButton = function () {
-                return (($scope.confs.length >= 1) && ($scope.confs.length <= 3));
-            };
+            //$scope.shouldShowRemoveButton = function () {
+            //    return (($scope.confs.length >= 1) && ($scope.confs.length <= 100));
+            //};
 
             $scope.onInit = function () {
-                var sf_Table = GetQueryString("FK_SFTable");
+                //var sf_Table = GetQueryString("FK_SFTable");
 
                 var protocol = $location.protocol();
                 var host = $location.host();
@@ -247,7 +317,7 @@
             };
 
             $scope.doSubmit = function (shouldCloseWindow) {
-                var sf_Table = GetQueryString("FK_SFTable");
+                //var sf_Table = GetQueryString("FK_SFTable");
 
                 var protocol = $location.protocol();
                 var host = $location.host();
@@ -265,7 +335,7 @@
                     if (shouldCloseWindow == true) {
                         window.close();
                     }
-                    
+
                     //window.location = url + "/";
 
                 }).error(function (data, status, headers, config) {
@@ -279,5 +349,4 @@
         });
     </script>
 </body>
-
 </html>

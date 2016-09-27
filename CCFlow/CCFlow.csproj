@@ -205,6 +205,7 @@
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\notificationFx.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\readme.txt" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\CreateTableDataEdit.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\SFTable\Tree.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Welcome.aspx" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />

@@ -28,7 +28,8 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                return context.Request.QueryString["FK_MapExt"];
+                string str= context.Request.QueryString["FK_MapExt"];
+                return str;
             }
         }
         public void ProcessRequest(HttpContext mycontext)
@@ -60,9 +61,6 @@ namespace CCFlow.WF.CCForm
             {
                 switch (doType)
                 {
-                    case "InitPopSetting":
-                        message = InitPopSetting();
-                        break;
                     case "InitPopVal":
                         message = InitPopVal();
                         break;
@@ -82,17 +80,6 @@ namespace CCFlow.WF.CCForm
             context.Response.Expires = 0;
             context.Response.Write(message);
             context.Response.End();
-        }
-        /// <summary>
-        /// 获得Pop的设置.
-        /// </summary>
-        /// <returns></returns>
-        public string InitPopSetting()
-        {
-            MapExt me = new MapExt();
-            me.MyPK = this.FK_MapExt;
-            me.Retrieve();
-            return me.PopValToJson();
         }
         /// <summary>
         /// 
@@ -124,7 +111,7 @@ namespace CCFlow.WF.CCForm
             DataSet ds = new DataSet();
 
             //获得配置信息.
-            Hashtable ht=me.PopValToJson();
+            Hashtable ht = me.PopValToHashtable();
             DataTable dtcfg=BP.Sys.PubClass.HashtableToDataTable(ht);
 
             //增加到数据源.
@@ -143,7 +130,49 @@ namespace CCFlow.WF.CCForm
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
+                ds.Tables.Add(dt);
+                return BP.Tools.Json.ToJson(ds);
+            }
 
+            if (me.PopValWorkModel == PopValWorkModel.TablePage)
+            {
+                //pageCount.
+                string countSQL = me.PopValTablePageSQLCount;
+                countSQL = countSQL.Replace("@WebUser.No", BP.Web.WebUser.No);
+                countSQL = countSQL.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
+
+                //pageSize
+                string key = context.Request.QueryString["Key"];
+                if (string.IsNullOrEmpty(key)==true)
+                    key = "";
+
+
+                //pageSize
+                string pageSize = context.Request.QueryString["PageSize"];
+                if (string.IsNullOrEmpty(pageSize))
+                    pageSize = "12";
+
+                //pageIndex
+                string pageIndex = context.Request.QueryString["PageIndex"];
+                if (string.IsNullOrEmpty(pageIndex))
+                    pageIndex = "0";
+
+                string sqlObjs = me.PopValTablePageSQL;
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                //三个固定参数.
+                sqlObjs = sqlObjs.Replace("@PageCount", count);
+                sqlObjs = sqlObjs.Replace("@PageSize", pageSize);
+                sqlObjs = sqlObjs.Replace("@PageIndex", pageIndex);
+                sqlObjs = sqlObjs.Replace("@Key", key);
+
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                dt.TableName = "DTObjs";
                 ds.Tables.Add(dt);
                 return BP.Tools.Json.ToJson(ds);
             }

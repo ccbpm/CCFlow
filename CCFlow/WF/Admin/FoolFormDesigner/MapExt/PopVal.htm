@@ -82,7 +82,6 @@
             var fk_mapExt = GetQueryString("MyPK");
             var frmData = $("#cc").serialize();
 
-           // alert(frmData);
 
             $.ajax({
                 data:frmData,
@@ -165,6 +164,8 @@
                 url: "MapExtHandler.ashx?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
+                    alert(data);
 
                     data = data.replace("\t\n", "");
                     data = data.replace("\t\n", "");
@@ -265,18 +266,18 @@
  <div id="TablePage" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
- <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM WF_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
  <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
  <li>比如For SQLServer: SELECT TOP @PageSize * FROM
 (
- SELECT  row_number() over(order by t.No) as rownumber,No,Name,Addr,Tel,Email FROM WF_Emp t
-) A WHERE rownumber > @PageCount
+ SELECT  row_number() over(order by t.No) as rownumber,No,Name,Tel,Email FROM WF_Emp t
+) A WHERE rownumber > @PageCount AND Name LIKE '%@Key%'
 
 <br />
 总条数: SELECT COUNT(no) FROM WF_Emp WHERE Name LIKE '%@Key%'
  </li>
- <li>比如For Oracle: SELECT No,Name,Addr,Email,Tel FROM Port_Emp WHERE Name like '%@Key%'  </li>
- <li>比如For MySQL: SELECT No,Name,Addr,Email,Tel FROM Port_Emp WHERE Name like '%@Key%'  </li>
+ <li>比如For Oracle: SELECT No,Name,Email,Tel FROM WF_Emp WHERE Name like '%@Key%'  </li>
+ <li>比如For MySQL: SELECT No,Name,Email,Tel FROM WF_Emp WHERE Name like '%@Key%'  </li>
  </ul>
  </div>
  <br />

@@ -2,11 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
+    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>-->
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <style type="text/css">
         body .table tbody tr td {
@@ -82,62 +81,194 @@
                 /*broder:#2884fa 1px solid;*/
             }
     </style>
- 
     <script type="text/javascript" >
         $(function () {
             dtTable();
-            alert();
+            $('#btnsv').bind('click', function () {
+                 var checked = $('input:checkbox:checked');
+                 var trData;
+                 var resultObj = {};
+                 var noData = [];
+                 var naData = [];
+                 if (checked.length > 0) {
+                     var trData1 = $(checked[0]).parent().parent().data().data;
+                     var tbData1 = $(checked[0]).parent().parent().parent().data().data;
+                     //if (tbData1.PopValFormat == "OnlyNo") {
+                         for (var ele in trData1) {
+                             resultObj[ele] = [];
+                         }
+                     //}
+                 }
+                 for (var i = 0; i < checked.length; i++) {
+                        trData = $(checked[i]).parent().parent().data().data;
+                        noData.push((trData.No));
+                        naData.push((trData.Name));
+                        //if (tbData1.PopValFormat == "OnlyNo") {
+                                //resultObj = { "No": noData };
+                        //}else if(tbData1.PopValFormat == "OnlyName"){
+                                //resultObj = { "Name": naData };
+                        //}else if(tbData1.PopValFormat == "OnlyNo"){
+                            //resultObj = {
+                            //    "No": noData,
+                            //    "Name": naData 
+                            //};
+                        //}else{
+                            for (var key in trData) {
+                                resultObj[key].push((trData[key]));
+                            }
+                        //}
+                   }
+                window.returnValue = JSON.stringify(resultObj);
+                console.log(window.returnValue);
+                window.close();
+            });
         });
 
-        function dtTable(thisA) {
-//            if ($("#txbSearchVals").val() == "") {
-//                var fk_mapExt = GetQueryString("FK_MapExt");
-//            } else {
-//                var fk_mapExt = s(thisA).prev("#txbSearchVals").val();
-//            }
+        function dtTable() {
             var fk_mapExt = GetQueryString("FK_MapExt");
+            var myPK = GetQueryString("FK_MapExt");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: "CCFormHeader.ashx?DoType=InitPopSetting&MyPK=" + myPK + '&FK_MapExt=' + fk_mapExt + '&m=' + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
+//                    if (data != null) { 
+//                        var dataArrs = JSON.parse(data);
+//                        if (dataArrs.length > 0) {
+//                            var tbData = $("#flowLists table");
+//                            if (tbData != undefined && tbData.data != undefined && tbData.data() != undefined && tbData.data().data != undefined && tbData.data().data == true)  {
+//                                $($('#flowLists table')[0]).data().data = dataArrs;
+//                            }
+//                               var colencn = dataArrs.PopValColNames;
+//                               var SelectM = dataArrs.PopValSelectModel;
+//                               var WorkM = dataArrs.PopValWorkModel;
+//                        }
+//                    }
+//                }
+//            });
+
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_mapExt + '&pageIndex=1&pageSize=12&ReqCount=0&m=' + Math.random(),
+                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_mapExt + '&m=' + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    var html = "";
-                    alert(data);
                     if (data != null) {
-                        var dataArr = data.DTOjbs;
+                        alert(data);
+
+                        var dataArr = JSON.parse(data).DTObjs;
                         if (dataArr.length > 0) {
-                            $.each(dataArr,
-                                function (i, obje) {
-                                    html += "<tr><td>" + obje.No + "</td><td>" + obje.Name + "</td><td>" + obje.FK_Dept + "</td></tr>";
-                                    $(".wupop").html("");
-                                    $(".wupop").html(html);
-                                });
+                            var keys;
+                            var values;
+                            var html1 = '';
+                            var tableHeader = '';
+                            //if (SelectM == "More") {
+                            //} else {
+                            //}
+                            //if (WorkM == "TablePage" ) {
+                            $.each(dataArr, function (i, obje) {
+                                var html = "<tr data-data='true'><td><input type='checkbox' /></td>";
+                                tableHeader = "<tr><th><input type='checkbox' /></th>";
+                                for (var i = 1; i < colencn.split("@").length; i++) {
+                                    keys = colencn.split("@")[i].split("=")[0];
+                                    values = colencn.split("@")[i].split("=")[1];
+                                    for (var key in obje) {
+                                        if (key == keys) {
+                                            tableHeader += '<th data-colname=' + values + '>' + values + '</th>';
+                                        }
+                                    }
+                                }
+                                tableHeader += '</tr>';
+                                for (var ele in obje) {
+                                    html += "<td>" + obje[ele] + "</td>";
+                                }
+                                html += "</tr>";
+                                html1 += html;
+                            });
+                            $(".wupop thead").html(tableHeader);
+                            $(".wupop tbody").html(html1);
+                            //}else if(WorkM == "TablePage"){
+
+                            //var toDoListInitData = {
+                            //    PageSize: 10,
+                            //    PageIndex: 1,
+                            //    DivId: 'flowListDiv',
+                            //    countUrl: "/Ashx/ITILFlow/FlowHandler.ashx?Method=GetPopFormListCount&m=" +
+                            //        Math.random() +
+                            //        "&type=" +
+                            //        pageData.type +
+                            //        "&SearchColumn=" +
+                            //        tableHeaderData[pageData.type].SearchColumn +
+                            //        "&SearchVal=" +
+                            //        $('#txbSearchVal').val() ||
+                            //        "",
+                            //    listUrl: "/Ashx/ITILFlow/FlowHandler.ashx?Method=GetPopFormList&m=" +
+                            //        Math.random() +
+                            //        "&type=" +
+                            //        pageData.type +
+                            //        "&SearchColumn=" +
+                            //        tableHeaderData[pageData.type].SearchColumn +
+                            //        "&SearchVal=" +
+                            //        $('#txbSearchVal').val() ||
+                            //        "",
+                            //    RenderOverParam: {},
+                            //    RenderOverFun: function() {
+                            //        $('#flowListDiv table tbody tr td input:checkbox').bind('click', showForm);
+                            //    },
+                            //};
+                            //$('#flowListDiv table tbody tr').remove();
+                            //Common.CustomPagePlug(toDoListInitData); //绑定表格
+
+
+                            //}
+                            //}else if(WorkM == "SelfUrl"){
+
+                            //}
+                            //} else {
+
+                            //}
+
+                        }
+                        $(".loadDate").hide();
+                        var trData = $("#flowLists table tbody tr");
+                        if (trData != undefined && trData.data != undefined && trData.data() != undefined && trData.data().data != undefined && trData.data().data == true) {
+                            $.each(dataArr, function (i, obje) {
+                                $($('#flowLists table tbody tr')[i]).data().data = obje;
+                            });
                         }
                     }
                 }
+
             });
+        //}
+        //}
+        //}
+        //});
         }
     </script>
 </head>
 <body>
     <!--无分页显示table-->
-    <div id="poptablew">
-        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
-            <div class="portlet-body " id="" style="overflow: auto;">
-                <div class="tab-content" style="margin: 4px 0px;">
-                    <div class="tab-pane active portlet_tab" id="flowLists">
-                        <div id="" style="min-height: 520px; overflow: auto;">
-                            <table class="table wupop"></table>
-                        </div>
-                        <div class="loadDate" style="text-align: center;">
-                            <img src="../Scripts/bootstrap/fonts/loading.gif" />
-                        </div>
+<div id="poptablew">
+    <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
+        <div class="portlet-body " id="" style="overflow: auto;">
+            <div class="tab-content" style="margin: 4px 0px;">
+                <div class="tab-pane active portlet_tab" id="flowLists">
+                    <div id="" style="min-height: 520px; overflow: auto;">
+                        <table class="table wupop" data-data="true">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                        <button id="btnsv" style="float: right;">保存</button>
+                    </div>
+                    <div class="loadDate" style="text-align: center;">
+                        <img src="../Scripts/bootstrap/fonts/loading.gif"/>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-     
+</div>
 </body>
 </html>

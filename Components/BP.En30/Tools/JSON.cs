@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Data.Sql;
 using System.Collections;
@@ -11,8 +12,18 @@ using System.Text.RegularExpressions;
 
 namespace BP.Tools
 {
+     
     public class Json
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ht"></param>
+        /// <returns></returns>
+        public static string Hastable2Json(Hashtable ht)
+        {
+            return ToJson(ht, false);
+        }
         /// <summary>
         /// 把一个json转化一个datatable
         /// </summary>

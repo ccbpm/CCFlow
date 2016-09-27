@@ -79,9 +79,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             }
 
             SFTable sf = new SFTable(this.FK_SFTable);
-
-            //string sql = "SELECT * FROM "+ sf.No;
-            string sql = "SELECT * FROM " + sf.SrcTable;
+            string sql = "SELECT * FROM "+ sf.No;
             DataTable dt = sf.RunSQLReturnTable(sql);
 
             string json = "";
@@ -98,10 +96,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                             ID = dt.Rows[i]["No"].ToString(),
                             Value = dt.Rows[i]["Name"].ToString(),
                             Parent = dt.Columns.Contains("ParentNo") ? dt.Rows[i]["ParentNo"].ToString() : ""
-
-                            //ID = dt.Rows[i][sf.ColumnValue].ToString(),
-                            //Value = dt.Rows[i][sf.ColumnText].ToString(),
-                            //Parent = dt.Columns.Contains(sf.ParentValue) ? dt.Rows[i][sf.ParentValue].ToString() : ""
                         });
                     }
                 }
@@ -138,7 +132,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                     items.Add(new CodeItem()
                     { 
                         ID = String.Format("{0}", (i + 1)),
-                        Value = String.Format("{0}-Item-{1}", sf.SrcTable, (i + 1))
+                        Value = String.Format("{0}-Item-{1}", this.FK_SFTable, (i + 1))
                     });
                 }
 
@@ -146,9 +140,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
                 foreach (var item in items)
                 {
-                    sql = "INSERT INTO " + sf.SrcTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
-                    //sql = String.Format("INSERT INTO {0} ({1}, {2}) Values ('{3}', '{4}')", sf.SrcTable, sf.ColumnValue, sf.ColumnText, item.ID, item.Value);
-                    
+                    sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
                     sf.RunSQL(sql);
                 }
             }
@@ -169,12 +161,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
         /// <returns></returns>
         public string CreateTableDataSave(string json= "@001=xxxx@002=xxxxx")
         {
-            //DataTable dt = null; //BP.Tools.Json.ToDataTable(json);
-            //if (dt.Rows.Count == 0)
-            //    return "err@数据错误,保存的值为空.";
-
             CodeItem[] items = Newtonsoft.Json.JsonConvert.DeserializeObject<CodeItem[]>(json);
-
             if (items.Length <= 0)
             {
                 return "err@数据错误,保存的值为空.";
@@ -182,41 +169,24 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             if (String.IsNullOrEmpty(this.FK_SFTable))
             {
-                return "";
+                return "err@参数错误.";
             }
 
             //删除原来的数据.
             BP.Sys.SFTable sf = new BP.Sys.SFTable(this.FK_SFTable);
-
-            //sf.RunSQL("DELETE FROM " + sf.No);
-
-            sf.RunSQL("DELETE FROM " + sf.SrcTable);
-
-            //把新数据插入到数据库.
-            //foreach (DataRow dr in dt.Rows)
-            //{
-            //    string sql = "INSERT INTO "+sf.SrcTable+" (No,Name)Values('"+dr[0]+"','"+dr[1]+"')";
-            //    sf.RunSQL(sql);
-            //}
+            sf.RunSQL("DELETE FROM " + sf.No);
 
             string sql = "";
-
             foreach (var item in items)
             {
                 if (!String.IsNullOrEmpty(sf.ParentValue))
                 {
-                    //sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
-                    sql = String.Format("INSERT INTO {0} (No, Name, {1}) Values ('{2}', '{3}', '{4}')", sf.SrcTable, sf.ParentValue, item.ID, item.Value, item.Parent);
-
-                    //sql = String.Format("INSERT INTO {0} ({1}, {2}, {3}) Values ('{4}', '{5}', '{6}')", sf.SrcTable, sf.ColumnValue, sf.ColumnText, sf.ParentValue, item.ID, item.Value, item.Parent);
+                    sql = String.Format("INSERT INTO {0} (No, Name, {1}) Values ('{2}', '{3}', '{4}')", this.FK_SFTable, sf.ParentValue, item.ID, item.Value, item.Parent);
                 }
                 else
                 {
-                    sql = String.Format("INSERT INTO {0} (No, Name) Values ('{1}', '{2}')", sf.SrcTable, item.ID, item.Value);
-
-                    //sql = String.Format("INSERT INTO {0} ({1}, {2}) Values ('{3}', '{4}')", sf.SrcTable, sf.ColumnValue, sf.ColumnText, item.ID, item.Value);
+                    sql = String.Format("INSERT INTO {0} (No, Name) Values ('{1}', '{2}')", this.FK_SFTable, item.ID, item.Value);
                 }
-               
                 sf.RunSQL(sql);
             }
 

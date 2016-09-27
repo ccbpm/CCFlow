@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Web;
 using BP.Sys;
 using System.IO;
@@ -22,9 +23,18 @@ namespace CCFlow.WF.CCForm
     /// </summary>
     public class CCFormHeader : IHttpHandler
     {
-
-        public void ProcessRequest(HttpContext context)
+        public HttpContext context=null;
+        public string FK_MapExt
         {
+            get
+            {
+                string str= context.Request.QueryString["FK_MapExt"];
+                return str;
+            }
+        }
+        public void ProcessRequest(HttpContext mycontext)
+        {
+            context= mycontext;
             context.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
             string doType = context.Request["DoType"];
             string attachPk = context.Request["AttachPK"];
@@ -52,10 +62,10 @@ namespace CCFlow.WF.CCForm
                 switch (doType)
                 {
                     case "InitPopVal":
-                        message = InitPopVal(context);
+                        message = InitPopVal();
                         break;
                     case "InitLJZData":
-                        message = InitPopValLJZ_Tree(context);
+                        message = InitPopValLJZ_Tree();
                         break;
                     case "DelWorkCheckAttach"://删除附件
                         message = DelWorkCheckAttach(pkVal);
@@ -76,7 +86,7 @@ namespace CCFlow.WF.CCForm
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public string InitPopValLJZ_Tree(HttpContext context)
+        public string InitPopValLJZ_Tree()
         {
             string mypk = context.Request.QueryString["FK_MapExt"];
             MapExt me = new MapExt();
@@ -91,38 +101,83 @@ namespace CCFlow.WF.CCForm
         /// 初始化PopVal的值
         /// </summary>
         /// <returns></returns>
-        public string InitPopVal(HttpContext context)
+        public string InitPopVal()
         {
-            string mypk = context.Request.QueryString["FK_MapExt"];
             MapExt me = new MapExt();
-            me.MyPK = mypk;
+            me.MyPK = this.FK_MapExt;
             me.Retrieve();
 
+            //数据对象，将要返回的.
             DataSet ds = new DataSet();
-            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
+
+            //获得配置信息.
+            Hashtable ht = me.PopValToHashtable();
+            DataTable dtcfg=BP.Sys.PubClass.HashtableToDataTable(ht);
+
+            //增加到数据源.
+            ds.Tables.Add(dtcfg);
+
 
             if (me.PopValWorkModel == PopValWorkModel.SelfUrl)
-            {
-                return BP.Tools.Json.ToJson(ds);
-            }
+                return me.PopValUrl;
 
-            if (me.PopValWorkModel == PopValWorkModel.TableOnlyModel)
+            if (me.PopValWorkModel == PopValWorkModel.TableOnly)
             {
                 string sqlObjs = me.PopValEntitySQL;
-                if (sqlObjs.Length > 10)
-                {
-                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
-                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
-                    dt.TableName = "DTObjs";
-                    ds.Tables.Add(dt);
-                }
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                dt.TableName = "DTObjs";
+                ds.Tables.Add(dt);
                 return BP.Tools.Json.ToJson(ds);
             }
 
-            if (me.PopValWorkModel == PopValWorkModel.GroupModel)
+            if (me.PopValWorkModel == PopValWorkModel.TablePage)
+            {
+                //pageCount.
+                string countSQL = me.PopValTablePageSQLCount;
+                countSQL = countSQL.Replace("@WebUser.No", BP.Web.WebUser.No);
+                countSQL = countSQL.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
+
+                //pageSize
+                string key = context.Request.QueryString["Key"];
+                if (string.IsNullOrEmpty(key)==true)
+                    key = "";
+
+
+                //pageSize
+                string pageSize = context.Request.QueryString["PageSize"];
+                if (string.IsNullOrEmpty(pageSize))
+                    pageSize = "12";
+
+                //pageIndex
+                string pageIndex = context.Request.QueryString["PageIndex"];
+                if (string.IsNullOrEmpty(pageIndex))
+                    pageIndex = "0";
+
+                string sqlObjs = me.PopValTablePageSQL;
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                //三个固定参数.
+                sqlObjs = sqlObjs.Replace("@PageCount", count);
+                sqlObjs = sqlObjs.Replace("@PageSize", pageSize);
+                sqlObjs = sqlObjs.Replace("@PageIndex", pageIndex);
+                sqlObjs = sqlObjs.Replace("@Key", key);
+
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                dt.TableName = "DTObjs";
+                ds.Tables.Add(dt);
+                return BP.Tools.Json.ToJson(ds);
+            }
+
+            if (me.PopValWorkModel == PopValWorkModel.Group)
             {
                 string sqlObjs = me.PopValGroupSQL;
                 if (sqlObjs.Length > 10)
@@ -149,9 +204,8 @@ namespace CCFlow.WF.CCForm
                 }
                 return BP.Tools.Json.ToJson(ds);
             }
-          
-            //把配置信息放入进去.
-            ds.Tables.Add(me.ToDataTableField("Sys_MapExt"));
+
+            //返回数据.
             return BP.Tools.Json.ToJson(ds);
         }
 

@@ -846,7 +846,7 @@ namespace BP.Sys
                  */
 
                 string sql = "";
-                if (this.CodeStruct == Sys.CodeStruct.NoName)
+                if (this.CodeStruct == Sys.CodeStruct.NoName || this.CodeStruct == Sys.CodeStruct.GradeNoName)
                 {
                     sql = "CREATE TABLE " + this.No + " (";
                     sql += "[No] [nvarchar](30) NOT NULL,";
@@ -862,10 +862,11 @@ namespace BP.Sys
                     sql += "[ParentNo] [nvarchar](3900) NOT NULL";
                     sql += ")";
                 }
-
                 this.RunSQL(sql);
-            }
 
+                //初始化数据.
+                this.InitDataTable();
+            }
            
             return base.beforeInsert();
         }
@@ -896,39 +897,38 @@ namespace BP.Sys
         /// </summary>
         public void InitDataTable()
         {
-
             DataTable dt = this.GenerData();
-
-            if (this.SrcType == Sys.SrcType.CreateTable)
-            {
-                /*
-                 * 要创建表。
-                 */
-                string sql = "CREATE TABLE " + this.No + " (";
-                sql += "[No] [nvarchar](30) NOT NULL,";
-                sql += "[Name] [nvarchar](3900) NOT NULL,";
-                sql += "[ParentNo] [nvarchar](3900) NOT NULL";
-                sql += ")";
-                this.RunSQL(sql);
-
-                //初始化数据.
-                for (int i = 0; i < 3; i++)
-                {
-                    string no = i.ToString();
-                    no = no.PadLeft(3, '0');
-                    sql = "INSERT INTO " + this.No + " (No,Name,ParentNo) VALUES ('" + no + "','Item" + no + "','0')";
-                    this.RunSQL(sql);
-                }
-
-                sql = "INSERT INTO " + this.No + " (No,Name,ParentNo) VALUES ('0','根目录','0')";
-                this.RunSQL(sql);
-            }
-
+            
+            string sql = "";
             if (dt.Rows.Count == 0)
             {
+                /*初始化数据.*/
+                if (this.CodeStruct == Sys.CodeStruct.Tree)
+                {
+                    sql = "INSERT INTO "+this.SrcTable+" (No,Name,ParentNo) VALUES('"+this.DefVal+"','根目录','"+this.DefVal+"') ";
+                    this.RunSQL(sql);
 
+                    for (int i = 1; i < 4; i++)
+                    {
+                        string no = i.ToString();
+                        no = no.PadLeft(3, '0');
+
+                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + no + "','Item"+no+"','" + this.DefVal + "') ";
+                        this.RunSQL(sql);
+                    }
+                }
+
+                if (this.CodeStruct == Sys.CodeStruct.NoName)
+                {
+                    for (int i = 1; i < 4; i++)
+                    {
+                        string no = i.ToString();
+                        no = no.PadLeft(3, '0');
+                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "') ";
+                        this.RunSQL(sql);
+                    }
+                }
             }
-
         }
  
     }

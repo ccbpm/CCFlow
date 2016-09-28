@@ -169,45 +169,67 @@ namespace CCFlow.WF.Comm.Sys
                     case "getclass": //获取类列表
                         string stru = Request.QueryString["struct"];
                         int st = 0;
+
                         if (string.IsNullOrWhiteSpace(stru) || !int.TryParse(stru, out st))
                         {
                             resultString = ReturnJson(false, "参数不正确", false);
                         }
                         else
                         {
-                            Hashtable ht = new Hashtable();
-
+                            string error = string.Empty;
                             ArrayList arr = null;
                             SFTables sfs = new SFTables();
+                            Entities ens = null;
+                            SFTable sf = null;
                             sfs.Retrieve(SFTableAttr.SrcType, (int)SrcType.BPClass);
 
-                            switch (st)
+                            try
                             {
-                                case 0:
-                                    arr = ClassFactory.GetObjects("BP.En.EntitiesNoName");
-                                    break;
-                                case 1:
-                                    arr = ClassFactory.GetObjects("BP.En.EntitiesSimpleTree");
-                                    break;
-                                default:
-                                    arr = new ArrayList();
-                                    break;
+                                switch (st)
+                                {
+                                    case 0:
+                                        arr = ClassFactory.GetObjects("BP.En.EntityNoName");
+                                        break;
+                                    case 1:
+                                        arr = ClassFactory.GetObjects("BP.En.EntitySimpleTree");
+                                        break;
+                                    default:
+                                        arr = new ArrayList();
+                                        break;
+                                }
+                            }
+                            catch(Exception ex)
+                            {
+                                error = "ClassFactory.GetObjects错误:" + ex.Message;
                             }
 
-                            foreach (BP.En.Entities myens in arr)
+                            if (string.IsNullOrWhiteSpace(error))
                             {
-                                if (myens == null)
-                                    continue;
-                                if (sfs.Contains(myens.ToString()))
-                                    continue;
+                                s = new StringBuilder("[");
 
-                                Entity en = myens.GetNewEntity;
-                                if (en == null)
-                                    continue;
-                                ht.Add(myens.ToString(), en.EnDesc);
+                                foreach (BP.En.Entity en in arr)
+                                {
+                                    ens = en.GetNewEntities;
 
+                                    if (ens == null) continue;
+
+                                    sf = sfs.GetEntityByKey(ens.ToString()) as SFTable;
+
+                                    if ((sf != null && sf.No != sfno) ||
+                                        string.IsNullOrWhiteSpace(ens.ToString()))
+                                        continue;
+
+                                    s.Append(string.Format(
+                                        "{{\"NO\":\"{0}\",\"NAME\":\"{0}[{1}]\",\"DESC\":\"{1}\"}},", ens,
+                                        en.EnDesc));
+                                }
+
+                                resultString = ReturnJson(true, s.ToString().TrimEnd(',') + "]", true);
                             }
-                            resultString = BP.Tools.Json.ToJson(ht,true); 
+                            else
+                            {
+                                resultString = ReturnJson(false, error, false);
+                            }
                         }
                         break;
                     case "getsrcs": //获取数据源列表
@@ -216,6 +238,7 @@ namespace CCFlow.WF.Comm.Sys
                         bool onlyWS = false;
 
                         SFDBSrcs srcs = new SFDBSrcs();
+
                         if (!string.IsNullOrWhiteSpace(type) && int.TryParse(type, out itype))
                         {
                             onlyWS = true;
@@ -234,14 +257,17 @@ namespace CCFlow.WF.Comm.Sys
                         if (!onlyWS)
                         {
                             List<DataRow> wsRows = new List<DataRow>();
+
                             foreach (DataRow r in dt.Rows)
                             {
                                 if (Equals(r["DBSRCTYPE"], (int)DBSrcType.WebServices))
                                     wsRows.Add(r);
                             }
+
                             foreach (DataRow r in wsRows)
                                 dt.Rows.Remove(r);
                         }
+
                         resultString = ReturnJson(true, BP.Tools.Json.ToJson(dt), true);
                         break;
                     case "gettvs": //获取表/视图列表

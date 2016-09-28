@@ -64,8 +64,8 @@ namespace CCFlow.WF.CCForm
                     case "InitPopVal":
                         message = InitPopVal();
                         break;
-                    case "InitLJZData":
-                        message = InitPopValLJZ_Tree();
+                    case "InitPopValTree":
+                        message = InitPopValTree();
                         break;
                     case "DelWorkCheckAttach"://删除附件
                         message = DelWorkCheckAttach(pkVal);
@@ -86,15 +86,31 @@ namespace CCFlow.WF.CCForm
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public string InitPopValLJZ_Tree()
+        public string InitPopValTree()
         {
             string mypk = context.Request.QueryString["FK_MapExt"];
+
             MapExt me = new MapExt();
             me.MyPK = mypk;
             me.Retrieve();
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("");
-            return null;
+            //获得配置信息.
+            Hashtable ht = me.PopValToHashtable();
+            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+
+            string parentNo = context.Request.QueryString["ParentNo"];
+            if (parentNo==null)
+                parentNo=me.PopValTreeParentNo;
+
+            string sqlObjs = me.PopValTreeSQL;
+            sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+            sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+            dt.TableName = "DTObjs";
+            return BP.Tools.Json.ToJson(dt);
         }
 
         /// <summary>
@@ -137,27 +153,29 @@ namespace CCFlow.WF.CCForm
             if (me.PopValWorkModel == PopValWorkModel.TablePage)
             {
                 //pageCount.
+
+                //key
+                string key = context.Request.QueryString["Key"];
+                if (string.IsNullOrEmpty(key) == true)
+                    key = "";
+
                 string countSQL = me.PopValTablePageSQLCount;
                 countSQL = countSQL.Replace("@WebUser.No", BP.Web.WebUser.No);
                 countSQL = countSQL.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                 countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                countSQL = countSQL.Replace("@Key", key);
                 string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
 
-                //pageSize
-                string key = context.Request.QueryString["Key"];
-                if (string.IsNullOrEmpty(key)==true)
-                    key = "";
-
 
                 //pageSize
-                string pageSize = context.Request.QueryString["PageSize"];
+                string pageSize = context.Request.QueryString["pageSize"];
                 if (string.IsNullOrEmpty(pageSize))
-                    pageSize = "12";
+                    pageSize = "10";
 
                 //pageIndex
-                string pageIndex = context.Request.QueryString["PageIndex"];
+                string pageIndex = context.Request.QueryString["pageIndex"];
                 if (string.IsNullOrEmpty(pageIndex))
-                    pageIndex = "0";
+                    pageIndex = "1";
 
                 string sqlObjs = me.PopValTablePageSQL;
                 sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
@@ -165,7 +183,7 @@ namespace CCFlow.WF.CCForm
                 sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
                 //三个固定参数.
-                sqlObjs = sqlObjs.Replace("@PageCount", count);
+                sqlObjs = sqlObjs.Replace("@PageCount", ((int.Parse(pageIndex) - 1) * int.Parse(pageSize)).ToString());
                 sqlObjs = sqlObjs.Replace("@PageSize", pageSize);
                 sqlObjs = sqlObjs.Replace("@PageIndex", pageIndex);
                 sqlObjs = sqlObjs.Replace("@Key", key);
@@ -174,6 +192,13 @@ namespace CCFlow.WF.CCForm
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
                 ds.Tables.Add(dt);
+
+                DataTable dtCount = new DataTable("DTCout");
+                dtCount.TableName = "DTCout";
+                dtCount.Columns.Add("Count", typeof(int));
+                dtCount.Rows.Add(new[] { count });
+                ds.Tables.Add(dtCount);
+
                 return BP.Tools.Json.ToJson(ds);
             }
 

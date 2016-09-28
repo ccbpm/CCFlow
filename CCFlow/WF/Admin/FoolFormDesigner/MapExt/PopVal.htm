@@ -193,6 +193,8 @@
                         case "Group":
                             break;
                         case "Tree":
+                            $("#TB_TreeSQL").val(data.PopValTablePageSQLCount);
+                            $("#TB_TreeParentNo").val(data.PopValTablePageSQLCount);
                             break;
                         default:
                             alert('没有判断的元素.');
@@ -333,7 +335,7 @@
 
 <!---------------------------- 模式5 ：树模式,没有关键字查询.  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_Tree" type="radio" name="Model" value="TreeModel"  /><label for="RB_PopWorkModel_Tree">树模式</label>  </legend>
+<legend><input id="RB_PopWorkModel_Tree" type="radio" name="Model" value="Tree"  /><label for="RB_PopWorkModel_Tree">树模式</label>  </legend>
 <a href="javascript:ShowHidden('Tree')">初始化树SQL</a>
  <div id="Tree" style="color:Gray; display:none">
  <ul>
@@ -344,7 +346,8 @@
  </ul>
  </div>
 
-<input type="text" id="TB_InitTree_SQL" name="TB_InitTree_SQL" value="" /> 根节点值:<input type="text" id="TB_RootVal" name="TB_RootVal"   value="" />
+    <input type="text" id="TB_TreeSQL" name="TB_TreeSQL" value="" /> 
+    根节点值:<input type="text" id="TB_TreeParentNo" name="TB_TreeParentNo" value="" />
 <br /> 
 <a href="javascript:ShowHidden('TreeLJZ')">懒加载SQL:</a>
 
@@ -354,8 +357,7 @@
  <li>格式:SELECT No, Name, ParentNo FROM Port_Dept WHERE ParentNo='@ParentNo' </li>
  </ul>
  </div>
-    
-    <input type="text" id="TB_LJZTree_SQL" name="TB_LJZTree_SQL"  value="" />
+     
     </fieldset>
 
 <!---------------------------- 高级设置.  ---------------------------------------------------->

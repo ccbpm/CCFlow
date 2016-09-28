@@ -182,7 +182,8 @@ namespace BP.Sys
                     ht.Add("EntitySQL", this.PopValEntitySQL);
                     break;
                 case PopValWorkModel.Tree:
-                    ht.Add("EntitySQL", this.PopValEntitySQL);
+                    ht.Add("TreeSQL", this.PopValTreeSQL);
+                    ht.Add("TreeParentNo", this.PopValTreeParentNo);
                     break;
                 default:
                     break;
@@ -284,6 +285,32 @@ namespace BP.Sys
             set
             {
                 this.SetPara("PopValTitle", value);
+            }
+        }
+
+        public string PopValTreeSQL
+        {
+            get
+            {
+                return this.PopValEntitySQL;
+            }
+            set
+            {
+                  this.PopValEntitySQL=value;
+            }
+        }
+        /// <summary>
+        /// 根目录
+        /// </summary>
+        public string PopValTreeParentNo
+        {
+            get
+            {
+                return this.GetParaString("PopValTreeParentNo");
+            }
+            set
+            {
+                this.SetPara("PopValTreeParentNo", value);
             }
         }
         /// <summary>

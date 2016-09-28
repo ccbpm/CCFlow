@@ -196,6 +196,16 @@ namespace BP.WF
                     if (myds.Tables.Contains(uiBindKey) == true)
                         continue;
 
+                    // 检查是否有下拉框自动填充。
+
+                    string keyOfEn = dr["KeyOfEn"].ToString();
+
+                    string fk_mapData = dr["FK_MapData"].ToString();
+
+                   //bool is  me.IsExit(MapExtAttr.FK_MapData, fk_mapData, MapExtAttr.ExtType, MapExtXmlList.DDLFullCtrl, MapExtAttr.AttrOfOper, keyOfEn);
+
+#warning 处理下拉框返回值的范围。
+
                     myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
                 }
                 #endregion End把外键表加入DataSet
@@ -320,6 +330,7 @@ namespace BP.WF
 
                 //表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+                return myds;
 
                 #region 流程设置信息.
                 Node nd = new Node(fk_node);

@@ -120,8 +120,16 @@
       <DependentUpon>UCExt.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ctrl\BPSubFlow.cs" />
+    <Compile Include="Ctrl\BPMapPin.cs" />
+    <Compile Include="Ctrl\BPMicrophonehot.cs" />
     <Compile Include="Dialog\SelectInitField.xaml.cs">
       <DependentUpon>SelectInitField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\FrmEleMapPin.xaml.cs">
+      <DependentUpon>FrmEleMapPin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\FrmEleMicHot.xaml.cs">
+      <DependentUpon>FrmEleMicHot.xaml</DependentUpon>
     </Compile>
     <Compile Include="enums.cs" />
     <Compile Include="Dialog\ColorPickerWin.xaml.cs">
@@ -421,6 +429,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialog\FrmEleMapPin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialog\FrmEleMicHot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -522,6 +538,8 @@
     <Resource Include="Img\Exp.png" />
     <Resource Include="Img\SubFlow.png" />
     <None Include="Service References\FF\CCForm.disco" />
+    <Resource Include="Img\ic_pin.png" />
+    <Resource Include="Img\microphonehot.png" />
     <Content Include="ServiceReferences.ClientConfig" />
     <Resource Include="Img\Alignment_Center.png" />
     <Resource Include="Img\Alignment_Down.png" />

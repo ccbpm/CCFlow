@@ -880,16 +880,30 @@ namespace BP.Sys
             if (this.SrcType == Sys.SrcType.CreateTable)
             {
                 sql = "SELECT * FROM " + this.SrcTable;
-                return this.RunSQLReturnTable(sql);
+                DataTable dt= this.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 0)
+                    this.InitDataTable();
+                else
+                    return dt;
+
+                return GenerData();
+
             }
 
             if (this.SrcType == Sys.SrcType.TableOrView)
             {
                 sql = "SELECT * FROM " + this.SrcTable;
-                return this.RunSQLReturnTable(sql);
+
+                DataTable dt = this.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 0)
+                    this.InitDataTable();
+                else
+                    return dt;
+
+                return GenerData();
             }
 
-            throw new Exception("@没有判断的数据.");
+            throw new Exception("@没有判断的数据源类型.");
         }
 
         /// <summary>
@@ -897,36 +911,33 @@ namespace BP.Sys
         /// </summary>
         public void InitDataTable()
         {
-            DataTable dt = this.GenerData();
-            
+
             string sql = "";
-            if (dt.Rows.Count == 0)
+
+            /*初始化数据.*/
+            if (this.CodeStruct == Sys.CodeStruct.Tree)
             {
-                /*初始化数据.*/
-                if (this.CodeStruct == Sys.CodeStruct.Tree)
+                sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + this.DefVal + "','根目录','" + this.DefVal + "') ";
+                this.RunSQL(sql);
+
+                for (int i = 1; i < 4; i++)
                 {
-                    sql = "INSERT INTO "+this.SrcTable+" (No,Name,ParentNo) VALUES('"+this.DefVal+"','根目录','"+this.DefVal+"') ";
+                    string no = i.ToString();
+                    no = no.PadLeft(3, '0');
+
+                    sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "') ";
                     this.RunSQL(sql);
-
-                    for (int i = 1; i < 4; i++)
-                    {
-                        string no = i.ToString();
-                        no = no.PadLeft(3, '0');
-
-                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + no + "','Item"+no+"','" + this.DefVal + "') ";
-                        this.RunSQL(sql);
-                    }
                 }
+            }
 
-                if (this.CodeStruct == Sys.CodeStruct.NoName)
+            if (this.CodeStruct == Sys.CodeStruct.NoName)
+            {
+                for (int i = 1; i < 4; i++)
                 {
-                    for (int i = 1; i < 4; i++)
-                    {
-                        string no = i.ToString();
-                        no = no.PadLeft(3, '0');
-                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "') ";
-                        this.RunSQL(sql);
-                    }
+                    string no = i.ToString();
+                    no = no.PadLeft(3, '0');
+                    sql = "INSERT INTO " + this.SrcTable + " (No,Name) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "') ";
+                    this.RunSQL(sql);
                 }
             }
         }

@@ -94,7 +94,7 @@
 </head>
 
 <body class="easyui-layout">
-    <div ng-controller="CCFlow_SFTreeConfCreationController" ng-init="">
+    <div ng-controller="CCFlow_SFTreeConfCreationController" ng-init="onInit()">
 
         <!--<table>
             <tr>
@@ -267,6 +267,8 @@
                 //setItemID($scope.confs);
 
                 collection.push({ id: id, value: (sf_Table + "-Item-" + id), parent: parentId, children: [] });
+
+                //collection.splice(index, 1, { id: id, value: (sf_Table + "-Item-" + id), parent: parentId, children: [] });
             };
 
             $scope.removeConf = function (index, collection) {

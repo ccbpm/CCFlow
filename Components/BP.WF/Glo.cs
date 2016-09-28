@@ -2311,6 +2311,9 @@ namespace BP.WF
         /// <returns></returns>
         public static string DealExp(string exp, Entity en, string errInfo)
         {
+            if (exp.Contains("@") == false)
+                return exp;
+
             exp = exp.Replace("~", "'");
 
             //首先替换加; 的。

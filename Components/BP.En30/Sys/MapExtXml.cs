@@ -14,7 +14,7 @@ namespace BP.Sys
         /// </summary>
         public const string AutoFull = "AutoFull";
         /// <summary>
-        /// 活动菜单
+        /// 自动填充
         /// </summary>
         public const string ActiveDDL = "ActiveDDL";
         /// <summary>
@@ -61,11 +61,14 @@ namespace BP.Sys
         /// 正则表达式
         /// </summary>
         public const string RegularExpression = "RegularExpression";
-
-
+        /// <summary>
+        /// WordFrm
+        /// </summary>
         public const string WordFrm = "WordFrm";
+        /// <summary>
+        /// ExcelFrm
+        /// </summary>
         public const string ExcelFrm = "ExcelFrm";
-
         /// <summary>
         /// 特别字段特殊用户权限
         /// </summary>

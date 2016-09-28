@@ -152,7 +152,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
                 //选择模式.
                 string seleModel = this.GetValFromFrmByKey("PopValSelectModel");
-                if (seleModel == "On")
+                if (seleModel == "One")
                     me.PopValSelectModel = PopValSelectModel.One;
                 else
                     me.PopValSelectModel = PopValSelectModel.More;

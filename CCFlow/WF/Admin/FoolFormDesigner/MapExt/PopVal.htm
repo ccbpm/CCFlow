@@ -107,7 +107,6 @@
        //页面启动函数.
        $(function () {
            InitPage();
-
        });
 
        function TestData() {
@@ -142,6 +141,7 @@
                     alert(data);
                 },
                 error: function (xml, textSta, errorThrown) {
+
                     alert(xml);
 
                     console.log(xml);
@@ -165,8 +165,6 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    alert(data);
-
                     data = data.replace("\t\n", "");
                     data = data.replace("\t\n", "");
                     data = data.replace("\t\n", "");
@@ -179,6 +177,7 @@
 
                     //设置选择的模式.
                     $("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked", "checked");
+
 
                     switch (data.PopValWorkModel) {
                         case "SelfUrl":
@@ -217,6 +216,7 @@
 
                     //设置选择模式.
                     $("#RB_PopValSelectModel_" + data.PopValSelectModel).attr('checked', 'checked');
+
                 }
             });
         }

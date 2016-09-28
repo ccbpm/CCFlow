@@ -536,6 +536,14 @@ namespace BP.Sys
         /// 子线程
         /// </summary>
         public const string SubThread = "SubThread";
+        /// <summary>
+        /// 地图定位
+        /// </summary>
+        public const string MapPin = "MapPin";
+        /// <summary>
+        /// 录音
+        /// </summary>
+        public const string Microphonehot = "Microphonehot";
         #endregion 类型
 
         #region 属性

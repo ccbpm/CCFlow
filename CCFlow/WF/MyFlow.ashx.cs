@@ -120,7 +120,6 @@ namespace CCFlow.WF
         {
             get
             {
-
                 if (this.Request.Form["WorkID"] == null)
                     return 0;
                 else
@@ -783,6 +782,9 @@ namespace CCFlow.WF
             string resultValue = "";
             switch (method)
             {
+                case "ReadNodeFrmData":
+                    resultValue = ReadNodeFrmData();
+                    break;
                 case "Save": //保存.
                     resultValue = Save();
                     break;
@@ -810,7 +812,17 @@ namespace CCFlow.WF
             context.Response.Write(resultValue);
         }
         /// <summary>
-        /// 获得退回的节点.
+        /// 获得节点表单数据.
+        /// </summary>
+        /// <returns></returns>
+        public string ReadNodeFrmData()
+        {
+           
+
+            return "";
+        }
+        /// <summary>
+        /// 获得可以退回的节点.
         /// </summary>
         /// <returns></returns>
         public string ReturnToNodes()
@@ -819,7 +831,7 @@ namespace CCFlow.WF
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
-        /// 执行退回.
+        /// 执行退回,返回退回信息.
         /// </summary>
         /// <returns></returns>
         public string ReturnWork()

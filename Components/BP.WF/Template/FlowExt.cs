@@ -651,7 +651,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "SKD开发接口";
+                rm.Title = "SDK开发接口";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/API.png";
                 rm.ClassMethodName = this.ToString() + ".DoAPICode()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;

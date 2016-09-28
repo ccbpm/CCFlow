@@ -191,10 +191,10 @@ namespace BP.Sys
             ht.Add(MapExtAttr.W, this.W);
             ht.Add(MapExtAttr.H, this.H);
 
-            ht.Add("PopValWorkModel", this.PopValWorkModel); //工作模式.
-            ht.Add("PopValSelectModel", this.PopValSelectModel); //单选，多选.
+            ht.Add("PopValWorkModel", this.PopValWorkModel.ToString()); //工作模式.
+            ht.Add("PopValSelectModel", this.PopValSelectModel.ToString()); //单选，多选.
 
-            ht.Add("PopValFormat", this.PopValFormat); //返回值格式.
+            ht.Add("PopValFormat", this.PopValFormat.ToString()); //返回值格式.
             ht.Add("PopValTitle", this.PopValTitle); //窗口标题.
             ht.Add("PopValColNames", this.PopValColNames); //列名 @No=编号@Name=名称@Addr=地址.
             ht.Add("PopValSearchTip", this.PopValSearchTip); //搜索提示..

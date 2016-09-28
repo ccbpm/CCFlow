@@ -182,7 +182,7 @@ namespace CCFlow.WF.Comm.Sys
                             Entities ens = null;
                             SFTable sf = null;
                             sfs.Retrieve(SFTableAttr.SrcType, (int)SrcType.BPClass);
-
+                            
                             try
                             {
                                 switch (st)

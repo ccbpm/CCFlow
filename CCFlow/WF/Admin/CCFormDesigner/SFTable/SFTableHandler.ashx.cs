@@ -318,58 +318,65 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             return parentNodes.ToArray();
         }
-
-        public string CreateTreeDataSave(string json) 
+        /// <summary>
+        /// 保存树
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public string CreateTreeDataSave(string json)
         {
-            
-            CodeItem[] items = Newtonsoft.Json.JsonConvert.DeserializeObject<CodeItem[]>(json);
-
-            if (items.Length <= 0)
-            {
+            DataTable dt = BP.Tools.Json.ToDataTable(json);
+            if (dt.Rows.Count == 0)
                 return "err@数据错误,保存的值为空.";
-            }
 
-            //删除原来的数据.
-            BP.Sys.SFTable sf = new BP.Sys.SFTable(this.FK_SFTable);
-            //sf.RunSQL("DELETE FROM " + sf.No);
-            sf.RunSQL("DELETE FROM " + this.FK_SFTable);
+            SFTable sf = new SFTable(this.FK_SFTable);
+
+            //原来的数据.
+            DataTable dtSrc = sf.GenerData();
+            string pks = ",";
+            foreach (DataRow dr in dt.Rows)
+                pks += dr["GUID"] + ",";
 
             string sql = "";
-
-            foreach (var item in items)
+            int insertNum = 0;
+            int updateNum = 0;
+            foreach (DataRow dr in dt.Rows)
             {
-                //saveTreeItem(item);
-                sql = String.Format("INSERT INTO {0} (No, Name, {1}) Values ('{2}', '{3}', '{4}')", this.FK_SFTable, sf.ParentValue, item.ID, item.Value, item.Parent);
-                sf.RunSQL(sql);
+                string no = dr["No"].ToString();
+                string name = dr["Name"].ToString();
+                string parentNo = dr["ParentNo"].ToString();
+                string guid = dr["GUID"].ToString();
 
-                if (item.Children != null && item.Children.Length > 0)
+                if (string.IsNullOrEmpty(guid))
                 {
-                    foreach (var child in item.Children)
-                    {
-                        //saveTreeItem(child);
-                        sql = String.Format("INSERT INTO {0} (No, Name, {1}) Values ('{2}', '{3}', '{4}')", this.FK_SFTable, sf.ParentValue, child.ID, child.Value, child.Parent);
-                        sf.RunSQL(sql);
-
-                        if (child.Children != null && child.Children.Length> 0)
-                        {
-                            foreach (var chld in child.Children)
-                            {
-                                //saveTreeItem(chld);
-                                sql = String.Format("INSERT INTO {0} (No, Name, {1}) Values ('{2}', '{3}', '{4}')", this.FK_SFTable, sf.ParentValue, chld.ID, chld.Value, chld.Parent);
-                                sf.RunSQL(sql);
-                            }
-                        }
-                    }
+                    sql = "INSERT INTO " + sf.SrcTable + " (No,Name,ParentNo,GUID)VALUES('" + no + "','" + name + "','" + parentNo + "','" + BP.DA.DBAccess.GenerGUID() + "')";
+                    sf.RunSQL(sql);
+                    insertNum++;
+                }
+                else
+                {
+                    pks = pks.Replace(guid + ",", ""); //替换下来.
+                    sql = "UPDATE " + sf.SrcTable + " SET No='" + no + "', Name='" + name + "', ParentNo='" + parentNo + "' WHERE GUID='" + guid + "'";
+                    sf.RunSQL(sql);
+                    updateNum++;
                 }
             }
 
-            return "";
-        }
+            //删除没有替换的.
+            string[] strs = pks.Split(',');
+            int deleteNum = 0;
+            foreach (string str in strs)
+            {
+                if (string.IsNullOrEmpty(str))
+                    continue;
 
-        //private string saveTreeItem(CodeItem codeItem) 
-        //{
-        //    return codeItem.ID;
-        //}
+                sql = "DELETE FROM " + sf.SrcTable + " WHERE GUID='" + str + "'";
+                deleteNum++;
+                sf.RunSQL(sql);
+            }
+
+            return "保存成功, 更新[" + updateNum + "]条,新建[" + insertNum + "]条,修改[" + updateNum + "]条.";
+        }
 
         public string CreateTableDataInit()
         {

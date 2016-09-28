@@ -850,7 +850,9 @@ namespace BP.Sys
                 {
                     sql = "CREATE TABLE " + this.No + " (";
                     sql += "[No] [nvarchar](30) NOT NULL,";
-                    sql += "[Name] [nvarchar](3900) NOT NULL";
+                    sql += "[Name] [nvarchar](3900) NULL,";
+                    sql += "[GUID] [nvarchar](36)  NULL";
+
                     sql += ")";
                 }
 
@@ -858,8 +860,9 @@ namespace BP.Sys
                 {
                     sql = "CREATE TABLE " + this.No + " (";
                     sql += "[No] [nvarchar](30) NOT NULL,";
-                    sql += "[Name] [nvarchar](3900) NOT NULL,";
-                    sql += "[ParentNo] [nvarchar](3900) NOT NULL";
+                    sql += "[Name] [nvarchar](3900)  NULL,";
+                    sql += "[ParentNo] [nvarchar](3900)  NULL,";
+                    sql += "[GUID] [nvarchar](36)  NULL";
                     sql += ")";
                 }
                 this.RunSQL(sql);
@@ -880,30 +883,16 @@ namespace BP.Sys
             if (this.SrcType == Sys.SrcType.CreateTable)
             {
                 sql = "SELECT * FROM " + this.SrcTable;
-                DataTable dt= this.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0)
-                    this.InitDataTable();
-                else
-                    return dt;
-
-                return GenerData();
-
+                return this.RunSQLReturnTable(sql);
             }
 
             if (this.SrcType == Sys.SrcType.TableOrView)
             {
                 sql = "SELECT * FROM " + this.SrcTable;
-
-                DataTable dt = this.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0)
-                    this.InitDataTable();
-                else
-                    return dt;
-
-                return GenerData();
+                return this.RunSQLReturnTable(sql);
             }
 
-            throw new Exception("@没有判断的数据源类型.");
+            throw new Exception("@没有判断的数据.");
         }
 
         /// <summary>
@@ -911,33 +900,36 @@ namespace BP.Sys
         /// </summary>
         public void InitDataTable()
         {
-
+            DataTable dt = this.GenerData();
+            
             string sql = "";
-
-            /*初始化数据.*/
-            if (this.CodeStruct == Sys.CodeStruct.Tree)
+            if (dt.Rows.Count == 0)
             {
-                sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + this.DefVal + "','根目录','" + this.DefVal + "') ";
-                this.RunSQL(sql);
-
-                for (int i = 1; i < 4; i++)
+                /*初始化数据.*/
+                if (this.CodeStruct == Sys.CodeStruct.Tree)
                 {
-                    string no = i.ToString();
-                    no = no.PadLeft(3, '0');
-
-                    sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "') ";
+                    sql = "INSERT INTO "+this.SrcTable+" (No,Name,ParentNo,GUID) VALUES('"+this.DefVal+"','根目录','"+this.DefVal+"','"+DBAccess.GenerGUID()+"') ";
                     this.RunSQL(sql);
+
+                    for (int i = 1; i < 4; i++)
+                    {
+                        string no = i.ToString();
+                        no = no.PadLeft(3, '0');
+
+                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo,GUID) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "', '" + DBAccess.GenerGUID() + "') ";
+                        this.RunSQL(sql);
+                    }
                 }
-            }
 
-            if (this.CodeStruct == Sys.CodeStruct.NoName)
-            {
-                for (int i = 1; i < 4; i++)
+                if (this.CodeStruct == Sys.CodeStruct.NoName)
                 {
-                    string no = i.ToString();
-                    no = no.PadLeft(3, '0');
-                    sql = "INSERT INTO " + this.SrcTable + " (No,Name) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "') ";
-                    this.RunSQL(sql);
+                    for (int i = 1; i < 4; i++)
+                    {
+                        string no = i.ToString();
+                        no = no.PadLeft(3, '0');
+                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo,GUID) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "', '" + DBAccess.GenerGUID() + "') ";
+                        this.RunSQL(sql);
+                    }
                 }
             }
         }

@@ -261,7 +261,7 @@ namespace CCFlow.WF.Admin
                     break;
                 }
             }
-            if (isHaveNDFrm ==false)
+            if (isHaveNDFrm == false)
             {
                 FrmNode fn = new FrmNode();
                 fn.FK_Flow = this.FK_Flow;
@@ -270,7 +270,7 @@ namespace CCFlow.WF.Admin
 
                 fn.FrmEnableRole = FrmEnableRole.Disable; //就是默认不启用.
                 fn.FrmSln = 0;
-              //  fn.IsEdit = true;
+                //  fn.IsEdit = true;
                 fn.IsEnableLoadData = true;
                 fn.Insert();
                 fns.AddEntity(fn);
@@ -290,7 +290,7 @@ namespace CCFlow.WF.Admin
             }
 
             this.Pub1.AddTDTitle("启用规则");
-           // this.Pub1.AddTDTitle("可编辑否？");
+            // this.Pub1.AddTDTitle("可编辑否？");
             this.Pub1.AddTDTitle("可打印否？");
             this.Pub1.AddTDTitle("是否启用<br>装载填充事件");
             this.Pub1.AddTDTitle("权限控制<br>方案");
@@ -299,7 +299,7 @@ namespace CCFlow.WF.Admin
             this.Pub1.AddTDTitle("文件模版");
 
             if (nd.HisRunModel == RunModel.FL || nd.HisRunModel == RunModel.FHL)
-               this.Pub1.AddTDTitle("是否1变N"); //add by zhoupeng 2016.03.25 for hainan.
+                this.Pub1.AddTDTitle("是否1变N"); //add by zhoupeng 2016.03.25 for hainan.
 
             if (nd.HisRunModel == RunModel.SubThread)
                 this.Pub1.AddTDTitle("数据汇总"); //add by zhoupeng 2016.03.25 for hainan.
@@ -322,12 +322,18 @@ namespace CCFlow.WF.Admin
 
                 this.Pub1.AddTR();
                 this.Pub1.AddTDIdx(idx++);
-                this.Pub1.AddTD(fn.FK_Frm); 
+                this.Pub1.AddTD(fn.FK_Frm);
 
-                if (fn.FK_Frm=="ND"+this.FK_Node)
-                    this.Pub1.AddTDB("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                if (fn.FK_Frm == "ND" + this.FK_Node)
+                {
+                    //this.Pub1.AddTDB("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                    this.Pub1.AddTDB(md.Name);
+                }
                 else
-                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                {
+                    //this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                    this.Pub1.AddTD(md.Name);
+                }
 
                 DDL ddl = new DDL();
                 //获取当前独立表单中的所有字段  add by 海南  zqp
@@ -376,7 +382,7 @@ namespace CCFlow.WF.Admin
                 //ddl.SetSelectItem(fn.FrmEnableRoleInt); //设置权限控制方案.
                 //this.Pub1.AddTD(ddl);
 
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FlowFrm/FrmEnableRole.aspx?FK_Node="+fn.FK_Node+"&FK_MapData="+fn.FK_Frm+"')\">设置(" + fn.FrmEnableRoleText + ")</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FlowFrm/FrmEnableRole.aspx?FK_Node=" + fn.FK_Node + "&FK_MapData=" + fn.FK_Frm + "')\">设置(" + fn.FrmEnableRoleText + ")</a>");
 
                 CheckBox cb = new CheckBox();
                 //cb.ID = "CB_IsEdit_" + md.No;
@@ -431,8 +437,8 @@ namespace CCFlow.WF.Admin
                     string[] files = System.IO.Directory.GetFiles(BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\", md.No + "*.xls");
                     foreach (string str in files)
                     {
-                       //System.IO.FileInfo info=new System.IO.FileInfo(
-                        ddl.Items.Add(new ListItem(str.Substring(str.LastIndexOf(md.No)), str ));
+                        //System.IO.FileInfo info=new System.IO.FileInfo(
+                        ddl.Items.Add(new ListItem(str.Substring(str.LastIndexOf(md.No)), str));
                     }
                     this.Pub1.AddTD(ddl);
                 }
@@ -460,12 +466,12 @@ namespace CCFlow.WF.Admin
                     myfns.Retrieve(FrmNodeAttr.FK_Flow, nd.FK_Flow);
 
                     //组合这个字符串.
-                    string strs = ";"+fn.FK_Frm+";";
+                    string strs = ";" + fn.FK_Frm + ";";
                     foreach (BP.WF.Template.FrmNode myfrn in myfns)
                     {
                         if (strs.Contains(";" + myfrn.FK_Frm + ";") == true)
                             continue;
-                        
+
                         strs += ";" + myfrn.FK_Frm + ";";
 
                         //检查该frm 是否有dtl.
@@ -475,7 +481,7 @@ namespace CCFlow.WF.Admin
 
                         foreach (MapDtl dtl in dtls)
                         {
-                            ddl.Items.Add(new ListItem("汇总到:"+myfrn.HisFrm.Name+"-"+dtl.Name,  myfrn.HisFrm.No+"@"+dtl.No));
+                            ddl.Items.Add(new ListItem("汇总到:" + myfrn.HisFrm.Name + "-" + dtl.Name, myfrn.HisFrm.No + "@" + dtl.No));
                         }
                     }
                     ddl.SetSelectItem(fn.HuiZong); //设置汇总..
@@ -496,7 +502,7 @@ namespace CCFlow.WF.Admin
 
             this.Pub1.AddTableEnd();
 
-              text = "<input type=button onclick=\"javascript:BindFrms('" + this.FK_Node + "','" + this.FK_Flow + "');\" value='修改表单绑定'  class=Btn />";
+            text = "<input type=button onclick=\"javascript:BindFrms('" + this.FK_Node + "','" + this.FK_Flow + "');\" value='修改表单绑定'  class=Btn />";
             this.Pub1.Add(text);
 
             Button btn = new Button();
@@ -521,7 +527,7 @@ namespace CCFlow.WF.Admin
             FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
             foreach (FrmNode fn in fns)
             {
-              //  fn.IsEdit = this.Pub1.GetCBByID("CB_IsEdit_" + fn.FK_Frm).Checked;
+                //  fn.IsEdit = this.Pub1.GetCBByID("CB_IsEdit_" + fn.FK_Frm).Checked;
                 fn.IsPrint = this.Pub1.GetCBByID("CB_IsPrint_" + fn.FK_Frm).Checked;
 
                 //是否启
@@ -533,12 +539,12 @@ namespace CCFlow.WF.Admin
                 {
                     if (currND.IsStartNode == false)
                     {
-                         fn.GuanJianZiDuan = this.Pub1.GetDDLByID("DDL_Attr_" + fn.FK_Frm).SelectedValue;
+                        fn.GuanJianZiDuan = this.Pub1.GetDDLByID("DDL_Attr_" + fn.FK_Frm).SelectedValue;
                     }
                 }
 
                 //表单启用规则. 去掉了 2016-05-11 使用连接替代.
-               // fn.FrmEnableRoleInt = this.Pub1.GetDDLByID("DDL_FrmEnableRole_" + fn.FK_Frm).SelectedItemIntVal;
+                // fn.FrmEnableRoleInt = this.Pub1.GetDDLByID("DDL_FrmEnableRole_" + fn.FK_Frm).SelectedItemIntVal;
 
                 //权限控制方案.
                 fn.FrmSln = this.Pub1.GetDDLByID("DDL_Sln_" + fn.FK_Frm).SelectedItemIntVal;
@@ -547,7 +553,7 @@ namespace CCFlow.WF.Admin
 
                 fn.FK_Flow = this.FK_Flow;
                 fn.FK_Node = this.FK_Node;
-                 
+
                 fn.MyPK = fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow;
 
                 if (fn.HisFrmType == FrmType.WordFrm || fn.HisFrmType == FrmType.ExcelFrm)
@@ -577,7 +583,7 @@ namespace CCFlow.WF.Admin
                     }
                 }
 
-                if (nd.HisRunModel == RunModel.SubThread )
+                if (nd.HisRunModel == RunModel.SubThread)
                 {
                     fn.HuiZong = this.Pub1.GetDDLByID("DDL_HuiZong_" + fn.FK_Frm).SelectedItemStringVal;
                 }

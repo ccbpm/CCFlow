@@ -91,6 +91,14 @@ namespace CCForm
         /// 多文件上传控件
         /// </summary>
         public const string AttachmentM = "AttachmentM";
+        /// <summary>
+        /// 地图定位
+        /// </summary>
+        public const string MapPin = "MapPin";
+        /// <summary>
+        /// 录音控件
+        /// </summary>
+        public const string Microphonehot = "Microphonehot";
         #endregion
 
         #region 字段
@@ -155,6 +163,8 @@ namespace CCForm
                 new ToolBox(){ IcoName=ToolBox.DDLEnum, IcoNameText="下拉框(枚举)",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/DDLEnum.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.DDLTable, IcoNameText="下拉框(表/视图)",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/DDLEnum.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.RBS,  IcoNameText="单选按钮",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/RB.png",UriKind.RelativeOrAbsolute))},
+                new ToolBox(){ IcoName=ToolBox.MapPin,  IcoNameText="地图定位",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/ic_pin.png",UriKind.RelativeOrAbsolute))},
+                new ToolBox(){ IcoName=ToolBox.Microphonehot,  IcoNameText="录音",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/microphonehot.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.FrmEle, IcoNameText="扩展控件",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/FrmEle.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.Attachment, IcoNameText="单附件",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/Attachment.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.AttachmentM, IcoNameText="多附件",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/AttachmentM.png",UriKind.RelativeOrAbsolute))},
@@ -193,6 +203,8 @@ namespace CCForm
                 new ToolBox(){ IcoName=ToolBox.DDLEnum, IcoNameText="下拉框(枚举)",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/DDLEnum.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.DDLTable, IcoNameText="下拉框(表/视图)",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/DDLEnum.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.RBS,  IcoNameText="单选按钮",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/RB.png",UriKind.RelativeOrAbsolute))},
+                new ToolBox(){ IcoName=ToolBox.MapPin,  IcoNameText="地图定位",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/ic_pin.png",UriKind.RelativeOrAbsolute))},
+                new ToolBox(){ IcoName=ToolBox.Microphonehot,  IcoNameText="录音",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/microphonehot.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.FrmEle, IcoNameText="扩展控件",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/FrmEle.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.Attachment, IcoNameText="单附件",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/Attachment.png",UriKind.RelativeOrAbsolute))},
                 new ToolBox(){ IcoName=ToolBox.AttachmentM, IcoNameText="多附件",IcoImage=new BitmapImage(new Uri("/CCFormDesigner;component/Img/AttachmentM.png",UriKind.RelativeOrAbsolute))},

@@ -73,6 +73,8 @@ namespace CCForm
         public FrmImgAth winFrmImgAth = new FrmImgAth();
         public FrmImgSeal winFrmImgSeal = new FrmImgSeal();
         public FrmEle winFrmEle = new FrmEle();
+        public FrmEleMapPin winFrmEleMapPin = new FrmEleMapPin();
+        public FrmEleMicHot winFrmEleMicHot = new FrmEleMicHot();
 
         public NodeFrms winNodeFrms = new NodeFrms();
         public SelectAttachment winSelectAttachment = new SelectAttachment();
@@ -104,6 +106,8 @@ namespace CCForm
                NameRB = "NameRB",
                NameImp = "NameImp",
                NameEle = "NameEle",
+               NameEleMapPin = "NameEleMapPin",
+               NameEleMicHot = "NameEleMicHot",
                NameAttachment = "NameAttachment",
                NameOp = "NameOP",
                NameBtn = "NameBtn",
@@ -344,6 +348,8 @@ namespace CCForm
             winSelectRB.Name = NameRB;
             winFrmImp.Name = NameImp;
             winFrmEle.Name = NameEle;
+            winFrmEleMapPin.Name = NameEleMapPin;
+            winFrmEleMicHot.Name = NameEleMicHot;
             winSelectAttachment.Name = NameAttachment;
             winFrmOp.Name = NameOp;
             winFrmBtn.Name = NameBtn;
@@ -362,6 +368,8 @@ namespace CCForm
             winSelectRB.Closed += WindowDilag_Closed;
             winFrmImp.Closed += WindowDilag_Closed;
             winFrmEle.Closed += WindowDilag_Closed;
+            winFrmEleMapPin.Closed += WindowDilag_Closed;
+            winFrmEleMicHot.Closed += WindowDilag_Closed;
             winFrmBtn.Closed += WindowDilag_Closed;
             winSelectAttachment.Closed += WindowDilag_Closed;
             winFrmOp.Closed += WindowDilag_Closed;
@@ -582,15 +590,31 @@ namespace CCForm
                 case NameEle:
                     BPEle ele = this.winFrmEle.HisEle;
                     BPEle myEle = this.workSpace.FindName(ele.Name.Trim()) as BPEle;
-                    if (myEle != null)
-                    {
-                        myEle = ele;
-                    }
-                    else
+                    if (myEle == null)
                     {
                         ele.SetValue(Canvas.LeftProperty, Glo.X);
                         ele.SetValue(Canvas.TopProperty, Glo.Y);
                         this.attachElementEvent(ele);
+                    }
+                    break;
+                case NameEleMapPin:
+                    BPMapPin mapPin = this.winFrmEleMapPin.HisEle;
+                    BPMapPin myMapPin = this.workSpace.FindName(mapPin.Name.Trim()) as BPMapPin;
+                    if (myMapPin == null)
+                    {
+                        mapPin.SetValue(Canvas.LeftProperty, Glo.X);
+                        mapPin.SetValue(Canvas.TopProperty, Glo.Y);
+                        this.attachElementEvent(mapPin);
+                    }
+                    break;
+                case NameEleMicHot:
+                    BPMicrophonehot micHot = this.winFrmEleMicHot.HisEle;
+                    BPMicrophonehot myMicHot = this.workSpace.FindName(micHot.Name.Trim()) as BPMicrophonehot;
+                    if (myMicHot == null)
+                    {
+                        micHot.SetValue(Canvas.LeftProperty, Glo.X);
+                        micHot.SetValue(Canvas.TopProperty, Glo.Y);
+                        this.attachElementEvent(micHot);
                     }
                     break;
                 case NameAttachmentM:
@@ -983,13 +1007,41 @@ namespace CCForm
                                         if ((string)dr["FK_MAPDATA"] != Glo.FK_MapData)
                                             continue;
 
-                                        BPEle bpele = new BPEle();
-                                        bpele.Name = dr["MYPK"];
-
                                         string eleType = (string)dr["ELETYPE"];
                                         if (string.IsNullOrEmpty(eleType))
                                             continue;
 
+                                        if (eleType == "MapPin")//地图定位
+                                        {
+                                            BPMapPin mapPin = new BPMapPin();
+                                            mapPin.MyPK = dr["MYPK"];
+                                            mapPin.Name = dr["ELEID"];
+                                            tmpDouble = dr["X"];
+                                            mapPin.SetValue(Canvas.LeftProperty, tmpDouble);
+                                            tmpDouble = dr["Y"];
+                                            mapPin.SetValue(Canvas.TopProperty, tmpDouble);
+
+                                            attachElementEvent(mapPin);
+                                            continue;
+                                        }
+                                        else if (eleType == "Microphonehot")//录音
+                                        {
+                                            BPMicrophonehot micHot = new BPMicrophonehot();
+                                            micHot.MyPK = dr["MYPK"];
+                                            micHot.Name = dr["ELEID"];
+                                            tmpDouble = dr["X"];
+                                            micHot.SetValue(Canvas.LeftProperty, tmpDouble);
+                                            tmpDouble = dr["Y"];
+                                            micHot.SetValue(Canvas.TopProperty, tmpDouble);
+
+                                            attachElementEvent(micHot);
+                                            continue;
+                                        }
+
+                                        //扩展控件
+                                        BPEle bpele = new BPEle();
+                                        bpele.Name = dr["MYPK"];
+                                        
                                         string eldId = (string)dr["ELEID"];
                                         if (string.IsNullOrEmpty(eldId))
                                             continue;
@@ -1791,9 +1843,9 @@ namespace CCForm
             dtEle.Columns.Add(new DataColumn("MYPK", typeof(string)));
             dtEle.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
 
-            //eleDT.Columns.Add(new DataColumn("EleType", typeof(string)));
-            //eleDT.Columns.Add(new DataColumn("EleID", typeof(string)));
-            //eleDT.Columns.Add(new DataColumn("EleName", typeof(string)));
+            //dtEle.Columns.Add(new DataColumn("EleType", typeof(string)));
+            //dtEle.Columns.Add(new DataColumn("EleID", typeof(string)));
+            //dtEle.Columns.Add(new DataColumn("EleName", typeof(string)));
 
             dtEle.Columns.Add(new DataColumn("X", typeof(double)));
             dtEle.Columns.Add(new DataColumn("Y", typeof(double)));
@@ -2445,7 +2497,64 @@ namespace CCForm
                     }
                     #endregion
                 }
+                else if (ctl is BPMapPin)
+                {
+                    #region
+                    BPMapPin ele = ctl as BPMapPin;
+                    if (ele != null)
+                    {
+                        DataRow drEle = dtEle.NewRow();
 
+                        drEle["MYPK"] = ele.MyPK;
+                        drEle["FK_MAPDATA"] = Glo.FK_MapData;
+
+                        //drEle["EleType"] = "MapPin";
+                        //drEle["EleName"] = ele.EleName;
+                        //drEle["EleID"] = ele.Name;
+
+                        //eleDT.Columns.Add(new DataColumn("EleType", typeof(string)));
+                        //eleDT.Columns.Add(new DataColumn("EleID", typeof(string)));
+                        //eleDT.Columns.Add(new DataColumn("EleName", typeof(string)));
+
+                        drEle["X"] = x.ToString("0.00");
+                        drEle["Y"] = y.ToString("0.00");
+
+                        drEle["W"] = ele.Width.ToString("0.00");
+                        drEle["H"] = ele.Height.ToString("0.00");
+
+                        dtEle.Rows.Add(drEle);
+                    }
+                    #endregion
+                }
+                else if (ctl is BPMicrophonehot)
+                {
+                    #region
+                    BPMicrophonehot ele = ctl as BPMicrophonehot;
+                    if (ele != null)
+                    {
+                        DataRow drEle = dtEle.NewRow();
+
+                        drEle["MYPK"] = ele.MyPK;
+                        drEle["FK_MAPDATA"] = Glo.FK_MapData;
+
+                        //drEle["EleType"] = "Microphonehot";
+                        //drEle["EleName"] = ele.EleName;
+                        //drEle["EleID"] = ele.Name;
+
+                        //eleDT.Columns.Add(new DataColumn("EleType", typeof(string)));
+                        //eleDT.Columns.Add(new DataColumn("EleID", typeof(string)));
+                        //eleDT.Columns.Add(new DataColumn("EleName", typeof(string)));
+
+                        drEle["X"] = x.ToString("0.00");
+                        drEle["Y"] = y.ToString("0.00");
+
+                        drEle["W"] = ele.Width.ToString("0.00");
+                        drEle["H"] = ele.Height.ToString("0.00");
+
+                        dtEle.Rows.Add(drEle);
+                    }
+                    #endregion
+                }
                 #endregion
             }
 
@@ -2866,6 +2975,24 @@ namespace CCForm
                     this.winFrmEle.Show();
                 }
             }
+            else if (sender is BPMapPin)
+            {
+                BPMapPin mapPin = sender as BPMapPin;
+                if (mapPin != null)
+                {
+                    this.winFrmEleMapPin.BindData(mapPin.MyPK);
+                    this.winFrmEleMapPin.Show();
+                }
+            }
+            else if (sender is BPMicrophonehot)
+            {
+                BPMicrophonehot micHot = sender as BPMicrophonehot;
+                if (micHot != null)
+                {
+                    this.winFrmEleMicHot.BindData(micHot.MyPK);
+                    this.winFrmEleMicHot.Show();
+                }
+            }
             else if (sender is BPWorkCheck)
             {
                 //BPWorkCheck workCheck = sender as BPWorkCheck;
@@ -2873,7 +3000,7 @@ namespace CCForm
                 //    this.winWorkCheck.BindIt(workCheck);
                 string url = Glo.BPMHost + @"/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=" + Glo.FK_MapData.Replace("ND", "") + "&tab=审核组件";
 
-              //  string url = Glo.BPMHost + @"/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" + Glo.FK_MapData.Replace("ND", "");
+                //  string url = Glo.BPMHost + @"/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" + Glo.FK_MapData.Replace("ND", "");
                 Glo.WinOpenDialog(url);
             }
             else if (sender is BPSubFlow)
@@ -3575,7 +3702,15 @@ namespace CCForm
                         ath.SetValue(Canvas.TopProperty, point.Y);
                         attachElementEvent(ath);
                         break;
+                    case ToolBox.MapPin://地图定位
+                        this.winFrmEleMapPin.InitForm();
+                        this.winFrmEleMapPin.Show();
 
+                        break;
+                    case ToolBox.Microphonehot://语音控件
+                        this.winFrmEleMicHot.InitForm();
+                        this.winFrmEleMicHot.Show();
+                        break;
                     default:
                         MessageBox.Show("功能未完成:" + selectType, "请期待", MessageBoxButton.OK);
                         break;
@@ -3984,7 +4119,7 @@ namespace CCForm
                 case Func.Property://add by qin 添加对平台的判断
                     string url ="";
                     if (Glo.Platform == Platform.JFlow)
-                        url = "/jflow-web/WF/Comm/RefFunc/UIEn.jsp?EnsName=BP.WF.Template.MapDataExts&PK=" + Glo.FK_MapData;
+                        url = Glo.BPMHost + "/WF/Comm/RefFunc/UIEn.jsp?EnsName=BP.WF.Template.MapDataExts&PK=" + Glo.FK_MapData;
                     else
                         url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataExts&PK=" + Glo.FK_MapData;
 
@@ -4805,6 +4940,8 @@ namespace CCForm
             else if (obj is BPImg) { prefix = "Img"; }
             else if (obj is BPImgAth) { prefix = "ImgAth"; }
             else if (obj is BPImgSeal) { prefix = "ImgSeal"; }
+            else if (obj is BPMapPin) { prefix = "MapPin"; }
+            else if (obj is BPMicrophonehot) { prefix = "MicPHot"; }
             else if (obj is BPTextBox) { prefix = "TB"; }
             else if (obj is BPDtl)
             {

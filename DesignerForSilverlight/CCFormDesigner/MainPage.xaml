@@ -160,9 +160,24 @@
                 </Image.RenderTransform>
             </Image>
         </DataTemplate>
-
         <DataTemplate x:Key="Dtl">
             <Image Width="24" Height="24" Source="/CCFormDesigner;component/Img/Dtl.png" >
+                <Image.RenderTransform>
+                    <!--Apply offset to center on the center of the ellipse-->
+                    <TranslateTransform X="-10" Y="-10" />
+                </Image.RenderTransform>
+            </Image>
+        </DataTemplate>
+        <DataTemplate x:Key="MapPin">
+            <Image Width="24" Height="24" Source="/CCFormDesigner;component/Img/ic_pin.png" >
+                <Image.RenderTransform>
+                    <!--Apply offset to center on the center of the ellipse-->
+                    <TranslateTransform X="-10" Y="-10" />
+                </Image.RenderTransform>
+            </Image>
+        </DataTemplate>
+        <DataTemplate x:Key="Microphonehot">
+            <Image Width="24" Height="24" Source="/CCFormDesigner;component/Img/microphonehot.png" >
                 <Image.RenderTransform>
                     <!--Apply offset to center on the center of the ellipse-->
                     <TranslateTransform X="-10" Y="-10" />

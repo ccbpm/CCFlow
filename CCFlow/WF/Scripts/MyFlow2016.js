@@ -104,6 +104,18 @@ function KindEditerSync() {
     catch (err) {
     }
 }
+
+function Shift() {
+  //  var url = '/WF/WorkOpt/Forward.htm';
+    //window.open(url);
+}
+
+function ReturnWork() {
+    //var url = '/WF/WorkOpt/ReturnWork.htm';
+    //window.open(url);
+}
+
+
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
 function ReqDDL(ddlID) {

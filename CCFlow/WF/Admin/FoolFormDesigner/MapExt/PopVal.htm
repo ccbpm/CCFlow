@@ -17,7 +17,7 @@
         }
         #TB_ColNames
         {
-            width: 383px;
+            width: 421px;
         }
         #TB_RootVal
         {
@@ -48,6 +48,22 @@
         #TB_LJZTree_SQL
         {
             width: 561px;
+        }
+        #TB_GroupModel_Group
+        {
+            width: 823px;
+        }
+        #TB_GroupModel_Entity
+        {
+            width: 90%;
+        }
+        #TB_Width
+        {
+            width: 62px;
+        }
+        #TB_Height
+        {
+            width: 66px;
         }
     </style>
     <base target="_self" />
@@ -256,7 +272,7 @@
 
  </div>
 </fieldset>
-<textarea type="text" rows=3 id="TB_Table_SQL" name="TB_Table_SQL" value="" ></textarea>
+<textarea type="text" rows=3 id="TB_Table_SQL" name="TB_Table_SQL"  ></textarea>
 
 
 <!---------------------------- 模式3 ：分页的Table  ---------------------------------------------------->
@@ -284,7 +300,7 @@
  </div>
  <br />
 
-<textarea rows=4 type="text" id="TB_TablePage_SQL" name="TB_TablePage_SQL" value="" > </textarea>
+<textarea rows=4 type="text" id="TB_TablePage_SQL" name="TB_TablePage_SQL"  > </textarea>
 
  <br />
 
@@ -298,19 +314,19 @@
  <li>比如For MySQL: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
  </ul>
  </div>
-<textarea   rows="3" id="TB_TablePage_SQLCount"  name="TB_TablePage_SQLCount" ></textarea>
+<textarea  cols="90"  rows="3" id="TB_TablePage_SQLCount"  name="TB_TablePage_SQLCount" ></textarea>
 
 <br />
-<input type=button   onclick='TestData()' value='测试数据' />
-
+<input type="button"   onclick='TestData()' value='测试数据' />
  
 </fieldset>
 
 <!---------------------------- 模式4 ：分组显示,但是不分页.  ---------------------------------------------------->
 <fieldset>
 <legend><input id="RB_PopWorkModel_GroupModel" type="radio" name="Model" value="GroupModel"  /><label for="RB_PopWorkModel_GroupModel">分组模式</label>  </legend>
-<a href="javascript:ShowHidden('GroupModel')">分组查询SQL</a>
- <div id="GroupModel" style="color:Gray; display:none">
+<a href="javascript:ShowHidden('GroupModelSQL')">分组查询SQL(可以为空):</a>
+<br />
+ <div id="GroupModelSQL" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
  <li>比如:SELECT No, Name FROM Port_Emp </li>
@@ -318,18 +334,22 @@
  <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
-<input type="text" id="TB_GroupModel_Group"  name="TB_GroupModel_Group" value="" />
+<textarea rows="3" cols="90" id="TB_GroupModel_Group"  name="TB_GroupModel_Group" ></textarea>
 
-<a href="javascript:ShowHidden('TablePageEntity')">&nbsp;实体查询SQL</a>
- <div id="TablePageEntity" style="color:Gray; display:none">
+<br />
+<a href="javascript:ShowHidden('GroupModelEntity')">实体查询SQL</a>
+ <div id="GroupModelEntity" style="color:Gray; display:none">
  <ul>
- <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
- <li>比如:SELECT No, Name FROM Port_Emp </li>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列，如果有三个列，第3个列必须是编码并且与分组查询SQL的编码列对应。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp 或者. SELECT No, Name,FK_Dept FROM Port_Emp </li>
  <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>SELECT No, Name,FK_Dept FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
  <li>该方式不考虑分页，不关键字查询。</li>
  </ul>
  </div>
-<input type="text" id="TB_GroupModel_Entity" name="TB_GroupModel_Entity" value="" />
+ <br />
+<textarea rows=3 type="text" id="TB_GroupModel_Entity"  name="TB_GroupModel_Entity" 
+        value="" ></textarea>
 </fieldset>
 
 
@@ -348,17 +368,7 @@
 
     <input type="text" id="TB_TreeSQL" name="TB_TreeSQL" value="" /> 
     根节点值:<input type="text" id="TB_TreeParentNo" name="TB_TreeParentNo" value="" />
-<br /> 
-<a href="javascript:ShowHidden('TreeLJZ')">懒加载SQL:</a>
-
- <div id="TreeLJZ" style="color:Gray; display:none">
- <ul>
- <li>设置一个查询的SQL语句，必须返回No,Name,Parent三个列。</li>
- <li>格式:SELECT No, Name, ParentNo FROM Port_Dept WHERE ParentNo='@ParentNo' </li>
- </ul>
- </div>
-     
-    </fieldset>
+ </fieldset>
 
 <!---------------------------- 高级设置.  ---------------------------------------------------->
 <!--<fieldset>

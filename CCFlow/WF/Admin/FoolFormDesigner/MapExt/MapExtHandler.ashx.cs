@@ -152,8 +152,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         me.PopValTablePageSQLCount = this.GetValFromFrmByKey("TB_TablePage_SQLCount");
                         break;
                     case "Group": //分组模式.
-                        me.PopValWorkModel = PopValWorkModel.Group;                        
-                        me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
+                        me.PopValWorkModel = PopValWorkModel.Group;
+
+                        me.PopValGroupSQL = this.GetValFromFrmByKey("TB_GroupModel_Group");
+                         me.PopValEntitySQL = this.GetValFromFrmByKey("TB_GroupModel_Entity");
+
+                        //me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
                         break;
                     case "Tree": //树模式.
                         me.PopValWorkModel = PopValWorkModel.Tree;

@@ -809,6 +809,9 @@ namespace CCFlow.WF
                 case "UnShift": //撤销移交.
                     resultValue = UnShift();
                     break;
+                case "Press": //催办.
+                    resultValue = Press();
+                    break;
                 default:
                     resultValue = method + "没有判断.";
                     break;
@@ -823,8 +826,6 @@ namespace CCFlow.WF
         /// <returns></returns>
         public string ReadNodeFrmData()
         {
-           
-
             return "";
         }
         /// <summary>
@@ -863,6 +864,15 @@ namespace CCFlow.WF
         public string UnShift()
         {
             return BP.WF.Dev2Interface.Node_ShiftUn(this.FK_Flow,this.WorkID);
+        }
+        /// <summary>
+        /// 执行催办
+        /// </summary>
+        /// <returns></returns>
+        public string Press()
+        {
+            string msg = this.Request.QueryString["Message"];
+            return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
         }
 
         public bool IsReusable

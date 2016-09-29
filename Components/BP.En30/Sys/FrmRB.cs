@@ -38,6 +38,14 @@ namespace BP.Sys
         /// </summary>
         public const string Lab = "Lab";
         /// <summary>
+        /// 脚本
+        /// </summary>
+        public const string Script = "Script";
+        /// <summary>
+        /// 配置信息
+        /// </summary>
+        public const string FieldsCfg = "FieldsCfg";
+        /// <summary>
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
@@ -48,6 +56,34 @@ namespace BP.Sys
     public class FrmRB : EntityMyPK
     {
         #region 属性
+        /// <summary>
+        /// 要执行的脚本
+        /// </summary>
+        public string Script
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmRBAttr.Script);
+            }
+            set
+            {
+                this.SetValByKey(FrmRBAttr.Script, value);
+            }
+        }
+        /// <summary>
+        /// 字段-配置信息
+        /// </summary>
+        public string FieldsCfg
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmRBAttr.FieldsCfg);
+            }
+            set
+            {
+                this.SetValByKey(FrmRBAttr.FieldsCfg, value);
+            }
+        }
         public string Lab
         {
             get
@@ -158,14 +194,21 @@ namespace BP.Sys
                 map.EnType = EnType.Sys;
 
                 map.AddMyPK();
-                map.AddTBString(FrmRBAttr.FK_MapData, null, "FK_MapData", true, false, 0, 100, 20);
-                map.AddTBString(FrmRBAttr.KeyOfEn, null, "KeyOfEn", true, false, 0, 30, 20);
-                map.AddTBString(FrmRBAttr.EnumKey, null, "EnumKey", true, false, 0, 30, 20);
-                map.AddTBString(FrmRBAttr.Lab, null, "Lab", true, false, 0, 90, 20);
+                map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 100, 20);
+                map.AddTBString(FrmRBAttr.KeyOfEn, null, "字段", true, false, 0, 30, 20);
+                map.AddTBString(FrmRBAttr.EnumKey, null, "枚举值", true, false, 0, 30, 20);
+                map.AddTBString(FrmRBAttr.Lab, null, "标签", true, false, 0, 90, 20);
                 map.AddTBInt(FrmRBAttr.IntKey, 0, "IntKey", true, false);
 
                 map.AddTBFloat(FrmRBAttr.X, 5, "X", true, false);
                 map.AddTBFloat(FrmRBAttr.Y, 5, "Y", false, false);
+
+                //要执行的脚本.
+                map.AddTBString(FrmRBAttr.Script, null, "要执行的脚本", true, false, 0, 4000, 20);
+                map.AddTBString(FrmRBAttr.FieldsCfg, null, "配置信息@ViewSta=0@IsEnable=1", true, false, 0, 100, 20);
+
+
+
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
 

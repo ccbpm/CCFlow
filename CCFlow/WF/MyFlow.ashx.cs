@@ -797,11 +797,20 @@ namespace CCFlow.WF
                 case "GenerWorkNode":
                     resultValue = GenerWorkNode();
                     break;
-                case "ReturnToNodes": //执行退回窗口.
+                case "ReturnToNodes": //获得可以退回的节点.
                     resultValue = ReturnToNodes();
                     break;
                 case "DoReturnWork": //执行退回.
                     resultValue = ReturnWork();
+                    break;
+                case "Shift": //移交.
+                    resultValue = Shift();
+                    break;
+                case "UnShift": //撤销移交.
+                    resultValue = UnShift();
+                    break;
+                case "Press": //催办.
+                    resultValue = Press();
                     break;
                 default:
                     resultValue = method + "没有判断.";
@@ -817,8 +826,6 @@ namespace CCFlow.WF
         /// <returns></returns>
         public string ReadNodeFrmData()
         {
-           
-
             return "";
         }
         /// <summary>
@@ -839,6 +846,33 @@ namespace CCFlow.WF
             int toNodeID = int.Parse(this.Request.QueryString["ReturnToNode"]);
             string reMesage = this.Request.QueryString["ReturnMsg"];
             return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, true);
+        }
+        /// <summary>
+        /// 执行移交.
+        /// </summary>
+        /// <returns></returns>
+        public string Shift()
+        {
+            string msg = this.Request.QueryString["Message"];
+            string toEmp = this.Request.QueryString["ToEmp"];
+            return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
+        }
+        /// <summary>
+        /// 撤销移交
+        /// </summary>
+        /// <returns></returns>
+        public string UnShift()
+        {
+            return BP.WF.Dev2Interface.Node_ShiftUn(this.FK_Flow,this.WorkID);
+        }
+        /// <summary>
+        /// 执行催办
+        /// </summary>
+        /// <returns></returns>
+        public string Press()
+        {
+            string msg = this.Request.QueryString["Message"];
+            return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
         }
 
         public bool IsReusable

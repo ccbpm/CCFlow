@@ -152,8 +152,7 @@ namespace CCFlow.WF.CCForm
 
             if (me.PopValWorkModel == PopValWorkModel.TablePage)
             {
-                //pageCount.
-
+                /* 分页的 */
                 //key
                 string key = context.Request.QueryString["Key"];
                 if (string.IsNullOrEmpty(key) == true)
@@ -165,7 +164,6 @@ namespace CCFlow.WF.CCForm
                 countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
                 countSQL = countSQL.Replace("@Key", key);
                 string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
-
 
                 //pageSize
                 string pageSize = context.Request.QueryString["pageSize"];
@@ -204,6 +202,10 @@ namespace CCFlow.WF.CCForm
 
             if (me.PopValWorkModel == PopValWorkModel.Group)
             {
+                /*
+                 *  分组的.
+                 */
+
                 string sqlObjs = me.PopValGroupSQL;
                 if (sqlObjs.Length > 10)
                 {

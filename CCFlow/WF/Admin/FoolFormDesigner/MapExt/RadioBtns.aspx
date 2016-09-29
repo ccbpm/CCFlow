@@ -94,7 +94,8 @@
     <td><%=myattr.Name%></td>
 
     <td><asp:CheckBox ID="CB_Visable_" runat="server" Text="可见" /></td>
-    <td><asp:CheckBox ID="CB_Enable_"  runat="server" Text="可用" /> </td>
+    <td><asp:CheckBox ID="CB_Enable_Yes"  runat="server" Text="可用" /> </td>
+    <td><asp:CheckBox ID="CB_Enable_No"  runat="server" Text="不可用" /> </td>
      </tr>
 
       <%} %>

@@ -49,13 +49,22 @@ namespace CCFlow.WF.MapDef {
         protected global::System.Web.UI.WebControls.CheckBox CB_Visable_;
         
         /// <summary>
-        /// CB_Enable_ 控件。
+        /// CB_Enable_Yes 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CB_Enable_;
+        protected global::System.Web.UI.WebControls.CheckBox CB_Enable_Yes;
+        
+        /// <summary>
+        /// CB_Enable_No 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CB_Enable_No;
         
         /// <summary>
         /// Btn_Save 控件。

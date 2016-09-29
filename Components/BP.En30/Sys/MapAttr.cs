@@ -235,7 +235,21 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(MapAttrAttr.UIIsInput, value);
+                this.SetValByKey(MapAttrAttr.UIIsInput, value);
+            }
+        }
+        /// <summary>
+        /// 是否启用高级JS设置
+        /// </summary>
+        public bool IsEnableJS
+        {
+            get
+            {
+                return this.GetParaBoolen("IsEnableJS",false);
+            }
+            set
+            {
+                this.SetPara("IsEnableJS", value);
             }
         }
         #endregion

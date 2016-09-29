@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            var fk_mapdata = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("FK_MapData");
+            var selectIntKey = GetQueryString("SelectIntKey");
+            if (selectIntKey == null)
+               selectIntKey = "1";
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: "MapExtHandler.ashx?DoType=RadioBtns_Init&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                   
+                   alert(data);
+
+                   data = JSON.parse(data);
+                },
+                error: function (xml, textSta, errorThrown) {
+                   alert(xml);
+                   alert(textSta);
+                   alert(errorThrown);
+                }
+            })
+
+
+              //执行保存
+           function Save() {
+            var fk_mapdata = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var selectIntKey = GetQueryString("SelectIntKey");
+            var frmData = $("#cc").serialize();
+
+            $.ajax({
+                data:frmData,
+                type: 'post',
+                async: true,
+                url: "MapExtHandler.ashx?DoType=RadioBtns_Save&FK_MapData="+fk_mapdata+"&FK_MapExt=" + fk_mapExt + "&KeyOfEn="+keyOfEn+"&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+
+
+</body>
+</html>

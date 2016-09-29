@@ -244,6 +244,24 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
             #endregion 是否可界面可见
 
+            #region 是否可界面可见
+            isItem = this.Pub1.AddTR(isItem);
+            this.Pub1.AddTDIdx(idx++);
+            this.Pub1.AddTD(""); //是否启用高级设置
+            this.Pub1.AddTDBegin();
+
+            CheckBox cb = new CheckBox();
+            cb.ID = "CB_IsEnableJS";
+            cb.Text = "是否启用高级JS设置";
+            cb.Checked = mapAttr.IsEnableJS; //是否启用高级JS设置？
+            this.Pub1.Add(cb);
+
+            this.Pub1.AddTDEnd();
+
+            this.Pub1.AddTD("");
+            this.Pub1.AddTREnd();
+            #endregion 是否可界面可见
+
             #region 合并单元格数
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
@@ -288,7 +306,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTDIdx(idx++);
                 string html = "<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">下拉框自动完成</a>";
                 html += " - <a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.ActiveDDL + "_" + mapAttr.MyPK + "')\">设置级联动(如:省份,城市联动)</a>";
-                html += " - <a href=\"javascript:WinOpen('./MapExt/RadioBtns.aspx?FK_MapData=" + mapAttr.FK_MapData + "&KeyOfEn=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">高级JS设置</a>";
+                html += " - <a href=\"javascript:WinOpen('./MapExt/RadioBtns.htm?FK_MapData=" + mapAttr.FK_MapData + "&KeyOfEn=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">高级JS设置</a>";
                 this.Pub1.AddTD("colspan=3", html);
                 this.Pub1.AddTREnd();
             }
@@ -374,6 +392,10 @@ namespace CCFlow.WF.MapDef
                 attr.DefVal = this.Pub1.GetDDLByID("DDL").SelectedItemStringVal;
                 attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
                 attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
+                
+                //是否启用高级JS设置.
+                attr.IsEnableJS = this.Pub1.GetCBByID("CB_IsEnableJS").Checked;
+
 
                 //单选按钮的展现方式.
                 attr.RBShowModel = this.Pub1.GetDDLByID("DDL_RBShowModel").SelectedItemIntVal;

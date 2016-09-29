@@ -24,11 +24,54 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
     /// </summary>
     public class MapExtHandler : IHttpHandler
     {
+        #region 属性.
+        /// <summary>
+        /// 字段
+        /// </summary>
+        public string KeyOfEn
+        {
+            get
+            {
+                string str = context.Request.QueryString["KeyOfEn"].ToString();
+                if (str == null || str == "")
+                    str = context.Request.QueryString["KeyOfEn"].ToString();
+                return str;
+            }
+        }
+        /// <summary>
+        /// extMap
+        /// </summary>
+        public string FK_MapExt
+        {
+            get
+            {
+                string fk_mapExt = context.Request.QueryString["MyPK"].ToString();
+                if (fk_mapExt == null || fk_mapExt=="")
+                    fk_mapExt = context.Request.QueryString["FK_MapExt"].ToString();
+
+                return fk_mapExt;
+            }
+        }
+        /// <summary>
+        /// 表单ID
+        /// </summary>
+        public string FK_MapData
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_MapData"].ToString();
+                if (str == null || str == "")
+                    str = context.Request.QueryString["FK_MapData"].ToString();
+                return str;
+            }
+        }
         string no;
         string name;
         string fk_dept;
         string oid;
         string kvs;
+        #endregion 属性.
+
         public string DealSQL(string sql, string key)
         {
             sql = sql.Replace("@Key", key);
@@ -59,25 +102,24 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
             return sql;
         }
+
+        /// <summary>
+        /// 返回
+        /// </summary>
+        /// <returns></returns>
         public string PopVal_Init()
         {
-            string fk_mapExt = context.Request.QueryString["MyPK"].ToString();
-
             MapExt ext = new MapExt();
-            ext.MyPK = fk_mapExt;
-            int i = ext.RetrieveFromDBSources();
-
-            if (i == 0)
+            ext.MyPK = this.FK_MapExt;
+            if (ext.RetrieveFromDBSources() == 0)
             {
                 ext.FK_DBSrc = "local";
                 ext.PopValSelectModel = PopValSelectModel.One;
                 ext.PopValWorkModel = PopValWorkModel.TableOnly;
             }
-
             return ext.PopValToJson();
-
-            //return ext.PopValToJson();
         }
+
         /// <summary>
         /// 保存设置.
         /// </summary>
@@ -87,8 +129,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             try
             {
                 MapExt me = new MapExt();
-                me.MyPK = context.Request.QueryString["FK_MapExt"];
-                me.FK_MapData = context.Request.QueryString["FK_MapData"];
+                me.MyPK =this.FK_MapExt;
+                me.FK_MapData = this.FK_MapData;
                 me.AttrOfOper = context.Request.QueryString["KeyOfEn"];
                 me.RetrieveFromDBSources();
 
@@ -102,13 +144,10 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         break;
                     case "TableOnly": //表格模式.
                         me.PopValWorkModel = PopValWorkModel.TableOnly;
-
                         me.PopValEntitySQL = this.GetValFromFrmByKey("TB_Table_SQL");
-
                         break;
                     case "TablePage": //分页模式.
                         me.PopValWorkModel = PopValWorkModel.TablePage;
-                        
                         me.PopValTablePageSQL = this.GetValFromFrmByKey("TB_TablePage_SQL");
                         me.PopValTablePageSQLCount = this.GetValFromFrmByKey("TB_TablePage_SQLCount");
                         break;
@@ -165,6 +204,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return "@保存失败:" + ex.Message;
             }
         }
+
         /// <summary>
         /// 获得Form数据.
         /// </summary>
@@ -185,7 +225,13 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string doType = context.Request.QueryString["DoType"];
             switch (doType)
             {
-                case "PopVal_Init":
+                case "RadioBtns_Init":
+                    context.Response.Write(this.RadioBtns_Init());
+                    break;
+                case "RadioBtns_Save":
+                    context.Response.Write(this.RadioBtns_Save());
+                    break;
+                case "PopVal_Init": 
                     context.Response.Write(this.PopVal_Init());
                     return;
                 case "PopVal_Save":
@@ -194,6 +240,71 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 default:
                     break;
             }
+        }
+        /// <summary>
+        /// 返回信息。
+        /// </summary>
+        /// <returns></returns>
+        public string RadioBtns_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //放入表单字段.
+            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+
+            //属性.
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            attr.Retrieve();
+
+            //字段值.
+            FrmRBs rbs= new FrmRBs();
+            rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
+            if (rbs.Count == 0)
+            {
+                /*初始枚举值变化.
+                 */
+                SysEnums ses = new SysEnums(attr.UIBindKey);
+                foreach (SysEnum se in ses)
+                {
+                    FrmRB rb = new FrmRB();
+                    rb.FK_MapData = this.FK_MapData;
+                    rb.KeyOfEn = this.KeyOfEn;
+                    rb.IntKey = se.IntKey;
+                    rb.Lab = se.Lab;
+                    rb.EnumKey = attr.UIBindKey;
+                    rb.Insert(); //插入数据.
+                }
+
+                rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
+            }
+
+            //加入单选按钮.
+            ds.Tables.Add(attrs.ToDataTableField("Sys_FrmRB"));
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 执行保存
+        /// </summary>
+        /// <returns></returns>
+        public string RadioBtns_Save()
+        {
+            string json = context.Request.Form["data"];
+            DataTable dt = BP.Tools.Json.ToDataTable(json);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                FrmRB rb = new FrmRB();
+                rb.MyPK = dr["MyPK"].ToString();
+                rb.Retrieve();
+
+                rb.Script = dr["Script"].ToString();
+                rb.FieldsCfg = dr["FieldsCfg"].ToString();
+                rb.Update();
+            }
+
+            return "保存成功.";
         }
         public bool IsReusable
         {

@@ -65,7 +65,7 @@
         {
              $('#treeGrd').treegrid
              ({
-                 url: undefined,//servicePoint,
+                 url: undefined,
                  data: data,
 
                  idField: 'id',
@@ -111,6 +111,7 @@
                      }
                      else
                      {
+                         $('#treeGrd').treegrid('endEdit', currentNodeId);
                          $('#treeGrd').treegrid('selectRow', nodeId);
                      }
                  }
@@ -131,7 +132,11 @@
             {
                 alert(msg);
 
-                data = map(JSON.parse(msg));
+                msg = [{ No: 1, Name: "CN_City-Item-1", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo : 1}, { No: 2, Name: "CN_City-Item-2", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 1}, { No: 3, Name: "CN_City-Item-3", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 2 }, { No: 4, Name: "CN_City-Item-4", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 3 }, { No: 5, Name: "CN_City-Item-5", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 5}, { No: 6, Name: "CN_City-Item-6", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 4}]
+
+                data = map(msg);
+
+                //data = map(JSON.parse(msg));
 
                 alert(JSON.stringify(data));
 
@@ -157,33 +162,35 @@
 
                     items.splice(i, 1);
                     i--;
+
+                    mapChild(items, mapped);
                 }
             }
 
-            for (var i = 0; i < items.length; i++)
-            {
-                if (items[i] != null)
-                {
-                    for (var j = 0; j < mapped.length; j++)
-                    {
-                        if (items[i].ParentNo == mapped[j].id)
-                        {
-                            mapped[j].children.push({
-                                id: items[i].No,
-                                value: items[i].Name,
-                                parent: items[i].ParentNo,
-                                uid: items[i].GUID,
-                                children: []
-                            });
+            //for (var i = 0; i < items.length; i++)
+            //{
+            //    if (items[i] != null)
+            //    {
+            //        for (var j = 0; j < mapped.length; j++)
+            //        {
+            //            if (items[i].ParentNo == mapped[j].id)
+            //            {
+            //                mapped[j].children.push({
+            //                    id: items[i].No,
+            //                    value: items[i].Name,
+            //                    parent: items[i].ParentNo,
+            //                    uid: items[i].GUID,
+            //                    children: []
+            //                });
 
-                            items.splice(i, 1);
-                            i--;
+            //                items.splice(i, 1);
+            //                i--;
 
-                            mapChild(items, mapped[j].children);
-                        }
-                    }
-                }
-            }
+            //                mapChild(items, mapped[j].children);
+            //            }
+            //        }
+            //    }
+            //}
 
             return mapped;
         }
@@ -206,7 +213,7 @@
                             items.splice(i, 1);
                             i--;
 
-                            mapChild(items, mapped);
+                            mapChild(items, mapped[j].children);
                         }
                     }
                 }
@@ -248,7 +255,7 @@
 
                 if (children[i].children != null && children[i].children != undefined)
                 {
-                    reduceChildren(children[i].children);
+                    reduceChildren(children[i].children, reduced);
                 }
             }
         }

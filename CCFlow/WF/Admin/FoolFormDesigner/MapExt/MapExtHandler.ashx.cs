@@ -45,10 +45,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             get
             {
-                string fk_mapExt = context.Request.QueryString["MyPK"].ToString();
+                string fk_mapExt = context.Request.QueryString["MyPK"] as string;
                 if (fk_mapExt == null || fk_mapExt=="")
-                    fk_mapExt = context.Request.QueryString["FK_MapExt"].ToString();
-
+                    fk_mapExt = context.Request.QueryString["FK_MapExt"] as string;
                 return fk_mapExt;
             }
         }
@@ -59,9 +58,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             get
             {
-                string str = context.Request.QueryString["FK_MapData"].ToString();
+                string str = context.Request.QueryString["FK_MapData"] as string;
                 if (str == null || str == "")
-                    str = context.Request.QueryString["FK_MapData"].ToString();
+                    str = context.Request.QueryString["MyPK"] as string;
                 return str;
             }
         }

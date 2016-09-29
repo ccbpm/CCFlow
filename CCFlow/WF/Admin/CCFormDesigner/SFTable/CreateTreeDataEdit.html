@@ -20,6 +20,110 @@
 
         //servicePoint = '/WF/Admin/CCFormDesigner/SFTable/sample.json'
 
+        function createGuid() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        var valuePolicy = {
+            AlphaNum: "alpha_num",
+            Int: "int",
+            Decimal: "decimal",
+            DateTime: "datetime",
+            Password: "password",
+            DBCCase: "dbc_case"
+        };
+
+        function purgeValue(policy, source) {
+            switch (policy) {
+                case valuePolicy.AlphaNum:
+                    {
+                        source.value = source.value.replace(/[^a-zA-Z0-9_\-\.]/g, '');
+                        break;
+                    }
+                case valuePolicy.Int:
+                    {
+                        source.value = source.value.replace(/[^\d]/g, '');
+                        break;
+                    }
+                case valuePolicy.Decimal:
+                    {
+                        source.value = source.value.replace(/[^0-9\.]/g, '');
+                        break;
+                    }
+                case valuePolicy.Password:
+                    {
+                        break;
+                    }
+                case valuePolicy.DBCCase:
+                    {
+                        source.value = source.value.replace(/[\uFF00-\uFFFF]/g, '');
+                        source.value = source.value.replace(/[\u4E00-\u9FA5]/g, '');
+                        break;
+                    }
+                default:
+                    {
+                        source.value = source.value.replace(/[\uFF00-\uFFFF]/g, '');
+                        source.value = source.value.replace(/[\u4E00-\u9FA5]/g, '');
+                        break;
+                    }
+            }
+        }
+
+        function resetNodeIDArray(nodes)
+        {
+            nodeIDArray = [];
+
+            for (var i = 0; i < nodes.length; i++)
+            {
+                if (nodeIDArray.indexOf(nodes[i].No) < 0)
+                {
+                    nodeIDArray.push(nodes[i].No);
+                }
+            }
+        }
+
+        function addNodeID(nodeId) {
+            if (nodeIDArray.indexOf(nodeId) < 0) {
+                nodeIDArray.push(nodeId);
+            }
+        }
+
+        function removeNodeID(nodeId)
+        {
+            if (nodeIDArray.indexOf(nodeId) >= 0) {
+                nodeIDArray.splice(nodeIDArray.indexOf(nodeId), 1);
+            }
+        }
+
+        function nextNodeID()
+        {
+            var nextNodeID = -1;
+
+            if (nodeIDArray == null || nodeIDArray == undefined) {
+                nodeIDArray = [];
+            }
+
+            if (nodeIDArray.length == 0) {
+                return 1;
+            }
+            else {
+                var currID = -1;
+                for (var i = 0; i < nodeIDArray.length; i++) {
+                    currID = Number(nodeIDArray[i]);
+                    if (currID > nextNodeID) {
+                        nextNodeID = currID;
+                    }
+                }
+            }
+
+            return nextNodeID + 1;
+        }
+
+        var nodeIDArray = [1, 2, 3, 11, 12, 13, 21, 22, 23, 31, 32, 33, 1111,1112, 1113, 12211, 1212, 1213];
+
         var data = [
             {
                 id: "1", value: "1", parent: "", children:
@@ -74,18 +178,18 @@
                  [[
                      {
                          field: 'id', title: 'No',
-                         width: 80
+                         width: 110
                      },
                      {
                          field: 'value', title: 'Name',
-                         width: 180,
+                         width: 210,
                          editor: {type:'textbox'}
                      },
-                     {
-                         field: 'parent', title: 'Parent',
-                         width: 60,
-                         align: 'right'
-                     }
+                     //{
+                     //    field: 'parent', title: 'Parent',
+                     //    width: 60,
+                     //    align: 'right'
+                     //}
                  ]],
 
                  singleSelect: true,
@@ -134,9 +238,11 @@
 
                 msg = [{ No: 1, Name: "CN_City-Item-1", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo : 1}, { No: 2, Name: "CN_City-Item-2", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 1}, { No: 3, Name: "CN_City-Item-3", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 2 }, { No: 4, Name: "CN_City-Item-4", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 3 }, { No: 5, Name: "CN_City-Item-5", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 5}, { No: 6, Name: "CN_City-Item-6", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 4}]
 
-                data = map(msg);
+                rawData = msg; //JSON.parse(msg);
 
-                //data = map(JSON.parse(msg));
+                resetNodeIDArray(rawData);
+
+                data = map(rawData);
 
                 alert(JSON.stringify(data));
 
@@ -311,7 +417,13 @@
             //editIndex = undefined;
 
             var node = $('#treeGrd').treegrid('getSelected');
-            $('#treeGrd').treegrid('remove',node.id);
+
+            if (node)
+            {
+                $('#treeGrd').treegrid('remove', node.id);
+
+                removeNodeID(node.id);
+            }     
         }
 
         function insert()
@@ -320,11 +432,17 @@
 
             if (node)
             {
+                var newNodeId = nextNodeID();
+                var newNodeValue = "NewNode-" + newNodeId.toString();
+                var newNodeUID = createGuid();
+
                 $('#treeGrd').treegrid('insert', {
                     //before: node.id,
                     after: node.id,
-                    data: { id: "1000", value: "33", parent: node.id, children: [] }
+                    data: { id: newNodeId, value: newNodeValue, parent: node.id, uid: newNodeUID, children: [] }
                 });
+
+                addNodeID(newNodeId);
             }
         }
 

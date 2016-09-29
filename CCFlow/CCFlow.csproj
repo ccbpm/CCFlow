@@ -844,6 +844,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
@@ -1739,6 +1740,7 @@
     <Content Include="WF\Scripts\LoadWebOffice.js" />
     <Content Include="WF\Scripts\MyFlow.js" />
     <Content Include="WF\Scripts\QueryString.js" />
+    <Content Include="WF\Scripts\MyFlow2016.js" />
     <Content Include="WF\SDKComponents\AccepterCCerSelecter.ascx" />
     <Content Include="WF\SDKComponents\Base\SDKBase.aspx" />
     <Content Include="WF\SDKComponents\Base\SDKData.js" />
@@ -2256,6 +2258,7 @@
     <Content Include="WF\WorkOpt\DTC.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />
     <Content Include="WF\WorkOpt\Forward.aspx" />
+    <Content Include="WF\WorkOpt\Forward.htm" />
     <Content Include="WF\WorkOpt\FTC.aspx" />
     <Content Include="WF\WorkOpt\GridEdit.aspx" />
     <Content Include="WF\WorkOpt\HungUp.aspx" />
@@ -2746,6 +2749,7 @@
     <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruckOnly.aspx" />
     <Content Include="WF\WorkOpt\Press.aspx" />
+    <Content Include="WF\WorkOpt\Press.htm" />
     <Content Include="WF\WorkOpt\PRI.aspx" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.aspx" />

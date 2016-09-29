@@ -1,0 +1,438 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+
+    <link href="../../../Scripts/easyUI15/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI15/themes/gray/dialog.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var sf_Table = GetQueryString("FK_SFTable");
+
+        var servicePointGet = '/WF/Admin/CCFormDesigner/SFTable/SFTableHandler.ashx?DoType=CreateTreeDataInit&FK_SFTable=' + sf_Table + '&m=' + Math.random();
+
+        var servicePointPost = '/WF/Admin/CCFormDesigner/SFTable/SFTableHandler.ashx?DoType=CreateTreeDataSave&FK_SFTable=' + sf_Table + '&m=' + Math.random();
+
+        //servicePoint = '/WF/Admin/CCFormDesigner/SFTable/sample.json'
+
+        var data = [
+            {
+                id: "1", value: "1", parent: "", children:
+                  [
+                      {
+                          id: "11", value: "11", parent: "1", children:
+                          [
+                              { id: "1111", value: "1111", parent: "11", children: [] },
+                              { id: "1112", value: "1112", parent: "11", children: [] },
+                              { id: "1113", value: "1113", parent: "11", children: [] }
+                          ]
+                      },
+                      {
+                          id: "12", value: "12", parent: "1", children:
+                          [
+                              { id: "1211", value: "1211", parent: "12", children: [] },
+                              { id: "1212", value: "1212", parent: "12", children: [] },
+                              { id: "1213", value: "1213", parent: "12", children: [] }
+                          ]
+                      },
+                      { id: "13", value: "13", parent: "1", children: [] }
+                  ]
+            },
+            {
+                id: "2", value: "2", parent: "", children:
+                    [
+                        { id: "21", value: "21", parent: "2", children: [] },
+                        { id: "22", value: "22", parent: "2", children: [] },
+                        { id: "23", value: "23", parent: "2", children: [] }
+                    ]
+            },
+            {
+                id: "3", value: "3", parent: "", children:
+                    [
+                        { id: "31", value: "31", parent: "3", children: [] },
+                        { id: "32", value: "32", parent: "3", children: [] },
+                        { id: "33", value: "33", parent: "3", children: [] }
+                    ]
+            }
+        ];
+
+        $(function ()
+        {
+             $('#treeGrd').treegrid
+             ({
+                 url: undefined,//servicePoint,
+                 data: data,
+
+                 idField: 'id',
+                 treeField: 'value',
+                 columns:
+                 [[
+                     {
+                         field: 'id', title: 'No',
+                         width: 80
+                     },
+                     {
+                         field: 'value', title: 'Name',
+                         width: 180,
+                         editor: {type:'textbox'}
+                     },
+                     {
+                         field: 'parent', title: 'Parent',
+                         width: 60,
+                         align: 'right'
+                     }
+                 ]],
+
+                 singleSelect: true,
+
+                 onClickRow: function (row)
+                 {
+                     //alert(row);
+
+                     //for (var prop in  row) {
+                     //    alert(prop + " : " + row[prop]);
+
+                     //}
+
+                     var nodeId = row.id;
+
+                     if (currentNodeId != nodeId)
+                     {
+                         $('#treeGrd').treegrid('endEdit', currentNodeId);
+
+                         $('#treeGrd').treegrid('selectRow', nodeId).treegrid('beginEdit', nodeId);
+
+                         currentNodeId = nodeId;
+                     }
+                     else
+                     {
+                         $('#treeGrd').treegrid('selectRow', nodeId);
+                     }
+                 }
+             });
+
+             initData();
+        });
+
+        var currentNodeId = undefined;
+
+        function initData()
+        {
+            $.ajax({
+                method: "GET",
+                url: servicePointGet,
+                cache: false
+            }).done(function (msg)
+            {
+                alert(msg);
+
+                data = map(JSON.parse(msg));
+
+                alert(JSON.stringify(data));
+
+                $('#treeGrd').treegrid('loadData', data);
+            });
+        }
+
+        function map(items)
+        {
+            var mapped = [];
+
+            for (var i = 0; i < items.length; i++)
+            {
+                if (items[i] != null && (items[i].ParentNo == items[i].No || items[i].ParentNo == undefined || items[i].ParentNo == null))
+                {
+                    mapped.push({
+                        id: items[i].No,
+                        value: items[i].Name,
+                        parent: items[i].No,
+                        uid: items[i].GUID,
+                        children: []
+                    });
+
+                    items.splice(i, 1);
+                    i--;
+                }
+            }
+
+            for (var i = 0; i < items.length; i++)
+            {
+                if (items[i] != null)
+                {
+                    for (var j = 0; j < mapped.length; j++)
+                    {
+                        if (items[i].ParentNo == mapped[j].id)
+                        {
+                            mapped[j].children.push({
+                                id: items[i].No,
+                                value: items[i].Name,
+                                parent: items[i].ParentNo,
+                                uid: items[i].GUID,
+                                children: []
+                            });
+
+                            items.splice(i, 1);
+                            i--;
+
+                            mapChild(items, mapped[j].children);
+                        }
+                    }
+                }
+            }
+
+            return mapped;
+        }
+
+        function mapChild(items, mapped)
+        {
+            for (var i = 0; i < items.length; i++) {
+                if (items[i] != null) {
+                    for (var j = 0; j < mapped.length; j++) {
+                        if (items[i].ParentNo == mapped[j].id)
+                        {
+                            mapped[j].children.push({
+                                id: items[i].No,
+                                value: items[i].Name,
+                                parent: items[i].ParentNo,
+                                uid: items[i].GUID,
+                                children: []
+                            });
+
+                            items.splice(i, 1);
+                            i--;
+
+                            mapChild(items, mapped);
+                        }
+                    }
+                }
+            }
+        }
+        
+        function reduce(data)
+        {
+            var reduced = [];
+
+            for (var i = 0; i < data.length; i++)
+            {
+                reduced.push({
+                    No : data[i].id,
+                    Name : data[i].value,
+                    ParentNo: data[i].parent,
+                    GUID : data[i].uid
+                });
+
+                if (data[i].children != null && data[i].children != undefined)
+                {
+                    reduceChildren(data[i].children, reduced);
+                } 
+            }
+           
+            return reduced;
+        }
+
+        function reduceChildren(children, reduced)
+        {
+            for (var i = 0; i < children.length; i++)
+            {
+                reduced.push({
+                    No : children[i].id,
+                    Name : children[i].value,
+                    ParentNo : children[i].parent,
+                    GUID : children[i].uid
+                });
+
+                if (children[i].children != null && children[i].children != undefined)
+                {
+                    reduceChildren(children[i].children);
+                }
+            }
+        }
+
+        function onClickRow(index)
+        {
+            if (editIndex != index)
+            {
+                if (endEditing())
+                {
+                    $('#treeGrd').datagrid('selectRow', index).datagrid('beginEdit', index);
+                    editIndex = index;
+                }
+                else
+                {
+                    $('#treeGrd').datagrid('selectRow', editIndex);
+                }
+            }
+        }
+
+        //function endEditing(){
+        //    			if (editIndex == undefined){return true}
+        //    			if ($('#treeGrd').treegrid('validateRow', currentNodeId)) {
+        //    			    var ed = $('#treeGrd').datagrid('getEditor', { index: editIndex, field: 'productid' });
+        //        				var productname = $(ed.target).combobox('getText');
+        //        				$('#dg').datagrid('getRows')[editIndex]['productname'] = productname;
+        //        				$('#dg').datagrid('endEdit', editIndex);
+        //        				editIndex = undefined;
+        //        				return true;
+        //        			} else {
+        //        				return false;
+        //        			}
+        //    		}
+
+
+        //function append()
+        //{
+        //    // append some nodes to the selected row
+        //    var node = $('#treeGrd').treegrid('getSelected');
+
+        //    $('#treeGrd').treegrid('append', {
+        //        parent: node.id,  // the node has a 'id' value that defined through 'idField' property
+        //        data: { id: "1000", value: "1000", parent: node.id, children: [] }
+        //    });
+
+        //}
+
+        function removeit()
+        {
+            //if (editIndex == undefined){return}
+            //$('#dg').datagrid('cancelEdit', editIndex)
+            //.datagrid('deleteRow', editIndex);
+            //editIndex = undefined;
+
+            var node = $('#treeGrd').treegrid('getSelected');
+            $('#treeGrd').treegrid('remove',node.id);
+        }
+
+        function insert()
+        {
+            var node = $('#treeGrd').treegrid('getSelected');
+
+            if (node)
+            {
+                $('#treeGrd').treegrid('insert', {
+                    //before: node.id,
+                    after: node.id,
+                    data: { id: "1000", value: "33", parent: node.id, children: [] }
+                });
+            }
+        }
+
+        function submit()
+        {
+            $.ajax({
+                method: "POST",
+                url: servicePointPost,
+                data: JSON.stringify(reduce(data))
+            }).done(function (msg)
+            {
+                alert("Data Saved: " + msg);
+            });
+        }
+
+        //function accept(){
+        //		if (endEditing()){
+        //				$('#dg').datagrid('acceptChanges');
+        //			}
+        //}
+
+        //function reject(){
+        //		$('#dg').datagrid('rejectChanges');
+        //		editIndex = undefined;
+        //}
+
+        //function getChanges(){
+        //		var rows = $('#dg').datagrid('getChanges');
+        //		alert(rows.length+' rows are changed!');
+        //	}
+    </script>
+
+    <!--<script type="text/javascript">
+        $(function () {
+            var access_editingId; //当前正在编辑的
+            var access_lastChildName;
+            var access_addclick = 0; //点击了添加
+            $("#access_tg").treegrid({
+                //右键
+                onContextMenu: function (e, row) {
+                    e.preventDefault();  //该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
+                    $("#access_tg").treegrid("select", row.id);
+                    $("#access_menu").menu("show", {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
+                }
+            });
+            $("#access_lb_new,#access_menu_new").click(function () {
+                access_new();
+            });
+            function access_new() {
+                var tt = $("#access_tg");
+                var row = tt.treegrid("getSelected");    //获取选中的标签项
+                tt.treegrid("reload", row.id); //reload为异步操作，如果直接读取子节点会无内容
+            }
+
+        });
+    </script>-->
+
+</head>
+<body>
+    <div class="container">
+        <!--<div id="access_menu" class="easyui-menu" style="width:100px;">
+            <div id="access_menu_edit">编辑本节点</div>
+            <div id="access_menu_del">删除本条目</div>
+            <div id="access_menu_refresh">刷新节点</div>
+            <div id="access_menu_new">新增子节点</div>
+        </div>-->
+        <!--<table id="tree" class="easyui-treegrid" style="width:600px;height:400px"></table>-->
+
+
+        <div id="tb" style="height:auto">
+            <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">挂接</a>-->
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-insert',plain:true" onclick="insert()">增加</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="submit()">保存</a>
+            <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">Reject</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>-->
+        </div>
+
+        <table id="treeGrd" class="easyui-treegrid" style="width:30%">
+        </table>
+
+    </div>
+    <!--<div id="access_toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-add" plain="true" id="access_lb_new">
+    </div>-->   
+
+    <!--<div class="container">
+        <div id="access_menu" class="easyui-menu" style="width:100px;">
+            <div id="access_menu_edit">编辑本节点</div>
+            <div id="access_menu_del">删除本条目</div>
+            <div id="access_menu_refresh">刷新节点</div>
+            <div id="access_menu_new">新增子节点</div>
+        </div>
+        <table id="access_tg" title="权限分配" class="easyui-treegrid" style="height:500px"
+               url="/Admin/Access/treegrid" toolbar="#access_toolbar"
+               rownumbers="true" idfield="id" treefield="description">
+            <thead>
+                <tr>
+                    <th field="id" width="40">ID</th>
+                    <th field="description" width="200" editor="text">描述</th>
+                    <th field="name" width="50">名称</th>
+                    <th field="action" width="200" editor="text">动作</th>
+                    <th field="role" width="200" editor="text">角色</th>
+                    <th field="state" width="200" editor="text">状态</th>
+                    <th field="parentid" width="200" editor="text">父层</th>
+                </tr>
+            </thead>
+        </table>
+        <div style="height:5px"></div>
+        <div id="access_toolbar">
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-add" plain="true" id="access_lb_new">
+        </div>
+    </div>-->
+</body>
+</html>

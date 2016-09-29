@@ -91,7 +91,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             if (String.IsNullOrEmpty(this.FK_SFTable))
                 return "";
 
-            verifyTable();
+            //verifyTable();
 
             SFTable sf = new SFTable(this.FK_SFTable);
             
@@ -99,30 +99,30 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             DataTable dt = sf.RunSQLReturnTable(sql);
 
             string json = "";
-            List<CodeItem> items = new List<CodeItem>();
+            //List<CodeItem> items = new List<CodeItem>();
 
             if (dt != null && dt.Rows.Count > 0)
             {
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    if (dt.Rows[i] != null)
-                    {
-                        items.Add(new CodeItem()
-                        {
-                            ID = dt.Rows[i]["No"].ToString(),
-                            Value = dt.Rows[i]["Name"].ToString(),
-                            Parent = dt.Columns.Contains("ParentNo") ? dt.Rows[i]["ParentNo"].ToString() : ""
-                        });
-                    }
-                }
+            //    for (int i = 0; i < dt.Rows.Count; i++)
+            //    {
+            //        if (dt.Rows[i] != null)
+            //        {
+            //            items.Add(new CodeItem()
+            //            {
+            //                ID = dt.Rows[i]["No"].ToString(),
+            //                Value = dt.Rows[i]["Name"].ToString(),
+            //                Parent = dt.Columns.Contains("ParentNo") ? dt.Rows[i]["ParentNo"].ToString() : dt.Rows[i]["No"].ToString()
+            //            });
+            //        }
+            //    }
 
                 //return BP.Tools.Json.ToJson(models.ToArray());
 
-                CodeItem[] treeItems = items.ToArray();
+                //CodeItem[] treeItems = items.ToArray();
 
-                treeItems = this.buildTreeItems(treeItems);
+                //treeItems = this.buildTreeItems(treeItems);
 
-                json = Newtonsoft.Json.JsonConvert.SerializeObject(treeItems);
+                //json = Newtonsoft.Json.JsonConvert.SerializeObject(treeItems);
 
                 //return json;
             }
@@ -131,26 +131,38 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 dt = sf.GenerData();
                 //return BP.Tools.Json.ToJson(dt);
 
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    if (dt.Rows[i] != null)
-                    {
-                        items.Add(new CodeItem()
-                        {
-                            ID = dt.Rows[i]["No"].ToString(),
-                            Value = dt.Rows[i]["Name"].ToString(),
-                            Parent = dt.Columns.Contains("ParentNo") ? dt.Rows[i]["ParentNo"].ToString() : ""
-                        });
-                    }
-                }
+                //for (int i = 0; i < dt.Rows.Count; i++)
+                //{
+                //    if (dt.Rows[i] != null)
+                //    {
+                //        items.Add(new CodeItem()
+                //        {
+                //            ID = dt.Rows[i]["No"].ToString(),
+                //            Value = dt.Rows[i]["Name"].ToString(),
+                //            Parent = dt.Columns.Contains("ParentNo") ? dt.Rows[i]["ParentNo"].ToString() : dt.Rows[i]["No"].ToString()
+                //        });
+                //    }
+                //}
 
-                //return BP.Tools.Json.ToJson(models.ToArray());
-                CodeItem[] treeItems = items.ToArray();
+                ////return BP.Tools.Json.ToJson(models.ToArray());
+                //CodeItem[] treeItems = items.ToArray();
 
-                treeItems = this.buildTreeItems(treeItems);
+                //treeItems = this.buildTreeItems(treeItems);
 
-                json = Newtonsoft.Json.JsonConvert.SerializeObject(treeItems);
+                //json = Newtonsoft.Json.JsonConvert.SerializeObject(treeItems);
+
+                //foreach (var item in items)
+                //{
+                //    sql = "INSERT INTO " + this.FK_SFTable + " (No,Name)Values('" + item.ID + "','" + item.Value + "')";
+                //    sf.RunSQL(sql);
+                //}
             }
+
+            json = BP.Tools.Json.ToJson(dt);
+
+            //json = "[{\"No\":\"1\",\"Name\":\"CN_City-Item-1\",\"Names\":\"\",\"Grade\":0,\"FK_SF\":\"\",\"FK_PQ\":\"\", \"Parent\":\"1\"},{\"No\":\"2\",\"Name\":\"CN_City-Item-2\",\"Names\":\"\",\"Grade\":0,\"FK_SF\":\"\",\"FK_PQ\":\"\", \"Parent\":\"1\"},{\"No\":\"3\",\"Name\":\"CN_City-Item-3\",\"Names\":\"\",\"Grade\":0,\"FK_SF\":\"\",\"FK_PQ\":\"\", \"Parent\":\"1\"},{\"No\":\"4\",\"Name\":\"CN_City-Item-4\",\"Names\":\"\",\"Grade\":0,\"FK_SF\":\"\",\"FK_PQ\":\"\", \"Parent\":\"2\"},{\"No\":\"5\",\"Name\":\"CN_City-Item-5\",\"Names\":\"\",\"Grade\":0,\"FK_SF\":\"\",\"FK_PQ\":\"\", \"Parent\":\"1\"},{\"No\":\"6\",\"Name\":\"CN_City-Item-6\",\"Names\":\"\",\"Grade\":0,\"FK_SF\":\"\",\"FK_PQ\":\"\", \"Parent\":\"2\"}]";
+
+            //json = "[{id: \"1\", value: \"1\", parent: \"\", children:[{id: \"11\", value: \"11\", parent: \"1\", children:[{ id: \"1111\", value: \"1111\", parent: \"11\", children: [] },{ id: \"1112\", value: \"1112\", parent: \"11\", children: [] },{ id: \"1113\", value: \"1113\", parent: \"11\", children: [] }]},{id: \"12\", value: \"12\", parent: \"1\", children:[{ id: \"1211\", value: \"1211\", parent: \"12\", children: [] },{ id: \"1212\", value: \"1212\", parent: \"12\", children: [] },{ id: \"1213\", value: \"1213\", parent: \"12\", children: [] }]},{ id: \"13\", value: \"13\", parent: \"1\", children: [] }},{id: \"2\", value: \"2\", parent: \"\", children:[{ id: \"21\", value: \"21\", parent: \"2\", children: [] },{ id: \"22\", value: \"22\", parent: \"2\", children: [] },{ id: \"23\", value: \"23\", parent: \"2\", children: [] }]},{id: \"3\", value: \"3\", parent: \"\", children:[{ id: \"31\", value: \"31\", parent: \"3\", children: [] },{ id: \"32\", value: \"32\", parent: \"3\", children: [] },{ id: \"33\", value: \"33\", parent: \"3\", children: [] }]}]";
 
             return json;
 
@@ -253,7 +265,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             for (int i = 0; i < parentNodes.Count; i++)
             {
-                if (childNodes[parentNodes[i].ID.ToLower()] != null)
+                if (childNodes.ContainsKey(parentNodes[i].ID.ToLower()) && childNodes[parentNodes[i].ID.ToLower()] != null)
                 {
                     parentNodes[i].Children = childNodes[parentNodes[i].ID.ToLower()].ToArray();
                 }
@@ -294,7 +306,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 {
                     foreach (var childNode in parentNode.Children)
                     {
-                        if (childNodes[childNode.ID.ToLower()] != null)
+                        if (childNodes.ContainsKey(childNode.ID.ToLower()) && childNodes[childNode.ID.ToLower()] != null)
                         {
                             childNode.Children = childNodes[parentNode.ID.ToLower()].ToArray();
                         }
@@ -308,7 +320,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 {
                     for (int j = 0; j < parentNodes[i].Children.Length; j++)
                     {
-                        if (childNodes[parentNodes[i].Children[j].ID.ToLower()] != null)
+                        if (childNodes.ContainsKey(parentNodes[i].Children[j].ID.ToLower()) && childNodes[parentNodes[i].Children[j].ID.ToLower()] != null)
                         {
                             parentNodes[i].Children[j].Children = childNodes[parentNodes[i].ID.ToLower()].ToArray();
                         }

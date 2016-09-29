@@ -186,6 +186,51 @@ function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK, width, height, title) {
 }
 
 
+/* 内置的Pop自动返回值. google 版 软通*/
+function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, title) {
+    //update by dgq 修改路径
+    //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
+
+    var wfpreHref = GetLocalWFPreHref();
+    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
+
+    //杨玉慧 模态框 先用这个
+    $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().prev().text());
+
+    $('#iframePopModalForm').attr("src", url);
+    $('#btnPopValOK').unbind('click');
+    $('#btnPopValOK').bind('click', function () {
+        //var retrunJson = frames["iframePopModalForm"].window.returnValue;
+        var retrunJson = '[{"No":"华夏银行,总行,会计部,会计出纳室","TXB_Title":"吴建","FK_Dept":"0001.02.000000000376"},{"No":"华夏银行,总行,会计部,会计出纳室","TXB_Title":"张立伟","FK_Dept":"0001.02.000000000080"}]';
+        var retrunObjArr = [];
+        if (retrunJson != undefined && retrunJson != '')
+            retrunObjArr = JSON.parse(retrunJson);
+        if (retrunObjArr.length > 0) {
+            for (var eml in retrunObjArr[0]) {
+                $('[id$=' + eml + ']').val('');
+            }
+        }
+        $(ctrl).val("");
+
+        $.each(retrunObjArr, function (i, retrunObj) {
+            for (var eml in retrunObj) {
+                $('[id$=' + eml + ']').val(retrunObj[eml] + ";");
+            }
+
+            $('#' + ctrl.id).val(retrunObj["No"]);
+        });
+    });
+    $('#returnPopValModal').modal().show();
+    //修改标题，失去焦点时进行保存
+    if (typeof self.parent.TabFormExists != 'undefined') {
+        var bExists = self.parent.TabFormExists();
+        if (bExists) {
+            self.parent.ChangTabFormTitle();
+        }
+    }
+    return;
+}
+
 /*  ReturnValTBFullCtrl */
 function ReturnValTBFullCtrl(ctrl, fk_mapExt) {
     var wfPreHref = GetLocalWFPreHref();

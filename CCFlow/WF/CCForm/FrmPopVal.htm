@@ -3,10 +3,15 @@
 <head>
     <title></title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>-->
+    <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
     <style type="text/css">
         body .table tbody tr td {
             line-height: 18px;
@@ -71,52 +76,52 @@
             background: #f4f9ff;
         }
 
-            .form_tree .form-control {
-                border-radius: 15px 0px 0px 15px;
+            .form_tree #orgTxt {
+                border-radius: 15px 0px 0px 15px !important;
                 /*border:#2884fa 1px solid;*/
             }
 
             .form_tree .input-group-addon {
-                border-radius: 0px 15px 15px 0px;
+                border-radius: 0px 15px 15px 0px !important;
                 /*broder:#2884fa 1px solid;*/
             }
     </style>
     <script type="text/javascript" >
         $(function () {
             dtTable();
-            $('#btnsv').bind('click', function () {
+            $('.btnsv').bind('click', function () {
                  var checked = $('input:checkbox:checked');
                  var trData;
                  var resultObj = {};
                  var noData = [];
                  var naData = [];
                  if (checked.length > 0) {
-                     var trData1 = $(checked[0]).parent().parent().data().data;
-                     var tbData1 = $(checked[0]).parent().parent().parent().data().data;
-                     //if (tbData1.PopValFormat == "OnlyNo") {
+                     var trData1 = $(checked[0]).parents("tr").data().data;
+                     var tbData1 = $(checked[0]).parents("table").data().data;
+                     if (tbData1.PopValFormat == "OnlyNo") {
                          for (var ele in trData1) {
                              resultObj[ele] = [];
                          }
-                     //}
+                     }
                  }
                  for (var i = 0; i < checked.length; i++) {
-                        trData = $(checked[i]).parent().parent().data().data;
+                        trData = $(checked[i]).parents("tr").data().data;
                         noData.push((trData.No));
                         naData.push((trData.Name));
-                        //if (tbData1.PopValFormat == "OnlyNo") {
-                                //resultObj = { "No": noData };
-                        //}else if(tbData1.PopValFormat == "OnlyName"){
-                                //resultObj = { "Name": naData };
-                        //}else if(tbData1.PopValFormat == "OnlyNo"){
-                            //resultObj = {
-                            //    "No": noData,
-                            //    "Name": naData 
-                            //};
-                        //}else{
+                        if (tbData1.PopValFormat == "OnlyNo") {
+                                resultObj = { "No": noData };
+                        }else if(tbData1.PopValFormat == "OnlyName"){
+                                resultObj = { "Name": naData };
+                        } else if (tbData1.PopValFormat == "NoName") {
+                            resultObj = {
+                                "No": noData,
+                                "Name": naData 
+                            };
+                        }else{
                             for (var key in trData) {
                                 resultObj[key].push((trData[key]));
                             }
-                        //}
+                        }
                    }
                 window.returnValue = JSON.stringify(resultObj);
                 console.log(window.returnValue);
@@ -125,150 +130,222 @@
         });
 
         function dtTable() {
-            var fk_mapExt = GetQueryString("FK_MapExt");
-            var myPK = GetQueryString("FK_MapExt");
-//            $.ajax({
-//                type: 'post',
-//                async: true,
-//                url: "CCFormHeader.ashx?DoType=InitPopSetting&MyPK=" + myPK + '&FK_MapExt=' + fk_mapExt + '&m=' + Math.random(),
-//                dataType: 'html',
-//                success: function (data) {
-//                    if (data != null) { 
-//                        var dataArrs = JSON.parse(data);
-//                        if (dataArrs.length > 0) {
-//                            var tbData = $("#flowLists table");
-//                            if (tbData != undefined && tbData.data != undefined && tbData.data() != undefined && tbData.data().data != undefined && tbData.data().data == true)  {
-//                                $($('#flowLists table')[0]).data().data = dataArrs;
-//                            }
-//                               var colencn = dataArrs.PopValColNames;
-//                               var SelectM = dataArrs.PopValSelectModel;
-//                               var WorkM = dataArrs.PopValWorkModel;
-//                        }
-//                    }
-//                }
-//            });
-
+            var fk_MapExt = GetQueryString("FK_MapExt");
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_mapExt + '&m=' + Math.random(),
+                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data != null) {
-                        alert(data);
-
+                        console.log(data);
+                        var dataArrs = JSON.parse(data).Hashtable;
                         var dataArr = JSON.parse(data).DTObjs;
+                        if (dataArrs.length > 0) {
+                            var tbData = $(".flowLists table");
+                            if (tbData != undefined && tbData.data != undefined && tbData.data() != undefined && tbData.data().data != undefined && tbData.data().data == true) {
+                                $.each(dataArrs, function (i, obje) {
+                                    $($('.flowLists table')[i]).data().data = obje;
+                                });
+                            }
+                        }
                         if (dataArr.length > 0) {
+                            var colencn = dataArrs[0].PopValColNames;
+                            var SelectM = dataArrs[0].PopValSelectModel;
+                            var WorkM = dataArrs[0].PopValWorkModel;
                             var keys;
                             var values;
                             var html1 = '';
-                            var tableHeader = '';
-                            //if (SelectM == "More") {
-                            //} else {
-                            //}
-                            //if (WorkM == "TablePage" ) {
                             $.each(dataArr, function (i, obje) {
-                                var html = "<tr data-data='true'><td><input type='checkbox' /></td>";
-                                tableHeader = "<tr><th><input type='checkbox' /></th>";
-                                for (var i = 1; i < colencn.split("@").length; i++) {
-                                    keys = colencn.split("@")[i].split("=")[0];
-                                    values = colencn.split("@")[i].split("=")[1];
-                                    for (var key in obje) {
-                                        if (key == keys) {
-                                            tableHeader += '<th data-colname=' + values + '>' + values + '</th>';
+                                var tableHeader = "<tr><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=checkbox@' data-coltype='Operation1'><input type='checkbox' /></th>";
+                                if (colencn != "") {
+                                        for (var i = 1; i < colencn.split("@").length; i++) {
+                                            keys = colencn.split("@")[i].split("=")[0];
+                                            values = colencn.split("@")[i].split("=")[1];
+                                            for (var key in obje) {
+                                                if (key == keys) {
+                                                    tableHeader +=
+                                                        '<th data-colname=' + key + '>' + values + '</th>';
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        for (var key in obje) {
+                                            tableHeader += '<th data-colname=' + key + '>' + key + '</th>';
                                         }
                                     }
-                                }
-                                tableHeader += '</tr>';
-                                for (var ele in obje) {
-                                    html += "<td>" + obje[ele] + "</td>";
-                                }
-                                html += "</tr>";
-                                html1 += html;
+                                    tableHeader += '</tr>';
+                                    $(".wupop thead").html(tableHeader);
                             });
-                            $(".wupop thead").html(tableHeader);
-                            $(".wupop tbody").html(html1);
-                            //}else if(WorkM == "TablePage"){
+                            if (SelectM == "One") {
 
-                            //var toDoListInitData = {
-                            //    PageSize: 10,
-                            //    PageIndex: 1,
-                            //    DivId: 'flowListDiv',
-                            //    countUrl: "/Ashx/ITILFlow/FlowHandler.ashx?Method=GetPopFormListCount&m=" +
-                            //        Math.random() +
-                            //        "&type=" +
-                            //        pageData.type +
-                            //        "&SearchColumn=" +
-                            //        tableHeaderData[pageData.type].SearchColumn +
-                            //        "&SearchVal=" +
-                            //        $('#txbSearchVal').val() ||
-                            //        "",
-                            //    listUrl: "/Ashx/ITILFlow/FlowHandler.ashx?Method=GetPopFormList&m=" +
-                            //        Math.random() +
-                            //        "&type=" +
-                            //        pageData.type +
-                            //        "&SearchColumn=" +
-                            //        tableHeaderData[pageData.type].SearchColumn +
-                            //        "&SearchVal=" +
-                            //        $('#txbSearchVal').val() ||
-                            //        "",
-                            //    RenderOverParam: {},
-                            //    RenderOverFun: function() {
-                            //        $('#flowListDiv table tbody tr td input:checkbox').bind('click', showForm);
-                            //    },
-                            //};
-                            //$('#flowListDiv table tbody tr').remove();
-                            //Common.CustomPagePlug(toDoListInitData); //绑定表格
+                            }
+                            if (WorkM == "Table") {
+                                $("#poptablew").show();
+                                $.each(dataArr,function(i, obje) {
+                                        var html = "<tr data-data='true'><td><input type='checkbox' /></td>";
+                                        for (var ele in obje) {
+                                            html += "<td>" + obje[ele] + "</td>";
+                                        }
+                                        html += "</tr>";
+                                        html1 += html;
+                                    });
+                                $(".wupop tbody").html(html1);
+                                $(".loadDate").hide();
+                            } else if (WorkM == "selfurl") {
+                                window.location.href = "";
+                            } else if (WorkM == "Tree") {
 
-
-                            //}
-                            //}else if(WorkM == "SelfUrl"){
-
-                            //}
-                            //} else {
-
-                            //}
-
-                        }
-                        $(".loadDate").hide();
-                        var trData = $("#flowLists table tbody tr");
-                        if (trData != undefined && trData.data != undefined && trData.data() != undefined && trData.data().data != undefined && trData.data().data == true) {
-                            $.each(dataArr, function (i, obje) {
-                                $($('#flowLists table tbody tr')[i]).data().data = obje;
-                            });
+                            } else if (WorkM == "TablePage") {
+                                $("#main").show();
+                                initTableData();
+                            }
+                            var trData = $(".flowLists table tbody tr");
+                            if (trData != undefined &&trData.data != undefined &&trData.data() != undefined &&trData.data().data != undefined &&trData.data().data == true) {
+                                $.each(dataArr,function(i, obje) {
+                                    $($('.flowLists table tbody tr')[i]).data().data = obje;
+                                });
+                            }
                         }
                     }
                 }
 
             });
-        //}
-        //}
-        //}
-        //});
         }
+        //分页table
+        function initTableData() {
+            var fk_MapExt = GetQueryString("FK_MapExt");
+            var pageSize = $('#flowListDiv .pagination-panel select').val();
+            if (pageSize == "-1") {
+                pageSize = 10;
+                $('#flowListDiv .pagination-panel select').children("[value=10]").attr('selected', 'selected');
+            }
+            var toDoListInitData = {
+                PageSize: pageSize,
+                PageIndex: 1,
+                DivId: 'flowListDiv',
+                countUrl: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random(),
+                listUrl: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random()
+            };
+            $('#flowListDiv table tbody tr').remove();
+            Common.CustomPagePlug(toDoListInitData);//绑定表格
+        }
+        //树
     </script>
 </head>
 <body>
     <!--无分页显示table-->
-<div id="poptablew">
+<div id="poptablew" style="display: none;">
     <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
         <div class="portlet-body " id="" style="overflow: auto;">
             <div class="tab-content" style="margin: 4px 0px;">
-                <div class="tab-pane active portlet_tab" id="flowLists">
+                <div class="tab-pane active portlet_tab flowLists">
                     <div id="" style="min-height: 520px; overflow: auto;">
                         <table class="table wupop" data-data="true">
                             <thead></thead>
                             <tbody></tbody>
                         </table>
-                        <button id="btnsv" style="float: right;">保存</button>
+                        <button class="btnsv" style="float: right;">保存</button>
                     </div>
                     <div class="loadDate" style="text-align: center;">
-                        <img src="../Scripts/bootstrap/fonts/loading.gif"/>
+                        <img src="../Scripts/bootstrap/fonts/loading.gif" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+    <!--无分页显示table-->
+<div id="main" style="display: none;">
+    <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
+        <!-- BEGIN CHART PORTLET-->
+        <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px; padding: 12px 0 0 20px;">
+            <div>
+                <div style="font-size: 20px; float: left; width: 100%;">
+                    <input id="txbSearchVal" value="" type="text" placeholder="标题" style="text-align: center;"/>
+                    <button class="Btn" id="btnSearch">搜索</button>
+                </div>
+                <div style="font-size: 20px; float: left; width: 100%; display: none;">
+                    已选择列表：
+                    <span id="selectedlist" style="word-break: break-all;"></span>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body " id="merDiv">
+            <div class="tab-content" style="margin: 4px 0px;">
+                <div class="tab-pane active portlet_tab flowLists">
+                    <div id="flowListDiv">
+                        <table class="table customthr customHover wupop" data-data="true">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="loadDate" style="text-align: center;">
+                            <img src="../Scripts/bootstrap/fonts/loading.gif"/>
+                        </div>
+                        <div class="pagination-panel">
+                            页码 <button class="btn btnTxt  btn-sm default prev" title="上一页"><i class="fa fa-angle-left"></i></button>
+                            <button class="btn btnTxt btn-sm default next" title="下一页">
+                                <i class="fa fa-angle-right"></i>
+                            </button>
+                            <span class="seperator">|</span>
+                            <button class="btn btnTxt btn-sm default prev" title="转到">转到</button>
+                            <input type="text" class="pagination-panel-input form-control input-mini input-inline input-sm" maxlenght="5" style="text-align: center; margin: 0 5px;"/>
+                            页<span class="seperator">|</span>
+                            <span class="pagination-panel-total">20</span>
+                            <label>
+                                页
+                                <span class="seperator">|</span>每页
+                                <select onchange="" style="width: auto !important;" class="form-control input-xsmall input-sm input-inline">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                    <option value="-1">全部</option>
+                                </select> 条
+                            </label>
+                        </div>
+                        <button class="btnsv" style="float: right;">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!--树tree-->
+    <div id="tree" style="display: block;">
+        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding:0px;margin:0px;overflow:auto;">
+            <div class="portlet-body " id="" style="overflow:auto;">
+                <div class="tab-content">
+                    <div class="tab-pane active portlet_tab" id="task">
+                        <div id="ListDiv">
+                            <div class="input-group form_tree">
+                                <input class="form-control" type="text" id="orgTxt" readonly="readonly" style="margin: 0px !important;"/>
+                                <span class="input-group-addon" id="test"><span class="glyphicon glyphicon-tree-deciduous"></span></span>
+                            </div>
+                            <div id="orgjstree" style="position: absolute; display: none; overflow: auto; width: 95%;" class="tree-demo jstree jstree-1 jstree-default">
+                                <ul>
+                                    <li data-jstree='{ "opened" : true }'>
+                                        Root node
+                                        <ul>
+                                            <li data-jstree='{ "opened" : true }' aria-expanded="false">
+                                                Child node 1
+                                                <ul>
+                                                    <li data-jstree='{ "selected" : true }'>Child node 1 1</li>
+                                                    <li>Child node 1 2</li>
+                                                </ul>
+                                            </li>
+                                            <li>Child node 2</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+

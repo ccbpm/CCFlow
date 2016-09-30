@@ -35,7 +35,7 @@
         #TB_TablePage_SQL
         {
             width: 90%;
-            height: 82px;
+            height: 41px;
         }
         #TB_TablePage_SQLCount
         {
@@ -64,6 +64,24 @@
         #TB_Height
         {
             width: 66px;
+        }
+        #TB_TreeSQL
+        {
+            height: 51px;
+            width: 768px;
+        }
+        #TB_TreeParentNo
+        {
+            height: 19px;
+            width: 47px;
+        }
+        #Textarea1
+        {
+            width: 779px;
+        }
+        #TB_DoubleTreeSQL
+        {
+            width: 778px;
         }
     </style>
     <base target="_self" />
@@ -97,8 +115,6 @@
         function Save() {
             var fk_mapExt = GetQueryString("MyPK");
             var frmData = $("#cc").serialize();
-
-
             $.ajax({
                 data:frmData,
                 type: 'post',
@@ -269,10 +285,9 @@
  <li>比如:SELECT No,Name FROM Port_Emp </li>
  <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
  </ul>
-
  </div>
-</fieldset>
 <textarea type="text" rows=3 id="TB_Table_SQL" name="TB_Table_SQL"  ></textarea>
+</fieldset>
 
 
 <!---------------------------- 模式3 ：分页的Table  ---------------------------------------------------->
@@ -300,7 +315,7 @@
  </div>
  <br />
 
-<textarea rows=4 type="text" id="TB_TablePage_SQL" name="TB_TablePage_SQL"  > </textarea>
+<textarea type="text" id="TB_TablePage_SQL" name="TB_TablePage_SQL"  > </textarea>
 
  <br />
 
@@ -348,16 +363,36 @@
  </ul>
  </div>
  <br />
-<textarea rows=3 type="text" id="TB_GroupModel_Entity"  name="TB_GroupModel_Entity" 
-        value="" ></textarea>
+<textarea rows="3" cols="90" type="text" id="TB_GroupModel_Entity"  name="TB_GroupModel_Entity" ></textarea>
 </fieldset>
 
 
-<!---------------------------- 模式5 ：树模式,没有关键字查询.  ---------------------------------------------------->
+<!---------------------------- 模式5 ：树模式(单实体),没有关键字查询.  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_Tree" type="radio" name="Model" value="Tree"  /><label for="RB_PopWorkModel_Tree">树模式</label>  </legend>
+<legend><input id="RB_PopWorkModel_Tree" type="radio" name="Model" value="Tree"  /><label for="RB_PopWorkModel_Tree">树模式(单实体)</label>  </legend>
 <a href="javascript:ShowHidden('Tree')">初始化树SQL</a>
  <div id="Tree" style="color:Gray; display:none">
+ <ul>
+ <li>单实体树是仅仅只有一个实体信息的树，比如部门树。</li>
+ <li>单实体树与双实体树都是懒加载的方式完成选择效果。</li>
+ <li>设置一个查询的SQL语句，必须返回No,Name,Parent三个列，必须有@ParentNo参数。</li>
+ <li>比如:SELECT No, Name,ParentNo FROM Port_Dept WHERE ParentNo='@ParentNo' </li>
+ <li>该参数支持ccbpm表达式。</li>
+ <li>返回的数据源里，必须有根节点。</li>
+ </ul>
+ </div>
+ <br />
+    <textarea  cols="90"  id="TB_TreeSQL" name="TB_TreeSQL"  ></textarea>
+ <br />
+    根节点值:<input type="text" id="TB_TreeParentNo" name="TB_TreeParentNo" value="0" />
+ </fieldset>
+
+ 
+<!---------------------------- 模式6 ：树模式(双实体),没有关键字查询.  ---------------------------------------------------->
+<fieldset>
+<legend><input id="RB_PopWorkModel_DoubleTree" type="radio" name="Model" value="RB_PopWorkModel_DoubleTree"  /><label for="RB_PopWorkModel_DoubleTree">树模式(双实体)</label>  </legend>
+<a href="javascript:ShowHidden('Tree6')">初始化树SQL</a>
+ <div id="Tree6" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name,Parent三个列。</li>
  <li>比如:SELECT No, Name,ParentNo FROM Port_Dept </li>
@@ -365,14 +400,28 @@
  <li>返回的数据源里，必须有根节点。</li>
  </ul>
  </div>
+ <br />
+    <textarea rows="3" cols="90" id="TB_DoubleTreeSQL" name="TB_DoubleTreeSQL"  ></textarea>
+ <br />
+    根节点值:<input type="text" id="TB_DoubleTreeParentNo" name="TB_DoubleTreeParentNo" value="0" />
+     <br />
+ <a href="javascript:ShowHidden('DoubleTreeEntitySQL')">实体SQL</a>
+     <br />
 
-    <input type="text" id="TB_TreeSQL" name="TB_TreeSQL" value="" /> 
-    根节点值:<input type="text" id="TB_TreeParentNo" name="TB_TreeParentNo" value="" />
+ <div id="DoubleTreeEntitySQL" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name, [外键] 三个列，第3个列是外键，必须有 @ParentNo 参数,@ParentNo是选择节点的ID.</li>
+ <li>比如:SELECT No, Name,FK_Dept FROM Port_Emp WHERE FK_Dept='@ParentNo' </li>
+ </ul>
+ </div>
+    <textarea rows="3"  cols="90" id="TB_DoubleTreeEntitySQL" name="TB_DoubleTreeEntitySQL"  ></textarea>
+
  </fieldset>
 
+
 <!---------------------------- 高级设置.  ---------------------------------------------------->
-<!--<fieldset>
-<legend><label for="RB_PopWorkModel_Tree">高级设置</label>  </legend>-->
+<fieldset>
+<legend><label for="RB_PopWorkModel_Tree">高级设置</label>  </legend>
 宽度(px)： <input type="text" id="TB_Width" name="TB_Width"  value="" />  
 高度(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />   
 开窗标题：<input type="text" id="TB_Title"  name="TB_Title"  value="" />
@@ -390,7 +439,7 @@
 
 <input type="text" id="TB_ColNames" name="TB_ColNames"  value="" />
 
-<!--</fieldset>-->
+</fieldset>
 
 <fieldset>
 <legend> 返回值格式  </legend>
@@ -408,8 +457,7 @@
 <input type="Button" value="获得Json"  onclick="GetJson()" />
 <input type="Button" value="保存"  onclick="Save()" />
 <input type="Button" value="保存并关闭"  onclick="SaveAndClose()" />
-<input type="Button" value="关闭"  onclick="Close()" />
-
+<input type="Button" value="关闭"  onclick="windows.close();" />
 
 </form>
 

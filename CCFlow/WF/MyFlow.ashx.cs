@@ -95,7 +95,6 @@ namespace CCFlow.WF
         {
             get
             {
-
                 if (string.IsNullOrEmpty(this.Request.Form["Paras"]) == false)
                 {
                     string myps = this.Request.Form["Paras"];
@@ -112,6 +111,24 @@ namespace CCFlow.WF
                 }
                 return false;
             }
+        }
+        /// <summary>
+        /// 轨迹ID
+        /// </summary>
+        public string TrackID
+        {
+            get
+            {
+                return this.RequestValByKey("TrackeID");
+            }
+        }
+        public string RequestValByKey(string key)
+        {
+            string str = this.Request.Form[key];
+            if (str == null)
+                str = context.Request.QueryString[key];
+
+            return str;
         }
         /// <summary>
         /// 当前的工作ID
@@ -280,13 +297,13 @@ namespace CCFlow.WF
             string toolbar = "";
             if (this.IsCC)
             {
-                toolbar+="<input type=button  value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/ChartTrack.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
+                toolbar+="<input type=button  value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/ChartTrack.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
                 // 判断审核组件在当前的表单中是否启用，如果启用了.
                 FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
                 if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
                 {
                     /*如果不等于启用, */
-                    toolbar += "<input type=button  value='填写审核意见' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CCCheckNote.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
+                    toolbar += "<input type=button  value='填写审核意见' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CCCheckNote.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
                 }
                 return toolbar;
             }
@@ -302,7 +319,7 @@ namespace CCFlow.WF
                     if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                     {
                         /*如果启用了发送按钮.*/
-                        toolbar += "<input type=button value='" + btnLab.SendLab+ "' enable=true onclick=\""+btnLab.SendJS + " if (SendSelfFrom()==false) return false;this.disabled=true;\" />";
+                        toolbar += "<input type=button value='" + btnLab.SendLab+ "' enable=true onclick=\""+btnLab.SendJS + " if (SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
                     }
                 }
                 else
@@ -317,7 +334,7 @@ namespace CCFlow.WF
                         }
                         else
                         {
-                            toolbar += "<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false;this.disabled=true;\" />";
+                            toolbar += "<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
                         }
                     }
                 }
@@ -338,7 +355,7 @@ namespace CCFlow.WF
                     if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                     {
                         /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                        toolbar += "<input type=button value='" + btnLab.SaveLab + "' enable=true onclick=\""+btnLab.SendJS + " if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();\" />";
+                        toolbar += "<input type=button value='" + btnLab.SaveLab + "' enable=true onclick=\""+btnLab.SendJS + " if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();Send(); \" />";
                     }
                 }
                 else
@@ -351,7 +368,7 @@ namespace CCFlow.WF
                         if (btnLab.SelectAccepterEnable == 2)
                         {
                             /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                             toolbar += "<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if (OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; \" />";
+                            toolbar += "<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if (OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; Send(); \" />";
                             //toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                             //Btn_Send.Style.Add("display", "none");
                             //this.Btn_Send.UseSubmitBehavior = false;
@@ -364,50 +381,50 @@ namespace CCFlow.WF
                         }
                         else
                         {
-                            toolbar += "<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();\" />";
+                            toolbar += "<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();Send();\" />";
                         }
                     }
                 }
 
-                /*处理保存按钮.*/
+                /* 处理保存按钮.*/
                 if (btnLab.SaveEnable && isAskFor == false)
                 {
-                    toolbar += "<input type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false;KindEditerSync();\" />";
+                    toolbar += "<input type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false;KindEditerSync();Save();\" />";
                 }
             }
 
             if (btnLab.WorkCheckEnable && isAskFor == false)
             {
                 /*审核*/
-                string urlr1 = appPath + "WF/WorkOpt/WorkCheck.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr1 = appPath + "WF/WorkOpt/WorkCheck.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar += "<input type=button  value='" + btnLab.WorkCheckLab + "' enable=true onclick=\"WinOpen('" + urlr1 + "','dsdd'); \" />";
             }
 
             if (btnLab.ThreadEnable)
             {
                 /*如果要查看子线程.*/
-                string ur2 = appPath + "WF/WorkOpt/ThreadDtl.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string ur2 = appPath + "WF/WorkOpt/ThreadDtl.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar += "<input type=button  value='" + btnLab.ThreadLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />";
             }
 
             if (btnLab.TCEnable == true && isAskFor == false)
             {
                 /*流转自定义..*/
-                string ur3 = appPath + "WF/WorkOpt/TransferCustom.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string ur3 = appPath + "WF/WorkOpt/TransferCustom.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar += "<input type=button  value='" + btnLab.TCLab + "' enable=true onclick=\"To('" + ur3 + "'); \" />";
             }
 
             if (btnLab.JumpWayEnable && isAskFor == false)
             {
                 /*如果没有焦点字段*/
-                string urlr = appPath + "WF/JumpWay.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr = appPath + "WF/JumpWay.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar += "<input type=button  value='" + btnLab.JumpWayLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
             }
 
             if (btnLab.ReturnEnable && isAskFor == false && this.currND.IsStartNode == false)
             {
                 /*如果没有焦点字段*/
-                string urlr = appPath + "WF/WorkOpt/ReturnWork.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr = appPath + "WF/WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar += "<input type=button  value='" + btnLab.ReturnLab + "' enable=true onclick=\"ReturnWork('" + urlr + "','" + btnLab.ReturnField + "'); \" />";
             }
           
@@ -415,7 +432,7 @@ namespace CCFlow.WF
             if (btnLab.HungEnable)
             {
                 /*挂起*/
-                string urlr = appPath + "WF/WorkOpt/HungUp.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr = appPath + "WF/WorkOpt/HungUp.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar += "<input type=button  value='" + btnLab.HungLab + "' enable=true onclick=\"WinOpen('" + urlr + "'); \" />";
                 //toolbar.Add("<input type=button  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />");
             }
@@ -425,15 +442,15 @@ namespace CCFlow.WF
                 /*移交*/
                 // toolbar.AddBtn("Btn_Shift", btnLab.ShiftLab);
                 //   this.Btn_Shift.Click += new System.EventHandler(ToolBar1_ButtonClick);
-                string url12 = "./WorkOpt/Forward.aspx?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + "移交原因.";
+                string url12 = "./WorkOpt/Forward.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + "移交原因.";
                 toolbar += "<input type=button  value='" + btnLab.ShiftLab + "' enable=true onclick=\"To('" + url12 + "'); \" />";
             }
 
             if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
             {
                 /* 抄送 */
-                // toolbar.Add("<input type=button value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Msg/Write.aspx?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "','ds'); \" />");
-                toolbar += "<input type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CC.aspx?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','ds'); \" />";
+                // toolbar.Add("<input type=button value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Msg/Write.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "','ds'); \" />");
+                toolbar += "<input type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CC.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','ds'); \" />";
             }
 
             if (btnLab.DeleteEnable != 0 && isAskFor == false)
@@ -447,7 +464,7 @@ namespace CCFlow.WF
                     case DelWorkFlowRole.DeleteAndWriteToLog:
                     case DelWorkFlowRole.DeleteByFlag:
                     case DelWorkFlowRole.DeleteReal: // 不需要交互，直接干净的删除.
-                        string urlrDel = appPath + "WF/MyFlowInfo.aspx?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                        string urlrDel = appPath + "WF/MyFlowInfo.htm?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                         toolbar += "<input type=button  value='" + btnLab.DeleteLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" />";
                         break;
                     //case DelWorkFlowRole.DeleteReal: // 不需要交互，直接干净的删除.
@@ -462,27 +479,27 @@ namespace CCFlow.WF
 
             if (btnLab.EndFlowEnable && this.currND.IsStartNode == false && isAskFor == false)
             {
-                toolbar += "<input type=button  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"To('./WorkOpt/StopFlow.aspx?&DoType=StopFlow&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "'); \" />";
+                toolbar += "<input type=button  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"To('./WorkOpt/StopFlow.htm?&DoType=StopFlow&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "'); \" />";
                 //toolbar.AddBtn("Btn_EndFlow", btnLab.EndFlowLab);
                 //toolbar.GetBtnByID("Btn_EndFlow").OnClientClick = "return confirm('" + this.ToE("AYS", "将要执行终止流程，您确认吗？") + "')";
                 //toolbar.GetBtnByID("Btn_EndFlow").Click += new System.EventHandler(ToolBar1_ButtonClick);
             }
 
             //if (btnLab.RptEnable)
-            //    toolbar.Add("<input type=button  value='" + btnLab.RptLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "','ds0'); \" />");
+            //    toolbar.Add("<input type=button  value='" + btnLab.RptLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "','ds0'); \" />");
 
             if (btnLab.PrintDocEnable && isAskFor == false)
             {
                 /*如果不是加签 */
                 if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintRTF)
                 {
-                    string urlr = appPath + "WF/WorkOpt/PrintDoc.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar +="<input type=button  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />";
                 }
 
                 if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintWord)
                 {
-                    string urlr = appPath + "WF/Rpt/RptDoc.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsPrint=1&s=" + tKey;
+                    string urlr = appPath + "WF/Rpt/RptDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsPrint=1&s=" + tKey;
                     toolbar +="<input type=button  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />";
                 }
 
@@ -493,38 +510,38 @@ namespace CCFlow.WF
             }
 
             if (btnLab.TrackEnable && isAskFor == false)
-                toolbar +="<input type=button  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/ChartTrack.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
+                toolbar +="<input type=button  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/ChartTrack.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
 
             //if (btnLab.OptEnable)
-            //    toolbar.Add("<input type=button  value='" + btnLab.OptLab + "' onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Home.aspx?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "','opt'); \"  />");
+            //    toolbar.Add("<input type=button  value='" + btnLab.OptLab + "' onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Home.htm?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "','opt'); \"  />");
 
             switch (btnLab.SelectAccepterEnable)
             {
                 case 1:
                     if (isAskFor == false)
-                        toolbar +="<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Accepter.aspx?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />";
+                        toolbar +="<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Accepter.htm?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />";
                     break;
                 case 2:
-                    //  toolbar.Add("<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Accepter.aspx?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />");
+                    //  toolbar.Add("<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Accepter.htm?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />");
                     break;
                 default:
                     break;
             }
 
             if (btnLab.SearchEnable && isAskFor == false)
-                toolbar +="<input type=button  value='" + btnLab.SearchLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Rpt/Search.aspx?EnsName=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "','dsd0'); \" />";
+                toolbar +="<input type=button  value='" + btnLab.SearchLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Rpt/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "','dsd0'); \" />";
 
             if (btnLab.BatchEnable && isAskFor == false)
             {
                 /*批量处理*/
-                string urlr = appPath + "WF/Batch.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr = appPath + "WF/Batch.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar +="<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
             }
 
             if (btnLab.AskforEnable && HisGenerWorkFlow != null && HisGenerWorkFlow.WFState != WFState.Askfor)
             {
                 /*加签 */
-                string urlr3 = appPath + "WF/WorkOpt/Askfor.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr3 = appPath + "WF/WorkOpt/Askfor.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar +="<input type=button  value='" + btnLab.AskforLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
                 //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
             }
@@ -532,7 +549,7 @@ namespace CCFlow.WF
             if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
             {
                 /*公文正文 */
-                string urlr = appPath + "WF/WorkOpt/WebOffice.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr = appPath + "WF/WorkOpt/WebOffice.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar +="<input type=button  value='" + btnLab.WebOfficeLab + "' enable=true onclick=\"WinOpen('" + urlr + "','公文正文'); \" />";
                 //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
             }
@@ -540,7 +557,7 @@ namespace CCFlow.WF
             if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
             {
                 /* 启用了数据重置功能 */
-                string urlr3 = appPath + "WF/MyFlow.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsDeleteDraft=1&s=" + tKey;
+                string urlr3 = appPath + "WF/MyFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsDeleteDraft=1&s=" + tKey;
                 toolbar +="<input type=button  value='数据重置' enable=true onclick=\"To('" + urlr3 + "','ds'); \" />";
                 //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
             }
@@ -548,21 +565,21 @@ namespace CCFlow.WF
             if (btnLab.SubFlowCtrlRole != SubFlowCtrlRole.None)
             {
                 /* 子流程 */
-                string urlr3 = appPath + "WF/WorkOpt/SubFlow.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr3 = appPath + "WF/WorkOpt/SubFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar +="<input type=button  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
             }
 
             if (btnLab.CHEnable == true)
             {
                 /* 节点时限设置 */
-                string urlr3 = appPath + "WF/WorkOpt/CH.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr3 = appPath + "WF/WorkOpt/CH.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar +="<input type=button  value='" + btnLab.CHLab + "' enable=true onclick=\"WinShowModalDialog('" + urlr3 + "'); \" />";
             }
 
             if (btnLab.PRIEnable == true)
             {
                 /* 优先级设置 */
-                string urlr3 = appPath + "WF/WorkOpt/PRI.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr3 = appPath + "WF/WorkOpt/PRI.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar +="<input type=button  value='" + btnLab.PRILab + "' enable=true onclick=\"WinShowModalDialog('" + urlr3 + "'); \" />";
             }
 
@@ -782,9 +799,7 @@ namespace CCFlow.WF
             string resultValue = "";
             switch (method)
             {
-                case "ReadNodeFrmData":
-                    resultValue = ReadNodeFrmData();
-                    break;
+               
                 case "Save": //保存.
                     resultValue = Save();
                     break;
@@ -812,6 +827,9 @@ namespace CCFlow.WF
                 case "Press": //催办.
                     resultValue = Press();
                     break;
+                case "ViewWorkNodeFrm": //查看一个表单.
+                    resultValue = ViewWorkNodeFrm();
+                    break;
                 default:
                     resultValue = method + "没有判断.";
                     break;
@@ -824,9 +842,33 @@ namespace CCFlow.WF
         /// 获得节点表单数据.
         /// </summary>
         /// <returns></returns>
-        public string ReadNodeFrmData()
+        public string ViewWorkNodeFrm()
         {
-            return "";
+            Node nd = new Node(this.FK_Node);
+
+            Hashtable ht = new Hashtable();
+            ht.Add("FormType", nd.FormType.ToString());
+            ht.Add("Url", nd.FormUrl+"&WorkID="+this.WorkID+"&FK_Flow="+this.FK_Flow+"&FK_Node="+this.FK_Node);
+
+            if (nd.FormType == NodeFormType.SDKForm)
+                return BP.Tools.Json.ToJson(ht, false); 
+
+            if (nd.FormType == NodeFormType.SelfForm)
+                return BP.Tools.Json.ToJson(ht, false);
+
+
+            //.工作数据放里面去, 放进去前执行一次装载前填充事件.
+            BP.WF.Work wk = nd.HisWork;
+            wk.OID = this.WorkID;
+            wk.RetrieveFromDBSources();
+
+            //表单模版.
+            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(wk.ToString(), true);
+            DataTable mainTable = wk.ToDataTableField("MainTable");
+            mainTable.TableName = "MainTable";
+            myds.Tables.Add(mainTable);
+
+            return BP.Tools.Json.ToJson(myds);
         }
         /// <summary>
         /// 获得可以退回的节点.

@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ccform从表设计器</title>
+     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <base target="_self" />
+      <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        function Save() {
+            var fk_mapExt = GetQueryString("MyPK");
+            var frmData = $("#cc").serialize();
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: "MapExtHandler.ashx?DoType=PopVal_Save&FK_MapExt=" + fk_mapExt + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        }
+
+        //公共变量.
+        //表单ID.
+        var fk_mapData = GetQueryString("FK_MapData");
+        //明细表ID.
+        var fk_mapDtl = GetQueryString("FK_MapDtl");
+     </script>
+</head>
+<body>
+
+
+
+ <div class='easyui-layout' data-options='fit:true'>
+        <div data-options="region:'north',noheader:true,split:false,border:false" style='height:30px;overflow-y:hidden'>
+            <div style='float:left'>
+                <a href="javascript:EditDtl(fk_mapData,fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-edit',plain:true"><%=dtl.Name %></a>
+            </div>
+            <div style='float:right'>
+                <a href="javascript:document.getElementById('F').contentWindow.AddF(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-new',plain:true">插入列</a>
+                <a href="javascript:document.getElementById('F').contentWindow.AddFGroup(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-new',plain:true">插入列组</a>
+                <a href="javascript:document.getElementById('F').contentWindow.CopyF(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">复制列</a>
+                <a href="javascript:document.getElementById('F').contentWindow.HidAttr(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">隐藏列</a>
+                <a href="javascript:document.getElementById('F').contentWindow.DtlMTR(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">多表头</a>
+
+                <!--<a href='Action.aspx?FK_MapData=<%=this.FK_MapDtl %>' class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">从表事件</a>-->
+                <!--<a href="javascript:DtlDoUp('<%=dtl.No %>')" class='easyui-linkbutton' data-options="iconCls:'icon-up',plain:true"></a>
+                <a href="javascript:DtlDoDown('<%=dtl.No %>')" class='easyui-linkbutton' data-options="iconCls:'icon-down',plain:true"></a>-->
+
+            </div>
+            <div style='clear:both'></div>
+        </div>
+        <div data-options="region:'center',noheader:true,border:false" style="overflow-y:hidden">
+            <iframe ID='F' frameborder='0' scrolling="auto" style='width:100%;height:100%' src='MapDtlDe.aspx?DoType=Edit&FK_MapData=<%=this.FK_MapData %>&FK_MapDtl=<%=dtl.No %>'></iframe>
+        </div>
+    </div>
+
+</body>
+</html>

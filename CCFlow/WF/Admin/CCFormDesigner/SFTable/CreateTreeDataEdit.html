@@ -9,6 +9,7 @@
     <link href="../../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI15/treegrid-dnd.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -192,6 +193,24 @@
 
                  singleSelect: true,
 
+                 rownumbers: true,
+
+                 fitColumns: true,
+
+                 animate: true,
+
+                 height: 450,
+                     
+                 onLoadSuccess: function (row)
+                 {
+                     $('#treeGrd').treegrid('enableDnd', row ? row.id : null);
+                 },
+
+                 onDrop: function(targetRow, sourceRow, point)
+                 {
+                     alert("Target: " + targetRow.id + "; Source: " + sourceRow.id + "; Point:" + point);
+                 },
+
                  onClickRow: function (row)
                  {
                      //alert(row);
@@ -206,7 +225,6 @@
                      if (currentNodeId != nodeId)
                      {
                          $('#treeGrd').treegrid('endEdit', currentNodeId);
-
                          $('#treeGrd').treegrid('selectRow', nodeId).treegrid('beginEdit', nodeId);
 
                          currentNodeId = nodeId;
@@ -378,9 +396,23 @@
 
             var node = $('#treeGrd').treegrid('getSelected');
 
+            //var parentNode = $('#treeGrd').treegrid('getParent', node.id);
+
             if (node)
             {
+                //if (parentNode != null && parentNode != undefined) {
+                //    if (parentNode.children != null && parentNode.children != undefined)
+                //    {
+                //        parentNode.children.splice(parentNode.children.indexOf(node), 1);
+                //    }
+                //}
+                //else {
+                //    data.splice(data.indexOf(node), 1);
+                //}
+
                 $('#treeGrd').treegrid('remove', node.id);
+                //$('#treeGrd').treegrid('acceptChanges');
+                $('#treeGrd').treegrid('pop', node.id);
 
                 removeNodeID(node.id);
             }
@@ -393,17 +425,34 @@
         {
             var node = $('#treeGrd').treegrid('getSelected');
 
+            var parentNode = $('#treeGrd').treegrid('getParent', node.id);
+
             if (node)
             {
                 var newNodeId = nextNodeID();
                 var newNodeValue = "NewNode-" + newNodeId.toString();
                 var newNodeUID = createGuid();
 
+                var newData = { id: newNodeId, value: newNodeValue, parent: node.id, uid: newNodeUID, children: [] };
+
+                if (parentNode != null && parentNode != undefined) {
+                    if (parentNode.children == null || parentNode.children == undefined) {
+                        parentNode.children = [];
+                    }
+
+                    parentNode.children.push(newData);
+                }
+                else {
+                    data.push(newData);
+                }
+
                 $('#treeGrd').treegrid('insert', {
                     //before: node.id,
                     after: node.id,
-                    data: { id: newNodeId, value: newNodeValue, parent: node.id, uid: newNodeUID, children: [] }
+                    data: newData
                 });
+
+                //$('#treeGrd').treegrid('acceptChanges');
 
                 addNodeID(newNodeId);
             } else {
@@ -411,23 +460,45 @@
             }
         }
 
-        function append() {
+        function append()
+        {
             // append some nodes to the selected row
             var node = $('#treeGrd').treegrid('getSelected');
+            //var children = $('#treeGrd').treegrid('getChildren', node.id);
 
             if (node) {
                 var newNodeId = nextNodeID();
                 var newNodeValue = "NewNode-" + newNodeId.toString();
                 var newNodeUID = createGuid();
+                var newData = { id: newNodeId, value: newNodeValue, parent: node.id, uid: newNodeUID, children: [] };
+
+                //for (var prop in  node) {
+                //    alert(prop + " : " + node[prop]);
+                //}
+
+                //if (node.children == null || node.children == undefined) {
+                //    node.children = [];
+                //}
+
+                //node.children.push(newData);
 
                 $('#treeGrd').treegrid('append', {
                     parent: node.id,  // the node has a 'id' value that defined through 'idField' property
-                    data: { id: newNodeId, value: newNodeValue, parent: node.id, uid: newNodeUID, children: [] }
+                    data: [newData]
                 });
 
-                addNodeID(newNodeId);
+                //$('#treeGrd').treegrid('acceptChanges');
 
-                $('#treeGrd').treegrid('loadData', data);
+                //$('#treeGrd').treegrid('insert', {
+                //    before: node.children[0].id,
+                //    //after: node.id,
+                //    data: newData
+                //});
+
+                addNodeID(newNodeId);
+ 
+                //$('#treeGrd').treegrid('reload');
+                //$('#treeGrd').treegrid('expandAll');
             }
             else {
                 alert("请首先选择一个结点!")
@@ -436,14 +507,21 @@
 
         function submit()
         {
+            $('#treeGrd').treegrid('acceptChanges');
+
             $.ajax({
                 method: "POST",
                 url: servicePointPost,
                 data: JSON.stringify(reduce(data))
             }).done(function (msg)
             {
-                alert("Data Saved: " + msg);
+                alert("保存成功: " + msg);
             });
+        }
+
+        function refresh()
+        {
+            $('#treeGrd').treegrid('reload');
         }
 
         //function accept(){
@@ -494,20 +572,14 @@
 </head>
 <body>
     <div class="container">
-        <!--<div id="access_menu" class="easyui-menu" style="width:100px;">
-            <div id="access_menu_edit">编辑本节点</div>
-            <div id="access_menu_del">删除本条目</div>
-            <div id="access_menu_refresh">刷新节点</div>
-            <div id="access_menu_new">新增子节点</div>
-        </div>-->
-        <!--<table id="tree" class="easyui-treegrid" style="width:600px;height:400px"></table>-->
-
 
         <div id="tb" style="height:auto">
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">挂接</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-insert',plain:true" onclick="insert()">增加</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="submit()">保存</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="refresh()">刷新</a>
+
             <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">Reject</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>-->
         </div>

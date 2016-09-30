@@ -54,9 +54,9 @@ function To(url) {
     window.location.href = url;
 }
 
-window.onerror = function () {
-    return true;
-}
+//window.onerror = function () {
+//    return true;
+//}
 
 function OpenItme3(webAppPath, className, url) {
     var url = webAppPath + "/Comm/" + 'Item3.aspx?EnName=' + className + url;

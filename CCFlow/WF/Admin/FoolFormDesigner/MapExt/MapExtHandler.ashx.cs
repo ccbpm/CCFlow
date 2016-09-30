@@ -158,10 +158,17 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
                         //me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
                         break;
-                    case "Tree": //树模式.
+                    case "Tree": //单实体树.
                         me.PopValWorkModel = PopValWorkModel.Tree;
                         me.PopValTreeSQL = this.GetValFromFrmByKey("TB_TreeSQL");
                         me.PopValTreeParentNo = this.GetValFromFrmByKey("TB_TreeParentNo");
+                        break;
+                    case "TreeDouble": //双实体树.
+                        me.PopValWorkModel = PopValWorkModel.TreeDouble;
+                        me.PopValTreeSQL = this.GetValFromFrmByKey("TB_DoubleTreeSQL");// 树SQL
+                        me.PopValTreeParentNo = this.GetValFromFrmByKey("TB_DoubleTreeParentNo");
+
+                        me.PopValEntitySQL = this.GetValFromFrmByKey("TB_DoubleTreeEntitySQL"); //实体SQL
                         break;
                     default:
                         break;
@@ -303,7 +310,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 rb.Retrieve();
 
                 rb.Script = dr["Script"].ToString();
-                rb.FieldsCfg = dr["FieldsCfg"].ToString();
+                rb.FieldsCfg = dr["FieldsCfg"].ToString(); //格式为 @字段名1=1@字段名2=0
+                rb.Tip = dr["Tip"].ToString(); //提示信息
                 rb.Update();
             }
 

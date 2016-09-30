@@ -61,7 +61,11 @@ namespace BP.Sys
         /// <summary>
         /// 树展现模式
         /// </summary>
-        Tree
+        Tree,
+        /// <summary>
+        /// 双实体树
+        /// </summary>
+        TreeDouble
     }
     /// <summary>
     /// 扩展

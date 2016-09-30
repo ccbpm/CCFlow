@@ -176,7 +176,7 @@ namespace BP.Tools
             {
                 /*如果是datatable 模式. */
                 DataTable dt = new DataTable();
-                dt.TableName = "DT";
+                dt.TableName = "HT";  //此表名不能修改.
                 dt.Columns.Add(new DataColumn("No", typeof(string)));
                 dt.Columns.Add(new DataColumn("Name", typeof(string)));
                 foreach (string key in ht.Keys)

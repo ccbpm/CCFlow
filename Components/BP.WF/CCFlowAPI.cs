@@ -108,70 +108,70 @@ namespace BP.WF
                 string sql = "";
                 DataTable dt = null;
 
-                //把附件的数据放入.
-                if (md.FrmAttachments.Count > 0)
-                {
-                    sql = "SELECT * FROM Sys_FrmAttachmentDB where RefPKVal=" + workID + " AND FK_MapData='ND" + fk_node + "'";
-                    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                    dt.TableName = "Sys_FrmAttachmentDB";
-                    myds.Tables.Add(dt);
-                }
-                // 图片附件数据放入
-                if (md.FrmImgAths.Count > 0)
-                {
-                    sql = "SELECT * FROM Sys_FrmImgAthDB where RefPKVal=" + workID + " AND FK_MapData='ND" + fk_node + "'";
-                    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                    dt.TableName = "Sys_FrmImgAthDB";
-                    myds.Tables.Add(dt);
-                }
+                ////把附件的数据放入.
+                //if (md.FrmAttachments.Count > 0)
+                //{
+                //    sql = "SELECT * FROM Sys_FrmAttachmentDB where RefPKVal=" + workID + " AND FK_MapData='ND" + fk_node + "'";
+                //    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                //    dt.TableName = "Sys_FrmAttachmentDB";
+                //    myds.Tables.Add(dt);
+                //}
+                //// 图片附件数据放入
+                //if (md.FrmImgAths.Count > 0)
+                //{
+                //    sql = "SELECT * FROM Sys_FrmImgAthDB where RefPKVal=" + workID + " AND FK_MapData='ND" + fk_node + "'";
+                //    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                //    dt.TableName = "Sys_FrmImgAthDB";
+                //    myds.Tables.Add(dt);
+                //}
 
-                //把从表的数据放入.
-                if (md.MapDtls.Count > 0)
-                {
-                    foreach (MapDtl dtl in md.MapDtls)
-                    {
-                        GEDtls dtls = new GEDtls(dtl.No);
-                        QueryObject qo = null;
-                        try
-                        {
-                            qo = new QueryObject(dtls);
-                            switch (dtl.DtlOpenType)
-                            {
-                                case DtlOpenType.ForEmp:  // 按人员来控制.
-                                    qo.AddWhere(GEDtlAttr.RefPK, workID);
-                                    qo.addAnd();
-                                    qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
-                                    break;
-                                case DtlOpenType.ForWorkID: // 按工作ID来控制
-                                    qo.AddWhere(GEDtlAttr.RefPK, workID);
-                                    break;
-                                case DtlOpenType.ForFID: // 按流程ID来控制.
-                                    qo.AddWhere(GEDtlAttr.FID, workID);
-                                    break;
-                            }
-                        }
-                        catch
-                        {
-                            dtls.GetNewEntity.CheckPhysicsTable();
-                        }
-                        DataTable dtDtl = qo.DoQueryToTable();
+                ////把从表的数据放入.
+                //if (md.MapDtls.Count > 0)
+                //{
+                //    foreach (MapDtl dtl in md.MapDtls)
+                //    {
+                //        GEDtls dtls = new GEDtls(dtl.No);
+                //        QueryObject qo = null;
+                //        try
+                //        {
+                //            qo = new QueryObject(dtls);
+                //            switch (dtl.DtlOpenType)
+                //            {
+                //                case DtlOpenType.ForEmp:  // 按人员来控制.
+                //                    qo.AddWhere(GEDtlAttr.RefPK, workID);
+                //                    qo.addAnd();
+                //                    qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
+                //                    break;
+                //                case DtlOpenType.ForWorkID: // 按工作ID来控制
+                //                    qo.AddWhere(GEDtlAttr.RefPK, workID);
+                //                    break;
+                //                case DtlOpenType.ForFID: // 按流程ID来控制.
+                //                    qo.AddWhere(GEDtlAttr.FID, workID);
+                //                    break;
+                //            }
+                //        }
+                //        catch
+                //        {
+                //            dtls.GetNewEntity.CheckPhysicsTable();
+                //        }
+                //        DataTable dtDtl = qo.DoQueryToTable();
 
-                        // 为明细表设置默认值.
-                        MapAttrs dtlAttrs = new MapAttrs(dtl.No);
-                        foreach (MapAttr attr in dtlAttrs)
-                        {
-                            //处理它的默认值.
-                            if (attr.DefValReal.Contains("@") == false)
-                                continue;
+                //        // 为明细表设置默认值.
+                //        MapAttrs dtlAttrs = new MapAttrs(dtl.No);
+                //        foreach (MapAttr attr in dtlAttrs)
+                //        {
+                //            //处理它的默认值.
+                //            if (attr.DefValReal.Contains("@") == false)
+                //                continue;
 
-                            foreach (DataRow dr in dtDtl.Rows)
-                                dr[attr.KeyOfEn] = attr.DefVal;
-                        }
+                //            foreach (DataRow dr in dtDtl.Rows)
+                //                dr[attr.KeyOfEn] = attr.DefVal;
+                //        }
 
-                        dtDtl.TableName = dtl.No; //修改明细表的名称.
-                        myds.Tables.Add(dtDtl); //加入这个明细表, 如果没有数据，xml体现为空.
-                    }
-                }
+                //        dtDtl.TableName = dtl.No; //修改明细表的名称.
+                //        myds.Tables.Add(dtDtl); //加入这个明细表, 如果没有数据，xml体现为空.
+                //    }
+                //}
                 #endregion
 
 

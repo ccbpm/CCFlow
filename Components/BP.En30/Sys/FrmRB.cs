@@ -49,6 +49,8 @@ namespace BP.Sys
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
+        public const string Tip = "Tip";
+
     }
     /// <summary>
     /// 单选框
@@ -56,6 +58,20 @@ namespace BP.Sys
     public class FrmRB : EntityMyPK
     {
         #region 属性
+        /// <summary>
+        /// 提示
+        /// </summary>
+        public string Tip
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmRBAttr.Tip);
+            }
+            set
+            {
+                this.SetValByKey(FrmRBAttr.Tip, value);
+            }
+        }
         /// <summary>
         /// 要执行的脚本
         /// </summary>
@@ -70,6 +86,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmRBAttr.Script, value);
             }
         }
+        
         /// <summary>
         /// 字段-配置信息
         /// </summary>
@@ -205,12 +222,12 @@ namespace BP.Sys
 
                 //要执行的脚本.
                 map.AddTBString(FrmRBAttr.Script, null, "要执行的脚本", true, false, 0, 4000, 20);
-                map.AddTBString(FrmRBAttr.FieldsCfg, null, "配置信息@ViewSta=0@IsEnable=1", true, false, 0, 100, 20);
+                map.AddTBString(FrmRBAttr.FieldsCfg, null, "配置信息@FieldName=Sta", true, false, 0, 4000, 20);
 
+                map.AddTBString(FrmRBAttr.Tip, null, "选择后提示的信息", true, false, 0, 1000, 20);
 
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-
 
                 this._enMap = map;
                 return this._enMap;

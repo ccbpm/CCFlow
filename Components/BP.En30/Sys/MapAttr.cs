@@ -1312,7 +1312,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.MyDataType, 0, "数据类型", true, false);
 
                 map.AddDDLSysEnum(MapAttrAttr.LGType, 0, "逻辑类型", true, false, MapAttrAttr.LGType, 
-                    "@0=普通@1=枚举@2=外键");
+                    "@0=普通@1=枚举@2=外键@3=打开系统页面");
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, false);

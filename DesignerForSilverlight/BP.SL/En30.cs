@@ -60,6 +60,7 @@ namespace BP.En
         public const string Normal = "0";
         public const string Enum = "1";
         public const string FK = "2";
+        public const string WinOpen = "3";
     }
     /// <summary>
     /// 控件类型
@@ -70,5 +71,7 @@ namespace BP.En
         public const string DDL = "1";
         public const string CheckBox = "2";
         public const string RB = "3";
+        public const string MapPin = "4";
+        public const string MicHot = "5";
     }
 }

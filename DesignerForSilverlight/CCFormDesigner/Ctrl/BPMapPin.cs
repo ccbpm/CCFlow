@@ -32,8 +32,8 @@ namespace CCForm
             this.Name = MainPage.Instance.GenerElementNameFromUI(this);
             this.IsReadOnly = true;
 
-            this.Width = 36;
-            this.Height = 36;
+            this.Width = 28;
+            this.Height = 28;
 
             ImageBrush ib = new ImageBrush();
             BitmapImage png = new BitmapImage(new Uri("/CCFormDesigner;component/Img/ic_pin.png", UriKind.Relative));

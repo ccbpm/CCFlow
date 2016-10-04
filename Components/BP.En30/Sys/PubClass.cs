@@ -1567,6 +1567,9 @@ namespace BP.Sys
                     case UIContralType.RadioBtn:
                         relKey = "RB_" + item.Key;
                         break;
+                    case UIContralType.MapPin:
+                        relKey = "TB_" + item.Key;
+                        break;
                     default:
                         break;
                 }
@@ -1640,6 +1643,9 @@ namespace BP.Sys
                         break;
                     case UIContralType.RadioBtn:
                         relKey = "RB_" + attr.Key + pk;
+                        break;
+                    case UIContralType.MapPin:
+                        relKey = "TB_" + attr.Key + pk;
                         break;
                     default:
                         break;

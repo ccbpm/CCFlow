@@ -851,6 +851,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SFList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx" />

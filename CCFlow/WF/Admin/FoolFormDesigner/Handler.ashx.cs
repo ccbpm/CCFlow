@@ -127,6 +127,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
+                    case "SFTableList":
+                        msg = this.SFTableList();
+                        break;
                     case "FieldSaveEnum": //保存字段.
                         msg = this.FieldSaveEnum();
                         break;
@@ -191,6 +194,17 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             return ses.ToJson();
         }
+        /// <summary>
+        /// 字典表列表.
+        /// </summary>
+        /// <returns></returns>
+        public string SFTableList()
+        {
+            SFTables ens = new SFTables();
+            ens.RetrieveAll();
+            return ens.ToJson();
+        }
+
         /// <summary>
         /// 字段选择.
         /// </summary>

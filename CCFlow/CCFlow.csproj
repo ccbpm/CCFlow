@@ -205,7 +205,6 @@
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\notificationFx.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\readme.txt" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\CreateTableDataEdit.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\SFTable\Tree.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Welcome.aspx" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
@@ -841,7 +840,11 @@
     <Content Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx" />
     <Content Include="WF\Admin\FlowDB\流程按月分析.png" />
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditF.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RadioBtns.htm" />
@@ -851,6 +854,8 @@
     <Content Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditEnum.htm" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Info.aspx" />
     <Content Include="WF\Admin\Org\Integration.aspx" />
@@ -1325,6 +1330,7 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\MapExtHandler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\SFTableHandler.ashx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
@@ -1384,7 +1390,6 @@
     <Content Include="WF\Messages.aspx" />
     <Content Include="WF\MessagesReplay.aspx" />
     <Content Include="WF\MyFlow.htm" />
-    <Content Include="WF\MyFlow.js" />
     <Content Include="WF\OneFlow\Archive.aspx" />
     <Content Include="WF\OneFlow\Cancel.aspx" />
     <Content Include="WF\OneFlow\Do.aspx" />
@@ -1433,6 +1438,7 @@
     <Content Include="WF\Scripts\ccflow.js" />
     <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
     <Content Include="WF\Scripts\CommonUnite.js" />
+    <Content Include="WF\Scripts\config.js" />
     <Content Include="WF\Scripts\Cookie.js" />
     <Content Include="WF\Scripts\designer.utility.js" />
     <Content Include="WF\Scripts\EasyUIUtility.js" />
@@ -2770,6 +2776,7 @@
     <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
     <Content Include="WF\WorkOpt\UnPassDtl.aspx" />
     <Content Include="WF\WorkOpt\UnSend.aspx" />
+    <Content Include="WF\WorkOpt\ViewWorkNodeFrm.htm" />
     <Content Include="WF\WorkOpt\WebOffice.aspx" />
     <Content Include="WF\WorkOpt\WorkCheck.aspx" />
     <Content Include="WF\WorkOpt\WorkCheckAth.aspx" />
@@ -4203,6 +4210,9 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx.designer.cs">
       <DependentUpon>FieldTypeList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\MapExtHandler.ashx.cs">
       <DependentUpon>MapExtHandler.ashx</DependentUpon>
@@ -7916,7 +7926,6 @@
     <Content Include="WF\Rpt\MasterPage.master" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\DataHandler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
-    <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Rpt\Single.Master" />
     <Content Include="WF\Rpt\SiteEUI.Master" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\RptGuide.Master" />

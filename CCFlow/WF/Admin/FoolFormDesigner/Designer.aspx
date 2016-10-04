@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.MapDef.WF_MapDef_MapDef"
-    Title="ccform傻瓜表单设计器" CodeBehind="Designer.aspx.cs" %>
+    Title="ccform傻瓜表单设计器" CodeBehind="Designer.htm.cs" %>
 
 <%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -22,7 +22,7 @@
     <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
     <script language="javascript" type="text/javascript">
         function FrmEvent(mypk) {
-            var url = 'FrmEvent.aspx?FK_MapData=' + mypk;
+            var url = 'FrmEvent.htm?FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         }
         function HelpGroup() {
@@ -31,99 +31,106 @@
             alert(msg);
         }
         function DoGroupF(enName) {
-            var b = window.showModalDialog('GroupTitle.aspx?EnName=' + enName, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+            var b = window.showModalDialog('GroupTitle.htm?EnName=' + enName, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function Insert(mypk, IDX) {
-            var url = 'FieldTypeList.aspx?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX;
+            var url = 'FieldTypeList.htm?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function AddF(fk_mapdata) {
-            //var url = 'Do.aspx?DoType=AddF&MyPK=' + mypk;
-            var url = 'FieldTypeList.aspx?DoType=AddF&FK_MapData=' + fk_mapdata;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+            //var url = 'Do.htm?DoType=AddF&MyPK=' + mypk;
+            var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + fk_mapdata;
+
+            var h = 500;
+            var w = 600;
+            var l = (screen.width - w) / 2;
+            var t = (screen.height - h) / 2;
+            var s = 'width=' + w + ', height=' + h + ', top=' + t + ', left=' + l;
+            s += ', toolbar=no, scrollbars=no, menubar=no, location=no, resizable=no'; 
+            var b = window.showModalDialog(url, 'ass', s);
             window.location.href = window.location.href;
         }
         function AddField(fk_mapdata, groupID) {
-            var url = 'FieldTypeList.aspx?DoType=AddF&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+            var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function AddTable(mypk) {
-            var url = 'EditCells.aspx?MyPK=' + mypk;
+            var url = 'EditCells.htm?MyPK=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function MapExt(mypk) {
-            var url = 'MapExt.aspx?FK_MapData=' + mypk;
+            var url = 'MapExt.htm?FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 800px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function BatchEdit(mypk) {
-            var url = 'BatchEdit.aspx?FK_MapData=' + mypk;
+            var url = 'BatchEdit.htm?FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 800px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function CopyFieldFromNode(mypk) {
-            var url = 'CopyFieldFromNode.aspx?DoType=AddF&FK_Node=' + mypk;
+            var url = 'CopyFieldFromNode.htm?DoType=AddF&FK_Node=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function GroupFieldNew(mypk) {
-            var url = 'GroupField.aspx?FK_MapData=' + mypk + "&RefOID=0&DoType=FunList";
+            var url = 'GroupField.htm?FK_MapData=' + mypk + "&RefOID=0&DoType=FunList";
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function ExpImp(fk_mapdata, fk_flow) {
-            var url = 'ExpImp.aspx?FK_MapData=' + fk_mapdata + "&DoType=FunList&FK_Flow=" + fk_flow;
+            var url = 'ExpImp.htm?FK_MapData=' + fk_mapdata + "&DoType=FunList&FK_Flow=" + fk_flow;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function GroupField(mypk, OID) {
-            var url = 'GroupField.aspx?FK_MapData=' + mypk + "&GroupField=" + OID;
+            var url = 'GroupField.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function GroupFieldDel(mypk, refoid) {
-            var url = 'GroupField.aspx?RefNo=' + mypk + '&DoType=DelIt&RefOID=' + refoid;
+            var url = 'GroupField.htm?RefNo=' + mypk + '&DoType=DelIt&RefOID=' + refoid;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function Edit(fk_mapdata, mypk, ftype) {
-            var url = 'EditF.aspx?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata;
+            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function EditEnum(fk_mapdata, mypk) {
-            var url = 'EditEnum.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk;
+            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function EditTable(fk_mapdata, mypk) {
-            var url = 'EditTable.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk;
+            var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function Up(fk_mapdata, mypk, idx, t) {
-            var url = 'Do.aspx?DoType=Up&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
+            var url = 'Do.htm?DoType=Up&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
-            //window.location.href ='Designer.aspx?PK='+mypk+'&IsOpen=1';
+            //window.location.href ='Designer.htm?PK='+mypk+'&IsOpen=1';
             window.location.href = window.location.href;
         }
         function Down(fk_mapdata, mypk, idx) {
-            var url = 'Do.aspx?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=xx';
+            var url = 'Do.htm?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=xx';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function GFDoUp(refoid) {
-            var url = 'Do.aspx?DoType=GFDoUp&RefOID=' + refoid;
+            var url = 'Do.htm?DoType=GFDoUp&RefOID=' + refoid;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function GFDoDown(refoid) {
-            var url = 'Do.aspx?DoType=GFDoDown&RefOID=' + refoid;
+            var url = 'Do.htm?DoType=GFDoDown&RefOID=' + refoid;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -133,7 +140,7 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            var url = 'Do.aspx?DoType=Del&MyPK=' + mypk + '&RefOID=' + refoid;
+            var url = 'Do.htm?DoType=Del&MyPK=' + mypk + '&RefOID=' + refoid;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -172,21 +179,21 @@
         var isInser = "";
 
         function CopyFieldFromNode(mypk) {
-            var url = 'CopyFieldFromNode.aspx?FK_Node=' + mypk;
+            var url = 'CopyFieldFromNode.htm?FK_Node=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         // 子线程.
         function EditFrmThread(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
 
         // 轨迹图.
         function EditTrack(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
@@ -194,120 +201,120 @@
 
         /// 审核组件.
         function EditFWC(mypk) {
-            //http: //localhost:41466/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FrmNodeComponents&PK=7901&EnName=BP.WF.Template.FrmNodeComponent&tab=%E7%88%B6%E5%AD%90%E6%B5%81%E7%A8%8B%E7%BB%84%E4%BB%B6
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=审核组件';
+            //http: //localhost:41466/WF/Comm/RefFunc/UIEn.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=7901&EnName=BP.WF.Template.FrmNodeComponent&tab=%E7%88%B6%E5%AD%90%E6%B5%81%E7%A8%8B%E7%BB%84%E4%BB%B6
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=审核组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
         //子流程.
         function EditSubFlow(mypk) {
-            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
+            // var url = '../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
 
         //子线程.
         function EditThread(mypk) {
-            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=子线程组件';
+            // var url = '../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=子线程组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
 
         //流转自定义.
         function EditFTC(mypk) {
-            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=流转自定义';
+            // var url = '../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=流转自定义';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
 
         //轨迹组件.
         function EditTrack(mypk) {
-            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=轨迹组件';
+            // var url = '../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=轨迹组件';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
 
 
         function MapDataEdit(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapFoolForm&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.MapFoolForm&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 850px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function FrmNodeComponent(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 850px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
 
         function EditDtl(mypk, dtlKey) {
-            var url = 'MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
+            var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             // var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function EditM2M(mypk, dtlKey) {
-            var url = 'MapM2M.aspx?DoType=Edit&FK_MapData=' + mypk + '&NoOfObj=' + dtlKey;
+            var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + mypk + '&NoOfObj=' + dtlKey;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function MapDtl(mypk) {
-            var url = 'MapDtl.aspx?DoType=DtlList&FK_MapData=' + mypk;
+            var url = 'MapDtl.htm?DoType=DtlList&FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         /// 多选.
         function MapM2M(mypk) {
-            var url = 'MapM2M.aspx?DoType=List&FK_MapData=' + mypk;
+            var url = 'MapM2M.htm?DoType=List&FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function MapM2MM(mypk) {
-            var url = 'MapM2MM.aspx?FK_MapData=' + mypk;
+            var url = 'MapM2MM.htm?FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function EditAth(fk_mapdata, ath) {
-            var url = 'Attachment.aspx?FK_MapData=' + fk_mapdata + '&Ath=' + ath;
+            var url = 'Attachment.htm?FK_MapData=' + fk_mapdata + '&Ath=' + ath;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function Ath(mypk) {
-            var url = 'Attachment.aspx?DoType=List&FK_MapData=' + mypk;
+            var url = 'Attachment.htm?DoType=List&FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 800px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function EditFrame(mypk, dtlKey) {
-            var url = 'MapFrame.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapFrame=' + dtlKey;
+            var url = 'MapFrame.htm?DoType=Edit&FK_MapData=' + mypk + '&FK_MapFrame=' + dtlKey;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function MapFrame(mypk) {
-            var url = 'MapFrame.aspx?DoType=DtlList&FK_MapData=' + mypk;
+            var url = 'MapFrame.htm?DoType=DtlList&FK_MapData=' + mypk;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function HidAttr(fk_mapData) {
-            var url = 'HidAttr.aspx?FK_MapData=' + fk_mapData;
+            var url = 'HidAttr.htm?FK_MapData=' + fk_mapData;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function EnableAthM(fk_MapDtl) {
-            var url = '../CCForm/AttachmentUpload.aspx?IsBTitle=1&PKVal=0&Ath=AthMDtl&FK_MapData=' + fk_MapDtl + '&FK_FrmAttachment=' + fk_MapDtl + '_AthMDtl';
+            var url = '../CCForm/AttachmentUpload.htm?IsBTitle=1&PKVal=0&Ath=AthMDtl&FK_MapData=' + fk_MapDtl + '&FK_FrmAttachment=' + fk_MapDtl + '_AthMDtl';
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             //  window.location.href = window.location.href;
         }
         function Sln(fk_mapdata) {
-            var url = 'Sln.aspx?IsBTitle=1&PKVal=0&Ath=AthM&FK_MapData=' + fk_mapdata + '&FK_FrmAttachment=' + fk_mapdata + '_AthM';
+            var url = 'Sln.htm?IsBTitle=1&PKVal=0&Ath=AthM&FK_MapData=' + fk_mapdata + '&FK_FrmAttachment=' + fk_mapdata + '_AthM';
             WinOpen(url);
             //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         }

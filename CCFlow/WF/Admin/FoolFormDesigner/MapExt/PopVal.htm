@@ -136,10 +136,7 @@
             window.close();
         }
 
-       //页面启动函数.
-       $(function () {
-           InitPage();
-       });
+     
 
        function TestData() {
          
@@ -184,6 +181,10 @@
         }
 
 
+        //页面启动函数.
+        $(function () {
+            InitPage();
+        });
         function InitPage() {
 
             var fk_mapExt = GetQueryString("MyPK");
@@ -258,7 +259,7 @@
     </script>
 </head>
 <body onkeypress="Esc();">
-<form id="cc"   >
+<form id="cc"    >
 <!---------------------------- 模式1 ：自定义URL ---------------------------------------------------->
 <fieldset>
 <legend><input id="RB_PopWorkModel_SelfUrl" type="radio" name="Model" value="SelfUrl"  /><label for="RB_PopWorkModel_SelfUrl">自定义URL</label>  </legend>

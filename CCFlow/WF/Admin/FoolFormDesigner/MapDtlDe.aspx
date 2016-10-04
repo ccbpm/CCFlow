@@ -12,12 +12,12 @@
     <base target="_self" />
     <script language="javascript">
         function Insert(fk_mapdata, IDX) {
-            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&IDX=' + IDX;
+            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&IDX=' + IDX;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function AddF(fk_mapdata) {
-            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata;
+            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -27,28 +27,28 @@
             window.location.href = window.location.href;
         }
         function CopyF(fk_mapdata) {
-            var url = 'CopyDtlField.aspx?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
+            var url = 'CopyDtlField.htm?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function HidAttr(mypk) {
-            var url = 'HidAttr.aspx?FK_MapData=' + mypk + '&s=' + Math.random();
+            var url = 'HidAttr.htm?FK_MapData=' + mypk + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
             //  window.location.href = window.location.href;
         }
         function Edit(fk_mapdata, mypk, ftype) {
-            var url = 'EditF.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype + '&s=' + Math.random();
+            var url = 'EditF.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function EditEnum(fk_mapdata, mypk) {
-            var url = 'EditEnum.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&s=' + Math.random();
+            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function EditTable(fk_mapdata, refno) {
-            var url = 'EditTable.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + refno + '&s=' + Math.random();
+            var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + refno + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

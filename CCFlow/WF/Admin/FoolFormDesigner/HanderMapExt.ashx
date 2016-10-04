@@ -22,11 +22,14 @@ namespace CCFlow.WF.MapDef
 {
     public class HanderMapExt : IHttpHandler
     {
+        #region 属性.
         string no;
         string name;
         string fk_dept;
         string oid;
         string kvs;
+        #endregion 属性.
+
         public string DealSQL(string sql, string key)
         {
             sql = sql.Replace("@Key", key);

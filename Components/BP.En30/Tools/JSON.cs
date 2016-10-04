@@ -137,6 +137,7 @@ namespace BP.Tools
             }
             return Json.DeleteLast(jsonString) + "]";
         }
+        
         /// <summary>
         /// 普通集合转换Json
         /// </summary>

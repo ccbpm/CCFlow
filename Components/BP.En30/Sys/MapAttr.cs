@@ -223,6 +223,37 @@ namespace BP.Sys
     /// </summary>
     public class MapAttr : EntityMyPK
     {
+        #region 文本字段参数属性.
+        /// <summary>
+        /// 是否是超大文本？
+        /// </summary>
+        public bool IsSupperText
+        {
+            get
+            {
+                return this.GetParaBoolen("IsSupperText",false);
+            }
+            set
+            {
+                this.SetPara("IsSupperText", value);
+            }
+        }
+        /// <summary>
+        /// 是否是富文本？
+        /// </summary>
+        public bool IsRichText
+        {
+            get
+            {
+                return this.GetParaBoolen("IsRichText",false);
+            }
+            set
+            {
+                this.SetPara("IsRichText", value);
+            }
+        }
+        #endregion
+
         #region 参数属性.
         /// <summary>
         /// 是否必填字段
@@ -231,7 +262,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValBooleanByKey(MapAttrAttr.UIIsInput);
+                return this.GetValBooleanByKey(MapAttrAttr.UIIsInput, false);
             }
             set
             {
@@ -451,48 +482,7 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.FK_MapData, value);
             }
         }
-        /// <summary>
-        /// AutoFullWay
-        /// </summary>
-        public AutoFullWay HisAutoFull_del
-        {
-            get
-            {
-                return (AutoFullWay)this.GetValIntByKey(MapAttrAttr.AutoFullWay);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.AutoFullWay, (int)value);
-            }
-        }
-        /// <summary>
-        /// 自动填写
-        /// </summary>
-        public string AutoFullDoc_Del
-        {
-            get
-            {
-                string doc = this.GetValStrByKey(MapAttrAttr.AutoFullDoc);
-                doc = doc.Replace("~", "'");
-                return doc;
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.AutoFullDoc, value);
-            }
-        }
-        public string AutoFullDocRun_Del
-        {
-            get
-            {
-                string doc = this.GetValStrByKey(MapAttrAttr.AutoFullDoc);
-                doc = doc.Replace("~", "'");
-                doc = doc.Replace("@WebUser.No", BP.Web.WebUser.No);
-                doc = doc.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                doc = doc.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                return doc;
-            }
-        }
+      
         public string KeyOfEn
         {
             get
@@ -954,17 +944,15 @@ namespace BP.Sys
             get
             {
                 return 0;
-
                 //Graphics2D g2 = (Graphics2D)g;
                 //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 //                        RenderingHints.VALUE_ANTIALIAS_ON);
-
                 //int textWidth = getFontMetrics(g2.getFont()).bytesWidth(str.getBytes(), 0, str.getBytes().length); 
 
             }
         }
         /// <summary>
-        /// 是否只读
+        /// 是否是否可见？
         /// </summary>
         public bool UIVisible
         {

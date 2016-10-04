@@ -107,10 +107,18 @@ namespace BP.En
         /// <summary>
         /// 把一个实体转化成Json.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回一个string json串.</returns>
         public string ToJson()
         {
-            return BP.Tools.Json.ToJson(this.Row);
+            Hashtable ht = this.Row;
+            if (ht.ContainsKey("AtPara") == true)
+            {
+                /*如果包含这个字段*/
+                AtPara ap = this.atPara;
+                foreach (string key in ap.HisHT.Keys)
+                    ht.Add(key, ap.HisHT[key]);
+            }
+            return BP.Tools.Json.ToJson(ht,false);
         }
 
         public DataTable ToDataTableField(string tableName)
@@ -4720,9 +4728,9 @@ namespace BP.En
         /// ToJson.
         /// </summary>
         /// <returns></returns>
-        public string ToJson()
+        public string ToJson(string dtName="dt")
         {
-            return BP.Tools.Json.ToJson(this.ToDataTableField());
+            return BP.Tools.Json.ToJson(this.ToDataTableField(dtName));
         }
         /// <summary>
         /// 把当前实体集合的数据库转换成Dataset。
@@ -4778,7 +4786,7 @@ namespace BP.En
         /// 把当前实体集合的数据库转换成Table。
         /// </summary>
         /// <returns>DataTable</returns>
-        public DataTable ToDataTableField(string tableName)
+        public DataTable ToDataTableField(string tableName="dt")
         {
             DataTable dt = this.ToEmptyTableField();
 

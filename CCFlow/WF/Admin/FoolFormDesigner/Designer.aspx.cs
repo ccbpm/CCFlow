@@ -1114,15 +1114,15 @@ namespace CCFlow.WF.MapDef
                 {
                     case FieldTypeS.Normal:
                         if (attr.UIContralType == UIContralType.DDL)
-                            lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + lab + str + "</a>";
+                            lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.KeyOfEn + "','" + attr.MyPK + "','" + attr.UIBindKey + "');\">" + lab + str + "</a>";
                         else
                             lab = "<a  href=\"javascript:Edit('" + this.FK_MapData + "','" + attr.MyPK + "','" + attr.MyDataType + "');\">" + lab + str + "</a>";
                         break;
                     case FieldTypeS.FK:
-                        lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + str + lab + str + "</a>";
+                        lab = "<a  href=\"javascript:EditTable('" + this.FK_MapData + "','" + attr.KeyOfEn + "','" + attr.MyPK + "','" + attr.UIBindKey + "');\">" + str + lab + str + "</a>";
                         break;
                     case FieldTypeS.Enum:
-                        lab = "<a  href=\"javascript:EditEnum('" + this.FK_MapData + "','" + attr.MyPK + "');\">" + str + lab + str + "</a>";
+                        lab = "<a  href=\"javascript:EditEnum('" + this.FK_MapData + "','" + attr.KeyOfEn + "','" + attr.MyPK + "','" + attr.UIBindKey + "');\">" + str + lab + str + "</a>";
                         break;
                     default:
                         break;

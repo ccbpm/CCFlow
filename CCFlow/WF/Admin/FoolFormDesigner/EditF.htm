@@ -107,7 +107,7 @@
                     $("#TB_FontSize").val(data.FontSize);  //字体大小.
 
                     //所在的字段分组.
-                    if (data.GroupID == 0)
+                    if (data.GroupID != 0)
                         $("#DDL_GroupID").val(data.GroupID);
                     else
                         $('DDL_GroupID').prop('selectedIndex', 0);

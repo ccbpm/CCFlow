@@ -16,7 +16,6 @@
         }
         function Copy() {
             var val = $("#TB_KeyOfEn").val();
-
             //对于火狐不兼容. #warning.
             clipboardData.setData('Text', val);
             alert('已经把字段[' + val + ']copy到粘帖版上');
@@ -83,6 +82,7 @@
             var mypk = GetQueryString("MyPK");
             var keyOfEn = GetQueryString("KeyOfEn");
             var fk_mapData = GetQueryString("FK_MapData");
+            var enumKey = GetQueryString("EnumKey"); //枚举字段.
 
             //设置不可以用.
             SetButtonSta('true');
@@ -90,7 +90,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FieldInit&MyPK=" + mypk + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&FType=2&m=" + Math.random(),
+                url: Handler + "?DoType=FieldInitEnum&MyPK=" + mypk + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&FType=2&EnumKey=" + enumKey + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -109,14 +109,24 @@
 
                     $("#DDL_ColSpan").val(data.ColSpan);   //跨的列数.
                     $("#TB_FontSize").val(data.FontSize);  //字体大小.
-                    $("#DDL_GroupID").val(data.GroupID);   //所在的字段分组.
 
+                    //所在的字段分组.
+                    if (data.GroupID != 0)
+                        $("#DDL_GroupID").val(data.GroupID);
+                    else
+                        $('DDL_GroupID').prop('selectedIndex', 0);
 
                     //是否可以编辑？
                     $("#RB_UIIsEnable_" + data.UIIsEnable).attr('checked', 'checked');
 
                     //是否可见？
                     $("#RB_UIVisible_" + data.UIVisible).attr('checked', 'checked');
+
+                    //控件类型.
+                    $("#RB_CtrlType_" + data.UIContralType).attr('checked', 'checked');
+
+                    //显示方式.
+                    $("#DDL_RBShowModel").val(data.RBShowModel);   //所在的字段分组.
 
                     //是否必填项.
                     if (data.UIIsInput == "1")
@@ -127,13 +137,16 @@
                         $("#CB_IsEnableJS").attr("checked", true);
 
                     var htmlLink = "";
-                    htmlLink += "<a href=\"javascript:WinOpen('./MapExt/PopVal.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&MyPK=PopVal_" + mypk + "')\">设置开窗返回值</a>";
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&OperAttrKey=" + mypk + "')\">正则表达式</a>";
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&MyPK=TBFullCtrl_" + mypk + "')\">文本框自动完成</a>";
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/InputCheck.htm?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">脚本验证</a>";
+                  //  htmlLink += "<a href=\"javascript:WinOpen('./MapExt/PopVal.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&MyPK=PopVal_" + mypk + "')\">设置开窗返回值</a>";
+                   // htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&OperAttrKey=" + mypk + "')\">正则表达式</a>";
+                   // htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&MyPK=TBFullCtrl_" + mypk + "')\">文本框自动完成</a>";
+                  //  htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/InputCheck.htm?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">脚本验证</a>";
+                    
                     //自动计算.
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
-
+                    htmlLink += "<a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
+                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RadioBtns.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">高级JS设置</a>";
+                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">设置联动</a>";
+                    
                     //设置超链接属性.
                     $("#htmlLink").html(htmlLink);
                 }
@@ -184,11 +197,23 @@
 <td><input  type="radio" id="RB_UIIsEnable_0" name="RB_UIIsEnable" value="0" /> <label for="RB_UIIsEnable_0">不可编辑</label> </td>
 </tr>
 
-<!--<tr> 
+<tr> 
 <td>是否界面可见</td>
 <td><input  type="radio" id="RB_UIVisible_1" name="RB_UIVisible" value="1" /> <label for="RB_UIVisible_1">可见</label> </td>
 <td><input  type="radio" id="RB_UIVisible_0" name="RB_UIVisible" value="0" /> <label for="RB_UIVisible_0">不可见</label> </td>
-</tr>-->
+</tr>
+
+<tr> 
+<td>使用控件类型</td>
+<td><input  type="radio" id="RB_CtrlType_1" name="RB_CtrlType" value="1" /> <label for="RB_CtrlType_1">下拉框</label> 
+<input  type="radio" id="RB_CtrlType_3" name="RB_CtrlType" value="3" /> <label for="RB_CtrlType_3">单选按钮</label>
+</td>
+
+<td>显示方式: <select name="DDL_RBShowModel" id="DDL_RBShowModel"> 
+    <option value="0">横向展示</option>
+	<option value="1">竖向展示</option>
+</select> </td>
+</tr>
 
 
 <tr id='tr4'> 
@@ -315,37 +340,47 @@
         $("#Msg").html("正在保存,请稍后......");
 
         var mypk = GetQueryString("MyPK");
-        var keyOfEn = GetQueryString("KeyOfEn");
+        var keyOfEn = $("#TB_KeyOfEn").val();
         var fk_mapData = GetQueryString("FK_MapData");
         var groupID = GetQueryString("GroupID");
         var fType = GetQueryString("FType");
+        var enumKey = GetQueryString("EnumKey");
        
         var frmData = $("#cc").serialize();
         $.ajax({
             data: frmData,
             type: 'post',
             async: true,
-            url: Handler + "?DoType=FieldSave&MyPK=" + mypk + "&FType=2&LGType=1&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
+            url: Handler + "?DoType=FieldSaveEnum&MyPK=" + mypk + "&FType=2&LGType=1&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&EnumKey="+enumKey+"&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
 
+                if (data.indexOf('err@') >= 0) {
+                    $("#Msg").html("<font color=red>" + data + "</font>");
+                    return;
+                }
+
                 if (btnCtl.id == 'Btn_Save') {
-                    $("#Msg").html("<font color=green>保存成功...</font>");
+
+                    var keyOfEn = $("#TB_KeyOfEn").val();
+                    var mypk = fk_mapData + "_" + keyOfEn;
+                    var url = "EditEnum.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&MyPK=" + mypk + "&EnumKey=" + enumKey;
+                    window.location.href = url;
                     return;
                 }
 
                 if (btnCtl.id == 'Btn_SaveAndClose') {
-                    $("#Msg").html("<font color=green>保存成功...</font>");
+                    $("#Msg").html("<font color=green>" + data + "</font>");
                     window.close();
                     return;
                 }
 
                 if (btnCtl.id == 'Btn_SaveAndNew') {
-                   // alert(data);
-                    $("#Msg").html("<font color=green>保存成功...</font>");
+                    // alert(data);
+                    $("#Msg").html("<font color=green>" + data + "</font>");
 
                     //#warning 这里一直弹出窗口,怎么解?
-                    window.location.href = 'FieldTypeList.htm?GroupID=' + groupID + '&FK_MapData=' + fk_mapData + '&FType='+fType;
+                    window.location.href = 'FieldTypeList.htm?GroupID=' + groupID + '&FK_MapData=' + fk_mapData + '&FType=' + fType;
                     return;
                 }
             }

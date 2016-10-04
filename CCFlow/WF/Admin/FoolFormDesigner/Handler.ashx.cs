@@ -31,35 +31,51 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             get
             {
-                return context.Request.QueryString["MyPK"];
+                string str= context.Request.QueryString["MyPK"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
             }
         }
         public string EnumKey
         {
             get
             {
-                return context.Request.QueryString["EnumKey"];
+                string str = context.Request.QueryString["EnumKey"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+ 
             }
         }
         public string KeyOfEn
         {
             get
             {
-                return context.Request.QueryString["KeyOfEn"];
+                string str = context.Request.QueryString["KeyOfEn"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
             }
         }
         public string FK_MapData
         {
             get
             {
-                return context.Request.QueryString["FK_MapData"];
+                string str = context.Request.QueryString["FK_MapData"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
             }
         }
         public string FK_MapDtl
         {
             get
             {
-                return context.Request.QueryString["FK_MapDtl"];
+                string str = context.Request.QueryString["FK_MapDtl"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
             }
         }
         public HttpContext context = null;
@@ -111,6 +127,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
+                    case "FieldSaveEnum": //保存字段.
+                        msg = this.FieldSaveEnum();
+                        break;
+                    case "FieldInitEnum": //初始化枚举信息.
+                        msg = this.FieldInitEnum();
+                        break;
                     case "EnumList": //获得枚举列表.
                         msg = this.EnumList(); 
                         break;
@@ -347,7 +369,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.RetrieveFromDBSources();
             }
             attr.FK_MapData = this.FK_MapData;
-          //  attr.MyDataType = int.Parse(context.Request.QueryString["FType"]);
 
             //字体大小.
             int size = attr.Para_FontSize;
@@ -362,6 +383,45 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             //横跨的列数.
             if (attr.ColSpan == 0)
                 attr.ColSpan=1;
+
+            return attr.ToJson();
+        }
+        public string FieldInitEnum()
+        {
+            MapAttr attr = new MapAttr();
+            attr.KeyOfEn = this.KeyOfEn;
+            attr.FK_MapData = this.FK_MapData;
+
+            if (string.IsNullOrEmpty(this.MyPK) == false)
+            {
+                attr.MyPK = this.MyPK;
+                attr.RetrieveFromDBSources();
+            }
+            else
+            {
+                SysEnumMain sem = new SysEnumMain(this.EnumKey);
+                attr.Name = sem.Name;
+                attr.KeyOfEn = sem.No;
+                attr.DefVal = "0";
+            }
+
+            //第1次加载.
+            if (attr.UIContralType == UIContralType.TB)
+                attr.UIContralType = UIContralType.DDL;
+
+            attr.FK_MapData = this.FK_MapData;
+
+            //字体大小.
+            int size = attr.Para_FontSize;
+            if (size == 0)
+                attr.Para_FontSize = 12;
+
+            //横跨的列数.
+            if (attr.ColSpan == 0)
+                attr.ColSpan = 1;
+
+            var model = attr.RBShowModel;
+            attr.RBShowModel = model;
 
             return attr.ToJson();
         }
@@ -422,6 +482,93 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             catch (Exception ex)
             {
                 return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 保存枚举
+        /// </summary>
+        /// <returns></returns>
+        public string FieldSaveEnum()
+        {
+            try
+            {
+                //定义变量.
+                string enumKey = context.Request.QueryString["EnumKey"];
+                if (enumKey == null)
+                    return "err@没有接收到enumKey的值，无法进行保存操作。";
+
+                //赋值.
+                MapAttr attr = new MapAttr();
+                attr.KeyOfEn = this.KeyOfEn;
+                attr.FK_MapData = this.FK_MapData;
+                if (string.IsNullOrEmpty(this.MyPK) == false)
+                {
+                    attr.MyPK = this.MyPK;
+                    attr.RetrieveFromDBSources();
+                }
+                else
+                {
+                    /*判断字段是否存在？*/
+                    if (attr.IsExit(MapAttrAttr.KeyOfEn, this.KeyOfEn, MapAttrAttr.FK_MapData, this.FK_MapData) == true)
+                        return "err@字段名:" + this.KeyOfEn + "已经存在.";
+                }
+
+                attr.KeyOfEn = this.KeyOfEn;
+                attr.FK_MapData = this.FK_MapData;
+                attr.LGType = FieldTypeS.Enum;
+                attr.UIBindKey = enumKey;
+                attr.MyDataType = DataType.AppInt;
+
+                //控件类型.
+                attr.UIContralType = UIContralType.DDL;
+
+                attr.Name = this.GetValFromFrmByKey("TB_Name");
+                attr.KeyOfEn = this.GetValFromFrmByKey("TB_KeyOfEn");
+                attr.ColSpan = this.GetValIntFromFrmByKey("DDL_ColSpan");
+                if (attr.ColSpan == 0)
+                    attr.ColSpan = 1;
+
+                //显示方式.
+                attr.RBShowModel = this.GetValIntFromFrmByKey("DDL_RBShowModel");
+
+                //控件类型.
+                attr.UIContralType = (UIContralType)this.GetValIntFromFrmByKey("RB_CtrlType"); 
+
+                attr.UIIsInput = this.GetValBoolenFromFrmByKey("CB_IsInput");   //是否是必填项.
+
+                attr.IsEnableJS = this.GetValBoolenFromFrmByKey("CB_IsEnableJS");   //是否启用js设置？
+
+                attr.Para_FontSize = this.GetValIntFromFrmByKey("TB_FontSize"); //字体大小.
+
+                //默认值.
+                attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");
+
+                //分组.
+                if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
+                    attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+
+                //是否可用？所有类型的属性，都需要。
+                int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
+                if (isEnable == 0)
+                    attr.UIIsEnable = false;
+                else
+                    attr.UIIsEnable = true;
+
+                //是否可见?
+                int visable = this.GetValIntFromFrmByKey("RB_UIVisible");
+                if (visable == 0)
+                    attr.UIVisible = false;
+                else
+                    attr.UIVisible = true;
+
+                attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+                attr.Save();
+
+                return "保存成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
             }
         }
         /// <summary>

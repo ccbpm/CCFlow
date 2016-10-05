@@ -69,75 +69,79 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             string action = string.Empty;
             //返回值
             string s_responsetext = string.Empty;
-            if (string.IsNullOrEmpty(context.Request["action"])==false)
+            if (string.IsNullOrEmpty(context.Request["action"]) == false)
                 action = context.Request["action"].ToString();
-
-            switch (action)
+            try
             {
-                case "loadform"://获取表单数据
-                    MapData mapData = new MapData(this.FK_MapData);
-                    s_responsetext = mapData.FormJson; //要返回的值.
-                    break;
-                case "SaveForm": //保存表单数据.
-                    try
-                    {
-                        string diagram = getUTF8ToString("diagram");//表单 H5 格式.
 
-                       // BP.DA.DataType.WriteFile("c:\\diagram111.json", diagram);
+                switch (action)
+                {
+                    case "loadform"://获取表单数据
+                        MapData mapData = new MapData(this.FK_MapData);
+                        s_responsetext = mapData.FormJson; //要返回的值.
+                        break;
+                    case "SaveForm": //保存表单数据.
+                        try
+                        {
+                            string diagram = getUTF8ToString("diagram");//表单 H5 格式.
+                            BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
+                            s_responsetext = "true";
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.DebugWriteError(ex.StackTrace);
+                            s_responsetext = "error:表单格式不正确，保存失败。" + ex.StackTrace;
+                        }
+                        break;
+                    case "ParseStringToPinyin": //转拼音方法.
+                        string name = getUTF8ToString("name");
+                        string flag = getUTF8ToString("flag");
+                        if (flag == "true")
+                            s_responsetext = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
+                        else
+                            s_responsetext = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
+                        break;
+                    case "LetLogin":    //使管理员登录
+                        s_responsetext = WebUser.No == "admin" ? string.Empty : LetAdminLogin("CH", true);
+                        break;
+                    case "DoType"://表单特殊元素保存公共方法
+                        s_responsetext = DoType();
+                        break;
+                    case "GetEnumerationList": //获取所有枚举
+                    case "GetSFTableList": //获取所有的外键表.
+                        string pageNumberStr = getUTF8ToString("pageNumber");
+                        int pageNumber = 1;
+                        if (string.IsNullOrEmpty(pageNumberStr) == false)
+                            pageNumber = int.Parse(pageNumberStr);
 
-                        BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
-                        s_responsetext= "true";
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.DebugWriteError(ex.StackTrace);
-                        s_responsetext= "error:表单格式不正确，保存失败。" + ex.StackTrace;
-                    }
-                    break;
-                case "ParseStringToPinyin": //转拼音方法.
-                    string name = getUTF8ToString("name");
-                    string flag = getUTF8ToString("flag");
-                    if (flag == "true")
-                        s_responsetext = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
-                    else
-                        s_responsetext = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
-                    break;
-                case "LetLogin":    //使管理员登录
-                    s_responsetext = WebUser.No == "admin" ? string.Empty : LetAdminLogin("CH", true);
-                    break;
-                case "DoType"://表单特殊元素保存公共方法
-                    s_responsetext = DoType();
-                    break;
-                case "GetEnumerationList": //获取所有枚举
-                case "GetSFTableList": //获取所有的外键表.
-                    string pageNumberStr = getUTF8ToString("pageNumber");
-                    int pageNumber = 1;
-                    if (string.IsNullOrEmpty(pageNumberStr) == false)
-                        pageNumber = int.Parse(pageNumberStr);
+                        string pageSizeStr = getUTF8ToString("pageSize");
+                        int pageSize = 9999;
+                        if (string.IsNullOrEmpty(pageSizeStr) == false)
+                            pageSize = int.Parse(pageSizeStr);
 
-                    string pageSizeStr = getUTF8ToString("pageSize");
-                    int pageSize = 9999;
-                    if (string.IsNullOrEmpty(pageSizeStr) == false)
-                        pageSize = int.Parse(pageSizeStr);
+                        //调用API获得数据.
+                        if (action == "GetSFTableList")
+                            s_responsetext = BP.Sys.CCFormAPI.DB_SFTableList(pageNumber, pageSize);
+                        else
+                            s_responsetext = BP.Sys.CCFormAPI.DB_EnumerationList(pageNumber, pageSize); //调用API获得数据.
 
-                    //调用API获得数据.
-                    if (action == "GetSFTableList")
-                        s_responsetext = BP.Sys.CCFormAPI.DB_SFTableList(pageNumber, pageSize);
-                    else
-                        s_responsetext = BP.Sys.CCFormAPI.DB_EnumerationList(pageNumber, pageSize); //调用API获得数据.
-
-                    BP.DA.DataType.WriteFile("c:\\sss.txt",s_responsetext);
-                    break;
-                case "Hiddenfielddata"://获取隐藏字段.
-                    s_responsetext = BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
-                    break;
-                case "HiddenFieldDelete": //删除隐藏字段.
-                    string records = getUTF8ToString("records");
-                    string FK_MapData = getUTF8ToString("FK_MapData");
-                    MapAttr mapAttrs = new MapAttr();
-                    int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
-                    s_responsetext = result.ToString();
-                    break;
+                       // BP.DA.DataType.WriteFile("c:\\sss.txt", s_responsetext);
+                        break;
+                    case "Hiddenfielddata"://获取隐藏字段.
+                        s_responsetext = BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
+                        break;
+                    case "HiddenFieldDelete": //删除隐藏字段.
+                        string records = getUTF8ToString("records");
+                        string FK_MapData = getUTF8ToString("FK_MapData");
+                        MapAttr mapAttrs = new MapAttr();
+                        int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
+                        s_responsetext = result.ToString();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                s_responsetext = "err@" + ex.Message;
             }
             if (string.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";

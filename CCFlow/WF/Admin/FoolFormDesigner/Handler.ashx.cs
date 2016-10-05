@@ -37,6 +37,20 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return str;
             }
         }
+        /// <summary>
+        /// 字典表
+        /// </summary>
+        public string FK_SFTable
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_SFTable"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+
+            }
+        }
         public string EnumKey
         {
             get
@@ -68,6 +82,22 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return str;
             }
         }
+        /// <summary>
+        ///  节点ID.
+        /// </summary>
+        public int FK_Node
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_Node"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return int.Parse(str);
+            }
+        }
+        /// <summary>
+        /// 明细表
+        /// </summary>
         public string FK_MapDtl
         {
             get
@@ -101,12 +131,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string val = this.GetValFromFrmByKey(key);
             if (val == null || val == "")
                 return false;
-
             return true;
-            //if (this.GetValIntFromFrmByKey(key) == 0)
-            //    return false;
-            //else
-            //    return true;
         }
         /// <summary>
         /// 公共方法获取值
@@ -127,6 +152,18 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
+                    case "DtlInit": //初始化明细表.
+                        msg = this.DtlInit();
+                        break;
+                    case "DtlAttrs":
+                        msg = this.DtlAttrs();
+                        break;
+                    case "FieldSaveSFTable": //保存外键字段..
+                        msg = this.FieldSaveSFTable();
+                        break;
+                    case "FieldInitSFTable": //初始化枚举信息.
+                        msg = this.FieldInitSFTable();
+                        break;
                     case "SFTableList":
                         msg = this.SFTableList();
                         break;
@@ -156,9 +193,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         break;
                     case "FieldInitGroupAndSysEnum": //转化成json..
                         msg = this.FieldInitGroupAndSysEnum();
-                        break;
-                    case "InitDtl": //初始化明细表.
-                        msg = this.InitDtl();
                         break;
                     case "DoUp": //字段上移
                         MapAttr attrU = new MapAttr(this.MyPK);
@@ -204,7 +238,44 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             ens.RetrieveAll();
             return ens.ToJson();
         }
+        /// <summary>
+        /// 初始化表.
+        /// </summary>
+        /// <returns></returns>
+        public string FieldInitSFTable()
+        {
+            MapAttr attr = new MapAttr();
+            attr.KeyOfEn = this.KeyOfEn;
+            attr.FK_MapData = this.FK_MapData;
 
+            if (string.IsNullOrEmpty(this.MyPK) == false)
+            {
+                attr.MyPK = this.MyPK;
+                attr.RetrieveFromDBSources();
+            }
+            else
+            {
+                SFTable sf = new SFTable(this.FK_SFTable);
+                attr.Name = sf.Name;
+                attr.KeyOfEn = sf.No;
+            }
+
+            //第1次加载.
+            attr.UIContralType = UIContralType.DDL;
+
+            attr.FK_MapData = this.FK_MapData;
+
+            //字体大小.
+            int size = attr.Para_FontSize;
+            if (size == 0)
+                attr.Para_FontSize = 12;
+
+            //横跨的列数.
+            if (attr.ColSpan == 0)
+                attr.ColSpan = 1;
+
+            return attr.ToJson();
+        }
         /// <summary>
         /// 字段选择.
         /// </summary>
@@ -499,7 +570,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
         }
         /// <summary>
-        /// 保存枚举
+        /// 保存枚举值.
         /// </summary>
         /// <returns></returns>
         public string FieldSaveEnum()
@@ -507,9 +578,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             try
             {
                 //定义变量.
-                string enumKey = context.Request.QueryString["EnumKey"];
-                if (enumKey == null)
-                    return "err@没有接收到enumKey的值，无法进行保存操作。";
+                if (this.EnumKey == null)
+                    return "err@没有接收到EnumKey的值，无法进行保存操作。";
 
                 //赋值.
                 MapAttr attr = new MapAttr();
@@ -530,7 +600,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.KeyOfEn = this.KeyOfEn;
                 attr.FK_MapData = this.FK_MapData;
                 attr.LGType = FieldTypeS.Enum;
-                attr.UIBindKey = enumKey;
+                attr.UIBindKey = this.EnumKey;
                 attr.MyDataType = DataType.AppInt;
 
                 //控件类型.
@@ -551,6 +621,85 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIIsInput = this.GetValBoolenFromFrmByKey("CB_IsInput");   //是否是必填项.
 
                 attr.IsEnableJS = this.GetValBoolenFromFrmByKey("CB_IsEnableJS");   //是否启用js设置？
+
+                attr.Para_FontSize = this.GetValIntFromFrmByKey("TB_FontSize"); //字体大小.
+
+                //默认值.
+                attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");
+
+                //分组.
+                if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
+                    attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+
+                //是否可用？所有类型的属性，都需要。
+                int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
+                if (isEnable == 0)
+                    attr.UIIsEnable = false;
+                else
+                    attr.UIIsEnable = true;
+
+                //是否可见?
+                int visable = this.GetValIntFromFrmByKey("RB_UIVisible");
+                if (visable == 0)
+                    attr.UIVisible = false;
+                else
+                    attr.UIVisible = true;
+
+                attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+
+                attr.Save();
+
+                return "保存成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
+        }
+        /// <summary>
+        /// 保存枚举
+        /// </summary>
+        /// <returns></returns>
+        public string FieldSaveSFTable()
+        {
+            try
+            {
+                //定义变量.
+                if (this.FK_SFTable == null)
+                    return "err@没有接收到FK_SFTable的值，无法进行保存操作。";
+
+                //赋值.
+                MapAttr attr = new MapAttr();
+                attr.KeyOfEn = this.KeyOfEn;
+                attr.FK_MapData = this.FK_MapData;
+                if (string.IsNullOrEmpty(this.MyPK) == false)
+                {
+                    attr.MyPK = this.MyPK;
+                    attr.RetrieveFromDBSources();
+                }
+                else
+                {
+                    /*判断字段是否存在？*/
+                    if (attr.IsExit(MapAttrAttr.KeyOfEn, this.KeyOfEn, MapAttrAttr.FK_MapData, this.FK_MapData) == true)
+                        return "err@字段名:" + this.KeyOfEn + "已经存在.";
+                }
+
+                attr.KeyOfEn = this.KeyOfEn;
+                attr.FK_MapData = this.FK_MapData;
+                attr.LGType = FieldTypeS.FK;
+                attr.UIBindKey = this.FK_SFTable;
+                attr.MyDataType = DataType.AppString;
+
+                //控件类型.
+                attr.UIContralType = UIContralType.DDL;
+
+                attr.Name = this.GetValFromFrmByKey("TB_Name");
+                attr.KeyOfEn = this.GetValFromFrmByKey("TB_KeyOfEn");
+                attr.ColSpan = this.GetValIntFromFrmByKey("DDL_ColSpan");
+                if (attr.ColSpan == 0)
+                    attr.ColSpan = 1;
+
+                attr.UIIsInput = this.GetValBoolenFromFrmByKey("CB_IsInput");   //是否是必填项.
 
                 attr.Para_FontSize = this.GetValIntFromFrmByKey("TB_FontSize"); //字体大小.
 
@@ -672,10 +821,68 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return ex.Message;
             }
         }
-        public string InitDtl()
+
+        /// <summary>
+        /// 获得从表的列.
+        /// </summary>
+        /// <returns></returns>
+        public string DtlAttrs()
         {
-            MapDtl dtl = new MapDtl(this.FK_MapDtl);
-            return null;
+            MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
+            return attrs.ToJson();
+        }
+        public string DtlInit()
+        {
+            MapDtl dtl = new MapDtl();
+            dtl.No = this.FK_MapDtl;
+            if (dtl.RetrieveFromDBSources() == 0)
+            {
+                dtl.FK_MapData = this.FK_MapData;
+                dtl.Name = this.FK_MapData;
+                dtl.Insert();
+                dtl.IntMapAttrs();
+            }
+
+            if (this.FK_Node != 0)
+            {
+                /* 如果传递来了节点信息, 就是说明了独立表单的节点方案处理, 现在就要做如下判断.
+                 * 1, 如果已经有了.
+                 */
+                dtl.No = this.FK_MapDtl + "_" + this.FK_Node;
+                if (dtl.RetrieveFromDBSources() == 0)
+                {
+
+                    // 开始复制它的属性.
+                    MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
+
+                    //让其直接保存.
+                    dtl.No = this.FK_MapDtl + "_" + this.FK_Node;
+                    dtl.FK_MapData = "Temp";
+                    dtl.DirectInsert(); //生成一个明细表属性的主表.
+
+                    //循环保存字段.
+                    int idx = 0;
+                    foreach (MapAttr item in attrs)
+                    {
+                        item.FK_MapData = this.FK_MapDtl + "_" + this.FK_Node;
+                        item.MyPK = item.FK_MapData + "_" + item.KeyOfEn;
+                        item.Save();
+                        idx++;
+                        item.Idx = idx;
+                        item.DirectUpdate();
+                    }
+
+                    MapData md = new MapData();
+                    md.No = "Temp";
+                    if (md.IsExits == false)
+                    {
+                        md.Name = "为权限方案设置的临时的数据";
+                        md.Insert();
+                    }
+                }
+                return "节点从表，装载成功..";
+            }
+            return "装载成功..";
         }
         /// <summary>
         /// 下载表单.

@@ -47,9 +47,9 @@
                         var newRow = "";
 
                         if (fk_mapData == null)
-                            newRow = "<tr ><td class=Idx>" + i + "</td><td>" + data[i].No + "</td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td><td><a href=''>编辑</a></td></tr>";
+                            newRow = "<tr ><td class=Idx>" + i + "</td><td>" + data[i].No + "</td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td><td><a href=\"javascript:Edit('" + data[i].No + "')\">编辑</a></td><td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td></tr>";
                         else
-                            newRow = "<tr ><td class=Idx>" + i + "</td><td><a href=\"javascript:AddFrm('" + data[i].No + "','" + fk_mapData + "')\" >" + data[i].No + "</a></td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td> <td>" + data[i].SrcTypeText + "</td> <td><a href=''>编辑</a></td></tr>";
+                            newRow = "<tr ><td class=Idx>" + i + "</td><td><a href=\"javascript:AddSFTable('" + data[i].No + "')\" >" + data[i].No + "</a></td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td> <td>" + data[i].SrcTypeText + "</td> <td><a href=\"javascript:Edit('" + data[i].No + "')\">编辑</a></td><td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td></tr>";
 
                         $("#Table1 tr:last").after(newRow);
                     }
@@ -57,24 +57,40 @@
             });
         }
 
-        //增加到枚举到表单.
-        function AddFrm(sfTable, fk_mapData) {
-            //window.open("SFList.htm?FK_MapData=" + fk_mapData + "&SFTable=" + sfTable, "", "");
-            WinOpen("SFList.htm?FK_MapData=" + fk_mapData + "&SFTable=" + sfTable + "&KeyOfEn=" + sfTable);
+        function Ref(key) {
+            alert(key);
         }
+
+        function AddSFTable(key) {
+
+            var groupID = GetQueryString("GroupID");
+            if (groupID == "null")
+                groupID = 0;
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            var url = 'EditTableField.htm?FK_MapData=' + fk_mapData + '&FK_SFTable=' + key + '&GroupID=' + groupID;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
+        }
+        function AddSFSQL(mypk, idx, key) {
+
+            var url = 'Do.aspx?DoType=AddSFSQLAttr&MyPK=' + mypk + '&IDX=' + idx + '&RefNo=' + key;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
+        }
+
      </script>
 </head>
 <body onkeypress="Esc()" >
 
 <table id="Table1">
-<caption>字典列表 - <a href="javascript:WinOpen('../CCFormDesigner/DialogCtr/FrmEnumeration.htm?FK_MapData=ND201')">枚举值维护</a></caption>
+<caption>字典列表 - <a href="javascript:WinOpen('../CCFormDesigner/DialogCtr/FrmEnumeration.htm?FK_MapData=ND201')">字典表维护</a></caption>
 <tr>
 <th>序</th>
 <th>编号</th>
 <th>名称</th>
 <th>数据源</th>
 <th>类型</th>
-<th>操作</th>
+<th>编辑</th>
+<th>引用</th>
 </tr>
 </table>
 

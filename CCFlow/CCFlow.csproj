@@ -857,6 +857,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditEnum.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditTableField.htm" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Info.aspx" />
     <Content Include="WF\Admin\Org\Integration.aspx" />

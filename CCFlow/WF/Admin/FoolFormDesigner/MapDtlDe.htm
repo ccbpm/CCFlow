@@ -2,97 +2,154 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>明细表属性</title>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
+
      <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+
     <base target="_self" />
       <script type="text/javascript">
+      
+        //页面启动函数.
+          $(function () {
 
-          function Esc() {
-              if (event.keyCode == 27)
-                  window.close();
-              return true;
-          }
+              $("#Msg").html("正在加载,请稍后......");
 
+              //公共变量.
+              //表单ID.
+              var fk_mapData = GetQueryString("FK_MapData");
+              //明细表ID.
+              var fk_mapDtl = GetQueryString("FK_MapDtl");
 
-          function DoTypeOfAttr(doType, attrPK) {
-
+              //初始化 GroupID.
               $.ajax({
-                  data: frmData,
                   type: 'post',
                   async: true,
-                  url: "Handler.ashx?DoType=" + doType + "&MyPK=" + attrPK + "&m=" + Math.random(),
+                  url: Handler + "?DoType=DtlAttrs&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&m=" + Math.random(),
                   dataType: 'html',
                   success: function (data) {
-                    //  alert(data);
+
+                      data = JSON.parse(data);
+
+                      $("#trTitle").append("<th>序</th>");
+
+                      //增加处理.
+                      for (var i = 0; i < data.length; i++) {
+                          var visable = data[i].UIVisible;
+                          if (visable == 0)
+                              continue;
+
+                          var mypk = data[i].MyPK;
+                          var dataType = data[i].MyDataType;
+                          var field = data[i].KeyOfEn;
+                          var name = data[i].Name;
+                          var lgType = data[i].LGType;
+
+                          var nameLink = "";
+                          if (lgType == 0) {
+                              nameLink = "<a href=\"javascript:Edit('" + fk_mapDtl + "','" + mypk + "','" + dataType + "')\" > " + name + "</a>";
+                          }
+                          if (lgType == 1) {
+                              nameLink = "<a href=\"javascript:EditEnum('" + fk_mapDtl + "','" + mypk + "')\" > " + name + "</a>";
+                          }
+                          if (lgType == 2) {
+                              nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "')\" > " + name + "</a>";
+                          }
+                          var col = "<th><a href=\"javascript:DoUp('" + field + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:DoUp('" + field + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
+                          $("#trTitle").append(col);
+                      }
+
                   }
               });
-          }
-     
-    function DoUp(mypk) {
-        DoTypeOfAttr('DoUp', mypk);
-    }
-    function DoDown(mypk) {
-        DoTypeOfAttr('DoDown', mypk);
-    }
 
-    var fk_mapData=null;
-    var fk_mapDtl=null;
+              $("#Msg").html("");
 
+          });
 
-    //页面启动函数.
-    $(function () {
+       
+        function AddF(fk_mapdata) {
+            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+        function AddFGroup(fk_mapdata) {
+            var url = 'Do.aspx?DoType=AddFGroup&FK_MapData=' + fk_mapdata;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+        function CopyF(fk_mapdata) {
+            var url = 'CopyDtlField.htm?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
 
-          fk_mapData = GetQueryString("FK_MapData");
-          fk_mapDtl = GetQueryString("FK_MapDtl");
+        function HidAttr(mypk) {
+            var url = 'HidAttr.htm?FK_MapData=' + mypk + '&s=' + Math.random();
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
+            //  window.location.href = window.location.href;
+        }
+        function Edit(fk_mapdata, mypk, ftype) {
+            var url = 'EditF.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype + '&s=' + Math.random();
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+        function EditEnum(fk_mapdata, mypk) {
+            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&s=' + Math.random();
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+        function EditTable(fk_mapdata, refno) {
+            var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + refno + '&s=' + Math.random();
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
 
-        $.ajax({
-            type: 'post',
-            async: true,
-            url: "Handler.ashx.ashx?DoType=InitDtl&FK_MapData=" + fk_mapData + "&FK_MapDtl="+fk_mapDtl+"&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
-                alert(data);
-            }
-        })
-    }
-    </script>
+        function Up(fk_mapdata, mypk, toidx) {
+            var url = 'Do.aspx?DoType=Up&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + "&IsDtl=1&ToIdx=" + toidx;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
+            //window.location.href ='Designer.aspx?PK='+mypk+'&IsOpen=1';
+            window.location.href = window.location.href;
+        }
+        function Down(fk_mapdata, mypk, toidx) {
+            var url = 'Do.aspx?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + "&IsDtl=1&Ds=" + toidx;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+        function Del(fk_mapdata, refNo) {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var url = 'Do.aspx?DoType=Del&MyPK=' + fk_mapdata + '&RefNo=' + refNo;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+        function DtlMTR(MyPK) {
+            var url = 'MapDtlMTR.aspx?MyPK=' + MyPK + '&s=' + Math.random();
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 350px; dialogWidth: 550px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+        function Attachment(fk_mapdtl) {
+            var url = 'Attachment.aspx?IsBTitle=1&PKVal=0&FK_MapData=' + fk_mapdtl + '&FK_FrmAttachment=' + fk_mapdtl + '_AthMDtl&Ath=AthMDtl&s=' + Math.random();
+            window.showModalDialog(url, 'xx','dialogWidth=750px;dialogHeight=700px');
+        }
+        function MapM2M(fk_mapdtl) {
+            window.showModalDialog('MapM2M.aspx?NoOfObj=M2M&PKVal=0&FK_MapData=' + fk_mapdtl + '&FK_FrmAttachment=' + fk_mapdtl + '_AthMDtl&Ath=AthMDtl&s=' + Math.random());
+        }
+      </script>
 </head>
 <body>
-
-<table>
-<tr>
-<th>序</th>
-<th><a href="javascript:DoUp('Field1')" ><img src='/WF/Img/Btn/Left.gif' /></a>列名1<a href="javascript:DoUp('Field1')" ><img src='/WF/Img/Btn/Right.gif' /></a></th>
-<th><a href="javascript:DoUp('Field1')" ><img src='/WF/Img/Btn/Left.gif' /></a>列名2<a href="javascript:DoUp('Field1')" ><img src='/WF/Img/Btn/Right.gif' /></a></th>
-<th><a href="javascript:DoUp('Field1')" ><img src='/WF/Img/Btn/Left.gif' /></a>列名3<a href="javascript:DoUp('Field1')" ><img src='/WF/Img/Btn/Right.gif' /></a></th>
-</tr>
-
-<tr>
-<td>1</td>
-<td>Text1</td>
-<td>Text2</td>
-<td>Text3</td>
-</tr>
-
-<tr>
-<td>2</td>
-<td>Text1</td>
-<td>Text2</td>
-<td>Text3</td>
-</tr>
-
-<tr>
-<td>2</td>
-<td>Text1</td>
-<td>Text2</td>
-<td>Text3</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Text1</td>
-<td>Text2</td>
-<td>Text3</td>
+<table id='dtlTable' >
+<tr id='trTitle'>
 </tr>
 
 </table>

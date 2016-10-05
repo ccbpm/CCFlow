@@ -33,6 +33,8 @@
 
             var fk_mapData = GetQueryString("FK_MapData");
 
+
+
             //初始化表格.
             $.ajax({
                 type: 'post',
@@ -45,11 +47,10 @@
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
                         var newRow = "";
-
                         if (fk_mapData == null)
-                            newRow = "<tr ><td class=Idx>" + i + "</td><td>" + data[i].No + "</td><td>" + data[i].Name + "</td><td>" + data[i].CfgVal + "</td><td><a href=''>编辑</a></td></tr>";
+                            newRow = "<tr ><td class=Idx>" + i + "</td><td>" + data[i].No + "</td><td>" + data[i].Name + "</td><td>" + data[i].CfgVal + "</td><td><a href=''>编辑</a></td><td><a href=\"javascrit:Edit('" + data[i].No + "');\" >编辑</a></td><td><a href=\"javascrit:Ref('" + data[i].No + "');\" >引用</a></td></tr>";
                         else
-                            newRow = "<tr ><td class=Idx>" + i + "</td><td><a href=\"javascript:AddFrm('" + data[i].No + "','" + fk_mapData + "')\" >" + data[i].No + "</a></td><td>" + data[i].Name + "</td><td>" + data[i].CfgVal + "</td><td><a href=''>编辑</a></td></tr>";
+                            newRow = "<tr ><td class=Idx>" + i + "</td><td><a href=\"javascript:AddFrm('" + data[i].No + "','" + fk_mapData + "')\" >" + data[i].No + "</a></td><td>" + data[i].Name + "</td><td>" + data[i].CfgVal + "</td><td><a href=\"javascrit:Edit('" + data[i].No + "');\" >编辑</a></td><td><a href=\"javascrit:Ref('" + data[i].No + "');\" >引用</a></td></tr>";
 
                         $("#Table1 tr:last").after(newRow);
                     }
@@ -60,7 +61,11 @@
         //增加到枚举到表单.
         function AddFrm(enumKey, fk_mapData) {
             //window.open("EditEnum.htm?FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey, "", "");
-            WinOpen("EditEnum.htm?FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey+"&KeyOfEn="+enumKey);
+            var groupID = GetQueryString("GroupID");
+            if (groupID == "null")
+                groupID = 0;
+
+            WinOpen("EditEnum.htm?FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey + "&KeyOfEn=" + enumKey + "&GroupID=" + groupID);
         }
      </script>
 </head>
@@ -74,6 +79,7 @@
 <th>名称</th>
 <th>枚举信息</th>
 <th>操作</th>
+<th>引用</th>
 </tr>
 </table>
 

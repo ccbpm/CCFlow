@@ -174,7 +174,9 @@ CCForm_Control_Propertys = {
     Dtl: [{ proName: 'No', ProText: '明细表编号', DefVal: 'No', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'Name', ProText: '名称', DefVal: 'Name', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'PTable', ProText: '存储表', DefVal: 'No', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
-                  { proName: 'Set', ProText: '设置', DefVal: '/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.aspx?FK_MapData=@FrmID@&FK_MapDtl=@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
+                  { proName: 'Set', ProText: '设置aspx', DefVal: '/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.aspx?FK_MapData=@FrmID@&FK_MapDtl=@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
+                  { proName: 'Set', ProText: '设置htm', DefVal: '/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=@FrmID@&FK_MapDtl=@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
+
                  ],
     Fieldset: [{ proName: 'No', ProText: '编号', DefVal: 'No', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'Name', ProText: '名称', DefVal: 'Name', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT }

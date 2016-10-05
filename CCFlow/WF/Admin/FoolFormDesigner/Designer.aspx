@@ -16,8 +16,8 @@
     <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
     <script language="JavaScript" type="text/javascript" src="MapDef.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js" ></script>
 
+    <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js" ></script>
     <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
     <script language="javascript" type="text/javascript">
@@ -109,7 +109,7 @@
             window.location.href = window.location.href;
         }
         function EditTable(fk_mapdata, keyOfEn, mypk, sfTable) {
-            var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn;
+            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }

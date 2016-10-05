@@ -9,7 +9,7 @@
 <head id="Head1" runat="server">
     <title>表单设计</title>
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <script language="JavaScript" src="../../Comm/JScript.js"></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <base target="_self" />
     <script language="javascript">
         //	    function AutoFull(fullID) {

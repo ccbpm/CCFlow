@@ -38,11 +38,14 @@
 
                       $("#trTitle").append("<th>序</th>");
 
-                      //增加处理.
+                      var colNum = 0;
+                      //生成表头..
                       for (var i = 0; i < data.length; i++) {
                           var visable = data[i].UIVisible;
                           if (visable == 0)
                               continue;
+
+                          colNum++;
 
                           var mypk = data[i].MyPK;
                           var dataType = data[i].MyDataType;
@@ -60,10 +63,27 @@
                           if (lgType == 2) {
                               nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "')\" > " + name + "</a>";
                           }
-                          var col = "<th><a href=\"javascript:DoUp('" + field + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:DoUp('" + field + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
+                          var col = "<th><a href=\"javascript:Up('"+fk_mapData+"','" + mypk + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('"+fk_mapData+"','" + mypk + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
                           $("#trTitle").append(col);
                       }
 
+
+                      //生成内容行.
+                      for (var i = 0; i < 12; i++) {
+
+                          var newRow = "<tr><td class=Idx >" + i + "</td>";
+
+                          for (var colIdx = 0; colIdx < colNum; colIdx++) {
+                              newRow += "<td >text</td>";
+                          }
+
+                          newRow += "</tr>";
+
+                          $("#dtlTable tr:last").after(newRow);
+                      }
+
+
+                    
                   }
               });
 
@@ -109,14 +129,13 @@
             window.location.href = window.location.href;
         }
 
-        function Up(fk_mapdata, mypk, toidx) {
-            var url = 'Do.aspx?DoType=Up&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + "&IsDtl=1&ToIdx=" + toidx;
+        function Up(fk_mapdata, mypk) {
+            var url = 'Do.htm?DoType=DtlFieldUp&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&IsDtl=1&M=' + Math.random(); 
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
-            //window.location.href ='Designer.aspx?PK='+mypk+'&IsOpen=1';
             window.location.href = window.location.href;
         }
-        function Down(fk_mapdata, mypk, toidx) {
-            var url = 'Do.aspx?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + "&IsDtl=1&Ds=" + toidx;
+        function Down(fk_mapdata, mypk) {
+            var url = 'Do.htm?DoType=DtlFieldDown&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&IsDtl=1&M=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

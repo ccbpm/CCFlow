@@ -203,10 +203,15 @@
             window.location.href = window.location.href;
         }
 
-        function EditDtl(mypk, dtlKey) {
-            var url = 'MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
+        function EditDtl(fk_mapData, dtlKey) {
+            var url = 'MapDtl.aspx?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + dtlKey;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            // var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 800px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
+        function EditDtlHtm(fk_mapData, dtlKey) {
+            var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + dtlKey;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }
 
@@ -256,7 +261,8 @@
  <div class='easyui-layout' data-options='fit:true'>
         <div data-options="region:'north',noheader:true,split:false,border:false" style='height:30px;overflow-y:hidden'>
             <div style='float:left'>
-                <a href="javascript:EditDtl(fk_mapData,fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-edit',plain:true">属性</a>
+                <a href="javascript:EditDtl(fk_mapData,fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-edit',plain:true">属性aspx</a>
+                <a href="javascript:EditDtlHtm(fk_mapData,fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-edit',plain:true">属性htm</a>
             </div>
             <div style='float:right'>
                 <a href="javascript:document.getElementById('F').contentWindow.AddF(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-new',plain:true">插入列</a>
@@ -265,7 +271,7 @@
                 <a href="javascript:document.getElementById('F').contentWindow.HidAttr(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">隐藏列</a>
                 <a href="javascript:document.getElementById('F').contentWindow.DtlMTR(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">多表头</a>
 
-                <!--<a href='Action.aspx?FK_MapData=<%=this.FK_MapDtl %>' class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">从表事件</a>-->
+                <!--<a href='Action.aspx?FK_MapData=' class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">从表事件</a>-->
                 <!--<a href="javascript:DtlDoUp(fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-up',plain:true"></a>
                 <a href="javascript:DtlDoDown(fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-down',plain:true"></a>-->
 
@@ -273,7 +279,7 @@
             <div style='clear:both'></div>
         </div>
         <div data-options="region:'center',noheader:true,border:false" style="overflow-y:hidden">
-            <iframe id='F' frameborder='0' scrolling="auto" style='width:100%;height:100%' src='this.url'    ></iframe>
+            <iframe id='F' frameborder='0' scrolling="auto" style='width:100%;height:400px' src='this.url'    ></iframe>
            <!-- <iframe id='Iframe1' frameborder='0' scrolling="auto" style='width:100%;height:100%' src='this.url'    ></iframe>-->
 
         </div>

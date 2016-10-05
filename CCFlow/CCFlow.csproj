@@ -840,10 +840,12 @@
     <Content Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx" />
     <Content Include="WF\Admin\FlowDB\流程按月分析.png" />
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Do.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditF.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\MapDtl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\PopVal.htm" />

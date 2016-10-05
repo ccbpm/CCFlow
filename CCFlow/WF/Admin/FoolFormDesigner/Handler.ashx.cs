@@ -194,13 +194,15 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "FieldInitGroupAndSysEnum": //转化成json..
                         msg = this.FieldInitGroupAndSysEnum();
                         break;
-                    case "DoUp": //字段上移
+                    case "DtlFieldUp": //字段上移
                         MapAttr attrU = new MapAttr(this.MyPK);
                         attrU.DoUp();
-                        return;
-                    case "DoDown": //字段下移.
+                        msg ="";
+                        break;
+                    case "DtlFieldDown": //字段下移.
                         MapAttr attrD = new MapAttr(this.MyPK);
                         attrD.DoDown();
+                        msg = "";
                         return;
                     case "DownTempFrm":
                         this.DownTempFrm();
@@ -831,6 +833,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
             return attrs.ToJson();
         }
+        /// <summary>
+        /// 该方法有2处调用。
+        /// 1，修改字段。
+        /// 2，编辑属性。
+        /// </summary>
+        /// <returns></returns>
         public string DtlInit()
         {
             MapDtl dtl = new MapDtl();
@@ -880,9 +888,10 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         md.Insert();
                     }
                 }
-                return "节点从表，装载成功..";
             }
-            return "装载成功..";
+
+            //返回json配置信息.
+            return dtl.ToJson();
         }
         /// <summary>
         /// 下载表单.

@@ -178,7 +178,7 @@ namespace BP.WF
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
 
-                MapExts mes = md.HisMapExts;
+                MapExts mes = md.MapExts;
 
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {

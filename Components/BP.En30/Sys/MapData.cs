@@ -721,22 +721,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 业务逻辑
-        /// </summary>
-        public MapExts HisMapExts
-        {
-            get
-            {
-                MapExts obj = this.GetRefObject("MapExts") as MapExts;
-                if (obj == null)
-                {
-                    obj = new MapExts(this.No);
-                    this.SetRefObject("MapExts", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
         /// 扩展控件
         /// </summary>
         public FrmEles HisFrmEles

@@ -24,7 +24,10 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             get
             {
-                return context.Request.QueryString["DoType"];
+                string str = context.Request.QueryString["DoType"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
             }
         }
         public string MyPK
@@ -155,6 +158,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "DtlInit": //初始化明细表.
                         msg = this.DtlInit();
                         break;
+                    case "DtlSave": //保存明细表.
+                        msg = this.DtlSave();
+                        break;
                     case "DtlAttrs":
                         msg = this.DtlAttrs();
                         break;
@@ -174,7 +180,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         msg = this.FieldInitEnum();
                         break;
                     case "EnumList": //获得枚举列表.
-                        msg = this.EnumList(); 
+                        msg = this.EnumList();
                         break;
                     case "FieldTypeSelect": //选择字段.
                         msg = this.FieldTypeSelect();
@@ -197,7 +203,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "DtlFieldUp": //字段上移
                         MapAttr attrU = new MapAttr(this.MyPK);
                         attrU.DoUp();
-                        msg ="";
+                        msg = "";
                         break;
                     case "DtlFieldDown": //字段下移.
                         MapAttr attrD = new MapAttr(this.MyPK);
@@ -215,7 +221,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
             catch (Exception ex)
             {
-                context.Response.Write(ex.Message);
+                context.Response.Write("err@" + ex.Message);
             }
             //输出信息.
         }
@@ -890,8 +896,40 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 }
             }
 
+            DataSet ds = new DataSet();
+            DataTable dt = dtl.ToDataTableField("Main");
+            ds.Tables.Add(dt);
+
+            //获得字段列表.
+            MapAttrs attrsDtl = new MapAttrs(this.FK_MapDtl);
+            DataTable dtAttrs = attrsDtl.ToDataTableField("Ens");
+            ds.Tables.Add(dtAttrs);
+
             //返回json配置信息.
-            return dtl.ToJson();
+            return BP.Tools.Json.ToJson(ds); 
+        }
+        /// <summary>
+        /// 执行保存.
+        /// </summary>
+        /// <returns></returns>
+        public string DtlSave()
+        {
+            try
+            {
+                //复制.
+                MapDtl dtl = new MapDtl(this.FK_MapDtl);
+
+                //从request对象里复制数据,到entity.
+                BP.Sys.PubClass.CopyFromRequest(dtl, context.Request);
+
+                dtl.Update();
+
+                return "保存成功...";
+            }
+            catch(Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
         }
         /// <summary>
         /// 下载表单.

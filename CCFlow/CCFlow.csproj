@@ -137,6 +137,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="ClientBin\CCFlowDesigner.xap" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
@@ -1071,6 +1072,7 @@
     <Content Include="WF\Comm\Charts\StackedColumn3D.swf" />
     <Content Include="WF\Comm\Charts\ZoomLine.swf" />
     <Content Include="WF\Comm\Contrast.aspx" />
+    <Content Include="WF\Comm\Gener.js" />
     <Content Include="WF\Comm\HelperEnsTextBox.aspx" />
     <Content Include="WF\Comm\HelperOfTBEUI.aspx" />
     <Content Include="WF\Comm\JS\EasyUI\easyloader.js" />
@@ -1327,6 +1329,7 @@
     <Content Include="SDKFlowDemo\SDK\F118\Serv.ashx" />
     <Content Include="SDKFlowDemo\SDK\Site.Master" />
     <Content Include="SDKFlowDemo\WinOpen.master" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
@@ -1336,6 +1339,7 @@
     <Content Include="WF\Admin\CCFormDesigner\SFTable\SFTableHandler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
+    <Content Include="WF\Comm\Handler.ashx" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
     <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH.sql" />
@@ -2905,6 +2909,9 @@
     </Compile>
     <Compile Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx.designer.cs">
       <DependentUpon>DemoEmps.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\BPFramework\DataInput\Cell2D.aspx.cs">
       <DependentUpon>Cell2D.aspx</DependentUpon>
@@ -4811,6 +4818,9 @@
     </Compile>
     <Compile Include="WF\Comm\Contrast.aspx.designer.cs">
       <DependentUpon>Contrast.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Comm\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\HelperEnsTextBox.aspx.cs">
       <DependentUpon>HelperEnsTextBox.aspx</DependentUpon>

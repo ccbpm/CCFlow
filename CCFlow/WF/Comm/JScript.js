@@ -199,7 +199,6 @@ function VirtyInt(ctrl) {
 
 }
 
-
 function VirtyNum(ctrl) {
 
     if (event.keyCode == 190) {

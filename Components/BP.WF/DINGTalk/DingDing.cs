@@ -162,11 +162,17 @@ namespace BP.WF
         }
         #endregion
 
-        public static string GetMediaById()
+        /// <summary>
+        /// 下载多媒体文件
+        /// </summary>
+        /// <param name="mediaId">多媒体编号</param>
+        /// <param name="workID">业务编号</param>
+        /// <param name="savePath">保存路径</param>
+        /// <returns></returns>
+        public static bool DownLoadMediaById(string mediaId,string workID,string savePath)
         {
-            string apiurl = FormatApiUrlWithToken(Urls.get_media) + "&media_id=IATOd2fEN84jE-ZFzilD8yc";
-            ResultPackage jsTicket = Analyze.Get<ResultPackage>(apiurl);
-            return jsTicket.Json;
+            string apiurl = FormatApiUrlWithToken(Urls.get_media) + "&media_id=" + mediaId;
+            return Analyze.HttpDownLoadFile(apiurl, savePath);
         }
 
         /// <summary>

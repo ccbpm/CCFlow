@@ -41,6 +41,17 @@ namespace BP.WF.DINGTalk.DDSDK
         }
         #endregion
 
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="downLoadUrl"></param>
+        /// <param name="saveFullName"></param>
+        /// <returns></returns>
+        public static bool HttpDownLoadFile(string downLoadUrl, string saveFullName)
+        {
+            return RequestHelper.HttpDownLoadFile(downLoadUrl, saveFullName);
+        }
+
         #region AnalyzeResult
         /// <summary>  
         /// 分析结果  

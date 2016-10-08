@@ -7,6 +7,8 @@
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
 
+    <script src="/WF/Comm/JS/echarts.js" type="text/javascript"></script>
+
     <link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="/DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
 
@@ -28,10 +30,13 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    // alert(data);
+                    alert(data);
                     data = JSON.parse(data);
 
-                     
+                    alert(data);
+
+                    var myChart = echarts.init(document.getElementById('main'));
+                    myChart.setOption(data);
                     return;
                 }
             });
@@ -41,6 +46,8 @@
     </script>
 </head>
 <body>
+
+<div id="main"> </div>
 
 
 

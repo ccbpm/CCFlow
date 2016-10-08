@@ -110,7 +110,6 @@ namespace CCFlow.WF.Comm.Rpt
                         //转化成json.
                         msg= attr.ToJson();
 
-
                         break;
                     default:
                         msg = "err@没有判断的标记:" + this.DoType;

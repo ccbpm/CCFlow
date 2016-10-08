@@ -1264,6 +1264,7 @@
     <Content Include="WF\Comm\JS\EasyUI\themes\icons\user.png" />
     <Content Include="WF\Comm\JS\EasyUI\themes\icons\xitong.png" />
     <Content Include="WF\Comm\JS\EasyUI\themes\icons\xitongleibie.png" />
+    <Content Include="WF\Comm\JS\echarts.js" />
     <Content Include="WF\Comm\JS\jquery-1.7.2.min.js" />
     <Content Include="WF\Comm\JS\SearchEasyUI.js" />
     <Content Include="WF\Comm\JS\SearchEasyUIReadOnly.js" />

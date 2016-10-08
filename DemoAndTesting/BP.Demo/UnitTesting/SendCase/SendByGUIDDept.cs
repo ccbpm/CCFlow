@@ -86,8 +86,8 @@ namespace BP.UnitTesting.SendCase
                     sql = "UPDATE Port_Emp SET FK_Dept='" + guid + "' WHERE FK_Dept='" + deptNo + "'";
                     DBAccess.RunSQL(sql);
 
-                    sql = "UPDATE Port_EmpDept SET FK_Dept='" + guid + "' WHERE FK_Dept='" + deptNo + "'";
-                    DBAccess.RunSQL(sql);
+                   // sql = "UPDATE Port_EmpDept SET FK_Dept='" + guid + "' WHERE FK_Dept='" + deptNo + "'";
+                   // DBAccess.RunSQL(sql);
                 }
 
                 sql = "UPDATE Port_Dept SET ParentNo='" + guid1 + "' WHERE ParentNo='1'";

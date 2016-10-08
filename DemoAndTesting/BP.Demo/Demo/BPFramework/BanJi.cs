@@ -19,7 +19,7 @@ namespace BP.Demo.BPFramework
 	/// <summary>
     /// 班级
 	/// </summary>
-	public class BanJi :EntityNoName
+	public class BanJi :BP.En.EntityNoName
 	{	
 		#region 基本属性
         /// <summary>
@@ -73,7 +73,7 @@ namespace BP.Demo.BPFramework
 				Map map = new Map();
 
 				#region 基本属性 
-                map.EnDBUrl = new DBUrl();
+             //   map.EnDBUrl = new DBUrl();
 				map.PhysicsTable="Demo_BanJi";   //表
 				map.DepositaryOfEntity=Depositary.None;  //实体村放位置.
                 map.IsAllowRepeatName = true;
@@ -102,7 +102,7 @@ namespace BP.Demo.BPFramework
 	/// <summary>
 	/// 班级s
 	/// </summary>
-	public class BanJis : EntitiesNoName
+	public class BanJis : BP.En.EntitiesNoName
 	{
 		#region 重写
 		/// <summary>
@@ -114,8 +114,8 @@ namespace BP.Demo.BPFramework
 			{
 				return new BanJi();
 			}
-		}	
-		#endregion 
+		}
+		#endregion
 
 		#region 构造方法
 		/// <summary>

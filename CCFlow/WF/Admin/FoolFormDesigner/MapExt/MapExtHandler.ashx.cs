@@ -268,6 +268,10 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             attr.Retrieve();
 
+            //把分组加入里面.
+            GroupFields gfs = new GroupFields(this.FK_MapData);
+            ds.Tables.Add(gfs.ToDataTableField("Sys_GroupFields"));
+             
             //字段值.
             FrmRBs rbs= new FrmRBs();
             rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);

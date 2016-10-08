@@ -22,7 +22,7 @@ function GenerCheckIDs() {
 }
 
 //填充下拉框.
-function GenerFullDropDownListCtrl(ddlCtrlID, data, noCol, nameCol, selectVal ) {
+function GenerFullDropDownListCtrl(ddlCtrlID, data, noCol, nameCol, selectVal) {
 
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
     var json = data;
@@ -50,10 +50,27 @@ function GenerFullDropDownListCtrl(ddlCtrlID, data, noCol, nameCol, selectVal ) 
         $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
     }
 
+    //    $("#DDL_" + attr).attr('selectedIndex', 0);
+    //    $("#DDL_" + attr).prop('selectedIndex', 0);
+    //    return;
+
+    //    if (selectVal == undefined) {
+    //        alert(selectVal);
+    //        $("#DDL_" + attr).attr("selectedIndex", 0);
+    //        //  $("#DDL_" + attr).val(selectVal);
+    //        return;
+    //    }
+
     //设置选中的值.
     if (selectVal != undefined) {
         $("#DDL_" + attr).val(selectVal);
     }
+    else {
+        $("#DDL_" + attr).prop('selectedIndex', 0);
+    }
+
+    //    alert('ss');
+    //$("#DDL_" + attr).options[0].selected = true;
 }
 
 /*
@@ -105,6 +122,31 @@ function GenerBindEntities(ctrlDDLId, ensName, selectVal) {
         }
     });
 }
+
+
+/*
+  绑定 s 外键表.
+*/
+function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
+
+    $.ajax({
+        type: 'post',
+        async: true,
+        url: "/WF/Comm/Handler.ashx?DoType=SFTable&SFTable=" + sfTable + "&m=" + Math.random(),
+        dataType: 'html',
+        success: function (data) {
+            data = JSON.parse(data);
+            //绑定枚举值.
+            GenerFullDropDownListCtrl(ctrlDDLId, data, "No", "Name", selectVal);
+            return;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            /*错误信息处理*/
+            alert("GenerBindSFTable,错误:参数:EnsName" + ensName + " , 异常信息 responseText:" + jqXHR.responseText + "; status:" + jqXHR.status + "; statusText:" + jqXHR.statusText + "; \t\n textStatus=" + textStatus + ";errorThrown=" + errorThrown);
+        }
+    });
+}
+
 
 /*
    为页面的所有字段属性赋值.

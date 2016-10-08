@@ -30,13 +30,30 @@
                 dataType: 'html',
                 success: function (data) {
 
+                    data = "{}";
                     alert(data);
-                    data = JSON.parse(data);
 
-                    alert(data);
+                    var dataObj = null;
+
+                    //                    try{
+
+                    dataObj = eval("(" + data + ")");
+
+                    //                    }catch {
+                    //                      alert('errr');
+                    //                    }
+
+                    alert(dataObj);
+
+
+                    //  data =
+                    //data = JSON.parse(data);
+                    // alert(data);
 
                     var myChart = echarts.init(document.getElementById('main'));
-                    myChart.setOption(data);
+                    alert(myChart);
+
+                    myChart.setOption(dataObj);
                     return;
                 }
             });

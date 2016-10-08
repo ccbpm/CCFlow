@@ -82,6 +82,16 @@ namespace CCFlow.WF.Comm
                 return str;
             }
         }
+        public string SFTable
+        {
+            get
+            {
+                string str = context.Request.QueryString["SFTable"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
         /// <summary>
         /// 表单外键
         /// </summary>
@@ -113,6 +123,11 @@ namespace CCFlow.WF.Comm
                         Entities ens = ClassFactory.GetEns(this.EnsName);
                         ens.RetrieveAll();
                         msg = ens.ToJson();
+                        break;
+                    case "SFTable": //获得枚举列表的JSON.
+                        SFTable sftable = new SFTable(this.SFTable);
+                        DataTable dt= sftable.GenerData();
+                        msg= BP.Tools.Json.ToJson(dt);
                         break;
                     default:
                         msg = "err@没有判断的标记:" + this.DoType;

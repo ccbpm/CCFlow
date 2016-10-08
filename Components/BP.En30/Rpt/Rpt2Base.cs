@@ -315,6 +315,7 @@ namespace BP.Rpt
             series_Data += "]";
             series_Data = series_Data.Replace("[,", "[");
 
+            //行程数据源.
             string dbData ="[";
             foreach (DataRow dr in dt.Rows)
             {
@@ -323,10 +324,9 @@ namespace BP.Rpt
             dbData = dbData.Substring(0, dbData.Length - 1);
             dbData = dbData + "]";
 
-          //  dbData = dbData.Replace("\"", "");
 
+            //组合成要生成的json格式.
             string str = "";
-
             str += "{";
             str += "title: {";
 
@@ -362,8 +362,7 @@ namespace BP.Rpt
             str += "  ] ";
             str += "}; ";
 
-
-            BP.DA.DataType.WriteFile("c:\\111.txt", str);
+           // BP.DA.DataType.WriteFile("c:\\111.txt", str);
             return str;
         }
     }

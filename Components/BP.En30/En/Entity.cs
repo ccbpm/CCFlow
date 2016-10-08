@@ -3187,7 +3187,7 @@ namespace BP.En
                         DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                         break;
                     default:
-                        throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
+                        throw new Exception("error MyFieldType= " + attr.MyFieldType + " Key=" + attr.Key);
                 }
             }
             #endregion

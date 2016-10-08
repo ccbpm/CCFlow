@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+        function NoSubmit(ev) {
+            if (window.event.srcElement.tagName == "TEXTAREA")
+                return true;
+            if (ev.keyCode == 13) {
+                window.event.keyCode = 9;
+                ev.keyCode = 9;
+                return true;
+            }
+            return true;
+        }
+   </script>
+
+    <style type="text/css">
+        #tb_msg
+        {
+            height: 72px;
+            width: 272px;
+        }
+    </style>
+</head>
+<body>
+
+请输入催办消息:
+  <br />
+ <textarea rows="4" cols="20" name="tb_msg" id="tb_msg" >此工作需要您请尽快处理....  </textarea>
+ <br />
+
+ <input type="button" value='催办'   /> 
+ <input type="button" value='取消'onclick="window.close();"   /> 
+
+
+</body>
+</html>

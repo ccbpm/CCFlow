@@ -48,10 +48,7 @@
     <tr>
     <td>
      <ul>
-          <li><a href="/WF/Comm/Rpt2DBA.aspx?Rpt2Name=BP.Demo.RptStudent" target="main">男女比例分析</a></li>
-
-          <li><a href="/WF/Comm/Rpt/Pie.htm?RptName=BP.Demo.RptStudent" target="main">男女比例分析</a></li>
-
+          <li><a href="/WF/Comm/Rpt/Pie.htm?RptName=BP.Demo.RptStudent" target="main">男女比例(饼图)</a></li>
        </ul>
      </td>
     </tr>

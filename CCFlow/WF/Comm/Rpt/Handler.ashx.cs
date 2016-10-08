@@ -109,7 +109,6 @@ namespace CCFlow.WF.Comm.Rpt
                         Rpt2Attr attr = rpt.AttrsOfGroup.GetD2(0);
                         //转化成json.
                         msg= attr.ToJson();
-
                         break;
                     default:
                         msg = "err@没有判断的标记:" + this.DoType;

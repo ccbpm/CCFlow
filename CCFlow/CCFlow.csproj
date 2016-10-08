@@ -138,6 +138,7 @@
     </Content>
     <Content Include="ClientBin\CCFlowDesigner.xap" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
+    <Content Include="SDKFlowDemo\Default.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
@@ -1029,19 +1030,9 @@
     <Content Include="WF\CH\FlowOne.aspx" />
     <Content Include="WF\CH\ShuLiang.png" />
     <Content Include="WF\CH\TodoSta.aspx" />
-    <Content Include="WF\Comm\Charts\Area2D.swf" />
-    <Content Include="WF\Comm\Charts\Column2D.swf" />
-    <Content Include="WF\Comm\Charts\Column3D.swf" />
     <Content Include="WF\Comm\Charts\css\prettify.css" />
     <Content Include="WF\Comm\Charts\css\Style.css" />
     <Content Include="WF\Comm\Charts\css\style_3.css" />
-    <Content Include="WF\Comm\Charts\FCExporter.swf" />
-    <Content Include="WF\Comm\Charts\FCF_Column3D.swf" />
-    <Content Include="WF\Comm\Charts\FCF_Doughnut2D.swf" />
-    <Content Include="WF\Comm\Charts\FCF_Line.swf" />
-    <Content Include="WF\Comm\Charts\FCF_MSColumn3D.swf" />
-    <Content Include="WF\Comm\Charts\FCF_MSLine.swf" />
-    <Content Include="WF\Comm\Charts\FCF_Pie3D.swf" />
     <Content Include="WF\Comm\Charts\imgs\bg.png" />
     <Content Include="WF\Comm\Charts\imgs\bg_2.png" />
     <Content Include="WF\Comm\Charts\imgs\image_1.png" />
@@ -1061,16 +1052,6 @@
     <Content Include="WF\Comm\Charts\js\jquery-1.4.2.min.js" />
     <Content Include="WF\Comm\Charts\js\json2_3.js" />
     <Content Include="WF\Comm\Charts\js\prettify.js" />
-    <Content Include="WF\Comm\Charts\Line.swf" />
-    <Content Include="WF\Comm\Charts\MSBar3D.swf" />
-    <Content Include="WF\Comm\Charts\MSColumn3D.swf" />
-    <Content Include="WF\Comm\Charts\MSLine.swf" />
-    <Content Include="WF\Comm\Charts\MSLine.xml" />
-    <Content Include="WF\Comm\Charts\Pie2D.swf" />
-    <Content Include="WF\Comm\Charts\Pie3D.swf" />
-    <Content Include="WF\Comm\Charts\StackedBar3D.swf" />
-    <Content Include="WF\Comm\Charts\StackedColumn3D.swf" />
-    <Content Include="WF\Comm\Charts\ZoomLine.swf" />
     <Content Include="WF\Comm\Contrast.aspx" />
     <Content Include="WF\Comm\Gener.js" />
     <Content Include="WF\Comm\HelperEnsTextBox.aspx" />
@@ -1299,6 +1280,7 @@
     <Content Include="WF\Comm\Rpt2DBA.aspx" />
     <Content Include="WF\Comm\Rpt2DBADtl.aspx" />
     <Content Include="WF\Comm\Rpt2DBAs.aspx" />
+    <Content Include="WF\Comm\Rpt\Pie.htm" />
     <Content Include="WF\Comm\SearchEUI.aspx" />
     <Content Include="WF\Comm\SelfAttrs.aspx" />
     <Content Include="WF\Comm\ShortKey.js" />
@@ -1340,6 +1322,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\Comm\Handler.ashx" />
+    <Content Include="WF\Comm\Rpt\Handler.ashx" />
     <None Include="WF\Data\Templete\NewFlow.json" />
     <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
     <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH.sql" />
@@ -4922,6 +4905,9 @@
     </Compile>
     <Compile Include="WF\Comm\Rpt2DBAs.aspx.designer.cs">
       <DependentUpon>Rpt2DBAs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Comm\Rpt\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\SearchEUI.aspx.cs">
       <DependentUpon>SearchEUI.aspx</DependentUpon>

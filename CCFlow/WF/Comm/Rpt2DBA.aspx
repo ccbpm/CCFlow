@@ -152,7 +152,8 @@
         string attrOfSelect = this.Request.QueryString["Idx"];
         if (string.IsNullOrEmpty(attrOfSelect))
             attrOfSelect = rpt.AttrDefSelected.ToString();
-
+        
+        //获得报表对象.
         BP.Rpt.Rpt2Attr myattr = rpt.AttrsOfGroup.GetD2(int.Parse(attrOfSelect));
     %>
     <div id="mm" class="easyui-menu" style="width: 80px;">
@@ -169,7 +170,7 @@
                 <div data-options="region:'center'">
                     <!-- 内容显示区域 -->
                     <%
-                        //获得数据源.s
+                        //获得数据源.
 
                         System.Data.DataTable dt = myattr.DBDataTable;
                         string leftHtml = "";
@@ -246,7 +247,8 @@
     <br />
     <%=myattr.DESC %>
     <%} %>
-    </div> </div> </div>
+    </div> 
+    </div> </div>
     <%
         string numFieldStrs = "";  //数值列-字符串,生成后用逗号分割.
         int numColCount = 0; // 数值列的数量.
@@ -278,6 +280,7 @@
         //求出最小最大值---郭要求整数,秦修改
         int minValue = int.Parse(myattr.MinValue.ToString());
         int maxValue = int.Parse(myattr.MaxValue.ToString());
+        
         if (maxValue == 0)
         {
             /*说明：属性已经设置最大最小值.*/

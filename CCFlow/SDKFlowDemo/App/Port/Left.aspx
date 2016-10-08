@@ -34,9 +34,7 @@
 
 
     <!------------------------- JQuery 与Entity的结合使用.  -------------------->
-    <tr>
-    <th>JQuery与Entity</th>
-    </tr>
+    <tr> <th>JQuery与Entity</th>  </tr>
     <tr>
     <td>
      <ul>
@@ -44,6 +42,21 @@
        </ul>
      </td>
     </tr>
+
+     <!------------------------- 图标显示.  -------------------->
+    <tr> <th>图标显示</th>  </tr>
+    <tr>
+    <td>
+     <ul>
+          <li><a href="/WF/Comm/Rpt2DBA.aspx?Rpt2Name=BP.Demo.RptStudent" target="main">男女比例分析</a></li>
+
+          <li><a href="/WF/Comm/Rpt/Pie.htm?RptName=BP.Demo.RptStudent" target="main">男女比例分析</a></li>
+
+       </ul>
+     </td>
+    </tr>
+
+
 
 
     <!------------------------- 数据采集  -------------------->

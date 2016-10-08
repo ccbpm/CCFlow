@@ -41,9 +41,9 @@
             */
             //调用通用方法绑定枚举, 性别.
             GenerBindEnumKey("DDL_XB", "XB");
+
             //调用通用方法绑定外键表. 班级.
             GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
-
 
             $.ajax({
                 type: 'post',
@@ -51,7 +51,7 @@
                 url: "Handler.ashx?DoType=StudentInit&No=" + no + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
+                   // alert(data);
                     data = JSON.parse(data);
 
                     //执行批量主表赋值.
@@ -64,8 +64,7 @@
         });
     </script>
 </head>
-
-<body >
+<body  >
 
 <form id="cc">
 <table style="width:80%;">
@@ -93,7 +92,6 @@
 
 </td>
 </tr>
-
 
 
 
@@ -186,12 +184,9 @@
         window.close();
     }
     function Delete() {
-
         var name = $("#TB_Name").val();
-
         if (window.confirm('您确定要删除['+name+']吗？') == false)
             return false;
-
         var no = $("#TB_No").val();
         $.ajax({
             type: 'post',
@@ -221,14 +216,13 @@
 <legend>开发约定与说明</legend>
 
 <ul>
+    
+<li>需要对 /WF/Comm/Gener.js  进行引用.</li>
 <li>控件的命名必须以 TB_ , DDL_, CB, RB_ 开头, 后半部分，必须与实体类的字段名称保持一致。</li>
 <li>按钮必须以 Btn_ 开头, 常用的按钮名称需要保持一致，比如： Btn_Save  Btn_SaveAndClose , Btn_Close , Btn_Delete </li>
 <li>常用的函数名必须保持一致，比如： Save()  SaveAncClose() Delete() Close() ...</li>
 <li>每个控件的name 的值，都不能为空，否则会导致数据传递不过去，并且checkbox的ids 取不出来。</li>
-
 <li>该界面是一个jq与bp框架的entity结合的实体信息存储，适用方面广，设计与实现比较容易，籍希望各位同事按照这个模式进行开发。</li>
-
-
 
 </ul>
 

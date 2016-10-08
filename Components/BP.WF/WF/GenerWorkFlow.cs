@@ -1204,7 +1204,8 @@ namespace BP.WF
 		public GenerWorkFlows(){}
 		#endregion
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List   /// <summary>
+        #region 为了适应自动翻译成java的需要,把实体转换成List  
+        /// <summary>
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
@@ -1212,7 +1213,6 @@ namespace BP.WF
         {
             return (System.Collections.Generic.IList<GenerWorkFlow>)this;
         }
-
         /// <summary>
         /// 转化成list
         /// </summary>

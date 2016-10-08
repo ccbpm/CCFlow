@@ -165,7 +165,7 @@
     <Compile Include="References\LitJSON\JsonWriter.cs" />
     <Compile Include="References\LitJSON\Lexer.cs" />
     <Compile Include="References\LitJSON\ParserToken.cs" />
-    <Compile Include="En\Rpt2Base.cs" />
+    <Compile Include="Rpt\Rpt2Base.cs" />
     <Compile Include="Service References\ccportal\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

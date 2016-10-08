@@ -7,8 +7,11 @@ using BP.Web.Controls;
 using BP.Web;
 using BP.Sys;
 
-namespace BP.En
+namespace BP.Rpt
 {
+    /// <summary>
+    /// 显示类型.
+    /// </summary>
     public enum DBAChartType
     {
         Table,
@@ -71,6 +74,16 @@ namespace BP.En
         public Rpt2Attr()
         {
         }
+        #region 基本属性.
+        /// <summary>
+        /// 子标题
+        /// </summary>
+        public string SubTitle = "SubTitle：子标题没有设置";
+        /// <summary>
+        /// 统计纬度
+        /// </summary>
+        public string TongJiWeiDu = "TongJiWeiDu：统计维度,属性没有设置.";
+
         private string _Title = "";
         /// <summary>
         /// 标题
@@ -141,6 +154,8 @@ namespace BP.En
         /// 默认宽度
         /// </summary>
         public int W = 900;
+        #endregion 基本属性.
+
         /// <summary>
         /// 底部文字.
         /// </summary>
@@ -165,7 +180,6 @@ namespace BP.En
         /// 是否启用table.
         /// </summary>
         public bool IsEnableTable = true;
-
         /// <summary>
         /// 柱图显示类型.
         /// </summary>
@@ -282,6 +296,75 @@ namespace BP.En
             {
                 _DBDataTable = value;
             }
+        }
+        /// <summary>
+        /// 转化成Json
+        /// </summary>
+        /// <returns>string</returns>
+        public string ToJson()
+        {
+
+            DataTable dt = this.DBDataTable;
+
+            //图示列数据.
+            string series_Data = "[";
+            foreach (DataRow dr in dt.Rows)
+            {
+                series_Data += ",'" + dr[1].ToString() + "'";
+            }
+            series_Data += "]";
+            series_Data = series_Data.Replace("[,", "[");
+
+            string dbData ="[";
+            foreach (DataRow dr in dt.Rows)
+            {
+                dbData += "{value:" + dr[2].ToString() + ",name:'" + dr[1] + "'},";
+            }
+            dbData = dbData.Substring(0, dbData.Length - 1);
+            dbData = dbData + "]";
+
+          //  dbData = dbData.Replace("\"", "");
+
+            string str = "";
+
+            str += "{";
+            str += "title: {";
+
+            str += " text: '" + this.Title + "',";
+            str += " subtext: '" + this.SubTitle + "',";
+            str += " x: 'center'";
+            str += " },";
+            str += "tooltip: {";
+            str += "    trigger: 'item',";
+            str += "    formatter: \"{a} <br/>{b} : {c} ({d}%)\"";
+            str += "},";
+            str += " legend: {";
+            str += "     orient: 'vertical',";
+            str += "     left: 'left',";
+            str += "     data:" + series_Data + "";
+            str += "  },";
+            str += "  series: [";
+            str += "    { ";
+            str += "     name: '" + this.TongJiWeiDu + "',";
+            str += "     type: 'pie',";
+            str += "    radius: '55%',";
+            str += "   center: ['50%', '60%'],";
+            str += "    data: " + dbData + ",";
+
+            str += "   itemStyle: {";
+            str += "     emphasis: {";
+            str += "         shadowBlur: 10,";
+            str += "        shadowOffsetX: 0,";
+            str += "       shadowColor: 'rgba(0, 0, 0, 0.5)'";
+            str += "    }";
+            str += "  }";
+            str += " }";
+            str += "  ] ";
+            str += "}; ";
+
+
+            BP.DA.DataType.WriteFile("c:\\111.txt", str);
+            return str;
         }
     }
     public class Rpt2Attrs : System.Collections.CollectionBase

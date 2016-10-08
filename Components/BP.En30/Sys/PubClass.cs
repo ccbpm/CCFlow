@@ -1526,7 +1526,6 @@ namespace BP.Sys
             dt.Rows.Add(dr);
             return dt;
         }
-
         #region
 
         #region
@@ -1544,69 +1543,110 @@ namespace BP.Sys
         }
         public static BP.En.Entity CopyFromRequest(BP.En.Entity en, HttpRequest reqest)
         {
-            string allKeys = ";";
-            foreach (string myK in reqest.Params.Keys)
-                allKeys += myK + ";";
-
-            // 给每个属性值.            
-            Attrs attrs = en.EnMap.Attrs;
-            foreach (Attr item in attrs)
+            //获取传递来的所有的checkbox ids 用于设置该属性为falsse.
+            string checkBoxIDs = reqest.QueryString["CheckBoxIDs"];
+            if (checkBoxIDs != null)
             {
-                string relKey = null;
-                switch (item.UIContralType)
+                string[] strs = checkBoxIDs.Split(',');
+                foreach (string str in strs)
                 {
-                    case UIContralType.TB:
-                        relKey = "TB_" + item.Key;
-                        break;
-                    case UIContralType.CheckBok:
-                        relKey = "CB_" + item.Key;
-                        break;
-                    case UIContralType.DDL:
-                        relKey = "DDL_" + item.Key;
-                        break;
-                    case UIContralType.RadioBtn:
-                        relKey = "RB_" + item.Key;
-                        break;
-                    case UIContralType.MapPin:
-                        relKey = "TB_" + item.Key;
-                        break;
-                    default:
-                        break;
-                }
+                    if (str == null || str == "")
+                        continue;
 
-                if (relKey == null)
+                    //设置该属性为false.
+                    en.Row[str.Replace("CB_", "")] = 0;
+                }
+            }
+
+
+            //如果不使用clone 就会导致 “集合已修改;可能无法执行枚举操作。”的错误。
+            Hashtable ht = en.Row.Clone() as Hashtable;
+
+            /*说明已经找到了这个字段信息。*/
+            foreach (string key in reqest.Params.Keys)
+            {
+                if (key == null || key == "")
                     continue;
 
-                if (allKeys.Contains(relKey + ";"))
-                {
-                    /*说明已经找到了这个字段信息。*/
-                    foreach (string myK in BP.Sys.Glo.Request.Params.Keys)
-                    {
-                        if (myK == null || myK == "")
-                            continue;
+                //获得实际的值, 具有特殊标记的，系统才赋值.
+                string attrKey = key.Clone() as string;
+                if (key.StartsWith("TB_"))
+                    attrKey = attrKey.Replace("TB_", "");
+                else if (key.StartsWith("CB_"))
+                    attrKey = attrKey.Replace("CB_", "");
+                else if (key.StartsWith("DDL_"))
+                    attrKey = attrKey.Replace("DDL_", "");
+                else if (key.StartsWith("RB_"))
+                    attrKey = attrKey.Replace("RB_", "");
+                else
+                    continue;
 
-                        if (myK.EndsWith(relKey))
-                        {
-                            if (item.UIContralType == UIContralType.CheckBok)
-                            {
-                                string val = BP.Sys.Glo.Request.Params[myK];
-                                if (val == "on" || val == "1" || val.Contains(",on"))
-                                    en.SetValByKey(item.Key, 1);
-                                else
-                                    en.SetValByKey(item.Key, 0);
-                            }
-                            else
-                            {
-                                en.SetValByKey(item.Key, BP.Sys.Glo.Request.Params[myK]);
-                            }
-                        }
-                        // if (myK.Contains(relKey+";" ))
-                    }
+                string val = reqest.Params[key];
+                if (key.IndexOf("CB_") == 0)
+                {
+                    en.Row[attrKey] = 1;
                     continue;
                 }
+
+                //其他的属性.
+                en.Row[attrKey] = val;
             }
             return en;
         }
+
+        public static BP.En.Entity CopyFromRequestByPost(BP.En.Entity en, HttpRequest reqest)
+        {
+            //获取传递来的所有的checkbox ids 用于设置该属性为falsse.
+            string checkBoxIDs = reqest.QueryString["CheckBoxIDs"];
+            if (checkBoxIDs != null)
+            {
+                string[] strs = checkBoxIDs.Split(',');
+                foreach (string str in strs)
+                {
+                    if (str == null || str == "")
+                        continue;
+
+                    //设置该属性为false.
+                    en.Row[str.Replace("CB_", "")] = 0;
+                }
+            }
+
+
+            //如果不使用clone 就会导致 “集合已修改;可能无法执行枚举操作。”的错误。
+            Hashtable ht = en.Row.Clone() as Hashtable;
+
+            /*说明已经找到了这个字段信息。*/
+            foreach (string key in reqest.Form.Keys)
+            {
+                if (key == null || key == "")
+                    continue;
+
+                //获得实际的值, 具有特殊标记的，系统才赋值.
+                string attrKey = key.Clone() as string;
+                if (key.StartsWith("TB_"))
+                    attrKey = attrKey.Replace("TB_", "");
+                else if (key.StartsWith("CB_"))
+                    attrKey = attrKey.Replace("CB_", "");
+                else if (key.StartsWith("DDL_"))
+                    attrKey = attrKey.Replace("DDL_", "");
+                else if (key.StartsWith("RB_"))
+                    attrKey = attrKey.Replace("RB_", "");
+                else
+                    continue;
+
+                string val = reqest.Form[key];
+                if (key.IndexOf("CB_") == 0)
+                {
+                    en.Row[attrKey] = 1;
+                    continue;
+                }
+
+                //其他的属性.
+                en.Row[attrKey] = val;
+            }
+            return en;
+        }
+
         /// <summary>
         /// 明细表传参保存
         /// </summary>

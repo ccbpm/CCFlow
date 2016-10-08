@@ -1490,7 +1490,7 @@ namespace BP.Sys
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("@请输入字段描述或字段名称。异常信息:" + ex.Message);
+                    throw new Exception("@请输入字段描述或字段名称，异常信息:" + ex.Message);
                 }
             }
             else

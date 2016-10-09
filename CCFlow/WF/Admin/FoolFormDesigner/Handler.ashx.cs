@@ -213,6 +213,11 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "DownTempFrm":
                         this.DownTempFrm();
                         return;
+                    case "HidAttr": //获得隐藏的字段.
+                        MapAttrs attrs = new MapAttrs();
+                        attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, 0);
+                        msg = attrs.ToJson();
+                        break;
                     default:
                         msg = "没有判断的执行类型：" + this.DoType;
                         break;

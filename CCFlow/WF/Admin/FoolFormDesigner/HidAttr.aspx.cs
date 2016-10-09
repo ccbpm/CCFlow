@@ -76,11 +76,6 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTREnd();
             }
             this.Pub1.AddTableEndWithHR();
-            //return;
-
-            //this.Pub1.AddFieldSet("编辑隐藏字段");
-            //this.Pub1.Add("说明：隐藏字段是不显示在表单里面，多用于属性的计算、方向条件的设置，报表的体现。");
-            //this.Pub1.AddFieldSetEnd();
         }
     }
 }

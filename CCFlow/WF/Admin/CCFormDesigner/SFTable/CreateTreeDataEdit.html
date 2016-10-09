@@ -208,13 +208,13 @@
 
                  onDrop: function(targetRow, sourceRow, point)
                  {
-                     alert("Target: " + targetRow.id + "; Source: " + sourceRow.id + "; Point:" + point);
+                     processDragDrop(targetRow, sourceRow, point);
                  },
 
                  onClickRow: function (row)
                  {
                      //alert(row);
-
+                     
                      //for (var prop in  row) {
                      //    alert(prop + " : " + row[prop]);
 
@@ -252,9 +252,9 @@
             {
                 alert(msg);
 
-                msg = [{ No: 1, Name: "CN_City-Item-1", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo : 1}, { No: 2, Name: "CN_City-Item-2", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 1}, { No: 3, Name: "CN_City-Item-3", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 2 }, { No: 4, Name: "CN_City-Item-4", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 3 }, { No: 5, Name: "CN_City-Item-5", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 5}, { No: 6, Name: "CN_City-Item-6", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 4}]
+                //msg = [{ No: 1, Name: "CN_City-Item-1", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo : 1}, { No: 2, Name: "CN_City-Item-2", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 1}, { No: 3, Name: "CN_City-Item-3", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 2 }, { No: 4, Name: "CN_City-Item-4", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 3 }, { No: 5, Name: "CN_City-Item-5", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 5}, { No: 6, Name: "CN_City-Item-6", Names: "", Grade: 0, FK_SF: "", FK_PQ: "", ParentNo: 4}]
 
-                rawData = msg; //JSON.parse(msg);
+                rawData = JSON.parse(msg);
 
                 resetNodeIDArray(rawData);
 
@@ -266,13 +266,39 @@
             });
         }
 
+        function processDragDrop(targetRow, sourceRow, point)
+        {
+            alert("Target: " + targetRow.id + "; Source: " + sourceRow.id + "; Point:" + point);
+
+            //for (var prop in targetRow)
+            //{
+            //    alert(prop + " : " + targetRow[prop]);
+            //}
+
+            var sourceNode = $('#treeGrd').treegrid('pop', sourceRow.id);
+
+            var targetNode = $('#treeGrd').treegrid('select', targetRow.id);
+
+            for (var prop in sourceNode) {
+                alert(prop + " : " + sourceNode[prop]);
+            }
+
+            $('#treeGrd').treegrid('append',
+                {
+                    parent: targetNode.id,
+                    data: { id: sourceNode.id, value: sourceNode.value, parent: targetNode.id, uid: sourceNode.uid, children: sourceNode.children}
+                });
+
+           
+        }
+
         function map(items)
         {
             var mapped = [];
 
             for (var i = 0; i < items.length; i++)
             {
-                if (items[i] != null && (items[i].ParentNo == items[i].No || items[i].ParentNo == undefined || items[i].ParentNo == null))
+                if (items[i] != null && (items[i].ParentNo == items[i].No || items[i].ParentNo == undefined || items[i].ParentNo == null || items[i].ParentNo == ""))
                 {
                     mapped.push({
                         id: items[i].No,
@@ -431,18 +457,24 @@
             {
                 var newNodeId = nextNodeID();
                 var newNodeValue = "NewNode-" + newNodeId.toString();
-                var newNodeUID = createGuid();
+                var newNodeUID = "";//createGuid();
 
-                var newData = { id: newNodeId, value: newNodeValue, parent: node.id, uid: newNodeUID, children: [] };
+                var newData = { id: newNodeId, value: newNodeValue, parent: node.parent, uid: newNodeUID, children: [] };
 
-                if (parentNode != null && parentNode != undefined) {
+                if (parentNode != null && parentNode != undefined)
+                {
                     if (parentNode.children == null || parentNode.children == undefined) {
                         parentNode.children = [];
                     }
 
+                    newData.parent = parentNode.id;
+
                     parentNode.children.push(newData);
                 }
-                else {
+                else
+                {
+                    newData.parent = newData.id;
+
                     data.push(newData);
                 }
 
@@ -469,7 +501,7 @@
             if (node) {
                 var newNodeId = nextNodeID();
                 var newNodeValue = "NewNode-" + newNodeId.toString();
-                var newNodeUID = createGuid();
+                var newNodeUID = "";//createGuid();
                 var newData = { id: newNodeId, value: newNodeValue, parent: node.id, uid: newNodeUID, children: [] };
 
                 //for (var prop in  node) {
@@ -530,10 +562,17 @@
         //			}
         //}
 
-        //function reject(){
-        //		$('#dg').datagrid('rejectChanges');
-        //		editIndex = undefined;
-        //}
+        function accept()
+        {
+            $('#treeGrd').treegrid('acceptChanges');
+            currentNodeId = undefined;
+        }
+
+        function reject()
+        {
+            $('#treeGrd').treegrid('rejectChanges');
+            currentNodeId = undefined;
+        }
 
         //function getChanges(){
         //		var rows = $('#dg').datagrid('getChanges');
@@ -577,11 +616,12 @@
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">挂接</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-insert',plain:true" onclick="insert()">增加</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
+            <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-accept',plain:true" onclick="accept()">接受</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销</a>-->
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="submit()">保存</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="refresh()">刷新</a>
 
-            <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">Reject</a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>-->
+            <!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>-->
         </div>
 
         <table id="treeGrd" class="easyui-treegrid" style="width:30%">

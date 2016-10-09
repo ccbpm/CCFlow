@@ -1735,6 +1735,7 @@
     <Content Include="WF\Scripts\easyUI\themes\icons\user.png" />
     <Content Include="WF\Scripts\easyUI\themes\icons\xitong.png" />
     <Content Include="WF\Scripts\easyUI\themes\icons\xitongleibie.png" />
+    <Content Include="WF\Scripts\easyUI15\treegrid-dnd.js" />
     <Content Include="WF\Scripts\FrmReportField.js" />
     <Content Include="WF\Scripts\FrmReportFieldReadOnly.js" />
     <Content Include="WF\Scripts\LoadWebOffice.js" />

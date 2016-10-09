@@ -203,7 +203,7 @@
                      
                  onLoadSuccess: function (row)
                  {
-                     $('#treeGrd').treegrid('enableDnd', row ? row.id : null);
+                     //$('#treeGrd').treegrid('enableDnd', row ? row.id : null);
                  },
 
                  onDrop: function(targetRow, sourceRow, point)
@@ -232,7 +232,9 @@
                      else
                      {
                          $('#treeGrd').treegrid('endEdit', currentNodeId);
+                         //$('#treeGrd').treegrid('selectRow', nodeId).treegrid('beginEdit', nodeId);
                          $('#treeGrd').treegrid('selectRow', nodeId);
+                         //currentNodeId = -1;
                      }
                  }
              });

@@ -352,7 +352,7 @@ namespace CCFlow.WF.UC
 
             #region 加载流程控制器 - 按钮
             BtnLab btnLab = new BtnLab(currND.NodeID);
-          //  BtnWord = null;  // btnLab.WebOfficeEnable + "";
+            //  BtnWord = null;  // btnLab.WebOfficeEnable + "";
 
             if (this.currND.HisFormType == NodeFormType.SelfForm)
             {
@@ -495,7 +495,7 @@ namespace CCFlow.WF.UC
                 toolbar.Add("<input type=button  value='" + btnLab.ThreadLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />");
             }
 
-            if (btnLab.TCEnable==true && isAskFor == false)
+            if (btnLab.TCEnable == true && isAskFor == false)
             {
                 /*流转自定义..*/
                 string ur3 = appPath + "WF/WorkOpt/TransferCustom.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
@@ -573,7 +573,18 @@ namespace CCFlow.WF.UC
 
             if (btnLab.EndFlowEnable && this.currND.IsStartNode == false && isAskFor == false)
             {
-                toolbar.Add("<input type=button  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"To('./WorkOpt/StopFlow.aspx?&DoType=StopFlow&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "'); \" />");
+                //获取配置文件
+                if (BP.Sys.SystemConfig.IsOpenEndFlow == IsOpenEndFlow.Close)
+                {
+                    toolbar.AddBtn("Btn_EndFlow", btnLab.EndFlowLab);
+                    toolbar.GetBtnByID("Btn_EndFlow").OnClientClick = "return confirm('将要执行结束流程，您确认吗?')')";
+                    toolbar.GetBtnByID("Btn_EndFlow").Click += new System.EventHandler(ToolBar1_ButtonClick);
+                }
+                else
+                {
+                    toolbar.Add("<input type=button  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"To('./WorkOpt/StopFlow.aspx?&DoType=StopFlow&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "'); \" />");
+                }
+
                 //toolbar.AddBtn("Btn_EndFlow", btnLab.EndFlowLab);
                 //toolbar.GetBtnByID("Btn_EndFlow").OnClientClick = "return confirm('" + this.ToE("AYS", "将要执行终止流程，您确认吗？") + "')";
                 //toolbar.GetBtnByID("Btn_EndFlow").Click += new System.EventHandler(ToolBar1_ButtonClick);
@@ -591,7 +602,7 @@ namespace CCFlow.WF.UC
                     toolbar.Add("<input type=button  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />");
                 }
 
-                if( this.currND.HisPrintDocEnable == PrintDocEnable.PrintWord)
+                if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintWord)
                 {
                     string urlr = appPath + "WF/Rpt/RptDoc.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsPrint=1&s=" + tKey;
                     toolbar.Add("<input type=button  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />");
@@ -640,7 +651,7 @@ namespace CCFlow.WF.UC
                 //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
             }
 
-            if (btnLab.WebOfficeWorkModel ==  WebOfficeWorkModel.Button)
+            if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
             {
                 /*公文正文 */
                 string urlr = appPath + "WF/WorkOpt/WebOffice.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
@@ -656,14 +667,14 @@ namespace CCFlow.WF.UC
                 //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
             }
 
-            if (btnLab.SubFlowCtrlRole != SubFlowCtrlRole.None  )
+            if (btnLab.SubFlowCtrlRole != SubFlowCtrlRole.None)
             {
                 /* 子流程 */
                 string urlr3 = appPath + "WF/WorkOpt/SubFlow.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar.Add("<input type=button  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />");
             }
 
-            if (btnLab.CHEnable ==true )
+            if (btnLab.CHEnable == true)
             {
                 /* 节点时限设置 */
                 string urlr3 = appPath + "WF/WorkOpt/CH.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
@@ -708,10 +719,10 @@ namespace CCFlow.WF.UC
 
 
         }
-        public string DealUrl(BP.WF.Node currND, string url=null)
+        public string DealUrl(BP.WF.Node currND, string url = null)
         {
-            if (url==null)
-               url = currND.FormUrl;
+            if (url == null)
+                url = currND.FormUrl;
 
             string urlExt = this.RequestParas;
 
@@ -793,7 +804,7 @@ namespace CCFlow.WF.UC
             // 检查是否可以发起该流程？
             if (BP.WF.Glo.CheckIsCanStartFlow_InitStartFlow(this.currFlow) == false)
             {
-                this.ToMsg("@您违反了该流程的【" + this.currFlow.StartLimitRole + "】限制规则。" + this.currFlow.StartLimitAlert,"INfo");
+                this.ToMsg("@您违反了该流程的【" + this.currFlow.StartLimitRole + "】限制规则。" + this.currFlow.StartLimitAlert, "INfo");
                 return;
             }
 
@@ -801,12 +812,12 @@ namespace CCFlow.WF.UC
             try
             {
                 string userNo = this.Request.QueryString["UserNo"];
-                if (userNo!=null && userNo != BP.Web.WebUser.No)
+                if (userNo != null && userNo != BP.Web.WebUser.No)
                     BP.WF.Dev2Interface.Port_Login(userNo);
             }
             catch (Exception ex)
             {
-                this.Response.Write("@登录信息WebUser.No丢失，请重新登录。" + ex.Message );
+                this.Response.Write("@登录信息WebUser.No丢失，请重新登录。" + ex.Message);
                 return;
             }
 
@@ -849,7 +860,7 @@ namespace CCFlow.WF.UC
             }
             catch (Exception ex)
             {
-                this.ToMsg("设置读取状态错误,或者当前工作已经被处理,或者当前登录人员已经改变.技术信息:"+ex.Message, ex.Message);
+                this.ToMsg("设置读取状态错误,或者当前工作已经被处理,或者当前登录人员已经改变.技术信息:" + ex.Message, ex.Message);
                 return;
             }
             #endregion
@@ -857,15 +868,15 @@ namespace CCFlow.WF.UC
             #region 判断前置导航.
             if (this.currND.IsStartNode && this.IsCC == false)
             {
-               if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow,WebUser.No)==false)
-               {
-                   /*是否可以发起流程？*/
-                   this.ToMsg("您("+BP.Web.WebUser.No+")没有发起或者处理该流程的权限.","Err");
-                   return;
-               }
+                if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
+                {
+                    /*是否可以发起流程？*/
+                    this.ToMsg("您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.", "Err");
+                    return;
+                }
             }
 
-            if (this.WorkID == 0 && this.PWorkID==0 && this.currND.IsStartNode && this.Request.QueryString["IsCheckGuide"] == null)
+            if (this.WorkID == 0 && this.PWorkID == 0 && this.currND.IsStartNode && this.Request.QueryString["IsCheckGuide"] == null)
             {
                 switch (this.currFlow.StartGuideWay)
                 {
@@ -888,7 +899,7 @@ namespace CCFlow.WF.UC
                         this.Response.Redirect("StartGuideEntities.aspx?FK_Flow=" + this.currFlow.No, true);
                         return;
                     case StartGuideWay.BySelfUrl: //按照定义的url.
-                        this.Response.Redirect( this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" + BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null), true);
+                        this.Response.Redirect(this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" + BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null), true);
                         break;
                     case StartGuideWay.ByFrms: //选择表单.
                         this.Response.Redirect("./WorkOpt/StartGuideFrms.aspx?FK_Flow=" + this.currFlow.No, true);
@@ -904,7 +915,7 @@ namespace CCFlow.WF.UC
 
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
-                 || this.currND.HisFormType == NodeFormType.SheetAutoTree  )
+                 || this.currND.HisFormType == NodeFormType.SheetAutoTree)
             {
                 /*如果是多表单流程.*/
                 string pFlowNo = this.Request.QueryString["PFlowNo"];
@@ -919,7 +930,7 @@ namespace CCFlow.WF.UC
                     if (string.IsNullOrEmpty(pFlowNo) == true)
                         this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null);
                     else
-                        this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null, Int64.Parse(pWorkID),0, pFlowNo, int.Parse(pNodeID));
+                        this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null, Int64.Parse(pWorkID), 0, pFlowNo, int.Parse(pNodeID));
 
                     currWK = currND.HisWork;
                     currWK.OID = this.WorkID;
@@ -945,7 +956,7 @@ namespace CCFlow.WF.UC
                         return;
                     }
                 }
-               
+
 
                 string toUrl = "";
                 if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)
@@ -1051,7 +1062,7 @@ namespace CCFlow.WF.UC
                     if (gwf.WFState == WFState.ReturnSta)
                     {
                         /*如果是退回的状态，就说明该信息是子线程退回到合流节点.*/
-                        this.Response.Redirect("./WorkOpt/DealSubThreadReturnToHL.aspx?FK_Flow="+this.FK_Flow+"&FK_Node="+this.FK_Node+"&WorkID="+this.WorkID+"&FID="+this.FID, true);
+                        this.Response.Redirect("./WorkOpt/DealSubThreadReturnToHL.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID, true);
                         return;
                     }
                 }
@@ -1134,7 +1145,7 @@ namespace CCFlow.WF.UC
 
                                 str = str.Replace("@WorkID", this.WorkID.ToString());
                                 str = str.Replace("@OID", this.WorkID.ToString());
-                                this.FlowMsg.AlertMsg_Info("退回信息", msgInfo + "<br>" + str+"<br>");
+                                this.FlowMsg.AlertMsg_Info("退回信息", msgInfo + "<br>" + str + "<br>");
                             }
                             else
                             {
@@ -1167,8 +1178,8 @@ namespace CCFlow.WF.UC
                             }
                             this.FlowMsg.AddFieldSetEnd();
                         }
-                       // gwf.WFState = WFState.Runing;
-                       // gwf.DirectUpdate();
+                        // gwf.WFState = WFState.Runing;
+                        // gwf.DirectUpdate();
                         break;
                     default:
                         break;
@@ -1254,7 +1265,7 @@ namespace CCFlow.WF.UC
                 this.ToMsg("<font color=red>数据已经被非法篡改，请通知管理员解决问题。</font>", "Info");
                 return;
             }
- 
+
             switch (nd.HisNodeWorkType)
             {
                 case NodeWorkType.StartWorkFL:
@@ -1325,7 +1336,7 @@ namespace CCFlow.WF.UC
                     /*如果需要设置父流程信息。*/
                     string cFlowNo = this.CFlowNo;
                     string[] workids = this.WorkIDs.Split(',');
-                    int count = workids.Length ;
+                    int count = workids.Length;
                     //this.Pub1.AddFieldSet("分组审阅", "一共选择了(" + count + ")个子流程被合并审阅,分别是:" + this.WorkIDs);//ID提示没有意义
                     this.Pub1.AddFieldSet("分组审阅", "一共选择了(" + count + ")个子流程被合并审阅。");
                 }
@@ -1363,7 +1374,7 @@ namespace CCFlow.WF.UC
                             frmType = NodeFormType.FreeForm;
                     }
 
-                    if (frmType == NodeFormType.FreeForm )
+                    if (frmType == NodeFormType.FreeForm)
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /* 添加保存表单函数，以便自定义按钮调用，执行表单的保存前后事件。 */
@@ -1394,7 +1405,7 @@ namespace CCFlow.WF.UC
                             isLoadData = true;
 
                         this.UCEn1.IsLoadData = isLoadData;
-                        this.UCEn1.BindCCForm(wk, nd.NodeFrmID, false, 0, isLoadData); 
+                        this.UCEn1.BindCCForm(wk, nd.NodeFrmID, false, 0, isLoadData);
                         if (wk.WorkEndInfo.Length > 2)
                             this.Pub3.Add(wk.WorkEndInfo);
                         this.UCEn1.Add("</div>");
@@ -1407,7 +1418,7 @@ namespace CCFlow.WF.UC
                         MapFoolForm map = new MapFoolForm("ND" + FK_Node);
                         this.Width = map.TableWidth;
                         this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight + "px;overflow-x:auto;' >");
-                        this.UCEn1.BindColumn4(wk, nd.NodeFrmID); 
+                        this.UCEn1.BindColumn4(wk, nd.NodeFrmID);
                         if (wk.WorkEndInfo.Length > 2)
                             this.Pub3.Add(wk.WorkEndInfo);
                         this.UCEn1.Add("</div>");
@@ -1434,7 +1445,7 @@ namespace CCFlow.WF.UC
 
                             FrmNode fnNode = new FrmNode();
                             fnNode.FK_Frm = myfrm.No;
-                        //    fnNode.IsEdit = true;
+                            //    fnNode.IsEdit = true;
                             fnNode.IsPrint = false;
                             switch (nd.HisFormType)
                             {
@@ -1465,7 +1476,7 @@ namespace CCFlow.WF.UC
                         if (this.FID == 0)
                             fid = this.WorkID;
 
-                        if (frms.Count == 1 )
+                        if (frms.Count == 1)
                         {
                             /* 仅仅只有一个独立表单的情况。 */
                             Frm frm = (Frm)frms[0];
@@ -1614,12 +1625,12 @@ namespace CCFlow.WF.UC
                             var excelFrmNos = string.Empty;
                             var excelFrmIdx = 0;
                             var excelFrmCount = 0;
-                            foreach(Frm frm in frms)
+                            foreach (Frm frm in frms)
                             {
                                 if (frm.HisFrmNode.HisFrmType != FrmType.ExcelFrm)
                                     continue;
                                 excelFrmNos += frm.No + ",";
-                                excelFrmCount ++;
+                                excelFrmCount++;
                             }
                             //end added
 
@@ -1630,7 +1641,7 @@ namespace CCFlow.WF.UC
                                 FrmNode fn = frm.HisFrmNode;
 
                                 //2015.02.07,added by liuxc
-                                if(fn.HisFrmType == FrmType.ExcelFrm)
+                                if (fn.HisFrmType == FrmType.ExcelFrm)
                                 {
                                     if (excelFrmIdx >= 1)
                                         continue;
@@ -1645,7 +1656,7 @@ namespace CCFlow.WF.UC
 
                                 //2015.02.07,edited by liuxc
                                 src = fn.FrmUrl + ".aspx?FK_MapData=" + (fn.HisFrmType == FrmType.ExcelFrm ? excelFrmNos.TrimEnd(',') : frm.No) + "&IsEdit=" + fn.IsEditInt + "&IsPrint=" + fn.IsPrintInt + urlExtFrm;
-                                this.UCEn1.Add("\t\n<li><a ID='HL" + frm.No + "' href=\"#" + frm.No + "\" onclick=\"TabClick('" + frm.No + "','" + src + "');\" >" +(fn.HisFrmType == FrmType.ExcelFrm ? string.Format("Excel表单[{0}]",excelFrmCount) : frm.Name) + "</a></li>");
+                                this.UCEn1.Add("\t\n<li><a ID='HL" + frm.No + "' href=\"#" + frm.No + "\" onclick=\"TabClick('" + frm.No + "','" + src + "');\" >" + (fn.HisFrmType == FrmType.ExcelFrm ? string.Format("Excel表单[{0}]", excelFrmCount) : frm.Name) + "</a></li>");
                             }
                             this.UCEn1.Add("\t\n </ul>");
                             #endregion 输出标签.
@@ -1923,6 +1934,12 @@ namespace CCFlow.WF.UC
                 case NamesOfBtn.Send:
                     this.Send(false);
                     break;
+                case "Btn_EndFlow":
+                    if (WorkID == 0)
+                        throw new Exception("没有指定当前的工作,不能查看工作者列表.");
+                    string infoEnd = BP.WF.Dev2Interface.Flow_DoFlowOverByCoercion(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, "");
+                    this.ToMsg("结束流程提示:<hr>" + infoEnd, "info");
+                    break;
                 default:
                     break;
             }
@@ -1962,7 +1979,7 @@ namespace CCFlow.WF.UC
                         MapAttrs mattrs = currND.MapData.MapAttrs;
                         foreach (MapAttr attr in mattrs)
                         {
-                            if (attr.TBModel ==  TBModel.RichText)
+                            if (attr.TBModel == TBModel.RichText)
                             {
                                 /* 如果是富文本 */
                                 currWK.SetValByKey(attr.KeyOfEn, this.Request.Form["ctl00$ContentPlaceHolder1$MyFlowUC1$MyFlow1$UCEn1$TB_" + attr.KeyOfEn]);
@@ -1976,7 +1993,7 @@ namespace CCFlow.WF.UC
                         }
 
                         //如果有单据编号，让其在每次保存后生成.
-                        if (this.currND.IsStartNode && this.currFlow.BillNoFormat.Length >2)
+                        if (this.currND.IsStartNode && this.currFlow.BillNoFormat.Length > 2)
                         {
                             if (this.UCEn1.IsExit("TB_BillNo") == true)
                             {
@@ -2061,7 +2078,7 @@ namespace CCFlow.WF.UC
                     if (this.currFlow.DraftRole != DraftRole.None)
                     {
                         string title = BP.WF.WorkFlowBuessRole.GenerTitle(this.currFlow, currWK);
-                        BP.WF.Dev2Interface.Flow_SetFlowTitle(this.FK_Flow,this.WorkID, title);
+                        BP.WF.Dev2Interface.Flow_SetFlowTitle(this.FK_Flow, this.WorkID, title);
                     }
                 }
             }

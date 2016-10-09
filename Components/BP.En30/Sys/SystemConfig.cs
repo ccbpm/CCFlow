@@ -65,6 +65,21 @@ namespace BP.Sys
         OneMore
     }
     /// <summary>
+    /// 结束流程 窗口
+    /// </summary>
+    public enum IsOpenEndFlow
+    {
+        /// <summary>
+        /// 默认不打开.
+        /// </summary>
+        Close,
+        /// <summary>
+        /// 打开
+        /// </summary>
+        Open
+    }
+
+    /// <summary>
     /// 系统配值
     /// </summary>
     public class SystemConfig
@@ -88,6 +103,18 @@ namespace BP.Sys
                 return (OSDBSrc)SystemConfig.GetValByKeyInt("OSDBSrc", 0);
             }
         }
+          /// <summary>
+        /// 结束流程 窗口配置
+        /// </summary>
+        public static IsOpenEndFlow IsOpenEndFlow
+        {
+            get
+            {
+                return (IsOpenEndFlow)SystemConfig.GetValByKeyInt("IsOpenEndFlow", 0);
+            }
+        }
+       
+
         #endregion
 
         /// <summary>
@@ -700,6 +727,8 @@ namespace BP.Sys
             }
         }
         #endregion
+
+
 
         #region 处理临时缓存
         /// <summary>

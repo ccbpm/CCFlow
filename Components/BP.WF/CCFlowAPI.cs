@@ -198,15 +198,11 @@ namespace BP.WF
                      //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
                     }
 
-                    // 判断是否存在.
-                    if (myds.Tables.Contains(uiBindKey) == true)
-                        continue;
-
                     // 检查是否有下拉框自动填充。
                     string keyOfEn = dr["KeyOfEn"].ToString();
                     string fk_mapData = dr["FK_MapData"].ToString();
 
-                    #region 处理下拉框数据范围. for xiaoyang.
+                    #region 处理下拉框数据范围. for 小杨.
                     me = mes.GetEntityByKey(MapExtAttr.ExtType,  MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
                     if (me != null)
                     {
@@ -214,11 +210,15 @@ namespace BP.WF
                         fullSQL = fullSQL.Replace("~", ",");
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
                         dt = DBAccess.RunSQLReturnTable(fullSQL);
-                        dt.TableName = uiBindKey; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                        dt.TableName =  keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
                         myds.Tables.Add(dt);
                         continue;
                     }
                     #endregion 处理下拉框数据范围.
+
+                    // 判断是否存在.
+                    if (myds.Tables.Contains(uiBindKey) == true)
+                        continue;
 
                     myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
                 }

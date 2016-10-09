@@ -606,6 +606,10 @@ namespace CCForm
                         mapPin.SetValue(Canvas.TopProperty, Glo.Y);
                         this.attachElementEvent(mapPin);
                     }
+                    else if (this.winFrmEleMapPin.IsNewElement == true)
+                    {
+                        MessageBox.Show("已经存在对象：" + mapPin.Name);
+                    }
                     break;
                 case NameEleMicHot:
                     BPMicrophonehot micHot = this.winFrmEleMicHot.HisEle;
@@ -615,6 +619,10 @@ namespace CCForm
                         micHot.SetValue(Canvas.LeftProperty, Glo.X);
                         micHot.SetValue(Canvas.TopProperty, Glo.Y);
                         this.attachElementEvent(micHot);
+                    }
+                    else if (this.winFrmEleMicHot.IsNewElement == true)
+                    {
+                        MessageBox.Show("已经存在对象：" + micHot.Name);
                     }
                     break;
                 case NameAttachmentM:
@@ -1010,33 +1018,6 @@ namespace CCForm
                                         string eleType = (string)dr["ELETYPE"];
                                         if (string.IsNullOrEmpty(eleType))
                                             continue;
-
-                                        if (eleType == "MapPin")//地图定位
-                                        {
-                                            BPMapPin mapPin = new BPMapPin();
-                                            mapPin.MyPK = dr["MYPK"];
-                                            mapPin.Name = dr["ELEID"];
-                                            tmpDouble = dr["X"];
-                                            mapPin.SetValue(Canvas.LeftProperty, tmpDouble);
-                                            tmpDouble = dr["Y"];
-                                            mapPin.SetValue(Canvas.TopProperty, tmpDouble);
-
-                                            attachElementEvent(mapPin);
-                                            continue;
-                                        }
-                                        else if (eleType == "Microphonehot")//录音
-                                        {
-                                            BPMicrophonehot micHot = new BPMicrophonehot();
-                                            micHot.MyPK = dr["MYPK"];
-                                            micHot.Name = dr["ELEID"];
-                                            tmpDouble = dr["X"];
-                                            micHot.SetValue(Canvas.LeftProperty, tmpDouble);
-                                            tmpDouble = dr["Y"];
-                                            micHot.SetValue(Canvas.TopProperty, tmpDouble);
-
-                                            attachElementEvent(micHot);
-                                            continue;
-                                        }
 
                                         //扩展控件
                                         BPEle bpele = new BPEle();
@@ -1489,6 +1470,26 @@ namespace CCForm
                                                 attachElementEvent(cb);
                                                 break;
                                             case CtrlType.RB:
+                                                break;
+                                            case CtrlType.MapPin://地图定位
+                                                BPMapPin mapPin = new BPMapPin();
+                                                mapPin.MyPK = dr["MYPK"];
+                                                mapPin.Name = keyOfEn;
+                                                mapPin.KeyName = text;
+                                                mapPin.SetValue(Canvas.LeftProperty, X);
+                                                mapPin.SetValue(Canvas.TopProperty, Y);
+
+                                                attachElementEvent(mapPin);
+                                                break;
+                                            case CtrlType.MicHot://录音
+                                                BPMicrophonehot micHot = new BPMicrophonehot();
+                                                micHot.MyPK = dr["MYPK"];
+                                                micHot.Name = keyOfEn;
+                                                micHot.KeyName = text;
+                                                micHot.SetValue(Canvas.LeftProperty, X);
+                                                micHot.SetValue(Canvas.TopProperty, Y);
+
+                                                attachElementEvent(micHot);
                                                 break;
                                             default:
                                                 break;
@@ -2500,58 +2501,46 @@ namespace CCForm
                 else if (ctl is BPMapPin)
                 {
                     #region
-                    BPMapPin ele = ctl as BPMapPin;
-                    if (ele != null)
+                    BPMapPin mapPin = ctl as BPMapPin;
+                    if (mapPin != null)
                     {
-                        DataRow drEle = dtEle.NewRow();
+                        DataRow mapAttrDR = dtMapAttr.NewRow();
+                        mapAttrDR["MYPK"] = mapPin.MyPK;
+                        mapAttrDR["NAME"] = mapPin.KeyName;
+                        mapAttrDR["KEYOFEN"] = mapPin.Name;
+                        mapAttrDR["FK_MAPDATA"] = Glo.FK_MapData;
+                        mapAttrDR["UICONTRALTYPE"] = CtrlType.MapPin;
+                        mapAttrDR["MYDATATYPE"] = DataType.AppString;
+                        mapAttrDR["UIWIDTH"] = mapPin.Width.ToString("0.00");
+                        mapAttrDR["UIHEIGHT"] = mapPin.Height.ToString("0.00");
+                        mapAttrDR["LGTYPE"] = LGType.WinOpen;
 
-                        drEle["MYPK"] = ele.MyPK;
-                        drEle["FK_MAPDATA"] = Glo.FK_MapData;
-
-                        //drEle["EleType"] = "MapPin";
-                        //drEle["EleName"] = ele.EleName;
-                        //drEle["EleID"] = ele.Name;
-
-                        //eleDT.Columns.Add(new DataColumn("EleType", typeof(string)));
-                        //eleDT.Columns.Add(new DataColumn("EleID", typeof(string)));
-                        //eleDT.Columns.Add(new DataColumn("EleName", typeof(string)));
-
-                        drEle["X"] = x.ToString("0.00");
-                        drEle["Y"] = y.ToString("0.00");
-
-                        drEle["W"] = ele.Width.ToString("0.00");
-                        drEle["H"] = ele.Height.ToString("0.00");
-
-                        dtEle.Rows.Add(drEle);
+                        mapAttrDR["X"] = x.ToString("0.00");
+                        mapAttrDR["Y"] = y.ToString("0.00");
+                        dtMapAttr.Rows.Add(mapAttrDR);
                     }
                     #endregion
                 }
                 else if (ctl is BPMicrophonehot)
                 {
                     #region
-                    BPMicrophonehot ele = ctl as BPMicrophonehot;
-                    if (ele != null)
+                    BPMicrophonehot micHot = ctl as BPMicrophonehot;
+                    if (micHot != null)
                     {
-                        DataRow drEle = dtEle.NewRow();
+                        DataRow mapAttrDR = dtMapAttr.NewRow();
+                        mapAttrDR["MYPK"] = micHot.MyPK;
+                        mapAttrDR["NAME"] = micHot.KeyName;
+                        mapAttrDR["KEYOFEN"] = micHot.Name;
+                        mapAttrDR["FK_MAPDATA"] = Glo.FK_MapData;
+                        mapAttrDR["UICONTRALTYPE"] = CtrlType.MicHot;
+                        mapAttrDR["MYDATATYPE"] = DataType.AppBoolean;
+                        mapAttrDR["UIWIDTH"] = micHot.Width.ToString("0.00");
+                        mapAttrDR["UIHEIGHT"] = micHot.Height.ToString("0.00");
+                        mapAttrDR["LGTYPE"] = LGType.WinOpen;
 
-                        drEle["MYPK"] = ele.MyPK;
-                        drEle["FK_MAPDATA"] = Glo.FK_MapData;
-
-                        //drEle["EleType"] = "Microphonehot";
-                        //drEle["EleName"] = ele.EleName;
-                        //drEle["EleID"] = ele.Name;
-
-                        //eleDT.Columns.Add(new DataColumn("EleType", typeof(string)));
-                        //eleDT.Columns.Add(new DataColumn("EleID", typeof(string)));
-                        //eleDT.Columns.Add(new DataColumn("EleName", typeof(string)));
-
-                        drEle["X"] = x.ToString("0.00");
-                        drEle["Y"] = y.ToString("0.00");
-
-                        drEle["W"] = ele.Width.ToString("0.00");
-                        drEle["H"] = ele.Height.ToString("0.00");
-
-                        dtEle.Rows.Add(drEle);
+                        mapAttrDR["X"] = x.ToString("0.00");
+                        mapAttrDR["Y"] = y.ToString("0.00");
+                        dtMapAttr.Rows.Add(mapAttrDR);
                     }
                     #endregion
                 }
@@ -2980,7 +2969,7 @@ namespace CCForm
                 BPMapPin mapPin = sender as BPMapPin;
                 if (mapPin != null)
                 {
-                    this.winFrmEleMapPin.BindData(mapPin.MyPK);
+                    this.winFrmEleMapPin.BindIt(mapPin);
                     this.winFrmEleMapPin.Show();
                 }
             }
@@ -2989,7 +2978,7 @@ namespace CCForm
                 BPMicrophonehot micHot = sender as BPMicrophonehot;
                 if (micHot != null)
                 {
-                    this.winFrmEleMicHot.BindData(micHot.MyPK);
+                    this.winFrmEleMicHot.BindIt(micHot);
                     this.winFrmEleMicHot.Show();
                 }
             }
@@ -3703,11 +3692,23 @@ namespace CCForm
                         attachElementEvent(ath);
                         break;
                     case ToolBox.MapPin://地图定位
+                        BPMapPin mapPin = new BPMapPin();
+                        mapPin.MyPK = Glo.FK_MapData + "_" + mapPin.Name;
+                        mapPin.SetValue(Canvas.LeftProperty, point.X);
+                        mapPin.SetValue(Canvas.TopProperty, point.Y);
+
+                        this.winFrmEleMapPin.HisEle = mapPin;
                         this.winFrmEleMapPin.InitForm();
                         this.winFrmEleMapPin.Show();
 
                         break;
                     case ToolBox.Microphonehot://语音控件
+                        BPMicrophonehot micHot = new BPMicrophonehot();
+                        micHot.MyPK = Glo.FK_MapData + "_" + micHot.Name;
+                        micHot.SetValue(Canvas.LeftProperty, point.X);
+                        micHot.SetValue(Canvas.TopProperty, point.Y);
+
+                        this.winFrmEleMicHot.HisEle = micHot;
                         this.winFrmEleMicHot.InitForm();
                         this.winFrmEleMicHot.Show();
                         break;

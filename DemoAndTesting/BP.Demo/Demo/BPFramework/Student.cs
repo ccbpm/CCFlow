@@ -48,6 +48,26 @@ namespace BP.Demo.BPFramework
         /// 备注
         /// </summary>
         public const string Note = "Note";
+        /// <summary>
+        /// 是否特困生？
+        /// </summary>
+        public const string IsTeKunSheng = "IsTeKunSheng";
+        /// <summary>
+        /// 是否有重大疾病史？
+        /// </summary>
+        public const string IsJiBing = "IsJiBing";
+        /// <summary>
+        /// 是否偏远山区？
+        /// </summary>
+        public const string IsPianYuanShanQu = "IsPianYuanShanQu";
+        /// <summary>
+        /// 是否独生子
+        /// </summary>
+        public const string IsDuShengZi = "IsDuShengZi";
+        /// <summary>
+        /// 整治面貌
+        /// </summary>
+        public const string ZZMM = "ZZMM";
         #endregion
     }
     /// <summary>
@@ -123,7 +143,6 @@ namespace BP.Demo.BPFramework
                 return this.GetValRefTextByKey(StudentAttr.XB);
             }
         }
-
         /// <summary>
         /// 班级编号
         /// </summary>
@@ -242,11 +261,10 @@ namespace BP.Demo.BPFramework
                 map.IsAutoGenerNo = true; //是否自动生成编号.
                 map.CodeStruct = "4"; // 4位数的编号，从 0001 开始，到 9999.
 
-                // 普通字段
+                //普通字段.
                 map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 4); // 如果设置自动编号字段必须是只读的.
                 map.AddTBString(StudentAttr.Name, null, "名称", true, false, 0, 200, 70);
                 map.AddTBString(StudentAttr.PWD, null, "登录密码", true, false, 0, 200, 70);
-
 
                 map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100,true);
                 map.AddTBInt(StudentAttr.Age, 0, "年龄", true, false);
@@ -255,12 +273,21 @@ namespace BP.Demo.BPFramework
                 map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
                 map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
 
-
                 //枚举字段
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true,StudentAttr.XB,"@0=女@1=男");
 
                 //外键字段.
                 map.AddDDLEntities(StudentAttr.FK_BanJi, null,"班级", new BP.Demo.BPFramework.BanJis(), true);
+
+
+                //增加checkbox属性.
+                map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true);
+                map.AddBoolean(StudentAttr.IsJiBing, false, "是否有重大疾病？", true, true);
+                map.AddBoolean(StudentAttr.IsPianYuanShanQu, false, "是否偏远山区？", true, true);
+                map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
+
+                // 枚举字段 - 整治面貌.
+                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM, "@0=少先队员@1=团员@2=党员");
 
 
                 map.AddMyFile("简历");

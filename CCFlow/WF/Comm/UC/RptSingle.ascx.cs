@@ -2,7 +2,6 @@
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Runtime;
@@ -16,7 +15,6 @@ using System.Web.Configuration;
 using System.Web.Routing;
 using System.Web.UI.Adapters;
 
-
 namespace CCFlow.WF.Comm.UC
 {
     public partial class RptSingle : BP.Web.UC.UCBase
@@ -29,7 +27,7 @@ namespace CCFlow.WF.Comm.UC
         [MergableProperty(false)]
         [Filterable(false)]
         [Themeable(false)]
-        public virtual BP.En.DBAChartType ChartType { get; set; }
+        public virtual BP.Rpt.DBAChartType ChartType { get; set; }
 
         /// <summary>
         /// Title

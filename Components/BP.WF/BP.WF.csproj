@@ -29,6 +29,16 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <PublishUrl>http://localhost/BP.WFV4/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -41,18 +51,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -105,6 +105,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -190,6 +193,22 @@
     <Compile Include="Dev2InterfaceGuest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DINGTalk\DDSDK\AccessToken.cs" />
+    <Compile Include="DINGTalk\DDSDK\Analyze.cs" />
+    <Compile Include="DINGTalk\DDSDK\CacheItem.cs" />
+    <Compile Include="DINGTalk\DDSDK\ConstVars.cs" />
+    <Compile Include="DINGTalk\DDSDK\ErrCodeEnum.cs" />
+    <Compile Include="DINGTalk\DDSDK\ICacheProvider.cs" />
+    <Compile Include="DINGTalk\DDSDK\JSTicket.cs" />
+    <Compile Include="DINGTalk\DDSDK\Keys.cs" />
+    <Compile Include="DINGTalk\DDSDK\RequestHelper.cs" />
+    <Compile Include="DINGTalk\DDSDK\ResultPackage.cs" />
+    <Compile Include="DINGTalk\DDSDK\SignPackage.cs" />
+    <Compile Include="DINGTalk\DDSDK\SignPackageHelper.cs" />
+    <Compile Include="DINGTalk\DDSDK\SimpleCacheProvider.cs" />
+    <Compile Include="DINGTalk\DDSDK\TimeStamp.cs" />
+    <Compile Include="DINGTalk\DDSDK\TokenResult.cs" />
+    <Compile Include="DINGTalk\DDSDK\Urls.cs" />
     <Compile Include="DINGTalk\DingDing.cs" />
     <Compile Include="DINGTalk\DingModel.cs" />
     <Compile Include="DINGTalk\DingTalk_Message.cs" />

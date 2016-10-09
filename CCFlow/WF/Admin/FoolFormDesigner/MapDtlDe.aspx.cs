@@ -119,7 +119,6 @@ namespace CCFlow.WF.MapDef
             string t = DateTime.Now.ToString("MM-dd-hh:mm:ss");
             if (attrs.Count == 0)
                 dtl.IntMapAttrs();
-            
 
             this.Title = md.Name + " - 设计明细";
             this.Pub1.AddTable("class='Table' border='0' ID='Tab' cellspacing='0' cellpadding='0' ");
@@ -159,7 +158,6 @@ namespace CCFlow.WF.MapDef
                 {
                     this.Pub1.Add(attr.Name);
                 }
-                //  this.Pub1.Add("[<a href=\"javascript:Insert('" + this.MyPK + "','" + attr.Idx + "');\" ><img src='../../Img/Btn/Insert.gif' border=0/>插入</a>]");
                 this.Pub1.Add("<a href=\"javascript:Down('" + this.MyPK + "','" + attr.MyPK + "','" + t + "');\" ><img src='../../Img/Btn/Right.gif' class=Arrow alt='向右移动' border=0/></a>");
                 this.Pub1.Add("</TH>");
             }

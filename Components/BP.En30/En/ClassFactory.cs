@@ -806,18 +806,18 @@ namespace BP.En
         /// </summary>
         /// <param name="rpt2Base">类名称</param>
         /// <returns>BP.Rpt.Rpt2Base</returns>
-        public static BP.En.Rpt2Base GetRpt2Base(string rpt2Base)
+        public static BP.Rpt.Rpt2Base GetRpt2Base(string rpt2Base)
         {
             if (Htable_Rpt2Base == null)
             {
                 Htable_Rpt2Base = new Hashtable();
-                string cl = "BP.En.Rpt2Base";
+                string cl = "BP.Rpt.Rpt2Base";
                 ArrayList al = ClassFactory.GetObjects(cl);
-                foreach (BP.En.Rpt2Base en in al)
+                foreach (BP.Rpt.Rpt2Base en in al)
                     Htable_Rpt2Base.Add(en.ToString(), en);
             }
             object tmp = Htable_Rpt2Base[rpt2Base];
-            return (tmp as BP.En.Rpt2Base);
+            return (tmp as BP.Rpt.Rpt2Base);
         }
         #endregion
 

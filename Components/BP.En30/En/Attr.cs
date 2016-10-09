@@ -73,7 +73,15 @@ namespace BP.En
 		/// <summary>
 		/// 单选择按钮
 		/// </summary>
-		RadioBtn=3
+        RadioBtn = 3,
+        /// <summary>
+        /// 地图定位
+        /// </summary>
+        MapPin = 4,
+        /// <summary>
+        /// 录音控件
+        /// </summary>
+        MicHot = 5
 	}
     /// <summary>
     /// 逻辑类型
@@ -91,7 +99,11 @@ namespace BP.En
         /// <summary>
         /// 外键
         /// </summary>
-        FK
+        FK,
+        /// <summary>
+        /// 功能页面
+        /// </summary>
+        WinOpen
     }
 	/// <summary>
 	/// 字段类型

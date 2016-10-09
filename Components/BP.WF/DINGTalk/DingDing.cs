@@ -14,6 +14,7 @@ using BP.Sys;
 using BP.WF.Data;
 using BP.En;
 using System.Collections;
+using BP.WF.DINGTalk.DDSDK;
 
 namespace BP.WF
 {
@@ -25,25 +26,11 @@ namespace BP.WF
         private string corpid = BP.Sys.SystemConfig.Ding_CorpID;
         private string corpsecret = BP.Sys.SystemConfig.Ding_CorpSecret;
 
-        public string getAccessToken()
+        public static string getAccessToken()
         {
-            string accessToken = string.Empty;
-            string url = "https://oapi.dingtalk.com/gettoken?corpid=" + corpid + "&corpsecret=" + corpsecret;
-            try
-            {
-                string str = new HttpWebResponseUtility().HttpResponseGet(url);
-                AccessToken AT = new AccessToken();
-                AT = FormatToJson.ParseFromJson<AccessToken>(str);
-                if (AT != null)
-                {
-                    accessToken = AT.access_token;
-                }
-            }
-            catch (Exception ex)
-            {
-                BP.DA.Log.DefaultLogWriteLineError(ex.Message);
-            }
-            return accessToken;
+            if (string.IsNullOrEmpty(AccessToken_Ding.Value) || AccessToken_Ding.Begin.AddSeconds(ConstVars.CACHE_TIME) < DateTime.Now)
+                UpdateAccessToken(true);
+            return AccessToken_Ding.Value;
         }
 
         /// <summary>
@@ -71,6 +58,121 @@ namespace BP.WF
                 return ex.Message;
             }
             return "";
+        }
+
+        #region 客户端开发
+
+        /// <summary>  
+        /// 获取JS票据  
+        /// </summary>  
+        /// <param name="url"></param>  
+        /// <returns></returns>  
+        public static JSTicket FetchJSTicket()
+        {
+            SimpleCacheProvider cache = SimpleCacheProvider.GetInstance();
+            JSTicket jsTicket = cache.GetCache<JSTicket>(ConstVars.CACHE_JS_TICKET_KEY);
+            if (jsTicket == null || string.IsNullOrEmpty(jsTicket.ticket))
+            {
+                String apiurl = FormatApiUrlWithToken(Urls.get_jsapi_ticket);
+                jsTicket = Analyze.Get<JSTicket>(apiurl);
+                cache.SetCache(ConstVars.CACHE_JS_TICKET_KEY, jsTicket, ConstVars.CACHE_TIME);
+            }
+            return jsTicket;
+        }
+
+        /// <summary>  
+        /// 获取签名包  
+        /// </summary>  
+        /// <param name="url"></param>  
+        /// <returns></returns>  
+        public static SignPackage FetchSignPackage(String url)
+        {
+            JSTicket jsticket = FetchJSTicket();
+            SignPackage signPackage = FetchSignPackage(url, jsticket);
+            return signPackage;
+        }
+
+        /// <summary>  
+        /// 获取签名包  
+        /// </summary>  
+        /// <param name="url"></param>  
+        /// <returns></returns>  
+        public static SignPackage FetchSignPackage(String url, JSTicket jsticket)
+        {
+            string timestamp = SignPackageHelper.ConvertToUnixTimeStamp(DateTime.Now);
+            string nonceStr = SignPackageHelper.CreateNonceStr();
+            if (jsticket == null)
+            {
+                return null;
+            }
+
+            // 这里参数的顺序要按照 key 值 ASCII 码升序排序   
+            string rawstring = Keys.jsapi_ticket + "=" + jsticket.ticket;
+            rawstring += "&" + Keys.noncestr + "=" + nonceStr;
+            rawstring += "&" + Keys.timestamp + "=" + timestamp;
+            rawstring += "&" + Keys.url + "=" + url;
+            string signature = SignPackageHelper.Sha1Hex(rawstring).ToLower();
+
+            var signPackage = new SignPackage()
+            {
+                agentId = BP.Sys.SystemConfig.Ding_AgentID,
+                corpId = BP.Sys.SystemConfig.Ding_CorpID,
+                timeStamp = timestamp,
+                nonceStr = nonceStr,
+                signature = signature,
+                url = url,
+                rawstring = rawstring,
+                jsticket = jsticket.ticket
+            };
+            return signPackage;
+        }
+
+        /// <summary>  
+        ///更新票据  
+        /// </summary>  
+        /// <param name="forced">true:强制更新.false:按缓存是否到期来更新</param>  
+        public static void UpdateAccessToken(bool forced = false)
+        {
+            if (!forced && AccessToken_Ding.Begin.AddSeconds(ConstVars.CACHE_TIME) >= DateTime.Now)
+            {
+                //没有强制更新，并且没有超过缓存时间  
+                return;
+            }
+            string CorpID = BP.Sys.SystemConfig.Ding_CorpID;
+            string CorpSecret = BP.Sys.SystemConfig.Ding_CorpSecret;
+            string TokenUrl = Urls.gettoken;
+            string apiurl = TokenUrl + "?" + Keys.corpid + "=" + CorpID + "&" + Keys.corpsecret + "=" + CorpSecret;
+            TokenResult tokenResult = Analyze.Get<TokenResult>(apiurl);
+            if (tokenResult.ErrCode == ErrCodeEnum.OK)
+            {
+                AccessToken_Ding.Value = tokenResult.Access_token;
+                AccessToken_Ding.Begin = DateTime.Now;
+            }
+        }
+
+        /// <summary>
+        /// 获取拼接Token的url
+        /// </summary>
+        /// <param name="apiUrl"></param>
+        /// <returns></returns>
+        public static string FormatApiUrlWithToken(string apiUrl)
+        {
+            //为空或超时
+            return apiUrl + "?access_token=" + getAccessToken();
+        }
+        #endregion
+
+        /// <summary>
+        /// 下载多媒体文件
+        /// </summary>
+        /// <param name="mediaId">多媒体编号</param>
+        /// <param name="workID">业务编号</param>
+        /// <param name="savePath">保存路径</param>
+        /// <returns></returns>
+        public static bool DownLoadMediaById(string mediaId,string workID,string savePath)
+        {
+            string apiurl = FormatApiUrlWithToken(Urls.get_media) + "&media_id=" + mediaId;
+            return Analyze.HttpDownLoadFile(apiurl, savePath);
         }
 
         /// <summary>

@@ -109,7 +109,7 @@ namespace BP.Demo.FlowEvent
             try
             {
                 // 组织必要的变量.
-                Int64 workid = this.WorkID; // 工作id.
+                Int64 workid = this.WorkID; // 工作id.w
                 string flowNo = this.HisNode.FK_Flow; // 流程编号.
                 int currNodeID = this.SendReturnObjs.VarCurrNodeID; //当前节点id
                 int toNodeID = this.SendReturnObjs.VarToNodeID; // 到达节点id.
@@ -120,16 +120,12 @@ namespace BP.Demo.FlowEvent
                 //执行向其他系统写入待办.
                 /*
                  * 在这里需要编写你的业务逻辑，根据上面组织的变量.
-                 * 
                  */
 
                 if (this.HisNode.NodeID == 102)
                 {
                     /*根据不同的节点，执行不同的业务逻辑*/
-
-
                 }
-              
 
                 //返回.
                 return base.SendSuccess();

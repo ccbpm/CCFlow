@@ -107,16 +107,82 @@ namespace BP.En
         /// <summary>
         /// 把一个实体转化成Json.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回一个string json串.</returns>
         public string ToJson()
         {
-            return BP.Tools.Json.ToJson(this.Row);
+            Hashtable ht = this.Row;
+            if (ht.ContainsKey("AtPara") == true)
+            {
+                /*如果包含这个字段*/
+                AtPara ap = this.atPara;
+                foreach (string key in ap.HisHT.Keys)
+                    ht.Add(key, ap.HisHT[key]);
+            }
+            return BP.Tools.Json.ToJson(ht,false);
         }
 
-        public DataTable ToDataTableField(string tableName)
+        /// <summary>
+        /// 转化成json字符串，包含外键与枚举，主表使用Main命名。
+        /// 外键使用外键表命名，枚举值使用枚举值命名。
+        /// </summary>
+        /// <returns></returns>
+        public string ToJsonIncludeEnumAndForeignKey()
+        {
+            DataSet ds = new DataSet();
+
+            ds.Tables.Add(this.ToDataTableField()); //把主表数据加入进去.
+
+            Attrs attrs = this.EnMap.Attrs;
+            foreach (Attr attr in attrs)
+            {
+                if (attr.UIBindKey == "")
+                    continue;
+
+                if (attr.IsEnum)
+                {
+                    if (ds.Tables.Contains(attr.UIBindKey))
+                        continue;
+                    SysEnums ses = new SysEnums(attr.UIBindKey);
+
+                    DataTable dt = ses.ToDataTableField(attr.UIBindKey); //把枚举加入进去.
+                    ds.Tables.Add(dt); //把这个枚举值加入进去..
+                    continue;
+                }
+
+                if (attr.IsFK)
+                {
+                    if (ds.Tables.Contains(attr.UIBindKey))
+                        continue;
+
+                    Entities ens = attr.HisFKEns;
+                    ens.RetrieveAll();
+
+                    DataTable dt = ens.ToDataTableField(attr.UIBindKey); //把外键表加入进去.
+                    ds.Tables.Add(dt); //把这个枚举值加入进去..
+                    continue;
+                }
+            }
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        public DataTable ToDataTableField(string tableName = "Main")
         {
             DataTable dt = this.GetNewEntities.ToEmptyTableField();
             dt.TableName = tableName;
+
+            //增加参数列.
+            if (this.Row.ContainsKey("AtPara") == true)
+            {
+                /*如果包含这个字段,就说明他有参数,把参数也要弄成一个列.*/
+                AtPara ap = this.atPara;
+                foreach (string key in ap.HisHT.Keys)
+                {
+                    dt.Columns.Add(key, typeof(string));
+                    // ht.Add(key, ap.HisHT[key]);
+                }
+            }
+
 
             DataRow dr = dt.NewRow();
             foreach (Attr attr in this.EnMap.Attrs)
@@ -138,6 +204,15 @@ namespace BP.En
                 else
                     dr[attr.Key] = this.GetValByKey(attr.Key);
             }
+
+            if (this.Row.ContainsKey("AtPara") == true)
+            {
+                /*如果包含这个字段*/
+                AtPara ap = this.atPara;
+                foreach (string key in ap.HisHT.Keys)
+                    dr[key] = ap.HisHT[key];
+            }
+
             dt.Rows.Add(dr);
             return dt;
         }
@@ -3112,7 +3187,7 @@ namespace BP.En
                         DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                         break;
                     default:
-                        throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
+                        throw new Exception("error MyFieldType= " + attr.MyFieldType + " Key=" + attr.Key);
                 }
             }
             #endregion
@@ -4720,9 +4795,9 @@ namespace BP.En
         /// ToJson.
         /// </summary>
         /// <returns></returns>
-        public string ToJson()
+        public string ToJson(string dtName="dt")
         {
-            return BP.Tools.Json.ToJson(this.ToDataTableField());
+            return BP.Tools.Json.ToJson(this.ToDataTableField(dtName));
         }
         /// <summary>
         /// 把当前实体集合的数据库转换成Dataset。
@@ -4734,10 +4809,7 @@ namespace BP.En
             ds.Tables.Add(this.ToDataTableField());
             return ds;
         }
-        public DataTable ToDataTableField()
-        {
-            return ToDataTableField("dt");
-        }
+        
         public DataTable ToDataTableStringField()
         {
             return ToDataTableStringField("dt");
@@ -4778,7 +4850,7 @@ namespace BP.En
         /// 把当前实体集合的数据库转换成Table。
         /// </summary>
         /// <returns>DataTable</returns>
-        public DataTable ToDataTableField(string tableName)
+        public DataTable ToDataTableField(string tableName="dt")
         {
             DataTable dt = this.ToEmptyTableField();
 

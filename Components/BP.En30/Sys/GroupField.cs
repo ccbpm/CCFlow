@@ -211,12 +211,6 @@ namespace BP.Sys
         /// <param name="enName">名称</param>
         public GroupFields(string enName)
         {
-            //QueryObject qo = new QueryObject(this);
-            //qo.AddWhere(GroupFieldAttr.EnName, enName);
-            //qo.addAnd();
-            //qo.AddWhereLen(GroupFieldAttr.CtrlID, " = " , 0, SystemConfig.AppCenterDBType);
-            //int i = qo.DoQuery();
-
             int i = this.Retrieve(GroupFieldAttr.EnName, enName, GroupFieldAttr.Idx);
             if (i == 0)
             {
@@ -232,7 +226,6 @@ namespace BP.Sys
                 gf.Insert();
                 this.AddEntity(gf);
             }
-            
         }
         /// <summary>
         /// 得到它的 Entity

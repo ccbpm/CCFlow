@@ -17,27 +17,33 @@ namespace CCForm
 {
     public partial class FrmEleMapPin : ChildWindow
     {
-        private string _MyPK = null;
-        private string _Name = null;
+        public bool IsNewElement = false;
+        public BPMapPin HisEle = null;
 
         public FrmEleMapPin()
         {
             InitializeComponent();
         }
+        //新建
         public void InitForm()
         {
-            _MyPK = null;
-            _Name = null;
+            this.IsNewElement = true;
             this.RB_0.IsChecked = true;
+            this.TB_MapPin_EnName.IsEnabled = true;
+            this.TB_MapPin_EnName.Text = "";
+            this.TB_MapPin_CName.Text = "";
         }
-
-        public BPMapPin HisEle = null;
-
-        public void BindData(string MyPK)
+        //编辑
+        public void BindIt(BPMapPin mapPin)
         {
-            _MyPK = MyPK;
+            this.HisEle = mapPin;
+            this.IsNewElement = false;
             this.RB_0.IsChecked = true;
-            string sql = "SELECT * FROM Sys_FrmEle WHERE MyPK='" + MyPK + "'";
+            this.TB_MapPin_EnName.IsEnabled = false;
+            this.TB_MapPin_CName.Text = this.HisEle.KeyName;
+            this.TB_MapPin_EnName.Text = this.HisEle.Name;
+
+            string sql = "SELECT * FROM Sys_MapAttr WHERE MyPK='" + this.HisEle.MyPK + "'";
             FF.CCFormSoapClient da = Glo.GetCCFormSoapClientServiceInstance();
             da.RunSQLReturnTableAsync(sql, Glo.UserNo, Glo.SID);
             da.RunSQLReturnTableCompleted += new EventHandler<FF.RunSQLReturnTableCompletedEventArgs>(da_RunSQLReturnTableCompleted);
@@ -51,55 +57,64 @@ namespace CCForm
             DataTable dt = ds.Tables[0];
             if (dt.Rows.Count > 0)
             {
-                _Name = dt.Rows[0]["EleID"].ToString();
-                if (!string.IsNullOrEmpty(dt.Rows[0]["ISENABLE"]) && dt.Rows[0]["ISENABLE"].ToString() == "0")
+                if (!string.IsNullOrEmpty(dt.Rows[0]["UIIsEnable"]) && dt.Rows[0]["UIIsEnable"].ToString() == "0")
                 {
                     this.RB_1.IsChecked = true;
                 }
-                if (HisEle == null)
-                {
-                    HisEle = new BPMapPin();
-                }
-                HisEle.Name = _Name;
-                HisEle.MyPK = _MyPK;
             }
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            //新增
-            if (string.IsNullOrEmpty(_Name))
+            string cnName = this.TB_MapPin_CName.Text;
+            if (string.IsNullOrEmpty(cnName))
             {
-                BPMapPin mapPin = new BPMapPin();
-                mapPin.MyPK = Glo.FK_MapData + "_MapPin_" + mapPin.Name;
-                this.HisEle = mapPin;
-                _MyPK = mapPin.MyPK;
-                _Name = mapPin.Name;
+                MessageBox.Show("中文名不能为空。");
+                return;
+            }
+            string enName = this.TB_MapPin_EnName.Text;
+            if (string.IsNullOrEmpty(enName))
+            {
+                MessageBox.Show("英文名不能为空。");
+                return;
             }
 
-            string strs = "@EnName=BP.Sys.FrmEle@PKVal=" + _MyPK;
-            strs += "@EleType=MapPin";
-            strs += "@EleName=MapPin";
-            strs += "@EleID=" + _Name;
-            strs += "@FK_MapData=" + Glo.FK_MapData;
+            this.HisEle.Name = this.TB_MapPin_EnName.Text;
+            this.HisEle.KeyName = this.TB_MapPin_CName.Text;
+            this.HisEle.MyPK = Glo.FK_MapData + "_" + this.TB_MapPin_EnName.Text;
 
-            if (this.RB_0.IsChecked == true)
-                strs += "@IsEnable=1";
+            if (IsNewElement == true)
+            {
+                this.DialogResult = true;
+            }
             else
-                strs += "@IsEnable=0";
-
-            FF.CCFormSoapClient da = Glo.GetCCFormSoapClientServiceInstance();
-            da.SaveEnAsync(strs);
-            da.SaveEnCompleted += new EventHandler<FF.SaveEnCompletedEventArgs>(da_SaveEnCompleted);
+            {
+                string UIIsEnable = "1";
+                if (this.RB_1.IsChecked == true)
+                {
+                    UIIsEnable = "0";
+                }
+                string sql = "UPDATE Sys_MapAttr SET UIIsEnable=" + UIIsEnable + " WHERE MyPK='" + this.HisEle.MyPK + "'";
+                FF.CCFormSoapClient da = Glo.GetCCFormSoapClientServiceInstance();
+                da.RunSQLAsync(sql, Glo.UserNo, Glo.SID);
+                da.RunSQLCompleted += new EventHandler<FF.RunSQLCompletedEventArgs>(da_RunSQLCompleted);
+            }
         }
 
-        void da_SaveEnCompleted(object sender, FF.SaveEnCompletedEventArgs e)
+        void da_RunSQLCompleted(object sender, FF.RunSQLCompletedEventArgs e)
         {
             this.DialogResult = true;
         }
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
+        }
+        private void TB_MapPin_CName_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (this.TB_MapPin_EnName.IsEnabled == false)
+                return;
+            Glo.GetKeyOfEn(this.TB_MapPin_CName.Text, true, this.TB_MapPin_EnName);
         }
     }
 }

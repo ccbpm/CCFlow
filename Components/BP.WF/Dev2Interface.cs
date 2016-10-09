@@ -4712,7 +4712,7 @@ namespace BP.WF
                 {
                     string dbstr = SystemConfig.AppCenterDBVarStr;
                     Paras ps = new Paras();
-                    ps.SQL = "UPDATE WF_GenerWorkerlist set AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
+                    ps.SQL = "UPDATE WF_GenerWorkerlist SET AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
                     ps.Add(GenerWorkerListAttr.Paras, paras);
                     ps.Add(GenerWorkerListAttr.WorkID, workID);
                     ps.Add(GenerWorkerListAttr.FK_Node, int.Parse(flowNo + "01"));

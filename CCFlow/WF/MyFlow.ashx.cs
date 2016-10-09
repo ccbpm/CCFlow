@@ -857,16 +857,22 @@ namespace CCFlow.WF
                 return BP.Tools.Json.ToJson(ht, false);
 
 
+
             //.工作数据放里面去, 放进去前执行一次装载前填充事件.
             BP.WF.Work wk = nd.HisWork;
             wk.OID = this.WorkID;
             wk.RetrieveFromDBSources();
 
             //表单模版.
-            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(wk.ToString(), true);
+            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID, true);
             DataTable mainTable = wk.ToDataTableField("MainTable");
             mainTable.TableName = "MainTable";
             myds.Tables.Add(mainTable);
+
+            MapExts exts = new MapExts(wk.ToString());
+            DataTable dtMapExt = exts.ToDataTableDescField();
+            dtMapExt.TableName = "Sys_MapExt";
+            myds.Tables.Add(dtMapExt);
 
             return BP.Tools.Json.ToJson(myds);
         }

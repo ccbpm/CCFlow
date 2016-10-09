@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using BP.En;
 using BP.DA;
+using BP.Rpt;
 
 namespace CCOA.WF.Comm
 {

@@ -110,7 +110,7 @@ namespace CCFlow.WF.UC
 
             s = s.Replace("@@", "@");
 
-            if (s.Substring(s.Length - 1) == "@")
+            if (s.Length > 0 && s.Substring(s.Length - 1) == "@")
                 s = s.Substring(0, s.Length - 1);
 
             s = s.Replace("@", "<BR><BR><img src='Img/dot.png' align='middle' width='8px' />&nbsp;");

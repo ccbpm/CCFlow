@@ -33,8 +33,6 @@
 
             var fk_mapData = GetQueryString("FK_MapData");
 
-
-
             //初始化表格.
             $.ajax({
                 type: 'post',
@@ -42,6 +40,12 @@
                 url: Handler + "?DoType=EnumList&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
+                    if (data.indexOf('err@' == 0)) {
+                        alert(data);
+                        return;
+                    }
+
 
                     data = JSON.parse(data);
                     //增加处理.

@@ -209,19 +209,32 @@ namespace CCFlow.WF.Comm.Sys
 
                                 foreach (BP.En.Entity en in arr)
                                 {
-                                    ens = en.GetNewEntities;
+                                    try
+                                    {
+                                        if (en == null)
+                                            continue;
 
-                                    if (ens == null) continue;
+                                        ens = en.GetNewEntities;
 
-                                    sf = sfs.GetEntityByKey(ens.ToString()) as SFTable;
+                                        if (ens == null)
+                                            continue;
 
-                                    if ((sf != null && sf.No != sfno) ||
-                                        string.IsNullOrWhiteSpace(ens.ToString()))
+                                        sf = sfs.GetEntityByKey(ens.ToString()) as SFTable;
+
+                                        if ((sf != null && sf.No != sfno) ||
+                                            string.IsNullOrWhiteSpace(ens.ToString()))
+                                            continue;
+
+                                        s.Append(string.Format(
+                                            "{{\"NO\":\"{0}\",\"NAME\":\"{0}[{1}]\",\"DESC\":\"{1}\"}},", ens,
+                                            en.EnDesc));
+                                    }
+                                    catch
+                                    {
+                                        //BP.DA.Log
+                                        //  BP.DA.Log.DefaultLogWriteLine(ex.Message);
                                         continue;
-
-                                    s.Append(string.Format(
-                                        "{{\"NO\":\"{0}\",\"NAME\":\"{0}[{1}]\",\"DESC\":\"{1}\"}},", ens,
-                                        en.EnDesc));
+                                    }
                                 }
 
                                 resultString = ReturnJson(true, s.ToString().TrimEnd(',') + "]", true);

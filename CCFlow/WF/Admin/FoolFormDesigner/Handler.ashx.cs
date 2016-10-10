@@ -173,6 +173,10 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "SFTableList":
                         msg = this.SFTableList();
                         break;
+                    case "SFTableDelete": //删除.
+                        msg = this.SFTableDelete();
+                        break;
+                        
                     case "FieldSaveEnum": //保存字段.
                         msg = this.FieldSaveEnum();
                         break;
@@ -219,7 +223,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         msg = attrs.ToJson();
                         break;
                     default:
-                        msg = "没有判断的执行类型：" + this.DoType;
+                        msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
                 }
                 context.Response.Write(msg);
@@ -240,6 +244,16 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             ses.RetrieveAll();
 
             return ses.ToJson();
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string SFTableDelete()
+        {
+            SFTable sf = new SFTable(this.FK_SFTable);
+            sf.Delete();
+            return "删除成功...";
         }
         /// <summary>
         /// 字典表列表.

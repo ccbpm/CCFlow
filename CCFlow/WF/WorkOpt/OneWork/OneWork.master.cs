@@ -7,6 +7,7 @@ using BP.WF;
 using BP.WF.XML;
 using BP.Web;
 using BP.Sys;
+
 namespace CCFlow.WF.OneWork
 {
     public partial class WF_WorkOpt_OneWork : BP.Web.MasterPage
@@ -52,12 +53,14 @@ namespace CCFlow.WF.OneWork
 
             foreach (OneWorkXml item in xmls)
             {
-                string url = string.Format("{0}.aspx?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.No, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
+                string url = "";
+                if (item.No == "FlowBBS")
+                    url = string.Format("{0}.htm?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.No, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
+                else
+                    url = string.Format("{0}.aspx?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.No, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
 
                 Pub1.AddLi(string.Format("<div{2}><a href='{0}'><span class='nav'>{1}</span></a></div>{3}", url, item.Name, item.No == pageId ? "  class='selected'" : "", Environment.NewLine));
             }
-
-
         }
     }
 }

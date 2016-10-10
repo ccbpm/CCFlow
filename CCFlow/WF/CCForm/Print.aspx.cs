@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Collections;
 using System.Web;
@@ -99,7 +100,7 @@ namespace CCFlow.WF.CCForm
             BP.Pub.RTFEngine engine = new BP.Pub.RTFEngine();
             if (tempName.ToLower() == "all")
             {
-                /* 说明要从所有的独立表单上取数据.*/
+                /* 说明要从所有的独立表单上取数据. */
                 FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
                 foreach (FrmNode fn in fns)
                 {
@@ -135,6 +136,7 @@ namespace CCFlow.WF.CCForm
                 engine.HisGEEntity = myge;
                 engine.AddEn(myge);
 
+                //增加从表.
                 MapDtls mymdtls = new MapDtls(tempName);
                 foreach (MapDtlExt dtl in mymdtls)
                 {
@@ -142,6 +144,14 @@ namespace CCFlow.WF.CCForm
                     enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
                     engine.EnsDataDtls.Add(enDtls);
                 }
+
+                //增加轨迹表.
+                string sql = "SELECT * FROM ND1Track WHERE ActionType=0";
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+
+
                 //engine.MakeDoc(file, toPath, tempName + "." + this.FID + ".doc", null, false);
                 engine.MakeDoc(file, toPath, Server.UrlDecode(tempNameChinese) + "." + this.WorkID + ".doc", null, false);
             }
@@ -198,6 +208,8 @@ namespace CCFlow.WF.CCForm
                 this.PrintBill();
                 return;
             }
+
+
             this.Pub1.AddTable();
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("ID");

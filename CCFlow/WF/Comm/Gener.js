@@ -25,9 +25,11 @@ function GenerCheckIDs() {
 function GenerFullDropDownListCtrl(ddlCtrlID, data, noCol, nameCol, selectVal) {
 
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
+
     var json = data;
     if (data[0].length == 1)
         json = data[0];
+
 
     // 清空默认值, 写一个循环把数据给值.
     $("#" + ddlCtrlID).empty();
@@ -36,41 +38,31 @@ function GenerFullDropDownListCtrl(ddlCtrlID, data, noCol, nameCol, selectVal) {
     if (json.length == 0)
         return;
 
+
+
     if (json[0][noCol] == undefined) {
         alert('@在绑定[' + ddlCtrlID + ']错误，No列名' + noCol + '不存在,无法行程期望的下拉框value . ');
         return;
     }
+
+
 
     if (json[0][nameCol] == undefined) {
         alert('@在绑定[' + ddlCtrlID + ']错误，Name列名' + nameCol + '不存在,无法行程期望的下拉框value . ');
         return;
     }
 
+
+
     for (var i = 0; i < json.length; i++) {
         $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
     }
 
-    //    $("#DDL_" + attr).attr('selectedIndex', 0);
-    //    $("#DDL_" + attr).prop('selectedIndex', 0);
-    //    return;
-
-    //    if (selectVal == undefined) {
-    //        alert(selectVal);
-    //        $("#DDL_" + attr).attr("selectedIndex", 0);
-    //        //  $("#DDL_" + attr).val(selectVal);
-    //        return;
-    //    }
 
     //设置选中的值.
     if (selectVal != undefined) {
-        $("#DDL_" + attr).val(selectVal);
+        $("#DDL_" + attr).val(val);
     }
-    else {
-        $("#DDL_" + attr).prop('selectedIndex', 0);
-    }
-
-    //    alert('ss');
-    //$("#DDL_" + attr).options[0].selected = true;
 }
 
 /*

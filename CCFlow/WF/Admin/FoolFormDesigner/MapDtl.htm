@@ -31,11 +31,13 @@
                 dataType: 'html',
                 success: function (data) {
 
+
                     data = JSON.parse(data);
 
                     //取出来两个表.
                     var main = data["Main"];
                     var ens = data["Ens"];
+                   
 
                     //绑定字段.
                     GenerFullDropDownListCtrl("DDL_GroupField", ens, "KeyOfEn", "Name");

@@ -46,16 +46,43 @@
 
                         var newRow = "";
 
+                        var nameLink = "";
+
                         if (fk_mapData == null)
-                            newRow = "<tr ><td class=Idx>" + i + "</td><td>" + data[i].No + "</td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td><td><a href=\"javascript:Edit('" + data[i].No + "')\">编辑</a></td><td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td></tr>";
+                            nameLink = "<a href=\"javascript:AddSFTable('" + data[i].No + "')\" >" + data[i].No + "</a>";
                         else
-                            newRow = "<tr ><td class=Idx>" + i + "</td><td><a href=\"javascript:AddSFTable('" + data[i].No + "')\" >" + data[i].No + "</a></td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td> <td>" + data[i].SrcTypeText + "</td> <td><a href=\"javascript:Edit('" + data[i].No + "')\">编辑</a></td><td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td></tr>";
+                            nameLink = data[i].No;
+
+                        newRow = "<tr ><td class=Idx>" + i + "</td><td>" + nameLink + "</td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td> <td>" + data[i].SrcTypeText + "</td> <td><a href=\"javascript:Edit('" + data[i].No + "')\">编辑</a></td><td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td><td><a href=\"javascript:Delete('" + data[i].No + "')\">删除</a></td></tr>";
 
                         $("#Table1 tr:last").after(newRow);
                     }
                 }
             });
         }
+
+        function Delete(key) {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+
+            //删除表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=SFTableDelete&FK_SFTable=" + key + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                    } else {
+                        window.location.href = window.location.href;
+                    }
+                }
+            });
+        }
+
 
         function Ref(key) {
             alert(key);
@@ -82,7 +109,7 @@
 <body onkeypress="Esc()" >
 
 <table id="Table1">
-<caption>字典列表 - <a href="javascript:WinOpen('../CCFormDesigner/DialogCtr/FrmEnumeration.htm?FK_MapData=ND201')">字典表维护</a></caption>
+<caption>字典列表 - <a href="javascript:WinOpen('SFGuide.htm?DoType=New&FromApp=SL')">创建字典表</a></caption>
 <tr>
 <th>序</th>
 <th>编号</th>
@@ -91,8 +118,10 @@
 <th>类型</th>
 <th>编辑</th>
 <th>引用</th>
+<th>删除</th>
 </tr>
 </table>
+
 
 <div id="Msg"></div>
 

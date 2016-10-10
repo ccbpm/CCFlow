@@ -4968,8 +4968,12 @@ namespace BP.WF
                     num++;
                 }
             }
+
             if (num == 1)
+            {
+                this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
+            }
 
             //把当前的待办设置已办，并且提示未处理的人。
             foreach (GenerWorkerList gwl in gwls)

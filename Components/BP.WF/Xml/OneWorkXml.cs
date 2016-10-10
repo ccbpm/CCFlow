@@ -71,6 +71,9 @@ namespace BP.WF.XML
                 return new OneWorkXml();
             }
         }
+        /// <summary>
+        /// 文件
+        /// </summary>
         public override string File
         {
             get

@@ -341,7 +341,6 @@ namespace BP.WF
         public string DoUnSend()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-
             if (gwf.FID != 0)
             {
                 //执行子线程的撤销.
@@ -370,12 +369,14 @@ namespace BP.WF
                     /*判断权限,当前的发送人是谁，如果是自己，就可以撤销.*/
                     if (gwf.Sender.Contains("(" + WebUser.No + ",") || gwf.Sender == WebUser.No || gwf.Sender=="" )
                     {
+
                     }
                     else
                     {
                         throw new Exception("@分流点不是您发送的，您不能执行撤销。");
                     }
-                     return this.DoUnSendFeiLiu(gwf);
+                    //return this.DoUnSendFeiLiu(gwf);
+                    break;
                 case NodeWorkType.StartWorkFL:
                     return this.DoUnSendFeiLiu(gwf);
                 case NodeWorkType.WorkHL:

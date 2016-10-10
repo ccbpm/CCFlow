@@ -2751,7 +2751,6 @@ namespace BP.En
             }
             #endregion
 
-
             #region 建立主键
             if (DBAccess.IsExitsTabPK(this._enMap.PhysicsTable) == false)
             {

@@ -4458,6 +4458,34 @@ namespace BP.WF
         }
 
         #region 与流程有关的接口
+        
+        /// <summary>
+        /// 增加一个评论
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="msg">消息</param>
+        /// <param name="empNo">评论人编号</param>
+        /// <param name="empName">评论人名称</param>
+        /// <returns>插入ID主键</returns>
+        public static string Flow_BBSAdd(string flowNo, Int64 workid, Int64 fid, string msg, string empNo, string empName)
+        {
+            return Glo.AddToTrack(ActionType.FlowBBS, flowNo, workid, fid, 0, null, empNo, empName, 0, null, empNo, empName, msg, null);
+        }
+        /// <summary>
+        /// 删除一个评论.
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="mypk">主键</param>
+        /// <returns>返回删除信息.</returns>
+        public static string Flow_BBSDelete(string flowNo, string mypk)
+        {
+            Paras ps = new Paras();
+            ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK ";
+            ps.Add("MyPK", mypk);
+            BP.DA.DBAccess.RunSQL(ps);
+            return "删除成功.";
+        }
         /// <summary>
         /// 取消设置关注
         /// </summary>

@@ -990,12 +990,13 @@ namespace BP.En
                 Attrs attrs = this.EnMap.Attrs;
                 foreach (Attr attr in attrs)
                 {
-
                     if (attr.UIIsReadonly && attr.IsFKorEnum == false)
                         continue;
-
-                    //if (attr.IsFK && string.IsNullOrEmpty(attr.DefaultVal.ToString()) ==true)
+                    //if (attr.IsFK && string.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
                     //    continue; /*如果是外键,并且外键的默认值为null.*/
+
+                    if (attr.IsFK)
+                        continue; /*如果是外键,并且外键的默认值为null.*/
 
                     string str = this.GetValStrByKey(attr.Key);
                     if (str == "" || str == attr.DefaultVal.ToString() || str == null)

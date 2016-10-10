@@ -123,6 +123,20 @@ namespace BP.WF
     /// </summary>
     public class Track : BP.En.Entity
     {
+        /// <summary>
+        /// 主键值
+        /// </summary>
+        public string MyPK
+        {
+            get
+            {
+                return this.GetValStrByKey(TrackAttr.MyPK);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.MyPK, value);
+            }
+        }
         public override string PK
         {
             get
@@ -356,6 +370,8 @@ namespace BP.WF
                     return "逻辑删除";
                 case ActionType.Order:
                     return "队列发送";
+                case ActionType.FlowBBS:
+                    return "评论";
                 default:
                     return "未知";
             }
@@ -486,9 +502,7 @@ namespace BP.WF
 
                 Map map = new Map("WF_Track", "轨迹表");
 
-
                 #region 字段
-
                 //增加一个自动增长的列.
                 map.AddTBIntPK(TrackAttr.MyPK, 0, "MyPK", true, false);
 

@@ -2071,7 +2071,7 @@ namespace BP.WF
         /// <param name="toEmpName">到人员名称</param>
         /// <param name="note">消息</param>
         /// <param name="tag">参数用@分开</param>
-        public static void AddToTrack(ActionType at, string flowNo, Int64 workID, Int64 fid, int fromNodeID, string fromNodeName, string fromEmpID, string fromEmpName,
+        public static string AddToTrack(ActionType at, string flowNo, Int64 workID, Int64 fid, int fromNodeID, string fromNodeName, string fromEmpID, string fromEmpName,
             int toNodeID, string toNodeName, string toEmpID, string toEmpName, string note, string tag)
         {
             if (toNodeID == 0)
@@ -2113,6 +2113,7 @@ namespace BP.WF
                 t.CheckPhysicsTable();
                 t.Insert();
             }
+            return t.MyPK;
         }
         /// <summary>
         /// 计算表达式是否通过(或者是否正确.)

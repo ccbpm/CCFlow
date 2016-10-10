@@ -239,6 +239,10 @@ namespace BP.WF
         /// </summary>
         TeampUp = 28,
         /// <summary>
+        /// 流程评论
+        /// </summary>
+        FlowBBS=29,
+        /// <summary>
         /// 信息
         /// </summary>
         Info=100

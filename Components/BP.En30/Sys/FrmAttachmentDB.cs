@@ -456,11 +456,6 @@ namespace BP.Sys
             this.Retrieve(FrmAttachmentDBAttr.FK_MapData, fk_mapdata, 
                 FrmAttachmentDBAttr.RefPKVal, pkval);
         }
-        public FrmAttachmentDBs(string fk_mapdata, Int64 pkval)
-        {
-            this.Retrieve(FrmAttachmentDBAttr.FK_MapData, fk_mapdata,
-                FrmAttachmentDBAttr.RefPKVal, pkval);
-        }
         /// <summary>
         /// 得到它的 Entity
         /// </summary>

@@ -22,6 +22,10 @@ namespace BP.Sys
         /// </summary>
         public const string FK_MapData = "FK_MapData";
         /// <summary>
+        /// FID
+        /// </summary>
+        public const string FID = "FID";
+        /// <summary>
         /// Tag1
         /// </summary>
         public const string Tag1 = "Tag1";
@@ -37,6 +41,10 @@ namespace BP.Sys
         /// Tag4
         /// </summary>
         public const string Tag4 = "Tag4";
+        /// <summary>
+        /// Tag5
+        /// </summary>
+        public const string Tag5 = "Tag5";
     }
     /// <summary>
     /// 表单元素扩展DB
@@ -115,6 +123,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// Tag5
+        /// </summary>
+        public string Tag5
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmEleDBAttr.Tag5);
+            }
+            set
+            {
+                this.SetValByKey(FrmEleDBAttr.Tag5, value);
+            }
+        }
+        /// <summary>
         /// FK_MapData
         /// </summary>
         public string FK_MapData
@@ -140,6 +162,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmEleDBAttr.RefPKVal, value);
+            }
+        }
+        /// <summary>
+        /// 流程ID
+        /// </summary>
+        public Int64 FID
+        {
+            get
+            {
+                return this.GetValInt64ByKey(FrmEleDBAttr.FID);
+            }
+            set
+            {
+                this.SetValByKey(FrmEleDBAttr.FID, value);
             }
         }
         #endregion
@@ -179,11 +215,12 @@ namespace BP.Sys
                 map.AddTBString(FrmEleDBAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
                 map.AddTBString(FrmEleDBAttr.EleID, null, "EleID", true, false, 0, 50, 20);
                 map.AddTBString(FrmEleDBAttr.RefPKVal, null, "RefPKVal", true, false, 0, 50, 20);
-
-                map.AddTBString(FrmEleDBAttr.Tag1, null, "Tag1", true, false, 0, 4000, 20);
-                map.AddTBString(FrmEleDBAttr.Tag2, null, "Tag2", true, false, 0, 4000, 20);
-                map.AddTBString(FrmEleDBAttr.Tag3, null, "Tag3", true, false, 0, 4000, 20);
-                map.AddTBString(FrmEleDBAttr.Tag4, null, "Tag4", true, false, 0, 4000, 20);
+                map.AddTBInt(FrmEleDBAttr.FID, 0, "FID", false, true);
+                map.AddTBString(FrmEleDBAttr.Tag1, null, "Tag1", true, false, 0, 1000, 20);
+                map.AddTBString(FrmEleDBAttr.Tag2, null, "Tag2", true, false, 0, 1000, 20);
+                map.AddTBString(FrmEleDBAttr.Tag3, null, "Tag3", true, false, 0, 1000, 20);
+                map.AddTBString(FrmEleDBAttr.Tag4, null, "Tag4", true, false, 0, 1000, 20);
+                map.AddTBString(FrmEleDBAttr.Tag5, null, "Tag5", true, false, 0, 1000, 20);
 
                 this._enMap = map;
                 return this._enMap;

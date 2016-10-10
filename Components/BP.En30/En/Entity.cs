@@ -3184,6 +3184,7 @@ namespace BP.En
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
+                    case DataType.AppDouble:
                         DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                         break;
                     default:

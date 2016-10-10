@@ -78,9 +78,9 @@
 <ul>
 <% 
     BP.Sys.MapExts exts = new BP.Sys.MapExts();
-    exts.Retrieve(BP.Sys.MapExtAttr.FK_MapData, fk_mapdata, 
+    int mecount =  exts.Retrieve(BP.Sys.MapExtAttr.FK_MapData, fk_mapdata, 
         BP.Sys.MapExtAttr.Tag, this.Request.QueryString["FK_Node"],
-        BP.Sys.MapExtAttr.ExtType, "SepcFiledsSepcUsers");
+        BP.Sys.MapExtAttr.ExtType, "SepcFieldsSepcUsers");
 
     foreach (BP.Sys.MapExt item in exts)
     {

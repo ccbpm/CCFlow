@@ -40,7 +40,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         /// <summary>
         /// http请求
         /// </summary>
-        public HttpContext _Context
+        public HttpContext context
         {
             get;
             set;
@@ -52,7 +52,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         /// <returns></returns>
         public string getUTF8ToString(string param)
         {
-            return HttpUtility.UrlDecode(_Context.Request[param], System.Text.Encoding.UTF8);
+            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
         }
         #endregion
 
@@ -60,17 +60,15 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         /// 调用方法
         /// </summary>
         /// <param name="context"></param>
-        public void ProcessRequest(HttpContext context)
+        public void ProcessRequest(HttpContext myContext)
         {
-            _Context = context;
-            if (_Context == null) 
-                return;
-
+            context = myContext;
             string action = string.Empty;
             //返回值
-            string s_responsetext = string.Empty;
+            string msg = string.Empty;
             if (string.IsNullOrEmpty(context.Request["action"]) == false)
                 action = context.Request["action"].ToString();
+
             try
             {
 
@@ -78,34 +76,34 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 {
                     case "loadform"://获取表单数据
                         MapData mapData = new MapData(this.FK_MapData);
-                        s_responsetext = mapData.FormJson; //要返回的值.
+                        msg = mapData.FormJson; //要返回的值.
                         break;
                     case "SaveForm": //保存表单数据.
                         try
                         {
                             string diagram = getUTF8ToString("diagram");//表单 H5 格式.
                             BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
-                            s_responsetext = "true";
+                            msg = "true";
                         }
                         catch (Exception ex)
                         {
                             Log.DebugWriteError(ex.StackTrace);
-                            s_responsetext = "error:表单格式不正确，保存失败。" + ex.StackTrace;
+                            msg = "error:表单格式不正确，保存失败。" + ex.StackTrace;
                         }
                         break;
                     case "ParseStringToPinyin": //转拼音方法.
                         string name = getUTF8ToString("name");
                         string flag = getUTF8ToString("flag");
                         if (flag == "true")
-                            s_responsetext = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
+                            msg = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
                         else
-                            s_responsetext = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
+                            msg = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
                         break;
                     case "LetLogin":    //使管理员登录
-                        s_responsetext = WebUser.No == "admin" ? string.Empty : LetAdminLogin("CH", true);
+                        msg = WebUser.No == "admin" ? string.Empty : LetAdminLogin("CH", true);
                         break;
                     case "DoType"://表单特殊元素保存公共方法
-                        s_responsetext = DoType();
+                        msg = DoType();
                         break;
                     case "GetEnumerationList": //获取所有枚举
                     case "GetSFTableList": //获取所有的外键表.
@@ -121,37 +119,37 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
 
                         //调用API获得数据.
                         if (action == "GetSFTableList")
-                            s_responsetext = BP.Sys.CCFormAPI.DB_SFTableList(pageNumber, pageSize);
+                            msg = BP.Sys.CCFormAPI.DB_SFTableList(pageNumber, pageSize);
                         else
-                            s_responsetext = BP.Sys.CCFormAPI.DB_EnumerationList(pageNumber, pageSize); //调用API获得数据.
+                            msg = BP.Sys.CCFormAPI.DB_EnumerationList(pageNumber, pageSize); //调用API获得数据.
 
-                       // BP.DA.DataType.WriteFile("c:\\sss.txt", s_responsetext);
+                        // BP.DA.DataType.WriteFile("c:\\sss.txt", msg);
                         break;
                     case "Hiddenfielddata"://获取隐藏字段.
-                        s_responsetext = BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
+                        msg = BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
                         break;
                     case "HiddenFieldDelete": //删除隐藏字段.
                         string records = getUTF8ToString("records");
                         string FK_MapData = getUTF8ToString("FK_MapData");
                         MapAttr mapAttrs = new MapAttr();
                         int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
-                        s_responsetext = result.ToString();
+                        msg = result.ToString();
                         break;
                 }
             }
             catch (Exception ex)
             {
-                s_responsetext = "err@" + ex.Message;
+                msg = "err@" + ex.Message;
             }
-            if (string.IsNullOrEmpty(s_responsetext))
-                s_responsetext = "";
+            if (string.IsNullOrEmpty(msg))
+                msg = "";
 
             //组装ajax字符串格式,返回调用客户端
             context.Response.Charset = "UTF-8";
             context.Response.ContentEncoding = System.Text.Encoding.UTF8;
             context.Response.ContentType = "text/html";
             context.Response.Expires = 0;
-            context.Response.Write(s_responsetext);
+            context.Response.Write(msg);
             context.Response.End();
         }
         /// <summary>
@@ -455,7 +453,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             }
             catch (Exception ex)
             {
-                return "error:" + ex.Message;
+                return "err@DoType" + this.DoType + " 异常信息" + ex.Message;
             }
         }
         public string SaveEn(string vals)

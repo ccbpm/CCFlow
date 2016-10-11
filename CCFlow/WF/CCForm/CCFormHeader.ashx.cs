@@ -23,22 +23,23 @@ namespace CCFlow.WF.CCForm
     /// </summary>
     public class CCFormHeader : IHttpHandler
     {
-        public HttpContext context=null;
+        public HttpContext context = null;
         public string FK_MapExt
         {
             get
             {
-                string str= context.Request.QueryString["FK_MapExt"];
+                string str = context.Request.QueryString["FK_MapExt"];
                 return str;
             }
         }
         public void ProcessRequest(HttpContext mycontext)
         {
-            context= mycontext;
+            context = mycontext;
             context.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
             string doType = context.Request["DoType"];
             string attachPk = context.Request["AttachPK"];
             string workid = context.Request["WorkID"];
+            string fid = context.Request["FID"];
             string fk_node = context.Request["FK_Node"];
             string ensName = context.Request["EnsName"];
             string fk_flow = context.Request["FK_Flow"];
@@ -50,10 +51,10 @@ namespace CCFlow.WF.CCForm
                 switch (doType)
                 {
                     case "SingelAttach"://单附件上传
-                        SingleAttach(context, attachPk, workid, fk_node, ensName);
+                        SingleAttach(context, attachPk, workid, fid, fk_node, ensName);
                         break;
                     case "MoreAttach"://多附件上传
-                        MoreAttach(context, attachPk, workid, fk_node, ensName, fk_flow, pkVal);
+                        MoreAttach(context, attachPk, workid, fid, fk_node, ensName, fk_flow, pkVal);
                         break;
                 }
             }
@@ -99,8 +100,8 @@ namespace CCFlow.WF.CCForm
             DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
 
             string parentNo = context.Request.QueryString["ParentNo"];
-            if (parentNo==null)
-                parentNo=me.PopValTreeParentNo;
+            if (parentNo == null)
+                parentNo = me.PopValTreeParentNo;
 
             string sqlObjs = me.PopValTreeSQL;
             sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
@@ -128,7 +129,7 @@ namespace CCFlow.WF.CCForm
 
             //获得配置信息.
             Hashtable ht = me.PopValToHashtable();
-            DataTable dtcfg=BP.Sys.PubClass.HashtableToDataTable(ht);
+            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
 
             //增加到数据源.
             ds.Tables.Add(dtcfg);
@@ -236,7 +237,7 @@ namespace CCFlow.WF.CCForm
         }
 
         //单附件上传方法
-        private void SingleAttach(HttpContext context, string attachPk, string workid, string fk_node, string ensName)
+        private void SingleAttach(HttpContext context, string attachPk, string workid, string fid, string fk_node, string ensName)
         {
             FrmAttachment frmAth = new FrmAttachment();
             frmAth.MyPK = attachPk;
@@ -262,7 +263,7 @@ namespace CCFlow.WF.CCForm
             {
                 saveTo = context.Server.MapPath("~/" + saveTo);
             }
-            catch 
+            catch
             {
                 //saveTo = saveTo;
             }
@@ -281,7 +282,7 @@ namespace CCFlow.WF.CCForm
             dbUpload.MyPK = athDBPK;
             dbUpload.FK_FrmAttachment = attachPk;
             dbUpload.RefPKVal = workid;
-
+            dbUpload.FID = string.IsNullOrEmpty(fid) ? 0 : long.Parse(fid);
             dbUpload.FK_MapData = ensName;
 
             dbUpload.FileExts = info.Extension;
@@ -319,7 +320,7 @@ namespace CCFlow.WF.CCForm
         }
 
         //多附件上传方法
-        public void MoreAttach(HttpContext context, string attachPk, string workid, string fk_node, string ensNamestring, string fk_flow, string pkVal)
+        public void MoreAttach(HttpContext context, string attachPk, string workid,string fid, string fk_node, string ensNamestring, string fk_flow, string pkVal)
         {
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
@@ -419,6 +420,7 @@ namespace CCFlow.WF.CCForm
                 dbUpload.Rec = BP.Web.WebUser.No;
                 dbUpload.RecName = BP.Web.WebUser.Name;
                 dbUpload.RefPKVal = pkVal;
+                dbUpload.FID = string.IsNullOrEmpty(fid) ? 0 : long.Parse(fid);
                 //if (athDesc.IsNote)
                 //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
 

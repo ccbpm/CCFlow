@@ -198,16 +198,6 @@ namespace BP.Pub
         {
             foreach (Entity en in this.HisEns)
             {
-                //if (en.ToString()=="BP.WF.NumCheck" || en.ToString()=="BP.WF.GECheckStand" || en.ToString()=="BP.WF.NoteWork"  )
-                //{
-                //    if (en.GetValStringByKey("NodeID")!=strs[1])
-                //        continue;
-                //}
-                //else
-                //{
-                //    continue;
-                //}
-
                 string val = en.GetValStringByKey(strs[2]);
                 switch (strs.Length)
                 {
@@ -531,7 +521,60 @@ namespace BP.Pub
             } // 实体循环。
 
             throw new Exception("参数设置错误 GetValueByKey ：" + key);
+        }
+        /// <summary>
+        /// 获得审核组件的信息.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string GetValueCheckWorkByKey(string key)
+        {
+            key = key.Replace(" ", "");
+            key = key.Replace("\r\n", "");
 
+            string[] strs = key.Split('.');
+            if (strs.Length == 3)
+            {
+                /*
+                 *  是一个节点一个审核人的模式. <WorkCheck.RDT.101>
+                 */
+                if (dtTrack == null)
+                    throw new Exception("@您设置了获取审核组件里的规则，但是你没有给审核组件数据源dtTrack赋值。");
+
+                string nodeID = strs[2];
+                foreach (DataRow dr in dtTrack.Rows)
+                {
+                    if (dr["NDFrom"].ToString() != nodeID)
+                        continue;
+
+                    switch (strs[1])
+                    {
+                        case "RDT":
+                            return dr["RDT"].ToString(); //审核日期.
+                        case "RDT-NYR":
+                            string rdt= dr["RDT"].ToString(); //审核日期.
+                            return BP.DA.DataType.ParseSysDate2DateTimeFriendly(rdt);
+                        case "Rec":
+                            return dr["EmpFrom"].ToString(); //记录人.
+                        case "RecName":
+                            return dr["EmpFromT"].ToString(); //审核人.
+                        case "Msg":
+                        case "Note":
+
+                           #warning 输出的乱码，没有解决方案。
+                           // string text=dr["Msg"].ToString();
+                            //return Encoding.GetEncoding("GB2312").GetString(Encoding.UTF8.GetBytes(dr["Msg"].ToString()));
+
+                            return  dr["Msg"].ToString();
+
+                            //return System.Text.Encoder  //审核信息.
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return "无";
         }
         /// <summary>
         /// 审核节点的表示方法是 节点ID.Attr.
@@ -543,6 +586,7 @@ namespace BP.Pub
             key = key.Replace(" ", "");
             key = key.Replace("\r\n", "");
 
+            //获取参数代码.
             if (key.Contains("@"))
                 return GetValueByAtKey(key);
 
@@ -847,6 +891,10 @@ namespace BP.Pub
         }
         public string ensStrs = "";
         /// <summary>
+        /// 轨迹表（用于输出打印审核轨迹,审核信息.）
+        /// </summary>
+        public DataTable dtTrack = null;
+        /// <summary>
         /// 单据生成 
         /// </summary>
         /// <param name="cfile">模板文件</param>
@@ -921,6 +969,11 @@ namespace BP.Pub
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
                         else if (para.Contains("-EnumYes") == true)
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
+                        else if (para.Contains("WorkCheck.RDT") 
+                            || para.Contains("WorkCheck.Rec") 
+                            || para.Contains("WorkCheck.RecName")
+                            || para.Contains("WorkCheck.Note") )   // 审核组件的审核日期.
+                            str = str.Replace("<" + para + ">", this.GetValueCheckWorkByKey(para));
                         else if (para.Contains(".") == true)
                             continue; /*有可能是明细表数据.*/
                         else

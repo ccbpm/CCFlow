@@ -2231,7 +2231,6 @@ namespace BP.WF
                 ps.Add(TrackAttr.WorkID, this.WorkID);
                 BP.DA.DBAccess.RunSQL(ps);
 
-
                 #endregion
             }
             #endregion 处理审核问题.
@@ -2413,6 +2412,11 @@ namespace BP.WF
                 #region 执行数据copy.
                 if (athDBs.Count > 0)
                 {
+                    //插入之前先删除.
+                    FrmAttachmentDB mydb = new FrmAttachmentDB();
+                    mydb.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + nd.NodeID, FrmAttachmentDBAttr.RefPKVal, wk.OID);
+
+
                     /*说明当前节点有附件数据*/
                     int idx = 0;
                     foreach (FrmAttachmentDB athDB in athDBs)
@@ -3792,14 +3796,19 @@ namespace BP.WF
             #region 复制附件。
             if (this.HisNode.MapData.FrmAttachments.Count > 0)
             {
+                //删除上一个节点可能有的数据，有可能是发送退回来的产生的垃圾数据.
+                Paras ps = new Paras();
+                ps.SQL = "DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData=" + dbStr + "FK_MapData AND RefPKVal=" + dbStr + "RefPKVal";
+                ps.Add(FrmAttachmentDBAttr.FK_MapData, "ND" + toND.NodeID);
+                ps.Add(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                DBAccess.RunSQL(ps);
+
                 FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + this.HisNode.NodeID,
                       this.WorkID.ToString());
+
                 int idx = 0;
                 if (athDBs.Count > 0)
                 {
-                    athDBs.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + toND.NodeID,
-                        FrmAttachmentDBAttr.RefPKVal, this.WorkID);
-
                     /*说明当前节点有附件数据*/
                     foreach (FrmAttachmentDB athDB in athDBs)
                     {

@@ -453,7 +453,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             }
             catch (Exception ex)
             {
-                return "err@DoType" + this.DoType + " 异常信息" + ex.Message;
+                return "err@DoType 异常信息" + ex.Message;
             }
         }
         public string SaveEn(string vals)

@@ -66,7 +66,7 @@ ChangeNodeManager.prototype = {
     NodeRunModel: function (nodeID, runModel) {
         $.ajax({
             type: 'POST',
-            url: "./common/controller.ashx",
+            url: "/WF/Admin/CCBPMDesigner/controller.ashx",
             data: { action: 'changenoderunmodel', FK_Node: nodeID, RunModel: runModel },
             success: function (jsonData) {
 

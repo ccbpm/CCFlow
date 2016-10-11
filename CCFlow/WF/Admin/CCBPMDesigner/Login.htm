@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋工作流程引擎设计器 - 系统登录</title>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+        //执行保存
+        function Login() {
+            //  var fk_mapExt = GetQueryString("MyPK");
+
+           var frmData = $("#cc").serialize();
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler+ "?DoType=Login&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    window.location.href = 'Default.aspx?' + data;
+                }
+            });
+        }
+
+        //初始化页面函数.....
+        $(function () {
+
+            var doType = GetQueryString("DoType");
+            if (doType == null)
+                doType = "LoginInit";
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=" + doType + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        window.location.href = '../DBInstall.aspx';
+                        return;
+                    }
+
+                    if (data != "")
+                        alert(data);
+                }
+            });
+        });
+    </script>
+</head>
+<body onkeypress="Esc();">
+<form id="cc" >
+
+用户名：<input type="text"  id="TB_UserNo" name="TB_UserNo"/>
+
+密码：<input type="password"  id="TB_Pass" name="TB_Pass"/>
+<input type=button  value="登录" id="Btn_Login"  onclick="Login();" />
+</form>
+
+</body>
+</html>

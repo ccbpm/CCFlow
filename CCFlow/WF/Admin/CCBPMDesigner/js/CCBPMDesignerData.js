@@ -20,9 +20,8 @@ function getArgsFromHref(sArgName) {
 
 //公共方法
 function ajaxService(param, callback, scope, levPath) {
-    var url = "common/CCBPMDesignerBase.ashx";
-    if (levPath == "1")
-        url = "../common/CCBPMDesignerBase.ashx";
+    var url = "/WF/Admin/CCBPMDesigner/CCBPMDesignerBase.ashx";
+
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据

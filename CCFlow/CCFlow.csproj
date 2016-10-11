@@ -140,6 +140,11 @@
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
     <Content Include="SDKFlowDemo\Default.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByDepts.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthSingle.png" />
@@ -198,6 +203,7 @@
     <Content Include="WF\Admin\CCFormDesigner\js\Left.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\commands\ConnectorCloneCommand.js" />
     <Content Include="WF\Admin\CCFormDesigner\Login.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\Login.htm" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-style-bar.css" />
@@ -238,7 +244,6 @@
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Welcome.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\FrmAttr.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuidEntity.aspx" />
@@ -465,9 +470,7 @@
     <Content Include="WF\Admin\AttrNode\Mobile.aspx" />
     <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.aspx" />
     <Content Include="WF\Admin\AttrNode\SubFlows.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByDepts.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Compent.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Nodes.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps.aspx" />
@@ -483,9 +486,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\Designer.xml" />
     <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\DialogCtr\NewFlow.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\EleList.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Exp.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Flows.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\API.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\App.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\AutoStart.png" />
@@ -547,12 +547,10 @@
     <Content Include="WF\Admin\CCBPMDesigner\js\jquery.ez-bg-resize.js" />
     <Content Include="WF\Admin\CCBPMDesigner\js\Left.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Login.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\FlowDesignerSvr.asmx" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\Truck.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx" />
-    <Content Include="WF\Admin\CCBPMDesigner\WelcomeV1.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\WelCome.html" />
+    <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
     <Content Include="WF\Admin\CCFormDesigner\APICode.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\assets\content-background.jpg" />
     <Content Include="WF\Admin\CCFormDesigner\assets\css\ajaxfileupload.css" />
@@ -1301,8 +1299,8 @@
     <Content Include="WF\Data\Install\SQLScript\InitView_Ora.sql" />
     <Content Include="WF\Admin\Org\Site.Master" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesignerController.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\common\CCBPMDesignerBase.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\common\controller.ashx" />
+    <Content Include="WF\Admin\CCBPMDesigner\CCBPMDesignerBase.ashx" />
+    <Content Include="WF\Admin\CCBPMDesigner\controller.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Opt\Site.Master" />
     <Content Include="SDKFlowDemo\App\Port\WinOpen.Master" />
     <Content Include="SDKFlowDemo\Comm\Site.Master" />
@@ -1317,6 +1315,7 @@
     <Content Include="SDKFlowDemo\WinOpen.master" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx" />
     <None Include="Service References\CloundWS\WS.wsdl" />
+    <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
@@ -3671,26 +3670,12 @@
     <Compile Include="WF\Admin\AttrNode\TurnToDeal.aspx.designer.cs">
       <DependentUpon>TurnToDeal.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByDepts.aspx.cs">
-      <DependentUpon>ByDepts.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByDepts.aspx.designer.cs">
-      <DependentUpon>ByDepts.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx.cs">
       <DependentUpon>ByFlows.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx.designer.cs">
       <DependentUpon>ByFlows.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\CH\List.aspx.cs">
-      <DependentUpon>List.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\CH\List.aspx.designer.cs">
-      <DependentUpon>List.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\Compent.aspx.cs">
       <DependentUpon>Compent.aspx</DependentUpon>
@@ -3762,10 +3747,10 @@
     <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.designer.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\common\CCBPMDesignerBase.ashx.cs">
+    <Compile Include="WF\Admin\CCBPMDesigner\CCBPMDesignerBase.ashx.cs">
       <DependentUpon>CCBPMDesignerBase.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\common\controller.ashx.cs">
+    <Compile Include="WF\Admin\CCBPMDesigner\controller.ashx.cs">
       <DependentUpon>controller.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Default.aspx.cs">
@@ -3789,26 +3774,8 @@
     <Compile Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx.designer.cs">
       <DependentUpon>DesignerSL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\EleList.aspx.cs">
-      <DependentUpon>EleList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\EleList.aspx.designer.cs">
-      <DependentUpon>EleList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Exp.aspx.cs">
-      <DependentUpon>Exp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Exp.aspx.designer.cs">
-      <DependentUpon>Exp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Flows.aspx.cs">
-      <DependentUpon>Flows.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Flows.aspx.designer.cs">
-      <DependentUpon>Flows.aspx</DependentUpon>
+    <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -3824,13 +3791,6 @@
     <Compile Include="WF\Admin\CCBPMDesigner\Opt\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\SearchFlow.aspx.cs">
-      <DependentUpon>SearchFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\SearchFlow.aspx.designer.cs">
-      <DependentUpon>SearchFlow.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\truck\FlowDesignerSvr.asmx.cs">
       <DependentUpon>FlowDesignerSvr.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -3841,20 +3801,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx.designer.cs">
       <DependentUpon>ChartWorks.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\WelcomeV1.aspx.cs">
-      <DependentUpon>WelcomeV1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\WelcomeV1.aspx.designer.cs">
-      <DependentUpon>WelcomeV1.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\APICode.aspx.cs">
       <DependentUpon>APICode.aspx</DependentUpon>

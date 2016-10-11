@@ -22,7 +22,7 @@
     }
    </style>
 
-    <script src="../../../Silverlight.js" type="text/javascript"></script>
+    <script src="../../Silverlight.js" type="text/javascript"></script>
     <script type="text/javascript">
 
         function maximizeWindow() {

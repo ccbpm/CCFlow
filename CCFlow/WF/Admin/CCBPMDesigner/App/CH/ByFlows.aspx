@@ -175,7 +175,6 @@
                                                  (int)BP.WF.Data.CHSta.YuQi + "' GROUP BY FK_Flow ");
             #endregion
 
-
             //本月办结率
             //总数
             System.Data.DataTable dtThisMouthTotal = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow,COUNT(distinct WorkID) Num FROM WF_CH WHERE FK_NY ='" +
@@ -184,7 +183,6 @@
             //按时
             System.Data.DataTable dtThisMouthBJ = BP.DA.DBAccess.RunSQLReturnTable("SELECT  FK_Flow,COUNT(distinct WorkID) Num FROM WF_CH WHERE FK_NY ='" +
                 dTime.ToString("yyyy-MM") + "' AND CHSta IN(0,1) GROUP BY FK_Flow ");
-
 
             foreach (BP.WF.Template.FlowSort flowSort in flowSorts)
             {

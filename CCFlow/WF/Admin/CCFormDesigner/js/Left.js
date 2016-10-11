@@ -23,7 +23,7 @@ function RefreshFlowJson() {
     if (!node || node.attributes.ISPARENT != '0') return;
     //首先关闭tab
     closeTab(node.text);
-    $.post("./common/controller.ashx", {
+    $.post("/WF/Admin/CCBPMDesigner/controller.ashx", {
         action: 'ccbpm_flow_resetversion',
         FK_Flow: node.id
     }, function (jsonData) {

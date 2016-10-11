@@ -24,6 +24,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             {
                 //退出.
                 BP.WF.Dev2Interface.Port_SigOut();
+                return;
             }
 
             if (this.Request.QueryString["DoType"] == "Login")

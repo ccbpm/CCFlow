@@ -151,8 +151,6 @@
             flows.RetrieveAll();
 
 
-
-
             // 获得超期时间
             System.Data.DataTable dtOverTimeMin
              = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow, SUM(OverMinutes) AS OverMinutes FROM WF_CH WHERE OverMinutes > 0 GROUP BY FK_Flow  ");

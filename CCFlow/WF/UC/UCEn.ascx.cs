@@ -1056,7 +1056,7 @@ namespace CCFlow.WF.UC
 
                             /*是大块文本，并且跨度在占领了整个剩余行单元格. */
                             this.Add("<TD colspan=2 width='50%' height='" + attr.UIHeight.ToString() + "px' >");
-                            this.Add("<span style='float:left'>" + attr.Name+str + "</span>");
+                            this.Add("<span style='float:left'>" + attr.Name + str + "</span>");
 
                             if (attr.TBModel == TBModel.RichText)
                             {
@@ -1100,7 +1100,7 @@ namespace CCFlow.WF.UC
                             }
 
                             this.AddTR();
-                            this.AddTDDesc(attr.Name+str);
+                            this.AddTDDesc(attr.Name + str);
 
                             /*是大块文本，并且跨度在占领了整个剩余行单元格. */
                             this.Add("<TD colspan=3 width='100%' height='" + attr.UIHeight.ToString() + "px' >");
@@ -1456,7 +1456,7 @@ namespace CCFlow.WF.UC
                     #endregion AppDouble  AppFloat AppInt .
 
                     #region AppMoney  AppRate  .
-                    if (attr.MyDataType == DataType.AppMoney )
+                    if (attr.MyDataType == DataType.AppMoney)
                     {
                         if (isLeft == true)
                             this.AddTR();
@@ -2953,7 +2953,7 @@ namespace CCFlow.WF.UC
                 }
             }
             #endregion 输出Ele
-            
+
 
             #region 输出竖线与标签 & 超连接 Img.
             FrmLabs labs = this.mapData.FrmLabs;
@@ -3028,7 +3028,7 @@ namespace CCFlow.WF.UC
                 float y = img.Y;
                 string imgSrc = "";
                 //imgSrc = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";
-                //图片类型
+                #region 图片类型
                 if (img.HisImgAppType == ImgAppType.Img)
                 {
                     //数据来源为本地.
@@ -3063,152 +3063,157 @@ namespace CCFlow.WF.UC
                     this.Add("\t\n</DIV>");
                     continue;
                 }
+                #endregion 图片类型
 
                 #region 电子签章
-                //获取登录人岗位
-                string stationNo = "";
-                //签章对应部门
-                string fk_dept = WebUser.FK_Dept;
-                //部门来源类别
-                string sealType = "0";
-                //签章对应岗位
-                string fk_station = img.Tag0;
-                //表单字段
-                string sealField = "";
-                string sql = "";
-
-                //重新加载 可能有缓存
-                img.RetrieveFromDBSources();
-                //0.不可以修改，从数据表中取，1可以修改，使用组合获取并保存数据
-                if ((img.IsEdit == 1 && this.IsReadonly == false) || activeFilds.Contains(img.MyPK + ","))
+                //图片类型
+                if (img.HisImgAppType == ImgAppType.Seal)
                 {
-                    #region 加载签章
-                    //如果设置了部门与岗位的集合进行拆分
-                    if (!string.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
+                    //获取登录人岗位
+                    string stationNo = "";
+                    //签章对应部门
+                    string fk_dept = WebUser.FK_Dept;
+                    //部门来源类别
+                    string sealType = "0";
+                    //签章对应岗位
+                    string fk_station = img.Tag0;
+                    //表单字段
+                    string sealField = "";
+                    string sql = "";
+
+                    //重新加载 可能有缓存
+                    img.RetrieveFromDBSources();
+                    //0.不可以修改，从数据表中取，1可以修改，使用组合获取并保存数据
+                    if ((img.IsEdit == 1 && this.IsReadonly == false) || activeFilds.Contains(img.MyPK + ","))
                     {
-                        fk_dept = img.Tag0.Split('^')[0];
-                        fk_station = img.Tag0.Split('^')[1];
-                        sealType = img.Tag0.Split('^')[2];
-                        sealField = img.Tag0.Split('^')[3];
-                        //如果部门没有设定，就获取部门来源
-                        if (fk_dept == "all")
+                        #region 加载签章
+                        //如果设置了部门与岗位的集合进行拆分
+                        if (!string.IsNullOrEmpty(img.Tag0) && img.Tag0.Contains("^") && img.Tag0.Split('^').Length == 4)
                         {
-                            //默认当前登陆人
-                            //  fk_dept = WebUser.FK_Dept;
-                            //发起人
-                            if (sealType == "1")
+                            fk_dept = img.Tag0.Split('^')[0];
+                            fk_station = img.Tag0.Split('^')[1];
+                            sealType = img.Tag0.Split('^')[2];
+                            sealField = img.Tag0.Split('^')[3];
+                            //如果部门没有设定，就获取部门来源
+                            if (fk_dept == "all")
                             {
-                                sql = "SELECT FK_Dept FROM WF_GenerWorkFlow WHERE WorkID=" + this.HisEn.GetValStrByKey("OID");
-                                fk_dept = BP.DA.DBAccess.RunSQLReturnString(sql);
-                            }
-                            //表单字段
-                            if (sealType == "2" && !string.IsNullOrEmpty(sealField))
-                            {
-                                //判断字段是否存在
-                                foreach (MapAttr attr in mattrs)
+                                //默认当前登陆人
+                                //  fk_dept = WebUser.FK_Dept;
+                                //发起人
+                                if (sealType == "1")
                                 {
-                                    if (attr.KeyOfEn == sealField)
+                                    sql = "SELECT FK_Dept FROM WF_GenerWorkFlow WHERE WorkID=" + this.HisEn.GetValStrByKey("OID");
+                                    fk_dept = BP.DA.DBAccess.RunSQLReturnString(sql);
+                                }
+                                //表单字段
+                                if (sealType == "2" && !string.IsNullOrEmpty(sealField))
+                                {
+                                    //判断字段是否存在
+                                    foreach (MapAttr attr in mattrs)
                                     {
-                                        fk_dept = this.HisEn.GetValStrByKey(sealField);
-                                        break;
+                                        if (attr.KeyOfEn == sealField)
+                                        {
+                                            fk_dept = this.HisEn.GetValStrByKey(sealField);
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    //判断本部门下是否有此人
-                    //sql = "SELECT fk_station from port_deptEmpStation where fk_dept='" + fk_dept + "' and fk_emp='" + WebUser.No + "'";
-                    sql = string.Format(" select FK_Station from Port_DeptStation where FK_Dept ='{0}' and FK_Station in (select FK_Station from " + BP.WF.Glo.EmpStation + " where FK_Emp='{1}')", fk_dept, WebUser.No);
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        if (fk_station.Contains(dr[0].ToString() + ","))
+                        //判断本部门下是否有此人
+                        //sql = "SELECT fk_station from port_deptEmpStation where fk_dept='" + fk_dept + "' and fk_emp='" + WebUser.No + "'";
+                        sql = string.Format(" select FK_Station from Port_DeptStation where FK_Dept ='{0}' and FK_Station in (select FK_Station from " + BP.WF.Glo.EmpStation + " where FK_Emp='{1}')", fk_dept, WebUser.No);
+                        DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                        foreach (DataRow dr in dt.Rows)
                         {
-                            stationNo = dr[0].ToString();
-                            break;
-                        }
-                    }
-                    #endregion 加载签章
-
-                    imgSrc = CCFlowAppPath + "DataUser/Seal/" + fk_dept + "_" + stationNo + ".png";
-                    //设置主键
-                    string myPK = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
-                    myPK = myPK + "_" + this.HisEn.GetValStrByKey("OID") + "_" + img.MyPK;
-
-                    FrmEleDB imgDb = new FrmEleDB();
-                    QueryObject queryInfo = new QueryObject(imgDb);
-                    queryInfo.AddWhere(FrmEleAttr.MyPK, myPK);
-                    queryInfo.DoQuery();
-                    //判断是否存在
-                    if (imgDb == null || string.IsNullOrEmpty(imgDb.FK_MapData))
-                    {
-                        imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
-                        imgDb.EleID = this.HisEn.GetValStrByKey("OID");
-                        imgDb.RefPKVal = img.MyPK;
-                        imgDb.Tag1 = imgSrc;
-                        imgDb.Insert();
-                    }
-                    else if (!IsPostBack) //edited by liuxc,2015-10-16,因新昌方面出现此处回发时将正确的签章图片路径改成了错误的路径，所以将此处的逻辑在回发时去掉，即回发时不进行签章图片的更新
-                    {
-                        imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
-                        imgDb.EleID = this.HisEn.GetValStrByKey("OID");
-                        imgDb.RefPKVal = img.MyPK;
-                        imgDb.Tag1 = imgSrc;
-                        imgDb.Update();
-                    }
-                    //添加控件
-                    x = img.X + wtX;
-                    this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                    this.Add("\t\n<img src='" + imgSrc + "' onerror=\"javascript:this.src='" + appPath + "DataUser/Seal/Def.png'\" style=\"padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;\" />");
-                    this.Add("\t\n</DIV>");
-                }
-                else
-                {
-                    FrmEleDB realDB = null;
-                    FrmEleDB imgDb = new FrmEleDB();
-                    QueryObject objQuery = new QueryObject(imgDb);
-                    objQuery.AddWhere(FrmEleAttr.FK_MapData, img.EnPK);
-                    objQuery.addAnd();
-                    objQuery.AddWhere(FrmEleAttr.EleID, this.HisEn.GetValStrByKey("OID"));
-
-                    if (objQuery.DoQuery() == 0)
-                    {
-                        FrmEleDBs imgdbs = new FrmEleDBs();
-                        QueryObject objQuerys = new QueryObject(imgdbs);
-                        objQuerys.AddWhere(FrmEleAttr.EleID, this.HisEn.GetValStrByKey("OID"));
-                        if (objQuerys.DoQuery() > 0)
-                        {
-                            foreach (FrmEleDB single in imgdbs)
+                            if (fk_station.Contains(dr[0].ToString() + ","))
                             {
-                                if (single.FK_MapData.Substring(6, single.FK_MapData.Length - 6).Equals(img.EnPK.Substring(6, img.EnPK.Length - 6)))
+                                stationNo = dr[0].ToString();
+                                break;
+                            }
+                        }
+                        #endregion 加载签章
+
+                        imgSrc = CCFlowAppPath + "DataUser/Seal/" + fk_dept + "_" + stationNo + ".png";
+                        //设置主键
+                        string myPK = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                        myPK = myPK + "_" + this.HisEn.GetValStrByKey("OID") + "_" + img.MyPK;
+
+                        FrmEleDB imgDb = new FrmEleDB();
+                        QueryObject queryInfo = new QueryObject(imgDb);
+                        queryInfo.AddWhere(FrmEleAttr.MyPK, myPK);
+                        queryInfo.DoQuery();
+                        //判断是否存在
+                        if (imgDb == null || string.IsNullOrEmpty(imgDb.FK_MapData))
+                        {
+                            imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                            imgDb.EleID = this.HisEn.GetValStrByKey("OID");
+                            imgDb.RefPKVal = img.MyPK;
+                            imgDb.Tag1 = imgSrc;
+                            imgDb.Insert();
+                        }
+                        else if (!IsPostBack) //edited by liuxc,2015-10-16,因新昌方面出现此处回发时将正确的签章图片路径改成了错误的路径，所以将此处的逻辑在回发时去掉，即回发时不进行签章图片的更新
+                        {
+                            imgDb.FK_MapData = string.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
+                            imgDb.EleID = this.HisEn.GetValStrByKey("OID");
+                            imgDb.RefPKVal = img.MyPK;
+                            imgDb.Tag1 = imgSrc;
+                            imgDb.Update();
+                        }
+                        //添加控件
+                        x = img.X + wtX;
+                        this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
+                        this.Add("\t\n<img src='" + imgSrc + "' onerror=\"javascript:this.src='" + appPath + "DataUser/Seal/Def.png'\" style=\"padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;\" />");
+                        this.Add("\t\n</DIV>");
+                    }
+                    else
+                    {
+                        FrmEleDB realDB = null;
+                        FrmEleDB imgDb = new FrmEleDB();
+                        QueryObject objQuery = new QueryObject(imgDb);
+                        objQuery.AddWhere(FrmEleAttr.FK_MapData, img.EnPK);
+                        objQuery.addAnd();
+                        objQuery.AddWhere(FrmEleAttr.EleID, this.HisEn.GetValStrByKey("OID"));
+
+                        if (objQuery.DoQuery() == 0)
+                        {
+                            FrmEleDBs imgdbs = new FrmEleDBs();
+                            QueryObject objQuerys = new QueryObject(imgdbs);
+                            objQuerys.AddWhere(FrmEleAttr.EleID, this.HisEn.GetValStrByKey("OID"));
+                            if (objQuerys.DoQuery() > 0)
+                            {
+                                foreach (FrmEleDB single in imgdbs)
                                 {
-                                    single.FK_MapData = img.EnPK;
-                                    single.MyPK = img.EnPK + "_" + this.HisEn.GetValStrByKey("OID") + "_" + img.EnPK;
-                                    single.RefPKVal = img.EnPK;
-                                    //  single.DirectInsert();
-                                    //  realDB = single; cut by zhoupeng .没有看明白.
-                                    break;
+                                    if (single.FK_MapData.Substring(6, single.FK_MapData.Length - 6).Equals(img.EnPK.Substring(6, img.EnPK.Length - 6)))
+                                    {
+                                        single.FK_MapData = img.EnPK;
+                                        single.MyPK = img.EnPK + "_" + this.HisEn.GetValStrByKey("OID") + "_" + img.EnPK;
+                                        single.RefPKVal = img.EnPK;
+                                        //  single.DirectInsert();
+                                        //  realDB = single; cut by zhoupeng .没有看明白.
+                                        break;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                realDB = imgDb;
                             }
                         }
                         else
                         {
                             realDB = imgDb;
                         }
-                    }
-                    else
-                    {
-                        realDB = imgDb;
-                    }
 
-                    if (realDB != null)
-                    {
-                        imgSrc = realDB.Tag1;
-                        //如果没有查到记录，控件不显示。说明没有走盖章的一步
-                        x = img.X + wtX;
-                        this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                        this.Add("\t\n<img src='" + imgSrc + "' onerror='javascript:this.src='" + appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png';' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
-                        this.Add("\t\n</DIV>");
+                        if (realDB != null)
+                        {
+                            imgSrc = realDB.Tag1;
+                            //如果没有查到记录，控件不显示。说明没有走盖章的一步
+                            x = img.X + wtX;
+                            this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
+                            this.Add("\t\n<img src='" + imgSrc + "' onerror='javascript:this.src='" + appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png';' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
+                            this.Add("\t\n</DIV>");
+                        }
                     }
                 }
                 #endregion
@@ -3661,132 +3666,166 @@ namespace CCFlow.WF.UC
                         this.Add(ddlFK);
                         HiddenField hidActiveT = null;
 
-                           MapExt me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
-                                                       MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
+                        MapExt me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
+                                                    MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
 
-                           if (me != null)
-                           {
-                               /*如果有装载填充了，就不给他加载数据了，因为在ａｆｔｅｒ里面会给他按照sql加载数据。*/
-                               //add by dgq 2013-4-9,添加内容修改后的事件
-                               ddlFK.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
-                           }
-                           else
-                           {
+                        if (me != null)
+                        {
+                            /*如果有装载填充了，就不给他加载数据了，因为在ａｆｔｅｒ里面会给他按照sql加载数据。*/
+                            //add by dgq 2013-4-9,添加内容修改后的事件
+                            ddlFK.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
+                        }
+                        else
+                        {
 
-                               if (ddlFK.Enabled || activeFilds.Contains(attr.KeyOfEn + ","))
-                               {
-                                   EntitiesNoName ens = attr.HisEntitiesNoName;
-                                   ens.RetrieveAll();
-                                   ddlFK.Enabled = true;
+                            if (ddlFK.Enabled || activeFilds.Contains(attr.KeyOfEn + ","))
+                            {
+                                EntitiesNoName ens = attr.HisEntitiesNoName;
+                                ens.RetrieveAll();
+                                ddlFK.Enabled = true;
 
-                                   //added by liuxc，2015-10-22.
-                                   //此处判断是否含有级联下拉框的情况，如果此属性是级联的下拉框，则判断其引起级联的属性值，根据此值只加载其级联子项
-                                   me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
-                                                                  MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
-                                   if (me != null)
-                                   {
-                                       hidActiveT = new HiddenField();
-                                       hidActiveT.ID = "HID_" + attr.KeyOfEn + "T";
-                                       this.Add(hidActiveT);
-                                       
-                                       string valOper = en.GetValStringByKey(me.AttrOfOper);
+                                //added by liuxc，2015-10-22.
+                                //此处判断是否含有级联下拉框的情况，如果此属性是级联的下拉框，则判断其引起级联的属性值，根据此值只加载其级联子项
+                                me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
+                                                               MapExtAttr.AttrsOfActive, attr.KeyOfEn) as MapExt;
+                                if (me != null)
+                                {
+                                    hidActiveT = new HiddenField();
+                                    hidActiveT.ID = "HID_" + attr.KeyOfEn + "T";
+                                    this.Add(hidActiveT);
 
-                                       if (IsPostBack)
-                                       {
-                                           valOper = Request.Params[ddlFK.UniqueID.Substring(0, ddlFK.UniqueID.Length - ddlFK.ID.Length) + "DDL_" + me.AttrOfOper];
-                                       }
+                                    string valOper = en.GetValStringByKey(me.AttrOfOper);
 
-                                       if (!string.IsNullOrWhiteSpace(valOper))
-                                       {
-                                           string fullSQL = me.Doc.Clone() as string;
-                                           fullSQL = fullSQL.Replace("~", ",");
-                                           fullSQL = fullSQL.Replace("@Key", valOper).Replace("@key", valOper);
-                                           fullSQL = fullSQL.Replace("@WebUser.No", WebUser.No);
-                                           fullSQL = fullSQL.Replace("@WebUser.Name", WebUser.Name);
-                                           fullSQL = fullSQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-                                           fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
+                                    if (IsPostBack)
+                                    {
+                                        valOper = Request.Params[ddlFK.UniqueID.Substring(0, ddlFK.UniqueID.Length - ddlFK.ID.Length) + "DDL_" + me.AttrOfOper];
+                                    }
 
-                                           DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
-                                           ddlFK.Items.Clear();
-                                           foreach (DataRow dr in dt.Rows)
-                                               ddlFK.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
-                                       }
-                                       else
-                                       {
-                                           ddlFK.Items.Clear();
-                                       }
-                                   }
-                                   else
-                                   {
-                                       ddlFK.BindEntities(ens);
-                                   }
+                                    if (!string.IsNullOrWhiteSpace(valOper))
+                                    {
+                                        string fullSQL = me.Doc.Clone() as string;
+                                        fullSQL = fullSQL.Replace("~", ",");
+                                        fullSQL = fullSQL.Replace("@Key", valOper).Replace("@key", valOper);
+                                        fullSQL = fullSQL.Replace("@WebUser.No", WebUser.No);
+                                        fullSQL = fullSQL.Replace("@WebUser.Name", WebUser.Name);
+                                        fullSQL = fullSQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                                        fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
 
-                                   if (ddlFK.Items.Count > 0)
-                                   {
-                                       if (ddlFK.Items.FindByText("请选择") == null)
-                                       {
-                                           ddlFK.Items.Insert(0, new ListItem("请选择", ""));
-                                       }
-                                   }
-                                   else
-                                   {
-                                       if (ddlFK.Items.FindByText("无数据") == null)
-                                       {
-                                           ddlFK.Items.Insert(0, new ListItem("无数据", ""));
-                                       }
-                                   }
-                                   string val = en.GetValStrByKey(attr.KeyOfEn);
-                                   if (string.IsNullOrEmpty(val) == true)
-                                   {
-                                       ddlFK.SetSelectItem("");
-                                   }
-                                   else
-                                   {
-                                       ddlFK.SetSelectItem(val);
+                                        DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
+                                        ddlFK.Items.Clear();
+                                        foreach (DataRow dr in dt.Rows)
+                                            ddlFK.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
+                                    }
+                                    else
+                                    {
+                                        ddlFK.Items.Clear();
+                                    }
+                                }
+                                else
+                                {
+                                    ddlFK.BindEntities(ens);
+                                }
 
-                                       if(hidActiveT != null)
-                                       {
-                                           hidActiveT.Value = ddlFK.Text;
-                                       }
-                                   }
+                                if (ddlFK.Items.Count > 0)
+                                {
+                                    if (ddlFK.Items.FindByText("请选择") == null)
+                                    {
+                                        ddlFK.Items.Insert(0, new ListItem("请选择", ""));
+                                    }
+                                }
+                                else
+                                {
+                                    if (ddlFK.Items.FindByText("无数据") == null)
+                                    {
+                                        ddlFK.Items.Insert(0, new ListItem("无数据", ""));
+                                    }
+                                }
+                                string val = en.GetValStrByKey(attr.KeyOfEn);
+                                if (string.IsNullOrEmpty(val) == true)
+                                {
+                                    ddlFK.SetSelectItem("");
+                                }
+                                else
+                                {
+                                    ddlFK.SetSelectItem(val);
 
-                                   //add by dgq 2013-4-9,添加内容修改后的事件
-                                   ddlFK.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
+                                    if (hidActiveT != null)
+                                    {
+                                        hidActiveT.Value = ddlFK.Text;
+                                    }
+                                }
 
-                                   if(hidActiveT != null)
-                                   {
-                                       ddlFK.Attributes["onchange"] += ";$('#"+hidActiveT.ClientID+"').val(this.options[this.selectedIndex].text);";
-                                   }
-                               }
-                               else
-                               {
-                                   if (ddlFK.Enabled == true && isReadonly == true)
-                                       ddlFK.Enabled = false;
+                                //add by dgq 2013-4-9,添加内容修改后的事件
+                                ddlFK.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
 
-                                   fSize = attr.Para_FontSize;
-                                   if (fSize == 0)
-                                       ddlFK.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";
-                                   else
-                                       ddlFK.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: left; height: " + fSize + "px;";
+                                if (hidActiveT != null)
+                                {
+                                    ddlFK.Attributes["onchange"] += ";$('#" + hidActiveT.ClientID + "').val(this.options[this.selectedIndex].text);";
+                                }
+                            }
+                            else
+                            {
+                                if (ddlFK.Enabled == true && isReadonly == true)
+                                    ddlFK.Enabled = false;
 
-                                   string val = en.GetValStrByKey(attr.KeyOfEn);
-                                   string text = en.GetValRefTextByKey(attr.KeyOfEn);
+                                fSize = attr.Para_FontSize;
+                                if (fSize == 0)
+                                    ddlFK.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";
+                                else
+                                    ddlFK.Attributes["style"] = "font-size: " + fSize + "px;width: " + attr.UIWidth + "px; text-align: left; height: " + fSize + "px;";
 
-                                   if (string.IsNullOrEmpty(text) && string.IsNullOrEmpty(val) == false)
-                                   {
-                                       EntitiesNoName ens = attr.HisEntitiesNoName;
-                                       Entity myen = ens.GetNewEntity;
-                                       myen.PKVal = val;
-                                       if (myen.RetrieveFromDBSources() != 0)
-                                           text = myen.GetValStringByKey("Name");
-                                       else
-                                           text = val;
-                                   }
-                                   ddlFK.Items.Add(new ListItem(text, val));
+                                string val = en.GetValStrByKey(attr.KeyOfEn);
+                                string text = en.GetValRefTextByKey(attr.KeyOfEn);
 
-                                   ddlFK.Enabled = false;
-                               }
-                           }
+                                if (string.IsNullOrEmpty(text) && string.IsNullOrEmpty(val) == false)
+                                {
+                                    EntitiesNoName ens = attr.HisEntitiesNoName;
+                                    Entity myen = ens.GetNewEntity;
+                                    myen.PKVal = val;
+                                    if (myen.RetrieveFromDBSources() != 0)
+                                        text = myen.GetValStringByKey("Name");
+                                    else
+                                        text = val;
+                                }
+                                ddlFK.Items.Add(new ListItem(text, val));
+
+                                ddlFK.Enabled = false;
+                            }
+                        }
+                        break;
+                    case FieldTypeS.WinOpen://打开系统页面
+                        switch (attr.UIContralType)
+                        {
+                            case UIContralType.MapPin:
+                                //页面暂不支持定位功能，只做显示手机端定位
+                                this.Add("\t\n<img src='" + appPath + "WF/Img/Btn/ic_pindisabled.png' align='middle' style='padding: 0px;margin: 0px;border-width: 0px;width:" + attr.UIWidth + "px;height:" + attr.UIHeight + "px;' />");
+                                this.Add(en.GetValStringByKey(attr.KeyOfEn));
+                                //this.Add("\t\n<img id='Ele" + attr.MyPK + "' onclick=\"\" src='" + appPath + "WF/Img/Btn/ic_pin.png' style='padding: 0px;margin: 0px;border-width: 0px;width:" + attr.UIWidth + "px;height:" + attr.UIHeight + "px;' />");
+                                break;
+                            case UIContralType.MicHot:
+                                FrmEleDBs dbs = new FrmEleDBs(this.FK_MapData, en.PKVal.ToString());
+                                QueryObject objMicHot = new QueryObject(dbs);
+                                objMicHot.AddWhere(FrmEleDBAttr.FK_MapData, this.FK_MapData);
+                                objMicHot.addAnd();
+                                objMicHot.AddWhere(FrmEleDBAttr.EleID, attr.KeyOfEn);
+                                objMicHot.addAnd();
+                                objMicHot.AddWhere(FrmEleDBAttr.Tag1, en.PKVal);
+                                objMicHot.addOrderBy(FrmEleDBAttr.Tag5);
+                                objMicHot.DoQuery();
+                                
+                                this.Add("\t\n<img src='" + appPath + "WF/Img/Btn/microphonedisabled.png' align='middle' style='padding: 0px;margin: 0px;border-width: 0px;width:" + attr.UIWidth + "px;height:" + attr.UIHeight + "px;' />");
+                                int idex = 0;
+                                foreach (FrmEleDB eleDB in dbs)
+                                {
+                                    idex++;
+                                    string href = CCFlowAppPath + "DataUser/UploadFile/" + eleDB.RefPKVal.Replace("@", "") + ".amr";
+                                    this.Add("<a href='" + href + "' target='_blank'>" + idex + ":语音长度 " + eleDB.Tag2 + " 秒</a>&nbsp;&nbsp;");
+                                    if (idex % 5 == 0)
+                                        this.Add("<br/>");
+                                }
+                                //this.Add("\t\n<img id='Ele" + attr.MyPK + "' onclick=\"\" src='" + appPath + "WF/Img/Btn/microphonehot.png' style='padding: 0px;margin: 0px;border-width: 0px;width:" + attr.UIWidth + "px;height:" + attr.UIHeight + "px;' />");
+                                break;
+                        }
                         break;
                     default:
                         break;
@@ -3974,8 +4013,8 @@ namespace CCFlow.WF.UC
                 string src = appPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
                 string fwcOnload = "";
                 string paras = this.RequestParas;
-                    if (paras.Contains("FID=") == false)
-                        paras += "&FID=" + en.GetValStrByKey("FID");
+                if (paras.Contains("FID=") == false)
+                    paras += "&FID=" + en.GetValStrByKey("FID");
 
                 if (paras.Contains("OID=") == false)
                     paras += "&OID=" + en.GetValStrByKey("OID");
@@ -4005,12 +4044,12 @@ namespace CCFlow.WF.UC
                 x = subFlow.SF_X + wtX;
                 this.Add("<DIV id='DIVWC" + fwc.No + "' style='position:absolute; left:" + x + "px; top:" + subFlow.SF_Y + "px; width:" + subFlow.SF_W + "px; height:" + subFlow.SF_H + "px;text-align: left;' >");
                 this.Add("<span>");
-                
+
                 string src = appPath + "WF/WorkOpt/SubFlow.aspx?s=2";
                 string fwcOnload = "";
                 string paras = this.RequestParas;
-                    if (paras.Contains("FID=") == false && en.EnMap.Attrs.Contains("FID")==true )
-                        paras += "&FID=" + en.GetValStrByKey("FID");
+                if (paras.Contains("FID=") == false && en.EnMap.Attrs.Contains("FID") == true)
+                    paras += "&FID=" + en.GetValStrByKey("FID");
 
                 if (paras.Contains("OID=") == false)
                     paras += "&OID=" + en.GetValStrByKey("OID");
@@ -4100,7 +4139,7 @@ namespace CCFlow.WF.UC
 
             foreach (FrmAttachment ath in aths)
             {
-                if (ath.IsVisable == false && activeAths.Contains(ath.MyPK)==false)
+                if (ath.IsVisable == false && activeAths.Contains(ath.MyPK) == false)
                     continue;
 
                 if (ath.UploadType == AttachmentUploadType.Single)
@@ -4116,13 +4155,13 @@ namespace CCFlow.WF.UC
                     lab.ID = "Lab" + ath.MyPK;
                     this.Add(lab);
 
-                   string node = this.Request.QueryString["FK_Node"];
-                   if (string.IsNullOrEmpty(node) && en.EnMap.Attrs.Contains("FK_Node"))
-                   {
-                       node = en.GetValStrByKey("FK_Node");
-                       if (node == "0" || node == "")
-                           node = ((Work)en).NodeID.ToString();
-                   }
+                    string node = this.Request.QueryString["FK_Node"];
+                    if (string.IsNullOrEmpty(node) && en.EnMap.Attrs.Contains("FK_Node"))
+                    {
+                        node = en.GetValStrByKey("FK_Node");
+                        if (node == "0" || node == "")
+                            node = ((Work)en).NodeID.ToString();
+                    }
 
                     if (athDB != null)
                     {

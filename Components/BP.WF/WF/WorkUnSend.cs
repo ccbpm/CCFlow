@@ -367,14 +367,14 @@ namespace BP.WF
                     throw new Exception("分合流点不允许撤消。");
                 case NodeWorkType.WorkFL:
                     /*判断权限,当前的发送人是谁，如果是自己，就可以撤销.*/
-                    if (gwf.Sender.Contains("(" + WebUser.No + ",") || gwf.Sender == WebUser.No || gwf.Sender=="" )
-                    {
+                    //if (gwf.Sender.Contains("(" + WebUser.No + ",") || gwf.Sender == WebUser.No || gwf.Sender=="" )
+                    //{
 
-                    }
-                    else
-                    {
-                        throw new Exception("@分流点不是您发送的，您不能执行撤销。");
-                    }
+                    //}
+                    //else
+                    //{
+                    //    throw new Exception("@分流点不是您发送的，您不能执行撤销。");
+                    //}
                     //return this.DoUnSendFeiLiu(gwf);
                     break;
                 case NodeWorkType.StartWorkFL:

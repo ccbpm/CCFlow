@@ -487,12 +487,22 @@
             switch (event) {
                 case "send": //发送
                     if (confirm("是否真的需要提交发送?")) {
-                        OnTabChange("btnsave");
                         $('#send').linkbutton({ disabled: true });
                         $('.tabs-inner span').each(function (i, n) {
                             var t = $(n).text();
                             if (t != '流程日志') {
-                                $('#tabs').tabs('close', t);
+                                var lastChar = t.substring(t.length - 1, t.length);
+                                if (lastChar == "*") {
+                                    t = t.substring(0, t.length - 1);
+                                    $('#tabs').tabs('select', t);
+
+                                    var tab = $('#tabs').tabs('getTab', t);
+                                    var currScope = tab.find('iframe')[0];
+                                    var contentWidow = currScope.contentWindow;
+                                    contentWidow.isChange = true;
+                                    contentWidow.SaveDtlData();
+                                }
+                                //$('#tabs').tabs('close', t);
                             }
                         });
                         //接收人规则检查
@@ -927,6 +937,17 @@
             newWindow.focus();
             return;
         }
+
+        //关闭所有Tab页
+        function CloseAllTab() {
+            $('.tabs-inner span').each(function (i, n) {
+                var t = $(n).text();
+                if (t != '流程日志') {
+                    $('#tabs').tabs('close', t);                    
+                }
+            });
+        }
+
         function closeWin() {
             if (window.dialogArguments && window.dialogArguments.window) {
                 window.dialogArguments.window.location = window.dialogArguments.window.location;

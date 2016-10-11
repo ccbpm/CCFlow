@@ -66,7 +66,19 @@ namespace CCFlow.WF.WorkOpt
 
             if (templetes.Count == 1)
             {
-               PrintDocV3(templetes[0] as BillTemplate);
+                BillTemplate templete = templetes[0] as BillTemplate;
+                switch (templete.HisBillFileType)
+                {
+                    case BillFileType.Word:
+                    case BillFileType.Excel:
+                        PrintDocV2(templete);
+                        return;
+                    case BillFileType.RuiLang:
+                        PrintDocRuiLiang(templete);
+                        return;
+                    default:
+                        break;
+                }
                 return;
             }
 
@@ -91,18 +103,14 @@ namespace CCFlow.WF.WorkOpt
             if (this.FK_Bill != null)
             {
                 BillTemplate templete = new BillTemplate(this.FK_Bill);
-
-                if (templete.HisBillFileType == BillFileType.RuiLang)
-                    this.PrintDocV4(templete);
-                else
-                    this.PrintDocV2(templete);
+                this.PrintDocV2(templete);
             }
         }
         /// <summary>
-        /// 瑞郎
+        /// 瑞浪
         /// </summary>
         /// <param name="func"></param>
-        public void PrintDocV4(BillTemplate func)
+        public void PrintDocRuiLiang(BillTemplate func)
         {
             IsRuiLang = true;
 
@@ -115,24 +123,7 @@ namespace CCFlow.WF.WorkOpt
             this.Pub1.Add(button);
         }
 
-        public void PrintDocV3(BillTemplate funcs)
-        {
-
-            switch (funcs.HisBillFileType)
-                {
-                    case BillFileType.Word:
-                    case BillFileType.Excel:
-                        PrintDocV2(funcs);
-                        break;
-                    case BillFileType.RuiLang:
-                        PrintDocV4(funcs);
-                        break;
-                    default:
-                        break;
-                }
-
-            
-        }
+        
         /// <summary>
         /// 打印单据
         /// </summary>
@@ -158,18 +149,9 @@ namespace CCFlow.WF.WorkOpt
                 rtf.EnsDataDtls.Clear();
                 if (func.NodeID == 0)
                 {
-
                 }
                 else
                 {
-                    //WorkNodes wns = new WorkNodes();
-                    //if (nd.HisRunModel == RunModel.FL
-                    //    || nd.HisRunModel == RunModel.FHL
-                    //    || nd.HisRunModel == RunModel.HL)
-                    //    wns.GenerByFID(nd.HisFlow, this.WorkID);
-                    //else
-                    //    wns.GenerByWorkID(nd.HisFlow, this.WorkID);
-
                     //把流程主表数据放入里面去.
                     GEEntity ndxxRpt = new GEEntity("ND" + int.Parse(nd.FK_Flow) + "Rpt");
                     ndxxRpt.PKVal = this.WorkID;
@@ -185,19 +167,12 @@ namespace CCFlow.WF.WorkOpt
                     foreach (Entities ens in al)
                         rtf.AddDtlEns(ens);
 
-                    //rtf.AddEn(wk);
-                    ////if (wns.Count == 0)
-                    ////    works = nd.HisWorks;
-                    ////else
-                    ////    works = wns.GetWorks;
-                    //foreach (Work mywk in works)
-                    //{
-                    //    if (mywk.OID == 0)
-                    //        continue;
-                    //    rtf.AddEn(mywk);
-                    //    rtf.ensStrs += ".ND" + mywk.NodeID;
-                    //}
-
+                    //把审核日志表加入里面去.
+                    Paras ps = new BP.DA.Paras();
+                    ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                    ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
+                    ps.Add(TrackAttr.WorkID, this.WorkID);
+                    rtf.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
                 }
 
                 paths = file.Split('_');

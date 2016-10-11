@@ -146,16 +146,14 @@ namespace CCFlow.WF.CCForm
                 }
 
                 //增加轨迹表.
-                string sql = "SELECT * FROM ND1Track WHERE ActionType=0";
+                Paras ps = new BP.DA.Paras();
+                ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
+                ps.Add(TrackAttr.WorkID, this.WorkID);
+                engine.dtTrack= BP.DA.DBAccess.RunSQLReturnTable(ps); 
 
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-
-
-
-                //engine.MakeDoc(file, toPath, tempName + "." + this.FID + ".doc", null, false);
                 engine.MakeDoc(file, toPath, Server.UrlDecode(tempNameChinese) + "." + this.WorkID + ".doc", null, false);
             }
-
 
             #region 保存单据，以方便查询.
             Bill bill = new Bill();
@@ -195,8 +193,6 @@ namespace CCFlow.WF.CCForm
             }
             #endregion
 
-             
-
             BP.Sys.PubClass.OpenWordDocV2(billFile, tempNameChinese + ".doc");
         }
         protected void Page_Load(object sender, EventArgs e)
@@ -209,7 +205,6 @@ namespace CCFlow.WF.CCForm
                 return;
             }
 
-
             this.Pub1.AddTable();
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("ID");
@@ -217,6 +212,7 @@ namespace CCFlow.WF.CCForm
             this.Pub1.AddTDTitle("表单名");
             this.Pub1.AddTDTitle("下载");
             this.Pub1.AddTREnd();
+
 
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
             string path = ApplicationPath + @"DataUser\CyclostyleFile\FlowFrm\" + nd.FK_Flow + "\\" + nd.NodeID + "\\";
@@ -238,9 +234,6 @@ namespace CCFlow.WF.CCForm
             {
                 fileIdx++;
                 string myfile = f.Replace(path, "");
-                //if (myfile.ToLower().Contains(".rtf") == false)
-                //    continue;
-
                 string[] strs = myfile.Split('.');
                 idx++;
 
@@ -258,7 +251,7 @@ namespace CCFlow.WF.CCForm
                 {
                     this.Pub1.AddTD("<a href='Print.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&FK_Flow="+this.FK_Flow+"&WorkID=" + this.WorkID + "&BillIdx=" + fileIdx + "' target=_blank >打印</a>");    
                 }
-                
+
                 this.Pub1.AddTREnd();
             }
             this.Pub1.AddTableEnd();

@@ -159,6 +159,7 @@ namespace CCFlow.WF
                     this.Alert("用户名或密码错误，注意两者区分大小写，请检查是否按下了CapsLock。");
                     return;
                 }
+
                 if (em.CheckPass(pass))
                 {
                     // 执行登陆.

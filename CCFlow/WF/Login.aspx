@@ -13,15 +13,15 @@
         WinShowModalDialog(url, '');
         window.location.href = 'Tools.aspx';
     }
+
     function NoSubmit(fk_emp) {
+
     }
 </script>
 
 <link rel="shortcut icon" href="./Img/ccbpm.ico" type="image/x-icon" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-
-
 
 <table width="100%; border:0px;">
 <caption class=CaptionMsg >切换用户</caption>

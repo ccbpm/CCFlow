@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>新建分组</title>
+     <!-- 引用配置文件.-->
+    <script src="../js/config.js" type="text/javascript"></script>
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            var mytb = document.getElementById("TB_Name");
+            mytb.focus();
+            $('#TB_Name').blur(function () //文本失去焦点时触发的事件
+            {
+                var TB_Name = document.getElementById("TB_Name").value;
+                var val = $('input:radio[name="RB_QPJP"]:checked').val();
+                if (TB_Name == "") {
+                    document.getElementById("TB_No").value = "";
+                    return;
+                }
+
+                if (val == "ziduanquanpin") {
+                    ParseStringToPinYin(TB_Name, true);
+                }
+                else {
+                    ParseStringToPinYin(TB_Name, false);
+                }
+
+            });
+            //点击全拼
+            $('input[id=RB_QP]').change(function () {
+                var TB_Name = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(TB_Name, true);
+            });
+            //点击简拼
+            $('input[id=RB_JP]').change(function () {
+                var TB_Name = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(TB_Name, false);
+            });
+        });
+
+        //转拼音，并去除开头为数字的字符
+        function ParseStringToPinYin(parseString, parseModel) {
+            parseString = $.trim(parseString);
+            if (parseString != "") {
+                $.post(controllerURLConfig, { action: 'ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
+                    if (data != "false") {
+                        document.getElementById("TB_No").value = data;
+                    }
+                });
+            }
+        }
+
+
+        //传入父窗体
+        function GetFrmInfo() {
+            return {
+                Name: $.trim($("#TB_Name").val()),
+                No: $.trim($("#TB_No").val()),
+                IsCreateLabel: $("#CB_SCBQ").prop("checked")
+            };
+        }
+    </script>
+
+</head>
+<body>
+
+ <fieldset>
+    <legend>新建空白分组</legend>
+    <table>
+    <tr> 
+    <td>分组名称</td>
+    <td>  <input type="text" value="" name="TB_Blank_Name" id="TB_Blank_Name" />  </td>
+    </tr>
+
+    <tr> 
+    <td>编号</td>
+    <td>  <input type="text" value="" name="TB_Blank_No" id="TB_Blank_No" />   </td>
+    </tr>
+
+    <tr>
+    <td colspan="4"> <font color="gray"> 空白字段分组，建立后可以把相关的字段放入此分组里。</font></td>
+    </tr>
+
+    <tr> 
+    <td colspan="4" > 
+    <input type="button" value="保存"   onclick="SaveBlank()" id="Btn_SaveBlank" name="Btn_SaveBlank" />
+     </td>
+    </tr>
+    </table>
+    </fieldset>
+
+
+
+    
+ <fieldset>
+    <legend>新建审核分组</legend>
+    <table>
+    <tr> 
+    <td>分组名称</td>
+    <td>  <input type="text" value="" name="TB_Check_Name" id="TB_Check_Name" />  </td>
+    </tr>
+
+    <tr> 
+    <td>前缀</td>
+    <td>  <input type="text" value="" name="TB_Check_No" id="TB_Check_No" />   </td>
+    </tr>
+
+    <tr>
+    <td colspan="4"> <font color="gray"> 审核分组：同时创建 _Checker, _CheckRDT, _CheckNote 三个字段.</font></td>
+    </tr>
+
+    <tr> 
+    <td colspan="4" > 
+    <input type="button" value="保存"   onclick="SaveCheck()" id="Btn_SaveCheck" name="Btn_SaveBlank" />
+     </td>
+    </tr>
+    </table>
+    </fieldset>
+     
+
+    <fieldset>
+    <legend> <a href="GroupField.aspx?DoType=NewEvalGroup&FK_MapData=<%=this.FK_MapData %>" > 创建工作质量考核字段分组</a></legend>
+     
+     <ul>
+      <li> 创建质量考核: EvalEmpNo,EvalEmpName,EvalCent,EvalNote 4个必要的字段。</li>
+     </ul>
+    </fieldset>
+
+</body>
+</html>

@@ -219,8 +219,17 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         return;
                     case "HidAttr": //获得隐藏的字段.
                         MapAttrs attrs = new MapAttrs();
-                        attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, 0);
+                        attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData,
+                            MapAttrAttr.UIVisible, 0);
                         msg = attrs.ToJson();
+                        break;
+                    case "Up": //移动位置..
+                        MapAttr attr = new MapAttr(this.MyPK);
+                        attr.DoUp();
+                        break;
+                    case "Down": //移动位置.
+                        MapAttr attrDown = new MapAttr(this.MyPK);
+                        attrDown.DoDown();
                         break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;

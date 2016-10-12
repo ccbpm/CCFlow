@@ -247,10 +247,6 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD("合并单元格数");
             DDL ddl1 = new DDL();
             ddl1.ID = "DDL_ColSpan";
-            //for (int i = 1; i < 12; i++)
-            //{
-            //    ddl1.Items.Add(new ListItem(i.ToString(), i.ToString()));
-            //}
 
             ddl1.Items.Add(new ListItem("1", "1"));
             ddl1.Items.Add(new ListItem("3", "3"));

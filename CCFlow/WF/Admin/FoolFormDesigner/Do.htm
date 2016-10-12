@@ -19,7 +19,6 @@
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
-
             var paras = window.location.search;
 
             //初始化 GroupID.
@@ -30,13 +29,20 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    if (data == null || data=="") {
+
+                    if (data == null || data == "") {
                         window.close();
                         return;
                     }
 
-                   // alert(data);
-                    data = JSON.parse(data);
+                    if (data.indexOf('err@') == 0) {
+
+                        $("#Msg").html(data);
+                        return;
+                    }
+
+                    // alert(data);
+                    //data = JSON.parse(data);
                 }
             });
 

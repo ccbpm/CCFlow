@@ -4,8 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head runat="server">
     <title>编辑外键表字段</title>
-	<script language="JavaScript" src="../../Comm/JScript.js" ></script>
-    <script language=javascript>
+	<script language="JavaScript" src="../../Comm/JScript.js" type="text/jscript" ></script>
+    <script language="javascript" type="text/javascript">
     /* ESC Key Down  */
     function Esc()
     {

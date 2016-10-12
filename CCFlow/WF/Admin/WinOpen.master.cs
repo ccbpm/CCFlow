@@ -17,7 +17,7 @@ public partial class WF_Admin_WinOpen : System.Web.UI.MasterPage
         {
             string url = this.Request.RawUrl;
             this.Session.Add("LastUrl", url);
-            this.Response.Redirect("/WF/Admin/ReLogin.aspx?LastUrl=[" + url + "]", true);
+            this.Response.Redirect("/WF/Admin/ReLogin.htm?LastUrl=[" + url + "]", true);
 
             //throw new Exception("@非法的用户必须由admin才能操作，现在登录用户是：" + BP.Web.WebUser.No);
         }

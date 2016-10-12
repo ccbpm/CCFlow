@@ -368,6 +368,7 @@ namespace CCFlow.WF
                                 continue;
                         }
                         #endregion 过滤不能到达的节点.
+
                         tempToNodeID = mynd.NodeID;
                         num++;
                     }
@@ -381,7 +382,6 @@ namespace CCFlow.WF
                 this.Response.Redirect("Accepter.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + tempToNodeID + "&FID=" + this.FID + "&type=" + this.AccepterType + "&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "&IsWinOpen=" + this.IsWinOpen, true);
                 return;
             }
-
 
             try
             {
@@ -784,7 +784,6 @@ namespace CCFlow.WF
             //mycb.Text = "以后发送都按照本次设置计算";
             //mycb.Checked = accps.IsSetNextTime;
             //this.Pub1.Add(mycb);
-
         }
         //保存
         public void saveMet()

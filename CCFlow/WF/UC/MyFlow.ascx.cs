@@ -352,8 +352,8 @@ namespace CCFlow.WF.UC
 
             #region 加载流程控制器 - 按钮
             BtnLab btnLab = new BtnLab(currND.NodeID);
-            //  BtnWord = null;  // btnLab.WebOfficeEnable + "";
 
+            #region 判断如果是嵌入方式的表单.
             if (this.currND.HisFormType == NodeFormType.SelfForm)
             {
                 /*如果是嵌入式表单.*/
@@ -413,7 +413,10 @@ namespace CCFlow.WF.UC
                 if (btnLab.SaveEnable && isAskFor == false)
                     toolbar.Add("<input type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\" SaveSelfFrom();\" />");
             }
-            else
+            #endregion 判断如果是嵌入方式的表单.
+
+            #region 内置表单..
+            if (this.currND.HisFormType != NodeFormType.SelfForm)
             {
                 /*启用了其他的表单.*/
                 if (currND.IsEndNode && isAskFor == false)
@@ -480,6 +483,7 @@ namespace CCFlow.WF.UC
                     this.Btn_Save.Click += new System.EventHandler(ToolBar1_ButtonClick);
                 }
             }
+            #endregion 内置表单..
 
             if (btnLab.WorkCheckEnable && isAskFor == false)
             {

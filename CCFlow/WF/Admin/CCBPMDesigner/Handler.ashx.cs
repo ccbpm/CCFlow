@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Web;
 using BP.En;
@@ -157,6 +158,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                     case "LoginInit": //登录初始化..
                         if (BP.DA.DBAccess.IsExitsObject("WF_Emp") == false)
                             msg="url@=../DBInstall.aspx";
+                        
                         break;
                     case "Login":
                         msg = this.Login();
@@ -184,23 +186,29 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.No != "admin")
                 return "url@Login.htm?DoType=Logout";
 
-            // 执行升级
-            string str = BP.WF.Glo.UpdataCCFlowVer();
-
-            string osModel = "";
+            Hashtable ht = new Hashtable();
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                osModel = "0";
-            osModel = "1";
+                ht.Add("OSModel", "0");
+            else
+                ht.Add("OSModel", "1");
 
-            if (str != null)
+            try
             {
-                if (str == "0")
-                    return "{ msg:'系统升级错误，请查看日志文件\\DataUser\\log\\*.*', OSModel:'" + osModel + "'}";
-                else
-                    return "{ msg:'系统成功升级到:" + str + " ，系统升级不会破坏现有的数据', OSModel:'" + osModel + "'}";
+                // 执行升级
+                string str = BP.WF.Glo.UpdataCCFlowVer();
+
+                if (str == null)
+                    str = "";
+
+                ht.Add("Msg", str);
+            }
+            catch (Exception ex)
+            {
+                ht.Add("Msg", ex.Message);
             }
 
-            return "{ msg:'', OSModel:'" + osModel + "'}";
+            //生成Json.
+            return BP.Tools.Json.ToJson(ht, false);
         }
 
         public string Login()
@@ -215,7 +223,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                 return "err@用户名或密码错误.";
             //让其登录.
             BP.WF.Dev2Interface.Port_Login(emp.No,true);
-            return "SID=xxx&UserNo="+emp.No;
+            return "SID=" + emp.SID + "&UserNo=" + emp.No;
         }
 
         public bool IsReusable

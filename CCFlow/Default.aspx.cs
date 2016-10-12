@@ -35,7 +35,7 @@ namespace CCFlow
             }
             else
             {
-                this.Response.Redirect("./WF/Admin/CCBPMDesigner/Login.aspx", true);
+                this.Response.Redirect("./WF/Admin/CCBPMDesigner/Login.htm", true);
             }
             return;
         }

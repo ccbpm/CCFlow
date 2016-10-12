@@ -240,7 +240,7 @@ namespace BP.WF
                 dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    sql = "UPDATE WF_CH SET Week=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString()) + " WHERE MyPK='" + dr[0].ToString() + "'";
+                    sql = "UPDATE WF_CH SET WeekNum=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString()) + " WHERE MyPK='" + dr[0].ToString() + "'";
                     BP.DA.DBAccess.RunSQL(sql);
                 }
                 #endregion  增加week字段.

@@ -189,6 +189,7 @@
                url: Handler + "?DoType=DefaultInit&m=" + Math.random(),
                dataType: 'html',
                success: function (data) {
+
                    if (data.indexOf('err@') == 0) {
                        alert(data);
                        return;
@@ -199,16 +200,14 @@
                        return;
                    }
 
-                   //转化成json.
                    data = JSON.parse(data);
 
-                   //给组织模式赋值.
+                   var msg = data.Msg;
                    osModel = data.OSModel;
 
-                   //提示升级信息.
-                   if (data.Msg != "") {
-                       alert(data.msg);
-                   }
+                   if (msg!="")
+                      alert(msg);
+                    
                }
            });
 
@@ -487,7 +486,7 @@
         function LoginOut() {
             $.messager.confirm("提示", "确定需要退出？", function (n) {
                 if (n == true) {
-                    window.location.href = "Login.aspx?DoType=Logout";
+                    window.location.href = "Login.htm?DoType=Logout";
                 }
             });
         }

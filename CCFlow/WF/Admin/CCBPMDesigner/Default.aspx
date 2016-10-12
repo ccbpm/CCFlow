@@ -176,7 +176,7 @@
         osModel = '<%=BP.Sys.SystemConfig.OSModel %>';
 
         $(function () {
-            var content = createFrame('Welcome.aspx');
+            var content = createFrame('Welcome.htm');
             $('#tabs').tabs('add', {
                 title: '首页',
                 id: 'WelCome',

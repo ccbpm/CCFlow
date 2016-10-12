@@ -3,6 +3,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+     <script type="text/javascript">
+         function OpenTab(id, name, url, icon) {
+             if (window.parent != null && window.parent.closeTab != null) {
+                 window.parent.closeTab(name);
+                 window.parent.addTab(id, name, url, icon);
+             }
+         }
+         function OpenNewFlowPanel() {
+             if (window.parent && window.parent.newFlow) {
+                 window.parent.newFlow();
+             }
+         }
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -20,7 +33,6 @@
                             <img src="./Img/NewFlow.png" border="0" />&nbsp;新建流程</a></li>
                         <li><a href="javascript:OpenTab('TempleteFlowSearch','关键字查询流程模版','../CCBPMDesigner/SearchFlow.aspx','icon-search');">
                             <img src="./Img/SearchKey.png" alt="" border="0" />&nbsp;关键字查询流程模版</a></li>
-                        <%--<li><a href="" href="../CCBPMDesigner/SearchFlow.aspx" ><img src="./Img/SearchKey.png" alt="" border="0" />&nbsp;关键字查询流程模版</a></li>--%>
                         <li><a href="javascript:OpenTab('TempleteFlowList','流程列表','../CCBPMDesigner/Flows.aspx','icon-flows');">
                             <img src="./Img/flows.png" border="0" />&nbsp;流程列表</a></li>
                         <li><a href="javascript:OpenTab('TempleteFlowControl','流程监控','../CCBPMDesigner/App/Welcome.aspx','icon-Monitor');">
@@ -39,7 +51,7 @@
                     <ul style="list-style: none">
                         <li><a href="">
                             <img src="./Img/NewFlow.png" />新建表单</a></li>
-                        <li><a href="../CCBPMDesigner/SearchFlow.aspx">
+                        <li><a href="../CCBPMDesigner/SearchFlow.htm">
                             <img src="./Img/NewFlow.png" border="0" />关键字查询表单模版</a></li>
                         <li><a href="javascript:OpenTab('NewDbSrc','新建数据源','../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New','icon-new');">
                             <img src="./Img/NewFlow.png" />新建数据源</a></li>

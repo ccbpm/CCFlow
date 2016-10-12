@@ -278,13 +278,13 @@ function CloseAllTabs() {
 
 //查询流程
 function SearchFlow() {
-    url = "./../CCBPMDesigner/SearchFlow.aspx?Lang=CH";
+    url = "./../CCBPMDesigner/SearchFlow.htm?Lang=CH";
     addTab("SPO", "查询流程", url);
 }
 
 //查询表单
 function SearchForm() {
-    url = "./../CCFormDesigner/SearchForm.aspx?Lang=CH";
+    url = "./../CCFormDesigner/SearchForm.htm?Lang=CH";
     addTab("SPO", "查询表单", url);
 }
 

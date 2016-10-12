@@ -67,7 +67,7 @@ function newFlow() {
         currSortId = $('#flowTree').tree('getSelected').id; //liuxc,20150323
     }
     var dgId = "iframDg";
-    var url = "DialogCtr/NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
+    var url = "NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
     OpenEasyUiDialog(url, dgId, '新建流程', 600, 394, 'icon-new', true, function () {
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();

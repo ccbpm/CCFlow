@@ -20,6 +20,7 @@ function getArgsFromHref(sArgName) {
 
 //公共方法
 function ajaxService(param, callback, scope, levPath) {
+
     var url = "/WF/Admin/CCBPMDesigner/CCBPMDesignerBase.ashx";
 
     $.ajax({

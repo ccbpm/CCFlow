@@ -145,6 +145,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthSingle.png" />
@@ -485,7 +486,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\Designer.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.xml" />
     <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\DialogCtr\NewFlow.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\NewFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\API.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\App.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\AutoStart.png" />
@@ -7920,6 +7921,7 @@
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
+    <Folder Include="WF\Admin\CCBPMDesigner\DialogCtr\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />
     <Folder Include="WF\Data\FlowDemo\Flow.Buess\01.日常办公\" />

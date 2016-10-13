@@ -8,32 +8,48 @@
     3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
     -->
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
-    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <style type="text/css">
-        #TB_Doc
+        #TB_ReturnReason
         {
-            height: 132px;
-            width: 433px;
+            height: 150px;
+            width: 100%;
+        }
+
+        body {
+            background: transparent;
         }
     </style>
     <script type="text/javascript">
         $(function () {
-            InitMsg();
-        });
+            InitParam();
 
+            InitReturnMsg();
+        });
+        var pageData = {};
+        function InitParam() {
+            pageData.FID = GetQueryString("FID");
+            pageData.WorkID = GetQueryString("WorkID");
+            pageData.FK_Node = GetQueryString("FK_Node");
+            pageData.FK_Flow = GetQueryString("FK_Flow");
+
+        }
         //确定 退回 执行退回操作
         function ReturnWork() {
             //WorkID, this.FID, this.FK_Node
             $.ajax({
                 type: 'post',
                 async: true,
-                data: { FK_Flow: GetQueryString('FK_Flow'), WorkID: pageData.WorkID, FID: pageData.FID, FK_Node: pageData.FK_Node },
-                url: "../WF/MyFlow.ashx?Method=DoReturnWork&m=" + Math.random() + "&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnMsg=' + $('#TB_Doc').val(),
+                data: pageData,
+                url: "../MyFlow.ashx?Method=DoReturnWork&m=" + Math.random() + "&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnMsg=' + $('#TB_Doc').val(),
                 dataType: 'html',
                 success: function (data) {
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                        window.parent.returnWorkWindowClose();
+                        window.parent.returnWorkWindowClose(data);
                     }
                 }
             });
@@ -47,12 +63,12 @@
         }
         //初始化页面退回信息
         function InitReturnMsg() {
-            var param = { FK_Node: GetQueryString('FK_Node'), WorkID: GetQueryString('WorkID'), FID: GetQueryString('FID') };
+            var param = pageData;
             $.ajax({
                 type: 'post',
                 async: true,
                 data: param,
-                url: "/WF/MyFlow.ashx?Method=ReturnToNodes&m=" + Math.random(),
+                url: "../MyFlow.ashx?Method=ReturnToNodes&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     var returnNodeArr = JSON.parse(data);
@@ -67,31 +83,25 @@
     </script>
 </head>
 <body>
-    <form id="cc">
-        <table>
-            <caption>工作退回</caption>
-            <tr>
-
-                <td>
-                    请选择要退回到的节点:
-                    <select id="DDL_Nodes" name="DDL_Nodes"></select>
-                </td>
-            </tr>
-
-            <tr>
-                <td> <textarea id="TB_Doc" name="TB_Doc"></textarea> </td>
-            </tr>
-
-
-            <tr>
-                <td> 上传附件：</td>
-            </tr>
-
-
-            <tr>
-                <td><input type="button" value="确定退回" onclick="ReturnWork();" /><input type="button" value="关闭" onclick="Close();" /></td>
-            </tr>
-        </table>
-    </form>
+    <div>
+        <div>
+            <label style="width:200px;"> 请选择要退回到的节点:</label>
+            <select id="DDL_Nodes" name="DDL_Nodes"></select>
+        </div>
+        <div>
+            <label>退回原因：</label></div>
+        <div>
+            <textarea id="TB_ReturnReason" name="TB_Doc"></textarea>
+        </div>
+        <div>
+            <label>上传附件：</label>
+        </div>
+        <div>
+            预留
+        </div>
+        <div style="text-align:right;">
+            <input type="button" value="确定退回" onclick="ReturnWork();" /><input type="button" value="关闭" onclick="Close();" />
+        </div>
+    </div>
 </body>
 </html>

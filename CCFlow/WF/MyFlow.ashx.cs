@@ -643,6 +643,12 @@ namespace CCFlow.WF
                     htMain.Add(key.Replace("CB_", ""), this.Request.Form[key]);
                     continue;
                 }
+
+                if (key.Contains("RB_"))
+                {
+                    htMain.Add(key.Replace("RB_", ""), this.Request.Form[key]);
+                    continue;
+                }
             }
             return htMain;
         }
@@ -675,6 +681,8 @@ namespace CCFlow.WF
                     {
                         return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
                     }
+#warning 杨玉慧
+                    return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
                 }
 
 
@@ -783,11 +791,11 @@ namespace CCFlow.WF
                 this.FID, BP.Web.WebUser.No);
 
             string xml = "c:\\WorkNode.xml";
-            ds.WriteXml(xml);
+            //ds.WriteXml(xml);
 
             string json = BP.Tools.Json.ToJson(ds);
-            BP.DA.DataType.WriteFile("c:\\WorkNode.json", json);
-            return "";
+            //BP.DA.DataType.WriteFile("c:\\WorkNode.json", json);
+            return json;
         }
         public void ProcessRequest(HttpContext context)
         {
@@ -872,7 +880,7 @@ namespace CCFlow.WF
             MapExts exts = new MapExts(wk.ToString());
             DataTable dtMapExt = exts.ToDataTableDescField();
             dtMapExt.TableName = "Sys_MapExt";
-            myds.Tables.Add(dtMapExt);
+            //myds.Tables.Add(dtMapExt);
 
             return BP.Tools.Json.ToJson(myds);
         }

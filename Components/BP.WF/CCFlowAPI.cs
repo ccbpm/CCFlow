@@ -92,7 +92,7 @@ namespace BP.WF
 
                 //执行装载填充》
                 MapExt me = new MapExt();
-                me.MyPK = wk.ToString() + "_" + MapExtXmlList.PageLoadFull;
+                me.MyPK = wk.NodeFrmID + "_" + MapExtXmlList.PageLoadFull;
                 if (me.RetrieveFromDBSources() == 1)
                 {
                     //执行通用的装载方法.
@@ -176,7 +176,7 @@ namespace BP.WF
 
 
                 #region 把外键表加入DataSet
-                DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
+                DataTable dtMapAttr = myds.Tables["Sys_MapAttr"] ;
 
                 MapExts mes = md.MapExts;
 

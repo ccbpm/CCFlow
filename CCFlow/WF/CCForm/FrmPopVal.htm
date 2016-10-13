@@ -5,6 +5,7 @@
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
@@ -13,6 +14,9 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
     <style type="text/css">
+    * {
+        list-style: none;
+    }
         body .table tbody tr td {
             line-height: 18px;
         }
@@ -78,6 +82,7 @@
 
             .form_tree #orgTxt {
                 border-radius: 15px 0px 0px 15px !important;
+                margin: 0px !important;
                 /*border:#2884fa 1px solid;*/
             }
 
@@ -85,8 +90,18 @@
                 border-radius: 0px 15px 15px 0px !important;
                 /*broder:#2884fa 1px solid;*/
             }
+    #groupTable #dt ul {
+        /*background: #f4f9ff;*/
+        font-weight: normal;
+        background: #d4e6fe;
+    }
+    #groupTable #dt > li {
+        /*background: #d4e6fe;*/
+        font-weight: bold;
+        background: #f4f9ff;
+    }
     </style>
-    <script type="text/javascript" >
+    <script type="text/javascript">
         $(function () {
             dtTable();
             $('.btnsv').bind('click', function () {
@@ -110,14 +125,14 @@
                         naData.push((trData.Name));
                         if (tbData1.PopValFormat == "OnlyNo") {
                                 resultObj = { "No": noData };
-                        }else if(tbData1.PopValFormat == "OnlyName"){
+                    } else if (tbData1.PopValFormat == "OnlyName") {
                                 resultObj = { "Name": naData };
                         } else if (tbData1.PopValFormat == "NoName") {
                             resultObj = {
                                 "No": noData,
                                 "Name": naData 
                             };
-                        }else{
+                    } else {
                             for (var key in trData) {
                                 resultObj[key].push((trData[key]));
                             }
@@ -127,7 +142,23 @@
                 console.log(window.returnValue);
                 window.close();
             });
+            $('#test').bind('click', function () {
+                if ($('#orgjstree').css('display') == "none") {
+                    $('#orgjstree').css('display', 'block');
+
+                    var instance = $('#orgjstree').jstree(true);
+                    if ($('#orgTxt').val() != undefined && $('#orgTxt').val() != '') {
+                        instance.select_node($('#orgTxt').val());
+                    }
+                }
+                else {
+                    $('#orgjstree').css('display', 'none');
+                }
+            });
         });
+
+        //配置数据
+        var pageSetData = {};
 
         function dtTable() {
             var fk_MapExt = GetQueryString("FK_MapExt");
@@ -138,78 +169,330 @@
                 dataType: 'html',
                 success: function (data) {
                     if (data != null) {
-                        console.log(data);
-                        var dataArrs = JSON.parse(data).Hashtable;
-                        var dataArr = JSON.parse(data).DTObjs;
-                        if (dataArrs.length > 0) {
-                            var tbData = $(".flowLists table");
-                            if (tbData != undefined && tbData.data != undefined && tbData.data() != undefined && tbData.data().data != undefined && tbData.data().data == true) {
-                                $.each(dataArrs, function (i, obje) {
-                                    $($('.flowLists table')[i]).data().data = obje;
-                                });
-                            }
-                        }
-                        if (dataArr.length > 0) {
-                            var colencn = dataArrs[0].PopValColNames;
-                            var SelectM = dataArrs[0].PopValSelectModel;
-                            var WorkM = dataArrs[0].PopValWorkModel;
-                            var keys;
-                            var values;
-                            var html1 = '';
-                            $.each(dataArr, function (i, obje) {
-                                var tableHeader = "<tr><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=checkbox@' data-coltype='Operation1'><input type='checkbox' /></th>";
-                                if (colencn != "") {
-                                        for (var i = 1; i < colencn.split("@").length; i++) {
-                                            keys = colencn.split("@")[i].split("=")[0];
-                                            values = colencn.split("@")[i].split("=")[1];
-                                            for (var key in obje) {
-                                                if (key == keys) {
-                                                    tableHeader +=
-                                                        '<th data-colname=' + key + '>' + values + '</th>';
+                        var setDataArr = null;
+                        //SelfUrl   自定义URL
+                        if (data.indexOf('@SelfUrl')==0) {
+                           
+                            if (parent.window.jsonStr != undefined && parent.window.jsonStr.trim() != '') {
+                                var workNodeData = JSON.parse(parent.window.jsonStr);
+                                workNodeData.MainTable;
+
+                                var params = getQueryStringFromUrl(data);
+                                if (params != null && params.length > 0) {
+                                    $.each(params, function (i, param) {
+                                        if (param.indexOf('@') == 0) {//是需要替换的参数
+                                            paramArr = param.split('='); 
+                                            if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                                                if (paramArr[1].indexOf('@WebUser.') == 0) {
+                                                    params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr('@WebUser.'.length)];
+                                                }
+                                                if (workNodeData.MainTable[0][paramArr[1].substr(1)] != undefined) {
+                                                    params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr(1)];
                                                 }
                                             }
                                         }
-                                    } else {
-                                        for (var key in obje) {
-                                            tableHeader += '<th data-colname=' + key + '>' + key + '</th>';
+                                    });
+                                    data = data.substr(0, data.indexOf('?')) + "?" + params.join('&');
+                                }
+                            }
+                            //将URL中的@参数替换成值
+                            window.location.href = data;//URL时直接返回了路径
+                            return;
+                        } else {
+                            setDataArr = JSON.parse(data).Hashtable;
+                        }
+                        pageSetData = setDataArr;
+                        var dataArr = JSON.parse(data).DTObjs;
+                        var dtgArr = JSON.parse(data).DTGroup;
+                        var dteArr = JSON.parse(data).DTEntity;
+                        if (setDataArr.length > 0) {
+                            var tbData = $(".flowLists table");
+                            if (tbData != undefined && tbData.data != undefined && tbData.data() != undefined && tbData.data().data != undefined && tbData.data().data == true) {
+                                $.each(setDataArr, function (i, obje) {
+                                    $($('.flowLists table')[i]).data().data = obje;
+                                });
+                            }
+                            var ulData = $("#groupTable #dt");
+                            if (ulData != undefined && ulData.data != undefined && ulData.data() != undefined && ulData.data().data != undefined && ulData.data().data == true) {
+                                $.each(setDataArr, function (i, obje) {
+                                    $($('#groupTable #dt')[i]).data().data = obje;
+                                });
+                            }
+                        }
+                        var WorkM = setDataArr[0].PopValWorkModel;
+                        if (WorkM == "Group") {
+                            $('#groupTable').css('display', 'block');
+                            var ultdg = '';
+                            var ultde = '';
+                            if (pageSetData[0].PopValSelectModel == "More") {//选择模式是多选
+                                $.each(dtgArr, function (i, obje) {
+                                    for (var k = 0; k < dteArr.length; k++) {
+                                        if (obje.No == dteArr[k].fk_dept) {
+                                            ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
+                                         }
+                                    }
+                                    ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" + ultde + "</ul></li>";
+                                    ultde = "";
+                                });
+                               } else {//选择模式是单选
+                                $.each(dtgArr, function (i, obje) {
+                                    $.each(dteArr, function (k, obj) {
+                                        if (obje.No == obj.fk_dept) {
+                                            ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='radio' name='cm' style='margin: 5px 5px;' class='groupr'/>" + obj.Name + "</li>";
+                                        }
+                                    });
+                                    ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'>" + obje.Name + "<ul style='overflow:hidden;margin:10px 0px;'>" + ultde + "</ul></li>";
+                                    ultde = "";
+                                });
+                            }
+                            $("#groupTable #dt").html(ultdg);
+                            $(".ulm_head").click(function () {
+                                if (this.checked) {
+                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                                } else {
+                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                                }
+                                GetGroupReturnVal();
+                            });
+                            $(".groupr").click(function () {
+                                GetGroupReturnVal();
+                            });
+                            //机构绑定
+                            if (dtgArr.length > 0) {
+                                var liData = $("#groupTable #dt>li");
+                                if (liData != undefined && liData.data != undefined && liData.data() != undefined && liData.data().data != undefined && liData.data().data == true) {
+                                    $.each(dtgArr, function (i, obje) {
+                                        $($('#groupTable #dt>li')[i]).data().data = obje;
+                                    });
+                                }
+                            }
+                            //实体绑定
+                            $.each(dteArr, function (k, obj) {
+                                var lifs = $("#groupTable #dt .lif");
+                                for (var i = 0; i < lifs.length; i++) {
+                                    if ($(lifs[i]).attr("name") == obj.fk_dept) {
+                                        var limData = $(lifs[i]).find(".lim");
+                                        if (limData != undefined && limData.data != undefined && limData.data() != undefined && limData.data().data != undefined && limData.data().data == true) {
+                                            limData.data().data = obj;
                                         }
                                     }
-                                    tableHeader += '</tr>';
-                                    $(".wupop thead").html(tableHeader);
+                                }
                             });
-                            if (SelectM == "One") {
-
+                            //树模式
+                        } else if (WorkM == "Tree" || WorkM == "TreeDouble") {//单实体+多实体
+                            initTreeData(WorkM);
+                        } else if (dataArr.length > 0) {//TablePage 和TableOnly
+                            var colencn = setDataArr[0].PopValColNames;
+                            //设置表格的表头
+                            var tableHeader = '';
+                            if (pageSetData[0].PopValSelectModel == "More") {//选择模式是单选
+                                tableHeader = "<tr data-data='true'><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=checkbox class=ck_tbody@' data-coltype='Operation1'><input type='checkbox' class='ck_head'/></th>";
+                            } else {//选择模式是多选
+                                tableHeader = "<tr data-data='true'><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=radio name=rb class=rb_tbody@' data-coltype='Operation1'></th>";
                             }
-                            if (WorkM == "Table") {
-                                $("#poptablew").show();
-                                $.each(dataArr,function(i, obje) {
-                                        var html = "<tr data-data='true'><td><input type='checkbox' /></td>";
-                                        for (var ele in obje) {
-                                            html += "<td>" + obje[ele] + "</td>";
+                            var colEnCnArr = colencn.split('@');
+                            colEnCnArr = $.grep(colEnCnArr, function (value) {
+                                return value != '' && value.split('=').length == 2;
+                            });
+                            if (colEnCnArr.length > 0) {
+                                for (var i = 0; i < colEnCnArr.length; i++) {
+                                    var enName = colEnCnArr[i].split('=')[0];
+                                    var cnName = colEnCnArr[i].split('=')[1];
+                                    tableHeader += '<th data-colname=' + enName + '>' + cnName + '</th>';
+                                }
+                            } else {
+                                if (dataArr.length > 0) {
+                                    for (var property in dataArr[0]) {
+                                        tableHeader += '<th data-colname="' + property + '">' + property + '</th>';
+                                    }
+                                } else {
+                                    tableHeader += '<th data-colname="No">编号</th>';
+                                    tableHeader += '<th data-colname="Name">名称</th>';
+                                }
+                            }
+                            tableHeader += '</tr>';
+
+
+                            //填充无分页表格的表格内容
+                            //表格无分页模式
+                            if (WorkM == "TableOnly") {
+                                $('#poptablew').css('display', 'block');
+                                $("#poptablew .wupop thead").html(tableHeader);
+                                var html = '';
+                                $.each(dataArr, function (k, obje) {
+                                    if (obje) {
+                                        html += "<tr>";
+                                        var headers = $(".wupop thead tr th");
+                                        for (var i = 0; i < headers.length; i++) {
+                                            if ($(headers[i]).data != undefined && $(headers[i]).data().colname != undefined && obje[$(headers[i]).data().colname] != undefined) {
+                                                if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "date") {//类型是日期的TD
+                                                    html += "<td>" + _this.DateFromMSJsonString(obje[$(headers[i]).data().colname]) + "</td>"
+                                                }
+                                                else if ($(headers[i]).data().opeation != undefined) {//存在操作按钮的TD
+                                                    //添加字符截取功能
+                                                    if ($(headers[i]).data().charlength != undefined) {
+                                                        var charlength = $(headers[i]).data().charlength;
+                                                        html += "<td title='" + obje[$(headers[i]).data().colname] + "'> <a onclick=" + $(headers[i]).data().opeation + ">" + (obje[$(headers[i]).data().colname].length <= charlength ? obje[$(headers[i]).data().colname] : (obje[$(headers[i]).data().colname].substr(0, charlength)) + "...") + "</a></td>"
+                                                    } else {
+                                                        html += "<td> <a onclick=" + $(headers[i]).data().opeation + ">" + obje[$(headers[i]).data().colname] + "</a></td>"
+                                                    }
+                                                }
+                                                    //是否把TITLE放上去
+                                                else if ($(headers[i]).data().title != undefined) {
+                                                    if ($(headers[i]).data().title != undefined) {
+                                                        var title = $(headers[i]).data().title;
+                                                        if (title == "true" || title) {
+                                                            html += "<td title='" + obje[$(headers[i]).data().colname] + "'>" + obje[$(headers[i]).data().colname] + "</td>"
+                                                        }
+                                                        else {
+                                                            html += "<td>" + obje[$(headers[i]).data().colname] + "</td>"
+                                                        }
+                                                    }
+                                                }
+                                                else if ($(headers[i]).data().visiable != undefined) {
+                                                    html += "<td style='display:none;'>" + obje[$(headers[i]).data().colname] + "</td>"
+                                                }
+                                                else {//添加字符截取功能 没有类型的TD
+                                                    if ($(headers[i]).data().charlength != undefined) {
+                                                        var charlength = $(headers[i]).data().charlength;
+
+                                                        html += "<td title='" + obje[$(headers[i]).data().colname] + "'>" + (obje[$(headers[i]).data().colname].length <= charlength ? obje[$(headers[i]).data().colname] : (obje[$(headers[i]).data().colname].substr(0, charlength) + "...")) + "</td>"
+                                                    } else {
+                                                        html += "<td>" + obje[$(headers[i]).data().colname] + "</td>";
+                                                    }
+                                                }
+                                            }
+                                            else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "SN") {//序号  序号的类型是SN colname列名称为空
+                                                html += "<td>" + (parseInt(k) + 1 + parseInt(_this.InitData.PageSize) * (parseInt(_this.InitData.PageIndex) - 1)) + "</td>";
+                                            }
+                                            else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Operation") {//序号  序号的类型是SN colname列名称为空){
+                                                html += ('<td><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
+                                                html += "</tr>";
+                                            }
+                                                //自定义内容
+                                            else if ($(headers[i]).data().custom != undefined && $(headers[i]).data().customcontent != undefined) {
+
+                                                var tmp = '';
+                                                var customCount = parseInt($(headers[i]).data().customcontent);
+                                                for (var j = 1; j <= customCount; j++) {
+                                                    //标签; 属性;VALUE
+                                                    var tmpC = $(headers[i]).data()["customcontent" + j];
+                                                    tmpC = tmpC.split('@');
+                                                    tmp += '<' + tmpC[0] + ' ' + tmpC[1] + '>' + tmpC[2] + '</' + tmpC[0] + '>';
+                                                }
+                                                html += ('<td>' + tmp + '</td>');
+                                            }
+                                            else {
+                                                html += "<td>" + "" + "</td>"
+                                            }
                                         }
                                         html += "</tr>";
-                                        html1 += html;
-                                    });
-                                $(".wupop tbody").html(html1);
-                                $(".loadDate").hide();
-                            } else if (WorkM == "selfurl") {
-                                window.location.href = "";
-                            } else if (WorkM == "Tree") {
-
-                            } else if (WorkM == "TablePage") {
-                                $("#main").show();
-                                initTableData();
-                            }
-                            var trData = $(".flowLists table tbody tr");
-                            if (trData != undefined &&trData.data != undefined &&trData.data() != undefined &&trData.data().data != undefined &&trData.data().data == true) {
-                                $.each(dataArr,function(i, obje) {
-                                    $($('.flowLists table tbody tr')[i]).data().data = obje;
+                                    }
                                 });
+
+                                $('#poptablew .wupop tbody').html(html);
+                                $(".loadDate").hide();
+                                //为TR设置DATA
+                                $.each(dataArr, function (k, obje) {
+                                    if (obje) {
+                                        //设置data-data
+                                        $($('#poptablew tbody tr')[k]).data().data = obje;
+                                    }
+                                });
+
+                                //为CHECKBOX radio绑定事件
+                                $('#poptablew tbody .ck_tbody').bind('change', checkBoxChange);
+                                $('#poptablew tbody .rb_tbody').bind('change', radioChange);
+                            //表格有分页模式
+                            } else if (WorkM == "TablePage") {
+                                $("#flowListDiv table thead").html(tableHeader);
+                                $('#main').css('display', 'block');
+                                $('#btnSearch').bind('click', initTableData);
+                                $('#btnSearch').trigger('click');
                             }
                         }
                     }
                 }
+            });
+        }
 
+        //初始化树  单实体+多实体
+        function initTreeData(workModel) {
+            $('#tree').css('display', 'block');
+           
+            var url = '/WF/CCForm/CCFormHeader.ashx?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') ;
+
+            //初始化Tree
+            var plugins = [];
+            if (pageSetData[0].PopValSelectModel == "More") {//多选
+                plugins = [
+                            "checkbox",
+                            "state",
+                            "conditionalselect"
+                ]
+            }
+            $('#orgjstree').jstree({
+                'core': {
+                    'data': function (node, cb) {
+                        //初始化根节点
+                        if (node.id === "#") {
+                            $.ajax({
+                                type: 'post',
+                                async: true,
+                                url: url,
+                                data: {},
+                                dataType: 'html',
+                                success: function (data) {
+                                    data = JSON.parse(data);
+                                    var itemArr = [];
+                                    $.each(data.DTObjs, function (i, rootNode) {
+                                        itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true });
+                                    });
+
+                                    cb(itemArr);
+                                }
+                            }
+                        );
+                        }
+                        else {
+                            url = '/WF/CCForm/CCFormHeader.ashx?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') + '&ParentNo=' + node.id;
+                            $.ajax({
+                                type: 'post',
+                                async: true,
+                                url: url,
+                                data: {},
+                                dataType: 'html',
+                                success: function (data) {
+                                    if (window.pageSetData[0].PopValWorkModel == "TreeDouble") {//双实体树
+                                        data = JSON.parse(data);
+                                        var itemArr = [];
+                                        $.each(data.DTObjs, function (i, rootNode) {
+                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true });
+                                        });
+
+                                        $.each(data.DTEntitys, function (i, rootNode) {
+                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file" });
+                                        });
+                                        cb(itemArr);
+                                    } else {//单实体树
+                                        data = JSON.parse(data);
+                                        var itemArr = [];
+                                        $.each(data.DTObjs, function (i, rootNode) {
+                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true });
+                                        });
+
+                                        cb(itemArr);
+                                    }
+                                }
+                            })
+                        }
+                    }
+                },
+                "plugins": plugins
+            }).on('changed.jstree', function (node, cb) {
+                GetTreeReturnVal();
+                $('#orgTxt').val(returnVal.Value);
+                $('#orgjstree').css('display', 'none');
             });
         }
         //分页table
@@ -224,17 +507,156 @@
                 PageSize: pageSize,
                 PageIndex: 1,
                 DivId: 'flowListDiv',
-                countUrl: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random(),
-                listUrl: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random()
+                countUrl: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&Key=' + $('#txbSearchVal').val() + '&m=' + Math.random(),
+                listUrl: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&Key=' + $('#txbSearchVal').val() + '&m=' + Math.random(),
+                RenderOverFun: function () {
+                    //为CHECKBOX radio绑定事件
+                    $('#flowListDiv table tbody .ck_tbody').bind('change', checkBoxChange);
+                    $('#flowListDiv table tbody .rb_tbody').bind('change', radioChange);
+                }
             };
             $('#flowListDiv table tbody tr').remove();
             Common.CustomPagePlug(toDoListInitData);//绑定表格
         }
-        //树
+        //checkbox的选中事件
+        function checkBoxChange(obj) {
+            var ck = obj.target;
+            var trData = $(ck).parent().parent().data().data;
+            
+            if (obj.target.checked) {
+                selectedTrArr.push(trData);
+            } else {
+                selectedTrArr.pop(trData);
+            }
+
+            SetReturnValFromSelectedTrArr();
+            $('#selectedlist').data().data = returnVal;
+        }
+
+        //radio 的选中事件
+        function radioChange(obj) {
+            var radio = obj.target;
+            var trData = $(radio).parent().parent().data().data;
+
+            if (obj.target.checked) {
+                selectedTrArr.length = 0;
+                selectedTrArr.push(trData);
+            } else {
+                selectedTrArr.pop(trData);
+            }
+
+            SetReturnValFromSelectedTrArr();
+            $('#selectedlist').data().data = returnVal;
+        }
+
+        //组装好的返回值  在MyFlow.htm中使用
+        var returnVal = {};
+        //返回值的数组
+        var selectedTrArr = [];
+
+        function SetReturnValFromSelectedTrArr() {
+            //返回值格式
+            switch (pageSetData[0].PopValFormat) {
+                case "OnlyNo"://仅NO
+                    var noArr = [];
+                    $.each(selectedTrArr, function (i, selectedTr) {
+                        noArr.push(selectedTr.No);
+                    });
+                    returnVal.No = noArr.join(';');
+                    break;
+                case "OnlyName"://仅Name
+                    var nameArr = [];
+                    $.each(selectedTrArr, function (i, selectedTr) {
+                        nameArr.push(selectedTr.No);
+                    });
+                    returnVal.Name = nameArr.join(';');
+                    break;
+                case "NoName"://No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
+                    var noArr = [];
+                    if (selectedTrArr.length > 0) {
+                        for (var property in selectedTrArr[0]) {
+                            returnVal[property] = [];
+                        }
+                    }
+
+                    $.each(selectedTrArr, function (i, selectedTr) {
+                        for (var property in returnVal) {
+                            returnVal[property].push(selectedTr[property]);
+                        }
+                    });
+
+                    for (var property in selectedTrArr[0]) {
+                        returnVal[property] = returnVal[property].join(';');
+                    }
+                    break;
+            }
+        }
+
+        function GetTreeReturnVal() {
+            var instance = $('#orgjstree').jstree(true);
+            var selectedIdArr = instance.get_selected();
+            var selectedNodes = [];
+            $.each(selectedIdArr, function (i, selectedId) {
+                selectedNodes.push(instance.get_node(selectedId));
+            });
+            //返回值格式
+            switch (pageSetData[0].PopValFormat) {
+                case "OnlyNo"://仅NO
+                    returnVal.Value = selectedIdArr.join(';');
+                    break;
+                case "OnlyName"://仅Name
+                    var nameArr = [];
+                    $.each(selectedNodes, function (i, selectedNode) {
+                        nameArr.push(selectedNode.text);
+                    }); 
+                    returnVal.Value = nameArr.join(';');
+                    break;
+                case "NoName"://No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
+                    var nameArr = [];
+                    $.each(selectedNodes, function (i, selectedNode) {
+                        nameArr.push("(" + selectedNode.id + "," + selectedNode.text + ")");
+                    });
+                    returnVal.Value = nameArr.join(';');
+                    break;
+            }
+            console.log(selectedNodes);
+        }
+
+        function GetGroupReturnVal() {
+            var checked = $('input:checked');
+            //var selectedIdArrf = [];
+            //var selectedNodesf = [];
+            //for (var i = 0; i < checked.parent(".lif").length; i++) {
+            //    selectedIdArrf.push($(checked.parent(".lif")[i]).data().data.No);
+            //    selectedNodesf.push($(checked.parent(".lif")[i]).data().data.Name);
+            //}
+            var selectedIdArrm = [];
+            var selectedNodesm = [];
+            var nameArr = [];
+            for (var i = 0; i < checked.parent(".lim").length; i++) {
+                selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.fk_dept);
+                selectedNodesm.push($(checked.parent(".lim")[i]).data().data.Name);
+                nameArr.push("(" + $(checked.parent(".lim")[i]).data().data.Name + "," + $(checked.parent(".lim")[i]).data().data.fk_dept + ")");
+            }
+            //返回值格式
+            switch (pageSetData[0].PopValFormat) {
+                case "OnlyNo"://仅NO
+                    returnVal.Value = selectedIdArrm.join(';');
+                    break;
+                case "OnlyName"://仅Name
+                    returnVal.Value = selectedNodesm.join(';');
+                    break;
+                case "NoName"://No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
+                    returnVal.Value = nameArr.join(';');
+                    break;
+            }
+            console.log(returnVal);
+        }
     </script>
 </head>
 <body>
-    <!--无分页显示table-->
+    <div id="selectedlist" style="display:none;"></div>
+<!--无分页显示table-->
 <div id="poptablew" style="display: none;">
     <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
         <div class="portlet-body " id="" style="overflow: auto;">
@@ -245,7 +667,6 @@
                             <thead></thead>
                             <tbody></tbody>
                         </table>
-                        <button class="btnsv" style="float: right;">保存</button>
                     </div>
                     <div class="loadDate" style="text-align: center;">
                         <img src="../Scripts/bootstrap/fonts/loading.gif" />
@@ -255,19 +676,19 @@
         </div>
     </div>
 </div>
-    <!--无分页显示table-->
+<!--无分页显示table-->
 <div id="main" style="display: none;">
     <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
         <!-- BEGIN CHART PORTLET-->
         <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px; padding: 12px 0 0 20px;">
             <div>
                 <div style="font-size: 20px; float: left; width: 100%;">
-                    <input id="txbSearchVal" value="" type="text" placeholder="标题" style="text-align: center;"/>
+                        <input id="txbSearchVal" value="" type="text" placeholder="标题" style="text-align: center;" />
                     <button class="Btn" id="btnSearch">搜索</button>
                 </div>
                 <div style="font-size: 20px; float: left; width: 100%; display: none;">
                     已选择列表：
-                    <span id="selectedlist" style="word-break: break-all;"></span>
+                    <span id="selectedlists" style="word-break: break-all;"></span>
                 </div>
             </div>
         </div>
@@ -280,7 +701,7 @@
                             <tbody></tbody>
                         </table>
                         <div class="loadDate" style="text-align: center;">
-                            <img src="../Scripts/bootstrap/fonts/loading.gif"/>
+                                <img src="../Scripts/bootstrap/fonts/loading.gif" />
                         </div>
                         <div class="pagination-panel">
                             页码 <button class="btn btnTxt  btn-sm default prev" title="上一页"><i class="fa fa-angle-left"></i></button>
@@ -289,7 +710,7 @@
                             </button>
                             <span class="seperator">|</span>
                             <button class="btn btnTxt btn-sm default prev" title="转到">转到</button>
-                            <input type="text" class="pagination-panel-input form-control input-mini input-inline input-sm" maxlenght="5" style="text-align: center; margin: 0 5px;"/>
+                                <input type="text" class="pagination-panel-input form-control input-mini input-inline input-sm" maxlenght="5" style="text-align: center; margin: 0 5px;" />
                             页<span class="seperator">|</span>
                             <span class="pagination-panel-total">20</span>
                             <label>
@@ -305,40 +726,24 @@
                                 </select> 条
                             </label>
                         </div>
-                        <button class="btnsv" style="float: right;">保存</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-    <!--树tree-->
-    <div id="tree" style="display: block;">
+<!--树tree-->
+    <div id="tree" style="display: none;">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding:0px;margin:0px;overflow:auto;">
             <div class="portlet-body " id="" style="overflow:auto;">
                 <div class="tab-content">
                     <div class="tab-pane active portlet_tab" id="task">
                         <div id="ListDiv">
                             <div class="input-group form_tree">
-                                <input class="form-control" type="text" id="orgTxt" readonly="readonly" style="margin: 0px !important;"/>
+                                <input class="form-control" type="text" id="orgTxt" readonly="readonly" />
                                 <span class="input-group-addon" id="test"><span class="glyphicon glyphicon-tree-deciduous"></span></span>
                             </div>
-                            <div id="orgjstree" style="position: absolute; display: none; overflow: auto; width: 95%;" class="tree-demo jstree jstree-1 jstree-default">
-                                <ul>
-                                    <li data-jstree='{ "opened" : true }'>
-                                        Root node
-                                        <ul>
-                                            <li data-jstree='{ "opened" : true }' aria-expanded="false">
-                                                Child node 1
-                                                <ul>
-                                                    <li data-jstree='{ "selected" : true }'>Child node 1 1</li>
-                                                    <li>Child node 1 2</li>
-                                                </ul>
-                                            </li>
-                                            <li>Child node 2</li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                            <div id="orgjstree" style="position:absolute;display:none;overflow:auto;width:95%;" class="tree-demo jstree jstree-1 jstree-default">
                             </div>
                         </div>
                     </div>

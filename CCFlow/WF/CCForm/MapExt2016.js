@@ -200,25 +200,33 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
     $('#iframePopModalForm').attr("src", url);
     $('#btnPopValOK').unbind('click');
     $('#btnPopValOK').bind('click', function () {
-        //var retrunJson = frames["iframePopModalForm"].window.returnValue;
-        var retrunJson = '[{"No":"华夏银行,总行,会计部,会计出纳室","TXB_Title":"吴建","FK_Dept":"0001.02.000000000376"},{"No":"华夏银行,总行,会计部,会计出纳室","TXB_Title":"张立伟","FK_Dept":"0001.02.000000000080"}]';
-        var retrunObjArr = [];
-        if (retrunJson != undefined && retrunJson != '')
-            retrunObjArr = JSON.parse(retrunJson);
-        if (retrunObjArr.length > 0) {
-            for (var eml in retrunObjArr[0]) {
-                $('[id$=' + eml + ']').val('');
-            }
-        }
         $(ctrl).val("");
 
-        $.each(retrunObjArr, function (i, retrunObj) {
-            for (var eml in retrunObj) {
-                $('[id$=' + eml + ']').val(retrunObj[eml] + ";");
+        //为表单元素反填值
+        var returnValSetObj = frames["iframePopModalForm"].window.pageSetData;
+        var returnValObj = frames["iframePopModalForm"].window.returnVal;
+        if (returnValSetObj[0].PopValWorkModel == "Tree" || returnValSetObj[0].PopValWorkModel == "TreeDouble" || returnValSetObj[0].PopValWorkModel == "Group") {//树模式 分组模式
+            frames["iframePopModalForm"].window.GetTreeReturnVal();
+            $(ctrl).val(returnValObj.Value);
+        }
+        else if (returnValSetObj[0].PopValWorkModel == "TableOnly" || returnValSetObj[0].PopValWorkModel == "TablePage") {//表格模式
+            if (returnValSetObj[0].PopValFormat == "OnlyNo") {
+                $(ctrl).val(returnValObj.No);
+            } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
+                $(ctrl).val(returnValObj.Name);
             }
-
-            $('#' + ctrl.id).val(retrunObj["No"]);
-        });
+            else {
+                for (var property in returnValObj) {
+                    $('[id$=' + property + ']').val(returnValObj[property]);
+                }
+            }
+        } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") {//自定义URL
+            //frames["iframePopModalForm"].window.GetTreeReturnVal();
+            if (frames["iframePopModalForm"].window.GetReturnVal != undefined && typeof (frames["iframePopModalForm"].window.GetReturnVal) == "function") {
+                frames["iframePopModalForm"].window.GetReturnVal()
+            }
+            $(ctrl).val(returnValObj.Value);
+        }
     });
     $('#returnPopValModal').modal().show();
     //修改标题，失去焦点时进行保存
@@ -689,6 +697,26 @@ function CheckInput(oInput, filter) {
         re = new RegExp(filter);
     }
     return re.test(oInput);
+}
+//正则表达式检查
+function CheckRegInput(oInput, filter,tipInfo) {
+    var oInputVal = $("[name=" + oInput + ']').val();
+    var result = true;
+    if (oInput != '') {
+        var re = filter;
+        if (typeof (filter) == "string") {
+            re = new RegExp(filter);
+        } else {
+            re = filter;
+        }
+        result = re.test(oInputVal);
+    }
+    if (!result) {//alert(tipInfo);
+        $("[name=" + oInput + ']').addClass('errorInput');
+    } else {
+        $("[name=" + oInput + ']').removeClass('errorInput');
+    }
+    return result;
 }
 //输入检查
 function txtTest_Onkeyup(ele, filter, message) {

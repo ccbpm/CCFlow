@@ -44,6 +44,10 @@
             .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav > li > a:hover, .nav > li > a:focus {
                 border-radius: 10px 10px 0px 0px;
             }
+
+        .errorInput {
+            border: 1px red solid !important;
+        }
     </style>
 
     <!--杨玉慧 -->
@@ -78,16 +82,13 @@
                 <div class="flowInfo" id="flowInfo">
                     <!--<uc1:Pub ID="Pub1" runat="server" />-->
                 </div>
-                <!--Message-->
-                <div class="Message" id='Message' style="display:block;">
-                    <!--<uc1:Pub ID="FlowMsg" runat="server" />-->
-                </div>
+                
                 <!--childThread-->
                 <div class="childThread" id='childThread'>
                     <!--<uc1:Pub ID="Pub3" runat="server" />-->
                 </div>
                 <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server" />-->
-                <div id="CCForm" mytabcontent="myTabContent" class="tab-content">
+                <div id="CCForm">
                     <div class="col-lg-1  col-md-1 col-sm-2">
                         <label>事件标题</label>
                     </div>
@@ -146,7 +147,7 @@
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius:0px;">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;opacity:1;">×</button>
                     <h4 class="modal-title">选择提出人</h4>
                 </div>
                 <div class="modal-body">
@@ -160,8 +161,13 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <!--Message-->
+    <div class="Message" id='Message' style="display:block;padding:18px;font-weight:bold;color:red;">
+        <!--<uc1:Pub ID="FlowMsg" runat="server" />-->
+    </div>
+
     <!--杨玉慧加  退回窗口-->
-    <div class="modal fade" id="returnWorkModal">
+    <!--<div class="modal fade" id="returnWorkModal">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius:0px;width:700px;">
                 <div class="modal-header">
@@ -171,14 +177,14 @@
                 <div class="modal-body">
                     <iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
+            </div>
+        </div>
+    </div>-->
+    
     <!--下拉框选项提示信息-->
     <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px; left: 304.98961639404297px; display: none;">
         <div class="arrow" style="left: 50.22522522522522%;"></div>
-        <h3 class="popover-title"><span> title</span><span style="float:right;cursor:pointer;" id="span_CloseNoticeInfo">×</span></h3>
+        <h3 class="popover-title"><span> title</span><span style="color:white;opacity:1;float:right;cursor:pointer;" id="span_CloseNoticeInfo">×</span></h3>
         <div class="popover-content">顶部的 Popover 中的一些内容</div>
     </div>
 </body>

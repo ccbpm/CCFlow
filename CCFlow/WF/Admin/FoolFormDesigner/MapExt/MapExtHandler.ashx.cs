@@ -130,6 +130,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 MapExt me = new MapExt();
                 me.MyPK =this.FK_MapExt;
                 me.FK_MapData = this.FK_MapData;
+                me.ExtType = "PopVal";
                 me.AttrOfOper = context.Request.QueryString["KeyOfEn"];
                 me.RetrieveFromDBSources();
 
@@ -168,7 +169,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         me.PopValTreeSQL = this.GetValFromFrmByKey("TB_DoubleTreeSQL");// 树SQL
                         me.PopValTreeParentNo = this.GetValFromFrmByKey("TB_DoubleTreeParentNo");
 
-                        me.PopValEntitySQL = this.GetValFromFrmByKey("TB_DoubleTreeEntitySQL"); //实体SQL
+                        me.PopValDoubleTreeEntitySQL = this.GetValFromFrmByKey("TB_DoubleTreeEntitySQL"); //实体SQL
                         break;
                     default:
                         break;
@@ -295,7 +296,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
 
             //加入单选按钮.
-            ds.Tables.Add(attrs.ToDataTableField("Sys_FrmRB"));
+            ds.Tables.Add(rbs.ToDataTableField("Sys_FrmRB"));
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>

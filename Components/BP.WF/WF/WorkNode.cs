@@ -4686,8 +4686,7 @@ namespace BP.WF
 
             //增加节点表单的必填项判断.
             string err = "";
-            if (this.HisNode.HisFormType == NodeFormType.FreeForm
-                || this.HisNode.HisFormType == NodeFormType.FixForm)
+            if (this.HisNode.HisFormType == NodeFormType.FreeForm)
             {
                 MapAttrs attrs=this.HisNode.MapData.MapAttrs;
                 Row row=this.HisWork.Row;

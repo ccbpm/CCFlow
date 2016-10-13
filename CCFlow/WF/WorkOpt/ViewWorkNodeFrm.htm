@@ -1,9 +1,805 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>查看表单数据</title>
+    <title></title>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
+    <script src="../../DataUser/JSLibData/MyFlowPublic.js" type="text/javascript"></script>
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
+    <script type="text/javascript" src="../Scripts/Cookie.js"></script>
+
+    <script type="text/javascript" language="javascript" src="../Scripts/MyFlow2016.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../WF/CCForm/MapExt2016.js"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../WF/Comm/Gener.js"></script>
+
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+
+    <script src="../Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
+    <link href="../Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+        /*除了字段分组之外的分组都是可以折叠的*/
+        .group {
+        }
+
+        .mustInput {
+        }
+
+        .nav > li > a {
+            padding: 6px 13px;
+        }
+
+            .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav > li > a:hover, .nav > li > a:focus {
+                border-radius: 10px 10px 0px 0px;
+            }
+
+        .errorInput {
+            border: 1px red solid !important;
+        }
+    </style>
+
+    <!--杨玉慧 -->
+    <script type="text/javascript">
+        //页面启动函数.
+        var initFunction = function () {
+            $("#Msg").html("正在加载,请稍后......");
+
+            //初始化groupID.
+            var no = GetQueryString("No");
+
+            /*
+            *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
+            */
+            //调用通用方法绑定枚举, 性别.
+            GenerBindEnumKey("DDL_XB", "XB");
+
+            //调用通用方法绑定外键表. 班级.
+            GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: "../Handler.ashx?DoType=StudentInit&No=" + no + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    // alert(data);
+                    data = JSON.parse(data);
+
+                    //执行批量主表赋值.
+                    GenerFullAllCtrlsVal(data);
+                    return;
+                }
+            });
+
+            $("#Msg").html("");
+        };
+        
+    </script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            initPageParam(); //初始化参数
+            GenerWorkNode(); //表单数据.
+        })
+    //以下是软通写的
+    //初始化网页URL参数
+    function initPageParam() {
+        //新建独有
+        pageData.UserNo = GetQueryString("UserNo");
+        pageData.DoWhat = GetQueryString("DoWhat");
+        pageData.IsMobile = GetQueryString("IsMobile");
+
+        pageData.FK_Flow = GetQueryString("FK_Flow");
+        pageData.FK_Node = GetQueryString("FK_Node");
+        //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
+        pageData.FID = GetQueryString("FID");
+        pageData.WorkID = GetQueryString("WorkID");
+        pageData.IsRead = GetQueryString("IsRead");
+        pageData.T = GetQueryString("T");
+        pageData.Paras = GetQueryString("Paras");
+        pageData.IsReadOnly = 1//如果是IsReadOnly，就表示是查看页面，不是处理页面
+        pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
+
+        pageData.MyPK = GetQueryString("MyPK");
+    }
+
+    //将获取过来的URL参数转成URL中的参数形式  &
+    function pageParamToUrl() {
+        var paramUrlStr = '';
+        for (var param in pageData) {
+            paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
+        }
+        return paramUrlStr;
+    }
+    //设置附件为只读
+    function setAttachDisabled() {
+        //附件设置
+        var attachs = $('iframe[src*="AttachmentUpload.aspx"]');
+        $.each(attachs, function (i, attach) {
+            if (attach.src.indexOf('IsReadOnly') == -1) {
+                $(attach).attr('src', $(attach).attr('src') + "&IsReadOnly=1");
+            }
+        })
+    }
+    //隐藏下方的功能按钮
+    function setToobarUnVisible() {
+        //隐藏下方的功能按钮
+        $('#bottomToolBar').css('display', 'none');
+    }
+    //设置表单元素不可用
+    function setFormEleDisabled() {
+        //文本框等设置为不可用
+        $('#divCCForm textarea').attr('disabled', 'disabled');
+        $('#divCCForm select').attr('disabled', 'disabled');
+        $('#divCCForm input[type!=button]').attr('disabled', 'disabled');
+    }
+
+    var pageData = {};
+    var globalVarList = {};
+    //解析分组类型 如果返回的为 '' 就表明是字段分组
+    function initGroup(workNodeData, groupFiled) {
+        var groupHtml = '';
+        /*根据控件类型解析分组*/
+        switch (groupFiled.CtrlType) {
+            case "Frame": // 框架 类型.
+                for (var frameIndex in workNodeData.Sys_MapFrame) {
+                    var fram = workNodeData.Sys_MapFrame[frameIndex];
+                    if (fram.MyPK != groupFiled.CtrlID)
+                        break;
+                    //将 中文的  冒号转成英文的冒号
+                    var src = fram.URL.replace(new RegExp(/(：)/g), ':');
+                    var params = '&FID=' + pageData.FID;
+                    params += '&WorkID=' + groupFiled.OID;
+
+                    if (src.indexOf("?") > 0) {
+                        var result = src.match(new RegExp("[\?\&][^\?\&]+=[^\?\&]+", "g"));
+                        for (var i = 0; i < result.length; i++) {
+                            if (result[i].substring(1).split('=')[1].indexOf('@') == 0) {
+                                var mainTableValue = workNodeData.MainTable[result[i].substring(1).split('=')[1].substring(1)];
+                                var urlValue = GetQueryString(result[i].substring(1).split('=')[1]);
+                                result[i] = result[i].substring(1).split('=')[0] + '=' + (urlValue == undefined ? mainTableValue : urlValue);
+                            } else {
+                                result[i] = result[i].substring(1);
+                            }
+                        }
+                        src = src.substring(0, src.indexOf("?")) + '?' + result.join('&');
+                    }
+                    else {
+                        //src += "?r=q&" + result.join('&');
+                        //src += "?r=q" + params;
+                        //src = src.substring(0, src.indexOf("?")) + '?' + result.join('&');
+                    }
+                    //通过URL将FRAME的SRC传过来
+                    var keyOfEn = fram.MyPK.substr(fram.FK_MapData.length + 1);
+                    if (GetQueryString('@' + keyOfEn) != undefined) {
+                        src = GetQueryString('@' + keyOfEn);
+                    }
+                    groupHtml += '<div class="col-md-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+
+                }
+                break;
+            case "Dtl":
+                break;
+            case "Ath": //增加附件.
+                for (var athIndex in workNodeData.Sys_FrmAttachment) {
+                    var ath = workNodeData.Sys_FrmAttachment[athIndex];
+                    if (ath.MyPK != groupFiled.CtrlID)
+                        break;
+                    var src = "";
+                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+
+                    groupHtml += '<div class="col-md-12 " style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                }
+                break;
+            case "FWC": //审核组件.
+                var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
+                var paras = pageParamToUrl();
+                if (paras.indexOf('OID') < 0) {
+                    paras += "&OID=" + pageData.WorkID;
+                }
+
+                paras += "&DoType=View";
+                src += "&r=q" + paras;
+                groupHtml += '<div class="col-md-12 " style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                break;
+            case "SubFlow": //子流程..
+                var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
+                var paras = pageParamToUrl();
+                if (paras.indexOf('OID') < 0) {
+                    paras += "&OID=" + pageData.WorkID;
+                }
+                paras += "&DoType=View";
+                src += "&r=q" + paras;
+                groupHtml += '<div class="col-md-12 " style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                break;
+            case "Track": //轨迹图.
+                var src = "/WF/WorkOpt/Track.aspx?s=2";
+                var paras = pageParamToUrl();
+                if (paras.indexOf('OID') < 0) {
+                    paras += "&OID=" + pageData.WorkID;
+                }
+                src += "&r=q" + paras;
+                groupHtml += '<div class="col-md-12 " style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                break;
+            case "Thread": //子线程.
+                var src = "/WF/WorkOpt/Thread.aspx?s=2";
+                var paras = pageParamToUrl();
+                if (paras.indexOf('OID') < 0) {
+                    paras += "&OID=" + pageData.WorkID;
+                }
+                src += "&r=q" + paras;
+                groupHtml += '<div class="col-md-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                break;
+            case "FTC": //流转自定义.  有问题
+                
+                var src = "/WF/WorkOpt/FTC.aspx?s=2";
+                var paras = pageParamToUrl();
+                if (paras.indexOf('OID') < 0) {
+                    paras += "&OID=" + pageData.WorkID;
+                }
+                src += "&r=q" + paras;
+                groupHtml += '<div class="col-md-12 " style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                break;
+            default:
+                break;
+        }
+        return groupHtml;
+    }
+
+    function InitForm() {
+        var CCFormHtml = '';
+        var workNodeData = JSON.parse(jsonStr);
+        //解析节点名称
+        $('#header span').text(workNodeData.Sys_MapData[0].Name);
+        //解析分组
+        var groupFileds = workNodeData.Sys_GroupField;
+
+        for (var i = 0; i < groupFileds.length; i++) {
+            var groupFiled = groupFileds[i];
+            var groupHtml = '';
+            //初始化分组
+            var groupResultHtml = initGroup(workNodeData, groupFiled);
+            if (groupResultHtml != '') {//返回的值如果为 ''，就表明是字段分组
+                groupHtml = '<div class="col-md-12  " style=""><input class="group" type="button" value="+ ' + groupFiled.Lab + '" data-target="group' + groupFiled.Idx + '"/></div>';
+                groupHtml += groupResultHtml;
+                CCFormHtml += groupHtml;
+                continue;
+            } else {//返回的值如果为 ''，就表明是字段分组
+                groupHtml = '<div class="col-md-12  " style=""><input class="group" type="button" value="- ' + groupFiled.Lab + '" data-target="group' + groupFiled.Idx + '"/></div>';
+                groupHtml += groupResultHtml;
+                CCFormHtml += groupHtml;
+            }
+
+            //解析字段
+            //过滤属于本分组的字段 
+            groupHtml = '<div class="col-md-12 " style="clear:both;"> ' + '<input type="button" value="' + groupFiled.Lab + '"/></div>';
+            var mapAttrData = $.grep(workNodeData.Sys_MapAttr, function (value) {
+                return value.GroupID == groupFiled.OID;
+            });
+
+            //开始解析表单字段
+            var mapAttrsHtml = InitMapAttr(mapAttrData, workNodeData);
+            CCFormHtml += "<div id='" + "group" + groupFiled.Idx + "'>" + mapAttrsHtml + "</div>";
+        }
+
+        $('#CCForm').html(CCFormHtml);
+
+        //初始化提示信息
+        var alertMsgs = workNodeData.AlertMsg;
+        if (alertMsgs != undefined && alertMsgs.length > 0) {
+            var alertMsgHtml = '';
+            $.each(alertMsgs, function (i, alertMsg) {
+                alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
+            });
+            $('#Message').html(alertMsgHtml);
+        }
+
+        //根据NAME 设置ID的值
+        var inputs = $('[name]');
+        $.each(inputs, function (i, obj) {
+            if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
+                $(obj).attr("id", $(obj).attr("name"));
+            }
+        })
+
+        //处理下拉框级联等扩展信息
+        AfterBindEn_DealMapExt();
+
+        //绑定分组的按钮事件  如果不是字段分组就变成可以折叠的
+        $('.group').bind('click', function (obj) {
+            var display = '';
+            var text = $(obj.target).val().substring(2, $(obj.target).val().length);
+            if ($(obj.target).val().indexOf('- ') == 0) {
+                display = 'none';
+                $(obj.target).val('+ ' + text);
+            } else {
+                display = 'block';
+                $(obj.target).val('- ' + text);
+            }
+
+            var div = $('#' + $(obj.target).data().target).css('display', display);
+        });
+
+        //如果是IsReadOnly，就表示是查看页面，不是处理页面
+        if (pageData.IsReadOnly != undefined && pageData.IsReadOnly == "1") {
+            
+        }
+    }
+
+    //解析表单字段 MapAttr
+    function InitMapAttr(mapAttrData, workNodeData) {
+        var resultHtml = '';
+        for (var j = 0; j < mapAttrData.length; j++) {
+            var mapAttr = mapAttrData[j];
+            if (mapAttr.UIVisible) {//是否显示
+                //添加 label
+                //如果是整行的需要添加  style='clear:both'
+
+                var str = '';
+                var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                for (var o in mapAttr) {
+                    str += o + ":" + mapAttr[o];
+                }
+
+                var eleHtml = '';
+                var isInOneRow = false;//是否占一整行
+                var islabelIsInEle = false;//
+
+
+
+
+
+                eleHtml += '';
+
+                //添加文本框 ，日期控件等
+                //AppString   
+                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
+                    if (mapAttr.ColSpan == 2 || mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {//占有1-2  3列的文本框
+                        var mdCol = 2;
+                        var smCol = 4;
+                        switch (mapAttr.ColSpan) {
+                            case 1:
+                                mdCol = 2;
+                                smCol = 4;
+                                break;
+                            case 2:
+                                mdCol = 4;
+                                smCol = 8;
+                                break;
+                            case 3:
+                                mdCol = 11;
+                                smCol = 10;
+                                isInOneRow = true;
+                                break;
+                        }
+                        if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+                            eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
+                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</operation>";
+                            eleHtml += '</div>';
+                        } else {//文本区域
+                            if (mapAttr.UIHeight <= 23) {
+                                eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
+                                    "<input name='TB_" + mapAttr.KeyOfEn + "' type='text' value='" + defValue + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    + '</div>';
+                            }
+                            else {//大于23就是多行
+                                if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 2) {
+                                    mdCol = 4;
+                                    smCol = 12;
+                                }
+                                islabelIsInEle = true;
+                                eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">'
+                                    + "<label>" + mapAttr.Name + "</label>"
+                                    +
+                                    (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput">*</span>' : "")
+                                    +
+                                    "<textarea style='height:" + mapAttr.UIHeight + "px;' name=TB_'" + mapAttr.KeyOfEn + "' type='text' value='" + defValue + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    + '</div>';
+
+                            }
+                        }
+                    } else if (mapAttr.ColSpan == "4" || (mapAttr.ColSpan == "3" && mapAttr.UIHeight > 23)) {//大文本区域  且占一整行
+                        isInOneRow = true;
+                        eleHtml += '<div class="col-lg-11 col-md-11 col-sm-10">' +
+                            "<textarea name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + defValue + "</textarea>"
+                            + '</div>';
+                    }
+                } //AppDate
+                else if (mapAttr.MyDataType == 6) {//AppDate
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 1) {
+                        enableAttr = 'onfocus="WdatePicker("' + ")" + '";';
+                    } else {
+                        enableAttr = "disabled='disabled'";
+                    }
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + defValue + "</div>";
+                }
+                else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 1) {
+                        enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+                    } else {
+                        enableAttr = "disabled='disabled'";
+                    }
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='" + defValue + "'/>" + "</div>";
+                }
+                else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
+                    var colMd = 2;
+                    var colsm = 4;
+                    if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
+                        colMd = 4;
+                        colsm = 8;
+                    }
+
+                    if (mapAttr.UIIsEnable == 1) {
+
+                    } else {
+                        enableAttr = "disabled='disabled'";
+                    }
+                    //CHECKBOX 默认值
+                    var checkedStr = '';
+                    if (checkedStr != "true" && checkedStr != '1') {
+                        checkedStr = ' checked="checked" '
+                    }
+                    checkedStr = ConvertDefVal(workNodeData, '', mapAttr.KeyOfEn);
+                    eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' + "<input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>" + "</div>";
+                }
+
+                if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
+                    var colMd = 2;
+                    var colsm = 4;
+                    if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
+                        colMd = 11;
+                        colsm = 10;
+                    }
+                    if (mapAttr.UIContralType == 1) {//DDL
+                        eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + mdCol + ' col-sm-' + colsm + '">' +
+                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                        + '</div>';
+                        eleHtml += "</div>";
+                    }
+
+                    if (mapAttr.UIContralType == 3) {//RadioBtn
+                        var operations = '';
+
+                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {
+                            if (mapAttr.ColSpan == 1) {
+                                eleHtml += '<div class="col-md-2 col-sm-4 col-lg-2">';
+                            } else if (mapAttr.ColSpan == 3) {
+                                eleHtml += '<div class="col-md-11 col-sm-10 col-lg-11" style="padding:2px 20px;">';
+                            }
+                            var enums = workNodeData.Sys_Enum;
+                            enums = $.grep(enums, function (value) {
+                                return value.EnumKey == mapAttr.UIBindKey;
+                            });
+
+                            var rbShowModel = 0;//RBShowModel=0时横着显示RBShowModel=1时竖着显示
+                            var showModelindex = mapAttr.AtPara.indexOf('@RBShowModel=');
+                            if (showModelindex >= 0) {//@RBShowModel=0
+                                rbShowModel = mapAttr.AtPara.substring('@RBShowModel='.length, '@RBShowModel='.length + 1);
+                            }
+                            $.each(enums, function (i, obj) {
+                                operations += "<input id='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' type='radio' " + (obj.IntKey == defValue ? " checked='checked' " : "") + "  name='RB_" + mapAttr.KeyOfEn + "' value='" + obj.IntKey + "'>" + obj.Lab + "</input>" + (rbShowModel == "1" ? "</br>" : '');
+                            });
+                        }
+                        eleHtml += operations;
+                        eleHtml += "</div>";
+                    }
+
+                    if (mapAttr.ColSpan == 3) {
+                        var operations = '';
+                        isInOneRow = true;
+                        eleHtml += '<div class="col-md-11 col-sm-10 col-lg-11">';
+                        if (mapAttr.ColSpan == 1) {
+                            //外键类型
+                            var enums = workNodeData.Sys_Enum;
+                            enums = $.grep(enums, function (value) {
+                                return value.EnumKey == mapAttr.UIBindKey;
+                            });
+
+                            var rbShowModel = 0;//RBShowModel=0时横着显示RBShowModel=1时竖着显示
+                            var showModelindex = mapAttr.AtPara.indexOf('@RBShowModel=');
+                            if (showModelindex >= 0) {//@RBShowModel=0
+                                rbShowModel = mapAttr.AtPara.substring('@RBShowModel='.length, '@RBShowModel='.length + 1);
+                            }
+                            $.each(enums, function (i, obj) {
+                                operations += "<input id='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' type='radio'" + (obj.IntKey == defValue ? " checked='checked' " : "") + "  name='RB_" + mapAttr.KeyOfEn + "' id='" + "RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "'>" + obj.Lab + "</input>" + (rbShowModel == "1" ? "</br>" : '');
+                            });
+                        }
+                        eleHtml += operations;
+                        eleHtml += "</div>";
+                    }
+                }
+                // AppDouble  AppFloat AppInt .
+                if (mapAttr.MyDataType == 5 ||
+                mapAttr.MyDataType == 3 ||
+                (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)
+            ) {
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 1) {
+
+                    } else {
+                        enableAttr = "disabled='disabled'";
+                    }
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input value='" + defValue + "' type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                }
+                //AppMoney  AppRate
+                if (mapAttr.MyDataType == 8) {
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 1) {
+
+                    } else {
+                        enableAttr = "disabled='disabled'";
+                    }
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input value='" + defValue + "' type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                }
+
+                if (mapAttr.LGType == 2) {
+                    var mdCol = 2;
+                    var smCol = 4;
+                    if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
+                        mdCol = 4;
+                        smCol = 8;
+                    }
+
+                    eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
+                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + defValue + "'" + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr) + "</select>";
+
+                    eleHtml += '</div>';
+                }
+
+                if (!islabelIsInEle) {
+                    eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  data-tag=' + str + ' class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
+                    (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput">*</span>' : "")
+                    + "</div>" + eleHtml;
+                }
+                resultHtml += eleHtml;
+            }
+        }
+
+        return resultHtml;
+    }
+
+    //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
+    function GepParaByName(name, atPara) {
+        var params = atPara.split('@');
+        var result = $.grep(params, function (value) {
+            return value != '' && value.split('=').length == 2 && value.split('=')[0] == value;
+        })
+        return result;
+    }
+
+    //初始化下拉列表框的OPERATION
+    function InitDDLOperation(workNodeData, mapAttr, defVal) {
+        var operations = '';
+        //外键类型
+        if (mapAttr.LGType == 2 && workNodeData[mapAttr.UIBindKey] != undefined) {
+            $.each(workNodeData[mapAttr.UIBindKey], function (i, obj) {
+                operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+        } else {
+            var enums = workNodeData.Sys_Enum;
+            enums = $.grep(enums, function (value) {
+                return value.EnumKey == mapAttr.UIBindKey;
+            });
+
+
+            $.each(enums, function (i, obj) {
+                operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+            });
+
+        }
+        return operations;
+    }
+
+    //填充默认数据
+    function ConvertDefVal(workNodeData, defVal, keyOfEn) {
+        //计算URL传过来的表单参数@TXB_Title=事件测试
+
+        var pageParams = getQueryString();
+        var pageParamObj = {};
+        $.each(pageParams, function (i, pageParam) {
+            if (pageParam.indexOf('@') == 0) {
+                var pageParamArr = pageParam.split('=');
+                pageParamObj[pageParamArr[0].substring(1, pageParamArr[0].length)] = pageParamArr[1];
+            }
+        });
+
+        var result = defVal;
+
+        //通过MAINTABLE返回的参数
+        for (var ele in workNodeData.MainTable[0]) {
+            if (keyOfEn == ele) {
+                result = workNodeData.MainTable[0][ele];
+                break;
+            }
+        }
+
+        //通过URL参数传过来的参数
+        for (var pageParam in pageParamObj) {
+            if (pageParam == keyOfEn) {
+                result = pageParamObj[pageParam];
+                break;
+            }
+        }
+        return result;
+    }
+    //加载表单数据.
+    function GenerWorkNode() {
+        $.ajax({
+            type: 'post',
+            async: true,
+            data: pageData,
+            url: "../MyFlow.ashx?Method=ViewWorkNodeFrm&m=" + Math.random(),
+            dataType: 'html',
+            success: function (data) {
+                jsonStr = data;
+                //解析表单
+                InitForm();
+
+                showNoticeInfo();
+                setFormEleDisabled();
+            }
+        });
+    }
+
+    //根据下拉框选定的值，弹出提示信息
+    function showNoticeInfo() {
+        var workNode = JSON.parse(jsonStr);
+        var rbs = workNode.Sys_FrmRB;
+        data = rbs;
+        $("input[type=radio],select").bind('change', function (obj) {
+            var methodVal = obj.target.value;
+            for (var j = 0; j < data.length; j++) {
+                var value = data[j].IntKey;
+                var noticeInfo = data[j].Tip;
+                var drdlColName = data[j].KeyOfEn;
+                if (methodVal == value && obj.target.name.indexOf(drdlColName) == (obj.target.name.length - drdlColName.length)) {
+                    //高级JS设置;  设置表单字段的  可用 可见 不可用 
+                    var fieldConfig = data[j].FieldsCfg;
+                    var fieldConfigArr = fieldConfig.split('@');
+                    $.each(fieldConfigArr, function (i, fieldCon) {
+                        if (fieldCon != '' && fieldCon.split('=').length == 2) {
+                            var fieldConArr = fieldCon.split('=');
+                            var ele = $('[name$=' + fieldConArr[0] + ']');
+                            switch (fieldConArr[1]) {
+                                case "1"://可用
+                                    ele.parent().css('display', 'block');
+                                    ele.parent().prev().css('display', 'block');
+                                    ele.removeAttr('disabled');
+                                    break;
+                                case "2"://可见
+                                    ele.parent().css('display', 'block');
+                                    ele.parent().prev().css('display', 'block');
+                                    break;
+                                case "3"://不可见
+                                    ele.parent().css('display', 'none');
+                                    ele.parent().prev().css('display', 'none');
+                                    break;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
+        $('#span_CloseNoticeInfo').bind('click', function () {
+            $('#div_NoticeInfo').css('display', 'none');
+        })
+
+        $("input[type=radio],select").change();
+        $('#span_CloseNoticeInfo').click();
+    }
+
+
+    //正则表达式检查
+    function checkReg() {
+
+    }
+
+    var colVisibleJsonStr ='';
+    var jsonStr ='';
+    </script>
 </head>
 <body>
+    <!--标题-->
+    <div id="header" style="height:50px;font-size:20px; background:#213b5d;color:white;padding:10px;">
+        <span style="">处理人处理</span>
+    </div>
+    <!--上半部分表单-->
+    <div id="topContentDiv" class="row">
+        <div id="contentDiv">
+            <form id="divCCForm" action="../MyFlow.ashx?method=login" method="post">
+                <!--LODOP_OB 先放着 不知道具体是什么-->
+                <div>
+                    <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0" height="0">
+                        <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="/DataUser/PrintTools/install_lodop32.exe" />
+                    </object>
+                </div>
+                <!--头部功能按钮 发送、移交-->
+                <div class="topBar" id="topBar">
+                    <!-- <uc3:ToolBar ID="ToolBar1" runat="server" />-->
+                </div>
+                <!--flowInfo-->
+                <div class="flowInfo" id="flowInfo">
+                    <!--<uc1:Pub ID="Pub1" runat="server" />-->
+                </div>
 
+                <!--childThread-->
+                <div class="childThread" id='childThread'>
+                    <!--<uc1:Pub ID="Pub3" runat="server" />-->
+                </div>
+                <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server" />-->
+                <div id="CCForm">
+                    <div class="col-lg-1  col-md-1 col-sm-2">
+                        <label>事件标题</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" placeholder="事件标题" name="TXB_Title" value="" />
+                    </div>
+                    <div class="col-lg-1  col-md-1 col-sm-2"><label>事件标题</label></div>
+                    <div class="col-md-2">
+                        <input type="text" placeholder="事件标题" name="BillNo" value="" />
+                    </div>
+                    <div class="col-md-2">
+                        <textarea placeholder="事件详述" name="detail" value=""></textarea>
+                    </div>
+                    <div class="col-md-2">
+                        <textarea placeholder="事件详述" name="detail1" value=""></textarea>
+                    </div>
+                    <div class="col-md-2">
+                        <select name="select">
+                            <option value="1">1</option>
+                            <option value="2">1</option>
+                            <option value="3">1</option>
+                            <option value="4">1</option>
+                            <option value="5">1</option>
+                        </select>
+                        <select name="select1">
+                            <option value="1">1</option>
+                            <option value="2">1</option>
+                            <option value="3">1</option>
+                            <option value="4">1</option>
+                            <option value="5">1</option>
+                        </select>
+                        <select name="select2">
+                            <option value="1">1</option>
+                            <option value="2">1</option>
+                            <option value="3">1</option>
+                            <option value="4">1</option>
+                            <option value="5">1</option>
+                        </select>
+                    </div>
+                </div>
+                <!--Pub2 -->
+                <div class="pub2Class" id="pub2Class">
+                    <!-- <uc1:Pub ID="Pub2" runat="server" />-->
+                </div>
+                <!--底部功能按钮 发送、移交-->
+                <div id="bottomToolBar" style="display: block;" class="Bar">
+                </div>
+                <!--DIVINFO-->
+                <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none;cursor: pointer;align:left'></div>
+            </form>
+        </div>
+    </div>
+
+    
+    
 </body>
 </html>

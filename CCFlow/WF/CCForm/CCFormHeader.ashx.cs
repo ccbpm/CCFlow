@@ -103,15 +103,30 @@ namespace CCFlow.WF.CCForm
             if (parentNo == null)
                 parentNo = me.PopValTreeParentNo;
 
+            DataSet resultDs = new DataSet();
             string sqlObjs = me.PopValTreeSQL;
             sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
             sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
             sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
             sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
-
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
             dt.TableName = "DTObjs";
-            return BP.Tools.Json.ToJson(dt);
+            resultDs.Tables.Add(dt);
+
+            //doubleTree
+            if (me.PopValWorkModel == PopValWorkModel.TreeDouble && parentNo != me.PopValTreeParentNo)
+            {
+                sqlObjs = me.PopValDoubleTreeEntitySQL;
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
+                DataTable entityDt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                entityDt.TableName = "DTEntitys";
+                resultDs.Tables.Add(entityDt);
+            }
+            
+            return BP.Tools.Json.ToJson(resultDs);
         }
 
         /// <summary>
@@ -135,7 +150,7 @@ namespace CCFlow.WF.CCForm
             ds.Tables.Add(dtcfg);
 
             if (me.PopValWorkModel == PopValWorkModel.SelfUrl)
-                return me.PopValUrl;
+                return "@SelfUrl" + me.PopValUrl;
 
             if (me.PopValWorkModel == PopValWorkModel.TableOnly)
             {

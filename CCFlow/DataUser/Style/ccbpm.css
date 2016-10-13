@@ -1,4 +1,442 @@
-﻿
+﻿/*  Table 风格  */
+body
+{
+   font-size: 14px;
+}
+
+/* 按钮风格 */
+input[type="button"], input[type="submit"]
+{
+    border: 0;
+    /*background: #4D77A7;*/
+    background: #2884fa;
+    color: #FFF;
+    font-size: 12px;
+    padding: 4px 8px;
+    margin: 5px 3px 5px 3px;
+
+    border-radius:15px;
+}
+
+/* 文本框只读风格. */
+.TBReadonly
+{
+    font-size: 12px;
+    text-align: left;
+    float: left;
+    clear: left;
+    width: 100%;
+    border-width: 0px 0px 1px 0px;
+    background-color: #FAFAFA;
+    word-break: keep-all;
+    border-style: dotted none;
+}
+
+.HBtn
+{
+    width: 1px;
+    height: 1px;
+    display: none;
+}
+/*  table 类型风格 */
+table
+{
+    border: 1px outset #C0C0C0;
+    padding: inherit;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+/*  时学业添加 开始位置 */
+
+/*扩展应用明细表与多附件.*/
+.TitleExt
+{
+    background-color: #f4f4f4;
+    font-size: 12px;
+    border: 1px solid #C2D5E3;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    padding: 3px;
+    font-style: normal;
+    color: #333333;
+}
+
+
+/*  时学业添加 结束位置 */
+th, .Title
+{
+    border-width: 1px;
+    border-color: #C2D5E3;
+    border-style: solid;
+    line-height: 25px;
+    color: 0a0a0a;
+    white-space: nowrap;
+    padding: 0 2px;
+    background-color: #e0ecff;
+    font-size: 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: normal;
+}
+ 
+.Idx
+{
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-weight: bold;
+    width:20px;
+}
+
+.Sum
+{
+    background-color: #FFFFFF;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    font-weight: bold;
+}
+
+td
+{
+    border-right-style: none;
+    border-left-style: none;
+    border-style: solid;
+    padding: 4px;
+    text-align: left;
+    color: #333333;
+    font-size: 12px;
+    border-width: 1px;
+    border-color: #C2D5E3;
+}
+
+
+td a
+{
+    text-decoration: none;
+    font-size: 12px;
+}
+
+
+.tdHJ
+{
+    border: 1px solid #D6DDE6;
+    padding: 4px;
+    text-align: left;
+    background-color: #FFFFFF;
+    color: #333333;
+    font-weight: bold;
+}
+
+.tdHJNum
+{
+    border: 1px solid #D6DDE6;
+    padding: 4px;
+    text-align: right;
+    background-color: #FFFFFF;
+    color: #333333;
+    font-weight: bold;
+}
+
+td input[type="textbox"]
+{
+    margin: 0px;
+    border: 1px solid #D6DDE6;
+    padding: 0px;
+}
+
+.TDNum
+{
+    text-align: right;
+    word-break: keep-all;
+}
+
+td input
+{
+    /*border:none;*/
+    width: auto;
+    word-break: keep-all;
+}
+ 
+.TBcalendar
+{
+    background-position: left center;
+    border-style: none none dotted none;
+    border-width: 1px;
+    border-color: #003366;
+}
+
+.TitleMsg
+{
+    font: bolder medium Arial, Helvetica, sans-serif;
+    color: #33517A;
+    text-align: left;
+    font-size: 12px;
+    padding-left: 10px;
+    font-weight: bold;
+    background: url('Img/title_bg0.png');
+    color: #31659C;
+    border: 1px solid #C2D5E3;
+    border-bottom: none;
+    height: 30px;
+    _padding-top: 8px;
+    _height: 20px;
+    vertical-align: middle;
+}
+
+caption
+{
+    vertical-align: bottom;
+    text-align: left;
+    height: 32px;
+    line-height: 20px;
+    font-size: 14px;
+    background: url('/DataUser/Style/Img/TitleBG.png') repeat-x;
+    height: 30px;
+    padding-left: 10px;
+    font-family: 黑体;
+    font-weight: bolder;
+    color: #333333;
+}
+
+.CaptionMsg
+{
+    vertical-align: middle;
+    text-align: left;
+    height: 32px;
+    background-position: left center;
+    line-height: 34px;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    font-family: 黑体;
+    font-weight: bolder;
+    color: #FFFFFF;
+    background: url('/DataUser/Style/Img/TitleMsg.png');
+    width: 138px;
+    margin-left: -10px;
+    padding-left: 0px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+.CaptionMsg  a:hover
+{
+    color: white;
+}
+
+.CaptionMsgLong
+{
+    vertical-align: middle;
+    text-align: left;
+    height: 32px;
+    background-position: left center;
+    line-height: 34px;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    font-family: 黑体;
+    font-weight: bolder;
+    color: #FFFFFF;
+    background: url('/DataUser/Style/Img/TitleMsgLong.png');
+    width: 238px;
+    margin-left: -10px;
+    padding-left: 0px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    text-align:center;
+}
+
+.TBDoc
+{
+   /*border-style: dotted; */
+    border-width: 1px;
+    border-color: #CCCCCC;
+  /*  overflow: visible;*/
+    width: 100%;
+    margin: 0px;
+    padding: 0px; 
+    display:block;
+    
+}
+
+.TB
+{
+    border-style: none none dotted none;
+    border-width: 1px;
+    border-color: #003366;
+    overflow: visible;
+    width: 100%;
+    font-size: 12px;
+}
+
+
+/** 其它  */
+.ToolBar
+{
+    background-color: #d8edff;
+}
+
+.GroupTitle
+{
+    padding: 4px;
+    margin: 4px;
+    background-color: #e0ecff;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #0e2d5f;
+}
+.GroupField
+{
+    padding: 4px;
+    margin: 4px;
+    background-color: #eee;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #006666;
+}
+
+.Icon
+{
+    width:12px;
+    height:12px;
+    margin-right:5px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.GroupField a
+{
+    font-weight: bold;
+}
+
+/* 在输入信息字段名称，单元格式的风格 */
+.FDesc
+{
+    padding: 4px;
+    text-align: left;
+    font-size: 12px;
+    margin: 4px;
+    background-color: #e0ecff;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: 20%;
+}
+
+.TBNum
+{
+    border-style: none none dotted none;
+    padding: 1px;
+    margin: 1px;
+    font-size: 12px;
+    text-align: right;
+    float: left;
+    clear: left;
+    width: auto;
+    border-width: 1px;
+    width: 70px;
+    word-break: keep-all;
+}
+
+
+.TBNumReadonly
+{
+    font-size: 12px;
+    background-color: infobackground;
+    border-right: black thin;
+    border-top: black thin;
+    border-left: black thin;
+    border-bottom: black thin;
+    text-align: right;
+    vertical-align: bottom;
+    text-align: right;
+    width: 70px;
+    word-break: keep-all;
+}
+
+.TR1
+{
+    background-color: AliceBlue;
+}
+
+.TRSum
+{
+    font-size: 12px;
+    background-color: #FFFFFF;
+    border-bottom-style: double;
+    border-bottom-width: 2px;
+    border-bottom-color: #C0C0C0;
+    border-right-style: none;
+    border-left-style: none;
+}
+
+.BigDoc
+{
+}
+
+/* 内部标签风格 */
+fieldset
+{
+    margin: 5px;
+    table-layout: auto;
+    padding: 2px;
+    text-align: left;
+}
+
+legend
+{
+    color: green;
+    font-style: inherit;
+    font-weight: bold;
+    
+}
+
+.FieldsetInfo
+{
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-top: 1px outset;
+    border-top-color: #CCCCCC;
+    border-right-color: inherit;
+    border-left-color: inherit;
+    border-width: 1px 0px 0px 0px;
+    border-style: outset none outset none;
+}
+
+Img
+{
+    border: 0px;
+}
+
+.Left
+{
+    background-color: #FFFFFF;
+}
+
+/*鼠标移动到行上，行背景色变化*/
+.tr_hover
+{
+    background: none repeat scroll 0 0 #e0ecff;
+}
+
+#bottomToolBar {
+display:block;
+}
+
+
+
 .Btn
 {
     border: 0;
@@ -12,21 +450,25 @@
 #divCCForm
 {
     position: relative !important;
-    background-color: white;
+    /*background-color: white;*/
     margin: 0 auto;
+    overflow:hidden !important;
+    height:auto !important;
 }
 .Message
 {
 
     margin: 0 auto;
     background: white;
-    display: table;
+    /*display: table;*/
+    display: none;
+    
 }
 #topBar
 {
     margin: 0 auto;
     background: white;
-    text-align: left;
+    text-align: right;
 }
 .topBar
 {
@@ -53,4 +495,402 @@
 {
     margin: 0 auto;
     display: table;
+}
+
+
+/*杨玉慧写*/
+body {
+    font-family: 'Microsoft YaHei UI';
+}
+.col-md-2, .col-md-1, .col-md-11,.col-sm-4, .col-sm-2, .col-sm-10 {
+    line-height: 40px;
+    text-align: left;
+    /*padding: 8px 0px;*/
+}
+
+#nav li span {
+}
+
+
+
+#nav {
+    display: inline-block;
+}
+
+.item {
+    width: 180px;
+    margin-right: 10px;
+    display: block;
+    float: left;
+    background: url(/image/arrow1.png) no-repeat;
+    background-position: 85px 10px;
+}
+    
+
+.item1 {
+    width: 180px;
+    margin-right: 10px;
+    display: block;
+    float: left;
+}
+
+    .item1:first-child {
+        background: url(/image/arrow1.png) no-repeat;
+        background-position: 85px 10px;
+    }
+
+div .item1:first-child a {
+    background: #1555a8;
+}
+
+div .item .active {
+    background: #1555a8;
+}
+div .item1:first-child .active {
+    background: #DC143C;
+}
+div .item1 .active{
+background:#a8352c;
+}
+
+        #centerNavDiv {
+            display:block;
+            clear:both;
+        
+        }
+
+            .item a {
+                background: #2682f9;
+                padding: 10px 20px;
+                border-radius: 30px;
+                font-size: 24px;
+                font-weight: bold;
+                cursor:pointer;
+                color:white;
+                text-decoration:none;
+
+                margin-left:10px;
+            }
+
+                .item a:hover, .item a:focus, .item1 a:hover, .item1 a:focus {
+                    color: white;
+                    text-decoration: none !important;
+                }
+
+            .item label {
+                width: 100%;
+                height: 20px;
+                float: left;
+                padding: 15px 0px;
+            }
+
+.item1 a {
+    cursor:pointer;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    background: #da554b;
+    color:white;
+    text-decoration:none !important;
+
+    margin-left:10px;
+}
+
+
+.item1 label {
+    width: 100%;
+    height: 20px;
+    float: left;
+    padding: 15px 0px;
+}
+#nav {
+    margin-top: 15px;
+}
+
+        .owl-prev {
+            background: url(/image/arrow_left_1.png) no-repeat;
+            padding: 20px 0px 20px 0px;
+            color: transparent;
+            width: 35px;
+            height: 100%;
+            float:left;
+            cursor:pointer;
+
+            border-style:none;
+            margin:10px 0px 10px 10px;
+        }
+
+        .owl-next {
+            background: url(/image/arrow_right_1.png) no-repeat;
+            padding: 20px 0px 20px 0px;
+            color: transparent;
+            width: 35px;
+            float:right;
+            cursor:pointer;
+
+            border-style:none;
+            margin:10px 0px 10px 10px;
+        }
+
+        .owl-prev:hover {
+            background: url(/image/arrow_left_2.png) no-repeat;
+            border-style:none;
+        }
+
+        .owl-next:hover {
+            background: url(/image/arrow_right_2.png) no-repeat;
+            border-style:none;
+        }
+        
+        .owl-prev:focus {
+            background: url(/image/arrow_left_2.png) no-repeat;
+            border-style:none;
+        }
+
+        .owl-next:focus {
+            background: url(/image/arrow_right_2.png) no-repeat;
+            border-style:none;
+        }
+
+input[type=text],select {
+    border-radius: 15px!important;
+    border: #2884fa 1px solid;
+    margin: 8px 0px !important;
+    line-height: 25px !important;
+    width: 100%;
+    padding-left: 6px;
+}
+
+/*.form_tree  input[type=text]{
+    border-radius: 15px 0px 0px 15px  !important;
+    border: #2884fa 1px solid !important;
+    margin: 8px 0px !important ;
+    line-height: 25px !important;
+    width: 100%;
+    padding-left: 6px;
+}
+.form_tree  span{
+    border-radius: 0px 15px 15px 0px  !important;
+    border: #2884fa 1px solid !important;
+    margin: 8px 0px !important ;
+    line-height: 25px !important;
+    width: 100%;
+    padding-left: 6px;
+}*/
+
+
+select {
+    height: 29px;
+}
+
+
+.col-md-1 label,.col-sm-2 label {
+    width: 100px;
+    text-align: right;
+}
+
+textarea,iframe[src*="AttachmentUpload.aspx"] {
+    margin-top:6px !important;
+
+    border-radius: 15px !important;
+    border: #2884fa 1px solid;
+    /*margin: 0px 10px;*/
+    line-height: 25px !important;
+    padding-left: 6px !important;
+    margin: 8px 0px !important;
+    width:100%;
+    height:150px;text-align: left;
+}
+
+.bigHeight {
+    height: 150px;
+}
+
+#topContentDiv {
+    background: #f4f9ff;
+    border-radius: 20px;
+    padding: 10px 0px 0px 0px;
+    margin: 25px 15px 10px 15px;
+    border: #2884fa 1px solid;
+    overflow: auto;
+}
+
+#centerNavDiv {
+
+}
+
+
+#bottomContentDiv {
+    background: #d4e6fe;
+    border-radius: 20px;
+    padding: 10px 0px 0px 0px ;
+    margin: 25px 15px 0px 15px;
+    border: #2884fa 1px solid;
+    overflow: auto;
+}
+
+#contentDiv {
+    width: 100%;
+}
+
+
+.col-md-2 a,.col-md-11 a,.col-md-4 a,.col-md-10 a {
+    line-height: 45px;
+    display: inline-block;
+}
+
+.panel {
+border:0px !important;
+margin:0px;
+}
+
+.topBar {
+display:none;
+}
+
+#bottomToolBar {
+    padding-right: 18px;
+    float:right;
+}
+
+.modal-header {
+    background: #213b5d;
+    color: white;
+    height:50px;
+}
+
+
+.modal-body {
+    border-radius: 20px;
+    margin: 15px 10px;
+    background: #f4f9ff;
+    border:#2884fa 1px solid;
+
+    text-align:right;
+}
+
+.btn {
+    background: #2884fa !important;
+    border-radius: 20px !important;
+    color:white !important;
+}
+
+.errorBorder {
+    border:1px solid #f48236 !important ;
+}
+
+.normalBorder {
+    border:1px solid #2884fa !important;
+
+}
+
+
+body {
+  color: #333333;
+  font-family: "Open Sans", sans-serif;
+  padding: 0px !important;
+  margin: 0px !important;
+  font-size: 13px;
+  direction: ltr;
+}
+ html,body {
+            scrollbar-face-color:#2884fa; /*������3D���棨ThreedFace������ɫ*/ 
+            scrollbar-highlight-color:white; /*������3D���������ߣ�ThreedHighlight����ɫ*/ 
+            scrollbar-shadow-color:white; /*������3D�����İ��ߣ�ThreedShadow����ɫ*/ 
+            scrollbar-3dlight-color:white; /*���������߿���ɫ*/ 
+            scrollbar-arrow-color:white; /*������������ͷ����ɫ */ 
+            scrollbar-track-color:white; /*���������϶�����(TrackBar)��ɫ*/
+            scrollbar-darkshadow-color:white; /*���������߿���ThreedDarkShadow����ɫ*/ 
+            
+        }
+ /*---������Ĭ����ʾ��ʽ--*/  
+        ::-webkit-scrollbar-thumb{  
+          background-color: #2884fa;
+          height: 50px;
+          outline-offset: -2px;
+          outline: 2px solid white;
+          -webkit-border-radius: 4px;
+          border: 2px solid white;
+        }  
+        /*---����������������ʾ��ʽ--*/  
+        ::-webkit-scrollbar-thumb:hover{  
+           background-color:#2884fa;  
+           height:50px;  
+           -webkit-border-radius:4px;  
+        }  
+        /*---��������С--*/  
+        ::-webkit-scrollbar{  
+           width:8px;  
+           height:8px;  
+        }  
+        /*---�����򱳾���ʽ--*/  
+        ::-webkit-scrollbar-track-piece{  
+           background-color: white;  
+           -webkit-border-radius:0;  
+        }
+
+
+        /*提示框的CSS 设置*/
+.popover-title {
+    background: #213b5d !important;
+    color: white;
+    height:30px;
+}
+.popover-content {
+    background:#f4f9ff;
+}
+
+#divTopArrow > .arrow:after {
+    border-top-color:#f4f9ff
+}
+
+#divBottomArrow > .arrow:after {
+    border-bottom-color:#d4e6fe
+}
+#divTopArrow > .arrow {
+    background:white;
+}
+
+#divBottomArrow > .arrow {
+    background:white;
+}
+
+.panel {
+    margin: 0px !important;
+}
+/*.row {
+  margin-bottom: 20px;
+}
+.row .row {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+[class*="col-"] {
+  
+  background-color: #eee;
+  background-color: rgba(86,61,124,.15);
+  border: 1px solid #ddd;
+  border: 1px solid rgba(86,61,124,.2);
+
+  
+}*/
+
+
+
+.header {
+    height: 50px;
+    font-size: 20px;
+    background: #213b5d;
+    color: white;
+    padding: 10px;
+}
+
+.group {
+    width: 100%;
+    text-align: left;
+}
+
+#orgTxt {
+    margin: 0px !important;
 }

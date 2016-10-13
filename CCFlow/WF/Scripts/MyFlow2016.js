@@ -453,14 +453,13 @@ function initPageParam() {
     pageData.Paras = GetQueryString("Paras");
     pageData.IsReadOnly = GetQueryString("IsReadOnly");//如果是IsReadOnly，就表示是查看页面，不是处理页面
     pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
-
 }
 
 //将获取过来的URL参数转成URL中的参数形式  &
 function pageParamToUrl() {
     var paramUrlStr = '';
     for (var param in pageData) {
-        paramUrlStr += '&' + param + '=' + pageData[param];
+        paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
     }
     return paramUrlStr;
 }
@@ -475,24 +474,68 @@ function initBar() {
         success: function (data) {
             var barHtml = data;
             $('.Bar').html(barHtml);
-
-            $('[value=发送]').attr('onclick', $('[value=发送]').attr('onclick') + ";Send();");
-            $('[value=保存]').attr('onclick', $('[value=保存]').attr('onclick') + ";Save();");
-
-            $('[value=退回]').attr('onclick', "$('#returnWorkModal').modal().show();");
+            if ($('[value=退回]').length>0){
+                returnBack();
+                $('[value=退回]').attr('onclick', "$('#returnWorkModal').modal().show();");
+            }
         }
     });
+}
 
-
+//初始化退回窗口
+function returnBack() {
     //初始化退回窗口的SRC
-    //$('#iframeReturnWorkForm').attr('src', "../WF/WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + (new Date).toUTCString());
-    //$('#btnReturnWorkOK').unbind('click');
-    //$('#btnReturnWorkOK').bind('click', function () {
-    //    var retrunVal = frames["iframeReturnWorkForm"].window.returnValue;
-    //    if (retrunVal == undefined)
-    //        retrunVal = "";
-    //    $('#Message').html(retrunVal);
-    //});
+    var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal">'+
+       '<div class="modal-dialog">'
+           +'<div class="modal-content" style="border-radius:0px;width:700px;">'
+              + '<div class="modal-header">'
+                  + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                   +'<h4 class="modal-title">工作退回</h4>'
+               +'</div>'
+               +'<div class="modal-body">'
+                   +'<iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+               +'</div>'
+           +'</div><!-- /.modal-content -->'
+       +'</div><!-- /.modal-dialog -->'
+   +'</div>';
+
+    $('body').append($(returnWorkModalHtml));
+    $('#iframeReturnWorkForm').attr('src', "../WF/WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + (new Date).toUTCString());
+    $('#btnReturnWorkOK').unbind('click');
+    $('#btnReturnWorkOK').bind('click', function () {
+        var retrunVal = frames["iframeReturnWorkForm"].window.returnValue;
+        if (retrunVal == undefined)
+            retrunVal = "";
+        $('#Message').html(retrunVal);
+    });
+}
+
+//初始化移交窗口
+function returnBack() {
+    //初始化退回窗口的SRC
+    var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal">' +
+       '<div class="modal-dialog">'
+           + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+              + '<div class="modal-header">'
+                  + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                   + '<h4 class="modal-title">工作退回</h4>'
+               + '</div>'
+               + '<div class="modal-body">'
+                   + '<iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+               + '</div>'
+           + '</div><!-- /.modal-content -->'
+       + '</div><!-- /.modal-dialog -->'
+   + '</div>';
+
+    $('body').append($(returnWorkModalHtml));
+    $('#iframeReturnWorkForm').attr('src', "../WF/WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + (new Date).toUTCString());
+    $('#btnReturnWorkOK').unbind('click');
+    $('#btnReturnWorkOK').bind('click', function () {
+        var retrunVal = frames["iframeReturnWorkForm"].window.returnValue;
+        if (retrunVal == undefined)
+            retrunVal = "";
+        $('#Message').html(retrunVal);
+    });
 }
 
 //退回操作  显示退回窗口
@@ -548,8 +591,10 @@ function Save() {
     });
 }
 
+//退回工作
 function returnWorkWindowClose(data) {
-    $('#returnWorkModal').modal().hide();
+    $('#returnWorkModal').modal('hide');
+    $('#Message').html(data);
     if (data.indexOf('工作已经被您退回到') == 0) {
         setAttachDisabled();
         setToobarUnVisible();
@@ -587,11 +632,76 @@ function initGroup(workNodeData, groupFiled) {
                 var src = fram.URL.replace(new RegExp(/(：)/g), ':');
                 var params = '&FID=' + pageData.FID;
                 params += '&WorkID=' + groupFiled.OID;
-                if (src.indexOf("?") > 0)
-                    src += "&r=q" + params;
-                else
-                    src += "?r=q" + params;
+
+                //var urlParamArr = getQueryString();
+                //var urlPramTranArr = [];
+                //$.each(urlParamArr, function (i, urlParam) {
+                //    if (urlParam.split('=').length == 2) {
+                //        urlPramTranArr.push((urlParam.indexOf('@') == 0 ? urlParam.split('=')[0].substring(1) : urlParam) + '=' + urlParam.split('=')[1]);
+                //    }
+                //})
+
+               
+                if (src.indexOf("?") > 0) {
+                    var params = getQueryStringFromUrl(src);
+                    if (params != null && params.length > 0) {
+                        $.each(params, function (i, param) {
+                            if (param.indexOf('@') == 0) {//是需要替换的参数
+                                paramArr = param.split('=');
+                                if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                                    if (paramArr[1].indexOf('@WebUser.') == 0) {
+                                        params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr('@WebUser.'.length)];
+                                    }
+                                    if (workNodeData.MainTable[0][paramArr[1].substr(1)] != undefined) {
+                                        params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr(1)];
+                                    }
+
+
+                                    //使用URL中的参数
+                                    var pageParams = getQueryString();
+                                    var pageParamObj = {};
+                                    $.each(pageParams, function (i, pageParam) {
+                                        if (pageParam.indexOf('@') == 0) {
+                                            var pageParamArr = pageParam.split('=');
+                                            pageParamObj[pageParamArr[0].substring(1, pageParamArr[0].length)] = pageParamArr[1];
+                                        }
+                                    });
+                                    var result = "";
+                                    //通过MAINTABLE返回的参数
+                                    for (var ele in workNodeData.MainTable[0]) {
+                                        if (keyOfEn == ele) {
+                                            result = workNodeData.MainTable[0][ele];
+                                            break;
+                                        }
+                                    }
+                                    //通过URL参数传过来的参数
+                                    for (var pageParam in pageParamObj) {
+                                        if (pageParam == keyOfEn) {
+                                            result = pageParamObj[pageParam];
+                                            break;
+                                        }
+                                    }
+
+                                    if (result != '') {
+                                        params[i] = paramArr[0].substring(1) + "=" + unescape(result);
+                                    }
+                                }
+                            }
+                        });
+                        src = src.substr(0, src.indexOf('?')) + "?" + params.join('&');
+                    }
+
+                    //src += "&r=q&" + result.join('&');
+                    //src += "&r=q" + params;
+                    //src = src.substring(0, src.indexOf("?")) + '?' + result.join('&');
+                }
+                else {
+                    //src += "?r=q&" + result.join('&');
+                    //src += "?r=q" + params;
+                    //src = src.substring(0, src.indexOf("?")) + '?' + result.join('&');
+                }
                 groupHtml += '<div class="col-md-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+
             }
             break;
         case "Dtl":
@@ -600,7 +710,7 @@ function initGroup(workNodeData, groupFiled) {
             for (var athIndex in workNodeData.Sys_FrmAttachment) {
                 var ath = workNodeData.Sys_FrmAttachment[athIndex];
                 if (ath.MyPK != groupFiled.CtrlID)
-                    break;
+                    continue;
                 var src = "";
                 if (pageData.IsReadonly)
                     src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
@@ -675,20 +785,27 @@ function InitForm() {
     //解析节点名称
     $('#header span').text(workNodeData.Sys_MapData[0].Name);
     //解析分组
-    var groupFileds = workNodeData.Sys_GroupField;
-
+    var groupFileds = workNodeData.Sys_GroupField.sort(function (a, b) {
+        return  a.Idx-b.Idx;
+    });
     for (var i = 0; i < groupFileds.length; i++) {
         var groupFiled = groupFileds[i];
+        if (groupFiled.Lab == "操作") {
+            console.log('ddd');
+        }
         var groupHtml = '';
         //初始化分组
         var groupResultHtml = initGroup(workNodeData, groupFiled);
         if (groupResultHtml != '') {//返回的值如果为 ''，就表明是字段分组
-            groupHtml = '<div class="col-md-12  " style=""><input class="group" type="button" value="+ ' + groupFiled.Lab + '"/></div>';
+            groupHtml = '<div class="col-md-12  " style=""><input class="group" type="button" value="+ ' + groupFiled.Lab + '" data-target="group' + groupFiled.Idx + '"/></div>';
             groupHtml += groupResultHtml;
             CCFormHtml += groupHtml;
             continue;
-        } else {//返回的值如果为 ''，就表明是字段分组
-            groupHtml = '<div class="col-md-12  " style=""><input type="button" value="+ ' + groupFiled.Lab + '"/></div>';
+        } else if (groupResultHtml == '' && groupFiled.CtrlType == "Ath") {//无附件的分组不展示
+            continue;
+        }
+        else {//返回的值如果为 ''，就表明是字段分组
+            groupHtml = '<div class="col-md-12  " style=""><input class="group" type="button" value="- ' + groupFiled.Lab + '" data-target="group' + groupFiled.Idx + '"/></div>';
             groupHtml += groupResultHtml;
             CCFormHtml += groupHtml;
         }
@@ -700,12 +817,26 @@ function InitForm() {
             return value.GroupID == groupFiled.OID;
         });
 
+        console.log(groupFiled.Lab)
         //开始解析表单字段
         var mapAttrsHtml = InitMapAttr(mapAttrData, workNodeData);
         CCFormHtml += "<div id='" + "group" + groupFiled.Idx + "'>" + mapAttrsHtml + "</div>";
+        console.log(mapAttrsHtml)
     }
 
+
     $('#CCForm').html(CCFormHtml);
+
+    return;
+    //初始化提示信息
+    var alertMsgs = workNodeData.AlertMsg;
+    if (alertMsgs != undefined && alertMsgs.length > 0) {
+        var alertMsgHtml = '';
+        $.each(alertMsgs, function (i, alertMsg) {
+            alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
+        });
+        $('#Message').html(alertMsgHtml);
+    }
 
     //根据NAME 设置ID的值
     var inputs = $('[name]');
@@ -715,10 +846,10 @@ function InitForm() {
         }
     })
 
-    //加载JS文件
-    var enName = workNodeData.Sys_MapData[0].No;
-    var jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
-    $('body').append($('<div>' + jsSrc + '</div>'));
+    ////加载JS文件
+    //var enName = workNodeData.Sys_MapData[0].No;
+    //var jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
+    //$('body').append($('<div>' + jsSrc + '</div>'));
 
     //处理下拉框级联等扩展信息
     AfterBindEn_DealMapExt();
@@ -735,7 +866,7 @@ function InitForm() {
             $(obj.target).val('- ' + text);
         }
 
-        var div = $(obj.target.parentNode.nextSibling).css('display', display);
+        var div = $('#' + $(obj.target).data().target).css('display', display);
     });
 
     //如果是IsReadOnly，就表示是查看页面，不是处理页面
@@ -749,6 +880,8 @@ function InitForm() {
 //解析表单字段 MapAttr
 function InitMapAttr(mapAttrData, workNodeData) {
     var resultHtml = '';
+
+    var hiddenHtml = '';
     for (var j = 0; j < mapAttrData.length; j++) {
         var mapAttr = mapAttrData[j];
         if (mapAttr.UIVisible) {//是否显示
@@ -765,13 +898,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
             var isInOneRow = false;//是否占一整行
             var islabelIsInEle = false;//
 
-
-
-            if (mapAttr.UIIsInput == 1) {//必填
-                eleHtml += '<span style="color:red" class="mustInput">*</span>';
-            }
-
-            eleHtml += '</label></div>';
+            eleHtml += '';
 
             //添加文本框 ，日期控件等
             //AppString   
@@ -813,7 +940,9 @@ function InitMapAttr(mapAttrData, workNodeData) {
                             eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">'
                                 + "<label>" + mapAttr.Name + "</label>"
                                 +
-                                "<textarea style='height:" + mapAttr.UIHeight + "px;' name=TB_'" + mapAttr.KeyOfEn + "' type='text' value='" + defValue + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput">*</span>' : "")
+                                +
+                                "<textarea style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' value='" + defValue + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                 + '</div>';
 
                         }
@@ -876,13 +1005,18 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + mdCol + ' col-sm-' + colsm + '">' +
                             "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                     + '</div>';
-                    eleHtml += "</div>";
+                    //eleHtml += "</div>";
                 }
 
                 if (mapAttr.UIContralType == 3) {//RadioBtn
                     var operations = '';
-                    eleHtml += '<div class="col-md-2 col-sm-4 col-lg-2">';
-                    if (mapAttr.ColSpan == 1) {
+
+                    if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {
+                        if (mapAttr.ColSpan == 1) {
+                            eleHtml += '<div class="col-md-2 col-sm-4 col-lg-2">';
+                        } else if (mapAttr.ColSpan == 3) {
+                            eleHtml += '<div class="col-md-11 col-sm-10 col-lg-11" style="padding:2px 20px;">';
+                        }
                         var enums = workNodeData.Sys_Enum;
                         enums = $.grep(enums, function (value) {
                             return value.EnumKey == mapAttr.UIBindKey;
@@ -897,7 +1031,9 @@ function InitMapAttr(mapAttrData, workNodeData) {
                             operations += "<input id='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' type='radio' " + (obj.IntKey == defValue ? " checked='checked' " : "") + "  name='RB_" + mapAttr.KeyOfEn + "' value='" + obj.IntKey + "'>" + obj.Lab + "</input>" + (rbShowModel == "1" ? "</br>" : '');
                         });
                     }
+
                     eleHtml += operations;
+                    //eleHtml += "</div>";
                     eleHtml += "</div>";
                 }
 
@@ -922,6 +1058,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         });
                     }
                     eleHtml += operations;
+                    //eleHtml += "</div>";
                     eleHtml += "</div>";
                 }
             }
@@ -964,13 +1101,20 @@ function InitMapAttr(mapAttrData, workNodeData) {
             }
 
             if (!islabelIsInEle) {
-                eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  data-tag=' + str + ' class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + eleHtml;
+                eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  data-tag=' + str + ' class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
+                (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput">*</span>' : "")
+                + "</div>" + eleHtml;
+
             }
             resultHtml += eleHtml;
+        } else {
+            var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
+            hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" +"四大导师"+ "' name='TB_" + mapAttr.KeyOfEn + "></input>";
         }
     }
 
-    return resultHtml;
+    return resultHtml + hiddenHtml;
 }
 
 //处理MapExt
@@ -982,8 +1126,14 @@ function AfterBindEn_DealMapExt() {
         switch (mapExt.ExtType) {
             case "PopVal"://PopVal窗返回值
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
+
+                tb.attr("placeholder", "请双击选择。。。");
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
                 tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
+                break;
+            case "RegularExpression"://正则表达式
+                var tb = $('[name$=' + mapExt.AttrOfOper + ']');
+                tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
                 break;
             case "InputCheck"://输入检查
                 var tbJS = $("#TB_" + mapExt.AttrOfOper);
@@ -1156,10 +1306,17 @@ function GepParaByName(name, atPara) {
 function InitDDLOperation(workNodeData, mapAttr, defVal) {
     var operations = '';
     //外键类型
-    if (mapAttr.LGType == 2 && workNodeData[mapAttr.UIBindKey] != undefined) {
-        $.each(workNodeData[mapAttr.UIBindKey], function (i, obj) {
-            operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-        });
+    if (mapAttr.LGType == 2) {
+        if (workNodeData[mapAttr.KeyOfEn] != undefined) {
+            $.each(workNodeData[mapAttr.KeyOfEn], function (i, obj) {
+                operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+        }
+        else if (workNodeData[mapAttr.UIBindKey] != undefined) {
+            $.each(workNodeData[mapAttr.UIBindKey], function (i, obj) {
+                operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+        }
     } else {
         var enums = workNodeData.Sys_Enum;
         enums = $.grep(enums, function (value) {
@@ -1220,7 +1377,7 @@ function GenerWorkNode() {
             //解析表单
             InitForm();
             ///根据下拉框选定的值，绑定表单中哪个元素显示，哪些元素不显示
-            showEleDependOnDRDLValue();
+            //showEleDependOnDRDLValue();
             //
             showNoticeInfo();
         }
@@ -1274,6 +1431,14 @@ function getFormData() {
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
         }
+
+        var hiddens = $('input[type=hidden]');
+        $.each(hiddens, function (i, hidden) {
+            if ($(hidden).attr("name").indexOf('TB_') == 0) {
+                formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
+            }
+        });
+        
     });
     formss = formArrResult.join('&');
     //加上URL中的参数
@@ -1293,6 +1458,11 @@ function getFormData() {
 }
 //发送
 function Send() {
+    //比填写检查
+    if (!checkBlanks()) {
+        return;
+    }
+
     $.ajax({
         type: 'post',
         async: true,
@@ -1356,13 +1526,13 @@ function showEleDependOnDRDLValue() {
 
     var selects = $('input[type=radio],select');
     for (var k = 0; k < selects.length; k++) {
-        var methodVal = selects[k].value;
+        var methodVal = selects[i].value;
         for (var j = 0; j < data.length; j++) {
             var value = data[j].Value;
             var visibleEles = data[j].VisibleCols;
             var unVisibleEles = data[j].UnVisibleCols;
             var drdlColName = data[j].DRDLColName;
-            if (methodVal == value && selects[k].name.indexOf(drdlColName) == (selects[k].name.length - drdlColName.length)) {//处理人处理
+            if (methodVal == value && selects[i].name.indexOf(drdlColName) == (selects[i].name.length - drdlColName.length)) {
                 var unVisibleEleArr = unVisibleEles.split(';');
                 for (var i = 0; i < unVisibleEleArr.length; i++) {
                     if ($('[id$="' + unVisibleEleArr[i] + '"]').length > 0) {
@@ -1390,62 +1560,104 @@ function showEleDependOnDRDLValue() {
 
 //根据下拉框选定的值，弹出提示信息
 function showNoticeInfo() {
-    return;
-    $.ajax({
-        type: 'post',
-        async: true,
-        url: "http://localhost:8080/Ashx/ITILFlow/NoticeInfoHandler.ashx?Method=GetList&m=" + Math.random() + "&FlowNo=" + Common.GetQueryString("FK_Flow"),
-        dataType: "jsonp",
-        jsonp: "callbackparam",
-        jsonpCallback: "success_jsonpCallback",
-        success: function (data) {
-            data = JSON.parse(data);
-            data = data.List;
-            var id = data[0].DRDLColName;
-            // $("select[id$='" + id + "']").bind('change', function (obj) {
-            $("select").bind('change', function (obj) {
-                var methodVal = obj.target.value;
-                for (var j = 0; j < data.length; j++) {
-                    var value = data[j].Value;
-                    var noticeInfo = data[j].NoticeInfo;
-                    var drdlColName = data[j].DRDLColName;
-                    if (methodVal == value && obj.target.id.indexOf(drdlColName) == (obj.target.id.length - drdlColName.length)) {
-                        var selectText = $(obj.target).find("option:selected").text();
-                        $($('#div_NoticeInfo .popover-title span')[0]).text(selectText);
-                        $('#div_NoticeInfo .popover-content').html(noticeInfo);
-
-                        var top = obj.target.offsetHeight;
-                        var left = obj.target.offsetLeft;
-                        var current = obj.target.offsetParent;
-                        while (current !== null) {
-                            left += current.offsetLeft;
-                            top += current.offsetTop;
-                            current = current.offsetParent;
+    var workNode = JSON.parse(jsonStr);
+    var rbs = workNode.Sys_FrmRB;
+    data = rbs;
+    $("input[type=radio],select").bind('change', function (obj) {
+        var methodVal = obj.target.value;
+        for (var j = 0; j < data.length; j++) {
+            var value = data[j].IntKey;
+            var noticeInfo = data[j].Tip;
+            var drdlColName = data[j].KeyOfEn;
+            if (methodVal == value && obj.target.name.indexOf(drdlColName) == (obj.target.name.length - drdlColName.length)) {
+                //高级JS设置;  设置表单字段的  可用 可见 不可用 
+                var fieldConfig = data[j].FieldsCfg;
+                var fieldConfigArr = fieldConfig.split('@');
+                $.each(fieldConfigArr, function (i, fieldCon) {
+                    if (fieldCon != '' && fieldCon.split('=').length == 2) {
+                        var fieldConArr = fieldCon.split('=');
+                        var ele= $('[name$=' + fieldConArr[0] + ']');
+                        switch (fieldConArr[1]) {
+                            case "1"://可用
+                                ele.parent().css('display', 'block');
+                                ele.parent().prev().css('display', 'block');
+                                ele.removeAttr('disabled');
+                                break;
+                            case "2"://可见
+                                ele.parent().css('display', 'block');
+                                ele.parent().prev().css('display', 'block');
+                                break;
+                            case "3"://不可见
+                                ele.parent().css('display', 'none');
+                                ele.parent().prev().css('display', 'none');
+                                break;
                         }
-
-                        $('#div_NoticeInfo').css('top', top - $('#div_NoticeInfo').height() - 30);
-                        $('#div_NoticeInfo').css('left', left);
-                        console.log(top)
-                        console.log(left)
-                        $('#div_NoticeInfo').css('display', 'block');
-                        //$("#btnNoticeInfo").popover('show');
-                        //$('#btnNoticeInfo').trigger('click');
                     }
+                });
+
+                //根据下拉列表的值选择弹出提示信息
+                if (noticeInfo == undefined || noticeInfo.trim() == '') {
+                    break;
                 }
-            });
+                noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
+                var selectText = '';
+                if (obj.target.tagName.toUpperCase() == 'INPUT' && obj.target.type.toUpperCase() == 'RADIO') {//radio button
+                    selectText = obj.target.nextSibling.textContent;
+                } else {//select
+                    selectText = $(obj.target).find("option:selected").text();
+                }
+                $($('#div_NoticeInfo .popover-title span')[0]).text(selectText);
+                $('#div_NoticeInfo .popover-content').html(noticeInfo);
+
+                var top = obj.target.offsetHeight;
+                var left = obj.target.offsetLeft;
+                var current = obj.target.offsetParent;
+                while (current !== null) {
+                    left += current.offsetLeft;
+                    top += current.offsetTop;
+                    current = current.offsetParent;
+                }
+
+
+                if (obj.target.tagName.toUpperCase() == 'INPUT' && obj.target.type.toUpperCase() == 'RADIO') {//radio button
+                    left = left - 40;
+                    top = top + 10;
+                }
+                if (top - $('#div_NoticeInfo').height() - 30 < 0) {
+                    //让提示框在下方展示
+                    $('#div_NoticeInfo').removeClass('top');
+                    $('#div_NoticeInfo').addClass('bottom');
+                    top = top;
+                } else {
+                    $('#div_NoticeInfo').removeClass('bottom');
+                    $('#div_NoticeInfo').addClass('top');
+                    top=top - $('#div_NoticeInfo').height() - 30;
+                }
+                $('#div_NoticeInfo').css('top',top );
+                $('#div_NoticeInfo').css('left', left);
+                $('#div_NoticeInfo').css('display', 'block');
+                //$("#btnNoticeInfo").popover('show');
+                //$('#btnNoticeInfo').trigger('click');
+                break;
+            }
         }
     });
+
 
     $('#span_CloseNoticeInfo').bind('click', function () {
         $('#div_NoticeInfo').css('display', 'none');
     })
+
+    $("input[type=radio]:checked,select").change();
+    $('#span_CloseNoticeInfo').click();
 }
 
 //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
 function checkBlanks() {
     var checkBlankResult = true;
-    //获取所有的列名 找到带* 的LABEL
-    var lbs = $('[class*=col-md-1] label:contains(*)');
+    //获取所有的列名 找到带* 的LABEL mustInput
+    //var lbs = $('[class*=col-md-1] label:contains(*)');
+    var lbs = $('.mustInput');
     $.each(lbs, function (i, obj) {
         if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
             var children = $(obj).parent().next().children();
@@ -1456,26 +1668,26 @@ function checkBlanks() {
                         if (children.attr('type') == "text") {
                             if (children.val() == "") {
                                 checkBlankResult = false;
-                                children.css('border-color', '#f48236');
+                                children.addClass('errorInput');
                             } else {
-                                children.css('border-color', '#2884fa');
+                                children.removeClass('errorInput');
                             }
                         }
                         break;
                     case "SELECT":
                         if (children.val() == "" || children.children('option:checked').text() == "*请选择") {
                             checkBlankResult = false;
-                            children.css('border-color', '#f48236');
+                            children.addClass('errorInput');
                         } else {
-                            children.css('border-color', '#2884fa');
+                            children.removeClass('errorInput');
                         }
                         break;
                     case "TEXTAREA":
                         if (children.val() == "") {
                             checkBlankResult = false;
-                            children.css('border-color', '#f48236');
+                            children.addClass('errorInput');
                         } else {
-                            children.css('border-color', '#2884fa');
+                            children.removeClass('errorInput');
                         }
                         break;
                 }
@@ -1494,5 +1706,8 @@ function checkReg() {
 
 }
 
+function SaveDtlAll() {
+    return true;
+}
 var colVisibleJsonStr = '{"IsSuccess":true,"Msg":null,"MsgList":null,"ErrMsg":null,"ErrMsgList":null,"List":[{"No":"56","DRDLColName":"DRDL_QuoteKnowled","DisplayDRDLColName":"是否引用知识","Value":"1","VisibleCols":"","UnVisibleCols":"Links_KnowledgeNo","FlowNo":"5","NodeNo":"502","DisplayValue":"否","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"96","DRDLColName":"DRDL_QuoteKnowled","DisplayDRDLColName":"是否引用知识","Value":"2","VisibleCols":"Links_KnowledgeNo","UnVisibleCols":"","FlowNo":"5","NodeNo":"502","DisplayValue":"是","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"101","DRDLColName":"DRDL_QuoteKnowled","DisplayDRDLColName":"是否引用知识","Value":"0","VisibleCols":"","UnVisibleCols":"Links_KnowledgeNo","FlowNo":"5","NodeNo":"502","DisplayValue":"*请选择","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"98","DRDLColName":"DRDL_InfluenceRange","DisplayDRDLColName":"影响范围","Value":"5","VisibleCols":"TXB_AffectOther","UnVisibleCols":"DRDL_InfluenceDegree","FlowNo":"5","NodeNo":"502","DisplayValue":"其它","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"99","DRDLColName":"DRDL_InfluenceRange","DisplayDRDLColName":"影响范围","Value":"0","VisibleCols":"","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"*请选择","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"50","DRDLColName":"DRDL_InfluenceRange","DisplayDRDLColName":"影响范围","Value":"4","VisibleCols":"DRDL_InfluenceDegree","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"大于20家分行","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"52","DRDLColName":"DRDL_InfluenceRange","DisplayDRDLColName":"影响范围","Value":"1","VisibleCols":"DRDL_InfluenceDegree","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"1家分行","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"53","DRDLColName":"DRDL_InfluenceRange","DisplayDRDLColName":"影响范围","Value":"2","VisibleCols":"DRDL_InfluenceDegree","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"2-5家分行","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"54","DRDLColName":"DRDL_InfluenceRange","DisplayDRDLColName":"影响范围","Value":"3","VisibleCols":"DRDL_InfluenceDegree","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"5-20家分行","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"100","DRDLColName":"DRDL_InfluenceDegree","DisplayDRDLColName":"事件影响程度","Value":"0","VisibleCols":"","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"*请选择","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"97","DRDLColName":"DRDL_InfluenceDegree","DisplayDRDLColName":"事件影响程度","Value":"6","VisibleCols":"TXB_AffectOther","UnVisibleCols":"DRDL_InfluenceRange","FlowNo":"5","NodeNo":"502","DisplayValue":"其它","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"45","DRDLColName":"DRDL_InfluenceDegree","DisplayDRDLColName":"事件影响程度","Value":"1","VisibleCols":"DRDL_InfluenceRange","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"单笔交易","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"46","DRDLColName":"DRDL_InfluenceDegree","DisplayDRDLColName":"事件影响程度","Value":"2","VisibleCols":"DRDL_InfluenceRange","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"2-19笔交易","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"47","DRDLColName":"DRDL_InfluenceDegree","DisplayDRDLColName":"事件影响程度","Value":"3","VisibleCols":"DRDL_InfluenceRange","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"20-50笔交易","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"48","DRDLColName":"DRDL_InfluenceDegree","DisplayDRDLColName":"事件影响程度","Value":"4","VisibleCols":"DRDL_InfluenceRange","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"50-200笔交易","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"49","DRDLColName":"DRDL_InfluenceDegree","DisplayDRDLColName":"事件影响程度","Value":"5","VisibleCols":"DRDL_InfluenceRange","UnVisibleCols":"TXB_AffectOther","FlowNo":"5","NodeNo":"502","DisplayValue":"大于200笔","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"40","DRDLColName":"DRDL_AcceptMethod2","DisplayDRDLColName":"受理方式","Value":"0","VisibleCols":"Attach_AcceptOpinions;Attach_Public;CDT;DRDL_AcceptMethod2;DRDL_IncidentPRI;DRDL_IncidentSource1;DRDL_IncidentSource2;DRDL_IncidentType;DRDL_IncidentType1;DRDL_IncidentType2;DRDL_IncidentType3;DRDL_IncidentTypeT;DRDL_InfluenceDegree;DRDL_InfluenceRange;DRDL_QuoteKnowled;DRDL_RepeateIncident;Emps;FID;FK_Dept;Links_RelativeRecordNo;OID;RDT;Rec;TXB_AcceptOpinions2;TXB_Email2;TXB_Emp2;TXB_Mobile2;TXB_SystemName","UnVisibleCols":"TXB_DisposeEmp2;TXB_Servicer2","FlowNo":"5","NodeNo":"502","DisplayValue":"服务台分析解释","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"41","DRDLColName":"DRDL_AcceptMethod2","DisplayDRDLColName":"受理方式","Value":"1","VisibleCols":"Attach_AcceptOpinions;Attach_Public;CDT;DRDL_AcceptMethod2;DRDL_IncidentPRI;DRDL_IncidentSource1;DRDL_IncidentSource2;DRDL_IncidentType;DRDL_IncidentType1;DRDL_IncidentType2;DRDL_IncidentType3;DRDL_IncidentTypeT;DRDL_InfluenceDegree;DRDL_InfluenceRange;DRDL_RepeateIncident;Emps;FID;FK_Dept;Links_RelativeRecordNo;OID;RDT;Rec;TXB_AcceptOpinions2;TXB_DisposeEmp2;TXB_Email2;TXB_Emp2;TXB_Mobile2;TXB_SystemName","UnVisibleCols":"DRDL_QuoteKnowled;Links_KnowledgeNo;TXB_Servicer2","FlowNo":"5","NodeNo":"502","DisplayValue":"指定处理员","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"42","DRDLColName":"DRDL_AcceptMethod2","DisplayDRDLColName":"受理方式","Value":"2","VisibleCols":"Attach_AcceptOpinions;Attach_Public;CDT;DRDL_AcceptMethod2;DRDL_IncidentPRI;DRDL_IncidentSource1;DRDL_IncidentSource2;DRDL_IncidentType;DRDL_IncidentType1;DRDL_IncidentType2;DRDL_IncidentType3;DRDL_IncidentTypeT;DRDL_InfluenceDegree;DRDL_InfluenceRange;DRDL_RepeateIncident;Emps;FID;FK_Dept;Links_RelativeRecordNo;OID;RDT;Rec;TXB_AcceptOpinions2;TXB_Email2;TXB_Emp2;TXB_Mobile2;TXB_Servicer2;TXB_SystemName","UnVisibleCols":"DRDL_QuoteKnowled;Links_KnowledgeNo;TXB_DisposeEmp2","FlowNo":"5","NodeNo":"502","DisplayValue":"其他服务台","FlowName":"事件管理","NodeName":"服务台受理"},{"No":"43","DRDLColName":"DRDL_AcceptMethod2","DisplayDRDLColName":"受理方式","Value":"3","VisibleCols":"Attach_AcceptOpinions;Attach_Public;DRDL_AcceptMethod2;TXB_AcceptOpinions2","UnVisibleCols":"CDT;DRDL_IncidentPRI;DRDL_IncidentSource1;DRDL_IncidentSource2;DRDL_IncidentType;DRDL_IncidentType1;DRDL_IncidentType2;DRDL_IncidentType3;DRDL_IncidentTypeT;DRDL_InfluenceDegree;DRDL_InfluenceRange;DRDL_QuoteKnowled;DRDL_RepeateIncident;Emps;FID;FK_Dept;ITIL_CascadEnumT;Links_RelativeRecordNo;OID;RDT;Rec;TXB_DisposeEmp2;TXB_Email2;TXB_Emp2;TXB_Mobile2;TXB_Servicer2;TXB_SystemName","FlowNo":"5","NodeNo":"502","DisplayValue":"驳回","FlowName":"事件管理","NodeName":"服务台受理"}],"Data":null}';
 var jsonStr = '{"Sys_GroupField":[{"OID":1643,"Lab":"开始节点","EnName":"ND17901","Idx":1,"GUID":"","CtrlType":"","CtrlID":"","AtPara":""},{"OID":1653,"Lab":"傻瓜表单测试","EnName":"ND17901","Idx":2,"GUID":"","CtrlType":"","CtrlID":"","AtPara":""}],"Sys_Enum":[{"MyPK":"FindLeader_CH_0","Lab":"直接领导","EnumKey":"FindLeader","IntKey":0,"Lang":"CH"},{"MyPK":"FindLeader_CH_1","Lab":"指定职务级别的领导","EnumKey":"FindLeader","IntKey":1,"Lang":"CH"},{"MyPK":"FindLeader_CH_2","Lab":"指定职务的领导","EnumKey":"FindLeader","IntKey":2,"Lang":"CH"},{"MyPK":"FindLeader_CH_3","Lab":"指定岗位的领导","EnumKey":"FindLeader","IntKey":3,"Lang":"CH"},{"MyPK":"PRI_CH_0","Lab":"低","EnumKey":"PRI","IntKey":0,"Lang":"CH"},{"MyPK":"PRI_CH_1","Lab":"中","EnumKey":"PRI","IntKey":1,"Lang":"CH"},{"MyPK":"PRI_CH_2","Lab":"高","EnumKey":"PRI","IntKey":2,"Lang":"CH"},{"MyPK":"QingJiaLeiXing_CH_0","Lab":"事假","EnumKey":"QingJiaLeiXing","IntKey":0,"Lang":"CH"},{"MyPK":"QingJiaLeiXing_CH_1","Lab":"病假","EnumKey":"QingJiaLeiXing","IntKey":1,"Lang":"CH"},{"MyPK":"QingJiaLeiXing_CH_2","Lab":"婚假","EnumKey":"QingJiaLeiXing","IntKey":2,"Lang":"CH"},{"MyPK":"WJLB_CH_0","Lab":"上行文","EnumKey":"WJLB","IntKey":0,"Lang":"CH"},{"MyPK":"WJLB_CH_1","Lab":"平行文","EnumKey":"WJLB","IntKey":1,"Lang":"CH"},{"MyPK":"WJLB_CH_2","Lab":"下行文","EnumKey":"WJLB","IntKey":2,"Lang":"CH"},{"MyPK":"WJLB_CH_3","Lab":"简讯","EnumKey":"WJLB","IntKey":3,"Lang":"CH"}],"WF_Node":[],"Sys_MapData":[{"No":"ND17901","Name":"填写请假申请单","FrmW":900,"FrmH":1200}],"Sys_MapAttr":[{"MyPK":"ND17901_Title","FK_MapData":"ND17901","KeyOfEn":"Title","Name":"标题","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":251,"UIHeight":23,"MinLen":0,"MaxLen":200,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":1,"UIIsInput":1,"IsSigan":0,"X":174.83,"Y":54.4,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1643,"Idx":-1,"AtPara":""},{"MyPK":"ND17901_FK_DQ","FK_MapData":"ND17901","KeyOfEn":"FK_DQ","Name":"地区","DefVal":"","UIContralType":1,"MyDataType":1,"LGType":2,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"CN_PQ","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":1,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1653,"Idx":1,"AtPara":""},{"MyPK":"ND17901_FK_DQT","FK_MapData":"ND17901","KeyOfEn":"FK_DQT","Name":"地区","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":60,"UIBindKey":"CN_PQ","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1653,"Idx":1,"AtPara":""},{"MyPK":"ND17901_QingJiaRen","FK_MapData":"ND17901","KeyOfEn":"QingJiaRen","Name":"请假人","DefVal":"@WebUser.Name","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1643,"Idx":1,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_QingJiaRenBuMen","FK_MapData":"ND17901","KeyOfEn":"QingJiaRenBuMen","Name":"请假人部门","DefVal":"@WebUser.FK_DeptName","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1643,"Idx":2,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_FK_SFT","FK_MapData":"ND17901","KeyOfEn":"FK_SFT","Name":"省份","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":60,"UIBindKey":"CN_SF","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1653,"Idx":2,"AtPara":""},{"MyPK":"ND17901_PRI","FK_MapData":"ND17901","KeyOfEn":"PRI","Name":"优先级","DefVal":"2","UIContralType":1,"MyDataType":2,"LGType":1,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":200,"UIBindKey":"PRI","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":174.76,"Y":56.19,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":3,"AtPara":""},{"MyPK":"ND17901_QingJiaLeiXing","FK_MapData":"ND17901","KeyOfEn":"QingJiaLeiXing","Name":"请假类型","DefVal":"0","UIContralType":1,"MyDataType":2,"LGType":1,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"QingJiaLeiXing","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1643,"Idx":4,"AtPara":"@RBShowModel=0"},{"MyPK":"ND17901_FK_SF","FK_MapData":"ND17901","KeyOfEn":"FK_SF","Name":"省份","DefVal":"","UIContralType":1,"MyDataType":1,"LGType":2,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"CN_SF","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1653,"Idx":4,"AtPara":""},{"MyPK":"ND17901_QingJiaRiQiCong","FK_MapData":"ND17901","KeyOfEn":"QingJiaRiQiCong","Name":"请假日期从","DefVal":"@RDT","UIContralType":0,"MyDataType":7,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":20,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":0,"GroupID":1643,"Idx":5,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_SanLieWenBenKuang","FK_MapData":"ND17901","KeyOfEn":"SanLieWenBenKuang","Name":"三列文本框","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":3,"GroupID":1653,"Idx":5,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_RiQiDao","FK_MapData":"ND17901","KeyOfEn":"RiQiDao","Name":"日期到","DefVal":"","UIContralType":0,"MyDataType":7,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":20,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":0,"GroupID":1643,"Idx":6,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_YouYanJing","FK_MapData":"ND17901","KeyOfEn":"YouYanJing","Name":"右眼睛","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":69,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1653,"Idx":7,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_QingJiaTianShu","FK_MapData":"ND17901","KeyOfEn":"QingJiaTianShu","Name":"请假天数","DefVal":"0","UIContralType":0,"MyDataType":3,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":0,"GroupID":1643,"Idx":7,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_QingJiaYuanYin","FK_MapData":"ND17901","KeyOfEn":"QingJiaYuanYin","Name":"请假原因","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":69,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":4,"GroupID":1643,"Idx":8,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_ZuoYanJing","FK_MapData":"ND17901","KeyOfEn":"ZuoYanJing","Name":"左眼睛","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":69,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1653,"Idx":10,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_PopDCCT","FK_MapData":"ND17901","KeyOfEn":"PopDCCT","Name":"Pop弹出窗体(表格模式)","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":3,"GroupID":1653,"Idx":12,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_PopFZMS","FK_MapData":"ND17901","KeyOfEn":"PopFZMS","Name":"Pop分组模式","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":3,"GroupID":1653,"Idx":13,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_PopSMS","FK_MapData":"ND17901","KeyOfEn":"PopSMS","Name":"Pop树模式","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":3,"GroupID":1653,"Idx":14,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_PopBGFY","FK_MapData":"ND17901","KeyOfEn":"PopBGFY","Name":"Pop表格分页","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":3,"GroupID":1653,"Idx":15,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_WJLB","FK_MapData":"ND17901","KeyOfEn":"WJLB","Name":"竖向展示枚举","DefVal":"0","UIContralType":3,"MyDataType":2,"LGType":1,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"WJLB","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1653,"Idx":16,"AtPara":"@RBShowModel=1"},{"MyPK":"ND17901_FindLeader","FK_MapData":"ND17901","KeyOfEn":"FindLeader","Name":"竖向展示枚举左边","DefVal":"0","UIContralType":3,"MyDataType":2,"LGType":1,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"FindLeader","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1653,"Idx":17,"AtPara":"@RBShowModel=1"},{"MyPK":"ND17901_DuYanLong","FK_MapData":"ND17901","KeyOfEn":"DuYanLong","Name":"独眼龙","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":69,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":3,"GroupID":1653,"Idx":18,"AtPara":"@FontSize=0"},{"MyPK":"ND17901_Emps","FK_MapData":"ND17901","KeyOfEn":"Emps","Name":"Emps","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":400,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_FID","FK_MapData":"ND17901","KeyOfEn":"FID","Name":"FID","DefVal":"0","UIContralType":0,"MyDataType":2,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_FK_CityT","FK_MapData":"ND17901","KeyOfEn":"FK_CityT","Name":"城市","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":60,"UIBindKey":"CN_City","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":0,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_FK_Dept","FK_MapData":"ND17901","KeyOfEn":"FK_Dept","Name":"操作员部门","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":50,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_CDT","FK_MapData":"ND17901","KeyOfEn":"CDT","Name":"发起时间","DefVal":"@RDT","UIContralType":0,"MyDataType":7,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"1","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_FK_NY","FK_MapData":"ND17901","KeyOfEn":"FK_NY","Name":"年月","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":7,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_MyNum","FK_MapData":"ND17901","KeyOfEn":"MyNum","Name":"个数","DefVal":"1","UIContralType":0,"MyDataType":2,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_OID","FK_MapData":"ND17901","KeyOfEn":"OID","Name":"WorkID","DefVal":"0","UIContralType":0,"MyDataType":2,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":2,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_RDT","FK_MapData":"ND17901","KeyOfEn":"RDT","Name":"接受时间","DefVal":"","UIContralType":0,"MyDataType":7,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"1","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""},{"MyPK":"ND17901_Rec","FK_MapData":"ND17901","KeyOfEn":"Rec","Name":"发起人","DefVal":"@WebUser.No","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":20,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"","EditType":1,"ColSpan":1,"GroupID":1643,"Idx":999,"AtPara":""}],"Sys_MapExt":[],"Sys_FrmLine":[{"MyPK":"29d9936a-fb29-4fd9-b6d3-611f523490d2","FK_MapData":"ND17901","X1":719.09,"X2":719.09,"Y1":40,"Y2":482.73,"BorderColor":"Black","BorderWidth":2},{"MyPK":"45638417-30af-4f05-a82b-b09cd501ad3a","FK_MapData":"ND17901","X1":81.55,"X2":718.82,"Y1":80,"Y2":80,"BorderColor":"Black","BorderWidth":2},{"MyPK":"4bfd8e91-99bb-4d96-aa8f-ed567d6c5684","FK_MapData":"ND17901","X1":83.36,"X2":717.91,"Y1":120.91,"Y2":120.91,"BorderColor":"Black","BorderWidth":2},{"MyPK":"6d8005f2-3018-44a4-9b16-5a1fc5aa4446","FK_MapData":"ND17901","X1":83.36,"X2":717.91,"Y1":40.91,"Y2":40.91,"BorderColor":"Black","BorderWidth":2},{"MyPK":"7c558b34-d002-4fcf-abb0-80e3b7b3b7b8","FK_MapData":"ND17901","X1":81.82,"X2":81.82,"Y1":40,"Y2":480.91,"BorderColor":"Black","BorderWidth":2},{"MyPK":"d6053f98-1b9e-42dc-bf93-0dff21ca9dff","FK_MapData":"ND17901","X1":81.82,"X2":720,"Y1":481.82,"Y2":481.82,"BorderColor":"Black","BorderWidth":2},{"MyPK":"d9fd4ff6-3142-4774-b3a9-a9c47f9faa52","FK_MapData":"ND17901","X1":281.82,"X2":281.82,"Y1":81.82,"Y2":121.82,"BorderColor":"Black","BorderWidth":2},{"MyPK":"ebe7c5ce-8947-4595-90be-25f406a639cb","FK_MapData":"ND17901","X1":360,"X2":360,"Y1":80.91,"Y2":120.91,"BorderColor":"Black","BorderWidth":2},{"MyPK":"f978aa2f-57e9-4f31-8d92-83289130ae22","FK_MapData":"ND17901","X1":158.82,"X2":158.82,"Y1":41.82,"Y2":482.73,"BorderColor":"Black","BorderWidth":2}],"Sys_FrmLink":[],"Sys_FrmBtn":[],"Sys_FrmImg":[{"MyPK":"I20160922161940_1","FK_MapData":"ND17901","ImgAppType":0,"X":577.26,"Y":3.45,"H":40,"W":137,"ImgURL":"/ccform；component/Img/LogoBig.png","ImgPath":"","LinkURL":"http：//ccflow.org","LinkTarget":"_blank","GUID":"","Tag0":"","SrcType":0,"IsEdit":0,"Name":"","EnPK":""}],"Sys_FrmLab":[{"MyPK":"Lab20160922161940_1","FK_MapData":"ND17901","Text":"优先级","X":109.05,"Y":58.1,"FontColor":"black","FontName":"Portable User Interface","FontSize":11,"FontStyle":"Normal","FontWeight":"normal","IsBold":0,"IsItalic":0},{"MyPK":"Lab20160922161940_10","FK_MapData":"ND17901","Text":"新建节点(请修改标题)","X":294.67,"Y":8.27,"FontColor":"Blue","FontName":"Portable User Interface","FontSize":23,"FontStyle":"Normal","FontWeight":"normal","IsBold":0,"IsItalic":0},{"MyPK":"Lab20160922161940_13","FK_MapData":"ND17901","Text":"说明：以上内容是ccflow自动产生的，您可以修改/删除它。@为了更方便您的设计您可以到http：//ccflow.org官网下载表单模板.@因为当前技术问题与silverlight开发工具使用特别说明如下：@@1，改变控件位置： @  所有的控件都支持 wasd， 做为方向键用来移动控件的位置， 部分控件支持方向键. @2， 增加textbox， 从表， dropdownlistbox， 的宽度 shift+ -> 方向键增加宽度 shift + <- 减小宽度.@3， 保存 windows键 + s.  删除 delete.  复制 ctrl+c   粘帖： ctrl+v.@4， 支持全选，批量移动， 批量放大缩小字体.， 批量改变线的宽度.@5， 改变线的长度： 选择线，点绿色的圆点，拖拉它。.@6， 放大或者缩小　label 的字体 ， 选择一个多个label ， 按 A+ 或者　A－　按钮.@7， 改变线或者标签的颜色， 选择操作对象，点工具栏上的调色板.","X":168.24,"Y":163.7,"FontColor":"Red","FontName":"Portable User Interface","FontSize":11,"FontStyle":"Normal","FontWeight":"normal","IsBold":0,"IsItalic":0},{"MyPK":"Lab20160922161940_4","FK_MapData":"ND17901","Text":"发起人","X":106.48,"Y":96.08,"FontColor":"black","FontName":"Portable User Interface","FontSize":11,"FontStyle":"Normal","FontWeight":"normal","IsBold":0,"IsItalic":0},{"MyPK":"Lab20160922161940_7","FK_MapData":"ND17901","Text":"发起时间","X":307.64,"Y":95.17,"FontColor":"black","FontName":"Portable User Interface","FontSize":11,"FontStyle":"Normal","FontWeight":"normal","IsBold":0,"IsItalic":0}],"Sys_FrmRB":[],"Sys_FrmEle":[],"Sys_FrmAttachment":[],"Sys_FrmImgAth":[],"Sys_MapDtl":[],"WF_NodeBar":[{"NodeID":17901,"Step":1,"FK_Flow":"179","Name":"填写请假申请单","Tip":"","WhoExeIt":0,"TurnToDeal":0,"TurnToDealDoc":"","ReadReceipts":0,"CondModel":0,"CancelRole":0,"IsTask":1,"IsRM":1,"DTFrom":"2016-09-22 16：19","DTTo":"2016-09-22 16：19","IsBUnit":0,"FocusField":"请假原因：@QingJiaYuanYin","SaveModel":0,"IsGuestNode":0,"SelfParas":"","RunModel":0,"SubThreadType":0,"PassRate":100,"SubFlowStartWay":0,"SubFlowStartParas":"","TodolistModel":0,"IsAllowRepeatEmps":0,"AutoRunEnable":0,"AutoRunParas":"","AutoJumpRole0":0,"AutoJumpRole1":0,"AutoJumpRole2":0,"WhenNoWorker":0,"SendLab":"发送","SendJS":"","SaveLab":"保存","SaveEnable":1,"ThreadLab":"子线程","ThreadEnable":0,"ThreadKillRole":0,"SubFlowLab":"子流程","SubFlowCtrlRole":0,"JumpWayLab":"跳转","JumpWay":0,"JumpToNodes":"","ReturnLab":"退回","ReturnRole":0,"ReturnAlert":"","IsBackTracking":0,"ReturnField":"","ReturnReasonsItems":"","CCLab":"抄送","CCRole":0,"CCWriteTo":0,"ShiftLab":"移交","ShiftEnable":0,"DelLab":"删除","DelEnable":0,"EndFlowLab":"结束流程","EndFlowEnable":0,"PrintDocLab":"打印单据","PrintDocEnable":0,"TrackLab":"轨迹","TrackEnable":1,"HungLab":"挂起","HungEnable":0,"SelectAccepterLab":"接受人","SelectAccepterEnable":0,"SearchLab":"查询","SearchEnable":0,"WorkCheckLab":"审核","WorkCheckEnable":0,"BatchLab":"批处理","BatchEnable":0,"AskforLab":"加签","AskforEnable":0,"TCLab":"流转自定义","TCEnable":0,"WebOffice":"公文","WebOfficeEnable":0,"PRILab":"重要性","PRIEnable":0,"CHLab":"节点时限","CHEnable":0,"FocusLab":"关注","FocusEnable":1,"FWCSta":0,"FWCShowModel":1,"FWCType":0,"FWCNodeName":"","FWCAth":0,"FWCTrackEnable":1,"FWCListEnable":1,"FWCIsShowAllStep":0,"SigantureEnabel":0,"FWCIsFullInfo":1,"FWCOpLabel":"审核","FWCDefInfo":"同意","FWC_H":300,"FWC_W":400,"FWCFields":"","MPhone_WorkModel":0,"MPhone_SrcModel":0,"MPad_WorkModel":0,"MPad_SrcModel":0,"FTCLab":"流转自定义","FTCSta":0,"FTCWorkModel":0,"FTC_X":5,"FTC_Y":5,"FTC_H":300,"FTC_W":400,"OfficeOpenLab":"打开本地","OfficeOpenEnable":0,"OfficeOpenTemplateLab":"打开模板","OfficeOpenTemplateEnable":0,"OfficeSaveLab":"保存","OfficeSaveEnable":1,"OfficeAcceptLab":"接受修订","OfficeAcceptEnable":0,"OfficeRefuseLab":"拒绝修订","OfficeRefuseEnable":0,"OfficeOverLab":"套红","OfficeOverEnable":0,"OfficeMarksEnable":1,"OfficePrintLab":"打印","OfficePrintEnable":0,"OfficeSealLab":"签章","OfficeSealEnable":0,"OfficeInsertFlowLab":"插入流程","OfficeInsertFlowEnable":0,"OfficeNodeInfo":0,"OfficeReSavePDF":0,"OfficeDownLab":"下载","OfficeDownEnable":0,"OfficeIsMarks":1,"OfficeTemplate":"","OfficeIsParent":1,"OfficeTHEnable":0,"OfficeTHTemplate":"","SFLab":"子流程","SFSta":0,"SFShowModel":1,"SFCaption":"","SFDefInfo":"","SFActiveFlows":"","SF_X":5,"SF_Y":5,"SF_H":300,"SF_W":400,"SFFields":"","SFShowCtrl":0,"SelectorDBShowWay":0,"SelectorModel":0,"SelectorP1":"","SelectorP2":"","OfficeOpen":"打开本地","OfficeOpenTemplate":"打开模板","OfficeSave":"保存","OfficeAccept":"接受修订","OfficeRefuse":"拒绝修订","OfficeOver":"套红按钮","OfficeMarks":1,"OfficeReadOnly":0,"OfficePrint":"打印按钮","OfficeSeal":"签章按钮","OfficeSealEnabel":0,"OfficeInsertFlow":"插入流程","OfficeInsertFlowEnabel":0,"OfficeIsDown":0,"OfficeIsTrueTH":0,"WebOfficeFrmModel":0,"FrmThreadLab":"子线程","FrmThreadSta":0,"FrmThread_X":5,"FrmThread_Y":5,"FrmThread_H":300,"FrmThread_W":400,"CheckNodes":"","DeliveryWay":0,"FWCLab":"审核信息","FWC_X":5,"FWC_Y":5,"CCIsStations":0,"CCIsDepts":0,"CCIsEmps":0,"CCIsSQLs":0,"CCCtrlWay":0,"CCSQL":"","CCTitle":"","CCDoc":"","IsExpSender":1,"DeliveryParas":"","BatchRole":0,"BatchListCount":12,"BatchParas":"","FormType":0,"NodeFrmID":"","FormUrl":"http：//","BlockModel":0,"BlockExp":"","BlockAlert":"","TSpanDay":0,"TSpanHour":8,"WarningDay":0,"WarningHour":4,"TCent":2,"CHWay":0,"IsEval":0,"OutTimeDeal":0,"DoOutTime":"","DoOutTimeCond":"","FrmTrackLab":"轨迹","FrmTrackSta":0,"FrmTrack_X":5,"FrmTrack_Y":5,"FrmTrack_H":300,"FrmTrack_W":400,"ICON":"前台","NodeWorkType":1,"FlowName":"我的流程(傻瓜表单)","FK_FlowSort":"01","FK_FlowSortT":"","FrmAttr":"","TAlertRole":0,"TAlertWay":0,"WAlertRole":0,"WAlertWay":0,"Doc":"","IsCanRpt":1,"IsCanOver":0,"IsSecret":0,"IsCanDelFlow":0,"IsHandOver":0,"NodePosType":0,"IsCCFlow":0,"HisStas":"@07@08@09@10@11","HisDeptStrs":"@07@08@09@10@11","HisToNDs":"@17902","HisBillIDs":"","HisSubFlows":"","PTable":"","ShowSheets":"","GroupStaNDs":"@17901","X":170,"Y":81,"AtPara":"","DocLeftWord":"","DocRightWord":""}],"WF_Flow":[{"No":"179","Name":"我的流程(傻瓜表单)","FK_FlowSort":"01","FK_FlowSortText":"线性流程","SysType":"","FlowRunWay":0,"RunObj":"","Note":"","RunSQL":"","NumOfBill":0,"NumOfDtl":0,"FlowAppType":0,"ChartType":1,"IsCanStart":"1","AvgDay":0,"IsFullSA":0,"IsMD5":0,"Idx":0,"TimelineRole":0,"Paras":"@StartNodeX=200@StartNodeY=50@EndNodeX=200@EndNodeY=350","PTable":"","Draft":0,"DataStoreModel":1,"TitleRole":"","FlowMark":"","FlowEventEntity":"","HistoryFields":"","IsGuestFlow":0,"BillNoFormat":"","FlowNoteExp":"","DRCtrlType":0,"StartLimitRole":0,"StartLimitPara":"","StartLimitAlert":"","StartLimitWhen":0,"StartGuideWay":0,"StartGuidePara1":"","StartGuidePara2":"","StartGuidePara3":"","IsResetData":0,"IsLoadPriData":0,"CFlowWay":0,"CFlowPara":"","IsBatchStart":0,"BatchStartFields":"","IsAutoSendSubFlowOver":0,"Ver":"2016-09-20 15：11：11","DType":1,"AtPara":"","DTSWay":0,"DTSDBSrc":"","DTSBTable":"","DTSBTablePK":"","DTSTime":0,"DTSSpecNodes":"","DTSField":0,"DTSFields":""}],"MainTable":[{"QingJiaYuanYin":"我是请假原因","Title":"财务部-guobaogeng，郭宝庚在2016-09-22 17：14发起.","QingJiaRen":"郭宝庚","QingJiaRenBuMen":"财务部","PRI":2,"PRIText":"高","QingJiaLeiXing":1,"QingJiaLeiXingText":"事假","QingJiaRiQiCong":"2016-09-22 17：14","RiQiDao":"","QingJiaTianShu":0,"QingJiaYuanYin":"我是请假原因2","RDT":"2016-09-22 17：49","Rec":"guobaogeng","FK_NY":"2016-09","MyNum":1,"OID":102,"CDT":"2016-09-22 17：49","Emps":"guobaogeng","FID":0,"FK_CityT":"","FK_Dept":"5","FK_DQ":"","FK_DQText":"","FK_DQT":"","FK_SFT":"","FK_SF":"","FK_SFText":"","SanLieWenBenKuang":"","YouYanJing":"","ZuoYanJing":"","PopDCCT":"","PopFZMS":"","PopSMS":"","PopBGFY":"","WJLB":0,"WJLBText":"上行文","FindLeader":1,"FindLeaderText":"指定职务级别的领导","DuYanLong":""}],"CN_PQ":[{"No":"AA","Name":"城市"},{"No":"DB","Name":"东北"},{"No":"HB","Name":"华北"},{"No":"HD","Name":"华东"},{"No":"XB","Name":"西北"},{"No":"XN","Name":"西南"},{"No":"ZN","Name":"中南"},{"No":"ZZ","Name":"香澳台"}],"CN_SF":[{"No":"11","Name":"北京","Names":"北京市","JC":"京","FK_PQ":"AA"},{"No":"12","Name":"天津","Names":"天津市","JC":"津","FK_PQ":"AA"},{"No":"13","Name":"河北","Names":"河北省","JC":"冀","FK_PQ":"HB"},{"No":"14","Name":"山西","Names":"山西省","JC":"晋","FK_PQ":"HB"},{"No":"15","Name":"内蒙","Names":"内蒙古自治区","JC":"蒙","FK_PQ":"HB"},{"No":"21","Name":"辽宁","Names":"辽宁省","JC":"辽","FK_PQ":"DB"},{"No":"22","Name":"吉林","Names":"吉林省","JC":"吉","FK_PQ":"DB"},{"No":"23","Name":"黑龙江","Names":"黑龙江省","JC":"黑","FK_PQ":"DB"},{"No":"31","Name":"上海","Names":"上海市","JC":"沪","FK_PQ":"AA"},{"No":"32","Name":"江苏","Names":"江苏省","JC":"苏","FK_PQ":"HD"},{"No":"33","Name":"浙江","Names":"浙江省","JC":"浙","FK_PQ":"HD"},{"No":"34","Name":"安徽","Names":"安徽省","JC":"皖","FK_PQ":"HD"},{"No":"35","Name":"福建","Names":"福建省","JC":"闽","FK_PQ":"HD"},{"No":"36","Name":"江西","Names":"江西省","JC":"赣","FK_PQ":"HD"},{"No":"37","Name":"山东","Names":"山东省","JC":"鲁","FK_PQ":"HD"},{"No":"41","Name":"河南","Names":"河南省","JC":"豫","FK_PQ":"ZN"},{"No":"42","Name":"湖北","Names":"湖北省","JC":"鄂","FK_PQ":"ZN"},{"No":"43","Name":"湖南","Names":"湖南省","JC":"湘","FK_PQ":"ZN"},{"No":"44","Name":"广东","Names":"广东省","JC":"粤","FK_PQ":"ZN"},{"No":"45","Name":"广西","Names":"广西壮族自治区","JC":"桂","FK_PQ":"ZN"},{"No":"46","Name":"海南","Names":"海南省","JC":"琼","FK_PQ":"ZN"},{"No":"50","Name":"重庆","Names":"重庆市","JC":"渝","FK_PQ":"AA"},{"No":"51","Name":"四川","Names":"四川省","JC":"川","FK_PQ":"XN"},{"No":"52","Name":"贵州","Names":"贵州省","JC":"贵","FK_PQ":"XN"},{"No":"53","Name":"云南","Names":"云南省","JC":"云","FK_PQ":"XN"},{"No":"54","Name":"西藏","Names":"西藏自治区","JC":"藏","FK_PQ":"XN"},{"No":"61","Name":"陕西","Names":"陕西省","JC":"陕","FK_PQ":"XB"},{"No":"62","Name":"甘肃","Names":"甘肃省","JC":"甘","FK_PQ":"XB"},{"No":"63","Name":"青海","Names":"青海省","JC":"青","FK_PQ":"XB"},{"No":"64","Name":"宁夏","Names":"宁夏回族自治区","JC":"宁","FK_PQ":"XB"},{"No":"65","Name":"新疆","Names":"新疆维吾尔自治区","JC":"新","FK_PQ":"XB"},{"No":"71","Name":"台湾","Names":"台湾省","JC":"台","FK_PQ":"ZZ"},{"No":"81","Name":"香港","Names":"香港特别行政区","JC":"港","FK_PQ":"ZZ"},{"No":"82","Name":"澳门","Names":"澳门特别行政区","JC":"澳","FK_PQ":"ZZ"}]}'

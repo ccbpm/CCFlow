@@ -189,6 +189,11 @@ namespace BP.Sys
                     ht.Add("TreeSQL", this.PopValTreeSQL);
                     ht.Add("TreeParentNo", this.PopValTreeParentNo);
                     break;
+                case PopValWorkModel.TreeDouble:
+                    ht.Add("DoubleTreeSQL", this.PopValTreeSQL);
+                    ht.Add("DoubleTreeParentNo", this.PopValTreeParentNo);
+                    ht.Add("DoubleTreeEntitySQL", this.PopValDoubleTreeEntitySQL);
+                    break;
                 default:
                     break;
             }
@@ -331,6 +336,23 @@ namespace BP.Sys
                 this.SetPara("PopValFormat", (int)value);
             }
         }
+
+        /// <summary>
+        /// 双实体树的实体
+        /// </summary>
+        public string PopValDoubleTreeEntitySQL
+        {
+            get
+            {
+                return this.Tag1;
+            }
+            set
+            {
+                this.Tag1 = value;
+
+            }
+        }
+        
         /// <summary>
         /// pop 选择方式
         /// 0,多选,1=单选.

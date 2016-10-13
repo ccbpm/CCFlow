@@ -114,11 +114,13 @@
         function Save() {
             var fk_mapExt = GetQueryString("MyPK");
             var frmData = $("#cc").serialize();
+            var keyOfEn = GetQueryString("RefNo");
+            var fk_mapData = GetQueryString("FK_MapData");
             $.ajax({
                 data:frmData,
                 type: 'post',
                 async: true,
-                url: "MapExtHandler.ashx?DoType=PopVal_Save&FK_MapExt=" + fk_mapExt + "&m=" + Math.random(),
+                url: "MapExtHandler.ashx?DoType=PopVal_Save&FK_MapExt=" + fk_mapExt + "&m=" + Math.random() + "&KeyOfEn=" + keyOfEn + '&FK_MapData=' + fk_mapData,
                 dataType: 'html',
                 success: function (data) {
                     alert(data);
@@ -203,6 +205,9 @@
                     data = data.replace("\t\n", "");
                     data = data.replace("\t\n", "");
 
+                    data = data.replace(/\n/g, "");
+                    data = data.replace(/\r/g, "");
+
                     data = JSON.parse(data);
 
                     //设置选择的模式.
@@ -221,10 +226,22 @@
                             $("#TB_TablePage_SQLCount").val(data.PopValTablePageSQLCount);
                             break;
                         case "Group":
+                            $("#TB_GroupModel_Group").val(data.GroupSQL);
+                            $("#TB_GroupModel_Entity").val(data.EntitySQL);
                             break;
                         case "Tree":
-                            $("#TB_TreeSQL").val(data.PopValTablePageSQLCount);
-                            $("#TB_TreeParentNo").val(data.PopValTablePageSQLCount);
+                            $("#TB_TreeSQL").val(data.TreeSQL);
+                            $("#TB_TreeParentNo").val(data.TreeParentNo);
+                            //$("#TB_DoubleTreeSQL").val(data.TreeSQL);
+                            //$("#TB_DoubleTreeParentNo").val(data.TreeParentNo);
+                            //$("#TB_DoubleTreeEntitySQL").val(data.PopValTablePageSQLCount);
+                            //$("#TB_TreeSQL").val(data.PopValTablePageSQLCount);
+                            //$("#TB_TreeParentNo").val(data.PopValTablePageSQLCount);
+                            break;
+                        case "TreeDouble":
+                            $("#TB_DoubleTreeSQL").val(data.DoubleTreeSQL);
+                            $("#TB_DoubleTreeParentNo").val(data.DoubleTreeParentNo);
+                            $("#TB_DoubleTreeEntitySQL").val(data.DoubleTreeEntitySQL);
                             break;
                         default:
                             alert('没有判断的元素.');
@@ -258,6 +275,7 @@
 <body onkeypress="Esc();">
 <form id="cc"    >
 <!---------------------------- 模式1 ：自定义URL ---------------------------------------------------->
+    <input type="checkbox" name="ccb" value="ccbV" id="ccb"/> ccb
 <fieldset>
 <legend><input id="RB_PopWorkModel_SelfUrl" type="radio" name="Model" value="SelfUrl"  /><label for="RB_PopWorkModel_SelfUrl">自定义URL</label>  </legend>
 <a href="javascript:ShowHidden('url')">自定义URL:</a>
@@ -274,7 +292,7 @@
 
 <!---------------------------- 模式2：Table  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_Table" type="radio" name="Model" value="TableOnly"  /><label for="RB_PopWorkModel_Table">表格模式</label>  </legend>
+<legend><input id="RB_PopWorkModel_TableOnly" type="radio" name="Model" value="TableOnly"  /><label for="RB_PopWorkModel_TableOnly">表格模式</label>  </legend>
 <a href="javascript:ShowHidden('Table')">初始化表格的查询 SQL </a>
  <div id="Table" style="color:Gray; display:none">
  
@@ -336,7 +354,7 @@
 
 <!---------------------------- 模式4 ：分组显示,但是不分页.  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_GroupModel" type="radio" name="Model" value="GroupModel"  /><label for="RB_PopWorkModel_GroupModel">分组模式</label>  </legend>
+<legend><input id="RB_PopWorkModel_Group" type="radio" name="Model" value="Group"  /><label for="RB_PopWorkModel_Group">分组模式</label>  </legend>
 <a href="javascript:ShowHidden('GroupModelSQL')">分组查询SQL(可以为空):</a>
 <br />
  <div id="GroupModelSQL" style="color:Gray; display:none">
@@ -388,7 +406,7 @@
  
 <!---------------------------- 模式6 ：树模式(双实体),没有关键字查询.  ---------------------------------------------------->
 <fieldset>
-<legend><input id="RB_PopWorkModel_DoubleTree" type="radio" name="Model" value="RB_PopWorkModel_DoubleTree"  /><label for="RB_PopWorkModel_DoubleTree">树模式(双实体)</label>  </legend>
+<legend><input id="RB_PopWorkModel_TreeDouble" type="radio" name="Model" value="TreeDouble" /><label for="RB_PopWorkModel_TreeDouble">树模式(双实体)</label>  </legend>
 <a href="javascript:ShowHidden('Tree6')">初始化树SQL</a>
  <div id="Tree6" style="color:Gray; display:none">
  <ul>

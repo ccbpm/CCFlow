@@ -181,16 +181,9 @@ namespace CCFlow.WF.Admin
 
             BP.Web.WebUser.SignInOfGener(emp);
 
-            string url = context.Session["LastUrl"] as string;
-            if (string.IsNullOrEmpty(url) == true)
-            {
-                return "url@" + url;
-            }
+            return "登录成功.";
 
-            url = context.Request["LastUrl"] as string;
-            url = url.Replace("[", "");
-            url = url.Replace("]", "");
-            return "url@" + url;
+             
         }
 
         public bool IsReusable

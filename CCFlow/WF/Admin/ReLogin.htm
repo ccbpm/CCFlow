@@ -28,9 +28,13 @@
                         return;
                     }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace("url@", "");
+                    var url = GetQueryString("LastUrl");
+
+                    if (url != null) {
+                        url = url.replace('[', '');
+                        url = url.replace(']', '');
                         window.location.href = url;
+                        return;
                     }
 
                     alert(data);

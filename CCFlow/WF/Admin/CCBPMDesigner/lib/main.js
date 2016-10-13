@@ -1109,7 +1109,7 @@ function onMouseDown(ev) {
                     var shapeText = currentTextEditor.editor.getElementsByTagName('textarea')[0].value;
                     $.ajax({
                         type: 'POST',
-                        url: "./common/controller.ashx",
+                        url: "/WF/Admin/CCBPMDesigner/controller.ashx",
                         data: { action: 'editnodename', NodeID: ccObj.CCBPM_OID, NodeName: encodeURI(shapeText) },
                         success: function (jsonData) {
                             if (jsonData == "true") {
@@ -3395,7 +3395,7 @@ function save(showInfo) {
         }
     }
 
-    $.post("./common/controller.ashx", {
+    $.post("/WF/Admin/CCBPMDesigner/controller.ashx", {
         action: 'save',
         diagram: serializedDiagram,
         png: dataURL,
@@ -3528,7 +3528,7 @@ function exportCanvas() {
 function load(diagramId) {
     //alert("load diagram [" + diagramId + ']');
 
-    $.post("./common/controller.ashx", { action: 'load', diagramId: diagramId },
+    $.post("/WF/Admin/CCBPMDesigner/controller.ashx", { action: 'load', diagramId: diagramId },
         function (data) {
             //alert(data);
             try {

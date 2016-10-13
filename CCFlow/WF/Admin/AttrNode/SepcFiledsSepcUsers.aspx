@@ -80,12 +80,13 @@
     BP.Sys.MapExts exts = new BP.Sys.MapExts();
     int mecount =  exts.Retrieve(BP.Sys.MapExtAttr.FK_MapData, fk_mapdata, 
         BP.Sys.MapExtAttr.Tag, this.Request.QueryString["FK_Node"],
-        BP.Sys.MapExtAttr.ExtType, "SepcFieldsSepcUsers");
+        BP.Sys.MapExtAttr.ExtType, "SepcFiledsSepcUsers");
+                                    
 
     foreach (BP.Sys.MapExt item in exts)
     {
         %>
-       <li> <a href="javascript:OpenIt('<%=fk_mapdata %>','<%=fk_node %>','<%=item.MyPK %>','Fields')">设置:<%=item.Doc %></a>  - <%=item.Tag1 %>-<%=item.Tag2 %>-<%=item.Tag3 %></li>
+       <li> <a href="javascript:OpenIt('<%=fk_mapdata %>','<%=fk_node %>','<%=item.MyPK %>','Fileds')">设置:<%=item.Doc %></a>  - <%=item.Tag1 %>-<%=item.Tag2 %>-<%=item.Tag3 %></li>
         
   <%  } %>
 </ul>
@@ -95,7 +96,7 @@
 
 <tr>
 <td colspan="6">
-<input type="button"  value="设置特别权限"  onclick="Save('<%=fk_mapdata %>','<%=fk_node %>','Fields')" />
+<input type="button"  value="设置特别权限"  onclick="Save('<%=fk_mapdata %>','<%=fk_node %>','Fileds')" />
  <%--   <asp:Button ID="Btn_Save" runat="server" Text="批量设置" />--%>
     </td>
 </tr>

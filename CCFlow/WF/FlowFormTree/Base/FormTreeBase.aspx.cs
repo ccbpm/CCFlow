@@ -79,6 +79,28 @@ namespace CCFlow.WF.FlowFormTree
                 return Int64.Parse(fid);
             }
         }
+        public Int64 PWorkID
+        {
+            get
+            {
+                string pworkId = getUTF8ToString("PWorkID");
+                if (string.IsNullOrEmpty(pworkId))
+                    return 0;
+
+                return Int64.Parse(pworkId);
+            }
+        }
+        public Int64 CWorkID
+        {
+            get
+            {
+                string cworkId = getUTF8ToString("CWorkID");
+                if (string.IsNullOrEmpty(cworkId))
+                    return 0;
+
+                return Int64.Parse(cworkId);
+            }
+        }
         #endregion 参数.
 
         protected void Page_Load(object sender, EventArgs e)
@@ -375,7 +397,7 @@ namespace CCFlow.WF.FlowFormTree
 
             /*如果到达的点为空 */
             Nodes nds = _HisNode.HisToNodes;
-            
+
             if (nds.Count == 0)
             {
                 //当前点是最后的一个节点，不能使用此功能
@@ -392,9 +414,9 @@ namespace CCFlow.WF.FlowFormTree
                 {
                     //if (mynd.HisDeliveryWay != DeliveryWay.BySelected)
                     //    continue;
-                    
+
                     GERpt _wk = _HisNode.HisFlow.HisGERpt;
-                    if (this.FID==0)
+                    if (this.FID == 0)
                         _wk.OID = this.WorkID;
                     else
                         _wk.OID = this.FID;
@@ -416,7 +438,7 @@ namespace CCFlow.WF.FlowFormTree
             }
             //检查是否是原路退回
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            if (gwf.WFState == WFState.ReturnSta && gwf.Paras_IsTrackBack==false)
+            if (gwf.WFState == WFState.ReturnSta && gwf.Paras_IsTrackBack == false)
             {
                 return "ReturnSta";
             }
@@ -644,7 +666,7 @@ namespace CCFlow.WF.FlowFormTree
             //节点表单
             string tfModel = SystemConfig.AppSettings["TreeFrmModel"];
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            
+
             FrmNodes frmNodes = new FrmNodes();
             QueryObject qo = new QueryObject(frmNodes);
             qo.AddWhere(FrmNodeAttr.FK_Node, this.FK_Node);
@@ -725,7 +747,7 @@ namespace CCFlow.WF.FlowFormTree
 
             //所有表单集合
             MapDatas mds = new MapDatas();
-            mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node="+this.FK_Node);
+            mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
 
             foreach (FrmNode frmNode in frmNodes)
             {
@@ -736,7 +758,24 @@ namespace CCFlow.WF.FlowFormTree
                         break;
                     case FrmEnableRole.WhenHaveData: //判断是否有数据.
                         MapData md = new MapData(frmNode.FK_Frm);
-                        if (DBAccess.RunSQLReturnValInt("SELECT COUNT(*) as Num FROM " + md.PTable + " WHERE OID=" + this.WorkID) == 0)
+                        Int64 pk = this.WorkID;
+                        switch (frmNode.WhoIsPK)
+                        {
+                            case WhoIsPK.FID:
+                                pk = this.FID;
+                                break;
+                            case WhoIsPK.PWorkID:
+                                pk = this.PWorkID;
+                                break;
+                            case WhoIsPK.CWorkID:
+                                pk = this.CWorkID;
+                                break;
+                            case WhoIsPK.OID:
+                            default:
+                                pk = this.WorkID;
+                                break;
+                        }
+                        if (DBAccess.RunSQLReturnValInt("SELECT COUNT(*) as Num FROM " + md.PTable + " WHERE OID=" + pk) == 0)
                             continue;
                         break;
                     case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
@@ -753,7 +792,7 @@ namespace CCFlow.WF.FlowFormTree
                     case FrmEnableRole.ByFrmFields:
                         throw new Exception("@这种类型的判断，ByFrmFields 还没有完成。");
 
-                     case FrmEnableRole.BySQL: // 按照SQL的方式.
+                    case FrmEnableRole.BySQL: // 按照SQL的方式.
                         string mysql = frmNode.FrmEnableExp.Clone() as string;
                         mysql = mysql.Replace("@OID", this.WorkID.ToString());
                         mysql = mysql.Replace("@WorkID", this.WorkID.ToString());
@@ -766,10 +805,10 @@ namespace CCFlow.WF.FlowFormTree
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;
                         break;
-                     case FrmEnableRole.Disable: // 如果禁用了，就continue出去..
+                    case FrmEnableRole.Disable: // 如果禁用了，就continue出去..
                         continue;
                     default:
-                        throw new Exception("@没有判断的规则."+frmNode.FrmEnableRole);
+                        throw new Exception("@没有判断的规则." + frmNode.FrmEnableRole);
                 }
                 #endregion
 
@@ -807,7 +846,7 @@ namespace CCFlow.WF.FlowFormTree
                     if (frmNode.FK_Frm != md.No)
                         continue;
 
-                    #warning 这里有错误, 如果是节点表单的话，就没有这个值，没有这个值就绑定不到表单树，代国强解决.
+#warning 这里有错误, 如果是节点表单的话，就没有这个值，没有这个值就绑定不到表单树，代国强解决.
                     if (md.FK_FormTree == "")
                         md.FK_FormTree = treeNo;
 
@@ -815,7 +854,7 @@ namespace CCFlow.WF.FlowFormTree
                     {
                         if (md.FK_FormTree != formTree.No)
                             continue;
-                        if (appFlowFormTree.Contains("No", formTree.No)==false)
+                        if (appFlowFormTree.Contains("No", formTree.No) == false)
                         {
                             BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
                             nodeFolder.No = formTree.No;
@@ -835,7 +874,7 @@ namespace CCFlow.WF.FlowFormTree
                     obj.addAnd();
                     obj.AddWhere(FrmFieldAttr.IsNotNull, "1");
                     obj.DoQuery();
-                    if (formFields != null && formFields.Count > 0) 
+                    if (formFields != null && formFields.Count > 0)
                         IsNotNull = true;
 
                     BP.WF.Template.FlowFormTree nodeForm = new BP.WF.Template.FlowFormTree();

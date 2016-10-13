@@ -2216,10 +2216,14 @@ namespace CCFlow.WF.UC
                     this.Alert(exSend.Message.Replace("@@", "@").Replace("@", "<BR>@"));
                     return;
                 }
-                BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", msg, "Err" + currND.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", msg, "Err" + currND.No + "_" + this.WorkID,
+                    SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+
+
                 this.FlowMsg.AddFieldSetGreen("错误");
                 this.FlowMsg.Add(exSend.Message.Replace("@@", "@").Replace("@", "<BR>@"));
                 this.FlowMsg.AddFieldSetEnd();
+                return;
             }
 
             #region 处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.

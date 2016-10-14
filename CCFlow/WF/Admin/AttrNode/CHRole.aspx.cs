@@ -66,7 +66,7 @@ namespace CCFlow.WF.Admin.AttrFlow
             //执行保存.
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
             nd.TSpanDay = int.Parse(this.TB_TSpanDay.Text);
-            nd.TSpanHour = float.Parse(this.TB_TSpanDay.Text);
+            nd.TSpanHour = float.Parse(this.TB_TSpanHour.Text);
             nd.WarningHour = float.Parse(this.TB_WarningHour.Text);
             nd.WarningDay = float.Parse(this.TB_WarningDay.Text);
             nd.TCent = int.Parse(this.TB_TCent.Text);

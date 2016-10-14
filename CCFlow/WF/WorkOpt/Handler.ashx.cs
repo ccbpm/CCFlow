@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using System.Data;
 using BP.DA;
 using BP.En;
 using BP.WF;
@@ -121,6 +122,19 @@ namespace CCFlow.WF.WorkOpt
             }
         }
         /// <summary>
+        /// FID
+        /// </summary>
+        public Int64 FID
+        {
+            get
+            {
+                string str = context.Request.QueryString["FID"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return Int64.Parse(str);
+            }
+        }
+        /// <summary>
         /// 明细表
         /// </summary>
         public string FK_MapDtl
@@ -180,6 +194,21 @@ namespace CCFlow.WF.WorkOpt
                     case "FlowBBSList": //获得流程评论列表.
                         msg = this.FlowBBSList();
                         break;
+                    case "ReturnToNodes": //获得可以退回的节点.
+                        msg = ReturnToNodes();
+                        break;
+                    case "DoReturnWork": //执行退回.
+                        msg = ReturnWork();
+                        break;
+                    case "Shift": //移交.
+                        msg = Shift();
+                        break;
+                    case "UnShift": //撤销移交.
+                        msg = UnShift();
+                        break;
+                    case "Press": //催办.
+                        msg = Press();
+                        break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
@@ -192,6 +221,56 @@ namespace CCFlow.WF.WorkOpt
             }
             //输出信息.
         }
+        #region 工作退回.
+        /// <summary>
+        /// 获得可以退回的节点.
+        /// </summary>
+        /// <returns></returns>
+        public string ReturnToNodes()
+        {
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 执行退回,返回退回信息.
+        /// </summary>
+        /// <returns></returns>
+        public string ReturnWork()
+        {
+            int toNodeID = int.Parse(context.Request.QueryString["ReturnToNode"]);
+            string reMesage = context.Request.QueryString["ReturnMsg"];
+            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, true);
+        }
+        #endregion
+
+        /// <summary>
+        /// 执行移交.
+        /// </summary>
+        /// <returns></returns>
+        public string Shift()
+        {
+            string msg = context.Request.QueryString["Message"];
+            string toEmp = context.Request.QueryString["ToEmp"];
+            return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
+        }
+        /// <summary>
+        /// 撤销移交
+        /// </summary>
+        /// <returns></returns>
+        public string UnShift()
+        {
+            return BP.WF.Dev2Interface.Node_ShiftUn(this.FK_Flow, this.WorkID);
+        }
+        /// <summary>
+        /// 执行催办
+        /// </summary>
+        /// <returns></returns>
+        public string Press()
+        {
+            string msg = context.Request.QueryString["Message"];
+            return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
+        }
+
         /// <summary>
         /// 获得发起的BBS评论.
         /// </summary>

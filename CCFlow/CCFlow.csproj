@@ -138,6 +138,7 @@
     </Content>
     <Content Include="ClientBin\CCFlowDesigner.xap" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
     <Content Include="SDKFlowDemo\Default.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByDepts.htm" />
@@ -864,6 +865,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditEnum.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditTableField.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditSQL.htm" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Info.aspx" />
     <Content Include="WF\Admin\Org\Integration.aspx" />
@@ -871,7 +873,7 @@
     <Content Include="WF\Admin\Org\IntegrationDB.aspx" />
     <Content Include="WF\Admin\Org\IntegrationWS.aspx" />
     <Content Include="WF\Admin\Org\Working.png" />
-    <Content Include="WF\Admin\ReLogin.aspx" />
+    <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\Templete\Uploade.aspx" />
     <Content Include="WF\Admin\Condition.aspx" />
     <Content Include="WF\Admin\ConditionLine.aspx" />
@@ -1324,6 +1326,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\MapExtHandler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\SFTableHandler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
+    <Content Include="WF\Admin\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\Comm\Handler.ashx" />
     <Content Include="WF\Comm\Rpt\Handler.ashx" />
@@ -1382,6 +1385,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\SFSQL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx" />
+    <Content Include="WF\Login.htm" />
     <Content Include="WF\Messages.aspx" />
     <Content Include="WF\MessagesReplay.aspx" />
     <Content Include="WF\MyFlow.htm" />
@@ -2030,6 +2034,7 @@
     <Content Include="WF\Admin\XAP\DoPort.aspx" />
     <Content Include="WF\Admin\XAP\WebService.asmx" />
     <Content Include="WF\Admin\CondByPara.aspx" />
+    <Content Include="WF\WorkOpt\Accepter.htm" />
     <Content Include="WF\WorkOpt\AllotTask.aspx" />
     <Content Include="WF\Batch.aspx" />
     <Content Include="WF\BPR.aspx" />
@@ -4214,6 +4219,9 @@
     <Compile Include="WF\Admin\FoolFormDesigner\SysEnumList.aspx.designer.cs">
       <DependentUpon>SysEnumList.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Admin\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Admin\Info.aspx.cs">
       <DependentUpon>Info.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -4255,13 +4263,6 @@
     </Compile>
     <Compile Include="WF\Admin\Org\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\ReLogin.aspx.cs">
-      <DependentUpon>ReLogin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\ReLogin.aspx.designer.cs">
-      <DependentUpon>ReLogin.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Templete\Uploade.aspx.cs">
       <DependentUpon>Uploade.aspx</DependentUpon>
@@ -5177,6 +5178,9 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx.designer.cs">
       <DependentUpon>SlnCopy.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Messages.aspx.cs">
       <DependentUpon>Messages.aspx</DependentUpon>
@@ -7877,6 +7881,7 @@
     <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Data\Templete\SysFields.txt" />
     <Content Include="WF\FlowCheck\Site.Master" />
+    <Content Include="WF\Handler.ashx" />
     <None Include="WF\Img\Arr\Thumbs.db" />
     <None Include="WF\Img\FileType\Thumbs.db" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
@@ -7921,7 +7926,6 @@
     <Folder Include="Bin\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
-    <Folder Include="WF\Admin\CCBPMDesigner\DialogCtr\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />
     <Folder Include="WF\Data\FlowDemo\Flow.Buess\01.日常办公\" />

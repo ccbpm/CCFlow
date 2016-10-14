@@ -10,6 +10,6 @@ var Handler = "Handler.ashx";
 // for Java.
 // var controllerURLConfig = '/WF/Admin/CCFormDesigner/FormDesignerController';
 // var plant = 'JFlow'; //运行平台.
-// var Handler = "Handler.aspx";
+// var Handler = "Handler";
 
   

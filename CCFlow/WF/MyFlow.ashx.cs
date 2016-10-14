@@ -512,9 +512,6 @@ namespace CCFlow.WF
             if (btnLab.TrackEnable && isAskFor == false)
                 toolbar +="<input type=button  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/ChartTrack.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
 
-            //if (btnLab.OptEnable)
-            //    toolbar.Add("<input type=button  value='" + btnLab.OptLab + "' onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Home.htm?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "','opt'); \"  />");
-
             switch (btnLab.SelectAccepterEnable)
             {
                 case 1:
@@ -820,21 +817,7 @@ namespace CCFlow.WF
                 case "GenerWorkNode":
                     resultValue = GenerWorkNode();
                     break;
-                case "ReturnToNodes": //获得可以退回的节点.
-                    resultValue = ReturnToNodes();
-                    break;
-                case "DoReturnWork": //执行退回.
-                    resultValue = ReturnWork();
-                    break;
-                case "Shift": //移交.
-                    resultValue = Shift();
-                    break;
-                case "UnShift": //撤销移交.
-                    resultValue = UnShift();
-                    break;
-                case "Press": //催办.
-                    resultValue = Press();
-                    break;
+              
                 case "ViewWorkNodeFrm": //查看一个表单.
                     resultValue = ViewWorkNodeFrm();
                     break;
@@ -884,53 +867,9 @@ namespace CCFlow.WF
 
             return BP.Tools.Json.ToJson(myds);
         }
-        /// <summary>
-        /// 获得可以退回的节点.
-        /// </summary>
-        /// <returns></returns>
-        public string ReturnToNodes()
-        {
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
-            return BP.Tools.Json.ToJson(dt);
-        }
-        /// <summary>
-        /// 执行退回,返回退回信息.
-        /// </summary>
-        /// <returns></returns>
-        public string ReturnWork()
-        {
-            int toNodeID = int.Parse(this.Request.QueryString["ReturnToNode"]);
-            string reMesage = this.Request.QueryString["ReturnMsg"];
-            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, true);
-        }
-        /// <summary>
-        /// 执行移交.
-        /// </summary>
-        /// <returns></returns>
-        public string Shift()
-        {
-            string msg = this.Request.QueryString["Message"];
-            string toEmp = this.Request.QueryString["ToEmp"];
-            return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
-        }
-        /// <summary>
-        /// 撤销移交
-        /// </summary>
-        /// <returns></returns>
-        public string UnShift()
-        {
-            return BP.WF.Dev2Interface.Node_ShiftUn(this.FK_Flow,this.WorkID);
-        }
-        /// <summary>
-        /// 执行催办
-        /// </summary>
-        /// <returns></returns>
-        public string Press()
-        {
-            string msg = this.Request.QueryString["Message"];
-            return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
-        }
-
+      
+      
+      
         public bool IsReusable
         {
             get

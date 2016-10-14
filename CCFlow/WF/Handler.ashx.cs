@@ -207,6 +207,7 @@ namespace CCFlow.WF
             string pass = this.GetValFromFrmByKey("TB_Pass");
             if (emp.Pass.Equals(pass) == false)
                 return "err@用户名或密码错误.";
+
             //让其登录.
            string sid= BP.WF.Dev2Interface.Port_Login(emp.No, true);
            return sid;

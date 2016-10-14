@@ -93,6 +93,9 @@
                 dataType: 'html',
                 success: function (data) {
 
+
+                    alert(data);
+
                     // alert(data);
                     data = JSON.parse(data);
 
@@ -167,7 +170,7 @@
 
                         //自动计算.
                         htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
-                    }  
+                    }
 
 
                     //如果是日期类型的.

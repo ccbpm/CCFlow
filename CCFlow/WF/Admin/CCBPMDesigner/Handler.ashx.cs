@@ -158,7 +158,6 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                     case "LoginInit": //登录初始化..
                         if (BP.DA.DBAccess.IsExitsObject("WF_Emp") == false)
                             msg="url@=../DBInstall.aspx";
-                        
                         break;
                     case "Login":
                         msg = this.Login();

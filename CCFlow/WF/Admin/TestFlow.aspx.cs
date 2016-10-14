@@ -234,7 +234,7 @@ namespace CCFlow.WF.Admin
             catch (Exception ex)
             {
                 this.Ucsys1.AddMsgOfWarning("错误原因",
-                        "<h2>您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员，请查看流程设计操作手册。</h2> 系统错误提示:" + ex.StackTrace + " - " + ex.Message + "<br><h3>也有可能你你切换了OSModel导致的，什么是OSModel,请查看在线帮助文档 <a href='http://ccbpm.mydoc.io' target=_blank>http://ccbpm.mydoc.io</a>  .</h3>");
+                        "<h2>您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员，<a href='http://bbs.ccflow.org/showtopic-4103.aspx' target=_blank ><font color=red>点击这查看解决办法</font>.</a>。</h2> 系统错误提示:" + ex.Message + "<br><h3>也有可能你你切换了OSModel导致的，什么是OSModel,请查看在线帮助文档 <a href='http://ccbpm.mydoc.io' target=_blank>http://ccbpm.mydoc.io</a>  .</h3>");
                 return;
             }
 

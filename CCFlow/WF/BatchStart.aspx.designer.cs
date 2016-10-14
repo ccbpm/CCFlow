@@ -13,12 +13,30 @@ namespace CCFlow.WF {
     public partial class BatchStartMy {
         
         /// <summary>
-        /// Pub1 控件。
+        /// Pub2 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::CCFlow.WF.Pub Pub1;
+        protected global::CCFlow.WF.Pub Pub2;
+        
+        /// <summary>
+        /// File1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload File1;
+        
+        /// <summary>
+        /// Btn_Imp 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Btn_Imp;
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
+using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -12,6 +13,10 @@ using BP.Web.Controls;
 using BP.DA;
 using BP.En;
 using BP.Web;
+using BP.WF.Rpt;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace CCFlow.WF
 {
@@ -45,7 +50,7 @@ namespace CCFlow.WF
         {
             if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
             {
-                
+
             }
 
             Flow fl = new Flow(this.FK_Flow);
@@ -53,9 +58,9 @@ namespace CCFlow.WF
             MapAttrs attrs = new MapAttrs(this.FK_MapData);
             if (fl.BatchStartFields.Length == 0)
             {
-                this.Pub1.AddFieldSet("流程属性设置错误");
-                this.Pub1.Add("您需要在流程属性里设置批量发起需要填写的字段。");
-                this.Pub1.AddFieldSetEnd();
+                this.Pub2.AddFieldSet("流程属性设置错误");
+                this.Pub2.Add("您需要在流程属性里设置批量发起需要填写的字段。");
+                this.Pub2.AddFieldSetEnd();
             }
 
             MapExts mes = new MapExts(this.FK_MapData);
@@ -64,17 +69,17 @@ namespace CCFlow.WF
             Work wk = nd.HisWork;
             wk.ResetDefaultVal();
 
-            this.Pub1.AddTable();
-            this.Pub1.AddCaptionMsg("批量发起:" + fl.Name);
+            this.Pub2.AddTable();
+            this.Pub2.AddCaptionMsg("批量发起:" + fl.Name);
 
             #region 输出标题.
-            this.Pub1.AddTR();
-            this.Pub1.AddTDTitle("序");
+            this.Pub2.AddTR();
+            this.Pub2.AddTDTitle("序");
 
             string str1 = "<INPUT id='checkedAll' onclick=\"SelectAllBS(this);\" value='选择' type='checkbox' name='checkedAll' >全部选择";
-            this.Pub1.AddTDTitle("align='left'", str1);
+            this.Pub2.AddTDTitle("align='left'", str1);
 
-            //this.Pub1.AddTDTitle("align='left'", "");
+            //this.Pub2.AddTDTitle("align='left'", "");
 
             string[] strs = fl.BatchStartFields.Split(',');
             foreach (string str in strs)
@@ -86,22 +91,22 @@ namespace CCFlow.WF
                 {
                     if (str != attr.KeyOfEn)
                         continue;
-                    this.Pub1.AddTDTitle(attr.Name);
+                    this.Pub2.AddTDTitle(attr.Name);
                 }
             }
-            this.Pub1.AddTREnd();
+            this.Pub2.AddTREnd();
             #endregion 输出标题.
 
             #region 输出标题.
             for (int i = 1; i <= this.RowNum; i++)
             {
-                this.Pub1.AddTR();
-                this.Pub1.AddTDIdx(i);
+                this.Pub2.AddTR();
+                this.Pub2.AddTDIdx(i);
                 CheckBox cbIdx = new CheckBox();
                 cbIdx.Checked = false;
                 cbIdx.Text = "发起否?";
                 cbIdx.ID = "CB_IDX_" + i;
-                this.Pub1.AddTD(cbIdx);
+                this.Pub2.AddTD(cbIdx);
 
                 foreach (string str in strs)
                 {
@@ -128,7 +133,7 @@ namespace CCFlow.WF
                                                 tb.CssClass = "TB";
                                             else
                                                 tb.CssClass = "TBReadonly";
-                                            this.Pub1.AddTD(tb);
+                                            this.Pub2.AddTD(tb);
                                         }
                                         else
                                         {
@@ -144,7 +149,7 @@ namespace CCFlow.WF
                                             else
                                                 tb.CssClass = "TBReadonly";
 
-                                            this.Pub1.AddTD(tb);
+                                            this.Pub2.AddTD(tb);
                                         }
                                         break;
                                     case BP.DA.DataType.AppDate:
@@ -160,7 +165,7 @@ namespace CCFlow.WF
                                             tb.Attributes["class"] = "TBReadonly";
 
                                         tb.Attributes["style"] = "width: " + attr.UIWidth + "px; text-align: left; height: 19px;";
-                                        this.Pub1.AddTD(tb);
+                                        this.Pub2.AddTD(tb);
                                         break;
                                     case BP.DA.DataType.AppDateTime:
                                         tb.ShowType = TBType.DateTime;
@@ -174,7 +179,7 @@ namespace CCFlow.WF
                                         if (attr.UIIsEnable)
                                             tb.Attributes["onfocus"] = "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});";
                                         tb.Attributes["style"] = "width: " + attr.UIWidth + "px; text-align: left; height: 19px;";
-                                        this.Pub1.AddTD(tb);
+                                        this.Pub2.AddTD(tb);
                                         break;
                                     case BP.DA.DataType.AppBoolean:
                                         CheckBox cb = new CheckBox();
@@ -193,7 +198,7 @@ namespace CCFlow.WF
                                             // cb.Attributes["onmousedown"] = "Change('" + attr.FK_MapData + "')";
                                             cb.Enabled = true;
                                         }
-                                        this.Pub1.AddTD(cb);
+                                        this.Pub2.AddTD(cb);
                                         break;
                                     case BP.DA.DataType.AppDouble:
                                     case BP.DA.DataType.AppFloat:
@@ -212,7 +217,7 @@ namespace CCFlow.WF
                                         else
                                             tb.Attributes["class"] = "TBReadonly";
 
-                                        this.Pub1.AddTD(tb);
+                                        this.Pub2.AddTD(tb);
                                         break;
                                     case BP.DA.DataType.AppInt:
                                         tb.Attributes["style"] = "width: " + attr.GetValStrByKey("UIWidth") + "px; text-align: right; height: 19px;word-break: keep-all;";
@@ -230,7 +235,7 @@ namespace CCFlow.WF
                                         else
                                             tb.Attributes["class"] = "TBReadonly";
 
-                                        this.Pub1.AddTD(tb);
+                                        this.Pub2.AddTD(tb);
                                         break;
                                     case BP.DA.DataType.AppMoney:
                                         if (attr.UIIsEnable)
@@ -248,7 +253,7 @@ namespace CCFlow.WF
                                         tb.Text = attr.DefVal;
 
                                         tb.Attributes["style"] = "width: " + attr.GetValStrByKey("UIWidth") + "px; text-align: right; height: 19px;";
-                                        this.Pub1.AddTD(tb);
+                                        this.Pub2.AddTD(tb);
                                         break;
                                     default:
                                         break;
@@ -269,7 +274,7 @@ namespace CCFlow.WF
                                         //   ddle.Attributes["onchange"] = "Change('" + attr.FK_MapData + "')";
                                     }
                                     //    ddle.Enabled = false;
-                                    this.Pub1.AddTD(ddle);
+                                    this.Pub2.AddTD(ddle);
                                 }
                                 else
                                 {
@@ -298,18 +303,18 @@ namespace CCFlow.WF
                                     ddl1.Items.Add(new ListItem(attr.DefVal, attr.DefVal));
                                 }
                                 ddl1.Enabled = attr.UIIsEnable;
-                                this.Pub1.AddTD(ddl1);
+                                this.Pub2.AddTD(ddl1);
                                 break;
                             default:
                                 break;
                         }
                     }
                 }
-                this.Pub1.AddTREnd();
+                this.Pub2.AddTREnd();
             }
             #endregion 输出标题.
 
-            this.Pub1.AddTableEnd();
+            this.Pub2.AddTableEnd();
 
             #region 处理扩展属性.
             if (mes.Count != 0)
@@ -318,7 +323,7 @@ namespace CCFlow.WF
               "<script language='JavaScript' src='/WF/Scripts/jquery-1.4.1.min.js' ></script>");
                 this.Page.RegisterClientScriptBlock("b81",
              "<script language='JavaScript' src='/WF/CCForm/MapExt.js' defer='defer' type='text/javascript' ></script>");
-                this.Pub1.Add("<div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none;cursor: pointer;align:left'></div>");
+                this.Pub2.Add("<div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none;cursor: pointer;align:left'></div>");
                 this.Page.RegisterClientScriptBlock("dCd",
     "<script language='JavaScript' src='/DataUser/JSLibData/" + this.FK_MapData + ".js' ></script>");
 
@@ -329,13 +334,13 @@ namespace CCFlow.WF
                         switch (me.ExtType)
                         {
                             case MapExtXmlList.DDLFullCtrl: // 自动填充.
-                                DDL ddlOper = this.Pub1.GetDDLByID("DDL_" + me.AttrOfOper + "_" + i);
+                                DDL ddlOper = this.Pub2.GetDDLByID("DDL_" + me.AttrOfOper + "_" + i);
                                 if (ddlOper == null)
                                     continue;
                                 ddlOper.Attributes["onchange"] = "DDLFullCtrl(this.value,\'" + ddlOper.ClientID + "\', \'" + me.MyPK + "\')";
                                 break;
                             case MapExtXmlList.ActiveDDL:
-                                DDL ddlPerant = this.Pub1.GetDDLByID("DDL_" + me.AttrOfOper + "_" + i);
+                                DDL ddlPerant = this.Pub2.GetDDLByID("DDL_" + me.AttrOfOper + "_" + i);
                                 string val, valC;
                                 DataTable dt;
                                 if (ddlPerant == null)
@@ -345,7 +350,7 @@ namespace CCFlow.WF
                                 //  ddlPerant.Attributes["onchange"] = " isChange=true; DDLAnsc(this.value, \'" + ddlC + "\', \'" + me.MyPK + "\')";
                                 ddlPerant.Attributes["onchange"] = "DDLAnsc(this.value, \'" + ddlC + "\', \'" + me.MyPK + "\')";
 
-                                DDL ddlChild = this.Pub1.GetDDLByID("DDL_" + me.AttrsOfActive + "_" + i);
+                                DDL ddlChild = this.Pub2.GetDDLByID("DDL_" + me.AttrsOfActive + "_" + i);
                                 val = ddlPerant.SelectedItemStringVal;
                                 if (ddlChild.Items.Count == 0)
                                     valC = wk.GetValStrByKey(me.AttrsOfActive);
@@ -374,7 +379,7 @@ namespace CCFlow.WF
 
                                 break;
                             case MapExtXmlList.AutoFullDLL: //自动填充下拉框的范围.
-                                DDL ddlFull = this.Pub1.GetDDLByID("DDL_" + me.AttrOfOper + "_" + i);
+                                DDL ddlFull = this.Pub2.GetDDLByID("DDL_" + me.AttrOfOper + "_" + i);
                                 if (ddlFull == null)
                                     continue;
 
@@ -424,7 +429,7 @@ namespace CCFlow.WF
                                 // ddlFull.Attributes["onchange"] = " isChange=true;";
                                 break;
                             case MapExtXmlList.TBFullCtrl: // 自动填充.
-                                TextBox tbAuto = this.Pub1.GetTextBoxByID("TB_" + me.AttrOfOper + "_" + i);
+                                TextBox tbAuto = this.Pub2.GetTextBoxByID("TB_" + me.AttrOfOper + "_" + i);
                                 if (tbAuto == null)
                                     continue;
                                 // tbAuto.Attributes["onkeyup"] = " isChange=true; DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + me.MyPK + "\');";
@@ -439,7 +444,7 @@ namespace CCFlow.WF
                                     {
                                         string[] myCtl = str.Split(':');
                                         string ctlID = myCtl[0];
-                                        DDL ddlC1 = this.Pub1.GetDDLByID("DDL_" + ctlID + "_" + i);
+                                        DDL ddlC1 = this.Pub2.GetDDLByID("DDL_" + ctlID + "_" + i);
                                         if (ddlC1 == null)
                                         {
                                             //me.Tag = "";
@@ -462,21 +467,21 @@ namespace CCFlow.WF
                                 }
                                 break;
                             case MapExtXmlList.InputCheck:
-                                TextBox tbCheck = this.Pub1.GetTextBoxByID("TB_" + me.AttrOfOper + "_" + i);
+                                TextBox tbCheck = this.Pub2.GetTextBoxByID("TB_" + me.AttrOfOper + "_" + i);
                                 if (tbCheck != null)
                                     tbCheck.Attributes[me.Tag2] += " rowPK=" + i + "; " + me.Tag1 + "(this);";
                                 break;
                             case MapExtXmlList.PopVal: //弹出窗.
-                                TB tb = this.Pub1.GetTBByID("TB_" + me.AttrOfOper + "_" + i);
+                                TB tb = this.Pub2.GetTBByID("TB_" + me.AttrOfOper + "_" + i);
                                 //  tb.Attributes["ondblclick"] = " isChange=true; ReturnVal(this,'" + me.Doc + "','sd');";
                                 tb.Attributes["ondblclick"] = " ReturnVal(this,'" + me.Doc + "','sd');";
                                 break;
                             case MapExtXmlList.Link: // 超链接.
-                                //TB tb = this.Pub1.GetTBByID("TB_" + me.AttrOfOper + "_" + mydtl.OID);
+                                //TB tb = this.Pub2.GetTBByID("TB_" + me.AttrOfOper + "_" + mydtl.OID);
                                 //tb.Attributes["ondblclick"] = " isChange=true; ReturnVal(this,'" + me.Doc + "','sd');";
                                 break;
                             case MapExtXmlList.RegularExpression://正则表达式,对数据控件处理
-                                TextBox tbExp = this.Pub1.GetTextBoxByID("TB_" + me.AttrOfOper + "_" + i);
+                                TextBox tbExp = this.Pub2.GetTextBoxByID("TB_" + me.AttrOfOper + "_" + i);
                                 if (tbExp == null || me.Tag == "onsubmit")
                                     continue;
                                 //验证输入的正则格式
@@ -499,52 +504,248 @@ namespace CCFlow.WF
             btn.ID = "Btn_Start";
             btn.Click += new EventHandler(btn_Send_Click);
             btn.OnClientClick = "return checkType()";
-            this.Pub1.Add(btn);
+            this.Pub2.Add(btn);
 
-            #region 文件上传.
-            this.Pub1.AddFieldSet("通过Excel导入方式发起:<a href='/DataUser/BatchStartFlowTemplete/" + this.FK_Flow + ".xls'><img src='/WF/Img/FileType/xls.gif' />下载Excel模版</a>");
-            this.Pub1.Add("文件名:");
-            FileUpload fu = new FileUpload();
-            fu.ID = "File1";
-            this.Pub1.Add(fu);
-            btn = new Button();
-            btn.Text = "导入";
-            btn.ID = "Btn_Imp";
-            btn.Click += new EventHandler(btn_Upload_Click);
-            this.Pub1.Add(btn);
-            this.Pub1.AddFieldSetEnd();
-            #endregion 文件上传.
+            //#region 文件上传.
+            //if (!IsPostBack)
+            //{
+            //    this.Pub2.AddFieldSet("通过Excel导入方式发起:<a href='/DataUser/BatchStartFlowTemplete/" + this.FK_Flow + ".xls'><img src='/WF/Img/FileType/xls.gif' />下载Excel模版</a>");
+            //    this.Pub2.Add("文件名:");
+            //    FileUpload fu = new FileUpload();
+            //    fu.ID = "File1";
+            //    this.Pub2.Add(fu);
+            //    btn = new Button();
+            //    btn.Text = "导入";
+            //    btn.ID = "Btn_Imp";
+            //    btn.Click += new EventHandler(btn_Upload_Click);
+            //    this.Pub2.Add(btn);
+            //    this.Pub2.AddFieldSetEnd();
+            //}
+            //#endregion 文件上传.
         }
-        void btn_Upload_Click(object sender, EventArgs e)
+
+        protected void btn_Upload_Click(object sender, EventArgs e)
         {
-            FileUpload FileUpLoad1 = this.FindControl("File1") as FileUpload;
-            if (FileUpLoad1.HasFile)
+            if (File1.HasFile)
             {
                 //判断文件是否小于10Mb   
-                if (FileUpLoad1.PostedFile.ContentLength < 10485760)
+                if (File1.PostedFile.ContentLength < 10485760)
                 {
                     try
                     {
-                        string fileName = Server.MapPath("~/DataUser/Temp/") + this.FK_Flow + this.Page.Session.SessionID + ".xls";
+                        string ext = System.IO.Path.GetExtension(File1.FileName).ToLower();
+                        string fileName = Server.MapPath("~/DataUser/Temp/") + this.FK_Flow + this.Page.Session.SessionID + ext;
 
                         //上传文件并指定上传目录的路径. 
-                        FileUpLoad1.PostedFile.SaveAs(fileName);
+                        File1.PostedFile.SaveAs(fileName);
 
-                        /*注意->这里为什么不是:FileUpLoad1.PostedFile.FileName  
-                        * 而是:FileUpLoad1.FileName?  
-                        * 前者是获得客户端完整限定(客户端完整路径)名称  
-                        * 后者FileUpLoad1.FileName只获得文件名.  
-                        */
+                        Flow flow = new Flow(this.FK_Flow);
+                        string[] sfields = flow.BatchStartFields.Split(",".ToCharArray(),
+                                                                      StringSplitOptions.RemoveEmptyEntries);
+                        MapAttrs attrs = new MapAttrs(this.FK_MapData);
+                        MapAttr attr;
+                        Dictionary<int, MapAttr> fields = new Dictionary<int, MapAttr>();   //列号，字段
+                        DataTable dt = new DataTable();   //excel中提取的数据，列名为attr.KeyOfEn
+                        IWorkbook wb;
+                        ISheet sheet;
+                        IRow row, headRow;
+                        DataRow dr;
+                        ICell cell;
+                        string cellValue = string.Empty;
+                        Hashtable ht = null;
+                        int tint;
+                        float tfloat;
+                        double tdouble;
+                        DateTime tdt;
+                        SysEnum en;
+                        EntityNoName enn;
 
-                        //当然上传语句也可以这样写(貌似废话):   
-                        //FileUpLoad1.SaveAs(@"D:\"+FileUpLoad1.FileName);   
-                        //lblMessage.Text = "上传成功!";
+                        using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                        {
+                            if (ext.Equals(".xls"))
+                                wb = new HSSFWorkbook(fs);
+                            else
+                                wb = new XSSFWorkbook(fs);
+
+                            sheet = wb.GetSheetAt(0);
+
+                            //检索行数不能少于3行，第1行为主标题行，第2行为字段标题行，以下为内容行
+                            //固定模式，从第3行开始检索数据
+                            if (sheet.LastRowNum < 3)
+                                CloseAndException(wb, fs, "文件行数错误，不能低于3行！");
+
+                            headRow = sheet.GetRow(1);
+
+                            //检索标题行，获取所有的字段
+                            foreach (ICell c in headRow.Cells)
+                            {
+                                cellValue = c.StringCellValue;
+
+                                if (string.IsNullOrWhiteSpace(cellValue))
+                                    continue;
+
+                                attr = attrs.GetEntityByKey(MapAttrAttr.Name, cellValue) as MapAttr;
+
+                                //未查到字段，或查到的字段不在设置的提取字段集合中，去掉
+                                if (attr == null || sfields.Contains(attr.KeyOfEn) == false)
+                                    continue;
+
+                                fields.Add(c.ColumnIndex, attr);
+                                dt.Columns.Add(attr.KeyOfEn);
+
+                                switch (attr.LGType)
+                                {
+                                    case FieldTypeS.Enum:
+                                        dt.Columns[dt.Columns.Count - 1].ExtendedProperties.Add("Source", new SysEnums(attr.UIBindKey));
+                                        break;
+                                    case FieldTypeS.FK:
+                                        dt.Columns[dt.Columns.Count - 1].ExtendedProperties.Add("Source", attr.HisEntitiesNoName);
+                                        break;
+                                }
+                            }
+
+                            if (fields.Count == 0)
+                                CloseAndException(wb, fs, "上传文件中，未检索到要提取的字段，请重新确认数据的正确性！");
+
+                            //遍历行，提取数据，存于dt中
+                            //提取过程中，进行数据有效性验证，不通过验证直接退出遍历，提示错误
+                            for (int r = 2; r < sheet.LastRowNum + 1; r++)
+                            {
+                                row = sheet.GetRow(r);
+
+                                if (row == null) continue;
+
+                                dr = dt.NewRow();
+
+                                foreach (KeyValuePair<int, MapAttr> field in fields)
+                                {
+                                    cell = row.GetCell(field.Key);
+
+                                    if (cell == null)
+                                    {
+                                        if (field.Value.UIIsInput)
+                                            CloseAndException(wb, fs,
+                                                                 string.Format("{0}，数据不能为空，请填写！", RptExportTemplateCell.GetCellName(field.Key, r)));
+                                        continue;
+                                    }
+
+                                    cellValue = GetCellValue(cell, cell.CellType, field.Value.MyDataType);
+
+                                    if (cell.CellType == CellType.Error || cell.CellType == CellType.Unknown)
+                                        CloseAndException(wb, fs,
+                                                          string.Format("{0}，数据错误，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                    if (field.Value.UIIsInput && string.IsNullOrWhiteSpace(cellValue))
+                                        CloseAndException(wb, fs,
+                                                             string.Format("{0}，数据不能为空，请填写！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                    switch (field.Value.LGType)
+                                    {
+                                        case FieldTypeS.Normal:
+                                            //再判断数据格式
+                                            switch (field.Value.MyDataType)
+                                            {
+                                                case DataType.AppInt:
+                                                    if (int.TryParse(cellValue, out tint) == false)
+                                                        CloseAndException(wb, fs, string.Format("{0}，数据不为整数，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                                    dr[field.Value.KeyOfEn] = tint;
+                                                    break;
+                                                case DataType.AppFloat:
+                                                case DataType.AppMoney:
+                                                    if (float.TryParse(cellValue, out tfloat) == false)
+                                                        CloseAndException(wb, fs, string.Format("{0}，数据不为Float，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                                    dr[field.Value.KeyOfEn] = tfloat;
+                                                    break;
+                                                case DataType.AppDouble:
+                                                    if (double.TryParse(cellValue, out tdouble) == false)
+                                                        CloseAndException(wb, fs, string.Format("{0}，数据不为Double，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                                    dr[field.Value.KeyOfEn] = tdouble;
+                                                    break;
+                                                case DataType.AppDate:
+                                                    if (DateTime.TryParse(cellValue, out tdt) == false)
+                                                        CloseAndException(wb, fs, string.Format("{0}，数据不为日期类型，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                                    dr[field.Value.KeyOfEn] = tdt.Date;
+                                                    break;
+                                                case DataType.AppDateTime:
+                                                    if (DateTime.TryParse(cellValue, out tdt) == false)
+                                                        CloseAndException(wb, fs, string.Format("{0}，数据不为日期时间类型，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                                    dr[field.Value.KeyOfEn] = tdt;
+                                                    break;
+                                                case DataType.AppBoolean:
+                                                    if (new[] { "是", "否" }.Contains(cellValue) == false)
+                                                        CloseAndException(wb, fs, string.Format("{0}，数据不为是/否，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                                    dr[field.Value.KeyOfEn] = cellValue == "是";
+                                                    break;
+                                                default:
+                                                    dr[field.Value.KeyOfEn] = cellValue;
+                                                    break;
+                                            }
+                                            break;
+                                        case FieldTypeS.Enum:
+                                            en = (dt.Columns[field.Value.KeyOfEn].ExtendedProperties["Source"] as SysEnums).GetEntityByKey(SysEnumAttr.Lab, cellValue) as SysEnum;
+
+                                            if (en == null)
+                                                CloseAndException(wb, fs, string.Format("{0}，数据不是有效值，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                            dr[field.Value.KeyOfEn] = en.IntKey;
+                                            break;
+                                        case FieldTypeS.FK:
+                                            enn = (dt.Columns[field.Value.KeyOfEn].ExtendedProperties["Source"] as EntitiesNoName).GetEntityByKey("Name", cellValue) as EntityNoName;
+
+                                            if (enn == null)
+                                                CloseAndException(wb, fs, string.Format("{0}，数据不是有效值，请修改！", RptExportTemplateCell.GetCellName(cell.ColumnIndex, r)));
+
+                                            dr[field.Value.KeyOfEn] = enn.No;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+
+                                dt.Rows.Add(dr);
+                            }
+
+                            wb.Close();
+                        }
+
+                        //执行遍历，发起所有流程
+                        Flow fl = new Flow(this.FK_Flow);
+                        this.Page.Title = fl.Name;
+                        string infos = "";
+                        Int64 workid;
+
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null);
+                            ht = new Hashtable();
+
+                            foreach (DataColumn col in dt.Columns)
+                            {
+                                ht.Add(col.ColumnName, dt.Rows[i][col.ColumnName]);
+                            }
+
+                            // 开始发起流程.
+                            string info = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht).ToMsgOfHtml();
+                            infos += "<br><fieldset width='100%' ><legend>&nbsp;&nbsp;第 (" + (i + 1) +
+                                     ") 条工作启动成功&nbsp;</legend>";
+                            infos += info;
+                            infos += "</fieldset>";
+                        }
+
+                        this.Pub2.Clear();
+                        this.Pub2.AddH2("&nbsp;&nbsp;发起信息");
+                        infos = infos.Replace("@@", "@");
+                        this.Pub2.Add(infos.Replace("@", "<br>@"));
                     }
                     catch (Exception ex)
                     {
                         BP.Sys.PubClass.Alert(ex.Message);
-                        //lblMessage.Text = "出现异常,无法上传!";
-                        //lblMessage.Text += ex.Message;   
                     }
                 }
                 else
@@ -555,9 +756,22 @@ namespace CCFlow.WF
             else
             {
                 BP.Sys.PubClass.Alert("尚未选择文件!");
-                // lblMessage.Text = "尚未选择文件!";
             }
         }
+
+        /// <summary>
+        /// 关闭EXCEL流并报异常
+        /// </summary>
+        /// <param name="wb"></param>
+        /// <param name="fs"></param>
+        /// <param name="exMsg"></param>
+        private void CloseAndException(IWorkbook wb, FileStream fs, string exMsg)
+        {
+            wb.Close();
+            fs.Close();
+            throw new Exception(exMsg);
+        }
+
         void btn_Send_Click(object sender, EventArgs e)
         {
             Flow fl = new Flow(this.FK_Flow);
@@ -567,7 +781,7 @@ namespace CCFlow.WF
             string infos = "";
             for (int i = 1; i <= 12; i++)
             {
-                CheckBox mycb = this.Pub1.GetCBByID("CB_IDX_" + i);
+                CheckBox mycb = this.Pub2.GetCBByID("CB_IDX_" + i);
                 if (mycb.Checked == false)
                     continue;
 
@@ -586,7 +800,7 @@ namespace CCFlow.WF
 
                         if (attr.LGType == FieldTypeS.Normal)
                         {
-                            TB tb = this.Pub1.GetTBByID("TB_" + attr.KeyOfEn + "_" + i);
+                            TB tb = this.Pub2.GetTBByID("TB_" + attr.KeyOfEn + "_" + i);
                             if (tb != null)
                             {
                                 if (tb.Text != attr.DefVal)
@@ -596,7 +810,7 @@ namespace CCFlow.WF
                                 continue;
                             }
 
-                            CheckBox cb = this.Pub1.GetCBByID("CB_" + attr.KeyOfEn + "_" + i);
+                            CheckBox cb = this.Pub2.GetCBByID("CB_" + attr.KeyOfEn + "_" + i);
                             if (cb != null)
                             {
                                 if (cb.Checked != attr.DefValOfBool)
@@ -611,7 +825,7 @@ namespace CCFlow.WF
                         }
                         else
                         {
-                            DDL ddl = this.Pub1.GetDDLByID("DDL_" + attr.KeyOfEn + "_" + i);
+                            DDL ddl = this.Pub2.GetDDLByID("DDL_" + attr.KeyOfEn + "_" + i);
                             if (ddl != null)
                             {
                                 if (ddl.SelectedItemStringVal != attr.DefVal)
@@ -639,13 +853,87 @@ namespace CCFlow.WF
 
                 #endregion 开始发起流程.
             }
-            this.Pub1.Clear();
+            this.Pub2.Clear();
 
-            this.Pub1.AddH2("&nbsp;&nbsp;发起信息");
+            this.Pub2.AddH2("&nbsp;&nbsp;发起信息");
             infos = infos.Replace("@@", "@");
-            this.Pub1.Add(infos.Replace("@", "<br>@"));
+            this.Pub2.Add(infos.Replace("@", "<br>@"));
         }
 
-        
+        /// <summary>
+        /// 获取单元格值的字符串形式
+        /// </summary>
+        /// <param name="cell">单元格</param>
+        /// <param name="cellType">单元格值类型</param>
+        /// <returns></returns>
+        private string GetCellValue(ICell cell, CellType cellType, int dataType)
+        {
+            string s = string.Empty;
+
+            switch (cellType)
+            {
+                case CellType.Blank:
+                    s = string.Empty;
+                    break;
+                case CellType.Boolean:
+                    s = cell.BooleanCellValue.ToString();
+                    break;
+                case CellType.Error:
+                    s = "ERROR";
+                    break;
+                case CellType.Formula:
+                    s = GetCellValue(cell, cell.CachedFormulaResultType, dataType);
+                    break;
+                case CellType.Numeric:
+                    switch (dataType)
+                    {
+                        case DataType.AppDate:
+                            s = cell.DateCellValue.Date.ToString("yyyy-MM-dd");
+                            break;
+                        case DataType.AppDateTime:
+                            s = cell.DateCellValue.Date.ToString("yyyy-MM-dd HH:mm:ss");
+                            break;
+                        default:
+                            s = cell.NumericCellValue.ToString();
+                            break;
+                    }
+                    break;
+                case CellType.String:
+                    s = (cell.StringCellValue ?? string.Empty).Replace("\n", "");
+                    break;
+                case CellType.Unknown:
+                    s = "UNKNOWN";
+                    break;
+            }
+
+            return s;
+        }
+    }
+
+    /// <summary>
+    /// 系统类扩展辅助
+    /// </summary>
+    public static class EnhanceHelper
+    {
+        /// <summary>
+        /// 自定义扩展：判断元素数组中是否含有指定元素
+        /// <para></para>
+        /// <para>added by liuxc,2016-10-13</para>
+        /// </summary>
+        /// <param name="arr">元素数组</param>
+        /// <param name="element">查找元素</param>
+        /// <returns></returns>
+        public static bool Contains<T>(this T[] arr, T element) where T : class
+        {
+            if (arr == null) return false;
+
+            foreach (T ele in arr)
+            {
+                if (Equals(ele, element))
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -159,6 +159,10 @@ namespace BP.WF.Template
             {
                 return this.GetValIntByKey(BtnAttr.SelectAccepterEnable);
             }
+            set
+            {
+                this.SetValByKey(BtnAttr.SelectAccepterEnable, value);
+            }
         }
         /// <summary>
         /// 保存
@@ -431,7 +435,7 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.EndFlowEnable);
             }
         }
-          /// <summary>
+        /// <summary>
         /// 是否启用流转自定义
         /// </summary>
         public string TCLab
@@ -455,7 +459,7 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.TCEnable, value);
             }
         }
-        
+
         /// <summary>
         /// 审核标签
         /// </summary>
@@ -604,7 +608,7 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.WebOfficeEnable, (int)value);
             }
         }
-      
+
         /// <summary>
         /// 文档按钮标签
         /// </summary>
@@ -754,7 +758,7 @@ namespace BP.WF.Template
             get { return this.GetValStringByKey(BtnAttr.OfficeInsertFlowLab); }
         }
 
-         
+
         /// <summary>
         /// 是否自动记录节点信息
         /// </summary>
@@ -823,7 +827,7 @@ namespace BP.WF.Template
             get { return this.GetValStringByKey(BtnAttr.OfficeTemplate); }
         }
 
- 
+
         /// <summary>
         /// 是否使用父流程的文档
         /// </summary>
@@ -900,7 +904,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ReturnRole, true, "是否启用", true, true);
-                map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10,true);
+                map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10, true);
 
 
                 map.AddTBString(BtnAttr.CCLab, "抄送", "抄送按钮标签", true, false, 0, 50, 10);
@@ -993,7 +997,7 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.OfficeOverLab, "套红", "套红标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.OfficeOverEnable, false, "是否启用", true, true);
 
-                map.AddBoolean(BtnAttr.OfficeMarksEnable, true, "是否查看用户留痕", true, true,true);
+                map.AddBoolean(BtnAttr.OfficeMarksEnable, true, "是否查看用户留痕", true, true, true);
 
                 map.AddTBString(BtnAttr.OfficePrintLab, "打印", "打印标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.OfficePrintEnable, false, "是否启用", true, true);
@@ -1014,7 +1018,7 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.OfficeIsMarks, true, "是否进入留痕模式", true, true);
                 map.AddTBString(BtnAttr.OfficeTemplate, "", "指定文档模板", true, false, 0, 100, 10);
                 map.AddBoolean(BtnAttr.OfficeIsParent, true, "是否使用父流程的文档", true, true);
- 
+
                 map.AddBoolean(BtnAttr.OfficeTHEnable, false, "是否自动套红", true, true);
                 map.AddTBString(BtnAttr.OfficeTHTemplate, "", "自动套红模板", true, false, 0, 200, 10);
 

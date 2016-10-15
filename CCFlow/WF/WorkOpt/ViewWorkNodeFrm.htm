@@ -53,43 +53,6 @@
 
     <!--杨玉慧 -->
     <script type="text/javascript">
-        //页面启动函数.
-        var initFunction = function () {
-            $("#Msg").html("正在加载,请稍后......");
-
-            //初始化groupID.
-            var no = GetQueryString("No");
-
-            /*
-            *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
-            */
-            //调用通用方法绑定枚举, 性别.
-            GenerBindEnumKey("DDL_XB", "XB");
-
-            //调用通用方法绑定外键表. 班级.
-            GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: "../Handler.ashx?DoType=StudentInit&No=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    // alert(data);
-                    data = JSON.parse(data);
-
-                    //执行批量主表赋值.
-                    GenerFullAllCtrlsVal(data);
-                    return;
-                }
-            });
-
-            $("#Msg").html("");
-        };
-        
-    </script>
-
-    <script type="text/javascript">
 
         $(function () {
             initPageParam(); //初始化参数
@@ -358,10 +321,6 @@
                 var eleHtml = '';
                 var isInOneRow = false;//是否占一整行
                 var islabelIsInEle = false;//
-
-
-
-
 
                 eleHtml += '';
 

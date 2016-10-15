@@ -237,6 +237,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (doType)
                 {
+                    case "TBFullCtrl_Init":
+                        msg = this.TBFullCtrl_Init();
+                        break;
+                    case "TBFullCtrl_Save":
+                        msg = this.TBFullCtrl_Save();
+                        break;
                     case "RegularExpression_Init":
                         msg = this.RegularExpression_Init();
                         break;
@@ -267,6 +273,37 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
+        }
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string TBFullCtrl_Init()
+        {
+            MapExt ext = new MapExt();
+            ext.MyPK=this.FK_MapData+"_"+MapExtXmlList.TBFullCtrl+"_"+this.KeyOfEn;
+            ext.FK_MapData = this.FK_MapData;
+            ext.ExtType = MapExtXmlList.TBFullCtrl;
+            if (ext.RetrieveFromDBSources()==0)
+                return "";
+            
+            return ext.ToJson();
+        }
+
+        public string TBFullCtrl_Save()
+        {
+            MapExt me = new MapExt();
+            me.MyPK = this.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + this.KeyOfEn;
+            me.RetrieveFromDBSources();
+
+            me.ExtType = MapExtXmlList.TBFullCtrl ;
+            me.Doc = this.GetValFromFrmByKey("TB_SQL");
+            me.AttrOfOper = this.KeyOfEn;
+            me.FK_MapData = this.FK_MapData;
+            me.FK_DBSrc = this.GetValFromFrmByKey("DDL_DBSrc"); 
+            me.Save();
+
+            return "保存成功...";
         }
 
         /// <summary>

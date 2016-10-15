@@ -43,6 +43,7 @@ namespace CCFlow.WF.MapDef
 
         public string Lab = null;
         #endregion 属性。
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (IsPostBack == false)

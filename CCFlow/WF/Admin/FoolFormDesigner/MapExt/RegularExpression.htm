@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-       <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
 
@@ -17,7 +17,7 @@
         $(function () {
 
             var fk_mapdata = GetQueryString["FK_MapData"]; //表单id.
-            var keyOfEn = GetQueryString["RefNo"]; //字段
+            var keyOfEn = GetQueryString["KeyOfEn"]; //字段
 
             $.ajax({
                 type: 'post',
@@ -70,7 +70,7 @@
                 data: frmData,
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=RegularExpression_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("RefNo") + "&m=" + Math.random(),
+                url: Handler + "?DoType=RegularExpression_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {

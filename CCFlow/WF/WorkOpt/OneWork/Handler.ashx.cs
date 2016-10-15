@@ -236,6 +236,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
             string msg = this.GetValFromFrmByKey("TB_Msg");
 
             string mypk = BP.WF.Dev2Interface.Flow_BBSAdd(this.FK_Flow, this.WorkID, this.FID, msg, WebUser.No, WebUser.Name);
+
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE MyPK=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "MyPK";
             ps.Add("MyPK", mypk);

@@ -2755,12 +2755,10 @@
     <Content Include="WF\WorkOpt\OneWork\TrackUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruckOnly.aspx" />
-    <Content Include="WF\WorkOpt\Press.aspx" />
     <Content Include="WF\WorkOpt\Press.htm" />
     <Content Include="WF\WorkOpt\PRI.aspx" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.aspx" />
-    <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.aspx" />
     <Content Include="WF\WorkOpt\SelectNode.aspx" />
     <Content Include="WF\WorkOpt\SelectUser.aspx" />
@@ -7679,13 +7677,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\TruckOnly.aspx.designer.cs">
       <DependentUpon>TruckOnly.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Press.aspx.cs">
-      <DependentUpon>Press.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Press.aspx.designer.cs">
-      <DependentUpon>Press.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\PRI.aspx.cs">
       <DependentUpon>PRI.aspx</DependentUpon>

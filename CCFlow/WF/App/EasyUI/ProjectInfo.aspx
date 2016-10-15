@@ -154,7 +154,7 @@
                    { title: '发起日期', field: 'RDT', width: 100 },
                    { title: '操作', field: 'opt', width: 200,
                        formatter: function (value, rec) {
-                           var h2 = "../WF/WorkOpt/Press.aspx?FID=" + rec.FID + '&WorkID=' + rec.WorkID + '&FK_Flow=' + rec.FK_Flow;
+                           var h2 = "../WF/WorkOpt/Press.htm?FID=" + rec.FID + '&WorkID=' + rec.WorkID + '&FK_Flow=' + rec.FK_Flow;
                            return "<a href='javascript:void(0);' onclick=UnSend('" + rec.FK_Flow + "','" + rec.WorkID + "') ><img align='middle' width='20' height='20' src='../WF/Img/Action/UnSend.png' border=0 />撤消发送</a>&nbsp;&nbsp;&nbsp;<a href='javascript:void(0);' onclick=Press('" + h2 + "')><img width='20' height='20' align='middle' src='../WF/Img/Action/Press.png' border=0 />催办</a>";
 
                        }

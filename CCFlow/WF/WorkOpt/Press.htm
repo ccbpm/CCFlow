@@ -2,18 +2,56 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <script type="text/javascript">
-        function NoSubmit(ev) {
-            if (window.event.srcElement.tagName == "TEXTAREA")
-                return true;
-            if (ev.keyCode == 13) {
-                window.event.keyCode = 9;
-                ev.keyCode = 9;
-                return true;
-            }
-            return true;
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <style type="text/css">
+        #TB_Doc
+        {
+            height: 132px;
+            width: 433px;
         }
-   </script>
+    </style>
+    <script type="text/javascript">
+
+        //确定 退回 执行退回操作
+        function Press() {
+
+            var msg = $("#TB_Msg").val();
+            if (msg == "") {
+                alert('请输入催办原因.');
+                return;
+            }
+
+            var btn = $("#Btn_Press");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Press&FK_Flow=" + GetQueryString('FK_Flow') + '&WorkID=' + GetQueryString('WorkID') + '&FID=' + GetQueryString('FID') + "&Msg=" + msg + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.close();
+                }
+            });
+        }
+
+        //取消退回
+        function Close() {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("取消");
+            }
+        }
+      
+    </script>
 
     <style type="text/css">
         #tb_msg
@@ -27,10 +65,10 @@
 
 请输入催办消息:
   <br />
- <textarea rows="4" cols="20" name="tb_msg" id="tb_msg" >此工作需要您请尽快处理....  </textarea>
+ <textarea rows="4" cols="20" name="TB_Msg" id="TB_Msg" >此工作需要您请尽快处理....  </textarea>
  <br />
 
- <input type="button" value='催办'   /> 
+ <input type="button" value='催办'  onclick="Press();"  id="Btn_Press" name="Btn_Press" /> 
  <input type="button" value='取消'onclick="window.close();"   /> 
 
 

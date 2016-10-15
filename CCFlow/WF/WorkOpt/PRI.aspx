@@ -20,7 +20,7 @@
     <asp:RadioButton ID="RadioButton3" Text="低" GroupName="a" runat="server" />
     <br />
 
-    <asp:Button ID="Button1" runat="server" Text="保存" />
+    <asp:Button ID="Button1" runat="server" Text="保存" onclick="Button1_Click" />
     <asp:Button ID="Button2" runat="server" Text="取消" />
 
 </fieldset>

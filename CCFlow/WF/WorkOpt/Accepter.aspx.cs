@@ -233,7 +233,7 @@ namespace CCFlow.WF
                     Cond cond = new Cond();
                     int i = cond.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID, CondAttr.ToNodeID, mynd.NodeID);
                     if (i == 0)
-                        continue; // 没有设置方向条件，就让它跳过去。
+                        continue; //没有设置方向条件，就让它跳过去。
                     cond.WorkID = this.WorkID;
                     cond.en = geRpt;
 
@@ -610,7 +610,6 @@ namespace CCFlow.WF
             }
 
 
-
             SBuilder.Append(",ddl:[");
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -843,7 +842,6 @@ namespace CCFlow.WF
             else
             {
                 PubClass.ResponseWriteScript("window.parent.$('windowIfrem').window('close');");
-
             }
 
             //#warning 刘文辉 保存收件人后调用发送按钮

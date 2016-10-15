@@ -167,7 +167,7 @@
             
             <asp:LinkButton runat="server" ID="LinkButton1" class="easyui-linkbutton" data-options="iconCls:'icon-reset '"
                 OnClick="LinkButton1_Click">撤销</asp:LinkButton>
-            <a id="A1" href="javascript:WinOp('../WorkOpt/Press.aspx?FID=<%=FID%>&WorkID=<%=WorkID%>&FK_Flow=<%=FK_Flow%>')"
+            <a id="A1" href="javascript:WinOp('../WorkOpt/Press.htm?FID=<%=FID%>&WorkID=<%=WorkID%>&FK_Flow=<%=FK_Flow%>')"
                 class="easyui-linkbutton" data-options="iconCls:'icon-tip'">催办</a> 
                 <% if (BP.Web.WebUser.No == "admin")
                    { %>

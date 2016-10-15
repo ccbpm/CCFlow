@@ -22,7 +22,7 @@
                   return;
               }
               function Press(appPath, fid, workid, fk_flow) {
-                  var url = appPath + 'WF/WorkOpt/Press.aspx?FID=' + fid + '&WorkID=' + workid + '&FK_Flow=' + fk_flow;
+                  var url = appPath + 'WF/WorkOpt/Press.htm?FID=' + fid + '&WorkID=' + workid + '&FK_Flow=' + fk_flow;
                   var v = window.showModalDialog(url, 'sd', 'dialogHeight: 200px; dialogWidth: 350px;center: yes; help: no');
               }
 

@@ -2205,9 +2205,19 @@ namespace CCFlow.WF.UC
             {
                 if (exSend.Message.Contains("请选择下一步骤工作") == true || exSend.Message.Contains("用户没有选择发送到的节点") == true)
                 {
-                    /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
-                    this.Response.Redirect("./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID, true);
+                    BtnLab btn = new BtnLab(this.FK_Node);
+                    btn.SelectAccepterEnable = 1;
+                    btn.Update();
+
+                    this.FlowMsg.AddFieldSetGreen("错误");
+                    this.FlowMsg.Add(exSend.Message.Replace("@@", "@").Replace("@", "<BR>@") +"<br>系统已经自动的设置为打开了,请您在重试一次.");
+                    this.FlowMsg.AddFieldSetEnd();
                     return;
+
+
+                    /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
+                    //this.Response.Redirect("./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID, true);
+                    //return;
                 }
 
                 //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示

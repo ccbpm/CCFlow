@@ -191,6 +191,9 @@ namespace CCFlow.WF.WorkOpt
             {
                 switch (this.DoType)
                 {
+                    case "AccepterInit": //选择接受人按钮.
+                        msg= this.AccepterInit();
+                        break;
                     case "FlowBBSList": //获得流程评论列表.
                         msg = this.FlowBBSList();
                         break;
@@ -221,6 +224,19 @@ namespace CCFlow.WF.WorkOpt
             }
             //输出信息.
         }
+
+        #region 选择接受人.
+        /// <summary>
+        /// 初始化接受人.
+        /// </summary>
+        /// <returns></returns>
+        public string AccepterInit()
+        {
+            return "";
+        }
+        #endregion
+
+
         #region 工作退回.
         /// <summary>
         /// 获得可以退回的节点.
@@ -267,7 +283,9 @@ namespace CCFlow.WF.WorkOpt
         /// <returns></returns>
         public string Press()
         {
-            string msg = context.Request.QueryString["Message"];
+            string msg = context.Request.QueryString["Msg"];
+
+            //调用API.
             return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
         }
 

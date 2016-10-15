@@ -13,7 +13,7 @@
             return;
         }
         function Press(appPath, fk_flow, workid) {
-            var url = appPath + 'WF/WorkOpt/Press.aspx?WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            var url = appPath + 'WF/WorkOpt/Press.htm?WorkID=' + workid + '&FK_Flow=' + fk_flow;
             var v = window.showModalDialog(url, 'sd', 'dialogHeight: 220px; dialogWidth: 430px;center: yes; help: no');
         }
         function CopyAndStart(appPath, fk_flow, CopyFormNode, CopyFormWorkID) {

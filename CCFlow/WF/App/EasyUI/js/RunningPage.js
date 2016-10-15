@@ -55,7 +55,7 @@ function callBack(jsonData, scope) {
                    { title: '操作', field: 'OPT', width: 200,
                        formatter: function (value, rec) {
 
-                           var h2 = "../../WorkOpt/Press.aspx?FID=" + rec.FID + '&WorkID=' + rec.WORKID + '&FK_Flow=' + rec.FK_FLOW + "&T=" + dateNow;
+                           var h2 = "../../WorkOpt/Press.htm?FID=" + rec.FID + '&WorkID=' + rec.WORKID + '&FK_Flow=' + rec.FK_FLOW + "&T=" + dateNow;
 
                            return "<a href='javascript:void(0);' onclick=UnSend('" + rec.FK_FLOW + "','" + rec.WORKID + "') ><img align='middle' width='20' height='20' src='../../Img/Action/UnSend.png' border=0 />撤消发送</a>&nbsp;&nbsp;&nbsp;<a href='javascript:void(0);' onclick=Press('" + h2 + "')><img width='20' height='20' align='middle' src='../../Img/Action/Press.png' border=0 />催办</a>";
 

@@ -48,15 +48,12 @@
                         return;
                     }
 
-
                     if (data == "[]") {
                         return;
                     }
 
                     //转化成json.
                     data = JSON.parse(data);
-
-
 
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
@@ -68,10 +65,16 @@
                         var msg = data[i].Msg;
 
                         // var delLink = "";
+
+                        var leftInfo = "<img src='../../Img/Dot.png' border=0  width='7px'/>&nbsp;" + empNo + " - " + empName + " <br/><br/>";
+
+                        leftInfo += "<center><img src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center>";
+
                         var delLink = "<a href=\"javascript:Delete('" + mypk + "');\">删除</a>";
-                        var newRow = "<tr ><td class=Idx>" + i + "</td><td>" + msg + "<hr>  " + empNo + " " + empName + "  " + delLink + "</td></tr>";
+                        var newRow = "<tr ><td class='Left'>" + leftInfo + "</td><td class=BigDoc>" + msg + "<hr>  " + empNo + " " + empName + "  " + delLink + "</td></tr>";
 
                         $("#Table1 tr:last").after(newRow);
+
                         idx = i;
                     }
                 }
@@ -131,9 +134,10 @@
                    var empName = data[0].EmpFromT;
                    var msg = data[0].Msg;
 
+                   var leftInfo = " <img src='../../Img/Dot.png' border=0  width='7px'/>&nbsp;" + empNo + " - " + empName + " <br/><br/>";
                    var delLink = "<a href=\"javascript:Delete('" + mypk + "');\">删除</a>";
-                   var newRow = "<tr ><td class=Idx>" + idx + "</td><td>" + msg + "<hr>  " + empNo + " " + empName + "  " + delLink + "</td></tr>";
-
+                   var newRow = "<tr ><td class='Left'>" + leftInfo + "</td><td class=BigDoc>" + msg + "<hr>  " + empNo + " " + empName + "  " + delLink + "</td></tr>";
+                
                    idx++;
                    $("#Table1 tr:last").after(newRow);
                }
@@ -143,7 +147,7 @@
 </head>
 <body onkeypress="Esc()" >
 
-<table id="Table1">
+<table id="Table1"  style="width:80%;" >
 <caption>流程评论</caption>
 <tr>
 <th>序</th>
@@ -152,14 +156,15 @@
 </table>
 
 <form id="cc" name="cc" >
+
 <fieldset>
 <legend>评论</legend>
 <textarea  rows="3" id="TB_Msg" name="TB_Msg"  cols="30" >
 </textarea>
+<br />
 <input type="button" id="Btn_Save" name="Btn_Save" value="提交评论"  onclick="Save();"/>
 </fieldset>
 </form>
-
 
 <div id="Msg"></div>
 

@@ -196,3 +196,15 @@ function GenerFullAllCtrlsVal(data) {
 
     // alert('没有找到的控件类型:' + unSetCtrl);
 }
+
+
+/*隐藏与显示.*/
+function ShowHidden(ctrlID) {
+
+    var ctrl = document.getElementById(ctrlID);
+    if (ctrl.style.display == "block") {
+        ctrl.style.display = 'none';
+    } else {
+        ctrl.style.display = 'block';
+    }
+}

@@ -1,21 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Web;
-using System.IO;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
 using System.Data;
-using System.Data.SqlClient;
-using System.Text;
-using System.Configuration;
-using System.Web.SessionState;
-using BP.DA;
 using BP.Web;
-using BP.WF;
 using BP.Sys;
-using BP.En;
+using BP.Sys.XML;
 
 namespace CCFlow.WF.Admin.FoolFormDesigner
 {
@@ -32,9 +20,17 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             get
             {
-                string str = context.Request.QueryString["KeyOfEn"].ToString();
+                string str = context.Request.QueryString["KeyOfEn"];
+                return str;
+            }
+        }
+        public string DoType
+        {
+            get
+            {
+                string str = context.Request.QueryString["DoType"].ToString();
                 if (str == null || str == "")
-                    str = context.Request.QueryString["KeyOfEn"].ToString();
+                    str = context.Request.QueryString["DoType"].ToString();
                 return str;
             }
         }
@@ -234,23 +230,111 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             context = mycontext;
             string doType = context.Request.QueryString["DoType"];
-            switch (doType)
+
+            string msg = "";
+
+            try
             {
-                case "RadioBtns_Init":
-                    context.Response.Write(this.RadioBtns_Init());
-                    break;
-                case "RadioBtns_Save":
-                    context.Response.Write(this.RadioBtns_Save());
-                    break;
-                case "PopVal_Init": 
-                    context.Response.Write(this.PopVal_Init());
-                    return;
-                case "PopVal_Save":
-                    context.Response.Write(this.PopVal_Save());
-                    return;
-                default:
-                    break;
+                switch (doType)
+                {
+                    case "RegularExpression_Init":
+                        msg = this.RegularExpression_Init();
+                        break;
+                    case "RegularExpression_Save":
+                        msg = this.RegularExpression_Save();
+                        break;
+                    case "RadioBtns_Init":
+                        msg = this.RadioBtns_Init();
+                        break;
+                    case "RadioBtns_Save":
+                        msg = this.RadioBtns_Save();
+                        break;
+                    case "PopVal_Init":
+                        msg = this.PopVal_Init();
+                        return;
+                    case "PopVal_Save":
+                        msg = this.PopVal_Save();
+                        return;
+                    default:
+                        msg = "err@标记错误:"+this.DoType;
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                msg = "err@" + ex.Message;
+            }
+
+            context.Response.ContentType = "text/plain";
+            context.Response.Write(msg);
+        }
+
+        /// <summary>
+        /// 初始化正则表达式界面
+        /// </summary>
+        /// <returns></returns>
+        public string RegularExpression_Init()
+        {
+            DataSet ds = new DataSet();
+            string sql = "SELECT * FROM Sys_MapExt WHERE AttrOfOper='"+this.KeyOfEn+"' AND FK_MapData='"+this.FK_MapData+"'";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
+
+            BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
+            res.RetrieveAll();
+
+            DataTable myDT = res.ToDataTable();
+            myDT.TableName = "RE";
+            ds.Tables.Add(myDT);
+
+
+            BP.Sys.XML.RegularExpressionDtls dtls = new BP.Sys.XML.RegularExpressionDtls();
+            dtls.RetrieveAll();
+            DataTable myDTDtls = res.ToDataTable();
+            myDTDtls.TableName = "REDtl";
+            ds.Tables.Add(myDTDtls);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        private void RegularExpression_Save_Tag(string tagID)
+        {
+            string val = this.GetValFromFrmByKey("TB_Doc_" + tagID);
+            if (string.IsNullOrEmpty(val))
+                return;
+            
+            MapExt me = new MapExt();
+            me.MyPK = this.FK_MapData + "_" + this.KeyOfEn + "_RegularExpression_" + tagID;
+            me.FK_MapData = this.FK_MapData;
+            me.AttrOfOper = this.KeyOfEn;
+            me.ExtType = "RegularExpression";
+            me.Tag = tagID;
+            me.Doc = val;
+            me.Tag1 = this.GetValFromFrmByKey("TB_Tag1_" + tagID);
+            me.Save();
+        }
+        /// <summary>
+        /// 执行 保存.
+        /// </summary>
+        /// <returns></returns>
+        public string RegularExpression_Save()
+        {
+            //删除该字段的全部扩展设置. 
+            MapExt me = new MapExt();
+            me.Delete(MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.ExtType, MapExtXmlList.RegularExpression,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            //执行存盘.
+            RegularExpression_Save_Tag("onblur");
+            RegularExpression_Save_Tag("onchange");
+            RegularExpression_Save_Tag("onclick");
+            RegularExpression_Save_Tag("ondblclick");
+            RegularExpression_Save_Tag("onkeypress");
+            RegularExpression_Save_Tag("onkeyup");
+            RegularExpression_Save_Tag("onsubmit");
+
+            return "保存成功...";
         }
         /// <summary>
         /// 返回信息。

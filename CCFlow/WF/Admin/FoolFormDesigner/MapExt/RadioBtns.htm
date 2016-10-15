@@ -5,6 +5,8 @@
     <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../../../Scripts/QueryString.js"></script>
     <link href="../../../../DataUser/Style/Table0.css" rel="stylesheet" />
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         //页面启动函数.
         var initData = {};
@@ -24,7 +26,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "MapExtHandler.ashx?DoType=RadioBtns_Init&FK_MapData=" + pageData.FK_MapData + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
+                url: Handler+"?DoType=RadioBtns_Init&FK_MapData=" + pageData.FK_MapData + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     initData = JSON.parse(data);
@@ -146,7 +148,7 @@
                 data: { data: JSON.stringify(initData.Sys_FrmRB) },
                 type: 'post',
                 async: true,
-                url: "MapExtHandler.ashx?DoType=RadioBtns_Save&FK_MapData=" + pageData + "&FK_MapExt=" + pageData.MyPK + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
+                url: Handler+"?DoType=RadioBtns_Save&FK_MapData=" + pageData + "&FK_MapExt=" + pageData.MyPK + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     alert(data)

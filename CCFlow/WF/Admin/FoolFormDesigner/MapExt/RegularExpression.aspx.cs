@@ -196,7 +196,7 @@ namespace CCFlow.WF.MapDef
             lb.ID = "LBReTemplete";
             lb.Height = 250;
 
-            RegularExpressions res = new RegularExpressions();
+            BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
             res.RetrieveAll();
             foreach (RegularExpression item in res)
             {

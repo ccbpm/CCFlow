@@ -53,7 +53,6 @@
                     //转化成json.
                     data = JSON.parse(data);
 
-
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
 
@@ -132,11 +131,9 @@
 
 
           var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" >删除</a>|<a href='Replay'>回复</a>";
-
-
           var newRow = "<tr><td style='bgcolor:red'>" + leftInfo + "<br><br></td><td class=BigDoc>" + msg + "<hr>  " + empNo + " " + empName + "  " + delLink + "</td></tr>";
+          $("#Table1 tr:last").after(newRow);
 
-           $("#Table1 tr:last").after(newRow);
        }
      </script>
 </head>

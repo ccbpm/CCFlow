@@ -93,13 +93,11 @@
                 dataType: 'html',
                 success: function (data) {
 
-
-                    alert(data);
-
                     // alert(data);
                     data = JSON.parse(data);
 
                     var mypk = data.FK_MapData + '_' + data.KeyOfEn;
+                    keyOfEn = data.KeyOfEn;
 
                     //给公共属性赋值.
                     $("#TB_Name").val(data.Name);

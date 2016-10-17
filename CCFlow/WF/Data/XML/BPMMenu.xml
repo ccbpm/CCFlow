@@ -8,7 +8,6 @@
     <!--<Item No="0105" Name="组织结构" Url="OrganizationalStructure.aspx" Img="../WF/Img/Btn/DTS.gif" />-->
     <Item No="0105" Name="组织结构" Url="Organization.aspx" Img="../WF/Img/Btn/DTS.gif" />
     <Item No="0106" Name="管理员设置" Url="ManagerDept.aspx" Img="../WF/Img/Btn/DTS.gif" />
-    <Item No="0107" Name="批量导入" Url="/WF/Comm/Sys/InitOrg.aspx" Img="/WF/Img/Btn/DTS.gif" />
 
   </Item>
   <!-- 菜单权限管理  -->

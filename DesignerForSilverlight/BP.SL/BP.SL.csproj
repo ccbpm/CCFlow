@@ -48,10 +48,10 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="Silverlight.DataSet">
-      <HintPath>..\..\DLL\Silverlight.DataSet.dll</HintPath>
+      <HintPath>..\..\RefDLL\Silverlight.DataSet.dll</HintPath>
     </Reference>
     <Reference Include="SilverlightFX">
-      <HintPath>..\..\DLL\SilverlightFX.dll</HintPath>
+      <HintPath>..\..\RefDLL\SilverlightFX.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />

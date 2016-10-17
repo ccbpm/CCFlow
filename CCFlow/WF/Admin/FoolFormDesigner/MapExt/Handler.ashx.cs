@@ -3,7 +3,6 @@ using System.Web;
 using System.Data;
 using BP.Web;
 using BP.Sys;
-using BP.Sys.XML;
 
 namespace CCFlow.WF.Admin.FoolFormDesigner
 {
@@ -232,6 +231,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string doType = context.Request.QueryString["DoType"];
 
             string msg = "";
+     
 
             try
             {
@@ -296,6 +296,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             me.MyPK = this.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + this.KeyOfEn;
             me.RetrieveFromDBSources();
 
+            System.Console.WriteLine("已执行删除");
             me.ExtType = MapExtXmlList.TBFullCtrl ;
             me.Doc = this.GetValFromFrmByKey("TB_SQL");
             me.AttrOfOper = this.KeyOfEn;
@@ -328,7 +329,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             BP.Sys.XML.RegularExpressionDtls dtls = new BP.Sys.XML.RegularExpressionDtls();
             dtls.RetrieveAll();
-            DataTable myDTDtls = res.ToDataTable();
+            DataTable myDTDtls = dtls.ToDataTable();
             myDTDtls.TableName = "REDtl";
             ds.Tables.Add(myDTDtls);
 

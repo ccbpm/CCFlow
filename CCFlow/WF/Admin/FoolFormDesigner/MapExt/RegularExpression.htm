@@ -13,7 +13,7 @@
         var RE = null;
         var REDtl = null;
 
-
+        //初始加载
         $(function () {
 
             var fk_mapdata = GetQueryString["FK_MapData"]; //表单id.
@@ -29,7 +29,7 @@
                     if (data == "")
                         return;
 
-                    alert(data);
+                   // alert(data);
 
                     data = JSON.parse(data);
 
@@ -38,7 +38,8 @@
                     REDtl = data['REDtl']; //模版的详细信息.
 
                     for (var i = 0; i < RE.length; i++) {
-                        var newRow = "<tr><td style='bgcolor:red'>" + RE[i].No + "</td><td class=BigDoc><a href=\"Select('"+RE[i].No+"')\" >" + RE[i].Name + "</a> </td></tr>";
+                        var xh = i + 1;
+                        var newRow = "<tr><td>" + xh + "</td><td style='bgcolor:red'>" + RE[i].No + "</td><td class=BigDoc><a href=\"javascript:Select('" + RE[i].No + "')\" >" + RE[i].Name + "</a> </td></tr>";
                         $("#Table1 tr:last").after(newRow);
                     }
 
@@ -50,17 +51,29 @@
                 }
             })
         })
-
+        //选择模板
         function Select(id) {
 
             for (var i = 0; i < REDtl.length; i++) {
+            
                 if (REDtl[i].ItemNo != id)
                     continue;
                 var ev = REDtl[i].ForEvent;
-                $("#TB_Doc_" + ev).val(REDtl[i].Exp);
+                var test = $("#TB_Doc_" + ev).val();
+                if (test == undefined) {
+                    alert("模板没有找到对应事件类型，请手输");
+                    continue;
+                       // $("#TB_Doc_onblur").val(REDtl[i].Exp);
+                     //   $("#TB_Doc_onblur").val(REDtl[i].Msg);
+                }
+
+                    $("#TB_Doc_" + ev).val(REDtl[i].Exp);
+                    $("#TB_Tag1_" + ev).val(REDtl[i].Msg);
+                    
+                    
              }
         }
-
+        //保存
         function Save() {
 
             var frmData = $("#cc").serialize();
@@ -81,8 +94,6 @@
                 }
             });
         }
-
-
     </script>
     <style type="text/css">
         .style1
@@ -167,15 +178,26 @@
 <input type="button" id="Btn_Save"  name="Btn_Save" value="保存"  onclick="Save()" /> 
 <input type="button" id="Btn_LoadTemplate"  name="Btn_LoadTemplate" value="加载模版"  onclick="LoadTemplate()" />
 <script type="text/javascript">
+    //加载模板
 
-function LoadTemplate() {
-    var div = document.getElementById("template");
+    function LoadTemplate() {
+        var Table1 = $("#Btn_LoadTemplate").val();
+
+        if (Table1 == "加载模版") {
+            $("#Table1").show();
+            $("#Btn_LoadTemplate").val("关闭模板");
+        } else {
+            $("#Table1").hide();
+            $("#Btn_LoadTemplate").val("加载模版");
+        }
+       
+       
 }
 </script>
 
-<div id="template">
+<div id = "div01">
 
-<table id="Table1" >
+<table id="Table1" class='Table' cellpadding='0' cellspacing='0' border='0' style="width:80%;display:none" >
 <tr>
 <th> 序号 </th>
 <th> 名称 </th>

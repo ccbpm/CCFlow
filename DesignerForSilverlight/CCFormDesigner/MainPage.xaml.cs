@@ -1085,11 +1085,11 @@ namespace CCForm
 
                                         // json 值中会有null 或 ""
                                         int type = 0;
-                                        tmpStr = dr["BTNTYPE"].ToString();
-                                        if (!string.IsNullOrEmpty(tmpStr))
-                                        {
-                                            int.TryParse(tmpStr, out type);
-                                        }
+                                        //tmpStr = dr["BTNTYPE"].ToString();
+                                        //if (!string.IsNullOrEmpty(tmpStr))
+                                        //{
+                                        //    int.TryParse(tmpStr, out type);
+                                        //}
                                         btn.HisBtnType = (BtnType)type;
 
                                         type = 0;

@@ -290,7 +290,7 @@
         //返回数据
         function btnOk() {
             var rows = $('#newsGrid').datagrid('getChecked');
-           
+
             if (rows.length == 0) {
                 $.messager.alert("提示", "请选择数据", "info");
                 return;
@@ -316,6 +316,8 @@
                 $.each(rows, function (n, value) {
                     str += value.CURVALUE + ",";
                 });
+
+                str = str.substr(0, str.length - 1);
             }
             //str = str.replace(/\r/g, "");
             //str = str.replace(/\n/g, "");
@@ -411,7 +413,7 @@
         <table id="newsGrid" fit="true" fitcolumns="true" class="easyui-datagrid">
         </table>
     </div>
-    <div   id="win" class="easyui-window" title="请输入" style="width: 400px; height: 230px;
+    <div id="win" class="easyui-window" title="请输入" style="width: 400px; height: 230px;
         overflow: hidden;" data-options="iconCls:'icon-save',modal:true,collapsible:false,minimizable:false,maximizable:false">
         <div class="easyui-layout" data-options="fit:true">
             <div data-options="region:'center'" style="text-align: center;">

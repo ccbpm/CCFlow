@@ -726,6 +726,19 @@ namespace BP.Sys
                     return false;
             }
         }
+        /// <summary>
+        /// 是否启用密码加密
+        /// </summary>
+        public static bool IsEnablePasswordEncryption
+        {
+            get
+            {
+                string s = AppSettings["IsEnablePasswordEncryption"] as string;
+                if (s == null || s == "0")
+                    return false;
+                return true;
+            }
+        }
         #endregion
 
 

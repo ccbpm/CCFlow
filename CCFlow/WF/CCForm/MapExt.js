@@ -240,6 +240,78 @@ function GenerPageKVs() {
 //        //}
 //    }
 //}
+
+/*装载填充*/
+function AutoFullDLL(e, ddl_Id, fk_mapExt) {
+    GenerPageKVs();
+    var url = GetLocalWFPreHref();
+    var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
+    $.ajax({
+        type: "get",
+        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        data: json_data,
+        beforeSend: function (XMLHttpRequest) {
+            //ShowLoading();
+        },
+        success: function (data, textStatus) {
+            // 获取原来选择值.
+            var oldVal = null;
+            var ddl = document.getElementById(ddl_Id);
+            var mylen = ddl.options.length - 1;
+            while (mylen >= 0) {
+                if (ddl.options[mylen].selected) {
+                    oldVal = ddl.options[mylen].value;
+                }
+                mylen--;
+            }
+
+            //清空
+            $("#" + ddl_Id).empty();
+            if (data == "") {
+                //无数据返回时，提示显示无数据，并将与此关联的下级下拉框也处理一遍，edited by liuxc,2015-10-22
+                $("#" + ddl).append("<option value='' selected='selected' >无数据</option");
+                var chg = $("#" + ddl_Id).attr("onchange");
+                if (typeof chg == "function") {
+                    $("#" + ddl_Id).change();
+                }
+                return;
+            }
+
+            var dataObj = eval("(" + data + ")"); //转换为json对象.
+            $.each(dataObj.Head, function (idx, item) {
+                $("#" + ddl_Id).append("<option value='" + item.No + "'>" + item.Name + "</option");
+            });
+
+            var isInIt = false;
+            mylen = ddl.options.length - 1;
+            while (mylen >= 0) {
+                if (ddl.options[mylen].value == oldVal) {
+                    ddl.options[mylen].selected = true;
+                    isInIt = true;
+                    break;
+                }
+                mylen--;
+            }
+            if (isInIt == false) {
+                //此处修改，去掉直接选中上次的结果，避免错误数据的产生，edited by liuxc,2015-10-22
+                $("#" + ddlChild).prepend("<option value='' selected='selected' >*请选择</option");
+                $("#" + ddlChild).val('');
+
+                var chg = $("#" + ddl_Id).attr("onchange");
+                if (typeof chg == "function") {
+                    $("#" + ddl_Id).change();
+                }
+            }
+        },
+        complete: function (XMLHttpRequest, textStatus) {
+            //HideLoading();
+        },
+        error: function () {
+            //请求出错处理
+        }
+    });
+}
+
 /* 自动填充 */
 function DDLFullCtrl(e, ddlChild, fk_mapExt) {
 

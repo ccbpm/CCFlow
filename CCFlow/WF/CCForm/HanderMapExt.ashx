@@ -18,11 +18,8 @@ using BP.WF;
 using BP.Sys;
 using BP.En;
 
-public class Handler : IHttpHandler, IRequiresSessionState  
+public class Handler : IHttpHandler, IRequiresSessionState
 {
-    string no;
-    string name;
-    string fk_dept;
     string oid;
     string kvs;
     string dealSQL;
@@ -33,17 +30,13 @@ public class Handler : IHttpHandler, IRequiresSessionState
         sql = sql.Replace("@Val", key);
         sql = sql.Replace("@val", key);
 
-        //sql = sql.Replace("@WebUser.No", no);
-        //sql = sql.Replace("@WebUser.Name", name);
-        //sql = sql.Replace("@WebUser.FK_Dept", fk_dept);
-
         sql = sql.Replace("@WebUser.No", WebUser.No);
         sql = sql.Replace("@WebUser.Name", WebUser.Name);
         sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
         if (oid != null)
             sql = sql.Replace("@OID", oid);
 
-        if (string.IsNullOrEmpty(kvs) == false && sql.Contains("@")==true )
+        if (string.IsNullOrEmpty(kvs) == false && sql.Contains("@") == true)
         {
             string[] strs = kvs.Split('~');
             foreach (string s in strs)
@@ -51,7 +44,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
                 if (string.IsNullOrEmpty(s)
                     || s.Contains("=") == false)
                     continue;
-                
+
 
                 string[] mykv = s.Split('=');
                 sql = sql.Replace("@" + mykv[0], mykv[1]);
@@ -63,25 +56,24 @@ public class Handler : IHttpHandler, IRequiresSessionState
         dealSQL = sql;
         return sql;
     }
+    
     public void ProcessRequest(HttpContext context)
     {
         string fk_mapExt = context.Request.QueryString["FK_MapExt"].ToString();
-        if ( string.IsNullOrEmpty( context.Request.QueryString["Key"]) )
+        if (string.IsNullOrEmpty(context.Request.QueryString["Key"]))
             return;
-        no=context.Request.QueryString["WebUserNo"];
-        name = context.Request.QueryString["WebUserName"];
-        fk_dept = context.Request.QueryString["WebUserFK_Dept"];
+
         oid = context.Request.QueryString["OID"];
         kvs = context.Request.QueryString["KVs"];
 
         BP.Sys.MapExt me = new BP.Sys.MapExt(fk_mapExt);
-       DataTable dt = null;
+        DataTable dt = null;
         string sql = "";
-        string key=context.Request.QueryString["Key"];
+        string key = context.Request.QueryString["Key"];
         key = System.Web.HttpUtility.UrlDecode(key,
             System.Text.Encoding.GetEncoding("GB2312"));
         key = key.Trim();
-       // key = "周";
+        // key = "周";
         switch (me.ExtType)
         {
             //case BP.Sys.MapExtXmlList.DDLFullCtrl: // 级连ddl.
@@ -94,6 +86,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
                 dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 context.Response.Write(JSONTODT(dt));
                 return;
+            case BP.Sys.MapExtXmlList.AutoFullDLL://填充下拉框
             case BP.Sys.MapExtXmlList.TBFullCtrl: // 自动完成。
             case BP.Sys.MapExtXmlList.DDLFullCtrl: // 级连ddl.
                 switch (context.Request.QueryString["DoType"])
@@ -114,7 +107,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
                         {
                             if (str == "" || str == null)
                                 continue;
-                            
+
                             string[] ss = str.Split(':');
                             string noOfObj = ss[0];
                             string mysql = ss[1];
@@ -139,7 +132,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
                             m2mData.InitMyPK();
                             m2mData.NumSelected = dtFull.Rows.Count;
                             m2mData.Save();
-                            
+
                             DataRow mydr = dtM2M.NewRow();
                             mydr[0] = ss[0];
                             dtM2M.Rows.Add(mydr);
@@ -158,7 +151,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
 
                             string[] ss = str.Split(':');
                             string fk_dtl = ss[0];
-                            string dtlKey= System.Web.HttpContext.Current.Session["DtlKey"] as string;
+                            string dtlKey = System.Web.HttpContext.Current.Session["DtlKey"] as string;
                             if (dtlKey == null)
                                 dtlKey = key;
                             string mysql = DealSQL(ss[1], dtlKey);
@@ -171,13 +164,13 @@ public class Handler : IHttpHandler, IRequiresSessionState
                             foreach (DataRow dr in dtDtlFull.Rows)
                             {
                                 BP.Sys.GEDtl mydtl = new GEDtl(fk_dtl);
-                              //  mydtl.OID = dtls.Count + 1;
+                                //  mydtl.OID = dtls.Count + 1;
                                 dtls.AddEntity(mydtl);
                                 foreach (DataColumn dc in dtDtlFull.Columns)
                                 {
                                     mydtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
                                 }
-                                mydtl.RefPKInt = int.Parse( oid);
+                                mydtl.RefPKInt = int.Parse(oid);
                                 if (mydtl.OID > 100)
                                 {
                                     mydtl.InsertAsOID(mydtl.OID);
@@ -187,7 +180,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
                                     mydtl.OID = 0;
                                     mydtl.Insert();
                                 }
-                                    
+
                             }
                             DataRow drRe = dtDtl.NewRow();
                             drRe[0] = fk_dtl;
@@ -237,7 +230,6 @@ public class Handler : IHttpHandler, IRequiresSessionState
                         break;
                     default:
                         sql = this.DealSQL(me.DocOfSQLDeal, key);
-                        //sql = this.DealSQL(me.DocOfSQLDeal, key);
                         dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                         context.Response.Write(JSONTODT(dt));
                         break;
@@ -256,14 +248,14 @@ public class Handler : IHttpHandler, IRequiresSessionState
     }
     public string JSONTODT(DataTable dt)
     {
-   if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.Informix
-            || BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle) && dealSQL!=null)
+        if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.Informix
+                 || BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle) && dealSQL != null)
         {
             /*如果数据库不区分大小写, 就要按用户输入的sql进行二次处理。*/
             string mysql = dealSQL.Trim();
-            mysql = mysql.Substring(6, mysql.ToLower().IndexOf("from")-6);
-            mysql=mysql.Replace(",", " ");
-            string[] strs=mysql.Split(' ');
+            mysql = mysql.Substring(6, mysql.ToLower().IndexOf("from") - 6);
+            mysql = mysql.Replace(",", " ");
+            string[] strs = mysql.Split(' ');
             foreach (string s in strs)
             {
                 if (string.IsNullOrEmpty(s))
@@ -294,7 +286,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
                 }
             }
         }
-        
+
         StringBuilder JsonString = new StringBuilder();
         if (dt != null && dt.Rows.Count > 0)
         {

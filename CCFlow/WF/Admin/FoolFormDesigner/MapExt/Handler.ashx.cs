@@ -41,7 +41,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             get
             {
                 string fk_mapExt = context.Request.QueryString["MyPK"] as string;
-                if (fk_mapExt == null || fk_mapExt=="")
+                if (fk_mapExt == null || fk_mapExt == "")
                     fk_mapExt = context.Request.QueryString["FK_MapExt"] as string;
                 return fk_mapExt;
             }
@@ -123,14 +123,14 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             try
             {
                 MapExt me = new MapExt();
-                me.MyPK =this.FK_MapExt;
+                me.MyPK = this.FK_MapExt;
                 me.FK_MapData = this.FK_MapData;
                 me.ExtType = "PopVal";
                 me.AttrOfOper = context.Request.QueryString["KeyOfEn"];
                 me.RetrieveFromDBSources();
 
                 string valWorkModel = this.GetValFromFrmByKey("Model");
-                
+
                 switch (valWorkModel)
                 {
                     case "SelfUrl": //URL模式.
@@ -150,7 +150,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         me.PopValWorkModel = PopValWorkModel.Group;
 
                         me.PopValGroupSQL = this.GetValFromFrmByKey("TB_GroupModel_Group");
-                         me.PopValEntitySQL = this.GetValFromFrmByKey("TB_GroupModel_Entity");
+                        me.PopValEntitySQL = this.GetValFromFrmByKey("TB_GroupModel_Entity");
 
                         //me.PopValUrl = this.GetValFromFrmByKey("TB_Url");
                         break;
@@ -205,7 +205,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 me.Save();
                 return "保存成功.";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return "@保存失败:" + ex.Message;
             }
@@ -218,7 +218,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         /// <returns>返回值</returns>
         public string GetValFromFrmByKey(string key)
         {
-            string val= context.Request.Form[key];
+            string val = context.Request.Form[key];
             val = val.Replace("'", "~");
             return val;
         }
@@ -231,7 +231,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string doType = context.Request.QueryString["DoType"];
 
             string msg = "";
-     
+
 
             try
             {
@@ -262,7 +262,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         msg = this.PopVal_Save();
                         return;
                     default:
-                        msg = "err@标记错误:"+this.DoType;
+                        msg = "err@标记错误:" + this.DoType;
                         break;
                 }
             }
@@ -281,12 +281,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         public string TBFullCtrl_Init()
         {
             MapExt ext = new MapExt();
-            ext.MyPK=this.FK_MapData+"_"+MapExtXmlList.TBFullCtrl+"_"+this.KeyOfEn;
+            ext.MyPK = this.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + this.KeyOfEn;
             ext.FK_MapData = this.FK_MapData;
             ext.ExtType = MapExtXmlList.TBFullCtrl;
-            if (ext.RetrieveFromDBSources()==0)
+            if (ext.RetrieveFromDBSources() == 0)
                 return "";
-            
+
             return ext.ToJson();
         }
 
@@ -297,11 +297,11 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             me.RetrieveFromDBSources();
 
             System.Console.WriteLine("已执行删除");
-            me.ExtType = MapExtXmlList.TBFullCtrl ;
+            me.ExtType = MapExtXmlList.TBFullCtrl;
             me.Doc = this.GetValFromFrmByKey("TB_SQL");
             me.AttrOfOper = this.KeyOfEn;
             me.FK_MapData = this.FK_MapData;
-            me.FK_DBSrc = this.GetValFromFrmByKey("DDL_DBSrc"); 
+            me.FK_DBSrc = this.GetValFromFrmByKey("DDL_DBSrc");
             me.Save();
 
             return "保存成功...";
@@ -314,7 +314,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         public string RegularExpression_Init()
         {
             DataSet ds = new DataSet();
-            string sql = "SELECT * FROM Sys_MapExt WHERE AttrOfOper='"+this.KeyOfEn+"' AND FK_MapData='"+this.FK_MapData+"'";
+            string sql = "SELECT * FROM Sys_MapExt WHERE AttrOfOper='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapExt";
             ds.Tables.Add(dt);
@@ -340,7 +340,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string val = this.GetValFromFrmByKey("TB_Doc_" + tagID);
             if (string.IsNullOrEmpty(val))
                 return;
-            
+
             MapExt me = new MapExt();
             me.MyPK = this.FK_MapData + "_" + this.KeyOfEn + "_RegularExpression_" + tagID;
             me.FK_MapData = this.FK_MapData;
@@ -372,6 +372,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             RegularExpression_Save_Tag("onkeyup");
             RegularExpression_Save_Tag("onsubmit");
 
+
             return "保存成功...";
         }
         /// <summary>
@@ -394,9 +395,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             //把分组加入里面.
             GroupFields gfs = new GroupFields(this.FK_MapData);
             ds.Tables.Add(gfs.ToDataTableField("Sys_GroupFields"));
-             
+
             //字段值.
-            FrmRBs rbs= new FrmRBs();
+            FrmRBs rbs = new FrmRBs();
             rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
             if (rbs.Count == 0)
             {

@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20160711";
+        public static string Ver = "20161018";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -129,6 +129,7 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+            updataNote += "20161018.升级用户表密码加密.";
             updataNote += "20160515.升级表单引擎绑定，去掉Isedit列.";
             updataNote += "20160526.升级FrmEnableRole状态.";
             updataNote += "20160501.升级todosta状态.";
@@ -665,6 +666,21 @@ namespace BP.WF
                 #endregion
 
 
+                #region 密码加密
+                if (SystemConfig.IsEnablePasswordEncryption == true)
+                {
+                    BP.Port.Emps emps = new BP.Port.Emps();
+                    emps.RetrieveAllFromDBSource();
+                    foreach (Emp empEn in emps)
+                    {
+                        if (string.IsNullOrEmpty(empEn.Pass) || empEn.Pass.Length < 30)
+                        {
+                            empEn.Pass = BP.Tools.Cryptography.EncryptString(empEn.Pass);
+                            empEn.DirectUpdate();
+                        }
+                    }
+                }
+                #endregion
 
                 // 最后更新版本号，然后返回.
                 sql = "UPDATE Sys_Serial SET IntVal=" + Ver + " WHERE CfgKey='Ver'";
@@ -3233,7 +3249,6 @@ namespace BP.WF
                 return true;
             }
         }
-
         /// <summary>
         /// 运行模式
         /// </summary>

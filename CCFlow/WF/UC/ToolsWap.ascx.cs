@@ -708,7 +708,7 @@ namespace CCFlow.WF.UC
             Emp emp = new Emp(WebUser.No);
             string appNo = BP.Sys.SystemConfig.AppSettings["CCPortal.AppNo"];
             //OA系统需要加密
-            if (!string.IsNullOrEmpty(appNo) && appNo == "CCOA")
+            if ((!string.IsNullOrEmpty(appNo) && appNo == "CCOA") || SystemConfig.IsEnablePasswordEncryption)
             {
                 p1 = BP.Tools.Cryptography.EncryptString(p1);
                 p2 = BP.Tools.Cryptography.EncryptString(p2);

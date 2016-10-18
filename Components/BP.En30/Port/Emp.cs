@@ -218,6 +218,9 @@ namespace BP.Port
             }
             else
             {
+                //启用加密
+                if (SystemConfig.IsEnablePasswordEncryption == true)
+                    pass = BP.Tools.Cryptography.EncryptString(pass);
                 /*使用数据库校验.*/
                 if (this.Pass == pass)
                     return true;

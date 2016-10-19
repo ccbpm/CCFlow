@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using BP.DA;
-using BP.En;
-using BP.WF;
 using BP.Web;
+using System.Data;
 
 namespace CCFlow.WF.WorkOpt.OneWork
 {
@@ -23,11 +20,14 @@ namespace CCFlow.WF.WorkOpt.OneWork
             get
             {
                 string str = context.Request.QueryString["DoType"];
+      
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
             }
         }
+
+
         /// <summary>
         /// 流程编号
         /// </summary>
@@ -51,6 +51,20 @@ namespace CCFlow.WF.WorkOpt.OneWork
                 return str;
             }
         }
+
+
+        public string UserName
+        {
+            get
+            {
+                string str = context.Request.QueryString["UserName"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+
+
         /// <summary>
         /// 字典表
         /// </summary>
@@ -148,6 +162,23 @@ namespace CCFlow.WF.WorkOpt.OneWork
                 return str;
             }
         }
+
+
+
+        public string Name
+        {
+            get
+            {
+                string str = BP.Web.WebUser.Name;
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+
+
+
+
         public HttpContext context = null;
         /// <summary>
         /// 获得表单的属性.
@@ -192,6 +223,12 @@ namespace CCFlow.WF.WorkOpt.OneWork
             {
                 switch (this.DoType)
                 {
+                    case "FlowBBSUser": //获得当前用户.
+                        msg = this.FlowBBSUser();
+                        break;
+                    case "FlowBBSDept": //获得当前用户.
+                        msg = this.FlowBBSDept();
+                        break;
                     case "FlowBBSList": //获得流程评论列表.
                         msg = this.FlowBBSList();
                         break;
@@ -199,7 +236,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                         msg = this.FlowBBSSave();
                         break;
                     case "FlowBBSDelete": //删除评论..
-                        msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK);
+                        msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK,this.UserName);
                         break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
@@ -219,6 +256,8 @@ namespace CCFlow.WF.WorkOpt.OneWork
         /// <returns></returns>
         public string FlowBBSList()
         {
+
+         
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
@@ -227,6 +266,22 @@ namespace CCFlow.WF.WorkOpt.OneWork
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
         }
 
+        public string FlowBBSUser()
+        {
+            string name = string.Empty;
+            name=BP.Web.WebUser.Name;
+            return name;
+
+        }
+
+        public string FlowBBSDept()
+        {
+              string dept = string.Empty;
+              dept = BP.Web.WebUser.FK_DeptName;
+              return dept;
+        }
+
+
         /// <summary>
         /// 提交评论.
         /// </summary>
@@ -234,9 +289,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
         public string FlowBBSSave()
         {
             string msg = this.GetValFromFrmByKey("TB_Msg");
-
             string mypk = BP.WF.Dev2Interface.Flow_BBSAdd(this.FK_Flow, this.WorkID, this.FID, msg, WebUser.No, WebUser.Name);
-
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE MyPK=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "MyPK";
             ps.Add("MyPK", mypk);
@@ -252,5 +305,6 @@ namespace CCFlow.WF.WorkOpt.OneWork
                 return false;
             }
         }
+
     }
 }

@@ -169,10 +169,70 @@ namespace BP.WF
         /// <param name="workID">业务编号</param>
         /// <param name="savePath">保存路径</param>
         /// <returns></returns>
-        public static bool DownLoadMediaById(string mediaId,string workID,string savePath)
+        public static bool DownLoadMediaById(string mediaId, string workID, string savePath)
         {
             string apiurl = FormatApiUrlWithToken(Urls.get_media) + "&media_id=" + mediaId;
             return Analyze.HttpDownLoadFile(apiurl, savePath);
+        }
+        /// <summary>
+        /// 下载钉钉所有头像
+        /// </summary>
+        /// <param name="savePath"></param>
+        /// <returns></returns>
+        public bool DownLoadUserIcon(string savePath)
+        {
+            if (Directory.Exists(savePath) == false)
+                Directory.CreateDirectory(savePath);
+
+            string access_token = getAccessToken();
+            string url = "https://oapi.dingtalk.com/department/list?access_token=" + access_token;
+            try
+            {
+                string str = new HttpWebResponseUtility().HttpResponseGet(url);
+                DepartMent_List departMentList = FormatToJson.ParseFromJson<DepartMent_List>(str);
+                //部门集合
+                if (departMentList != null && departMentList.department != null && departMentList.department.Count > 0)
+                {
+                    //部门信息
+                    foreach (DepartMentDetailInfo deptMentInfo in departMentList.department)
+                    {
+                        //部门人员
+                        DepartMentUser_List userList = GenerDeptUser_List(access_token, deptMentInfo.id);
+                        if (userList != null)
+                        {
+                            foreach (DepartMentUserInfo userInfo in userList.userlist)
+                            {
+                                if (string.IsNullOrEmpty(userInfo.avatar))
+                                {
+                                    //大图标
+                                    string UserIcon = savePath + "\\" + userInfo.userid + "Biger.png";
+                                    File.Copy(savePath + "\\DefaultBiger.png", UserIcon, true);
+
+                                    //小图标
+                                    UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
+                                    File.Copy(savePath + "\\DefaultSmaller.png", UserIcon, true);
+                                }
+                                else
+                                {
+                                    //大图标
+                                    string headimgurl = userInfo.avatar;
+                                    string UserIcon = savePath + "\\" + userInfo.userid + "Biger.png";
+                                    BP.DA.DataType.HttpDownloadFile(headimgurl, UserIcon);
+
+                                    //小图标
+                                    UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
+                                    BP.DA.DataType.HttpDownloadFile(headimgurl, UserIcon);
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+            }
+            return false;
         }
 
         /// <summary>
@@ -277,6 +337,132 @@ namespace BP.WF
                 BP.DA.Log.DefaultLogWriteLineError(ex.Message);
             }
             return false;
+        }
+
+        /// <summary>
+        /// 增量同步组织结构
+        /// </summary>
+        /// <returns></returns>
+        public string AnsyIncrementOrgToGPM()
+        {
+            string access_token = getAccessToken();
+            string url = "https://oapi.dingtalk.com/department/list?access_token=" + access_token;
+            try
+            {
+                StringBuilder append = new StringBuilder();
+                string str = new HttpWebResponseUtility().HttpResponseGet(url);
+                DepartMent_List departMentList = FormatToJson.ParseFromJson<DepartMent_List>(str);
+                //部门集合
+                if (departMentList != null && departMentList.department != null && departMentList.department.Count > 0)
+                {
+                    //增加跟部门
+                    int deptIdx = 0;
+                    bool doSomeThing = false;
+                    //部门信息
+                    foreach (DepartMentDetailInfo deptMentInfo in departMentList.department)
+                    {
+                        deptIdx++;
+                        doSomeThing = false;
+                        //增加部门,排除根目录
+                        if (deptMentInfo.id != "1")
+                        {
+                            Dept dept = new Dept();
+                            if (dept.IsExit(DeptAttr.No, deptMentInfo.id) == true)
+                            {
+                                if (!dept.Name.Equals(deptMentInfo.name))
+                                {
+                                    doSomeThing = true;
+                                    append.Append("\r\n部门名称发生变化：" + dept.Name + " --> " + deptMentInfo.name);
+                                }
+                                if (!dept.ParentNo.Equals(deptMentInfo.parentid))
+                                {
+                                    doSomeThing = true;
+                                    append.Append("\r\n部门父级发生变化：" + dept.ParentNo + " --> " + deptMentInfo.parentid);
+                                }
+                                //有变化，更新
+                                if (doSomeThing == true)
+                                {
+                                    dept.No = deptMentInfo.id;
+                                    dept.Name = deptMentInfo.name;
+                                    dept.ParentNo = deptMentInfo.parentid;
+                                    dept.DirectUpdate();
+                                }
+                                continue;
+                            }
+                            //不存在则新增
+                            dept.No = deptMentInfo.id;
+                            dept.Name = deptMentInfo.name;
+                            dept.ParentNo = deptMentInfo.parentid;
+                            dept.Idx = deptIdx;
+                            dept.DirectInsert();
+                            append.Append("\r\n新增部门：" + deptMentInfo.id + " - " + deptMentInfo.name);
+                        }
+
+                        //部门人员
+                        DepartMentUser_List userList = GenerDeptUser_List(access_token, deptMentInfo.id);
+                        if (userList != null)
+                        {
+                            foreach (DepartMentUserInfo userInfo in userList.userlist)
+                            {
+                                Emp emp = new Emp();
+                                emp.No = userInfo.userid;
+
+                                DeptEmp deptEmp = new DeptEmp();
+                                //如果账户存在则人员信息不添加，添加关联表
+                                if (emp.RetrieveFromDBSources() > 0)
+                                {
+                                    if (!emp.Name.Equals(userInfo.name))
+                                    {
+                                        emp.Name = userInfo.name;
+                                        emp.DirectUpdate();
+                                        append.Append("\r\n人员名称发生变化：" + emp.Name + " --> " + userInfo.name);
+                                    }
+
+                                    deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
+                                    if (deptEmp.RetrieveFromDBSources() > 0)
+                                        continue;
+
+                                    //增加人员归属部门
+                                    deptEmp.FK_Dept = deptMentInfo.id;
+                                    deptEmp.FK_Emp = emp.No;
+                                    deptEmp.DirectInsert();
+                                    append.Append("\r\n增加人员归属部门：" + emp.Name + " - " + deptMentInfo.name);
+                                    continue;
+                                }
+
+                                //增加人员
+                                emp.No = userInfo.userid;
+                                emp.EmpNo = userInfo.jobnumber;
+                                emp.Name = userInfo.name;
+                                emp.FK_Dept = deptMentInfo.id;
+                                emp.Tel = userInfo.mobile;
+                                emp.Email = userInfo.email;
+                                //emp.Idx = string.IsNullOrEmpty(userInfo.order) == true ? 0 : Int32.Parse(userInfo.order);
+                                emp.DirectInsert();
+                                append.Append("\r\n增加人员：" + emp.Name + "  部门:" + deptMentInfo.name);
+
+                                //增加人员与部门对应表
+                                deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
+                                deptEmp.FK_Dept = deptMentInfo.id;
+                                deptEmp.FK_Emp = emp.No;
+                                deptEmp.DirectInsert();
+                            }
+                        }
+                    }
+
+                    #region 处理部门名称全程
+                    BP.WF.DTS.OrgInit_NameOfPath nameOfPath = new DTS.OrgInit_NameOfPath();
+                    if (nameOfPath.IsCanDo)
+                        nameOfPath.Do();
+                    #endregion
+                }
+                return append.ToString();
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex.Message);
+            }
+            return null;
         }
 
         /// <summary>

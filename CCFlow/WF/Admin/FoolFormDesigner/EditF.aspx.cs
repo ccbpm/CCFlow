@@ -560,10 +560,10 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTDBegin("colspan=3");
                 this.Pub1.Add("<a href=\"javascript:WinOpen('./MapExt/PopVal.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.PopVal + "_" + mapAttr.MyPK + "')\">设置开窗返回值</a>");
 
-                string html = " - <a href=\"javascript:WinOpen('./MapExt/RegularExpression.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&OperAttrKey=" + mapAttr.MyPK + "')\">正则表达式</a>";
+                string html = " - <a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&OperAttrKey=" + mapAttr.MyPK + "')\">正则表达式</a>";
 
                 if (mapAttr.MyDataType == DataType.AppString)
-                    html += " - <a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + mapAttr.KeyOfEn + "')\">文本框自动完成</a>";
+                    html += " - <a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.htm?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + mapAttr.KeyOfEn + "')\">文本框自动完成</a>";
 
                 if (mapAttr.IsNum)
                     html += " - <a href=\"javascript:WinOpen('./MapExt/AutoFull.aspx?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>";

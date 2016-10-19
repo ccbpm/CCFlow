@@ -1532,7 +1532,7 @@ namespace BP.DA
             DateTime dtfrom = DataType.ParseSysDate2DateTime(dtoffrom);
             DateTime dtto = DataType.ParseSysDate2DateTime(dtofto);
 
-            TimeSpan ts = dtfrom - dtto;
+            TimeSpan ts = dtto - dtfrom;
             return  (float)Math.Round(ts.TotalDays, 2);
         }
         /// <summary>

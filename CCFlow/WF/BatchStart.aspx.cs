@@ -44,6 +44,7 @@ namespace CCFlow.WF
                 return 12;
             }
         }
+        public int ShowTabIndex { get; set; }
         #endregion 属性.
 
         protected void Page_Load(object sender, EventArgs e)
@@ -54,13 +55,13 @@ namespace CCFlow.WF
             }
 
             Flow fl = new Flow(this.FK_Flow);
-            this.Page.Title = fl.Name;
+            //this.Page.Title = fl.Name;
             MapAttrs attrs = new MapAttrs(this.FK_MapData);
             if (fl.BatchStartFields.Length == 0)
             {
-                this.Pub2.AddFieldSet("流程属性设置错误");
-                this.Pub2.Add("您需要在流程属性里设置批量发起需要填写的字段。");
-                this.Pub2.AddFieldSetEnd();
+                this.Pub2.AddEasyUiPanelInfo("流程属性设置错误", "<b>您需要在流程属性里设置批量发起需要填写的字段。</b>", "icon-no");
+                fsexcel.Visible = false;
+                this.Pub1.AddEasyUiPanelInfo("流程属性设置错误", "<b>您需要在流程属性里设置批量发起需要填写的字段。</b>", "icon-no");
             }
 
             MapExts mes = new MapExts(this.FK_MapData);
@@ -69,18 +70,17 @@ namespace CCFlow.WF
             Work wk = nd.HisWork;
             wk.ResetDefaultVal();
 
-            this.Pub2.AddTable();
-            this.Pub2.AddCaptionMsg("批量发起:" + fl.Name);
+            this.Master.Page.Title = "批量发起：" + fl.Name;
 
+            this.Pub2.AddTable("class='Table' cellpadding='0' cellspacing='0' border='0' style='width:98%'");
             #region 输出标题.
             this.Pub2.AddTR();
-            this.Pub2.AddTDTitle("序");
+            this.Pub2.AddTDTitle("style='width:60px'", "序");
 
-            string str1 = "<INPUT id='checkedAll' onclick=\"SelectAllBS(this);\" value='选择' type='checkbox' name='checkedAll' >全部选择";
-            this.Pub2.AddTDTitle("align='left'", str1);
+            string str1 = "<INPUT id='checkedAll' onclick=\"SelectAllBS(this);\" value='选择' type='checkbox' name='checkedAll' ><label for='checkedAll'>选择全部</a>";
+            this.Pub2.AddTDTitle("align='left' style='width:100px' nowrap", str1);
 
-            //this.Pub2.AddTDTitle("align='left'", "");
-
+            int fieldCount = 0;
             string[] strs = fl.BatchStartFields.Split(',');
             foreach (string str in strs)
             {
@@ -92,8 +92,19 @@ namespace CCFlow.WF
                     if (str != attr.KeyOfEn)
                         continue;
                     this.Pub2.AddTDTitle(attr.Name);
+                    fieldCount++;
                 }
             }
+
+            if(fieldCount==0)
+            {
+                this.Pub2.Clear();
+                this.Pub2.AddEasyUiPanelInfo("流程属性设置错误", "<b>您需要在流程属性里设置批量发起需要填写的字段。</b>", "icon-no");
+                fsexcel.Visible = false;
+                this.Pub1.AddEasyUiPanelInfo("流程属性设置错误", "<b>您需要在流程属性里设置批量发起需要填写的字段。</b>", "icon-no");
+                return;
+            }
+
             this.Pub2.AddTREnd();
             #endregion 输出标题.
 
@@ -104,7 +115,7 @@ namespace CCFlow.WF
                 this.Pub2.AddTDIdx(i);
                 CheckBox cbIdx = new CheckBox();
                 cbIdx.Checked = false;
-                cbIdx.Text = "发起否?";
+                cbIdx.Text = "发起";
                 cbIdx.ID = "CB_IDX_" + i;
                 this.Pub2.AddTD(cbIdx);
 
@@ -505,7 +516,6 @@ namespace CCFlow.WF
             btn.Click += new EventHandler(btn_Send_Click);
             btn.OnClientClick = "return checkType()";
             this.Pub2.Add(btn);
-
             //#region 文件上传.
             //if (!IsPostBack)
             //{
@@ -526,6 +536,8 @@ namespace CCFlow.WF
 
         protected void btn_Upload_Click(object sender, EventArgs e)
         {
+            this.ShowTabIndex = 1;
+
             if (File1.HasFile)
             {
                 //判断文件是否小于10Mb   
@@ -731,17 +743,31 @@ namespace CCFlow.WF
                             }
 
                             // 开始发起流程.
-                            string info = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht).ToMsgOfHtml();
-                            infos += "<br><fieldset width='100%' ><legend>&nbsp;&nbsp;第 (" + (i + 1) +
-                                     ") 条工作启动成功&nbsp;</legend>";
-                            infos += info;
-                            infos += "</fieldset>";
+                            string info = string.Empty;
+
+                            try
+                            {
+                                info = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht).ToMsgOfHtml();
+                                infos += "<br><fieldset width='100%' ><legend>&nbsp;&nbsp;第 (" + i + ") 条工作启动成功&nbsp;</legend>";
+                                infos += info;
+                            }
+                            catch (Exception ex)
+                            {
+                                infos += "<br><fieldset width='100%' ><legend>&nbsp;&nbsp;第 (" + i + ") 条工作启动失败&nbsp;</legend>";
+                                infos += "<b>" + ex.Message + "</b>";
+                            }
+                            finally
+                            {
+                                infos += "</fieldset>";
+                            }
                         }
 
-                        this.Pub2.Clear();
-                        this.Pub2.AddH2("&nbsp;&nbsp;发起信息");
+                        this.Pub1.Clear();
+                        this.Pub1.AddH2("&nbsp;&nbsp;发起信息");
                         infos = infos.Replace("@@", "@");
-                        this.Pub2.Add(infos.Replace("@", "<br>@"));
+                        this.Pub1.Add(infos.Replace("@", "<br>@"));
+                        this.Pub1.AddBR();
+                        this.Pub1.AddBR();
                     }
                     catch (Exception ex)
                     {
@@ -779,6 +805,7 @@ namespace CCFlow.WF
             MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.FK_Flow + "01"));
             string[] strs = fl.BatchStartFields.Split(',');
             string infos = "";
+            this.ShowTabIndex = 0;
             for (int i = 1; i <= 12; i++)
             {
                 CheckBox mycb = this.Pub2.GetCBByID("CB_IDX_" + i);
@@ -845,11 +872,23 @@ namespace CCFlow.WF
                 if (isChange == false)
                     continue;
 
-                string info = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht).ToMsgOfHtml();
+                string info = string.Empty;
 
-                infos += "<br><fieldset width='100%' ><legend>&nbsp;&nbsp;第 (" + i + ") 条工作启动成功&nbsp;</legend>";
-                infos += info;
-                infos += "</fieldset>";
+                try
+                {
+                    info = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht).ToMsgOfHtml();
+                    infos += "<br><fieldset width='100%' ><legend>&nbsp;&nbsp;第 (" + i + ") 条工作启动成功&nbsp;</legend>";
+                    infos += info;
+                }
+                catch (Exception ex)
+                {
+                    infos += "<br><fieldset width='100%' ><legend>&nbsp;&nbsp;第 (" + i + ") 条工作启动失败&nbsp;</legend>";
+                    infos += "<b>" + ex.Message + "</b>";
+                }
+                finally
+                {
+                    infos += "</fieldset>";
+                }
 
                 #endregion 开始发起流程.
             }
@@ -858,6 +897,15 @@ namespace CCFlow.WF
             this.Pub2.AddH2("&nbsp;&nbsp;发起信息");
             infos = infos.Replace("@@", "@");
             this.Pub2.Add(infos.Replace("@", "<br>@"));
+            this.Pub2.AddBR();
+            this.Pub2.AddSpace(2);
+
+            Button btn = new Button();
+            btn.Text = "继续发起";
+            btn.ID = "Btn_Continue";
+            btn.OnClientClick = "location.href='BatchStart.aspx?t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff") +
+                                "'";
+            this.Pub2.Add(btn);
         }
 
         /// <summary>

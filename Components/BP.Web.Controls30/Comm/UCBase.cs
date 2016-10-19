@@ -2098,6 +2098,24 @@ namespace BP.Web.UC
         {
             this.Add("\n<Caption ><div class='CaptionMsgLong' >" + str + "</div></Caption>");
         }
+
+        /// <summary>
+        /// 指定长度标题（指定长度是指中间带文本的区域长度）
+        /// <para>added by liuxc,2016-10-19</para>
+        /// </summary>
+        /// <param name="text">文本</param>
+        /// <param name="textWidth">文本区域长度（建议使用字符数*20，即每个字符按照20像素计算），小于100，则为100</param>
+        /// <param name="isTableCaption">是否是table中的caption标题，如果false，则增加一个宽度为100%的div caption</param>
+        public void AddCaptionMsg(string text, int textWidth, bool isTableCaption)
+        {
+            if (textWidth < 100)
+                textWidth = 100;
+
+            this.Add(isTableCaption ? "<caption>" : "<div class='caption' style='width:100%;'>");
+            this.Add("<div class='CapLeft'></div>\n<div class='CapCenter' style='width:" + textWidth + "px'>" + text + "</div>\n<div class='CapRight'></div><div style='clear:both;'></div>");
+            this.Add(isTableCaption ? "</caption>" : "</div>");
+        }
+
         public void AddTableBarGreen(string title, int col)
         {
             this.Add("\n<TR class='TR'>");

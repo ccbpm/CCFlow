@@ -1,7 +1,7 @@
 /*  Table 风格  */
 body
 {
-   font-size: 14px;
+    font-size: 14px;
 }
 
 /* 按钮风格 */
@@ -77,14 +77,14 @@ th, .Title
     font-size: 12px;
     font-weight: normal;
 }
- 
+
 .Idx
 {
     font-size: 12px;
     border: 1px solid #ccc;
     text-align: center;
     font-weight: bold;
-    width:20px;
+    width: 20px;
 }
 
 .Sum
@@ -156,7 +156,7 @@ td input
     width: auto;
     word-break: keep-all;
 }
- 
+
 .TBcalendar
 {
     background-position: left center;
@@ -183,7 +183,7 @@ td input
     vertical-align: middle;
 }
 
-caption
+caption, .caption
 {
     vertical-align: bottom;
     text-align: left;
@@ -220,8 +220,7 @@ caption
     background-attachment: fixed;
 }
 
-
-.CaptionMsg  a:hover
+.CaptionMsg a:hover
 {
     color: white;
 }
@@ -246,20 +245,57 @@ caption
     padding-left: 0px;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    text-align:center;
+    text-align: center;
+}
+/*可变长度Caption样式，三段式拼接*/
+.CapLeft
+{
+    margin-left: -10px;
+    width: 40px;
+    height: 30px;
+    background-position: 0 0;
+    line-height: 30px;
+    font-size: 12px;
+    background: url('/DataUser/Style/Img/TitleMsg.png');
+    background-repeat: no-repeat;
+    float: left;
 }
 
+.CapCenter
+{
+    text-align: left;
+    height: 30px;
+    background-position: left top;
+    line-height: 30px;
+    font-size: 12px;
+    font-family: 黑体;
+    font-weight: bolder;
+    color: #FFFFFF;
+    background: url('/DataUser/Style/Img/TitleMsgCenterBg.png');
+    background-repeat: repeat-x;
+    float: left;
+}
+
+.CapRight
+{
+    width: 20px;
+    height: 30px;
+    line-height: 30px;
+    background-image: url('/DataUser/Style/Img/TitleMsgRightBg.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    float: left;
+}
+/*可变长度Caption样式，三段式拼接 完成*/
 .TBDoc
 {
-   /*border-style: dotted; */
+    /*border-style: dotted; */
     border-width: 1px;
-    border-color: #CCCCCC;
-  /*  overflow: visible;*/
+    border-color: #CCCCCC; /*  overflow: visible;*/
     width: 100%;
     margin: 0px;
-    padding: 0px; 
-    display:block;
-    
+    padding: 0px;
+    display: block;
 }
 
 .TB
@@ -306,11 +342,11 @@ caption
 
 .Icon
 {
-    width:12px;
-    height:12px;
-    margin-right:5px;
-    text-align:center;
-    vertical-align:middle;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .GroupField a
@@ -396,7 +432,6 @@ legend
     color: green;
     font-style: inherit;
     font-weight: bold;
-    
 }
 
 .FieldsetInfo

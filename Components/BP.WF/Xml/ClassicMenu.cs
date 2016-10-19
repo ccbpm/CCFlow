@@ -32,6 +32,12 @@ namespace BP.WF.XML
                         return this.GetValStringByKey(BP.Web.WebUser.SysLang) + "(" + BP.WF.Dev2Interface.Todolist_Sharing + ")";
                     case "CC":
                         return this.GetValStringByKey(BP.Web.WebUser.SysLang) + "(" + BP.WF.Dev2Interface.Todolist_CCWorks + ")";
+                    case "Draft":
+                        return this.GetValStringByKey(BP.Web.WebUser.SysLang) + "(" + BP.WF.Dev2Interface.Todolist_Draft + ")";
+                        break;
+                    case "Runing":
+                        return this.GetValStringByKey(BP.Web.WebUser.SysLang) + "(" + BP.WF.Dev2Interface.Todolist_Runing + ")";
+                        break;
                     default:
                         return this.GetValStringByKey(BP.Web.WebUser.SysLang);
                 }

@@ -215,6 +215,23 @@ namespace BP.WF
                 }
             }
         }
+
+        /// <summary>
+        /// 获取草稿箱流程数量
+        /// </summary>
+        public static int Todolist_Draft
+        {
+            get
+            {
+                /*获取数据.*/
+                string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                BP.DA.Paras ps = new BP.DA.Paras();
+                ps.SQL = "SELECT count(a.WorkID ) as Num FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter";
+                ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
+                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+            }
+        }
+
         /// <summary>
         /// 获取已经完成流程数量
         /// </summary>

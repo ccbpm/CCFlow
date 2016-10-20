@@ -12,12 +12,13 @@
 
         $(function () {
 
-            var fk_mapdata = GetQueryString["FK_MapData"]; //表单id.
-            var keyOfEn = GetQueryString["KeyOfEn"]; //字段
+            var fk_mapdata = GetQueryString("FK_MapData"); //表单id.
+            var keyOfEn = GetQueryString("KeyOfEn"); //字段
 
             //初始化数据.
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs");
-
+           
+          
             $.ajax({
                 type: 'post',
                 async: true,
@@ -25,13 +26,12 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    if (data == "" )
+                    if (data == "")
                         return;
 
                     data = JSON.parse(data);
 
                     $("#TB_SQL").val(data.Doc); //设置值.
-
                     $("#DDL_DBSrc").val(data.FK_DBSrc); //设置值.
 
                 },
@@ -46,11 +46,12 @@
 
         function Save() {
 
-            var frmData = $("#cc").serialize();
-
+           // var frmData = $("#cc").serialize();
+            var TB_SQL = $("#TB_SQL").val();
+            var DDL_DBSrc = $("#DDL_DBSrc").val();
             //初始化表格.
             $.ajax({
-                data: frmData,
+                data: { TB_SQL: TB_SQL, DDL_DBSrc: DDL_DBSrc },
                 type: 'post',
                 async: true,
                 url: Handler + "?DoType=TBFullCtrl_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
@@ -67,13 +68,13 @@
     </script>
 </head>
 <body>
-
+ <form id="cc">
 <table style=" width:100%;">
 <caption>为文本框设置自动填充 </caption>
 <tr>
-<td class="Idx">1</td>
+<td class="Idx"  style=" width:100xp;">1</td>
 <td valign="top" colspan="2"  style=" width:100%;" >  
-<a href="javascript:ShowHidden('sqlexp')" >自动填充SQL: </a>
+<a href="javascript:ShowHidden('sqlexp')" >自动填充SQL: </a><br />
  <div id="sqlexp" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name两个列，用于显示下拉列表，其他的列与字段名称对应以便系统自动对应填充。</li>
@@ -90,7 +91,7 @@
 
 
 <tr>
-<td class="Idx">2</td>
+<td class="Idx" style="width:30px;">2</td>
 <td valign="top" >  <a href="javascript:ShowHidden('dbsrc')" >执行SQL的数据源: </a>
 <div id="dbsrc" style="color:Gray; display:none">
  <ul>
@@ -101,11 +102,9 @@
 </td>
 <td  style="width:50%;">
 
-<select id="DDL_DBSrc">
-</select>
+<select id="DDL_DBSrc" >
 
-<!-- <asp:DropDownList ID="DDL_DBSrc" runat="server">
-    </asp:DropDownList>-->
+</select>
 
  </td>
 </tr>
@@ -135,6 +134,6 @@
 </tr>
 </table>
 
-
+</form>
 </body>
 </html>

@@ -369,21 +369,44 @@ namespace CCFlow.WF.CCForm
                         {
                             if (BP.DA.DataType.IsImgExt(db.FileExts) == false)
                                 continue;
-                            if (athDesc.IsDelete != false)
+
+                            #region 附件删除权限
+
+                            //if (athDesc.IsDelete != false)
+                            //{
+                            //    if (athDesc.IsDelete == true)
+                            //        this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
+                            //    else if (athDesc.IsDeleteInt == 2)
+                            //    {
+                            //        if (db.Rec.Equals(WebUser.No))
+                            //            this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
+                            //    }
+                            //    else
+                            //        this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> </li>");
+
+                            //}
+                            //else
+                            //    this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> </li>");
+
+
+                            #endregion
+
+                            if (athDesc.HisDeleteWay == AthDeleteWay.None)//不能删除
                             {
-                                if (athDesc.IsDelete == true)
-                                    this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
-                                else if (athDesc.IsDeleteInt == 2)
-                                {
-                                    if (db.Rec.Equals(WebUser.No))
-                                        this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
-                                }
-                                else
-                                    this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> </li>");
+                                this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> </li>");
 
                             }
-                            else
-                                this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> </li>");
+                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
+                            {
+                                this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
+
+                            }
+                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf)//只能删除自己上传的
+                            {
+                                if (db.Rec.Equals(WebUser.No))
+                                    this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
+
+                            }
                         }
                         this.Pub1.Add("</ul>");
                         this.Pub1.Add("</div>");
@@ -489,7 +512,8 @@ namespace CCFlow.WF.CCForm
 
                 #region 处理权限问题.
                 // 处理权限问题, 有可能当前节点是可以上传或者删除，但是当前节点上不能让此人执行工作。
-                bool isDel = athDesc.IsDeleteInt == 0 ? false : true;
+                // bool isDel = athDesc.IsDeleteInt == 0 ? false : true;
+                bool isDel = athDesc.HisDeleteWay == AthDeleteWay.None ? false : true;
                 bool isUpdate = athDesc.IsUpload;
                 if (isDel == true || isUpdate == true)
                 {
@@ -542,20 +566,40 @@ namespace CCFlow.WF.CCForm
 
                         if (this.IsReadonly != "1")
                         {
-                            if (athDesc.IsDelete != false)
+                            #region 附件权限
+
+                            //if (athDesc.IsDelete != false)
+                            //{
+                            //    if (athDesc.IsDelete == true)
+                            //        this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
+                            //    else if (athDesc.IsDeleteInt == 2)
+                            //    {
+                            //        if (db.Rec.Equals(WebUser.No))
+                            //            this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
+                            //    }
+                            //    else
+                            //        this.Pub1.AddTD("");
+                            //}
+                            //else
+                            //    this.Pub1.AddTD("");
+
+                            #endregion
+
+                            if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
                             {
-                                if (athDesc.IsDelete == true)
+                                this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
+                            }
+                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf)//只能删除自己上传的
+                            {
+                                if (db.Rec.Equals(WebUser.No))
                                     this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
-                                else if (athDesc.IsDeleteInt == 2)
-                                {
-                                    if (db.Rec.Equals(WebUser.No))
-                                        this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
-                                }
-                                else
-                                    this.Pub1.AddTD("");
+                                else                              
+                                    this.Pub1.AddTD("");                                
                             }
                             else
+                            {
                                 this.Pub1.AddTD("");
+                            }
                         }
                         else
                         {
@@ -658,16 +702,29 @@ namespace CCFlow.WF.CCForm
                         if (this.IsReadonly != "1")
                         {
                             string op = null;
-                            if (isDel == true)
-                            {
-                                if (athDesc.IsDelete == true)
-                                    op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
-                                else if (athDesc.IsDeleteInt == 2)
-                                {
-                                    if (db.Rec.Equals(WebUser.No))
-                                        op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
-                                }
 
+                            #region 附件删除权限 
+                            //if (isDel == true)
+                            //{
+                            //    if (athDesc.IsDelete == true)
+                            //        op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
+                            //    else if (athDesc.IsDeleteInt == 2)
+                            //    {
+                            //        if (db.Rec.Equals(WebUser.No))
+                            //            op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
+                            //    }
+
+                            //}
+                            #endregion 
+
+                            if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
+                            {
+                                op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>"; 
+                            }
+                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf)//删除自己上传的
+                            {
+                                if (db.Rec.Equals(WebUser.No))
+                                    op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
                             }
 
                             this.Pub1.Add(op);
@@ -708,7 +765,7 @@ namespace CCFlow.WF.CCForm
                     ImageButton btn = new ImageButton();
                     btn.ImageUrl = "../Img/FileType/zip.png";
                     btn.ID = "Btn_DownLoad_Zip";
-                    btn.CssClass = "Btn";
+                    btn.CssClass = "BtnImg";
                     btn.ToolTip = "压缩打包下载";
                     btn.Click += new ImageClickEventHandler(btn_DownLoad_Zip);
                     this.Pub1.Add(btn);

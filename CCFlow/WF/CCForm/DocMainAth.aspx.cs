@@ -42,8 +42,8 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                if (_fk_node==0)
-                return int.Parse(this.Request.QueryString["FK_Node"]);
+                if (_fk_node == 0)
+                    return int.Parse(this.Request.QueryString["FK_Node"]);
 
                 return _fk_node;
             }
@@ -72,7 +72,7 @@ namespace CCFlow.WF.CCForm
             {
                 string paras = this.Request.QueryString["Paras"];
                 if (string.IsNullOrEmpty(paras) == false)
-                    if (paras.Contains("IsCC=1")==true)
+                    if (paras.Contains("IsCC=1") == true)
                         return "1";
                 return "ssss";
             }
@@ -86,7 +86,7 @@ namespace CCFlow.WF.CCForm
             FrmAttachment athDesc = new FrmAttachment();
             int i = athDesc.Retrieve(FrmAttachmentAttr.FK_MapData,
                 this.FK_MapData, FrmAttachmentAttr.NoOfObj, "DocMainAth");
-            if (i == 0  )
+            if (i == 0)
             {
                 /*如果没有数据.*/
                 /*如果没有查询到它,就有可能是公文多附件被删除了.*/
@@ -138,23 +138,23 @@ namespace CCFlow.WF.CCForm
                 /*如果是抄送过来的, 有可能是抄送到的节点不是发送到的节点，导致附件数据没有copy。
                  * 也就是说，发给b节点，但是抄送到c节点上去了，导致c节点上的人看不到附件数据。*/
 
-                    CCList cc = new CCList();
-                    int nnn = cc.Retrieve(CCListAttr.FK_Node, this.FK_Node, CCListAttr.WorkID, this.WorkID, CCListAttr.CCTo, WebUser.No);
-                    this._fk_node = cc.NDFrom;
-                    if (cc.NDFrom != 0)
-                    {
-                        athDBs.Retrieve(FrmAttachmentDBAttr.FK_MapData, "ND" + cc.NDFrom, FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
+                CCList cc = new CCList();
+                int nnn = cc.Retrieve(CCListAttr.FK_Node, this.FK_Node, CCListAttr.WorkID, this.WorkID, CCListAttr.CCTo, WebUser.No);
+                this._fk_node = cc.NDFrom;
+                if (cc.NDFrom != 0)
+                {
+                    athDBs.Retrieve(FrmAttachmentDBAttr.FK_MapData, "ND" + cc.NDFrom, FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
 
-                        string ndFromMapdata = athDesc.MyPK.Replace(athDesc.FK_MapData, "ND" + cc.NDFrom);
-                        athDB = athDBs.GetEntityByKey(FrmAttachmentDBAttr.FK_FrmAttachment, ndFromMapdata) as FrmAttachmentDB;
-                        //重新设置文件描述。
-                        athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, "DocMainAth");
-                    }
+                    string ndFromMapdata = athDesc.MyPK.Replace(athDesc.FK_MapData, "ND" + cc.NDFrom);
+                    athDB = athDBs.GetEntityByKey(FrmAttachmentDBAttr.FK_FrmAttachment, ndFromMapdata) as FrmAttachmentDB;
+                    //重新设置文件描述。
+                    athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, "DocMainAth");
+                }
             }
             else
             {
                 /* 单个文件 */
-                  athDB = athDBs.GetEntityByKey(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK) as FrmAttachmentDB;
+                athDB = athDBs.GetEntityByKey(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK) as FrmAttachmentDB;
             }
 
 
@@ -166,14 +166,15 @@ namespace CCFlow.WF.CCForm
                 if (athDB.FileExts == "ceb")
                     athDB.FileExts = "pdf";
                 if (athDesc.IsWoEnableWF)
-                    lab.Text = "<a  href=\"javascript:OpenOfiice('" + athDB.FK_FrmAttachment + "','" + this.WorkID + "','" + athDB.MyPK + "','" + this.FK_MapData + "','"+athDesc.NoOfObj+"','" + this.FK_Node + "')\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName + "</a>";
+                    lab.Text = "<a  href=\"javascript:OpenOfiice('" + athDB.FK_FrmAttachment + "','" + this.WorkID + "','" + athDB.MyPK + "','" + this.FK_MapData + "','" + athDesc.NoOfObj + "','" + this.FK_Node + "')\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName + "</a>";
                 else
                     lab.Text = "<img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName;
             }
 
             #region 处理权限问题.
             // 处理权限问题, 有可能当前节点是可以上传或者删除，但是当前节点上不能让此人执行工作。
-            bool isDel = athDesc.IsDeleteInt == 0 ? false : true ;
+            // bool isDel = athDesc.IsDeleteInt == 0 ? false : true ;
+            bool isDel = athDesc.HisDeleteWay == AthDeleteWay.None ? false : true;
             bool isUpdate = athDesc.IsUpload;
             if (isDel == true || isUpdate == true)
             {
@@ -194,7 +195,7 @@ namespace CCFlow.WF.CCForm
             {
                 FileUpload fu = new FileUpload();
                 fu.ID = athDesc.MyPK;
-                Btn_Upload.ID  = "Btn_Upload_" + athDesc.MyPK + "_" + this.WorkID;
+                Btn_Upload.ID = "Btn_Upload_" + athDesc.MyPK + "_" + this.WorkID;
                 fu.Attributes["Width"] = athDesc.W.ToString();
                 fu.Attributes["onchange"] = "UploadChange('" + mybtn.ID + "');";
                 this.Pub1.Add(fu);
@@ -218,10 +219,10 @@ namespace CCFlow.WF.CCForm
 
             if (this.IsReadonly == false)
             {
-                if (athDesc.IsDeleteInt != 0 && isDel == true)
+                if (athDesc.HisDeleteWay != AthDeleteWay.None && isDel == true)// if (athDesc.IsDeleteInt != 0 && isDel == true)
                 {
                     bool isDeleteBtn = true;
-                    if (athDesc.IsDeleteInt == 2)
+                    if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf) //if (athDesc.IsDeleteInt == 2)
                     {
                         if (!athDB.Rec.Equals(WebUser.No))
                             isDeleteBtn = false;
@@ -260,7 +261,7 @@ namespace CCFlow.WF.CCForm
             }
         }
 
-       protected void btnUpload_Click(object sender, EventArgs e)
+        protected void btnUpload_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             string[] ids = btn.ID.Split('_');
@@ -296,7 +297,7 @@ namespace CCFlow.WF.CCForm
                     }
                     catch
                     {
-                        
+
                     }
 
                     Label lab1 = this.Pub1.GetLabelByID("Lab" + frmAth.MyPK);

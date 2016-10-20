@@ -352,110 +352,211 @@ namespace BP.WF
                 StringBuilder append = new StringBuilder();
                 string str = new HttpWebResponseUtility().HttpResponseGet(url);
                 DepartMent_List departMentList = FormatToJson.ParseFromJson<DepartMent_List>(str);
-                //部门集合
-                if (departMentList != null && departMentList.department != null && departMentList.department.Count > 0)
+                if (departMentList == null || departMentList.department == null || departMentList.department.Count == 0)
+                    return "钉钉获取部门出错。";
+
+                #region 获取钉钉组织结构，进行更新与新增
+                //增加跟部门
+                int deptIdx = 0;
+                bool doSomeThing = false;
+                //部门信息
+                foreach (DepartMentDetailInfo deptMentInfo in departMentList.department)
                 {
-                    //增加跟部门
-                    int deptIdx = 0;
-                    bool doSomeThing = false;
-                    //部门信息
-                    foreach (DepartMentDetailInfo deptMentInfo in departMentList.department)
+                    deptIdx++;
+                    doSomeThing = false;
+                    //增加部门,排除根目录
+                    if (deptMentInfo.id != "1")
                     {
-                        deptIdx++;
-                        doSomeThing = false;
-                        //增加部门,排除根目录
-                        if (deptMentInfo.id != "1")
+                        Dept dept = new Dept();
+                        if (dept.IsExit(DeptAttr.No, deptMentInfo.id) == true)
                         {
-                            Dept dept = new Dept();
-                            if (dept.IsExit(DeptAttr.No, deptMentInfo.id) == true)
+                            if (!dept.Name.Equals(deptMentInfo.name))
                             {
-                                if (!dept.Name.Equals(deptMentInfo.name))
-                                {
-                                    doSomeThing = true;
-                                    append.Append("\r\n部门名称发生变化：" + dept.Name + " --> " + deptMentInfo.name);
-                                }
-                                if (!dept.ParentNo.Equals(deptMentInfo.parentid))
-                                {
-                                    doSomeThing = true;
-                                    append.Append("\r\n部门父级发生变化：" + dept.ParentNo + " --> " + deptMentInfo.parentid);
-                                }
-                                //有变化，更新
-                                if (doSomeThing == true)
-                                {
-                                    dept.No = deptMentInfo.id;
-                                    dept.Name = deptMentInfo.name;
-                                    dept.ParentNo = deptMentInfo.parentid;
-                                    dept.DirectUpdate();
-                                }
-                                continue;
+                                doSomeThing = true;
+                                append.Append("\r\n部门名称发生变化：" + dept.Name + " --> " + deptMentInfo.name);
                             }
-                            //不存在则新增
-                            dept.No = deptMentInfo.id;
-                            dept.Name = deptMentInfo.name;
-                            dept.ParentNo = deptMentInfo.parentid;
-                            dept.Idx = deptIdx;
-                            dept.DirectInsert();
-                            append.Append("\r\n新增部门：" + deptMentInfo.id + " - " + deptMentInfo.name);
-                        }
-
-                        //部门人员
-                        DepartMentUser_List userList = GenerDeptUser_List(access_token, deptMentInfo.id);
-                        if (userList != null)
-                        {
-                            foreach (DepartMentUserInfo userInfo in userList.userlist)
+                            if (!dept.ParentNo.Equals(deptMentInfo.parentid))
                             {
-                                Emp emp = new Emp();
-                                emp.No = userInfo.userid;
+                                doSomeThing = true;
+                                append.Append("\r\n部门父级发生变化：" + dept.ParentNo + " --> " + deptMentInfo.parentid);
+                            }
+                            //有变化，更新
+                            if (doSomeThing == true)
+                            {
+                                dept.No = deptMentInfo.id;
+                                dept.Name = deptMentInfo.name;
+                                dept.ParentNo = deptMentInfo.parentid;
+                                dept.DirectUpdate();
+                            }
+                            continue;
+                        }
+                        //不存在则新增
+                        dept.No = deptMentInfo.id;
+                        dept.Name = deptMentInfo.name;
+                        dept.ParentNo = deptMentInfo.parentid;
+                        dept.Idx = deptIdx;
+                        dept.DirectInsert();
+                        append.Append("\r\n新增部门：" + deptMentInfo.id + " - " + deptMentInfo.name);
+                    }
 
-                                DeptEmp deptEmp = new DeptEmp();
-                                //如果账户存在则人员信息不添加，添加关联表
-                                if (emp.RetrieveFromDBSources() > 0)
+                    //部门人员
+                    DepartMentUser_List userList = GenerDeptUser_List(access_token, deptMentInfo.id);
+                    if (userList != null)
+                    {
+                        foreach (DepartMentUserInfo userInfo in userList.userlist)
+                        {
+                            Emp emp = new Emp();
+                            emp.No = userInfo.userid;
+
+                            DeptEmp deptEmp = new DeptEmp();
+                            //如果账户存在则人员信息不添加，添加关联表
+                            if (emp.RetrieveFromDBSources() > 0)
+                            {
+                                if (!emp.Name.Equals(userInfo.name))
                                 {
-                                    if (!emp.Name.Equals(userInfo.name))
-                                    {
-                                        emp.Name = userInfo.name;
-                                        emp.DirectUpdate();
-                                        append.Append("\r\n人员名称发生变化：" + emp.Name + " --> " + userInfo.name);
-                                    }
-
-                                    deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
-                                    if (deptEmp.RetrieveFromDBSources() > 0)
-                                        continue;
-
-                                    //增加人员归属部门
-                                    deptEmp.FK_Dept = deptMentInfo.id;
-                                    deptEmp.FK_Emp = emp.No;
-                                    deptEmp.DirectInsert();
-                                    append.Append("\r\n增加人员归属部门：" + emp.Name + " - " + deptMentInfo.name);
-                                    continue;
+                                    emp.Name = userInfo.name;
+                                    emp.DirectUpdate();
+                                    append.Append("\r\n人员名称发生变化：" + emp.Name + " --> " + userInfo.name);
                                 }
 
-                                //增加人员
-                                emp.No = userInfo.userid;
-                                emp.EmpNo = userInfo.jobnumber;
-                                emp.Name = userInfo.name;
-                                emp.FK_Dept = deptMentInfo.id;
-                                emp.Tel = userInfo.mobile;
-                                emp.Email = userInfo.email;
-                                //emp.Idx = string.IsNullOrEmpty(userInfo.order) == true ? 0 : Int32.Parse(userInfo.order);
-                                emp.DirectInsert();
-                                append.Append("\r\n增加人员：" + emp.Name + "  部门:" + deptMentInfo.name);
-
-                                //增加人员与部门对应表
                                 deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
+                                if (deptEmp.RetrieveFromDBSources() > 0)
+                                    continue;
+
+                                //增加人员归属部门
                                 deptEmp.FK_Dept = deptMentInfo.id;
                                 deptEmp.FK_Emp = emp.No;
                                 deptEmp.DirectInsert();
+                                append.Append("\r\n增加人员归属部门：" + emp.Name + " - " + deptMentInfo.name);
+                                continue;
                             }
+
+                            //增加人员
+                            emp.No = userInfo.userid;
+                            emp.EmpNo = userInfo.jobnumber;
+                            emp.Name = userInfo.name;
+                            emp.FK_Dept = deptMentInfo.id;
+                            emp.Tel = userInfo.mobile;
+                            emp.Email = userInfo.email;
+                            //emp.Idx = string.IsNullOrEmpty(userInfo.order) == true ? 0 : Int32.Parse(userInfo.order);
+                            emp.DirectInsert();
+                            append.Append("\r\n增加人员：" + emp.Name + "  所属部门:" + deptMentInfo.name);
+
+                            //增加人员与部门对应表
+                            deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
+                            deptEmp.FK_Dept = deptMentInfo.id;
+                            deptEmp.FK_Emp = emp.No;
+                            deptEmp.DirectInsert();
+                        }
+                    }
+                }
+                #endregion
+
+                #region GPM组织结构，在钉钉不存在进行删除部门与人员关系表，人员表不进行删除,删除业务人员表WF_Emp
+                Depts gpm_Depts = new Depts();
+                gpm_Depts.RetrieveAllFromDBSource();
+                foreach (Dept gpm_Dept in gpm_Depts)
+                {
+                    bool isHave = false;
+                    foreach (DepartMentDetailInfo ding_Dept in departMentList.department)
+                    {
+                        if (gpm_Dept.No.Equals(ding_Dept.id))
+                        {
+                            isHave = true;
+                            break;
                         }
                     }
 
-                    #region 处理部门名称全程
-                    BP.WF.DTS.OrgInit_NameOfPath nameOfPath = new DTS.OrgInit_NameOfPath();
-                    if (nameOfPath.IsCanDo)
-                        nameOfPath.Do();
-                    #endregion
+                    //部门在钉钉不存在则进行删除：部门表、部门人员、部门人员岗位、部门职位、部门岗位
+                    if (isHave == false)
+                    {
+                        //部门岗位
+                        DeptStation deptStation = new DeptStation();
+                        int iDeptStation = deptStation.Delete(DeptStationAttr.FK_Dept, gpm_Dept.No);
+                        //部门职位
+                        DeptDuty deptDuty = new DeptDuty();
+                        int iDeptDuty = deptDuty.Delete(DeptDutyAttr.FK_Dept, gpm_Dept.No);
+                        //部门人员岗位
+                        DeptEmpStation deptEmpStation = new DeptEmpStation();
+                        int iDeptEmpStation = deptEmpStation.Delete(DeptEmpStationAttr.FK_Dept, gpm_Dept.No);
+                        //部门人员
+                        DeptEmp deptEmp = new DeptEmp();
+                        int iDeptEmp = deptEmp.Delete(DeptEmpAttr.FK_Dept, gpm_Dept.No);
+                        //部门表
+                        Dept dt = new Dept(gpm_Dept.No);
+                        dt.Delete();
+                        append.Append("\r\n删除部门：" + gpm_Dept.Name + " 部门全路径：" + gpm_Dept.NameOfPath);
+                        append.Append("\r\n        部门岗位 " + iDeptStation + " 条记录");
+                        append.Append("\r\n        部门职位 " + iDeptDuty + " 条记录");
+                        append.Append("\r\n        部门人员岗位 " + iDeptEmpStation + " 条记录");
+                        append.Append("\r\n        部门人员 " + iDeptEmp + " 条记录");
+                    }
+                    else
+                    {
+                        //组织结构人员
+                        DeptEmps deptEmps = new DeptEmps();
+                        QueryObject obj = new QueryObject(deptEmps);
+                        obj.AddWhere(DeptEmpAttr.FK_Dept, gpm_Dept.No);
+                        obj.addAnd();
+                        obj.AddWhereNotIn(DeptEmpAttr.FK_Emp, "'admin'");
+                        obj.DoQuery();
+
+                        //部门下没有人员不需要处理
+                        if (deptEmps == null || deptEmps.Count == 0)
+                            continue;
+
+                        //钉钉部门人员
+                        DepartMentUser_List userList = GenerDeptUser_List(access_token, gpm_Dept.No);
+                        //部门下没有人员，清除部门下的所有人员
+                        if (userList == null || userList.userlist.Count == 0)
+                        {
+                            append.Append("\r\n删除部门下的人员，部门：" + gpm_Dept.Name + " 部门全路径：" + gpm_Dept.NameOfPath);
+                            foreach (DeptEmp dt in deptEmps)
+                            {
+                                dt.Delete();
+                                Emp ep = new Emp();
+                                ep.No = dt.FK_Emp;
+                                ep.RetrieveFromDBSources();
+                                append.Append("\r\n        人员编号：" + dt.FK_Emp + " 姓名:" + ep.Name);
+                            }
+                            continue;
+                        }
+
+                        //判断部门下的人员是否存在
+                        foreach (DeptEmp deptEmp in deptEmps)
+                        {
+                            isHave = false;
+                            foreach (DepartMentUserInfo userInfo in userList.userlist)
+                            {
+                                if (deptEmp.FK_Emp.Equals(userInfo.userid))
+                                {
+                                    isHave = true;
+                                    break;
+                                }
+                            }
+
+                            //不存在，删除
+                            if (isHave == false)
+                            {
+                                deptEmp.Delete();
+                                Emp ep = new Emp();
+                                ep.No = deptEmp.FK_Emp;
+                                ep.RetrieveFromDBSources();
+                                append.Append("\r\n删除部门下的人员，部门：" + gpm_Dept.Name + " 部门全路径：" + gpm_Dept.NameOfPath);
+                                append.Append("\r\n        人员编号：" + deptEmp.FK_Emp + " 姓名：" + ep.Name);
+                            }
+                        }
+                    }
                 }
+                //删除没包含在部门的人员
+
+                #endregion
+
+                #region 处理部门名称全程
+                BP.WF.DTS.OrgInit_NameOfPath nameOfPath = new DTS.OrgInit_NameOfPath();
+                if (nameOfPath.IsCanDo)
+                    nameOfPath.Do();
+                #endregion
                 return append.ToString();
             }
             catch (Exception ex)

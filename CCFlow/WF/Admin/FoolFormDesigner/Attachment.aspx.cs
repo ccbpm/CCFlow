@@ -303,12 +303,13 @@ namespace CCFlow.WF.MapDef
        
 
             ddl = new BP.Web.Controls.DDL();
-            ddl.ID = "DDL_"+ FrmAttachmentAttr.IsDelete;
+            ddl.ID = "DDL_" + FrmAttachmentAttr.DeleteWay; ;// FrmAttachmentAttr.IsDelete;
             ddl.Items.Clear();
             ddl.Items.Add(new ListItem("不能删除", "0"));
             ddl.Items.Add(new ListItem("删除所有", "1"));
             ddl.Items.Add(new ListItem("只能删除自己上传的", "2"));
-            ddl.SetSelectItem(ath.IsDeleteInt);
+            ddl.SetSelectItem((int)ath.HisDeleteWay);
+            //ddl.SetSelectItem(ath.IsDeleteInt);
             this.Pub1.AddTD(ddl);
 
             cb = new CheckBox();
@@ -614,6 +615,7 @@ namespace CCFlow.WF.MapDef
             if (ath.IsNodeSheet == true)
             {
                 ath.HisCtrlWay = (AthCtrlWay)this.Pub1.GetDDLByID("DDL_CtrlWay").SelectedItemIntVal;
+                ath.HisDeleteWay = (AthDeleteWay)this.Pub1.GetDDLByID("DDL_DeleteWay").SelectedItemIntVal;
                 ath.AthUploadWay = (AthUploadWay)this.Pub1.GetDDLByID("DDL_AthUploadWay").SelectedItemIntVal;
                 ath.FileShowWay = (FileShowWay)this.Pub1.GetDDLByID("DDL_FileShowWay").SelectedItemIntVal; //文件展现方式.
                 ath.UploadCtrl = this.Pub1.GetDDLByID("DDL_UploadCtrl").SelectedItemIntVal; //使用的附件上传工具.

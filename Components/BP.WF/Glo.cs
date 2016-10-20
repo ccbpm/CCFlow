@@ -737,7 +737,7 @@ namespace BP.WF
             }
             return true;
         }
-       
+
         /// <summary>
         /// 安装包
         /// </summary>
@@ -1091,7 +1091,7 @@ namespace BP.WF
                     {
                         fl.DoCheck();
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         BP.DA.Log.DebugWriteError(ex.Message);
                     }
@@ -2069,7 +2069,7 @@ namespace BP.WF
                 return false;
             return true;
         }
-       
+
         /// <summary>
         /// 加入track
         /// </summary>
@@ -4343,6 +4343,26 @@ namespace BP.WF
                 item.Insert(); // 插入数据库.
             }
             #endregion 处理字段.
+
+            //没有考虑到附件的权限 20161020 hzm
+            #region 附件权限
+
+            FrmAttachments fas = new FrmAttachments();
+            //删除现有节点的附件权限
+            fas.Delete(FrmAttachmentAttr.FK_Node, currNodeID, FrmAttachmentAttr.FK_MapData, frmID);
+            //查询出 现在表单上是否有附件的情况
+            fas.Retrieve(FrmAttachmentAttr.FK_Node, fromNodeID, FrmAttachmentAttr.FK_MapData, frmID);
+
+            //复制权限
+            foreach (FrmAttachment fa in fas)
+            {
+                fa.MyPK = fa.FK_MapData + "_" + fa.NoOfObj + "_" + currNodeID;
+                fa.FK_Node = currNodeID;
+                fa.Insert();
+            }
+
+            #endregion
+
         }
         /// <summary>
         /// 产生消息,senderEmpNo是为了保证写入消息的唯一性，receiveid才是真正的接收者.

@@ -19,7 +19,7 @@ namespace BP.WF.DTS
         public OrgInit_DingIcreMent()
         {
             this.Title = "同步增量钉钉通讯录到CCGPM";
-            this.Help = "增量同步钉钉通讯录。<br> 钉钉相关配置写入Web.config，配置正确才可以被执行";
+            this.Help = "增量同步钉钉通讯录,需要时间比较长，请耐心等待。<br> 钉钉相关配置写入Web.config，配置正确才可以被执行";
         }
         /// <summary>
         /// 设置执行变量
@@ -51,6 +51,10 @@ namespace BP.WF.DTS
             if (string.IsNullOrEmpty(result))
             {
                 return "执行成功,没有发生变化...";
+            }
+            else if (result.Contains("钉钉获取部门出错"))
+            {
+                return result;
             }
             else if (result.Length > 0)
             {

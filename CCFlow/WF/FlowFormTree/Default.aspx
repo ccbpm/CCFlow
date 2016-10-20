@@ -609,7 +609,7 @@
                     strTimeKey += date.getMinutes(); //MM
                     strTimeKey += date.getSeconds(); //SS
 
-                    window.open("../WorkOpt/ReturnWork.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "退回窗口", "height=400, width=700,top=80,left=160,scrollbars=yes");
+                    window.open("../WorkOpt/ReturnWork.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "退回窗口", "height=400, width=800,top=80,left=160,scrollbars=yes");
                     break;
                 case "selectaccepter": //选择接收人
                     window.open("../WorkOpt/Accepter.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1", "选择收件人", "height=600, width=800,scrollbars=yes");

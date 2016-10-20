@@ -93,6 +93,25 @@ namespace BP.Sys
     }
 
     /// <summary>
+    /// 附件删除规则
+    /// </summary>
+    public enum AthDeleteWay
+    {
+        /// <summary>
+        /// 不删除 0
+        /// </summary>
+        None,
+        /// <summary>
+        /// 删除所有 1
+        /// </summary>
+        DelAll,
+        /// <summary>
+        /// 只删除自己上传 2
+        /// </summary>
+        DelSelf
+    }
+
+    /// <summary>
     /// 附件
     /// </summary>
     public class FrmAttachmentAttr : EntityMyPKAttr
@@ -226,6 +245,12 @@ namespace BP.Sys
         /// 是否可见？
         /// </summary>
         public const string IsVisable = "IsVisable";
+
+        /// <summary>
+        /// 附件删除方式
+        /// </summary>
+        public const string DeleteWay = "DeleteWay";
+
 
         #region weboffice属性。
         /// <summary>
@@ -477,6 +502,21 @@ namespace BP.Sys
         }
 
         /// <summary>
+        /// 附件删除方式
+        /// </summary>
+        public AthDeleteWay HisDeleteWay
+        {
+            get
+            {
+                return (AthDeleteWay)this.GetValIntByKey(FrmAttachmentAttr.DeleteWay);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.DeleteWay, (int)value);
+            }
+        }
+
+        /// <summary>
         /// 是否可以排序?
         /// </summary>
         public bool IsOrder
@@ -551,7 +591,7 @@ namespace BP.Sys
         {
             get
             {
-                string str= this.GetValStringByKey(FrmAttachmentAttr.Name);
+                string str = this.GetValStringByKey(FrmAttachmentAttr.Name);
                 if (string.IsNullOrEmpty(str) == true)
                     str = "未命名";
                 return str;
@@ -1084,6 +1124,9 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
                 map.AddTBInt(FrmAttachmentAttr.IsDelete, 1,
                     "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的)", false, false);
+                
+                //hzm新增列
+                map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsOrder, false, "是否可以排序", false, false);
 
@@ -1193,7 +1236,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmAttachments(string fk_mapdata)
         {
-            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node, 0,FrmAttachmentAttr.RowIdx);
+            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node, 0, FrmAttachmentAttr.RowIdx);
         }
         /// <summary>
         /// 得到它的 Entity

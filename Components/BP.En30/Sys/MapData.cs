@@ -1885,7 +1885,8 @@ namespace BP.Sys
                             en.MyPK = "Ath_" + idx + "_" + fk_mapdata;
                             if (isSetReadonly == true)
                             {
-                                en.IsDeleteInt = 0;
+                               // en.IsDeleteInt = 0;
+                                en.HisDeleteWay = AthDeleteWay.None;
                                 en.IsUpload = false;
                             }
 

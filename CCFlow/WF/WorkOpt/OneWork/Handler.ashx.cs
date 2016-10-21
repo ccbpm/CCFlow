@@ -226,7 +226,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     case "FlowBBSUser": //获得当前用户.
                         msg = this.FlowBBSUser();
                         break;
-                    case "FlowBBSDept": //获得当前用户.
+                    case "FlowBBSDept": //获得用户部门.
                         msg = this.FlowBBSDept();
                         break;
                     case "FlowBBSList": //获得流程评论列表.
@@ -235,8 +235,14 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     case "FlowBBSSave": //提交评论..
                         msg = this.FlowBBSSave();
                         break;
-                    case "FlowBBSDelete": //删除评论..
+                    case "FlowBBSDelete": //删除评论.
                         msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK,this.UserName);
+                        break;
+                    case "FlowBBSCheck": //查看某一用户评论.
+                        msg = this.FlowBBSCheck();
+                        break;
+                    case "FlowBBSReplay": //评论回复.
+                        msg = this.FlowBBSReplay();
                         break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
@@ -276,9 +282,22 @@ namespace CCFlow.WF.WorkOpt.OneWork
 
         public string FlowBBSDept()
         {
-              string dept = string.Empty;
-              dept = BP.Web.WebUser.FK_DeptName;
-              return dept;
+
+            Paras ps = new Paras();
+            ps.SQL = "select a.name from port_dept a INNER join port_emp b on b.FK_Dept=a.no and b.name='"+this.UserName+"'";
+
+            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnString(ps));
+        }
+
+        /// 查看某一用户的评论.
+ 
+        public  string FlowBBSCheck()
+        {
+            Paras pss = new Paras();
+            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND  EMPFROMT='"+this.UserName+"'";
+            pss.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
+            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(pss));
+
         }
 
 
@@ -296,6 +315,23 @@ namespace CCFlow.WF.WorkOpt.OneWork
            
             //转化成json
             return BP.Tools.Json.ToJson( BP.DA.DBAccess.RunSQLReturnTable(ps));
+        }
+
+        /// <summary>
+        /// 回复评论.
+        /// </summary>
+        /// <returns></returns>
+
+        public string FlowBBSReplay()
+        {
+            string msg = this.GetValFromFrmByKey("TB_Msg");
+            string mypk = BP.WF.Dev2Interface.Flow_BBSAdd(this.FK_Flow, this.WorkID, this.FID, msg, WebUser.No, WebUser.Name);
+            Paras ps = new Paras();
+            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE MyPK=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "MyPK";
+            ps.Add("MyPK", mypk);
+
+            //转化成json
+            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
         }
 
         public bool IsReusable

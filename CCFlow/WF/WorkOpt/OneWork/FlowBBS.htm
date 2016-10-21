@@ -12,8 +12,6 @@
 
     <script language="javascript" type="text/javascript" >
 
-
-
         /* ESC Key Down */
         function Esc() {
             if (event.keyCode == 27)
@@ -33,9 +31,11 @@
             $("#Msg").html("");
         });
 
+        var str = GetQueryString("FK_Flow");
+        var WID = GetQueryString("WorkID");
         //初始化数据.
         function InitPage() {
-
+            $("#Table1  tr:not(:first)").html("");
             //初始化表格.
             $.ajax({
                 type: 'post',
@@ -66,7 +66,6 @@
         //删除.
         function Delete(mypk) {
             var name = "";
-            var dept = "";
              $.ajax({
                  type: 'post',
                  async: true,
@@ -112,8 +111,40 @@
             1000)
             }
         }
+
+        function Check(empName, str) {         
+            $("#Table1  tr:not(:first)").html("");
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=FlowBBSCheck&FK_Flow=" + str + "&UserName=" + empName,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    if (data == "[]") {
+                        return;
+                    }
+
+                    //转化成json.
+                    data = JSON.parse(data);
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+                        AddRow2(data[i]);
+
+                    }
+                }
+
+            });
+        }
+
+
         function Submit() {
-           
+        
             var frmData = $("#cc").serialize();
             if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "") {
                 alert("请填写评论内容!" );
@@ -128,7 +159,6 @@
                     url: Handler + "?DoType=FlowBBSSave&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
                     dataType: 'html',
                     success: function (data) {
-
                         if (data.indexOf('err@') == 0) {
                             alert(data);
                             return;
@@ -145,51 +175,89 @@
             function Clear() {
                 $("#TB_Msg").val("");
                 return;
-                }
+            }
 
-                function Rel(empName, pk) {
-                    var url = 'FlowBBSReplay.htm?RE=' + empName + '&MyPK=' + pk;
-                    alert(url);
-                    WinOpen(url);
-                }
 
-           function AddRow(data) {
+            //评论回复
+            function Rel(empName, pk) {
+
+                var url = "FlowBBSReplay.htm?RE=" + encodeURIComponent(empName) + "&MyPK=" + pk + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID");
+                WinOpen(url);
+            }
+
+
+     
+
+
+          function AddRow(data) {
+          
            var mypk = data.MyPK;
            var date = data.RDT;
            var empNo = data.EmpFrom;
            var empName = data.EmpFromT;
-           var msg = data.Msg; 
+           var msg = data.Msg;
+           $.ajax({
+               type: 'post',
+               async: true,
+               url: Handler + "?DoType=FlowBBSDept&UserName=" + empName,
+               dataType: 'html',
+               success: function (data) {
+                   var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "  <br/><br/>";
+                   //增加上icon.
+                   leftInfo += "<center ><img  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
+                   leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
+                   leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
+                   leftInfo += "所属部门:&nbsp&nbsp" + data;
+                   var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empName + "','" + mypk + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + str + "');\">只看该用户</a> ";
+                   var newRow = "<tr><td style='background-color: #dbe5f1'>" + leftInfo + "<br><br></td><td class=BigDoc>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</td></tr>";
+                   $("#Table1 tr:last").after(newRow);
 
-           var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + " - " + empName + " <br/><br/>";
+                  }
+           });
+      }
 
-           //增加上icon.
-           leftInfo += "<center ><img  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
-
-
+      function AddRow2(data) {
+          var mypk = data.MyPK;
+          var date = data.RDT;
+          var empNo = data.EmpFrom;
+          var empName = data.EmpFromT;
+          var msg = data.Msg;
+          $.ajax({
+              type: 'post',
+              async: true,
+              url: Handler + "?DoType=FlowBBSDept&UserName=" + empName,
+              dataType: 'html',
+              success: function (data) {
+                  var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "<br/><br/>";
+                  //增加上icon.
+                  leftInfo += "<center ><img  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
+                  leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
+                  leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
+                  leftInfo += "所属部门:&nbsp&nbsp" + data;
+                  var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empName + "','" + mypk + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:InitPage();\">查看全部用户</a> ";
+                  var Row = "<tr><td style='background-color: #dbe5f1'>" + leftInfo + "<br><br></td><td class=BigDoc>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='border : 1px dashed blue;' /> " + delLink + "</td></tr>";
+                  $("#Table1 tr:last").after(Row);
+              }
+          }); 
  
-           leftInfo += "发表于:&nbsp&nbsp" + date;
 
+      }
 
-           var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empName + "','" + mypk + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a> ";
-          var newRow = "<tr><td style='background-color: #dbe5f1'>" + leftInfo + "<br><br></td><td class=BigDoc>" + msg + "<hr>  " + empNo + " " + empName + "  " + delLink + "</td></tr>";
-          $("#Table1 tr:last").after(newRow);
-
-       }
      </script>
 </head>
 <body onkeypress="Esc()" >
 <div align="center">
+
 <table id="Table1"  style="width:80%;" >
 <caption>流程评论</caption>
 <tr>
-<th style="width:200px;" >序</th>
+<th style="width:200px;">序</th>
 <th>信息内容</th>
 </tr>
 </table>
 
 <form id="cc" name="cc" >
 <fieldset style="width:80%;">
-<legend >评论</legend>
 <textarea  rows="3" id="TB_Msg" name="TB_Msg"  cols="60" >
 </textarea>
 <br />
@@ -200,6 +268,6 @@
 </form>
 
 <div id="Msg"></div>
-
+</div>
 </body>
 </html>

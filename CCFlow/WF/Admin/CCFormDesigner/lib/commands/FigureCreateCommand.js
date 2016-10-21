@@ -64,8 +64,6 @@ FigureCreateCommand.prototype = {
                     this.RadioButtonCreate(createdFigure, this.x, this.y, 'DDL');
                     break;
                 case CCForm_Controls.RadioButton:
-                    alert('@该类型的控件还没有完成，请使用下拉框实现同样的需求。');
-                    return;
                     canAddFigure = false;  // 需要弹出对话框创建.
                     this.RadioButtonCreate(createdFigure, this.x, this.y, 'RB');
                     break;
@@ -203,6 +201,7 @@ FigureCreateCommand.prototype = {
             lab = '下拉框枚举值';
 
         OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
+
             var win = document.getElementById(dgId).contentWindow;
             var frmVal = win.GetFrmInfo();
 
@@ -223,7 +222,11 @@ FigureCreateCommand.prototype = {
                 return false;
             }
 
-            createdFigure.CCForm_Shape = "DropDownListEnum";
+            if (dotype == "DDL")
+                createdFigure.CCForm_Shape = "DropDownListEnum";
+            else
+                createdFigure.CCForm_Shape = "RadioButton";
+
 
             //根据信息创建不同类型的数字控件.
             var transField = new TransFormDataField(createdFigure, frmVal, x, y);
@@ -244,8 +247,10 @@ FigureCreateCommand.prototype = {
                 if (json == "true") {
 
                     try {
+
                         //开始画这个 - 元素.
                         transField.paint();
+
                     } catch (e) {
                         alert('画元素错误：' + e);
                     }
@@ -481,7 +486,7 @@ function TransFormDataField(newfigure, frmVal, x, y) {
 }
 
 TransFormDataField.prototype = {
-    /**输出控件**/
+    /** 输出控件 **/
     paint: function () {
         var createdFigure = this.figure;
 
@@ -494,11 +499,14 @@ TransFormDataField.prototype = {
         //添加到Figures
         //add to STACK
         STACK.figureAdd(createdFigure);
+
         //add property
         createdFigure = this.Transform();
+
         //change text
         var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
         if (figureText != null) {
+
             if (this.dataArrary.KeyOfEn != null)
                 figureText.setTextStr(this.dataArrary.KeyOfEn);
 
@@ -519,8 +527,9 @@ TransFormDataField.prototype = {
         shap_src = "/DataView/" + createdFigure.CCForm_Shape + ".png";
 
         //  alert(shap_src);
+        //  alert(shap_src);
         //  alert(figureSetsURL);
-        // alert(figureSetsURL + shap_src);
+        //  alert(figureSetsURL + shap_src);
 
         propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
         //shap image

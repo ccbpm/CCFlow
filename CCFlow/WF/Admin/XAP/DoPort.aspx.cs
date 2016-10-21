@@ -121,6 +121,9 @@ namespace CCFlow.WF.Admin.XAP
                         case "BP.WF.Template.Ext.NodeExts":
                             this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.NodeExts&No=" + this.PK, true);
                             return;
+                        case "BP.WF.Rpt.MapRptExts":
+                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK="+this.PK, true);
+                            return;
                         case "BP.WF.Node":
                             Node nd = new Node(this.PK);
                             this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.NodeSheets&PK=" + this.PK, true);

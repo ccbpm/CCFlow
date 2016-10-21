@@ -78,20 +78,6 @@ namespace CCFlow.WF.MapDef.Rpt
             Flow fl = new Flow(this.FK_Flow);
             rpt.PTable = fl.PTable;
             rpt.Save();
-
-            //if (string.IsNullOrWhiteSpace(this.RptNo))
-            //{
-            //    if (rpt.IsExits)
-            //    {
-            //        BP.Sys.PubClass.Alert("@该编号已经存在:" + rpt.No);
-            //        return;
-            //    }
-            //    rpt.Insert();
-            //}
-            //else
-            //{
-            //    rpt.Update();
-            //}
         }
 
         protected void Btn_SaveAndNext1_Click(object sender, EventArgs e)

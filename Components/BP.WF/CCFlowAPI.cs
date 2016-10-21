@@ -58,7 +58,7 @@ namespace BP.WF
                 if (nd.IsStartNode == false)
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
 
-                //// 节点数据.
+                // 节点数据.
                 //string sql = "SELECT * FROM WF_Node WHERE NodeID=" + fk_node;
                 //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 //dt.TableName = "WF_NodeBar";

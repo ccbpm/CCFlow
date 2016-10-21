@@ -424,6 +424,23 @@ namespace BP.Sys
                 this.SetValByKey(MapExtAttr.FK_DBSrc, value);
             }
         }
+
+
+        /// <summary>
+        /// pop 多个搜索条件
+        /// 0,多选,1=单选.
+        /// </summary>
+        public PopValSelectModel PopValSearchConditions
+        {
+            get
+            {
+                return (PopValSelectModel)this.GetParaInt("PopValSelectModel");
+            }
+            set
+            {
+                this.SetPara("PopValSelectModel", (int)value);
+            }
+        }
         #endregion
 
 

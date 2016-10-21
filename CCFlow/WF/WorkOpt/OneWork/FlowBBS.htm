@@ -7,11 +7,11 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="css/demo.js" type="text/javascript"></script>
      <base target="_self" /> 
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-
+    <link href="css/demo.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript" >
-
         /* ESC Key Down */
         function Esc() {
             if (event.keyCode == 27)
@@ -20,17 +20,15 @@
         }
 
         var idx = 0;
-
         //页面启动函数.
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
 
             InitPage();
-           
+            Count();
             $("#Msg").html("");
         });
-
         var str = GetQueryString("FK_Flow");
         var WID = GetQueryString("WorkID");
         //初始化数据.
@@ -65,35 +63,33 @@
         }  
         //删除.
         function Delete(mypk) {
-            var name = "";
-             $.ajax({
-                 type: 'post',
-                 async: true,
-                 url: Handler + "?DoType=FlowBBSUser",
-                 dataType: 'html',
-                 success: function (data) {
-                     name = data;
-                     return name;
-                 }
-             });     
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-     
-            //初始化表格.
+            var name;
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSDelete&FK_Flow=" + GetQueryString("FK_Flow") + "&MyPK=" + mypk + "&UserName=" + name + "&m=" + Math.random(),
+                url: Handler + "?DoType=FlowBBSUser",
                 dataType: 'html',
                 success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = window.location.href;
+                    $.ajax({
+                        type: 'post',
+                        async: true,
+                        url: Handler + "?DoType=FlowBBSDelete&FK_Flow=" + GetQueryString("FK_Flow") + "&MyPK=" + mypk + "&UserName=" + data + "&m=" + Math.random(),
+                        dataType: 'html',
+                        success: function (data) {
+                            if (data.indexOf('err@') == 0) {
+                                alert(data);
+                                return;
+                            }
+                            alert(data);
+                            window.location.href = window.location.href;
+                        }
+                    });
+                  
                 }
-            });
+            });     
+            if (window.confirm('您确定要删除吗？') == false)
+                return;      
+               Count();
         }
         var wait = 10;
         function time(o) {
@@ -111,7 +107,20 @@
             1000)
             }
         }
+        //统计评论条数
+        function Count() {
 
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=FlowBBSCount&FK_Flow=" + GetQueryString("FK_Flow"),
+                dataType: 'html',
+                success: function (data) {
+                    $("#TB_count").val(data);
+                }
+
+            });      
+        }
         function Check(empName, str) {         
             $("#Table1  tr:not(:first)").html("");
             $.ajax({
@@ -125,11 +134,9 @@
                         alert(data);
                         return;
                     }
-
                     if (data == "[]") {
                         return;
                     }
-
                     //转化成json.
                     data = JSON.parse(data);
                     //增加处理.
@@ -142,9 +149,7 @@
             });
         }
 
-
-        function Submit() {
-        
+        function Submit() {       
             var frmData = $("#cc").serialize();
             if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "") {
                 alert("请填写评论内容!" );
@@ -168,7 +173,7 @@
                         AddRow(data[0]);
                     }
                 });
-
+               
             }
            
             //清空评论
@@ -177,17 +182,11 @@
                 return;
             }
 
-
             //评论回复
             function Rel(empName, pk) {
-
                 var url = "FlowBBSReplay.htm?RE=" + encodeURIComponent(empName) + "&MyPK=" + pk + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID");
                 WinOpen(url);
             }
-
-
-     
-
 
           function AddRow(data) {
           
@@ -209,9 +208,9 @@
                    leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
                    leftInfo += "所属部门:&nbsp&nbsp" + data;
                    var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empName + "','" + mypk + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + str + "');\">只看该用户</a> ";
-                   var newRow = "<tr><td style='background-color: #dbe5f1'>" + leftInfo + "<br><br></td><td class=BigDoc>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</td></tr>";
-                   $("#Table1 tr:last").after(newRow);
-
+                   var newRow = "<tr ><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</th></tr>";
+                   $("#Table1 tr:last").after(newRow);colspan='2'
+                   Count();
                   }
            });
       }
@@ -235,14 +234,12 @@
                   leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
                   leftInfo += "所属部门:&nbsp&nbsp" + data;
                   var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empName + "','" + mypk + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:InitPage();\">查看全部用户</a> ";
-                  var Row = "<tr><td style='background-color: #dbe5f1'>" + leftInfo + "<br><br></td><td class=BigDoc>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='border : 1px dashed blue;' /> " + delLink + "</td></tr>";
+                  var Row = "<tr  ><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th class=BigDoc colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='border : 1px dashed blue;' /> " + delLink + "</th></tr>";
                   $("#Table1 tr:last").after(Row);
+                  Count();
               }
           }); 
- 
-
-      }
-
+       }
      </script>
 </head>
 <body onkeypress="Esc()" >
@@ -251,8 +248,9 @@
 <table id="Table1"  style="width:80%;" >
 <caption>流程评论</caption>
 <tr>
-<th style="width:200px;">序</th>
-<th>信息内容</th>
+<th style="width:200px;">资料</th>
+<th >信息内容</th>
+<th style="text-align: right;" >评论总计条数:&nbsp<input type="text" style="color:red ;" id="TB_count"  size="4"  readonly="readonly" /></th>
 </tr>
 </table>
 
@@ -268,6 +266,15 @@
 </form>
 
 <div id="Msg"></div>
+</div>
+<div class="side">
+	<ul>
+		<li><a href=""><div class="sidebox"><img src="Img/WIFI.png">无线WIFI</div></a></li>
+		<li><a href=""><div class="sidebox"><img src="Img/side_icon02.png">嘻嘻哈哈</div></a></li>
+		<li><a href="http://user.qzone.qq.com/756872568" target="_blank"><div class="sidebox"><img src="Img/QQ.png">QQ客服</div></a></li>
+		<li><a href="http://weibo.com/" target="_blank"><div class="sidebox"><img src="Img/WEIBO.png">新浪微博</div></a></li>
+		<li style="border:none;"><a href="javascript:goTop();"><div class="sidebox"><img src="Img/TOP.png">返回顶部</div></a></li>
+	</ul>
 </div>
 </body>
 </html>

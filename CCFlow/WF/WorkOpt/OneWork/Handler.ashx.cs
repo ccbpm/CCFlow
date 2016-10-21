@@ -239,10 +239,13 @@ namespace CCFlow.WF.WorkOpt.OneWork
                         msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK,this.UserName);
                         break;
                     case "FlowBBSCheck": //查看某一用户评论.
-                        msg = this.FlowBBSCheck();
+                          msg = this.FlowBBSCheck();
                         break;
                     case "FlowBBSReplay": //评论回复.
                         msg = this.FlowBBSReplay();
+                        break;
+                    case "FlowBBSCount": //统计评论条数.
+                        msg = this.FlowBBSCount();
                         break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
@@ -275,7 +278,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
         public string FlowBBSUser()
         {
             string name = string.Empty;
-            name=BP.Web.WebUser.Name;
+            name=BP.Web.WebUser.No;
             return name;
 
         }
@@ -298,7 +301,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
             pss.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(pss));
 
-        }
+       }
 
 
         /// <summary>
@@ -333,6 +336,23 @@ namespace CCFlow.WF.WorkOpt.OneWork
             //转化成json
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
         }
+
+
+        /// <summary>
+        /// 统计评论条数.
+        /// </summary>
+        /// <returns></returns>
+
+        public string FlowBBSCount()
+        {
+  
+            Paras ps = new Paras();
+            ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
+            ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
+            string count = BP.DA.DBAccess.RunSQLReturnValInt(ps).ToString();
+            return  count;
+        }
+
 
         public bool IsReusable
         {

@@ -304,7 +304,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             me.FK_DBSrc = this.GetValFromFrmByKey("DDL_DBSrc");
             me.Save();
 
-            return "保存成功...";
+            return "操作成功...";
         }
 
         /// <summary>

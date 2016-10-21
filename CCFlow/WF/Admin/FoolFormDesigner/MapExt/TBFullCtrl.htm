@@ -17,8 +17,6 @@
 
             //初始化数据.
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs");
-           
-          
             $.ajax({
                 type: 'post',
                 async: true,
@@ -42,8 +40,8 @@
                 }
             })
         })
- 
-
+        
+        //保存
         function Save() {
 
            // var frmData = $("#cc").serialize();
@@ -58,13 +56,26 @@
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
-                        alert(data);
+                       alert(data);
                         return;
                     }
                     alert(data);
                 }
             });
         }
+        //保存并关闭
+        function SaveAndClose() {
+            Save();
+            window.close();
+
+        }    
+          //删除
+        function Delete() {
+            $("#TB_SQL").val(""); //设置值.
+            $("#DDL_DBSrc").val(""); //设置值.
+            Save();
+        }
+
     </script>
 </head>
 <body>

@@ -2,6 +2,7 @@
 body
 {
    font-size: 14px;
+   text-align:center;
 }
 
 /* 按钮风格 */
@@ -452,17 +453,18 @@ display:block;
     position: relative !important;
     /*background-color: white;*/
     margin: 0 auto;
-    overflow:hidden !important;
-    height:auto !important;
+    overflow-x:auto;
 }
-.Message
-{
-
+.Message {
     margin: 0 auto;
     background: white;
     /*display: table;*/
     display: none;
+    display: block;
     
+    font-weight: bold;
+    color: red;
+    text-align:left;
 }
 #topBar
 {
@@ -653,11 +655,11 @@ background:#a8352c;
             border-style:none;
         }
 
-input[type=text],select {
-    border-radius: 15px!important;
+input[type=text], select {
+    border-radius: 15px;
     border: #2884fa 1px solid;
-    margin: 8px 0px !important;
-    line-height: 25px !important;
+    margin: 8px 0px;
+    line-height: 25px;
     width: 100%;
     padding-left: 6px;
 }
@@ -686,7 +688,7 @@ select {
 
 
 .col-md-1 label,.col-sm-2 label {
-    width: 100px;
+    width: auto;
     text-align: right;
 }
 
@@ -714,6 +716,8 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
     margin: 25px 15px 10px 15px;
     border: #2884fa 1px solid;
     overflow: auto;
+
+
 }
 
 #centerNavDiv {
@@ -878,19 +882,69 @@ body {
 
 
 
-.header {
+#header {
     height: 50px;
     font-size: 20px;
     background: #213b5d;
     color: white;
     padding: 10px;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#showCol {
+    float:right;
+}
+
+
+#orgTxt {
+    margin: 0px !important;
 }
 
 .group {
     width: 100%;
     text-align: left;
+    border: 0;
+    /*background: #4D77A7;*/
+    background: #2884fa;
+    color: #FFF;
+    font-size: 12px;
+    padding: 4px 8px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 5px;
+    cursor:pointer;
 }
 
-#orgTxt {
-    margin: 0px !important;
+.state {
+    padding: 0px 8px 0px 5px;
+    cursor:pointer;
+}
+
+
+.reloadIframe {
+    color: white;
+    cursor: pointer;
+    float:right;
+}
+
+
+.form_tree input[type=text] {
+    margin: 0px;
+    border-radius: 15px 0px 0px 15px;
+}
+
+.form_tree {
+    margin: 8px 0px 9px 0px;
+}
+
+    .form_tree .input-group-addon {
+        border-radius: 0px 15px 15px 0px;
+        background: #2884fa;
+        border: #2884fa 1px solid;
+        cursor:pointer;
+    }
+
+#showCol input[type=radio] {
+cursor:pointer;
 }

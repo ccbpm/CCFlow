@@ -11,14 +11,20 @@
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/commonYangYH.js"></script>
     <script type="text/javascript" src="Scripts/Cookie.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.nav.js"></script>
     
     <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
     <script type="text/javascript" language="javascript" src="Scripts/MyFlow2016.js"></script>
-    <script type="text/javascript" src="Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="Scripts/QueryString2016.js"></script>
     <script type="text/javascript" src="../WF/CCForm/MapExt2016.js"></script>
 
     <link href="Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+    <link href="Scripts/bootstrap/css/lanrenzhijia.css" rel="Stylesheet" />
+    
+    <link href="Scripts/bootstrap/css/components-rounded.css" rel="Stylesheet" />
+    <link href="Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
+    <link rel="stylesheet" href="Scripts/bootstrap/css/css.css" type="text/css" media="all" />
 
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../DataUser/Style/ccbpm.css" rel="Stylesheet" />
@@ -48,6 +54,19 @@
         .errorInput {
             border: 1px red solid !important;
         }
+
+        #navGroup .navLi {
+        }
+
+        li.scrollNav.active a {
+            /*background: #fff;
+	color: #333;
+	font-weight: bold;*/
+            /*url(../img/back.png) no-repeat 5px 7px;*/
+            /*(http://x.autoimg.cn/car/images/csicon20150812.png) no-repeat*/
+            /*5px 7px*/
+            background: url(Scripts/bootstrap/css/img/back.png) no-repeat;
+        }
     </style>
 
     <!--杨玉慧 -->
@@ -56,118 +75,96 @@
             initPageParam(); //初始化参数
             initBar(); //工具栏.
             GenerWorkNode(); //表单数据.
+
+            $('[name=showCol]').bind('change', function (obj) {
+                if (obj.target.value == "8") {
+                    Col4To8();
+                } else {
+                    Col8To4();
+                }
+            });
         });
     </script>
 </head>
 <body>
-    <!--标题-->
-    <div id="header" style="height:50px;font-size:20px; background:#213b5d;color:white;padding:10px;">
-        <span style="">处理人处理</span>
-    </div>
-    <!--上半部分表单-->
-    <div id="topContentDiv" class="row">
-        <div id="contentDiv">
-            <form id="divCCForm" action="MyFlow.ashx?method=login" method="post">
-                <!--LODOP_OB 先放着 不知道具体是什么-->
-                <div>
-                    <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0" height="0">
-                        <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="/DataUser/PrintTools/install_lodop32.exe" />
-                    </object>
-                </div>
-                <!--头部功能按钮 发送、移交-->
-                <div class="topBar" id="topBar">
-                    <!-- <uc3:ToolBar ID="ToolBar1" runat="server" />-->
-                </div>
-                <!--flowInfo-->
-                <div class="flowInfo" id="flowInfo">
-                    <!--<uc1:Pub ID="Pub1" runat="server" />-->
-                </div>
-                
-                <!--childThread-->
-                <div class="childThread" id='childThread'>
-                    <!--<uc1:Pub ID="Pub3" runat="server" />-->
-                </div>
-                <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server" />-->
-                <div id="CCForm">
-                    <div class="col-lg-1  col-md-1 col-sm-2">
-                        <label>事件标题</label>
+    <ul class="pageScroll left" id="nav" style="display:none;"></ul>
+
+        <!--标题-->
+        <div id="header">
+            <span>处理人处理</span>
+            <div id="showCol">
+                <input type="radio" name="showCol" id="rdShow4" value="4" />4列展示<input type="radio" value="8" id="rdShow8" name="showCol" />8列展示
+            </div>
+        </div>
+        <!--上半部分表单-->
+        <div id="topContentDiv" class="row">
+            <div id="contentDiv">
+                <form id="divCCForm" action="MyFlow.ashx?method=login" method="post">
+                    <!--LODOP_OB 先放着 不知道具体是什么-->
+                    <div>
+                        <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0" height="0">
+                            <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="/DataUser/PrintTools/install_lodop32.exe" />
+                        </object>
                     </div>
-                    <div class="col-md-2">
-                        <input type="text" placeholder="事件标题" name="TXB_Title" value="" />
+                    <!--头部功能按钮 发送、移交-->
+                    <div class="topBar" id="topBar">
+                        <!-- <uc3:ToolBar ID="ToolBar1" runat="server" />-->
                     </div>
-                    <div class="col-lg-1  col-md-1 col-sm-2"><label>事件标题</label></div>
-                    <div class="col-md-2">
-                        <input type="text" placeholder="事件标题" name="BillNo" value="" />
+                    <!--flowInfo-->
+                    <div class="flowInfo" id="flowInfo">
+                        <!--<uc1:Pub ID="Pub1" runat="server" />-->
                     </div>
-                    <div class="col-md-2">
-                        <textarea placeholder="事件详述" name="detail" value=""></textarea>
+
+                    <!--childThread-->
+                    <div class="childThread" id='childThread'>
+                        <!--<uc1:Pub ID="Pub3" runat="server" />-->
                     </div>
-                    <div class="col-md-2">
-                        <textarea placeholder="事件详述" name="detail1" value=""></textarea>
+                    <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server" />-->
+                    <div id="CCForm">
+                        <br />
+                        正在初始化表单模板及数据，请耐心等待。。。
+                        <br/>
+                        <br />
                     </div>
-                    <div class="col-md-2">
-                        <select name="select">
-                            <option value="1">1</option>
-                            <option value="2">1</option>
-                            <option value="3">1</option>
-                            <option value="4">1</option>
-                            <option value="5">1</option>
-                        </select>
-                        <select name="select1">
-                            <option value="1">1</option>
-                            <option value="2">1</option>
-                            <option value="3">1</option>
-                            <option value="4">1</option>
-                            <option value="5">1</option>
-                        </select>
-                        <select name="select2">
-                            <option value="1">1</option>
-                            <option value="2">1</option>
-                            <option value="3">1</option>
-                            <option value="4">1</option>
-                            <option value="5">1</option>
-                        </select>
+                    <!--Pub2 -->
+                    <div class="pub2Class" id="pub2Class">
+                        <!-- <uc1:Pub ID="Pub2" runat="server" />-->
                     </div>
-                </div>
-                <!--Pub2 -->
-                <div class="pub2Class" id="pub2Class">
-                    <!-- <uc1:Pub ID="Pub2" runat="server" />-->
-                </div>
+
+                    <!--DIVINFO-->
+                    <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none;cursor: pointer;align:left'></div>
+                </form>
                 <!--底部功能按钮 发送、移交-->
                 <div id="bottomToolBar" style="display: block;" class="Bar">
                 </div>
-                <!--DIVINFO-->
-                <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none;cursor: pointer;align:left'></div>
-            </form>
+            </div>
         </div>
-    </div>
 
-    <!--杨玉慧加  暂时解决POP窗不好用的问题-->
-    <div class="modal fade" id="returnPopValModal">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius:0px;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;opacity:1;">×</button>
-                    <h4 class="modal-title">选择提出人</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width:100%;border:0px;height:400px;" id="iframePopModalForm" name="iframePopModalForm"></iframe>
-                    <div style="text-align:right;">
-                        <button type="button" class="btn" data-dismiss="modal">取消</button>
-                        <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">确定</button>
+        <!--杨玉慧加  暂时解决POP窗不好用的问题-->
+        <div class="modal fade" id="returnPopValModal">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius:0px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;opacity:1;">×</button>
+                        <h4 class="modal-title">选择提出人</h4>
                     </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+                    <div class="modal-body">
+                        <iframe style="width:100%;border:0px;height:400px;" id="iframePopModalForm" name="iframePopModalForm"></iframe>
+                        <div style="text-align:right;">
+                            <button type="button" class="btn" data-dismiss="modal">取消</button>
+                            <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">确定</button>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!--Message-->
+        <div class="Message" id='Message'>
+            <!--<uc1:Pub ID="FlowMsg" runat="server" />-->
+        </div>
 
-    <!--Message-->
-    <div class="Message" id='Message' style="display:block;padding:18px;font-weight:bold;color:red;">
-        <!--<uc1:Pub ID="FlowMsg" runat="server" />-->
-    </div>
-
-    <!--杨玉慧加  退回窗口-->
-    <!--<div class="modal fade" id="returnWorkModal">
+        <!--杨玉慧加  退回窗口-->
+        <!--<div class="modal fade" id="returnWorkModal">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius:0px;width:700px;">
                 <div class="modal-header">
@@ -180,12 +177,12 @@
             </div>
         </div>
     </div>-->
-    
-    <!--下拉框选项提示信息-->
-    <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px; left: 304.98961639404297px; display: none;">
-        <div class="arrow" style="left: 50.22522522522522%;"></div>
-        <h3 class="popover-title"><span> title</span><span style="color:white;opacity:1;float:right;cursor:pointer;" id="span_CloseNoticeInfo">×</span></h3>
-        <div class="popover-content">顶部的 Popover 中的一些内容</div>
-    </div>
+        <!--下拉框选项提示信息-->
+        <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px; left: 304.98961639404297px; display: none;">
+            <div class="arrow" style="left: 50.22522522522522%;"></div>
+            <h3 class="popover-title"><span> title</span><span style="color:white;opacity:1;float:right;cursor:pointer;" id="span_CloseNoticeInfo">×</span></h3>
+            <div class="popover-content">顶部的 Popover 中的一些内容</div>
+        </div>
+        
 </body>
 </html>

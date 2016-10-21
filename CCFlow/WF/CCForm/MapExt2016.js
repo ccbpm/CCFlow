@@ -185,17 +185,53 @@ function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK, width, height, title) {
     return;
 }
 
+//根据Name设置元素的值  分为 tb,ddl,rd
+function SetEleValByName(eleName, val) {
+    var ele = $('[name$=_' + eleName + ']');
+    if (ele != undefined && ele.length > 0) {
+        switch (ele[0].tagName.toUpperCase()) {
+            case "INPUT":
+                switch (ele[0].type.toUpperCase()) {
+                    case "CHECKBOX"://复选框  0:false  1:true
+                        val.indexOf('1')>=0 ? $(ele).attr('checked', true) : $(ele).attr('checked', false);
+                        break;
+                    case "TEXT"://文本框
+                        $(ele).val(val);
+                        break;
+                    case "RADIO"://单选钮
+                        $(ele).attr('checked', false);
+                        $('[name=RB_' + eleName + '][value=' + val + ']').attr('checked', true);
+                        break;
+                    case "HIDDEN":
+                        $(ele).val(val);
+                        break;
+                }
+                break;
+                //下拉框
+            case "SELECT":
+                $(ele).val(val);
+                break;
+                //文本区域
+            case "TEXTAREA":
+                $(ele).val(val);
+                break;
+        }
+    }
+}
+
+
 
 /* 内置的Pop自动返回值. google 版 软通*/
 function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, title) {
     //update by dgq 修改路径
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
 
+    ctrl = $('#' + ctrl);
     var wfpreHref = GetLocalWFPreHref();
     url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
 
     //杨玉慧 模态框 先用这个
-    $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().prev().text());
+    $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().parent().prev().text());
 
     $('#iframePopModalForm').attr("src", url);
     $('#btnPopValOK').unbind('click');
@@ -205,8 +241,23 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
         //为表单元素反填值
         var returnValSetObj = frames["iframePopModalForm"].window.pageSetData;
         var returnValObj = frames["iframePopModalForm"].window.returnVal;
-        if (returnValSetObj[0].PopValWorkModel == "Tree" || returnValSetObj[0].PopValWorkModel == "TreeDouble" || returnValSetObj[0].PopValWorkModel == "Group") {//树模式 分组模式
+        if (returnValSetObj[0].PopValWorkModel == "Tree" || returnValSetObj[0].PopValWorkModel == "TreeDouble" ) {//树模式 分组模式
             frames["iframePopModalForm"].window.GetTreeReturnVal();
+            if (returnValSetObj[0].PopValFormat == "OnlyNo") {
+                $(ctrl).val(returnValObj.No);
+            } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
+                $(ctrl).val(returnValObj.Name);
+            }
+            else {
+                for (var property in returnValObj) {
+                    //$('[id$=_' + property + ']').val(returnValObj[property]);
+
+                    SetEleValByName(property, returnValObj[property]);
+                }
+            }
+        }
+        else if (returnValSetObj[0].PopValWorkModel == "Group") {//分组模式
+            frames["iframePopModalForm"].window.GetGroupReturnVal();
             $(ctrl).val(returnValObj.Value);
         }
         else if (returnValSetObj[0].PopValWorkModel == "TableOnly" || returnValSetObj[0].PopValWorkModel == "TablePage") {//表格模式
@@ -217,7 +268,8 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
             }
             else {
                 for (var property in returnValObj) {
-                    $('[id$=' + property + ']').val(returnValObj[property]);
+                    //$('[id$=_' + property + ']').val(returnValObj[property]);
+                    SetEleValByName(property, returnValObj[property]);
                 }
             }
         } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") {//自定义URL

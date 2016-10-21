@@ -320,8 +320,8 @@
  <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
  <li>比如For SQLServer: SELECT TOP @PageSize * FROM
 (
- SELECT  row_number() over(order by t.No) as rownumber,No,Name,Tel,Email FROM WF_Emp t
-) A WHERE rownumber > @PageCount AND Name LIKE '%@Key%'
+ SELECT  row_number() over(order by t.No) as rownumber,No,Name,Tel,Email FROM WF_Emp t WHERE  Name LIKE '%@Key%'
+) A WHERE rownumber > @PageCount 
 
 <br />
 总条数: SELECT COUNT(no) FROM WF_Emp WHERE Name LIKE '%@Key%'
@@ -412,8 +412,8 @@
  <div id="Tree6" style="color:Gray; display:none">
  <ul>
  <li>设置一个查询的SQL语句，必须返回No,Name,Parent三个列。</li>
- <li>比如:SELECT No, Name,ParentNo FROM Port_Dept </li>
- <li>该参数支持ccbpm表达式,比如:SELECT No, Name,ParentNo FROM Port_Dept WHERE No='@WebUser.FK_Dept'</li>
+ <li>比如:SELECT No, Name,ParentNo FROM Port_Dept WHERE  ParentNo='@ParentNo'</li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name,ParentNo FROM Port_Dept WHERE ParentNo='@WebUser.FK_Dept'</li>
  <li>返回的数据源里，必须有根节点。</li>
  </ul>
  </div>
@@ -444,7 +444,15 @@
 开窗标题：<input type="text" id="TB_Title"  name="TB_Title"  value="" />
 搜索关键字提示：<input type="text" id="TB_PopValSearchTip" name="TB_PopValSearchTip" value="" />
 <br />
-
+    
+    <div id="TB_SearchCondition" style="color:Gray; display:none">
+        <ul>
+            <li>多个搜索条件 TB_Title,搜索条件;</li>
+            <li>可以为空，如果为空列名就按照英文名字显示。</li>
+            <li>格式为: DT_StartTime,开始时间;DDL_Flow,流程名称,select no,name from wf_flow</li>
+        </ul>
+    </div>
+    <br />
 <a href="javascript:ShowHidden('ColName')">显示的中文列名(可以为空)：</a>
  <div id="ColName" style="color:Gray; display:none">
  <ul>

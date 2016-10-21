@@ -71,9 +71,7 @@
             display: none;
         }*/
         #test {
-            border-radius: 0px 15px 15px 0px !important;
-            background: #2884fa;
-            border: #2884fa 1px solid !important;
+            
         }
 
         .form_tree {
@@ -104,48 +102,9 @@
     <script type="text/javascript">
         $(function () {
             dtTable();
-            $('.btnsv').bind('click', function () {
-                 var checked = $('input:checkbox:checked');
-                 var trData;
-                 var resultObj = {};
-                 var noData = [];
-                 var naData = [];
-                 if (checked.length > 0) {
-                     var trData1 = $(checked[0]).parents("tr").data().data;
-                     var tbData1 = $(checked[0]).parents("table").data().data;
-                     if (tbData1.PopValFormat == "OnlyNo") {
-                         for (var ele in trData1) {
-                             resultObj[ele] = [];
-                         }
-                     }
-                 }
-                 for (var i = 0; i < checked.length; i++) {
-                        trData = $(checked[i]).parents("tr").data().data;
-                        noData.push((trData.No));
-                        naData.push((trData.Name));
-                        if (tbData1.PopValFormat == "OnlyNo") {
-                                resultObj = { "No": noData };
-                    } else if (tbData1.PopValFormat == "OnlyName") {
-                                resultObj = { "Name": naData };
-                        } else if (tbData1.PopValFormat == "NoName") {
-                            resultObj = {
-                                "No": noData,
-                                "Name": naData 
-                            };
-                    } else {
-                            for (var key in trData) {
-                                resultObj[key].push((trData[key]));
-                            }
-                        }
-                   }
-                window.returnValue = JSON.stringify(resultObj);
-                console.log(window.returnValue);
-                window.close();
-            });
             $('#test').bind('click', function () {
                 if ($('#orgjstree').css('display') == "none") {
                     $('#orgjstree').css('display', 'block');
-
                     var instance = $('#orgjstree').jstree(true);
                     if ($('#orgTxt').val() != undefined && $('#orgTxt').val() != '') {
                         instance.select_node($('#orgTxt').val());
@@ -222,12 +181,21 @@
                         var WorkM = setDataArr[0].PopValWorkModel;
                         if (WorkM == "Group") {
                             $('#groupTable').css('display', 'block');
+                            window.fkName = '';
+                            if (dteArr !=undefined &&  dteArr.length > 0) {
+                                for (var pro in dteArr[0]) {
+                                    if (pro.toLowerCase() != "no" && pro.toLowerCase() != "name") {
+                                        fkName = pro;
+                                        break;
+                                    }
+                                }
+                            }
                             var ultdg = '';
                             var ultde = '';
                             if (pageSetData[0].PopValSelectModel == "More") {//选择模式是多选
                                 $.each(dtgArr, function (i, obje) {
                                     for (var k = 0; k < dteArr.length; k++) {
-                                        if (obje.No == dteArr[k].fk_dept) {
+                                        if (obje.No == dteArr[k][fkName]) {
                                             ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
                                          }
                                     }
@@ -237,7 +205,7 @@
                                } else {//选择模式是单选
                                 $.each(dtgArr, function (i, obje) {
                                     $.each(dteArr, function (k, obj) {
-                                        if (obje.No == obj.fk_dept) {
+                                        if (obje.No == obj[fkName]) {
                                             ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='radio' name='cm' style='margin: 5px 5px;' class='groupr'/>" + obj.Name + "</li>";
                                         }
                                     });
@@ -252,10 +220,6 @@
                                 } else {
                                     $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
                                 }
-                                GetGroupReturnVal();
-                            });
-                            $(".groupr").click(function () {
-                                GetGroupReturnVal();
                             });
                             //机构绑定
                             if (dtgArr.length > 0) {
@@ -270,10 +234,14 @@
                             $.each(dteArr, function (k, obj) {
                                 var lifs = $("#groupTable #dt .lif");
                                 for (var i = 0; i < lifs.length; i++) {
-                                    if ($(lifs[i]).attr("name") == obj.fk_dept) {
+                                    if ($(lifs[i]).attr("name") == obj[fkName]) {
                                         var limData = $(lifs[i]).find(".lim");
-                                        if (limData != undefined && limData.data != undefined && limData.data() != undefined && limData.data().data != undefined && limData.data().data == true) {
-                                            limData.data().data = obj;
+                                        for (var m = 0; m < limData.length; m++) {
+                                            var lim = limData[m];
+                                            if ($(lim).text() == obj.Name && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
+                                                $(lim).data().data = obj;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
@@ -418,7 +386,8 @@
 
         //初始化树  单实体+多实体
         function initTreeData(workModel) {
-            $('#tree').css('display', 'block');
+            //$('#tree').css('display', 'block');
+            $('#orgjstree').css('display', 'block');
            
             var url = '/WF/CCForm/CCFormHeader.ashx?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') ;
 
@@ -426,10 +395,10 @@
             var plugins = [];
             if (pageSetData[0].PopValSelectModel == "More") {//多选
                 plugins = [
-                            "checkbox",
-                            "state",
-                            "conditionalselect"
-                ]
+                    "checkbox",
+                    "state",
+                    "conditionalselect"
+                ];
             }
             $('#orgjstree').jstree({
                 'core': {
@@ -446,7 +415,7 @@
                                     data = JSON.parse(data);
                                     var itemArr = [];
                                     $.each(data.DTObjs, function (i, rootNode) {
-                                        itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true });
+                                        itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true, "data":rootNode});
                                     });
 
                                     cb(itemArr);
@@ -467,32 +436,31 @@
                                         data = JSON.parse(data);
                                         var itemArr = [];
                                         $.each(data.DTObjs, function (i, rootNode) {
-                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true });
+                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true,"data":rootNode});
                                         });
 
                                         $.each(data.DTEntitys, function (i, rootNode) {
-                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file" });
+                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file","data": rootNode});
                                         });
                                         cb(itemArr);
                                     } else {//单实体树
                                         data = JSON.parse(data);
                                         var itemArr = [];
                                         $.each(data.DTObjs, function (i, rootNode) {
-                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true });
+                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true,"data":rootNode});
                                         });
-
                                         cb(itemArr);
                                     }
                                 }
-                            })
+                            });
                         }
                     }
                 },
                 "plugins": plugins
             }).on('changed.jstree', function (node, cb) {
                 GetTreeReturnVal();
-                $('#orgTxt').val(returnVal.Value);
-                $('#orgjstree').css('display', 'none');
+                //$('#orgTxt').val(returnVal.Name);
+                //$('#orgjstree').css('display', 'none');
             });
         }
         //分页table
@@ -567,7 +535,7 @@
                 case "OnlyName"://仅Name
                     var nameArr = [];
                     $.each(selectedTrArr, function (i, selectedTr) {
-                        nameArr.push(selectedTr.No);
+                        nameArr.push(selectedTr.Name);
                     });
                     returnVal.Name = nameArr.join(';');
                     break;
@@ -584,9 +552,8 @@
                             returnVal[property].push(selectedTr[property]);
                         }
                     });
-
                     for (var property in selectedTrArr[0]) {
-                        returnVal[property] = returnVal[property].join(';');
+                        returnVal[property] = returnVal[property].join(";");
                     }
                     break;
             }
@@ -596,30 +563,51 @@
             var instance = $('#orgjstree').jstree(true);
             var selectedIdArr = instance.get_selected();
             var selectedNodes = [];
+            var nameArrs = [];
+            var noArr= [];
+            var nameArr= [];
             $.each(selectedIdArr, function (i, selectedId) {
                 selectedNodes.push(instance.get_node(selectedId));
+            });
+            $.each(selectedNodes, function (i, selectedNode) {
+                if (pageSetData[0].PopValWorkModel == "TreeDouble") {
+                    if (selectedNodes[i].icon != true) {
+                        nameArrs.push(selectedNode.data);
+                        noArr.push(selectedNode.id);
+                        nameArr.push(selectedNode.text);
+                    }
+                } else {
+                    //if (selectedNodes[i].children.length == 0) {
+                        nameArrs.push(selectedNode.data);
+                        noArr.push(selectedNode.id);
+                        nameArr.push(selectedNode.text);
+                    //}
+                }
             });
             //返回值格式
             switch (pageSetData[0].PopValFormat) {
                 case "OnlyNo"://仅NO
-                    returnVal.Value = selectedIdArr.join(';');
+                    returnVal.Name = noArr.join(';');
                     break;
                 case "OnlyName"://仅Name
-                    var nameArr = [];
-                    $.each(selectedNodes, function (i, selectedNode) {
-                        nameArr.push(selectedNode.text);
-                    }); 
-                    returnVal.Value = nameArr.join(';');
+                    returnVal.Name = nameArr.join(';');
                     break;
                 case "NoName"://No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
-                    var nameArr = [];
-                    $.each(selectedNodes, function (i, selectedNode) {
-                        nameArr.push("(" + selectedNode.id + "," + selectedNode.text + ")");
+                    if (nameArrs.length > 0) {
+                        for (var property in nameArrs[0]) {
+                            returnVal[property] = [];
+                        }
+                    }
+                    $.each(nameArrs, function (i, selected) {
+                        for (var property in returnVal) {
+                            returnVal[property].push(selected[property]);
+                        }
                     });
-                    returnVal.Value = nameArr.join(';');
+                    for (var property in nameArrs[0]) {
+                        returnVal[property] = returnVal[property].join(";");
+                    }
                     break;
             }
-            console.log(selectedNodes);
         }
 
         function GetGroupReturnVal() {
@@ -633,10 +621,11 @@
             var selectedIdArrm = [];
             var selectedNodesm = [];
             var nameArr = [];
+            
             for (var i = 0; i < checked.parent(".lim").length; i++) {
-                selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.fk_dept);
+                selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
                 selectedNodesm.push($(checked.parent(".lim")[i]).data().data.Name);
-                nameArr.push("(" + $(checked.parent(".lim")[i]).data().data.Name + "," + $(checked.parent(".lim")[i]).data().data.fk_dept + ")");
+                nameArr.push("(" + $(checked.parent(".lim")[i]).data().data.No + "," + $(checked.parent(".lim")[i]).data().data.Name + ")");
             }
             //返回值格式
             switch (pageSetData[0].PopValFormat) {
@@ -650,7 +639,6 @@
                     returnVal.Value = nameArr.join(';');
                     break;
             }
-            console.log(returnVal);
         }
     </script>
 </head>
@@ -733,7 +721,7 @@
     </div>
 </div>
 <!--树tree-->
-    <div id="tree" style="display: none;">
+    <!--<div id="tree" style="display: none;">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding:0px;margin:0px;overflow:auto;">
             <div class="portlet-body " id="" style="overflow:auto;">
                 <div class="tab-content">
@@ -750,6 +738,13 @@
                 </div>
             </div>
         </div>
+    </div>-->
+    <div><label id="treeVal"></label></div>
+    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" style="font-size:14px;">
+    </div>
+    <!--分组显示table-->
+    <div id="groupTable" style="display: none">
+        <ul id="dt" data-data="true"></ul>
     </div>
 </body>
 </html>

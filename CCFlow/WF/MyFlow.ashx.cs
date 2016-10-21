@@ -663,7 +663,7 @@ namespace CCFlow.WF
                 try
                 {
                     objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null);
-                      msg = objs.ToMsgOfHtml();
+                    msg = objs.ToMsgOfHtml();
                     BP.WF.Glo.SessionMsg = msg;
                 }
                 catch (Exception exSend)
@@ -673,11 +673,15 @@ namespace CCFlow.WF
                         /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
                         return "url@./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
                     }
+
+
                     //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示
-                    if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && exSend.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
-                    {
-                        return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
-                    }
+                    //if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && exSend.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
+                    //if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && exSend.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
+                    //{
+                    //    return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
+                    //}
+
 #warning 杨玉慧
                     return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
                 }

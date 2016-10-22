@@ -1095,6 +1095,9 @@ namespace BP.En
                         }
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
+                            if (attr.HisFKEns == null)
+                                throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
+
                             Map map = attr.HisFKEn.EnMap;
                             val = val + ", T" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
                         }
@@ -1373,7 +1376,11 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
+                            if (attr.HisFKEns == null)
+                                throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
+
                             Map map = attr.HisFKEn.EnMap;
+
                             val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
                         }
                         break;
@@ -1487,6 +1494,10 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
+                            if (attr.HisFKEns == null)
+                                throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
+
+
                             Map map = attr.HisFKEn.EnMap;
                             val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
                         }

@@ -226,7 +226,6 @@ namespace BP.Sys
 
                 map.AddTBString(FrmRBAttr.Tip, null, "选择后提示的信息", true, false, 0, 1000, 20);
 
-
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 this._enMap = map;

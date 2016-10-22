@@ -886,6 +886,7 @@ namespace BP.En
             get
             {
                 #warning new a entity.
+
                return this.HisFKEns.GetNewEntity;
 
                 if (_HisFKEn == null)

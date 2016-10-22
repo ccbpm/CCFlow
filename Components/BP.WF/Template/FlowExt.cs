@@ -989,7 +989,11 @@ namespace BP.WF.Template
         #region 报表设计.
         public string DoDRpt()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Rpt/OneFlow.aspx?FK_Flow=" + this.No + "&FK_MapData=ND" + int.Parse(this.No) + "MyRpt";
+
+            ///WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt;
+            return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND" + int.Parse(this.No) + "MyRpt";
+            //  UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt
+            //return SystemConfig.CCFlowWebPath + "WF/Rpt/OneFlow.aspx?FK_Flow=" + this.No + "&FK_MapData=ND" + int.Parse(this.No) + "MyRpt";
         }
         public string DoDRptSearch()
         {

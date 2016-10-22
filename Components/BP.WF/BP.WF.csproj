@@ -226,6 +226,7 @@
     <Compile Include="DTS\OrgInit_DingIcreMent.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
+    <Compile Include="Rpt\MapRptExt.cs" />
     <Compile Include="Service References\CCInterface\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

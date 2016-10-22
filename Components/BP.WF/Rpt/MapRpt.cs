@@ -49,7 +49,6 @@ namespace BP.WF.Rpt
         /// </summary>
         SpecDepts
     }
-
     /// <summary>
     /// 报表设计
     /// </summary>
@@ -606,6 +605,10 @@ namespace BP.WF.Rpt
          
         #endregion
 
+        #region 其他方法.
+        /// <summary>
+        /// 显示的列.
+        /// </summary>
         public MapAttrs HisShowColsAttrs
         {
             get
@@ -620,6 +623,9 @@ namespace BP.WF.Rpt
             return base.beforeInsert();
         }
 
+        /// <summary>
+        /// 重置设置.
+        /// </summary>
         public void ResetIt()
         {
             MapData md = new MapData(this.No);
@@ -644,18 +650,23 @@ namespace BP.WF.Rpt
                 attr.Insert();
             }
         }
-        
+        /// <summary>
+        /// 删除之前.
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeDelete()
         {
             MapAttrs attrs = new MapAttrs();
             attrs.Delete(MapAttrAttr.FK_MapData, this.No);
             return base.beforeDelete();
         }
+        #endregion 其他方法.
+
     }
     /// <summary>
     /// 报表设计s
     /// </summary>
-    public class MapRpts : EntitiesMyPK
+    public class MapRpts : EntitiesNoName
     {
         #region 构造
         /// <summary>

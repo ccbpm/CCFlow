@@ -297,36 +297,41 @@ namespace BP.Sys
         {
 
             MapAttr ma = new MapAttr();
-            ma.FK_MapData = fk_mapdata; 
-            ma.KeyOfEn =field;
-            ma.Name = fieldDesc; 
+            ma.FK_MapData = fk_mapdata;
+            ma.KeyOfEn = field;
+            ma.Name = fieldDesc;
             ma.MyDataType = DataType.AppInt;
-            ma.X =x;
+            ma.X = x;
             ma.Y = y;
             ma.UIIsEnable = true;
             ma.LGType = FieldTypeS.Enum;
-                ma.UIContralType = ctrlType ;
-                ma.UIBindKey = enumKey;
+            ma.UIContralType = ctrlType;
+            ma.UIBindKey = enumKey;
             ma.Insert();
 
-            if (ma.UIContralType == UIContralType.RadioBtn)
-            {
-                SysEnums ses = new SysEnums(ma.UIBindKey);
-                int idx = 0;
-                foreach (SysEnum item in ses)
-                {
-                    idx++;
-                    FrmRB rb = new FrmRB();
-                    rb.FK_MapData = ma.FK_MapData;
-                    rb.KeyOfEn = ma.KeyOfEn;
-                    rb.EnumKey = ma.UIBindKey;
-                    rb.Lab = item.Lab;
-                    rb.X = ma.X;
+            if (ma.UIContralType != UIContralType.RadioBtn)
+                return;
 
-                    //让其变化y值.
-                    rb.Y = ma.Y + idx * 30;
-                    rb.Insert();
-                }
+            //删除可能存在的数据.
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='"+ma.KeyOfEn+"' AND FK_MapData='"+ma.FK_MapData+"'");
+
+            SysEnums ses = new SysEnums(ma.UIBindKey);
+            int idx = 0;
+            foreach (SysEnum item in ses)
+            {
+                idx++;
+                FrmRB rb = new FrmRB();
+                rb.FK_MapData = ma.FK_MapData;
+                rb.KeyOfEn = ma.KeyOfEn;
+                rb.EnumKey = ma.UIBindKey;
+
+                rb.Lab = item.Lab;
+                rb.IntKey = item.IntKey;
+                rb.X = ma.X;
+
+                //让其变化y值.
+                rb.Y = ma.Y + idx * 30;
+                rb.Insert();
             }
         }
         /// <summary>

@@ -85,6 +85,19 @@ namespace CCFlow.WF.WorkOpt
                 return str;
             }
         }
+        /// <summary>
+        /// 部门编号
+        /// </summary>
+        public string FK_Dept
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_Dept"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
         public string FK_MapData
         {
             get
@@ -191,6 +204,9 @@ namespace CCFlow.WF.WorkOpt
             {
                 switch (this.DoType)
                 {
+                    case "SelectEmps":
+                        msg = this.SelectEmps();
+                        break;
                     case "AccepterInit": //选择接受人按钮.
                         msg= this.AccepterInit();
                         break;
@@ -223,6 +239,30 @@ namespace CCFlow.WF.WorkOpt
                 context.Response.Write("err@" + ex.Message);
             }
             //输出信息.
+        }
+        /// <summary>
+        /// 人员选择器
+        /// </summary>
+        /// <returns></returns>
+        public string SelectEmps()
+        {
+            string fk_dept = this.FK_Dept;
+            if (fk_dept == null)
+                fk_dept = BP.Web.WebUser.FK_Dept;
+
+            DataSet ds = new DataSet();
+
+            string sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ";
+            DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtDept.TableName = "Depts";
+            ds.Tables.Add(dtDept);
+
+            sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "'";
+            DataTable dtEmps = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmps.TableName = "Emps";
+            ds.Tables.Add(dtEmps);
+
+            return BP.Tools.Json.ToJson(ds);
         }
 
         #region 选择接受人.

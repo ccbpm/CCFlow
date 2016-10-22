@@ -296,6 +296,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
                 if (!string.IsNullOrEmpty(y)) iY = (int)double.Parse(y);
 
                 int nodeId = BP.BPMN.Glo.NewNode(FK_Flow, iX, iY);
+
                 BP.WF.Node node = new BP.WF.Node(nodeId);
                 node.HisRunModel = Node_GetRunModelByFigureName(figureName);
                 node.Update();
@@ -346,20 +347,22 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
             try
             {
                 int delResult = 0;
+
                 string FK_Node = getUTF8ToString("FK_Node");
-                if (string.IsNullOrEmpty(FK_Node)) return "true";
+                if (string.IsNullOrEmpty(FK_Node))
+                    return "true";
 
                 BP.WF.Node node = new BP.WF.Node(int.Parse(FK_Node));
                 if (node.IsExits == false)
                     return "true";
 
                 if (node.IsStartNode == true)
-                {
                     return "开始节点不允许被删除。";
-                }
+
                 delResult = node.Delete();
 
-                if (delResult > 0) return "true";
+                if (delResult > 0)
+                    return "true";
 
                 return "Delete Error.";
             }
@@ -390,7 +393,6 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
             }
             return "false";
         }
-
         /// <summary>
         /// 修改节点运行模式
         /// </summary>

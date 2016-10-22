@@ -13,6 +13,8 @@
     <script src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+
     <style type="text/css">
     * {
         list-style: none;
@@ -124,7 +126,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random(),
+                url: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data != null) {
@@ -389,7 +391,7 @@
             //$('#tree').css('display', 'block');
             $('#orgjstree').css('display', 'block');
            
-            var url = '/WF/CCForm/CCFormHeader.ashx?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') ;
+            var url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') ;
 
             //初始化Tree
             var plugins = [];
@@ -424,7 +426,7 @@
                         );
                         }
                         else {
-                            url = '/WF/CCForm/CCFormHeader.ashx?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') + '&ParentNo=' + node.id;
+                            url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') + '&ParentNo=' + node.id;
                             $.ajax({
                                 type: 'post',
                                 async: true,
@@ -475,8 +477,8 @@
                 PageSize: pageSize,
                 PageIndex: 1,
                 DivId: 'flowListDiv',
-                countUrl: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&Key=' + $('#txbSearchVal').val() + '&m=' + Math.random(),
-                listUrl: "CCFormHeader.ashx?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&Key=' + $('#txbSearchVal').val() + '&m=' + Math.random(),
+                countUrl: Handler + '?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&Key=' + $('#txbSearchVal').val() + '&m=' + Math.random(),
+                listUrl:  Handler + '?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&Key=' + $('#txbSearchVal').val() + '&m=' + Math.random(),
                 RenderOverFun: function () {
                     //为CHECKBOX radio绑定事件
                     $('#flowListDiv table tbody .ck_tbody').bind('change', checkBoxChange);

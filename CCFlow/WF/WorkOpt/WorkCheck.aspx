@@ -53,7 +53,7 @@
                     type: "GET", //使用GET或POST方法访问后台
                     dataType: "text", //返回json格式的数据
                     contentType: "application/json; charset=utf-8",
-                    url: "../CCForm/CCFormHeader.ashx?DoType=DelWorkCheckAttach&PKVal=" + MyPK, //要访问的后台地址
+                    url: "../CCForm/Handler.ashx?DoType=DelWorkCheckAttach&PKVal=" + MyPK, //要访问的后台地址
                     async: false,
                     cache: false,
                     success: function (msg) {//msg为返回的数据，在这里做数据绑定

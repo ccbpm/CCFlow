@@ -148,7 +148,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "/WF/CCForm/CCFormHeader.ashx?DoType=InitPopVal&pageIndex=1&pageSize=12&ReqCount=0&MyPK=" + fk_mapExt + "&m=" + Math.random(),
+                url: Handler + "?DoType=InitPopVal&pageIndex=1&pageSize=12&ReqCount=0&MyPK=" + fk_mapExt + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     alert(data);
@@ -165,7 +165,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: "/WF/CCForm/CCFormHeader.ashx?DoType=InitPopSetting&MyPK=" + fk_mapExt + "&m=" + Math.random(),
+                url: Handler + "?DoType=InitPopSetting&MyPK=" + fk_mapExt + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     alert(data);
@@ -445,21 +445,21 @@
 
 搜索关键字提示：<input type="text" id="TB_PopValSearchTip" name="TB_PopValSearchTip" value="" />
 <br />
-<!--
-查询条件www：
-<br />
-<textarea type="text" id="Text1" name="TB_PopValSearchTip" value="" > 
 
-</textarea><hr /> -->
+<a href="javascript:ShowHidden('PopValSearchCond')">查询条件设置(可以为空)：</a>
+ <div id="PopValSearchCond" style="color:Gray; display:none">
+ <ul>
+ <li>该设置对table查询有效:</li>
+ <li>格式为:</li>
+ <li>$Para=Dept#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'</li>
+ </ul>
+ </div>
 
-    <div id="TB_SearchCondition" style="color:Gray; display:none">
-        <ul>
-            <li>多个搜索条件 TB_Title,搜索条件;</li>
-            <li>可以为空，如果为空列名就按照英文名字显示。</li>
-            <li>格式为: DT_StartTime,开始时间;DDL_Flow,流程名称,select no,name from wf_flow</li>
-        </ul>
-    </div>
-    <br />
+<textarea  id="TB_PopValSearchCond" name="TB_PopValSearchCond" value="" style="width:90%;" > 
+</textarea>
+<hr /> 
+ 
+
 <a href="javascript:ShowHidden('ColName')">显示的中文列名(可以为空)：</a>
  <div id="ColName" style="color:Gray; display:none">
  <ul>
@@ -486,10 +486,10 @@
 <input id="RB_PopValSelectModel_More" type="radio" name="PopValSelectModel" value="More"  /><label for="RB_PopValSelectModel_More">多选</label> 
 </fieldset>
 
-<input type="Button" value="获得Json"  onclick="GetJson()" />
-<input type="Button" value="保存"  onclick="Save()" />
-<input type="Button" value="保存并关闭"  onclick="SaveAndClose()" />
-<input type="Button" value="关闭"  onclick="windows.close();" />
+<input type="button" value="获得Json"  onclick="GetJson()" />
+<input type="button" value="保存"  onclick="Save()" />
+<input type="button" value="保存并关闭"  onclick="SaveAndClose()" />
+<input type="button" value="关闭"  onclick="windows.close();" />
 
 </form>
 

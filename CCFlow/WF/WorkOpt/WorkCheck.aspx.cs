@@ -178,7 +178,7 @@ namespace CCFlow.WF.WorkOpt
                 string AttachPK = this.NodeID + "_FrmWorkCheck";
 
                 uploadJS.Append("\t\n 'swf': '" + BP.WF.Glo.CCFlowAppPath + "WF/Scripts/Jquery-plug/fileupload/uploadify.swf',");
-                uploadJS.Append("\t\n 'uploader':  '" + BP.WF.Glo.CCFlowAppPath + "WF/CCForm/CCFormHeader.ashx?AttachPK=" + AttachPK + "&WorkID=" + this.WorkID + "&DoType=MoreAttach&FK_Node=" + this.FK_Node + "&EnsName=" + this.EnName + "&FK_Flow=" + this.FK_Flow + "&PKVal=" + this.WorkID + "',");
+                uploadJS.Append("\t\n 'uploader':  '" + BP.WF.Glo.CCFlowAppPath + "WF/CCForm/Handler.ashx?AttachPK=" + AttachPK + "&WorkID=" + this.WorkID + "&DoType=MoreAttach&FK_Node=" + this.FK_Node + "&EnsName=" + this.EnName + "&FK_Flow=" + this.FK_Flow + "&PKVal=" + this.WorkID + "',");
                 uploadJS.Append("\t\n   'auto': true,");
                 uploadJS.Append("\t\n 'fileTypeDesc':'请选择上传文件',");
                 uploadJS.Append("\t\n 'buttonText':'上传附件',");

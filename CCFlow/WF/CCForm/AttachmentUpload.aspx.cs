@@ -896,7 +896,7 @@ namespace CCFlow.WF.CCForm
                     uploadJS.Append("\t\n $('#file_upload').uploadify({");
 
                     uploadJS.Append("\t\n 'swf': '" + BP.WF.Glo.CCFlowAppPath + "WF/Scripts/Jquery-plug/fileupload/uploadify.swf',");
-                    uploadJS.Append("\t\n 'uploader':  '" + BP.WF.Glo.CCFlowAppPath + "WF/CCForm/CCFormHeader.ashx?AttachPK=" + this.FK_FrmAttachment + "&WorkID=" + this.PKVal + "&FID=" + this.FID + "&DoType=MoreAttach&FK_Node=" + this.FK_Node + "&EnsName=" + this.EnName + "&FK_Flow=" + this.FK_Flow + "&PKVal=" + this.PKVal + "',");
+                    uploadJS.Append("\t\n 'uploader':  '" + BP.WF.Glo.CCFlowAppPath + "WF/CCForm/Handler.ashx?AttachPK=" + this.FK_FrmAttachment + "&WorkID=" + this.PKVal + "&FID=" + this.FID + "&DoType=MoreAttach&FK_Node=" + this.FK_Node + "&EnsName=" + this.EnName + "&FK_Flow=" + this.FK_Flow + "&PKVal=" + this.PKVal + "',");
                     //uploadJS.Append("\t\n 'cancelImage': '" + BP.WF.Glo.CCFlowAppPath + "WF/Scripts/Jquery-plug/fileupload/cancel.png',");
                     uploadJS.Append("\t\n   'auto': true,");
                     uploadJS.Append("\t\n 'fileTypeDesc':'请选择上传文件',");

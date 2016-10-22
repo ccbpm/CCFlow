@@ -292,8 +292,8 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.common
                 string y = getUTF8ToString("y");
                 int iX = 0;
                 int iY = 0;
-                if (!string.IsNullOrEmpty(x)) iX = int.Parse(x);
-                if (!string.IsNullOrEmpty(y)) iY = int.Parse(y);
+                if (!string.IsNullOrEmpty(x)) iX = (int)double.Parse(x);
+                if (!string.IsNullOrEmpty(y)) iY = (int)double.Parse(y);
 
                 int nodeId = BP.BPMN.Glo.NewNode(FK_Flow, iX, iY);
                 BP.WF.Node node = new BP.WF.Node(nodeId);

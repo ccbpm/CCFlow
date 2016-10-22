@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="关注" Language="C#" MasterPageFile="~/WF/WinOpen.master" AutoEventWireup="true" CodeBehind="Focus.aspx.cs" Inherits="CCFlow.WF.Focus" %>
+<%@ Import Namespace="BP.Sys" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">  
 </asp:Content>
@@ -43,6 +44,7 @@
                         int idx = 0;
                         //获得关注的数据.
                         System.Data.DataTable dt = BP.WF.Dev2Interface.DB_Focus(flowNo, BP.Web.WebUser.No);
+                        SysEnums stas = new SysEnums("WFSta");
 
                         foreach (System.Data.DataRow dr in dt.Rows)
                         {
@@ -52,13 +54,8 @@
                             string RDT = dr["RDT"].ToString();
                             string Starter = dr["Starter"].ToString();
                             int wfsta = int.Parse(dr["WFSta"].ToString());
-                               string wfstaT = "运行中";
-                               if (wfsta == 0)
-                                   wfstaT = "草稿";
-                               if (wfsta == 1)
-                                   wfstaT = "运行中";
-                               if (wfsta == 2)
-                                   wfstaT = "已完成";
+                            //edit by liuxc,2016-10-22,修复状态显示不正确问题
+                            string wfstaT = (stas.GetEntityByKey(SysEnumAttr.IntKey, wfsta) as SysEnum).Lab;
 
                                string nodeName = dr["NodeName"].ToString();
                                string WorkID = dr["WorkID"].ToString();

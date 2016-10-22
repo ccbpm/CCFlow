@@ -485,14 +485,23 @@ function TransFormDataField(newfigure, frmVal, x, y) {
     this.y = y;
 }
 
+
+/*
+* 绘制图形.
+*/
 TransFormDataField.prototype = {
-    /** 输出控件 **/
+    /** 画输出控件 **/
     paint: function () {
+
         var createdFigure = this.figure;
 
+        if ("RadioButton" == createdFigure.CCForm_Shape) {
+            return CrateRB(createdFigure, this.dataArrary );
+        }
+
+        //把主键给他.
         if (this.dataArrary.KeyOfEn != null)
             createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
-
         if (this.dataArrary.No != null)
             createdFigure.CCForm_MyPK = this.dataArrary.No;
 
@@ -500,10 +509,10 @@ TransFormDataField.prototype = {
         //add to STACK
         STACK.figureAdd(createdFigure);
 
-        //add property
+        //add property  增加属性.
         createdFigure = this.Transform();
 
-        //change text
+        //change text  //设置控件上的ID文本.
         var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
         if (figureText != null) {
 
@@ -653,4 +662,35 @@ TransFormDataField.prototype = {
         }
         return expString;
     }
+}
+
+function CrateRB(createdFigure, dataArrary) {
+
+    //把主键给他.
+    if (this.dataArrary.KeyOfEn != null)
+        createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
+    if (this.dataArrary.No != null)
+        createdFigure.CCForm_MyPK = this.dataArrary.No;
+
+    //添加到Figures
+    //add to STACK
+    STACK.figureAdd(createdFigure);
+
+    //add property  增加属性.
+    createdFigure = this.Transform();
+
+    //change text  //设置控件上的ID文本.
+    var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
+    if (figureText != null) {
+
+        if (this.dataArrary.KeyOfEn != null)
+            figureText.setTextStr(this.dataArrary.KeyOfEn);
+
+        if (this.dataArrary.No != null)
+            figureText.setTextStr(this.dataArrary.No);
+    }
+
+    //创建标签
+    this.LabelCreateForFigure();
+    draw();
 }

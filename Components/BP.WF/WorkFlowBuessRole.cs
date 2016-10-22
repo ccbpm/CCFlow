@@ -294,12 +294,12 @@ namespace BP.WF
             billNo = billNo.Replace("{yyyy}", DateTime.Now.ToString("yyyy"));
 
             billNo = billNo.Replace("{yy}", DateTime.Now.ToString("yy"));
-            billNo = billNo.Replace("{YY}", DateTime.Now.ToString("YY"));
+            billNo = billNo.Replace("{YY}", DateTime.Now.ToString("yy"));
 
             billNo = billNo.Replace("{MM}", DateTime.Now.ToString("MM"));
-            billNo = billNo.Replace("{mm}", DateTime.Now.ToString("mm"));
+            billNo = billNo.Replace("{mm}", DateTime.Now.ToString("MM"));
 
-            billNo = billNo.Replace("{DD}", DateTime.Now.ToString("DD"));
+            billNo = billNo.Replace("{DD}", DateTime.Now.ToString("dd"));
             billNo = billNo.Replace("{dd}", DateTime.Now.ToString("dd"));
             billNo = billNo.Replace("{HH}", DateTime.Now.ToString("HH"));
             billNo = billNo.Replace("{hh}", DateTime.Now.ToString("HH"));

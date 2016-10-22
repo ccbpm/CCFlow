@@ -4525,9 +4525,9 @@ namespace BP.WF
             int i = gwf.RetrieveFromDBSources();
             if (i == 0)
                 throw new Exception("@ 设置关注错误：没有找到 WorkID= " + workid + " 的实例。");
-            string paras = gwf.GetValStrByKey("AtPara");
-
-            if (paras.Contains("F_" + WebUser.No + "=0") == false)
+            string isFocus = gwf.GetParaString("F_" + WebUser.No, "0"); //edit by liuxc,2016-10-22,修复关注/取消关注逻辑错误
+            
+            if (isFocus == "0")
                 gwf.SetPara("F_" + WebUser.No, "1");
             else
                 gwf.SetPara("F_" + WebUser.No, "0");

@@ -41,13 +41,14 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    if (data.indexOf('err@' == 0)) {
+                    if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
 
-
                     data = JSON.parse(data);
+
+
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
                         var newRow = "";

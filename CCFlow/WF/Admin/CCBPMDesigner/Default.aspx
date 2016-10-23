@@ -500,10 +500,18 @@
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
         z-index: 21006;">
     </div>
-    <div data-options="region:'west',border:true,split:true"
-     title="<div class='logpanel'><div class='icon-logPic'></div><div class='logPicspan'>驰骋BPM</div></div>" style="width: 280px;">
+    <div data-options="region:'west',border:true,split:true" title="<img src='/DataUser/ICON/Smaller.png' style='width:22px;vertical-align:middle' />&nbsp;驰骋工作流引擎设计器" style="width:250px; ">
+
         <div id="menuTab" class="easyui-tabs" data-options="fit:true,border:false">
         </div>
+
+     <%--   <div data-options="region:'west',border:true,split:true"
+     title="<div class='logpanel'><div class='icon-logPic'></div><div class='logPicspan'>驰骋BPM</div></div>" style="width: 280px;">
+        <div id="Div1" class="easyui-tabs" data-options="fit:true,border:false">
+        </div>--%>
+
+
+
     </div>
     <div data-options="region:'center',border:true" collapsible="true">
         <script type="text/javascript" language="javascript">

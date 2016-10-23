@@ -86,6 +86,19 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
         }
         /// <summary>
+        /// 框架ID
+        /// </summary>
+        public string FK_MapFrame
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_MapFrame"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+        /// <summary>
         ///  节点ID.
         /// </summary>
         public int FK_Node
@@ -155,6 +168,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
+                    case "MapFrameInit": //框架初始化.
+                        msg = this.MapFrameInit();
+                        break;
                     case "DtlInit": //初始化明细表.
                         msg = this.DtlInit();
                         break;
@@ -176,7 +192,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "SFTableDelete": //删除.
                         msg = this.SFTableDelete();
                         break;
-                        
                     case "FieldSaveEnum": //保存字段.
                         msg = this.FieldSaveEnum();
                         break;
@@ -242,6 +257,22 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 context.Response.Write("err@" + ex.Message);
             }
             //输出信息.
+        }
+        /// <summary>
+        /// 框架信息.
+        /// </summary>
+        /// <returns></returns>
+        public string MapFrameInit()
+        {
+            BP.Sys.FrmEle fe = new FrmEle();
+            fe.MyPK = this.MyPK;
+            if (fe.RetrieveFromDBSources() == 0)
+            {
+            }
+
+            fe.FK_MapData = this.FK_MapData;
+            fe.RetrieveFromDBSources();
+            return fe.ToJson();
         }
         /// <summary>
         /// 枚举值列表

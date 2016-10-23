@@ -173,11 +173,40 @@ namespace CCFlow.WF.CCForm
                 if (string.IsNullOrEmpty(key) == true)
                     key = "";
 
+                //取出来查询条件.
+                string[] conds = me.PopValSearchCond.Split('$');
+                
                 string countSQL = me.PopValTablePageSQLCount;
+
+                //固定参数.
                 countSQL = countSQL.Replace("@WebUser.No", BP.Web.WebUser.No);
                 countSQL = countSQL.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                 countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
                 countSQL = countSQL.Replace("@Key", key);
+
+                //替换其他参数.
+                foreach (string cond in conds)
+                {
+                    if (cond == null || cond == "")
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(6, cond.IndexOf("#"));
+                    string val = context.Request.QueryString[para];
+
+                    if (val == "all")
+                    {
+                        countSQL = countSQL.Replace( para+"=@" + para, "1=1");
+                        countSQL = countSQL.Replace( para + "='@" + para+"'", "1=1");
+                    }
+                    else
+                    {
+                        //要执行两次替换有可能是，有引号.
+                        countSQL = countSQL.Replace("@" + para , val);
+                    }
+                }
+                 
+
                 string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
 
                 //pageSize
@@ -194,12 +223,34 @@ namespace CCFlow.WF.CCForm
                 sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
                 sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                 sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                sqlObjs = sqlObjs.Replace("@Key", key);
 
                 //三个固定参数.
                 sqlObjs = sqlObjs.Replace("@PageCount", ((int.Parse(pageIndex) - 1) * int.Parse(pageSize)).ToString());
                 sqlObjs = sqlObjs.Replace("@PageSize", pageSize);
                 sqlObjs = sqlObjs.Replace("@PageIndex", pageIndex);
-                sqlObjs = sqlObjs.Replace("@Key", key);
+
+                //替换其他参数.
+                foreach (string cond in conds)
+                {
+                    if (cond == null || cond == "")
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(6, cond.IndexOf("#"));
+                    string val = context.Request.QueryString[para];
+
+                    if (val == "all")
+                    {
+                        sqlObjs = sqlObjs.Replace(para + "=@" + para, "1=1");
+                        sqlObjs = sqlObjs.Replace(para + "='@" + para + "'", "1=1");
+                    }
+                    else
+                    {
+                        //要执行两次替换有可能是，有引号.
+                        sqlObjs = sqlObjs.Replace("@" + para, val);
+                    }
+                }
 
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
@@ -211,6 +262,50 @@ namespace CCFlow.WF.CCForm
                 dtCount.Columns.Add("Count", typeof(int));
                 dtCount.Rows.Add(new[] { count });
                 ds.Tables.Add(dtCount);
+
+
+                //处理查询条件.
+                //$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'
+                //$Para=XB#Label=性别#EnumKey=XB
+                //$Para=DTFrom#Label=注册日期从#DefVal=@Now-30
+                //$Para=DTTo#Label=到#DefVal=@Now
+
+               
+                 foreach (string cond in conds)
+                 {
+                     if (string.IsNullOrEmpty(cond) == true)
+                         continue;
+
+                     string sql = null;
+                     if (cond.Contains("ListSQL") == true)
+                     {
+                         sql = cond.Substring(cond.IndexOf("ListSQL")+1);
+                         sql = sql.Replace("@WebUser.No",WebUser.No);
+                         sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                         sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+                     }
+
+                     if (cond.Contains("EnumKey") == true)
+                     {
+                         string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 1);
+                         sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
+                     }
+
+                     if (sql == null)
+                         continue;
+
+                     //参数.
+                     string para = cond.Substring(6, cond.IndexOf("#"));
+                     if (ds.Tables.Contains(para) == true)
+                         throw new Exception("@配置的查询,参数名有冲突不能命名为:"+para);
+
+                     //查询出来数据，就把他放入到dataset里面.
+                     DataTable dtPara = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                     dtPara.TableName = para;
+                     ds.Tables.Add(dtPara); //加入到参数集合.
+                 }
+
 
                 return BP.Tools.Json.ToJson(ds);
             }

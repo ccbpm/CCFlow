@@ -111,6 +111,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 ext.PopValSelectModel = PopValSelectModel.One;
                 ext.PopValWorkModel = PopValWorkModel.TableOnly;
             }
+
+           // ext.SetValByKey
+
             return ext.PopValToJson();
         }
 
@@ -175,7 +178,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 me.H = int.Parse(this.GetValFromFrmByKey("TB_Height"));
                 me.PopValColNames = this.GetValFromFrmByKey("TB_ColNames"); //中文列名的对应.
                 me.PopValTitle = this.GetValFromFrmByKey("TB_Title"); //标题.
-                me.PopValSearchTip = this.GetValFromFrmByKey("TB_PopValSearchTip"); //提示.
+                me.PopValSearchTip = this.GetValFromFrmByKey("TB_PopValSearchTip"); //关键字提示.
+                me.PopValSearchCond = this.GetValFromFrmByKey("TB_PopValSearchCond"); //查询条件.
 
 
                 //数据返回格式.
@@ -229,9 +233,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             context = mycontext;
             string doType = context.Request.QueryString["DoType"];
-
             string msg = "";
-
 
             try
             {
@@ -257,10 +259,10 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         break;
                     case "PopVal_Init":
                         msg = this.PopVal_Init();
-                        return;
+                        break;
                     case "PopVal_Save":
                         msg = this.PopVal_Save();
-                        return;
+                        break;
                     default:
                         msg = "err@标记错误:" + this.DoType;
                         break;

@@ -195,7 +195,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler+"?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
+                url: Handler + "?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -257,6 +257,8 @@
 
                     //搜索提示.
                     $("#TB_PopValSearchTip").val(data.PopValSearchTip);
+                    $("#TB_PopValSearchCond").val(data.PopValSearchCond); //查询条件.
+
 
                     //替换列信息.
                     $("#TB_ColNames").val(data.PopValColNames);
@@ -443,7 +445,7 @@
 高度(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />   
 开窗标题：<input type="text" id="TB_Title"  name="TB_Title"  value="" />
 
-搜索关键字提示：<input type="text" id="TB_PopValSearchTip" name="TB_PopValSearchTip" value="" />
+搜索关键字提示：<input type="text" id="TB_PopValSearchTip" name="TB_PopValSearchTip" value="" style=" width:300px;" />
 <br />
 
 <a href="javascript:ShowHidden('PopValSearchCond')">查询条件设置(可以为空)：</a>
@@ -451,11 +453,16 @@
  <ul>
  <li>该设置对table查询有效:</li>
  <li>格式为:</li>
- <li>$Para=Dept#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'</li>
+
+<li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'</li>
+<li>$Para=XB#Label=性别#EnumKey=XB</li>
+<li>$Para=DTFrom#Label=注册日期从#DefVal=@Now-30</li>
+<li>$Para=DTTo#Label=到#DefVal=@Now</li>
+
  </ul>
  </div>
 
-<textarea  id="TB_PopValSearchCond" name="TB_PopValSearchCond" value="" style="width:90%;" > 
+<textarea  id="TB_PopValSearchCond" rows="5" name="TB_PopValSearchCond" value="" style="width:90%;" > 
 </textarea>
 <hr /> 
  

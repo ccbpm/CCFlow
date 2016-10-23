@@ -204,6 +204,9 @@ namespace CCFlow.WF.WorkOpt
             {
                 switch (this.DoType)
                 {
+                    case "Askfor":
+                        msg = this.Askfor();
+                        break;
                     case "SelectEmps":
                         msg = this.SelectEmps();
                         break;
@@ -239,6 +242,23 @@ namespace CCFlow.WF.WorkOpt
                 context.Response.Write("err@" + ex.Message);
             }
             //输出信息.
+        }
+        /// <summary>
+        /// 执行加签
+        /// </summary>
+        /// <returns>执行信息</returns>
+        public string Askfor()
+        {
+            Int64 workID = int.Parse(context.Request.QueryString["WorkID"]); //工作ID
+            string toEmp = context.Request.QueryString["ToEmp"]; //让谁加签?
+            string note = context.Request.QueryString["Note"]; //原因.
+            string model = context.Request.QueryString["Model"]; //模式.
+
+            BP.WF.AskforHelpSta sta = BP.WF.AskforHelpSta.AfterDealSend;
+            if (model == "0")
+                sta = BP.WF.AskforHelpSta.AfterDealSend;
+
+            return BP.WF.Dev2Interface.Node_Askfor(workID, sta, toEmp, note);
         }
         /// <summary>
         /// 人员选择器

@@ -432,9 +432,6 @@ function ResizeWindow() {
 }
 window.onload = ResizeWindow;
 
-
-
-
 //以下是软通写的
 //初始化网页URL参数
 function initPageParam() {
@@ -474,51 +471,35 @@ function initBar() {
         success: function (data) {
             var barHtml = data;
             $('.Bar').html(barHtml);
-            if ($('[value=退回]').length>0){
-                returnBack();
-                $('[value=退回]').attr('onclick', "$('#returnWorkModal').modal().show();");
+            if ($('[value=退回]').length > 0) {
+                $('[value=退回]').attr('onclick', '');
+                $('[value=退回]').unbind('click');
+                $('[value=退回]').bind('click', function () { initModal("returnBack"); $('#returnWorkModal').modal().show(); });
+            }
+            if ($('[value=移交]').length > 0) {
+
+                $('[value=移交]').attr('onclick', '');
+                $('[value=移交]').unbind('click');
+                $('[value=移交]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
+            }
+            if ($('[value=加签]').length > 0) {
+                $('[value=加签]').attr('onclick', '');
+                $('[value=加签]').unbind('click');
+                $('[value=加签]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
             }
         }
     });
 }
 
-//初始化退回窗口
-function returnBack() {
-    //初始化退回窗口的SRC
-    var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal">'+
-       '<div class="modal-dialog">'
-           +'<div class="modal-content" style="border-radius:0px;width:700px;">'
-              + '<div class="modal-header">'
-                  + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                   +'<h4 class="modal-title">工作退回</h4>'
-               +'</div>'
-               +'<div class="modal-body">'
-                   +'<iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
-               +'</div>'
-           +'</div><!-- /.modal-content -->'
-       +'</div><!-- /.modal-dialog -->'
-   +'</div>';
-
-    $('body').append($(returnWorkModalHtml));
-    $('#iframeReturnWorkForm').attr('src', "../WF/WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + (new Date).toUTCString());
-    $('#btnReturnWorkOK').unbind('click');
-    $('#btnReturnWorkOK').bind('click', function () {
-        var retrunVal = frames["iframeReturnWorkForm"].window.returnValue;
-        if (retrunVal == undefined)
-            retrunVal = "";
-        $('#Message').html(retrunVal);
-    });
-}
-
-//初始化移交窗口
-function returnBack() {
+//初始化退回、移交、加签窗口
+function initModal(modalType) {
     //初始化退回窗口的SRC
     var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal">' +
        '<div class="modal-dialog">'
-           + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+           + '<div class="modal-content" style="border-radius:0px;width:700px;text-align:left;">'
               + '<div class="modal-header">'
                   + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                   + '<h4 class="modal-title">工作退回</h4>'
+                   + '<h4 class="modal-title" id="modalHeader">工作退回</h4>'
                + '</div>'
                + '<div class="modal-body">'
                    + '<iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
@@ -528,7 +509,27 @@ function returnBack() {
    + '</div>';
 
     $('body').append($(returnWorkModalHtml));
-    $('#iframeReturnWorkForm').attr('src', "../WF/WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + (new Date).toUTCString());
+
+    var modalIframeSrc = '';
+    if (modalType != undefined) {
+        switch (modalType) {
+            case "returnBack":
+                $('#modalHeader').text("工作退回");
+                modalIframeSrc = "../WF/WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
+                break;
+            case "shift":
+                $('#modalHeader').text("工作移交");
+                modalIframeSrc = "../WF/WorkOpt/forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "askfor":
+                $('#modalHeader').text("工作移交");
+                modalIframeSrc = "../WF/WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            default:
+                break;
+        }
+    }
+    $('#iframeReturnWorkForm').attr('src',modalIframeSrc );
     $('#btnReturnWorkOK').unbind('click');
     $('#btnReturnWorkOK').bind('click', function () {
         var retrunVal = frames["iframeReturnWorkForm"].window.returnValue;
@@ -1659,6 +1660,8 @@ function Send() {
         }
     });
 }
+//移交
+//
 
 //根据下拉框选定的值，绑定表单中哪个元素显示，哪些元素不显示
 function showEleDependOnDRDLValue() {

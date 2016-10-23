@@ -20,43 +20,55 @@
         }
     </style>
     <script type="text/javascript">
+        var pageData = {};
         $(function () {
 
             //初始化页面退回信息
-                var param = { FK_Node: GetQueryString('FK_Node'), WorkID: GetQueryString('WorkID'), FID: GetQueryString('FID') };
-                $.ajax({
-                    type: 'post',
-                    async: true,
-                    data: param,
-                    url: Handler + "?DoType=ReturnToNodes&m=" + Math.random(),
-                    dataType: 'html',
-                    success: function (data) {
+            
+            pageData = {
+                FK_Node: GetQueryString('FK_Node'),
+                WorkID: GetQueryString('WorkID'),
+                FID: GetQueryString('FID'),
+                Message: GetQueryString('Info'),
+                FK_Flow: GetQueryString("FK_Flow")
+            };
 
-                        var returnNodeArr = JSON.parse(data);
-                        var DDL_NodesHtml = '';
-
-                        $.each(returnNodeArr, function (i, returnNode) {
-                            DDL_NodesHtml += '<option selected="selected" value="' + returnNode.No + '">' + returnNode.Name + '=&gt;' + returnNode.RecName + '</option>';
-                        });
-
-                        $('#DDL_Nodes').html(DDL_NodesHtml);
+            $.ajax({
+                type: 'post',
+                async: true,
+                data: null,
+                url: Handler + "?DoType=ReturnToNodes&FK_Node=" + pageData.FK_Node + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        console.error("退回窗口错误信息" + data);
+                        return;
                     }
-                });
+                    var returnNodeArr = JSON.parse(data);
+                    var DDL_NodesHtml = '';
+
+                    $.each(returnNodeArr, function (i, returnNode) {
+                        DDL_NodesHtml += '<option selected="selected" value="' + returnNode.No + '">' + returnNode.Name + '=&gt;' + returnNode.RecName + '</option>';
+                    });
+
+                    $('#DDL_Nodes').html(DDL_NodesHtml);
+                }
+            });
 
         });
 
         //确定 退回 执行退回操作
-        function ReturnWork() {
+        function ReturnWork(isBack) {
             //WorkID, this.FID, this.FK_Node
             $.ajax({
                 type: 'post',
                 async: true,
-                data: { FK_Flow: GetQueryString('FK_Flow'), WorkID: pageData.WorkID, FID: pageData.FID, FK_Node: pageData.FK_Node },
-                url: Handler + "?DoType=DoReturnWork&m=" + Math.random() + "&IsBack=0&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnMsg=' + $('#TB_Doc').val(),
+                data: {},
+                url: Handler + "?DoType=DoReturnWork&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&FK_Node=" + pageData.FK_Node + "&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnMsg=' + $('#TB_Doc').val() + "&IsBack=" + isBack + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                        window.parent.returnWorkWindowClose();
+                        window.parent.returnWorkWindowClose(data);
                     }
                 }
             });
@@ -73,32 +85,17 @@
 </head>
 <body>
     <form id="cc">
-        <table>
-            <caption>工作退回</caption>
-            <tr>
-
-                <td>
+        <div>
+            <div>工作退回</div>
+            <div>
                     请选择要退回到的节点:
                     <select id="DDL_Nodes" name="DDL_Nodes"></select>
-                </td>
-
-                <td>  </td>
-            </tr>
-
-            <tr>
-                <td colspan=2> <textarea id="TB_Doc" name="TB_Doc"></textarea> </td>
-            </tr>
-
-
-            <tr>
-                <td colspan=2> 上传附件：</td>
-            </tr>
-
-
-            <tr>
-                <td colspan=2><input type="button" value="确定退回" onclick="ReturnWork();" /><input type="button" value="关闭" onclick="Close();" /></td>
-            </tr>
-        </table>
+            </div>
+            <div><textarea id="TB_Doc" name="TB_Doc"></textarea> </div>
+            <div> 上传附件：</div>
+            <div><input type="button" value="确定退回" onclick="ReturnWork(0);" /><input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" />
+                <input type="button" value="关闭" onclick="Close();" /></div>
+        </div>
     </form>
 </body>
 </html>

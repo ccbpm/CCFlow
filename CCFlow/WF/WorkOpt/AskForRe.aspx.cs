@@ -81,8 +81,7 @@ namespace CCFlow.WF.WorkOpt
             }
 
             string replay= this.Pub1.GetTextBoxByID("TB_Doc").Text;
-            string info = BP.WF.Dev2Interface.Node_AskforReply(this.FK_Flow, this.FK_Node,
-                 this.WorkID, this.FID, replay);
+            string info = BP.WF.Dev2Interface.Node_AskforReply(this.WorkID, replay);
 
             this.ToMsg(info, "Info");
         }

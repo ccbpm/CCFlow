@@ -1516,7 +1516,7 @@ public class CCFlowAPI : CCForm
     {
         this.LetUserLogin(userNo, sid);
 
-        string info = BP.WF.Dev2Interface.Node_AskforReply(fk_flow, fk_node, workID, fid, replyNote);
+        string info = BP.WF.Dev2Interface.Node_AskforReply(workID, replyNote);
 
         return info;
     }

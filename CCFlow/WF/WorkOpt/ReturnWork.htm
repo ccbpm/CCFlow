@@ -52,7 +52,7 @@
                 type: 'post',
                 async: true,
                 data: { FK_Flow: GetQueryString('FK_Flow'), WorkID: pageData.WorkID, FID: pageData.FID, FK_Node: pageData.FK_Node },
-                url: Handler + "?DoType=DoReturnWork&m=" + Math.random() + "&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnMsg=' + $('#TB_Doc').val(),
+                url: Handler + "?DoType=DoReturnWork&m=" + Math.random() + "&IsBack=0&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnMsg=' + $('#TB_Doc').val(),
                 dataType: 'html',
                 success: function (data) {
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
@@ -81,20 +81,22 @@
                     请选择要退回到的节点:
                     <select id="DDL_Nodes" name="DDL_Nodes"></select>
                 </td>
+
+                <td>  </td>
             </tr>
 
             <tr>
-                <td> <textarea id="TB_Doc" name="TB_Doc"></textarea> </td>
-            </tr>
-
-
-            <tr>
-                <td> 上传附件：</td>
+                <td colspan=2> <textarea id="TB_Doc" name="TB_Doc"></textarea> </td>
             </tr>
 
 
             <tr>
-                <td><input type="button" value="确定退回" onclick="ReturnWork();" /><input type="button" value="关闭" onclick="Close();" /></td>
+                <td colspan=2> 上传附件：</td>
+            </tr>
+
+
+            <tr>
+                <td colspan=2><input type="button" value="确定退回" onclick="ReturnWork();" /><input type="button" value="关闭" onclick="Close();" /></td>
             </tr>
         </table>
     </form>

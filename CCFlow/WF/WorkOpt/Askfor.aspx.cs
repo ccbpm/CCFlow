@@ -102,14 +102,14 @@ namespace CCFlow.WF.WorkOpt
             RadioButton rb = new RadioButton();
             rb.ID = "RB_0";
             rb.GroupName = "s";
-            rb.Text = "对方加签后,直接发送到下一步骤.";
+            rb.Text = "对方加签后,直接发送到下一步.";
             rb.Checked = true;
             this.Pub2.Add(rb);
 
             rb = new RadioButton();
             rb.ID = "RB_1";
             rb.GroupName = "s";
-            rb.Text = "对方加签后在转发给我,由我发送到下一步骤.";
+            rb.Text = "对方加签后转发给我,由我发送到下一步.";
             this.Pub2.Add(rb);
             this.Pub2.AddTDEnd();
             this.Pub2.AddTREnd();

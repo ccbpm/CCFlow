@@ -2259,7 +2259,9 @@
     <Content Include="WF\Admin\FoolFormDesigner\RETemplete.aspx" />
     <Content Include="WF\WorkOpt\AccepterAdv.aspx" />
     <Content Include="WF\WorkOpt\Askfor.aspx" />
+    <Content Include="WF\WorkOpt\Askfor.htm" />
     <Content Include="WF\WorkOpt\AskForRe.aspx" />
+    <Content Include="WF\WorkOpt\AskForRe.htm" />
     <Content Include="WF\WorkOpt\CCCheckNote.aspx" />
     <Content Include="WF\WorkOpt\CCFlowAPI.asmx" />
     <Content Include="WF\WorkOpt\CCFlowAPITester.aspx" />
@@ -2764,6 +2766,7 @@
     <Content Include="WF\WorkOpt\PRI.aspx" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.aspx" />
+    <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.aspx" />
     <Content Include="WF\WorkOpt\SelectEmps.htm" />
     <Content Include="WF\WorkOpt\SelectNode.aspx" />

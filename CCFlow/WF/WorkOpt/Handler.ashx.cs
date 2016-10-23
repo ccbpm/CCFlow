@@ -204,8 +204,11 @@ namespace CCFlow.WF.WorkOpt
             {
                 switch (this.DoType)
                 {
-                    case "Askfor":
+                    case "Askfor": //加签.
                         msg = this.Askfor();
+                        break;
+                    case "AskForRe": //回复加签.
+                        msg = this.AskForRe();
                         break;
                     case "SelectEmps":
                         msg = this.SelectEmps();
@@ -242,6 +245,16 @@ namespace CCFlow.WF.WorkOpt
                 context.Response.Write("err@" + ex.Message);
             }
             //输出信息.
+        }
+
+        /// <summary>
+        /// 回复加签信息.
+        /// </summary>
+        /// <returns></returns>
+        public string AskForRe()
+        {
+            string note = context.Request.QueryString["Note"]; //原因.
+            return BP.WF.Dev2Interface.Node_AskforReply( this.WorkID,  note);
         }
         /// <summary>
         /// 执行加签

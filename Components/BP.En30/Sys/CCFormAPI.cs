@@ -673,9 +673,21 @@ namespace BP.Sys
                     continue;
                 }
 
-                
-            
+                if (shape == "Fieldset")
+                {
+                    //记录已经存在的ID， 需要当时保存.
+                    BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);
+                    eleIDs = eleIDs.Replace(ctrlID + "@", "@");
+                    continue;
+                }
 
+                if (shape == "RadioButton")
+                {
+                    //记录已经存在的ID， 需要当时保存.
+                    BP.Sys.CCFormParse.SaveFrmRadioButton(fk_mapdata, ctrlID, x, y);
+                    eleIDs = eleIDs.Replace(ctrlID + "@", "@");
+                    continue;
+                }
                 
                 #endregion 附件.
 

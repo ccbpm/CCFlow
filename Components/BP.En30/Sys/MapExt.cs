@@ -129,6 +129,10 @@ namespace BP.Sys
         /// </summary>
         public const string Tag3 = "Tag3";
         /// <summary>
+        /// tag4
+        /// </summary>
+        public const string Tag4 = "Tag4";
+        /// <summary>
         /// 数据源
         /// </summary>
         public const string DBSrc = "DBSrc";
@@ -208,6 +212,10 @@ namespace BP.Sys
             ht.Add("PopValTitle", this.PopValTitle); //窗口标题.
             ht.Add("PopValColNames", this.PopValColNames); //列名 @No=编号@Name=名称@Addr=地址.
             ht.Add("PopValSearchTip", this.PopValSearchTip); //搜索提示..
+
+            //查询条件.
+            ht.Add("PopValSearchCond", this.PopValSearchCond); //查询条件..
+
 
             //转化为Json.
             return ht;
@@ -397,6 +405,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 查询条件
+        /// </summary>
+        public string PopValSearchCond
+        {
+            get
+            {
+              return  this.Tag4;
+            }
+            set
+            {
+                this.Tag4 = value;
+            }
+        }
+        /// <summary>
         /// 搜索提示关键字
         /// </summary>
         public string PopValSearchTip
@@ -410,6 +432,8 @@ namespace BP.Sys
                 this.SetPara("PopValSearchTip", value);
             }
         }
+
+        
         /// <summary>
         /// 数据源
         /// </summary>
@@ -424,26 +448,7 @@ namespace BP.Sys
                 this.SetValByKey(MapExtAttr.FK_DBSrc, value);
             }
         }
-
-
-        /// <summary>
-        /// pop 多个搜索条件
-        /// 0,多选,1=单选.
-        /// </summary>
-        public PopValSelectModel PopValSearchConditions
-        {
-            get
-            {
-                return (PopValSelectModel)this.GetParaInt("PopValSelectModel");
-            }
-            set
-            {
-                this.SetPara("PopValSelectModel", (int)value);
-            }
-        }
         #endregion
-
-
 
         #region 属性
         public string ExtDesc
@@ -669,6 +674,19 @@ namespace BP.Sys
                 this.SetValByKey("Tag3", value);
             }
         }
+        public string Tag4
+        {
+            get
+            {
+                return this.GetValStrByKey("Tag4").Replace("~", "'");
+            }
+            set
+            {
+                this.SetValByKey("Tag4", value);
+            }
+        }
+
+        
         public int H
         {
             get
@@ -740,6 +758,7 @@ namespace BP.Sys
                 map.AddTBString(MapExtAttr.Tag1, null, "Tag1", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag2, null, "Tag2", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag3, null, "Tag3", true, false, 0, 2000, 20);
+                map.AddTBString(MapExtAttr.Tag4, null, "Tag4", true, false, 0, 2000, 20);
 
                 map.AddTBString(MapExtAttr.AtPara, null, "参数", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.DBSrc, null, "数据源", true, false, 0, 20, 20);

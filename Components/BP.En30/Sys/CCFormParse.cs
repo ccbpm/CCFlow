@@ -16,13 +16,13 @@ namespace BP.Sys
         /// <summary>
         /// 保存元素
         /// </summary>
-        /// <param name="fk_mapdata"></param>
-        /// <param name="eleType"></param>
-        /// <param name="ctrlID"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="h"></param>
-        /// <param name="w"></param>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="eleType">元素类型</param>
+        /// <param name="ctrlID">控件ID</param>
+        /// <param name="x">位置</param>
+        /// <param name="y">位置</param>
+        /// <param name="h">高度</param>
+        /// <param name="w">宽度</param>
         public static void SaveFrmEle(string fk_mapdata,string eleType, string ctrlID, float x, float y, float h, float w)
         {
             FrmEle en = new FrmEle();
@@ -39,7 +39,32 @@ namespace BP.Sys
             en.H = h;
             en.Update();
         }
-
+        /// <summary>
+        /// 保存一个rb
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="ctrlID">控件ID</param>
+        /// <param name="x">位置x</param>
+        /// <param name="y">位置y</param>
+        public static void SaveFrmRadioButton(string fk_mapdata, string ctrlID, float x, float y)
+        {
+            FrmRB en = new FrmRB();
+            en.MyPK = fk_mapdata + "_" + ctrlID;
+            int i= en.RetrieveFromDBSources();
+            en.FK_MapData = fk_mapdata;
+            en.X = x;
+            en.Y = y;
+            en.Update();
+        }
+        /// <summary>
+        /// 保存图片
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="ctrlID">空间ID</param>
+        /// <param name="x">位置x</param>
+        /// <param name="y">位置y</param>
+        /// <param name="h">高度h</param>
+        /// <param name="w">宽度w</param>
         public static void SaveAthImg(string fk_mapdata, string ctrlID, float x, float y, float h, float w)
         {
             FrmImgAth en = new FrmImgAth();
@@ -54,7 +79,15 @@ namespace BP.Sys
             en.H = h;
             en.Update();
         }
- 
+        /// <summary>
+        /// 保存多附件
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="ctrlID">控件ID</param>
+        /// <param name="x">位置x</param>
+        /// <param name="y">位置y</param>
+        /// <param name="h">高度</param>
+        /// <param name="w">宽度</param>
         public static void SaveAthMulti(string fk_mapdata,string ctrlID, float x, float y, float h, float w)
         {
             FrmAttachment en = new FrmAttachment();

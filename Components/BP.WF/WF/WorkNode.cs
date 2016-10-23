@@ -2254,9 +2254,9 @@ namespace BP.WF
                 if (this.HisNode.IsStartNode)
                 {
                     if (WebUser.IsWap)
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.aspx?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + toND.FK_Flow + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.aspx?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse( toND.FK_Flow) + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。", SendReturnMsgType.Info);
                     else
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/MyFlow.aspx?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + toND.FK_Flow + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/MyFlow.aspx?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。", SendReturnMsgType.Info);
                 }
                 else
                     this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>。", SendReturnMsgType.Info);
@@ -3190,9 +3190,9 @@ namespace BP.WF
             if (this.HisNode.IsStartNode)
             {
                 if (WebUser.IsWap)
-                    this.addMsg("UnDoNew", "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.aspx?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + toNode.FK_Flow + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
+                    this.addMsg("UnDoNew", "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.aspx?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
                 else
-                    this.addMsg("UnDoNew", "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + toNode.FK_Flow + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
+                    this.addMsg("UnDoNew", "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
             }
             else
             {

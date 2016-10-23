@@ -6416,7 +6416,7 @@ namespace BP.WF
         /// <param name="fid">FID</param>
         /// <param name="replyNote">答复信息</param>
         /// <returns></returns>
-        public static string Node_AskforReply(string fk_flow, int fk_node, Int64 workid, Int64 fid, string replyNote)
+        public static string Node_AskforReply(Int64 workid, string replyNote)
         {
             // 把回复信息临时的写入 流程注册信息表以便让发送方法获取这个信息写入日志.
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
@@ -6424,9 +6424,9 @@ namespace BP.WF
             gwf.Update();
 
             //执行发送, 在发送的方法里面已经做了判断了,并且把 回复的信息写入了日志.
-            string info = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid).ToMsgOfHtml();
+            string info = BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, workid).ToMsgOfHtml();
 
-            Node node = new Node(fk_node);
+            Node node = new Node(gwf.FK_Node);
             Work wk = node.HisWork;
             wk.OID = workid;
             wk.RetrieveFromDBSources();

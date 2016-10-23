@@ -342,7 +342,7 @@ namespace BP.WF
 
                             DataRow drMsg = dtAlert.NewRow();
                             drMsg["Title"] = worker + "," + workerName + "请求加签:";
-                            drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
+                            drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
                             dtAlert.Rows.Add(drMsg);
 
                             //提示信息.

@@ -295,7 +295,13 @@ namespace CCFlow.WF.WorkOpt
         {
             int toNodeID = int.Parse(context.Request.QueryString["ReturnToNode"]);
             string reMesage = context.Request.QueryString["ReturnMsg"];
-            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, true);
+
+            bool isBackBoolen = false;
+            string isBack = context.Request.QueryString["IsBack"];
+            if (isBack == "1")
+                isBackBoolen = true;
+
+            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, isBackBoolen);
         }
         #endregion
 

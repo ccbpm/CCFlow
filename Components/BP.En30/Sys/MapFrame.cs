@@ -66,20 +66,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 编号
-        /// </summary>
-        public string NoOfObj
-        {
-            get
-            {
-                return this.GetValStrByKey(MapFrameAttr.NoOfObj);
-            }
-            set
-            {
-                this.SetValByKey(MapFrameAttr.NoOfObj, value);
-            }
-        }
-        /// <summary>
         /// 名称
         /// </summary>
         public string Name
@@ -209,16 +195,13 @@ namespace BP.Sys
                 map.EnType = EnType.Sys;
 
                 map.AddMyPK();
-                map.AddTBString(MapFrameAttr.NoOfObj, null, "编号", true, false, 1, 20, 20);
-                map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 1, 200, 20);
+                map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20);
 
                 map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, false, 0, 100, 20);
                 map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20);
                 map.AddTBString(MapFrameAttr.W, null, "W", true, false, 0, 20, 20);
                 map.AddTBString(MapFrameAttr.H, null, "H", true, false, 0, 20, 20);
 
-                //map.AddTBInt(MapFrameAttr.H, 500, "高度", false, false);
-                //map.AddTBInt(MapFrameAttr.W, 400, "宽度", false, false);
 
                 map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
                 map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
@@ -228,12 +211,6 @@ namespace BP.Sys
                 this._enMap = map;
                 return this._enMap;
             }
-        }
-      
-        protected override bool beforeUpdateInsertAction()
-        {
-            this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
-            return base.beforeUpdateInsertAction();
         }
 
         /// <summary>

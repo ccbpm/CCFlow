@@ -1942,7 +1942,6 @@ namespace BP.Sys
 
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
                             }
-                            en.NoOfObj = "Fra_" + idx + "_" + fk_mapdata;
                             en.Insert();
                         }
                         break;

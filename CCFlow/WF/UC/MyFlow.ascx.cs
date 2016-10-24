@@ -2206,7 +2206,7 @@ namespace CCFlow.WF.UC
                 if (exSend.Message.Contains("请选择下一步骤工作") == true || exSend.Message.Contains("用户没有选择发送到的节点") == true)
                 {
                     BtnLab btn = new BtnLab(this.FK_Node);
-                    btn.SelectAccepterEnable = 1;
+                    btn.SelectAccepterEnable = 2;
                     btn.Update();
 
                     this.FlowMsg.AddFieldSetGreen("错误");

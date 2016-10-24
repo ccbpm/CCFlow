@@ -69,6 +69,8 @@
                 success: function (data) {
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                         window.parent.returnWorkWindowClose(data);
+                    } else {
+                        $('body').append($('<div>'+data+'</div>'));
                     }
                 }
             });
@@ -78,6 +80,9 @@
         function Close() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("取消");
+            }
+            else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
             }
         }
       

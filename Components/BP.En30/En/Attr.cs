@@ -56,23 +56,23 @@ namespace BP.En
 	/// <summary>
 	///  控件类型
 	/// </summary>
-	public enum UIContralType
-	{
-		/// <summary>
-		/// 文本框
-		/// </summary>
-		TB=0,
-		/// <summary>
-		/// 下拉框
-		/// </summary>
-		DDL=1,
-		/// <summary>
-		/// CheckBok
-		/// </summary>
-		CheckBok=2,
-		/// <summary>
-		/// 单选择按钮
-		/// </summary>
+    public enum UIContralType
+    {
+        /// <summary>
+        /// 文本框
+        /// </summary>
+        TB = 0,
+        /// <summary>
+        /// 下拉框
+        /// </summary>
+        DDL = 1,
+        /// <summary>
+        /// CheckBok
+        /// </summary>
+        CheckBok = 2,
+        /// <summary>
+        /// 单选择按钮
+        /// </summary>
         RadioBtn = 3,
         /// <summary>
         /// 地图定位
@@ -81,8 +81,12 @@ namespace BP.En
         /// <summary>
         /// 录音控件
         /// </summary>
-        MicHot = 5
-	}
+        MicHot = 5,
+        /// <summary>
+        /// 附件展示控件
+        /// </summary>
+        AthShow = 6
+    }
     /// <summary>
     /// 逻辑类型
     /// </summary>

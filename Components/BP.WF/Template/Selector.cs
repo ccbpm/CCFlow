@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Data;
 using BP.DA;
 using BP.Sys;
 using BP.En;
 using BP.WF.Port;
+using BP.Web;
 
 namespace BP.WF.Template
 {
@@ -271,15 +273,10 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SelectorAttr.SelectorModel, 0, "窗口模式", true, true, SelectorAttr.SelectorModel,
                     "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url");
 
-
-                //map.AddTBString(SelectorAttr.SelectorP1, null, "参数1", true, false, 0, 500, 10, true);
-                //map.AddTBString(SelectorAttr.SelectorP2, null, "参数2", true, false, 0, 500, 10, true);
-
                 map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "参数1", true, false, true);
                 map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "参数2", true, false, true);
 
             
-
                 // 相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
                     NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
@@ -297,6 +294,132 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        /// <summary>
+        /// 产生数据.
+        /// </summary>
+        /// <returns></returns>
+        public System.Data.DataSet GenerDataSet(int nodeid)
+        {
+            switch (this.SelectorModel)
+            {
+                case Template.SelectorModel.Dept:
+                    return ByDept(nodeid);
+                case Template.SelectorModel.Emp:
+                    return ByEmp(nodeid);
+                case Template.SelectorModel.Station:
+                    return ByStation(nodeid);
+                case Template.SelectorModel.SQL:
+                    return BySQL(nodeid);
+                default:
+                    break;
+            }
+            return null;
+        }
+        /// <summary>
+        /// 按照SQL计算.
+        /// </summary>
+        /// <param name="nodeID">节点ID</param>
+        /// <returns>返回值</returns>
+        private DataSet BySQL(int nodeID)
+        {
+            // 定义数据容器.
+            DataSet ds = new DataSet();
+
+            //部门.
+            string sqlGroup = this.SelectorP1;
+            sqlGroup = sqlGroup.Replace("@WebUser.No", WebUser.No);
+            sqlGroup = sqlGroup.Replace("@WebUser.Name", WebUser.Name);
+            sqlGroup = sqlGroup.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);
+            dt.TableName = "Depts";
+            ds.Tables.Add(dt);
+
+            //人员.
+            string sqlDB = this.SelectorP2;
+            sqlDB = sqlDB.Replace("@WebUser.No", WebUser.No);
+            sqlDB = sqlDB.Replace("@WebUser.Name", WebUser.Name);
+            sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
+            dtEmp.TableName = "Emps";
+            ds.Tables.Add(dtEmp);
+            return ds;
+        }
+
+        /// <summary>
+        /// 按照部门获取部门人员树.
+        /// </summary>
+        /// <param name="nodeID">节点ID</param>
+        /// <returns>返回数据源dataset</returns>
+        private DataSet ByDept(int nodeID)
+        {
+            // 定义数据容器.
+            DataSet ds = new DataSet();
+
+            //部门.
+            string sql = "SELECT a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node="+nodeID;
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Depts";
+            ds.Tables.Add(dt);
+
+            //人员.
+            sql = "SELECT a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeDept b WHERE a.FK_Dept=b.FK_Dept AND B.FK_Node=" + nodeID;
+             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+             dtEmp.TableName = "Emps";
+             ds.Tables.Add(dtEmp);
+             return ds;
+        }
+
+        /// <summary>
+        /// 按照Emp获取部门人员树.
+        /// </summary>
+        /// <param name="nodeID">节点ID</param>
+        /// <returns>返回数据源dataset</returns>
+        private DataSet ByEmp(int nodeID)
+        {
+            // 定义数据容器.
+            DataSet ds = new DataSet();
+
+            //部门.
+            string sql = "SELECT a.No,a.Name, a.ParentNo FROM Port_Dept a, WF_NodeEmp b, Port_Emp c WHERE b.FK_Emp=c.No AND a.No=c.FK_Dept AND B.FK_Node=" + nodeID;
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Depts";
+            ds.Tables.Add(dt);
+
+            //人员.
+            sql = "SELECT a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeEmp b WHERE a.No=b.FK_Emp AND b.FK_Node=" + nodeID;
+            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp.TableName = "Emps";
+            ds.Tables.Add(dtEmp);
+            return ds;
+        }
+
+        /// <summary>
+        /// 按照Station获取部门人员树.
+        /// </summary>
+        /// <param name="nodeID">节点ID</param>
+        /// <returns>返回数据源dataset</returns>
+        private DataSet ByStation(int nodeID)
+        {
+            // 定义数据容器.
+            DataSet ds = new DataSet();
+
+            //部门.
+            string sql = "SELECT a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Depts";
+            ds.Tables.Add(dt);
+
+
+            //人员.
+            sql = "SELECT a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
+            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp.TableName = "Emps";
+            ds.Tables.Add(dtEmp);
+            return ds;
+        }
+
+
     }
     /// <summary>
     /// Accpter

@@ -355,6 +355,9 @@ namespace BP.Sys
                 return DataType.IsNumStr(this.KeyOfEn.Replace("F", ""));
             }
         }
+        /// <summary>
+        /// 转换成属性.
+        /// </summary>
         public Attr HisAttr
         {
             get
@@ -460,6 +463,9 @@ namespace BP.Sys
                 }
             }
         }
+        /// <summary>
+        /// 编辑类型
+        /// </summary>
         public EditType HisEditType
         {
             get
@@ -471,6 +477,9 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.EditType, (int)value);
             }
         }
+        /// <summary>
+        /// 表单ID
+        /// </summary>
         public string FK_MapData
         {
             get
@@ -482,7 +491,9 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.FK_MapData, value);
             }
         }
-      
+        /// <summary>
+        /// 字段名
+        /// </summary>
         public string KeyOfEn
         {
             get
@@ -944,11 +955,6 @@ namespace BP.Sys
             get
             {
                 return 0;
-                //Graphics2D g2 = (Graphics2D)g;
-                //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                //                        RenderingHints.VALUE_ANTIALIAS_ON);
-                //int textWidth = getFontMetrics(g2.getFont()).bytesWidth(str.getBytes(), 0, str.getBytes().length); 
-
             }
         }
         /// <summary>

@@ -145,14 +145,13 @@ namespace BP.Sys
         public string ToJson()
         {
             Hashtable ht = this.Row;
-
             //控件类型.
-            ht["UIContralType"] = this.UIContralType.ToString();
+           // ht["UIContralType"] = this.UIContralType.ToString();
 
             switch (this.UIContralType)
             {
                 case En.UIContralType.AthShow: //附件控件.
-                    ht["AthShowModel"] = this.AthShowModel.ToString();
+                    //   ht["AthShowModel"] = this.AthShowModel.ToString();
                     break;
                 default:
                     break;

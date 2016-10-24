@@ -2186,6 +2186,7 @@ namespace BP.WF
                 string textInfo = string.Format("@发送给如下{0}位处理人,{1}.",this.HisRememberMe.NumOfObjs.ToString(), this.HisRememberMe.ObjsExt);
 
                 this.addMsg(SendReturnMsgFlag.ToEmps, textInfo, htmlInfo);
+
             }
 
 
@@ -5658,7 +5659,7 @@ namespace BP.WF
 
                 //做了不可能性的判断.
                 if (this.HisGenerWorkFlow.FK_Node != this.HisNode.NodeID)
-                    throw new Exception("@流程出现的错误,工作ID="+this.WorkID+",当前活动点(" + this.HisGenerWorkFlow.FK_Node + "" + this.HisGenerWorkFlow.NodeName + ")与发送点("+this.HisNode.NodeID+this.HisNode.Name+")不一致");
+                    throw new Exception("@流程出现的错误,工作ID=" + this.WorkID + ",当前活动点(" + this.HisGenerWorkFlow.FK_Node + "" + this.HisGenerWorkFlow.NodeName + ")与发送点(" + this.HisNode.NodeID + this.HisNode.Name + ")不一致");
 
                 // 检查完成条件。
                 if (jumpToNode != null && this.HisNode.IsEndNode)
@@ -5704,8 +5705,8 @@ namespace BP.WF
                 else
                     this.addMsg(SendReturnMsgFlag.IsStopFlow, "0", "流程未结束", SendReturnMsgType.SystemMsg);
 
-                string mymsgHtml =  "@查看<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='" + VirPath + "WF/WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
-                this.addMsg(SendReturnMsgFlag.MsgOfText, mymsgHtml );
+                string mymsgHtml = "@查看<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='" + VirPath + "WF/WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
+                this.addMsg(SendReturnMsgFlag.MsgOfText, mymsgHtml);
 
                 if (this.IsStopFlow == true)
                 {
@@ -5949,14 +5950,14 @@ namespace BP.WF
 
                         if (isPass == false)
                         {
-                            msg += "@不符合子流程[" + fl.Name + "]启动条件。"; 
+                            msg += "@不符合子流程[" + fl.Name + "]启动条件。";
                             continue;
                         }
                         #endregion 检查流程启动条件.
 
                         //启动子流程.
-                      SendReturnObjs sendObjs=  BP.WF.Dev2Interface.Node_StartWork(fl.No, this.HisWork.Row, null, 0, null, this.WorkID, this.HisFlow.No);
-                      msg += "@子流程[" + fl.Name + "]已经启动，已经发送给：" + sendObjs.VarAcceptersName + "，发送到：" + sendObjs.VarToNodeName+"。";
+                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_StartWork(fl.No, this.HisWork.Row, null, 0, null, this.WorkID, this.HisFlow.No);
+                        msg += "@子流程[" + fl.Name + "]已经启动，已经发送给：" + sendObjs.VarAcceptersName + "，发送到：" + sendObjs.VarToNodeName + "。";
                     }
                     if (msg != "")
                         this.addMsg(SendReturnMsgFlag.MsgOfText, msg);
@@ -6128,19 +6129,19 @@ namespace BP.WF
                 }
                 #endregion 设置流程的标记.
 
-              
+
 
                 //执行时效考核.
                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
 
                 #region 触发下一个节点的自动发送, 处理国机的需求.
-                if (this.HisMsgObjs.VarToNodeID !=null 
-                    &&  this.town != null 
-                    && this.town.HisNode.WhoExeIt !=0  )
+                if (this.HisMsgObjs.VarToNodeID != null
+                    && this.town != null
+                    && this.town.HisNode.WhoExeIt != 0)
                 {
                     string currUser = BP.Web.WebUser.No;
                     string[] emps = this.HisMsgObjs.VarAcceptersID.Split(',');
-                    foreach (string emp  in emps)
+                    foreach (string emp in emps)
                     {
                         if (string.IsNullOrEmpty(emp))
                             continue;
@@ -6156,14 +6157,14 @@ namespace BP.WF
                                 /*如果当前的节点是子线程，并且发送到的节点非子线程。
                                  * 就是子线程发送到非子线程的情况。
                                  */
-                                this.HisMsgObjs= BP.WF.Dev2Interface.Node_SendWork(this.HisNode.FK_Flow, this.HisWork.FID);
+                                this.HisMsgObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisNode.FK_Flow, this.HisWork.FID);
                             }
                             else
                             {
                                 this.HisMsgObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisNode.FK_Flow, this.HisWork.OID);
                             }
                         }
-                        catch 
+                        catch
                         {
                             // 可能是正常的阻挡发送，操作不必提示。
                             //this.HisMsgObjs.AddMsg("Auto"
@@ -6187,6 +6188,20 @@ namespace BP.WF
 
                 #endregion 计算未来处理人.
 
+                #region 判断当前处理人员，可否处理下一步工作.
+
+                if (this.town != null
+                    && this.HisRememberMe!=null 
+                    && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
+                {
+                    string url = "MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID;
+
+                    string htmlInfo = "@<a href='" + url + "' >下一步工作，您仍然可以处理，点击这里现在处理。</a>.";
+                    string textInfo = "@下一步工作，您仍然可以处理。";
+
+                    this.addMsg(SendReturnMsgFlag.ToEmps, textInfo, htmlInfo);
+                }
+                #endregion 判断当前处理人员，可否处理下一步工作.
 
                 //返回这个对象.
                 return this.HisMsgObjs;

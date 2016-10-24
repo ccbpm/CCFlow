@@ -85,7 +85,12 @@ namespace BP.En
         /// <summary>
         /// 附件展示控件
         /// </summary>
-        AthShow = 6
+        AthShow = 6,
+        /// <summary>
+        /// 拍照控件
+        /// </summary>
+        Picture=7
+
     }
     /// <summary>
     /// 逻辑类型

@@ -5,6 +5,11 @@ function Esc() {
     return true;
 }
 
+/* 把一个 @XB=1@Age=25 转化成一个js对象.  */
+function AtParaToJson(json) {
+   
+}
+
 //获得所有的checkbox 的id组成一个string用逗号分开, 以方便后台接受的值保存.
 function GenerCheckIDs() {
 
@@ -22,7 +27,13 @@ function GenerCheckIDs() {
 }
 
 //填充下拉框.
-function GenerFullDropDownListCtrl(ddlCtrlID, data, noCol, nameCol, selectVal) {
+function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
+
+    if (noCol == null)
+        noCol = "No";
+
+    if (nameCol == null)
+        nameCol = "Name";
 
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
 
@@ -69,7 +80,7 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
         success: function (data) {
             data = JSON.parse(data);
             //绑定枚举值.
-            GenerFullDropDownListCtrl(ctrlDDLId, data, "IntKey", "Lab");
+            GenerBindDDL(ctrlDDLId, data, "IntKey", "Lab");
             return;
         }
     });
@@ -94,7 +105,7 @@ function GenerBindEntities(ctrlDDLId, ensName, selectVal) {
 
             data = JSON.parse(data);
             //绑定枚举值.
-            GenerFullDropDownListCtrl(ctrlDDLId, data, "No", "Name",selectVal);
+            GenerBindDDL(ctrlDDLId, data, "No", "Name",selectVal);
             return;
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -118,7 +129,7 @@ function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
         success: function (data) {
             data = JSON.parse(data);
             //绑定枚举值.
-            GenerFullDropDownListCtrl(ctrlDDLId, data, "No", "Name", selectVal);
+            GenerBindDDL(ctrlDDLId, data, "No", "Name", selectVal);
             return;
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -130,7 +141,7 @@ function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
 
 /* 绑定SQL.
 1. 调用这个方法，需要在 SQLList.xml 配置一个SQL , sqlKey 就是该sql的标记.
-2, paras 就是向这个sql传递的参数, 比如： @FK_Mapdata=BAC.
+2, paras 就是向这个sql传递的参数, 比如： @FK_Mapdata=BAC@KeyOfEn=MyFild  .
 */
 function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
 
@@ -152,7 +163,7 @@ function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
 
             data = JSON.parse(data);
             //绑定枚举值.
-            GenerFullDropDownListCtrl(ctrlDDLId, data, colNo, colName);
+            GenerBindDDL(ctrlDDLId, data, colNo, colName);
             return;
         }
     });

@@ -273,7 +273,27 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         }
         public string EditFExtContral_Save()
         {
-            return null;
+
+            ExtContral ext = new ExtContral(this.FK_MapData, this.KeyOfEn);
+
+            //用户选择的控件类型.
+            int model = this.GetValIntFromFrmByKey("Model");
+            UIContralType ctrlType = (UIContralType)model;
+
+            switch (ctrlType)
+            {
+                case UIContralType.AthShow: //附件模式.= 6
+                    ext.AthRefObj = this.GetValFromFrmByKey("DDL_Ath");
+                    ext.AthShowModel = (AthShowModel)this.GetValIntFromFrmByKey("DDL_AthShowModel");
+                    break;
+                default:
+                    break;
+            }
+
+            //执行保存.
+            ext.Update();
+
+            return "保存成功.";
         }
         #endregion textbox 扩展控件保存与展现.
 

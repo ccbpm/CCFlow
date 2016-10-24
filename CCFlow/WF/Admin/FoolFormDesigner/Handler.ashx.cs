@@ -858,6 +858,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     //最大最小长度.
                     attr.MaxLen = this.GetValIntFromFrmByKey("TB_MaxLen");
                     attr.MinLen = this.GetValIntFromFrmByKey("TB_MinLen");
+
+                    attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
+
                 }
 
                 //是否可用？所有类型的属性，都需要。

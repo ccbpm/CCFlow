@@ -81,6 +81,7 @@
                 document.getElementById("tr3").style.display = 'none';
                 document.getElementById("tr4").style.display = 'none';
                 document.getElementById("tr5").style.display = 'none';
+                document.getElementById("tr6").style.display = 'none';
             }
 
             //设置不可以用.
@@ -107,6 +108,10 @@
                     $("#DDL_ColSpan").val(data.ColSpan);   //跨的列数.
                     $("#TB_FontSize").val(data.FontSize);  //字体大小.
 
+
+
+                    
+
                     //所在的字段分组.
                     if (data.GroupID != 0)
                         $("#DDL_GroupID").val(data.GroupID);
@@ -129,14 +134,13 @@
                     if (data.IsRichText == "1")
                         $("#CB_IsRichText").attr("checked", true);
 
-
-
                     var htmlLink = "";
                     if (data.MyDataType == 1) {
 
                         //最大最小长度.
                         $("#TB_MinLen").val(data.MinLen);
                         $("#TB_MaxLen").val(data.MaxLen);
+                        $("#TB_UIWidth").val(data.UIWidth);  //宽度..
 
 
                         //默认值.
@@ -167,7 +171,7 @@
                         htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/InputCheck.htm?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">脚本验证</a>";
 
                         //自动计算.
-                        htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
+                        // htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
                     }
 
 
@@ -300,6 +304,12 @@
 <td>sqlserver不要超过4000</td>
 </tr>
    
+ <tr id='tr6' > 
+<td>文本框宽度 </td>
+<td> <input type="text" id="TB_UIWidth" name="TB_UIWidth" /> </td>
+<td>对从表有效.</td>
+</tr>
+
 <tr id='tr3' > 
 <td>文本框行数 </td>
 <td> <select name="DDL_Rows" id="DDL_Rows"> 

@@ -5,6 +5,7 @@ using System.Data;
 using BP.DA;
 using BP.En;
 using BP.WF;
+using BP.WF.Template;
 
 namespace CCFlow.WF.WorkOpt
 {
@@ -213,8 +214,11 @@ namespace CCFlow.WF.WorkOpt
                     case "SelectEmps":
                         msg = this.SelectEmps();
                         break;
-                    case "AccepterInit": //选择接受人按钮.
+                    case "AccepterInit": //首次加载.
                         msg= this.AccepterInit();
+                        break;
+                    case "AccepterSave": //保存.
+                        msg = this.AccepterSave();
                         break;
                     case "FlowBBSList": //获得流程评论列表.
                         msg = this.FlowBBSList();
@@ -305,7 +309,75 @@ namespace CCFlow.WF.WorkOpt
         /// <returns></returns>
         public string AccepterInit()
         {
-            return "";
+
+            int toNodeID = 0;
+            if (this.GetValFromFrmByKey("ToNode") != "0")
+                toNodeID = this.GetValIntFromFrmByKey("ToNode");
+
+            //当前节点.
+            Node nd = new Node(this.FK_Node);
+
+            //到达的节点, 用户生成到达节点的下拉框.
+            Nodes toNodes = nd.HisToNodes;
+            DataTable dtNodes = new DataTable();
+            dtNodes.TableName = "Nodes";
+            dtNodes.Columns.Add(new DataColumn("No", typeof(string)));
+            dtNodes.Columns.Add(new DataColumn("Name", typeof(string)));
+            foreach (Node item in toNodes)
+            {
+                DataRow dr = dtNodes.NewRow();
+                dr["No"] = item.NodeID;
+                dr["Name"] = item.Name;
+                dtNodes.Rows.Add(dr);
+            }
+
+            //求到达的节点.
+            if (toNodeID == 0)
+                toNodeID = toNodes[0].GetValIntByKey("NodeID");   //取第一个.
+
+            Selector select = new Selector(toNodeID);
+
+            //获得 部门与人员.
+            DataSet ds = select.GenerDataSet( toNodeID);
+
+            //加入到到达节点的列表.
+            ds.Tables.Add(dtNodes);
+
+            //返回json.
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        /// <summary>
+        /// 执行保存并发送.
+        /// </summary>
+        /// <returns>返回发送的结果.</returns>
+        public string AccepterSave()
+        {
+            try
+            {
+                //求到达的节点. 
+                int toNodeID = 0;
+                if (this.GetValFromFrmByKey("ToNode") != "0")
+                    toNodeID = this.GetValIntFromFrmByKey("ToNode");
+
+                if (toNodeID == 0)
+                {   //没有就获得第一个节点.
+                    Node nd = new Node(this.FK_Node);
+                    Nodes nds = nd.HisToNodes;
+                    toNodeID = nds[0].GetValIntByKey("NodeID");
+                }
+
+                //求发送到的人员.
+                string selectEmps = this.GetValFromFrmByKey("SelectEmps");
+
+                //执行发送.
+                SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, selectEmps);
+                return objs.ToMsgOfHtml();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
         #endregion
 

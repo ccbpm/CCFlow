@@ -7298,7 +7298,7 @@ namespace BP.WF
                     sql = "SELECT NDTo FROM ND" + int.Parse(flowNo) + "Track WHERE  RowNum=1 AND EmpFrom='" + BP.Web.WebUser.No + "' AND NDFrom=" + nodeID + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.SubFlowForward + ")  ORDER BY RDT DESC";
                     break;
                 case DBType.MySQL:
-                    sql = "SELECT NDTo FROM ND" + int.Parse(flowNo) + "Track WHERE  limit 0,1  AND EmpFrom='" + BP.Web.WebUser.No + "' AND NDFrom=" + nodeID + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.SubFlowForward + ")  ORDER BY RDT DESC";
+                    sql = "SELECT NDTo FROM ND" + int.Parse(flowNo) + "Track WHERE EmpFrom='" + BP.Web.WebUser.No + "' AND NDFrom=" + nodeID + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.SubFlowForward + ") limit 0,1";
                     break;
                 case DBType.Informix:
                     sql = "SELECT first 1 NDTo FROM ND" + int.Parse(flowNo) + "Track WHERE EmpFrom='" + BP.Web.WebUser.No + "' AND NDFrom=" + nodeID + " AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.SubFlowForward + ")  ORDER BY RDT DESC";

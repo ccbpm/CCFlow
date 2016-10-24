@@ -494,38 +494,59 @@ TransFormDataField.prototype = {
     paint: function () {
 
         var createdFigure = this.figure;
-
-        if ("RadioButton" == createdFigure.CCForm_Shape) {
-            return CrateRB(createdFigure, this.dataArrary );
-        }
-
-        //把主键给他.
-        if (this.dataArrary.KeyOfEn != null)
-            createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
-        if (this.dataArrary.No != null)
-            createdFigure.CCForm_MyPK = this.dataArrary.No;
-
-        //添加到Figures
-        //add to STACK
-        STACK.figureAdd(createdFigure);
-
-        //add property  增加属性.
-        createdFigure = this.Transform();
-
-        //change text  //设置控件上的ID文本.
-        var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
-        if (figureText != null) {
-
+        if (createdFigure.CCForm_Shape == "RadioButton") {
+            var rbArr = this.dataArrary.Vals.slice(1).split("@");
+            var s = [];
+            for (var i = 0; i < rbArr.length; i++) {
+                s.push("RB_" + this.dataArrary.KeyOfEn + "_" + rbArr[i]);
+            }
+            for (var k = 0; k < s.length; k++) {
+                if (this.dataArrary.KeyOfEn != null) {
+                    createdFigure.CCForm_MyPK = s[k];
+                    //if (createdFigure.name == "Label") {
+                    //    createdFigure.id = s[k].split("=")[0];
+                    //}
+                }
+                this.y += 24;
+                STACK.figureAdd(createdFigure);
+                createdFigure = this.Transform();
+                var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
+                if (figureText != null) {
+                    if (this.dataArrary.KeyOfEn != null)
+                        figureText.setTextStr(this.dataArrary.KeyOfEn);
+                    this.LabelCreateForFigure();
+                    draw();
+                }
+            }
+        } else {
+            //把主键给他.
             if (this.dataArrary.KeyOfEn != null)
-                figureText.setTextStr(this.dataArrary.KeyOfEn);
-
+                createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
             if (this.dataArrary.No != null)
-                figureText.setTextStr(this.dataArrary.No);
-        }
+                createdFigure.CCForm_MyPK = this.dataArrary.No;
 
-        //创建标签
-        this.LabelCreateForFigure();
-        draw();
+            //添加到Figures
+            //add to STACK
+            STACK.figureAdd(createdFigure);
+
+            //add property  增加属性.
+            createdFigure = this.Transform();
+
+            //change text  //设置控件上的ID文本.
+            var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
+            if (figureText != null) {
+
+                if (this.dataArrary.KeyOfEn != null)
+                    figureText.setTextStr(this.dataArrary.KeyOfEn);
+
+                if (this.dataArrary.No != null)
+                    figureText.setTextStr(this.dataArrary.No);
+            }
+
+            //创建标签
+            this.LabelCreateForFigure();
+            draw();
+        }
     },
     /**根据控件类型，生成不同控件描述 and propertys**/
     Transform: function () {
@@ -542,10 +563,12 @@ TransFormDataField.prototype = {
 
         propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
         //shap image
-        var imageFrame = STACK.figuresImagePrimitiveGetByFigureId(createdFigure.id);
-        if (imageFrame != null) {
-            //alert(figureSetsURL + shap_src);
-            imageFrame.setUrl(figureSetsURL + shap_src);
+        if (createdFigure.CCForm_Shape != "RadioButton") {
+            var imageFrame = STACK.figuresImagePrimitiveGetByFigureId(createdFigure.id);
+            if (imageFrame != null) {
+                //alert(figureSetsURL + shap_src);
+                imageFrame.setUrl(figureSetsURL + shap_src);
+            }
         }
 
         // alert(figureSetsURL + shap_src);
@@ -588,6 +611,9 @@ TransFormDataField.prototype = {
                     defVal = this.dataArrary.Name;
                     break;
                 case "KeyOfEn":    // 字段名.
+                    if (createdFigure.CCForm_Shape == "RadioButton") {
+                        this.dataArrary.KeyOfEn = "";
+                    }
                     defVal = this.dataArrary.KeyOfEn;
                     break;
                 case "UIBindKey":  // 绑定的外键.
@@ -639,9 +665,9 @@ TransFormDataField.prototype = {
         //change text
         figureText = STACK.figuresTextPrimitiveGetByFigureId(selectedFigureId);
         if (figureText != null) {
-            figureText.setTextStr(this.dataArrary.Name);
-            figureText.setTextStr(this.dataArrary.Name);
-        }
+            figureText.setTextStr(" * " + this.figure.CCForm_MyPK.split("=")[1]);
+            //figureText.setTextoType(this.figure.CCForm_MyPK);
+         }
     },
     /**替换系统表达式值**/
     DealExp: function (expString) {

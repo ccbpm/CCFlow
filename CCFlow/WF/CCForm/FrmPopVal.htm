@@ -2,6 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
+
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
+    <script src="../DataUser/JSLibData/MyFlowPublic.js" type="text/javascript"></script>
+
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+
+
+
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
@@ -120,13 +130,16 @@
 
         //配置数据
         var pageSetData = {};
+        var initPopValData = {};
+        var firstLoad = true;
 
         function dtTable() {
             var fk_MapExt = GetQueryString("FK_MapExt");
+            var searchData = $('#searchForm').serialize();
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random(),
+                url: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&"+searchData,
                 dataType: 'html',
                 success: function (data) {
                     if (data != null) {
@@ -161,6 +174,7 @@
                             return;
                         } else {
                             setDataArr = JSON.parse(data).Hashtable;
+                            initPopValData = JSON.parse(data);
                         }
                         pageSetData = setDataArr;
                         var dataArr = JSON.parse(data).DTObjs;
@@ -251,7 +265,15 @@
                             //树模式
                         } else if (WorkM == "Tree" || WorkM == "TreeDouble") {//单实体+多实体
                             initTreeData(WorkM);
-                        } else if (dataArr.length > 0) {//TablePage 和TableOnly
+                        } else if (WorkM == "TablePage" && firstLoad) {
+                            firstLoad = false;
+                            $('#main').css('display', 'block');
+                            $('#btnSearch').bind('click', initTableData);
+                            //初始化多个初始化搜索条件
+                            initMoreConSearch(pageSetData[0].PopValSearchCond);
+                            $('#btnSearch').trigger('click');
+                        }
+                        else if (dataArr.length > 0) {//TablePage 和TableOnly
                             var colencn = setDataArr[0].PopValColNames;
                             //设置表格的表头
                             var tableHeader = '';
@@ -373,12 +395,12 @@
                                 //为CHECKBOX radio绑定事件
                                 $('#poptablew tbody .ck_tbody').bind('change', checkBoxChange);
                                 $('#poptablew tbody .rb_tbody').bind('change', radioChange);
-                            //表格有分页模式
+                                //表格有分页模式
                             } else if (WorkM == "TablePage") {
                                 $("#flowListDiv table thead").html(tableHeader);
-                                $('#main').css('display', 'block');
-                                $('#btnSearch').bind('click', initTableData);
-                                $('#btnSearch').trigger('click');
+                                //$('#main').css('display', 'block');
+                                //$('#btnSearch').bind('click', initTableData);
+                                //$('#btnSearch').trigger('click');
                             }
                         }
                     }
@@ -473,12 +495,13 @@
                 pageSize = 10;
                 $('#flowListDiv .pagination-panel select').children("[value=10]").attr('selected', 'selected');
             }
+            var searchData = $('#searchForm').serialize();
             var toDoListInitData = {
                 PageSize: pageSize,
                 PageIndex: 1,
                 DivId: 'flowListDiv',
-                countUrl: Handler + '?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&Key=' + $('#txbSearchVal').val() + '&m=' + Math.random(),
-                listUrl:  Handler + '?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&Key=' + $('#txbSearchVal').val() + '&m=' + Math.random(),
+                countUrl: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+                listUrl: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData ,
                 RenderOverFun: function () {
                     //为CHECKBOX radio绑定事件
                     $('#flowListDiv table tbody .ck_tbody').bind('change', checkBoxChange);
@@ -487,6 +510,38 @@
             };
             $('#flowListDiv table tbody tr').remove();
             Common.CustomPagePlug(toDoListInitData);//绑定表格
+
+            dtTable();
+        }
+
+        //初始化多个搜索条件
+        function initMoreConSearch(conditionStr) {
+             conditionStr = '$Para=FK_Flow#Label=流程名称#ListSQL= select No，Name from WF_Flow$Para=DTStarttime#Label=启动流程日期从#DefVal=@Now-30$Para=DTEndtime#Label=启动流程日期到#DefVal=@Now';
+             var conditions = conditionStr.split('$');
+             var conHtml='';
+            $.each(conditions, function (i, con) {
+                if (con != undefined && con.trim() != '') {
+                    var paramList = con.split('#');
+                    var paramName = paramList[0].split('=')[1];
+                    var lableText = paramList[1].split('=')[1];
+                    conHtml += "<label>" + lableText + "</label>";
+                    if (paramList.length == 3 && (paramList[2].indexOf('ListSQL') >= 0 || paramList[2].indexOf('EnumKey') >= 0)) {//是DDL 下拉框
+                        conHtml += "<select name='" + paramName + "' id='" + paramName + "'><option value='all'>请选择</option>";
+                        if (initPopValData[paramName] != undefined && initPopValData[paramName].length > 0) {
+                            $.each(initPopValData[paramName], function (j, enumObj) {
+                                conHtml += "<option value='" + enumObj.No + "'>" + enumObj.Name + "</option>";
+                            });
+                        }
+                        conHtml += "</select>";
+                    } else {//日期
+                        conHtml += '<input  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
+                    }
+                }
+            });
+
+            $('#searchDiv').append($(conHtml));
+            console.log(conHtml)
+
         }
         //checkbox的选中事件
         function checkBoxChange(obj) {
@@ -666,21 +721,24 @@
         </div>
     </div>
 </div>
-<!--无分页显示table-->
+<!--分页显示table-->
 <div id="main" style="display: none;">
     <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
         <!-- BEGIN CHART PORTLET-->
         <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px; padding: 12px 0 0 20px;">
-            <div>
-                <div style="font-size: 20px; float: left; width: 100%;">
-                        <input id="txbSearchVal" value="" type="text" placeholder="标题" style="text-align: center;" />
-                    <button class="Btn" id="btnSearch">搜索</button>
-                </div>
-                <div style="font-size: 20px; float: left; width: 100%; display: none;">
-                    已选择列表：
-                    <span id="selectedlists" style="word-break: break-all;"></span>
-                </div>
-            </div>
+            <div><form id="searchForm">
+    <div style="font-size: 20px; float: left; width: 100%;" id="searchDiv">
+        <input id="txbSearchVal" value="" type="text" placeholder="标题" style="text-align: center;" />
+        
+    </div>
+</form>
+                <button class="Btn" id="btnSearch">搜索</button>
+
+    <div style="font-size: 20px; float: left; width: 100%; display: none;">
+        已选择列表：
+        <span id="selectedlists" style="word-break: break-all;"></span>
+    </div>
+</div>
         </div>
         <div class="portlet-body " id="merDiv">
             <div class="tab-content" style="margin: 4px 0px;">

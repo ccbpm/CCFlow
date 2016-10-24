@@ -29,6 +29,10 @@
                 url: Handler+"?DoType=RadioBtns_Init&FK_MapData=" + pageData.FK_MapData + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+                    if (data != undefined && data.indexOf('err@') == 0) {
+                        console.error(data);
+                        return;
+                    }
                     initData = JSON.parse(data);
                     //绑定左侧的列表值
                     var ulListValuesLiHtml = '';

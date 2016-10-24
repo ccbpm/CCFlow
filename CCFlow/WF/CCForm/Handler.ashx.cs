@@ -191,8 +191,15 @@ namespace CCFlow.WF.CCForm
                         continue;
 
                     //参数.
-                    string para = cond.Substring(6, cond.IndexOf("#"));
+                    string para = cond.Substring(5, cond.IndexOf("#")-5);
                     string val = context.Request.QueryString[para];
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
+                            val = "all";
+                        else
+                            val = "";
+                    }
 
                     if (val == "all")
                     {
@@ -237,9 +244,15 @@ namespace CCFlow.WF.CCForm
                         continue;
 
                     //参数.
-                    string para = cond.Substring(6, cond.IndexOf("#"));
+                    string para = cond.Substring(5, cond.IndexOf("#")-5);
                     string val = context.Request.QueryString[para];
-
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
+                            val = "all";
+                        else
+                            val = "";
+                    }
                     if (val == "all")
                     {
                         sqlObjs = sqlObjs.Replace(para + "=@" + para, "1=1");
@@ -279,7 +292,7 @@ namespace CCFlow.WF.CCForm
                      string sql = null;
                      if (cond.Contains("ListSQL") == true)
                      {
-                         sql = cond.Substring(cond.IndexOf("ListSQL")+1);
+                         sql = cond.Substring(cond.IndexOf("ListSQL")+8);
                          sql = sql.Replace("@WebUser.No",WebUser.No);
                          sql = sql.Replace("@WebUser.Name", WebUser.Name);
                          sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
@@ -296,7 +309,7 @@ namespace CCFlow.WF.CCForm
                          continue;
 
                      //参数.
-                     string para = cond.Substring(6, cond.IndexOf("#"));
+                     string para = cond.Substring(5, cond.IndexOf("#")-5);
                      if (ds.Tables.Contains(para) == true)
                          throw new Exception("@配置的查询,参数名有冲突不能命名为:"+para);
 

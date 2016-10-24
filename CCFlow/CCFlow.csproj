@@ -842,6 +842,7 @@
     <Content Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx" />
     <Content Include="WF\Admin\FlowDB\流程按月分析.png" />
     <Content Include="WF\Admin\FlowFrm\FrmEnableRole.aspx" />
+    <Content Include="WF\Admin\FoolFormDesigner\Attachment.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditF.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral.htm" />

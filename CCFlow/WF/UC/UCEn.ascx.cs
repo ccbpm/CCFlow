@@ -343,7 +343,7 @@ namespace CCFlow.WF.UC
             foreach (MapFrame fr in frames)
             {
                 //  if (fr.IsAutoSize)
-                js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.NoOfObj + "','TD" + fr.NoOfObj + "')\", 200);";
+                js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.MyPK + "','TD" + fr.MyPK + "')\", 200);";
             }
             foreach (MapM2M m2m in m2ms)
             {
@@ -736,7 +736,7 @@ namespace CCFlow.WF.UC
                             this.AddTREnd();
 
                             this.AddTR();
-                            this.Add("<TD colspan=4 ID='TD" + fram.NoOfObj + "' height='" + fram.H + "' width='" + fram.W + "'  >");
+                            this.Add("<TD colspan=4 ID='TD" + fram.MyPK + "' height='" + fram.H + "' width='" + fram.W + "'  >");
                             paras = this.RequestParas;
                             if (paras.Contains("FID=") == false)
                                 paras += "&FID=" + this.HisEn.GetValStrByKey("FID");
@@ -749,7 +749,7 @@ namespace CCFlow.WF.UC
                                 src += "&r=q" + paras;
                             else
                                 src += "?r=q" + paras;
-                            this.Add("<iframe ID='F" + fram.NoOfObj + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='" + fram.H + "' scrolling=auto /></iframe>");
+                            this.Add("<iframe ID='F" + fram.MyPK + "'   src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='100%' height='" + fram.H + "' scrolling=auto /></iframe>");
                             this.AddTDEnd();
                             this.AddTREnd();
                         }
@@ -1539,7 +1539,7 @@ namespace CCFlow.WF.UC
             foreach (MapFrame fr in frames)
             {
                 //  if (fr.IsAutoSize)
-                js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.NoOfObj + "','TD" + fr.NoOfObj + "')\", 200);";
+                js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.MyPK + "','TD" + fr.MyPK + "')\", 200);";
             }
             foreach (MapM2M m2m in m2ms)
             {
@@ -2691,7 +2691,7 @@ namespace CCFlow.WF.UC
             foreach (MapFrame fr in frames)
             {
                 //  if (fr.IsAutoSize)
-                js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.NoOfObj + "','TD" + fr.NoOfObj + "')\", 200);";
+                js += "\t\n window.setInterval(\"ReinitIframe('F" + fr.MyPK + "','TD" + fr.MyPK + "')\", 200);";
             }
             foreach (MapM2M m2m in m2ms)
             {

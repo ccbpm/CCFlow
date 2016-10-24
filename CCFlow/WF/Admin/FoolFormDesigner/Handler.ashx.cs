@@ -168,6 +168,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
+                    case "EditFExtContral_Init": //扩展控件初始化.
+                        msg = this.EditFExtContral_Init();
+                        break;
+                    case "EditFExtContral_Save": //扩展控件初始化.
+                        msg = this.EditFExtContral_Save();
+                        break;
                     case "MapFrameInit": //框架初始化.
                         msg = this.MapFrameInit();
                         break;
@@ -258,6 +264,19 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
             //输出信息.
         }
+
+        #region textbox 扩展控件保存与展现.
+        public string EditFExtContral_Init()
+        {
+            ExtContral ext = new ExtContral(this.FK_MapData, this.KeyOfEn);
+            return ext.ToJson();
+        }
+        public string EditFExtContral_Save()
+        {
+            return null;
+        }
+        #endregion textbox 扩展控件保存与展现.
+
         /// <summary>
         /// 框架信息.
         /// </summary>
@@ -271,7 +290,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
 
             fe.FK_MapData = this.FK_MapData;
-            fe.RetrieveFromDBSources();
+
             return fe.ToJson();
         }
         /// <summary>
@@ -282,7 +301,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             SysEnumMains ses = new SysEnumMains();
             ses.RetrieveAll();
-
             return ses.ToJson();
         }
         /// <summary>
@@ -860,7 +878,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     attr.MinLen = this.GetValIntFromFrmByKey("TB_MinLen");
 
                     attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
-
                 }
 
                 //是否可用？所有类型的属性，都需要。

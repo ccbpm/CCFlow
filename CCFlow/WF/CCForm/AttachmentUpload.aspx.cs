@@ -498,6 +498,7 @@ namespace CCFlow.WF.CCForm
                         dbUpload.RDT = DataType.CurrentDataTime;
                         dbUpload.Rec = BP.Web.WebUser.No;
                         dbUpload.RecName = BP.Web.WebUser.Name;
+
                         //if (athDesc.IsNote)
                         //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
                         //if (athDesc.Sort.Contains(","))
@@ -566,24 +567,6 @@ namespace CCFlow.WF.CCForm
 
                         if (this.IsReadonly != "1")
                         {
-                            #region 附件权限
-
-                            //if (athDesc.IsDelete != false)
-                            //{
-                            //    if (athDesc.IsDelete == true)
-                            //        this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
-                            //    else if (athDesc.IsDeleteInt == 2)
-                            //    {
-                            //        if (db.Rec.Equals(WebUser.No))
-                            //            this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
-                            //    }
-                            //    else
-                            //        this.Pub1.AddTD("");
-                            //}
-                            //else
-                            //    this.Pub1.AddTD("");
-
-                            #endregion
 
                             if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
                             {

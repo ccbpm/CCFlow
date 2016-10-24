@@ -49,14 +49,12 @@ namespace CCFlow.WF.MapDef
                     int num = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(MyPK) FROM Sys_MapFrame WHERE FK_MapData='" + this.FK_MapData + "'") + 1;
                     MapFrame dtl1 = new MapFrame();
                     dtl1.Name =   "框架"  + num;
-                    dtl1.NoOfObj = "F" + num;
                     BindEdit(md, dtl1);
                     break;
                 case "Edit":
                     MapFrame dtl = new MapFrame();
                     if (this.FK_MapFrame == null)
                     {
-                        dtl.NoOfObj = "Frm";
                     }
                     else
                     {
@@ -162,21 +160,13 @@ namespace CCFlow.WF.MapDef
                     case "Edit":
                         MapFrame dtl = new MapFrame(this.FK_MapFrame);
                         dtl = (MapFrame)this.Pub1.Copy(dtl);
-                        if (this.DoType == "New")
-                        {
-                            if (dtl.IsExits)
-                            {
-                                this.Alert("已存在编号："  + dtl.NoOfObj);
-                                return;
-                            }
-                        }
+                        
                         dtl.FK_MapData = this.FK_MapData;
                         dtl.IsAutoSize = this.Pub1.GetRadioBtnByID("RB_IsAutoSize_1").Checked;
 
                         if (this.DoType == "New")
                         {
-                           
-                            
+                            dtl.MyPK = BP.DA.DBAccess.GenerGUID();
                             dtl.Insert();
                         }
                         else
@@ -251,23 +241,11 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTREnd();
 
             int idx = 1;
-            this.Pub1.AddTR();
-            this.Pub1.AddTDIdx(idx++);
-            this.Pub1.AddTD("编号");
-            TB tb = new TB();
-            tb.ID = "TB_" + MapFrameAttr.NoOfObj;
-            tb.Text = dtl.NoOfObj;
-            if (this.DoType == "Edit")
-                tb.Enabled = false;
-            this.Pub1.AddTD(tb);
-            this.Pub1.AddTD();
-            this.Pub1.AddTREnd();
-
 
             this.Pub1.AddTR1();
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("描述");
-            tb = new TB();
+            TB tb = new TB();
             tb.ID = "TB_Name";
             tb.Text = dtl.Name;
             tb.Columns = 50;

@@ -38,26 +38,19 @@ function GenerFullDropDownListCtrl(ddlCtrlID, data, noCol, nameCol, selectVal) {
     if (json.length == 0)
         return;
 
-
-
     if (json[0][noCol] == undefined) {
         alert('@在绑定[' + ddlCtrlID + ']错误，No列名' + noCol + '不存在,无法行程期望的下拉框value . ');
         return;
     }
-
-
 
     if (json[0][nameCol] == undefined) {
         alert('@在绑定[' + ddlCtrlID + ']错误，Name列名' + nameCol + '不存在,无法行程期望的下拉框value . ');
         return;
     }
 
-
-
     for (var i = 0; i < json.length; i++) {
         $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
     }
-
 
     //设置选中的值.
     if (selectVal != undefined) {
@@ -65,9 +58,7 @@ function GenerFullDropDownListCtrl(ddlCtrlID, data, noCol, nameCol, selectVal) {
     }
 }
 
-/*
- 绑定枚举值.
-*/
+/*绑定枚举值.*/
 function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
 
     $.ajax({
@@ -85,9 +76,7 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
 }
 
 
-/*
-  绑定枚举值外键表.
-*/
+/* 绑定枚举值外键表.*/
 function GenerBindEntities(ctrlDDLId, ensName, selectVal) {
 
     $.ajax({
@@ -117,7 +106,7 @@ function GenerBindEntities(ctrlDDLId, ensName, selectVal) {
 
 
 /*
-  绑定 s 外键表.
+  绑定外键表.
 */
 function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
 
@@ -139,6 +128,35 @@ function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
     });
 }
 
+/* 绑定SQL.
+1. 调用这个方法，需要在 SQLList.xml 配置一个SQL , sqlKey 就是该sql的标记.
+2, paras 就是向这个sql传递的参数, 比如： @FK_Mapdata=BAC.
+*/
+function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
+
+    if (colNo == null)
+        colNo = "No";
+    if (colName == null)
+        colName = "Name";
+
+    $.ajax({
+        type: 'post',
+        async: true,
+        url: "/WF/Comm/Handler.ashx?DoType=SQLList&SQLKey=" + sqlKey + "&Paras=" + paras + "&m=" + Math.random(),
+        dataType: 'html',
+        success: function (data) {
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+            }
+
+            data = JSON.parse(data);
+            //绑定枚举值.
+            GenerFullDropDownListCtrl(ctrlDDLId, data, colNo, colName);
+            return;
+        }
+    });
+}
 
 /*
    为页面的所有字段属性赋值.

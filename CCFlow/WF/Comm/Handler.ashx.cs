@@ -116,6 +116,9 @@ namespace CCFlow.WF.Comm
             {
                 switch (this.DoType)
                 {
+                    case "SQLList": //获得枚举列表的JSON.
+                        msg = this.SQLList(); 
+                        break;
                     case "EnumList": //获得枚举列表的JSON.
                         SysEnums ses = new SysEnums(this.EnumKey);
                         msg= ses.ToJson();
@@ -142,6 +145,34 @@ namespace CCFlow.WF.Comm
 
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
+        }
+
+        /// <summary>
+        /// 执行一个SQL，然后返回一个列表.
+        /// </summary>
+        /// <returns></returns>
+        public string SQLList()
+        {
+            string sqlKey = context.Request.QueryString["SQLKey"]; //SQL的key.
+            string paras = context.Request.QueryString["Paras"]; //参数. 格式为 @para1=paraVal@para2=val2
+
+            BP.Sys.XML.SQLList sqlXml = new BP.Sys.XML.SQLList(sqlKey);
+
+            //获得SQL
+            string sql = sqlXml.SQL;
+            string[] strs = paras.Split('@');
+            foreach (string str in strs)
+            {
+                if (str == null || str == "")
+                    continue;
+
+                //参数.
+                string[] p=str.Split('=');
+                sql = sql.Replace("@" + p[0], p[1]);
+            }
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         public bool IsReusable

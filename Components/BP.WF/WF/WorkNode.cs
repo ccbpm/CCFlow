@@ -5713,6 +5713,8 @@ namespace BP.WF
                     this.Func_DoSetThisWorkOver();
                     this.rptGe.WFState = WFState.Complete;
                     this.rptGe.Update();
+
+                    this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
                 }
                 else
                 {
@@ -5725,6 +5727,8 @@ namespace BP.WF
                     {
                         this.rptGe.WFState = WFState.Complete;
                         this.Func_DoSetThisWorkOver();
+
+                        this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
                     }
                     else
                     {

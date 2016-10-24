@@ -40,9 +40,9 @@
                    
 
                     //绑定字段.
-                    GenerFullDropDownListCtrl("DDL_GroupField", ens, "KeyOfEn", "Name");
-                    GenerFullDropDownListCtrl("DDL_SubThreadWorker", ens, "KeyOfEn", "Name");
-                    GenerFullDropDownListCtrl("DDL_SubThreadGroupMark", ens, "KeyOfEn", "Name");
+                    GenerBindDDL("DDL_GroupField", ens, "KeyOfEn", "Name");
+                    GenerBindDDL("DDL_SubThreadWorker", ens, "KeyOfEn", "Name");
+                    GenerBindDDL("DDL_SubThreadGroupMark", ens, "KeyOfEn", "Name");
 
                     //执行批量主表赋值.
                     GenerFullAllCtrlsVal(main);

@@ -285,6 +285,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 case UIContralType.AthShow: //附件模式.= 6
                     ext.AthRefObj = this.GetValFromFrmByKey("DDL_Ath");
                     ext.AthShowModel = (AthShowModel)this.GetValIntFromFrmByKey("DDL_AthShowModel");
+                    ext.UIContralType = ctrlType;
                     break;
                 default:
                     break;

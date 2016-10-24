@@ -1053,6 +1053,9 @@ namespace CCFlow.WF.UC
                 currWK = this.currFlow.NewWork();
                 this.WorkID = currWK.OID;
                 gwf = new GenerWorkFlow();
+                //added by liuxc,2016-10-24,此处需要获取一下，否则发起节点关注的流程，刷新页面还是未关注的状态
+                gwf.WorkID = this.WorkID;
+                gwf.RetrieveFromDBSources();
             }
             else
             {

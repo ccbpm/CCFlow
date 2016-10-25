@@ -517,15 +517,14 @@ TransFormDataField.prototype = {
                 var rbArr = this.dataArrary.Vals.slice(1).split("@");
                 var s = [];
                 for (var i = 0; i < rbArr.length; i++) {
-                    s.push("RB_" + this.dataArrary.KeyOfEn + "_" + rbArr[i]);
+                    s.push("RB_" + this.dataArrary.UIBindKey + "_" + rbArr[i]);
                 }
                 for (var k = 0; k < s.length; k++) {
-                    if (this.dataArrary.KeyOfEn != null) {
+                    if (this.dataArrary.UIBindKey != null) {
                         createdFigure.CCForm_MyPK = s[k];
                     }
                     this.y += 24;
                     STACK.figureAdd(createdFigure);
-                    //createdFigure = this.Transform();
                     if (createdFigure.name == "Label") {
                         createdFigure = this.Transform();
                     }

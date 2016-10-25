@@ -3678,7 +3678,7 @@ namespace CCFlow.WF.UC
                         else
                         {
 
-                            if (ddlFK.Enabled || activeFilds.Contains(attr.KeyOfEn + ","))
+                            if ((attr.UIIsEnable == true && this.IsReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
                             {
                                 EntitiesNoName ens = attr.HisEntitiesNoName;
                                 ens.RetrieveAll();
@@ -3765,9 +3765,6 @@ namespace CCFlow.WF.UC
                             }
                             else
                             {
-                                if (ddlFK.Enabled == true && isReadonly == true)
-                                    ddlFK.Enabled = false;
-
                                 fSize = attr.Para_FontSize;
                                 if (fSize == 0)
                                     ddlFK.Attributes["style"] = "width: " + attr.UIWidth + "px; text-left: right; height: 19px;";

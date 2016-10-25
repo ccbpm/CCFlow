@@ -167,16 +167,16 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             try
             {
                 switch (this.DoType)
-                {
-                    case "EditFExtContral_Init": //扩展控件初始化.
-                        msg = this.EditFExtContral_Init();
+                {   case "MapFrame_Save"://框架保存
+                        msg = this.MapFrame_Save();
                         break;
-                    case "EditFExtContral_Save": //扩展控件初始化.
-                        msg = this.EditFExtContral_Save();
+                    case "MapFrame_Init": //框架初始化.
+                        msg = this.MapFrame_Init();
                         break;
-                    case "MapFrameInit": //框架初始化.
-                        msg = this.MapFrameInit();
+                    case "MapFrame_Delete": //框架初始化.
+                        msg = this.MapFrame_Delete();
                         break;
+
                     case "DtlInit": //初始化明细表.
                         msg = this.DtlInit();
                         break;
@@ -264,55 +264,91 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
             //输出信息.
         }
-
-        #region textbox 扩展控件保存与展现.
-        public string EditFExtContral_Init()
-        {
-            ExtContral ext = new ExtContral(this.FK_MapData, this.KeyOfEn);
-            return ext.ToJson();
-        }
-        public string EditFExtContral_Save()
-        {
-
-            ExtContral ext = new ExtContral(this.FK_MapData, this.KeyOfEn);
-
-            //用户选择的控件类型.
-            int model = this.GetValIntFromFrmByKey("Model");
-            UIContralType ctrlType = (UIContralType)model;
-
-            switch (ctrlType)
-            {
-                case UIContralType.AthShow: //附件模式.= 6
-                    ext.AthRefObj = this.GetValFromFrmByKey("DDL_Ath");
-                    ext.AthShowModel = (AthShowModel)this.GetValIntFromFrmByKey("DDL_AthShowModel");
-                    ext.UIContralType = ctrlType;
-                    break;
-                default:
-                    break;
-            }
-
-            //执行保存.
-            ext.Update();
-
-            return "保存成功.";
-        }
-        #endregion textbox 扩展控件保存与展现.
-
         /// <summary>
         /// 框架信息.
         /// </summary>
         /// <returns></returns>
-        public string MapFrameInit()
-        {
-            BP.Sys.FrmEle fe = new FrmEle();
-            fe.MyPK = this.MyPK;
-            if (fe.RetrieveFromDBSources() == 0)
+        public string MapFrame_Init()
             {
+                DataSet ds = new DataSet();
+                string sql = "SELECT * FROM Sys_MapFrame WHERE  FK_MapData='" + this.FK_MapData + "'";
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "Sys_MapFrame";
+                ds.Tables.Add(dt);
+                return BP.Tools.Json.ToJson(ds);
+
+        //    BP.Sys.FrmEle fe = new FrmEle();
+        //    //fe.MyPK = this.MyPK;
+        //    //if (fe.RetrieveFromDBSources() == 0)
+        //    //{
+
+        //    //} 
+        //    //fe.FK_MapData = this.FK_MapData;
+        //    //fe.RetrieveFromDBSources();
+        //    //return fe.ToJson();
+        //    string fk_MapFrame = context.Request.QueryString["fk_MapFrame"];
+        //    MapExt ext = new MapExt();
+        //    ext.MyPK = this.FK_MapData + "_" + fk_MapFrame + "_" + this.KeyOfEn;
+        //    ext.FK_MapData = this.FK_MapData;
+        //    ext.ExtType = MapExtXmlList.TBFullCtrl;
+        //    if (ext.RetrieveFromDBSources() == 0)
+        //        return "";
+
+        //    return ext.ToJson();
+           }   
+        /// <summary>
+        /// 框架信息保存.
+        /// </summary>
+        /// <returns></returns>
+        public string MapFrame_Save()
+        { 
+            // string TB_NoOfObj = this.GetValFromFrmByKey("TB_NoOfObj");
+            string URL = this.GetValFromFrmByKey("TB_URL");         
+            string Name = this.GetValFromFrmByKey("TB_Name");
+            string W = this.GetValFromFrmByKey("TB_W");
+            string H = this.GetValFromFrmByKey("TB_H");
+            string b = this.GetValFromFrmByKey("RB_IsAutoSize");
+            bool IsAutoSize = true;
+            if (b == "0")
+            {
+                 IsAutoSize = false;
             }
-
-            fe.FK_MapData = this.FK_MapData;
-
-            return fe.ToJson();
+             
+             MapFrame dtlN = new MapFrame();
+                
+              dtlN.FK_MapData = this.FK_MapData;
+              dtlN.MyPK = this.FK_MapData;
+              dtlN.Name = Name;
+              dtlN.URL = URL;
+              dtlN.W = W;
+              dtlN.H = H;
+              dtlN.IsAutoSize = IsAutoSize;
+              dtlN.GroupID = 0;
+              dtlN.RowIdx = 0;
+              string saveType = this.GetValFromFrmByKey("saveType");
+              if (saveType == "insert")
+              {
+                 dtlN.Insert();
+                 return "保存成功...";
+               }else{
+                 dtlN.MyPK = this.GetValFromFrmByKey("MyPK");
+                 dtlN.Update();
+                 return "操作成功...";
+               }
+             
+          
+           
+        }
+        /// <summary>
+        /// 框架信息删除.
+        /// </summary>
+        /// <returns></returns>
+        public string MapFrame_Delete()
+        {
+            MapFrame dtl = new MapFrame();
+            dtl.MyPK = this.GetValFromFrmByKey("MyPK");
+            dtl.Delete();
+            return "操作成功...";
         }
         /// <summary>
         /// 枚举值列表
@@ -322,6 +358,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             SysEnumMains ses = new SysEnumMains();
             ses.RetrieveAll();
+
             return ses.ToJson();
         }
         /// <summary>
@@ -899,6 +936,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     attr.MinLen = this.GetValIntFromFrmByKey("TB_MinLen");
 
                     attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
+
                 }
 
                 //是否可用？所有类型的属性，都需要。

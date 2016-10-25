@@ -236,6 +236,9 @@ namespace BP.WF
             // 更新.
             gwf.FK_Node = cancelToNode.NodeID;
             gwf.NodeName = cancelToNode.Name;
+            //如果不启动自动记忆，删除tonodes,用于 选择节点发送。撤消后，可重新选择节点发送
+            if (cancelToNode.IsRememberMe == false)
+                gwf.Paras_ToNodes = "";
 
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
                 gwf.TaskSta = TaskSta.Takeback;

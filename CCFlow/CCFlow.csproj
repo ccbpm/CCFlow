@@ -1305,7 +1305,7 @@
     <Content Include="WF\Comm\TreeGrade.aspx" />
     <Content Include="WF\Comm\UC\RptSingle.ascx" />
     <Content Include="WF\Comm\UIEn.aspx" />
-    <Content Include="WF\Data\Install\SQLScript\InitView_Ora.sql" />
+    <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitView_Ora.sql" />
     <Content Include="WF\Admin\Org\Site.Master" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesignerController.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\CCBPMDesignerBase.ashx" />
@@ -1337,24 +1337,24 @@
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\Comm\Handler.ashx" />
     <Content Include="WF\Comm\Rpt\Handler.ashx" />
-    <None Include="WF\Data\Templete\NewFlow.json" />
-    <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
-    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH.sql" />
-    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
-    <Content Include="WF\Data\UpdataCCFlowVer.sql" />
-    <Content Include="WF\Data\XML\SQLList.xml" />
-    <Content Include="WF\Data\XML\BPMMenu.xml">
+    <None Include="WF\FlowFormTree\Data\Templete\NewFlow.json" />
+    <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitView_MySQL.sql" />
+    <Content Include="WF\FlowFormTree\Data\Install\SQLScript\Port_Inc_CH.sql" />
+    <Content Include="WF\FlowFormTree\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
+    <Content Include="WF\FlowFormTree\Data\UpdataCCFlowVer.sql" />
+    <Content Include="WF\FlowFormTree\Data\XML\SQLList.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\BPMMenu.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\Ens\Search.xml" />
-    <Content Include="WF\Data\XML\SysDataType.xml" />
-    <Content Include="WF\Data\XML\TaoHong.xml" />
-    <Content Include="WF\Data\XML\XmlDB.xml" />
-    <Content Include="WF\Data\XML\OnlineHepler\CCFlow.xml" />
-    <Content Include="WF\Data\FlowFields.txt" />
-    <Content Include="WF\Data\XML\CCForm.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\Ens\Search.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\SysDataType.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\TaoHong.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\XmlDB.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\OnlineHepler\CCFlow.xml" />
+    <Content Include="WF\FlowFormTree\Data\FlowFields.txt" />
+    <Content Include="WF\FlowFormTree\Data\XML\CCForm.xml" />
     <Content Include="WF\Admin\FileUploadEUI.aspx" />
-    <Content Include="WF\Data\ImpTableField.txt" />
+    <Content Include="WF\FlowFormTree\Data\ImpTableField.txt" />
     <Content Include="WF\Draft.aspx" />
     <Content Include="WF\ErrorPage.aspx" />
     <Content Include="WF\FlowCheck\MyFlow.aspx" />
@@ -1839,7 +1839,7 @@
     <Content Include="WF\Comm\Menu.js" />
     <Content Include="WF\Comm\Search.aspx" />
     <Content Include="WF\Comm\Style\Table.css" />
-    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_WorkFlow.sql" />
+    <Content Include="WF\FlowFormTree\Data\Install\SQLScript\Port_Inc_CH_WorkFlow.sql" />
     <Content Include="WF\FlowFormTree\Base\FormTreeBase.aspx" />
     <Content Include="WF\FlowFormTree\Default.aspx" />
     <Content Include="WF\FlowFormTree\FlowFormTreeEdit.aspx" />
@@ -2183,61 +2183,61 @@
     <Content Include="WF\Comm\UC\UCGraphics.ascx" />
     <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\UC\UIEn.ascx" />
-    <Content Include="WF\Data\HelpDesc\MapExt_CH.txt" />
-    <Content Include="WF\Data\HelpDesc\MapExt_EN.txt" />
-    <Content Include="WF\Data\Img\LogBig.PNG" />
-    <Content Include="WF\Data\Img\LogH.PNG" />
-    <Content Include="WF\Data\Install\DemoData.xml" />
-    <Content Include="WF\Data\Install\Informix.sql" />
-    <Content Include="WF\Data\Install\SQLScript\InitView_SQL.sql" />
-    <Content Include="WF\Data\Install\SQLScript\InitPublicData.sql" />
-    <Content Include="WF\Data\JSLib\onblur\01.校验手机号码.js" />
-    <Content Include="WF\Data\JSLib\onblur\02.校验用户姓名：只能输入1-30个以字母开头的字串.js" />
-    <Content Include="WF\Data\JSLib\onblur\04.校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-” .js" />
-    <Content Include="WF\Data\JSLib\onblur\05.校验密码：只能输入6-20个字母、数字、下划线.js" />
-    <Content Include="WF\Data\JSLib\onblur\06.校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串.js" />
-    <Content Include="WF\Data\JSLib\onblur\07.校验邮政编码.js" />
-    <Content Include="WF\Data\JSLib\onblur\08.校验Email.js" />
-    <Content Include="WF\Data\JSLib\onkeypress\01.只能输入0-9 .js" />
-    <Content Include="WF\Data\SysFields.txt" />
-    <Content Include="WF\Data\Sys\FieldKeys.txt" />
-    <Content Include="WF\Data\XML\AdminTools.xml" />
-    <Content Include="WF\Data\XML\DBUrl.xml" />
-    <Content Include="WF\Data\XML\DefVal.xml" />
-    <Content Include="WF\Data\XML\Designer.xml">
+    <Content Include="WF\FlowFormTree\Data\HelpDesc\MapExt_CH.txt" />
+    <Content Include="WF\FlowFormTree\Data\HelpDesc\MapExt_EN.txt" />
+    <Content Include="WF\FlowFormTree\Data\Img\LogBig.PNG" />
+    <Content Include="WF\FlowFormTree\Data\Img\LogH.PNG" />
+    <Content Include="WF\FlowFormTree\Data\Install\DemoData.xml" />
+    <Content Include="WF\FlowFormTree\Data\Install\Informix.sql" />
+    <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitView_SQL.sql" />
+    <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitPublicData.sql" />
+    <Content Include="WF\FlowFormTree\Data\JSLib\onblur\01.校验手机号码.js" />
+    <Content Include="WF\FlowFormTree\Data\JSLib\onblur\02.校验用户姓名：只能输入1-30个以字母开头的字串.js" />
+    <Content Include="WF\FlowFormTree\Data\JSLib\onblur\04.校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-” .js" />
+    <Content Include="WF\FlowFormTree\Data\JSLib\onblur\05.校验密码：只能输入6-20个字母、数字、下划线.js" />
+    <Content Include="WF\FlowFormTree\Data\JSLib\onblur\06.校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串.js" />
+    <Content Include="WF\FlowFormTree\Data\JSLib\onblur\07.校验邮政编码.js" />
+    <Content Include="WF\FlowFormTree\Data\JSLib\onblur\08.校验Email.js" />
+    <Content Include="WF\FlowFormTree\Data\JSLib\onkeypress\01.只能输入0-9 .js" />
+    <Content Include="WF\FlowFormTree\Data\SysFields.txt" />
+    <Content Include="WF\FlowFormTree\Data\Sys\FieldKeys.txt" />
+    <Content Include="WF\FlowFormTree\Data\XML\AdminTools.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\DBUrl.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\DefVal.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\Designer.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\Ens\ActiveAttr.xml" />
-    <Content Include="WF\Data\XML\Ens\AttrDesc.xml" />
-    <Content Include="WF\Data\XML\Ens\ConfigEns.xml" />
-    <Content Include="WF\Data\XML\Ens\EnsAppXml\GE.xml" />
-    <Content Include="WF\Data\XML\Ens\EnsAppXml\WF.xml" />
-    <Content Include="WF\Data\XML\Ens\GlobalKeyVal.xml" />
-    <Content Include="WF\Data\XML\EnumInfo.xml" />
-    <Content Include="WF\Data\XML\Enum\Map.xml">
+    <Content Include="WF\FlowFormTree\Data\XML\Ens\ActiveAttr.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\Ens\AttrDesc.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\Ens\ConfigEns.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\Ens\EnsAppXml\GE.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\Ens\EnsAppXml\WF.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\Ens\GlobalKeyVal.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\EnumInfo.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\Enum\Map.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\Enum\WFV4.xml">
+    <Content Include="WF\FlowFormTree\Data\XML\Enum\WFV4.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\EventList.xml">
+    <Content Include="WF\FlowFormTree\Data\XML\EventList.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\FeatureSet.xml" />
-    <Content Include="WF\Data\XML\FrmEle.xml" />
-    <Content Include="WF\Data\XML\MapExt.xml">
+    <Content Include="WF\FlowFormTree\Data\XML\FeatureSet.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\FrmEle.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\MapExt.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\Menu.xml">
+    <Content Include="WF\FlowFormTree\Data\XML\Menu.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\RegularExpression.xml" />
-    <Content Include="WF\Data\XML\SDK.xml" />
-    <Content Include="WF\Data\XML\UserTools.xml" />
-    <Content Include="WF\Data\XML\WebConfigDesc.xml">
+    <Content Include="WF\FlowFormTree\Data\XML\RegularExpression.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\SDK.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\UserTools.xml" />
+    <Content Include="WF\FlowFormTree\Data\XML\WebConfigDesc.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="WF\Data\XML\WFAdmin.xml">
+    <Content Include="WF\FlowFormTree\Data\XML\WFAdmin.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="WF\Do.aspx" />
@@ -7882,10 +7882,10 @@
     <Content Include="WF\Comm\Port\SearchDepts.ashx" />
     <None Include="WF\Comm\Style\Img\Tabs\Thumbs.db" />
     <Content Include="WF\Comm\Sys\WinOpen.Master" />
-    <None Include="WF\Data\Install\License_CH.rtf" />
-    <None Include="WF\Data\Install\License_EH.rtf" />
+    <None Include="WF\FlowFormTree\Data\Install\License_CH.rtf" />
+    <None Include="WF\FlowFormTree\Data\Install\License_EH.rtf" />
     <Content Include="WF\CCForm\HanderMapExt.ashx" />
-    <Content Include="WF\Data\Templete\SysFields.txt" />
+    <Content Include="WF\FlowFormTree\Data\Templete\SysFields.txt" />
     <Content Include="WF\FlowCheck\Site.Master" />
     <Content Include="WF\Handler.ashx" />
     <None Include="WF\Img\Arr\Thumbs.db" />
@@ -7934,9 +7934,9 @@
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="WF\Admin\ClientBin\NodeIcon\" />
     <Folder Include="WF\App\Classic\Img\Menu\" />
-    <Folder Include="WF\Data\JSLib\onchange\" />
-    <Folder Include="WF\Data\JSLib\ondblclick\" />
-    <Folder Include="WF\Data\JSLib\onkeyup\" />
+    <Folder Include="WF\FlowFormTree\Data\JSLib\onchange\" />
+    <Folder Include="WF\FlowFormTree\Data\JSLib\ondblclick\" />
+    <Folder Include="WF\FlowFormTree\Data\JSLib\onkeyup\" />
     <Folder Include="WF\WorkOpt\OneWork\Img\" />
   </ItemGroup>
   <ItemGroup>

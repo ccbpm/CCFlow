@@ -270,6 +270,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "Attachment_Init": //字段属性
                         msg = this.Attachment_Init();
                         break;
+                    case "EditFExtContral_Init": //字段扩展属性.
+                        msg = this.EditFExtContral_Init();
+                        break;
+                    case "EditFExtContral_Save": //字段扩展属性.
+                        msg = this.EditFExtContral_Save();
+                        break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
@@ -282,6 +288,60 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
             //输出信息.
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string EditFExtContral_Init()
+        {
+            ExtContral en = new ExtContral();
+            en.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            en.RetrieveFromDBSources();
+            return en.ToJson();
+
+        }
+        public string EditFExtContral_Save()
+        {
+            ExtContral en = new ExtContral();
+            en.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            en.RetrieveFromDBSources();
+
+            en.UIContralType = (UIContralType)int.Parse( this.GetValFromFrmByKey("UIContralType")) ;
+
+            switch (en.UIContralType)
+            {
+                case UIContralType.AthShow:
+                    en.AthRefObj = this.GetValFromFrmByKey("DDL_Ath");
+                    en.AthShowModel = (AthShowModel)int.Parse(this.GetValFromFrmByKey("DDL_AthShowModel"));
+
+                    //让附件不可见.
+                    FrmAttachment ath = new FrmAttachment(en.AthRefObj);
+                    ath.IsVisable = false;
+                    ath.Update();
+                    BP.DA.DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE EnName='"+this.FK_MapData+"' AND CtrlID='"+en.AthRefObj+"'");
+
+                    FrmAttachments aths = new FrmAttachments(this.FK_MapData);
+                    foreach (FrmAttachment item in aths)
+                    {
+                        string sql = "SELECT count(*) FROM Sys_MapAttr WHERE AtPara LIKE '%"+item.MyPK+"%' AND FK_MapData='"+this.FK_MapData+"'";
+                        int num = DBAccess.RunSQLReturnValInt(sql);
+                        if (num == 0)
+                        {   
+                            // 没有被引用.
+                            item.IsVisable = true;
+                            item.Update();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            en.Update();
+
+            return "保存成功.";
+        }
+        
         /// <summary>
         /// 框架信息.
         /// </summary>

@@ -1120,13 +1120,14 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             int i = ath.RetrieveFromDBSources();
             if (i == 0)
             {
+                /*初始化默认值.*/
                 ath.NoOfObj = "Ath1";
                 ath.Name = "我的附件";
+                ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\"+this.FK_MapData+"\\";
             }
 
             if (i == 0 && this.FK_Node != 0)
             {
-
                 /*这里处理 独立表单解决方案, 如果有FK_Node 就说明该节点需要单独控制该附件的属性. */
                 MapData mapData = new MapData();
                 mapData.RetrieveByAttr(MapDataAttr.No, this.FK_MapData);
@@ -1149,14 +1150,28 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 ath.FK_Node = this.FK_Node;
                 ath.FK_MapData = this.FK_MapData;
                 ath.NoOfObj = this.Ath;
-                ath.DirectInsert();
+                //  ath.DirectInsert();
             }
-            if (ath.IsNodeSheet == true)
-            {
 
-
-            }
             return ath.ToJson();
+        }
+        /// <summary>
+        /// 保存.
+        /// </summary>
+        /// <returns></returns>
+        public string Attachment_Save()
+        {
+            FrmAttachment ath = new FrmAttachment();
+            ath.FK_MapData = this.FK_MapData;
+            ath.NoOfObj = this.Ath;
+            ath.FK_Node = this.FK_Node;
+
+            ath = BP.Sys.PubClass.CopyFromRequestByPost(ath, context.Request) as FrmAttachment;
+            ath.FK_MapData = this.FK_MapData;
+
+
+            ath.Save(); //执行保存.
+            return "保存成功..";
         }
     }
 }

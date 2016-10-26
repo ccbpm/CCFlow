@@ -2,7 +2,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head><title>附件属性设置</title>
-<<<<<<< .mine
 <script language="JavaScript" src="../../Comm/JScript.js"></script>
     <script language="javascript" type="text/javascript" >
     <script language=javascript>
@@ -25,6 +24,8 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
    <base target="_self" />
     <script  type="text/javascript">
         function Esc() {
@@ -64,143 +65,12 @@
                 dataType: 'html',
                 success: function (data) {
 
+
                     data = JSON.parse(data);
 
-                    $("#TB_NoOfObj").val(data.NoOfObj);
-                    $("#TB_Name").val(data.Name);
-                    $("#TB_Exts").val(data.Exts);
+                    //给整个界面的元素批量赋值.
+                    GenerFullAllCtrlsVal(data);
 
-                    //文件数据存储方式
-                    $("#DDL_SaveWay").val(data.SaveWay);
-
-                    $("#TB_SaveTo").val(data.SaveTo);
-                    $("#TB_Sort").val(data.Sort);
-
-                    //完整性校验
-                    $("#DDL_UploadFileNumCheck").val(data.UploadFileNumCheck);
-                    $("#TB_H").val(data.H);
-                    $("#TB_W").val(data.W);
-
-                    //自动控制高度与宽度(对傻瓜表单有效)
-                    if (data.IsAutoSize == "1")
-                        $("#CB_IsAutoSize").attr("checked", true);
-
-                    //是否增加备注列
-                    if (data.IsNote == "1")
-                        $("#CB_IsNote").attr("checked", true);
-
-                    //是否显示标题列
-                    if (data.IsShowTitle == "1")
-                        $("#CB_IsShowTitle").attr("checked", true);
-
-                    //是否可见
-                    if (data.IsVisable == "1")
-                        $("#CB_IsVisable").attr("checked", true);
-
-                    //展现方式
-                    $("#DDL_FileShowWay").val(data.FileShowWay);
-
-                    //是否可下载
-                    if (data.IsDownload == "1")
-                        $("#CB_IsDownload").attr("checked", true);
-
-                    //删除规则
-                    $("#DDL_DeleteWay").val(data.DeleteWay);
-
-                    //是否可上传
-                    if (data.IsUpload == "1")
-                        $("#CB_IsUpload").attr("checked", true);
-
-                    //是否可以排序
-                    if (data.IsOrder == "1")
-                        $("#CB_IsOrder").attr("checked", true);
-
-                    //使用上传控件方式
-                    $("#DDL_UploadCtrl").val(data.UploadCtrl);
-
-                    //是否是节点表单.
-                    if (FK_MapData.indexOf("ND") != 0) {
-                        $("#DDL_Tr1").hide();  //数据显示控制方式
-                        $("#DDL_Tr2").hide();  //该附件是否要汇总到合流节点上去？(对子线程节点有效)
-                        $("#DDL_Tr3").hide();  //是否是合流节点的汇总附件组件？(对合流节点有效)
-                        $("#DDL_Tr4").hide();  //数据上传控制方式
-                    }
-
-                    //数据显示控制方式
-                    $("#DDL_CtrlWay").val(data.CtrlWay);
-
-                    //该附件是否要汇总到合流节点上去？(对子线程节点有效)
-                    if (data.IsToHeLiuHZ == "1")
-                        $("#CB_IsToHeLiuHZ").attr("checked", true);
-
-
-                    //是否是合流节点的汇总附件组件？(对合流节点有效)
-                    if (data.IsHeLiuHuiZong == "1")
-                        $("#CB_IsHeLiuHuiZong").attr("checked", true);
-
-                    //数据上传控制方式
-                    $("#DDL_AthUploadWay").val(data.AthUploadWay);
-
-
-                    //是否启用weboffice？
-                    if (data.IsWoEnableWF == "1")
-                        $("#CB_IsWoEnableWF").attr("checked", true);
-
-                    //是否启用保存？
-                    if (data.IsWoEnableSave == "1")
-                        $("#CB_IsWoEnableSave").attr("checked", true);
-
-                    //是否只读？
-                    if (data.IsWoEnableReadonly == "1")
-                        $("#CB_IsWoEnableReadonly").attr("checked", true);
-
-                    //是否启用修订？
-                    if (data.IsWoEnableRevise == "1")
-                        $("#CB_IsWoEnableRevise").attr("checked", true);
-
-                    //是否查看用户留痕？
-                    if (data.IsWoEnableViewKeepMark == "1")
-                        $("#CB_IsWoEnableViewKeepMark").attr("checked", true);
-
-                    //是否打印？
-                    if (data.IsWoEnablePrint == "1")
-                        $("#CB_IsWoEnablePrint").attr("checked", true);
-
-                    //是否启用套红？ 
-                    if (data.IsWoEnableOver == "1")
-                        $("#CB_IsWoEnableOver").attr("checked", true);
-
-                    //是否启用签章？ 
-                    if (data.IsWoEnableSeal == "1")
-                        $("#CB_IsWoEnableSeal").attr("checked", true);
-
-                    //是否启用模板文件？
-                    if (data.IsWoEnableTemplete == "1")
-                        $("#CB_IsWoEnableTemplete").attr("checked", true);
-
-                    //是否记录节点信息？ 	
-                    if (data.IsWoEnableCheck == "1")
-                        $("#CB_IsWoEnableCheck").attr("checked", true);
-
-                    //是否启用插入流程？ 	
-                    if (data.IsWoEnableInsertFlow == "1")
-                        $("#CB_IsWoEnableInsertFlow").attr("checked", true);
-
-                    //是否启用插入风险点？
-                    if (data.IsWoEnableInsertFengXian == "1")
-                        $("#CB_IsWoEnableInsertFengXian").attr("checked", true);
-
-                    //是否进入留痕模式？ 	
-                    if (data.IsWoEnableMarks == "1")
-                        $("#CB_IsWoEnableMarks").attr("checked", true);
-
-                    //是否启用下载？
-                    if (data.IsWoEnableDown == "1")
-                        $("#CB_IsWoEnableDown").attr("checked", true);
-
-                    //是否启用生成快捷键
-                    if (data.FastKeyIsEnable == "1")
-                        $("#CB_FastKeyIsEnable").attr("checked", true);
 
                     alert("初始化成功：" + data);
                 },
@@ -374,15 +244,15 @@
 </tr>
 <tr>
 <td class='Idx' >23</td>
-<td ><input id="CB_IsWoEnableWF" type="checkbox" name="CB_IsWoEnableWF" /><label for="CB_IsWoEnableWF">是否启用weboffice？</label></td>
-<td ><input id="CB_IsWoEnableSave" type="checkbox" name="CB_IsWoEnableSave" /><label for="CB_IsWoEnableSave">是否启用保存？</label></td>
-<td ><input id="CB_IsWoEnableReadonly" type="checkbox" name="CB_IsWoEnableReadonly" /><label for="CB_IsWoEnableReadonly">是否只读？</label></td>
+<td ><input id="CBPara_IsWoEnableWF" type="checkbox" name="CBPara_IsWoEnableWF" /><label for="CB_IsWoEnableWF">是否启用weboffice？</label></td>
+<td ><input id="CBPara_IsWoEnableSave" type="checkbox" name="CBPara_IsWoEnableSave" /><label for="CB_IsWoEnableSave">是否启用保存？</label></td>
+<td ><input id="CBPara_IsWoEnableReadonly" type="checkbox" name="CBPara_IsWoEnableReadonly" /><label for="CB_IsWoEnableReadonly">是否只读？</label></td>
 </tr>
 <tr>
 <td class='Idx' >24</td>
-<td ><input id="CB_IsWoEnableRevise" type="checkbox" name="CB_IsWoEnableRevise" /><label for="CB_IsWoEnableRevise">是否启用修订？</label></td>
-<td ><input id="CB_IsWoEnableViewKeepMark" type="checkbox" name="CB_IsWoEnableViewKeepMark" /><label for="CB_IsWoEnableViewKeepMark">是否查看用户留痕？</label></td>
-<td ><input id="CB_IsWoEnablePrint" type="checkbox" name="CB_IsWoEnablePrint" /><label for="CB_IsWoEnablePrint">是否打印？</label></td>
+<td ><input id="Para_CB_IsWoEnableRevise" type="checkbox" name="Para_CB_IsWoEnableRevise" /><label for="CB_IsWoEnableRevise">是否启用修订？</label></td>
+<td ><input id="Para_CB_IsWoEnableViewKeepMark" type="checkbox" name="Para_CB_IsWoEnableViewKeepMark" /><label for="CB_IsWoEnableViewKeepMark">是否查看用户留痕？</label></td>
+<td ><input id="Para_CB_IsWoEnablePrint" type="checkbox" name="Para_CB_IsWoEnablePrint" /><label for="CB_IsWoEnablePrint">是否打印？</label></td>
 </tr>
 <tr>
 <td class='Idx' >25</td>

@@ -124,21 +124,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return str;
             }
         }
-
-        /// <summary>
-        /// 字段属性编号
-        /// </summary>
-        public string Ath
-        {
-            get
-            {
-                string str = context.Request.QueryString["Ath"];
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-
         public HttpContext context = null;
         /// <summary>
         /// 获得表单的属性.
@@ -267,9 +252,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         MapAttr attrDown = new MapAttr(this.MyPK);
                         attrDown.DoDown();
                         break;
-                    case "Attachment_Init": //字段属性
-                        msg = this.Attachment_Init();
-                        break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
@@ -287,75 +269,38 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         /// </summary>
         /// <returns></returns>
         public string MapFrame_Init()
+        {
+            MapFrame mf = new MapFrame();
+            mf.FK_MapData = this.FK_MapData;
+
+            if (this.MyPK == null)
             {
-                DataSet ds = new DataSet();
-                string sql = "SELECT * FROM Sys_MapFrame WHERE  FK_MapData='" + this.FK_MapData + "'";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "Sys_MapFrame";
-                ds.Tables.Add(dt);
-                return BP.Tools.Json.ToJson(ds);
-
-        //    BP.Sys.FrmEle fe = new FrmEle();
-        //    //fe.MyPK = this.MyPK;
-        //    //if (fe.RetrieveFromDBSources() == 0)
-        //    //{
-
-        //    //} 
-        //    //fe.FK_MapData = this.FK_MapData;
-        //    //fe.RetrieveFromDBSources();
-        //    //return fe.ToJson();
-        //    string fk_MapFrame = context.Request.QueryString["fk_MapFrame"];
-        //    MapExt ext = new MapExt();
-        //    ext.MyPK = this.FK_MapData + "_" + fk_MapFrame + "_" + this.KeyOfEn;
-        //    ext.FK_MapData = this.FK_MapData;
-        //    ext.ExtType = MapExtXmlList.TBFullCtrl;
-        //    if (ext.RetrieveFromDBSources() == 0)
-        //        return "";
-
-        //    return ext.ToJson();
-           }   
+                mf.URL = "http://ccflow.org";
+                mf.W = "100%";
+                mf.H = "300";
+                mf.Name = "我的框架.";
+                mf.FK_MapData = this.FK_MapData;
+                mf.MyPK = BP.DA.DBAccess.GenerGUID();
+            }
+            else
+            {
+                mf.MyPK = this.MyPK;
+                mf.RetrieveFromDBSources();
+            }
+            return mf.ToJson();
+        }
         /// <summary>
         /// 框架信息保存.
         /// </summary>
         /// <returns></returns>
         public string MapFrame_Save()
-        { 
-            // string TB_NoOfObj = this.GetValFromFrmByKey("TB_NoOfObj");
-            string URL = this.GetValFromFrmByKey("TB_URL");         
-            string Name = this.GetValFromFrmByKey("TB_Name");
-            string W = this.GetValFromFrmByKey("TB_W");
-            string H = this.GetValFromFrmByKey("TB_H");
-            string b = this.GetValFromFrmByKey("RB_IsAutoSize");
-            bool IsAutoSize = true;
-            if (b == "0")
-            {
-                 IsAutoSize = false;
-            }
-             
-             MapFrame dtlN = new MapFrame();
-                
-              dtlN.FK_MapData = this.FK_MapData;
-              dtlN.MyPK = this.FK_MapData;
-              dtlN.Name = Name;
-              dtlN.URL = URL;
-              dtlN.W = W;
-              dtlN.H = H;
-              dtlN.IsAutoSize = IsAutoSize;
-              dtlN.GroupID = 0;
-              dtlN.RowIdx = 0;
-              string saveType = this.GetValFromFrmByKey("saveType");
-              if (saveType == "insert")
-              {
-                 dtlN.Insert();
-                 return "保存成功...";
-               }else{
-                 dtlN.MyPK = this.GetValFromFrmByKey("MyPK");
-                 dtlN.Update();
-                 return "操作成功...";
-               }
-             
-          
+        {
+            MapFrame mf = new MapFrame();
+            mf = BP.Sys.PubClass.CopyFromRequestByPost(mf, context.Request) as MapFrame;
+            mf.FK_MapData = this.FK_MapData;
            
+            mf.Save(); //执行保存.
+            return "保存成功..";
         }
         /// <summary>
         /// 框架信息删除.
@@ -364,9 +309,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         public string MapFrame_Delete()
         {
             MapFrame dtl = new MapFrame();
-            dtl.MyPK = this.GetValFromFrmByKey("MyPK");
+            dtl.MyPK = this.MyPK;  
             dtl.Delete();
-            return "操作成功...";
+            return "操作成功..." + this.MyPK ;
         }
         /// <summary>
         /// 枚举值列表
@@ -671,7 +616,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             return attr.ToJson();
         }
-
         /// <summary>
         /// 转化成json
         /// </summary>
@@ -1127,73 +1071,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 return false;
             }
-        }
-
-        public bool IsNodeSheet
-        {
-            get
-            {
-                if (this.FK_MapData.StartsWith("ND") == true)
-                    return true;
-                return false;
-            }
-        }
-        /// <summary>
-        /// 字段属性编辑 初始化
-        /// </summary>
-        /// <returns></returns>
-        public string Attachment_Init()
-        {
-            FrmAttachment ath = new FrmAttachment();
-            ath.FK_MapData = this.FK_MapData;
-            ath.NoOfObj = this.Ath;
-            ath.FK_Node = this.FK_Node;
-
-            if (this.FK_Node == 0)
-                ath.MyPK = this.FK_MapData + "_" + this.Ath;
-            else
-                ath.MyPK = this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node;
-
-            int i = ath.RetrieveFromDBSources();
-            if (i == 0)
-            {
-                ath.NoOfObj = "Ath1";
-                ath.Name = "我的附件";
-            }
-
-            if (i == 0 && this.FK_Node != 0)
-            {
-
-                /*这里处理 独立表单解决方案, 如果有FK_Node 就说明该节点需要单独控制该附件的属性. */
-                MapData mapData = new MapData();
-                mapData.RetrieveByAttr(MapDataAttr.No, this.FK_MapData);
-                if (mapData.AppType == "0")
-                {
-                    FrmAttachment souceAthMent = new FrmAttachment();
-                    // 查询出来原来的数据.
-                    int rowCount = souceAthMent.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, this.Ath, FrmAttachmentAttr.FK_Node, "0");
-                    if (rowCount > 0)
-                    {
-                        ath.Copy(souceAthMent);
-                    }
-                }
-                if (this.FK_Node == 0)
-                    ath.MyPK = this.FK_MapData + "_" + this.Ath;
-                else
-                    ath.MyPK = this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node;
-
-                //插入一个新的.
-                ath.FK_Node = this.FK_Node;
-                ath.FK_MapData = this.FK_MapData;
-                ath.NoOfObj = this.Ath;
-                ath.DirectInsert();
-            }
-            if (ath.IsNodeSheet == true)
-            {
-            
-
-            }
-            return ath.ToJson();
         }
     }
 }

@@ -293,8 +293,8 @@
             window.location.href = window.location.href;
         }
 
-        function EditFrame(mypk, dtlKey) {
-            var url = 'MapFrame.htm?DoType=Edit&FK_MapData=' + mypk + '&FK_MapFrame=' + dtlKey;
+        function EditFrame(mypk, frmKey) {
+            var url = 'MapFrame.htm?DoType=Edit&FK_MapData=' + mypk + '&MyPK=' + frmKey;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

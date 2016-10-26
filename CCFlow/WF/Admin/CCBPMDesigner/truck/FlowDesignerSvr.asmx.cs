@@ -31,7 +31,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         [WebMethod]
         public string GetFlowTree()
         {
-            
+
             BP.WF.Glo.CheckTreeRoot();
 
             string sql = @"
@@ -520,7 +520,7 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
 
                 //获取流程中的节点信息
                 sql = "SELECT NodeID ID,Name,Icon,X,Y,NodePosType,RunModel,HisToNDs,TodolistModel FROM WF_Node WHERE FK_Flow='" +
-                    fk_flow + "'";
+                    fk_flow + "' ORDER BY Step";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_NODE";
                 ds.Tables.Add(dt);
@@ -537,8 +537,17 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
                 dt.TableName = "WF_DIRECTION";
                 ds.Tables.Add(dt);
 
+
                 if (!string.IsNullOrWhiteSpace(workid))
                 {
+                    //获取流程信息，added by liuxc,2016-10-26
+                    sql =
+                        "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT FROM WF_GenerWorkFlow AS wgwf WHERE wgwf.WorkID = " +
+                        workid;
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    dt.TableName = "FLOWINFO";
+                    ds.Tables.Add(dt);
+
                     //获取工作轨迹信息
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
                     sql = "SELECT NDFrom, NDTo,ActionType,ActionTypeText,Msg,RDT,EmpFrom,EmpFromT,EmpToT,EmpTo FROM " + trackTable +
@@ -993,12 +1002,14 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
         public string FlowSave(string fk_flow, string nodes, string dirs, string labes)
         {
             LetAdminLogin("CH", true);
-            string result =  WorkflowDefintionManager.SaveFlow(fk_flow, nodes, dirs, labes);
-            if( string.IsNullOrEmpty(result))
+            string result = WorkflowDefintionManager.SaveFlow(fk_flow, nodes, dirs, labes);
+            if (string.IsNullOrEmpty(result))
             {
                 return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = "" });
 
-            }else{
+            }
+            else
+            {
                 return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = result });
             }
         }
@@ -1013,7 +1024,7 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
             if (!string.IsNullOrEmpty(dt.TableName))
                 dt.TableName = dt.TableName.ToUpper();
 
-            foreach(DataColumn col in dt.Columns)
+            foreach (DataColumn col in dt.Columns)
             {
                 col.ColumnName = col.ColumnName.ToUpper();
             }

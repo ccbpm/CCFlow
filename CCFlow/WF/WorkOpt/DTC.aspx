@@ -49,7 +49,7 @@
             }
 
             $('#aa').panel('refresh', "TransferCustomSimple.aspx?flowNo=" + flowNo);
-
+            $('#bb').panel('refresh', "../Admin/CCBPMDesigner/truck/TruckSimple.aspx?FK_Flow=" + flowNo + "&WorkID=" + $('#workid').textbox('getValue') + "&FID=0");
             return;
 
             var v = $('#workid').textbox('getValue');
@@ -236,6 +236,14 @@
                             </td>
                         </tr>
                     </table>--%>
+                </td>
+            </tr>
+            <tr>
+                <td class="GroupField">
+                    流转进度：
+                </td>
+                <td style="padding: 5px;">
+                    <div class="easyui-panel" id="bb" style="height:auto;width:100%;"></div>
                 </td>
             </tr>
         </table>

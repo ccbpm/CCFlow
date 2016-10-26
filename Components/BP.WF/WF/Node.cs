@@ -865,7 +865,7 @@ namespace BP.WF
 
         }
         /// <summary>
-        /// OID
+        /// 节点编号
         /// </summary>
         public int NodeID
         {

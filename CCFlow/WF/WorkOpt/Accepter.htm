@@ -120,10 +120,9 @@
         //配置数据
         var firstLoad = true;
         var toNode;
-        var pageUrlParam = { fk_node: GetQueryString("FK_Node"), WorkID: GetQueryString("WorkID") };
+        var pageUrlParam = { fk_node: GetQueryString("FK_Node"), WorkID: GetQueryString("WorkID"), FK_Flow: GetQueryString("FK_Flow") };
         function dtTable() {
             if (firstLoad) {
-                firstLoad = false;
                 toNode = 0;
             } else {
                 toNode = $("#searchS1 option:selected").attr("val");
@@ -140,7 +139,8 @@
                         var selDataArr = JSON.parse(data).Nodes;
                         var dtgArr = JSON.parse(data).Depts;
                         var dteArr = JSON.parse(data).Emps;
-                        if (firstLoad == true){
+                        if (firstLoad == true) {
+                            firstLoad = false;
                             var html = '';
                             $.each(selDataArr,function(i, obje) {
                                     html += '<option val="' + obje.No + '">' + obje.Name + '</option>';
@@ -226,21 +226,53 @@
             for (var i = 0; i < checked.parent(".lim").length; i++) {
                 selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
             }
+            console.log(selectedIdArrm)
             return selectedIdArrm.join(';');
-         }
+        }
+
+        //确定【选择接收人并发送】
+        function SendNode() {
+            //AccepterSave&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi
+            var empNos = sedmsg();
+            toNode = $("#searchS1 option:selected").attr("val");
+            $.ajax({
+                type: 'post',
+                async: true,
+                data: { "FK_Flow": pageUrlParam.FK_Flow, "WorkID": pageUrlParam.WorkID,ToNode:toNode, FK_Node:pageUrlParam.fk_node},
+                url: Handler + "?DoType=AccepterSave&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID + "&ToNode=" + toNode + "&FK_Node=" + pageUrlParam.FK_Node + "&m=" + Math.random() + "&SelectEmps=" + empNos,
+                dataType: 'html',
+                success: function (data) {
+                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                        window.parent.returnWorkWindowClose(data);
+                    } else {
+                        $('body').append($('<div>' + data + '</div>'));
+                        $('#btnOk').attr('disabled', true);
+                    }
+                }
+            });
+        }
+
+        //取消【选择接收人并发送】
+        function Close() {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("取消");
+            } else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
+            }
+        }
 
         </script>
 </head>
 <body>
 <div id="searchS">
-    <select id="searchS1" onclick="dtTable()"></select>
+    请选择要到达到的节点:<select id="searchS1" onclick="dtTable()"></select>
 </div>
 <div id="groupTable" style="display: none">
     <ul id="dt" data-data="true"></ul>
 </div>
 <div>
-    <button class="btn btn-info" onclick="sedmsg()">发送</button>
-    <button class ="btn btn-info">取消</button>
+    <button id="btnOk" class="btn btn-info" onclick="SendNode()">发送</button>
+    <button id="btnCancel" class ="btn btn-info" onclick="Close()">取消</button>
 </div>
 </body>
 </html>

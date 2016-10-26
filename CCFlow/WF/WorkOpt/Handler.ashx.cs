@@ -357,8 +357,8 @@ namespace CCFlow.WF.WorkOpt
             {
                 //求到达的节点. 
                 int toNodeID = 0;
-                if (this.GetValFromFrmByKey("ToNode") != "0")
-                    toNodeID = this.GetValIntFromFrmByKey("ToNode");
+                if (this.GetRequestVal("ToNode") != "0")
+                    toNodeID = int.Parse( this.GetRequestVal("ToNode"));
 
                 if (toNodeID == 0)
                 {   //没有就获得第一个节点.
@@ -368,7 +368,11 @@ namespace CCFlow.WF.WorkOpt
                 }
 
                 //求发送到的人员.
-                string selectEmps = this.GetValFromFrmByKey("SelectEmps");
+               // string selectEmps = this.GetValFromFrmByKey("SelectEmps");
+                string selectEmps = this.GetRequestVal("SelectEmps");
+                selectEmps = selectEmps.Replace(";", ",");
+
+
 
                 //执行发送.
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, selectEmps);

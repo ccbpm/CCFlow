@@ -116,6 +116,7 @@
     <script type="text/javascript">
         $(function () {
             dtTable();
+            $("#groupTable").height($(window).height() - 80 + "px");
         });
         //配置数据
         var firstLoad = true;
@@ -161,6 +162,8 @@
                         }
                         var ultdg = '';
                         var ultde = '';
+                        var ultdes = '';
+                        var s = "";
                         $.each(dtgArr,function(i, obje) {
                                 for (var k = 0; k < dteArr.length; k++) {
                                     if (obje.No == dteArr[k][fkName]) {
@@ -168,8 +171,16 @@
                                             "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
                                     }
                                 }
-                                ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
-                                    ultde + "</ul></li>";
+                                var groupFileds = $.grep(dteArr, function (value) {
+                                    return $('[name="' + value.FK_Dept + '"]').length == 0;
+                                });
+                                $.each(groupFileds, function(j, objj) {
+                                    ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
+                            });
+                                s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                                    ultdes + "</ul></li>";
+                              ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                                    ultde + "</ul></li>" + s;
                                 ultde = "";
                             });
                         $("#groupTable #dt").html(ultdg);
@@ -180,19 +191,6 @@
                                     $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
                                 }
                             });
-                        //机构绑定
-                        if (dtgArr.length > 0) {
-                            var liData = $("#groupTable #dt>li");
-                            if (liData != undefined &&
-                                liData.data != undefined &&
-                                liData.data() != undefined &&
-                                liData.data().data != undefined &&
-                                liData.data().data == true) {
-                                $.each(dtgArr,function(i, obje) {
-                                        $($('#groupTable #dt>li')[i]).data().data = obje;
-                                });
-                            }
-                        }
                         //实体绑定
                         $.each(dteArr,function(k, obj) {
                                 var lifs = $("#groupTable #dt .lif");
@@ -216,17 +214,10 @@
         }
         function sedmsg() {
             var checked = $('input:checked');
-            //var selectedIdArrf = [];
-            //var selectedNodesf = [];
-            //for (var i = 0; i < checked.parent(".lif").length; i++) {
-            //    selectedIdArrf.push($(checked.parent(".lif")[i]).data().data.No);
-            //    selectedNodesf.push($(checked.parent(".lif")[i]).data().data.Name);
-            //}
             var selectedIdArrm = [];
             for (var i = 0; i < checked.parent(".lim").length; i++) {
                 selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
             }
-            console.log(selectedIdArrm)
             return selectedIdArrm.join(';');
         }
 
@@ -239,7 +230,7 @@
                 type: 'post',
                 async: true,
                 data: { "FK_Flow": pageUrlParam.FK_Flow, "WorkID": pageUrlParam.WorkID,ToNode:toNode, FK_Node:pageUrlParam.fk_node},
-                url: Handler + "?DoType=AccepterSave&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID + "&ToNode=" + toNode + "&FK_Node=" + pageUrlParam.FK_Node + "&m=" + Math.random() + "&SelectEmps=" + empNos,
+                url: Handler + "?DoType=AccepterSave&m=" + Math.random() + "&SelectEmps=" + empNos,
                 dataType: 'html',
                 success: function (data) {
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
@@ -264,13 +255,16 @@
         </script>
 </head>
 <body>
-<div id="searchS">
-    请选择要到达到的节点:<select id="searchS1" onclick="dtTable()"></select>
+    <div id="searchS">
+        <div style="float: left;">请选择要到达到的节点:</div>
+        <div style="float: left;">
+            <select id="searchS1" onclick="dtTable()" style="width: 100%;"></select>
+        </div>
 </div>
-<div id="groupTable" style="display: none">
+<div id="groupTable" style="display: none; overflow-y: auto;">
     <ul id="dt" data-data="true"></ul>
 </div>
-<div>
+<div style="float: right;">
     <button id="btnOk" class="btn btn-info" onclick="SendNode()">发送</button>
     <button id="btnCancel" class ="btn btn-info" onclick="Close()">取消</button>
 </div>

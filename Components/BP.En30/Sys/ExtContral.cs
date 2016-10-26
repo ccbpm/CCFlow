@@ -138,27 +138,7 @@ namespace BP.Sys
         }
         #endregion 附件属性
 
-        /// <summary>
-        /// 转化成Json
-        /// </summary>
-        /// <returns></returns>
-        public string ToJson()
-        {
-            Hashtable ht = this.Row;
-            //控件类型.
-           // ht["UIContralType"] = this.UIContralType.ToString();
-
-            switch (this.UIContralType)
-            {
-                case En.UIContralType.AthShow: //附件控件.
-                    //   ht["AthShowModel"] = this.AthShowModel.ToString();
-                    break;
-                default:
-                    break;
-            }
-            //把他转化成json.
-            return BP.Tools.Json.ToJson(ht, false);
-        }
+       
 
         #region 构造方法
         /// <summary>

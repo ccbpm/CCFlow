@@ -458,6 +458,8 @@ namespace BP.Sys
         /// <param name="jsonStrOfH5Frm"></param>
         public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
         {
+          //  BP.DA.DataType.WriteFile("D:\\AAA.JSON", jsonStrOfH5Frm);
+
             JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
             if (jd.IsObject == false)
                 throw new Exception("error:表单格式不正确，保存失败。");
@@ -600,8 +602,16 @@ namespace BP.Sys
                 switch (shape)
                 {
                     case "Label": //保存标签.
-                        BP.Sys.CCFormParse.SaveLabel(fk_mapdata, control, properties, labelPKs, ctrlID);
-                        labelPKs = labelPKs.Replace(ctrlID + "@", "@");
+                        if (ctrlID.IndexOf("RB_") == 0)
+                        {
+                            /*让其向下运行.*/
+                            shape = "RadioButtonItem";
+                        }
+                        else
+                        {
+                            BP.Sys.CCFormParse.SaveLabel(fk_mapdata, control, properties, labelPKs, ctrlID);
+                            labelPKs = labelPKs.Replace(ctrlID + "@", "@");
+                        }
                         continue;
                     case "Button": //保存Button.
                         BP.Sys.CCFormParse.SaveButton(fk_mapdata, control, properties, btnsPKs, ctrlID);
@@ -615,8 +625,7 @@ namespace BP.Sys
                         BP.Sys.CCFormParse.SaveImage(fk_mapdata, control, properties, imgPKs, ctrlID);
                         imgPKs = imgPKs.Replace(ctrlID + "@", "@");
                         continue;
-                  
-                    default:
+                     default:
                         break;
                 }
                 #endregion 装饰类控件.
@@ -681,14 +690,18 @@ namespace BP.Sys
                     continue;
                 }
 
-                if (shape == "RadioButton")
+                if (shape == "RadioButtonItem")
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveFrmRadioButton(fk_mapdata, ctrlID, x, y);
                     eleIDs = eleIDs.Replace(ctrlID + "@", "@");
                     continue;
                 }
-                
+
+                if (shape == "RadioButton")
+                {
+                    continue;
+                }
                 #endregion 附件.
 
                 throw new Exception("@没有判断的类型:shape = " + shape);

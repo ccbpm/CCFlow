@@ -1099,6 +1099,7 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("Sys_FrmAttachment");
 
                 map.DepositaryOfEntity = Depositary.None;

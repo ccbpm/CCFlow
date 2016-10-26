@@ -370,10 +370,6 @@ namespace BP.WF
                 selectAccper.CheckPhysicsTable();
                 #endregion
 
-                #region 升级wf-generworkerlist 2014-05-09
-                GenerWorkerList gwl = new GenerWorkerList();
-                gwl.CheckPhysicsTable();
-                #endregion 升级wf-generworkerlist 2014-05-09
 
                 #region  升级 NodeToolbar
                 FrmField ff = new FrmField();
@@ -452,24 +448,8 @@ namespace BP.WF
                 sql += "@UPDATE WF_Node SET SF_W=0 WHERE SF_W IS NULL";
                 sql += "@UPDATE WF_Node SET SF_H=0 WHERE SF_H IS NULL";
                 BP.DA.DBAccess.RunSQLs(sql);
-
                 #endregion 执行更新.
-
-                #region 执行报表设计。
-                Flows fls = new Flows();
-                //fls.RetrieveAll();
-                //foreach (Flow fl in fls)
-                //{
-                //    try
-                //    {
-                //        MapRpts rpts = new MapRpts(fl.No);
-                //    }
-                //    catch
-                //    {
-                //        fl.DoCheck();
-                //    }
-                //}
-                #endregion
+                 
 
                 #region 升级站内消息表 2013-10-20
                 BP.WF.SMS sms = new SMS();

@@ -1606,8 +1606,17 @@ namespace BP.Sys
                     if (str == null || str == "")
                         continue;
 
-                    //设置该属性为false.
-                    en.Row[str.Replace("CB_", "")] = 0;
+                    if (str.Contains("CBPara"))
+                    {
+                        /*如果是参数字段.*/
+                        en.SetPara(str.Replace("CBPara_", ""), 0);
+                    }
+                    else
+                    {
+                        //设置该属性为false.
+                        en.Row[str.Replace("CB_", "")] = 0;
+                    }
+
                 }
             }
 
@@ -1632,7 +1641,31 @@ namespace BP.Sys
                 else if (key.StartsWith("RB_"))
                     attrKey = attrKey.Replace("RB_", "");
                 else
+                {
+                    //给参数赋值.
+
+                    //是checkbox 类型的数据.
+                    if (key.IndexOf("CBPara_") == 0)
+                    {
+                        en.SetPara(attrKey, 1);
+                        continue;
+                    }
+
+                    if (key.StartsWith("TBPara_"))
+                        attrKey = attrKey.Replace("TBPara_", "");
+                    else if (key.StartsWith("CBPara_"))
+                        attrKey = attrKey.Replace("CBPara_", "");
+                    else if (key.StartsWith("DDLPara_"))
+                        attrKey = attrKey.Replace("DDLPara_", "");
+                    else if (key.StartsWith("RBPara_"))
+                        attrKey = attrKey.Replace("RBPara_", "");
+                    else
+                        continue;
+
+                    //其他控件类型 给参数赋值.
+                    en.SetPara(attrKey, reqest.Form[key]);
                     continue;
+                }
 
                 string val = reqest.Form[key];
                 if (key.IndexOf("CB_") == 0)

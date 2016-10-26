@@ -281,7 +281,8 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
 
 
-                map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它",true, true, NodeAttr.WhoExeIt, "@0=操作员执行@1=机器执行@2=混合执行");
+                map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它",true, true, NodeAttr.WhoExeIt,
+                    "@0=操作员执行@1=机器执行@2=混合执行");
                 map.SetHelperUrl(NodeAttr.WhoExeIt, "http://ccbpm.mydoc.io/?v=5404&t=17913");
 
                 map.AddDDLSysEnum(NodeAttr.TurnToDeal, 0, "发送后转向",
@@ -698,8 +699,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-             
-
 
                  rm = new RefMethod();
                 rm.Title = "节点事件"; // "调用事件接口";
@@ -723,7 +722,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-             
 
                 rm = new RefMethod();
                 rm.Title = "流程完成条件"; // "流程完成条件";
@@ -753,7 +751,6 @@ namespace BP.WF.Template
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Msg.gif";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
 
                 if (Glo.IsEnableZhiDu)
                 {
@@ -886,13 +883,14 @@ namespace BP.WF.Template
                 #endregion 表单设置.
 
                 #region 考核.
-                rm = new RefMethod();
-                rm.Title = "设置考核规则";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/CH.png";
-                rm.ClassMethodName = this.ToString() + ".DoCHRole";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "考核规则";
-                map.AddRefMethod(rm);
+
+                    rm = new RefMethod();
+                    rm.Title = "设置考核规则";
+                    rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/CH.png";
+                    rm.ClassMethodName = this.ToString() + ".DoCHRole";
+                    rm.RefMethodType = RefMethodType.RightFrameOpen;
+                    rm.GroupName = "考核规则";
+                    map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "超时处理规则";

@@ -3468,6 +3468,10 @@ namespace BP.En
     public abstract class Entities : CollectionBase
     {
         #region 查询方法.
+        /// <summary>
+        /// 查询全部
+        /// </summary>
+        /// <returns></returns>
         public virtual int RetrieveAllFromDBSource()
         {
             QueryObject qo = new QueryObject(this);

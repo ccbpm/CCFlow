@@ -674,7 +674,7 @@ namespace BP.WF.Template
                 title = BP.DA.DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
 
             string hostUrl = Glo.HostURL;
-            string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DataType.CurrentDataTime;
+            string sid = "{EmpStr}_" + workid + "_" + objs.VarToNodeID + "_" + DataType.CurrentDataTime;
             string openWorkURl = hostUrl + "WF/Do.aspx?DoType=OF&SID=" + sid;
             openWorkURl = openWorkURl.Replace("//", "/");
             openWorkURl = openWorkURl.Replace("//", "/");

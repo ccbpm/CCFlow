@@ -1571,7 +1571,6 @@ function getFormData() {
         formArrResult.push(ele);
     });
 
-
     //获取表单中禁用的表单元素的值
     var disabledEles = $('#divCCForm :disabled');
     $.each(disabledEles, function (i, disabledEle) {
@@ -1602,14 +1601,14 @@ function getFormData() {
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
         }
+    });
 
-        var hiddens = $('input[type=hidden]');
-        $.each(hiddens, function (i, hidden) {
-            if ($(hidden).attr("name").indexOf('TB_') == 0) {
-                //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
-            }
-        });
-        
+    //获取表单中隐藏的表单元素的值
+    var hiddens = $('input[type=hidden]');
+    $.each(hiddens, function (i, hidden) {
+        if ($(hidden).attr("name").indexOf('TB_') == 0) {
+            formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
+        }
     });
     formss = formArrResult.join('&');
     //加上URL中的参数

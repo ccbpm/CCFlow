@@ -50,10 +50,9 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=StudentInit&No=" + no + "&m=" + Math.random(),
+                url: Handler + "?DoType=Student_Init&No=" + no + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    // alert(data);
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -94,9 +93,11 @@
 <td> 整治面貌</td>
 <td>
 
-<input id="RB_ZZMM_0" type="radio" name="ZZMM" value="0"  /><label for="RB_ZZMM_0">少先队员</label>
-<input id="RB_ZZMM_1" type="radio" name="ZZMM" value="1"  /><label for="RB_ZZMM_1">团员</label>
-<input id="RB_ZZMM_2" type="radio" name="ZZMM" value="2"  /><label for="RB_ZZMM_2">党员</label>
+<!--  必须使用 RB_ 枚举值命名. -->
+
+<input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0"  /><label for="RB_ZZMM_0">少先队员</label>
+<input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1"  /><label for="RB_ZZMM_1">团员</label>
+<input id="RB_ZZMM_2" type="radio" name="RB_ZZMM" value="2"  /><label for="RB_ZZMM_2">党员</label>
 
 </td>
 </tr>
@@ -160,7 +161,7 @@
 
         var no = GetQueryString("No");
 
-        var CheckBoxIDs = GenerCheckIDs(); //获得所有的checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+        var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
        // alert(CheckBoxIDs);
         var frmData = $("#cc").serialize();
         //alert(frmData);
@@ -168,7 +169,7 @@
             data: frmData,
             type: 'post',
             async: true,
-            url: Handler + "?DoType=StudentSave&CheckBoxIDs=" + CheckBoxIDs + "&No=" + no + "&m=" + Math.random(),
+            url: Handler + "?DoType=Student_Save&CheckBoxIDs=" + checkBoxIDs + "&No=" + no + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
 

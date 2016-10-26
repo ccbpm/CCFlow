@@ -373,6 +373,9 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
             this.Response.Write("<br>部门名称:" + emp.FK_DeptText);
         }
 
+        //等于.
+        myEmps.Retrieve(EmpAttr.FK_Dept, "01");
+
      //   DataTable mydt = qo.DoQueryToTable();  // 查询出来的数据转入到datatable里。.
 
         Emps myEmp1s = new Emps();

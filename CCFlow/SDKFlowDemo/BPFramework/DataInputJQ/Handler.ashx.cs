@@ -62,14 +62,14 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
             {
                 switch (this.DoType)
                 {
-                    case "StudentInit": //初始化实体demo.
-                        msg = this.StudentInit();
+                    case "Student_Init": //初始化实体demo.
+                        msg = this.Student_Init();
                         break;
-                    case "StudentSave": //保存实体demo.
-                        msg = this.StudentSave();
+                    case "Student_Save": //保存实体demo.
+                        msg = this.Student_Save();
                         break;
-                    case "StudentDelete":
-                        msg = this.StudentDelete();
+                    case "Student_Delete":
+                        msg = this.Student_Delete();
                         break;
                     default:
                         msg = "err@没有判断的标记:" + this.DoType;
@@ -88,7 +88,7 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
         /// 实体保存
         /// </summary>
         /// <returns></returns>
-        public string StudentSave()
+        public string Student_Save()
         {
             BP.Demo.BPFramework.Student stu = new BP.Demo.BPFramework.Student();
             if (this.No != null)
@@ -106,12 +106,15 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
         /// 初始化学生信息.
         /// </summary>
         /// <returns></returns>
-        public string StudentInit()
+        public string Student_Init()
         {
             BP.Demo.BPFramework.Student en = new BP.Demo.BPFramework.Student();
             if (this.No ==null)
             {
                 en.No = en.GenerNewNo;
+                en.Age = 23;
+                en.Addr = "山东.济南.";
+
             }
             else
             {
@@ -121,10 +124,10 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
             return en.ToJson();
         }
         /// <summary>
-        /// 实体保存
+        /// 删除
         /// </summary>
         /// <returns></returns>
-        public string StudentDelete()
+        public string Student_Delete()
         {
             BP.Demo.BPFramework.Student stu = new BP.Demo.BPFramework.Student();
             if (this.No != null)

@@ -270,8 +270,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SelectorAttr.SelectorDBShowWay, 0, "数据显示方式", true, true,
                 SelectorAttr.SelectorDBShowWay, "@0=表格显示@1=树形显示");
 
-                map.AddDDLSysEnum(SelectorAttr.SelectorModel, 0, "窗口模式", true, true, SelectorAttr.SelectorModel,
-                    "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url");
+                map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "窗口模式", true, true, SelectorAttr.SelectorModel,
+                    "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url@5=使用通用人员选择器");
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "参数1", true, false, true);
                 map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "参数2", true, false, true);
@@ -312,6 +312,8 @@ namespace BP.WF.Template
                 case Template.SelectorModel.SQL:
                     return BySQL(nodeid);
                 default:
+                    DataSet ds= new DataSet();
+                    return ds;
                     break;
             }
             return null;

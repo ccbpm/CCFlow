@@ -1653,8 +1653,6 @@ namespace BP.Sys
 
                     if (key.StartsWith("TBPara_"))
                         attrKey = attrKey.Replace("TBPara_", "");
-                    else if (key.StartsWith("CBPara_"))
-                        attrKey = attrKey.Replace("CBPara_", "");
                     else if (key.StartsWith("DDLPara_"))
                         attrKey = attrKey.Replace("DDLPara_", "");
                     else if (key.StartsWith("RBPara_"))

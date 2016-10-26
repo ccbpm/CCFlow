@@ -13,6 +13,18 @@ namespace BP.Sys
     /// </summary>
     public class CCFormAPI
     {
+        /// <summary>
+        /// 获得附件信息.
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="pk">主键</param>
+        /// <returns>附件信息.</returns>
+        public static string GetAthInfos(string fk_mapdata, string pk)
+        {
+            int num = BP.DA.DBAccess.RunSQL("SELECT COUNT(MYPK) FROM Sys_FrmAttachmentDB WHERE FK_MapData='"+fk_mapdata+"' AND RefPKVal="+pk);
+            return "附件("+num+")";
+        }
+
         #region 创建修改字段.
         /// <summary>
         /// 创建通用组件入口

@@ -124,6 +124,21 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return str;
             }
         }
+
+        /// <summary>
+        /// 字段属性编号
+        /// </summary>
+        public string Ath
+        {
+            get
+            {
+                string str = context.Request.QueryString["Ath"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+
         public HttpContext context = null;
         /// <summary>
         /// 获得表单的属性.
@@ -251,6 +266,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "Down": //移动位置.
                         MapAttr attrDown = new MapAttr(this.MyPK);
                         attrDown.DoDown();
+                        break;
+                    case "Attachment_Init": //字段属性
+                        msg = this.Attachment_Init();
                         break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
@@ -1071,6 +1089,74 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 return false;
             }
+        }
+
+
+        public bool IsNodeSheet
+        {
+            get
+            {
+                if (this.FK_MapData.StartsWith("ND") == true)
+                    return true;
+                return false;
+            }
+        }
+        /// <summary>
+        /// 字段属性编辑 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Attachment_Init()
+        {
+            FrmAttachment ath = new FrmAttachment();
+            ath.FK_MapData = this.FK_MapData;
+            ath.NoOfObj = this.Ath;
+            ath.FK_Node = this.FK_Node;
+
+            if (this.FK_Node == 0)
+                ath.MyPK = this.FK_MapData + "_" + this.Ath;
+            else
+                ath.MyPK = this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node;
+
+            int i = ath.RetrieveFromDBSources();
+            if (i == 0)
+            {
+                ath.NoOfObj = "Ath1";
+                ath.Name = "我的附件";
+            }
+
+            if (i == 0 && this.FK_Node != 0)
+            {
+
+                /*这里处理 独立表单解决方案, 如果有FK_Node 就说明该节点需要单独控制该附件的属性. */
+                MapData mapData = new MapData();
+                mapData.RetrieveByAttr(MapDataAttr.No, this.FK_MapData);
+                if (mapData.AppType == "0")
+                {
+                    FrmAttachment souceAthMent = new FrmAttachment();
+                    // 查询出来原来的数据.
+                    int rowCount = souceAthMent.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, this.Ath, FrmAttachmentAttr.FK_Node, "0");
+                    if (rowCount > 0)
+                    {
+                        ath.Copy(souceAthMent);
+                    }
+                }
+                if (this.FK_Node == 0)
+                    ath.MyPK = this.FK_MapData + "_" + this.Ath;
+                else
+                    ath.MyPK = this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node;
+
+                //插入一个新的.
+                ath.FK_Node = this.FK_Node;
+                ath.FK_MapData = this.FK_MapData;
+                ath.NoOfObj = this.Ath;
+                ath.DirectInsert();
+            }
+            if (ath.IsNodeSheet == true)
+            {
+
+
+            }
+            return ath.ToJson();
         }
     }
 }

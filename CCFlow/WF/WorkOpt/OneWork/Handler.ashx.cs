@@ -3,6 +3,7 @@ using System.Web;
 using BP.DA;
 using BP.Web;
 using System.Data;
+using BP.WF;
 
 namespace CCFlow.WF.WorkOpt.OneWork
 {
@@ -53,6 +54,19 @@ namespace CCFlow.WF.WorkOpt.OneWork
         }
 
 
+        public string Msg
+        {
+            get
+            {
+                string str = context.Request.QueryString["TB_Msg"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+
+
+        
         public string UserName
         {
             get
@@ -63,6 +77,19 @@ namespace CCFlow.WF.WorkOpt.OneWork
                 return str;
             }
         }
+
+
+        public string Title
+        {
+            get
+            {
+                string str = context.Request.QueryString["Title"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+
 
 
         /// <summary>
@@ -223,7 +250,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
             {
                 switch (this.DoType)
                 {
-                    case "FlowBBSUser": //获得当前用户.
+                    case "FlowBBSUser": //获得当前用户no.
                         msg = this.FlowBBSUser();
                         break;
                     case "FlowBBSDept": //获得用户部门.
@@ -247,6 +274,9 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     case "FlowBBSCount": //统计评论条数.
                         msg = this.FlowBBSCount();
                         break;
+                    case "FlowBBSUserName": //获得当前用户名称.
+                        msg = this.FlowBBSUserName();
+                        break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
@@ -264,9 +294,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
         /// </summary>
         /// <returns></returns>
         public string FlowBBSList()
-        {
-
-         
+        {        
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
@@ -282,6 +310,13 @@ namespace CCFlow.WF.WorkOpt.OneWork
             return name;
 
         }
+        public string FlowBBSUserName()
+        {
+            string name = string.Empty;
+            name = BP.Web.WebUser.Name;
+            return name;
+
+        }
 
         public string FlowBBSDept()
         {
@@ -293,7 +328,6 @@ namespace CCFlow.WF.WorkOpt.OneWork
         }
 
         /// 查看某一用户的评论.
- 
         public  string FlowBBSCheck()
         {
             Paras pss = new Paras();
@@ -302,8 +336,6 @@ namespace CCFlow.WF.WorkOpt.OneWork
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(pss));
 
        }
-
-
         /// <summary>
         /// 提交评论.
         /// </summary>
@@ -315,8 +347,6 @@ namespace CCFlow.WF.WorkOpt.OneWork
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE MyPK=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "MyPK";
             ps.Add("MyPK", mypk);
-           
-            //转化成json
             return BP.Tools.Json.ToJson( BP.DA.DBAccess.RunSQLReturnTable(ps));
         }
 
@@ -324,20 +354,19 @@ namespace CCFlow.WF.WorkOpt.OneWork
         /// 回复评论.
         /// </summary>
         /// <returns></returns>
-
         public string FlowBBSReplay()
         {
-            string msg = this.GetValFromFrmByKey("TB_Msg");
-            string mypk = BP.WF.Dev2Interface.Flow_BBSAdd(this.FK_Flow, this.WorkID, this.FID, msg, WebUser.No, WebUser.Name);
-            Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE MyPK=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "MyPK";
-            ps.Add("MyPK", mypk);
-
-            //转化成json
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
+              SMS  sms = new SMS();
+              sms.RetrieveByAttr(SMSAttr.MyPK, MyPK);
+              sms.MyPK = DBAccess.GenerGUID();
+              sms.RDT = DataType.CurrentDataTime;
+              sms.SendToEmpNo = this.UserName;  
+              sms.Sender = WebUser.No;
+              sms.Title = this.Title;
+              sms.DocOfEmail = this.Msg;
+              sms.Insert(); 
+              return null;
         }
-
-
         /// <summary>
         /// 统计评论条数.
         /// </summary>
@@ -352,7 +381,6 @@ namespace CCFlow.WF.WorkOpt.OneWork
             string count = BP.DA.DBAccess.RunSQLReturnValInt(ps).ToString();
             return  count;
         }
-
 
         public bool IsReusable
         {

@@ -220,6 +220,44 @@ function GenerFullAllCtrlsVal(data) {
             continue;
         }
 
+
+        // 处理参数字段.....................
+
+        // textbox
+        tb = document.getElementById('TBPara_' + attr);
+        if (tb != null) {
+            tb.value = val;
+            continue;
+        }
+
+        //checkbox.
+        cb = document.getElementById('CBPara_' + attr);
+        if (cb != null) {
+            if (val == "1")
+                cb.checked = true;
+            else
+                cb.checked = false;
+            continue;
+        }
+
+        //下拉框.
+        ddl = document.getElementById('DDLPara_' + attr);
+        if (ddl != null) {
+
+            if (ddl.options.length == 0)
+                continue;
+
+            $("#DDL_" + attr).val(val); // 操作权限.
+            continue;
+        }
+
+        // RadioButton. 单选按钮.
+        rb = document.getElementById('RBPara_' + attr + "_" + val);
+        if (rb != null) {
+            rb.checked = true;
+            continue;
+        }
+
         unSetCtrl += "@" + attr + " = " + val;
     }
 

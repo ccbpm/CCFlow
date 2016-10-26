@@ -347,6 +347,14 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
             }
             #endregion 处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
 
+            GenerWorkFlow gwfw = new GenerWorkFlow();
+            gwfw.WorkID = this.WorkID;
+            gwfw.RetrieveFromDBSources();
+            if (nd.IsRememberMe == true)
+                gwfw.Paras_ToNodes = toNodes;
+            else
+                gwfw.Paras_ToNodes = "";
+            gwfw.Save();
 
             /*处理转向问题.*/
             switch (nd.HisTurnToDeal)

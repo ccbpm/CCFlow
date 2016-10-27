@@ -72,7 +72,7 @@
                     GenerFullAllCtrlsVal(data);
 
 
-                    alert("初始化成功：" + data);
+                    alert("初始化成功");
                 },
                 error: function (data) {
                     alert(初始化失败);
@@ -80,6 +80,55 @@
 
             });
         });
+
+        function Save() {
+            var CheckBoxIDs = GenerCheckIDs(); //获得所有的checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            alert(CheckBoxIDs);
+            var frmData = $("#cc").serialize();
+            var Ath = GetQueryString("Ath");
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Attachment_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&Ath=" + Ath + "&CheckBoxIDs=" + CheckBoxIDs + "m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+
+                    alert(data);
+                    return;
+                  //  window.close();
+                }
+            });
+        }
+        function Delete() {
+            var Ath = GetQueryString("Ath");
+            var mypk = GetQueryString("FK_MapData") +"_"+ Ath;
+            alert("mypk======" + mypk);
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Attachment_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&MyPK=" + mypk + "&Ath=" + Ath + "m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        Attachment_Init();
+                        alert(data);
+                        return;
+                    }
+
+
+                    alert(data);
+                    //  window.close();
+                }
+            });   
+        }
         </script>
 </head>
 <body onkeypress="Esc();" topmargin="0" leftmargin="0"   style="font-size:smaller">
@@ -252,24 +301,24 @@
 <td class='Idx' >24</td>
 <td ><input id="CBPara_IsWoEnableRevise" type="checkbox" name="CBPara_IsWoEnableRevise" /><label for="CB_IsWoEnableRevise">是否启用修订？</label></td>
 <td ><input id="CBPara_IsWoEnableViewKeepMark" type="checkbox" name="CBPara_IsWoEnableViewKeepMark" /><label for="CB_IsWoEnableViewKeepMark">是否查看用户留痕？</label></td>
-<td ><input id="Para_CB_IsWoEnablePrint" type="checkbox" name="Para_CB_IsWoEnablePrint" /><label for="CB_IsWoEnablePrint">是否打印？</label></td>
+<td ><input id="CBPara_IsWoEnablePrint" type="checkbox" name="CBPara_IsWoEnablePrint" /><label for="CB_IsWoEnablePrint">是否打印？</label></td>
 </tr>
 <tr>
 <td class='Idx' >25</td>
-<td ><input id="CB_IsWoEnableOver" type="checkbox" name="CB_IsWoEnableOver" /><label for="CB_IsWoEnableOver">是否启用套红？</label></td>
-<td ><input id="CB_IsWoEnableSeal" type="checkbox" name="CB_IsWoEnableSeal" /><label for="CB_IsWoEnableSeal">是否启用签章？</label></td>
-<td ><input id="CB_IsWoEnableTemplete" type="checkbox" name="CB_IsWoEnableTemplete" /><label for="CB_IsWoEnableTemplete">是否启用模板文件？</label></td>
+<td ><input id="CBPara_IsWoEnableOver" type="checkbox" name="CBPara_IsWoEnableOver" /><label for="CB_IsWoEnableOver">是否启用套红？</label></td>
+<td ><input id="CBPara_IsWoEnableSeal" type="checkbox" name="CBPara_IsWoEnableSeal" /><label for="CB_IsWoEnableSeal">是否启用签章？</label></td>
+<td ><input id="CBPara_IsWoEnableTemplete" type="checkbox" name="CBPara_IsWoEnableTemplete" /><label for="CB_IsWoEnableTemplete">是否启用模板文件？</label></td>
 </tr>
 <tr>
 <td class='Idx' >26</td>
-<td ><input id="CB_IsWoEnableCheck" type="checkbox" name="CB_IsWoEnableCheck" /><label for="CB_IsWoEnableCheck">是否记录节点信息？</label></td>
-<td ><input id="CB_IsWoEnableInsertFlow" type="checkbox" name="CB_IsWoEnableInsertFlow" /><label for="CB_IsWoEnableInsertFlow">是否启用插入流程？</label></td>
-<td ><input id="CB_IsWoEnableInsertFengXian" type="checkbox" name="CB_IsWoEnableInsertFengXian" /><label for="CB_IsWoEnableInsertFengXian">是否启用插入风险点？</label></td>
+<td ><input id="CBPara_IsWoEnableCheck" type="checkbox" name="CBPara_IsWoEnableCheck" /><label for="CB_IsWoEnableCheck">是否记录节点信息？</label></td>
+<td ><input id="CBPara_IsWoEnableInsertFlow" type="checkbox" name="CBPara_IsWoEnableInsertFlow" /><label for="CB_IsWoEnableInsertFlow">是否启用插入流程？</label></td>
+<td ><input id="CBPara_IsWoEnableInsertFengXian" type="checkbox" name="CBPara_IsWoEnableInsertFengXian" /><label for="CB_IsWoEnableInsertFengXian">是否启用插入风险点？</label></td>
 </tr>
 <tr>
 <td class='Idx' >27</td>
-<td ><input id="CB_IsWoEnableMarks" type="checkbox" name="CB_IsWoEnableMarks" /><label for="CB_IsWoEnableMarks">是否进入留痕模式？</label></td>
-<td ><input id="CB_IsWoEnableDown" type="checkbox" name="CB_IsWoEnableDown" /><label for="CB_IsWoEnableDown">是否启用下载？</label></td>
+<td ><input id="CBPara_IsWoEnableMarks" type="checkbox" name="CBPara_IsWoEnableMarks" /><label for="CB_IsWoEnableMarks">是否进入留痕模式？</label></td>
+<td ><input id="CBPara_IsWoEnableDown" type="checkbox" name="CBPara_IsWoEnableDown" /><label for="CB_IsWoEnableDown">是否启用下载？</label></td>
 <td   >&nbsp;</td>
 </tr>
 </tr>
@@ -279,7 +328,7 @@
 </tr>
 <tr>
 <td class='Idx' >29</td>
-<td   colspan="3"  ><input id="CB_FastKeyIsEnable" type="checkbox" name="CB_FastKeyIsEnable" /><label for="CB_FastKeyIsEnable">是否启用生成快捷键？(启用就会按照规则生成放在附件的同一个目录里面)</label></td>
+<td   colspan="3"  ><input id="CBPara_FastKeyIsEnable" type="checkbox" name="CBPara_FastKeyIsEnable" /><label for="CB_FastKeyIsEnable">是否启用生成快捷键？(启用就会按照规则生成放在附件的同一个目录里面)</label></td>
 </tr>
 <tr>
 <td class='Idx' >30</td>
@@ -292,8 +341,8 @@
 <tr>
 <td class='Idx' >32</td>
 <td   >&nbsp;</td>
-<td ><input type="submit" name="Btn_Save" value="  Save  " id="Btn_Save" class="Btn" /></td>
-<td ><input type="submit" name="Btn_Delete" value="  Delete  " id="Btn_Delete" class="Btn" /></td>
+<td ><input type="button" name="Btn_Save" value="保存" id="Btn_Save" onclick="Save();" class="Btn" /></td>
+<td ><input type="button" name="Btn_Delete" value=" 删除  " id="Btn_Delete" onclick="Delete();" class="Btn" /></td>
 <td >&nbsp;</td>
 </tr></Table>
     </center>

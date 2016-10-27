@@ -605,7 +605,11 @@ function Save() {
 function returnWorkWindowClose(data) {
     $('#returnWorkModal').modal('hide');
     $('#Message').html(data);
-    if (data.indexOf('工作已经被您退回到') == 0) {
+    if (data.indexOf('err@') == 0  || data=="取消") {//发送时发生错误
+        
+    }
+    else {
+        //发送成功时
         setAttachDisabled();
         setToobarUnVisible();
         setFormEleDisabled();

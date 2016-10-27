@@ -768,9 +768,6 @@ display:none;
 .modal-body {
     border-radius: 20px;
     margin: 15px 10px;
-    background: #f4f9ff;
-    border:#2884fa 1px solid;
-
     text-align:right;
 }
 

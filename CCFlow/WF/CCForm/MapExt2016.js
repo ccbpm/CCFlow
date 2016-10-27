@@ -226,6 +226,9 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
     //update by dgq 修改路径
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
 
+    //设置摸态框的宽度和高度
+    $('#returnPopValModal .modal-dialog').height(height);
+    $('#returnPopValModal .modal-dialog').width(width);
     ctrl = $('#' + ctrl);
     var wfpreHref = GetLocalWFPreHref();
     url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;

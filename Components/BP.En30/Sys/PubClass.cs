@@ -1644,13 +1644,7 @@ namespace BP.Sys
                 {
                     //给参数赋值.
 
-                    //是checkbox 类型的数据.
-                    if (key.IndexOf("CBPara_") == 0)
-                    {
-                        en.SetPara(attrKey, 1);
-                        continue;
-                    }
-
+                   
                     if (key.StartsWith("TBPara_"))
                         attrKey = attrKey.Replace("TBPara_", "");
                     else if (key.StartsWith("DDLPara_"))
@@ -1659,7 +1653,12 @@ namespace BP.Sys
                         attrKey = attrKey.Replace("RBPara_", "");
                     else
                         continue;
-
+                    //是checkbox 类型的数据.
+                    if (key.IndexOf("CBPara_") == 0)
+                    {
+                        en.SetPara(attrKey, 1);
+                        continue;
+                    }
                     //其他控件类型 给参数赋值.
                     en.SetPara(attrKey, reqest.Form[key]);
                     continue;

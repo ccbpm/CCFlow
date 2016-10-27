@@ -198,7 +198,7 @@
                 sBuilder.Append("<td class='Idx' nowrap>" + i + "</td>");
                 if (BP.WF.Glo.IsWinOpenEmpWorks)
                 {
-                    sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\"" + " >" + "<a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FID=0&WorkID=" + dr["WorkID"] + "&IsRead=0&T=" + timeKey + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
+                    sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\"" + " >" + "<a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FID=0&WorkID=" + dr["WorkID"] + "&FK_Node=" + int.Parse(dr["FK_Flow"].ToString()) + "01&IsRead=0&T=" + timeKey + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
                 }
 
                 sBuilder.Append("<td  nowrap >" + dr["FlowName"].ToString() + "</td>");

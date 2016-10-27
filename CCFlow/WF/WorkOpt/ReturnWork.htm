@@ -16,11 +16,17 @@
 
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <style type="text/css">
-        /*#TB_Doc
-        {
-            height: 132px;
-            width: 433px;
-        }*/
+        body {
+            background: transparent;
+        }
+
+            body div {
+                margin: 20px auto;
+            }
+
+        #Message {
+            width: 100%;
+        }
     </style>
     <script type="text/javascript">
         var pageData = {};
@@ -77,6 +83,7 @@
                     }
                 }
             });
+            $(".foot").hide();
         }
 
         //取消退回
@@ -92,19 +99,19 @@
     </script>
 </head>
 <body>
-    <form id="cc">
-        <div class="row">
-            <div class="col-md-6 col-sm-6">  请选择要退回到的节点:</div>
-            <div class="col-md-6 col-sm-6">
-                <select id="DDL_Nodes" name="DDL_Nodes"></select>
-            </div>
-            <div class="col-md-12 col-sm-12"><textarea id="TB_Doc" name="TB_Doc"></textarea> </div>
-            <div class="col-md-12 col-sm-12"> 上传附件：</div>
-            <div class="col-md-12 col-sm-12" style="float:right;">
-                <input type="button" value="确定退回" onclick="ReturnWork(0);" /><input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" />
+    <div style="text-align: left;"> 
+        请选择要退回到的节点:
+        <select id="DDL_Nodes" name="DDL_Nodes" style="width: 62%;"></select>
+    </div>
+<div>
+    退回原因：
+    <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 64%;"></textarea>
+</div>
+            <div style="text-align: right; width: 22%; float: left;"> 上传附件：</div>
+            <div style="position: fixed;bottom: 0px;right: 0px;" class="foot">
+                <input type="button" value="确定退回" onclick="ReturnWork(0);"/>
+                <input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" />
                 <input type="button" value="关闭" onclick="Close();" />
             </div>
-        </div>
-    </form>
-</body>
+ </body>
 </html>

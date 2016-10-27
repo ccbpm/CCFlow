@@ -35,7 +35,7 @@
             line-height: 18px;
         }
 
-        .portlet-body, body, .portlet-title {
+        .portlet-body,.portlet-title {
             background: #f4f9ff !important;
             border-bottom: 0px;
         }
@@ -109,9 +109,16 @@
         }
 
         #groupTable #dt > li {
-            /*background: #d4e6fe;*/
             font-weight: bold;
-            background: #f4f9ff;
+        }
+        #searchS {
+            overflow:hidden;
+        }
+        #searchS div{
+            height:40px;
+            line-height:40px;
+            text-align:left;
+            float: left;
         }
     </style>
     <script type="text/javascript">
@@ -285,8 +292,10 @@
                         $('body').append($('<div>' + data + '</div>'));
                         $('#btnOk').attr('disabled', true);
                     }
+                    
                 }
             });
+            $(".foot").hide();
         }
 
         //取消【选择接收人并发送】
@@ -299,8 +308,8 @@
         }
         //初始化人员选择窗口
         function initSelectEmpModal() {
-            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
-               '<div class="modal-dialog">'
+            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 80%;margin: 40px auto;">' +
+               '<div class="modal-dialog" style="margin: 0px;">'
                    + '<div class="modal-content" style="border-radius:0px;width:700px;">'
                       + '<div class="modal-header">'
                           + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
@@ -316,7 +325,9 @@
             $('body').append($(selectEmpModalHtml));
             $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random()+"&IsSelectMore=1");
 
-            $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+            $('#BtnSelectEmps').bind('click', function () {
+                $('#selectEmpsModal').modal().show();
+            });
         }
 
         //设置选中的人员
@@ -332,22 +343,23 @@
 </head>
 <body>
     <div id="searchS">
-        <div style="float: left;">请选择要到达到的节点:</div>
-        <div style="float: left;">
+        <div>请选择要到达到的节点：</div>
+        <div style="width: 55%;">
             <select id="searchS1" onclick="dtTable()" style="width: 100%;"></select>
         </div>
     </div>
-    <div id="groupTable" style="display: none; overflow-y: auto;">
-        <ul id="dt" data-data="true"></ul>
+    <div id="groupTable" style="display: none; overflow-y: auto;text-align:left;">
+        <ul id="dt" data-data="true" style="padding-left: 0px;"></ul>
     </div>
     <div id="selectEmpsDiv" style="display:none;">
         <div>
         请选择接受人：
-        <input type="text" id="ToEmp" name="ToEmp" value='' /> <input type="button" id="BtnSelectEmps" value='选择接受人' />
+        <input type="text" id="ToEmp" name="ToEmp" value='' style="width:55%;"/> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative;
+right: 92px;top: -1px;border-radius: 0px 25px 25px 0px;"/>
         <br />
     </div>
     </div>
-    <div style="float: right;">
+    <div style="position: fixed;bottom: 0px;right: 0px;" class="foot">
         <button id="btnOk" class="btn btn-info" onclick="SendNode()">发送</button>
         <button id="btnCancel" class="btn btn-info" onclick="Close()">取消</button>
     </div>

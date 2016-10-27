@@ -267,15 +267,16 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         MapAttr attrDown = new MapAttr(this.MyPK);
                         attrDown.DoDown();
                         break;
-                    case "Attachment_Init": //字段属性
+                    case "Attachment_Init": //字段属性初始化
                         msg = this.Attachment_Init();
                         break;
-                    case "EditFExtContral_Init": //字段扩展属性.
-                        msg = this.EditFExtContral_Init();
+                    case "Attachment_Save": //字段属性保存
+                        msg = this.Attachment_Save();
                         break;
-                    case "EditFExtContral_Save": //字段扩展属性.
-                        msg = this.EditFExtContral_Save();
+                    case "Attachment_Delete": //字段属性删除
+                        msg = this.Attachment_Delete();
                         break;
+
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
@@ -1225,13 +1226,28 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             ath.FK_MapData = this.FK_MapData;
             ath.NoOfObj = this.Ath;
             ath.FK_Node = this.FK_Node;
+            ath.MyPK = this.FK_MapData + "_" + this.Ath;
 
             ath = BP.Sys.PubClass.CopyFromRequestByPost(ath, context.Request) as FrmAttachment;
-            ath.FK_MapData = this.FK_MapData;
+         
 
-
-            ath.Save(); //执行保存.
+            int i = ath.RetrieveFromDBSources();
+            if (i == 0)
+            {
+                ath.Save(); //执行保存.              
+            }else {
+                ath.Update();
+            }
             return "保存成功..";
+        }
+        public string Attachment_Delete()
+        {
+            FrmAttachment ath = new FrmAttachment();
+
+            ath.MyPK = this.MyPK;  
+
+            ath.Delete();
+            return "删除成功.." + ath.MyPK;
         }
     }
 }

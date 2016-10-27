@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
 
     <script src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
@@ -16,6 +16,8 @@
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
@@ -57,13 +59,13 @@
             padding: 4px 17px !important;
         }
 
-        input[type=text], select {
+        /*input[type=text], select {
             border-radius: 15px !important;
             border: #2884fa 1px solid !important;
             margin: 8px 0px !important;
             line-height: 25px;
             padding-left: 6px;
-        }
+        }*/
 
         #btnSearch {
             height: 30px;
@@ -110,6 +112,30 @@
         font-weight: bold;
         background: #f4f9ff;
     }
+
+        .searchGroup {
+            float: left;
+            padding-right: 25px;
+        }
+        .searchGroup select, .searchGroup input[type=text] {
+            width:auto;
+        }
+            .searchGroup label {
+            padding-right:5px;
+            }
+        #searchForm {
+            float: left;
+        }
+
+        #searchBtnDiv {
+            /*float:right;*/
+        }
+
+        #btnSearch {
+            position: absolute;
+            top: 15px;
+            right: 5px;
+        }
     </style>
     <script type="text/javascript">
         $(function () {
@@ -516,15 +542,17 @@
 
         //初始化多个搜索条件
         function initMoreConSearch(conditionStr) {
-             conditionStr = '$Para=FK_Flow#Label=流程名称#ListSQL= select No，Name from WF_Flow$Para=DTStarttime#Label=启动流程日期从#DefVal=@Now-30$Para=DTEndtime#Label=启动流程日期到#DefVal=@Now';
              var conditions = conditionStr.split('$');
-             var conHtml='';
+             var conHtml = '';
+            //先加上KEY 
+             conHtml += "<div class='searchGroup'><label>" + initPopValData.Hashtable[0].PopValSearchTip + "</label>"+"<input name='Key' id='Key' type='text'/></div>";
             $.each(conditions, function (i, con) {
                 if (con != undefined && con.trim() != '') {
                     var paramList = con.split('#');
                     var paramName = paramList[0].split('=')[1];
                     var lableText = paramList[1].split('=')[1];
-                    conHtml += "<label>" + lableText + "</label>";
+                    var defVal = paramList.length > 2 ? paramList[2].split('=')[1] : '';
+                    conHtml += "<div class='searchGroup'><label>" + lableText + "</label>";
                     if (paramList.length == 3 && (paramList[2].indexOf('ListSQL') >= 0 || paramList[2].indexOf('EnumKey') >= 0)) {//是DDL 下拉框
                         conHtml += "<select name='" + paramName + "' id='" + paramName + "'><option value='all'>请选择</option>";
                         if (initPopValData[paramName] != undefined && initPopValData[paramName].length > 0) {
@@ -534,14 +562,22 @@
                         }
                         conHtml += "</select>";
                     } else {//日期
-                        conHtml += '<input  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
+                        if (defVal != undefined && defVal.trim() != '') {
+                            defVal = defVal.replace('@Now', "(new Date())");
+                            console.log(1+":"+defVal)
+                            defVal = new Date(eval(defVal));
+                            console.log(2 + ":" + defVal)
+                            defVal = defVal.FormateDate("yyyy-MM-dd HH:mm:ss");
+                            console.log(3 + ":" + defVal)
+                        }
+                        conHtml += '<input value="' + defVal + '"  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
                     }
+                    conHtml += "</div>";
                 }
             });
 
             $('#searchDiv').append($(conHtml));
             console.log(conHtml)
-
         }
         //checkbox的选中事件
         function checkBoxChange(obj) {
@@ -726,13 +762,13 @@
     <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
         <!-- BEGIN CHART PORTLET-->
         <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px; padding: 12px 0 0 20px;">
-            <div><form id="searchForm">
-    <div style="font-size: 20px; float: left; width: 100%;" id="searchDiv">
-        <input id="txbSearchVal" value="" type="text" placeholder="标题" style="text-align: center;" />
-        
-    </div>
-</form>
-                <button class="Btn" id="btnSearch">搜索</button>
+            <div>
+                <form id="searchForm">
+                    <div id="searchDiv">
+                    </div></form>
+                <div class="searchBtnDiv">
+                    <button class="Btn" id="btnSearch">搜索</button>
+                </div>
 
     <div style="font-size: 20px; float: left; width: 100%; display: none;">
         已选择列表：

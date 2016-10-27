@@ -487,6 +487,11 @@ function initBar() {
                 $('[value=加签]').unbind('click');
                 $('[value=加签]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
             }
+            if ($('[value=接受人]').length > 0) {
+                $('[value=接受人]').attr('onclick', '');
+                $('[value=接受人]').unbind('click');
+                $('[value=接受人]').bind('click', function () { initModal("accepter"); $('#returnWorkModal').modal().show(); });
+            }
         }
     });
 }
@@ -524,6 +529,10 @@ function initModal(modalType) {
             case "askfor":
                 $('#modalHeader').text("工作移交");
                 modalIframeSrc = "../WF/WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "accepter":
+                $('#modalHeader').text("选择下一个节点及下一个节点接受人");
+                modalIframeSrc = "../WF/WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
             default:
                 break;
@@ -1206,7 +1215,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
             }
 
             if (!islabelIsInEle) {
-                eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  data-tag=' + str + ' class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
+                eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
                 (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                 + "</div>" + eleHtml;
 
@@ -1607,7 +1616,7 @@ function getFormData() {
     var hiddens = $('input[type=hidden]');
     $.each(hiddens, function (i, hidden) {
         if ($(hidden).attr("name").indexOf('TB_') == 0) {
-            formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
+            //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
         }
     });
     formss = formArrResult.join('&');

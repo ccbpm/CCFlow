@@ -948,3 +948,25 @@ body {
 #showCol input[type=radio] {
 cursor:pointer;
 }
+
+/*radio后边跟着的标签*/
+.labRb {
+cursor:pointer;
+}
+input[type=radio] {
+cursor:pointer;
+}
+
+.modal-title {
+    text-align: left;
+    font-size: 16px;
+}
+
+.input-group-addon {
+    cursor: pointer;
+}
+
+/*POP窗中的的树*/
+.tree-demo {
+text-align:left;
+}

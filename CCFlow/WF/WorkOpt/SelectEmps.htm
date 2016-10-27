@@ -51,7 +51,7 @@
             }
         }
 
-        var pageData = { IsSelectMore: false, FK_Dept: GetQueryString('FK_Dept') || '' ,ParentDept:''};
+        var pageData = { IsSelectMore: GetQueryString('IsSelectMore') != undefined && GetQueryString('IsSelectMore')=="1"?true:false, FK_Dept: GetQueryString('FK_Dept') || '', ParentDept: '' };
         var returnVal = {};
 
         //初始化树  接收人
@@ -245,7 +245,7 @@
                 }
             });
             for (var property in nameArrs[0]) {
-                returnVal[property] = returnVal[property].join(";");
+                returnVal[property] = returnVal[property].join(",");
             }
         }
     </script>

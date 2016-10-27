@@ -7,13 +7,14 @@
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
 
-    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
     <script src="../Scripts/QueryString2016.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
+
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
     <!--
        杨玉慧.
@@ -116,12 +117,14 @@
     <script type="text/javascript">
         $(function () {
             dtTable();
+            initSelectEmpModal();
             $("#groupTable").height($(window).height() - 80 + "px");
         });
         //配置数据
         var firstLoad = true;
         var toNode;
         var pageUrlParam = { fk_node: GetQueryString("FK_Node"), WorkID: GetQueryString("WorkID"), FK_Flow: GetQueryString("FK_Flow") };
+
         function dtTable() {
             if (firstLoad) {
                 toNode = 0;
@@ -135,7 +138,9 @@
                     pageUrlParam.WorkID + '&m=' + Math.random(),
                 dataType: 'html',
                 data: {ToNode:toNode},
-                success: function(data) {
+                success: function (data) {
+
+                    console.log(data)
                     if (data != null && data != undefined) {
                         var selDataArr = JSON.parse(data).Nodes;
                         var dtgArr = JSON.parse(data).Depts;
@@ -151,6 +156,14 @@
                             $("#searchS1 option:nth(0)").attr("selected", "selected");
                         }
                         $('#groupTable').css('display', 'block');
+                        if (dtgArr == undefined  && dteArr == undefined ) {//通用人员选择其
+                            $('#selectEmpsDiv').css('display', 'block');
+                            $('#groupTable').css('display', 'none');
+                            return;
+                        } else {
+                            $('#groupTable').css('display', 'block');
+                            $('#selectEmpsDiv').css('display', 'none');
+                        }
                         window.fkName = '';
                         if (dteArr != undefined && dteArr.length > 0) {
                             for (var pro in dteArr[0]) {
@@ -165,25 +178,40 @@
                         var ultdes = '';
                         var s = "";
                         $.each(dtgArr,function(i, obje) {
-                                for (var k = 0; k < dteArr.length; k++) {
-                                    if (obje.No == dteArr[k][fkName]) {
-                                        ultde +=
-                                            "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
-                                    }
+                            for (var k = 0; k < dteArr.length; k++) {
+                                if (obje.No == dteArr[k][fkName]) {
+                                    ultde +=
+                                        "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
                                 }
-                                var groupFileds = $.grep(dteArr, function (value) {
-                                    return $('[name="' + value.FK_Dept + '"]').length == 0;
-                                });
-                                $.each(groupFileds, function(j, objj) {
-                                    ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
-                            });
-                                s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
-                                    ultdes + "</ul></li>";
-                              ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
-                                    ultde + "</ul></li>" + s;
-                                ultde = "";
-                            });
+                            }
+                            ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                                    ultde + "</ul></li>";
+                            ultde = "";
+                        });
+                        //
+                        var groupFileds = $.grep(dteArr, function (value) {
+                            console.log(value)
+                            console.log($('[name="' + value.FK_Dept + '"]').length == "0");
+                            return ($('[name="' + value.FK_Dept + '"]').length != "0");
+                        });
+
+                        console.log(groupFileds)
+                        $.each(groupFileds, function (j, objj) {
+                            ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
+                        });
+                            s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                                ultdes + "</ul></li>";
+                            ultdg += s;
+
+                        //
                         $("#groupTable #dt").html(ultdg);
+                        $(".ulm_head").click(function () {
+                            if (this.checked) {
+                                $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                            } else {
+                                $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                            }
+                        });
                         $(".ulm_head").click(function() {
                                 if (this.checked) {
                                     $(this).parent("li").children("ul").find("input").prop("checked", "checked");
@@ -192,20 +220,20 @@
                                 }
                             });
                         //实体绑定
-                        $.each(dteArr,function(k, obj) {
-                                var lifs = $("#groupTable #dt .lif");
-                                for (var i = 0; i < lifs.length; i++) {
-                                    if ($(lifs[i]).attr("name") == obj[fkName]) {
-                                        var limData = $(lifs[i]).find(".lim");
-                                        for (var m = 0; m < limData.length; m++) {
-                                            var lim = limData[m];
-                                            if ($(lim).text() == obj.Name &&$(lim) != undefined &&$(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
-                                                $(lim).data().data = obj;
-                                                break;
-                                            }
+                        $.each(dteArr, function (k, obj) {
+                            var lifs = $("#groupTable #dt .lif");
+                            for (var i = 0; i < lifs.length; i++) {
+                                if ($(lifs[i]).attr("name") == obj[fkName]) {
+                                    var limData = $(lifs[i]).find(".lim");
+                                    for (var m = 0; m < limData.length; m++) {
+                                        var lim = limData[m];
+                                        if ($(lim).text() == obj.Name && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
+                                            $(lim).data().data = obj;
+                                            break;
                                         }
                                     }
                                 }
+                            }
                         });
                     }
 
@@ -213,24 +241,42 @@
             });
         }
         function sedmsg() {
-            var checked = $('input:checked');
-            var selectedIdArrm = [];
-            for (var i = 0; i < checked.parent(".lim").length; i++) {
-                selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
+            if ($('#groupTable').css('display') != 'none') {
+                var checked = $('input:checked');
+                //var selectedIdArrf = [];
+                //var selectedNodesf = [];
+                //for (var i = 0; i < checked.parent(".lif").length; i++) {
+                //    selectedIdArrf.push($(checked.parent(".lif")[i]).data().data.No);
+                //    selectedNodesf.push($(checked.parent(".lif")[i]).data().data.Name);
+                //}
+                var selectedIdArrm = [];
+                for (var i = 0; i < checked.parent(".lim").length; i++) {
+                    selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
+                }
+                console.log(selectedIdArrm)
+                return selectedIdArrm.join(';');
+            } else {
+                return frames["iframeSelectEmpsForm"].window.returnVal.No;
+                var checked = $('input:checked');
+                var selectedIdArrm = [];
+                for (var i = 0; i < checked.parent(".lim").length; i++) {
+                    selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
+                }
+                return selectedIdArrm.join(';');
             }
-            return selectedIdArrm.join(';');
         }
 
         //确定【选择接收人并发送】
         function SendNode() {
             //AccepterSave&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi
             var empNos = sedmsg();
+            console.log(pageUrlParam.WorkID)
             toNode = $("#searchS1 option:selected").attr("val");
             $.ajax({
                 type: 'post',
                 async: true,
                 data: { "FK_Flow": pageUrlParam.FK_Flow, "WorkID": pageUrlParam.WorkID,ToNode:toNode, FK_Node:pageUrlParam.fk_node},
-                url: Handler + "?DoType=AccepterSave&m=" + Math.random() + "&SelectEmps=" + empNos,
+                url: Handler + "?DoType=AccepterSave&m=" + Math.random() + "&SelectEmps=" + empNos + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
                 dataType: 'html',
                 success: function (data) {
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
@@ -251,7 +297,37 @@
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
             }
         }
+        //初始化人员选择窗口
+        function initSelectEmpModal() {
+            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
+               '<div class="modal-dialog">'
+                   + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                      + '<div class="modal-header">'
+                          + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                           + '<h4 class="modal-title">选择移交人</h4>'
+                       + '</div>'
+                       + '<div class="modal-body">'
+                           + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                       + '</div>'
+                   + '</div><!-- /.modal-content -->'
+               + '</div><!-- /.modal-dialog -->'
+           + '</div>';
 
+            $('body').append($(selectEmpModalHtml));
+            $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random()+"&IsSelectMore=1");
+
+            $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+        }
+
+        //设置选中的人员
+        function selectEmpsWindowClose(data) {
+            $('#selectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            } else {
+                $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+            }
+        }
         </script>
 </head>
 <body>
@@ -260,13 +336,20 @@
         <div style="float: left;">
             <select id="searchS1" onclick="dtTable()" style="width: 100%;"></select>
         </div>
-</div>
-<div id="groupTable" style="display: none; overflow-y: auto;">
-    <ul id="dt" data-data="true"></ul>
-</div>
-<div style="float: right;">
-    <button id="btnOk" class="btn btn-info" onclick="SendNode()">发送</button>
-    <button id="btnCancel" class ="btn btn-info" onclick="Close()">取消</button>
-</div>
+    </div>
+    <div id="groupTable" style="display: none; overflow-y: auto;">
+        <ul id="dt" data-data="true"></ul>
+    </div>
+    <div id="selectEmpsDiv" style="display:none;">
+        <div>
+        请选择接受人：
+        <input type="text" id="ToEmp" name="ToEmp" value='' /> <input type="button" id="BtnSelectEmps" value='选择接受人' />
+        <br />
+    </div>
+    </div>
+    <div style="float: right;">
+        <button id="btnOk" class="btn btn-info" onclick="SendNode()">发送</button>
+        <button id="btnCancel" class="btn btn-info" onclick="Close()">取消</button>
+    </div>
 </body>
 </html>

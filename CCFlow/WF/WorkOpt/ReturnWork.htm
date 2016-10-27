@@ -11,13 +11,16 @@
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <!-- 导入配置文件. -->
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <style type="text/css">
-        #TB_Doc
+        /*#TB_Doc
         {
             height: 132px;
             width: 433px;
-        }
+        }*/
     </style>
     <script type="text/javascript">
         var pageData = {};
@@ -90,16 +93,17 @@
 </head>
 <body>
     <form id="cc">
-        <div>
-            <div>工作退回</div>
-            <div>
-                    请选择要退回到的节点:
-                    <select id="DDL_Nodes" name="DDL_Nodes"></select>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">  请选择要退回到的节点:</div>
+            <div class="col-md-6 col-sm-6">
+                <select id="DDL_Nodes" name="DDL_Nodes"></select>
             </div>
-            <div><textarea id="TB_Doc" name="TB_Doc"></textarea> </div>
-            <div> 上传附件：</div>
-            <div><input type="button" value="确定退回" onclick="ReturnWork(0);" /><input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" />
-                <input type="button" value="关闭" onclick="Close();" /></div>
+            <div class="col-md-12 col-sm-12"><textarea id="TB_Doc" name="TB_Doc"></textarea> </div>
+            <div class="col-md-12 col-sm-12"> 上传附件：</div>
+            <div class="col-md-12 col-sm-12" style="float:right;">
+                <input type="button" value="确定退回" onclick="ReturnWork(0);" /><input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" />
+                <input type="button" value="关闭" onclick="Close();" />
+            </div>
         </div>
     </form>
 </body>

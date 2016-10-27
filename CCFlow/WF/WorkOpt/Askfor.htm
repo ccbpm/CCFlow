@@ -26,9 +26,9 @@
         body {
             background: transparent;
         }
-        body div{
-            margin: 20px auto;
-        }
+            body div {
+                text-align: left;
+            }
         #Message {
             width: 100%;
         }
@@ -112,14 +112,14 @@
 <body>
     <div>
         请选择要加签的人：
-        <input type="text" id="ToEmp" name="ToEmp" value='' style="width:55%;" /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative;right:87px;top:-1px; border-radius: 0px 25px 25px 0px; height: 27px;" />
+        <input type="text" id="ToEmp" name="ToEmp" value='' style="width:80%;" /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;" />
         <br />
     </div>
     <div>
         加签原因:
-        <textarea name="Message" id="Message" style="vertical-align: top; width: 62%;"></textarea><br />
+        <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea><br />
     </div>
-    <div>
+    <div style="margin: 20px auto;">
         加签模式:
         <input type="radio" value="0" name="RB_Model" checked=checked id="RB_Model_0" /> <label for="RB_Model_0">加签后直接发送给下一步处理人</label>
         <input type="radio" id="RB_Model_1" value="1" name="RB_Model" /> <label for="RB_Model_1">加签后发送给我由我发送给下一步处理人</label>

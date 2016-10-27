@@ -29,6 +29,7 @@
     <style type="text/css">
         * {
             list-style: none;
+            text-align: left;
         }
 
         body .table tbody tr td {
@@ -343,19 +344,16 @@
 </head>
 <body>
     <div id="searchS">
-        <div>请选择要到达到的节点：</div>
-        <div style="width: 55%;">
-            <select id="searchS1" onclick="dtTable()" style="width: 100%;"></select>
-        </div>
+        请选择要到达到的节点：
+        <select id="searchS1" onclick="dtTable()" style="width: 76%;"></select>
     </div>
     <div id="groupTable" style="display: none; overflow-y: auto;text-align:left;">
         <ul id="dt" data-data="true" style="padding-left: 0px;"></ul>
     </div>
     <div id="selectEmpsDiv" style="display:none;">
-        <div>
+        <div style="margin: 20px auto;">
         请选择接受人：
-        <input type="text" id="ToEmp" name="ToEmp" value='' style="width:55%;"/> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative;
-right: 92px;top: -1px;border-radius: 0px 25px 25px 0px;"/>
+        <input type="text" id="ToEmp" name="ToEmp" value='' style="width:84%;"/> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
         <br />
     </div>
     </div>

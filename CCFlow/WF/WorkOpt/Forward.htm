@@ -27,7 +27,7 @@
             background: transparent;
         }
             body div {
-                margin: 20px auto;
+                text-align: left;
             }
         #Message {
         width:100%;
@@ -112,12 +112,12 @@
 <body>
     <div>
         请选择要移交的人:
-        <input type="text" id="ToEmp" name="ToEmp" value='' style="width:55%;" /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative;right:87px;top:-1px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
+        <input type="text" id="ToEmp" name="ToEmp" value='' style="width:81%;" /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative;right:-562px;top:-41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
         <br />
     </div>
     <div>
         移交原因:
-        <textarea name="Message" id="Message" style="vertical-align: top; width: 62%;"></textarea>
+        <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>
     </div>
     <div style="position: fixed;bottom: 0px;right: 0px;" class="foot">
         <input type=button value="确定移交" onclick="ReturnWork();" />

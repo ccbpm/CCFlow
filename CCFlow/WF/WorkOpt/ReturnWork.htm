@@ -21,6 +21,7 @@
         }
 
             body div {
+                text-align: left;
                 margin: 20px auto;
             }
 
@@ -99,15 +100,15 @@
     </script>
 </head>
 <body>
-    <div style="text-align: left;"> 
+    <div> 
         请选择要退回到的节点:
-        <select id="DDL_Nodes" name="DDL_Nodes" style="width: 62%;"></select>
+        <select id="DDL_Nodes" name="DDL_Nodes" style="width: 77%;"></select>
     </div>
 <div>
     退回原因：
-    <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 64%;"></textarea>
+    <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 98%;"></textarea>
 </div>
-            <div style="text-align: right; width: 22%; float: left;"> 上传附件：</div>
+            <div> 上传附件：</div>
             <div style="position: fixed;bottom: 0px;right: 0px;" class="foot">
                 <input type="button" value="确定退回" onclick="ReturnWork(0);"/>
                 <input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" />

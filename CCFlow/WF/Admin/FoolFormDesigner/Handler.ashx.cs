@@ -1228,10 +1228,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             ath.FK_Node = this.FK_Node;
             ath.MyPK = this.FK_MapData + "_" + this.Ath;
 
+            int i = ath.RetrieveFromDBSources();
             ath = BP.Sys.PubClass.CopyFromRequestByPost(ath, context.Request) as FrmAttachment;
          
-
-            int i = ath.RetrieveFromDBSources();
             if (i == 0)
             {
                 ath.Save(); //执行保存.              

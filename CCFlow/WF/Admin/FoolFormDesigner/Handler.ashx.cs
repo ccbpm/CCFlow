@@ -276,7 +276,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "Attachment_Delete": //字段属性删除
                         msg = this.Attachment_Delete();
                         break;
-
+                    case "EditFExtContral_Init": //字段属性删除
+                        msg = this.EditFExtContral_Init();
+                        break;
+                    case "EditFExtContral_Save": //字段属性删除
+                        msg = this.EditFExtContral_Save();
+                        break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
@@ -307,7 +312,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             en.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             en.RetrieveFromDBSources();
 
-            en.UIContralType = (UIContralType)int.Parse( this.GetValFromFrmByKey("UIContralType")) ;
+            en.UIContralType = (UIContralType)int.Parse(this.GetValFromFrmByKey("Model"));
 
             switch (en.UIContralType)
             {

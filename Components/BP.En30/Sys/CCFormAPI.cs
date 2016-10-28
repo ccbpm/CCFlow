@@ -532,7 +532,14 @@ namespace BP.Sys
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
             foreach (MapAttr item in attrs)
+            {
+                if (item.KeyOfEn == "OID")
+                    continue;
+                if (item.UIVisible == false)
+                    continue;
+
                 attrPKs += item.KeyOfEn + "@";
+            }
             attrPKs += "@";
 
 
@@ -549,7 +556,9 @@ namespace BP.Sys
             FrmAttachments aths = new FrmAttachments();
             aths.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
             foreach (FrmAttachment item in aths)
+            {
                 athMultis += item.NoOfObj + "@";
+            }
             athMultis += "@";
 
             //图片附件.
@@ -557,7 +566,9 @@ namespace BP.Sys
             FrmImgAths fias = new FrmImgAths();;
             fias.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
             foreach (FrmImgAth item in fias)
+            {
                 athImgs += item.CtrlID + "@";
+            }
             athImgs += "@";
 
 
@@ -581,6 +592,7 @@ namespace BP.Sys
                 /*画布里没有任何东西, 清楚所有的元素.*/
                 string delSqls = "";
                 delSqls += "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapdata + "' AND KeyOfEn NOT IN ('OID')";
+                delSqls += "DELETE FROM Sys_FrmRB WHERE FK_MapData='" + fk_mapdata + "'"; //枚举值的相关rb. 
                 delSqls += "DELETE FROM Sys_MapDtl WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "DELETE FROM Sys_FrmBtn WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "DELETE FROM Sys_FrmLine WHERE FK_MapData='" + fk_mapdata + "'";
@@ -702,11 +714,20 @@ namespace BP.Sys
                     continue;
                 }
 
-                if (shape == "RadioButtonItem")
+                if (shape == "RadioButton")
                 {
+                    if (ctrlID.Contains("=") == true)
+                        continue;
+
                     //记录已经存在的ID， 需要当时保存.
-                    BP.Sys.CCFormParse.SaveFrmRadioButton(fk_mapdata, ctrlID, x, y);
-                    eleIDs = eleIDs.Replace(ctrlID + "@", "@");
+                    if (ctrlID.Contains("RB_") == true)
+                        ctrlID = ctrlID.Substring(3);
+
+                    string str= BP.Sys.CCFormParse.SaveFrmRadioButton(fk_mapdata, ctrlID, x, y);
+                    if (str == null)
+                        continue;
+
+                    attrPKs = attrPKs.Replace(str + "@", "@");
                     continue;
                 }
 
@@ -760,6 +781,10 @@ namespace BP.Sys
             {
                 if (string.IsNullOrEmpty(pk))
                     continue;
+
+                if (pk == "OID")
+                    continue;
+
                 sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + pk + "' AND FK_MapData='"+fk_mapdata+"'";
                 sqls += "@DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }

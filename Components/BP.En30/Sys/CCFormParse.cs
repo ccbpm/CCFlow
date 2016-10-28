@@ -46,15 +46,20 @@ namespace BP.Sys
         /// <param name="ctrlID">控件ID</param>
         /// <param name="x">位置x</param>
         /// <param name="y">位置y</param>
-        public static void SaveFrmRadioButton(string fk_mapdata, string ctrlID, float x, float y)
+        public static string SaveFrmRadioButton(string fk_mapdata, string ctrlID, float x, float y)
         {
+
             FrmRB en = new FrmRB();
             en.MyPK = fk_mapdata + "_" + ctrlID;
             int i= en.RetrieveFromDBSources();
+            if (i == 0)
+                return null;
+
             en.FK_MapData = fk_mapdata;
             en.X = x;
             en.Y = y;
             en.Update();
+            return en.KeyOfEn;
         }
         /// <summary>
         /// 保存图片

@@ -171,7 +171,7 @@ namespace BP.Tools
         /// <param name="ht">Hashtable</param>
         /// <param name="isNoNameFormat">是否编号名称格式</param>
         /// <returns></returns>
-        public static string ToJson(Hashtable ht,bool isNoNameFormat)
+        public static string ToJson(Hashtable ht, bool isNoNameFormat)
         {
             if (isNoNameFormat)
             {
@@ -204,6 +204,7 @@ namespace BP.Tools
             }
             strs += "\"OutEnd\":\"1\"";
             strs += "}";
+            strs = TranJsonStr(strs);
             return strs;
         }
         
@@ -271,12 +272,28 @@ namespace BP.Tools
             string temstr;
             temstr = value;
             temstr = temstr.Replace("{", "｛").Replace("}", "｝").Replace(":", "：").Replace(",", "，").Replace("[", "【").Replace("]", "】").Replace(";", "；").Replace("\n", "<br/>").Replace("\r", "");
-
             temstr = temstr.Replace("\t", "   ");
             temstr = temstr.Replace("'", "\'");
             temstr = temstr.Replace(@"\", @"\\");
             temstr = temstr.Replace("\"", "\"\"");
+
             return temstr;
+        }
+
+        /// <summary>
+        /// JSON字符串的转义
+        /// </summary>
+        /// <param name="jsonStr"></param>
+        /// <returns></returns>
+        private static string TranJsonStr(string jsonStr) {
+            string strs = jsonStr;
+            strs = strs.Replace("\\", "\\\\");
+            strs = strs.Replace("\n", "\\n");
+            strs = strs.Replace("\b", "\\b");
+            strs = strs.Replace("\t", "\\t");
+            strs = strs.Replace("\f", "\\f");
+            strs = strs.Replace("/", "\\/");
+            return strs;
         }
     }
 }

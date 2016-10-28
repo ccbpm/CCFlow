@@ -329,7 +329,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     FrmAttachments aths = new FrmAttachments(this.FK_MapData);
                     foreach (FrmAttachment item in aths)
                     {
-                        string sql = "SELECT count(*) FROM Sys_MapAttr WHERE AtPara LIKE '%"+item.MyPK+"%' AND FK_MapData='"+this.FK_MapData+"'";
+                        string sql = "SELECT count(*) FROM Sys_MapAttr WHERE AtPara LIKE '%"+item.MyPK+"@%' AND FK_MapData='"+this.FK_MapData+"'";
                         int num = DBAccess.RunSQLReturnValInt(sql);
                         if (num == 0)
                         {   

@@ -338,7 +338,7 @@ namespace BP.WF
             }
 
         }
-       
+
         /// <summary>
         /// 流程发起参数2
         /// </summary>
@@ -347,7 +347,7 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStringByKey(FlowAttr.StartGuidePara2);
-                str= str.Replace("~", "'");
+                str = str.Replace("~", "'");
                 if (string.IsNullOrEmpty(str) == null)
                 {
                     if (this.StartGuideWay == BP.WF.Template.StartGuideWay.ByHistoryUrl)
@@ -664,7 +664,7 @@ namespace BP.WF
                     wk.SetValByKey(GERptAttr.FK_Dept, emp.FK_Dept);
                     wk.FID = 0;
                     wk.DirectInsert();
-              
+
                     //设置参数.
                     foreach (string k in paras.Keys)
                         rpt.SetValByKey(k, paras[k]);
@@ -740,7 +740,7 @@ namespace BP.WF
             }
 
             //在创建WorkID的时候调用的事件.
-            this.DoFlowEventEntity(EventListOfNode.CreateWorkID, nd,wk,null);
+            this.DoFlowEventEntity(EventListOfNode.CreateWorkID, nd, wk, null);
 
             #region copy数据.
             // 记录这个id ,不让其它在复制时间被修改。
@@ -1171,7 +1171,7 @@ namespace BP.WF
 
             return wk;
         }
-      
+
         #endregion 创建新工作.
 
         #region 初始化一个工作.
@@ -1466,12 +1466,12 @@ namespace BP.WF
                 }
                 values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
                 //获取除主键之外的其他值
-                if(i>0)
+                if (i > 0)
                     upVal = upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
             }
 
             values = values.Substring(0, values.Length - 1);
-            upVal = upVal.Substring(0,upVal.Length-1);
+            upVal = upVal.Substring(0, upVal.Length - 1);
 
             //查询对应的业务表中是否存在这条记录
             sql = "SELECT * FROM " + this.DTSBTable.ToUpper() + " WHERE " + DTSBTablePK + "='" + lcDt.Rows[0][lcArr[0].ToString()] + "'";
@@ -2276,7 +2276,7 @@ namespace BP.WF
             path = PathFlowDesc + path + "\\";
             this.DoExpFlowXmlTemplete(path);
 
-           // name = path + name + "." + this.Ver.Replace(":", "_") + ".xml";
+            // name = path + name + "." + this.Ver.Replace(":", "_") + ".xml";
 
             name = path + name + ".xml";
             return name;
@@ -2295,7 +2295,7 @@ namespace BP.WF
             {
                 string name = this.Name;
                 name = BP.Tools.StringExpressionCalculate.ReplaceBadCharOfFileName(name);
-               // name = name + "." + this.Ver.Replace(":", "_") + ".xml";
+                // name = name + "." + this.Ver.Replace(":", "_") + ".xml";
                 name = name + ".xml";
                 string filePath = path + name;
                 ds.WriteXml(filePath);
@@ -2869,7 +2869,7 @@ namespace BP.WF
         {
             if (this.HisDataStoreModel == DataStoreModel.SpecTable)
                 return;
-         
+
             string viewName = "V" + this.No;
             string sql = "CREATE VIEW " + viewName + " ";
             sql += "/* CCFlow Auto Create :" + this.Name + " Date:" + DateTime.Now.ToString("yyyy-MM-dd") + " */ ";
@@ -3335,7 +3335,7 @@ namespace BP.WF
                 attr.Idx = -100;
                 attr.Insert();
             }
- 
+
             if (attrs.Contains(md.No + "_" + GERptAttr.BillNo) == false)
             {
                 /* 父流程 流程编号 */
@@ -4055,7 +4055,7 @@ namespace BP.WF
                 default:
                     return str;
             }
-           
+
             //执行消息的发送.
             PushMsgs pms = currNode.HisPushMsgs;
             string msgAlert = ""; //生成的提示信息.
@@ -4075,7 +4075,7 @@ namespace BP.WF
 
             return str;
         }
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, Node jumpToNode=null, string jumpToEmp=null)
+        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, Node jumpToNode = null, string jumpToEmp = null)
         {
             string str = this.DoFlowEventEntity(doType, currNode, en, atPara, null, jumpToNode, jumpToEmp);
             return BP.DA.DataType.PraseGB2312_To_utf8(str);
@@ -4893,10 +4893,19 @@ namespace BP.WF
         {
             FileInfo info = new FileInfo(path);
             DataSet ds = new DataSet();
-            ds.ReadXml(path);
+
+            try
+            {
+                ds.ReadXml(path);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("@导入流程路径:" +path + "出错：" + ex.Message);
+            }
+
 
             if (ds.Tables.Contains("WF_Flow") == false)
-                throw new Exception("导入错误，非流程模版文件"+path+"。");
+                throw new Exception("导入错误，非流程模版文件" + path + "。");
 
             DataTable dtFlow = ds.Tables["WF_Flow"];
             Flow fl = new Flow();
@@ -4969,7 +4978,7 @@ namespace BP.WF
                     case "fk_flowsort":
                         continue;
                     case "name":
-                       // val = "复制:" + val + "_" + DateTime.Now.ToString("MM月dd日HH时mm分");
+                        // val = "复制:" + val + "_" + DateTime.Now.ToString("MM月dd日HH时mm分");
                         break;
                     default:
                         break;

@@ -294,8 +294,8 @@ function AutoFullDLL(e, ddl_Id, fk_mapExt) {
             }
             if (isInIt == false) {
                 //此处修改，去掉直接选中上次的结果，避免错误数据的产生，edited by liuxc,2015-10-22
-                $("#" + ddlChild).prepend("<option value='' selected='selected' >*请选择</option");
-                $("#" + ddlChild).val('');
+                $("#" + ddl_Id).prepend("<option value='' selected='selected' >*请选择</option");
+                $("#" + ddl_Id).val('');
 
                 var chg = $("#" + ddl_Id).attr("onchange");
                 if (typeof chg == "function") {

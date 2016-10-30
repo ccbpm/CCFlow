@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TruckSimple.aspx.cs" Inherits="CCFlow.WF.Admin.CCBPMDesigner.truck.TruckSimple" %>
 
-<%@ Import Namespace="BP.WF.Template" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -115,6 +114,13 @@
             font-size: 18px;
             background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -68px transparent;
         }
+        .step-none
+        {
+            height: 34px;
+            line-height: 34px;
+            font-size: 18px;
+            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -306px transparent;
+        }
         .step-time
         {
             color: #999999;
@@ -206,14 +212,33 @@
                 possibles = aDS.POSSIBLE;
                 startNodeId = findFromArray(nodes, 'NODEPOSTYPE', 0)[0].ID;
 
-                if (aDS.FLOWINFO && aDS.FLOWINFO.length > 0) {
-                    flowinfo = aDS.FLOWINFO[0];
-                }
+//                var tks;
+//                var nclass;
+//                currFD = new FlowDirection(nodes);
+
+//                if (aDS.FLOWINFO && aDS.FLOWINFO.length > 0) {
+//                    flowinfo = aDS.FLOWINFO[0];
+//                    currFD.addNode(startNodeId, flowinfo.STARTERNAME, flowinfo.RDT);
+//                }
+
+
+                //新方案：从开始节点开始，暂未编码
+                //先按照轨迹数据查找下一个流转的点，如果找到，则显示下一个点
+                //如果在轨迹数据中没有找到下一个点，则从连线数据中查找下一个点，如果下一个点多于2个，则不显示；否则显示下一个点。
+                //依次往下；直至找不到下一个点为止。
+//                while (true) {
+//                    tks = findFromArray(tracks, 'NDFROM', startNodeId, 'ACTIONTYPE', 1);
+
+//                    if (tks.length > 0) {
+//                        
+//                    }
+//                }
 
                 var startDirs = findFromArray(dirs, 'NODE', startNodeId);
                 var currFD;
                 var trackNodes = startNodeId + '_';
                 var haveFD = false;
+                var possFDs = new Array();
 
                 //计算出所有流转方向
                 $.each(startDirs, function () {
@@ -237,20 +262,23 @@
                         haveFD = true;
                     }
 
-                    $('#cmbdirs').append("<option value='" + this.no + "'" + (haveFD && currFD.no == this.no ? " selected" : "") + ">" + this.name + "</option>");
+                    //$('#cmbdirs').append("<option value='" + this.no + "'" + (haveFD && currFD.no == this.no ? " selected" : "") + ">" + this.name + "</option>");
                 });
 
-                $('#cmbdirs').combobox({
-                    panelMaxWidth: $('.flowstep').innerWidth() - 20,
-                    onSelect: function (oDir) {
-                        loadTrack(oDir.value);
-                    }
-                });
+                loadTrack(currFD.no);
+
+//                $('#cmbdirs').combobox({
+//                    panelMaxWidth: $('.flowstep').innerWidth() - 20,
+//                    onSelect: function (oDir) {
+//                        loadTrack(oDir.value);
+//                    }
+//                });
+
 
                 //如果只有一个流转方向，则隐藏下拉框选择
-                if (flowDirs.length == 1) {
-                    $('#directions').hide();
-                }
+//                if (flowDirs.length == 1) {
+//                    $('#directions').hide();
+//                }
             }
 
             function loadTrack(sFDNo) {
@@ -261,6 +289,7 @@
                 var step, emp;
                 var currNode;
                 var poss;
+                var sdirs;
 
                 //确定当前所处节点
                 if (tracks.length == 0) {
@@ -285,7 +314,8 @@
                     tks = findFromArray(tracks, 'NDFROM', fd.nodes[i].ID);
                     tkTos = findFromArray(tracks, 'NDTO', fd.nodes[i].ID);
                     poss = findFromArray(possibles, 'FK_NODE', fd.nodes[i].ID);
-
+                    sdirs = findFromArray(dirs, 'NODE', fd.nodes[i].ID);
+                    
                     if (tks.length == 0) {
                         if (i == 0) {
                             step = 'step-first1';   //开始节点未流动
@@ -373,6 +403,17 @@
                     html += '<div class="step-time">' + emp + '</div>';
                     html += '</div></li>';
                     $('.flowstep-1').append(html);
+
+                    //判断下一个点是否可以显示
+                    if (sdirs.length > 1 && tks.length == 0 && poss.length == 0) {
+                        html = '<li><div>';
+                        html += '<div class="step-name"></div>';
+                        html += '<div class="step-none"></div>';
+                        html += '<div class="step-time"></div>';
+                        html += '</div></li>';
+                        $('.flowstep-1').append(html);
+                        break;
+                    }
                 }
             }
 
@@ -434,11 +475,13 @@
                 return dir;
             }
 
-            function findFromArray(aArray, sField, oValue) {
+            function findFromArray(aArray, sField1, oValue1, sField2, oValue2) {
                 ///<summary>从数组中查找指定属性指定值的元素</summary>
                 ///<param name="aArray" type="Array">数组</param>
-                ///<param name="sField" type="String">属性</param>
-                ///<param name="oValue" type="Object">值</param>
+                ///<param name="sField1" type="String">属性1</param>
+                ///<param name="oValue1" type="Object">值1</param>
+                ///<param name="sField2" type="String">属性2</param>
+                ///<param name="oValue2" type="Object">值2</param>
                 if (!aArray || aArray.length == 0) {
                     return [];
                 }
@@ -446,7 +489,7 @@
                 var re = [];
 
                 for (var i = 0; i < aArray.length; i++) {
-                    if (aArray[i] && aArray[i][sField] == oValue) {
+                    if (aArray[i] && aArray[i][sField1] == oValue1 && (!sField2 || aArray[i][sField2] == oValue2)) {
                         re.push(aArray[i]);
                     }
                 }
@@ -454,11 +497,11 @@
                 return re;
             }
         </script>
-        <div id="directions" style="width: 100%; height: 50px; padding: 10px">
+        <%--<div id="directions" style="width: 100%; height: 50px; padding: 10px">
             流转方向：
             <select id="cmbdirs" style="width: auto;">
             </select>
-        </div>
+        </div>--%>
         <ul class="flowstep-1">
         </ul>
     </div>

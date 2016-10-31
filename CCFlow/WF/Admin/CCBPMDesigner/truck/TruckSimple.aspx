@@ -121,6 +121,20 @@
             font-size: 18px;
             background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -306px transparent;
         }
+        .step-first0
+        {
+            height: 34px;
+            line-height: 34px;
+            font-size: 18px;
+            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -340px transparent;
+        }
+        .step-last2
+        {
+            height: 34px;
+            line-height: 34px;
+            font-size: 18px;
+            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -374px transparent;
+        }
         .step-time
         {
             color: #999999;
@@ -206,79 +220,57 @@
                 ///<summary>处理流转方向信息</summary>
                 ///<param name="aDS" type="Array">信息集合</param>
                 nodes = aDS.WF_NODE;
-                dirs = aDS.WF_DIRECTION;
                 tracks = aDS.TRACK;
-                flowDirs = new Array();
-                possibles = aDS.POSSIBLE;
                 startNodeId = findFromArray(nodes, 'NODEPOSTYPE', 0)[0].ID;
 
-//                var tks;
-//                var nclass;
-//                currFD = new FlowDirection(nodes);
+                var html;
+                var flowinfo = aDS.FLOWINFO[0];
+                var nTracks = new Array();
 
-//                if (aDS.FLOWINFO && aDS.FLOWINFO.length > 0) {
-//                    flowinfo = aDS.FLOWINFO[0];
-//                    currFD.addNode(startNodeId, flowinfo.STARTERNAME, flowinfo.RDT);
-//                }
-
-
-                //新方案：从开始节点开始，暂未编码
-                //先按照轨迹数据查找下一个流转的点，如果找到，则显示下一个点
-                //如果在轨迹数据中没有找到下一个点，则从连线数据中查找下一个点，如果下一个点多于2个，则不显示；否则显示下一个点。
-                //依次往下；直至找不到下一个点为止。
-//                while (true) {
-//                    tks = findFromArray(tracks, 'NDFROM', startNodeId, 'ACTIONTYPE', 1);
-
-//                    if (tks.length > 0) {
-//                        
-//                    }
-//                }
-
-                var startDirs = findFromArray(dirs, 'NODE', startNodeId);
-                var currFD;
-                var trackNodes = startNodeId + '_';
-                var haveFD = false;
-                var possFDs = new Array();
-
-                //计算出所有流转方向
-                $.each(startDirs, function () {
-                    currFD = new FlowDirection(this, nodes);
-                    flowDirs.push(currFD);
-                    doNextDirs(this, dirs, currFD, flowDirs);
-                });
-
-                //判断当前流程的流转方向
-                $.each(tracks, function () {
-                    if (this.ACTIONTYPE == 1 && trackNodes.indexOf(this.NDTO + '_') == -1) {
-                        trackNodes += this.NDTO + '_';
-                    }
-                });
-
-                trackNodes = trackNodes.substr(0, trackNodes.length - 1);
-
-                $.each(flowDirs, function () {
-                    if (!haveFD && this.no.indexOf(trackNodes) != -1) {
-                        currFD = this;
-                        haveFD = true;
+                for (var i = 0; i < tracks.length; i++) {
+                    if ((i < tracks.length - 1 && tracks[i + 1].ACTIONTYPE == 5) || tracks[i].ACTIONTYPE == 5) {
+                        continue;
                     }
 
-                    //$('#cmbdirs').append("<option value='" + this.no + "'" + (haveFD && currFD.no == this.no ? " selected" : "") + ">" + this.name + "</option>");
-                });
+                    nTracks.push(tracks[i]);
+                }
 
-                loadTrack(currFD.no);
+                for (var i = 0; i < nTracks.length; i++) {
+                    html = '<li><div>';                    
+                    html += '<div class="step-name">' + nTracks[i].NDFROMT + '</div>';
 
-//                $('#cmbdirs').combobox({
-//                    panelMaxWidth: $('.flowstep').innerWidth() - 20,
-//                    onSelect: function (oDir) {
-//                        loadTrack(oDir.value);
-//                    }
-//                });
+                    if (i == 0) {
+                        step = 'step-first2';
+                    }
+                    else if (i == nTracks.length - 1 && flowinfo.WFSTA == 1) {
+                        step = 'step-last2';
+                    }
+                    else {
+                        switch (nTracks[i].ACTIONTYPE) {
+                            case 2:
+//                            case 5:
+                                step = 'step-flow3';
+                                break;
+                            default:
+                                step = 'step-flow2';
+                                break;
+                        }
+                    }
 
+                    html += '<div class="' + step + '"></div>';
+                    html += '<div class="step-time">' + nTracks[i].RDT.split(' ')[0] + '<br />' + nTracks[i].EMPFROMT + '<br />（' + nTracks[i].ACTIONTYPETEXT + '）</div>';
+                    html += '</div></li>';
+                    $('.flowstep-1').append(html);
+                }
 
-                //如果只有一个流转方向，则隐藏下拉框选择
-//                if (flowDirs.length == 1) {
-//                    $('#directions').hide();
-//                }
+                if (flowinfo.WFSTA != 1) {
+                    html = '<li><div>';
+                    html += '<div class="step-name"><img src="/WF/Admin/CCBPMDesigner/Img/arrow.png" align="middle" />' + (nTracks.length > 0 ? nTracks[nTracks.length - 1].NDTOT : findFromArray(nodes, 'ID', startNodeId)[0].NAME) + '</div>';
+                    html += '<div class="'+(nTracks.length > 0 ? 'step-last1' : 'step-first0')+'"></div>';
+                    html += '<div class="step-time">&nbsp;<br />' + (nTracks.length > 0 ? nTracks[nTracks.length - 1].EMPTOT : flowinfo.STARTERNAME) + '</div>';
+                    html += '</div></li>';
+                    $('.flowstep-1').append(html);
+                }
             }
 
             function loadTrack(sFDNo) {
@@ -315,7 +307,7 @@
                     tkTos = findFromArray(tracks, 'NDTO', fd.nodes[i].ID);
                     poss = findFromArray(possibles, 'FK_NODE', fd.nodes[i].ID);
                     sdirs = findFromArray(dirs, 'NODE', fd.nodes[i].ID);
-                    
+
                     if (tks.length == 0) {
                         if (i == 0) {
                             step = 'step-first1';   //开始节点未流动

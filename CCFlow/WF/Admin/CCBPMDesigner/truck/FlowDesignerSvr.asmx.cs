@@ -542,7 +542,7 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
                 {
                     //获取流程信息，added by liuxc,2016-10-26
                     sql =
-                        "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT FROM WF_GenerWorkFlow AS wgwf WHERE wgwf.WorkID = " +
+                        "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow AS wgwf WHERE wgwf.WorkID = " +
                         workid;
                     dt = DBAccess.RunSQLReturnTable(sql);
                     dt.TableName = "FLOWINFO";
@@ -550,7 +550,7 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
 
                     //获取工作轨迹信息
                     var trackTable = "ND" + int.Parse(fk_flow) + "Track";
-                    sql = "SELECT NDFrom, NDTo,ActionType,ActionTypeText,Msg,RDT,EmpFrom,EmpFromT,EmpToT,EmpTo FROM " + trackTable +
+                    sql = "SELECT NDFrom,NDFromT, NDTo,NDToT, ActionType,ActionTypeText,Msg,RDT,EmpFrom,EmpFromT,EmpToT,EmpTo FROM " + trackTable +
                           " WHERE WorkID=" +
                           workid + (string.IsNullOrWhiteSpace(fid) || fid == "0" ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT ASC";
                     dt = DBAccess.RunSQLReturnTable(sql);

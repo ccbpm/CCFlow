@@ -355,7 +355,7 @@ namespace CCFlow.WF
                     if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                     {
                         /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                        toolbar += "<input type=button value='" + btnLab.SaveLab + "' enable=true onclick=\""+btnLab.SendJS + " if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();Send(); \" />";
+                        toolbar += "<input type=button value='" + btnLab.SendLab + "' enable=true onclick=\" "+btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();Send(); \" />";
                     }
                 }
                 else

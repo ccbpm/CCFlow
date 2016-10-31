@@ -385,7 +385,7 @@ function ReturnVal(ctrl, url, winName) {
         var startIndex = url.indexOf('#');
         //获取#号后面的& 符号的位置
         var endIndex = url.indexOf('&', startIndex);
-        if (endIndex < 0) {
+        if (endIndex < 0) {SetBottomTooBar
             endIndex = url.length;
         }
         var paramId = url.substring(startIndex + 1, endIndex);
@@ -539,13 +539,6 @@ function initModal(modalType) {
         }
     }
     $('#iframeReturnWorkForm').attr('src',modalIframeSrc );
-    $('#btnReturnWorkOK').unbind('click');
-    $('#btnReturnWorkOK').bind('click', function () {
-        var retrunVal = frames["iframeReturnWorkForm"].window.returnValue;
-        if (retrunVal == undefined)
-            retrunVal = "";
-        $('#Message').html(retrunVal);
-    });
 }
 
 //退回操作  显示退回窗口
@@ -587,9 +580,11 @@ function Save() {
         success: function (data) {
             if (data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
+                $('.Message').show();
             }
             else {
                 $('#Message').html(data);
+                $('.Message').show();
                 //表示退回OK
                 if (data.indexOf('工作已经被您退回到') == 0) {
                     setAttachDisabled();
@@ -605,6 +600,7 @@ function Save() {
 function returnWorkWindowClose(data) {
     $('#returnWorkModal').modal('hide');
     $('#Message').html(data);
+    $('.Message').show();
     if (data.indexOf('err@') == 0  || data=="取消") {//发送时发生错误
         
     }
@@ -1655,12 +1651,15 @@ function Send() {
         success: function (data) {
             if (data.indexOf('err@') == 0) {//发送时发生错误
                 $('#Message').html(data.substring(4, data.length));
+                $('.Message').show();
             }
             else if (data.indexOf('url@') == 0) {//发送成功时转到指定的URL 
                 $('#Message').html("<a href=" + data.substring(4, data.length) + ">待处理</a>");
+                $('.Message').show();
             }
             else if (data.indexOf('@当前工作') == 0) {
                 $('#Message').html(data);
+                $('.Message').show();
                 //发送成功时
                 setAttachDisabled();
                 setToobarUnVisible();
@@ -1668,6 +1667,7 @@ function Send() {
             }
             else {//发送时发生错误信息
                 $('#Message').html(data);
+                $('.Message').show();
             }
         }
     });

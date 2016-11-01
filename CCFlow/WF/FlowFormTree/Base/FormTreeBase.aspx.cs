@@ -455,6 +455,7 @@ namespace CCFlow.WF.FlowFormTree
                 {
                     return "error:" + ex.Message;
                 }
+
                 //按照用户选择计算
                 if (_HisNode.CondModel == CondModel.ByUserSelected)
                 {

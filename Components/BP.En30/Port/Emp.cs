@@ -475,8 +475,8 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (BP.Web.WebUser.No != "admin")
-                throw new Exception("@您没有查询的权限.");
+            //if (BP.Web.WebUser.No != "admin")
+            //    throw new Exception("@您没有查询的权限.");
 
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
             {

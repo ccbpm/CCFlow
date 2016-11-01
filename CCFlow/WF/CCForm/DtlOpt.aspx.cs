@@ -197,7 +197,7 @@ namespace CCFlow.WF.CCForm
                 string fileName = fuit.FileName.ToLower();
                 if (fileName.Contains(".xls") == false)
                 {
-                    this.Alert("上传的文件必须是excel文件.");
+                    this.Alert("@上传的文件必须是excel文件.");
                     return;
                 }
                 string ext = ".xls";
@@ -209,7 +209,7 @@ namespace CCFlow.WF.CCForm
                 fuit.SaveAs(file);
 
                 GEDtls dtls = new GEDtls(this.FK_MapDtl);
-                System.Data.DataTable dt = BP.DA.DBLoad.GetTableByExt(file);
+                System.Data.DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(file);
 
                 #region 检查两个文件是否一致。 生成要导入的属性
                 BP.En.Attrs attrs = dtls.GetNewEntity.EnMap.Attrs;

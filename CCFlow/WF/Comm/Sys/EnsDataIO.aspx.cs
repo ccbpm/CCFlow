@@ -46,7 +46,7 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
         string filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp"+"\\" + WebUser.No + "DTS.xls";
         if (System.IO.File.Exists(filePath) == false)
             filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xlsx";
-        DataTable dt = BP.DA.DBLoad.GetTableByExt(filePath, null);
+        DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, null);
 
         this.Pub1.AddTableNormal();
         this.Pub1.AddTRGroupTitle(4, "第2/3步：设置字段对应关系");
@@ -164,7 +164,7 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
             if (System.IO.File.Exists(filePath)==false)
                 filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xlsx";
 
-            DataTable dt = BP.DA.DBLoad.GetTableByExt(filePath, null);
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, null);
           
             Entity en = ens.GetNewEntity;
             Attrs attrs = en.EnMap.Attrs;
@@ -234,7 +234,7 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
             if (System.IO.File.Exists(filePath) == false)
                 filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xlsx";
 
-            DataTable dt = BP.DA.DBLoad.GetTableByExt(filePath, null);
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, null);
             Entity en = ens.GetNewEntity;
             Attrs attrs = en.EnMap.Attrs;
 
@@ -424,7 +424,7 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
 
             string filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS" + ext;
             file.PostedFile.SaveAs(filePath);
-            DataTable dt = BP.DA.DBLoad.GetTableByExt(filePath, null);
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, null);
             if (dt.Rows.Count == 0)
                 throw new Exception("@读取文件失败，没有数据在文件里。");
 

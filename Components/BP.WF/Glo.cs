@@ -2609,7 +2609,7 @@ namespace BP.WF
         }
         public static string LoadFlowDataWithToSpecEndNode(string xlsFile)
         {
-            DataTable dt = BP.DA.DBLoad.GetTableByExt(xlsFile);
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(xlsFile);
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
             ds.WriteXml("C:\\已完成.xml");

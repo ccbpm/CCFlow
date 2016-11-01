@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20161031";
+        public static string Ver = "20161101";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -129,6 +129,7 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+            updataNote += "20161101.升级表单，增加图片附件必填验证 by:liuxianchen";
             updataNote += "20161018.升级用户表密码加密.";
             updataNote += "20160515.升级表单引擎绑定，去掉Isedit列.";
             updataNote += "20160526.升级FrmEnableRole状态.";
@@ -651,6 +652,14 @@ namespace BP.WF
                 }
                 #endregion
 
+                #region 20161101.升级表单，增加图片附件必填验证 by:liuxianchen
+
+                FrmImgAth imgAth = new FrmImgAth();
+                imgAth.CheckPhysicsTable();
+
+                sql = "UPDATE Sys_FrmImgAth SET IsRequired = 0 WHERE IsRequired IS NULL";
+                BP.DA.DBAccess.RunSQL(sql);
+                #endregion
 
                 #region 密码加密
                 if (SystemConfig.IsEnablePasswordEncryption == true)

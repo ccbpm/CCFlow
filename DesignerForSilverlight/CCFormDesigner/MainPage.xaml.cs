@@ -1305,6 +1305,7 @@ namespace CCForm
                                         ath.SetValue(Canvas.LeftProperty, (double)dr["X"]);
                                         ath.SetValue(Canvas.TopProperty, (double)dr["Y"]);
                                         ath.IsEdit = dr["ISEDIT"] == 1 ? true : false;
+                                        ath.IsRequired = dr["ISREQUIRED"] == 1 ? true : false;
                                         ath.Height = dr["H"];
                                         ath.Width = dr["W"];
                                         attachElementEvent(ath);
@@ -1861,6 +1862,7 @@ namespace CCForm
             imgAthDT.Columns.Add(new DataColumn("CTRLID", typeof(string)));
             imgAthDT.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
             imgAthDT.Columns.Add(new DataColumn("ISEDIT", typeof(double)));
+            imgAthDT.Columns.Add(new DataColumn("ISREQUIRED", typeof(double)));
             imgAthDT.Columns.Add(new DataColumn("X", typeof(double)));
             imgAthDT.Columns.Add(new DataColumn("Y", typeof(double)));
             imgAthDT.Columns.Add(new DataColumn("W", typeof(double)));
@@ -2149,6 +2151,7 @@ namespace CCForm
                         mapAth["CTRLID"] = imgAth.CtrlID; //附件ID.
                         mapAth["FK_MAPDATA"] = Glo.FK_MapData;
                         mapAth["ISEDIT"] = imgAth.IsEdit ? "1" : "0";
+                        mapAth["ISREQUIRED"] = imgAth.IsRequired ? "1" : "0";
 
                         mapAth["X"] = x.ToString("0.00");
                         mapAth["Y"] = y.ToString("0.00");

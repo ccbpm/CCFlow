@@ -10,6 +10,10 @@ namespace CCForm
         /// </summary>
         public bool IsEdit = true;
         /// <summary>
+        /// 是否是必填项，2016-07-20，added by liuxc
+        /// </summary>
+        public bool IsRequired = false;
+        /// <summary>
         /// 附件ID
         /// </summary>
         public string  CtrlID = null;

@@ -24,13 +24,15 @@ namespace CCForm
         {
             this.HisImgAth = imgAth;
             RBtn_EditDisplay.IsChecked = true;
-            RBtn_Edit.IsChecked = this.HisImgAth.IsEdit;            
+            RBtn_Edit.IsChecked = this.HisImgAth.IsEdit;
+            ChkRequired.IsChecked = this.HisImgAth.IsRequired;
             this.Show();
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             this.HisImgAth.IsEdit = (bool)RBtn_Edit.IsChecked;
+            this.HisImgAth.IsRequired = (bool) ChkRequired.IsChecked;
             this.DialogResult = true;
         }
 

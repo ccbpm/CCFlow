@@ -4751,6 +4751,22 @@ namespace BP.WF
                 }
                 #endregion 检查附件个数的完整性.
 
+                #region 检查图片附件的必填，added by liuxc,2016-11-1
+                foreach(FrmImgAth imgAth in this.HisNode.MapData.FrmImgAths)
+                {
+                    if (!imgAth.IsRequired) 
+                        continue;
+                    
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT COUNT(MyPK) as Num FROM Sys_FrmImgAthDB WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND FK_FrmImgAth=" + SystemConfig.AppCenterDBVarStr + "FK_FrmImgAth AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal";
+                    ps.Add("FK_MapData", "ND" + this.HisNode.NodeID);
+                    ps.Add("FK_FrmImgAth", imgAth.MyPK);
+                    ps.Add("RefPKVal", this.WorkID);
+                    if (DBAccess.RunSQLReturnValInt(ps) == 0)
+                        err += "@您没有上传图片附件:" + imgAth.CtrlID;
+                }
+                #endregion 检查图片附件的必填，added by liuxc,2016-11-1
+
                 if (err != "")
                     throw new Exception("在提交前检查到如下必输字段填写不完整:" + err);
             }

@@ -41,6 +41,10 @@ namespace BP.Sys
         /// 是否可编辑
         /// </summary>
         public const string IsEdit = "IsEdit";
+        /// <summary>
+        /// 是否必填项
+        /// </summary>
+        public const string IsRequired = "IsRequired";
     }
     /// <summary>
     /// 图片附件
@@ -160,6 +164,20 @@ namespace BP.Sys
                 this.SetValByKey(FrmImgAthAttr.IsEdit, value);
             }
         }
+        /// <summary>
+        /// 是否必填，2016-11-1
+        /// </summary>
+        public bool IsRequired
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmImgAthAttr.IsRequired);
+            }
+            set
+            {
+                this.SetValByKey(FrmImgAthAttr.IsRequired, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -206,6 +224,7 @@ namespace BP.Sys
                 map.AddTBFloat(FrmImgAthAttr.W, 160, "W", false, false);
 
                 map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
+                map.AddTBInt(FrmImgAthAttr.IsRequired, 0, "是否必填项", true, true);
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 this._enMap = map;

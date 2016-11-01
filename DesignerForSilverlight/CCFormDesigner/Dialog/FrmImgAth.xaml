@@ -15,5 +15,6 @@
         <RadioButton Content="可编辑" Height="16" HorizontalAlignment="Left" Margin="125,44,0,0" Name="RBtn_Edit" VerticalAlignment="Top" />
         <RadioButton Content="不可编辑" Height="16" HorizontalAlignment="Left" Margin="184,44,0,0" Name="RBtn_EditDisplay" VerticalAlignment="Top" />
         <sdk:Label Height="28" HorizontalAlignment="Left" Margin="58,44,0,0" Name="label1" VerticalAlignment="Top" Width="120" Content="是否可编辑:" />
+        <CheckBox Content="必填项" Height="16" HorizontalAlignment="Left" Margin="125,78,0,0" Name="ChkRequired" VerticalAlignment="Top" />
     </Grid>
 </controls:ChildWindow>

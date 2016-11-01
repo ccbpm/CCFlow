@@ -189,38 +189,41 @@ namespace BP.DA
                 throw new Exception("@获取table出错误：" + ex.Message + strConn);
             }
         }
-
-        public static DataTable GetTableByExt(string filePath)
+       
+        public static DataTable ReadExcelFileToDataTable(string fileFullName,int sheetIdx = 0)
         {
-            return GetTableByExt(filePath,null);
+            string tableName = GenerTableNameByIndex(fileFullName, sheetIdx);
+            string sql = "SELECT * FROM [" + tableName + "]";
+            return ReadExcelFileToDataTable(fileFullName, sql);
         }
-
 		/// <summary>
 		/// 通过文件，sql ,取出Table.
 		/// </summary>
 		/// <param name="filePath"></param>
 		/// <param name="sql"></param>
 		/// <returns></returns>
-        public static DataTable GetTableByExt(string filePath,string sql)
+        public static DataTable ReadExcelFileToDataTable(string filePath, string sql)
         {
-            DataTable Tb = new DataTable("Tb");
-            Tb.Rows.Clear();
+            DataTable dt = new DataTable("dt");
 
             string typ = System.IO.Path.GetExtension(filePath).ToLower();
             string strConn;
             switch (typ.ToLower() )
             {
                 case ".xls":
-                    if (sql==null)
+                    if (sql == null)
+                    {
                         sql = "SELECT * FROM [" + GenerFirstTableName(filePath) + "]";
+                    }
+
                     strConn = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source =" + filePath + ";Extended Properties=Excel 8.0";
                     System.Data.OleDb.OleDbConnection conn = new OleDbConnection(strConn);
                     OleDbDataAdapter ada = new OleDbDataAdapter(sql, conn);
                     try
                     {
                         conn.Open();
-                        ada.Fill(Tb);
-                        Tb.TableName = Path.GetFileNameWithoutExtension(filePath);
+                        ada.Fill(dt);
+                        dt.TableName = Path.GetFileNameWithoutExtension(filePath);
                     }
                     catch (System.Exception ex)
                     {
@@ -228,7 +231,7 @@ namespace BP.DA
                         throw ex;//(ex.Message);
                     }
                     conn.Close();
-                    break;
+                    return dt;
                 case ".xlsx":
                     if (sql == null)
                         sql = "SELECT * FROM [" + GenerFirstTableName(filePath)+"]";
@@ -238,8 +241,8 @@ namespace BP.DA
                         System.Data.OleDb.OleDbConnection conn121 = new OleDbConnection(strConn);
                         OleDbDataAdapter ada91 = new OleDbDataAdapter(sql, conn121);
                         conn121.Open();
-                        ada91.Fill(Tb);
-                        Tb.TableName = Path.GetFileNameWithoutExtension(filePath);
+                        ada91.Fill(dt);
+                        dt.TableName = Path.GetFileNameWithoutExtension(filePath);
                         conn121.Close();
                         ada91.Dispose();
                     }
@@ -250,8 +253,8 @@ namespace BP.DA
                             strConn = "Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\"";
                             System.Data.OleDb.OleDbConnection conn1215 = new OleDbConnection(strConn);
                             OleDbDataAdapter ada919 = new OleDbDataAdapter(sql, conn1215);
-                            ada919.Fill(Tb);
-                            Tb.TableName = Path.GetFileNameWithoutExtension(filePath);
+                            ada919.Fill(dt);
+                            dt.TableName = Path.GetFileNameWithoutExtension(filePath);
                             ada919.Dispose();
                             conn1215.Close();
                         }
@@ -261,7 +264,7 @@ namespace BP.DA
                         }
                         throw ex1;//(ex.Message);
                     }
-                    break;
+                    return dt;
                 case ".dbf":
                     strConn = "Driver={Microsoft dBASE Driver (*.DBF)};DBQ=" + System.IO.Path.GetDirectoryName(filePath) + "\\"; //+FilePath;//
                     OdbcConnection conn1 = new OdbcConnection(strConn);
@@ -269,7 +272,7 @@ namespace BP.DA
                     conn1.Open();
                     try
                     {
-                        ada1.Fill(Tb);
+                        ada1.Fill(dt);
                     }
                     catch//(System.Exception ex)
                     {
@@ -279,8 +282,8 @@ namespace BP.DA
                             int from = ada1.SelectCommand.CommandText.ToLower().IndexOf("from");
                             ada1.SelectCommand.CommandText = ada1.SelectCommand.CommandText.Remove(sel, from - sel);
                             ada1.SelectCommand.CommandText = ada1.SelectCommand.CommandText.Insert(sel, " top 10 * ");
-                            ada1.Fill(Tb);
-                            Tb.TableName = "error";
+                            ada1.Fill(dt);
+                            dt.TableName = "error";
                         }
                         catch (System.Exception ex)
                         {
@@ -289,11 +292,11 @@ namespace BP.DA
                         }
                     }
                     conn1.Close();
-                    break;
+                    return dt;
                 default:
                     break;
             }
-            return Tb;
+            return dt;
         }
 	}
 }

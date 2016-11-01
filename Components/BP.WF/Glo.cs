@@ -2454,7 +2454,7 @@ namespace BP.WF
         /// <param name="xlsFile"></param>
         public static string LoadFlowDataWithToSpecNode(string xlsFile)
         {
-            DataTable dt = BP.DA.DBLoad.GetTableByExt(xlsFile);
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(xlsFile);
             string err = "";
             string info = "";
 

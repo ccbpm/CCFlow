@@ -58,6 +58,7 @@
         $(function Attachment_Init() {
             var FK_MapData = GetQueryString("FK_MapData");
             var Ath = GetQueryString("Ath");
+            
             $.ajax({
                 type: 'POST',
                 async: true,
@@ -70,7 +71,10 @@
 
                     //给整个界面的元素批量赋值.
                     GenerFullAllCtrlsVal(data);
-
+                    if (data.NoOfObj != null)
+                    {
+                        $("#TB_NoOfObj").attr('disabled',true);
+                    }
 
                     alert("初始化成功");
                 },

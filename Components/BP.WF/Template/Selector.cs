@@ -21,7 +21,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 按照用户选择计算
         /// </summary>
-        ByUserSelected
+        ByUserSelected,
+        /// <summary>
+        /// 发送按钮旁下拉框选择
+        /// </summary>
+        SendButtonSileSelect
     }
     /// <summary>
     /// 关系类型

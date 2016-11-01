@@ -34,6 +34,15 @@ namespace BP.WF
         /// <returns>返回dataset</returns>
         public static DataSet GenerWorkNode(string fk_flow, int fk_node, Int64 workID, Int64 fid, string userNo)
         {
+
+            //让其登录. ??? 为什么需要登录？
+            if (WebUser.No != userNo)
+            {
+                Emp emp = new Emp(userNo);
+                BP.Web.WebUser.SignInOfGener(emp);
+            }
+
+            //节点.
             if (fk_node == 0)
                 fk_node = int.Parse(fk_flow + "01");
 
@@ -42,8 +51,7 @@ namespace BP.WF
 
             try
             {
-                Emp emp = new Emp(userNo);
-                BP.Web.WebUser.SignInOfGener(emp);
+             
 
                 MapData md = new MapData();
                 md.No = "ND" + fk_node;
@@ -57,6 +65,38 @@ namespace BP.WF
                 Node nd = new Node(fk_node);
                 if (nd.IsStartNode == false)
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
+
+
+                //增加转向下拉框数据.
+                if (nd.CondModel == CondModel.SendButtonSileSelect)
+                {
+                    /*如果当前节点，是可以显示下拉框的.*/
+                    Nodes nds = nd.HisToNodes;
+
+                    DataTable dtToNDs = new DataTable();
+                    dtToNDs.TableName = "ToNodes";
+                    dtToNDs.Columns.Add("No",typeof(string));
+                    dtToNDs.Columns.Add("Name", typeof(string));
+                    dtToNDs.Columns.Add("IsSelectEmps", typeof(string));
+
+                    foreach (Node item in nds)
+                    {
+                        DataRow dr = dtToNDs.NewRow();
+                        dr["No"] = item.NodeID;
+                        dr["Name"] = item.Name;
+                        //if (item.hissel
+
+                        if (item.HisDeliveryWay == DeliveryWay.BySelected)
+                            dr["IsSelectEmps"] = "1";
+                        else
+                            dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
+                        dtToNDs.Rows.Add(dr);
+                    }
+
+                    //增加一个下拉框, 对方判断是否有这个数据.
+                    myds.Tables.Add(dtToNDs);
+                }
+
 
                 // 节点数据.
                 //string sql = "SELECT * FROM WF_Node WHERE NodeID=" + fk_node;

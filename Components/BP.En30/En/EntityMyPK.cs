@@ -13,7 +13,6 @@ namespace BP.En
         /// className
         /// </summary>
         public const string MyPK = "MyPK";
-        public const string NoInt = "NoInt";
     }
 	/// <summary>
 	/// NoEntity 的摘要说明。
@@ -47,6 +46,7 @@ namespace BP.En
         #region 构造
         public EntityMyPK()
         {
+
         }
         /// <summary>
         /// class Name 

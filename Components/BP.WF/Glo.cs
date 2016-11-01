@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20161026";
+        public static string Ver = "20161031";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -175,6 +175,9 @@ namespace BP.WF
 
                 BP.DA.DBAccess.RunSQL("DELETE FROM Sys_EnumMain WHERE No='SelectorModel'");
                 BP.DA.DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='SelectorModel' ");
+
+                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_EnumMain WHERE No='CondModel'");
+                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='CondModel' ");
 
                 // 运行升级SQL.
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");

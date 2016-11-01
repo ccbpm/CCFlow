@@ -2991,7 +2991,7 @@ namespace BP.WF
                 attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 32;
+                attr.MaxLen = 50;
                 attr.Insert();
             }
 
@@ -3259,7 +3259,7 @@ namespace BP.WF
             attr.UIVisible = false;
             attr.UIIsEnable = false;
             attr.MinLen = 0;
-            attr.MaxLen = 32;
+            attr.MaxLen = 50;
             attr.Insert();
 
             if (this.NodePosType == NodePosType.Start)

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>CCBPM2.0</title>
@@ -100,20 +101,12 @@
             <img src="Img/Menu/property.png"   id="FlowAttr"   border="0" width="14" height="14" alt="流程属性,设置整个流程信息." />
             <label for="FlowAttr" class="toolbarText">流程属性</label>
         </a>
-
-        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt="自定义流程报表." />
-        <a style="text-decoration: none;" href="javascript:DesignMyRpt();" title="报表设计">
-            <img src="Img/DesignRpt.png"   id="DesignRpt"   border="0" width="14" height="14" alt="报表设计" />
-            <label for="DesignRpt" class="toolbarText">报表设计</label>
-        </a>
-
-
+        
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt="自定义流程报表." />
         <a style="text-decoration: none;" href="javascript:DesignMyRptNew();" title="报表设计">
             <img src="Img/DesignRpt.png"   id="DesignMyRptNew"   border="0" width="14" height="14" alt="报表设计" />
-            <label for="DesignMyRptNew" class="toolbarText">报表New</label>
+            <label for="DesignMyRptNew" class="toolbarText">报表</label>
         </a>
-
 
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
@@ -132,13 +125,6 @@
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a  style="text-decoration: none;" href="javascript:action('connector-jagged');" title="折线连接">
             <img src="assets/images/icon_connector_jagged.gif" border="0" id="LineZX" /> <label for="LineZX" class="toolbarText">折线连接</label>  </a>
-       <%-- <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
-        <a href="javascript:action('connector-organic');" title="曲线连接">
-            <img src="assets/images/icon_connector_organic.gif" border="0" alt="曲线连接" id="Organic" /> <label for="Organic" class="toolbarText">折线连接</label>  </a>--%>
-        <%--<img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1"
-            height="18" />
-        <a href="javascript:action('container');" title="Container (Experimental)">
-            <img src="assets/images/container.png" border="0" alt="Container" /></a>--%>
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18"/>            
         <input type="checkbox" onclick="showGrid();" checked="checked" id="gridCheckbox"  title="显示网格" style="vertical-align:middle;"/>
@@ -151,21 +137,6 @@
             height="18" />
         <a href="javascript:createFigure(figure_Text, 'assets/images/text.gif');" title="添加标签" >
             <img src="assets/images/text.gif" border="0" height="18" /></a>
-        <%--<img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1"
-            height="18" />
-        <a href="javascript:Conver_CCBPM_V1ToV2();" title="重新转化流程">
-            <img src="assets/images/rotate.png" border="0" height="18" /></a>--%>
-        <%--<img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1"
-            height="18" />
-            <a href="javascript:action('duplicate');">Copy</a>--%>
-        <%--<img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1"
-            height="18" />
-        <a href="javascript:action('undo');" title="Undo (Ctrl-Z)">
-            <img src="assets/images/arrow_undo.png" border="0" /></a>
-        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1"
-            height="18" />
-        <a href="javascript:action('redo');" title="Redo (Ctrl-Y)">
-            <img src="assets/images/arrow_redo.png" border="0" /></a>--%>
         <script type="text/javascript" language="javascript">
             if (!isBrowserReady()) {
                 document.write('<span style="background-color: red;" >');
@@ -176,14 +147,6 @@
     </div> 
     <div id="editor">
         <div id="figures" style="height: 100%; overflow:auto;position:relative;">
-            <%--<select style="width: 120px;" onchange="setFigureSet(this.options[this.selectedIndex].value);">
-                <script type="text/javascript">
-                    for (var setName in figureSets) {
-                        var set = figureSets[setName];
-                        document.write('<option value="' + setName + '">' + set['name'] + '</option>');
-                    }
-                </script>
-            </select>--%>
             <div id="minimap" style="position:absolute; bottom:18px;">
             </div>
         </div>
@@ -226,7 +189,6 @@
     </div>
     <div id="nodeMenu" class="easyui-menu" style="width: 180px;">
         <div data-options="iconCls:'icon-property',name:'NodePropertyNew'">节点属性</div>
-        <%--<div data-options="iconCls:'icon-property',name:'NodeProperty'">节点属性</div>--%>
         <div data-options="iconCls:'icon-edit',name:'editnodename'">修改名称</div>
         <div id="nodeModel_Menu_For_CCBPM">
             <span>节点类型</span>
@@ -251,24 +213,6 @@
         <div data-options="iconCls:'icon-Sender',name:'BindStations'">绑定岗位</div>
 
         <div data-options="iconCls:'icon-CC',name:'NodeCCRole'">设置抄送人(呈阅人)</div>
-<%--        <div class="menu-sep"></div>
-        <div data-options="iconCls:'icon-Event',name:'NodeEvent'">事件&消息</div>
-        <div data-options="iconCls:'icon-Cond',name:'FlowCompleteCond'">流程完成条件</div>
-        <div data-options="iconCls:'icon-Listion',name:'Listion'">消息收听</div>
-         <div data-options="iconCls:'icon-Node',name:'Node'" >批量设置</div>--%>
-
-         <%--   <span>批量设置</span>
-            <div>
-               <div data-options="iconCls:'icon-edit',name:'ToolBar'" >功能按钮控制</div>
-               <div data-options="iconCls:'icon-edit',name:'SubFlows'" >父子流程</div>
-               <div data-options="iconCls:'icon-edit',name:'SelfToolbar'" >审核组件</div>
-               <div data-options="iconCls:'icon-edit',name:'SelfToolbar'">移动设置</div>
-               <div data-options="iconCls:'icon-edit',name:'SelfToolbar'">考核</div>
-               <div data-options="iconCls:'icon-edit',name:'SelfToolbar'">自定义工具栏</div>
-            </div>
-        </div>--%>
-
-        <%--<div onclick="SetBUnit()" data-options="iconCls:'icon-bind',name:'SetBUnit'"> 设置为节点模版(业务单元)</div>--%>
         <div class="menu-sep"></div>
         <div data-options="iconCls:'icon-delete',name:'deletenode'">删除</div>
     </div>

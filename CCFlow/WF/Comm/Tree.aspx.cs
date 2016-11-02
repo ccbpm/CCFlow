@@ -184,6 +184,8 @@ namespace CCOA.Comm
             EntityTree root = ens.GetEntityByKey(EntityTreeAttr.ParentNo, rootNo) as EntityTree;
             if (root == null)
                 throw new Exception("@没有找到rootNo=" + rootNo + "的entity.");
+            if(root.No.Equals(rootNo))
+                throw new Exception("@根节点编号不能与父节点编号相同：No=" + rootNo);
             appendMenus.Append("[{");
             appendMenus.Append("\"id\":\"" + rootNo + "\"");
             appendMenus.Append(",\"text\":\"" + root.Name + "\"");

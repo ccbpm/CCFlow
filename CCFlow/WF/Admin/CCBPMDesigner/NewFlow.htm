@@ -59,11 +59,11 @@
     <form id="from1" action="">
     <table class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
         <tr>
-            <td><font color=red><b>*</b></font>  流程名称：</td>
+            <td><font color=red><b>*</b></font>流程名称：</td>
             <td>
                 <input id="TB_FlowName" class="easyui-textbox" style="width: 200px" />
             </td>
-            <td> </td>
+            <td> 不能为空.</td>
         </tr>
         <tr>
             <td>
@@ -74,7 +74,7 @@
                 </select>
             </td>
 
-            <td> </td>
+            <td> 流程显示位置.</td>
         </tr>
         <tr>
             <td nowarp="true"><font color="red"><b>*</b></font>数据存储模式：</td>
@@ -91,7 +91,7 @@
             <td>
                 <input id="TB_PTable" class="easyui-textbox" style="width: 200px" />
             </td>
-            <td> <font  color="gray">存储到流程数据库上的表名称，默认为NDxxxRpt,xxx是流程编号。 </font></td>
+            <td> 流程<font  color="gray">运行的数据表名称，默认为NDxxxRpt,xxx是流程编号。 </font></td>
         </tr>
         <tr>
             <td nowarp="true"  width="20%;">
@@ -101,8 +101,7 @@
                 <input id="TB_FlowCode" class="easyui-textbox" style="width: 200px" />
             </td>
             <td> 
-            <font  color="gray">唯一来确定此流程的标记、也叫流程别名、比如:BaoXiao,QingJia (可以为空)</font>
-            </td>
+            <font  color="gray">唯一来确定此流程的标记、也叫流程别名、比如:BaoXiao,QingJia (可以为空)</font> 。</td>
         </tr>
         <tr>
             <td  nowarp="true"><font color=red><b>*</b></font>流程模式：</td>

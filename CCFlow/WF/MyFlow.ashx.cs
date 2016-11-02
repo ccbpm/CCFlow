@@ -144,6 +144,19 @@ namespace CCFlow.WF
             }
         }
         /// <summary>
+        /// 到达的节点ID
+        /// </summary>
+        public int ToNode
+        {
+            get
+            {
+                if (this.Request.Form["ToNode"] == null)
+                    return 0;
+                else
+                    return Int64.Parse(this.Request.Form["ToNode"]);
+            }
+        }
+        /// <summary>
         /// 子流程ID
         /// </summary>
         public Int64 CWorkID
@@ -662,7 +675,7 @@ namespace CCFlow.WF
                 string msg = "";
                 try
                 {
-                    objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null);
+                    objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null,this.ToNode,null);
                     msg = objs.ToMsgOfHtml();
                     BP.WF.Glo.SessionMsg = msg;
                 }

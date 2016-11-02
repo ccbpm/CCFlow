@@ -140,6 +140,7 @@
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
     <Content Include="SDKFlowDemo\Default.htm" />
+    <Content Include="Silverlight.js" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByDepts.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
@@ -484,7 +485,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\RptOrder.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Default.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Designer.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.xml" />
     <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\NewFlow.htm" />
@@ -3760,13 +3760,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Designer.aspx.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Designer.aspx.designer.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx.cs">
       <DependentUpon>DesignerSL.aspx</DependentUpon>

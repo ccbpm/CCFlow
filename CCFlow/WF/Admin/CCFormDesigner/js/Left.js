@@ -28,7 +28,7 @@ function RefreshFlowJson() {
         FK_Flow: node.id
     }, function (jsonData) {
         $(".mymask").show();
-        addTab(node.id, node.text, "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+        addTab(node.id, node.text, "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
         //延时3秒
         setTimeout(DesignerLoaded, 3000);
     });
@@ -38,19 +38,19 @@ function RefreshFlowJson() {
 function OpenFlowToCanvas(node, id, text) {
     $(".mymask").show();
     if (node.attributes.DTYPE == "2") {//BPMN模式
-        addTab(id, text, "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=2", node.iconCls);
+        addTab(id, text, "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=2", node.iconCls);
     } else if (node.attributes.DTYPE == "1") {//CCBPM
-        addTab(id, text, "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls);
+        addTab(id, text, "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls);
     } else {
         if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
             var attrs = node.attributes;    //这样写，是为了不将attributes里面原有的属性丢失，edited by liuxc,2015-11-05
             attrs.DTYPE = "1";
-            attrs.Url = "Designer.aspx?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
+            attrs.Url = "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
             $('#flowTree').tree('update', {
                 target: node.target,
                 attributes: attrs
             });
-            addTab(id, text, "Designer.aspx?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+            addTab(id, text, "Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
         } else {
             addTab(id, text, "DesignerSL.aspx?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
         }
@@ -95,7 +95,7 @@ function newFlow() {
                     data: [{
                         id: jdata.data.no,
                         text: jdata.data.name,
-                        attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+                        attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
                         iconCls: 'icon-flow1',
                         checked: false
                     }]
@@ -103,7 +103,7 @@ function newFlow() {
                 var nodeData = {
                     id: jdata.data.no,
                     text: jdata.data.name,
-                    attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+                    attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
                     iconCls: 'icon-flow1',
                     checked: false
                 };

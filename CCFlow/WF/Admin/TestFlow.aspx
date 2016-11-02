@@ -75,7 +75,7 @@
     <center>
 <table width="910px"   border="0"  cellpadding="0" cellspacing="0" style="margin-top:0px;height:700px;background:white; text-align:center" > 
 
-<caption>流程测试导航</caption>
+<caption>流程测试导航. 提示:下列人员，都是可以发起该流程的人员，点击一个人员进入流程发起界面。</caption>
 <tr>
 <td valign="top"  style="margin:5px;" >
     <uc2:ucsys ID="Ucsys1" runat="server" />

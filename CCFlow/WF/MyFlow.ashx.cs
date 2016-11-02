@@ -153,7 +153,7 @@ namespace CCFlow.WF
                 if (this.Request.Form["ToNode"] == null)
                     return 0;
                 else
-                    return Int64.Parse(this.Request.Form["ToNode"]);
+                    return int.Parse(this.Request.Form["ToNode"]);
             }
         }
         /// <summary>

@@ -23,12 +23,11 @@
 
         //初始化数据.
         function InitPage() {
-
             //初始化表格.
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=LoginInit&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
+                url: Handler + "?DoType=LoginInit&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -54,10 +53,6 @@
 
 
                     if (data.UserNo != "") {  //有登录的信息.
-
-                        //给文本框赋值.
-
-                        $("#TB_UserNo").val(data.UserNo);
 
                     }
 
@@ -97,7 +92,7 @@
 
                     var toWhere = GetQueryString("ToWhere");
                     if (toWhere == null || toWhere == "") {
-                        toWhere = "EmpWorks.htm";
+                        toWhere = "EmpWorks.aspx";
                     }
                     window.location.href = toWhere;
                 }
@@ -106,8 +101,8 @@
 
         ///安全退出..
         function Exit() {
-
             //执行登录..
+            var frmData = $("#cc").serialize();
             $.ajax({
                 data: frmData,
                 type: 'post',
@@ -174,7 +169,7 @@
 </div>
 
 <div id="divBtnAuth" style=" float:right">
-<input type="button" id="Btn_ExitAuth" name="Btn_ExitAuth"  value="退出授权模式" /> 
+<input type="button" id="Btn_ExitAuth" name="Btn_ExitAuth" onclick="ExitAuth();" value="退出授权模式" /> 
 </div>
 
 <div id="divBtnExit"  style=" float:right">
@@ -200,6 +195,9 @@
     </table>
 
 </form>
+
+    <p>
+        &nbsp;</p>
 
 </body>
 </html>

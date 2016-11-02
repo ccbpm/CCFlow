@@ -7,7 +7,19 @@ function Esc() {
 
 /* 把一个 @XB=1@Age=25 转化成一个js对象.  */
 function AtParaToJson(json) {
-   
+    var jsObj = {};
+    if (json != undefined && json.trim() != '') {
+        var atParamArr = json.split('@');
+        $.each(atParamArr, function (i,atParam) {
+            if (atParam != '') {
+                var  atParamKeyValue = atParam.split('=');
+                if (atParamKeyValue.length == 2) {
+                    jsObj[atParamKeyValue[0]] = atParamKeyValue[1];
+                }
+            }
+        });
+    }
+    return jsObj;
 }
 
 //获得所有的checkbox 的id组成一个string用逗号分开, 以方便后台接受的值保存.

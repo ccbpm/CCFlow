@@ -131,13 +131,18 @@
         //配置数据
         var firstLoad = true;
         var toNode;
-        var pageUrlParam = { fk_node: GetQueryString("FK_Node"), WorkID: GetQueryString("WorkID"), FK_Flow: GetQueryString("FK_Flow") };
+        var pageUrlParam = { fk_node: GetQueryString("FK_Node"), WorkID: GetQueryString("WorkID"), FK_Flow: GetQueryString("FK_Flow"), toNode: GetQueryString("ToNode") != undefined ? GetQueryString("ToNode") : 0 };
 
         function dtTable() {
-            if (firstLoad) {
-                toNode = 0;
+            if (pageUrlParam.toNode == 0) {
+                if (firstLoad) {
+                    toNode = 0;
+                } else {
+                    toNode = $("#searchS1 option:selected").attr("val");
+                }
             } else {
-                toNode = $("#searchS1 option:selected").attr("val");
+                $("#searchS").css('display', 'none');
+                toNode = pageUrlParam.toNode;
             }
             $.ajax({
                 type: 'post',
@@ -147,17 +152,16 @@
                 dataType: 'html',
                 data: {ToNode:toNode},
                 success: function (data) {
-
                     console.log(data)
                     if (data != null && data != undefined) {
                         var selDataArr = JSON.parse(data).Nodes;
                         var dtgArr = JSON.parse(data).Depts;
                         var dteArr = JSON.parse(data).Emps;
-                        if (firstLoad == true) {
+                        if (firstLoad == true && pageUrlParam.toNode == 0) {
                             firstLoad = false;
                             var html = '';
-                            $.each(selDataArr,function(i, obje) {
-                                    html += '<option val="' + obje.No + '">' + obje.Name + '</option>';
+                            $.each(selDataArr, function (i, obje) {
+                                html += '<option val="' + obje.No + '">' + obje.Name + '</option>';
                             });
                             $("#searchS1").html("");
                             $("#searchS1").html(html);
@@ -167,6 +171,10 @@
                         if (dtgArr == undefined  && dteArr == undefined ) {//通用人员选择其
                             $('#selectEmpsDiv').css('display', 'block');
                             $('#groupTable').css('display', 'none');
+
+
+                            $(".wait").hide();
+                            $("section").show();
                             return;
                         } else {
                             $('#groupTable').css('display', 'block');
@@ -281,7 +289,11 @@
             //AccepterSave&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi
             var empNos = sedmsg();
             console.log(pageUrlParam.WorkID)
-            toNode = $("#searchS1 option:selected").attr("val");
+            if (pageUrlParam.toNode == 0) {
+                toNode = $("#searchS1 option:selected").attr("val");
+            } else {
+                toNode = pageUrlParam.toNode;
+            }
             $.ajax({
                 type: 'post',
                 async: true,

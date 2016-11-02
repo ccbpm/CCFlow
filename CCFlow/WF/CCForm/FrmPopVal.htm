@@ -196,7 +196,8 @@
                                 }
                             }
                             //将URL中的@参数替换成值
-                            window.location.href = data;//URL时直接返回了路径
+                            console.log(data.substr('@SelfUrl'.length))
+                            window.location.href = data.substr('@SelfUrl'.length);//URL时直接返回了路径
                             return;
                         } else {
                             setDataArr = JSON.parse(data).Hashtable;

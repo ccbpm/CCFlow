@@ -16,6 +16,7 @@
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.nav.js"></script>
     <script type="text/javascript" src="Scripts/MyFlow2016.js"></script>
     <script type="text/javascript" src="CCForm/MapExt2016.js"></script>
+    <script type="text/javascript" src="Comm/Gener.js"></script>
     <script type="text/javascript" src="Scripts/QueryString2016.js"></script>
     <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
 
@@ -61,23 +62,62 @@
             }
 
             li.scrollNav.active a {
-                /*background: #fff;
-        color: #333;
-        font-weight: bold;*/
-                /*url(../img/back.png) no-repeat 5px 7px;*/
-                /*(http://x.autoimg.cn/car/images/csicon20150812.png) no-repeat*/
-                /*5px 7px*/
                 background: url(Scripts/bootstrap/css/img/back.png) no-repeat;
             }
+        #nav li a > div {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            float: left;
+            background: #CDD2D8;
+            line-height: 25px !important;
+            margin-right: 5px;
+            text-align: center;
+            color: #fff;
+            font: bold 15px "微软雅黑";
+            margin-left: 5px;
+        }
+        #nav li > b {
+            display: block;
+            height: 20px;
+            margin: 3px 25px;
+            border-left: 2px solid #bbb;
+        }
+        #nav li > a {
+            height: 30px;
+            text-align: left;
+            line-height: 30px !important;
+            background: none;
+          }
+        #nav .current a {
+            margin: 0px;
+            color: #7E8DF9;
+            background: none;
+            box-shadow: none;
+            height: 40px;
+            line-height: 40px !important;
+        }
+            #nav .current a > div {
+                width: 35px;
+                height: 35px;
+                margin-left: 0px;
+                line-height: 35px !important;
+                background: #7E8DF9;
+                font: bold 20px "微软雅黑";
+            }
+        body iframe {
+            border: 1px solid #ccc;
+        }
     </style>
 
     <!--杨玉慧 -->
     <script type="text/javascript">
         $(function () {
-            initPageParam(); //初始化参数
-            initBar(); //工具栏.
+           initPageParam(); //初始化参数
+           initBar(); //工具栏.
             GenerWorkNode(); //表单数据.
-
+            $("#nav").height($(window).height() - 40);
+            $("#nav").width(($(window).width() - 900) / 2 - 5);
             $('[name=showCol]').bind('change', function (obj) {
                 if (obj.target.value == "8") {
                     Col4To8();
@@ -88,7 +128,12 @@
             if ($("#Message").html() == "") {
                 $(".Message").hide();
             }
-        });
+            if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
+                //计算高度，展示滚动条
+                var height = $(parent.document.getElementById('MainFrames')).height() - 110;
+                $('#topContentDiv').height(height);
+            }
+        })
     </script>
 </head>
 <body>
@@ -97,8 +142,12 @@
         <button type="button" data-dismiss="alert" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
         <div id='Message'></div>
     </div>
-<ul class="pageScroll left" id="nav" style="display: none;"></ul>
-
+    <!--分组导航-->
+    <ul class="pageScroll left" id="nav" style="display: none;"></ul>
+    <!--轨迹导航-->
+    <ul class="pageScroll left" id="navTrackList" style="display: none;"></ul>
+    <div id="divTrack"></div>
+    <div id="divCurrentForm">
 <!--标题-->
 <div id="header">
     <span>处理人处理</span>
@@ -150,7 +199,7 @@
         </div>
     </div>
 </div>
-
+        </div>
 <!--杨玉慧加 暂时解决POP窗不好用的问题-->
 <div class="modal fade" id="returnPopValModal">
     <div class="modal-dialog">
@@ -169,25 +218,34 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<!--杨玉慧加 退回窗口-->
-<!--<div class="modal fade" id="returnWorkModal">
-    <div class="modal-dialog">
-        <div class="modal-content" style="border-radius:0px;width:700px;">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">工作退回</h4>
-            </div>
-            <div class="modal-body">
-                <iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>
-            </div>
-        </div>
-    </div>
-</div>-->
 <!--下拉框选项提示信息-->
 <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px; left: 304.98961639404297px; display: none;">
     <div class="arrow" style="left: 50.22522522522522%;"></div>
     <h3 class="popover-title"><span> title</span><span style="color: white; opacity: 1; float: right; cursor: pointer;" id="span_CloseNoticeInfo">×</span></h3>
     <div class="popover-content">顶部的 Popover 中的一些内容</div>
 </div>
+    <!--杨玉慧加  附件弹出窗口-->
+    <div class="modal fade" id="athModal">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius:0px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;opacity:1; display:none;">×</button>
+                    <h4 class="modal-title">选择附件</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe style="width:100%;border:0px;height:400px;" id="iframeAthForm" name="iframeAthForm"></iframe>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!--杨玉慧加  中间导航-->
+    <iframe id="navIframe" style="display:none;">
+
+    </iframe>
+
+    <div>
+        <iframe id="hisIframe" style="width:100%;display:none;"></iframe>
+    </div>
 </body>
 </html>

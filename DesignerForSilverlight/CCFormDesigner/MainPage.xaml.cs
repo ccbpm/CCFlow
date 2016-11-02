@@ -1074,6 +1074,7 @@ namespace CCForm
                                     {
                                         if (dr.Count == 0)
                                             continue;
+
                                         if ((string)dr["FK_MAPDATA"] != Glo.FK_MapData)
                                             continue;
 
@@ -1082,7 +1083,6 @@ namespace CCForm
                                         btn.Name = dr["MYPK"];
                                         tmpStr = dr["TEXT"];
                                         btn.Content = tmpStr.Replace("&nbsp;", " ");
-
                                         // json 值中会有null 或 ""
                                         int type = 0;
                                         //tmpStr = dr["BTNTYPE"].ToString();
@@ -1092,25 +1092,32 @@ namespace CCForm
                                         //}
                                         btn.HisBtnType = (BtnType)type;
 
-                                        type = 0;
-                                        tmpStr = dr["EVENTTYPE"].ToString();
-                                        if (!string.IsNullOrEmpty(tmpStr))
+                                        try
                                         {
-                                            int.TryParse(tmpStr, out type);
+                                            type = 0;
+                                            tmpStr = dr["EVENTTYPE"].ToString();
+                                            if (!string.IsNullOrEmpty(tmpStr))
+                                            {
+                                                int.TryParse(tmpStr, out type);
+                                            }
+                                            btn.HisEventType = (EventType)type;
+
+                                            tmpStr = dr["EVENTCONTEXT"];
+                                            if (!string.IsNullOrEmpty(tmpStr))
+                                                btn.EventContext = tmpStr.Replace("~", "'");
+
+                                            tmpStr = dr["MSGERR"];
+                                            if (!string.IsNullOrEmpty(tmpStr))
+                                                btn.MsgErr = tmpStr.Replace("~", "'");
+
+                                            tmpStr = dr["MSGOK"];
+                                            if (!string.IsNullOrEmpty(tmpStr))
+                                                btn.MsgOK = tmpStr.Replace("~", "'");
                                         }
-                                        btn.HisEventType = (EventType)type;
+                                        catch
+                                        {
 
-                                        tmpStr = dr["EVENTCONTEXT"];
-                                        if (!string.IsNullOrEmpty(tmpStr))
-                                            btn.EventContext = tmpStr.Replace("~", "'");
-
-                                        tmpStr = dr["MSGERR"];
-                                        if (!string.IsNullOrEmpty(tmpStr))
-                                            btn.MsgErr = tmpStr.Replace("~", "'");
-
-                                        tmpStr = dr["MSGOK"];
-                                        if (!string.IsNullOrEmpty(tmpStr))
-                                            btn.MsgOK = tmpStr.Replace("~", "'");
+                                        }
 
                                         tmpDouble = dr["X"];
                                         btn.SetValue(Canvas.LeftProperty, tmpDouble);
@@ -1755,9 +1762,6 @@ namespace CCForm
             dtLine.Columns.Add(new DataColumn("MYPK", typeof(string)));
             dtLine.Columns.Add(new DataColumn("FK_MAPDATA", typeof(string)));
 
-            dtLine.Columns.Add(new DataColumn("X", typeof(double)));
-            dtLine.Columns.Add(new DataColumn("Y", typeof(double)));
-
             dtLine.Columns.Add(new DataColumn("X1", typeof(double)));
             dtLine.Columns.Add(new DataColumn("Y1", typeof(double)));
 
@@ -2038,8 +2042,8 @@ namespace CCForm
                         drline["MYPK"] = myPk;
                         drline["FK_MAPDATA"] = Glo.FK_MapData;
 
-                        drline["X"] = x.ToString("0.00");
-                        drline["Y"] = y.ToString("0.00");
+                        //drline["X"] = x.ToString("0.00");
+                        //drline["Y"] = y.ToString("0.00");
 
                         drline["X1"] = line.MyLine.X1.ToString("0.00");
                         drline["X2"] = line.MyLine.X2.ToString("0.00");

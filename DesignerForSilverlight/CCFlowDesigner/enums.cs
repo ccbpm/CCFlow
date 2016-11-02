@@ -17,7 +17,6 @@ namespace BP
         public string Name;
         public int Value;
     }
-
     /// <summary>
     /// 组织机构/模式 
     /// </summary>

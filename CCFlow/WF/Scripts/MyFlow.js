@@ -30,10 +30,12 @@ var winSelectAccepter = null;
 // 打开选择人接收器.
 function OpenSelectAccepter(flowNo, nodeid, workid, fid) {
     var url = "./WorkOpt/Accepter.aspx?WorkID=" + workid + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2";
+
     if (winSelectAccepter == null)
         winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
     else
         winSelectAccepter.focus(); // (0, 0);
+
     return false;
 }
 

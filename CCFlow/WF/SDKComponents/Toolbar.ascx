@@ -188,7 +188,7 @@
          }
 
          if (btnID == 'Btn_SelectAccepter') {
-             OpenUrl('SelectAccepterMsg', '接受人', '/WF/WorkOpt/Accepter.aspx?1=2', 600, 450);
+             OpenUrl('SelectAccepterMsg', '接受人', '/WF/WorkOpt/Accepter.htm?1=2', 600, 450);
              
              return;
          }

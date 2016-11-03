@@ -412,7 +412,7 @@
                 <div id="tb" style="height: 27px; background-color: #E1ECFF;">
                     <a id="copyTo" style="margin-left: 25px;" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-childline'" onclick="copyTo()">抄送</a> 
                     <a id="clear" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'" onclick="clearData()">重置</a>
-                    <a id="isOk" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="getChecked()">确定</a> 
+                    <a id="isOk" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="getChecked()">确定并发送</a> 
                     <a id="delMeeting" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'" onclick="cancelMet()">关闭</a>
                 </div>
                 <div style="height: 25px; background-color: #E1ECFF; padding-left: 300px;">

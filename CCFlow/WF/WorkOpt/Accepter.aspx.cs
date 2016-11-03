@@ -284,7 +284,7 @@ namespace CCFlow.WF
                 if (this.ToNode == mynd.NodeID)
                     str += "&nbsp;&nbsp;<b class='l-link'><font color='red' >" + mynd.Name + "</font></b>";
                 else
-                    str += "&nbsp;&nbsp;<b><a class='l-link' href='Accepter.aspx?FK_Node=" + this.FK_Node + "&type=1&ToNode=" + mynd.NodeID + "&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "' >" + mynd.Name + "</a></b>";
+                    str += "&nbsp;&nbsp;<b><a class='l-link' href='Accepter.htm?FK_Node=" + this.FK_Node + "&type=1&ToNode=" + mynd.NodeID + "&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "' >" + mynd.Name + "</a></b>";
             }
             this.Left.Add(str + "</p>");
             this.Left.AddFieldSetEnd();
@@ -379,7 +379,7 @@ namespace CCFlow.WF
                     return;
                 }
 
-                this.Response.Redirect("Accepter.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + tempToNodeID + "&FID=" + this.FID + "&type=" + this.AccepterType + "&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "&IsWinOpen=" + this.IsWinOpen, true);
+                this.Response.Redirect("Accepter.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + tempToNodeID + "&FID=" + this.FID + "&type=" + this.AccepterType + "&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "&IsWinOpen=" + this.IsWinOpen, true);
                 return;
             }
 

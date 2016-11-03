@@ -442,9 +442,11 @@ namespace CCFlow.WF.UC
                         {
                             /*如果启用了选择人窗口的模式是【选择既发送】.*/
                             toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if (OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; \" />");
+                          
                             toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                             Btn_Send.Style.Add("display", "none");
                             this.Btn_Send.UseSubmitBehavior = false;
+
 
                             if (this.currND.HisFormType == NodeFormType.DisableIt)
                                 this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
@@ -628,7 +630,7 @@ namespace CCFlow.WF.UC
             {
                 case 1:
                     if (isAskFor == false)
-                        toolbar.Add("<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Accepter.aspx?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />");
+                        toolbar.Add("<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Accepter.htm?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />");
                     break;
                 case 2:
                     //  toolbar.Add("<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Accepter.aspx?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />");
@@ -752,7 +754,7 @@ namespace CCFlow.WF.UC
             if (urlExt.Contains("FK_Node") == false)
                 urlExt += "&FK_Node=" + currND.NodeID;
 
-            if (urlExt.Contains("&FID") == false)
+            if (urlExt.Contains("&FID") == false && currWK!=null)
                 urlExt += "&FID=" + currWK.FID;
 
             if (urlExt.Contains("&UserNo") == false)

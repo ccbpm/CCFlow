@@ -2569,7 +2569,6 @@
     <Content Include="WF\JumpWay.aspx" />
     <Content Include="WF\KeySearch.aspx" />
     <Content Include="WF\Loading.htm" />
-    <Content Include="WF\Login.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\CCForm.asmx" />
@@ -7009,13 +7008,6 @@
     </Compile>
     <Compile Include="WF\KeySearch.aspx.designer.cs">
       <DependentUpon>KeySearch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Action.aspx.cs">
       <DependentUpon>Action.aspx</DependentUpon>

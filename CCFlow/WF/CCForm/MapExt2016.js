@@ -244,43 +244,51 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
         //为表单元素反填值
         var returnValSetObj = frames["iframePopModalForm"].window.pageSetData;
         var returnValObj = frames["iframePopModalForm"].window.returnVal;
-        if (returnValSetObj[0].PopValWorkModel == "Tree" || returnValSetObj[0].PopValWorkModel == "TreeDouble" ) {//树模式 分组模式
-            frames["iframePopModalForm"].window.GetTreeReturnVal();
-            if (returnValSetObj[0].PopValFormat == "OnlyNo") {
-                $(ctrl).val(returnValObj.No);
-            } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
-                $(ctrl).val(returnValObj.Name);
-            }
-            else {
-                for (var property in returnValObj) {
-                    //$('[id$=_' + property + ']').val(returnValObj[property]);
+        if (returnValSetObj != null && returnValObj != null) {
+            if (returnValSetObj[0]
+                .PopValWorkModel ==
+                "Tree" ||
+                returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
+                frames["iframePopModalForm"].window.GetTreeReturnVal();
+                if (returnValSetObj[0].PopValFormat == "OnlyNo") {
+                    $(ctrl).val(returnValObj.No);
+                } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
+                    $(ctrl).val(returnValObj.Name);
+                } else {
+                    for (var property in returnValObj) {
+                        //$('[id$=_' + property + ']').val(returnValObj[property]);
 
-                    SetEleValByName(property, returnValObj[property]);
+                        SetEleValByName(property, returnValObj[property]);
+                    }
                 }
-            }
-        }
-        else if (returnValSetObj[0].PopValWorkModel == "Group") {//分组模式
-            frames["iframePopModalForm"].window.GetGroupReturnVal();
-            $(ctrl).val(returnValObj.Value);
-        }
-        else if (returnValSetObj[0].PopValWorkModel == "TableOnly" || returnValSetObj[0].PopValWorkModel == "TablePage") {//表格模式
-            if (returnValSetObj[0].PopValFormat == "OnlyNo") {
-                $(ctrl).val(returnValObj.No);
-            } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
-                $(ctrl).val(returnValObj.Name);
-            }
-            else {
-                for (var property in returnValObj) {
-                    //$('[id$=_' + property + ']').val(returnValObj[property]);
-                    SetEleValByName(property, returnValObj[property]);
+            } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
+                frames["iframePopModalForm"].window.GetGroupReturnVal();
+                $(ctrl).val(returnValObj.Value);
+            } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
+                returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
+                if (returnValSetObj[0].PopValFormat == "OnlyNo") {
+                    $(ctrl).val(returnValObj.No);
+                } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
+                    $(ctrl).val(returnValObj.Name);
+                } else {
+                    for (var property in returnValObj) {
+                        //$('[id$=_' + property + ']').val(returnValObj[property]);
+                        SetEleValByName(property, returnValObj[property]);
+                    }
                 }
+            } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") { //自定义URL
+                //frames["iframePopModalForm"].window.GetTreeReturnVal();
+                if (frames["iframePopModalForm"].window.GetReturnVal != undefined &&
+                    typeof (frames["iframePopModalForm"].window.GetReturnVal) == "function") {
+                    frames["iframePopModalForm"].window.GetReturnVal()
+                }
+                $(ctrl).val(returnValObj.Value);
             }
-        } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") {//自定义URL
-            //frames["iframePopModalForm"].window.GetTreeReturnVal();
-            if (frames["iframePopModalForm"].window.GetReturnVal != undefined && typeof (frames["iframePopModalForm"].window.GetReturnVal) == "function") {
-                frames["iframePopModalForm"].window.GetReturnVal()
+        } else {
+            if (frames["iframePopModalForm"].window.returnValue != undefined) {
+                var Value = frames["iframePopModalForm"].window.returnValue;
             }
-            $(ctrl).val(returnValObj.Value);
+            $(ctrl).val(Value);
         }
     });
     $('#returnPopValModal').modal().show();

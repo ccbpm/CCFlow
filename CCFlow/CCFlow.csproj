@@ -157,6 +157,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\APICode.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthSingle.png" />
@@ -558,7 +559,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\truck\Truck.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx" />
     <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\APICode.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\assets\content-background.jpg" />
     <Content Include="WF\Admin\CCFormDesigner\assets\css\ajaxfileupload.css" />
     <Content Include="WF\Admin\CCFormDesigner\assets\css\colorPicker_new.css" />
@@ -3775,13 +3775,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx.designer.cs">
       <DependentUpon>ChartWorks.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\APICode.aspx.cs">
-      <DependentUpon>APICode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\APICode.aspx.designer.cs">
-      <DependentUpon>APICode.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\BasicData.aspx.cs">
       <DependentUpon>BasicData.aspx</DependentUpon>

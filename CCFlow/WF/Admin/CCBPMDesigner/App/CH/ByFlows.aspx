@@ -349,9 +349,6 @@
                    lastMouthBJL = lastMouthBJCount * 100 / lastMouthTotalCount;
                }
                
-              
-                   
-               
                //本月按时办结率
                decimal thisMouthBJL = 0;
                int thisMouthBJCount = 0;//办结

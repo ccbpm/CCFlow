@@ -2,14 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>主页</title>
-    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="../../../Scripts/jquery/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../../Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
-    <script src="../../../Comm/Charts/js/FusionCharts.js" type="text/javascript"></script>
-    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+     <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
 
-     <script src="../../Scripts/config.js" type="text/javascript"></script>
-    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+
+     
     <style type="text/css">
         body
         {
@@ -58,41 +60,44 @@
             margin-top: 0;
         }
     </style>
-    <script type="text/javascript">
-      
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
         $(function () {
 
-             $.ajax({
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Welcome_Init&m=xxx",
+                url: Handler + "?DoType=Welcome_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
 
-                    // alert(data);
 
                     data = JSON.parse(data);
 
+                    //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllDivVal(data);
-
-                   // alert(data.totalFlow);
                     return;
                 }
             });
-        }
+
+            $("#Msg").html("");
+        });
     </script>
 </head>
 <body>
     <form id="form1" runat="server">
+    <div id="Msg"></div>
+
     <table style="width: 100%; min-width: 750px;">
-        <caption>
-            欢迎:
-            data.
-        </caption>
+       
         <tr>
             <td valign="top">
                 <fieldset>
@@ -126,7 +131,7 @@
                             </td>
 
                             <td>
-                              <div id="avgNum" > </div>
+                                <div id="avgNum" > </div>
                             </td>
                             <td>
                                 个
@@ -137,7 +142,7 @@
                                 <font class="flow_font">4、</font>启用的流程数
                             </td>
                             <td>
-                                <%=runFlowNum%>
+                                 <div id="runFlowNum" > </div>
                             </td>
                             <td>
                                 个
@@ -148,7 +153,8 @@
                                 <font class="flow_font">5、</font>流程启用比率
                             </td>
                             <td>
-                                <%= flowRate.ToString("0.00")%><font class="flow_font flow_font_big">%</font>
+                                <div id="flowRate" > </div>
+                                <font class="flow_font flow_font_big">%</font>                           
                             </td>
                             <td>
                             </td>
@@ -158,8 +164,9 @@
                                 <font class="flow_font">6、</font>平均每流程启动数
                             </td>
                             <td>
-                                <%= flowRate.ToString("0")%>
+                                <div id="flowRate11" > </div>
                             </td>
+
                             <td>
                                 个
                             </td>
@@ -176,7 +183,7 @@
                                 <font class="flow_font">1、</font>流程总数
                             </td>
                             <td>
-                                
+                                 <div id="zsNum" > </div>
                             </td>
                             <td>
                                 个
@@ -187,7 +194,7 @@
                                 <font class="flow_font">2、</font>正在运行数
                             </td>
                             <td>
-                                <%=BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState!=" +  (int)BP.WF.WFState.Complete)+"  "%>
+                                 <div id="zzyxNum" > </div>
                             </td>
                             <td>
                                 个
@@ -198,7 +205,7 @@
                                 <font class="flow_font">3、</font>完成数
                             </td>
                             <td>
-                                <%=BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=" + (int)BP.WF.WFState.Complete) + " "%>
+                                <div id="wcNum" > </div>
                             </td>
                             <td>
                                 个
@@ -209,7 +216,7 @@
                                 <font class="flow_font ">4、</font>退回中数
                             </td>
                             <td class="font_red">
-                                <%=BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=" + (int)BP.WF.WFState.ReturnSta) + " "%>
+                                <div id="thzNum" > </div>
                             </td>
                             <td>
                                 个
@@ -220,7 +227,7 @@
                                 <font class="flow_font">5、</font>删除数
                             </td>
                             <td class="font_red">
-                                <%=BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=" + (int)BP.WF.WFState.Delete) + " "%>
+                                <div id="deleteNum" > </div>
                             </td>
                             <td>
                                 个
@@ -231,7 +238,7 @@
                                 <font class="flow_font">6、</font>其他运行数
                             </td>
                             <td>
-                                <%=BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFSta=" + (int)BP.WF.WFSta.Etc) + "  "%>
+                                <div id="qtNum" > </div>
                             </td>
                             <td>
                                 个
@@ -249,7 +256,7 @@
                                 <font class="flow_font">1、</font>提前完成分钟数
                             </td>
                             <td>
-                                <%=beforeOver%>
+                                <div id="beforeOver" > </div>
                             </td>
                             <td>
                                 分钟
@@ -260,7 +267,7 @@
                                 <font class="flow_font ">2、</font>逾期分钟数
                             </td>
                             <td class="font_red">
-                                <%=afterOver%>
+                                 <div id="afterOver" > </div>
                             </td>
                             <td>分钟 </td>
                         </tr>
@@ -269,7 +276,7 @@
                                 <font class="flow_font">3、</font>按时完成
                             </td>
                             <td>
-                                <%=inTimeOverCount%>
+                                <div id="inTimeOverCount" > </div>
                             </td>
                             <td>
                                 个
@@ -280,7 +287,7 @@
                                 <font class="flow_font">4、</font>超时完成
                             </td>
                             <td class="font_red">
-                                <%=afterOverCount%>
+                             <div id="afterOverCount" > </div>
                             </td>
                             <td>
                                 个
@@ -291,7 +298,7 @@
                                 <font class="flow_font">5、</font>按时办结率
                             </td>
                             <td>
-                                <%=asRate.ToString("0.00") %><font class="flow_font flow_font_big">%</font>
+                                <div id="asRate" > </div>
                             </td>
                             <td>
                             </td>
@@ -302,7 +309,7 @@
                             </td>
                             <td>
                                 <font class="font_red">
-                                    <%=runningFlowOverTime%></font>
+                                     <div id="runningFlowOverTime" > </div>
                             </td>
                             <td>
                                 个

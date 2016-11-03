@@ -288,10 +288,10 @@ function GenerFullAllDivVal(data) {
 
         var val = json[attr]; //值
 
-        // textbox
         var div = document.getElementById(attr);
+
         if (div != null) {
-            div.innerhtml = val;
+            div.innerHTML = val;
             continue;
         }
     }

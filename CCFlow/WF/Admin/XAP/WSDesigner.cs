@@ -988,7 +988,7 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
                 string sql = "";
                 string table = "ND" + int.Parse(fk_flow) + "Track";
                 DataSet ds = new DataSet();
-                sql = "SELECT NDFrom, NDTo,ActionType,Msg,RDT,EmpFrom,EmpFromT FROM " + table + " WHERE WorkID=" + workid + "  OR FID=" + workid + " ORDER BY NDFrom ASC,NDTo ASC";
+                sql = "SELECT NDFrom, NDTo,ActionType,Msg,RDT,EmpFrom,EmpFromT FROM " + table + " WHERE (WorkID=" + workid + "  OR FID=" + workid + ") AND ActionType=1 ORDER BY NDFrom ASC,NDTo ASC";
                 DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 mydt.TableName = "WF_Track";
                 ds.Tables.Add(mydt);

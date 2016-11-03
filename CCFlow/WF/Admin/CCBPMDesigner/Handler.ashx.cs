@@ -182,11 +182,16 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         /// <summary>
         /// 公共方法获取值
         /// </summary>
-        /// <param name="param">参数名</param>
+        /// <param name="key">参数名,可以从 form 与request 里面获取.</param>
         /// <returns></returns>
-        public string GetRequestVal(string param)
+        public string GetRequestVal(string key)
         {
-            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
+            string val = context.Request[key];
+            if (val == null)
+                val = context.Request.Form[key];
+            if (val == null)
+                return null;
+            return HttpUtility.UrlDecode(val, System.Text.Encoding.UTF8);
         }
         #endregion 执行.
 
@@ -301,7 +306,6 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             {
                 // 执行升级
                 string str = BP.WF.Glo.UpdataCCFlowVer();
-
                 if (str == null)
                     str = "";
 
@@ -318,16 +322,19 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
 
         public string Login()
         {
+
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = this.GetValFromFrmByKey("TB_UserNo");
 
-            if (emp.RetrieveFromDBSources()==0)
+            if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
-            string pass= this.GetValFromFrmByKey("TB_Pass");
-            if (emp.CheckPass(pass)==false)
+
+            string pass = this.GetValFromFrmByKey("TB_Pass");
+            if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";
+
             //让其登录.
-            BP.WF.Dev2Interface.Port_Login(emp.No,true);
+            BP.WF.Dev2Interface.Port_Login(emp.No, true);
             return "SID=" + emp.SID + "&UserNo=" + emp.No;
         }
 

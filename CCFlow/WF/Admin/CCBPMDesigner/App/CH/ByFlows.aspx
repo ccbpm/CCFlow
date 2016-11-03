@@ -493,9 +493,7 @@
             int onThisTimeCountTotal= 0;
             foreach (System.Data.DataRow dr in dtThisOnTimeCount.Rows)
             {
-              
                     onThisTimeCountTotal = int.Parse(dr[1].ToString());
-
             }
 
             //逾期Total
@@ -599,8 +597,6 @@
               <td class="center"> <%=onThisTimeCountTotal%> </td>
               <td class="center"> <%=yqThisTimeCountTotal%> </td>
               <td class="center"> <%=thisMouthBJLTotal%>% </td>
-               
-               
                 </tr>
        
           

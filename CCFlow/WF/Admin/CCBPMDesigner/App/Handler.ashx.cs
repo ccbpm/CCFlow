@@ -209,6 +209,67 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.App
 
         public string Welcome_Init()
         {
+            int totalFlow = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow ");
+            int runFlowNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow WHERE IsCanStart=1  ");
+            int nodeNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node ");
+            int zsNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow ");
+            int zzyxNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState!=" +  (int)BP.WF.WFState.Complete);
+            int wxNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=" + (int)BP.WF.WFState.Complete);
+            int thzNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=" + (int)BP.WF.WFState.ReturnSta);
+            int deleteNum =  BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=" + (int)BP.WF.WFState.Delete);
+            int qtNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFSta=" + (int)BP.WF.WFSta.Etc);
+            
+            //平均每流程发起数量。
+            decimal avgNum = 0;
+            try
+            {
+                avgNum = (decimal)nodeNum / (decimal)totalFlow;
+            }
+            catch (Exception)
+            {
+            }
+            //流程启用比率。
+            decimal flowRate = 0;
+            try
+            {
+                flowRate = (decimal)runFlowNum / (decimal)totalFlow * 100;
+            }
+            catch (Exception)
+            {
+            }
+            //OverMinutes小于0表明提前 
+            string sql = "SELECT SUM(OverMinutes) FROM WF_CH WHERE  OverMinutes <0";
+            int beforeOver = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+
+            //OverMinutes大于0表明逾期
+            sql = "SELECT SUM(OverMinutes) FROM WF_CH WHERE OverMinutes >0 ";
+            int afterOver = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+
+
+            sql = "SELECT SUM (ASNum) AS ASNum , SUM(CSNum) CSNum ,SUM(AllNum) AllNum FROM V_TOTALCH  ";
+            System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+            int inTimeOverCount = 0;//按时
+            int afterOverCount = 0;//超时
+            int totalCount = 0;
+            if (dt.Rows.Count == 1)
+            {
+                inTimeOverCount = int.Parse(string.IsNullOrEmpty(dt.Rows[0]["ASNum"].ToString()) ? "0" : dt.Rows[0]["ASNum"].ToString());
+                afterOverCount = int.Parse(string.IsNullOrEmpty(dt.Rows[0]["CSNum"].ToString()) ? "0" : dt.Rows[0]["CSNum"].ToString());
+                totalCount = int.Parse(string.IsNullOrEmpty(dt.Rows[0]["AllNum"].ToString()) ? "0" : dt.Rows[0]["AllNum"].ToString());
+            }
+
+            //求按时办结率.
+            decimal asRate = 0;
+            if (totalCount == 0)
+                asRate = 0;
+            else
+                asRate = (decimal)inTimeOverCount / (decimal)totalCount * 100;
+
+            //在运行的逾期.
+            sql = "SELECT COUNT(WorkID) as Num  FROM WF_GenerWorkFlow WHERE SDTOfNode >='2015-07-06 10:43' AND WFState NOT IN (0,3)";
+            int runningFlowOverTime = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+
             return "";
         }
 

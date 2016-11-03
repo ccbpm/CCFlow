@@ -34,10 +34,10 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["DoType"];
+                string str = GetRequestVal("DoType");
                 if (str == null || str == "" || str == "null")
                 {
-                    if (string.IsNullOrEmpty(context.Request["action"]) == false)
+                    if (string.IsNullOrEmpty(GetRequestVal("action")) == false)
                         str = context.Request["action"].ToString();
                     else
                         return null;
@@ -52,7 +52,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["FK_Flow"];
+                string str = GetRequestVal("FK_Flow");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -65,7 +65,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["FK_Node"];
+                string str = GetRequestVal("FK_Node");
                 if (str == null || str == "" || str == "null")
                     return 0;
                 return int.Parse(str);
@@ -78,7 +78,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["MyPK"];
+                string str = GetRequestVal("MyPK");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -91,7 +91,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["No"];
+                string str = GetRequestVal("No");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -104,7 +104,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["EnumKey"];
+                string str = GetRequestVal("EnumKey");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -117,7 +117,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["EnsName"];
+                string str = GetRequestVal("EnsName");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -127,7 +127,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["SFTable"];
+                string str = GetRequestVal("SFTable");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -140,7 +140,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         {
             get
             {
-                string str = context.Request.QueryString["FK_MapData"];
+                string str = GetRequestVal("FK_MapData");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;

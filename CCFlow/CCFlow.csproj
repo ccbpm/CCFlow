@@ -140,7 +140,6 @@
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
     <Content Include="SDKFlowDemo\Default.htm" />
-    <Content Include="Silverlight.js" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByDepts.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
@@ -547,7 +546,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\js\FuncTrees.js" />
     <Content Include="WF\Admin\CCBPMDesigner\js\jquery.ez-bg-resize.js" />
     <Content Include="WF\Admin\CCBPMDesigner\js\Left.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\Login.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\FlowDesignerSvr.asmx" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\Truck.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx" />
@@ -3754,13 +3752,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Opt\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

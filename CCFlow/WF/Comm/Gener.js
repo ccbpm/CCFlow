@@ -5,6 +5,7 @@ function Esc() {
     return true;
 }
 
+
 /* 把一个 @XB=1@Age=25 转化成一个js对象.  */
 function AtParaToJson(json) {
     var jsObj = {};
@@ -181,10 +182,7 @@ function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
     });
 }
 
-/*
-   为页面的所有字段属性赋值.
-*/
-
+/*为页面的所有字段属性赋值. */
 function GenerFullAllCtrlsVal(data) {
 
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
@@ -271,6 +269,31 @@ function GenerFullAllCtrlsVal(data) {
         }
 
         unSetCtrl += "@" + attr + " = " + val;
+    }
+
+    // alert('没有找到的控件类型:' + unSetCtrl);
+}
+
+
+/*为页面的所有 div 属性赋值. */
+function GenerFullAllDivVal(data) {
+
+    //判断data是否是一个数组，如果是一个数组，就取第1个对象.
+    var json = data;
+    if (data.length == 1)
+        json = data[0];
+
+    var unSetCtrl = "";
+    for (var attr in json) {
+
+        var val = json[attr]; //值
+
+        // textbox
+        var div = document.getElementById(attr);
+        if (div != null) {
+            div.innerhtml = val;
+            continue;
+        }
     }
 
     // alert('没有找到的控件类型:' + unSetCtrl);

@@ -158,6 +158,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\APICode.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\BasicData.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthSingle.png" />
@@ -173,6 +174,7 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\SubFlowDtl.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\ThreadDtl.png" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTableAttrEdit.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\FiledsList.htm" />
     <Content Include="WF\Admin\CCFormDesigner\js\Controls.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\ControlsPropertys.js" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\AthMulti.png" />
@@ -226,7 +228,7 @@
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\notificationFx.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\readme.txt" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\CreateTableDataEdit.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\Welcome.aspx" />
+    <Content Include="WF\Admin\CCFormDesigner\Welcome.htm" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
     <Content Include="WF\Admin\ClientBin\CCFormDesigner.xap" />
@@ -720,14 +722,12 @@
     <Content Include="WF\Admin\CCFormDesigner\assets\javascript\excanvas.js" />
     <Content Include="WF\Admin\CCFormDesigner\assets\javascript\jquery-1.11.0.min.js" />
     <Content Include="WF\Admin\CCFormDesigner\assets\javascript\json2.js" />
-    <Content Include="WF\Admin\CCFormDesigner\BasicData.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\CCFormDesignerSL.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmEnumeration.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmHiddenField.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmImg.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTextBox.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\FiledsList.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesigner.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Home.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Img\DBSrc.png" />
@@ -3776,13 +3776,6 @@
     <Compile Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx.designer.cs">
       <DependentUpon>ChartWorks.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\BasicData.aspx.cs">
-      <DependentUpon>BasicData.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\BasicData.aspx.designer.cs">
-      <DependentUpon>BasicData.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\CCFormDesignerSL.aspx.cs">
       <DependentUpon>CCFormDesignerSL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3806,13 +3799,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx.designer.cs">
       <DependentUpon>DesignerFrm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\FiledsList.aspx.cs">
-      <DependentUpon>FiledsList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\FiledsList.aspx.designer.cs">
-      <DependentUpon>FiledsList.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\FrmAttr.aspx.cs">
       <DependentUpon>FrmAttr.aspx</DependentUpon>
@@ -3893,13 +3879,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Tables.aspx.designer.cs">
       <DependentUpon>Tables.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Clound\DictData.aspx.cs">
       <DependentUpon>DictData.aspx</DependentUpon>

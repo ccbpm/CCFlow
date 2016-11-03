@@ -75,8 +75,7 @@
     <form id="form1" runat="server">
     <table style="width: 100%; min-width: 750px;">
         <caption>
-            欢迎:
-            <%=BP.Web.WebUser.Name %>
+            欢迎:<%=BP.Web.WebUser.Name %>
         </caption>
         <tr>
             <td valign="top">

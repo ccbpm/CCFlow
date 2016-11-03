@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
+using System.Data;
 using System.Web;
+using BP.DA;
+using BP.WF;
+using BP.Port;
 
 namespace CCFlow.WF.Admin.CCBPMDesigner.App
 {
@@ -209,10 +214,19 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.App
 
         public string Welcome_Init()
         {
+            Hashtable ht = new Hashtable();
             int totalFlow = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow ");
+            ht.Add("totalFlow", totalFlow);
+
             int runFlowNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow WHERE IsCanStart=1  ");
+            ht.Add("runFlowNum", runFlowNum);
+
             int nodeNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node ");
+            ht.Add("nodeNum", nodeNum);
+
             int zsNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow ");
+            ht.Add("zsNum", zsNum);
+
             int zzyxNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState!=" +  (int)BP.WF.WFState.Complete);
             int wxNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=" + (int)BP.WF.WFState.Complete);
             int thzNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=" + (int)BP.WF.WFState.ReturnSta);
@@ -270,7 +284,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.App
             sql = "SELECT COUNT(WorkID) as Num  FROM WF_GenerWorkFlow WHERE SDTOfNode >='2015-07-06 10:43' AND WFState NOT IN (0,3)";
             int runningFlowOverTime = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
 
-            return "";
+            return  BP.Tools.Json.ToJson(ht,false);
         }
 
         public bool IsReusable

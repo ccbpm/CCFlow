@@ -23,7 +23,7 @@ function RefreshFlowJson() {
     if (!node || node.attributes.ISPARENT != '0') return;
     //首先关闭tab
     closeTab(node.text);
-    $.post("/WF/Admin/CCBPMDesigner/controller.ashx", {
+    $.post(Handler, {
         action: 'ccbpm_flow_resetversion',
         FK_Flow: node.id
     }, function (jsonData) {
@@ -78,7 +78,7 @@ function newFlow() {
         }
         //传入参数
         var params = {
-            method: "Do",
+            action: "Do",
             doWhat: "NewFlow",
             para1: newFlowInfo.flowSort + ',' + newFlowInfo.flowName + ',' + newFlowInfo.dataStoreModel + ',' + newFlowInfo.pTable + ',' + newFlowInfo.flowCode + ',' + newFlowInfo.FlowVersion
         };
@@ -137,7 +137,7 @@ function newFlowSort(isSub) {
         //传入参数
         var doWhat = isSub ? 'NewSubFlowSort' : 'NewSameLevelFlowSort';
         var params = {
-            method: "Do",
+            action: "Do",
             doWhat: doWhat,
             para1: currSort.id + ',' + val
         };
@@ -182,7 +182,7 @@ function editFlowSort() {
         }
         //传入后台参数
         var params = {
-            method: "Do",
+            action: "Do",
             doWhat: "EditFlowSort",
             para1: currSort.id + ',' + val
         };
@@ -210,7 +210,7 @@ function deleteFlowSort() {
     OpenEasyUiConfirm("你确定要删除名称为“" + currSort.text + "”的流程类别吗？", function () {
         //传入后台参数
         var params = {
-            method: "Do",
+            action: "Do",
             doWhat: "DelFlowSort",
             para1: currSort.id
         };
@@ -223,7 +223,7 @@ function deleteFlowSort() {
                 OpenEasyUiConfirm("所选类别下包含子流程类别，确定强制删除吗？", function () {
                     //传入后台参数
                     var params = {
-                        method: "Do",
+                        action: "Do",
                         doWhat: "DelFlowSort",
                         force: "true",
                         para1: currSort.id
@@ -243,7 +243,7 @@ function deleteFlowSort() {
                 OpenEasyUiConfirm("所选类别下包含流程，确定强制删除吗？", function () {
                     //传入后台参数
                     var params = {
-                        method: "Do",
+                        action: "Do",
                         doWhat: "DelFlowSort",
                         force: "true",
                         para1: currSort.id
@@ -346,7 +346,7 @@ function DeleteFlow() {
 
     OpenEasyUiConfirm("你确定要删除名称为“" + currFlow.text + "”的流程吗？", function () {
         var params = {
-            method: "Do",
+            action: "Do",
             doWhat: "DelFlow",
             para1: currFlow.id
         };
@@ -608,7 +608,7 @@ function WinOpen(url) {
 var WebUser = { No: '', Name: '', FK_Dept: '', SID: '' };
 function InitUserInfo() {
     var params = {
-        method: "WebUserInfo"
+        action: "WebUserInfo"
     };
     ajaxService(params, function (data) {
         var jdata = $.parseJSON(data);

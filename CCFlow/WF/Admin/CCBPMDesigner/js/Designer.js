@@ -575,7 +575,7 @@ function WinOpenIt(url, winWidth, winHeight) {
 //将v1版本流程转换为v2
 function Conver_CCBPM_V1ToV2() {
     //transe old flow to bpm
-    $.post("/WF/Admin/CCBPMDesigner/controller.ashx", {
+    $.post(Handler, {
         action: 'ccbpm_flow_elements',
         FK_Flow: CCBPM_Data_FK_Flow
     }, function (jsonData) {

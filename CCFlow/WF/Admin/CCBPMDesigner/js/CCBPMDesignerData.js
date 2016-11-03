@@ -20,14 +20,11 @@ function getArgsFromHref(sArgName) {
 
 //公共方法
 function ajaxService(param, callback, scope, levPath) {
-
-    var url = "/WF/Admin/CCBPMDesigner/CCBPMDesignerBase.ashx";
-
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据
         contentType: "application/json; charset=utf-8",
-        url: url, //要访问的后台地址
+        url: Handler, //要访问的后台地址
         data: param, //要发送的数据
         async: true,
         cache: false,
@@ -46,7 +43,7 @@ function checklogin(fCallback, oScope) {
     /// <summary>检测登录信息</summary>
     /// <param name="fCallback" type="Function">检测完之后，要运行的方法</param>
     /// <param name="oScope" type="Object">检测完之后，要运行的方法的参数</param>
-    ajaxService({ method: "LetLogin" }, function (re, scps) {
+    ajaxService({ action: "LetLogin" }, function (re, scps) {
         if (re == null || re.length == 0) {
             if (scps.length == 2 && scps[0]) {
                 scps[0](scps[1]);

@@ -44,7 +44,7 @@ FigureCreateCommand.prototype = {
                 if (createdFigure.CCBPM_Shape == CCBPM_Shape_Node) {
                     $.ajax({
                         type: 'POST',
-                        url: "/WF/Admin/CCBPMDesigner/controller.ashx",
+                        url: Handler,
                         data: { action: 'genernodeid', FK_Flow: CCBPM_Data_FK_Flow, FigureName: createdFigure.name, x: this.x, y: this.y },
                         success: function (jsonData) {
                             var jData = $.parseJSON(jsonData);

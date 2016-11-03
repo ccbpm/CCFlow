@@ -31,7 +31,7 @@ FigureDeleteCommand.prototype = {
                     if (canDelete == true) {
                         $.ajax({
                             type: 'POST',
-                            url: "/WF/Admin/CCBPMDesigner/controller.ashx",
+                            url: Handler,
                             data: { action: 'deletenode', FK_Flow: CCBPM_Data_FK_Flow, FK_Node: this.deletedFigure.CCBPM_OID },
                             success: function (json) {
                                 if (json != "true") {

@@ -141,12 +141,22 @@
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
     <Content Include="SDKFlowDemo\Default.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByDepts.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Nodes.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps0.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps1.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps2.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\SearchKey.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\RptOrder.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthSingle.png" />
@@ -473,7 +483,6 @@
     <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.aspx" />
     <Content Include="WF\Admin\AttrNode\SubFlows.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\Compent.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Nodes.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps0.aspx" />
@@ -481,7 +490,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps2.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\SearchKey.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\RptOrder.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.xml" />
     <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx" />
@@ -1305,7 +1313,6 @@
     <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitView_Ora.sql" />
     <Content Include="WF\Admin\Org\Site.Master" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesignerController.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Opt\Site.Master" />
     <Content Include="SDKFlowDemo\App\Port\WinOpen.Master" />
     <Content Include="SDKFlowDemo\Comm\Site.Master" />
     <Content Include="SDKFlowDemo\GuestApp\Site.Master" />
@@ -1320,6 +1327,9 @@
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Handler.ashx" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\CH\Handler.ashx" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\Handler.ashx" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
@@ -3673,12 +3683,14 @@
     <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx.designer.cs">
       <DependentUpon>ByFlows.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\Compent.aspx.cs">
-      <DependentUpon>Compent.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
+    <Compile Include="WF\Admin\CCBPMDesigner\App\CH\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\Compent.aspx.designer.cs">
-      <DependentUpon>Compent.aspx</DependentUpon>
+    <Compile Include="WF\Admin\CCBPMDesigner\App\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\Nodes.aspx.cs">
       <DependentUpon>Nodes.aspx</DependentUpon>
@@ -3729,13 +3741,6 @@
     <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.aspx.designer.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\RptOrder.aspx.cs">
-      <DependentUpon>RptOrder.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\RptOrder.aspx.designer.cs">
-      <DependentUpon>RptOrder.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3753,16 +3758,16 @@
     <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Opt\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Opt\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\truck\FlowDesignerSvr.asmx.cs">
       <DependentUpon>FlowDesignerSvr.asmx</DependentUpon>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx.cs">
+      <DependentUpon>TruckSimple.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx.designer.cs">
+      <DependentUpon>TruckSimple.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx.cs">
       <DependentUpon>ChartWorks.ascx</DependentUpon>

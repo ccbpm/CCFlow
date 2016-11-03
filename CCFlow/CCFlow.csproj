@@ -484,7 +484,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\RptOrder.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Default.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.xml" />
     <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\NewFlow.htm" />
@@ -1308,8 +1307,6 @@
     <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitView_Ora.sql" />
     <Content Include="WF\Admin\Org\Site.Master" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesignerController.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\CCBPMDesignerBase.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\controller.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Opt\Site.Master" />
     <Content Include="SDKFlowDemo\App\Port\WinOpen.Master" />
     <Content Include="SDKFlowDemo\Comm\Site.Master" />
@@ -3747,19 +3744,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.designer.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\CCBPMDesignerBase.ashx.cs">
-      <DependentUpon>CCBPMDesignerBase.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\controller.ashx.cs">
-      <DependentUpon>controller.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx.cs">
       <DependentUpon>DesignerSL.aspx</DependentUpon>

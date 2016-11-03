@@ -306,9 +306,7 @@
                             <td class="font_red">
                                 <%=afterOver%>
                             </td>
-                            <td>
-                                分钟
-                            </td>
+                            <td>分钟 </td>
                         </tr>
                         <tr>
                             <td class="flow_info">

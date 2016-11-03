@@ -8,6 +8,7 @@
         type="text/css" />
     <link href="../../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
 </head>
 <body>
@@ -144,7 +145,8 @@
     <div class="flowstep">
         <script language="javascript" type="text/javascript">
             var jdata;
-            var fk_flow = '<%=this.FK_Flow %>';
+
+            var fk_flow =  '<%=this.FK_Flow %>';
             var workid = '<%=this.WorkID %>';
             var fid = '<%=this.FID %>';
             var nodes;

@@ -424,10 +424,16 @@
                         return;
                     }
 
+                    if (data.indexOf('url@Default.htm') == 0) {
+                        window.location.href = data.replace('url@','');
+                        return;
+                    }
+
                     if (data.indexOf('url@') == 0) {
                         window.location.href = '../DBInstall.aspx';
                         return;
                     }
+
 
                     if (data != "")
                         alert(data);

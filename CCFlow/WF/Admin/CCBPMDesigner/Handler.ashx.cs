@@ -214,11 +214,19 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                     case "LoginInit": //登录初始化..
                         if (BP.DA.DBAccess.IsExitsObject("WF_Emp") == false)
                             msg = "url@=../DBInstall.aspx";
+
+                        string userNo = this.GetRequestVal("UserNo");
+                        string sid = this.GetRequestVal("SID");
+                        if (sid != null && userNo == "admin")
+                        {
+                            BP.WF.Dev2Interface.Port_Login(userNo, sid);
+                            msg = "url@Default.htm?UserNo=" + userNo + "&SessionID=" + this.context.Session.SessionID;
+                        }
+
                         break;
                     case "Login":
                         msg = this.Login();
                         break;
-
                     case "load"://获取流程图表数据
                         msg = Flow_LoadFlowJsonData();
                         break;
@@ -296,6 +304,8 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.No != "admin")
                 return "url@Login.htm?DoType=Logout";
 
+
+
             Hashtable ht = new Hashtable();
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
                 ht.Add("OSModel", "0");
@@ -316,12 +326,19 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                 ht.Add("Msg", ex.Message);
             }
 
+
+         
+
             //生成Json.
             return BP.Tools.Json.ToJson(ht, false);
         }
 
         public string Login()
         {
+
+
+           
+
 
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = this.GetValFromFrmByKey("TB_UserNo");

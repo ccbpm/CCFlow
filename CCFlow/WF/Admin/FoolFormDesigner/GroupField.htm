@@ -105,7 +105,9 @@
             var gfID = GetQueryString("GroupField");
             if (gfID == null)
                 gfID = "0";
-            window.location.href = "GroupFieldEdit.htm?GroupField=" + gfID + "&FK_MapData=" + fk_mapData + "&m=" + Math.random();
+            var url = "GroupFieldEdit.htm?GroupField=" + gfID + "&FK_MapData=" + fk_mapData + "&m=" + Math.random();
+            window.showModalDialog(url, "", "dialogWidth=600px;dialogHeight=300px;dialogLeft=560px;dialogTop=300px;");
+            //window.location.href = url;
 
         }
 

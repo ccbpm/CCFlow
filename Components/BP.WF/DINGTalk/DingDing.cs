@@ -211,6 +211,10 @@ namespace BP.WF
                                     //小图标
                                     UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
                                     File.Copy(savePath + "\\DefaultSmaller.png", UserIcon, true);
+
+                                    //正常图标
+                                    UserIcon = savePath + "\\" + userInfo.userid + ".png";
+                                    File.Copy(savePath + "\\Default.png", UserIcon, true);
                                 }
                                 else
                                 {
@@ -221,6 +225,10 @@ namespace BP.WF
 
                                     //小图标
                                     UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
+                                    BP.DA.DataType.HttpDownloadFile(headimgurl, UserIcon);
+
+                                    //正常图标
+                                    UserIcon = savePath + "\\" + userInfo.userid + ".png";
                                     BP.DA.DataType.HttpDownloadFile(headimgurl, UserIcon);
                                 }
                             }

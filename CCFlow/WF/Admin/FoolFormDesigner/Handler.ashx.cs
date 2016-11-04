@@ -173,6 +173,19 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
         }
+        /// <summary>
+        /// 公共方法获取值
+        /// </summary>
+        /// <param name="param">参数名</param>
+        /// <returns></returns>
+        public int GetRequestValInt(string param)
+        {
+            string str = GetRequestVal(param);
+            if (str == null || str == "")
+                return 0;
+
+            return int.Parse(str);
+        }
         #endregion 属性.
 
         public void ProcessRequest(HttpContext mycontext)
@@ -182,7 +195,17 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             try
             {
                 switch (this.DoType)
-                {   case "MapFrame_Save"://框架保存
+                {
+                    case "GroupField_SaveCheck":
+                        msg = this.GroupField_SaveCheck();
+                        break;
+                    case "GroupField_Init"://保存空白.
+                        msg = this.GroupField_Init();
+                        break;
+                    case "GroupField_SaveBlank"://保存空白.
+                        msg = this.GroupField_SaveBlank();
+                        break;
+                    case "MapFrame_Save"://框架保存
                         msg = this.MapFrame_Save();
                         break;
                     case "MapFrame_Init": //框架初始化.
@@ -293,6 +316,47 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 context.Response.Write("err@" + ex.Message);
             }
             //输出信息.
+        }
+        /// <summary>
+        /// 返回信息.
+        /// </summary>
+        /// <returns></returns>
+        public string GroupField_Init()
+        {
+            GroupField gf = new GroupField();
+            gf.OID= this.GetRequestValInt("GroupField");
+            if (gf.OID != 0)
+                gf.Retrieve();
+
+            return gf.ToJson();
+        }
+        
+        /// <summary>
+        /// 保存空白的分组.
+        /// </summary>
+        /// <returns></returns>
+        public string GroupField_SaveBlank()
+        {
+            string no = this.GetValFromFrmByKey("TB_Blank_No");
+            string name = this.GetValFromFrmByKey("TB_Blank_Name");
+
+            GroupField gf = new GroupField();
+            gf.OID= this.GetRequestValInt("GroupField");
+            if (gf.OID != 0)
+                gf.Retrieve();
+
+            gf.CtrlID = no;
+            gf.EnName = this.FK_MapData;
+            gf.Lab = name;
+            gf.Save();
+            return "保存成功.";
+        }
+        public string GroupField_SaveCheck()
+        {
+            string lab=this.GetValFromFrmByKey("TB_Check_Name");
+            string prx=this.GetValFromFrmByKey("TB_Check_No");
+            BP.Sys.CCFormAPI.CreateCheckGroup(this.FK_MapData, lab, prx);
+            return "创建成功...";
         }
         /// <summary>
         /// 

@@ -4,8 +4,6 @@
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
         FormOnLoadCheckIsNull();
     }
-
-
     
 });
 
@@ -259,7 +257,6 @@ function WinOpen(url, winName) {
     newWindow.focus();
     return;
 }
-
  
 
 function DoDelSubFlow(fk_flow, workid) {
@@ -337,8 +334,6 @@ function printFrom() {
    
     LODOP.PREVIEW();
 }
-
-
 
 
 //原有的

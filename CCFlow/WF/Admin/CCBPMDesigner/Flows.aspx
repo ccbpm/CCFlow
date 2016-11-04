@@ -31,20 +31,20 @@
         function openFlow(flowDType, flowName, flowNo, webUserNo, webUserSID) {
             if (flowDType == 2) {//BPMN模式
                 window.parent.closeTab(flowName);
-                window.parent.addTab('flow', flowName, "../CCBPMDesigner/Designer.aspx?FK_Flow=" +
+                window.parent.addTab('flow', flowName, "../CCBPMDesigner/Designer.htm?FK_Flow=" +
                         flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=2", '');
             } else if (flowDType == 1) {//CCBPM
                 window.parent.closeTab(flowName);
-                window.parent.addTab('flow', flowName, '../CCBPMDesigner/Designer.aspx?FK_Flow=' +
+                window.parent.addTab('flow', flowName, '../CCBPMDesigner/Designer.htm?FK_Flow=' +
                   flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=1", '');
             } else {
                 if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
                     window.parent.closeTab(flowName);
-                    window.parent.addTab('flow', flowName, "../CCBPMDesigner/Designer.aspx?FK_Flow=" +
+                    window.parent.addTab('flow', flowName, "../CCBPMDesigner/Designer.htm?FK_Flow=" +
                   flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
                 } else {
                     window.parent.closeTab(flowName);
-                    window.parent.addTab('flow', flowName, "../CCBPMDesigner/DesignerSL.aspx?FK_Flow=" +
+                    window.parent.addTab('flow', flowName, "../CCBPMDesigner/DesignerSL.htm?FK_Flow=" +
                   flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
                 }
             }
@@ -174,7 +174,6 @@
             System.Data.DataTable dtCqTimeCount
              = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow,COUNT( distinct WorkID) Num FROM WF_CH WHERE CHSta='" +
                                                (int)BP.WF.Data.CHSta.ChaoQi + "' GROUP BY FK_Flow  ");
-
 
             // 获得流程状态.
             System.Data.DataTable dt

@@ -154,6 +154,8 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.htm" />
+    <Content Include="WF\Admin\CCBPMDesigner\Flows.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx" />
@@ -495,7 +497,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.xml" />
-    <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\NewFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\API.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Img\App.png" />
@@ -3747,12 +3748,12 @@
     <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.designer.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx.cs">
-      <DependentUpon>DesignerSL.aspx</DependentUpon>
+    <Compile Include="WF\Admin\CCBPMDesigner\Flows.aspx.cs">
+      <DependentUpon>Flows.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\DesignerSL.aspx.designer.cs">
-      <DependentUpon>DesignerSL.aspx</DependentUpon>
+    <Compile Include="WF\Admin\CCBPMDesigner\Flows.aspx.designer.cs">
+      <DependentUpon>Flows.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

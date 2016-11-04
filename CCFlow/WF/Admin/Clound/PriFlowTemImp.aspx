@@ -29,7 +29,7 @@
                   flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
                     } else {
                         window.parent.closeTab(flowName);
-                        window.parent.addTab('flow', flowName, "../CCBPMDesigner/DesignerSL.aspx?FK_Flow=" +
+                        window.parent.addTab('flow', flowName, "../CCBPMDesigner/DesignerSL.htm?FK_Flow=" +
                   flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
                     }
                 }

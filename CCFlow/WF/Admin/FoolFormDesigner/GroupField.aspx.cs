@@ -75,61 +75,7 @@ namespace CCFlow.WF.MapDef
                 return;
             }
 
-            GroupField gf = new GroupField();
-            gf.Lab = sta;
-            gf.EnName = this.FK_MapData;
-            gf.Insert();
-
-            attr = new MapAttr();
-            attr.FK_MapData = this.FK_MapData;
-            attr.KeyOfEn = prx + "_Note";
-            attr.Name = "审核意见"; // sta;  // this.ToE("CheckNote", "审核意见");
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.UIIsEnable = true;
-            attr.UIIsLine = true;
-            attr.MaxLen = 4000;
-            attr.ColSpan = 4;
-            attr.GroupID = gf.OID;
-            attr.UIHeight = 23 * 3;
-          //  attr.UIRows = 3;
-            attr.Idx = 1;
-            attr.Insert();
-            attr.Update("Idx", 1);
-
-
-            attr = new MapAttr();
-            attr.FK_MapData = this.FK_MapData;
-            attr.KeyOfEn = prx + "_Checker";
-            attr.Name = "审核人";// "审核人";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.MaxLen = 50;
-            attr.MinLen = 0;
-            attr.UIIsEnable = true;
-            attr.UIIsLine = false;
-            attr.DefVal = "@WebUser.No";
-            attr.UIIsEnable = false;
-            attr.GroupID = gf.OID;
-            attr.IsSigan = true;
-            attr.Idx = 2;
-            attr.Insert();
-            attr.Update("Idx", 2);
-
-            attr = new MapAttr();
-            attr.FK_MapData = this.FK_MapData;
-            attr.KeyOfEn = prx + "_RDT";
-            attr.Name = "审核日期"; // "审核日期";
-            attr.MyDataType = DataType.AppDateTime;
-            attr.UIContralType = UIContralType.TB;
-            attr.UIIsEnable = true;
-            attr.UIIsLine = false;
-            attr.DefVal = "@RDT";
-            attr.UIIsEnable = false;
-            attr.GroupID = gf.OID;
-            attr.Idx = 3;
-            attr.Insert();
-            attr.Update("Idx", 3);
+          
 
             this.WinCloseWithMsg("保存成功"); // "增加成功，您可以调整它的位置与修改字段的标签。"
         }

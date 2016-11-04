@@ -309,9 +309,6 @@ namespace BP.Web.WF
                       //  Glo.ToMsg("流程删除成功");
                         BP.WF.Glo.ToMsg("流程删除成功");
 
-             
-
-
                         //this.ToWFMsgPage("流程删除成功");
                         break;
                     default:

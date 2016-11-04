@@ -169,10 +169,6 @@ namespace BP.Sys
         /// </summary>
         public const string IsNote = "IsNote";
         /// <summary>
-        /// 是否可以删除
-        /// </summary>
-        public const string IsDelete = "IsDelete";
-        /// <summary>
         /// 是否显示标题列
         /// </summary>
         public const string IsShowTitle = "IsShowTitle";
@@ -473,31 +469,6 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmAttachmentAttr.IsDownload, value);
-            }
-        }
-        /// <summary>
-        /// 是否可以删除
-        /// </summary>
-        public bool IsDelete
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FrmAttachmentAttr.IsDelete);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.IsDelete, value);
-            }
-        }
-        public int IsDeleteInt
-        {
-            get
-            {
-                return this.GetValIntByKey(FrmAttachmentAttr.IsDelete);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.IsDelete, value);
             }
         }
 
@@ -1123,8 +1094,6 @@ namespace BP.Sys
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "H", false, false);
 
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
-                map.AddTBInt(FrmAttachmentAttr.IsDelete, 1,
-                    "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的)", false, false);
                 
                 //hzm新增列
                 map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);

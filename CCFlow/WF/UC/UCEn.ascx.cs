@@ -4271,7 +4271,7 @@ namespace CCFlow.WF.UC
 
                     if (this.IsReadonly == false)
                     {
-                        if (ath.IsDelete)
+                        if (ath.HisDeleteWay == AthDeleteWay.DelAll || (ath.HisDeleteWay == AthDeleteWay.DelSelf && athDB.Rec == WebUser.No))
                         {
                             mybtn = new Button();
                             mybtn.CssClass = "Btn";

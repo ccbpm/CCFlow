@@ -154,9 +154,8 @@ namespace BP.Sys
                 map.AddTBIntPKOID();
                 map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20);
                 map.AddTBString(GroupFieldAttr.EnName, null, "类", true, false, 0, 200, 20);
-                map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-
+                map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
                 map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, false, 0, 50, 20);
                 map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, false, 0, 500, 20);
                 map.AddTBAtParas(3000);

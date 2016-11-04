@@ -446,6 +446,69 @@ namespace BP.Sys
 
         #region 模版操作.
         /// <summary>
+        /// 创建一个审核分组
+        /// </summary>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="groupName">分组名称</param>
+        /// <param name="prx">前缀</param>
+        public static void CreateCheckGroup(string frmID, string groupName, string prx)
+        {
+            GroupField gf = new GroupField();
+            gf.Lab = groupName;
+            gf.EnName = frmID;
+            gf.Insert();
+
+            MapAttr attr = new MapAttr();
+            attr.FK_MapData = frmID;
+            attr.KeyOfEn = prx + "_Note";
+            attr.Name = "审核意见"; // sta;  // this.ToE("CheckNote", "审核意见");
+            attr.MyDataType = DataType.AppString;
+            attr.UIContralType = UIContralType.TB;
+            attr.UIIsEnable = true;
+            attr.UIIsLine = true;
+            attr.MaxLen = 4000;
+            attr.ColSpan = 4;
+            attr.GroupID = gf.OID;
+            attr.UIHeight = 23 * 3;
+            attr.Idx = 1;
+            attr.Insert();
+            attr.Update("Idx", 1);
+
+
+            attr = new MapAttr();
+            attr.FK_MapData = frmID;
+            attr.KeyOfEn = prx + "_Checker";
+            attr.Name = "审核人";// "审核人";
+            attr.MyDataType = DataType.AppString;
+            attr.UIContralType = UIContralType.TB;
+            attr.MaxLen = 50;
+            attr.MinLen = 0;
+            attr.UIIsEnable = true;
+            attr.UIIsLine = false;
+            attr.DefVal = "@WebUser.No";
+            attr.UIIsEnable = false;
+            attr.GroupID = gf.OID;
+            attr.IsSigan = true;
+            attr.Idx = 2;
+            attr.Insert();
+            attr.Update("Idx", 2);
+
+            attr = new MapAttr();
+            attr.FK_MapData = frmID;
+            attr.KeyOfEn = prx + "_RDT";
+            attr.Name = "审核日期"; // "审核日期";
+            attr.MyDataType = DataType.AppDateTime;
+            attr.UIContralType = UIContralType.TB;
+            attr.UIIsEnable = true;
+            attr.UIIsLine = false;
+            attr.DefVal = "@RDT";
+            attr.UIIsEnable = false;
+            attr.GroupID = gf.OID;
+            attr.Idx = 3;
+            attr.Insert();
+            attr.Update("Idx", 3);
+        }
+        /// <summary>
         /// 创建表单
         /// </summary>
         /// <param name="frmID">表单ID</param>

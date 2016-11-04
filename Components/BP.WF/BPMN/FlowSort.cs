@@ -80,7 +80,6 @@ namespace BP.BPMN
             {
                 return new FlowSort();
             }
-
         }
         /// <summary>
         /// 流程类别s

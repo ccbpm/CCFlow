@@ -227,7 +227,6 @@ namespace BP.WF.Template
                 UAC uac = new UAC();
                 uac.IsDelete = false;
                 uac.IsInsert = false;
-                uac.IsView = false;
                 if (BP.Web.WebUser.No == "admin")
                 {
                     uac.IsUpdate = true;
@@ -277,8 +276,11 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "窗口模式", true, true, SelectorAttr.SelectorModel,
                     "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url@5=使用通用人员选择器");
 
-                map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "参数1", true, false, true);
-                map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "参数2", true, false, true);
+                map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name FROM  Port_Dept", true, false, true);
+                map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源:比如:SELECT No,Name,FK_Dept FROM  Port_Emp", true, false, true);
+
+                //map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数,可以为空", true, false, true);
+                //map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源", true, false, true);
 
             
                 // 相关功能。
@@ -334,12 +336,16 @@ namespace BP.WF.Template
 
             //部门.
             string sqlGroup = this.SelectorP1;
-            sqlGroup = sqlGroup.Replace("@WebUser.No", WebUser.No);
-            sqlGroup = sqlGroup.Replace("@WebUser.Name", WebUser.Name);
-            sqlGroup = sqlGroup.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);
-            dt.TableName = "Depts";
-            ds.Tables.Add(dt);
+            if (string.IsNullOrEmpty(sqlGroup) == false)
+            {
+                sqlGroup = sqlGroup.Replace("@WebUser.No", WebUser.No);
+                sqlGroup = sqlGroup.Replace("@WebUser.Name", WebUser.Name);
+                sqlGroup = sqlGroup.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);
+                dt.TableName = "Depts";
+                ds.Tables.Add(dt);
+            }
+
 
             //人员.
             string sqlDB = this.SelectorP2;

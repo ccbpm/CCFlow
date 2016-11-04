@@ -95,24 +95,44 @@
                     }
 
                     alert(data);
-                    //window.close();
-
-//                    $("#Msg").html("<font color=green>" + data + "</font>");
-//                    var no = $('#TB_No').val();
-//                    window.location.href = 'Student.htm?No=' + no;
                     return;
                 }
             });
         }
 
-        function SaveBlank_Edit() {
+        function EditBlank() {
             var fk_mapData = GetQueryString("FK_MapData");
             var gfID = GetQueryString("GroupField");
             if (gfID == null)
                 gfID = "0";
             window.location.href = "GroupFieldEdit.htm?GroupField=" + gfID + "&FK_MapData=" + fk_mapData + "&m=" + Math.random();
-        
+
         }
+
+        function SaveCheck() {
+            var fk_mapData = GetQueryString("FK_MapData");
+            var checkBoxIDs = GenerCheckIDs();
+            var frmData = $("#cc").serialize();
+
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=CheckGroup_Save&FK_MapData=" + fk_mapData,
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+                    alert(data);
+                }
+
+            });
+
+
+        }
+        
     </script>
 
 </head>
@@ -143,7 +163,7 @@
     <tr> 
     <td colspan="4" > 
     <input type="button" value="保存"   onclick="SaveBlank()" id="Btn_SaveBlank" name="Btn_SaveBlank" />
-    <input type="button" value="编辑"   onclick="SaveBlank_Edit()" id="Button4" name="Btn_SaveBlank" />
+    <input type="button" value="编辑"   onclick="EditBlank()" id="Button4" name="Btn_SaveBlank" />
      </td>
     </tr>
     </table>

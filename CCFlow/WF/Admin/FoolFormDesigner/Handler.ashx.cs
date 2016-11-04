@@ -8,6 +8,7 @@ using BP.Sys;
 using BP.DA;
 using BP.Port;
 using BP.En;
+using BP.Tools;
 
 namespace CCFlow.WF.Admin.FoolFormDesigner
 {
@@ -196,7 +197,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
-                    case "GroupField_SaveCheck":  //保存分组
+                    case "GroupField_SaveCheck":  
                         msg = this.GroupField_SaveCheck();
                         break;
                     case "GroupField_DeleteCheck":  //删除分组
@@ -204,12 +205,15 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         break;
                     case "GroupField_DeleteAllCheck":  //删除并删除该分组下的字段
                         msg = this.GroupField_DeleteAllCheck();
-                        break;    
+                        break;
                     case "GroupField_Init"://保存空白.
                         msg = this.GroupField_Init();
                         break;
                     case "GroupField_SaveBlank"://保存空白.
                         msg = this.GroupField_SaveBlank();
+                        break;
+                    case "CheckGroup_Save":   //审核分组保存
+                        msg = this.CheckGroup_Save();
                         break;
                     case "MapFrame_Save"://框架保存
                         msg = this.MapFrame_Save();
@@ -357,6 +361,37 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             gf.Save();
             return "保存成功.";
         }
+
+        /// <summary>
+        /// 审核分组保存
+        /// </summary>
+        /// <returns></returns>
+        public string CheckGroup_Save()
+        {
+            string sta = this.GetValFromFrmByKey("TB_Check_Name");
+            if (sta.Length == 0)
+            {
+               return "审核岗位不能为空";
+            }
+
+            string prx = this.GetValFromFrmByKey("TB_Check_No");
+            if (prx.Length == 0)
+            {
+                prx = chs2py.convert(sta);
+            }
+
+            MapAttr attr = new MapAttr();
+            int i = attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_Note");
+            i += attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_Checker");
+            i += attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_RDT");
+
+            if (i > 0)
+            {
+                return  "前缀已经使用：" + prx + " ， 请确认您是否增加了这个审核分组或者，请您更换其他的前缀。";
+            }
+            return "保存成功";
+        }
+
         public string GroupField_SaveCheck()
         {
             string lab=this.GetValFromFrmByKey("TB_Check_Name");

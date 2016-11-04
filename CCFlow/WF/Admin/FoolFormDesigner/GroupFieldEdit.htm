@@ -18,10 +18,8 @@
         $(function () {
 
             var gfID = GetQueryString("GroupField");
-            if (gfID == null) {
+            if (gfID == null)
                 gfID = "0";
-                $("#Button4").hide();
-            }
 
             $.ajax({
                 type: 'post',
@@ -95,7 +93,7 @@
                     }
 
                     alert(data);
-                    //window.close();
+                    window.close();
 
 //                    $("#Msg").html("<font color=green>" + data + "</font>");
 //                    var no = $('#TB_No').val();
@@ -105,13 +103,38 @@
             });
         }
 
-        function SaveBlank_Edit() {
-            var fk_mapData = GetQueryString("FK_MapData");
+        function SaveBlank_Close() {
+            SaveBlank();
+            window.close();
+        }
+
+        function GroupField_Delete(num) {
+
             var gfID = GetQueryString("GroupField");
-            if (gfID == null)
+            if (gfID == null) {
                 gfID = "0";
-            window.location.href = "GroupFieldEdit.htm?GroupField=" + gfID + "&FK_MapData=" + fk_mapData + "&m=" + Math.random();
-        
+            }
+            var url ;
+            if (num == 1) {
+                url = Handler + "?DoType=GroupField_DeleteCheck&GroupField=" + gfID + "&m=" + Math.random();
+            } else {
+                url = Handler + "?DoType=GroupField_DeleteAllCheck&GroupField=" + gfID + "&m=" + Math.random();
+            }
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+                    alert(data);
+                    window.close();
+                }
+            });
         }
     </script>
 
@@ -143,49 +166,14 @@
     <tr> 
     <td colspan="4" > 
     <input type="button" value="保存"   onclick="SaveBlank()" id="Btn_SaveBlank" name="Btn_SaveBlank" />
-    <input type="button" value="编辑"   onclick="SaveBlank_Edit()" id="Button4" name="Btn_SaveBlank" />
+    <input type="button" value="保存并关闭"   onclick="SaveBlank_Close()" id="Button1" name="Btn_SaveBlank" />
+    <input type="button" value="删除"   onclick="GroupField_Delete(1)" id="Button2" name="Btn_SaveBlank" />
+    <input type="button" value="删除并删除该分组下的字段"   onclick="GroupField_Delete(2)" id="Button3" name="Btn_SaveBlank" />
+     </td>
      </td>
     </tr>
     </table>
     </fieldset>
-
-
-
-    
- <fieldset>
-    <legend>新建审核分组</legend>
-    <table>
-    <tr> 
-    <td>分组名称</td>
-    <td>  <input type="text" value="" name="TB_Check_Name" id="TB_Check_Name" />  </td>
-    </tr>
-
-    <tr> 
-    <td>前缀</td>
-    <td>  <input type="text" value="" name="TB_Check_No" id="TB_Check_No" />   </td>
-    </tr>
-
-    <tr>
-    <td colspan="4"> <font color="gray"> 审核分组：同时创建 _Checker, _CheckRDT, _CheckNote 三个字段.</font></td>
-    </tr>
-
-    <tr> 
-    <td colspan="4" > 
-    <input type="button" value="保存"   onclick="SaveCheck()" id="Btn_SaveCheck" name="Btn_SaveCheck" />
-     </td>
-    </tr>
-    </table>
-    </fieldset>
-     
-
-    <fieldset>
-    <legend> <a href="GroupField.aspx?DoType=NewEvalGroup&FK_MapData=<%=this.FK_MapData %>" > 创建工作质量考核字段分组</a></legend>
-     
-     <ul>
-      <li> 创建质量考核: EvalEmpNo,EvalEmpName,EvalCent,EvalNote 4个必要的字段。</li>
-     </ul>
-    </fieldset>
-
     </form>
 
 </body>

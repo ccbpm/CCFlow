@@ -196,9 +196,15 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
-                    case "GroupField_SaveCheck":
+                    case "GroupField_SaveCheck":  //保存分组
                         msg = this.GroupField_SaveCheck();
                         break;
+                    case "GroupField_DeleteCheck":  //删除分组
+                        msg = this.GroupField_DeleteCheck();
+                        break;
+                    case "GroupField_DeleteAllCheck":  //删除并删除该分组下的字段
+                        msg = this.GroupField_DeleteAllCheck();
+                        break;    
                     case "GroupField_Init"://保存空白.
                         msg = this.GroupField_Init();
                         break;
@@ -358,6 +364,49 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             BP.Sys.CCFormAPI.CreateCheckGroup(this.FK_MapData, lab, prx);
             return "创建成功...";
         }
+
+
+        /// <summary>
+        /// 
+        /// 删除分组
+        /// </summary>
+        /// <returns></returns>
+        public string GroupField_DeleteCheck()
+        {
+            GroupField gf = new GroupField();
+            gf.OID = this.GetRequestValInt("GroupField");
+            gf.Delete();
+
+            BP.WF.Template.MapFoolForm md = new BP.WF.Template.MapFoolForm(this.FK_MapData);
+            md.DoCheckFixFrmForUpdateVer();
+            return "删除成功...";
+        }
+
+        /// <summary>
+        /// 
+        /// 删除并删除该分组下的字段
+        /// </summary>
+        /// <returns></returns>
+        public string GroupField_DeleteAllCheck()
+        {
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.GroupID, this.GetRequestValInt("GroupField"));
+            foreach (MapAttr attr in attrs)
+            {
+                if (attr.HisEditType != EditType.Edit)
+                    continue;
+                if (attr.KeyOfEn == "FID")
+                    continue;
+                attr.Delete();
+            }
+
+            GroupField gf = new GroupField();
+            gf.OID = this.GetRequestValInt("GroupField");
+            gf.Delete();
+
+            return "删除并删除该分组下的字段成功...";
+        }
+        
         /// <summary>
         /// 
         /// </summary>

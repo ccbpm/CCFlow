@@ -14,7 +14,7 @@
         OnClick="" Url="FlowSearch.aspx"  Img="./Img/Search.gif" Enable="0" Title="流程查询。" />
   <Item No="Tools" CH="设置"  B5="设置"  EN="Tools"  JP="ツールバー" RU="Создавать" Url="Tools.aspx" Img="./Img/Tools.gif" Enable="0" Title="工具栏" />
   <Item No="Emps"  CH="成员"  B5="成员"  EN="Employers"  JP="成员" RU="Член" Url="Emps.aspx" Img="./Img/Emps.gif" Enable="0" Title="员工通讯录。" />
-  <Item No="Login" CH="切换"  B5="切换"  EN="Switch User"  JP="スイッチ" RU="Переключатель" Url="Login.aspx" Img="./Img/Login.gif" Enable="0" Title="切换用户。" />
+  <Item No="Login" CH="切换"  B5="切换"  EN="Switch User"  JP="スイッチ" RU="Переключатель" Url="Login.htm" Img="./Img/Login.gif" Enable="0" Title="切换用户。" />
     
   <Item1 No="Msg" CH="消息"  B5="消息"  EN="Messages"  JP="消息" RU="Новости" Url="Msg.aspx" Img="./Img/Msg.gif" Enable="0" Title="流程查询。" />
   <Item1 No="Calendar" CH="日历"  B5="日历"  EN="Calendar"  JP="お問い合わせ" RU="Запрос" Url="Calendar.aspx" Img="./Img/Calendar.gif" Enable="1" Title="工作日历。" />

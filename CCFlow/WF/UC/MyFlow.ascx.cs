@@ -807,6 +807,13 @@ namespace CCFlow.WF.UC
             this.currND = new BP.WF.Node(this.FK_Node);
             this.Width = "900";
 
+            if (this.WorkID != 0)
+            {
+                this.gwf = new GenerWorkFlow();
+                this.gwf.WorkID = this.WorkID;
+                this.gwf.Retrieve();
+            }
+
             // 检查是否可以发起该流程？
             if (BP.WF.Glo.CheckIsCanStartFlow_InitStartFlow(this.currFlow) == false)
             {
@@ -962,7 +969,6 @@ namespace CCFlow.WF.UC
                 }
                 else
                 {
-                    gwf = new GenerWorkFlow();
                     gwf.WorkID = this.WorkID;
                     gwf.RetrieveFromDBSources();
                     pFlowNo = gwf.PFlowNo;
@@ -980,7 +986,6 @@ namespace CCFlow.WF.UC
                         return;
                     }
                 }
-
 
                 string toUrl = "";
                 if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)

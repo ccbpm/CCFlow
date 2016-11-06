@@ -109,7 +109,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
                 this.Pub1.AddTD("<a  href=\"javascript:WinOpen('SFTable.aspx?FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "&FK_SFTable=" + sem.No + "&GroupField=" + this.GroupField + "','sg')\"  ><img src='../../Img/Btn/Edit.gif' border=0/>属性</a>");
 
-                this.Pub1.AddTD(sem.FK_SFDBSrc); //描述.
+                this.Pub1.AddTD(sem.FK_SFDBSrc);  //描述.
                 this.Pub1.AddTD(sem.SrcTypeText); //数据类型.
                 this.Pub1.AddTREnd();
             }

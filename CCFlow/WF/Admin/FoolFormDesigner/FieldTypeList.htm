@@ -19,7 +19,10 @@
         }
 
         var fk_mapdata = GetQueryString("FK_MapData");
-        var groupID = GetQueryString("GroupID");
+        var groupID = GetQueryString("GroupField");
+        if (groupID == null)
+            groupID = 0;
+
         var fType = GetQueryString("FType");
 
         //页面启动函数.
@@ -97,12 +100,13 @@
                 return;
             }
 
+
             var fType = $('input[name="RB_FType"]:checked').val();
 
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FieldTypeSelect&Name=" + name + "&FType=" + fType + "&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + no + "&m=" + Math.random(),
+                url: Handler + "?DoType=FieldTypeSelect&Name=" + name + "&FType=" + fType + "&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + no + "&GroupField="+groupID+"&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -192,17 +196,19 @@
 
 <script type="text/javascript" >
 
+    var groupID = GetQueryString("GroupField");
+
     function Enum(doType) {
-        window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupID=' + groupID;
+        window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
     }
 
     function Table(doType) {
-        window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupID=' + groupID;
+        window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
     }
 
     function TableGuide() {
         ///WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>
-        window.location.href = '/WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupID=' + groupID;
+        window.location.href = '/WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
     }
 </script>
 

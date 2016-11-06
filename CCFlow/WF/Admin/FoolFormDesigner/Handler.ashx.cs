@@ -86,6 +86,17 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return str;
             }
         }
+           public int GroupField
+        {
+            get
+            {
+                string str = context.Request.QueryString["GroupField"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return int.Parse( str);
+            }
+        }
+        
         /// <summary>
         /// 框架ID
         /// </summary>
@@ -107,6 +118,19 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             get
             {
                 string str = context.Request.QueryString["FK_Node"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return int.Parse(str);
+            }
+        }
+        /// <summary>
+        ///   RefOID
+        /// </summary>
+        public int RefOID
+        {
+            get
+            {
+                string str = context.Request.QueryString["RefOID"];
                 if (str == null || str == "" || str == "null")
                     return 0;
                 return int.Parse(str);
@@ -156,7 +180,11 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         }
         public int GetValIntFromFrmByKey(string key)
         {
-            return int.Parse(this.GetValFromFrmByKey(key));
+            string str = this.GetValFromFrmByKey(key);
+            if (str == null || str == "")
+                throw new Exception("@参数:"+key+" 没有取到值.");
+
+            return int.Parse(str);
         }
         public bool GetValBoolenFromFrmByKey(string key)
         {
@@ -224,7 +252,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "MapFrame_Delete": //框架初始化.
                         msg = this.MapFrame_Delete();
                         break;
-
                     case "DtlInit": //初始化明细表.
                         msg = this.DtlInit();
                         break;
@@ -258,8 +285,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "FieldTypeSelect": //选择字段.
                         msg = this.FieldTypeSelect();
                         break;
-                    case "FieldInit": //字段属性.
-                        msg = this.FieldInit();
+                    case "EditF_FieldInit": //字段属性.
+                        msg = this.EditF_FieldInit();
                         break;
                     case "FieldSave": //保存字段.
                         msg = this.FieldSave();
@@ -314,6 +341,85 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         break;
                     case "EditFExtContral_Save": //字段属性删除
                         msg = this.EditFExtContral_Save();
+                        break;
+                    case "GFDoUp":
+                        GroupField gf = new GroupField(this.RefOID);
+                        gf.DoUp();
+                        gf.Retrieve();
+                        if (gf.Idx == 0)
+                            return;
+
+                        int oidIdx = gf.Idx;
+                        gf.Idx = gf.Idx - 1;
+                        GroupField gfUp = new GroupField();
+                        if (gfUp.Retrieve(GroupFieldAttr.EnName, gf.EnName, GroupFieldAttr.Idx, gf.Idx) == 1)
+                        {
+                            gfUp.Idx = oidIdx;
+                            gfUp.Update();
+                        }
+                        gf.Update();
+                        break;
+                    case "GFDoDown":
+                        GroupField mygf = new GroupField(this.RefOID);
+                        mygf.DoDown();
+                        mygf.Retrieve();
+                        int oidIdx1 = mygf.Idx;
+                        mygf.Idx = mygf.Idx + 1;
+                        GroupField gfDown = new GroupField();
+                        if (gfDown.Retrieve(GroupFieldAttr.EnName, mygf.EnName, GroupFieldAttr.Idx, mygf.Idx) == 1)
+                        {
+                            gfDown.Idx = oidIdx1;
+                            gfDown.Update();
+                        }
+                        mygf.Update();
+                        break;
+                    case "AthDoUp":
+                        FrmAttachment frmAth = new FrmAttachment(this.MyPK);
+                        if (frmAth.RowIdx > 0)
+                        {
+                            frmAth.RowIdx = frmAth.RowIdx - 1;
+                            frmAth.Update();
+                        }
+                        break;
+                    case "AthDoDown":
+                        FrmAttachment frmAthD = new FrmAttachment(this.MyPK);
+                        if (frmAthD.RowIdx < 10)
+                        {
+                            frmAthD.RowIdx = frmAthD.RowIdx + 1;
+                            frmAthD.Update();
+                        }
+                        break;
+                    case "M2MDoUp":
+                        MapM2M ddtl1 = new MapM2M(this.MyPK);
+                        if (ddtl1.RowIdx > 0)
+                        {
+                            ddtl1.RowIdx = ddtl1.RowIdx - 1;
+                            ddtl1.Update();
+                        }
+                        break;
+                    case "M2MDoDown":
+                        MapM2M ddtl2 = new MapM2M(this.MyPK);
+                        if (ddtl2.RowIdx < 10)
+                        {
+                            ddtl2.RowIdx = ddtl2.RowIdx + 1;
+                            ddtl2.Update();
+                        }
+                        break;
+                    case "FrameDoUp":
+                        MapFrame frame1 = new MapFrame(this.MyPK);
+                        if (frame1.RowIdx > 0)
+                        {
+                            frame1.RowIdx = frame1.RowIdx - 1;
+                            frame1.Update();
+                        }
+                        break;
+                    case "FrameDoDown":
+                        MapFrame frame2 = new MapFrame(this.MyPK);
+                        if (frame2.RowIdx < 10)
+                        {
+                            frame2.RowIdx = frame2.RowIdx + 1;
+                            frame2.Update();
+                        }
                         break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
@@ -414,6 +520,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             BP.WF.Template.MapFoolForm md = new BP.WF.Template.MapFoolForm(this.FK_MapData);
             md.DoCheckFixFrmForUpdateVer();
+
             return "删除成功...";
         }
 
@@ -624,7 +731,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string name = this.GetRequestVal("Name");
 
             int fType = int.Parse(this.context.Request.QueryString["FType"]);
-            string groupIDStr = this.context.Request.QueryString["GroupID"];
+            string groupIDStr = this.context.Request.QueryString["GroupField"];
             if (groupIDStr == null || groupIDStr == "")
                 groupIDStr = "0";
             int groupID = int.Parse(groupIDStr);
@@ -660,7 +767,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupID=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
             }
 
             if (attr.MyDataType == DataType.AppInt)
@@ -676,7 +783,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.DefVal = "0";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupID=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
             }
 
             if (attr.MyDataType == DataType.AppMoney)
@@ -692,7 +799,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.DefVal = "0.00";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupID=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
             }
 
             if (attr.MyDataType == DataType.AppFloat)
@@ -709,7 +816,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
                 attr.DefVal = "0";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupID=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
             }
 
             if (attr.MyDataType == DataType.AppDouble)
@@ -725,7 +832,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.DefVal = "0";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupID=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
             }
 
             if (attr.MyDataType == DataType.AppDate)
@@ -740,7 +847,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.MyDataType = DataType.AppDate;
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDate + "&DoType=Edit&GroupID=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDate + "&DoType=Edit&GroupField=" + groupID;
             }
 
             if (attr.MyDataType == DataType.AppDateTime)
@@ -755,7 +862,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.MyDataType = DataType.AppDateTime;
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDateTime + "&DoType=Edit&GroupID=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDateTime + "&DoType=Edit&GroupField=" + groupID;
             }
 
             if (attr.MyDataType == DataType.AppBoolean)
@@ -771,7 +878,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MyDataType = DataType.AppBoolean;
                 attr.DefVal = "0";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupID=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupField=" + groupID;
             }
 
             return "err@没有判断的数据类型." + attr.MyDataTypeStr;
@@ -780,7 +887,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         /// 字段初始化数据.
         /// </summary>
         /// <returns></returns>
-        public string FieldInit()
+        public string EditF_FieldInit()
         {
              MapAttr attr = new MapAttr();
             attr.KeyOfEn = this.KeyOfEn;
@@ -791,6 +898,11 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MyPK = this.MyPK;
                 attr.RetrieveFromDBSources();
             }
+            else
+            {
+                attr.GroupID = this.GroupField;
+            }
+
             attr.FK_MapData = this.FK_MapData;
 
             //字体大小.
@@ -884,7 +996,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             //转化成json输出.
             string json=  BP.Tools.Json.ToJson(ds);
-            BP.DA.DataType.WriteFile("c:\\FieldInitGroupAndSysEnum.json", json);
+           // BP.DA.DataType.WriteFile("c:\\FieldInitGroupAndSysEnum.json", json);
             return json;
         }
         

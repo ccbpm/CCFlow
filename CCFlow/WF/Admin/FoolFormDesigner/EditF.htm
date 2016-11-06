@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
         /* ESC Key Down */
         function Esc() {
@@ -34,31 +35,12 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
+            //绑定字段分组.
             InitPage();
 
             //初始化groupID.
             var fk_mapData = GetQueryString("FK_MapData");
-
-            //初始化 GroupID.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FieldInitGroupID&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    //alert(data);
-                    //var data="[{"OID":404,"Lab":"填写请假申请单","EnName":"ND201","Idx":1,"GUID":"","CtrlType":"","CtrlID":"","AtPara":""}]";
-                    
-                    data = JSON.parse(data);
-
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
-                        $("#DDL_GroupID").append("<option value='" + data[i].OID + "' >" + data[i].Lab + "</option>");
-                    }
-                }
-            });
-
+             
             $("#Msg").html("");
 
         });
@@ -90,7 +72,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FieldInit&MyPK=" + mypk + "&FType=" + fType + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
+                url: Handler + "?DoType=EditF_FieldInit&MyPK=" + mypk + "&FType=" + fType + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -109,14 +91,12 @@
                     $("#TB_FontSize").val(data.FontSize);  //字体大小.
 
 
-
-
-
                     //所在的字段分组.
+                    var groupID = 0;
                     if (data.GroupID != 0)
-                        $("#DDL_GroupID").val(data.GroupID);
-                    else
-                        $('DDL_GroupID').prop('selectedIndex', 0);
+                        groupID = data.GroupID;
+                    GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "No", "Name", groupID);
+
 
                     //是否可以编辑？
                     $("#RB_UIIsEnable_" + data.UIIsEnable).attr('checked', 'checked');
@@ -157,13 +137,14 @@
                         for (var i = 1; i < 30; i++) {
                             $("#DDL_Rows").append("<option value='" + i + "'>" + i + "行</option>");
                         }
-
                         //计算文本框的行数.
                         var rows = data.UIHeight / 23;
                         if (rows <= 0)
                             rows = 1;
-
+                        rows = parseInt(rows);
                         $("#DDL_Rows").val(rows); //行数.
+
+
 
                         htmlLink += "<a href=\"javascript:WinOpen('./MapExt/PopVal.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&MyPK=PopVal_" + mypk + "')\">设置开窗返回值</a>";
                         htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&OperAttrKey=" + mypk + "')\">正则表达式</a>";
@@ -408,11 +389,11 @@
     //新建.
     function New() {
         var fk_mapData = GetQueryString("FK_MapData");
-        var groupID = GetQueryString("GroupID");
+        var groupID = GetQueryString("GroupField");
         var fType = GetQueryString("FType");
 
         //#warning 这里一直弹出窗口,怎么解?
-        window.location.href = 'FieldTypeList.htm?GroupID=' + groupID + '&FK_MapData=' + fk_mapData + '&FType=' + fType;
+        window.location.href = 'FieldTypeList.htm?GroupField=' + groupID + '&FK_MapData=' + fk_mapData + '&FType=' + fType;
         return;
     }
     //删除.
@@ -449,7 +430,7 @@
         var mypk = GetQueryString("MyPK");
         var keyOfEn = GetQueryString("KeyOfEn");
         var fk_mapData = GetQueryString("FK_MapData");
-        var groupID = GetQueryString("GroupID");
+        var groupID = GetQueryString("GroupField");
         var fType = GetQueryString("FType");
 
         if (fType == null || fType == "")
@@ -460,7 +441,7 @@
             data: frmData,
             type: 'post',
             async: true,
-            url: Handler + "?DoType=FieldSave&MyPK=" + mypk + "&FType=" + fType + "&LGType=0&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&GroupID=" + groupID + "&m=" + Math.random(),
+            url: Handler + "?DoType=FieldSave&MyPK=" + mypk + "&FType=" + fType + "&LGType=0&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&GroupField=" + groupID + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
 

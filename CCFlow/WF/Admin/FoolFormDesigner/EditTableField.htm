@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
         /* ESC Key Down */
         function Esc() {
@@ -48,10 +49,6 @@
                 dataType: 'html',
                 success: function (data) {
                     data = JSON.parse(data);
-                    //绑定字段分组.
-                    for (var i = 0; i < data.length; i++) {
-                        $("#DDL_GroupID").append("<option value='" + data[i].OID + "' >" + data[i].Lab + "</option>");
-                    }
                 }
             });
 
@@ -66,7 +63,7 @@
             var fk_mapData = GetQueryString("FK_MapData");
             var fk_sfTable = GetQueryString("FK_SFTable"); //枚举字段.
 
-            var groupID = GetQueryString("GroupID"); //枚举字段.
+            var groupID = GetQueryString("GroupField"); //枚举字段.
             if (groupID == null || groupID == "" || groupID == "null")
                 groupID = "0";
 
@@ -76,11 +73,11 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FieldInitSFTable&MyPK=" + mypk + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&FType=2&FK_SFTable=" + fk_sfTable + "&GroupID=" + groupID + "&m=" + Math.random(),
+                url: Handler + "?DoType=FieldInitSFTable&MyPK=" + mypk + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&FType=2&FK_SFTable=" + fk_sfTable + "&GroupField=" + groupID + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
-                   data = JSON.parse(data);
+                    data = JSON.parse(data);
 
                     //给公共属性赋值.
                     $("#TB_Name").val(data.Name);
@@ -90,12 +87,12 @@
                     $("#DDL_ColSpan").val(data.ColSpan);   //跨的列数.
                     $("#TB_FontSize").val(data.FontSize);  //字体大小.
 
-
                     //所在的字段分组.
+                    var groupID = 0;
                     if (data.GroupID != 0)
-                        $("#DDL_GroupID").val(data.GroupID);
-                    else
-                        $('DDL_GroupID').prop('selectedIndex', 0);
+                        groupID = data.GroupID;
+                       
+                    GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "No", "Name", groupID);
 
                     //是否可以编辑？
                     $("#RB_UIIsEnable_" + data.UIIsEnable).attr('checked', 'checked');
@@ -274,10 +271,10 @@
     //新建.
     function New() {
         var fk_mapData = GetQueryString("FK_MapData");
-        var groupID = GetQueryString("GroupID");
+        var groupID = GetQueryString("GroupField");
       
         //#warning 这里一直弹出窗口,怎么解?
-        window.location.href = 'FieldTypeList.htm?GroupID=' + groupID + '&FK_MapData=' + fk_mapData + '&FType=1' ;
+        window.location.href = 'FieldTypeList.htm?GroupField=' + groupID + '&FK_MapData=' + fk_mapData + '&FType=1';
         return;
     }
     //删除.
@@ -314,7 +311,7 @@
         var mypk = GetQueryString("MyPK");
         var keyOfEn = $("#TB_KeyOfEn").val();
         var fk_mapData = GetQueryString("FK_MapData");
-        var groupID = GetQueryString("GroupID");
+        var gf = GetQueryString("GroupField");
         var fType = GetQueryString("FType");
         var sfTable = GetQueryString("FK_SFTable");
        
@@ -323,7 +320,7 @@
             data: frmData,
             type: 'post',
             async: true,
-            url: Handler + "?DoType=FieldSaveSFTable&MyPK=" + mypk + "&FType=2&LGType=2&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&FK_SFTable=" + sfTable + "&m=" + Math.random(),
+            url: Handler + "?DoType=FieldSaveSFTable&MyPK=" + mypk + "&FType=2&LGType=2&FK_MapData=" + fk_mapData + "&GroupField=" + gf + "&KeyOfEn=" + keyOfEn + "&FK_SFTable=" + sfTable + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
 
@@ -335,7 +332,7 @@
                 if (btnCtl.id == 'Btn_Save') {
                     var keyOfEn = $("#TB_KeyOfEn").val();
                     var mypk = fk_mapData + "_" + keyOfEn;
-                    var url = "EditTableField.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&MyPK=" + mypk + "&FK_SFTable=" + sfTable;
+                    var url = "EditTableField.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&MyPK=" + mypk + "&FK_SFTable=" + sfTable + "&GroupField=" +gf;
                     window.location.href = url;
                     return;
                 }

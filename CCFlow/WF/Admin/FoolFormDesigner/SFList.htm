@@ -45,15 +45,22 @@
                     for (var i = 0; i < data.length; i++) {
 
                         var newRow = "";
-
                         var nameLink = "";
 
-                        if (fk_mapData == null)
-                            nameLink = "<a href=\"javascript:AddSFTable('" + data[i].No + "')\" >" + data[i].No + "</a>";
+                        if (fk_mapData != null)
+                            nameLink = "<a href=\"javascript:AddSFTable('" + data[i].No + "')\" ><img src='../../Img/Btn/Add.gif' border=0 />" + data[i].No + "</a>";
                         else
                             nameLink = data[i].No;
 
-                        newRow = "<tr ><td class=Idx>" + i + "</td><td>" + nameLink + "</td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td> <td>" + data[i].SrcTypeText + "</td> <td><a href=\"javascript:Edit('" + data[i].No + "')\">编辑</a></td><td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td><td><a href=\"javascript:Delete('" + data[i].No + "')\">删除</a></td></tr>";
+                        newRow = "<tr ><td class=Idx>" + i + "</td>";
+                        newRow += "<td>" + nameLink + "</td>";
+                        newRow += "<td>" + data[i].Name + "</td>";
+                        newRow += "<td>" + data[i].FK_SFDBSrcText + "</td>";
+                        newRow += "<td>" + data[i].SrcTypeText + "</td>";
+                        newRow += "<td><a href=\"javascript:Edit('" + data[i].No + "')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a></td>";
+                        newRow += "<td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td>";
+                        newRow += "<td><a href=\"javascript:Delete('" + data[i].No + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a></td>";
+                        newRow += "</tr>";
 
                         $("#Table1 tr:last").after(newRow);
                     }
@@ -83,19 +90,18 @@
             });
         }
 
-
         function Ref(key) {
             alert(key);
         }
 
         function AddSFTable(key) {
 
-            var groupID = GetQueryString("GroupID");
+            var groupID = GetQueryString("GroupField");
             if (groupID == "null")
                 groupID = 0;
             var fk_mapData = GetQueryString("FK_MapData");
 
-            var url = 'EditTableField.htm?FK_MapData=' + fk_mapData + '&FK_SFTable=' + key + '&GroupID=' + groupID;
+            var url = 'EditTableField.htm?FK_MapData=' + fk_mapData + '&FK_SFTable=' + key + '&GroupField=' + groupID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
         }
         function AddSFSQL(mypk, idx, key) {

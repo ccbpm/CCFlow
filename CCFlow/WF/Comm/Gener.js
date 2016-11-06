@@ -78,7 +78,7 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
 
     //设置选中的值.
     if (selectVal != undefined) {
-        $("#DDL_" + attr).val(val);
+        $("#" + ddlCtrlID).val(selectVal);
     }
 }
 
@@ -163,6 +163,7 @@ function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
     if (colName == null)
         colName = "Name";
 
+
     $.ajax({
         type: 'post',
         async: true,
@@ -175,8 +176,10 @@ function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
             }
 
             data = JSON.parse(data);
+
             //绑定枚举值.
-            GenerBindDDL(ctrlDDLId, data, colNo, colName);
+            GenerBindDDL(ctrlDDLId, data, colNo, colName, selectVal);
+
             return;
         }
     });

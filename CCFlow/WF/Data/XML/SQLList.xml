@@ -8,4 +8,8 @@
 <NewDataSet>
 	<Item No="EditFExtContral_AthList" SQL="SELECT MyPK AS No, Name FROM Sys_FrmAttachment WHERE FK_MapData='@FK_MapData'" 
         Note="获得一个表单的附件列表"  />
+
+  <!-- 字段分组 -->
+  <Item No="GroupField" SQL="SELECT OID AS No, Lab as Name FROM Sys_GroupField WHERE  CtrlType='' AND EnName='@FK_MapData'"
+        Note="获得一个表单的附件列表"  />
 </NewDataSet>

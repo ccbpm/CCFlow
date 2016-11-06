@@ -7,7 +7,6 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
 
-
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -108,7 +107,12 @@
             var gfID = GetQueryString("GroupField");
             if (gfID == null) {
                 gfID = "0";
+                return;
             }
+
+            if (confirm('您确定要删除吗？') == false)
+                return;
+
             var url ;
             if (num == 1) {
                 url = Handler + "?DoType=GroupField_DeleteCheck&GroupField=" + gfID + "&m=" + Math.random();
@@ -128,6 +132,7 @@
                     }
                     alert(data);
                     window.close();
+                    return;
                 }
             });
         }

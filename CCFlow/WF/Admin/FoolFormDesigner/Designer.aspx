@@ -89,27 +89,31 @@
             window.location.href = window.location.href;
         }
         function GroupField(mypk, OID) {
-            var url = 'GroupField.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
+            var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
+
         function GroupFieldDel(mypk, refoid) {
             var url = 'GroupField.htm?RefNo=' + mypk + '&DoType=DelIt&RefOID=' + refoid;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function Edit(fk_mapdata, mypk, ftype) {
-            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata;
+
+        function Edit(fk_mapdata, mypk, ftype, gf) {
+            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata + '&GroupField=' + gf;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditEnum(fk_mapdata,keyOfEn, mypk, enumKey) {
-            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&KeyOfEn=' + keyOfEn;
+
+        function EditEnum(fk_mapdata,keyOfEn, mypk, enumKey,gf) {
+            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&KeyOfEn=' + keyOfEn+ '&GroupField=' + gf;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditTable(fk_mapdata, keyOfEn, mypk, sfTable) {
-            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn;
+
+        function EditTable(fk_mapdata, keyOfEn, mypk, sfTable,gf) {
+            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn+ '&GroupField=' + gf;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -283,7 +287,11 @@
             window.location.href = window.location.href;
         }
         function EditAth(fk_mapdata, ath) {
-            var url = 'Attachment.htm?FK_MapData=' + fk_mapdata + '&Ath=' + ath;
+
+            var url = '../Comm/UIEn.aspx?EnsName=BP.Sys.FrmAttachmentExts&FK_MapData=' + fk_mapdata + '&MyPK=' + ath;
+
+           // var url = 'Attachment.htm?FK_MapData=' + fk_mapdata + '&Ath=' + ath;
+
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

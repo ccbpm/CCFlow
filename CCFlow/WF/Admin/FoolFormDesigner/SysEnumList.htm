@@ -66,11 +66,11 @@
         //增加到枚举到表单.
         function AddFrm(enumKey, fk_mapData) {
             //window.open("EditEnum.htm?FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey, "", "");
-            var groupID = GetQueryString("GroupID");
+            var groupID = GetQueryString("GroupField");
             if (groupID == "null")
                 groupID = 0;
 
-            WinOpen("EditEnum.htm?FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey + "&KeyOfEn=" + enumKey + "&GroupID=" + groupID);
+            WinOpen("EditEnum.htm?FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey + "&KeyOfEn=" + enumKey + "&GroupField=" + groupID);
         }
      </script>
 </head>

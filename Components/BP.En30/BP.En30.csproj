@@ -193,6 +193,7 @@
     </Compile>
     <Compile Include="Sys\ExtContral.cs" />
     <Compile Include="Sys\XML\SQLList.cs" />
+    <Compile Include="Sys\FrmAttachmentExt.cs" />
     <Compile Include="Tools\Cryptography.cs" />
     <Compile Include="Tools\DataSet2Json.cs" />
     <Compile Include="DA\EnumDA.cs" />

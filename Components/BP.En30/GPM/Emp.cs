@@ -283,14 +283,14 @@ namespace BP.GPM
 
                 #region 字段
                 /*关于字段属性的增加 */
-                map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 1, 20, 30);
-                map.AddTBString(EmpAttr.EmpNo, null, "职工编号", true, false, 0, 20, 30);
-                map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 100, 30);
+                map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 1, 50, 50);
+                map.AddTBString(EmpAttr.EmpNo, null, "职工编号", true, false, 0, 50, 50);
+                map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
 
                 //map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
 
-                map.AddTBString(EmpAttr.FK_Dept, null, "当前部门", false, false, 0, 20, 10);
+                map.AddTBString(EmpAttr.FK_Dept, null, "当前部门", false, false, 0, 50, 50);
                 map.AddTBString(EmpAttr.FK_Duty, null, "当前职务", false, false, 0, 20, 10);
                 map.AddTBString(EmpAttr.Leader, null, "当前领导", false, false, 0, 50, 1);
 

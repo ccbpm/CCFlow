@@ -27,6 +27,10 @@ namespace CCForm
         /// 来源类型
         /// </summary>
         public int SrcType = 0;
+        /// <summary>
+        /// 图片类型
+        /// </summary>
+        public string ImgAppType = "0";
         public BitmapImage HisPng = null;
 
       

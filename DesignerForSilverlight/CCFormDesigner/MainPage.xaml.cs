@@ -1286,7 +1286,7 @@ namespace CCForm
                                                         img.HisPng = png;
                                                     }
                                                 }
-
+                                                img.ImgAppType = ImgAppType.ToString();
                                                 img.LinkTarget = dr["LINKTARGET"];
                                                 img.LinkURL = dr["LINKURL"];
                                                 img.ImgURL = imgUrl;
@@ -2135,7 +2135,7 @@ namespace CCForm
                         drImg["IMGPATH"] = png.UriSource.ToString().Contains("DataUser") ? png.UriSource.ToString().Replace(Glo.BPMHost, "") : png.UriSource.ToString();
                         drImg["IMGURL"] = img.ImgURL;
 
-                        drImg["IMGAPPTYPE"] = "0";
+                        drImg["IMGAPPTYPE"] = img.ImgAppType;
                         drImg["ISEDIT"] = "1";
                         drImg["NAME"] = img.TB_CN_Name;
                         drImg["ENPK"] = img.TB_En_Name;

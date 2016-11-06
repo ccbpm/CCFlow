@@ -753,6 +753,7 @@ namespace CCForm
         }
         public static void SetComboBoxSelected(ComboBox cb, string val)
         {
+            int index = 0;
             foreach (ComboBoxItem item in cb.Items)
             {
                 item.IsSelected = false;
@@ -760,7 +761,11 @@ namespace CCForm
             foreach (ComboBoxItem item in cb.Items)
             {
                 if (item.Tag.ToString() == val)
+                {
+                    cb.SelectedIndex = index;
                     item.IsSelected = true;
+                }
+                index++;
             }
             if (cb.SelectedIndex == -1)
                 cb.SelectedIndex = 0;

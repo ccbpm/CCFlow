@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.MapDef.WF_MapDef_MapDef"
-    Title="ccform傻瓜表单设计器" CodeBehind="Designer.htm.cs" %>
+    Title="ccform傻瓜表单设计器" CodeBehind="Designer.aspx.cs" %>
 
 <%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -13,12 +13,12 @@
             color: #696969;
         }
     </style>
+
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script src="../../Scripts/Config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-
     <script language="JavaScript" type="text/javascript" src="MapDef.js" ></script>
 
     <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js" ></script>
@@ -310,7 +310,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Designer_NewAth&FK_MapData=" + fk_mapdata + "&AthNo=" + val + "&m=" + Math.random(),
+                url: Handler + "?DoType=Designer_AthNew&FK_MapData=" + fk_mapdata + "&AthNo=" + val + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {

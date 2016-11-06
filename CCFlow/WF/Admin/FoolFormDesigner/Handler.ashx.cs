@@ -225,8 +225,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
-                    case "Designer_NewAth":
-                        msg = this.Designer_NewAth();
+                    case "Designer_AthNew":
+                        msg = this.Designer_AthNew();
                         break;
                     case "GroupField_SaveCheck":  
                         msg = this.GroupField_SaveCheck();
@@ -440,7 +440,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         /// 创建一个多附件
         /// </summary>
         /// <returns></returns>
-        public string Designer_NewAth()
+        public string Designer_AthNew()
         {
             FrmAttachment ath = new FrmAttachment();
             ath.FK_MapData = this.FK_MapData;
@@ -1469,6 +1469,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 ath.NoOfObj = "Ath1";
                 ath.Name = "我的附件";
                 ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\"+this.FK_MapData+"\\";
+                ath.W = 150;
+                ath.H = 40;
+                ath.Exts = "*.*";
             }
 
             if (i == 0 && this.FK_Node != 0)

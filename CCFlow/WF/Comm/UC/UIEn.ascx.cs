@@ -356,6 +356,8 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
             if (Request["DeleteOver"] == "1")
             {
                 Page.ClientScript.RegisterClientScriptBlock(GetType(), "showmsg", "alert('删除成功！');", true);
+                this.WinClose(); //add by zhoupeng 2016.11.06 删除之后要关闭.
+                return;
             }
         }
     }

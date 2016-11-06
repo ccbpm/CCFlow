@@ -855,6 +855,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\GroupField.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\GroupFieldEdit.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\HidAttr.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtl.htm" />

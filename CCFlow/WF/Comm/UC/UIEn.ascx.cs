@@ -99,9 +99,11 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                     else
                         en.PKVal = this.Request.QueryString[en.PK];
                 }
+
+
                 if (en.IsExits == false)
                 {
-                    throw new Exception("@记录不存在,或者没有保存.");
+                    throw new Exception("@记录{"+en.ToString()+"}{"+en.PKVal+"}不存在,或者没有保存.");
                 }
                 else
                 {
@@ -109,6 +111,8 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                     if (i == 0)
                         en.RetrieveFromDBSources();
                 }
+
+
                 Attrs myattrs = en.EnMap.Attrs;
                 foreach (Attr attr in myattrs)
                 {

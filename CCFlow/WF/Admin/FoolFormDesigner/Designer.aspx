@@ -13,8 +13,12 @@
             color: #696969;
         }
     </style>
-    <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/Config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
     <script language="JavaScript" type="text/javascript" src="MapDef.js" ></script>
 
     <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js" ></script>
@@ -287,19 +291,42 @@
             window.location.href = window.location.href;
         }
         function EditAth(fk_mapdata, ath) {
-
-            var url = '../Comm/UIEn.aspx?EnsName=BP.Sys.FrmAttachmentExts&FK_MapData=' + fk_mapdata + '&MyPK=' + ath;
-
-           // var url = 'Attachment.htm?FK_MapData=' + fk_mapdata + '&Ath=' + ath;
-
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+            var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.FrmAttachmentExts&FK_MapData=' + fk_mapdata + '&MyPK='+ fk_mapdata+"_"+ ath;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 800px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function Ath(mypk) {
-            var url = 'Attachment.htm?DoType=List&FK_MapData=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 800px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+        function Ath(fk_mapdata) {
+
+            var val = prompt('请输入附件ID，要求表单唯一。', 'Ath1');
+
+            if (val == null) {
+                return;
+            } else if (val == '') {
+                alert('附件ID不能为空，请重新输入！');
+                Ath(fk_mapdata);
+                return;
+            }
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Designer_NewAth&FK_MapData=" + fk_mapdata + "&AthNo=" + val + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.FrmAttachmentExts&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
+                    var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+                    window.location.href = window.location.href;
+                    return;
+                }
+            });
         }
+
+
 
         function EditFrame(mypk, frmKey) {
             var url = 'MapFrame.htm?DoType=Edit&FK_MapData=' + mypk + '&MyPK=' + frmKey;

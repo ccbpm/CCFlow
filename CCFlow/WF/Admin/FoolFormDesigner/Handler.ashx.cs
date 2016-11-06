@@ -225,6 +225,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
+                    case "Designer_NewAth":
+                        msg = this.Designer_NewAth();
+                        break;
                     case "GroupField_SaveCheck":  
                         msg = this.GroupField_SaveCheck();
                         break;
@@ -434,6 +437,21 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             //输出信息.
         }
         /// <summary>
+        /// 创建一个多附件
+        /// </summary>
+        /// <returns></returns>
+        public string Designer_NewAth()
+        {
+            FrmAttachment ath = new FrmAttachment();
+            ath.FK_MapData = this.FK_MapData;
+            ath.NoOfObj = this.GetRequestVal("AthNo");
+            ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
+            if (ath.RetrieveFromDBSources() == 1)
+                return "err@附件ID:"+ath.NoOfObj+"已经存在.";
+            BP.Sys.CCFormAPI.CreateOrSaveAthMulti(this.FK_MapData, this.GetRequestVal("AthNo"), "我的附件", 100, 200);
+            return ath.MyPK;
+        }
+        /// <summary>
         /// 返回信息.
         /// </summary>
         /// <returns></returns>
@@ -539,6 +557,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     continue;
                 if (attr.KeyOfEn == "FID")
                     continue;
+
                 attr.Delete();
             }
 

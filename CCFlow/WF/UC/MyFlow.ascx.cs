@@ -919,6 +919,23 @@ namespace CCFlow.WF.UC
             this.Page.Title = "第" + this.currND.Step + "步:" + this.currND.Name;
             #endregion 判断前置导航
 
+
+            #region 处理分合流的退回信息.
+            if (this.WorkID != 0)
+            {
+                if (this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL)
+                {
+                    if (gwf.WFState == WFState.ReturnSta)
+                    {
+                        /*如果是退回的状态，就说明该信息是子线程退回到合流节点.*/
+                        this.Response.Redirect("./WorkOpt/DealSubThreadReturnToHL.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID, true);
+                        return;
+                    }
+                }
+            }
+            #endregion 处理分合流的退回信息.
+
+
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
                  || this.currND.HisFormType == NodeFormType.SheetAutoTree)
@@ -950,6 +967,7 @@ namespace CCFlow.WF.UC
                     gwf.RetrieveFromDBSources();
                     pFlowNo = gwf.PFlowNo;
                     pWorkID = gwf.PWorkID.ToString();
+
                 }
 
                 if (this.currND.IsStartNode)

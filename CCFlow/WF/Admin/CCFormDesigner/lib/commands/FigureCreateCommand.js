@@ -287,9 +287,6 @@ FigureCreateCommand.prototype = {
             case "AthSingle":
                 lab = "创建单附件";
                 break;
-            case "AthSingle":
-                lab = "创建单附件";
-                break;
             case "AthImg":
                 lab = "创建图片附件";
                 break;

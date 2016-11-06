@@ -22,6 +22,7 @@ namespace BP.Sys
                 if (BP.Web.WebUser.No == "admin")
                 {
                     uac.IsUpdate = true;
+                    uac.IsDelete = true;
                     return uac;
                 }
                 return uac;
@@ -794,11 +795,11 @@ namespace BP.Sys
                 
                 //hzm新增列
                 // map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
-                map.AddDDLSysEnum(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, "@0=不能删除@1=删除所有@2=只能删除自己上传的");
+                map.AddDDLSysEnum(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
+                    "@0=不能删除@1=删除所有@2=只能删除自己上传的");
 
                 map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", true, false);
                 map.AddBoolean(FrmAttachmentAttr.IsOrder, false, "是否可以排序", true, false);
-
 
                 map.AddBoolean(FrmAttachmentAttr.IsAutoSize, true, "自动控制大小", true, false);
                 map.AddBoolean(FrmAttachmentAttr.IsNote, true, "是否增加备注", true, false);
@@ -810,8 +811,11 @@ namespace BP.Sys
 
                 //对于父子流程有效.
                  //map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", true, false);
-                map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, FrmAttachmentAttr.CtrlWay, "@0=PK@1=FID@2=ParentID");
-                map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.CtrlWay, "@0=继承模式@1=协作模式");
+                map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, FrmAttachmentAttr.CtrlWay+"Ath", 
+                    "@0=PK-主键@1=FID-流程ID@2=ParentID-父流程ID@3=仅能查看自己上传的数据");
+
+                map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.CtrlWay, 
+                    "@0=继承模式@1=协作模式");
 
                 //map.AddTBInt(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式0=继承模式,1=协作模式.", true, false);
 
@@ -836,9 +840,14 @@ namespace BP.Sys
         }
         #endregion
 
+        /// <summary>
+        /// 执行高级设置.
+        /// </summary>
+        /// <returns></returns>
         public string DoAdv()
         {
-            return "/WF/Admin/FoolFormDesigner/Attachment.htm?FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/Attachment.htm?FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&Ath=" + this.NoOfObj;
+            //   var url = 'Attachment.htm?FK_MapData=' + fk_mapdata + '&Ath=' + ath;
         }
 
         public bool IsUse = false;

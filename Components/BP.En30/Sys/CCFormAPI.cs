@@ -132,7 +132,11 @@ namespace BP.Sys
             ath.FK_MapData = fk_mapdata;
             ath.NoOfObj = no;
             ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
-            ath.RetrieveFromDBSources();
+           int i= ath.RetrieveFromDBSources();
+            if (i==0)
+            {
+                ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
+            }
 
             ath.UploadType = AttachmentUploadType.Multi;
             ath.Name = name;

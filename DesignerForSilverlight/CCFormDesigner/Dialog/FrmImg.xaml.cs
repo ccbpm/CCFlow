@@ -85,6 +85,7 @@ namespace CCForm
             this.TB_LinkUrl.Text = img.LinkURL;
             Glo.BindComboBoxWinOpenTarget(this.DDL_WinName, img.LinkTarget);
 
+            this.DDL_ImgAppType.Items.Clear();
             ComboBoxItem cbi = new ComboBoxItem();
             cbi.Content = "图片";
             cbi.Tag = "0";

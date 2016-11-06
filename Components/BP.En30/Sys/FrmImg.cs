@@ -20,7 +20,11 @@ namespace BP.Sys
         /// <summary>
         /// 北京安证通公章CA
         /// </summary>
-        SealESA
+        SealESA,
+        /// <summary>
+        /// 二维码
+        /// </summary>
+        QRCode
     }
     /// <summary>
     /// 图片

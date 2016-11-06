@@ -65,6 +65,11 @@ namespace CCForm
             }
             this.HisImg.TB_CN_Name = TB_CN_Seal.Text;
             this.HisImg.TB_En_Name = TB_En_Seal.Text;
+            ComboBoxItem it = (ComboBoxItem)this.DDL_ImgAppType.SelectedItem;
+            if (it != null)
+            {
+                img.ImgAppType = it.Tag.ToString();
+            }
             Glo.currEle = img;
             this.DialogResult = true;
         }
@@ -80,6 +85,26 @@ namespace CCForm
             this.TB_LinkUrl.Text = img.LinkURL;
             Glo.BindComboBoxWinOpenTarget(this.DDL_WinName, img.LinkTarget);
 
+            ComboBoxItem cbi = new ComboBoxItem();
+            cbi.Content = "图片";
+            cbi.Tag = "0";
+            this.DDL_ImgAppType.Items.Add(cbi);
+
+            cbi = new ComboBoxItem();
+            cbi.Content = "图片公章";
+            cbi.Tag = "1";
+            this.DDL_ImgAppType.Items.Add(cbi);
+
+            cbi = new ComboBoxItem();
+            cbi.Content = "CA公章";
+            cbi.Tag = "2";
+            this.DDL_ImgAppType.Items.Add(cbi);
+
+            cbi = new ComboBoxItem();
+            cbi.Content = "二维码";
+            cbi.Tag = "3";
+            this.DDL_ImgAppType.Items.Add(cbi);
+            Glo.SetComboBoxSelected(this.DDL_ImgAppType, img.ImgAppType);
             this.RB_0.IsChecked = false;
             this.RB_1.IsChecked = false;
 

@@ -29,12 +29,14 @@
         <TextBox Height="23" HorizontalAlignment="Left" Margin="41,201,0,0" Name="TB_LinkUrl" VerticalAlignment="Top" Width="385" />
        
         <sdk:Label Content="打开窗口" Height="28"     HorizontalAlignment="Left" Margin="41,235,0,0" Name="label4" VerticalAlignment="Top" Width="50" />
-        <TextBox Height="23" HorizontalAlignment="Right" Margin="0,229,171,0" Name="TB_WinName" VerticalAlignment="Top" Width="84" />
-        <sdk:Label Content="窗口名称:" Height="28" HorizontalAlignment="Left" Margin="209,231,0,0" Name="label5" VerticalAlignment="Top" Width="57" />
         <ComboBox Height="23" HorizontalAlignment="Left" ItemsSource="{Binding}" Margin="97,230,0,0" Name="DDL_WinName" VerticalAlignment="Top" Width="113" SelectionChanged="DDL_WinName_SelectionChanged" />
 
-
-
+        <sdk:Label Content="图片类型:" Height="28" HorizontalAlignment="Left" Margin="41,260,0,0" Name="label7" VerticalAlignment="Top" Width="57" />
+        <ComboBox Height="23" HorizontalAlignment="Left" ItemsSource="{Binding}" Margin="97,260,0,0" Name="DDL_ImgAppType" VerticalAlignment="Top" Width="113"/>
+        
+        <sdk:Label Content="窗口名称:" Height="28" HorizontalAlignment="Left" Margin="209,231,0,0" Name="label5" VerticalAlignment="Top" Width="57" />
+        <TextBox Height="23" HorizontalAlignment="Right" Margin="0,229,171,0" Name="TB_WinName" VerticalAlignment="Top" Width="84" />
+        
         <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="1" />
         <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="1" />
     </Grid>

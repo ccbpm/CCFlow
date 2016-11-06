@@ -879,7 +879,7 @@ namespace CCFlow.WF.UC
             #endregion
 
             #region 判断前置导航.
-            if (this.currND.IsStartNode && this.IsCC == false)
+            if (this.currND.IsStartNode && this.IsCC == false && this.WorkID==0)
             {
                 if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
                 {

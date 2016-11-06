@@ -2675,7 +2675,7 @@ namespace BP.En
         public void AddMyPK()
         {
             this.PKs = "MyPK";
-            this.AddTBStringPK("MyPK", null, "MyPK", true, true, 1, 100, 10);
+            this.AddTBStringPK("MyPK", null, "主键MyPK", true, true, 1, 100, 10);
 
             //Attr attr = new Attr();
             //attr.Key = "MyPK";

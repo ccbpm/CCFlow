@@ -378,7 +378,7 @@ namespace BP.WF
                         Dept dept = new Dept();
                         if (dept.IsExit(DeptAttr.No, deptMentInfo.id) == true)
                         {
-                            if (!dept.Name.Equals(deptMentInfo.name))
+                            if (dept.No == deptMentInfo.id && !dept.Name.Equals(deptMentInfo.name))
                             {
                                 doSomeThing = true;
                                 append.Append("\r\n部门名称发生变化：" + dept.Name + " --> " + deptMentInfo.name);
@@ -396,17 +396,18 @@ namespace BP.WF
                                 dept.ParentNo = deptMentInfo.parentid;
                                 dept.DirectUpdate();
                             }
-                            continue;
                         }
-                        //不存在则新增
-                        dept.No = deptMentInfo.id;
-                        dept.Name = deptMentInfo.name;
-                        dept.ParentNo = deptMentInfo.parentid;
-                        dept.Idx = deptIdx;
-                        dept.DirectInsert();
-                        append.Append("\r\n新增部门：" + deptMentInfo.id + " - " + deptMentInfo.name);
+                        else
+                        {
+                            //不存在则新增
+                            dept.No = deptMentInfo.id;
+                            dept.Name = deptMentInfo.name;
+                            dept.ParentNo = deptMentInfo.parentid;
+                            dept.Idx = deptIdx;
+                            dept.DirectInsert();
+                            append.Append("\r\n新增部门：" + deptMentInfo.id + " - " + deptMentInfo.name);
+                        }
                     }
-
                     //部门人员
                     DepartMentUser_List userList = GenerDeptUser_List(access_token, deptMentInfo.id);
                     if (userList != null)

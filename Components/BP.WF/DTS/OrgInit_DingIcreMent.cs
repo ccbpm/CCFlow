@@ -46,6 +46,9 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
+            GPM.Emp emp = new GPM.Emp();
+            emp.CheckPhysicsTable();
+
             DingDing ding = new DingDing();
             string result = ding.AnsyIncrementOrgToGPM();
             if (string.IsNullOrEmpty(result))

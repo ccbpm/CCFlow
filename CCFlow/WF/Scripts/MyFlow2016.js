@@ -1028,6 +1028,7 @@ function SetAth(data) {
         athDiv.html("附件<span class='badge' >" + data.length + "</span>个");
     }
     $('#athModal').modal('hide');
+    $('#athModal').hide();
 }
 
 window.onresize = function () {

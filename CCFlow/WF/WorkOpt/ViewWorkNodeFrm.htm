@@ -211,7 +211,7 @@
                     if (ath.MyPK != groupFiled.CtrlID)
                         continue;
                     var src = "";
-                    if (pageData.IsReadonly)
+                    if (pageData.IsReadonly==1)
                         src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
                     else
                         src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
@@ -357,6 +357,23 @@
         //处理下拉框级联等扩展信息
         AfterBindEn_DealMapExt();
 
+        //设置默认值
+        for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
+            var mapAttr = workNodeData.Sys_MapAttr[j];
+            //添加 label
+            //如果是整行的需要添加  style='clear:both'
+
+
+            var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+                $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+            }
+
+            //ddl
+
+            //rb
+        }
+
         //绑定扩展附件
         $('.divAth').bind('click', function (obj) {
             var keyOfEn = $(obj.target).data().target;
@@ -369,19 +386,26 @@
             var ath = $.grep(workNodeData.Sys_FrmAttachment, function (value) {
                 return value.MyPK == athRefObj;
             })
+
+
             if (ath.length > 0) {
                 ath = ath[0];
                 var src = "";
-                if (pageData.IsReadonly)
+                if (pageData.IsReadonly==1)
                     src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
                 else
                     src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
-                $('#iframeAthForm').attr('src', src);
-                atParamObj["tbId"] = tbId;
-                atParamObj["divId"] = divId;
-                $('#iframeAthForm').data(atParamObj);
-                $('#athModal .modal-title').text("上传附件：" + $(obj.target).parent().prev().children('label').text());
-                $('#athModal').modal().show();
+                atParamObj["IsViewWorkNode"] = 1;
+
+                if (parent != undefined && parent.document.getElementById('iframeAthForm') != undefined) {
+                    var athForm = $(parent.document.getElementById('iframeAthForm'));
+                    athForm.data(atParamObj);
+                    athForm.attr('src', src);
+                    var athModal = $(parent.document.getElementById('athModal'));
+                    var athFormTitle = $(parent.document.getElementById('athModal')).find('.modal-title');
+                    athFormTitle.text("上传附件：" + $(obj.target).parent().prev().children('label').text());
+                    athModal.modal('show');
+                }
             }
         });
         //绑定分组的按钮事件  如果不是字段分组就变成可以折叠的
@@ -434,6 +458,8 @@
     //解析表单字段 MapAttr
     function InitMapAttr(mapAttrData, workNodeData) {
         var resultHtml = '';
+
+        var hiddenHtml = '';
         for (var j = 0; j < mapAttrData.length; j++) {
             var mapAttr = mapAttrData[j];
             if (mapAttr.UIVisible) {//是否显示
@@ -452,213 +478,228 @@
 
                 eleHtml += '';
 
-                //添加文本框 ，日期控件等
-                //AppString   
-                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
-                    if (mapAttr.ColSpan == 2 || mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {//占有1-2  3列的文本框
+                if (mapAttr.UIContralType != 6) {
+                    //添加文本框 ，日期控件等
+                    //AppString   
+                    if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
+                        if (mapAttr.ColSpan == 0 || mapAttr.ColSpan == 2 || mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {//占有1-2  3列的文本框
+                            var mdCol = 2;
+                            var smCol = 4;
+                            switch (mapAttr.ColSpan) {
+                                case 1:
+                                    mdCol = 2;
+                                    smCol = 4;
+                                    break;
+                                case 2:
+                                    mdCol = 4;
+                                    smCol = 8;
+                                    break;
+                                case 3:
+                                    mdCol = 11;
+                                    smCol = 10;
+                                    isInOneRow = true;
+                                    break;
+                            }
+                            if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+                                eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">1' +
+                                    "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                eleHtml += '</div>';
+                            } else {//文本区域
+                                if (mapAttr.UIHeight <= 23) {
+                                    eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
+                                        "<input name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                        + '</div>';
+                                }
+                                else {//大于23就是多行
+                                    if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 2) {
+                                        mdCol = 4;
+                                        smCol = 12;
+                                    }
+                                    islabelIsInEle = true;
+                                    eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">'
+                                        + "<label>" + mapAttr.Name + "</label>"
+                                        +
+                                        (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
+                                        +
+                                        "<textarea style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                        + '</div>';
+
+                                }
+                            }
+                        } else if (mapAttr.ColSpan == "4" || (mapAttr.ColSpan == "3" && mapAttr.UIHeight > 23)) {//大文本区域  且占一整行
+                            isInOneRow = true;
+                            eleHtml += '<div class="col-lg-11 col-md-11 col-sm-10">' +
+                                "<textarea name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
+                                + '</div>';
+                        }
+                    } //AppDate
+                    else if (mapAttr.MyDataType == 6) {//AppDate
+                        var enableAttr = '';
+                        if (mapAttr.UIIsEnable == 1) {
+                            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                        } else {
+                            enableAttr = "disabled='disabled'";
+                        }
+                        eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    }
+                    else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
+                        var enableAttr = '';
+                        if (mapAttr.UIIsEnable == 1) {
+                            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+                        } else {
+                            enableAttr = "disabled='disabled'";
+                        }
+                        eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />" + "</div>";
+                    }
+                    else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
+                        var colMd = 2;
+                        var colsm = 4;
+                        if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
+                            colMd = 4;
+                            colsm = 8;
+                        }
+
+                        if (mapAttr.UIIsEnable == 1) {
+
+                        } else {
+                            enableAttr = "disabled='disabled'";
+                        }
+                        //CHECKBOX 默认值
+                        var checkedStr = '';
+                        if (checkedStr != "true" && checkedStr != '1') {
+                            checkedStr = ' checked="checked" '
+                        }
+                        checkedStr = ConvertDefVal(workNodeData, '', mapAttr.KeyOfEn);
+                        eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' + "<input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>" + "</div>";
+                    }
+
+                    if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
+                        var colMd = 2;
+                        var colsm = 4;
+                        if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
+                            colMd = 11;
+                            colsm = 10;
+                        }
+                        if (mapAttr.UIContralType == 1) {//DDL
+                            eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' +
+                                    "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                            eleHtml += '</div>';
+                            //eleHtml += "</div>";
+                        }
+
+                        if (mapAttr.UIContralType == 3) {
+                            //RadioBtn
+                            var operations = '';
+
+                            if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {
+                                if (mapAttr.ColSpan == 1) {
+                                    eleHtml += '<div class="col-md-2 col-sm-4 col-lg-2">';
+                                } else if (mapAttr.ColSpan == 3) {
+                                    eleHtml += '<div class="col-md-11 col-sm-10 col-lg-11" style="padding:3px 20px;">';
+                                }
+                                var enums = workNodeData.Sys_Enum;
+                                enums = $.grep(enums, function (value) {
+                                    return value.EnumKey == mapAttr.UIBindKey;
+                                });
+
+                                var rbShowModel = 0;//RBShowModel=0时横着显示RBShowModel=1时竖着显示
+                                var showModelindex = mapAttr.AtPara.indexOf('@RBShowModel=');
+                                if (showModelindex >= 0) {//@RBShowModel=0
+                                    rbShowModel = mapAttr.AtPara.substring('@RBShowModel='.length, '@RBShowModel='.length + 1);
+                                }
+                                $.each(enums, function (i, obj) {
+                                    operations += "<input id='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' type='radio' " + (obj.IntKey == defValue ? " checked='checked' " : "") + "  name='RB_" + mapAttr.KeyOfEn + "' value='" + obj.IntKey + "'/><label for='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' class='labRb'>" + obj.Lab + "</label>" + (rbShowModel == "1" ? "</br>" : '');
+                                });
+                            }
+
+                            eleHtml += operations;
+                            //eleHtml += "</div>";
+                            eleHtml += "</div>";
+                        }
+                    }
+
+                    // AppDouble  AppFloat AppInt .
+                    if (mapAttr.MyDataType == 5 ||
+                    mapAttr.MyDataType == 3 ||
+                    (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)
+                ) {
+                        var enableAttr = '';
+                        if (mapAttr.UIIsEnable == 1) {
+
+                        } else {
+                            enableAttr = "disabled='disabled'";
+                        }
+                        eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input  type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    }
+                    //AppMoney  AppRate
+                    if (mapAttr.MyDataType == 8) {
+                        var enableAttr = '';
+                        if (mapAttr.UIIsEnable == 1) {
+
+                        } else {
+                            enableAttr = "disabled='disabled'";
+                        }
+                        eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input  type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    }
+
+                    if (mapAttr.LGType == 2) {
                         var mdCol = 2;
                         var smCol = 4;
-                        switch (mapAttr.ColSpan) {
-                            case 1:
-                                mdCol = 2;
-                                smCol = 4;
-                                break;
-                            case 2:
-                                mdCol = 4;
-                                smCol = 8;
-                                break;
-                            case 3:
-                                mdCol = 11;
-                                smCol = 10;
-                                isInOneRow = true;
-                                break;
+                        if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
+                            mdCol = 4;
+                            smCol = 8;
                         }
-                        if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-                            eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</operation>";
-                            eleHtml += '</div>';
-                        } else {//文本区域
-                            if (mapAttr.UIHeight <= 23) {
-                                eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                    "<input name='TB_" + mapAttr.KeyOfEn + "' type='text' value='" + defValue + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                                    + '</div>';
-                            }
-                            else {//大于23就是多行
-                                if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 2) {
-                                    mdCol = 4;
-                                    smCol = 12;
-                                }
-                                islabelIsInEle = true;
-                                eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">'
-                                    + "<label>" + mapAttr.Name + "</label>"
-                                    +
-                                    (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput">*</span>' : "")
-                                    +
-                                    "<textarea style='height:" + mapAttr.UIHeight + "px;' name=TB_'" + mapAttr.KeyOfEn + "' type='text' value='" + defValue + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                                    + '</div>';
 
-                            }
+                        eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
+                                    "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr,defValue) + "</select>";
+
+                        eleHtml += '</div>';
+                    }
+                } else {
+                    //展示附件信息
+                    var atParamObj = AtParaToJson(mapAttr.AtPara);
+                    if (atParamObj.AthRefObj != undefined) {//扩展设置为附件展示
+                        var colMd = 2;
+                        var colsm = 4;
+                        if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
+                            colMd = 11;
+                            colsm = 10;
                         }
-                    } else if (mapAttr.ColSpan == "4" || (mapAttr.ColSpan == "3" && mapAttr.UIHeight > 23)) {//大文本区域  且占一整行
-                        isInOneRow = true;
-                        eleHtml += '<div class="col-lg-11 col-md-11 col-sm-10">' +
-                            "<textarea name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + defValue + "</textarea>"
-                            + '</div>';
-                    }
-                } //AppDate
-                else if (mapAttr.MyDataType == 6) {//AppDate
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-                        enableAttr = 'onfocus="WdatePicker("' + ")" + '";';
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + defValue + "</div>";
-                }
-                else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-                        enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='" + defValue + "'/>" + "</div>";
-                }
-                else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
-                    var colMd = 2;
-                    var colsm = 4;
-                    if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
-                        colMd = 4;
-                        colsm = 8;
-                    }
 
-                    if (mapAttr.UIIsEnable == 1) {
-
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    //CHECKBOX 默认值
-                    var checkedStr = '';
-                    if (checkedStr != "true" && checkedStr != '1') {
-                        checkedStr = ' checked="checked" '
-                    }
-                    checkedStr = ConvertDefVal(workNodeData, '', mapAttr.KeyOfEn);
-                    eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' + "<input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>" + "</div>";
-                }
-
-                if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
-                    var colMd = 2;
-                    var colsm = 4;
-                    if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
-                        colMd = 11;
-                        colsm = 10;
-                    }
-                    if (mapAttr.UIContralType == 1) {//DDL
-                        eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + mdCol + ' col-sm-' + colsm + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
-                        + '</div>';
-                        eleHtml += "</div>";
-                    }
-
-                    if (mapAttr.UIContralType == 3) {//RadioBtn
-                        var operations = '';
-
-                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {
-                            if (mapAttr.ColSpan == 1) {
-                                eleHtml += '<div class="col-md-2 col-sm-4 col-lg-2">';
-                            } else if (mapAttr.ColSpan == 3) {
-                                eleHtml += '<div class="col-md-11 col-sm-10 col-lg-11" style="padding:2px 20px;">';
-                            }
-                            var enums = workNodeData.Sys_Enum;
-                            enums = $.grep(enums, function (value) {
-                                return value.EnumKey == mapAttr.UIBindKey;
-                            });
-
-                            var rbShowModel = 0;//RBShowModel=0时横着显示RBShowModel=1时竖着显示
-                            var showModelindex = mapAttr.AtPara.indexOf('@RBShowModel=');
-                            if (showModelindex >= 0) {//@RBShowModel=0
-                                rbShowModel = mapAttr.AtPara.substring('@RBShowModel='.length, '@RBShowModel='.length + 1);
-                            }
-                            $.each(enums, function (i, obj) {
-                                operations += "<input id='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' type='radio' " + (obj.IntKey == defValue ? " checked='checked' " : "") + "  name='RB_" + mapAttr.KeyOfEn + "' value='" + obj.IntKey + "'>" + obj.Lab + "</input>" + (rbShowModel == "1" ? "</br>" : '');
-                            });
+                        eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' +
+                                "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' >" + "</input>";
+                        defValue = defValue != undefined && defValue != '' ? defValue : '&nbsp;';
+                        if (defValue.indexOf('@AthCount=') == 0) {
+                            defValue = "附件" + "<span class='badge'>" + defValue.substring('@AthCount='.length, defValue.length) + "</span>个";
+                        } else {
+                            defValue = defValue;
                         }
-                        eleHtml += operations;
-                        eleHtml += "</div>";
+                        eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" + defValue + "</div>";
+                        eleHtml += '</div>';
                     }
-
-                    if (mapAttr.ColSpan == 3) {
-                        var operations = '';
-                        isInOneRow = true;
-                        eleHtml += '<div class="col-md-11 col-sm-10 col-lg-11">';
-                        if (mapAttr.ColSpan == 1) {
-                            //外键类型
-                            var enums = workNodeData.Sys_Enum;
-                            enums = $.grep(enums, function (value) {
-                                return value.EnumKey == mapAttr.UIBindKey;
-                            });
-
-                            var rbShowModel = 0;//RBShowModel=0时横着显示RBShowModel=1时竖着显示
-                            var showModelindex = mapAttr.AtPara.indexOf('@RBShowModel=');
-                            if (showModelindex >= 0) {//@RBShowModel=0
-                                rbShowModel = mapAttr.AtPara.substring('@RBShowModel='.length, '@RBShowModel='.length + 1);
-                            }
-                            $.each(enums, function (i, obj) {
-                                operations += "<input id='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' type='radio'" + (obj.IntKey == defValue ? " checked='checked' " : "") + "  name='RB_" + mapAttr.KeyOfEn + "' id='" + "RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "'>" + obj.Lab + "</input>" + (rbShowModel == "1" ? "</br>" : '');
-                            });
-                        }
-                        eleHtml += operations;
-                        eleHtml += "</div>";
-                    }
-                }
-                // AppDouble  AppFloat AppInt .
-                if (mapAttr.MyDataType == 5 ||
-                mapAttr.MyDataType == 3 ||
-                (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)
-            ) {
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input value='" + defValue + "' type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
-                }
-                //AppMoney  AppRate
-                if (mapAttr.MyDataType == 8) {
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input value='" + defValue + "' type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
-                }
-
-                if (mapAttr.LGType == 2) {
-                    var mdCol = 2;
-                    var smCol = 4;
-                    if (mapAttr.ColSpan == 4 || mapAttr.ColSpan == 3) {
-                        mdCol = 4;
-                        smCol = 8;
-                    }
-
-                    eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + defValue + "'" + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr) + "</select>";
-
-                    eleHtml += '</div>';
                 }
 
                 if (!islabelIsInEle) {
-                    eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  data-tag=' + str + ' class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
-                    (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput">*</span>' : "")
+                    eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
+                    (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                     + "</div>" + eleHtml;
+
                 }
                 resultHtml += eleHtml;
+            } else {
+                var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                if (value == undefined) {
+                    value = '';
+                } else {
+                    value = value.toString().replace(/：/g, ':').replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
+                }
+
+                //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
+                hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'></input>";
             }
         }
 
-        return resultHtml;
+        return resultHtml + hiddenHtml;
     }
 
     //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
@@ -674,10 +715,21 @@
     function InitDDLOperation(workNodeData, mapAttr, defVal) {
         var operations = '';
         //外键类型
-        if (mapAttr.LGType == 2 && workNodeData[mapAttr.UIBindKey] != undefined) {
-            $.each(workNodeData[mapAttr.UIBindKey], function (i, obj) {
-                operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
+        if (mapAttr.LGType == 2) {
+            /*if (workNodeData[mapAttr.KeyOfEn] != undefined) {
+                $.each(workNodeData[mapAttr.KeyOfEn], function (i, obj) {
+                    operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+            }
+            else if (workNodeData[mapAttr.UIBindKey] != undefined) {
+                $.each(workNodeData[mapAttr.UIBindKey], function (i, obj) {
+                    operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+            }*/
+            var labTxt = workNodeData.MainTable[0][mapAttr.KeyOfEn + "Text"];
+            var intVal = workNodeData.MainTable[0][mapAttr.KeyOfEn];
+            operations += "<option selected='selected'  value='" + intVal + "'>" + labTxt + "</option>";
+            console.log(operations)
         } else {
             var enums = workNodeData.Sys_Enum;
             enums = $.grep(enums, function (value) {
@@ -723,7 +775,11 @@
                 break;
             }
         }
-        return result;
+
+        if (result != undefined && typeof (result) == 'string') {
+            result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'");
+        }
+        return result = unescape(result);
     }
     //加载表单数据.
     function GenerWorkNode() {
@@ -940,7 +996,6 @@
                         default:
                             break;
                     }
-                    console.log("icon:" + icon + popWorkModelStr);
                     var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
                     '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                     tb.parent().html(eleHtml);

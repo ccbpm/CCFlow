@@ -850,7 +850,7 @@ namespace CCFlow.WF.Rpt.UC
                     case "FK_Dept":
                         if (WebUser.No != "admin")
                         {
-                            dt = DBAccess.RunSQLReturnTable("SELECT No,Name FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM  WF_DeptFlowSearch WHERE FK_Emp='" + WebUser.No + "' AND FK_Flow='" + currMapRpt.FK_Flow + "')");
+                            dt = DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM  WF_DeptFlowSearch WHERE FK_Emp='" + WebUser.No + "' AND FK_Flow='" + currMapRpt.FK_Flow + "')");
                             if (dt.Rows.Count == 0)
                             {
                                 BP.WF.Port.DeptFlowSearch dfs = new BP.WF.Port.DeptFlowSearch();
@@ -859,11 +859,25 @@ namespace CCFlow.WF.Rpt.UC
                                 dfs.FK_Flow = currMapRpt.FK_Flow;
                                 dfs.MyPK = WebUser.FK_Dept + "_" + WebUser.No + "_" + currMapRpt.FK_Flow;
                                 dfs.Insert();
-                                dt = DBAccess.RunSQLReturnTable("SELECT No,Name FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM  WF_DeptFlowSearch WHERE FK_Emp='" + WebUser.No + "' AND FK_Flow='" + currMapRpt.FK_Flow + "')");
+                                dt = DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept WHERE No IN (SELECT FK_Dept FROM  WF_DeptFlowSearch WHERE FK_Emp='" + WebUser.No + "' AND FK_Flow='" + currMapRpt.FK_Flow + "')");
                             }
                             mydll.Items.Clear();
-                            foreach (DataRow dr in dt.Rows)
-                                mydll.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
+                            //部门下拉改为树形字符串展示，类似流程属性中的“流程类别”下拉，edited by liuxc,2016-11-7
+                            //1.获取当前DataTable中的根节点部门
+                            string root = string.Empty;
+
+                            foreach(DataRow row in dt.Rows)
+                            {
+                                if(dt.Select(string.Format("No='{0}'", row["ParentNo"] == null || row["ParentNo"] == DBNull.Value ? string.Empty : row["ParentNo"].ToString())).Length == 0)
+                                {
+                                    root = row["ParentNo"].ToString();
+                                    break;
+                                }
+                            }
+                            //2.格式化字符串，增加项
+                            DDL.MakeTree(dt, "ParentNo", root, "No", "Name", mydll, -1);
+                            //foreach (DataRow dr in dt.Rows)
+                            //    mydll.Items.Add(new ListItem(dr["Name"].ToString(), dr["No"].ToString()));
                         }
 
                         if (mydll.Items.Count >= 2)
@@ -1247,13 +1261,18 @@ namespace CCFlow.WF.Rpt.UC
                             ddl.Items.Clear();
                             BP.Port.Depts depts = new BP.Port.Depts();
                             depts.RetrieveAll();
-                            foreach (BP.Port.Dept dept in depts)
-                            {
-                                string space = "";
-                                //   space = space.PadLeft(dept.Grade - 1, '-');
-                                ListItem li = new ListItem(space + dept.Name, dept.No);
-                                this.GetDDLByKey("DDL_" + attr.Key).Items.Add(li);
-                            }
+                            //edited by liuxc,2016-11-7,将部门下拉中的项格式化成树形字符串展示，类似“流程属性”中的流程类别下拉显示
+                            //foreach (BP.Port.Dept dept in depts)
+                            //{
+                            //    string space = "";
+                            //    //   space = space.PadLeft(dept.Grade - 1, '-');
+                            //    ListItem li = new ListItem(space + dept.Name, dept.No);
+                            //    this.GetDDLByKey("DDL_" + attr.Key).Items.Add(li);
+                            //}
+                            //格式化项字符串，增加项
+                            DataTable dt = depts.ToDataTableField();
+                            DDL.MakeTree(dt, "ParentNo", "0", "No", "Name", ddl, -1);
+
                             if (depts.Count > SystemConfig.MaxDDLNum)
                                 this.AddLab("lD", "<a href=\"javascript:onDDLSelectedMore('DDL_" + attr.Key + "', '" + this.EnsName + "', 'BP.Port.Depts', 'No','Name')\" >...</a>");
 

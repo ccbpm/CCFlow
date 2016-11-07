@@ -6,6 +6,7 @@
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <link href="../Scripts/slideBox/style/jquery.slideBox.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/slideBox/jquery.slideBox.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
         function Del(fk_ath, pkVal, delPKVal) {
@@ -42,6 +43,26 @@
             // window.(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
             //window.location.href = 'AttachmentUploadImg.aspx?FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
         }
+
+        //关闭窗口  适用于扩展属性
+        function close() {
+            if (parent != undefined && parent.SetAth != undefined && typeof (parent.SetAth) == "function") {
+                var nameTds = $('.Idx').next();
+                var nameStrs = [];
+                $.each(nameTds, function (i, nameTd) {
+                    nameStrs.push($(nameTd).children('a').text());
+                })
+                parent.SetAth(nameStrs);
+            }
+        }
+
+        $(function () {
+            //是字段的扩展属性访问页面时
+            if (GetQueryString('IsExtend') != undefined && GetQueryString('IsExtend')=="1") {
+                $('#bar').css('display', 'block');
+                $('#btn_Colse').bind('click', close);
+            }
+        });
     </script>
     <style type="text/css">
         .TBNote
@@ -73,4 +94,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <uc1:Pub ID="Pub1" runat="server" EnableViewState="False" />
     <asp:Button runat="server" ID="Btn_Upload" OnClick="btn_Click" Style="display: none;" />
+
+    <div id="bar" style="display:none;">
+        <input type="button"   id="btn_Colse"  value="关闭"/>
+    </div>
 </asp:Content>

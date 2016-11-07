@@ -623,14 +623,14 @@
                     $.each(selectedTrArr, function (i, selectedTr) {
                         noArr.push(selectedTr.No);
                     });
-                    returnVal.No = noArr.join(';');
+                    returnVal.No = noArr.join(',');
                     break;
                 case "OnlyName"://仅Name
                     var nameArr = [];
                     $.each(selectedTrArr, function (i, selectedTr) {
                         nameArr.push(selectedTr.Name);
                     });
-                    returnVal.Name = nameArr.join(';');
+                    returnVal.Name = nameArr.join(',');
                     break;
                 case "NoName"://No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
                     var noArr = [];
@@ -646,7 +646,7 @@
                         }
                     });
                     for (var property in selectedTrArr[0]) {
-                        returnVal[property] = returnVal[property].join(";");
+                        returnVal[property] = returnVal[property].join(",");
                     }
                     break;
             }
@@ -680,10 +680,10 @@
             //返回值格式
             switch (pageSetData[0].PopValFormat) {
                 case "OnlyNo"://仅NO
-                    returnVal.Name = noArr.join(';');
+                    returnVal.Name = noArr.join(',');
                     break;
                 case "OnlyName"://仅Name
-                    returnVal.Name = nameArr.join(';');
+                    returnVal.Name = nameArr.join(',');
                     break;
                 case "NoName"://No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
                     if (nameArrs.length > 0) {
@@ -697,7 +697,7 @@
                         }
                     });
                     for (var property in nameArrs[0]) {
-                        returnVal[property] = returnVal[property].join(";");
+                        returnVal[property] = returnVal[property].join(",");
                     }
                     break;
             }
@@ -723,13 +723,13 @@
             //返回值格式
             switch (pageSetData[0].PopValFormat) {
                 case "OnlyNo"://仅NO
-                    returnVal.Value = selectedIdArrm.join(';');
+                    returnVal.Value = selectedIdArrm.join(',');
                     break;
                 case "OnlyName"://仅Name
-                    returnVal.Value = selectedNodesm.join(';');
+                    returnVal.Value = selectedNodesm.join(',');
                     break;
                 case "NoName"://No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
-                    returnVal.Value = nameArr.join(';');
+                    returnVal.Value = nameArr.join(',');
                     break;
             }
         }

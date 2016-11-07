@@ -878,6 +878,8 @@ function GetLocalWFPreHref() {
     if (url.indexOf('/WF/') >= 0) {
         var index = url.indexOf('/WF/');
         url = url.substring(0, index);
+    } else {
+        url = "";
     }
     return url;
 }

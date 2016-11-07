@@ -45,7 +45,10 @@ ul {
 }
 
 /* 主要代码部分 */
-#nav {left: 100px;list-style: none;margin: 0;position: fixed;top: 60px;}
+#nav {list-style: none;margin: 0;position: fixed;top: 0px;left:1140px;overflow-y:auto;}
+@media (min-width: 1400px) {
+    #nav {left:1440px;}
+}
 #nav li {margin-bottom: 2px;}
 #nav a {/*background: #ededed;color: #666;*/display: block;	font-size: 14px;padding: 5px 10px;text-decoration: none;text-transform: uppercase;}
     #nav a:hover { /*background: #dedede;*/

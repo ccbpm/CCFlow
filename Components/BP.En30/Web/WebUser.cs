@@ -456,11 +456,11 @@ namespace BP.Web
         /// <summary>
         /// 部门全称
         /// </summary>
-        public static string FK_DeptNameOfFull
+        public static string FK_DeptFullName
         {
             get
             {
-                string val = GetValFromCookie("FK_DeptNameOfFull", null, true);
+                string val = GetValFromCookie("FK_DeptFullName", null, true);
                 if (string.IsNullOrEmpty(val))
                 {
                     try
@@ -474,13 +474,13 @@ namespace BP.Web
                     }
 
                     //给它赋值.
-                    FK_DeptNameOfFull = val;
+                    FK_DeptFullName = val;
                 }
                 return val;
             }
             set
             {
-                SetSessionByKey("FK_DeptNameOfFull", value);
+                SetSessionByKey("FK_DeptFullName", value);
             }
         }
         public static string SysLang

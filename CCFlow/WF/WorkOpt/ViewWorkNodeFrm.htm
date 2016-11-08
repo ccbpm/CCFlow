@@ -824,29 +824,31 @@
                         if (fieldCon != '' && fieldCon.split('=').length == 2) {
                             var fieldConArr = fieldCon.split('=');
                             var ele = $('[name$=' + fieldConArr[0] + ']');
-                            var labDiv = undefined;
-                            var eleDiv = undefined;
-                            if (ele.parent().attr('class').indexOf('input-group') >= 0) {
-                                labDiv = ele.parent().parent().prev();
-                                eleDiv = ele.parent().parent();
-                            } else {
-                                labDiv = ele.parent().prev();
-                                eleDiv = ele.parent();
-                            }
-                            switch (fieldConArr[1]) {
-                                case "1"://可用
-                                    labDiv.css('display', 'block');
-                                    eleDiv.css('display', 'block');
-                                    ele.removeAttr('disabled');
-                                    break;
-                                case "2"://可见
-                                    labDiv.css('display', 'block');
-                                    eleDiv.css('display', 'block');
-                                    break;
-                                case "3"://不可见
-                                    labDiv.css('display', 'none');
-                                    eleDiv.css('display', 'none');
-                                    break;
+                            if (ele.length != 0) {
+                                var labDiv = undefined;
+                                var eleDiv = undefined;
+                                if (ele.parent().attr('class').indexOf('input-group') >= 0) {
+                                    labDiv = ele.parent().parent().prev();
+                                    eleDiv = ele.parent().parent();
+                                } else {
+                                    labDiv = ele.parent().prev();
+                                    eleDiv = ele.parent();
+                                }
+                                switch (fieldConArr[1]) {
+                                    case "1"://可用
+                                        labDiv.css('display', 'block');
+                                        eleDiv.css('display', 'block');
+                                        ele.removeAttr('disabled');
+                                        break;
+                                    case "2"://可见
+                                        labDiv.css('display', 'block');
+                                        eleDiv.css('display', 'block');
+                                        break;
+                                    case "3"://不可见
+                                        labDiv.css('display', 'none');
+                                        eleDiv.css('display', 'none');
+                                        break;
+                                }
                             }
                         }
                     });

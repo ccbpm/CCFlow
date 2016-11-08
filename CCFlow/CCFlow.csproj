@@ -1306,6 +1306,7 @@
     <Content Include="WF\Comm\Sys\Holiday.aspx" />
     <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.aspx" />
     <Content Include="WF\Comm\Sys\SFGuide.aspx" />
+    <Content Include="WF\Comm\Sys\SFGuide.htm" />
     <Content Include="WF\Comm\Sys\SystemClass.aspx" />
     <Content Include="WF\Comm\Tree.aspx" />
     <Content Include="WF\Comm\TreeEns.aspx" />
@@ -1344,6 +1345,7 @@
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\Comm\Handler.ashx" />
     <Content Include="WF\Comm\Rpt\Handler.ashx" />
+    <Content Include="WF\Comm\Sys\Handler.ashx" />
     <None Include="WF\FlowFormTree\Data\Templete\NewFlow.json" />
     <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitView_MySQL.sql" />
     <Content Include="WF\FlowFormTree\Data\Install\SQLScript\Port_Inc_CH.sql" />
@@ -4821,6 +4823,9 @@
     </Compile>
     <Compile Include="WF\Comm\SelfAttrs.aspx.designer.cs">
       <DependentUpon>SelfAttrs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Comm\Sys\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Sys\Holiday.aspx.cs">
       <DependentUpon>Holiday.aspx</DependentUpon>

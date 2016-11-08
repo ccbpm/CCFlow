@@ -96,6 +96,7 @@
             window.parent.returnWorkWindowClose("取消");
         } else {
             $('body').append($('<div>' + "已取消操作" + '</div>'));
+            window.close();
         }
     }
     //设置选中的人员

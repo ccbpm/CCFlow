@@ -1760,7 +1760,7 @@ function Send() {
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData() + "&ToNode="+toNode,
+        data: getFormData() + "&ToNode=" + toNode,
         url: "MyFlow.ashx?Method=Send",
         dataType: 'html',
         success: function (data) {
@@ -1769,8 +1769,12 @@ function Send() {
                 $('.Message').show();
             }
             else if (data.indexOf('url@') == 0) {//发送成功时转到指定的URL 
-                $('#Message').html("<a href=" + data.substring(4, data.length) + ">待处理</a>");
-                $('.Message').show();
+                var url = data;
+                url = url.replace('url@', '');
+                window.location.href = url;
+               // WinOpen(url, 'ss');
+                // $('#Message').html("<a href=" + data.substring(4, data.length) + ">待处理</a>");
+                // $('.Message').show();
             }
             else if (data.indexOf('@当前工作') == 0) {
                 $('#Message').html(data);

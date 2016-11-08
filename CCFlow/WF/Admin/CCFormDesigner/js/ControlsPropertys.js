@@ -45,7 +45,7 @@ CCForm_Control_Enum = {
                 { Text: '登陆人员名称', Value: '@WebUser.Name' },
                 { Text: '登陆人员部门编号', Value: '@WebUser.FK_Dept' },
                 { Text: '登陆人员部门名称', Value: '@WebUser.FK_DeptName' },
-                { Text: '登陆人员部门全称', Value: '@WebUser.FK_DeptNameOfFull' },
+                { Text: '登陆人员部门全称', Value: '@WebUser.FK_DeptFullName' },
                 { Text: '当前日期-yyyy年mm月dd日', Value: '@yyyy年mm月dd日' },
                 { Text: '当前日期-yy年mm月dd日', Value: '@yy年mm月dd日' },
                 { Text: '当前年度', Value: '@FK_ND' },

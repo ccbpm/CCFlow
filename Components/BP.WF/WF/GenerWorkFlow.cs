@@ -982,8 +982,9 @@ namespace BP.WF
                 map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
 
                 map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, false, 0, 100, 10);
-                map.AddTBInt(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false);
-                map.AddTBInt(GenerWorkFlowAttr.WFSta, 0, "流程状态Ext", true, false);
+                
+                map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "状态", true, false, GenerWorkFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
+                map.AddDDLSysEnum(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false, GenerWorkFlowAttr.WFState);
 
                 map.AddTBString(GenerWorkFlowAttr.Starter, null, "发起人", true, false, 0, 200, 10);
                 map.AddTBString(GenerWorkFlowAttr.StarterName, null, "发起人名称", true, false, 0, 200, 10);

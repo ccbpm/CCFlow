@@ -89,12 +89,12 @@ namespace BP.GPM
         /// <summary>
         /// 工作人员岗位对应
         /// </summary>
-        /// <param name="_empoid">部门</param>
-        /// <param name="wsNo">岗位编号</param> 	
-        public DeptStation(string _empoid, string wsNo)
+        /// <param name="deptid">部门</param>
+        /// <param name="stationid">岗位编号</param> 	
+        public DeptStation(string deptid, string stationid)
         {
-            this.FK_Dept = _empoid;
-            this.FK_Station = wsNo;
+            this.FK_Dept = deptid;
+            this.FK_Station = stationid;
             if (this.Retrieve(DeptStationAttr.FK_Dept, this.FK_Dept, DeptStationAttr.FK_Station, this.FK_Station) == 0)
                 this.Insert();
         }

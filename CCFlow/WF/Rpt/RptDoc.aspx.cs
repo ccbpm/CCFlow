@@ -238,8 +238,8 @@ namespace CCFlow.WF.Rpt
                     case "@WebUser.FK_DeptName":
                         attrVal = WebUser.FK_DeptName;
                         break;
-                    case "@WebUser.FK_DeptNameOfFull":
-                        attrVal = WebUser.FK_DeptNameOfFull;
+                    case "@WebUser.FK_DeptFullName":
+                        attrVal = WebUser.FK_DeptFullName;
                         break;
                 }
                 

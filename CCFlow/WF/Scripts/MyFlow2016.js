@@ -1047,6 +1047,7 @@ function SetAth(data) {
         $('#athModal').removeClass('in');
     }
     $('#athModal').hide();
+    $(window.frames["track0"]).contents().find(".modal-backdrop").hide();
 }
 
 //查看页面的附件展示  查看页面调用

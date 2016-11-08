@@ -2150,10 +2150,10 @@ namespace BP.WF
         {
             exp = exp.Replace("@WebUser.No", WebUser.No);
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptFullName", WebUser.FK_DeptFullName);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-
-
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            
             string[] strs = exp.Split(' ');
             bool isPass = false;
 
@@ -2351,9 +2351,9 @@ namespace BP.WF
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            
             if (exp.Contains("@") == false)
             {
                 exp = exp.Replace("~", "'");

@@ -465,7 +465,7 @@ namespace BP.Web
                 {
                     try
                     {
-                        val = DBAccess.RunSQLReturnStringIsNull("SELECT NameOfFull FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'", null);
+                        val = DBAccess.RunSQLReturnStringIsNull("SELECT NameOfPath FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'", null);
                         return val;
                     }
                     catch

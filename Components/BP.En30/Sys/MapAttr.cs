@@ -639,8 +639,8 @@ namespace BP.Sys
                         return BP.Web.WebUser.FK_Dept;
                     case "@webuser.fk_deptname":
                         return BP.Web.WebUser.FK_DeptName;
-                    case "@webuser.fk_deptnameoffull":
-                        return BP.Web.WebUser.FK_DeptNameOfFull;
+                    case "@webuser.FK_DeptFullName":
+                        return BP.Web.WebUser.FK_DeptFullName;
                     case "@fk_ny":
                         return DataType.CurrentYearMonth;
                     case "@fk_nd":

@@ -794,18 +794,19 @@ function initTrackList(workNodeData) {
     var trackNavHtml = '';
     var trackHtml = '';
     $.each(workNodeData.Track, function (i, track) {
-        console.log($('<p>' + track.Msg + '</p>').text())
-        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>'+ (i+1) +'</div>' + track.NDFromT + ':' + track.ActionTypeText + '</a><b></b></li>';
+        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '</a>' + ((pageData.DoType == 'View' && i == workNodeData.Track.length - 1 )? '<b></b>' : '') + '</li>';
         if (track.ActionTypeText == "退回") {
             trackHtml += '<div class="trackDiv">' + '<div class="returnTackHeader" id="track' + i + '" ><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单退回至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>退回原因：" + track.Msg + '</div></div>';
         } else {
             var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
-            trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track' + i + ' " src="' + trackSrc + '"></iframe></div>';
+            trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
         }
     })
     //不是查看模式   显示当前处理节点
     if (pageData.DoType != 'View') {
-        trackNavHtml += '<li  class="scrollNav"><a href="#header"><div>' + (workNodeData.Track.length+1) + '</div>' + workNodeData.Sys_MapData[0].Name + ':当前</a></li>';
+        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '</a></li>';
+
+        //trackNavHtml += '<li class="scrollNav" title="发送人："><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + "dsfsf" + '</a></li>';
     }
     $('#nav').html(trackNavHtml);
     if (workNodeData.Track.length > 0) {
@@ -939,6 +940,18 @@ function InitForm() {
     //处理下拉框级联等扩展信息
     AfterBindEn_DealMapExt();
 
+    //设置默认值
+    for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
+        var mapAttr = workNodeData.Sys_MapAttr[j];
+        //添加 label
+        //如果是整行的需要添加  style='clear:both'
+
+
+        var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+        if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+            $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+        }
+    }
     //绑定扩展附件
     $('.divAth').bind('click', function (obj) {
         var keyOfEn = $(obj.target).data().target;
@@ -1008,6 +1021,7 @@ function InitForm() {
         $('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
     }
 
+
     showNoticeInfo();
 }
 
@@ -1018,17 +1032,30 @@ function SetAth(data) {
     var divId = atParamObj.divId;
     var athTb = $('#' + tbId);
     var athDiv = $('#' + divId);
-    console.log(atParamObj)
 
-    if (atParamObj.AthShowModel == "1") {
-        athTb.val(data.join('*'));
-        athDiv.html(data.join(';&nbsp;'));
-    } else {
-        athTb.val('@AthCount=' + data.length);
-        athDiv.html("附件<span class='badge' >" + data.length + "</span>个");
-    }
     $('#athModal').modal('hide');
+    //不存在或来自于viewWorkNodeFrm
+    if (atParamObj != undefined && atParamObj.IsViewWorkNode != 1 && divId != undefined && tbId != undefined) {
+        if (atParamObj.AthShowModel == "1") {
+            athTb.val(data.join('*'));
+            athDiv.html(data.join(';&nbsp;'));
+        } else {
+            athTb.val('@AthCount=' + data.length);
+            athDiv.html("附件<span class='badge' >" + data.length + "</span>个");
+        }
+    } else {
+        $('#athModal').removeClass('in');
+    }
     $('#athModal').hide();
+}
+
+//查看页面的附件展示  查看页面调用
+function ShowViewNodeAth(athLab, atParamObj,src) {
+    var athForm = $('iframeAthForm');
+    var athModal = $('athModal');
+    var athFormTitle = $('#athModal .modal-title');
+    athFormTitle.text("上传附件：" + athLab);
+    athModal.modal().show();
 }
 
 window.onresize = function () {
@@ -1118,7 +1145,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                 //添加文本框 ，日期控件等
                 //AppString   
                 if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
-                    if (mapAttr.ColSpan == 2 || mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {//占有1-2  3列的文本框
+                    if (mapAttr.ColSpan==0 || mapAttr.ColSpan == 2 || mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {//占有1-2  3列的文本框
                         var mdCol = 2;
                         var smCol = 4;
                         switch (mapAttr.ColSpan) {
@@ -1143,7 +1170,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         } else {//文本区域
                             if (mapAttr.UIHeight <= 23) {
                                 eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                    "<input name='TB_" + mapAttr.KeyOfEn + "' type='text' value='" + defValue + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<input name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
                             }
                             else {//大于23就是多行
@@ -1157,7 +1184,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                     +
                                     (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                                     +
-                                    "<textarea style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' value='" + defValue + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<textarea style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
 
                             }
@@ -1165,7 +1192,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else if (mapAttr.ColSpan == "4" || (mapAttr.ColSpan == "3" && mapAttr.UIHeight > 23)) {//大文本区域  且占一整行
                         isInOneRow = true;
                         eleHtml += '<div class="col-lg-11 col-md-11 col-sm-10">' +
-                            "<textarea name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + defValue + "</textarea>"
+                            "<textarea name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
                             + '</div>';
                     }
                 } //AppDate
@@ -1176,7 +1203,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + defValue + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
                 else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                     var enableAttr = '';
@@ -1185,7 +1212,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' value='" + defValue + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />" + "</div>";
                 }
                 else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
                     var colMd = 2;
@@ -1265,7 +1292,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input value='" + defValue + "' type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input  type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
                 //AppMoney  AppRate
                 if (mapAttr.MyDataType == 8) {
@@ -1275,7 +1302,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input value='" + defValue + "' type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input  type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
 
                 if (mapAttr.LGType == 2) {
@@ -1287,7 +1314,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     }
 
                     eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + defValue + "'" + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr) + "</select>";
+                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr) + "</select>";
 
                     eleHtml += '</div>';
                 }
@@ -1303,7 +1330,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     }
                     
                     eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' +
-                            "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + defValue + "'>" + "</input>";
+                            "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' >" + "</input>";
                     defValue = defValue != undefined && defValue != '' ? defValue : '&nbsp;';
                     if (defValue.indexOf('@AthCount=') == 0) {
                         defValue = "附件" + "<span class='badge'>" + defValue.substring('@AthCount='.length, defValue.length) + "</span>个";
@@ -1331,7 +1358,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
             }
             
             //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
-            hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' value='" + value + "' name='TB_" + mapAttr.KeyOfEn + "'></input>";
+            hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'></input>";
         }
     }
 
@@ -1406,7 +1433,6 @@ function AfterBindEn_DealMapExt() {
                     default:
                         break;
                 }
-                console.log("icon:" + icon + popWorkModelStr);
                 var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
                 '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
@@ -1643,6 +1669,10 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
             break;
         }
     }
+
+    if (result != undefined && typeof (result) == 'string') {
+        result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'");
+    }
     return result = unescape(result);
 }
 //加载表单数据.
@@ -1832,6 +1862,9 @@ function showNoticeInfo() {
                     if (fieldCon != '' && fieldCon.split('=').length == 2) {
                         var fieldConArr = fieldCon.split('=');
                         var ele = $('[name$=' + fieldConArr[0] + ']');
+                        if (ele.length ==0) {
+                            continue;
+                        }
                         var labDiv = undefined;
                         var eleDiv = undefined;
                         if (ele.css('display').toUpperCase() == "NONE") {
@@ -1927,7 +1960,6 @@ function checkBlanks() {
     $.each(lbs, function (i, obj) {
         if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
             var keyofen = $(obj).data().keyofen
-            console.log($(obj).data())
             var ele = $('[id$=_' + keyofen + ']');
             if (ele.length == 1) {
                 switch (ele[0].tagName.toUpperCase()) {

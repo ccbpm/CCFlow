@@ -192,6 +192,7 @@ namespace BP.WF
 
             titleRole = titleRole.Replace("@WebUser.No", wk.FlowStarter);
             titleRole = titleRole.Replace("@WebUser.Name", WebUser.Name);
+            titleRole = titleRole.Replace("@WebUser.FK_DeptFullName", WebUser.FK_DeptFullName);
             titleRole = titleRole.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             titleRole = titleRole.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
             titleRole = titleRole.Replace("@RDT", wk.FlowStartRDT);

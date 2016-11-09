@@ -61,30 +61,21 @@
         function Delete(mypk) {
             var name;
             if (window.confirm('您确定要删除吗？') == false)
-                return;    
+                return;
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSUser",
+                url: Handler + "?DoType=FlowBBSDelete&FK_Flow=" + GetQueryString("FK_Flow") + "&MyPK=" + mypk + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    $.ajax({
-                        type: 'post',
-                        async: true,
-                        url: Handler + "?DoType=FlowBBSDelete&FK_Flow=" + GetQueryString("FK_Flow") + "&MyPK=" + mypk + "&UserName=" + data + "&m=" + Math.random(),
-                        dataType: 'html',
-                        success: function (data) {
-                            if (data.indexOf('err@') == 0) {
-                                alert(data);
-                                return;
-                            }
-                            alert(data);
-                            window.location.href = window.location.href;
-                        }
-                    });
-                  
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.location.href = window.location.href;
                 }
-            });           
+            });         
                Count();
         }
         var wait=0;
@@ -145,6 +136,7 @@
         }
 
         function Submit() {
+            
             if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "" || $("#TB_Msg").val().trim().length == 0) {
                 alert("请填写评论内容!");
                 return;
@@ -161,7 +153,6 @@
             });
           
             var frmData = $("#cc").serialize();
-            //初始化表格.
             $.ajax({
                 data: frmData,
                 type: 'post',
@@ -169,8 +160,12 @@
                 url: Handler + "?DoType=FlowBBSSave&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+ 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
+                        return;
+                    }
+                    if (data == "[]") {
                         return;
                     }
                     //转化成json.
@@ -209,7 +204,7 @@
            $.ajax({
                type: 'post',
                async: true,
-               url: Handler + "?DoType=FlowBBSDept&UserName=" + empName,
+               url: Handler + "?DoType=FlowBBSDept&UserName=" + empNo,
                dataType: 'html',
                success: function (data) {
                    var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "  <br/><br/>";
@@ -218,11 +213,11 @@
                    leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
                    leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
                    leftInfo += "所属部门:&nbsp&nbsp" + data;
-                   var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','"+empName+"');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + str + "');\">只看该用户</a> ";
+                   var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + str + "');\">只看该用户</a> ";
                    var newRow = "<tr ><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</th></tr>";
-                   $("#Table1 tr:last").after(newRow);colspan='2'
+                   $("#Table1 tr:last").after(newRow);
                    Count();
-                  }
+               }
            });
       }
 
@@ -235,7 +230,7 @@
           $.ajax({
               type: 'post',
               async: true,
-              url: Handler + "?DoType=FlowBBSDept&UserName=" + empName,
+              url: Handler + "?DoType=FlowBBSDept&UserName=" + empNo,
               dataType: 'html',
               success: function (data) {
                   var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "<br/><br/>";

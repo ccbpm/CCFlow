@@ -263,7 +263,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                         msg = this.FlowBBSSave();
                         break;
                     case "FlowBBSDelete": //删除评论.
-                        msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK,this.UserName);
+                        msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK,WebUser.No);
                         break;
                     case "FlowBBSCheck": //查看某一用户评论.
                           msg = this.FlowBBSCheck();
@@ -271,7 +271,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     case "FlowBBSReplay": //评论回复.
                         msg = this.FlowBBSReplay();
                         break;
-                    case "FlowBBSCount": //统计评论条数.
+                    case "FlowBBSCount": //统计评论条数
                         msg = this.FlowBBSCount();
                         break;
                     case "FlowBBSUserName": //获得当前用户名称.
@@ -322,7 +322,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
         {
 
             Paras ps = new Paras();
-            ps.SQL = "select a.name from port_dept a INNER join port_emp b on b.FK_Dept=a.no and b.name='"+this.UserName+"'";
+            ps.SQL = "select a.name from port_dept a INNER join port_emp b on b.FK_Dept=a.no and b.No='"+this.UserName+"'";
 
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnString(ps));
         }
@@ -361,7 +361,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
               sms.MyPK = DBAccess.GenerGUID();
               sms.RDT = DataType.CurrentDataTime;
               sms.SendToEmpNo = this.UserName;  
-              sms.Sender = WebUser.No;
+              sms.Sender = WebUser.Name;
               sms.Title = this.Title;
               sms.DocOfEmail = this.Msg;
               sms.Insert(); 

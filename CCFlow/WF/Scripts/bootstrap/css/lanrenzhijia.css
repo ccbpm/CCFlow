@@ -45,7 +45,7 @@ ul {
 }
 
 /* 主要代码部分 */
-#nav {list-style: none;margin: 0;position: fixed;top: 0px;left:1140px;overflow-y:auto;}
+#nav {list-style: none;margin: 0;position: fixed;top: 0px;left:1140px;overflow-y:auto;min-width: 220px;}
 @media (min-width: 1400px) and (max-width: 1600px){
     #nav {left:1440px;}
 }

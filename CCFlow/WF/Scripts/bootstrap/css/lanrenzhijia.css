@@ -53,7 +53,7 @@ ul {
     #nav {left:1640px;}
 }
 @media (min-width: 1800px) and (max-width: 1920px){
-    #nav {left:1230px;}
+    #nav {left:1440px;}
 }
 #nav li {margin-bottom: 2px;}
 #nav a {/*background: #ededed;color: #666;*/display: block;	font-size: 14px;padding: 5px 10px;text-decoration: none;text-transform: uppercase;}

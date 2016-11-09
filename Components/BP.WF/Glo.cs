@@ -175,13 +175,9 @@ namespace BP.WF
             try
             {
 
-                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_EnumMain WHERE No='SelectorModel'");
-                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='SelectorModel' ");
+              
 
-                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_EnumMain WHERE No='CondModel'");
-                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='CondModel' ");
-
-                // 运行升级SQL.
+                // 运行升级SQL. D:\ccflow\CCFlow\WF\Data\UpdataCCFlowVer.sql
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
 
 
@@ -3412,8 +3408,6 @@ namespace BP.WF
                 }
             }
         }
-
-
         //用户表单风格控制
         public static string GetUserStyle
         {
@@ -3973,6 +3967,7 @@ namespace BP.WF
         #endregion 与考核相关.
 
         #region 其他方法。
+      
         /// <summary>
         /// 获得一个表单的动态附件字段
         /// </summary>

@@ -40,62 +40,50 @@ namespace BP.WF
         /// 活动类型名称
         /// </summary>
         public const string ActionTypeText = "ActionTypeText";
-
         /// <summary>
         /// 时间跨度
         /// </summary>
         public const string WorkTimeSpan = "WorkTimeSpan";
-
         /// <summary>
         /// 节点数据
         /// </summary>
         public const string NodeData = "NodeData";
-
         /// <summary>
         /// 轨迹字段
         /// </summary>
         public const string TrackFields = "TrackFields";
-
         /// <summary>
         /// 备注
         /// </summary>
         public const string Note = "Note";
-
         /// <summary>
         /// 从节点
         /// </summary>
         public const string NDFrom = "NDFrom";
-
         /// <summary>
         /// 到节点
         /// </summary>
         public const string NDTo = "NDTo";
-
         /// <summary>
         /// 从人员
         /// </summary>
         public const string EmpFrom = "EmpFrom";
-
         /// <summary>
         /// 到人员
         /// </summary>
         public const string EmpTo = "EmpTo";
-
         /// <summary>
         /// 审核
         /// </summary>
         public const string Msg = "Msg";
-
         /// <summary>
         /// EmpFromT
         /// </summary>
         public const string EmpFromT = "EmpFromT";
-
         /// <summary>
         /// NDFromT
         /// </summary>
         public const string NDFromT = "NDFromT";
-
         /// <summary>
         /// NDToT
         /// </summary>
@@ -113,9 +101,9 @@ namespace BP.WF
         /// </summary>
         public const string Tag = "Tag";
         /// <summary>
-        /// 内部的键值
+        /// 表单数据
         /// </summary>
-        public const string InnerKey_del = "InnerKey";
+        public const string FrmDB = "FrmDB";
     }
 
     /// <summary>
@@ -123,6 +111,20 @@ namespace BP.WF
     /// </summary>
     public class Track : BP.En.Entity
     {
+        /// <summary>
+        /// 表单数据
+        /// </summary>
+        public string FrmDB
+        {
+            get
+            {
+                return this.GetValStrByKey(TrackAttr.FrmDB);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.FrmDB, value);
+            }
+        }
         /// <summary>
         /// 主键值
         /// </summary>
@@ -403,7 +405,9 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.NodeData, value);
             }
         }
-
+        /// <summary>
+        /// 实际执行人
+        /// </summary>
         public string Exer
         {
             get
@@ -415,6 +419,8 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.Exer, value);
             }
         }
+      
+         
 
         /// <summary>
         /// 审核意见
@@ -678,6 +684,12 @@ namespace BP.WF
             if (string.IsNullOrEmpty(this.ActionTypeText))
                 this.ActionTypeText = Track.GetActionTypeT(this.HisActionType);
 
+            if (this.HisActionType == ActionType.Forward)
+            {
+                /*如果是发送, 就记录下来，当前表单的数据.*/
+
+            }
+
             if (mypk == 0)
             {
                 this.SetValByKey(TrackAttr.MyPK, DBAccess.GenerOIDByGUID());
@@ -725,6 +737,9 @@ namespace BP.WF
                 throw ex;
             }
 
+            //把frm日志写入到数据里.
+            BP.DA.DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
+
             #endregion 执行保存
         }
 
@@ -751,6 +766,7 @@ namespace BP.WF
             this.DoInsert(0);
             return false;
         }
+         
         #endregion 属性
     }
 

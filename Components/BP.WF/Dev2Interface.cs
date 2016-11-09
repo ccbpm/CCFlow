@@ -7127,6 +7127,17 @@ namespace BP.WF
         #endregion UI 接口
 
         #region ccform 接口
+      
+        /// <summary>
+        ///  获得指定轨迹的json数据. 
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="mypk">流程主键</param>
+        /// <returns>返回当时的表单json字符串</returns>
+        public static string CCFrom_GetFrmDBJson(string flowNo,string mypk)
+        {
+            return DBAccess.GetTextFileFromDB("ND" + int.Parse(flowNo) + "Track", "MyPK", mypk, "FrmDB"); 
+        }
         /// <summary>
         /// SDK签章接口
         /// </summary>

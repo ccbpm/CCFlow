@@ -852,9 +852,14 @@ namespace BP.WF
                 default:
                     break;
             }
+
+            //把工作的当时信息存入数据库.
+            string json = this.HisWork.ToJson();
+
             if (this.HisWorkerLists.Count == 1)
             {
                 GenerWorkerList wl = this.HisWorkerLists[0] as GenerWorkerList;
+
                 this.AddToTrack(at, wl.FK_Emp, wl.FK_EmpText, wl.FK_Node, wl.FK_NodeText, null, this.ndFrom);
             }
             else
@@ -6715,7 +6720,7 @@ namespace BP.WF
         /// <param name="toNDid">到节点</param>
         /// <param name="toNDName">到节点名称</param>
         /// <param name="msg">消息</param>
-        public void AddToTrack(ActionType at, string toEmp, string toEmpName, int toNDid, string toNDName, string msg, Node ndFrom)
+        public void AddToTrack(ActionType at, string toEmp, string toEmpName, int toNDid, string toNDName, string msg, Node ndFrom, string frmDBJson=null)
         {
             Track t = new Track();
             t.WorkID = this.HisWork.OID;
@@ -6744,6 +6749,7 @@ namespace BP.WF
             t.EmpTo = toEmp;
             t.EmpToT = toEmpName;
             t.Msg = msg;
+            t.FrmDB = frmDBJson; //表单数据Json.
 
             switch (at)
             {

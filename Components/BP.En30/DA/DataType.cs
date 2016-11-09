@@ -425,8 +425,6 @@ namespace BP.DA
             System.IO.StreamWriter sr;
             if (System.IO.File.Exists(file))
                 System.IO.File.Delete(file);
-
-
             try
             {
                 //sr = new System.IO.StreamWriter(file, false, System.Text.Encoding.GetEncoding("GB2312"));
@@ -440,7 +438,6 @@ namespace BP.DA
             sr.Write(Doc);
             sr.Close();
         }
-
         /// <summary>
         /// Http下载文件
         /// </summary>
@@ -634,7 +631,6 @@ namespace BP.DA
             }
             return bs;
         }
-
         /// <summary>
         /// 取道百分比
         /// </summary>

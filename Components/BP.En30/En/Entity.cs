@@ -2279,7 +2279,7 @@ namespace BP.En
                 File.Delete(tempFile);
 
             File.Create(tempFile).Close();
-            return BP.DA.DBAccess.GetTextFileFromDB(tempFile, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), imgFieldName);
+            return BP.DA.DBAccess.GetTextFileFromDB(this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), imgFieldName, tempFile);
         }
         #endregion 对文件的处理.
 

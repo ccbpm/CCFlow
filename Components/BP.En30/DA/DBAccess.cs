@@ -100,8 +100,6 @@ namespace BP.DA
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
 
-
-
                 OracleCommand cm = new OracleCommand();
                 cm.Connection = cn;
                 cm.CommandType = CommandType.Text;
@@ -134,6 +132,22 @@ namespace BP.DA
                 }
                 return;
             }
+        }
+        /// <summary>
+        /// 保存文件到数据库
+        /// </summary>
+        /// <param name="fullFileName">完成的文件路径</param>
+        /// <param name="tableName">表名称</param>
+        /// <param name="tablePK">表主键</param>
+        /// <param name="pkVal">主键值</param>
+        /// <param name="saveFileField">保存到字段</param>
+        public static void SaveBigTextToDB(string docs, string tableName, string tablePK, string pkVal, string saveToFileField)
+        {
+            System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
+            byte[] inputBytes = converter.GetBytes(docs);
+
+            //执行保存.
+            SaveFileToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
         }
         /// <summary>
         /// 保存文件到数据库
@@ -283,8 +297,11 @@ namespace BP.DA
         /// <param name="pkVal">主键值</param>
         /// <param name="fileSaveField">表字段</param>
         /// <returns>读取出来的文本文件</returns>
-        public static string GetTextFileFromDB(string fullFileName, string tableName, string tablePK, string pkVal, string fileSaveField)
+        public static string GetTextFileFromDB(string tableName, string tablePK, string pkVal, string fileSaveField, string fullFileName = null)
         {
+            if (fullFileName == null)
+                fullFileName = SystemConfig.PathOfTemp + "\\" + tableName + "_" + pkVal + ".tmp";
+
             GetFileFromDB(fullFileName, tableName, tablePK, pkVal, fileSaveField);
             return DataType.ReadTextFile(fullFileName);
         }

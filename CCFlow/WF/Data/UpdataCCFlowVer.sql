@@ -1,6 +1,12 @@
 ﻿
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
 
+
+DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
+DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
+DELETE FROM Sys_Enum WHERE EnumKey ='FrmTrackSta';
+
+
 -- 更新枚举值;
 DELETE FROM Sys_Enum WHERE EnumKey ='CodeStruct';
 DELETE FROM Sys_Enum WHERE EnumKey ='DBSrcType';
@@ -23,6 +29,7 @@ DELETE FROM Sys_Enum WHERE EnumKey ='NodeFormType';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmType';
 DELETE FROM Sys_Enum WHERE EnumKey ='FTCSta';
 DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
+
 
 
 -- 升级数据源 2016.0

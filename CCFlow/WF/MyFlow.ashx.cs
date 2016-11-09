@@ -852,9 +852,6 @@ namespace CCFlow.WF
                     resultValue = GenerWorkNode();
                     break;
               
-                case "ViewWorkNodeFrm": //查看一个表单.
-                    resultValue = ViewWorkNodeFrm();
-                    break;
                 default:
                     resultValue = method + "没有判断.";
                     break;
@@ -863,45 +860,7 @@ namespace CCFlow.WF
             context.Response.ContentType = "text/plain";
             context.Response.Write(resultValue);
         }
-        /// <summary>
-        /// 获得节点表单数据.
-        /// </summary>
-        /// <returns></returns>
-        public string ViewWorkNodeFrm()
-        {
-            Node nd = new Node(this.FK_Node);
-
-            Hashtable ht = new Hashtable();
-            ht.Add("FormType", nd.FormType.ToString());
-            ht.Add("Url", nd.FormUrl+"&WorkID="+this.WorkID+"&FK_Flow="+this.FK_Flow+"&FK_Node="+this.FK_Node);
-
-            if (nd.FormType == NodeFormType.SDKForm)
-                return BP.Tools.Json.ToJson(ht, false); 
-
-            if (nd.FormType == NodeFormType.SelfForm)
-                return BP.Tools.Json.ToJson(ht, false);
-
-
-
-            //.工作数据放里面去, 放进去前执行一次装载前填充事件.
-            BP.WF.Work wk = nd.HisWork;
-            wk.OID = this.WorkID;
-            wk.RetrieveFromDBSources();
-
-            //表单模版.
-            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID, true);
-            DataTable mainTable = wk.ToDataTableField("MainTable");
-            mainTable.TableName = "MainTable";
-            myds.Tables.Add(mainTable);
-
-            MapExts exts = new MapExts(wk.ToString());
-            DataTable dtMapExt = exts.ToDataTableDescField();
-            dtMapExt.TableName = "Sys_MapExt";
-            //myds.Tables.Add(dtMapExt);
-
-            return BP.Tools.Json.ToJson(myds);
-        }
-      
+       
       
       
         public bool IsReusable

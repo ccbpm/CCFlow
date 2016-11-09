@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Web;
 using System.Data;
 using BP.DA;
+using BP.Sys;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
@@ -205,6 +207,9 @@ namespace CCFlow.WF.WorkOpt
             {
                 switch (this.DoType)
                 {
+                    case "ViewWorkNodeFrm": //查看一个表单.
+                        msg = ViewWorkNodeFrm();
+                        break;
                     case "Askfor": //加签.
                         msg = this.Askfor();
                         break;
@@ -250,7 +255,39 @@ namespace CCFlow.WF.WorkOpt
             }
             //输出信息.
         }
+        /// <summary>
+        /// 获得节点表单数据.
+        /// </summary>
+        /// <returns></returns>
+        public string ViewWorkNodeFrm()
+        {
+            Node nd = new Node(this.FK_Node);
 
+            Hashtable ht = new Hashtable();
+            ht.Add("FormType", nd.FormType.ToString());
+            ht.Add("Url", nd.FormUrl + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node);
+
+            if (nd.FormType == NodeFormType.SDKForm)
+                return BP.Tools.Json.ToJson(ht, false);
+
+            if (nd.FormType == NodeFormType.SelfForm)
+                return BP.Tools.Json.ToJson(ht, false);
+
+            //表单模版.
+            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID, true);
+            string json = BP.WF.Dev2Interface.CCFrom_GetFrmDBJson(this.FK_Flow, this.MyPK);
+            DataTable mainTable = BP.Tools.Json.ToDataTable(json);
+            mainTable.TableName = "MainTable";
+            myds.Tables.Add(mainTable);
+
+            MapExts exts = new MapExts(nd.HisWork.ToString());
+            DataTable dtMapExt = exts.ToDataTableDescField();
+            dtMapExt.TableName = "Sys_MapExt";
+            myds.Tables.Add(dtMapExt);
+
+            return BP.Tools.Json.ToJson(myds);
+        }
+      
         /// <summary>
         /// 回复加签信息.
         /// </summary>

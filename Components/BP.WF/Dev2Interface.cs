@@ -4494,11 +4494,11 @@ namespace BP.WF
         /// </summary>
         /// <param name="flowNo">流程编号</param>
         /// <param name="mypk">主键</param>
-        /// <returns>返回删除信息.</returns>
+        /// <returns>返回删除信息.</returns>AddToTrack
         public static string Flow_BBSDelete(string flowNo, string mypk,string username)
         {
             Paras pss = new Paras();
-            pss.SQL = "SELECT EMPFROMT FROM ND" + int.Parse(flowNo) + "Track WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK ";
+            pss.SQL = "SELECT EMPFROM FROM ND" + int.Parse(flowNo) + "Track WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK ";
             pss.Add("MyPK", mypk);
             string str = BP.DA.DBAccess.RunSQLReturnString(pss);
             if (str.Equals(username) || str == username)
@@ -4514,6 +4514,7 @@ namespace BP.WF
                 return "删除失败,仅能删除自己评论!";
             }
         }
+      
         /// <summary>
         /// 取消设置关注
         /// </summary>

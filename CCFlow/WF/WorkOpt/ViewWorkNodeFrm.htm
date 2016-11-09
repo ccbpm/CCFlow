@@ -407,6 +407,7 @@
                     athModal.modal('show');
                 }
             }
+            window.parent.$("#athModal").css("display", "block").addClass("in");
         });
         //绑定分组的按钮事件  如果不是字段分组就变成可以折叠的
         $('.group').bind('click', function (obj) {

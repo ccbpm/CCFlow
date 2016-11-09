@@ -1291,6 +1291,7 @@
     <Content Include="WF\Comm\Port\DeptTree.aspx" />
     <Content Include="WF\Comm\Port\SelectDepts_Jq.aspx" />
     <Content Include="WF\Comm\Port\SelectUser_Jq.aspx" />
+    <Content Include="WF\Comm\RefFunc\Dot2DotSearch.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2DotSingle.aspx" />
     <Content Include="WF\Comm\RefFunc\Exp.aspx" />
     <Content Include="WF\Comm\RefFunc\RefDtl.ascx" />
@@ -1345,6 +1346,7 @@
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\Comm\Handler.ashx" />
     <Content Include="WF\Comm\Rpt\Handler.ashx" />
+    <Content Include="WF\Comm\RefFunc\Handler.ashx" />
     <Content Include="WF\Comm\Sys\Handler.ashx" />
     <None Include="WF\FlowFormTree\Data\Templete\NewFlow.json" />
     <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitView_MySQL.sql" />
@@ -2752,6 +2754,7 @@
     <Content Include="WF\WorkOpt\OneWork\ChartTrack.aspx" />
     <Content Include="WF\WorkOpt\OneWork\ChartTrack.htm" />
     <Content Include="WF\WorkOpt\OneWork\CheckTrack.aspx" />
+    <Content Include="WF\WorkOpt\OneWork\FlowBBSReplay.htm" />
     <Content Include="WF\WorkOpt\OneWork\NDRpt.aspx" />
     <Content Include="WF\WorkOpt\OneWork\OP.aspx" />
     <Content Include="WF\WorkOpt\OneWork\Track.aspx" />
@@ -4760,6 +4763,9 @@
     </Compile>
     <Compile Include="WF\Comm\RefFunc\Exp.aspx.designer.cs">
       <DependentUpon>Exp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Comm\RefFunc\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\RefFunc\MasterPageSingle.Master.cs">
       <DependentUpon>MasterPageSingle.Master</DependentUpon>

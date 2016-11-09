@@ -210,5 +210,18 @@ namespace BP.Sys
         /// 3，所有的参数都可以从  this.SysPara.GetValByKey中获取。
         /// </summary>
         abstract public void Do();
+        /// <summary>
+        /// 获得最后一个action的ID.
+        /// </summary>
+        /// <returns></returns>
+        public string GetLastActionTrackID()
+        {
+            string sql = "SELECT  MyPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + this.FK_Node + " ORDER BY RDT ";
+
+            DataTable dt=BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
+                return null;
+            return dt.Rows[0][0].ToString();
+        }
     }
 }

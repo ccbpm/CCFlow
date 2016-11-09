@@ -1658,6 +1658,10 @@ namespace CCForm
                     bound++;
                     BPLine line = ctl as BPLine;
 
+                    //X1=X2&& Y1=Y2 说明是个点排除在外
+                    if (line.MyLine.X1 == line.MyLine.X2 && line.MyLine.Y1 == line.MyLine.Y2)
+                        continue;
+
                     if (MaxLeft == 0 || MaxLeft > line.MyLine.X1)   //计算最左边的X坐标，edited by liuxc,2016-3-29
                         MaxLeft = line.MyLine.X1;
                     if (MaxTop == 0 || MaxTop > line.MyLine.Y1) //计算最上边的Y坐标
@@ -2037,6 +2041,10 @@ namespace CCForm
                     BPLine line = ctl as BPLine;
                     if (line != null)
                     {
+                        //X1=X2&& Y1=Y2 说明是个点排除在外
+                        if (line.MyLine.X1 == line.MyLine.X2 && line.MyLine.Y1 == line.MyLine.Y2)
+                            continue;
+
                         DataRow drline = dtLine.NewRow();
 
                         drline["MYPK"] = myPk;

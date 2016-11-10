@@ -794,25 +794,49 @@ function initTrackList(workNodeData) {
     var trackNavHtml = '';
     var trackHtml = '';
     $.each(workNodeData.Track, function (i, track) {
-        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '</a>' + ((pageData.DoType == 'View' && i == workNodeData.Track.length - 1 )? '<b></b>' : '') + '</li>';
+        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p></a></li>';
         if (track.ActionTypeText == "退回") {
-            trackHtml += '<div class="trackDiv">' + '<div class="returnTackHeader" id="track' + i + '" ><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单退回至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>退回原因：" + track.Msg + '</div></div>';
+            trackHtml += '<div class="trackDiv"><i></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>'+ (i+1) +'</b><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单退回至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>退回原因：" + track.Msg + '</div></div>';
         } else {
             var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
             trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
         }
-    })
+     });
     //不是查看模式   显示当前处理节点
+    function HgetNowFormatDate(time) {
+        var date = time ? new Date(time) : new Date();
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+                + " " + date.getHours() + seperator2 + date.getMinutes()
+                + seperator2 + date.getSeconds();
+        return {
+            currentdate: currentdate,
+            getDay: date.getFullYear() + seperator1 + month + seperator1 + strDate,
+            getTime: date.getHours() + seperator2 + date.getMinutes()
+                + seperator2 + date.getSeconds()
+        };
+    }
+    var sendr = $.cookie("CCS").split("=")[1].split("&")[0];
+    var sendt = HgetNowFormatDate().currentdate;
     if (pageData.DoType != 'View') {
-        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '</a></li>';
-
+        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendr + '</p><p>时间:' + sendt + '</p></a></li>';
+        $('#header b').text((workNodeData.Track.length + 1));
         //trackNavHtml += '<li class="scrollNav" title="发送人："><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + "dsfsf" + '</a></li>';
     }
     $('#nav').html(trackNavHtml);
     if (workNodeData.Track.length > 0) {
-        $('#nav').css('display', 'block');
+        $('.navbars').css('display', 'block');
     } else {//新建单子时，不显示轨迹导航，表单宽度为100%
-        $('#nav').css('display', 'none');
+        $('.navbars').css('display', 'none');
         $('#divCurrentForm').css('width', '100%');
     }
     $($('#nav li')[0]).addClass('current');
@@ -1099,6 +1123,10 @@ function Col4To8() {
 //8列切为4列
 function Col8To4() {
     pageData.Col = 4;
+  /*  $('.col-sm-2').attr('class', 'col-lg-2 col-md-2 col-sm-2');
+    $('.col-sm-4').attr('class', 'col-lg-4 col-md-4 col-sm-4')
+    $('.col-sm-10').attr('class', 'col-lg-10 col-md-10 col-sm-10');*/
+
     $('.col-sm-2').attr('class', 'col-lg-2 col-md-2 col-sm-2');
     $('.col-sm-4').attr('class', 'col-lg-4 col-md-4 col-sm-4')
     $('.col-sm-10').attr('class', 'col-lg-10 col-md-10 col-sm-10');
@@ -1110,8 +1138,8 @@ function Col8To4() {
     //$('#header').css('width', '900px');
     //$('#Message').css('width', '900px');
 
-    $('#divCurrentForm').css('width', '900px');
-    $('#divTrack').css('width', '900px');
+    $('#divCurrentForm').css('width', '1150px');
+    $('#divTrack').css('width', '1150px');
     //显示左侧导航栏 暂时不显示
     $('#nav').css('display', 'block');
 

@@ -461,6 +461,7 @@ display:block;
     /*background-color: white;*/
     overflow: hidden;
     overflow-y:auto;
+    padding:10px;
 }
 .Message {
     margin: 0 auto;
@@ -619,9 +620,6 @@ background:#a8352c;
     float: left;
     padding: 15px 0px;
 }
-#nav {
-    margin-top: 15px;
-}
 
         .owl-prev {
             background: url(/image/arrow_left_1.png) no-repeat;
@@ -724,14 +722,12 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
 }
 
 #topContentDiv {
-    background: #f4f9ff;
+    background: #fff;
     border-radius: 20px;
     padding: 10px 0px 0px 0px;
-    margin: 25px 15px 10px 15px;
-    border: #2884fa 1px solid;
+    margin: 35px 15px 20px 15px;
+    border: #2854FF 1px solid;
     overflow: auto;
-
-
 }
 
 #centerNavDiv {
@@ -895,14 +891,13 @@ body {
 
 #header {
     height: 50px;
-    font-size: 20px;
-    background:#718BF2 !important;
-    color: white;
-    padding: 10px;
+    font: bold 16px "微软雅黑";
+    background:#6975F4 !important;
+    color: #fff;
     text-align: left;
-    margin-left: auto;
-    margin-right: auto;
     cursor:pointer;
+    line-height: 50px;
+    padding-left: 40px;
 }
 
 #showCol {
@@ -931,6 +926,8 @@ body {
 }
 #CCForm label {
     font-weight: normal;
+    font-size:12px;
+    margin-bottom:0px;
 }
 .state {
     padding: 0px 8px 0px 5px;
@@ -1002,41 +999,47 @@ border:none;
 }
 
 
-#divTrack {
-margin:auto;
-width:900px;
+#divTrack ,#divCurrentForm{
+width:1150px;
+float:right;
 }
     #divTrack iframe {
     width:100%;
     }
 
 .trackDiv {
-    background:white;
+    background: #E3E7F4;
+    padding-bottom: 10px;
+    position:relative;
 }
-
-#divCurrentForm {
-margin:auto;
-background:white;
-}
-
+.trackDiv i {
+            display: block;
+            width: 33px;
+            height: 22px;
+            background: url("../../WF/Scripts/bootstrap/css/img/sanjiao_03.png") no-repeat;
+            position: absolute;
+            top: 66px;
+            left: 50px;
+        }
 .returnTackDiv {
     font-size: 15px;
     text-align: left;
     padding: 20px;
-    background: #f4f9ff;
+    background: #fff;
     border-radius: 20px;
-    margin: 10px 20px;
-    border: #2884fa 1px solid;
+    margin: 35px 15px 20px 15px;
+    border: #2854FF 1px solid;
     overflow: auto;
+    color: #f00;
 }
 
 .returnTackHeader {
+    height: 50px;
+    font: bold 16px "微软雅黑";
+    background: #6975F4 !important;
+    color: #fff;
     text-align: left;
     cursor: pointer;
-    height: 50px;
-    font-size: 20px;
-    background: #213b5d;
-    color: white;
-    padding: 10px;
-    margin:0px 0px 10px 0px;
+    line-height: 50px;
+    padding-left: 40px;
 }

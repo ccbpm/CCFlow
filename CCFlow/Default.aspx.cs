@@ -13,6 +13,7 @@ using BP.En;
 using BP.Sys;
 using BP.WF;
 using BP.Web;
+using BP.Port;
 
 namespace CCFlow
 {
@@ -20,11 +21,10 @@ namespace CCFlow
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            BP.Port.Emps emps = new BP.Port.Emps();
+            emps.Retrieve(EmpAttr.FK_Dept, "01");
 
-            //BP.TKY.Port.DTSOrg dts = new BP.TKY.Port.DTSOrg();
-            //dts.Do();
-            //return;
-             
+
             BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  start ------------------ ");
             BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  end ------------------ ");
 
@@ -49,7 +49,6 @@ namespace CCFlow
                 this.Response.Write(en.ToString() + " " + en.EnDesc + " <br>");
             }
             this.Response.Write(" <hr>");
-
 
             string str2 = "BP.En.EntitySimpleTree";
             ArrayList al2 = ClassFactory.GetObjects(str2);
@@ -97,8 +96,8 @@ namespace CCFlow
                 sql = "UPDATE Port_EmpStation Set FK_Emp='" + deptName + "' WHERE FK_Emp='" + emp.No + "'";
                 BP.DA.DBAccess.RunSQL(sql);
 
-                sql = "UPDATE Port_EmpDept Set FK_Emp='" + deptName + "' WHERE FK_Emp='" + emp.No + "'";
-                BP.DA.DBAccess.RunSQL(sql);
+                //sql = "UPDATE Port_EmpDept Set FK_Emp='" + deptName + "' WHERE FK_Emp='" + emp.No + "'";
+                //BP.DA.DBAccess.RunSQL(sql);
 
                 sql = "UPDATE WF_NodeEmp Set FK_Emp='" + deptName + "' WHERE FK_Emp='" + emp.No + "'";
                 BP.DA.DBAccess.RunSQL(sql);

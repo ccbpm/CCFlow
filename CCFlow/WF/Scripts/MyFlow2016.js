@@ -795,13 +795,14 @@ function initTrackList(workNodeData) {
     var trackHtml = '';
     $.each(workNodeData.Track, function (i, track) {
         trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p></a></li>';
-        if (track.ActionTypeText == "退回") {
-            trackHtml += '<div class="trackDiv"><i></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>'+ (i+1) +'</b><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单退回至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>退回原因：" + track.Msg + '</div></div>';
+        var actionType = track.ActionType;
+        if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11) {
+            trackHtml += '<div class="trackDiv"><i></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
         } else {
             var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
             trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
         }
-     });
+    });
     //不是查看模式   显示当前处理节点
     function HgetNowFormatDate(time) {
         var date = time ? new Date(time) : new Date();

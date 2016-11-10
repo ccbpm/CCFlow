@@ -171,15 +171,41 @@ namespace BP.DA
             //执行保存.
             SaveFileToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
         }
+        public static void GetFileFromDB(string fileFullName,string tableName, string tablePK, string pkVal, string fileSaveField)
+        {
+            byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
+            FileStream fs;
+            //如果文件不为空,就把流数据保存一个文件.
+            if (fileFullName != null)
+            {
+                FileInfo fi = new System.IO.FileInfo(fileFullName);
+                fs = fi.OpenWrite();
+                fs.Write(byteFile, 0, byteFile.Length);
+                fs.Close();
+            }
+        }
+        /// <summary>
+        /// 从数据库里获得文本
+        /// </summary>
+        /// <param name="tableName">表名</param>
+        /// <param name="tablePK">主键</param>
+        /// <param name="pkVal">主键值</param>
+        /// <param name="fileSaveField">保存字段</param>
+        /// <returns></returns>
+        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, string fileSaveField)
+        {
+            byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
+            System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
+            return converter.GetString(byteFile);
+        }
         /// <summary>
         /// 从数据库里提取文件
         /// </summary>
-        /// <param name="fullFilePath">要存储的文件路径</param>
         /// <param name="tableName">表名</param>
         /// <param name="tablePK">表主键</param>
         /// <param name="pkVal">主键值</param>
         /// <param name="fileSaveField">字段</param>
-        public static byte[] GetFileFromDB(string fullFileName, string tableName, string tablePK, string pkVal, string fileSaveField)
+        public static byte[] GetByteFromDB(string tableName, string tablePK, string pkVal, string fileSaveField)
         {
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
@@ -220,17 +246,9 @@ namespace BP.DA
 
                     byteFile = (byte[])dr[0];
                 }
-                FileStream fs;
-
-                //如果文件不为空,就把流数据保存一个文件.
-                if (fullFileName != null)
-                {
-                    FileInfo fi = new System.IO.FileInfo(fullFileName);
-                    fs = fi.OpenWrite();
-                    fs.Write(byteFile, 0, byteFile.Length);
-                    fs.Close();
-                }
                 return byteFile;
+
+
             }
 
             //增加对oracle数据库的逻辑 qin
@@ -273,38 +291,13 @@ namespace BP.DA
 
                     byteFile = (byte[])dr[0];
                 }
-                FileStream fs;
-
-                //如果文件不为空,就把流数据保存一个文件.
-                if (fullFileName != null)
-                {
-                    FileInfo fi = new System.IO.FileInfo(fullFileName);
-                    fs = fi.OpenWrite();
-                    fs.Write(byteFile, 0, byteFile.Length);
-                    fs.Close();
-                }
+                
                 return byteFile;
             }
             //最后仍然没有找到.
             throw new Exception("@没有判断的数据库类型.");
         }
-        /// <summary>
-        /// 从数据库一个表里把img字段读取出来，转化成string返回.
-        /// </summary>
-        /// <param name="fullFileName">要存储的文件路径名称</param>
-        /// <param name="tableName">表名称</param>
-        /// <param name="tablePK">表主键</param>
-        /// <param name="pkVal">主键值</param>
-        /// <param name="fileSaveField">表字段</param>
-        /// <returns>读取出来的文本文件</returns>
-        public static string GetTextFileFromDB(string tableName, string tablePK, string pkVal, string fileSaveField, string fullFileName = null)
-        {
-            if (fullFileName == null)
-                fullFileName = SystemConfig.PathOfTemp + "\\" + tableName + "_" + pkVal + ".tmp";
-
-            GetFileFromDB(fullFileName, tableName, tablePK, pkVal, fileSaveField);
-            return DataType.ReadTextFile(fullFileName);
-        }
+        
         #endregion 文件存储数据库处理.
 
 

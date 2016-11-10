@@ -2274,12 +2274,7 @@ namespace BP.En
         /// <returns>大文本数据</returns>
         public string GetBigTextFromDB(string imgFieldName)
         {
-            string tempFile = BP.Sys.SystemConfig.PathOfTemp + "\\" + this.EnMap.PhysicsTable + this.PKVals + ".tmp";
-            if (File.Exists(tempFile) == true)
-                File.Delete(tempFile);
-
-            File.Create(tempFile).Close();
-            return BP.DA.DBAccess.GetTextFileFromDB(this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), imgFieldName, tempFile);
+            return BP.DA.DBAccess.GetBigTextFromDB(this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), imgFieldName);
         }
         #endregion 对文件的处理.
 

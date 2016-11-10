@@ -7137,7 +7137,7 @@ namespace BP.WF
         /// <returns>返回当时的表单json字符串</returns>
         public static string CCFrom_GetFrmDBJson(string flowNo,string mypk)
         {
-            return DBAccess.GetTextFileFromDB("ND" + int.Parse(flowNo) + "Track", "MyPK", mypk, "FrmDB"); 
+            return DBAccess.GetBigTextFromDB("ND" + int.Parse(flowNo) + "Track", "MyPK", mypk, "FrmDB"); 
         }
         /// <summary>
         /// SDK签章接口

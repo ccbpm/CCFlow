@@ -4,7 +4,6 @@ body
   font-size: 12px;
 }
 
-
 /*  table 类型风格 */
 table
 {
@@ -143,12 +142,15 @@ td input
 /*  input 类型风格 */
 input[type="button"], .Btn, input[type="submit"]
 {
-    border: 0;
+    border-style: none;
+    border-color: inherit;
+    border-width: 0;
     background: #4D77A7;
     color: #FFF;
     font-size: 12px;
     padding: 4px 6px 4px 6px;
     margin: 3px 2px 3px 2px;
+    height: 24px;
 }
 
 .TBcalendar

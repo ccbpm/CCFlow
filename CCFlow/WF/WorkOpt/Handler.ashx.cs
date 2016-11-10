@@ -225,6 +225,9 @@ namespace CCFlow.WF.WorkOpt
                     case "AccepterSave": //保存.
                         msg = this.AccepterSave();
                         break;
+                    case "AccepterSend": //发送.
+                        msg = this.AccepterSend();
+                        break;
                     case "FlowBBSList": //获得流程评论列表.
                         msg = this.FlowBBSList();
                         break;
@@ -383,12 +386,46 @@ namespace CCFlow.WF.WorkOpt
             //返回json.
             return BP.Tools.Json.ToJson(ds);
         }
+        /// <summary>
+        /// 保存.
+        /// </summary>
+        /// <returns></returns>
+        public string AccepterSave()
+        {
+            try
+            {
+                //求到达的节点. 
+                int toNodeID = 0;
+                if (this.GetRequestVal("ToNode") != "0")
+                    toNodeID = int.Parse(this.GetRequestVal("ToNode"));
+
+                if (toNodeID == 0)
+                {   //没有就获得第一个节点.
+                    Node nd = new Node(this.FK_Node);
+                    Nodes nds = nd.HisToNodes;
+                    toNodeID = nds[0].GetValIntByKey("NodeID");
+                }
+
+                //求发送到的人员.
+                // string selectEmps = this.GetValFromFrmByKey("SelectEmps");
+                string selectEmps = this.GetRequestVal("SelectEmps");
+                selectEmps = selectEmps.Replace(";", ",");
+
+                //保存接受人.
+                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, this.FK_Node, selectEmps);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
 
         /// <summary>
         /// 执行保存并发送.
         /// </summary>
         /// <returns>返回发送的结果.</returns>
-        public string AccepterSave()
+        public string AccepterSend()
         {
             try
             {
@@ -408,8 +445,6 @@ namespace CCFlow.WF.WorkOpt
                // string selectEmps = this.GetValFromFrmByKey("SelectEmps");
                 string selectEmps = this.GetRequestVal("SelectEmps");
                 selectEmps = selectEmps.Replace(";", ",");
-
-
 
                 //执行发送.
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, selectEmps);

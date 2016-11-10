@@ -75,8 +75,7 @@
                         //gwf.WFState = WFState.Runing;
                         //gwf.DirectUpdate();
                     }
-                %>
-                <%=msgInfo%>
+                %>                <%=msgInfo%>
             </td>
         </tr>
         <tr>
@@ -107,6 +106,8 @@
                 <asp:Button ID="Btn_Send" runat="server" Text="退回给子线程处理人" OnClick="Btn_Send_Click" />
                 <asp:Button ID="Btn_Shfit" runat="server" Text="移交给其他人处理" OnClick="Btn_Shift_Click" />
                 <asp:Button ID="Btn_Del" runat="server" Text="删除子线程" OnClick="Btn_Del_Click" />
+                <asp:Button ID="Btn_UnSend" runat="server" Text="撤销分流点发送" 
+                    OnClick="Btn_UnSend_Click" />
             </td>
         </tr>
     </table>

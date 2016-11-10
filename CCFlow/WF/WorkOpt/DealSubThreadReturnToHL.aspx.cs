@@ -64,6 +64,8 @@ namespace CCFlow.WF.WorkOpt
             BP.WF.Glo.ToMsg("该工作删除成功...");
         }
 
+        
+
         protected void Btn_Shift_Click(object sender, EventArgs e)
         {
             string shiftNo = TB_ShiftNo.Value;
@@ -82,6 +84,19 @@ namespace CCFlow.WF.WorkOpt
           string result =   BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, shiftNo,message);
 
           BP.WF.Glo.ToMsg(result);
+        }
+
+        protected void Btn_UnSend_Click(object sender, EventArgs e)
+        {
+            try
+            {
+               string str= BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.FID);
+               BP.WF.Glo.ToMsg(str);
+            }
+            catch(Exception ex)
+            {
+                BP.WF.Glo.ToMsg(ex.Message);
+            }
         }
     }
 }

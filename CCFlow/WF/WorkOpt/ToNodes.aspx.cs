@@ -171,7 +171,8 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
                     if (mynd.HisDeliveryWay == DeliveryWay.BySelected)
                     {
                         /*由上一步发送人员选择.*/
-                        this.Pub1.Add(" - <a id=\"acc_link_" + mynd.NodeID + "\" href=\"javascript:WinShowModalDialog_Accepter('Accepter.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + mynd.NodeID + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&type=1')\" >选择接受人员" + addSpan + "</a>");
+
+                        this.Pub1.Add(" - <a id=\"acc_link_" + mynd.NodeID + "\" href=\"javascript:WinShowModalDialog_Accepter('Accepter.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + mynd.NodeID + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&type=1&DoType=AccepterSave')\" >选择接受人员" + addSpan + "</a>");
                     }
                     this.Pub1.AddBR();
                     continue;
@@ -190,7 +191,7 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
                     if (mynd.HisDeliveryWay == DeliveryWay.BySelected)
                     {
                         /*由上一步发送人员选择.*/
-                        this.Pub1.Add(" - <a id=\"acc_link_" + mynd.NodeID + "\" href=\"javascript:WinShowModalDialog_Accepter('Accepter.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + mynd.NodeID + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&type=1')\" >选择接受人员" + addSpan + "</a>");
+                        this.Pub1.Add(" - <a id=\"acc_link_" + mynd.NodeID + "\" href=\"javascript:WinShowModalDialog_Accepter('Accepter.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + mynd.NodeID + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&type=1&DoType=AccepterSave')\" >选择接受人员" + addSpan + "</a>");
                     }
                     this.Pub1.AddBR();
                 }

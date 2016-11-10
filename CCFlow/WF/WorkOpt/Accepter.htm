@@ -122,11 +122,24 @@
         }
     </style>
     <script type="text/javascript">
+
+        var doType = GetQueryString("DoType");
         $(function () {
 
+            if (doType == null || doType == "")
+                doType = "AccepterSend";
+            if (doType == "AccepterSend") {
+                $("#btnOk").text('发送');
+            } else {
+                $("#btnOk").text('保存');
+            }
+
             dtTable();
+
             initSelectEmpModal();
+
             $("#groupTable").height($(window).height() - 80 + "px");
+
 
         });
         //配置数据
@@ -152,8 +165,10 @@
                 url: Handler + "?DoType=AccepterInit&FK_Node=" + pageUrlParam.fk_node + '&WorkID=' +
                     pageUrlParam.WorkID + '&m=' + Math.random(),
                 dataType: 'html',
-                data: {ToNode:toNode},
+                data: { ToNode: toNode },
                 success: function (data) {
+                    alert(data);
+
                     console.log(data)
                     if (data != null && data != undefined) {
                         var selDataArr = JSON.parse(data).Nodes;
@@ -170,7 +185,7 @@
                             $("#searchS1 option:nth(0)").attr("selected", "selected");
                         }
                         $('#groupTable').css('display', 'block');
-                        if (dtgArr == undefined  && dteArr == undefined ) {//通用人员选择其
+                        if (dtgArr == undefined && dteArr == undefined) {//通用人员选择其
                             $('#selectEmpsDiv').css('display', 'block');
                             $('#groupTable').css('display', 'none');
 
@@ -194,7 +209,7 @@
                         var ultde = '';
                         var ultdes = '';
                         var s = "";
-                        $.each(dtgArr,function(i, obje) {
+                        $.each(dtgArr, function (i, obje) {
                             for (var k = 0; k < dteArr.length; k++) {
                                 if (obje.No == dteArr[k][fkName]) {
                                     ultde +=
@@ -216,14 +231,14 @@
                         $.each(groupFileds, function (j, objj) {
                             ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
                         });
-                            s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                        s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
                                 ultdes + "</ul></li>";
-                            ultdg += s;
+                        ultdg += s;
 
                         //
-                            $("#groupTable #dt").html(ultdg);
-                            $(".wait").hide();
-                            $("section").show();
+                        $("#groupTable #dt").html(ultdg);
+                        $(".wait").hide();
+                        $("section").show();
                         $(".ulm_head").click(function () {
                             if (this.checked) {
                                 $(this).parent("li").children("ul").find("input").prop("checked", "checked");
@@ -231,13 +246,13 @@
                                 $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
                             }
                         });
-                        $(".ulm_head").click(function() {
-                                if (this.checked) {
-                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
-                                } else {
-                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
-                                }
-                            });
+                        $(".ulm_head").click(function () {
+                            if (this.checked) {
+                                $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                            } else {
+                                $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                            }
+                        });
                         //实体绑定
                         $.each(dteArr, function (k, obj) {
                             var lifs = $("#groupTable #dt .lif");
@@ -285,30 +300,54 @@
             }
         }
 
-        //确定【选择接收人并发送】
+        //确定【选择接收人并发送】 / 保存.  AccepterSave AccepterSend
         function SendNode() {
+
             //AccepterSave&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi
+
             var empNos = sedmsg();
-            console.log(pageUrlParam.WorkID)
+            if (empNos == '' || empNos == null) {
+                alert('请选择人员.');
+                return;
+            }
+
+           // var empNos = "zhoupeng";
+
+            console.log(pageUrlParam.WorkID);
+
             if (pageUrlParam.toNode == 0) {
                 toNode = $("#searchS1 option:selected").attr("val");
             } else {
                 toNode = pageUrlParam.toNode;
             }
+
             $.ajax({
                 type: 'post',
                 async: true,
-                data: { "FK_Flow": pageUrlParam.FK_Flow, "WorkID": pageUrlParam.WorkID,ToNode:toNode, FK_Node:pageUrlParam.fk_node},
-                url: Handler + "?DoType=AccepterSave&m=" + Math.random() + "&SelectEmps=" + empNos + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
+                data: { "FK_Flow": pageUrlParam.FK_Flow, "WorkID": pageUrlParam.WorkID, ToNode: toNode, FK_Node: pageUrlParam.fk_node },
+                url: Handler + "?DoType=" + doType + "&m=" + Math.random() + "&SelectEmps=" + empNos + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
                 dataType: 'html',
                 success: function (data) {
+
+                    // alert(data);
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    if ("AccepterSave" == doType) {
+                        alert('保存成功...');
+                        window.close();
+                        return;
+                    }
+
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                         window.parent.returnWorkWindowClose(data);
                     } else {
                         $('body').append($('<div>' + data + '</div>'));
                         $('#btnOk').attr('disabled', true);
                     }
-                    
                 }
             });
             $(".foot").hide();
@@ -376,7 +415,8 @@
         </div>
     </div>
     <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
-        <button id="btnOk" class="btn btn-info" onclick="SendNode()">发送</button>
+        <!--<button id="btnSaveAndClose" class="btn btn-info" onclick="SendNode('AccepterSave')">确定</button>-->
+        <button id="btnOk" class="btn btn-info" onclick="SendNode()" >发送</button>
         <button id="btnCancel" class="btn btn-info" onclick="Close()">取消</button>
     </div>
 </section>

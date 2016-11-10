@@ -782,7 +782,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppInt)
@@ -798,7 +798,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.DefVal = "0";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppMoney)
@@ -814,7 +814,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.DefVal = "0.00";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppFloat)
@@ -831,7 +831,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
                 attr.DefVal = "0";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDouble)
@@ -847,7 +847,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.DefVal = "0";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDate)
@@ -862,7 +862,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.MyDataType = DataType.AppDate;
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDate + "&DoType=Edit&GroupField=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDate + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDateTime)
@@ -877,7 +877,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.UIContralType = UIContralType.TB;
                 attr.MyDataType = DataType.AppDateTime;
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDateTime + "&DoType=Edit&GroupField=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDateTime + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppBoolean)
@@ -893,7 +893,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 attr.MyDataType = DataType.AppBoolean;
                 attr.DefVal = "0";
                 attr.Insert();
-                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupField=" + groupID;
+                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             return "err@没有判断的数据类型." + attr.MyDataTypeStr;

@@ -114,17 +114,7 @@ namespace BP.WF
         /// <summary>
         /// 表单数据
         /// </summary>
-        public string FrmDB
-        {
-            get
-            {
-                return this.GetValStrByKey(TrackAttr.FrmDB);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.FrmDB, value);
-            }
-        }
+        public string FrmDB = null;
         /// <summary>
         /// 主键值
         /// </summary>
@@ -684,7 +674,7 @@ namespace BP.WF
             if (string.IsNullOrEmpty(this.ActionTypeText))
                 this.ActionTypeText = Track.GetActionTypeT(this.HisActionType);
 
-          
+
 
             if (mypk == 0)
             {
@@ -734,17 +724,9 @@ namespace BP.WF
             }
 
             //把frm日志写入到数据里.
+            if (this.FrmDB != null)
+                BP.DA.DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
 
-            try
-            {
-                if (this.HisActionType == ActionType.Forward)
-                {
-                    BP.DA.DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
-                }
-            }catch
-            {
-
-            }
 
             #endregion 执行保存
         }

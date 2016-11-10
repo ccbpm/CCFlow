@@ -367,7 +367,8 @@ namespace BP.WF
             switch (nd.HisNodeWorkType)
             {
                 case NodeWorkType.WorkFHL:
-                    throw new Exception("分合流点不允许撤消。");
+                    //throw new Exception("@分合流点不允许撤消。");
+                    return this.DoUnSendFeiLiu(gwf);
                 case NodeWorkType.WorkFL:
                 case NodeWorkType.StartWorkFL:
                     return this.DoUnSendFeiLiu(gwf);

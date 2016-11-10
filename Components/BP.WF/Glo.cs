@@ -2132,7 +2132,7 @@ namespace BP.WF
             catch
             {
                 t.CheckPhysicsTable();
-                ///t.Insert();
+                t.Insert();
             }
             return t.MyPK;
         }

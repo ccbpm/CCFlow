@@ -139,7 +139,7 @@ namespace CCFlow.WF.SDKComponents
                     else
                     {
                         this.AddTD("style='word-break:break-all;'",
-    "<a href=\"javascript:OpenIt('../FoolFrmTrack.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+    "<a href=\"javascript:OpenIt('../WorkOpt/FoolFrmTrack.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
 
                     }
 

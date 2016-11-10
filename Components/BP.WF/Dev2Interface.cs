@@ -2001,12 +2001,7 @@ namespace BP.WF
             }
 
             string sql = "";
-            if (nd.IsHL || nd.IsFLHL)
-            {
-                /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
-                sql = "SELECT FK_Node AS No,FK_NodeText as Name, FK_Emp as Rec, FK_EmpText as RecName FROM WF_GenerWorkerlist WHERE FID=" + fid + " AND WorkID=" + workid + " AND FK_Node!=" + fk_node + " AND IsPass=1 ORDER BY RDT  ";
-                return DBAccess.RunSQLReturnTable(sql);
-            }
+          
 
             WorkNode wn = new WorkNode(workid, fk_node);
             WorkNodes wns = new WorkNodes();
@@ -2015,6 +2010,14 @@ namespace BP.WF
                 case ReturnRole.CanNotReturn:
                     return dt;
                 case ReturnRole.ReturnAnyNodes:
+
+                    if (nd.IsHL || nd.IsFLHL)
+                    {
+                        /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
+                        sql = "SELECT FK_Node AS No,FK_NodeText as Name, FK_Emp as Rec, FK_EmpText as RecName FROM WF_GenerWorkerlist WHERE FID=" + fid + " AND WorkID=" + workid + " AND FK_Node!=" + fk_node + " AND IsPass=1 ORDER BY RDT  ";
+                        return DBAccess.RunSQLReturnTable(sql);
+                    }
+
                     if (nd.TodolistModel == TodolistModel.Order)
                         sql = "SELECT FK_Node as No,FK_NodeText as Name,FK_Emp as Rec,FK_EmpText as RecName FROM WF_GenerWorkerlist WHERE  (WorkID=" + workid + " AND IsEnable=1 AND IsPass=1 AND FK_Node!=" + fk_node + ") OR (FK_Node=" + fk_node + " AND IsPass <0)  ORDER BY RDT";
                     else

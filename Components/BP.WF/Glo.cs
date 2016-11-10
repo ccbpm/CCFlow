@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20161104";
+        public static string Ver = "20161110";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -175,7 +175,10 @@ namespace BP.WF
             try
             {
 
-              
+
+                //升级傻瓜表单.
+                MapFoolForm mff = new MapFoolForm();
+                mff.CheckPhysicsTable();
 
                 // 运行升级SQL. D:\ccflow\CCFlow\WF\Data\UpdataCCFlowVer.sql
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");

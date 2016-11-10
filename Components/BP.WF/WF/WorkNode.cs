@@ -6776,10 +6776,12 @@ namespace BP.WF
                     break;
             }
 
+
             if (at == ActionType.Forward)
             {
                 if (this.HisNode.IsFL)
                     at = ActionType.ForwardFL;
+                t.FrmDB = this.HisWork.ToJson();
             }
 
             try

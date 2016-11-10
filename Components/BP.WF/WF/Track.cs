@@ -684,11 +684,7 @@ namespace BP.WF
             if (string.IsNullOrEmpty(this.ActionTypeText))
                 this.ActionTypeText = Track.GetActionTypeT(this.HisActionType);
 
-            if (this.HisActionType == ActionType.Forward)
-            {
-                /*如果是发送, 就记录下来，当前表单的数据.*/
-
-            }
+          
 
             if (mypk == 0)
             {
@@ -738,7 +734,17 @@ namespace BP.WF
             }
 
             //把frm日志写入到数据里.
-            BP.DA.DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
+
+            try
+            {
+                if (this.HisActionType == ActionType.Forward)
+                {
+                    BP.DA.DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
+                }
+            }catch
+            {
+
+            }
 
             #endregion 执行保存
         }

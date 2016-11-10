@@ -31,14 +31,10 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
     <PublishUrl>http://localhost/BP.WFV4/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>

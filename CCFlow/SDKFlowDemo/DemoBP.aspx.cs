@@ -196,7 +196,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
 
         //读取文件到指定的位置.
         string saveToFile = "c:\\222.txt";
-        byte[] byt = BP.DA.DBAccess.GetFileFromDB(saveToFile, "WF_Flow", "No", "001", "FlowJson"); 
+      //  string byt = BP.DA.DBAccess.GetBigTextFromDB(saveToFile, "WF_Flow", "No", "001", "FlowJson"); 
         // FlowJson是一个已经存在的img字段, 系统就会生成一个 temp文件在指定的路径下. 返回的是一个byt 类型的数据流.
         #endregion 向数据库存储文件.
 

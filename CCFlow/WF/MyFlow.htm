@@ -38,14 +38,7 @@
         body {
             padding: 0px;
             margin: 0px;
-        }
-        /*除了字段分组之外的分组都是可以折叠的*/
-        .group {
-        }
-
-        .mustInput {
-        }
-
+         }
         .nav > li > a {
             padding: 6px 13px;
         }
@@ -57,63 +50,101 @@
         .errorInput {
             border: 1px red solid !important;
         }
-
-        #navGroup .navLi {
-        }
-
         li.scrollNav.active a {
             background: url(Scripts/bootstrap/css/img/back.png) no-repeat;
         }
-
+        #nav li {
+            height: 110px;
+        } 
         #nav li a > div {
             width: 25px;
             height: 25px;
             border-radius: 50%;
-            float: left;
             background: #CDD2D8;
             line-height: 25px !important;
-            margin-right: 5px;
             text-align: center;
             color: #fff;
             font: bold 15px "微软雅黑";
-            margin-left: 5px;
+            margin: 0px auto;
+            margin-bottom: 10px;
         }
-
-        #nav li > b {
-            display: block;
-            height: 20px;
-            margin: 3px 25px;
-            border-left: 2px solid #bbb;
-        }
-
         #nav li > a {
-            height: 30px;
-            text-align: left;
-            line-height: 30px !important;
+            color: #333;
+            overflow: hidden;
+            text-align: center;
             background: none;
+            font: bold 14px "微软雅黑";
         }
-
+            #nav li > a p {
+                color: #2884fa;
+                font: normal 12px '微软雅黑';
+                height: 20px;
+            }
         #nav .current a {
             margin: 0px;
-            color: #7E8DF9;
+            color: #333;
             background: none;
             box-shadow: none;
-            height: 40px;
-            line-height: 40px !important;
         }
 
             #nav .current a > div {
-                width: 35px;
-                height: 35px;
-                margin-left: 0px;
-                line-height: 35px !important;
+                width: 30px;
+                height: 30px;
+                line-height: 30px !important;
                 background: #7E8DF9;
-                font: bold 20px "微软雅黑";
+                font: bold 18px "微软雅黑";
             }
 
         body iframe {
-            border: 1px solid #ccc;
+            border: none;
         }
+        #header > b, .returnTackHeader b{
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #fff;
+            margin: 12px;
+            float: left;
+            padding-left: 7px;
+            color: #7E8DF9;
+            line-height: 25px;
+        }
+        #topContentDiv i {
+            display: block;
+            width: 33px;
+            height: 22px;
+            background: url("Scripts/bootstrap/css/img/sanjiao_03.png") no-repeat;
+            position: absolute;
+            top: 66px;
+            left: 50px;
+        }
+        .navbars{
+            position:fixed;
+            float: left;
+            width: 190px;
+            height: 500px;
+            margin-top: 70px;
+        }
+            .navbars i {
+                display: block;
+                width: 70px;
+                height: 30px;
+                background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat -75px 0px; 
+                position: absolute;
+                top: 0px;
+                left: 64px;
+            }
+            .navbars i:hover{
+                background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px 0px;
+             }
+             .navbars i.bottom {
+                    background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat -75px -42px;
+                    top: 470px;
+             }
+             .navbars i.bottom:hover {
+                    background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px -42px;
+                    top: 470px;
+                }
     </style>
 
     <!--杨玉慧 -->
@@ -122,8 +153,6 @@
             initPageParam(); //初始化参数
             initBar(); //工具栏.
             GenerWorkNode(); //表单数据.
-            $("#nav").height($(window).height() - 40);
-            $("#nav").width(($(window).width() - 900) / 2 - 5);
             $('[name=showCol]').bind('change', function (obj) {
                 if (obj.target.value == "8") {
                     Col4To8();
@@ -139,6 +168,10 @@
                 var height = $(parent.document.getElementById('MainFrames')).height() - 110;
                 $('#topContentDiv').height(height);
             }
+            function movetb() {
+                var move;
+                $("#nav").css("top", top);
+            }
         })
     </script>
 </head>
@@ -148,15 +181,19 @@
         <button type="button" data-dismiss="alert" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
         <div id='Message'></div>
     </div>
-    <!--分组导航-->
-    <ul class="pageScroll left" id="nav" style="display: none;"></ul>
+<!--分组导航-->
+    <div class="navbars" style="display: none;">
+        <i class="top"></i><i class="bottom"></i>
+        <ul class="pageScroll left" id="nav"></ul>
+    </div>
+
     <!--轨迹导航-->
     <ul class="pageScroll left" id="navTrackList" style="display: none;"></ul>
     <div id="divTrack"></div>
-    <div id="divCurrentForm" name="track13">
+    <div id="divCurrentForm" name="track13" style="background: #E3E7F4; position: relative;">
         <!--标题-->
         <div id="header">
-            <span>处理人处理</span>
+            <b></b><span>处理人处理</span>
             <div id="showCol">
                 <input type="radio" name="showCol" id="rdShow4" value="4" /> <label for="rdShow4">4列展示</label>
                 <input type="radio" value="8" id="rdShow8" name="showCol" /> <label for="rdShow8">8列展示</label>
@@ -164,12 +201,13 @@
         </div>
         <!--上半部分表单-->
         <div id="topContentDiv" class="row">
+            <i></i>
             <div id="contentDiv">
                 <form id="divCCForm" action="MyFlow.ashx?method=login" method="post">
                     <!--LODOP_OB 先放着 不知道具体是什么-->
                     <div>
                         <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0" height="0">
-                            <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="/DataUser/PrintTools/install_lodop32.exe" />
+                            <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="/DataUser/PrintTools/install_lodop32.exe"/>
                         </object>
                     </div>
                     <!--头部功能按钮 发送、移交-->
@@ -187,10 +225,10 @@
                     </div>
                     <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server"/>-->
                     <div id="CCForm">
-                        <br />
+                        <br/>
                         正在初始化表单模板及数据，请耐心等待。。。
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
                     </div>
                     <!--Pub2 -->
                     <div class="pub2Class" id="pub2Class">

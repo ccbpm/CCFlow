@@ -174,8 +174,6 @@ namespace BP.WF
             string msg = "";
             try
             {
-
-
                 //升级傻瓜表单.
                 MapFoolForm mff = new MapFoolForm();
                 mff.CheckPhysicsTable();
@@ -260,8 +258,6 @@ namespace BP.WF
                 if (src.RetrieveFromDBSources() == 0)
                     src.Insert();
                 #endregion 检查数据源.
-
-
 
                 #region 其他.
                 // 更新 PassRate.

@@ -750,10 +750,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string name = this.GetRequestVal("Name");
 
             int fType = int.Parse(this.context.Request.QueryString["FType"]);
-            string groupIDStr = this.context.Request.QueryString["GroupField"];
-            if (groupIDStr == null || groupIDStr == "")
-                groupIDStr = "0";
-            int groupID = int.Parse(groupIDStr);
 
             MapAttrs attrs = new MapAttrs();
             int i = attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, no);
@@ -767,7 +763,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             attr.FK_MapData = this.FK_MapData;
             attr.LGType = FieldTypeS.Normal;
             attr.MyPK = this.FK_MapData + "_" + no;
-            attr.GroupID = groupID;
+            attr.GroupID = this.GroupField;
             attr.MyDataType = fType;
 
             int colspan = attr.ColSpan;

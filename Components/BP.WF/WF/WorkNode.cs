@@ -6777,7 +6777,7 @@ namespace BP.WF
             }
 
 
-            if (at == ActionType.Forward)
+            if (at == ActionType.Forward || at == ActionType.SubFlowForward || at == ActionType.ForwardHL)
             {
                 if (this.HisNode.IsFL)
                     at = ActionType.ForwardFL;

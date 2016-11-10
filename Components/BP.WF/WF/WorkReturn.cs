@@ -466,7 +466,8 @@ namespace BP.WF
                             throw new Exception("@非法的退回模式,请反馈给管理员.");
                             break;
                         case RunModel.FHL: /*5.4 分合流点 */
-                            throw new Exception("@目前不支持此场景下的退回,请反馈给管理员.");
+                            return ExeReturn5_2();
+                            //throw new Exception("@目前不支持此场景下的退回,请反馈给管理员.");
                             break;
                         case RunModel.SubThread: /*5.5 子线程*/
                             return ExeReturn1_1();

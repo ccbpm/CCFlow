@@ -361,7 +361,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
               sms.MyPK = DBAccess.GenerGUID();
               sms.RDT = DataType.CurrentDataTime;
               sms.SendToEmpNo = this.UserName;  
-              sms.Sender = WebUser.Name;
+              sms.Sender = WebUser.No;
               sms.Title = this.Title;
               sms.DocOfEmail = this.Msg;
               sms.Insert(); 

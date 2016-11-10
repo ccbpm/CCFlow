@@ -2269,6 +2269,7 @@
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
     <Content Include="WF\WorkOpt\DTC.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />
+    <Content Include="WF\WorkOpt\FoolFrmTrack.htm" />
     <Content Include="WF\WorkOpt\OneWork\FlowBBS.htm" />
     <Content Include="WF\WorkOpt\Forward.aspx" />
     <Content Include="WF\WorkOpt\Forward.htm" />

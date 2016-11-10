@@ -130,10 +130,21 @@ namespace CCFlow.WF.SDKComponents
                         continue;
 
                     this.AddTR();
-                    this.AddTD("style='word-break:break-all;'",
-                        "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
 
-                    this.AddTD(item.NodeName); //到达节点名称.
+                    if (sf.SFOpenType == 0)
+                    {
+                        this.AddTD("style='word-break:break-all;'",
+                            "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                    }
+                    else
+                    {
+                        this.AddTD("style='word-break:break-all;'",
+    "<a href=\"javascript:OpenIt('../FoolFrmTrack.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+
+                    }
+
+
+                        this.AddTD(item.NodeName); //到达节点名称.
 
                     if (item.WFState == WFState.Complete)
                         this.AddTD("已完成");

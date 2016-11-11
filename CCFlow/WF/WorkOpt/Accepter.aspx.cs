@@ -379,7 +379,7 @@ namespace CCFlow.WF
                     return;
                 }
 
-                this.Response.Redirect("Accepter.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + tempToNodeID + "&FID=" + this.FID + "&type=" + this.AccepterType + "&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "&IsWinOpen=" + this.IsWinOpen, true);
+                this.Response.Redirect("Accepter.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&ToNode=" + tempToNodeID + "&FID=" + this.FID + "&type=" + this.AccepterType + "&WorkID=" + this.WorkID + "&WorkIDs=" + this.WorkIDs + "&IsWinOpen=" + this.IsWinOpen + "&DoType=AccepterSend", true);
                 return;
             }
 

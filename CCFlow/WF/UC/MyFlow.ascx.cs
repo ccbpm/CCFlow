@@ -376,7 +376,7 @@ namespace CCFlow.WF.UC
                         /*如果启用了发送按钮.*/
                         if (btnLab.SelectAccepterEnable == 2)
                         {
-                            /*如果启用了选择人窗口的模式是【选择既发送】.*/
+                            /*如果启用了选择人窗口的模式是在发送前打开.*/
                             toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"javascript:OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')\" />");
                             toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                             Btn_Send.Style.Add("display", "none");
@@ -441,7 +441,7 @@ namespace CCFlow.WF.UC
                         if (btnLab.SelectAccepterEnable == 2)
                         {
                             /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                            toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if (OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; \" />");
+                            toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if ( OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; \" />");
                           
                             toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                             Btn_Send.Style.Add("display", "none");

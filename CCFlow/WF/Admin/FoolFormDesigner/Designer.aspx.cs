@@ -728,7 +728,7 @@ namespace CCFlow.WF.MapDef
                                 this.Pub1.AddTDEnd();
                             }
 
-                            if (attr.ColSpan == 3)
+                            if (attr.ColSpan >= 3)
                             {
                                 if (isLeft == false)
                                 {

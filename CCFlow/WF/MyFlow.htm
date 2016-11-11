@@ -31,6 +31,8 @@
 
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+
+
     <script src="./Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
     <link href="./Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -77,7 +79,8 @@
             #nav li > a p {
                 color: #2884fa;
                 font: normal 12px '微软雅黑';
-             }
+                height: 20px;
+            }
         #nav .current a {
             margin: 0px;
             color: #333;
@@ -124,6 +127,9 @@
             margin-top: 70px;
             overflow: hidden;
         }
+        .navbars .s{
+            overflow-y: auto;
+        }
             .navbars i {
                 display: block;
                 width: 70px;
@@ -142,6 +148,14 @@
                     .navbars i.bottom:hover, .navbars i.bottom_disabled:hover {
                         background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px -42px;
                     }
+        ::-webkit-scrollbar-thumb {
+            background-color: #fff;
+            border: none;
+        }
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+        }
     </style>
 
     <!--杨玉慧 -->
@@ -170,17 +184,20 @@
                 $("#nav").css("top", top);
             }
             nav.init();
-            $(".Message button").click(function() {
-                 $(".Message").hide();
+            $(".navbars i").click(function () {
+                $("#nav").removeClass("s");
             });
-
-        })
+            $("#nav").bind("mouseover", function() {
+                $("#nav").addClass("s");
+                $("#nav").css("top","30px");
+            });
+         })
     </script>
 </head>
 <body>
     <!--Message-->
     <div class="Message alert">
-        <button type="button" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
+        <button type="button" data-dismiss="alert" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
         <div id='Message'></div>
     </div>
 <!--分组导航-->
@@ -190,7 +207,7 @@
         <div style="width: 190px; height: 30px; position: absolute; z-index: 10; background: #fff; top: 470px;">
             <i class="bottom"></i>
         </div>
-            <ul class="pageScroll left" id="nav"></ul>
+            <ul class="pageScroll left s" id="nav"></ul>
         </div>
 
     <!--轨迹导航-->

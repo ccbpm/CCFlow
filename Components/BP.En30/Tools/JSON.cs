@@ -38,8 +38,15 @@ namespace BP.Tools
             string strName = rg.Match(strJson).Value;
             DataTable tb = null;
             //去除表名  
-            strJson = strJson.Substring(strJson.IndexOf("[") + 1);
-            strJson = strJson.Substring(0, strJson.IndexOf("]"));
+            try
+            {
+                strJson = strJson.Substring(strJson.IndexOf("[") + 1);
+                strJson = strJson.Substring(0, strJson.IndexOf("]"));
+            }
+            catch (Exception ex)
+            {
+
+            }
             //获取数据  
             rg = new Regex(@"(?<={)[^}]+(?=})");
             MatchCollection mc = rg.Matches(strJson);

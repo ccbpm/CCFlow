@@ -542,7 +542,7 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
                 {
                     //获取流程信息，added by liuxc,2016-10-26
                     sql =
-                        "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow AS wgwf WHERE wgwf.WorkID = " +
+                        "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow wgwf WHERE wgwf.WorkID = " +
                         workid;
                     dt = DBAccess.RunSQLReturnTable(sql);
                     dt.TableName = "FLOWINFO";

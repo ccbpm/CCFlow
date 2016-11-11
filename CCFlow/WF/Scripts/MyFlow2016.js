@@ -1295,7 +1295,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         //RadioBtn
                         var operations = '';
 
-                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {
+                        if (mapAttr.ColSpan == 1 || mapAttr.ColSpan >= 3) {
                             if (mapAttr.ColSpan == 1) {
                                 eleHtml += '<div class="col-md-2 col-sm-4 col-lg-2">';
                             } else if (mapAttr.ColSpan == 3) {

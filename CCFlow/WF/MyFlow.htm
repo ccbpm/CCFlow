@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <script src="Scripts/JavaScript1.js"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
 
     <script src="./Comm/JScript.js" type="text/javascript"></script>
@@ -121,6 +122,7 @@
             width: 190px;
             height: 500px;
             margin-top: 70px;
+            overflow: hidden;
         }
             .navbars i {
                 display: block;
@@ -134,14 +136,12 @@
             .navbars i:hover{
                 background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px 0px;
              }
-             .navbars i.bottom {
+                .navbars i.bottom, .navbars i.bottom_disabled {
                     background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat -75px -42px;
-                    top: 470px;
-             }
-             .navbars i.bottom:hover {
-                    background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px -42px;
-                    top: 470px;
                 }
+                    .navbars i.bottom:hover, .navbars i.bottom_disabled:hover {
+                        background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px -42px;
+                    }
     </style>
 
     <!--杨玉慧 -->
@@ -169,9 +169,11 @@
                 var move;
                 $("#nav").css("top", top);
             }
+            nav.init();
             $(".Message button").click(function() {
-                $(".Message").hide();
+                 $(".Message").hide();
             });
+
         })
     </script>
 </head>
@@ -183,9 +185,13 @@
     </div>
 <!--分组导航-->
     <div class="navbars" style="display: none;">
-        <i class="top"></i><i class="bottom"></i>
-        <ul class="pageScroll left" id="nav"></ul>
-    </div>
+        <div style="width: 190px; height: 30px; position: absolute; z-index: 10; background: #fff;"><i class="top_disabled"></i>
+        </div>
+        <div style="width: 190px; height: 30px; position: absolute; z-index: 10; background: #fff; top: 470px;">
+            <i class="bottom"></i>
+        </div>
+            <ul class="pageScroll left" id="nav"></ul>
+        </div>
 
     <!--轨迹导航-->
     <ul class="pageScroll left" id="navTrackList" style="display: none;"></ul>

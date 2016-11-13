@@ -674,8 +674,6 @@ namespace BP.WF
             if (string.IsNullOrEmpty(this.ActionTypeText))
                 this.ActionTypeText = Track.GetActionTypeT(this.HisActionType);
 
-
-
             if (mypk == 0)
             {
                 this.SetValByKey(TrackAttr.MyPK, DBAccess.GenerOIDByGUID());

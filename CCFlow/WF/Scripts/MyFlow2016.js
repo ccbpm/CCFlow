@@ -793,6 +793,13 @@ function initGroup(workNodeData, groupFiled) {
 function initTrackList(workNodeData) {
     var trackNavHtml = '';
     var trackHtml = '';
+    var trackList = workNodeData.Track;
+    $.grep(TextTrackList, function (value) {
+        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 27 || value.ActionType == 26 ||value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1;
+    });
+
+
+
     $.each(workNodeData.Track, function (i, track) {
         trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p></a></li>';
         var actionType = track.ActionType;
@@ -1726,6 +1733,13 @@ function GenerWorkNode() {
         dataType: 'html',
         success: function (data) {
             jsonStr = data;
+            try {
+                var datajson = JSON.parse(data);
+            }
+            catch (err) {
+                alert("GenerWorkNode转换JSON失败:" + datajson);
+                return;
+            }
             //解析表单
             InitForm();
             ///根据下拉框选定的值，绑定表单中哪个元素显示，哪些元素不显示

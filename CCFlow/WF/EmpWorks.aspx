@@ -248,6 +248,8 @@
                 string sdt = dr["SDT"] as string;
                 string paras = dr["AtPara"] as string;
 
+                paras = paras.Replace("'", "\\'");
+
                 if (is1)
                 {
                     sBuilder.Append("<tr bgcolor=AliceBlue " + "ID='" + gIdx + "_" + i + "'" + " >");

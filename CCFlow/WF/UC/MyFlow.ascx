@@ -27,42 +27,33 @@
         if (selectNodeID.indexOf('.') != -1) {  // 发送之前，需要调用选择人接收器.
             selectNodeID = selectNodeID.replace('.1', '');
             var url = "./WorkOpt/Accepter.htm?WorkID=" + workID + "&ToNode=" + selectNodeID + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2&DoType=AccepterSave";
-            alert(url);
-            if (winSelectAccepter == null)
-                winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
-            else
-                winSelectAccepter.focus();
+            winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
 
         } else {
             //开始调用发送按钮.
             var btnSend = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Send");
             btnSend.click();
         }
-        
     }
 
 
     //打开接收人窗口时获取返回值
     function returnWorkWindowClose(data) {
-
-        if (data == "SaveOK") {
-            //开始调用发送按钮.
+        //alert(data);
+        if (data.indexOf('SaveOK@') == 0) {
+            //说明保存人员成功,开始调用发送按钮.
             var btnSend = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Send");
             btnSend.click();
         }
 
         // alert(data);
-//        data = data.replace('@','<br>@');
-
-//        $("#Msg").html(data);
-//        //window.location.href = 'MyFlowInfo.aspx?FID=';
-
-//        $(window.opener.document.getElementById('topBar')).find('input').attr('disabled');
-
-//        $('#topBar').find('input').attr('disabled', 'true');
-//        $('#topBar').find('input').css('background', 'gray');
+        //        data = data.replace('@','<br>@');
+        //        $("#Msg").html(data);
+        //        //window.location.href = 'MyFlowInfo.aspx?FID=';
+        //        $(window.opener.document.getElementById('topBar')).find('input').attr('disabled');
+        //        $('#topBar').find('input').attr('disabled', 'true');
+        //        $('#topBar').find('input').css('background', 'gray');
     }
-
 
 </script>
 

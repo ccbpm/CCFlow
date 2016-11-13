@@ -337,9 +337,9 @@
                     if ("AccepterSave" == doType) {
 
                         if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                            window.parent.returnWorkWindowClose('SaveOK');
+                            window.parent.returnWorkWindowClose(data);
                         } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                            window.opener.returnWorkWindowClose('SaveOK');
+                            window.opener.returnWorkWindowClose(data);
                         } else {
                             $('body').append($('<div>' + data + '</div>'));
                             $('#btnOk').attr('disabled', true);

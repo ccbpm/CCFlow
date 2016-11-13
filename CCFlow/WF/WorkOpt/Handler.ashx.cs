@@ -412,8 +412,8 @@ namespace CCFlow.WF.WorkOpt
                 selectEmps = selectEmps.Replace(";", ",");
 
                 //保存接受人.
-                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, this.FK_Node, selectEmps);
-                return null;
+                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, selectEmps);
+                return "SaveOK@" + selectEmps;
             }
             catch (Exception ex)
             {

@@ -444,7 +444,8 @@ namespace CCFlow.WF.UC
                         else
                             li.Value = nd.NodeID.ToString();
 
-                        li.Text = nd.Name+" - "+li.Value;
+                        //li.Text = nd.Name+" - "+li.Value;
+                        li.Text = nd.Name ;
                         ddl.Items.Add(li);
                     }
                     this.toolbar.Add(ddl);

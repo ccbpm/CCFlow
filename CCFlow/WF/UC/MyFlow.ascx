@@ -10,6 +10,27 @@
     </object>
 </div>
 
+<script type="text/javascript">
+
+    //发送按钮，当
+    function SendBtnCondClick(flowNo,nodeid,workID, fid) {
+        if (SysCheckFrm() == false)
+            return false;
+        KindEditerSync(); 
+
+      // 
+     var url = "./WorkOpt/Accepter.htm?WorkID=" + workid + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2&DoType=AccepterSend";
+    if (winSelectAccepter == null)
+        winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
+    else
+        winSelectAccepter.focus(); // (0, 0);
+    return false;
+
+      //  OpenSelectAccepter('" + this.FK_Flow + "', '" + this.FK_Node + "', '" + this.WorkID + "', '" + this.FID + "') == false) return false;
+    }
+
+</script>
+
 <div style="margin: 0; padding: 0;" id="D">
     <div style="width: <%=this.Width %>px;" class="topBar" id="topBar">
         <uc3:ToolBar ID="ToolBar1" runat="server" />

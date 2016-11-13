@@ -1334,6 +1334,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Handler.ashx" />
+    <Content Include="web1.config" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
@@ -2788,15 +2789,15 @@
     <Content Include="WF\WorkOpt\WebOffice.aspx" />
     <Content Include="WF\WorkOpt\WorkCheck.aspx" />
     <Content Include="WF\WorkOpt\WorkCheckAth.aspx" />
-    <Content Include="web.config">
+    <None Include="web.config">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="web.Debug.config">
+    </None>
+    <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
-    </Content>
-    <Content Include="web.Release.config">
+    </None>
+    <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
-    </Content>
+    </None>
     <Content Include="WF\WorkOpt\Handler.ashx" />
     <Content Include="WF\WorkOpt\OneWork\Handler.ashx" />
   </ItemGroup>

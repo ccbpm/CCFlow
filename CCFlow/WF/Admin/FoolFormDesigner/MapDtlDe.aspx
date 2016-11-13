@@ -8,7 +8,7 @@
 <head id="Head1" runat="server">
     <title>表单设计</title>
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
-    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
+    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer" type="text/javascript" ></script>
     <base target="_self" />
     <script language="javascript">
         function Insert(fk_mapdata, IDX) {
@@ -48,7 +48,7 @@
             window.location.href = window.location.href;
         }
         function EditTable(fk_mapdata, refno) {
-            var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + refno + '&s=' + Math.random();
+            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + refno + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

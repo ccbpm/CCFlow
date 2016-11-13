@@ -336,7 +336,6 @@ namespace CCFlow.WF.UC
                 toolbar.AddBR();
 
             this.toolbar.Add("&nbsp;&nbsp;");
-
             if (this.IsCC)
             {
                 toolbar.Add("<input type=button  value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/ChartTrack.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />");
@@ -418,60 +417,91 @@ namespace CCFlow.WF.UC
             #region 内置表单..
             if (this.currND.HisFormType != NodeFormType.SelfForm)
             {
-                /*启用了其他的表单.*/
-                if (currND.IsEndNode && isAskFor == false)
+                if (this.currND.CondModel == CondModel.SendButtonSileSelect)
                 {
-                    /*如果当前节点是结束节点.*/
-                    if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                    /*如果流程的方向条件是按照下拉框拉来选择.*/
+                    toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick='SendBtnCondClick()' />");
+                    toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
+                    Btn_Send.Style.Add("display", "none");
+                    this.Btn_Send.UseSubmitBehavior = false;
+
+                    if (this.currND.HisFormType == NodeFormType.DisableIt)
+                        this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
+                    else
+                        this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                    this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
+
+                   
+                    // 增加方向到下拉框.
+                    DDL ddl = new DDL();
+                    ddl.ID = "DDL_ToNode";
+                    Nodes toNodes = this.currND.HisToNodes;
+                    foreach (Node nd in toNodes)
                     {
-                        /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                        toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
-                        this.Btn_Send.UseSubmitBehavior = false;
-                        this.Btn_Send.OnClientClick = btnLab.SendJS + " if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();";
-                        this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
+                        ListItem li = new ListItem();
+                        li.Value = nd.NodeID.ToString();
+                        li.Text = nd.Name;
+                        ddl.Items.Add(li);
                     }
+                    this.toolbar.Add(ddl);
+                     
                 }
                 else
                 {
-                    if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group && isAskFor == false)
+
+                    /*启用了其他的表单.*/
+                    if (currND.IsEndNode && isAskFor == false)
                     {
-                        /*如果启用了发送按钮.
-                         * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
-                         */
-                        if (btnLab.SelectAccepterEnable == 2)
+                        /*如果当前节点是结束节点.*/
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                         {
                             /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                            toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if ( OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; \" />");
-                          
                             toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
-                            Btn_Send.Style.Add("display", "none");
                             this.Btn_Send.UseSubmitBehavior = false;
-
-
-                            if (this.currND.HisFormType == NodeFormType.DisableIt)
-                                this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                            else
-                                this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
-                            //   this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
+                            this.Btn_Send.OnClientClick = btnLab.SendJS + " if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();";
                             this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group && isAskFor == false)
                         {
-                            toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
-                            this.Btn_Send.UseSubmitBehavior = false;
-                            if (btnLab.SendJS.Trim().Length > 2)
+                            /*如果启用了发送按钮.
+                             * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
+                             */
+                            if (btnLab.SelectAccepterEnable == 2)
                             {
-                                this.Btn_Send.OnClientClick = btnLab.SendJS + ";if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                                /*如果启用了选择人窗口的模式是【选择既发送】.*/
+                                toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if ( OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; \" />");
+                                toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
+                                Btn_Send.Style.Add("display", "none");
+                                this.Btn_Send.UseSubmitBehavior = false;
+
+                                if (this.currND.HisFormType == NodeFormType.DisableIt)
+                                    this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
+                                else
+                                    this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                                //   this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
+                                this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                             }
                             else
                             {
+                                toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                                 this.Btn_Send.UseSubmitBehavior = false;
-                                if (this.currND.HisFormType == NodeFormType.DisableIt)
-                                    this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
+                                if (btnLab.SendJS.Trim().Length > 2)
+                                {
+                                    this.Btn_Send.OnClientClick = btnLab.SendJS + ";if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                                }
                                 else
-                                    this.Btn_Send.OnClientClick = "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                                {
+                                    this.Btn_Send.UseSubmitBehavior = false;
+                                    if (this.currND.HisFormType == NodeFormType.DisableIt)
+                                        this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
+                                    else
+                                        this.Btn_Send.OnClientClick = "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                                }
+                                this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                             }
-                            this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                         }
                     }
                 }

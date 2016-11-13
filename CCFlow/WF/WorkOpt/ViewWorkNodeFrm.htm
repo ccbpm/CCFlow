@@ -1157,6 +1157,13 @@
             dataType: 'html',
             success: function(data) {
                 jsonStr = data;
+                try {
+                    var datajson = JSON.parse(data);
+                }
+                catch(err){
+                    alert("ViewWorkNodeFrm转换JSON失败:" + datajson);
+                    return;
+                }
                 //解析表单
                 InitForm();
 
@@ -1560,7 +1567,7 @@
 <body>
     <!--标题-->
     <div id="header">
-        <b></b><span style="">处理人处理</span>
+        <b></b><span style=""></span>
     </div>
     <!--上半部分表单-->
 <div id="topContentDiv" class="row">
@@ -1588,46 +1595,7 @@
             </div>
             <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server"/>-->
             <div id="CCForm">
-                <div class="col-lg-1  col-md-1 col-sm-2">
-                    <label>事件标题</label>
-                </div>
-                <div class="col-md-2">
-                    <input type="text" placeholder="事件标题" name="TXB_Title" value=""/>
-                </div>
-                <div class="col-lg-1  col-md-1 col-sm-2"><label>事件标题</label>
-                </div>
-                <div class="col-md-2">
-                    <input type="text" placeholder="事件标题" name="BillNo" value=""/>
-                </div>
-                <div class="col-md-2">
-                    <textarea placeholder="事件详述" name="detail" value=""></textarea>
-                </div>
-                <div class="col-md-2">
-                    <textarea placeholder="事件详述" name="detail1" value=""></textarea>
-                </div>
-                <div class="col-md-2">
-                    <select name="select">
-                        <option value="1">1</option>
-                        <option value="2">1</option>
-                        <option value="3">1</option>
-                        <option value="4">1</option>
-                        <option value="5">1</option>
-                    </select>
-                    <select name="select1">
-                        <option value="1">1</option>
-                        <option value="2">1</option>
-                        <option value="3">1</option>
-                        <option value="4">1</option>
-                        <option value="5">1</option>
-                    </select>
-                    <select name="select2">
-                        <option value="1">1</option>
-                        <option value="2">1</option>
-                        <option value="3">1</option>
-                        <option value="4">1</option>
-                        <option value="5">1</option>
-                    </select>
-                </div>
+                
             </div>
             <!--Pub2 -->
             <div class="pub2Class" id="pub2Class">

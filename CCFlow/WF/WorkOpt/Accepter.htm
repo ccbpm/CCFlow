@@ -128,6 +128,7 @@
 
             if (doType == null || doType == "")
                 doType = "AccepterSend";
+
             if (doType == "AccepterSend") {
                 $("#btnOk").text('发送');
             } else {
@@ -327,16 +328,23 @@
                 url: Handler + "?DoType=" + doType + "&m=" + Math.random() + "&SelectEmps=" + empNos + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
                 dataType: 'html',
                 success: function (data) {
-
                     // alert(data);
-
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
 
                     if ("AccepterSave" == doType) {
-                        alert('保存成功...');
+
+                        if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                            window.parent.returnWorkWindowClose('SaveOK');
+                        } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                            window.opener.returnWorkWindowClose('SaveOK');
+                        } else {
+                            $('body').append($('<div>' + data + '</div>'));
+                            $('#btnOk').attr('disabled', true);
+                        }
+                        //alert('保存成功...');
                         window.close();
                         return;
                     }

@@ -420,7 +420,7 @@ namespace CCFlow.WF.UC
                 if (this.currND.CondModel == CondModel.SendButtonSileSelect)
                 {
                     /*如果流程的方向条件是按照下拉框拉来选择.*/
-                    toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick='SendBtnCondClick()' />");
+                    toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"SendBtnCondClick('" + currND.FK_Flow + "','" + currND.NodeID + "','" + this.WorkID + "','"+this.FID+"')\" />");
                     toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                     Btn_Send.Style.Add("display", "none");
                     this.Btn_Send.UseSubmitBehavior = false;
@@ -431,7 +431,7 @@ namespace CCFlow.WF.UC
                         this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
                     this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
 
-                   
+
                     // 增加方向到下拉框.
                     DDL ddl = new DDL();
                     ddl.ID = "DDL_ToNode";
@@ -439,12 +439,15 @@ namespace CCFlow.WF.UC
                     foreach (Node nd in toNodes)
                     {
                         ListItem li = new ListItem();
-                        li.Value = nd.NodeID.ToString();
-                        li.Text = nd.Name;
+                        if (nd.HisDeliveryWay == DeliveryWay.BySelected)
+                            li.Value = nd.NodeID.ToString() + ".1";
+                        else
+                            li.Value = nd.NodeID.ToString();
+
+                        li.Text = nd.Name+" - "+li.Value;
                         ddl.Items.Add(li);
                     }
                     this.toolbar.Add(ddl);
-                     
                 }
                 else
                 {
@@ -2257,7 +2260,25 @@ namespace CCFlow.WF.UC
             WorkNode firstwn = new WorkNode(this.currWK, this.currND);
             try
             {
-                msg = firstwn.NodeSend().ToMsgOfHtml();
+
+                if (gwf.WFState == WFState.ReturnSta && gwf.Paras_IsTrackBack == false)
+                {
+                    msg = firstwn.NodeSend().ToMsgOfHtml();
+                }
+                else
+                {
+                    if (this.ToolBar1.IsExit("DDL_ToNode") == false)
+                    {
+                        msg = firstwn.NodeSend().ToMsgOfHtml();
+                    }
+                    else
+                    {
+                        //求到达节点ID .
+                        string toNodeIDStr = this.ToolBar1.GetDDLByID("DDL_ToNode").SelectedItemStringVal.Replace(".1", "");
+                        Node toNode = new Node(int.Parse(toNodeIDStr));
+                        msg = firstwn.NodeSend(toNode, null).ToMsgOfHtml();
+                    }
+                }
             }
             catch (Exception exSend)
             {

@@ -129,17 +129,7 @@
             alert(a);
         }
 
-        //打开接收人窗口时获取返回值
-        function returnWorkWindowClose(data) {
-
-            alert(data);
-
-            $(window.opener.document.getElementById('topBar')).find('input').attr('disabled')
-
-            $('#topBar').find('input').attr('disabled', 'true');
-            $('#topBar').find('input').css('background', 'gray');
-            
-        }
+         
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">

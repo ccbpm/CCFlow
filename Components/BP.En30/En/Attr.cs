@@ -90,7 +90,6 @@ namespace BP.En
         /// 拍照控件
         /// </summary>
         Picture=7
-
     }
     /// <summary>
     /// 逻辑类型
@@ -100,19 +99,19 @@ namespace BP.En
         /// <summary>
         /// 普通类型
         /// </summary>
-        Normal,
+        Normal = 0,
         /// <summary>
         /// 枚举类型
         /// </summary>
-        Enum,
+        Enum=1,
         /// <summary>
         /// 外键
         /// </summary>
-        FK,
+        FK=2,
         /// <summary>
         /// 功能页面
         /// </summary>
-        WinOpen
+        WinOpen=3
     }
 	/// <summary>
 	/// 字段类型

@@ -3551,12 +3551,14 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="workID">工作ID</param>
         /// <returns>返回成功执行信息</returns>
-        public static string Flow_DoUnSend(string flowNo, Int64 workID)
+        public static string Flow_DoUnSend(string flowNo, Int64 workID, int unSendToNode=0)
         {
             // 转化成编号.
             flowNo = TurnFlowMarkToFlowNo(flowNo);
 
-            WorkUnSend unSend = new WorkUnSend(flowNo, workID);
+            WorkUnSend unSend = new WorkUnSend(flowNo, workID, unSendToNode);
+            unSend.UnSendToNode = unSendToNode;
+
             return unSend.DoUnSend();
         }
         /// <summary>
@@ -4053,13 +4055,15 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="workid">子线程的工作ID</param>
         /// <param name="info">删除信息</param>
-        public static void Flow_DeleteSubThread(string flowNo, Int64 workid, string info)
+        public static string Flow_DeleteSubThread(string flowNo, Int64 workid, string info)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
 
             WorkFlow wf = new WorkFlow(flowNo, workid);
-            wf.DoDeleteWorkFlowByReal(false);
+           string msg= wf.DoDeleteWorkFlowByReal(false);
+
             BP.WF.Dev2Interface.WriteTrackInfo(flowNo, gwf.FK_Node, gwf.FID, 0, info, "删除子线程");
+            return msg;
         }
         /// <summary>
         /// 执行工作催办

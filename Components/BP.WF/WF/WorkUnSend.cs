@@ -103,11 +103,13 @@ namespace BP.WF
         /// <summary>
         /// 撤销发送
         /// </summary>
-        public WorkUnSend(string flowNo, Int64 workID)
+        public WorkUnSend(string flowNo, Int64 workID, int unSendToNode=0)
         {
             this.FlowNo = flowNo;
             this.WorkID = workID;
+            this.UnSendToNode = UnSendToNode; //撤销到节点.
         }
+        public int UnSendToNode = 0;
         /// <summary>
         /// 得到当前的进行中的工作。
         /// </summary>
@@ -338,6 +340,7 @@ namespace BP.WF
 
             return "工作已经被您撤销到:" + cancelToNode.Name;
         }
+       
         /// <summary>
         /// 执行撤消
         /// </summary>
@@ -355,6 +358,21 @@ namespace BP.WF
                 //return "@子线程已经被删除.";
             }
 
+            if (this.UnSendToNode != 0 && gwf.FK_Node != this.UnSendToNode)
+            {
+                /* 要撤销的节点是分流节点，并且当前节点不在分流节点而是在合流节点的情况， for:华夏银行.
+                 * 1, 分流节点发送给n个人.
+                 * 2, 其中一个人发送到合流节点，另外一个人退回给分流节点。
+                 * 3，现在分流节点的人接收到一个待办，并且需要撤销整个分流节点的发送.
+                 * 4, UnSendToNode 这个时间没有值，并且当前干流节点的停留的节点与要撤销到的节点不一致。
+                 */
+
+              return  DoUnSendInFeiLiuHeiliu(gwf);
+
+            }
+
+
+          
 
             // 如果停留的节点是分合流。
             Node nd = new Node(gwf.FK_Node);
@@ -363,6 +381,8 @@ namespace BP.WF
                 /*该节点不允许退回.*/
                 throw new Exception("当前节点，不允许撤销。");
             }
+
+            
 
             switch (nd.HisNodeWorkType)
             {
@@ -616,7 +636,7 @@ namespace BP.WF
         {
             //首先要检查，当前的处理人是否是分流节点的处理人？如果是，就要把，未走完的所有子线程都删除掉。
             GenerWorkerList gwl = new GenerWorkerList();
-            int i=gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.FK_Emp, WebUser.No);
+            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.FK_Emp, WebUser.No);
             if (i == 0)
                 throw new Exception("@您不能执行撤消发送，因为当前工作不是您发送的。");
 
@@ -649,7 +669,7 @@ namespace BP.WF
                     GenerWorkFlows gwfs = new GenerWorkFlows();
                     gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
                     foreach (GenerWorkFlow en in gwfs)
-                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "撤销发送删除");
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
                     continue;
                 }
 
@@ -697,6 +717,98 @@ namespace BP.WF
                 {
                     return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                 }
+            }
+        }
+        /// <summary>
+        /// 分合流的撤销发送.
+        /// </summary>
+        /// <param name="gwf"></param>
+        /// <returns></returns>
+        private string DoUnSendInFeiLiuHeiliu(GenerWorkFlow gwf)
+        {
+            //首先要检查，当前的处理人是否是分流节点的处理人？如果是，就要把，未走完的所有子线程都删除掉。
+            GenerWorkerList gwl = new GenerWorkerList();
+
+            //删除合流节点的处理人.
+            gwl.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+
+            //查询已经走得分流节点待办.
+            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.UnSendToNode, GenerWorkerListAttr.FK_Emp, WebUser.No);
+            if (i == 0)
+                throw new Exception("@您不能执行撤消发送，因为当前分流工作不是您发送的。");
+
+            // 更新分流节点，让其出现待办.
+            gwl.IsPassInt = 0;
+            gwl.IsRead = false;
+            gwl.RDT = BP.DA.DataType.CurrentDataTime;
+            gwl.SDT = BP.DA.DataType.CurrentDataTime;  //这里计算时间有问题.
+            gwl.Update();
+
+            // 把设置当前流程运行到分流流程上.
+            gwf.FK_Node = this.UnSendToNode;
+            Node nd = new Node(this.UnSendToNode);
+            gwf.NodeName = nd.Name;
+            gwf.Sender = BP.Web.WebUser.No;
+            gwf.SendDT = BP.DA.DataType.CurrentDataTime;
+            gwf.Update();
+
+
+            Work wk = nd.HisWork;
+            wk.OID = gwf.WorkID;
+            wk.RetrieveFromDBSources();
+
+            string msg = nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wk, null);
+
+            // 记录日志..
+            WorkNode wn = new WorkNode(wk, nd);
+            wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, "");
+
+            // 删除分合流记录。
+            if (nd.IsStartNode)
+                DBAccess.RunSQL("DELETE FROM WF_GenerFH WHERE FID=" + this.WorkID);
+
+            //删除上一个节点的数据。
+            foreach (Node ndNext in nd.HisToNodes)
+            {
+                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND FK_Node=" + ndNext.NodeID);
+                if (i == 0)
+                    continue;
+
+                if (ndNext.HisRunModel == RunModel.SubThread)
+                {
+                    /*如果到达的节点是子线程,就查询出来发起的子线程。*/
+                    GenerWorkFlows gwfs = new GenerWorkFlows();
+                    gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
+                    foreach (GenerWorkFlow en in gwfs)
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
+                    continue;
+                }
+
+                // 删除工作记录。
+                Works wks = ndNext.HisWorks;
+                if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
+                    wks.Delete(GenerWorkerListAttr.FID, this.WorkID);
+            }
+
+            //设置当前节点。            
+            BP.DA.DBAccess.RunSQL("UPDATE WF_GenerFH SET FK_Node=" + gwf.FK_Node + " WHERE FID=" + this.WorkID);
+
+            // 设置当前节点的状态.
+            Node cNode = new Node(gwf.FK_Node);
+            Work cWork = cNode.HisWork;
+            cWork.OID = this.WorkID;
+            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wk, null);
+            if (cNode.IsStartNode)
+            {
+
+                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='Do.aspx?ActionType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+
+            }
+            else
+            {
+
+                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+
             }
         }
         /// <summary>

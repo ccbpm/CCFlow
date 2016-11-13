@@ -656,8 +656,76 @@ namespace BP.WF
             #endregion
 
 
-            return "子线程被删除成功.";
 
+            //检查是否是最后一个子线程被删除了？如果是，就需要当分流节点产生待办.
+            GenerWorkFlow gwfMain = new GenerWorkFlow(this.FID);
+
+            /*说明仅仅停留在分流节点,还没有到合流节点上去.
+             * 删除子线程的时候，判断是否是最后一个子线程,如果是，就要把他设置为待办状态。
+             * 1.首先要找到.
+             * 2.xxxx.
+             */
+            //  string sql = "SELECT COUNT(*) FROM WF_GenerWorkerList WHERE FK_Node=";
+            string mysql = "SELECT COUNT(*)  as Num FROM WF_GenerWorkerList WHERE IsPass=0 AND FID=" + this.FID;
+            int num = BP.DA.DBAccess.RunSQLReturnValInt(mysql);
+            if (num == 0)
+            {
+                /* 说明当前主流程上是分流节点，但是已经没有子线程的待办了。
+                 * 就是说，删除子流程的时候，删除到最后已经没有活动或者已经完成的子线程了.
+                 * */
+
+                GenerWorkerList gwl = new GenerWorkerList();
+                int i = gwl.Retrieve(GenerWorkerListAttr.FK_Node, gwfMain.FK_Node, GenerWorkerListAttr.WorkID, gwfMain.WorkID,
+                    GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
+                if (i == 0)
+                {
+                    Node ndMain = new Node(gwfMain.FK_Node);
+                    if (ndMain.IsHL == true)
+                    {
+                        /* 有可能是当前节点已经到了合流节点上去了, 要判断合流节点是否有代办？如果没有代办，就撤销到分流节点上去.
+                         * 
+                         * 就要检查他是否有代办.
+                         */
+                        mysql = "SELECT COUNT(*)  as Num FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Node=" + gwfMain.FK_Node;
+                        num = BP.DA.DBAccess.RunSQLReturnValInt(mysql);
+                        if (num == 0)
+                        {
+                            /*如果没有待办，就说明，当前节点已经运行到合流节点，但是不符合合流节点的完成率，导致合流节点上的人员看不到待办. 
+                             * 这种情况，就需要让当前分流节点产生待办.
+                             */
+
+                            mysql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FID=0 AND WorkID=" + gwfMain.WorkID + " ORDER BY RDT DESC ";
+                            int fenLiuNodeID = BP.DA.DBAccess.RunSQLReturnValInt(mysql);
+
+                            Node nd = new Node(fenLiuNodeID);
+                            if (nd.IsFL == false)
+                                throw new Exception("@程序错误，没有找到最近的一个分流节点.");
+
+                            GenerWorkerLists gwls = new GenerWorkerLists();
+                            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, fenLiuNodeID);
+                            foreach (GenerWorkerList item in gwls)
+                            {
+                                item.IsRead = false;
+                                item.IsPassInt = 0;
+                                item.RDT = BP.DA.DataType.CurrentDataTime;
+                                item.SDT = BP.DA.DataType.CurrentDataTime;
+                                item.Update();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    gwl.IsRead = false;
+                    gwl.IsPassInt = 0;
+                    gwl.RDT = BP.DA.DataType.CurrentDataTime;
+                    gwl.SDT = BP.DA.DataType.CurrentDataTime;
+                    gwl.Update();
+                    return "子线程被删除成功,这是最后一个删除的子线程已经为您在{" + gwfMain.NodeName + "}产生了待办,<a href='/WF/MyFlow.aspx?WorkID=" + gwfMain.WorkID + "&FK_Flow=" + gwfMain.FK_Flow + "'>点击处理工作</a>.";
+
+                }
+            }
+            return "子线程被删除成功.";
         }
 
         /// <summary>

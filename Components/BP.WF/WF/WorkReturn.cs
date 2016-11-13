@@ -512,6 +512,15 @@ namespace BP.WF
                 item.Update();
             }
 
+            //把分流节点的待办去掉. 
+            gwls = new GenerWorkerLists();
+            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FID, this.FID, GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
+            foreach (GenerWorkerList item in gwls)
+            {
+                item.IsPassInt = -2;
+                item.Update();
+            }
+
             return "成功的把信息退回到：" + this.ReturnToNode.Name + " , 退回给:(" + this.ReturnToEmp + ")";
         }
         /// <summary>

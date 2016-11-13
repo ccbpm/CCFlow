@@ -59,9 +59,12 @@ namespace CCFlow.WF.WorkOpt
 
         protected void Btn_Del_Click(object sender, EventArgs e)
         {
-            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID,"手工删除");
+           string msg= BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID,"手工删除");
             //提示信息.
-            BP.WF.Glo.ToMsg("该工作删除成功...");
+           if (msg == "" || msg == null)
+               msg = "该工作删除成功...";
+
+           BP.WF.Glo.ToMsg(msg);
         }
 
         
@@ -90,7 +93,7 @@ namespace CCFlow.WF.WorkOpt
         {
             try
             {
-               string str= BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.FID);
+               string str= BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.FID,this.FK_Node);
                BP.WF.Glo.ToMsg(str);
             }
             catch(Exception ex)

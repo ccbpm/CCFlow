@@ -170,17 +170,17 @@ namespace CCFlow.WF.OneWork
         /// </summary>
         public void FlowOverByCoercion()
         {
-            GenerWorkFlow gwf = new GenerWorkFlow(WorkID);
             this.Pub2.AddEasyUiPanelInfoBegin("删除流程");
-            if (WebUser.No == "admin")
+            if ( BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow,this.WorkID, WebUser.No) ==true)
             {
-                this.Pub2.Add("功能执行:<a href=\"javascript:DoFunc('" + FlowOpList.FlowOverByCoercion + "','" + WorkID + "','" + FK_Flow + "','" + FK_Node + "')\" >点击执行删除流程</a>。");
+                this.Pub2.Add("功能执行:<a href=\"javascript:DeleteFlowInstance('" + FK_Flow + "','" + WorkID + "')\" >点击执行删除流程</a>。");
                 this.Pub2.AddBR("说明：如果执行流程将会被彻底的删除。");
             }
             else
             {
-                this.Pub2.Add("只有admin才能删除流程，您没有此权限.");
+                this.Pub2.Add("您没有删除该流程的权限.");
             }
+
             this.Pub2.AddEasyUiPanelInfoEnd();
             Pub2.AddBR();
         }

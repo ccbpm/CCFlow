@@ -257,6 +257,9 @@ namespace CCFlow.WF.WorkOpt
             {
                 switch (this.DoType)
                 {
+                    case "DeleteFlowInstance_DoDelete": //流程删除.
+
+                        break;
                     case "ViewWorkNodeFrm": //查看一个表单.
                         msg = ViewWorkNodeFrm();
                         break;
@@ -308,6 +311,37 @@ namespace CCFlow.WF.WorkOpt
             }
             //输出信息.
         }
+
+        public string DeleteFlowInstance_DoDelete()
+        {
+            if (BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, 
+                this.WorkID, BP.Web.WebUser.No) == false)
+                return "您没有删除该流程的权限.";
+
+            string deleteWay = this.GetRequestVal("RB_DeleteWay");
+            string doc = this.GetRequestVal("TB_Doc");
+
+            //是否要删除子流程？ 这里注意变量的获取方式，你可以自己定义.
+            string isDeleteSubFlow = this.GetRequestVal("CB_IsDeleteSubFlow");
+
+            bool isDelSubFlow = false;
+            if (isDeleteSubFlow == "1")
+                isDelSubFlow = true;
+
+            //按照标记删除.
+            if (deleteWay == "0")
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(this.FK_Flow, this.WorkID, doc, isDelSubFlow);
+
+            //彻底删除.
+            if (deleteWay == "1")
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID, isDelSubFlow);
+
+            //彻底并放入到删除轨迹里.
+            if (deleteWay == "2")
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByWriteLog(this.FK_Flow, this.WorkID, doc, isDelSubFlow);
+
+            return "流程删除成功.";
+        }
         /// <summary>
         /// 获得节点表单数据.
         /// </summary>
@@ -332,12 +366,12 @@ namespace CCFlow.WF.WorkOpt
             DataTable mainTable = BP.Tools.Json.ToDataTableOneRow(json);
             mainTable.TableName = "MainTable";
             myds.Tables.Add(mainTable);
-
+           
             //MapExts exts = new MapExts(nd.HisWork.ToString());
             //DataTable dtMapExt = exts.ToDataTableDescField();
             //dtMapExt.TableName = "Sys_MapExt";
             //myds.Tables.Add(dtMapExt);
-
+ 
             return BP.Tools.Json.ToJson(myds);
         }
       

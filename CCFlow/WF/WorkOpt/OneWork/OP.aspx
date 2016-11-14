@@ -16,6 +16,12 @@
             }
             return true;
         }
+
+        //删除流程.
+        function DeleteFlowInstance(flowNo, workid) {
+            var url = '../DeleteFlowInstance.htm?FK_Flow=' + flowNo + '&WorkID=' + workid;
+            WinOpen(url);
+        }
         function DoFunc(doType, workid, fk_flow, fk_node) {
 
             if (doType == 'Del' || doType == 'Reset') {

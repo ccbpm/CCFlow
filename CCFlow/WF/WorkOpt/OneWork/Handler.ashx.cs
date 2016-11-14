@@ -315,15 +315,12 @@ namespace CCFlow.WF.WorkOpt.OneWork
             string name = string.Empty;
             name = BP.Web.WebUser.Name;
             return name;
-
         }
 
         public string FlowBBSDept()
         {
-
             Paras ps = new Paras();
             ps.SQL = "select a.name from port_dept a INNER join port_emp b on b.FK_Dept=a.no and b.No='"+this.UserName+"'";
-
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnString(ps));
         }
 

@@ -471,21 +471,21 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         break;
                     case "FrameDoUp":
-                        MapFrame frame1 = new MapFrame(this.MyPK);
-                        if (frame1.RowIdx > 0)
-                        {
-                            frame1.RowIdx = frame1.RowIdx - 1;
-                            frame1.Update();
-                        }
+                        //MapFrame frame1 = new MapFrame(this.MyPK);
+                        //if (frame1.RowIdx > 0)
+                        //{
+                        //    frame1.RowIdx = frame1.RowIdx - 1;
+                        //    frame1.Update();
+                        //}
                         this.WinClose();
                         break;
                     case "FrameDoDown":
-                        MapFrame frame2 = new MapFrame(this.MyPK);
-                        if (frame2.RowIdx < 10)
-                        {
-                            frame2.RowIdx = frame2.RowIdx + 1;
-                            frame2.Update();
-                        }
+                        //MapFrame frame2 = new MapFrame(this.MyPK);
+                        //if (frame2.RowIdx < 10)
+                        //{
+                        //    frame2.RowIdx = frame2.RowIdx + 1;
+                        //    frame2.Update();
+                        //}
                         this.WinClose();
                         break;
                     default:

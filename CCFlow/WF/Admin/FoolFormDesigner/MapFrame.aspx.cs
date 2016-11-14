@@ -147,7 +147,6 @@ namespace CCFlow.WF.MapDef
                         }
                         dtlN.FK_MapData = this.FK_MapData;
                         dtlN.GroupID = 0;
-                        dtlN.RowIdx = 0;
                         dtlN.Insert();
 
                         if (btn.ID.Contains("AndClose"))

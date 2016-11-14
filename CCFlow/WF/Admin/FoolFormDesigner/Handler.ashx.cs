@@ -225,6 +225,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             {
                 switch (this.DoType)
                 {
+                    case "Designer_NewMapDtl":
+                        msg = this.Designer_NewMapDtl();
+                        break;
+                    case "Designer_NewFrame":
+                        msg = this.Designer_NewFrame();
+                        break;
                     case "Designer_AthNew":
                         msg = this.Designer_AthNew();
                         break;
@@ -409,20 +415,20 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         }
                         break;
                     case "FrameDoUp":
-                        MapFrame frame1 = new MapFrame(this.MyPK);
-                        if (frame1.RowIdx > 0)
-                        {
-                            frame1.RowIdx = frame1.RowIdx - 1;
-                            frame1.Update();
-                        }
+                        //MapFrame frame1 = new MapFrame(this.MyPK);
+                        //if (frame1.RowIdx > 0)
+                        //{
+                        //    frame1.RowIdx = frame1.RowIdx - 1;
+                        //    frame1.Update();
+                        //}
                         break;
                     case "FrameDoDown":
-                        MapFrame frame2 = new MapFrame(this.MyPK);
-                        if (frame2.RowIdx < 10)
-                        {
-                            frame2.RowIdx = frame2.RowIdx + 1;
-                            frame2.Update();
-                        }
+                        //MapFrame frame2 = new MapFrame(this.MyPK);
+                        //if (frame2.RowIdx < 10)
+                        //{
+                        //    frame2.RowIdx = frame2.RowIdx + 1;
+                        //    frame2.Update();
+                        //}
                         break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
@@ -435,6 +441,48 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 context.Response.Write("err@" + ex.Message);
             }
             //输出信息.
+        }
+        public string Designer_NewMapDtl()
+        {
+            MapDtl en = new MapDtl();
+            en.FK_MapData = this.FK_MapData;
+            en.No = this.GetRequestVal("DtlNo");
+
+            if (en.RetrieveFromDBSources() == 1)
+            {
+                return "err@从表ID:" + en.No + "已经存在.";
+            }
+            else
+            {
+                en.Name = "我的从表" + en.No;
+                en.PTable = en.No;
+                en.Insert();
+                en.IntMapAttrs();
+            }
+
+            //返回字串.
+            return en.No;
+        }
+        /// <summary>
+        /// 新建框架
+        /// </summary>
+        /// <returns></returns>
+        public string Designer_NewFrame()
+        {
+            MapFrame frm = new MapFrame();
+            frm.FK_MapData = this.FK_MapData;
+            frm.MyPK = frm.FK_MapData + "_" + this.GetRequestVal("FrameNo");
+            if (frm.RetrieveFromDBSources() == 1)
+                return "err@框架ID:" + this.GetRequestVal("FrameNo") + "已经存在.";
+            else
+            {
+                frm.URL = "http://ccport.org/About.aspx";
+                frm.Name = "我的框架" + this.GetRequestVal("FrameNo");
+                frm.Insert();
+            }
+
+            //BP.Sys.CCFormAPI.CreateOrSaveAthMulti(this.FK_MapData, this.GetRequestVal("FrameNo"), "我的附件", 100, 200);
+            return frm.MyPK;
         }
         /// <summary>
         /// 创建一个多附件

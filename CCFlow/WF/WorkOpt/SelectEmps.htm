@@ -190,6 +190,8 @@
                 "plugins": plugins
             }).on('changed.jstree', function (node, cb) {
                 GetSelectedEmpsReturnVal();
+            }).bind("loaded.jstree", function (event, data) {
+                data.instance.open_all();
             });
         }
         //弹出树

@@ -417,7 +417,7 @@ namespace CCFlow.WF.UC
             #region 内置表单..
             if (this.currND.HisFormType != NodeFormType.SelfForm)
             {
-                if (this.currND.CondModel == CondModel.SendButtonSileSelect)
+                if (this.currND.CondModel == CondModel.SendButtonSileSelect && this.currND.IsEndNode==false)
                 {
                     /*如果流程的方向条件是按照下拉框拉来选择.*/
                     toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"SendBtnCondClick('" + currND.FK_Flow + "','" + currND.NodeID + "','" + this.WorkID + "','"+this.FID+"')\" />");
@@ -430,7 +430,6 @@ namespace CCFlow.WF.UC
                     else
                         this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
                     this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
-
 
                     // 增加方向到下拉框.
                     DDL ddl = new DDL();
@@ -448,11 +447,23 @@ namespace CCFlow.WF.UC
                         li.Text = nd.Name ;
                         ddl.Items.Add(li);
                     }
-                    this.toolbar.Add(ddl);
+
+                    if (ddl.Items.Count != 0)
+                    {
+                        if (ddl.Items.Count == 1)
+                        {
+                            this.toolbar.Add("<div style='display:none'>");
+                            this.toolbar.Add(ddl);
+                            this.toolbar.Add("</div>");
+                        }
+                        else
+                        {
+                            this.toolbar.Add(ddl);
+                        }
+                    }
                 }
                 else
                 {
-
                     /*启用了其他的表单.*/
                     if (currND.IsEndNode && isAskFor == false)
                     {
@@ -707,7 +718,7 @@ namespace CCFlow.WF.UC
                 //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
             }
 
-            if (btnLab.SubFlowCtrlRole != SubFlowCtrlRole.None)
+            if (btnLab.SubFlowEnable ==true)
             {
                 /* 子流程 */
                 string urlr3 = appPath + "WF/WorkOpt/SubFlow.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;

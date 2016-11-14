@@ -101,8 +101,8 @@ namespace CCFlow.WF.SDKComponents
                 //输出标题.
                 BP.WF.Flow fl = new Flow(str);
 
-                if (sf.SFSta== FrmSubFlowSta.Enable)
-                   html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'><a href=\"javascript:OpenIt('../MyFlow.aspx?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID="+this.FID+"')\"  >[启动流程]</a></style>";
+                if (sf.SFSta == FrmSubFlowSta.Enable)
+                    html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'><a href=\"javascript:OpenIt('../MyFlow.aspx?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID=" + this.FID + "')\"  >[启动流程]</a></style>";
 
                 if (sf.SFSta == FrmSubFlowSta.Readonly)
                     html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div></style>";
@@ -113,7 +113,6 @@ namespace CCFlow.WF.SDKComponents
 
                 //该流程的子流程信息.
                 GenerWorkFlows gwfs = new GenerWorkFlows();
-
                 if (sf.SFShowCtrl == SFShowCtrl.All)
                 {
                     gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID, GenerWorkFlowAttr.FK_Flow, str); //流程.
@@ -130,7 +129,6 @@ namespace CCFlow.WF.SDKComponents
                         continue;
 
                     this.AddTR();
-
                     if (sf.SFOpenType == 0)
                     {
                         this.AddTD("style='word-break:break-all;'",
@@ -143,8 +141,7 @@ namespace CCFlow.WF.SDKComponents
 
                     }
 
-
-                        this.AddTD(item.NodeName); //到达节点名称.
+                    this.AddTD(item.NodeName); //到达节点名称.
 
                     if (item.WFState == WFState.Complete)
                         this.AddTD("已完成");

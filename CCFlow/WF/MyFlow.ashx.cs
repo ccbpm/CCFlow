@@ -583,7 +583,7 @@ namespace CCFlow.WF
                 //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
             }
 
-            if (btnLab.SubFlowCtrlRole != SubFlowCtrlRole.None)
+            if (btnLab.SubFlowEnable ==true)
             {
                 /* 子流程 */
                 string urlr3 = appPath + "WF/WorkOpt/SubFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;

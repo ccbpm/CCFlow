@@ -63,7 +63,6 @@ namespace CCFlow.WF.Admin
             //    this.Response.Write("全局的安全验证码错误,或者您没有设置,请在Web.config中的appsetting节点里设置GloSID 的值.");
             //    return;
             //}
-
             //if (BP.Web.WebUser.No != "admin")
             //{
             //    this.ToErrorPage("@登录信息丢失，请使用admin登录。");
@@ -184,6 +183,21 @@ namespace CCFlow.WF.Admin
                                       + "        pdes.FK_Emp";
                             }
                             break;
+                        case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
+                            sql = "SELECT No as FK_Emp FROM Port_Emp ";
+                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            if (dt.Rows.Count > 300)
+                            {
+                                if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
+                                    sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
+
+                                if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
+
+                                if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE limit 0,300 ";
+                            }
+                            break;
                         case DeliveryWay.BySQL:
                             if (string.IsNullOrEmpty(nd.DeliveryParas))
                                 throw new Exception("@您设置的按SQL访问开始节点，但是您没有设置sql.");
@@ -217,6 +231,23 @@ namespace CCFlow.WF.Admin
                         case DeliveryWay.ByBindEmp:
                             sql = "SELECT FK_Emp FROM WF_NodeEmp WHERE FK_Node='" + nodeid + "'";
                             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            break;
+                        case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
+                            sql = "SELECT No as FK_Emp FROM Port_Emp ";
+                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            if (dt.Rows.Count > 300)
+                            {
+                                if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
+                                    sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
+
+                                if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
+
+                                if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE limit 0,300 ";
+
+                                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            }
                             break;
                         case DeliveryWay.ByDeptAndStation:
                             throw new Exception("@开始节点不支持的模式ByDeptAndStation");

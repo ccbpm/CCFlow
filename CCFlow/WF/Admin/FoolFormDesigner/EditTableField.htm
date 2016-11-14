@@ -91,7 +91,7 @@
                     var groupID = 0;
                     if (data.GroupID != 0)
                         groupID = data.GroupID;
-                       
+
                     GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "No", "Name", groupID);
 
                     //是否可以编辑？
@@ -112,9 +112,10 @@
                     //  htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/InputCheck.htm?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">脚本验证</a>";
 
                     //自动计算.
-                    htmlLink += "<a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RadioBtns.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">高级JS设置</a>";
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">设置联动</a>";
+                    htmlLink += "<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
+                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">设置级联(联动)</a>";
+                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">设置自动填充</a>";
+                    htmlLink += "-<a href=\"javascript:WinOpen('./EleBatch.aspx?FK_MapData=" + fk_mapData + "&KeyOfEn=" + data.KeyOfEn + "&EleType=MapAttr')\">批处理</a>";
 
                     //设置超链接属性.
                     $("#htmlLink").html(htmlLink);

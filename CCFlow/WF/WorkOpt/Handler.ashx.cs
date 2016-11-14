@@ -257,8 +257,11 @@ namespace CCFlow.WF.WorkOpt
             {
                 switch (this.DoType)
                 {
-                    case "DeleteFlowInstance_DoDelete": //流程删除.
-
+                    case "DealSubThreadReturnToHL_Init":
+                        msg = this.DealSubThreadReturnToHL_Init();
+                        break;
+                    case "DealSubThreadReturnToHL_Done":
+                        msg = this.DealSubThreadReturnToHL_Done();
                         break;
                     case "ViewWorkNodeFrm": //查看一个表单.
                         msg = ViewWorkNodeFrm();
@@ -284,8 +287,8 @@ namespace CCFlow.WF.WorkOpt
                     case "FlowBBSList": //获得流程评论列表.
                         msg = this.FlowBBSList();
                         break;
-                    case "ReturnToNodes": //获得可以退回的节点.
-                        msg = ReturnToNodes();
+                    case "Return_Init": //获得可以退回的节点.
+                        msg = Return_Init();
                         break;
                     case "DoReturnWork": //执行退回.
                         msg = ReturnWork();
@@ -311,6 +314,78 @@ namespace CCFlow.WF.WorkOpt
             }
             //输出信息.
         }
+
+        #region 退回到分流节点处理器.
+        /// <summary>
+        /// 初始化.
+        /// </summary>
+        /// <returns></returns>
+        public string DealSubThreadReturnToHL_Init()
+        {
+            /* 如果工作节点退回了*/
+            BP.WF.ReturnWorks rws = new BP.WF.ReturnWorks();
+            rws.Retrieve(BP.WF.ReturnWorkAttr.ReturnToNode, this.FK_Node,
+                BP.WF.ReturnWorkAttr.WorkID, this.WorkID,
+                BP.WF.ReturnWorkAttr.RDT);
+            string msgInfo = "";
+            if (rws.Count != 0)
+            {
+                foreach (BP.WF.ReturnWork rw in rws)
+                {
+                    msgInfo += "<fieldset width='100%' ><legend>&nbsp; 来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='./../../DataUser/ReturnLog/" + this.FK_Flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a></legend>";
+                    msgInfo += rw.NoteHtml;
+                    msgInfo += "</fieldset>";
+                }
+            }
+            return msgInfo;
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string DealSubThreadReturnToHL_Done()
+        {
+            //操作类型.
+            string actionType = this.GetRequestVal("ActionType");
+            string note = this.GetRequestVal("Note");
+
+
+            if (actionType == "Return")
+            {
+                /*如果是退回. */
+                BP.WF.ReturnWork rw = new BP.WF.ReturnWork();
+                rw.Retrieve(BP.WF.ReturnWorkAttr.ReturnToNode, this.FK_Node,
+                         BP.WF.ReturnWorkAttr.WorkID, this.WorkID);
+                string info = BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID,
+                    this.FK_Node, rw.ReturnNode, note, false);
+                return info;
+            }
+
+
+            if (actionType == "Shift")
+            {
+                /*如果是移交操作.*/
+                string toEmps = this.GetRequestVal("ShiftToEmp");
+                return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmps, note);
+            }
+
+            if (actionType == "Kill")
+            {
+                string msg = BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+                //提示信息.
+                if (msg == "" || msg == null)
+                    msg = "该工作删除成功...";
+                return msg;
+            }
+
+            if (actionType == "UnSend")
+            {
+                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.FID, this.FK_Node);
+            }
+
+            return "err@没有判断的类型"+actionType;
+        }
+        #endregion 退回到分流节点处理器.
 
         public string DeleteFlowInstance_DoDelete()
         {
@@ -547,7 +622,7 @@ namespace CCFlow.WF.WorkOpt
         /// 获得可以退回的节点.
         /// </summary>
         /// <returns></returns>
-        public string ReturnToNodes()
+        public string Return_Init()
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
             return BP.Tools.Json.ToJson(dt);
@@ -565,6 +640,8 @@ namespace CCFlow.WF.WorkOpt
             string isBack = context.Request.QueryString["IsBack"];
             if (isBack == "1")
                 isBackBoolen = true;
+
+            
 
             return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, isBackBoolen);
         }

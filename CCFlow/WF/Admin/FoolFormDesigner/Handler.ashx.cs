@@ -212,7 +212,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             string str = GetRequestVal(param);
             if (str == null || str == "")
                 return 0;
-
             return int.Parse(str);
         }
         #endregion 属性.
@@ -297,8 +296,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "EditF_FieldInit": //字段属性.
                         msg = this.EditF_FieldInit();
                         break;
-                    case "FieldSave": //保存字段.
-                        msg = this.FieldSave();
+                    case "EditF_Save": //保存字段.
+                        msg = this.EditF_Save();
                         break;
                     case "FieldDelete": //执行删除..
                         msg = this.FieldDelete();
@@ -1251,7 +1250,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         /// 执行保存.
         /// </summary>
         /// <returns></returns>
-        public string FieldSave()
+        public string EditF_Save()
         {
             try
             {
@@ -1276,14 +1275,17 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
                 attr.FK_MapData = this.FK_MapData;
                 attr.MyDataType = fType; //数据类型.
-
                 attr.Name = this.GetValFromFrmByKey("TB_Name");
+
                 attr.KeyOfEn = this.GetValFromFrmByKey("TB_KeyOfEn");
                 attr.ColSpan = this.GetValIntFromFrmByKey("DDL_ColSpan");
+
                 if (attr.ColSpan == 0)
                     attr.ColSpan = 1;
 
                 attr.Para_FontSize = this.GetValIntFromFrmByKey("TB_FontSize"); //字体大小.
+                attr.Para_Tip = this.GetValFromFrmByKey("TB_Tip"); //操作提示.
+
 
                 //默认值.
                 attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");

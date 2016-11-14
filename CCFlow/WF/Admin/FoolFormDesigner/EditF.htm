@@ -90,11 +90,16 @@
                     $("#DDL_ColSpan").val(data.ColSpan);   //跨的列数.
                     $("#TB_FontSize").val(data.FontSize);  //字体大小.
 
+                    alert(data.Tip);
+
+
+                    $("#TB_Tip").val(data.Tip);  //字体大小.
 
                     //所在的字段分组.
                     var groupID = 0;
                     if (data.GroupID != 0)
                         groupID = data.GroupID;
+
                     GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "No", "Name", groupID);
 
 
@@ -252,8 +257,8 @@
 	<option value="@WebUser.FK_Dept">登陆人员部门编号</option>
 	<option selected="selected" value="@WebUser.FK_DeptName">登陆人员部门名称</option>
 	<option value="@WebUser.FK_DeptFullName">登陆人员部门全称</option>
-	<option value="@yyyy年mm月dd日">当前日期-1</option>
-	<option value="@yy年mm月dd日">当前日期-2</option>
+	<option value="@yyyy年MM月dd日">当前日期-1</option>
+	<option value="@yy年MM月dd日">当前日期-2</option>
 	<option value="@FK_ND">当前年度</option>
 	<option value="@FK_YF">当前月份</option>
 	<option value="@CurrWorker">当前工作可处理人员</option>
@@ -320,6 +325,15 @@
  </td>
 <td >对傻瓜表单有效 </td>
 </tr>
+
+<tr id='tr7' > 
+<td>操作提示 </td>
+<td>  
+<input type="text" id="Text1" name="TB_Tip" />
+</td>
+<td>当文本框被激活的时候，提示的信息.</td>
+</tr>
+
 <!-- end string 属性. -->
 
 
@@ -441,7 +455,7 @@
             data: frmData,
             type: 'post',
             async: true,
-            url: Handler + "?DoType=FieldSave&MyPK=" + mypk + "&FType=" + fType + "&LGType=0&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&GroupField=" + groupID + "&m=" + Math.random(),
+            url: Handler + "?DoType=EditF_Save&MyPK=" + mypk + "&FType=" + fType + "&LGType=0&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&GroupField=" + groupID + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
 

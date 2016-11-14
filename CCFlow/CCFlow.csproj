@@ -2268,6 +2268,7 @@
     <Content Include="WF\WorkOpt\CH.aspx" />
     <Content Include="WF\WorkOpt\ChartTrackV2.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
+    <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.htm" />
     <Content Include="WF\WorkOpt\DeleteFlowInstance.htm" />
     <Content Include="WF\WorkOpt\DTC.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />

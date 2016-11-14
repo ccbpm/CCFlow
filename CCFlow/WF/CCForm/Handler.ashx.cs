@@ -83,7 +83,24 @@ namespace CCFlow.WF.CCForm
             context.Response.End();
         }
         /// <summary>
-        /// 
+        /// 处理SQL的表达式.
+        /// </summary>
+        /// <param name="exp">表达式</param>
+        /// <returns>从from里面替换的表达式.</returns>
+        public string DealExpByFromVals(string exp)
+        {
+            foreach (string strKey in context.Request.Form.AllKeys)
+            {
+                if (exp.Contains("@") == false)
+                    return exp;
+                string str = strKey.Replace("TB_", "").Replace("CB_", "").Replace("DDL_", "").Replace("RB_", "");
+
+                exp = exp.Replace("@" + strKey, context.Request.Form[str]);
+            }
+            return exp;
+        }
+        /// <summary>
+        /// 初始化树的接口
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -109,6 +126,8 @@ namespace CCFlow.WF.CCForm
             sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
             sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
             sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
+            sqlObjs = this.DealExpByFromVals(sqlObjs);
+
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
             dt.TableName = "DTObjs";
             resultDs.Tables.Add(dt);
@@ -121,6 +140,8 @@ namespace CCFlow.WF.CCForm
                 sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                 sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
                 sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
+                sqlObjs = this.DealExpByFromVals(sqlObjs);
+
                 DataTable entityDt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                 entityDt.TableName = "DTEntitys";
                 resultDs.Tables.Add(entityDt);
@@ -159,6 +180,9 @@ namespace CCFlow.WF.CCForm
                 sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                 sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
+                sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
                 ds.Tables.Add(dt);
@@ -183,6 +207,7 @@ namespace CCFlow.WF.CCForm
                 countSQL = countSQL.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                 countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
                 countSQL = countSQL.Replace("@Key", key);
+                countSQL = this.DealExpByFromVals(countSQL);
 
                 //替换其他参数.
                 foreach (string cond in conds)
@@ -236,6 +261,7 @@ namespace CCFlow.WF.CCForm
                 sqlObjs = sqlObjs.Replace("@PageCount", ((int.Parse(pageIndex) - 1) * int.Parse(pageSize)).ToString());
                 sqlObjs = sqlObjs.Replace("@PageSize", pageSize);
                 sqlObjs = sqlObjs.Replace("@PageIndex", pageIndex);
+                sqlObjs = this.DealExpByFromVals(sqlObjs);
 
                 //替换其他参数.
                 foreach (string cond in conds)
@@ -296,7 +322,7 @@ namespace CCFlow.WF.CCForm
                          sql = sql.Replace("@WebUser.No",WebUser.No);
                          sql = sql.Replace("@WebUser.Name", WebUser.Name);
                          sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-
+                         sql = this.DealExpByFromVals(sql);
                      }
 
                      if (cond.Contains("EnumKey") == true)
@@ -335,6 +361,8 @@ namespace CCFlow.WF.CCForm
                     sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
                     sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                     sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sqlObjs = this.DealExpByFromVals(sqlObjs);
+
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                     dt.TableName = "DTGroup";
@@ -347,6 +375,8 @@ namespace CCFlow.WF.CCForm
                     sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
                     sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                     sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sqlObjs = this.DealExpByFromVals(sqlObjs);
+
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                     dt.TableName = "DTEntity";
@@ -399,7 +429,6 @@ namespace CCFlow.WF.CCForm
             context.Request.Files[0].SaveAs(saveTo);
 
             FileInfo info = new FileInfo(saveTo);
-
 
             FrmAttachmentDB dbUpload = new FrmAttachmentDB();
             dbUpload.MyPK = athDBPK;

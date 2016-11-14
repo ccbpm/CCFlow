@@ -77,8 +77,18 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
     }
 
     //设置选中的值.
-    if (selectVal != undefined) {
+    if (selectVal != undefined ) {
+
+        var v = $("#" + ddlCtrlID)[0].options.length;
+        if (v == 0)
+            return;
+
         $("#" + ddlCtrlID).val(selectVal);
+
+        var v = $("#" + ddlCtrlID).val();
+        if (v == null) {
+            $("#" + ddlCtrlID)[0].options[0].selected = true;
+        }
     }
 }
 
@@ -162,7 +172,6 @@ function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
         colNo = "No";
     if (colName == null)
         colName = "Name";
-
 
     $.ajax({
         type: 'post',

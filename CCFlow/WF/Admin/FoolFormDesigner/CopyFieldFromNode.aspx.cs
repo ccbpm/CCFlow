@@ -107,17 +107,18 @@ namespace CCFlow.WF.MapDef
                     this.Pub2.AddTREnd();
                 }
 
-                foreach (MapFrame frm in frms)
-                {
-                    if (frm.GroupID != gf.OID)
-                        continue;
-                    this.Pub2.AddTR();
-                    cb = new CheckBox();
-                    cb.ID = "CB" + frm.MyPK + "_" + frm.GroupID;
-                    cb.Text = "框架" + ":" + frm.Name;
-                    this.Pub2.AddTD(cb);
-                    this.Pub2.AddTREnd();
-                }
+                //foreach (MapFrame frm in frms)
+                //{
+                //    if (frm.GroupID != gf.OID)
+                //        continue;
+
+                //    this.Pub2.AddTR();
+                //    cb = new CheckBox();
+                //    cb.ID = "CB" + frm.MyPK + "_" + frm.GroupID;
+                //    cb.Text = "框架" + ":" + frm.Name;
+                //    this.Pub2.AddTD(cb);
+                //    this.Pub2.AddTREnd();
+                //}
 
 
                 this.Pub2.AddTR();
@@ -235,22 +236,22 @@ namespace CCFlow.WF.MapDef
                     mym2m.Insert();
                 }
 
-                foreach (MapFrame frm in frms)
-                {
-                    if (frm.GroupID != gf.OID)
-                        continue;
+                //foreach (MapFrame frm in frms)
+                //{
+                //    if (frm.GroupID != gf.OID)
+                //        continue;
 
-                    MapFrame myen = new MapFrame();
-                    myen.MyPK = frm.MyPK.Replace(this.NodeOfSelect, this.FK_Node);
-                    if (myen.IsExits)
-                        continue;
+                //    MapFrame myen = new MapFrame();
+                //    myen.MyPK = frm.MyPK.Replace(this.NodeOfSelect, this.FK_Node);
+                //    if (myen.IsExits)
+                //        continue;
 
-                    myen.Copy(frm);
-                    myen.FK_MapData = this.FK_Node;
-                    myen.GroupID = mygf.OID;
-                    myen.MyPK = frm.MyPK.Replace(this.NodeOfSelect, this.FK_Node);
-                    myen.Insert();
-                }
+                //    myen.Copy(frm);
+                //    myen.FK_MapData = this.FK_Node;
+                //    myen.GroupID = mygf.OID;
+                //    myen.MyPK = frm.MyPK.Replace(this.NodeOfSelect, this.FK_Node);
+                //    myen.Insert();
+                //}
 
                 // 复制从表.
                 foreach (MapDtl dtl in dtls)

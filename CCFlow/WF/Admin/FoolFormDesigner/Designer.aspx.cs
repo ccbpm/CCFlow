@@ -107,7 +107,7 @@ namespace CCFlow.WF.MapDef
         public MapFoolForm md = null;
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
             string fk_node = this.Request.QueryString["FK_Node"];
             md = new MapFoolForm(this.FK_MapData);
 

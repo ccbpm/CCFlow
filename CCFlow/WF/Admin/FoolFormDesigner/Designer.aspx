@@ -259,23 +259,9 @@
             window.location.href = window.location.href;
         }
 
-
-        function EditDtl(mypk, dtlKey) {
-            var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            // var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-
-        function EditM2M(mypk, dtlKey) {
-            var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + mypk + '&NoOfObj=' + dtlKey;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
-
         //新增附件.
         function NewMapDtl(fk_mapdata) {
-            var val = prompt('请输入从表ID，要求表单唯一。', fk_mapdata+'Dtl1');
+            var val = prompt('请输入从表ID，要求表单唯一。', fk_mapdata + 'Dtl1');
             if (val == null) {
                 return;
             }
@@ -296,14 +282,31 @@
                         alert(data);
                         return;
                     }
-                    var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.MapDtlExts&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
+                    var url = '../../Comm/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&FK_MapData=' + fk_mapdata + '&No=' + data;
                     var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
                     window.location.href = window.location.href;
                     return;
                 }
             });
         }
-         
+        
+        ///编辑从表.
+        function EditDtl(fk_mapdata, mypk) {
+
+            var url = '../../Comm/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&FK_MapData=' + fk_mapdata + '&No=' + mypk;
+
+            //var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
+
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
+        function EditM2M(mypk, dtlKey) {
+            var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + mypk + '&NoOfObj=' + dtlKey;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+
 
         /// 多选.
         function MapM2M(mypk) {
@@ -440,7 +443,7 @@
                     class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">新建字段</a>
             <a href="javascript:HidAttr('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
                 隐藏字段</a> <a href="javascript:GroupFieldNew('<%=fk_mapdata %>');" class="easyui-linkbutton"
-                    data-options="plain:true,iconCls:'icon-groupbar'">新建字段分组</a> <a href="javascript:MapDtl('<%=fk_mapdata %>');"
+                    data-options="plain:true,iconCls:'icon-groupbar'">新建字段分组</a> <a href="javascript:NewMapDtl('<%=fk_mapdata %>');"
                         class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">新建从表</a>
             <a href="javascript:NewAth('<%=fk_mapdata %>');" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">
                 新建附件组件</a> <a href="javascript:NewFrame('<%=fk_mapdata %>');" class="easyui-linkbutton"

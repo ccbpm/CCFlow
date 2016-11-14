@@ -7,6 +7,7 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
 
@@ -113,13 +114,24 @@
 <legend><input id="RB_CtrlType_6" type="radio" name="Model" value="6"  /><label for="RB_CtrlType_6">设置为附件展示字段</label>   </legend>
 <ul>
 <li> 请选择一个附件  <select id="DDL_Ath" name="DDL_Ath" >
-</select>   , 该附件的上传的文件数据就显示到这个控件上.</li>
+</select>该附件的上传的文件数据就显示到这个控件上.</li>
+
+<li><a href="javascript:EditAth()">编辑附件</a></li>
+
+<script type="text/javascript">
+    function EditAth() {
+        var ddl = document.getElementById("DDL_Ath");
+        var mypk = ddl.options[ddl.selectedIndex].value;
+        var url = '../../Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmAttachmentExts&MyPK=' + mypk;
+        WinOpen(url);
+    }
+</script>
 
 
 <li>文件数据展示模式:   <select id="DDL_AthShowModel" name="DDL_AthShowModel" >
   <option value="0" >简洁模式.   格式: 附件(x) </option>
   <option value="1" >仅文件名称. 格式: 我的文件1.doc,我的文件2.doc </option>
-</select>  .</li>
+</select> .</li>
 
 </ul>
 </fieldset>

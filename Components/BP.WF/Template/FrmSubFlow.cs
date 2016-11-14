@@ -115,10 +115,6 @@ namespace BP.WF.Template
         /// 查看类型
         /// </summary>
         public const string SFOpenType = "SFOpenType";
-        /// <summary>
-        /// 子流程删除方式
-        /// </summary>
-        public const string SFDeleteRole = "SFDeleteRole";
     }
     /// <summary>
     /// 父子流程
@@ -219,20 +215,6 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(FrmSubFlowAttr.SFShowCtrl, (int)value);
-            }
-        }
-        /// <summary>
-        /// 子流程删除规则
-        /// </summary>
-        public SFDeleteRole SFDeleteRole
-        {
-            get
-            {
-                return (SFDeleteRole)this.GetValIntByKey(FrmSubFlowAttr.SFDeleteRole);
-            }
-            set
-            {
-                this.SetValByKey(FrmSubFlowAttr.SFDeleteRole, (int)value);
             }
         }
         /// <summary>
@@ -586,7 +568,6 @@ namespace BP.WF.Template
                 map.AddTBString(FrmSubFlowAttr.SFDefInfo, null, "可启动的子流程", true, false, 0, 50, 10,true);
                 map.AddTBString(FrmSubFlowAttr.SFActiveFlows, null, "可触发的子流程", true, false, 0, 50, 10, true);
 
-
                 map.AddTBFloat(FrmSubFlowAttr.SF_X, 5, "位置X", true, false);
                 map.AddTBFloat(FrmSubFlowAttr.SF_Y, 5, "位置Y", true, false);
 
@@ -597,12 +578,11 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFShowCtrl, (int)SFShowCtrl.All, "显示控制方式",
                   true, true, FrmSubFlowAttr.SFShowCtrl, "@0=可以看所有的子流程@1=仅仅可以看自己发起的子流程"); //此属性暂时没有用.
-
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFDeleteRole, (int)SFDeleteRole.DisableDelete, "删除规则",
-                true, true, FrmSubFlowAttr.SFShowCtrl, "@0=不可删除@1=仅可删除该节自己发起的子流程@2=删除该节点所有人发起的子流程"); //此属性暂时没有用.
-
+            
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFOpenType,0, "打开子流程显示",
                  true, true, FrmSubFlowAttr.SFOpenType, "@0=工作查看器@1=傻瓜表单轨迹查看器"); //此属性暂时没有用.
+
+              
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 

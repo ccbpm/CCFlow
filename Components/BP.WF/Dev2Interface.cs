@@ -4483,10 +4483,58 @@ namespace BP.WF
                     cidx++;
                 }
             }
-
-
         }
+        /// <summary>
+        /// 是否可以删除该流程？
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <returns>是否可以删除该流程</returns>
+        public static bool Flow_IsCanDeleteFlowInstance(string flowNo, Int64 workid, string userNo)
+        {
+            if (userNo == "admin")
+                return true;
 
+            Flow fl = new Flow(flowNo);
+            if (fl.FlowDeleteRole == FlowDeleteRole.AdminOnly)
+                return false;
+
+            //是否是用户管理员?
+            if (fl.FlowDeleteRole == FlowDeleteRole.AdminAppOnly)
+            {
+                if (userNo.IndexOf("admin") == 0)
+                    return true; // 这里判断不严谨,如何判断是否是一个应用管理员使用admin+部门编号来确定的. 比如： admin3701 
+                else
+                    return false;
+            }
+
+            //是否是发起人.
+            if (fl.FlowDeleteRole == FlowDeleteRole.ByMyStarter)
+            {
+                Paras ps = new Paras();
+                ps.SQL = "SELECT WorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND Starter=" + SystemConfig.AppCenterDBVarStr + "Starter";
+                ps.Add("WorkID", workid);
+                ps.Add("Starter", userNo);
+                string user = BP.DA.DBAccess.RunSQLReturnStringIsNull(ps,null);
+                if (user == null)
+                    return false;
+                return true;
+            }
+
+            //按照节点是否启用删除按钮来计算. 
+            if (fl.FlowDeleteRole == FlowDeleteRole.ByNodeSetting)
+            {
+                Paras ps = new Paras();
+                ps.SQL = "SELECT WorkID FROM WF_GenerWorkerlist A, WF_Node B  WHERE A.FK_Node=B.NodeID  AND B.DelEnable=1  AND A.WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND A.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+                ps.Add("WorkID", workid);
+                ps.Add("FK_Emp", userNo);
+                string user = BP.DA.DBAccess.RunSQLReturnStringIsNull(ps, null);
+                if (user == null)
+                    return false;
+                return true;
+            }
+            return false;
+        }
         #region 与流程有关的接口
         
         /// <summary>

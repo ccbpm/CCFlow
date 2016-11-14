@@ -409,6 +409,16 @@ namespace BP.WF
 
         #region 其他属性
         /// <summary>
+        /// 流程删除规则
+        /// </summary>
+        public FlowDeleteRole FlowDeleteRole
+        {
+            get
+            {
+                return (FlowDeleteRole)this.GetValIntByKey(FlowAttr.FlowDeleteRole);
+            }
+        }
+        /// <summary>
         /// 草稿规则
         /// </summary>
         public DraftRole DraftRole
@@ -4698,6 +4708,12 @@ namespace BP.WF
                 map.AddTBString(FlowAttr.Ver, null, "版本号", true, true, 0, 20, 10);
                 //设计类型 .
                 map.AddTBInt(FlowAttr.DType, 0, "设计类型0=ccbpm,1=bpmn", true, false);
+
+                map.AddTBInt(FlowAttr.FlowDeleteRole, 0, "流程实例删除规则", true, false);
+
+
+
+
 
                 //参数.
                 map.AddTBAtParas(1000);

@@ -33,6 +33,7 @@ namespace BP.Tools
         {
             //转换json格式
             strJson = strJson.Replace(",\"", "*\"").Replace("\":", "\"#").ToString();
+
             //取出表名  
             var rg = new Regex(@"(?<={)[^:]+(?=:\[)", RegexOptions.IgnoreCase);
             string strName = rg.Match(strJson).Value;
@@ -368,9 +369,7 @@ namespace BP.Tools
         public static string ToJson(string value)
         {
             if (string.IsNullOrEmpty(value))
-            {
                 return string.Empty;
-            }
 
             string temstr;
             temstr = value;
@@ -379,10 +378,8 @@ namespace BP.Tools
             temstr = temstr.Replace("'", "\'");
             temstr = temstr.Replace(@"\", @"\\");
             temstr = temstr.Replace("\"", "\"\"");
-
             return temstr;
         }
-
         /// <summary>
         /// JSON字符串的转义
         /// </summary>

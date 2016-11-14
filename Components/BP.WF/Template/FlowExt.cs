@@ -364,10 +364,13 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsResetData, false, "是否启用开始节点数据重置按钮？", true, true, true);
                 map.AddBoolean(FlowAttr.IsLoadPriData, false, "是否自动装载上一笔数据？", true, true, true);
 
-
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
                 map.AddTBString(FlowAttr.SysType, null, "类型类型", false, false, 0, 100, 10, false);
 
+                // add for 华夏银行.
+                map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则",
+            true, true, FlowAttr.FlowDeleteRole,
+            "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");   
                 #endregion 基本属性。
 
                 #region 启动方式

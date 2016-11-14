@@ -262,6 +262,10 @@ namespace BP.WF.Template
         /// 设计类型
         /// </summary>
         public const string DType = "DType";
+        /// <summary>
+        /// 删除规则
+        /// </summary>
+        public const string FlowDeleteRole = "FlowDeleteRole";
         #endregion 父子流程
 
         #region 数据同步方式.

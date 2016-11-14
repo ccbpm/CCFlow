@@ -6,6 +6,28 @@ using System.Text;
 namespace BP.WF
 {
     /// <summary>
+    /// 流程删除规则
+    /// </summary>
+    public enum FlowDeleteRole
+    {
+        /// <summary>
+        /// 超级管理员可以删除
+        /// </summary>
+        AdminOnly,
+        /// <summary>
+        /// 分级管理员可以删除
+        /// </summary>
+        AdminAppOnly,
+        /// <summary>
+        /// 发起人可以删除
+        /// </summary>
+        ByMyStarter,
+        /// <summary>
+        /// 节点启动删除按钮的操作员
+        /// </summary>
+        ByNodeSetting
+    }
+    /// <summary>
     /// 运行平台
     /// </summary>
     public enum Platform

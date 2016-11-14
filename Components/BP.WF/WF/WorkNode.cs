@@ -6754,6 +6754,7 @@ namespace BP.WF
             switch (at)
             {
                 case ActionType.Forward:
+                case ActionType.ForwardAskfor:
                 case ActionType.Start:
                 case ActionType.UnSend:
                 case ActionType.ForwardFL:

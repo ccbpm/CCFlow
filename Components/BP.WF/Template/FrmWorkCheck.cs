@@ -78,24 +78,7 @@ namespace BP.WF.Template
         /// </summary>
         MySelf
     }
-    /// <summary>
-    /// 删除规则
-    /// </summary>
-    public enum SFDeleteRole
-    {
-        /// <summary>
-        /// 不能删除
-        /// </summary>
-        DisableDelete,
-        /// <summary>
-        /// 删除我发起的流程
-        /// </summary>
-        DeleteMyStart,
-        /// <summary>
-        /// 删除可以所有的子流程
-        /// </summary>
-        DeleteAll
-    }
+  
     /// <summary>
     /// 审核组件状态
     /// </summary>

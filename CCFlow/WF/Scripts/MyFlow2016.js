@@ -643,7 +643,7 @@ function initGroup(workNodeData, groupFiled) {
             for (var frameIndex in workNodeData.Sys_MapFrame) {
                 var fram = workNodeData.Sys_MapFrame[frameIndex];
                 if (fram.MyPK != groupFiled.CtrlID)
-                    break;
+                    continue;
                 //将 中文的  冒号转成英文的冒号
                 var src = fram.URL.replace(new RegExp(/(：)/g), ':');
                 var params = '&FID=' + pageData.FID;
@@ -1719,7 +1719,7 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
     }
 
     if (result != undefined && typeof (result) == 'string') {
-        result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'");
+        result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
     }
     return result = unescape(result);
 }
@@ -1733,13 +1733,39 @@ function GenerWorkNode() {
         dataType: 'html',
         success: function (data) {
             jsonStr = data;
+            var gengerWorkNode = {};
             try {
-                var datajson = JSON.parse(data);
+                var gengerWorkNode = JSON.parse(data);
             }
             catch (err) {
-                alert("GenerWorkNode转换JSON失败:" + datajson);
+                alert("GenerWorkNode转换JSON失败:" + data);
                 return;
             }
+            //显示父流程 链接
+            if (gengerWorkNode.WF_GenerWorkFlow != null && gengerWorkNode.WF_GenerWorkFlow.length > 0 && (gengerWorkNode.WF_GenerWorkFlow[0].PWorkID != 0 || gengerWorkNode.WF_GenerWorkFlow[0].PWorkID2!=0)) {
+                $('#btnShowPFlow').bind('click', function () {
+                    var pworkid = 1;
+                    var pfk_node = 1;
+                    var pfk_flow = 1;
+                    if (gengerWorkNode.WF_GenerWorkFlow[0].PWorkID != 0) {
+                        pworkid = gengerWorkNode.WF_GenerWorkFlow[0].PWorkID;
+                        pfk_flow = gengerWorkNode.WF_GenerWorkFlow[0].PFlowNo;
+                        pfk_node = gengerWorkNode.WF_GenerWorkFlow[0].PNodeID;
+                    } else {
+                        pworkid = gengerWorkNode.WF_GenerWorkFlow[0].PWorkID2;
+                        pfk_flow = gengerWorkNode.WF_GenerWorkFlow[0].PFlowNo2;
+                        pfk_node = gengerWorkNode.WF_GenerWorkFlow[0].PNodeID2;
+                    }
+                    
+                    window.open("WorkOpt/FoolFrmTrack.htm?FK_Flow=" + pfk_flow + "&WorkID=" + pworkid + "&FK_Node=" + pfk_node);
+                    
+                });
+
+                $('#ShowPFlow').css('display', 'block');
+            } else {
+                $('#ShowPFlow').css('display','none');
+            }
+
             //解析表单
             InitForm();
             ///根据下拉框选定的值，绑定表单中哪个元素显示，哪些元素不显示

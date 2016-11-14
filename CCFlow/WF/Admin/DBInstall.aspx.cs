@@ -29,7 +29,7 @@ namespace CCFlow.WF.Admin
                 this.Pub1.Add("ccflow数据库初始化成功.");
                 // this.Pub1.AddBR("<a href='./XAP/Designer.aspx?IsCheckUpdate=1' >进入流程设计器.</a>");
                 // this.Response.Redirect("./XAP/Designer.aspx?IsCheckUpdate=1", true);
-                this.Response.Redirect("./CCBPMDesigner/Login.aspx?IsCheckUpdate=1", true);
+                this.Response.Redirect("./CCBPMDesigner/Login.htm?IsCheckUpdate=1", true);
                 this.Pub1.AddFieldSetEnd();
                 return;
             }
@@ -259,7 +259,7 @@ namespace CCFlow.WF.Admin
             this.Pub1.AddBR("4,任何时间的安装失败，都要删除数据库重新建，然后反馈问题，并svn最新的程序进行重安装。");
             this.Pub1.AddBR("5,<font color=red>系统在运行的时候不区分大小写，如果在mysql,oracle上安装错误，请数据库服务上做配置。</font>");
             this.Pub1.AddBR("6,<font color=red>当前的数据库连接用户，需要有创建删除视图与表的权限，否则安装失败。</font>");
-             
+            this.Pub1.AddBR("7,<a href='http://ccport.org/About.aspx' target=_blank >关于ccflow的商务问题，请点击这里</a>。");
         }
         void btn_Click(object sender, EventArgs e)
         {

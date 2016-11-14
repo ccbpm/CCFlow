@@ -405,7 +405,7 @@
 
 		</form>
 		<div class="button">
-			<a href="http://ccform.mydoc.io/" target="_blank" > <img src="../../Img/Help.png" alt="" />在线帮助</a>|<a href="../CCBPMDesigner/Login.aspx">流程设计器</a>
+			<a href="http://ccform.mydoc.io/" target="_blank" > <img src="../../Img/Help.png" alt="" />在线帮助</a>|<a href="../CCBPMDesigner/Login.htm">流程设计器</a>
 		</div>
 	</section>
     </div>

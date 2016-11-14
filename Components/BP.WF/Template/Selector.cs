@@ -114,7 +114,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 自定义链接
         /// </summary>
-        Url
+        Url,
+        /// <summary>
+        /// 通用的人员选择器.
+        /// </summary>
+        GenerUserSelecter
     }
     /// <summary>
     /// Selector属性

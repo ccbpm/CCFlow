@@ -189,16 +189,7 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.SubFlowLab);
             }
         }
-        /// <summary>
-        /// 子流程按钮是否启用
-        /// </summary>
-        public SubFlowCtrlRole SubFlowCtrlRole
-        {
-            get
-            {
-                return (SubFlowCtrlRole)this.GetValIntByKey(BtnAttr.SubFlowCtrlRole);
-            }
-        }
+       
         /// <summary>
         /// 跳转标签
         /// </summary>

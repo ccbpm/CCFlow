@@ -181,7 +181,6 @@ namespace BP.WF
                 // 运行升级SQL. D:\ccflow\CCFlow\WF\Data\UpdataCCFlowVer.sql
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
 
-
                 #region 表单方案中的不可编辑, 旧版本如果包含了这个列.
                 if (BP.DA.DBAccess.IsExitsTableCol("WF_FrmNode", "IsEdit") == true)
                 {

@@ -6278,9 +6278,18 @@ namespace BP.WF
             nd.X = x;
             nd.Y = y;
             nd.Step = idx;
-            nd.Insert();
 
+            //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
+            nd.CondModel = Template.CondModel.SendButtonSileSelect; //默认的发送方向.
+            nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
+            nd.Insert();
             nd.CreateMap();
+
+            //通用的人员选择器.
+            BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
+            select.SelectorModel = Template.SelectorModel.GenerUserSelecter;
+            select.Update();
+
             return nd;
         }
         /// <summary>
@@ -6344,10 +6353,23 @@ namespace BP.WF
                 nd.X = 200;
                 nd.Y = 150;
                 nd.ICON = "前台";
+
+
+                //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
+                nd.CondModel = Template.CondModel.SendButtonSileSelect; //默认的发送方向.
+                nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
+
                 nd.Insert();
 
                 nd.CreateMap();
                 nd.HisWork.CheckPhysicsTable();
+
+                //通用的人员选择器.
+                BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
+                select.SelectorModel = Template.SelectorModel.GenerUserSelecter;
+                select.Update();
+
+
 
                 nd = new Node();
                 nd.NodeID = int.Parse(this.No + "02");
@@ -6360,9 +6382,20 @@ namespace BP.WF
                 nd.X = 200;
                 nd.Y = 250;
                 nd.ICON = "审核";
+
+                //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
+                nd.CondModel = Template.CondModel.SendButtonSileSelect; //默认的发送方向.
+                nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
+
                 nd.Insert();
                 nd.CreateMap();
                 nd.HisWork.CheckPhysicsTable();
+
+                //通用的人员选择器.
+                select = new Template.Selector(nd.NodeID);
+                select.SelectorModel = Template.SelectorModel.GenerUserSelecter;
+                select.Update();
+
 
                 BP.Sys.MapData md = new BP.Sys.MapData();
                 md.No = "ND" + int.Parse(this.No) + "Rpt";

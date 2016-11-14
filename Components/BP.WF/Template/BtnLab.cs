@@ -215,16 +215,7 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.SubFlowLab);
             }
         }
-        /// <summary>
-        /// 子流程按钮是否启用
-        /// </summary>
-        public SubFlowCtrlRole SubFlowCtrlRole
-        {
-            get
-            {
-                return (SubFlowCtrlRole)this.GetValIntByKey(BtnAttr.SubFlowCtrlRole);
-            }
-        }
+       
         /// <summary>
         /// 跳转标签
         /// </summary>
@@ -468,6 +459,20 @@ namespace BP.WF.Template
             get
             {
                 return this.GetValStringByKey(BtnAttr.WorkCheckLab);
+            }
+        }
+        /// <summary>
+        /// 标签是否启用？
+        /// </summary>
+        public bool SubFlowEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.SubFlowEnable);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.SubFlowEnable, value);
             }
         }
         /// <summary>
@@ -898,8 +903,9 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.ThreadLab, "子线程", "子线程按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ThreadEnable, false, "是否启用", true, true);
 
+
                 map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.SubFlowCtrlRole, 0, "控制规则", true, true, BtnAttr.SubFlowCtrlRole, "@0=无@1=不可以删除子流程@2=可以删除子流程");
+                map.AddBoolean(BtnAttr.SubFlowEnable, false, "是否启用", true, true);
 
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);

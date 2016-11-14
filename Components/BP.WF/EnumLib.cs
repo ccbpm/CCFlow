@@ -701,24 +701,7 @@ namespace BP.WF
         /// </summary>
         ByCCFlowBPM = 100
     }
-    /// <summary>
-    /// 子流程控制方式
-    /// </summary>
-    public enum SubFlowCtrlRole
-    {
-        /// <summary>
-        /// 不显示
-        /// </summary>
-        None,
-        /// <summary>
-        /// 可以删除子流程
-        /// </summary>
-        CanDel,
-        /// <summary>
-        /// 不可以删除
-        /// </summary>
-        NotCanDel
-    }
+   
     /// <summary>
     /// 节点工作退回规则
     /// </summary>

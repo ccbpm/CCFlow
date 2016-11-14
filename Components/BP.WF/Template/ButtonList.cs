@@ -30,9 +30,9 @@ namespace BP.WF.Template
         /// </summary>
         public const string SubFlowLab = "SubFlowLab";
         /// <summary>
-        /// 子流程控制显示规则
+        /// 可否启用
         /// </summary>
-        public const string SubFlowCtrlRole = "SubFlowCtrlRole";
+        public const string SubFlowEnable = "SubFlowEnable";
         /// <summary>
         /// 保存是否启用
         /// </summary>

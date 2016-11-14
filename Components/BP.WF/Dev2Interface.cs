@@ -3764,6 +3764,9 @@ namespace BP.WF
                         ps.Add("FK_Node", nd.NodeID);
                         num = DBAccess.RunSQLReturnValInt(ps);
                         break;
+                    case DeliveryWay.BySelected:
+                        num = 1;
+                        break;
                     default:
                         throw new Exception("@开始节点不允许设置此访问规则：" + nd.HisDeliveryWay);
                 }
@@ -3795,6 +3798,9 @@ namespace BP.WF
                         ps.Add("FK_Emp", userNo);
                         ps.Add("FK_Node", nd.NodeID);
                         num = DBAccess.RunSQLReturnValInt(ps);
+                        break;
+                    case DeliveryWay.BySelected:
+                        num = 1;
                         break;
                     default:
                         throw new Exception("@开始节点不允许设置此访问规则：" + nd.HisDeliveryWay);

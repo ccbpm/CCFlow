@@ -26,7 +26,13 @@ namespace CCFlow.WF.WorkOpt
             {
                 string str = context.Request.QueryString["DoType"];
                 if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["DoType"];
+                }
+                if (str == null || str == "" || str == "null") {
+
                     return null;
+                }
                 return str;
             }
         }
@@ -39,6 +45,10 @@ namespace CCFlow.WF.WorkOpt
             {
                 string str = context.Request.QueryString["FK_Flow"];
                 if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["FK_Flow"];
+                }
+                if (str == null || str == "" || str == "null")
                     return null;
                 return str;
             }
@@ -48,6 +58,10 @@ namespace CCFlow.WF.WorkOpt
             get
             {
                 string str = context.Request.QueryString["MyPK"];
+                if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["MyPK"];
+                }
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -62,6 +76,10 @@ namespace CCFlow.WF.WorkOpt
             {
                 string str = context.Request.QueryString["FK_SFTable"];
                 if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["FK_SFTable"];
+                }
+                if (str == null || str == "" || str == "null")
                     return null;
                 return str;
 
@@ -73,6 +91,10 @@ namespace CCFlow.WF.WorkOpt
             {
                 string str = context.Request.QueryString["EnumKey"];
                 if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["EnumKey"];
+                }
+                if (str == null || str == "" || str == "null")
                     return null;
                 return str;
 
@@ -83,6 +105,10 @@ namespace CCFlow.WF.WorkOpt
             get
             {
                 string str = context.Request.QueryString["KeyOfEn"];
+                if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["KeyOfEn"];
+                }
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -97,6 +123,10 @@ namespace CCFlow.WF.WorkOpt
             {
                 string str = context.Request.QueryString["FK_Dept"];
                 if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["FK_Dept"];
+                }
+                if (str == null || str == "" || str == "null")
                     return null;
                 return str;
             }
@@ -106,6 +136,10 @@ namespace CCFlow.WF.WorkOpt
             get
             {
                 string str = context.Request.QueryString["FK_MapData"];
+                if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["FK_MapData"];
+                }
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -120,6 +154,10 @@ namespace CCFlow.WF.WorkOpt
             {
                 string str = context.Request.QueryString["FK_Node"];
                 if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["FK_Node"];
+                }
+                if (str == null || str == "" || str == "null")
                     return 0;
                 return int.Parse(str);
             }
@@ -132,6 +170,10 @@ namespace CCFlow.WF.WorkOpt
             get
             {
                 string str = context.Request.QueryString["WorkID"];
+                if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["WorkID"];
+                }
                 if (str == null || str == "" || str == "null")
                     return 0;
                 return Int64.Parse(str);
@@ -146,6 +188,10 @@ namespace CCFlow.WF.WorkOpt
             {
                 string str = context.Request.QueryString["FID"];
                 if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["FID"];
+                }
+                if (str == null || str == "" || str == "null")
                     return 0;
                 return Int64.Parse(str);
             }
@@ -158,6 +204,10 @@ namespace CCFlow.WF.WorkOpt
             get
             {
                 string str = context.Request.QueryString["FK_MapDtl"];
+                if (str == null || str == "" || str == "null")
+                {
+                    str = context.Request.Form["FK_MapDtl"];
+                }
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -279,14 +329,14 @@ namespace CCFlow.WF.WorkOpt
             //表单模版.
             DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID, true);
             string json = BP.WF.Dev2Interface.CCFrom_GetFrmDBJson(this.FK_Flow, this.MyPK);
-            DataTable mainTable = BP.Tools.Json.ToDataTable(json);
+            DataTable mainTable = BP.Tools.Json.ToDataTableOneRow(json);
             mainTable.TableName = "MainTable";
             myds.Tables.Add(mainTable);
 
-            MapExts exts = new MapExts(nd.HisWork.ToString());
-            DataTable dtMapExt = exts.ToDataTableDescField();
-            dtMapExt.TableName = "Sys_MapExt";
-            myds.Tables.Add(dtMapExt);
+            //MapExts exts = new MapExts(nd.HisWork.ToString());
+            //DataTable dtMapExt = exts.ToDataTableDescField();
+            //dtMapExt.TableName = "Sys_MapExt";
+            //myds.Tables.Add(dtMapExt);
 
             return BP.Tools.Json.ToJson(myds);
         }

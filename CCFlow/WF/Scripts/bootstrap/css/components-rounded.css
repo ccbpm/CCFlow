@@ -3503,8 +3503,8 @@ select.input-sm {
   border-color: #e5e5e5;
 }
 .input-group .input-group-addon {
-  border-color: #e5e5e5;
-  background: #e5e5e5;
+  border-color: #EBEBE4;
+  background: #EBEBE4;
   min-width: 39px;
 }
 .input-group .input-group-addon > i {

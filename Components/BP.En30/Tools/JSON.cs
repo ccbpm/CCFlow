@@ -87,6 +87,102 @@ namespace BP.Tools
             }
             return tb;
         }
+
+        /// <summary>
+        /// 把一个json转化一个datatable 杨玉慧
+        /// </summary>
+        /// <param name="json">一个json字符串</param>
+        /// <returns>序列化的datatable</returns>
+        public static DataTable ToDataTableOneRow(string strJson)
+        {
+            //转换json格式
+            //杨玉慧  写
+            //把 *  和# 先替换成别的符号
+            string str1 = "@@@~~~+++";
+            string str2 = "+++---$$$";
+            strJson = strJson.Replace(str1, "");
+            strJson = strJson.Replace(str2, "");
+
+            strJson = strJson.Replace("*", str1);
+            strJson = strJson.Replace("#", str2);
+
+            strJson = strJson.Replace(",\"", "*\"").Replace("\":", "\"#").ToString();
+
+
+            //取出表名  
+            var rg = new Regex(@"(?<={)[^:]+(?=:\[)", RegexOptions.IgnoreCase);
+            string strName = rg.Match(strJson).Value;
+            DataTable tb = null;
+            //去除表名  
+            try
+            {
+                strJson = strJson.Substring(strJson.IndexOf("[") + 1);
+                strJson = strJson.Substring(0, strJson.IndexOf("]"));
+            }
+            catch (Exception ex)
+            {
+
+            }
+            //获取数据  
+            rg = new Regex(@"(?<={)[^}]+(?=})");
+            MatchCollection mc = rg.Matches(strJson);
+            for (int i = 0; i < mc.Count; i++)
+            {
+                string strRow = mc[i].Value;
+                string[] strRows = strRow.Split('*');
+                //创建表  
+                if (tb == null)
+                {
+                    tb = new DataTable();
+                    tb.TableName = strName;
+                    foreach (string str in strRows)
+                    {
+                        if (str.Contains("#"))
+                        {
+                            var dc = new DataColumn();
+                            string[] strCell = str.Split('#');
+                            string columnName = string.Empty;
+                            if (strCell[0].Substring(0, 1) == "\"")
+                            {
+                                int a = strCell[0].Length;
+                                columnName = strCell[0].Substring(1, a - 2);
+                            }
+                            else
+                            {
+                                columnName = strCell[0];
+                            }
+                            columnName = columnName.Replace(str1, "*").Replace(str1, "#");
+                            dc.ColumnName = columnName;
+
+                            tb.Columns.Add(dc);
+                        }
+                        else
+                        {
+                            var dc = new DataColumn();
+                            dc.ColumnName = "无" + i;
+                            tb.Columns.Add(dc);
+                        }
+                    }
+                    tb.AcceptChanges();
+                }
+                //增加内容  
+                DataRow dr = tb.NewRow();
+                string content = string.Empty;
+                for (int r = 0; r < strRows.Length; r++)
+                {
+                    if (strRows[r].Contains("#"))
+                    {
+                        content = strRows[r].Split('#')[1].Trim().Replace("，", ",").Replace("：", ":").Replace("\"", "");
+                        content = content.Replace(str1, "*").Replace(str1, "#");
+
+                        dr[r] = content;
+                    }
+                }
+                tb.Rows.Add(dr);
+                tb.AcceptChanges();
+            }
+            return tb;
+        }
         /// <summary>
         /// 把一个json转化一个datatable
         /// </summary>

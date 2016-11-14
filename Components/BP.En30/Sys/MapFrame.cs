@@ -19,10 +19,6 @@ namespace BP.Sys
         /// </summary>
         public const string URL = "URL";
         /// <summary>
-        /// 插入表单的位置
-        /// </summary>
-        public const string RowIdx = "RowIdx";
-        /// <summary>
         /// GroupID
         /// </summary>
         public const string GroupID = "GroupID";
@@ -32,10 +28,6 @@ namespace BP.Sys
         /// 是否可以自适应大小
         /// </summary>
         public const string IsAutoSize = "IsAutoSize";
-        /// <summary>
-        /// 内部编号
-        /// </summary>
-        public const string NoOfObj = "NoOfObj";
         /// <summary>
         /// 名称
         /// </summary>
@@ -51,6 +43,19 @@ namespace BP.Sys
     public class MapFrame : EntityMyPK
     {
         #region 属性
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                if (BP.Web.WebUser.No == "admin")
+                {
+                    uac.IsDelete = true;
+                    uac.IsUpdate = true;
+                }
+                return uac;
+            }
+        }
         /// <summary>
         /// 是否自适应大小
         /// </summary>
@@ -137,17 +142,7 @@ namespace BP.Sys
                 this.SetValByKey(MapFrameAttr.FK_MapData, value);
             }
         }
-        public int RowIdx
-        {
-            get
-            {
-                return this.GetValIntByKey(MapFrameAttr.RowIdx);
-            }
-            set
-            {
-                this.SetValByKey(MapFrameAttr.RowIdx, value);
-            }
-        }
+     
         
         public int GroupID
         {
@@ -195,19 +190,18 @@ namespace BP.Sys
                 map.EnType = EnType.Sys;
 
                 map.AddMyPK();
-                map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20);
+                map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
+                map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20,true);
+                map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20,true);
 
-                map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, false, 0, 100, 20);
-                map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20);
-                map.AddTBString(MapFrameAttr.W, null, "W", true, false, 0, 20, 20);
-                map.AddTBString(MapFrameAttr.H, null, "H", true, false, 0, 20, 20);
-
+                map.AddTBString(MapFrameAttr.W, null, "宽度", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.H, null, "高度", true, false, 0, 20, 20);
 
                 map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
-                map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
+               // map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
                 map.AddTBInt(MapFrameAttr.GroupID, 0, "GroupID", false, false);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-                
+                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+
                 this._enMap = map;
                 return this._enMap;
             }

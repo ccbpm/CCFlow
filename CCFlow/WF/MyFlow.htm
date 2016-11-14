@@ -69,17 +69,17 @@
             margin: 0px auto;
             margin-bottom: 10px;
         }
-        #nav li > a {
-            color: #333;
-            overflow: hidden;
-            text-align: center;
-            background: none;
-            font: bold 14px "微软雅黑";
-        }
+            #nav li > a {
+                color: #333;
+                height: 110px;
+                overflow: hidden;
+                text-align: center;
+                background: none;
+                font: bold 14px "微软雅黑";
+            }
             #nav li > a p {
                 color: #2884fa;
                 font: normal 12px '微软雅黑';
-                height: 20px;
             }
         #nav .current a {
             margin: 0px;
@@ -127,9 +127,10 @@
             margin-top: 70px;
             overflow: hidden;
         }
-        .navbars .s{
-            overflow-y: auto;
-        }
+            .navbars .s {
+                overflow-y: auto;
+                scrollbar-face-color:#fff;
+            }
             .navbars i {
                 display: block;
                 width: 70px;
@@ -156,6 +157,7 @@
             width: 0px;
             height: 0px;
         }
+        
     </style>
 
     <!--杨玉慧 -->
@@ -202,12 +204,12 @@
     </div>
 <!--分组导航-->
     <div class="navbars" style="display: none;">
-        <div style="width: 190px; height: 30px; position: absolute; z-index: 10; background: #fff;"><i class="top_disabled"></i>
+        <div style="width: 180px; height: 30px; position: absolute; z-index: 10; background: #fff;"><i class="top_disabled"></i>
         </div>
-        <div style="width: 190px; height: 30px; position: absolute; z-index: 10; background: #fff; top: 470px;">
+        <div style="width: 180px; height: 30px; position: absolute; z-index: 10; background: #fff; top: 470px;">
             <i class="bottom"></i>
         </div>
-            <ul class="pageScroll left s" id="nav"></ul>
+        <ul class="pageScroll left s" id="nav"></ul>
         </div>
 
     <!--轨迹导航-->

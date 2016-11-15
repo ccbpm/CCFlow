@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet"/>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script src="../Scripts/jquery/jquery.min.js"></script>
+    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script src="../Scripts/QueryString2016.js"></script>
+    
+    <style>
+        #mains {
+            width: 900px;
+            margin: 0px auto;
+            background: #fff;
+            border: 1px solid #ccc;
+        } 
+        #mains h3 {
+            font-size: 20px;
+            background: #718BF2;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            margin: 0px;
+        }
+            #mains fieldset legend {
+                border-bottom: none;
+                float: left;
+                width:70%;
+            }
+            #mains form {
+                overflow: hidden;
+            }
+        #mains tr{
+            height: 50px;
+        }
+        #mains tr td{
+            padding: 0px 15px;
+        }
+            #mains form {
+                background: #f4f9ff;
+                padding: 10px;
+                margin: 25px 15px;
+                border: #2884fa 1px solid;
+                border-radius: 20px !important;
+            }
+            #mains table{
+                width: 100%;
+                border: none;
+              }
+        #mains tr td input, #mains tr td textarea {
+            border-radius: 15px;
+            border: #2884fa 1px solid;
+            margin: 8px 0px;
+            line-height: 25px;
+            padding-left: 6px;
+            resize: none;
+        }
+            #mains tr td button {
+                margin: 0px 5px;
+                border-radius: 15px;
+                background: #2884fa;
+            }
+    </style>
+    <script>
+        $(function () {
+            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
+               '<div class="modal-dialog">'
+                   + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                      + '<div class="modal-header">'
+                          + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                           + '<h4 class="modal-title">选择移交人</h4>'
+                       + '</div>'
+                       + '<div class="modal-body">'
+                           + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                       + '</div>'
+                   + '</div><!-- /.modal-content -->'
+               + '</div><!-- /.modal-dialog -->'
+           + '</div>';
+
+            $('body').append($(selectEmpModalHtml));
+            $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random());
+
+            $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+            $("section").show();
+            $(".idea input").click(function () {
+                if ($(".idea input:checked").val().split("_")[1] == "移交给其他人处理") {
+                    $(".yjshow").show();
+                } else {
+                    $(".yjshow").hide();
+                }
+                var re = $(".idea input:checked").val().split("_")[1] + "原因：";
+                $("#sjre").text(re);
+            });
+            msg();
+        });
+        //http://localhost:26507/WF/WorkOpt/DealSubThreadReturnToHL.aspx?FK_Flow=029&FK_Node=2905&WorkID=913&FID=912
+        function msg() {
+            $.ajax({
+                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Init&FK_Flow=029&FK_Node=2905&WorkID=913&FID=912&m=" +
+                    Math.random(),
+                data: {},
+                success: function(data) {
+                    if (data != null) {
+                        $("#mains h3").append(data);
+                    }
+                }
+            });
+        }
+        function save() {
+            var actionType = $(".idea input:checked").val().split("_")[0];
+            var note = $("#resj").val();
+            var shiftToEmp = $("#ToEmp").val();
+            $.ajax({
+                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Done&FK_Flow=029&FK_Node=2905&WorkID=918&FID=917" + "&ActionType=" + actionType + "&Note=" + note + "&ShiftToEmp=" + shiftToEmp + "&=" + Math.random(),
+                data: {},
+                success: function (data) {
+                    if (data != null) {
+                        $("#mains h3").append(data);
+                     }
+                }
+            });
+        }
+    </script>
+</head>
+<body style="margin: 0px; background: #eee;">
+    <section id="mains" style="display: none;">
+        <h3></h3>
+        <!--<form action="/" method="post">-->
+        <table>
+            <!--<tr>
+                <td colspan="2">
+                    <fieldset>
+                        <legend>&nbsp; 来自节点:</legend>
+                    </fieldset>
+                </td>
+            </tr>-->
+            <tr class="idea">
+                <td style="width: 20%; text-align: right;">方式</td>
+                <td>
+                    <input type="radio" name="radio1" value="Shift_移交给其他人处理" class="yjother" checked />移交给其他人处理
+                    <input type="radio" name="radio1" value="Return_退回给子线程处理人" class="yjback" />退回给子线程处理人
+                    <input type="radio" name="radio1" value="Kill_删除子线程" class="yjdele" />删除子线程
+                    <input type="radio" name="radio1" value="UnSend_撤销分流点发送" class="yj" />撤销分流点发送
+                </td>
+            </tr>
+            <tr class="yjshow">
+                <td style="width: 25%; text-align: right;">移交人：</td>
+                <td style="position:relative;"><input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;" /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: absolute; right: 145px; top: 3px; border-radius: 0px 25px 25px 0px; height: 27px; background: #2884fa; color: #fff;" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 25%; text-align: right;" id="sjre">移交给其他人处理原因：</td>
+                <td><textarea id="resj" style="width:100%;"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: right;">
+                    <button class="btn btn-info" onclick="save()">确定</button>
+                    <button class="btn btn-info">取消</button>
+                </td>
+            </tr>
+        </table>
+        <!--</form>-->
+    </section>
+</body>
+</html>

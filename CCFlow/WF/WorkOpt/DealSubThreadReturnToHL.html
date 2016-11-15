@@ -82,7 +82,10 @@
             $('body').append($(selectEmpModalHtml));
             $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random());
 
-            $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+            $('#BtnSelectEmps').bind('click', function () {
+                //$('#selectEmpsModal').modal().show();
+                $('#selectEmpsModal').show().addClass("in");
+            });
             $("section").show();
             $(".idea input").click(function () {
                 if ($(".idea input:checked").val().split("_")[1] == "移交给其他人处理") {
@@ -95,10 +98,9 @@
             });
             msg();
         });
-        //http://localhost:26507/WF/WorkOpt/DealSubThreadReturnToHL.aspx?FK_Flow=029&FK_Node=2905&WorkID=913&FID=912
         function msg() {
             $.ajax({
-                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Init&FK_Flow=029&FK_Node=2905&WorkID=913&FID=912&m=" +
+                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Init&FK_Flow=029&FK_Node=2905&WorkID=923&FID=922&m=" +
                     Math.random(),
                 data: {},
                 success: function(data) {
@@ -111,9 +113,9 @@
         function save() {
             var actionType = $(".idea input:checked").val().split("_")[0];
             var note = $("#resj").val();
-            var shiftToEmp = $("#ToEmp").val();
+            var shiftToEmp = frames["iframeSelectEmpsForm"].window.returnVal.No;
             $.ajax({
-                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Done&FK_Flow=029&FK_Node=2905&WorkID=918&FID=917" + "&ActionType=" + actionType + "&Note=" + note + "&ShiftToEmp=" + shiftToEmp + "&=" + Math.random(),
+                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Done&FK_Flow=029&FK_Node=2905&WorkID=923&FID=922" + "&ActionType=" + actionType + "&Note=" + note + "&ShiftToEmp=" + shiftToEmp + "&=" + Math.random(),
                 data: {},
                 success: function (data) {
                     if (data != null) {
@@ -121,13 +123,30 @@
                      }
                 }
             });
+            $(".foot").hide();
+        }
+        function selectEmpsWindowClose(data) {
+            //$('#selectEmpsModal').modal('hide');
+            $('#selectEmpsModal').hide().removeClass("in");
+            if (data == '取消') {
+                return;
+            } else {
+                $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+            }
+        }
+        function Close() {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("取消");
+            } else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
+                window.close();
+            }
         }
     </script>
 </head>
 <body style="margin: 0px; background: #eee;">
     <section id="mains" style="display: none;">
         <h3></h3>
-        <!--<form action="/" method="post">-->
         <table>
             <!--<tr>
                 <td colspan="2">
@@ -147,21 +166,20 @@
             </tr>
             <tr class="yjshow">
                 <td style="width: 25%; text-align: right;">移交人：</td>
-                <td style="position:relative;"><input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;" /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: absolute; right: 145px; top: 3px; border-radius: 0px 25px 25px 0px; height: 27px; background: #2884fa; color: #fff;" />
+                <td style="position:relative;"><input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;" disabled /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: absolute; right: 145px; top: 3px; border-radius: 0px 25px 25px 0px; height: 27px; background: #2884fa; color: #fff;" />
                 </td>
             </tr>
             <tr>
                 <td style="width: 25%; text-align: right;" id="sjre">移交给其他人处理原因：</td>
                 <td><textarea id="resj" style="width:100%;"></textarea></td>
             </tr>
-            <tr>
+            <tr class="foot">
                 <td colspan="2" style="text-align: right;">
                     <button class="btn btn-info" onclick="save()">确定</button>
-                    <button class="btn btn-info">取消</button>
+                    <button class="btn btn-info" onclick="Close()">取消</button>
                 </td>
             </tr>
         </table>
-        <!--</form>-->
-    </section>
+     </section>
 </body>
 </html>

@@ -4551,6 +4551,7 @@ namespace BP.WF
         /// </summary>
         /// <param name="flowNo">流程编号</param>
         /// <param name="workid">工作ID</param>
+        /// <param name="fid">父工作ID</param>
         /// <param name="msg">消息</param>
         /// <param name="empNo">评论人编号</param>
         /// <param name="empName">评论人名称</param>

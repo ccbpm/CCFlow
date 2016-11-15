@@ -195,8 +195,7 @@ namespace BP.DA
         public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, string fileSaveField)
         {
             byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
-            System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
-            return converter.GetString(byteFile);
+            return System.Text.Encoding.UTF8.GetString(byteFile);
         }
         /// <summary>
         /// 从数据库里提取文件

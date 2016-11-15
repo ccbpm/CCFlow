@@ -1,16 +1,13 @@
-﻿
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>驰骋工作流程引擎设计器ccflow6</title>
-	<link rel="stylesheet" type="text/css" href="normalize/css/demo.css" />
-	<link rel="stylesheet" type="text/css" href="normalize/css/ns-default.css" />
-	<link rel="stylesheet" type="text/css" href="normalize/css/ns-style-bar.css" />
-
+    <link rel="stylesheet" type="text/css" href="normalize/css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="normalize/css/ns-default.css" />
+    <link rel="stylesheet" type="text/css" href="normalize/css/ns-style-bar.css" />
     <script src="../../Scripts/Config.js" type="text/javascript"></script>
-
     <script type="text/javascript" src="normalize/js/modernizr.custom.js"></script>
     <link href="../../Scripts/easyUI15/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI15/themes/gray/dialog.css" rel="stylesheet" type="text/css" />
@@ -24,203 +21,222 @@
     <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
     <script src="js/FuncTrees.js" type="text/javascript"></script>
     <script src="js/Left.js" type="text/javascript"></script>
-
     <style type="text/css">
-    .icon-Search
-    {
-       background: url('./Img/Search.png') no-repeat;
-    }
-    .icon-Event
-    {
-       background: url('../../Img/Event.png') no-repeat;
-    }
-    .icon-Setting
-    {
-       background: url('../../Img/Setting.png') no-repeat;
-    }
-   
-    .icon-DTS
-    {
-       background: url('./Img/DTS.png') no-repeat;
-    }
-    .icon-URL
-    {
-       background: url('./Img/URL.png') no-repeat;
-    }
-    .icon-API
-    {
-       background: url('./Img/API.png') no-repeat;
-    }
-     .icon-StartGuide
-    {
-       background: url('./Img/StartGuide.png') no-repeat;
-    }
-    .icon-limit
-    {
-       background: url('./Img/limit.png') no-repeat;
-    }
-    .icon-AutoStart
-    {
-       background: url('./Img/AutoStart.png') no-repeat;
-    }
-    .icon-DesignRpt
-    {
-       background: url('./Img/DesignRpt.png') no-repeat;
-    }
-    .icon-Group
-    {
-       background: url('./Img/Group.png') no-repeat;
-    }
-    .icon-D3
-    {
-       background: url('./Img/D3.png') no-repeat;
-    }
-    .icon-Contrast
-    {
-       background: url('./Img/Contrast.png') no-repeat;
-    }
-    .icon-SQL
-    {
-       background: url('./Img/SQL.png') no-repeat;
-    }
-    .icon-Field
-    {
-       background: url('./Img/Field.png') no-repeat;
-    }
-     .icon-Node
-    {
-       background: url('./Img/Node.png') no-repeat;
-    }
-    .icon-FuncFolder
-    {
-       background: url('./Img/FuncFolder.png') no-repeat;
-    }
-     .icon-Monitor
-    {
-       background: url('./Img/Monitor.png') no-repeat;
-    }
-      .icon-SearchKey
-    {
-       background: url('./Img/SearchKey.png') no-repeat;
-    }
-    .icon-app
-    {
-       background: url('./Img/app.png') no-repeat;
-    }
-    .icon-flows
-    {
-       background: url('./Img/flows.png') no-repeat;
-    }
-    .icon-RptOrder
-    {
-       background: url('./Img/RptOrder.png') no-repeat;
-    }
-    .icon-Grow
-    {
-       background: url('./Img/Grow.png') no-repeat;
-    }
-     .icon-Warning
-    {
-       background: url('./Img/Warning.png') no-repeat;
-    }
-       .icon-overtime
-    {
-       background: url('./Img/overtime.png') no-repeat;
-    }
-      .icon-log
-    {
-       background: url('./Img/log.png') no-repeat;
-    }
-    
-    .icon-flowcloud
-{
-    background: url('./Img/FlowCloud.png') no-repeat;
-    width: 16px;
-    height: 16px;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-}
-    .icon-Home
-    {
-       background: url('../CCFormDesigner/Img/Home.png') no-repeat;
-    }
-    .icon-Glasses
-    {
-       background: url('../CCFormDesigner/Img/Glasses.png') no-repeat;
-    }
-      .icon-JavaScript
-    {
-       background: url('../CCFormDesigner/Img/JavaScript.png') no-repeat;
-    }
-    
-    .icon-LoadFull
-    {
-       background: url('../CCFormDesigner/Img/LoadFull.png') no-repeat;
-    }
-    
-    
-   .icon-Menu
-   {
-      background: url('../../../GPM/Images/Menu.png');
-    }
-
-   .icon-User
-   {
-      background: url('../../../GPM/Images/User.png');
-    }
-    .icon-Station
-   {
-      background: url('../../../GPM/Images/Station.png');
-    }
+        .icon-Search
+        {
+            background: url('./Img/Search.png') no-repeat;
+        }
+        .icon-Event
+        {
+            background: url('../../Img/Event.png') no-repeat;
+        }
+        .icon-Setting
+        {
+            background: url('../../Img/Setting.png') no-repeat;
+        }
+        
+        .icon-DTS
+        {
+            background: url('./Img/DTS.png') no-repeat;
+        }
+        .icon-URL
+        {
+            background: url('./Img/URL.png') no-repeat;
+        }
+        .icon-API
+        {
+            background: url('./Img/API.png') no-repeat;
+        }
+        .icon-StartGuide
+        {
+            background: url('./Img/StartGuide.png') no-repeat;
+        }
+        .icon-limit
+        {
+            background: url('./Img/limit.png') no-repeat;
+        }
+        .icon-AutoStart
+        {
+            background: url('./Img/AutoStart.png') no-repeat;
+        }
+        .icon-DesignRpt
+        {
+            background: url('./Img/DesignRpt.png') no-repeat;
+        }
+        .icon-Group
+        {
+            background: url('./Img/Group.png') no-repeat;
+        }
+        .icon-D3
+        {
+            background: url('./Img/D3.png') no-repeat;
+        }
+        .icon-Contrast
+        {
+            background: url('./Img/Contrast.png') no-repeat;
+        }
+        .icon-SQL
+        {
+            background: url('./Img/SQL.png') no-repeat;
+        }
+        .icon-Field
+        {
+            background: url('./Img/Field.png') no-repeat;
+        }
+        .icon-Node
+        {
+            background: url('./Img/Node.png') no-repeat;
+        }
+        .icon-FuncFolder
+        {
+            background: url('./Img/FuncFolder.png') no-repeat;
+        }
+        .icon-Monitor
+        {
+            background: url('./Img/Monitor.png') no-repeat;
+        }
+        .icon-SearchKey
+        {
+            background: url('./Img/SearchKey.png') no-repeat;
+        }
+        .icon-app
+        {
+            background: url('./Img/app.png') no-repeat;
+        }
+        .icon-flows
+        {
+            background: url('./Img/flows.png') no-repeat;
+        }
+        .icon-RptOrder
+        {
+            background: url('./Img/RptOrder.png') no-repeat;
+        }
+        .icon-Grow
+        {
+            background: url('./Img/Grow.png') no-repeat;
+        }
+        .icon-Warning
+        {
+            background: url('./Img/Warning.png') no-repeat;
+        }
+        .icon-overtime
+        {
+            background: url('./Img/overtime.png') no-repeat;
+        }
+        .icon-log
+        {
+            background: url('./Img/log.png') no-repeat;
+        }
+        
+        .icon-flowcloud
+        {
+            background: url('./Img/FlowCloud.png') no-repeat;
+            width: 16px;
+            height: 16px;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+        }
+        .icon-Home
+        {
+            background: url('../CCFormDesigner/Img/Home.png') no-repeat;
+        }
+        .icon-Glasses
+        {
+            background: url('../CCFormDesigner/Img/Glasses.png') no-repeat;
+        }
+        .icon-JavaScript
+        {
+            background: url('../CCFormDesigner/Img/JavaScript.png') no-repeat;
+        }        
+        .icon-LoadFull
+        {
+            background: url('../CCFormDesigner/Img/LoadFull.png') no-repeat;
+        }        
+        .icon-Menu
+        {
+            background: url('../../../GPM/Images/Menu.png');
+        }
+        
+        .icon-User
+        {
+            background: url('../../../GPM/Images/User.png');
+        }
+        .icon-Station
+        {
+            background: url('../../../GPM/Images/Station.png');
+        }
+        .panel-header
+        {
+            height: 36px;
+        }
+        .logpanel
+        {
+            height: 50px;
+        }
+        .icon-logPic
+        {
+            background: url('/DataUser/ICON/Smaller.png') no-repeat;
+            height: 50px;
+            width: 50px;
+            float: left;
+            display: inline;
+        }
+        .logPicspan
+        {
+            margin-left: 15px;
+            margin-top: 6px;
+            font-size: large;
+            float: left;
+            display: inline;
+        }
     </style>
     <script language="javascript" type="text/javascript">
 
-       var osModel = 0; // '<%=BP.Sys.SystemConfig.OSModel %>';
+        var osModel = 0; // '<%=BP.Sys.SystemConfig.OSModel %>';
 
-       $(function () {
+        $(function () {
 
-           //            var doType = GetQueryString("UserNo");
-           //            if (doType == null)
-           //                doType = "LoginInit";
-           $.ajax({
-               type: 'post',
-               async: true,
-               url: Handler + "?DoType=DefaultInit&m=" + Math.random(),
-               dataType: 'html',
-               success: function (data) {
+            //            var doType = GetQueryString("UserNo");
+            //            if (doType == null)
+            //                doType = "LoginInit";
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=DefaultInit&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
 
-                   if (data.indexOf('err@') == 0) {
-                       alert(data);
-                       return;
-                   }
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
 
-                   if (data.indexOf('url@') == 0) {
-                       window.location.href = 'Login.htm&DoType=Logout';
-                       return;
-                   }
+                    if (data.indexOf('url@') == 0) {
+                        window.location.href = 'Login.htm&DoType=Logout';
+                        return;
+                    }
 
-                   data = JSON.parse(data);
+                    data = JSON.parse(data);
 
-                   var msg = data.Msg;
-                   osModel = data.OSModel;
+                    var msg = data.Msg;
+                    osModel = data.OSModel;
 
-                   if (msg!="")
-                      alert(msg);
-                    
-               }
-           });
+                    if (msg != "")
+                        alert(msg);
 
-
-           var content = createFrame('Welcome.htm');
-           $('#tabs').tabs('add', {
-               title: '首页',
-               id: 'WelCome',
-               content: content,
-               iconCls: '',
-               closable: false
-           });
-       });
+                }
+            });
+            
+            var content = createFrame('Welcome.htm');
+            $('#tabs').tabs('add', {
+                title: '首页',
+                id: 'WelCome',
+                content: content,
+                iconCls: '',
+                closable: false
+            });
+        });
 
         function closeTab(title) {
             $('#tabs').tabs('close', title);
@@ -284,7 +300,7 @@
             var tabText = "";
             var p = $(document.getElementById("tabs")).find("li");
             $.each(p, function (i, val) {
-                if (val.className == "tabs-selected") {
+                if (val.className.indexOf("tabs-selected") > -1) {
                     tabText = $($(val).find("span")[0]).text();
                 }
             });
@@ -292,7 +308,7 @@
             var lastChar = tabText.substring(tabText.length - 1, tabText.length);
             if (lastChar != "*") {
                 $.each(p, function (i, val) {
-                    if (val.className == "tabs-selected") {
+                    if (val.className.indexOf("tabs-selected") > -1) {
                         tabText = $($(val).find("span")[0]).text(tabText + ' *');
                     }
                 });
@@ -304,15 +320,16 @@
             var tabText = "";
             var p = $(parent.document.getElementById("tabs")).find("li");
             $.each(p, function (i, val) {
-                if (val.className == "tabs-selected") {
+                debugger
+                if (val.className.indexOf("tabs-selected") > -1) {
                     tabText = $($(val).find("span")[0]).text();
                 }
             });
-
+            debugger
             var lastChar = tabText.substring(tabText.length - 1, tabText.length);
             if (lastChar == "*") {
                 $.each(p, function (i, val) {
-                    if (val.className == "tabs-selected") {
+                    if (val.className.indexOf("tabs-selected") > -1) {
                         $($(val).find("span")[0]).text(tabText.substring(0, tabText.length - 1));
                     }
                 });
@@ -400,6 +417,7 @@
             arrayCloseObj.length = 0;
             tabCloseEven();
         }
+
         //绑定右键菜单事件
         function tabCloseEven() {
             //刷新
@@ -504,43 +522,14 @@
             notification.show();
         }
     </script>
-    <style type="text/css">
-         .panel-header
-        {
-            height:36px;    
-        }
-        .logpanel
-        {
-            height:50px;
-        }
-        .icon-logPic
-        {
-	        background:url('/DataUser/ICON/Smaller.png') no-repeat;
-	        height:50px;
-	        width:50px;
-	        float:left;
-	        display:inline;
-        }
-        .logPicspan
-        {
-            margin-left:15px;
-            margin-top:6px;
-            font-size:large;
-            float:left;
-	        display:inline;
-        }
-    </style>
 </head>
 <body class="easyui-layout" data-options="fit: true">
-    <div class="panel window mymask mymaskContainer" style="display: block; width: 32px;
-        height: 32px; z-index: 21008; text-align: center; font-size: 14px; font-weight: bold;">
-        <img alt="" src="assets/images/loading_small.gif" align='middle' style="width: 32px;
-            height: 32px;" />
+    <div class="panel window mymask mymaskContainer" style="display: block; width: 32px;height: 32px; z-index: 21008; text-align: center; font-size: 14px; font-weight: bold;">
+        <img alt="" src="assets/images/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
     </div>
-    <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
-        z-index: 21006;">
+    <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;z-index: 21006;">
     </div>
-     <div data-options="region:'west',border:true,split:true" title="<img src='/DataUser/ICON/Smaller.png' style='width:40px;vertical-align:middle' />&nbsp;驰骋工作流引擎设计器" style="width:250px; ">
+    <div data-options="region:'west',border:true,split:true" title="<img src='/DataUser/ICON/Smaller.png' style='width:40px;vertical-align:middle' />&nbsp;驰骋工作流引擎设计器" style="width: 250px;">
         <div id="menuTab" class="easyui-tabs" data-options="fit:true,border:false">
         </div>
     </div>
@@ -555,8 +544,16 @@
         <div id="tabs" class="easyui-tabs" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
         </div>
         <div id="tab-tools">
-            <a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="Login2App()"><b style="color: Blue;"><img alt='使用普通用户,登录前台demo系统' src='/WF/App/Classic/Img/Key.png' style="width:14px;height:14px;"/>登录前台</b></a> 
-            <a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="LoginOut()"><b style="color: Blue;"><img alt='退出ccbpm流程设计器' src='/WF/Img/Exit.png' style="width:14px;height:14px;"/>退出</b></a>
+            <a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="Login2App()">
+                <b style="color: Blue;">
+                    <img alt='使用普通用户,登录前台demo系统' src='/WF/App/Classic/Img/Key.png' style="width: 14px;height: 14px;" />登录前台
+                </b>
+            </a> 
+            <a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="LoginOut()">
+                <b style="color: Blue;">
+                    <img alt='退出ccbpm流程设计器' src='/WF/Img/Exit.png' style="width: 14px; height: 14px;" />退出
+                </b>
+            </a>
         </div>
     </div>
     <!--  context menu -->
@@ -594,7 +591,6 @@
         <div class="menu-sep"></div>
         <div onclick="ImpLocalFlow()" data-options="iconCls:'icon-imp'">导入本机流程模版</div>
         <div onclick="ImpColudFlow()" data-options="iconCls:'icon-imp'">导入ccbpm云服务流程模版</div>
-
     </div>
     <div id="mFormRoot" class="easyui-menu" style="width: 120px;">
         <div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>

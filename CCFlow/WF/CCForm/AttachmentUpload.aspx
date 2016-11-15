@@ -95,7 +95,7 @@
     <uc1:Pub ID="Pub1" runat="server" EnableViewState="False" />
     <asp:Button runat="server" ID="Btn_Upload" OnClick="btn_Click" Style="display: none;" />
 
-    <div id="bar" style="display:none;">
+    <div id="bar" style="display:none;position: fixed;bottom: 0px;right: 0px;">
         <input type="button"   id="btn_Colse"  value="关闭"/>
     </div>
 </asp:Content>

@@ -51,7 +51,6 @@ namespace BP.WF
 
             try
             {
-             
 
                 MapData md = new MapData();
                 md.No = "ND" + fk_node;
@@ -65,7 +64,6 @@ namespace BP.WF
                 Node nd = new Node(fk_node);
                 if (nd.IsStartNode == false)
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
-
 
                 //增加转向下拉框数据.
                 if (nd.CondModel == CondModel.SendButtonSileSelect)

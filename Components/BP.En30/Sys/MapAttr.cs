@@ -196,6 +196,10 @@ namespace BP.Sys
         /// </summary>
         public const string SiganField = "SiganField";
         /// <summary>
+        /// 操作提示
+        /// </summary>
+        public const string Tip = "Tip";
+        /// <summary>
         /// 是否自动签名
         /// </summary>
         public const string PicType = "PicType";
@@ -1054,6 +1058,20 @@ namespace BP.Sys
             set
             {
                 this.SetPara("RBShowModel", value);
+            }
+        }
+        /// <summary>
+        /// 操作提示
+        /// </summary>
+        public string Para_Tip
+        {
+            get
+            {
+                return this.GetParaString(MapAttrAttr.Tip);
+            }
+            set
+            {
+                this.SetPara(MapAttrAttr.Tip, value);
             }
         }
         /// <summary>

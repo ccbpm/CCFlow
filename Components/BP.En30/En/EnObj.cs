@@ -300,6 +300,29 @@ namespace BP.En
                             }
                         }
                         continue;
+                    case "@yyyy年mm月dd日":
+                        if (attr.UIIsReadonly == true)
+                        {
+                                this.SetValByKey(attr.Key, DateTime.Now.ToString("yyyy年MM月dd日"));
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(myval) || myval == v)
+                                this.SetValByKey(attr.Key, DateTime.Now.ToString("yyyy年MM月dd日"));
+                        }
+                        continue;
+                    case "@yy年mm月dd日":
+                        if (attr.UIIsReadonly == true)
+                        {
+                            this.SetValByKey(attr.Key, DateTime.Now.ToString("yy年MM月dd日"));
+                            continue;
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(myval) || myval == v)
+                                this.SetValByKey(attr.Key, DateTime.Now.ToString("yy年MM月dd日"));
+                        }
+                        continue;
                     default:
                         continue;
                 }

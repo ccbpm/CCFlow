@@ -1080,15 +1080,6 @@ namespace BP.WF.Template
                 #endregion 方法 - 基本功能.
 
 
-                //rm = new RefMethod();
-                //rm.Title = "扩展设置"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoMapExt";
-                //rm.Icon = "/WF/Img/Setting.png";
-                //rm.Visable = true;
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Target = "_blank";
-                //map.AddRefMethod(rm);
-
                 #region 方法 - 开发接口.
                 rm = new RefMethod();
                 rm.Title = "调用查询API"; // "设计表单";
@@ -1143,11 +1134,16 @@ namespace BP.WF.Template
                 //rm.Target = "_blank";
                 //map.AddRefMethod(rm);
 
+
+             
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+
 
         #region 方法.
         /// <summary>
@@ -1210,6 +1206,7 @@ namespace BP.WF.Template
             }
             return "执行成功";
         }
+      
         /// <summary>
         /// 批量修改字段
         /// </summary>

@@ -1068,9 +1068,27 @@ namespace BP.WF.Template
                 #endregion 工作流相关.
 
 
+                RefMethod  rm = new RefMethod();
+                rm.Title = "高级设置"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoAdvSetting";
+                rm.Icon = "/WF/Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        /// <summary>
+        /// 高级设置
+        /// </summary>
+        /// <returns></returns>
+        public string DoAdvSetting()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapDtl.htm?DoType=Edit&FK_MapDtl=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
 
         #region 基本属性.

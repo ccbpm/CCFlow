@@ -18,10 +18,6 @@ namespace BP.Sys
         /// URL
         /// </summary>
         public const string URL = "URL";
-        /// <summary>
-        /// GroupID
-        /// </summary>
-        public const string GroupID = "GroupID";
         public const string H = "H";
         public const string W = "W";
         /// <summary>
@@ -142,19 +138,18 @@ namespace BP.Sys
                 this.SetValByKey(MapFrameAttr.FK_MapData, value);
             }
         }
-     
-        
-        public int GroupID
-        {
-            get
-            {
-                return this.GetValIntByKey(MapFrameAttr.GroupID);
-            }
-            set
-            {
-                this.SetValByKey(MapFrameAttr.GroupID, value);
-            }
-        }
+
+        //public int GroupID
+        //{
+        //    get
+        //    {
+        //        return this.GetValIntByKey(MapFrameAttr.GroupID);
+        //    }
+        //    set
+        //    {
+        //        this.SetValByKey(MapFrameAttr.GroupID, value);
+        //    }
+        //}
        
         #endregion
 
@@ -199,7 +194,8 @@ namespace BP.Sys
 
                 map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
                // map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
-                map.AddTBInt(MapFrameAttr.GroupID, 0, "GroupID", false, false);
+               // map.AddTBInt(MapFrameAttr.GroupID, 0, "GroupID", false, false);
+
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 this._enMap = map;
@@ -252,7 +248,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public MapFrames(string fk_mapdata)
         {
-            this.Retrieve(MapFrameAttr.FK_MapData, fk_mapdata, MapFrameAttr.GroupID);
+            this.Retrieve(MapFrameAttr.FK_MapData, fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

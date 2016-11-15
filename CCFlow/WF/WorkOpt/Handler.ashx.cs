@@ -302,6 +302,9 @@ namespace CCFlow.WF.WorkOpt
                     case "Press": //催办.
                         msg = Press();
                         break;
+                    case "DeleteFlowInstance_DoDelete": //执行删除流程.
+                        msg = DeleteFlowInstance_DoDelete();
+                        break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;

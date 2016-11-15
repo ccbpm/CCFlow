@@ -1,40 +1,63 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-    <style type="text/css">
-        #TB_Doc
-        {
-            height: 79px;
-            width: 721px;
-        }
-    </style>
+    <title>删除流程</title>
+     <link href="./../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="./../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="./../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="./../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="./../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script src="./../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../WF/Comm/Gener.js"></script>
+    <link href="./../../WF/Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+     <script src="./../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function OK() {
+            var TB_Doc = $("#TB_Doc").val();
+            var deleteWay = $('input[name="deleteWay"]').filter(':checked').val();
+            var CB_IsDeleteSubFlow = $('input[name="CB_IsDeleteSubFlow"]').filter(':checked').val();
+            if (TB_Doc == "" || TB_Doc.trim().length == 0) {
+                alert("请填写删除原因!");
+                return;
+            }
+            if (deleteWay == "" || deleteWay == null || deleteWay=="undefined") {
+                alert("请选择删除方式!");
+                return;
+            }
+             $.ajax({
+               type: 'post',
+               async: true,
+               url: Handler + "?DoType=DeleteFlowInstance_DoDelete&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&RB_DeleteWay=" + deleteWay + "&TB_Doc=" + TB_Doc + "&CB_IsDeleteSubFlow=" + CB_IsDeleteSubFlow,
+               dataType: 'html',
+               success: function (data) {
+                   alert(data);
+                   window.close();             
+               }
+           });        
+        }   
+    </script>
 </head>
 <body>
 
 <table>
-<caption> 删除流程(删除需谨慎) </caption>
+<caption style=" text-align: center"> 删除流程&nbsp(需谨慎！) </caption>
 <tr>
-<td>删除原因 </td>
+<td>删除原因</td>
 <td> 
-   <textarea id="TB_Doc" name="TB_Doc" > 
-
+   <textarea id="TB_Doc" name="TB_Doc" style=" height:100px; width :600px;" >
    </textarea>
     </td>
 </tr>
-
 <tr>
 <td>删除方式 </td>
-<td> (.)做删除标记方式删除.  (.)彻底删除(删除数据与轨迹信息). (.)把该流程移动到流程删除列表里. </td>
+<td> <input type="radio" name="deleteWay" value="0" />做删除标记方式删除.<input type="radio" name="deleteWay" value="1" />彻底删除(删除数据与轨迹信息).<input type="radio" name="deleteWay" value="2" />把该流程移动到流程删除列表里.</td>
 </tr>
-
 <tr>
 <td></td>
-<td> <input type="checkbox"  />是否删除子流程？ </td>
+<td> <input type="checkbox" name="CB_IsDeleteSubFlow"  value="1"/>是否删除子流程？</td>
 </tr>
-
 </table>
-
 <input type="button" value="执行删除" name="Btn_OK" id="Btn_OK" onclick="OK()" /> 
 <input type="button" value="取消" name="Btn_Cancel" id="Btn_Cancel" onclick="window.close()" /> 
 

@@ -577,10 +577,14 @@ function setFormEleDisabled() {
 
 //保存
 function Save() {
+    //比填写检查
+    if (!checkBlanks()) {
+        return;
+    }
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData(),
+        data: getFormData(true),
         url: "MyFlow.ashx?Method=Save",
         dataType: 'html',
         success: function (data) {
@@ -1305,7 +1309,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         if (mapAttr.ColSpan == 1 || mapAttr.ColSpan >= 3) {
                             if (mapAttr.ColSpan == 1) {
                                 eleHtml += '<div class="col-md-2 col-sm-4 col-lg-2">';
-                            } else if (mapAttr.ColSpan == 3) {
+                            } else if (mapAttr.ColSpan >= 3) {
                                 eleHtml += '<div class="col-md-11 col-sm-10 col-lg-11" style="padding:3px 20px;">';
                             }
                             var enums = workNodeData.Sys_Enum;
@@ -1774,15 +1778,18 @@ function GenerWorkNode() {
             InitToNodeDDL();
             //
             Col8To4();
+
+            window.location.href = "#divCurrentForm";
         }
     });
 }
 
 //获取表单数据
-function getFormData() {
+function getFormData(isCotainTextArea) {
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
+    //获取CHECKBOX的值
     $.each(formArr, function (i, ele) {
         if (ele.split('=')[0].indexOf('CB_') == 0) {
             if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
@@ -1871,7 +1878,7 @@ function Send() {
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData() + "&ToNode=" + toNode,
+        data: getFormData(true) + "&ToNode=" + toNode,
         url: "MyFlow.ashx?Method=Send",
         dataType: 'html',
         success: function (data) {
@@ -1923,7 +1930,7 @@ function InitToNodeDDL() {
     }
 }
 
-//根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示
+//根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
 function showNoticeInfo() {
     var workNode = JSON.parse(jsonStr);
     var rbs = workNode.Sys_FrmRB;
@@ -2032,6 +2039,63 @@ function showNoticeInfo() {
     $('#span_CloseNoticeInfo').click();
 }
 
+//给出文本框输入提示信息
+function showTbNoticeInfo() {
+    var workNode = JSON.parse(jsonStr);
+    var mapAttr = workNode.Sys_MapAttr;
+    mapAttr = $.grep(mapAttr, function (attr) {
+        var atParams = mapAttr.AtPara;
+        return atParams != undefined && AtParaToJson(atParams).Tip != undefined && AtParaToJson(atParams).Tip != '' && $('#TB_' + attr.KeyOfEn).length > 0 && $('#TB_' + attr.KeyOfEn).css('display') != 'none';
+    })
+
+    $.each(mapAttr, function (i, attr) {
+        $('#TB_' + attr.KeyOfEn).bind('foucs', function (obj) {
+            mapAttr = $.grep(mapAttr, function (attr) {
+                return 'TB_' + attr.KeyOfEn == obj.target.id;
+            })
+            var atParams = mapAttr.AtPara;
+            var noticeInfo = atParams.Tip;
+
+            noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
+            var selectText = '';
+            if (obj.target.tagName.toUpperCase() == 'INPUT' && obj.target.type.toUpperCase() == 'RADIO') {//radio button
+                selectText = obj.target.nextSibling.textContent;
+            } else {//select
+                selectText = $(obj.target).find("option:selected").text();
+            }
+            $($('#div_NoticeInfo .popover-title span')[0]).text(selectText);
+            $('#div_NoticeInfo .popover-content').html(noticeInfo);
+
+            var top = obj.target.offsetHeight;
+            var left = obj.target.offsetLeft;
+            var current = obj.target.offsetParent;
+            while (current !== null) {
+                left += current.offsetLeft;
+                top += current.offsetTop;
+                current = current.offsetParent;
+            }
+
+
+            if (obj.target.tagName.toUpperCase() == 'INPUT' && obj.target.type.toUpperCase() == 'RADIO') {//radio button
+                left = left - 40;
+                top = top + 10;
+            }
+            if (top - $('#div_NoticeInfo').height() - 30 < 0) {
+                //让提示框在下方展示
+                $('#div_NoticeInfo').removeClass('top');
+                $('#div_NoticeInfo').addClass('bottom');
+                top = top;
+            } else {
+                $('#div_NoticeInfo').removeClass('bottom');
+                $('#div_NoticeInfo').addClass('top');
+                top = top - $('#div_NoticeInfo').height() - 30;
+            }
+            $('#div_NoticeInfo').css('top', top);
+            $('#div_NoticeInfo').css('left', left);
+            $('#div_NoticeInfo').css('display', 'block');
+        });
+    })
+}
 //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
 function checkBlanks() {
     var checkBlankResult = true;

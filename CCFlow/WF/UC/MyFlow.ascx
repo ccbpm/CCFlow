@@ -39,7 +39,7 @@
 
     //打开接收人窗口时获取返回值
     function returnWorkWindowClose(data) {
-        //alert(data);
+            //alert(data);
         if (data.indexOf('SaveOK@') == 0) {
             //说明保存人员成功,开始调用发送按钮.
             var btnSend = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Send");

@@ -6,6 +6,7 @@
         <style type="text/css">
            body
            {
+               
            }
            li
            {
@@ -17,8 +18,10 @@
 	</head>
 	<body   >
 
+    
+    <body >
   <center>
-  <table style="text-align:center; border:1px; width:70%; border-color:Black;  " >
+  <table style="text-align:center; border:1px; width:70%;" >
   <caption style="CaptionMsgLong"    >驰骋工作流程引擎ccbpm测试导航</caption>
   <tr>
   <th>多看文档少走弯路，学好ccflow受益一生。</th>
@@ -27,16 +30,16 @@
   <tr>
   <td>
     <ul>
-    <li> <a href="/WF/Admin/CCBPMDesigner/Login.aspx" >进入流程设计器</a> : 用户名:admin 密码:pub</li>
-    <li> <a href='./WF/App/Classic/Login.aspx' >进入应用程序方式登录...</a></li>
-    <li> <a href="http://ccflow.org" target="_blank" >ccflow 官方网站</a></li>
-    <li> <a href="http://bbs.ccflow.org" target="_blank" >  技术论坛</a></li>
-    <li> 技术指导:ccflow张庆鹏 QQ:1497192404 电话:18653158250 </li>
+    <li><font size="30" color="green" ><a href="WF/Admin/CCBPMDesigner/Login.htm" >进入流程设计器</a></font> 用户名:admin 密码:123</li>
+    <li> <a href='./WF/App/Classic/Login.aspx' >前台登录</a></li>
+    <li> <a href="http://ccflow.org" target=_blank >ccflow 官方网站</a> |  <a href="http://bbs.ccflow.org" target=_blank >  技术论坛</a> </li>
+    <li> 商务问题 QQ:<span class="style4">793719823</span> 电话:<span  class="style5">0531-82374939 , 18660153393</span> </li> 
     </ul>
   </td>
   </tr>
 
-  <tr>
+
+   <tr>
   <th>
   在线文档，需要高版本的IE浏览器或者谷歌火狐浏览器查看。
   </th>
@@ -181,10 +184,11 @@
   
 
   <tr>
-  <td style=" text-align:center" >济南驰骋信息技术有限公司 @2003-2015</td>
+  <td style=" text-align:center" >济南驰骋信息技术有限公司 @2003-2017</td>
   </tr>
   </table>
   </center>
+
 
 
  </body>

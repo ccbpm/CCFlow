@@ -246,7 +246,7 @@ namespace BP.WF
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnNodeName = this.ReturnToNode.Name;
+            rw.ReturnNodeName = this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = this.ReturnToEmp; //退回给。
@@ -595,7 +595,7 @@ namespace BP.WF
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnNodeName = this.ReturnToNode.Name;
+            rw.ReturnNodeName = this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = toEmp; //退回给。
@@ -672,7 +672,7 @@ namespace BP.WF
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnNodeName = this.ReturnToNode.Name;
+            rw.ReturnNodeName = this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = toEmp; //退回给。
@@ -788,7 +788,7 @@ namespace BP.WF
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnNodeName = this.ReturnToNode.Name;
+            rw.ReturnNodeName = this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = gwl.FK_Emp; //退回给。

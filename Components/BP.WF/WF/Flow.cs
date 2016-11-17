@@ -6748,7 +6748,6 @@ namespace BP.WF
 
             //删除单据.
             sql += "@ DELETE FROM WF_BillTemplate WHERE  NodeID in (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
-
             //删除权限控制.
             sql += "@ DELETE FROM Sys_FrmSln WHERE FK_Flow='" + this.No + "'";
             //考核表

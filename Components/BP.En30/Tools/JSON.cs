@@ -277,7 +277,7 @@ namespace BP.Tools
         /// <returns></returns>
         public static string ToJson(Hashtable ht, bool isNoNameFormat)
         {
-            if (isNoNameFormat)
+            if (isNoNameFormat ==true)
             {
                 /*如果是datatable 模式. */
                 DataTable dt = new DataTable();

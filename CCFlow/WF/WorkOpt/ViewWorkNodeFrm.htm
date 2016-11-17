@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../Scripts/Cookie.js"></script>
 
 <script type="text/javascript" language="javascript" src="../Scripts/MyFlow2016.js"></script>
-<script type="text/javascript" src="../Scripts/QueryString.js"></script>
+<script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
 <script type="text/javascript" src="../../WF/CCForm/MapExt2016.js"></script>
 <!-- 引用通用的js文件. -->
 <script type="text/javascript" src="../../WF/Comm/Gener.js"></script>
@@ -564,7 +564,8 @@
                                 "&FK_MapData=" +
                                 groupFiled.FK_MapData +
                                 "&FK_FrmAttachment=" +
-                                ath.MyPK;
+                                ath.MyPK +
+                                "&IsReadonly=1";
                         atParamObj["IsViewWorkNode"] = 1;
 
                         if (parent != undefined && parent.document.getElementById('iframeAthForm') != undefined) {

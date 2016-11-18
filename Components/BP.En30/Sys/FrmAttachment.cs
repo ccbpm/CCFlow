@@ -197,10 +197,6 @@ namespace BP.Sys
         /// </summary>
         public const string UploadType = "UploadType";
         /// <summary>
-        /// RowIdx
-        /// </summary>
-        public const string RowIdx = "RowIdx";
-        /// <summary>
         /// GroupID
         /// </summary>
         public const string GroupID = "GroupID";
@@ -257,7 +253,6 @@ namespace BP.Sys
         /// 是否启用weboffice
         /// </summary>
         public const string IsWoEnableWF = "IsWoEnableWF";
-
         /// <summary>
         /// 是否启用保存
         /// </summary>
@@ -310,10 +305,6 @@ namespace BP.Sys
         /// 是否启用下载
         /// </summary>
         public const string IsWoEnableDown = "IsWoEnableDown";
-
-
-
-
         #endregion weboffice属性。
 
         #region 快捷键.
@@ -682,17 +673,6 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmAttachmentAttr.H, value);
-            }
-        }
-        public int RowIdx
-        {
-            get
-            {
-                return this.GetValIntByKey(FrmAttachmentAttr.RowIdx);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.RowIdx, value);
             }
         }
         public int GroupID
@@ -1113,7 +1093,7 @@ namespace BP.Sys
                 //参数属性.
                 map.AddTBAtParas(3000);
 
-                map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", false, false);
+              //  map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", false, false);
                 map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, false);
                 map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
@@ -1206,7 +1186,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmAttachments(string fk_mapdata)
         {
-            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node, 0, FrmAttachmentAttr.RowIdx);
+            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node);
         }
         /// <summary>
         /// 得到它的 Entity

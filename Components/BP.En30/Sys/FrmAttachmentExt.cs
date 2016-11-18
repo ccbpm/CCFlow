@@ -380,17 +380,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.H, value);
             }
         }
-        public int RowIdx
-        {
-            get
-            {
-                return this.GetValIntByKey(FrmAttachmentAttr.RowIdx);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.RowIdx, value);
-            }
-        }
+      
         public int GroupID
         {
             get
@@ -775,6 +765,7 @@ namespace BP.Sys
                 map.EnType = EnType.Sys;
                 map.AddMyPK();
 
+                #region 基本属性。
                 map.AddTBString(FrmAttachmentAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
                 map.AddTBString(FrmAttachmentAttr.NoOfObj, null, "附件编号", true, true, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentAttr.FK_Node, 0, "节点控制(对sln有效)", false, false);
@@ -790,24 +781,22 @@ namespace BP.Sys
 
                 map.AddTBFloat(FrmAttachmentAttr.W, 40, "宽度", false, false);
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "高度", false, false);
+                #endregion 基本属性。
 
-                map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
-                
+                #region 权限控制。
                 //hzm新增列
                 // map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
                 map.AddDDLSysEnum(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
                     "@0=不能删除@1=删除所有@2=只能删除自己上传的");
 
-                map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", true, false);
-                map.AddBoolean(FrmAttachmentAttr.IsOrder, false, "是否可以排序", true, false);
+                map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
+                map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsOrder, false, "是否可以排序", true, true);
 
-                map.AddBoolean(FrmAttachmentAttr.IsAutoSize, true, "自动控制大小", true, false);
-                map.AddBoolean(FrmAttachmentAttr.IsNote, true, "是否增加备注", true, false);
-                map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", true, false);
-
-
+                map.AddBoolean(FrmAttachmentAttr.IsAutoSize, true, "自动控制大小", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsNote, true, "是否增加备注", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", true, true);
                 map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false, FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
-
 
                 //对于父子流程有效.
                  //map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", true, false);
@@ -817,14 +806,46 @@ namespace BP.Sys
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.CtrlWay, 
                     "@0=继承模式@1=协作模式");
 
+                #endregion 权限控制。
+
+                #region WebOffice控制方式。
+                map.AddBoolean(FrmAttachmentAttr.IsRowLock, true, "是否启用锁定行", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableWF, true, "是否启用weboffice", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableSave, true, "是否启用保存", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableReadonly, true, "是否只读", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableRevise, true, "是否启用修订", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableViewKeepMark, true, "是否查看用户留痕", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnablePrint, true, "是否打印", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableSeal, true, "是否启用签章", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableOver, true, "是否启用套红", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableTemplete, true, "是否启用公文模板", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableCheck, true, "是否自动写入审核信息", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableInsertFlow, true, "是否插入流程", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableInsertFengXian, true, "是否插入风险点", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableMarks, true, "是否启用留痕模式", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableDown, true, "是否启用下载", true, true);
+                #endregion WebOffice控制方式。
+
+                #region 节点相关
+                //map.AddDDLSysEnum(FrmAttachmentAttr.DtlOpenType, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
+                //    "@0=不能删除@1=删除所有@2=只能删除自己上传的");
+
+                #endregion 节点相关
+
+                map.AddBoolean(FrmAttachmentAttr.IsToHeLiuHZ, true, "该附件是否要汇总到合流节点上去？(对子线程节点有效)", true, true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsHeLiuHuiZong, true, "是否是合流节点的汇总附件组件？(对合流节点有效)", true, true, true);
+
+
+
                 //map.AddTBInt(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式0=继承模式,1=协作模式.", true, false);
 
+                #region 其他属性。
                 //参数属性.
                 map.AddTBAtParas(3000);
+                map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, true);
+                map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", false, true, 0, 128, 20);
+                #endregion 其他属性。
 
-                map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", true, false);
-                map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", true, false);
-                map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "高级配置";
@@ -832,7 +853,6 @@ namespace BP.Sys
                 rm.ClassMethodName = this.ToString() + ".DoAdv";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
 
                 this._enMap = map;
                 return this._enMap;
@@ -933,7 +953,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmAttachmentExts(string fk_mapdata)
         {
-            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node, 0, FrmAttachmentAttr.RowIdx);
+            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node, 0);
         }
         /// <summary>
         /// 得到它的 Entity

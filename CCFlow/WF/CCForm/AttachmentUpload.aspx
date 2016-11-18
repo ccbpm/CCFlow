@@ -62,6 +62,8 @@
                 $('#bar').css('display', 'block');
                 $('#btn_Colse').bind('click', close);
             }
+            $('#bar').css('display', 'block');
+            $('#btn_Colse').bind('click', close);
         });
     </script>
     <style type="text/css">
@@ -95,7 +97,7 @@
     <uc1:Pub ID="Pub1" runat="server" EnableViewState="False" />
     <asp:Button runat="server" ID="Btn_Upload" OnClick="btn_Click" Style="display: none;" />
 
-    <div id="bar" style="display:none;position: fixed;bottom: 0px;right: 0px;">
-        <input type="button"   id="btn_Colse"  value="关闭"/>
-    </div>
+    <div id="bar" style="display: none;position: fixed;bottom: 0px;right: 0px;">
+        <button class="btn btn-info" id="btn_Colse" style="border: 0;background: #2884fa;color: #FFF;font-size: 12px;padding: 6px 10px;border-radius: 15px;margin: 5px;">关闭</button>
+     </div>
 </asp:Content>

@@ -31,11 +31,19 @@ DELETE FROM Sys_Enum WHERE EnumKey ='FTCSta';
 DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
 
 
-
 -- 升级数据源 2016.0
 UPDATE Sys_SFTable SET SrcType=0 WHERE No like 'BP.%' AND  (SrcType = 0 OR SrcType = 1)
 UPDATE Sys_SFTable SET SrcType=1 WHERE (No NOT like 'BP.%') AND  (SrcType = 0 OR SrcType = 1)
--- UPDATE Sys_SFTable SET SrcType=2 WHERE  LEN (SelectStatement ) >10
+
+
+-- 2016.11.18 升级维护附件属性.;
+DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmAttachmentExt';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmAttachmentExt',
+'@MyPK=基础信息,附件的基本配置.
+@DeleteWay=权限控制,控制附件的下载与上传权限.@IsRowLock=WebOffice属性,设置与公文有关系的属性配置.
+@IsToHeLiuHZ=流程相关,控制节点附件的分合流.
+@FastKeyIsEnable=快捷键,为附件生成快捷键放入指定的目录.');
+
 
 
 -- 2016.07.20 升级明细表维护分组;

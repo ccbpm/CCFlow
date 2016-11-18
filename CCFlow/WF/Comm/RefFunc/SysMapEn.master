@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Untitled Page</title>
+    <title>卡片</title>
     <asp:ContentPlaceHolder id="head" runat="server">
     <script language="JavaScript" src="Style/JScript.js"></script>
     <script language="javascript">

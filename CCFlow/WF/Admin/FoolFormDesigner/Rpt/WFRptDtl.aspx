@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" Inherits="WF_MapDef_WFRptDtl" Title="Untitled Page" Codebehind="WFRptDtl.aspx.cs" %>
+﻿<%@ Page Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" Inherits="WF_MapDef_WFRptDtl" Title="从表信息" Codebehind="WFRptDtl.aspx.cs" %>
 
 <%@ Register src="../Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 

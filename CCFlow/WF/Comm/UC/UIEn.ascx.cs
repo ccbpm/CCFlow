@@ -310,6 +310,13 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                 this.UCEn1.BindV2(this.CurrEn, this.CurrEn.ToString(), this.IsReadonly, true);
             else
                 this.UCEn1.Bind(this.CurrEn, this.CurrEn.ToString(), this.IsReadonly, true);
+
+            if (this.CurrEn.EnMap.Attrs.Contains("Name") == true)
+                this.Page.Title = this.CurrEn.GetValStringByKey("Name");
+            else if (this.CurrEn.EnMap.Attrs.Contains("Title") == true)
+                this.Page.Title = this.CurrEn.GetValStringByKey("Title");
+            else
+                this.Page.Title = "信息卡片";
         }
         catch (Exception ex)
         {

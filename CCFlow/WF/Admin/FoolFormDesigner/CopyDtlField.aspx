@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.MapDef.WF_MapDef_CopyDtlField" Title="Untitled Page" Codebehind="CopyDtlField.aspx.cs" %>
+﻿<%@ Page Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.MapDef.WF_MapDef_CopyDtlField" Title="复制字段" Codebehind="CopyDtlField.aspx.cs" %>
 
 <%@ Register src="UC/CopyDtlField.ascx" tagname="CopyDtlField" tagprefix="uc1" %>
 

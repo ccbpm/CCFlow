@@ -1223,7 +1223,7 @@ namespace CCFlow.WF.Admin
                             if (tids.OldIdx != ids.Idx)
                             {
                                 //更新FrmAttachment中的索引
-                                athMent.RowIdx = ids.Idx;
+                           //     athMent.RowIdx = ids.Idx;
                                 athMent.Update();
                             }
                         }
@@ -1233,7 +1233,7 @@ namespace CCFlow.WF.Admin
                             if (tids.OldIdx != targetIdx)
                             {
                                 //更新FrmAttachment中的索引
-                                athMent.RowIdx = targetIdx;
+                            //    athMent.RowIdx = targetIdx;
                                 athMent.Update();
                             }
                         }
@@ -1243,7 +1243,7 @@ namespace CCFlow.WF.Admin
                             if (tids.OldIdx != tids.Idx)
                             {
                                 //更新FrmAttachment中的索引
-                                athMent.RowIdx = tids.Idx;
+                             //   athMent.RowIdx = tids.Idx;
                                 athMent.Update();
                             }
                         }
@@ -1431,21 +1431,21 @@ namespace CCFlow.WF.Admin
 
                 pub1.AddTDBegin();
 
-                if (idx_Attr > 1)
-                {
-                    btn = new LinkBtn(false, "Btn_AthMent_Up_" + athMents.Count + "_" + idx_Attr + "_" + athMent.RowIdx + "_0_" + athMent.NoOfObj, "上移");
-                    btn.SetDataOption("iconCls", "'icon-up'");
-                    btn.Click += btn_Click;
-                    pub1.Add(btn);
-                }
+                //if (idx_Attr > 1)
+                //{
+                //    btn = new LinkBtn(false, "Btn_AthMent_Up_" + athMents.Count + "_" + idx_Attr + "_" + athMent.RowIdx + "_0_" + athMent.NoOfObj, "上移");
+                //    btn.SetDataOption("iconCls", "'icon-up'");
+                //    btn.Click += btn_Click;
+                //    pub1.Add(btn);
+                //}
+                //if (idx_Attr < groupOfAthMents.Count)
+                //{
+                //    btn = new LinkBtn(false, "Btn_AthMent_Down_" + athMents.Count + "_" + idx_Attr + "_" + athMent.RowIdx + "_0_" + athMent.NoOfObj, "下移");
+                //    btn.SetDataOption("iconCls", "'icon-down'");
+                //    btn.Click += btn_Click;
+                //    pub1.Add(btn);
+                //}
 
-                if (idx_Attr < groupOfAthMents.Count)
-                {
-                    btn = new LinkBtn(false, "Btn_AthMent_Down_" + athMents.Count + "_" + idx_Attr + "_" + athMent.RowIdx + "_0_" + athMent.NoOfObj, "下移");
-                    btn.SetDataOption("iconCls", "'icon-down'");
-                    btn.Click += btn_Click;
-                    pub1.Add(btn);
-                }
                 pub1.AddTDEnd();
                 pub1.AddTREnd();
 

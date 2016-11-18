@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="SysMapEn.master" AutoEventWireup="true" Inherits="CCFlow.WF.Comm.RefFunc.SysMapEnUI" Title="Untitled Page" Codebehind="SysMapEn.aspx.cs" %>
+﻿<%@ Page Language="C#" MasterPageFile="SysMapEn.master" AutoEventWireup="true" Inherits="CCFlow.WF.Comm.RefFunc.SysMapEnUI" Title="卡片" Codebehind="SysMapEn.aspx.cs" %>
 <%@ Register src="SysMapEnUC.ascx" tagname="SysMapEnUC" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script language="JavaScript" src="Style/JScript.js"></script>

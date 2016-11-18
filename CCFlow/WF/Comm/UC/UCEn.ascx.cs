@@ -1329,9 +1329,12 @@ namespace CCFlow.Web.Comm.UC
                                 else
                                 {
                                     /* 可以使用的情况. */
-                                    DDL ddl1 = new DDL(attr, val.ToString(), "enumLab", true, this.Page.Request.ApplicationPath);
+                                  //  DDL ddl1 = new DDL(attr, val.ToString(), "enumLab", true, this.Page.Request.ApplicationPath);
+                                    DDL ddl1 = new DDL();
+                                    ddl1.BindSysEnum(attr.UIBindKey, (int)val);
                                     ddl1.ID = "DDL_" + attr.Key;
                                     this.AddContral(attr.DescHelper, ddl1, true, 3);
+
                                 }
                                 break;
                             case UIContralType.CheckBok:
@@ -1504,9 +1507,41 @@ namespace CCFlow.Web.Comm.UC
                             else
                             {
                                 /* 可以使用的情况. */
-                                DDL ddl1 = new DDL(attr, val.ToString(), "enumLab", true, this.Page.Request.ApplicationPath);
-                                ddl1.ID = "DDL_" + attr.Key;
-                                this.AddContral(attr.DescHelper, ddl1, true);
+                                if (attr.UIDDLShowType == DDLShowType.BindSQL)
+                                {
+                                    DDL ddlSQL =new DDL();
+                                    ddlSQL.ID = "DDL_" + attr.Key;
+                                    string sql = attr.UIBindKey;
+                                    if (sql.Contains("@Web") == true)
+                                    {
+                                        sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+                                        sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                                        sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                                        sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                                    }
+
+                                    if (sql.Contains("@") == true)
+                                    {
+                                        foreach (Attr myattr in en.EnMap.Attrs)
+                                        {
+                                            sql = sql.Replace("@"+myattr.Key, en.GetValStrByKey(myattr.Key));
+                                            if (sql.Contains("@") == false)
+                                                break;
+                                        }
+                                    }
+
+                                    //绑定好.
+                                    DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(sql);
+                                    ddlSQL.Bind(dt, "No", "Name", val.ToString());
+                                    this.AddContral(attr.DescHelper, ddlSQL, true);
+                                }
+                                else
+                                {
+                                    DDL ddl1 = new DDL(attr, val.ToString(), "enumLab", true, this.Page.Request.ApplicationPath);
+                                    ddl1.ID = "DDL_" + attr.Key;
+                                    this.AddContral(attr.DescHelper, ddl1, true);
+                                }
+
                             }
 
                             break;

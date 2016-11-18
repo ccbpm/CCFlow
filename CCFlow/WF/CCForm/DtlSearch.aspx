@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.CCForm.WF_DtlSearch" Title="Untitled Page" Codebehind="DtlSearch.aspx.cs" %>
+﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.CCForm.WF_DtlSearch" Title="查询" Codebehind="DtlSearch.aspx.cs" %>
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script language="JavaScript" src="../Comm/JScript.js"></script>

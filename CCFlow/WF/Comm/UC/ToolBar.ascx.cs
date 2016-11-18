@@ -1000,7 +1000,6 @@ namespace CCFlow.WF.Comm.UC
                 {
                     DDL ddl = new DDL();
                     ddl.ID = "DDL_" + attr.Key;
-                    ddl.SelfShowType = DDLShowType.Ens; //  attr.UIDDLShowType;		 
                     ddl.SelfBindKey = "BP.Sys.Operators";
                     ddl.SelfEnsRefKey = "No";
                     ddl.SelfEnsRefKeyText = "Name";
@@ -1019,7 +1018,6 @@ namespace CCFlow.WF.Comm.UC
 
                     DDL ddl = new DDL();
                     ddl.ID = "DDL_" + attr.Key + "_Year";
-                    ddl.SelfShowType = DDLShowType.Ens;
                     ddl.SelfBindKey = "BP.Pub.NDs";
                     ddl.SelfEnsRefKey = "No";
                     ddl.SelfEnsRefKeyText = "Name";
@@ -1032,7 +1030,6 @@ namespace CCFlow.WF.Comm.UC
 
                     ddl = new DDL();
                     ddl.ID = "DDL_" + attr.Key + "_Month";
-                    ddl.SelfShowType = DDLShowType.Ens;
                     ddl.SelfBindKey = "BP.Pub.YFs";
                     ddl.SelfEnsRefKey = "No";
                     ddl.SelfEnsRefKeyText = "Name";
@@ -1045,7 +1042,6 @@ namespace CCFlow.WF.Comm.UC
 
                     ddl = new DDL();
                     ddl.ID = "DDL_" + attr.Key + "_Day";
-                    ddl.SelfShowType = DDLShowType.Ens;
                     ddl.SelfBindKey = "BP.Pub.Days";
                     ddl.SelfEnsRefKey = "No";
                     ddl.SelfEnsRefKeyText = "Name";

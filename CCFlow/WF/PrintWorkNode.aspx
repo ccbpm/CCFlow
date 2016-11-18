@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_PrintWorkNode" Title="Untitled Page" Codebehind="PrintWorkNode.aspx.cs" %>
+﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_PrintWorkNode" Title="卡片" Codebehind="PrintWorkNode.aspx.cs" %>
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>

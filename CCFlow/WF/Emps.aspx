@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_Emps" Title="Untitled Page" Codebehind="Emps.aspx.cs" %>
+﻿<%@ Page Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_Emps" Title="卡片" Codebehind="Emps.aspx.cs" %>
 
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 

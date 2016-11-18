@@ -1,11 +1,8 @@
 ﻿
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
-
-
 DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTrackSta';
-
 
 -- 更新枚举值;
 DELETE FROM Sys_Enum WHERE EnumKey ='CodeStruct';
@@ -44,22 +41,16 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmAttachmentExt',
 @IsToHeLiuHZ=流程相关,控制节点附件的分合流.
 @FastKeyIsEnable=快捷键,为附件生成快捷键放入指定的目录.');
 
-
-
 -- 2016.07.20 升级明细表维护分组;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapDtlExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDtlExt','@No=基础信息,基础信息权限信息.@IsExp=数据导入导出,数据导入导出.@FrmThreadLab=超连接,对合流节点有效用于配置与现实子线程运行的情况。@FrmTrackLab=轨迹组件,用于显示流程运行的轨迹图.');
 
-
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FrmNodeComponent';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FrmNodeComponent','@NodeID=审核组件,适用于sdk表单审核组件与ccform上的审核组件属性设置.@SFLab=父子流程组件,在该节点上配置与显示父子流程.@FrmThreadLab=子线程组件,对合流节点有效，用于配置与现实子线程运行的情况。@FrmTrackLab=轨迹组件,用于显示流程运行的轨迹图.@FTCLab=流转自定义,在每个节点上自己控制节点的处理人.');
-
 
 -- 傻瓜表单属性;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapFoolForm';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapFoolForm','@No=基础属性,基础属性.@Designer=设计者信息,设计者的单位信息，人员信息，可以上传到表单云.');
-
-
 
 --新版本的流程属性,节点属性;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeExt';

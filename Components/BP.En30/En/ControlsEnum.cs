@@ -223,7 +223,7 @@ namespace BP.Web.Controls
 		/// <summary>
 		/// 与Table 相关联
 		/// </summary>
-		BindTable
+		BindSQL
 	}
 	/// <summary>
 	/// DDLShowType

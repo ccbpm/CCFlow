@@ -1779,6 +1779,45 @@ namespace BP.En
         #endregion
 
 
+        #region DDLSQL
+        public void AddDDLSQL(string key, string defaultVal, string desc, string sql, bool uiIsEnable = true)
+        {
+            Attr attr = new Attr();
+            attr.Key = key;
+            attr.Field = key;
+            attr.DefaultVal = defaultVal;
+            attr.MyDataType = DataType.AppString;
+            attr.MyFieldType = FieldType.Normal;
+            attr.MaxLength = 50;
+
+            attr.Desc = desc;
+            attr.UIContralType = UIContralType.DDL;
+
+            attr.UIDDLShowType = DDLShowType.BindSQL; 
+
+            attr.UIBindKey = sql;
+            attr.HisFKEns = null;
+            attr.UIIsReadonly = uiIsEnable;
+            this.Attrs.Add(attr);
+
+
+            //他的名称列.
+            attr = new Attr();
+            attr.Key = key + "Text";
+            attr.Field = key + "Text";
+            attr.DefaultVal = defaultVal;
+            attr.MyDataType = DataType.AppString;
+            attr.MyFieldType = FieldType.Normal;
+            attr.MaxLength = 50;
+            attr.Desc = desc;
+            attr.UIContralType = UIContralType.TB;
+            attr.UIBindKey = sql;
+            attr.UIIsReadonly = true;
+            attr.UIVisible = false;
+            this.Attrs.Add(attr);
+        }
+        #endregion DDLSQL
+
 
         #region 与实体由关系的操作。
 

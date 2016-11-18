@@ -108,24 +108,7 @@ namespace BP.Sys.XML
         public XmlEn()
         {
         }
-
-        /// <summary>
-        /// 指定属性查询
-        /// </summary>
-        /// <param name="key">属性值</param>
-        /// <param name="val">属性</param>
-        public int RetrieveBy_del(string key, string val)
-        {
-            XmlEns ens = this.GetNewEntities;
-            ens.RetrieveAll();
-
-            ens.RetrieveBy(key, val);
-            if (ens.Count == 0)
-                return 0;
-
-            this.Row = ens[0].Row;
-            return ens.Count;
-        }
+       
         public int RetrieveByPK(string key, string val)
         {
             XmlEns ens = Cash.GetObj(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
@@ -133,6 +116,8 @@ namespace BP.Sys.XML
             {
                 ens = this.GetNewEntities;
                 ens.RetrieveAll();
+
+                //Cash.SetConn(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
             }
 
             int i = 0;

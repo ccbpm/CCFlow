@@ -403,13 +403,11 @@ namespace BP.Sys
                     case FieldTypeS.Enum:
                         attr.UIContralType = this.UIContralType;
                         attr.MyFieldType = FieldType.Enum;
-                        attr.UIDDLShowType = BP.Web.Controls.DDLShowType.SysEnum;
                         attr.UIIsReadonly = this.UIIsEnable;
                         break;
                     case FieldTypeS.FK:
                         attr.UIContralType = this.UIContralType;
                         attr.MyFieldType = FieldType.FK;
-                        attr.UIDDLShowType = BP.Web.Controls.DDLShowType.Ens;
                         attr.UIRefKeyValue = "No";
                         attr.UIRefKeyText = "Name";
                         attr.UIIsReadonly = this.UIIsEnable;

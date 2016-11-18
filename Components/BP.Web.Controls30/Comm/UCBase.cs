@@ -1245,7 +1245,7 @@ namespace BP.Web.UC
             this.Controls.Add(ddl);
             if (ddl.Enabled)
             {
-                if (ddl.SelfBindKey.IndexOf(".") == -1)
+                if (ddl.SelfBindKey ==null || ddl.SelfBindKey.IndexOf(".") == -1 )
                 {
                     this.AddTDEnd();
                 }

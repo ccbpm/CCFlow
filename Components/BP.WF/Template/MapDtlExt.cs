@@ -920,44 +920,6 @@ namespace BP.WF.Template
         #endregion
 
         #region 构造方法
-        public Map GenerMap()
-        {
-            bool isdebug = SystemConfig.IsDebug;
-
-            if (isdebug == false)
-            {
-                Map m = BP.DA.Cash.GetMap(this.No);
-                if (m != null)
-                    return m;
-            }
-
-            MapAttrs mapAttrs = this.MapAttrs;
-            Map map = new Map(this.PTable);
-            map.EnDesc = this.Name;
-            map.EnType = EnType.App;
-            map.DepositaryOfEntity = Depositary.None;
-            map.DepositaryOfMap = Depositary.Application;
-
-            Attrs attrs = new Attrs();
-            foreach (MapAttr mapAttr in mapAttrs)
-                map.AddAttr(mapAttr.HisAttr);
-
-            BP.DA.Cash.SetMap(this.No, map);
-            return map;
-        }
-        public GEDtl HisGEDtl
-        {
-            get
-            {
-                GEDtl dtl = new GEDtl(this.No);
-                return dtl;
-            }
-        }
-        public GEEntity GenerGEMainEntity(string mainPK)
-        {
-            GEEntity en = new GEEntity(this.FK_MapData, mainPK);
-            return en;
-        }
         /// <summary>
         /// 明细
         /// </summary>
@@ -1048,7 +1010,6 @@ namespace BP.WF.Template
 
                 #endregion 基础信息.
 
-
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
                 map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导出？", false, false);
@@ -1062,11 +1023,12 @@ namespace BP.WF.Template
                 #region 工作流相关.
                 //add 2014-02-21.
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
-
                 map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许copy节点数据", false, false);
                 map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", false, false);
-                #endregion 工作流相关.
 
+                string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='@No' AND  ( (MyDataType =1 and UIVisible=1 ) or (UIContralType=1))";
+                map.AddDDLSQL(MapDtlAttr.SubThreadWorker, null, "子线程处理人字段", sql, true);
+                #endregion 工作流相关.
 
                 RefMethod  rm = new RefMethod();
                 rm.Title = "高级设置"; // "设计表单";

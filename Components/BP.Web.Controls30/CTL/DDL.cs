@@ -230,8 +230,8 @@ namespace BP.Web.Controls
                 case DDLShowType.Self: /// 枚举类型
                     SelfBindSysEnum();
                     break;
-                case DDLShowType.BindTable: /// 于Table Bind .
-                    this.SelfBindTable();
+                case DDLShowType.BindSQL: /// 于Table Bind .
+                    this.SelfBindSQL();
                     break;
                 case DDLShowType.Ens: /// 于实体。
                     this.SelfBindEns();
@@ -300,44 +300,6 @@ namespace BP.Web.Controls
             return isHave;
         }
         /// <summary>
-        /// 绑定datatable.
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="val"></param>
-        /// <param name="text"></param>
-        public void Bind(DataTable dt, string val, string text)
-        {
-            if (this.Items.Count >= dt.Rows.Count)
-            {
-                bool isHave = false;
-                foreach (ListItem li in this.Items)
-                {
-                    isHave = false;
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        if (dr[val].ToString() == li.Value)
-                        {
-                            isHave = true;
-                            break;
-                        }
-                    }
-              
-
-                    if (isHave)
-                        li.Attributes["visibility"] = "true";
-                    else
-                        li.Attributes["visibility"] = "false";
-                }
-            }
-            else
-            {
-                foreach (DataRow dr in dt.Rows)
-                {
-                    this.Items.Add(new ListItem(dr[text].ToString(), dr[val].ToString()));
-                }
-            }
-        }
-        /// <summary>
         /// 绑定是否存在
         /// </summary>
         /// <param name="dt"></param>
@@ -345,7 +307,7 @@ namespace BP.Web.Controls
         /// <param name="text"></param>
         /// <param name="selectVal"></param>
         /// <returns></returns>
-        public bool Bind(DataTable dt, string val, string text, string selectVal)
+        public bool Bind(DataTable dt, string val="No", string text="Name", string selectVal="")
         {
             this.Items.Clear();
             bool isHave = false;
@@ -517,7 +479,7 @@ namespace BP.Web.Controls
         /// <summary>
         /// DDLDataHelp 用到了DDL自定义的帮定。
         /// </summary>
-        private void SelfBindTable()
+        private void SelfBindSQL()
         {
             if (this.SelfBindKey == "")
                 return;

@@ -1579,7 +1579,7 @@ namespace BP.En
         public void Add(Attr attr)
         {
             if (attr.Field == null || attr.Field == "")
-                throw new Exception("属性设置错误：您不能设置 key='" + attr.Key + "',得字段值为空");
+                throw new Exception("@属性设置错误：您不能设置 key='" + attr.Key + "',得字段值为空");
 
             bool k = attr.IsKeyEqualField;
             this.Add(attr, true, false);
@@ -1620,13 +1620,11 @@ namespace BP.En
 				myattr.UIWidth=attr.UIWidth*2;
 				myattr.Key=    attr.Key+"Text";
 
-
 				myattr.UIIsReadonly=true;
 				myattr.UIBindKey = attr.UIBindKey ;
                // myattr.UIBindKeyOfEn = attr.UIBindKeyOfEn;
                 myattr.HisFKEns = attr.HisFKEns;
                              
-
               
 				//myattr.Desc=attr.Desc+"名称";
 				 

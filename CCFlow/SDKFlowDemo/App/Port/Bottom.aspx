@@ -6,6 +6,6 @@
 </head>
 <body style="background:#0368bb; height:20px; line-height:20px; text-align:center; color:#FFF; border-top:1px solid #0344bb;">
 <div style=" font-size:12px;">
-	  <%=BP.Sys.SystemConfig.SysName %> @2003-2015 @驰骋技术 </div>
+	  <%=BP.Sys.SystemConfig.SysName %> @2003-2017 @驰骋技术 </div>
 </body>
 </html>

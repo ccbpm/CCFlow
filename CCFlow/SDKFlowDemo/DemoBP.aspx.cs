@@ -326,6 +326,39 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
     /// </summary>
     public void EntitiesBaseApp()
     {
+        //查询出来班级 = 01 所有学生。
+        Students stus = new Students();
+        stus.Retrieve(StudentAttr.FK_BanJi, "01");
+        foreach (Student stu in stus)
+        {
+            string str = "学生:" + stu.No + " 名称:" + stu.Name;
+            this.Response.Write( str+"<hr>");
+        }
+
+        //查询出来班级 = 01  and XB = 女的所有学生.
+        stus = new Students();
+        stus.Retrieve(StudentAttr.FK_BanJi, "01", StudentAttr.XB,0);
+        foreach (Student stu in stus)
+        {
+            string str = "学生:" + stu.No + " 名称:" + stu.Name;
+            this.Response.Write(str + "<hr>");
+        }
+
+        //查询全部的学生, 如果有缓存就会从缓存里查询.
+          stus = new Students();
+          stus.RetrieveAll();
+
+          //查询全部的学生, 从数据库里查询.
+          stus = new Students();
+          stus.RetrieveAllFromDBSource();
+
+        //访问集合的数量属性.
+          int numOfStus = stus.Count;
+
+        //判断集合里是否包含主键等于特定值的.
+        bool isExits = stus.Contains("zhangsan");
+
+
         #region 查询全部
         /* 查询全部分为两种方式，1 从缓存里查询全部。2，从数据库查询全部。  */
         Emps emps = new Emps();
@@ -345,10 +378,10 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         DataTable empsDTDesc = emps.ToDataTableDesc(); //以中文字段做为列名。
        
         // 从数据库里查询全部。
-        emps = new Emps();
-        num = emps.RetrieveAllFromDBSource();
+        Emps emps2 = new Emps();
+        num = emps2.RetrieveAllFromDBSource();
         this.Response.Write("RetrieveAllFromDBSource查询出来(" + num + ")个");
-        foreach (Emp emp in emps)
+        foreach (Emp emp in emps2)
         {
             this.Response.Write("<hr>人员名称:" + emp.Name);
             this.Response.Write("<br>人员编号:" + emp.No);
@@ -376,11 +409,11 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         //等于.
         myEmps.Retrieve(EmpAttr.FK_Dept, "01");
 
-     //   DataTable mydt = qo.DoQueryToTable();  // 查询出来的数据转入到datatable里。.
+        DataTable mydt = qo.DoQueryToTable();  // 查询出来的数据转入到datatable里。.
 
-        Emps myEmp1s = new Emps();
-        myEmp1s.Retrieve(EmpAttr.FK_Dept, "01");
-        foreach (Emp  item in myEmp1s)
+        Emps myemps = new Emps();
+        myemps.Retrieve(EmpAttr.FK_Dept, "01");
+        foreach (Emp  item in myemps)
         {
             this.Response.Write("<hr>人员名称:" + item.Name);
             this.Response.Write("<br>人员编号:" + item.No);
@@ -484,6 +517,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         // 执行数据库删除，类于执行 DELETE Port_Emp WHERE FK_Dept='01' 的sql.
         myEmps.Delete("FK_Dept", "01");
         #endregion
+
     }
     /// <summary>
     /// 展示EnttiyNo自动编号

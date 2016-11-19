@@ -49,11 +49,9 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
         nameCol = "Name";
 
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
-
     var json = data;
     if (data[0].length == 1)
         json = data[0];
-
 
     // 清空默认值, 写一个循环把数据给值.
     $("#" + ddlCtrlID).empty();
@@ -68,7 +66,7 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
     }
 
     if (json[0][nameCol] == undefined) {
-        alert('@在绑定[' + ddlCtrlID + ']错误，Name列名' + nameCol + '不存在,无法行程期望的下拉框value . ');
+        alert('@在绑定[' + ddlCtrlID + ']错误，Name列名' + nameCol + '不存在,无法行程期望的下拉框value. ');
         return;
     }
 

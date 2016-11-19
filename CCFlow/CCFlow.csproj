@@ -2612,7 +2612,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtl.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapDtlMTR.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapFrame.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapM2M.aspx" />
@@ -7152,13 +7151,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapDtlDe.aspx.designer.cs">
       <DependentUpon>MapDtlDe.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapDtlMTR.aspx.cs">
-      <DependentUpon>MapDtlMTR.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapDtlMTR.aspx.designer.cs">
-      <DependentUpon>MapDtlMTR.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt.aspx.cs">
       <DependentUpon>MapExt.aspx</DependentUpon>

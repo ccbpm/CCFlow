@@ -10,6 +10,6 @@
         Note="获得一个表单的附件列表"  />
 
   <!-- 字段分组 -->
-  <Item No="GroupField" SQL="SELECT OID AS No, Lab as Name FROM Sys_GroupField WHERE  ( CtrlType IS NULL OR CtrlType='' ) AND EnName='@FK_MapData'"
+  <Item No="GroupField" SQL="SELECT OID AS NO, Lab as NAME FROM Sys_GroupField WHERE  ( CtrlType IS NULL OR CtrlType='' ) AND EnName='@FK_MapData'"
         Note="获得一个表单的附件列表"  />
 </NewDataSet>

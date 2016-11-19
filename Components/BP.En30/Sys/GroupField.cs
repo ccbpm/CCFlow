@@ -54,6 +54,25 @@ namespace BP.Sys
     /// </summary>
     public class GroupField : EntityOID
     {
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                if (BP.Web.WebUser.No == "admin")
+                {
+                    /* */
+                    uac.IsDelete = true;
+                    uac.IsInsert = false;
+                    uac.IsUpdate = true;
+                    return uac;
+                }
+                uac.Readonly();
+                uac.IsView = false;
+                return uac;
+            }
+        }
+
         #region 属性
         public bool IsUse = false;
         public string EnName
@@ -152,19 +171,66 @@ namespace BP.Sys
                 map.EnType = EnType.Sys;
 
                 map.AddTBIntPKOID();
-                map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20);
-                map.AddTBString(GroupFieldAttr.EnName, null, "类", true, false, 0, 200, 20);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-                map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
-                map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, false, 0, 50, 20);
-                map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, false, 0, 500, 20);
+                map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20,true);
+                map.AddTBString(GroupFieldAttr.EnName, null, "类", false, false, 0, 200, 20);
+                map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", false, false);
+
+
+                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+                map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", false, false, 0, 50, 20);
+                map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", false, false, 0, 500, 20);
                 map.AddTBAtParas(3000);
+
+                RefMethod rm = new RefMethod();
+                //rm.Title = "增加字段";
+                //rm.Icon = "../WF/Img/Btn/New.gif";
+                //rm.ClassMethodName = this.ToString() + ".DoAddField";
+                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                //map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "删除隶属分组的字段";
+                rm.Icon = "../WF/Img/Btn/Delete.gif";
+                rm.Warning = "您确定要删除该分组下的所有字段吗？";
+                rm.ClassMethodName = this.ToString() + ".DoDelAllField";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 删除所有隶属该分组的字段.
+        /// </summary>
+        /// <returns></returns>
+        public string DoDelAllField()
+        {
+            string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.EnName + "' AND GroupID=" + this.OID+" AND KeyOfEn NOT IN ('OID','RDT','REC','RefPK','FID')";
+            int i= BP.DA.DBAccess.RunSQL(sql);
+            return "删除字段{"+i+"}个，被删除成功, 执行的SQL:"+sql;
+        }
+        /// <summary>
+        /// 增加字段
+        /// </summary>
+        /// <returns></returns>
+        public string DoAddField()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/FieldTypeList.htm?DoType=AddF&FK_MapData11=" + this.EnName + "&GroupField=" + this.OID; // DataType.CurrentDataTime;
+        }
+
+        protected override bool beforeUpdate()
+        {
+          //  this.Update("Lab", this.Lab);
+            string sql = "UPDATE Sys_GroupField SET LAB='"+this.Lab+"' WHERE OID="+this.OID;
+            BP.DA.DBAccess.RunSQL(sql);
+            return false;
+        }
+
+       
 
         public void DoDown()
         {

@@ -1039,6 +1039,26 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "事件"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoAction";
+                rm.Icon = "/WF/Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "隐藏字段"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".HidAttr";
+                rm.Icon = "/WF/Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -1051,6 +1071,20 @@ namespace BP.WF.Template
         {
             return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapDtl.htm?DoType=Edit&FK_MapDtl=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
+        /// <summary>
+        /// 高级设置
+        /// </summary>
+        /// <returns></returns>
+        public string DoAction()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Action.aspx?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
+        }
+
+        public string HidAttr()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/HidAttr.aspx?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
+        }
+        
 
         #region 基本属性.
         public float X

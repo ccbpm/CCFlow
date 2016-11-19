@@ -25,9 +25,9 @@ INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1003','集团服�
 INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1004','集团财务部','100','yangyilei',1)  ;
 INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1005','集团人力资源部','100','liping',1) ;
 INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1060','南方分公司','100','wangwenying',0) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1061',   '市场部','1006','ranqingxin',1) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1062',    '财务部','1006','randun',1) ;
-INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1063',    '销售部','1006','randun',1) ;
+INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1061',   '市场部','1060','ranqingxin',1) ;
+INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1062',    '财务部','1060','randun',1) ;
+INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1063',    '销售部','1060','randun',1) ;
 
 INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1070','北方分公司','100','lining',0) ;
 INSERT INTO Port_Dept (No,Name,ParentNo,Leader,IsDir) VALUES('1071','市场部','1070','lichao',1) ;

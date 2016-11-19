@@ -193,37 +193,12 @@
     <Compile Include="Dev2InterfaceGuest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DINGTalk\DDSDK\AccessToken.cs" />
-    <Compile Include="DINGTalk\DDSDK\Analyze.cs" />
-    <Compile Include="DINGTalk\DDSDK\CacheItem.cs" />
-    <Compile Include="DINGTalk\DDSDK\ConstVars.cs" />
-    <Compile Include="DINGTalk\DDSDK\ErrCodeEnum.cs" />
-    <Compile Include="DINGTalk\DDSDK\ICacheProvider.cs" />
-    <Compile Include="DINGTalk\DDSDK\JSTicket.cs" />
-    <Compile Include="DINGTalk\DDSDK\Keys.cs" />
-    <Compile Include="DINGTalk\DDSDK\RequestHelper.cs" />
-    <Compile Include="DINGTalk\DDSDK\ResultPackage.cs" />
-    <Compile Include="DINGTalk\DDSDK\SignPackage.cs" />
-    <Compile Include="DINGTalk\DDSDK\SignPackageHelper.cs" />
-    <Compile Include="DINGTalk\DDSDK\SimpleCacheProvider.cs" />
-    <Compile Include="DINGTalk\DDSDK\TimeStamp.cs" />
-    <Compile Include="DINGTalk\DDSDK\TokenResult.cs" />
-    <Compile Include="DINGTalk\DDSDK\Urls.cs" />
-    <Compile Include="DINGTalk\DingDing.cs" />
-    <Compile Include="DINGTalk\DingModel.cs" />
-    <Compile Include="DINGTalk\DingTalk_Message.cs" />
-    <Compile Include="DINGTalk\WeiXinMessage.cs" />
     <Compile Include="DTS\ChangeUserNo.cs" />
     <Compile Include="DTS\DeleteBlankGroupField.cs" />
     <Compile Include="DTS\LoadTempleteOfBuess.cs" />
-    <Compile Include="DTS\OrgInit_Ding.cs" />
-    <Compile Include="DTS\OrgInit_NameOfPath.cs" />
-    <Compile Include="DTS\OrgInit_WeiXinUserIcon.cs" />
     <Compile Include="DTS\DocFieldAddLengthTo1000.cs" />
     <Compile Include="CCFlowAPI.cs" />
     <Compile Include="DTS\ResetSortMapAttr.cs" />
-    <Compile Include="DTS\OrgInit_DingUserIcon.cs" />
-    <Compile Include="DTS\OrgInit_DingIcreMent.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />
@@ -255,7 +230,6 @@
     <Compile Include="Glo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="MS\DutyAndPower.cs" />
     <Compile Include="MS\NodeDtl.cs" />
     <Compile Include="MS\Sort.cs" />
@@ -386,9 +360,6 @@
     <Compile Include="Template\WorkflowDefintionManager.cs" />
     <Compile Include="Template\PushMsg.cs" />
     <Compile Include="WF\TransferCustom.cs" />
-    <Compile Include="DINGTalk\WeinXinModel.cs" />
-    <Compile Include="DINGTalk\WeiXin.cs" />
-    <Compile Include="DINGTalk\WXBizMsgCrypt.cs" />
     <Compile Include="WF.cs" />
     <Compile Include="WFEnum.cs" />
     <Compile Include="WF\CCWork.cs" />

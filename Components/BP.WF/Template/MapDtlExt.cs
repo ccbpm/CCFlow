@@ -999,15 +999,8 @@ namespace BP.WF.Template
                 map.AddTBFloat(MapDtlAttr.FrmW, 900, "FrmW", true, true);
                 map.AddTBFloat(MapDtlAttr.FrmH, 1200, "FrmH", true, true);
 
-                //MTR 多表头列.
-                map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
+               
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-
-             
-
-                //参数.
-                map.AddTBAtParas(300);
-
                 #endregion 基础信息.
 
                 #region 导入导出填充.
@@ -1019,6 +1012,13 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20,true);
                 map.AddTBString(MapDtlAttr.ImpSQLFull, null, "数据填充SQL", true, false, 0, 500, 20,true);
                 #endregion 导入导出填充.
+
+
+                #region 多表头.
+                //MTR 多表头列.
+                map.AddTBStringDoc(MapDtlAttr.MTR, null, "请书写html标记,以《TR》开头，以《/TR》结尾。", true, false, true);
+                #endregion 多表头.
+
 
                 #region 工作流相关.
                 //add 2014-02-21.
@@ -1043,7 +1043,6 @@ namespace BP.WF.Template
                 return this._enMap;
             }
         }
-
         /// <summary>
         /// 高级设置
         /// </summary>
@@ -1097,6 +1096,17 @@ namespace BP.WF.Template
             }
         }
         #endregion 基本属性.
+
+
+        protected override bool beforeUpdate()
+        {
+            MapDtl dtl = new MapDtl(this.No);
+            dtl.IsEnablePass = this.IsEnableAthM;
+            dtl.Update();
+
+
+            return base.beforeUpdate();
+        }
 
         /// <summary>
         /// 获取个数

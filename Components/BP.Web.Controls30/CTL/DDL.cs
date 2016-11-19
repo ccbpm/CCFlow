@@ -300,16 +300,23 @@ namespace BP.Web.Controls
             return isHave;
         }
         /// <summary>
-        /// 绑定是否存在
+        /// 绑定一个table,并设置选择的值.
         /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="val"></param>
-        /// <param name="text"></param>
-        /// <param name="selectVal"></param>
-        /// <returns></returns>
+        /// <param name="dt">数据源</param>
+        /// <param name="val">值列</param>
+        /// <param name="text">标签列</param>
+        /// <param name="selectVal">选中的值</param>
+        /// <returns>返回是否选择成功</returns>
         public bool Bind(DataTable dt, string val="No", string text="Name", string selectVal="")
         {
             this.Items.Clear();
+            if (dt.Rows.Count == 0)
+            {
+                ListItem li = new ListItem("无", "无");
+                this.Items.Add(li);
+                return false;
+            }
+
             bool isHave = false;
             foreach (DataRow dr in dt.Rows)
             {

@@ -222,7 +222,7 @@ function SetEleValByName(eleName, val) {
 
 
 /* 内置的Pop自动返回值. google 版 软通*/
-function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, title) {
+function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, title,formData) {
     //update by dgq 修改路径
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
 
@@ -231,7 +231,7 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
     $('#returnPopValModal .modal-dialog').width(width);
     ctrl = $('#' + ctrl);
     var wfpreHref = GetLocalWFPreHref();
-    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
+    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape( getFormData(false,false))+"&m="+Math.random();
 
     //杨玉慧 模态框 先用这个
     $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().parent().prev().text());
@@ -240,7 +240,6 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
     $('#btnPopValOK').unbind('click');
     $('#btnPopValOK').bind('click', function () {
         $(ctrl).val("");
-
         //为表单元素反填值
         var returnValSetObj = frames["iframePopModalForm"].window.pageSetData;
         var returnValObj = frames["iframePopModalForm"].window.returnVal;
@@ -290,6 +289,8 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
             }
             $(ctrl).val(Value);
         }
+
+        // $(".jstree-clicked").removeClass("jstree-clicked");
     });
     $('#returnPopValModal').modal().show();
     //修改标题，失去焦点时进行保存
@@ -768,6 +769,10 @@ function CheckRegInput(oInput, filter,tipInfo) {
     if (oInput != '') {
         var re = filter;
         if (typeof (filter) == "string") {
+            if (filter.indexOf('/') == 0) {
+                filter = filter.substr(1, filter.length - 2);
+            }
+
             re = new RegExp(filter);
         } else {
             re = filter;

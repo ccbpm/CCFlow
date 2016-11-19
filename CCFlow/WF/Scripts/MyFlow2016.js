@@ -577,14 +577,21 @@ function setFormEleDisabled() {
 
 //保存
 function Save() {
-    //比填写检查
+    //必填项和正则表达式检查
+    var formCheckResult = true;
     if (!checkBlanks()) {
-        return;
+        formCheckResult = false;
+    }
+    if (!checkReg()) {
+        formCheckResult = false;
+    }
+    if (!formCheckResult) {
+        alert("请检查表单必填项和正则表达式");
     }
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData(true),
+        data: getFormData(true,true),
         url: "MyFlow.ashx?Method=Save",
         dataType: 'html',
         success: function (data) {
@@ -798,13 +805,13 @@ function initTrackList(workNodeData) {
     var trackNavHtml = '';
     var trackHtml = '';
     var trackList = workNodeData.Track;
-    $.grep(TextTrackList, function (value) {
-        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 27 || value.ActionType == 26 ||value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1;
+    var filterTrackList= $.grep(trackList, function (value) {
+        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 ||value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1;
     });
-
-
-
+    workNodeData.Track = filterTrackList;
     $.each(workNodeData.Track, function (i, track) {
+        track.RDT = track.RDT.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+
         trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p></a></li>';
         var actionType = track.ActionType;
         if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11) {
@@ -837,7 +844,7 @@ function initTrackList(workNodeData) {
                 + seperator2 + date.getSeconds()
         };
     }
-    var sendr = $.cookie("CCS").split("=")[1].split("&")[0];
+    var sendr = $.cookie("CCS").split("=")[2].split("&")[0];
     var sendt = HgetNowFormatDate().currentdate;
     if (pageData.DoType != 'View') {
         trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendr + '</p><p>时间:' + sendt + '</p></a></li>';
@@ -1222,7 +1229,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         } else {//文本区域
                             if (mapAttr.UIHeight <= 23) {
                                 eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                    "<input name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
                             }
                             else {//大于23就是多行
@@ -1236,7 +1243,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                     +
                                     (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                                     +
-                                    "<textarea style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
 
                             }
@@ -1244,7 +1251,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else if (mapAttr.ColSpan == "4" || (mapAttr.ColSpan == "3" && mapAttr.UIHeight > 23)) {//大文本区域  且占一整行
                         isInOneRow = true;
                         eleHtml += '<div class="col-lg-11 col-md-11 col-sm-10">' +
-                            "<textarea name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
+                            "<textarea maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
                             + '</div>';
                     }
                 } //AppDate
@@ -1255,7 +1262,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
                 else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                     var enableAttr = '';
@@ -1264,7 +1271,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />" + "</div>";
                 }
                 else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
                     var colMd = 2;
@@ -1344,7 +1351,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input  type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
                 //AppMoney  AppRate
                 if (mapAttr.MyDataType == 8) {
@@ -1354,7 +1361,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input  type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
 
                 if (mapAttr.LGType == 2) {
@@ -1489,9 +1496,22 @@ function AfterBindEn_DealMapExt() {
                 '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
                 break;
-            case "RegularExpression"://正则表达式
+            case "RegularExpression"://正则表达式  统一在保存和提交时检查
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
-                tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
+                //tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
+
+                if (tb.attr('class')!=undefined && tb.attr('class').indexOf('CheckRegInput') > 0) {
+                    break;
+                } else {
+                    tb.addClass("CheckRegInput");
+                    tb.data(mapExt)
+                    //tb.data().name = tb.attr('name');
+                    //tb.data().Doc = mapExt.Doc;
+                    //tb.data().Tag1 = mapExt.Tag1;
+                    //tb.attr("data-name", tb.attr('name'));
+                    //tb.attr("data-Doc", tb.attr('name'));
+                    //tb.attr("data-checkreginput", "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
+                }
                 break;
             case "InputCheck"://输入检查
                 var tbJS = $("#TB_" + mapExt.AttrOfOper);
@@ -1785,7 +1805,7 @@ function GenerWorkNode() {
 }
 
 //获取表单数据
-function getFormData(isCotainTextArea) {
+function getFormData(isCotainTextArea,isCotainUrlParam) {
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -1840,10 +1860,17 @@ function getFormData(isCotainTextArea) {
             //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
         }
     });
+
+    if (!isCotainTextArea) {
+        formArrResult = $.grep(formArrResult, function (value) {
+            return value.length <= 20;
+        });
+    }
+
     formss = formArrResult.join('&');
-    //加上URL中的参数
     var dataArr = [];
-    if (pageData != undefined) {
+    //加上URL中的参数
+    if (pageData != undefined && isCotainUrlParam) {
         var pageDataArr = [];
         for (var data in pageData) {
             pageDataArr.push(data + '=' + pageData[data]);
@@ -1852,15 +1879,22 @@ function getFormData(isCotainTextArea) {
     }
     if (formss != '')
         dataArr.push(formss);
-
     var formData = dataArr.join('&');
     return formData;
 }
 //发送
 function Send() {
     //比填写检查
+    //必填项和正则表达式检查
+    var formCheckResult = true;
     if (!checkBlanks()) {
-        return;
+        formCheckResult = false;
+    }
+    if (!checkReg()) {
+        formCheckResult = false;
+    }
+    if (!formCheckResult) {
+        alert("请检查表单必填项和正则表达式");
     }
     var toNode = 0;
     //含有发送节点 且接收
@@ -1878,7 +1912,7 @@ function Send() {
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData(true) + "&ToNode=" + toNode,
+        data: getFormData(true,true) + "&ToNode=" + toNode,
         url: "MyFlow.ashx?Method=Send",
         dataType: 'html',
         success: function (data) {
@@ -1895,7 +1929,8 @@ function Send() {
                 // $('.Message').show();
             }
             else if (data.indexOf('@当前工作') == 0) {
-                $('#Message').html(data);
+                if (window.opener != null && window.opener!=undefined  && window.opener)
+                    $('#Message').html(data);
                 $('.Message').show();
                 //发送成功时
                 setAttachDisabled();
@@ -2139,15 +2174,35 @@ function checkBlanks() {
         }
     });
 
-    if (!checkBlankResult) {
-        alert('有必填项未填写或者填写格式不正确，请检查表单补充内容');
-    }
+    
     return checkBlankResult;
 }
 
 //正则表达式检查
 function checkReg() {
+    var checkRegResult = true;
+    var regInputs = $('.CheckRegInput');
+    $.each(regInputs, function (i, obj) {
+        var name = obj.name;
+        var mapExtData = $(obj).data();
+        if (mapExtData.Doc != undefined) {
+            var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
+            var tag1 = mapExtData.Tag1;
+            if ($(obj).val() != undefined && $(obj).val() != '') {
 
+                var result = CheckRegInput(name, regDoc, tag1);
+                if (!result) {
+                    $(obj).addClass('errorInput');
+                    checkRegResult = false;
+                } else {
+                    $(obj).removeClass('errorInput');
+                }
+            }
+        }
+    });
+
+    
+    return checkRegResult;
 }
 
 function SaveDtlAll() {

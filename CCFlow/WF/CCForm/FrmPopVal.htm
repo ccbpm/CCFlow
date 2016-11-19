@@ -162,9 +162,17 @@
         function dtTable() {
             var fk_MapExt = GetQueryString("FK_MapExt");
             var searchData = $('#searchForm').serialize();
+            var formData = getQueryString('FormData');
+
+            var formData2 = {};
+            for (var i = 0; i < formData.length; i++) {
+                formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
+            }
+
             $.ajax({
                 type: 'post',
                 async: true,
+                data: formData2,
                 url: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&"+searchData,
                 dataType: 'html',
                 success: function (data) {
@@ -442,30 +450,33 @@
             var url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') ;
 
             //初始化Tree
-            var plugins = [];
-            if (pageSetData[0].PopValSelectModel == "More") {//多选
-                plugins = [
-                    "checkbox",
-                    "state",
-                    "conditionalselect"
-                ];
-            }
-            $('#orgjstree').jstree({
+            var jstreeOption = {
                 'core': {
                     'data': function (node, cb) {
                         //初始化根节点
+                        var formData = unescape(getQueryString('FormData')).split('&');
+
+                        var formData2 = {};
+                        for (var i = 0; i < formData.length; i++) {
+                            formData2[formData[i].split('=')[0]] =formData[i].split('=')[1];
+                        }
+
                         if (node.id === "#") {
                             $.ajax({
                                 type: 'post',
                                 async: true,
                                 url: url,
-                                data: {},
+                                data: formData2,
                                 dataType: 'html',
                                 success: function (data) {
                                     data = JSON.parse(data);
                                     var itemArr = [];
                                     $.each(data.DTObjs, function (i, rootNode) {
-                                        itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true, "data":rootNode});
+                                        itemArr.push({
+                                            "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
+                                                "opened": true, "selected": false
+                                            }
+                                        });
                                     });
 
                                     cb(itemArr);
@@ -479,25 +490,37 @@
                                 type: 'post',
                                 async: true,
                                 url: url,
-                                data: {},
+                                data: formData2,
                                 dataType: 'html',
                                 success: function (data) {
                                     if (window.pageSetData[0].PopValWorkModel == "TreeDouble") {//双实体树
                                         data = JSON.parse(data);
                                         var itemArr = [];
                                         $.each(data.DTObjs, function (i, rootNode) {
-                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true,"data":rootNode});
+                                            itemArr.push({
+                                                "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
+                                                    //"opened": false, "selected": false
+                                                }, 
+                                            });
                                         });
 
                                         $.each(data.DTEntitys, function (i, rootNode) {
-                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file","data": rootNode});
+                                            itemArr.push({
+                                                "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file", "data": rootNode, "state": {
+                                                    //"opened": false, "selected": false
+                                                }, 
+                                            });
                                         });
                                         cb(itemArr);
                                     } else {//单实体树
                                         data = JSON.parse(data);
                                         var itemArr = [];
                                         $.each(data.DTObjs, function (i, rootNode) {
-                                            itemArr.push({ "text": rootNode.Name, "id": rootNode.No, "children": true,"data":rootNode});
+                                            itemArr.push({
+                                                "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
+                                                    //"opened": false, "selected": false
+                                                }
+                                            });
                                         });
                                         cb(itemArr);
                                     }
@@ -506,8 +529,26 @@
                         }
                     }
                 },
-                "plugins": plugins
-            }).on('changed.jstree', function (node, cb) {
+            };
+            var plugins = [];
+            if (pageSetData[0].PopValSelectModel == "More") {//多选
+                plugins = [
+                    "checkbox",
+                    //"state",
+                    //"conditionalselect"
+
+                ];
+                jstreeOption.core.multiple = true;
+            } else {
+                jstreeOption.core.multiple = false;
+            }
+
+            jstreeOption.plugins = plugins;
+
+            
+
+
+            $('#orgjstree').jstree(jstreeOption).on('changed.jstree', function (node, cb) {
                 GetTreeReturnVal();
                 //$('#orgTxt').val(returnVal.Name);
                 //$('#orgjstree').css('display', 'none');
@@ -563,6 +604,7 @@
                         conHtml += "</select>";
                     } else {//日期
                         if (defVal != undefined && defVal.trim() != '') {
+                            defVal = defVal.replace('<br/>', '');
                             defVal = defVal.replace('@Now', "(new Date())");
                             console.log(1+":"+defVal)
                             defVal = new Date(eval(defVal));

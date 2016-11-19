@@ -892,7 +892,7 @@ body {
 #header {
     height: 50px;
     font: bold 16px "微软雅黑";
-    background:#6975F4 !important;
+    background:gray !important;
     color: #fff;
     text-align: left;
     cursor:pointer;
@@ -1031,15 +1031,20 @@ float:right;
     border: #2854FF 1px solid;
     overflow: auto;
     color: #f00;
+    display:none;
 }
 
 .returnTackHeader {
     height: 50px;
     font: bold 16px "微软雅黑";
-    background: #6975F4 !important;
+    background: lightgrey !important;
     color: #fff;
     text-align: left;
     cursor: pointer;
     line-height: 50px;
     padding-left: 40px;
+}
+
+#header {
+background: gray !important;
 }

@@ -309,9 +309,8 @@
                 <a href="javascript:document.getElementById('F<%=dtl.No %>').contentWindow.AddF('<%=dtl.No %>');" class='easyui-linkbutton' data-options="iconCls:'icon-new',plain:true">插入列</a>
                 <a href="javascript:document.getElementById('F<%=dtl.No %>').contentWindow.AddFGroup('<%=dtl.No %>');" class='easyui-linkbutton' data-options="iconCls:'icon-new',plain:true">插入列组</a>
                 <a href="javascript:document.getElementById('F<%=dtl.No %>').contentWindow.CopyF('<%=dtl.No %>');" class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">复制列</a>
-                <a href="javascript:document.getElementById('F<%=dtl.No %>').contentWindow.HidAttr('<%=dtl.No %>');" class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">隐藏列</a>
-                <a href="javascript:document.getElementById('F<%=dtl.No %>').contentWindow.DtlMTR('<%=dtl.No %>');" class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">多表头</a>
-                <a href='Action.aspx?FK_MapData=<%=this.FK_MapDtl %>' class='easyui-linkbutton' data-options="iconCls:'icon-add',plain:true">从表事件</a>
+
+              
                 <a href="javascript:DtlDoUp('<%=dtl.No %>')" class='easyui-linkbutton' data-options="iconCls:'icon-up',plain:true"></a>
                 <a href="javascript:DtlDoDown('<%=dtl.No %>')" class='easyui-linkbutton' data-options="iconCls:'icon-down',plain:true"></a>
             </div>

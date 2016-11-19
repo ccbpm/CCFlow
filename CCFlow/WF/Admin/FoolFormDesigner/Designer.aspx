@@ -92,8 +92,11 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
+
         function GroupField(mypk, OID) {
-            var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
+
+            // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
+            var url = "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.GroupFields&PK=" + OID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

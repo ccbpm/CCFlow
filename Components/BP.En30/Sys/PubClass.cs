@@ -1609,7 +1609,7 @@ namespace BP.Sys
                     if (str.Contains("CBPara"))
                     {
                         /*如果是参数字段.*/
-                        en.SetPara(str.Replace("CBPara_", ""), 0);
+                        en.Row[str.Replace("CBPara_", "")]= 0;
                     }
                     else
                     {
@@ -1653,15 +1653,7 @@ namespace BP.Sys
                         attrKey = attrKey.Replace("RBPara_", "");
                     else
                         continue;
-                    //是checkbox 类型的数据.
-                    if (key.IndexOf("CBPara_") == 0)
-                    {
-                        en.SetPara(attrKey, 1);
-                        continue;
-                    }
-                    //其他控件类型 给参数赋值.
-                    en.SetPara(attrKey, reqest.Form[key]);
-                    continue;
+                    
                 }
 
                 string val = reqest.Form[key];

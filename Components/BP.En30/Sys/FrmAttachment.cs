@@ -200,6 +200,10 @@ namespace BP.Sys
         /// GroupID
         /// </summary>
         public const string GroupID = "GroupID";
+        /// RowIdx
+        /// </summary>
+        public const string RowIdx = "RowIdx";
+        /// <summary>
         /// <summary>
         /// 自动控制大小
         /// </summary>
@@ -686,6 +690,18 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.GroupID, value);
             }
         }
+
+        public int RowIdx
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmAttachmentAttr.RowIdx);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.RowIdx, value);
+            }
+        }
         /// <summary>
         /// 数据控制方式
         /// </summary>
@@ -770,9 +786,10 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.FK_MapData, value);
             }
         }
+        
         #endregion
 
-        #region weboffice文档属性(参数属性)
+        #region weboffice文档属性
         /// <summary>
         /// 是否启用锁定行
         /// </summary>
@@ -784,7 +801,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsRowLock, value);
+                this.SetValByKey(FrmAttachmentAttr.IsRowLock, value);
             }
         }
         /// <summary>
@@ -794,11 +811,11 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnablePrint);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnablePrint);
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnablePrint, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnablePrint, value);
             }
         }
         /// <summary>
@@ -812,7 +829,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableReadonly, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableReadonly, value);
             }
         }
         /// <summary>
@@ -826,7 +843,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableRevise, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableRevise, value);
             }
         }
         /// <summary>
@@ -840,7 +857,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableSave, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableSave, value);
             }
         }
         /// <summary>
@@ -854,7 +871,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableViewKeepMark, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableViewKeepMark, value);
             }
         }
         /// <summary>
@@ -868,7 +885,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableWF, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableWF, value);
             }
         }
 
@@ -883,7 +900,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableOver, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableOver, value);
             }
         }
 
@@ -898,7 +915,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableSeal, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableSeal, value);
             }
         }
 
@@ -913,7 +930,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableTemplete, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableTemplete, value);
             }
         }
 
@@ -928,7 +945,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableCheck, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableCheck, value);
             }
         }
 
@@ -943,7 +960,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableInsertFlow, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableInsertFlow, value);
             }
         }
 
@@ -958,7 +975,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableInsertFengXian, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableInsertFengXian, value);
             }
         }
 
@@ -973,7 +990,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableMarks, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableMarks, value);
             }
         }
 
@@ -988,7 +1005,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableDown, value);
+                this.SetValByKey(FrmAttachmentAttr.IsWoEnableDown, value);
             }
         }
 
@@ -1090,8 +1107,25 @@ namespace BP.Sys
                 map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", false, false);
                 map.AddTBInt(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式0=继承模式,1=协作模式.", false, false);
 
+                #region WebOffice控制方式
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableWF, true, "是否启用weboffice", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableSave, true, "是否启用保存", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableReadonly, true, "是否只读", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableRevise, true, "是否启用修订", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableViewKeepMark, true, "是否查看用户留痕", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnablePrint, true, "是否打印", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableOver, true, "是否启用套红", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableSeal, true, "是否启用签章", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableTemplete, true, "是否启用模板文件", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableCheck, true, "是否记录节点信息", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableInsertFlow, true, "是否启用插入流程", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableInsertFengXian, true, "是否启用插入风险点", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableMarks, true, "是否进入留痕模式", true, true);
+                map.AddBoolean(FrmAttachmentAttr.IsWoEnableDown, true, "是否启用下载", true, true);
+                #endregion WebOffice控制方式
+
                 //参数属性.
-                map.AddTBAtParas(3000);
+                //map.AddTBAtParas(3000);
 
               //  map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", false, false);
                 map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, false);

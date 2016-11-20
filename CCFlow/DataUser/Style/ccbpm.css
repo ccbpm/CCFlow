@@ -1048,3 +1048,22 @@ float:right;
 #header {
 background: gray !important;
 }
+
+
+#freeBarDiv {
+display:none;
+}
+
+#freeBarDiv #BtnOk{
+    float:right;
+}
+
+#freeBarDiv #BtnCancel{
+    float:right;
+    margin-right:50px;
+}
+
+#orgjstree {
+font-size:14px;display: none;height:90%;overflow:auto;
+}
+

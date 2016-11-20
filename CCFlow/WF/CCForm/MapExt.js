@@ -175,16 +175,50 @@ function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK, width, height, title) {
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
 
     var wfpreHref = GetLocalWFPreHref();
-    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
-    var v = window.showModalDialog(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
-    if (v == null || v == '' || v == 'NaN') {
-        return;
-    }
-    ctrl.value = v;
-    ctrl.value = v;
-    return;
+    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value+"&CtrlId="+ctrl.id;
+    //var v = window.showModalDialog(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
+    var v = window.open(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
+    
+    //if (v == null || v == '' || v == 'NaN') {
+        
+    //}
+    //ctrl.value = v.value;
+    //return;
 }
 
+//根据Name设置元素的值  分为 tb,ddl,rd
+function SetEleValByName(eleName, val) {
+    var ele = $('[name$=_' + eleName + ']');
+    if (ele != undefined && ele.length > 0) {
+        switch (ele[0].tagName.toUpperCase()) {
+            case "INPUT":
+                switch (ele[0].type.toUpperCase()) {
+                    case "CHECKBOX"://复选框  0:false  1:true
+                        val.indexOf('1') >= 0 ? $(ele).attr('checked', true) : $(ele).attr('checked', false);
+                        break;
+                    case "TEXT"://文本框
+                        $(ele).val(val);
+                        break;
+                    case "RADIO"://单选钮
+                        $(ele).attr('checked', false);
+                        $('[name=RB_' + eleName + '][value=' + val + ']').attr('checked', true);
+                        break;
+                    case "HIDDEN":
+                        $(ele).val(val);
+                        break;
+                }
+                break;
+                //下拉框
+            case "SELECT":
+                $(ele).val(val);
+                break;
+                //文本区域
+            case "TEXTAREA":
+                $(ele).val(val);
+                break;
+        }
+    }
+}
 
 /*  ReturnValTBFullCtrl */
 function ReturnValTBFullCtrl(ctrl, fk_mapExt) {

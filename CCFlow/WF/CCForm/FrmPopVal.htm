@@ -107,11 +107,16 @@
         font-weight: normal;
         background: #d4e6fe;
     }
-    #groupTable #dt > li {
-        /*background: #d4e6fe;*/
-        font-weight: bold;
-        background: #f4f9ff;
-    }
+        #groupTable #dt > li {
+            /*background: #d4e6fe;*/
+            font-weight: bold;
+            background: #f4f9ff;
+        }
+        #groupTable {
+            display: none;
+            height: 90%;
+            overflow: auto;
+        }
 
         .searchGroup {
             float: left;
@@ -139,6 +144,9 @@
     </style>
     <script type="text/javascript">
         $(function () {
+            var bodyHeight = document.documentElement.clientHeight;
+            $('body').height(bodyHeight);
+
             dtTable();
             $('#test').bind('click', function () {
                 if ($('#orgjstree').css('display') == "none") {
@@ -948,18 +956,18 @@
         </div>
     </div>-->
     <div><label id="treeVal"></label></div>
-    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" style="font-size:14px;">
+    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" >
     </div>
     <!--分组显示table-->
-    <div id="groupTable" style="display: none">
+    <div id="groupTable" >
         <ul id="dt" data-data="true"></ul>
     </div>
 
 
     <!--为自由表单和从表加-->
     <div id="freeBarDiv">
+        <input type="button" value="取消" id="BtnCancel" />
         <input type="button" value="确定" id="BtnOk"/>
-        <input type="button" value="取消" id="BtnCancel"/>
     </div>
 </body>
 </html>

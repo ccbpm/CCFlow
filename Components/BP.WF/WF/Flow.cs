@@ -896,7 +896,6 @@ namespace BP.WF
                 if (dt.Rows.Count != 1)
                     throw new Exception("@不应该查询不到父流程的数据, 可能的情况之一,请确认该父流程的调用节点是子线程，但是没有把子线程的FID参数传递进来。");
 
-
                 wk.Copy(dt.Rows[0]);
                 rpt.Copy(dt.Rows[0]);
                 #endregion copy 首先从父流程的NDxxxRpt copy.
@@ -966,7 +965,7 @@ namespace BP.WF
                 rpt.Update(); // 更新流程数据表.
                 #endregion 特殊赋值.
 
-                #region 复制表单其他数据.
+                #region 复制其他数据..
                 //复制明细。
                 MapDtls dtls = wk.HisMapDtls;
                 if (dtls.Count > 0)
@@ -1053,7 +1052,40 @@ namespace BP.WF
                 }
                 #endregion 复制表单其他数据.
 
+                #region 复制独立表单数据.
+                //求出来被copy的节点有多少个独立表单.
+                FrmNodes fnsFrom = new Template.FrmNodes(fromNd.NodeID);
+                if (fnsFrom.Count != 0)
+                {
+                    //求当前节点表单的绑定的表单.
+                    FrmNodes fns = new Template.FrmNodes(nd.NodeID);
+                    if (fns.Count != 0)
+                    {
+                        //开始遍历当前绑定的表单.
+                        foreach (FrmNode fn in fns)
+                        {
+                            foreach (FrmNode fnFrom in fnsFrom)
+                            {
+                                if (fn.FK_Frm != fnFrom.FK_Frm)
+                                    continue;
+
+                                BP.Sys.GEEntity geEnFrom = new GEEntity(fnFrom.FK_Frm);
+                                geEnFrom.OID = PWorkID;
+                                if (geEnFrom.RetrieveFromDBSources() == 0)
+                                    continue;
+
+                                //执行数据copy , 复制到本身. 
+                                geEnFrom.CopyToOID(wk.OID);
+                            }
+                        }
+                    }
+                }
+                #endregion 复制独立表单数据.
+
             }
+
+
+
             #endregion 处理流程之间的数据传递1。
 
             #region 处理单据编号.

@@ -1715,8 +1715,9 @@ namespace BP.En
         {
             foreach (Attr attr in this.EnMap.Attrs)
             {
-                //if (attr.IsPK)
-                //    continue;
+#warning zhoupeng 打开如下注释代码？没有考虑到为什么要改变PK.
+                if (attr.IsPK)
+                    continue;
 
                 object obj = fromEn.GetValByKey(attr.Key);
                 if (obj == null)

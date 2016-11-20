@@ -152,6 +152,68 @@
                     $('#orgjstree').css('display', 'none');
                 }
             });
+            if (parent == undefined || parent.frames["iframePopModalForm"] == undefined) {
+                $('#freeBarDiv').css('display', 'block');
+                //自由表单时使用
+                $('#BtnOk').bind('click', function () {
+                    var ctrlId = GetQueryString("CtrlId");
+                    var ctrl = opener.window.document.getElementById(ctrlId);
+                    
+                    //为表单元素反填值
+                    var returnValSetObj = window.pageSetData;
+                    var returnValObj = window.returnVal;
+                    if (returnValSetObj != null && returnValObj != null) {
+                        if (returnValSetObj[0]
+                            .PopValWorkModel ==
+                            "Tree" ||
+                            returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
+                            window.GetTreeReturnVal();
+                            if (returnValSetObj[0].PopValFormat == "OnlyNo") {
+                                $(ctrl).val(returnValObj.No);
+                            } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
+                                $(ctrl).val(returnValObj.Name);
+                            } else {
+                                for (var property in returnValObj) {
+                                    opener.window.SetEleValByName(property, returnValObj[property]);
+                                }
+                            }
+                        } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
+                            window.GetGroupReturnVal();
+                            $(ctrl).val(returnValObj.Value);
+                        } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
+                            returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
+                            if (returnValSetObj[0].PopValFormat == "OnlyNo") {
+                                $(ctrl).val(returnValObj.No);
+                            } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
+                                $(ctrl).val(returnValObj.Name);
+                            } else {
+                                for (var property in returnValObj) {
+                                    //$('[id$=_' + property + ']').val(returnValObj[property]);
+                                    opener.window.SetEleValByName(property, returnValObj[property]);
+                                }
+                            }
+                        } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") { //自定义URL
+                            //frames["iframePopModalForm"].window.GetTreeReturnVal();
+                            if (window.GetReturnVal != undefined &&
+                                typeof (window.GetReturnVal) == "function") {
+                                window.GetReturnVal()
+                            }
+                            $(ctrl).val(returnValObj.Value);
+                        }
+                    } else {
+                        if (window.returnValue != undefined) {
+                            var Value = window.returnValue;
+                        }
+                        $(ctrl).val(Value);
+                    }
+
+                    window.close();
+                });
+
+                $('#BtnCancel').bind('click', function () {
+                    window.close();
+                })
+            }
         });
 
         //配置数据
@@ -883,6 +945,13 @@
     <!--分组显示table-->
     <div id="groupTable" style="display: none">
         <ul id="dt" data-data="true"></ul>
+    </div>
+
+
+    <!--为自由表单和从表加-->
+    <div id="freeBarDiv">
+        <input type="button" value="确定" id="BtnOk"/>
+        <input type="button" value="取消" id="BtnCancel"/>
     </div>
 </body>
 </html>

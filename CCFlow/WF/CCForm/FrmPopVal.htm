@@ -173,9 +173,11 @@
                             } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
                                 $(ctrl).val(returnValObj.Name);
                             } else {
-                                for (var property in returnValObj) {
-                                    opener.window.SetEleValByName(property, returnValObj[property]);
-                                }
+                                $(ctrl).val("(" + returnValObj.No + ',' + returnValObj.Name + ")");
+
+                                //for (var property in returnValObj) {
+                                //    opener.window.SetEleValByName(property, returnValObj[property]);
+                                //}
                             }
                         } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
                             window.GetGroupReturnVal();
@@ -188,8 +190,14 @@
                                 $(ctrl).val(returnValObj.Name);
                             } else {
                                 for (var property in returnValObj) {
+                                    
+                                    var valueArr = [];
+                                    $.each(selectedTrArr, function (i, selectedTr) {
+                                        valueArr.push("(" + selectedTr.No + "," + selectedTr.Name + ")");
+                                    });
+                                    $(ctrl).val(valueArr.join(','));
                                     //$('[id$=_' + property + ']').val(returnValObj[property]);
-                                    opener.window.SetEleValByName(property, returnValObj[property]);
+                                    //opener.window.SetEleValByName(property, returnValObj[property]);
                                 }
                             }
                         } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") { //自定义URL

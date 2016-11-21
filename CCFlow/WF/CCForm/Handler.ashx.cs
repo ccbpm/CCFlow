@@ -95,7 +95,7 @@ namespace CCFlow.WF.CCForm
                     return exp;
                 string str = strKey.Replace("TB_", "").Replace("CB_", "").Replace("DDL_", "").Replace("RB_", "");
 
-                exp = exp.Replace("@" + strKey, context.Request.Form[str]);
+                exp = exp.Replace("@" + str, context.Request.Form[strKey]);
             }
             return exp;
         }
@@ -316,7 +316,7 @@ namespace CCFlow.WF.CCForm
                          continue;
 
                      string sql = null;
-                     if (cond.Contains("ListSQL") == true)
+                     if (cond.Contains("#ListSQL=") == true)
                      {
                          sql = cond.Substring(cond.IndexOf("ListSQL")+8);
                          sql = sql.Replace("@WebUser.No",WebUser.No);
@@ -325,9 +325,9 @@ namespace CCFlow.WF.CCForm
                          sql = this.DealExpByFromVals(sql);
                      }
 
-                     if (cond.Contains("EnumKey") == true)
+                     if (cond.Contains("#EnumKey=") == true)
                      {
-                         string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 1);
+                         string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
                          sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
                      }
 

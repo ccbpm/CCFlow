@@ -116,7 +116,7 @@
                     var groupID = 0;
                     if (data.GroupID != 0)
                         groupID = data.GroupID;
-                    GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "No", "Name", groupID);
+                    GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "NO", "NAME", groupID);
 
                     //是否可以编辑？
                     $("#RB_UIIsEnable_" + data.UIIsEnable).attr('checked', 'checked');

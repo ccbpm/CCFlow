@@ -167,9 +167,9 @@ function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
 function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
 
     if (colNo == null)
-        colNo = "No";
+        colNo = "NO";
     if (colName == null)
-        colName = "Name";
+        colName = "NAME";
 
     $.ajax({
         type: 'post',

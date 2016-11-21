@@ -6,7 +6,7 @@
 4, 该文件被 Gener.js 的 GenerBindSQL调用到.
 -->
 <NewDataSet>
-	<Item No="EditFExtContral_AthList" SQL="SELECT MyPK AS No, Name FROM Sys_FrmAttachment WHERE FK_MapData='@FK_MapData'" 
+	<Item No="EditFExtContral_AthList" SQL="SELECT MyPK AS NO, NAME FROM Sys_FrmAttachment WHERE FK_MapData='@FK_MapData'" 
         Note="获得一个表单的附件列表"  />
 
   <!-- 字段分组 -->

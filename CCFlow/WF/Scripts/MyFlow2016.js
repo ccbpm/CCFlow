@@ -1067,6 +1067,8 @@ function InitForm() {
 
 
     showNoticeInfo();
+
+    showTbNoticeInfo();
 }
 
 //回填扩展字段的值
@@ -2081,26 +2083,27 @@ function showTbNoticeInfo() {
     var workNode = JSON.parse(jsonStr);
     var mapAttr = workNode.Sys_MapAttr;
     mapAttr = $.grep(mapAttr, function (attr) {
-        var atParams = mapAttr.AtPara;
+        var atParams = attr.AtPara;
         return atParams != undefined && AtParaToJson(atParams).Tip != undefined && AtParaToJson(atParams).Tip != '' && $('#TB_' + attr.KeyOfEn).length > 0 && $('#TB_' + attr.KeyOfEn).css('display') != 'none';
     })
 
     $.each(mapAttr, function (i, attr) {
-        $('#TB_' + attr.KeyOfEn).bind('foucs', function (obj) {
+        $('#TB_' + attr.KeyOfEn).bind('focus', function (obj) {
+            var workNode = JSON.parse(jsonStr);
+            var mapAttr = workNode.Sys_MapAttr;
+
             mapAttr = $.grep(mapAttr, function (attr) {
                 return 'TB_' + attr.KeyOfEn == obj.target.id;
             })
-            var atParams = mapAttr.AtPara;
+            var atParams = AtParaToJson(mapAttr[0].AtPara);
             var noticeInfo = atParams.Tip;
 
+            if (noticeInfo == undefined || noticeInfo == '')
+                return;
+
             noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
-            var selectText = '';
-            if (obj.target.tagName.toUpperCase() == 'INPUT' && obj.target.type.toUpperCase() == 'RADIO') {//radio button
-                selectText = obj.target.nextSibling.textContent;
-            } else {//select
-                selectText = $(obj.target).find("option:selected").text();
-            }
-            $($('#div_NoticeInfo .popover-title span')[0]).text(selectText);
+            
+            $($('#div_NoticeInfo .popover-title span')[0]).text(mapAttr[0].Name);
             $('#div_NoticeInfo .popover-content').html(noticeInfo);
 
             var top = obj.target.offsetHeight;
@@ -2111,12 +2114,7 @@ function showTbNoticeInfo() {
                 top += current.offsetTop;
                 current = current.offsetParent;
             }
-
-
-            if (obj.target.tagName.toUpperCase() == 'INPUT' && obj.target.type.toUpperCase() == 'RADIO') {//radio button
-                left = left - 40;
-                top = top + 10;
-            }
+            
             if (top - $('#div_NoticeInfo').height() - 30 < 0) {
                 //让提示框在下方展示
                 $('#div_NoticeInfo').removeClass('top');

@@ -1863,7 +1863,7 @@ function getFormData(isCotainTextArea,isCotainUrlParam) {
 
     if (!isCotainTextArea) {
         formArrResult = $.grep(formArrResult, function (value) {
-            return value.length <= 20;
+            return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
         });
     }
 

@@ -587,6 +587,7 @@ function Save() {
     }
     if (!formCheckResult) {
         alert("请检查表单必填项和正则表达式");
+        return;
     }
     $.ajax({
         type: 'post',
@@ -1895,6 +1896,7 @@ function Send() {
     }
     if (!formCheckResult) {
         alert("请检查表单必填项和正则表达式");
+        return;
     }
     var toNode = 0;
     //含有发送节点 且接收

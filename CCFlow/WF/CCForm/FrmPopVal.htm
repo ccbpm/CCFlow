@@ -247,6 +247,16 @@
                 formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
             }
 
+            var formData = unescape(getQueryString('FormData')).split('&');
+
+            var formData2 = {};
+            for (var i = 0; i < formData.length; i++) {
+                //formData2[formData[i].split('=')[0]] = formData[i].split('=')[1];
+                formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
+            }
+
+            console.log(formData2)
+
             $.ajax({
                 type: 'post',
                 async: true,
@@ -536,7 +546,8 @@
 
                         var formData2 = {};
                         for (var i = 0; i < formData.length; i++) {
-                            formData2[formData[i].split('=')[0]] =formData[i].split('=')[1];
+                            //  formData2[formData[i].split('=')[0]] =formData[i].split('=')[1];
+                            formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
                         }
 
                         if (node.id === "#") {

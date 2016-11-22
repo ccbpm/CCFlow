@@ -104,7 +104,7 @@ namespace CCFlow.WF
                         return;
 
                     Emp emp = new Emp(fk_emp);
-                    BP.Web.WebUser.SignInOfGenerLang(emp, null);
+                    BP.Web.WebUser.SignInOfGener(emp);
                 }
             }
 

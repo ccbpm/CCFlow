@@ -51,7 +51,7 @@ namespace CCFlow.WF.Admin
         public void DoReturnToUser()
         {
             string userNo=this.Request.QueryString["UserNo"];
-            string sid= BP.WF.Dev2Interface.Port_Login(userNo, false);
+            string sid= BP.WF.Dev2Interface.Port_Login(userNo);
 
             string url = "../../WF/Port.aspx?UserNo=" + userNo + "&SID=" + sid + "&DoWhat=" + this.Request.QueryString["DoWhat"] + "&FK_Flow=" + this.FK_Flow + "&&IsMobile=" + this.Request.QueryString["IsMobile"];
             this.Response.Redirect(url, true);
@@ -96,7 +96,7 @@ namespace CCFlow.WF.Admin
             if (this.RefNo != null)
             {
                 Emp emp = new Emp(this.RefNo);
-                BP.Web.WebUser.SignInOfGenerLang(emp, this.Lang);
+                BP.Web.WebUser.SignInOfGener(emp, this.Lang);
                 this.Session["FK_Flow"] = this.FK_Flow;
                 if (this.Request.QueryString["Type"] != null)
                 {

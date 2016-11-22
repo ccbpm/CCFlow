@@ -223,7 +223,7 @@ namespace BP.Web.WF
 
                          string fk_flow = mynd.FK_Flow;
                          string myurl = "./WorkOpt/OneWork/Track.aspx?FK_Node=" + mynd.NodeID + "&WorkID=" + myWorkID + "&FK_Flow=" + fk_flow;
-                         Web.WebUser.SignInOfGener( new BP.Port.Emp(fk_emp), true);
+                         Web.WebUser.SignInOfGener( new BP.Port.Emp(fk_emp));
                          this.Response.Write("<script> window.location.href='" + myurl + "'</script> *^_^*  <br><br>正在进入系统请稍后，如果长时间没有反应，请<a href='" + myurl + "'>点这里进入。</a>");
                         return;
                     case "OF": //通过一个串来打开一个工作.
@@ -240,7 +240,7 @@ namespace BP.Web.WF
                         }
 
                         BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
-                        Web.WebUser.SignInOfGener(empOF, true);
+                        Web.WebUser.SignInOfGener(empOF);
                         string u = "MyFlow.aspx?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID+"&FK_Node="+wl.FK_Node+"&FID="+wl.FID;
                         this.Response.Write("<script> window.location.href='" + u + "'</script> *^_^*  <br><br>正在进入系统请稍后，如果长时间没有反应，请<a href='" + u + "'>点这里进入。</a>");
                         return;
@@ -248,7 +248,7 @@ namespace BP.Web.WF
                         BP.Port.Emp emp = new BP.Port.Emp(this.FK_Emp);
                         //首先退出，再进行登录
                         BP.Web.WebUser.Exit();
-                        BP.Web.WebUser.SignInOfGenerLang(emp, WebUser.SysLang);
+                        BP.Web.WebUser.SignInOfGener(emp, WebUser.SysLang);
                         this.WinClose();
                         return;
                     case "LogAs":
@@ -259,7 +259,7 @@ namespace BP.Web.WF
                             return;
                         }
                         BP.Port.Emp emp1 = new BP.Port.Emp(this.FK_Emp);
-                        BP.Web.WebUser.SignInOfGener(emp1, WebUser.SysLang, WebUser.No, true, false);
+                        BP.Web.WebUser.SignInOfGener(emp1);
                         this.WinClose();
                         return;
                     case "TakeBack": // 取消授权。

@@ -105,7 +105,7 @@ namespace BP.Web.Port
             if (BP.Web.WebUser.No != this.UserNo)
             {
                 BP.WF.Dev2Interface.Port_SigOut();
-                BP.WF.Dev2Interface.Port_Login(this.UserNo, true);
+                BP.WF.Dev2Interface.Port_Login(this.UserNo);
             }
             if (this.Request.QueryString["IsMobile"] == "1")
                 BP.Web.WebUser.UserWorkDev = UserWorkDev.Mobile;

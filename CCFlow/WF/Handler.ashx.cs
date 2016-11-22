@@ -209,7 +209,7 @@ namespace CCFlow.WF
                 return "err@用户名或密码错误.";
 
             //让其登录.
-           string sid= BP.WF.Dev2Interface.Port_Login(emp.No, true);
+           string sid= BP.WF.Dev2Interface.Port_Login(emp.No);
            return sid;
         }
         #endregion 登录相关.

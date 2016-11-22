@@ -631,7 +631,7 @@ SELECT No, FK_FlowSort as ParentNo,Name,Idx,0 IsParent FROM WF_Flow
                 if (islogin)
                 {
                     BP.Port.Emp emp = new BP.Port.Emp("admin");
-                    WebUser.SignInOfGener(emp, lang, "admin", true, false);
+                    WebUser.SignInOfGener(emp);
                 }
             }
             catch (Exception exception)

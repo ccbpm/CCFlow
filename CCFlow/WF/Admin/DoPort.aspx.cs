@@ -70,7 +70,7 @@ namespace CCFlow.WF.Admin
                     emp.No = this.UserNo;
                     emp.RetrieveFromDBSources();
 
-                    BP.Web.WebUser.SignInOfGenerLang(emp, this.Lang);
+                    BP.Web.WebUser.SignInOfGener(emp, this.Lang);
                     this.Response.Redirect("../MyFlow.aspx?OID=" + this.Request.QueryString["WorkID"] + "&FK_Flow=" + this.Request.QueryString["FK_Flow"], true);
                     return;
                 default:

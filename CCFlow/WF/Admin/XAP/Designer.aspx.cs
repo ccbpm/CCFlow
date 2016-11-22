@@ -49,7 +49,7 @@ namespace CCFlow.WF.Admin.XAP
             emp.No = "admin";
             if (emp.RetrieveFromDBSources() == 1)
             {
-                BP.Web.WebUser.SignInOfGener(emp, true);
+                BP.Web.WebUser.SignInOfGener(emp);
             }
             else
             {
@@ -58,7 +58,7 @@ namespace CCFlow.WF.Admin.XAP
                 emp.FK_Dept = "01";
                 emp.Pass = "pub";
                 emp.Insert();
-                BP.Web.WebUser.SignInOfGener(emp, true);
+                BP.Web.WebUser.SignInOfGener(emp);
                 //throw new Exception("admin 用户丢失，请注意大小写。");
             }
             #endregion 执行admin登陆.

@@ -118,7 +118,7 @@ public partial class App_Login : BP.Web.WebPage
                 //WebUser.Token = this.Session.SessionID;
 
                 //调用登录接口,让BP框架登录.
-                BP.WF.Dev2Interface.Port_Login(em.No, this.IsRemember.Checked);
+                BP.WF.Dev2Interface.Port_Login(em.No);
 
                 Response.Redirect("Default.aspx", false);
                 return;

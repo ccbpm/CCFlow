@@ -213,7 +213,7 @@ namespace CCFlow.WF.CCForm
                         }
                         BP.Port.Emp emp155 = new BP.Port.Emp(wl.FK_Emp);
 
-                        BP.Web.WebUser.SignInOfGener(emp155, true);
+                        BP.Web.WebUser.SignInOfGener(emp155);
                         string u = "MyFlow.aspx?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID;
                         if (this.Request.QueryString["IsWap"] != null)
                             u = "./.../WAP/" + u;
@@ -221,7 +221,7 @@ namespace CCFlow.WF.CCForm
                         return;
                     case "ExitAuth":
                         BP.Port.Emp emp = new BP.Port.Emp(this.FK_Emp);
-                        BP.Web.WebUser.SignInOfGenerLang(emp, WebUser.SysLang);
+                        BP.Web.WebUser.SignInOfGener(emp, WebUser.SysLang);
                         this.WinClose();
                         return;
                     case "LogAs":
@@ -232,7 +232,7 @@ namespace CCFlow.WF.CCForm
                             return;
                         }
                         BP.Port.Emp emp1 = new BP.Port.Emp(this.FK_Emp);
-                        BP.Web.WebUser.SignInOfGener(emp1, WebUser.SysLang, WebUser.No, true, false);
+                        BP.Web.WebUser.SignInOfGener(emp1);
                         this.WinClose();
                         return;
                     case "TakeBack": // È¡ÏûÊÚÈ¨¡£

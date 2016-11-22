@@ -1075,7 +1075,7 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
                 if (islogin)
                 {
                     BP.Port.Emp emp = new BP.Port.Emp("admin");
-                    WebUser.SignInOfGener(emp, lang, "admin", true, false);
+                    WebUser.SignInOfGener(emp);
                 }
             }
             catch (Exception exception)

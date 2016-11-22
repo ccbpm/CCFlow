@@ -351,7 +351,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                 return "err@用户名或密码错误.";
 
             //让其登录.
-            BP.WF.Dev2Interface.Port_Login(emp.No, true);
+            BP.WF.Dev2Interface.Port_Login(emp.No);
             return "SID=" + emp.SID + "&UserNo=" + emp.No;
         }
 
@@ -1510,7 +1510,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                 if (islogin)
                 {
                     BP.Port.Emp emp = new BP.Port.Emp("admin");
-                    WebUser.SignInOfGener(emp, lang, "admin", true, false);
+                    WebUser.SignInOfGener(emp);
                 }
             }
             catch (Exception exception)

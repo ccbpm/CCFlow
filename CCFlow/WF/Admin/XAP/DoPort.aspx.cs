@@ -76,7 +76,7 @@ namespace CCFlow.WF.Admin.XAP
 
          //   BP.Sys.SystemConfig.DoClearCash();
             BP.Port.Emp emp = new BP.Port.Emp("admin");
-            BP.Web.WebUser.SignInOfGenerLang(emp, "CH");
+            BP.Web.WebUser.SignInOfGener(emp, "CH");
 
             string fk_flow = this.Request.QueryString["FK_Flow"];
             string fk_Node = this.Request.QueryString["FK_Node"];

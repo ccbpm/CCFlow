@@ -123,7 +123,7 @@ namespace CCFlow.WF
                     {
                         Emp emL = new Emp(this.UserNo);
                         WebUser.Token = this.Session.SessionID;
-                        WebUser.SignInOfGenerLang(emL, SystemConfig.SysLanguage);
+                        WebUser.SignInOfGener(emL, SystemConfig.SysLanguage);
                     }
                 }
                 catch (Exception ex)

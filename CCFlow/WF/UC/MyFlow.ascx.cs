@@ -421,6 +421,7 @@ namespace CCFlow.WF.UC
                 {
                     /*如果流程的方向条件是按照下拉框拉来选择.*/
                     toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"SendBtnCondClick('" + currND.FK_Flow + "','" + currND.NodeID + "','" + this.WorkID + "','"+this.FID+"')\" />");
+                 
                     toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                     Btn_Send.Style.Add("display", "none");
                     this.Btn_Send.UseSubmitBehavior = false;

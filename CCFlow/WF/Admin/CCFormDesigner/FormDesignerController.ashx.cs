@@ -504,7 +504,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 if (islogin)
                 {
                     BP.Port.Emp emp = new BP.Port.Emp("admin");
-                    WebUser.SignInOfGener(emp, lang, "admin", true, false);
+                    WebUser.SignInOfGener(emp);
                 }
             }
             catch (Exception exception)

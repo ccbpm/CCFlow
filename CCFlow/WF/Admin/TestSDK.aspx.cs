@@ -30,7 +30,7 @@ namespace CCFlow.WF.Admin
             sdks.RetrieveAll();
 
             Emp emp1 = new Emp(this.RefNo);
-            WebUser.SignInOfGenerLang(emp1, this.Lang);
+            WebUser.SignInOfGener(emp1);
 
             this.Pub1.AddTable();
             this.Pub1.AddCaptionLeft(" 当前操作员:" + emp1.Name);

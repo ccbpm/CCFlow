@@ -57,7 +57,7 @@ public partial class SDKFlowDemo_LoginSDK : BP.Web.WebPage
 
                             if (em.CheckPass(strPs))
                             {
-                                WebUser.SignInOfGenerLang(em, WebUser.SysLang, isRemember == "0" ? false : true);
+                                WebUser.SignInOfGener(em, WebUser.SysLang, isRemember == "0" ? false : true);
                                 if (isRemember == "1")
                                 {
                                     if (this.Request.RawUrl.ToLower().Contains("wap"))
@@ -123,7 +123,7 @@ public partial class SDKFlowDemo_LoginSDK : BP.Web.WebPage
             if (em.CheckPass(pass))
             {
                 bool bl = this.IsRemember.Checked;
-                WebUser.SignInOfGenerLang(em, WebUser.SysLang, bl);
+                WebUser.SignInOfGener(em, WebUser.SysLang, bl);
 
                 if (this.Request.RawUrl.ToLower().Contains("wap"))
                     WebUser.IsWap = true;

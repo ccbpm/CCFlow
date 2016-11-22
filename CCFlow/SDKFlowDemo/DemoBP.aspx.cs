@@ -10,6 +10,7 @@ using BP.En;
 using BP.DA;
 using BP.Port;
 using BP.Demo.BPFramework;
+using BP.Sys;
 
 public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
 {
@@ -87,6 +88,15 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
     {
 
 
+    }
+
+    public void GEEntity()
+    {
+        Int64 workidOld = 9090;
+        Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork("001");
+
+        GEEntity entityA = new GEEntity("FrmIDA", workidOld);
+        GEEntity entityB = new GEEntity("FrmIDB", 1001);
     }
     /// <summary>
     /// 写入日志

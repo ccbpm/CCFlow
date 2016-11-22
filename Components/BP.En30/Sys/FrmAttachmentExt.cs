@@ -786,6 +786,7 @@ namespace BP.Sys
                 #region 权限控制。
                 //hzm新增列
                 // map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
+
                 map.AddDDLSysEnum(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
                     "@0=不能删除@1=删除所有@2=只能删除自己上传的");
 

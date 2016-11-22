@@ -1716,8 +1716,8 @@ namespace BP.En
             foreach (Attr attr in this.EnMap.Attrs)
             {
 #warning zhoupeng 打开如下注释代码？没有考虑到为什么要改变PK.
-                if (attr.IsPK)
-                    continue;
+                //if (attr.IsPK)
+                //    continue;   //不能在打开，如果打开，就会与其他的约定出错，copy就是全部的属性，然后自己。
 
                 object obj = fromEn.GetValByKey(attr.Key);
                 if (obj == null)

@@ -3153,6 +3153,8 @@ namespace BP.WF
                     GenerWorkerList flGwl = new GenerWorkerList();
                     flGwl.Copy(wl);
 
+                    //flGwl.WorkID = this.WorkID;
+
                     flGwl.FK_Emp = WebUser.No;
                     flGwl.FK_EmpText = WebUser.Name;
                     flGwl.FK_Node = this.HisNode.NodeID;

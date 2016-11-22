@@ -608,7 +608,7 @@ namespace BP.WF
                 emp.No = "admin";
                 if (emp.RetrieveFromDBSources() == 1)
                 {
-                    BP.Web.WebUser.SignInOfGener(emp, true);
+                    BP.Web.WebUser.SignInOfGener(emp);
                 }
                 else
                 {
@@ -617,7 +617,7 @@ namespace BP.WF
                     emp.FK_Dept = "01";
                     emp.Pass = "123";
                     emp.Insert();
-                    BP.Web.WebUser.SignInOfGener(emp, true);
+                    BP.Web.WebUser.SignInOfGener(emp);
                     //throw new Exception("admin 用户丢失，请注意大小写。");
                 }
                 #endregion 执行admin登陆.

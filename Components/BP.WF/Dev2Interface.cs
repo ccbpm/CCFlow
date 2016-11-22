@@ -2534,7 +2534,7 @@ namespace BP.WF
             }
 
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
-            WebUser.SignInOfGener(emp, true);
+            WebUser.SignInOfGener(emp);
             WebUser.IsWap = false;
             return;
         }
@@ -2543,10 +2543,10 @@ namespace BP.WF
         /// </summary>
         /// <param name="userNo">用户名</param>
         /// <param name="isRememberMe">是否记住密码</param>
-        public static string Port_Login(string userNo, bool isRememberMe = true)
+        public static string Port_Login(string userNo)
         {
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
-            WebUser.SignInOfGener(emp, isRememberMe);
+            WebUser.SignInOfGener(emp);
             WebUser.IsWap = false;
             WebUser.Auth = ""; //设置授权人为空.
             return Port_GetSID(userNo);

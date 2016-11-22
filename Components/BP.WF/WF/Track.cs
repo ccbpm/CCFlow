@@ -409,9 +409,6 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.Exer, value);
             }
         }
-      
-         
-
         /// <summary>
         /// 审核意见
         /// </summary>
@@ -736,12 +733,12 @@ namespace BP.WF
         {
             if (BP.Web.WebUser.No == "Guest")
             {
-                this.Exer = BP.Web.GuestUser.Name;
+                this.Exer = BP.Web.GuestUser.No +","+ BP.Web.GuestUser.Name;
             }
             else
             {
                 if (BP.Web.WebUser.IsAuthorize)
-                    this.Exer = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.AuthorizerEmpID, BP.Web.WebUser.Auth);
+                    this.Exer = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.Auth, BP.Web.WebUser.AuthName);
                 else
                     this.Exer = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
             }

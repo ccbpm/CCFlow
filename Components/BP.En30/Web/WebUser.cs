@@ -62,66 +62,6 @@ namespace BP.Web
             return str;
         }
         /// <summary>
-        /// 登陆
-        /// </summary>
-        /// <param name="em"></param>
-        public static void SignInOfGener(Emp em)
-        {
-            SignInOfGener(em, "CH", null, true, false);
-        }
-
-        /// <summary>
-        /// 登陆
-        /// </summary>
-        /// <param name="em"></param>
-        /// <param name="isRememberMe"></param>
-        public static void SignInOfGener(Emp em, bool isRememberMe)
-        {
-            SignInOfGener(em, "CH", null, isRememberMe, false);
-        }
-        /// <summary>
-        /// 登陆
-        /// </summary>
-        /// <param name="em"></param>
-        /// <param name="auth"></param>
-        public static void SignInOfGenerAuth(Emp em, string auth)
-        {
-            SignInOfGener(em, "CH", auth, true, false);
-        }
-        /// <summary>
-        /// 登陆
-        /// </summary>
-        /// <param name="em"></param>
-        /// <param name="lang"></param>
-        public static void SignInOfGenerLang(Emp em, string lang, bool isRememberMe)
-        {
-            SignInOfGener(em, lang, null, isRememberMe, false);
-        }
-        /// <summary>
-        /// 登陆
-        /// </summary>
-        /// <param name="em"></param>
-        /// <param name="lang"></param>
-        public static void SignInOfGenerLang(Emp em, string lang)
-        {
-            SignInOfGener(em, lang, null, true, false);
-        }
-        public static void SignInOfGener(Emp em, string lang)
-        {
-            SignInOfGener(em, lang, em.No, true, false);
-        }
-        /// <summary>
-        /// 登录
-        /// </summary>
-        /// <param name="em">登录人</param>
-        /// <param name="lang">语言</param>
-        /// <param name="auth">被授权登录人</param>
-        /// <param name="isRememberMe">是否记忆我</param>
-        public static void SignInOfGener(Emp em, string lang, string auth, bool isRememberMe)
-        {
-            SignInOfGener(em, lang, auth, isRememberMe, false);
-        }
-        /// <summary>
         /// 通用的登陆
         /// </summary>
         /// <param name="em">人员</param>
@@ -129,7 +69,7 @@ namespace BP.Web
         /// <param name="auth">授权人</param>
         /// <param name="isRememberMe">是否记录cookies</param>
         /// <param name="IsRecSID">是否记录SID</param>
-        public static void SignInOfGener(Emp em, string lang, string auth, bool isRememberMe, bool IsRecSID)
+        public static void SignInOfGener(Emp em, string lang="CH", bool isRememberMe = false, bool IsRecSID = false, string authNo = null, string authName = null)
         {
             if (System.Web.HttpContext.Current == null)
                 SystemConfig.IsBSsystem = false;
@@ -141,10 +81,16 @@ namespace BP.Web
 
             WebUser.No = em.No;
             WebUser.Name = em.Name;
-            if ( string.IsNullOrEmpty(auth)==false)
-                WebUser.Auth = auth;
+            if (string.IsNullOrEmpty(authNo) == false)
+            {
+                WebUser.Auth = authNo;
+                WebUser.AuthName = authName;
+            }
             else
+            {
                 WebUser.Auth = null;
+                WebUser.AuthName = null;
+            }
 
 
             //登录模式？
@@ -264,9 +210,14 @@ namespace BP.Web
                 //    {
                 //    }
                 //}
-                if (auth == null)
-                    auth = "";
-                cookie.Values.Add("Auth", auth); //授权人.
+                if (authNo == null)
+                    authNo = "";
+                cookie.Values.Add("Auth", authNo); //授权人.
+
+                if (authName == null)
+                    authName = "";
+                cookie.Values.Add("AuthName", authName); //授权人名称..
+
                 System.Web.HttpContext.Current.Response.AppendCookie(cookie);
             }
         }
@@ -673,6 +624,8 @@ namespace BP.Web
                         WebUser.No = hc["No"];
                         WebUser.FK_Dept = hc["FK_Dept"];
                         WebUser.Auth = hc["Auth"];
+                        WebUser.AuthName = hc["AuthName"];
+
                         WebUser.FK_DeptName = HttpUtility.UrlDecode(hc["FK_DeptName"]);
                         WebUser.Name = HttpUtility.UrlDecode(hc["Name"]);
 
@@ -903,16 +856,21 @@ namespace BP.Web
         /// <summary>
         /// 使用授权人ID
         /// </summary>
-        public static string AuthorizerEmpID
+        public static string AuthName
         {
-            get
+             get
             {
-                return (string)GetSessionByKey("AuthorizerEmpID", null);
-
+                string val = GetValFromCookie("AuthName", null, false);
+                if (val == null)
+                    val = GetSessionByKey("AuthName", null);
+                return val;
             }
             set
             {
-                SetSessionByKey("AuthorizerEmpID", value);
+                if (value == "")
+                    SetSessionByKey("AuthName", null);
+                else
+                    SetSessionByKey("AuthName", value);
             }
         }
         /// <summary>

@@ -819,11 +819,20 @@ namespace CCFlow.WF
                     this.FID, BP.Web.WebUser.No);
 
                 //获取WF_GenerWorkFlow
-                string sql = string.Format("select work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,ISNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+                string sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,ISNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
 
                 DataTable wf_generWorkFlowDt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 wf_generWorkFlowDt.TableName = "WF_GenerWorkFlow";
                 ds.Tables.Add(wf_generWorkFlowDt);
+
+                sql = "select * from WF_Node where NodeID=" + this.FK_Node;
+                DataTable wf_node = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                wf_node.TableName = "WF_Node";
+                if (ds.Tables.Contains(wf_node.TableName))
+                {
+                    ds.Tables.Remove("WF_Node");
+                }
+                ds.Tables.Add(wf_node);
             }
             DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];
             ds.Tables.Add(trackDt.Copy());

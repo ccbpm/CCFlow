@@ -36,24 +36,6 @@
 
             InitPage();
 
-            //初始化groupID.
-            var fk_mapData = GetQueryString("FK_MapData");
-            var enumKey = GetQueryString("EnumKey");
-            var mypk = GetQueryString("MyPK");
-
-            //初始化 GroupID.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FieldInitGroupAndSysEnum&FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey + "&MyPK=" + mypk + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    data = JSON.parse(data);
-                   // var dtEnum = data.Sys_Enum;
-                   // $("#DDL_DefVal").empty();  //清空他.
-                }
-            });
-
             $("#Msg").html("");
 
         });
@@ -87,6 +69,8 @@
 
                     //绑定枚举值, 让其可以选择默认值.
                     GenerBindEnumKey("DDL_DefVal", data.UIBindKey, data.DefVal);
+
+
                     //设置事件.
                     $("#DDL_DefVal").change(function () {
                         var checkValue = $("#DDL_DefVal").val();
@@ -105,7 +89,7 @@
                     var groupID = 0;
                     if (data.GroupID != 0)
                         groupID = data.GroupID;
-
+                    // GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "No", "Name", groupID);
                     GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "NO", "NAME", groupID);
 
                     //是否可以编辑？

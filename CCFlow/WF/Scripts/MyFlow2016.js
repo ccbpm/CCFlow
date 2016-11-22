@@ -605,6 +605,8 @@ function Save() {
                 $('.Message').show();
                 //表示退回OK
                 if (data.indexOf('工作已经被您退回到') == 0) {
+                    OptSuc();
+
                     setAttachDisabled();
                     setToobarUnVisible();
                     setFormEleDisabled();
@@ -619,10 +621,11 @@ function returnWorkWindowClose(data) {
     $('#returnWorkModal').modal('hide');
     $('#Message').html(data);
     $('.Message').show();
-    if (data.indexOf('err@') == 0  || data=="取消") {//发送时发生错误
+    if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
         
     }
     else {
+        OptSuc();
         //发送成功时
         setAttachDisabled();
         setToobarUnVisible();
@@ -879,12 +882,6 @@ function initTrackList(workNodeData) {
 
 function InitForm() {
     var workNodeData = JSON.parse(jsonStr);
-    //如果为查看页面，只显示历史轨迹
-    initTrackList(workNodeData);
-    if (pageData.DoType == 'View') {
-        $('#divCurrentForm').css('display','none');
-        return;
-    }
     var CCFormHtml = '';
     
     var navGroupHtml = '';
@@ -1756,7 +1753,7 @@ function GenerWorkNode() {
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?Method=GenerWorkNode&DoType="+pageData.DoType+"&m=" + Math.random(),
+        url: "MyFlow.ashx?Method=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
             jsonStr = data;
@@ -1769,7 +1766,7 @@ function GenerWorkNode() {
                 return;
             }
             //显示父流程 链接
-            if (gengerWorkNode.WF_GenerWorkFlow != null && gengerWorkNode.WF_GenerWorkFlow.length > 0 && (gengerWorkNode.WF_GenerWorkFlow[0].PWorkID != 0 || gengerWorkNode.WF_GenerWorkFlow[0].PWorkID2!=0)) {
+            if (gengerWorkNode.WF_GenerWorkFlow != null && gengerWorkNode.WF_GenerWorkFlow.length > 0 && (gengerWorkNode.WF_GenerWorkFlow[0].PWorkID != 0 || gengerWorkNode.WF_GenerWorkFlow[0].PWorkID2 != 0)) {
                 $('#btnShowPFlow').bind('click', function () {
                     var pworkid = 1;
                     var pfk_node = 1;
@@ -1783,14 +1780,30 @@ function GenerWorkNode() {
                         pfk_flow = gengerWorkNode.WF_GenerWorkFlow[0].PFlowNo2;
                         pfk_node = gengerWorkNode.WF_GenerWorkFlow[0].PNodeID2;
                     }
-                    
+
                     window.open("WorkOpt/FoolFrmTrack.htm?FK_Flow=" + pfk_flow + "&WorkID=" + pworkid + "&FK_Node=" + pfk_node);
-                    
+
                 });
 
                 $('#ShowPFlow').css('display', 'block');
             } else {
-                $('#ShowPFlow').css('display','none');
+                $('#ShowPFlow').css('display', 'none');
+            }
+
+            //如果为查看页面，只显示历史轨迹
+            initTrackList(gengerWorkNode);
+            if (pageData.DoType == 'View') {
+                $('#divCurrentForm').css('display', 'none');
+                return;
+            }
+            //是分流或者分合流  且是 退回状态 转到页面 WF\WorkOpt\DealSubThreadReturnToHL.html
+            if ((gengerWorkNode.WF_Node[0].RunModel == 2 || gengerWorkNode.WF_Node[0].RunModel == 3) && gengerWorkNode.WF_GenerWorkFlow[0].WFState == 5) {
+                var iframeHtml = "<iframe style='width:100%;' src='./WorkOpt/DealSubThreadReturnToHL.html?FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + pageData.FK_Node + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "'></iframe>";
+                $('#divCurrentForm').html(iframeHtml);
+            }
+            //加签回复
+            if (gengerWorkNode.WF_GenerWorkFlow[0].WFState == 11) {
+
             }
 
             //解析表单
@@ -1916,7 +1929,7 @@ function Send() {
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData(true,true) + "&ToNode=" + toNode,
+        data: getFormData(true, true) + "&ToNode=" + toNode,
         url: "MyFlow.ashx?Method=Send",
         dataType: 'html',
         success: function (data) {
@@ -1928,12 +1941,14 @@ function Send() {
                 var url = data;
                 url = url.replace('url@', '');
                 window.location.href = url;
-               // WinOpen(url, 'ss');
+                // WinOpen(url, 'ss');
                 // $('#Message').html("<a href=" + data.substring(4, data.length) + ">待处理</a>");
                 // $('.Message').show();
             }
             else if (data.indexOf('@当前工作') == 0) {
-                if (window.opener != null && window.opener!=undefined  && window.opener)
+                OptSuc();
+
+                if (window.opener != null && window.opener != undefined && window.opener)
                     $('#Message').html(data);
                 $('.Message').show();
                 //发送成功时
@@ -1947,6 +1962,11 @@ function Send() {
             }
         }
     });
+}
+
+//发送 退回 移交等执行成功后转到  指定页面
+function OptSuc() {
+    window.location.href = "/WF/MyFlow.aspx";
 }
 //移交
 //初始化发送节点下拉框

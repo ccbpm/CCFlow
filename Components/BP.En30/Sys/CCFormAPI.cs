@@ -1009,8 +1009,9 @@ namespace BP.Sys
             /* 20150730 小周鹏修改 添加AtPara 参数 START */
             //sql = "@SELECT  MyPK,FK_MapData,UploadType,X,Y,W,H,NoOfObj,Name,Exts,SaveTo,IsUpload,IsDelete,IsDownload "
             // + " FROM Sys_FrmAttachment WHERE " + where + " AND FK_Node=0";
-            sql = "@SELECT MyPK,FK_MapData,UploadType,X,Y,W,H,NoOfObj,Name,Exts,SaveTo,IsUpload,IsDelete,IsDownload ,AtPara"
+            sql = "@SELECT MyPK,FK_MapData,UploadType,X,Y,W,H,NoOfObj,Name,Exts,SaveTo,IsUpload,DeleteWay,IsDownload ,AtPara"
                 + " FROM Sys_FrmAttachment WHERE " + where + " AND FK_Node=0";
+
             /* 20150730 小周鹏修改 添加AtPara 参数 END */
             sqls += sql;
 

@@ -1125,7 +1125,7 @@ namespace BP.Sys
                 #endregion WebOffice控制方式
 
                 //参数属性.
-                //map.AddTBAtParas(3000);
+                map.AddTBAtParas(3000);
 
               //  map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", false, false);
                 map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, false);

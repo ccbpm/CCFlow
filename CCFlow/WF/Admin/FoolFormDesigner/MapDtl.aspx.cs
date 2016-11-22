@@ -259,7 +259,7 @@ namespace CCFlow.WF.MapDef
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);
             dtl.IntMapAttrs();
-            this.Response.Redirect("MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + this.FK_MapDtl, true);
+            this.Response.Redirect("MapDtlDe.htm?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + this.FK_MapDtl, true);
         }
 
         public void BindEdit(MapData md, MapDtl dtl)

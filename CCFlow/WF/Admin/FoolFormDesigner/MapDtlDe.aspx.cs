@@ -18,7 +18,7 @@ namespace CCFlow.WF.MapDef
     public partial class Comm_MapDef_MapDtlDe : BP.Web.WebPage
     {
         #region 属性
-        public new string MyPK
+        public new string FK_MapDtl
         {
             get
             {
@@ -53,13 +53,7 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["FK_MapData"];
             }
         }
-        public string FK_MapDtl
-        {
-            get
-            {
-                return this.Request.QueryString["FK_MapDtl"];
-            }
-        }
+        
         #endregion 属性
 
         protected void Page_Load(object sender, EventArgs e)
@@ -73,8 +67,8 @@ namespace CCFlow.WF.MapDef
                 return;
 
             #region 查看有几个分组？从表的字段多于1个分组就需要把他们设置成一个分组就可以，否则排序出现问题.
-            string sqlGroup = "SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapDtl + "'";
-            if (DBAccess.RunSQLReturnValInt(sqlGroup) != 1)
+            string sqlGroup = "SELECT COUNT(OID) FROM Sys_GroupField WHERE EnName='" + this.FK_MapDtl + "'";
+            if (DBAccess.RunSQLReturnValInt(sqlGroup) == 0 )
             {
                 BP.Sys.GroupField gf = new GroupField();
                 gf.EnName = this.FK_MapDtl;
@@ -86,9 +80,10 @@ namespace CCFlow.WF.MapDef
             #endregion 查看有几个分组？从表的字段多于1个分组就需要把他们设置成一个分组就可以，否则排序出现问题.
 
 
-            MapAttrs attrs = new MapAttrs(this.MyPK);
+            MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
+
             MapAttrs attrs2 = new MapAttrs();
-            MapExts mes = new MapExts(this.MyPK);
+            MapExts mes = new MapExts(this.FK_MapData);
             string LinkFields = ",";
             if (mes.Count != 0)
             {
@@ -142,13 +137,13 @@ namespace CCFlow.WF.MapDef
                     switch (attr.LGType)
                     {
                         case FieldTypeS.Normal:
-                            this.Pub1.Add("<a href=\"javascript:Edit('" + this.MyPK + "','" + attr.MyPK + "','" + attr.MyDataType + "');\"  alt='" + attr.KeyOfEn + "'>" + attr.Name + "</a>");
+                            this.Pub1.Add("<a href=\"javascript:Edit('" + this.FK_MapDtl + "','" + attr.MyPK + "','" + attr.MyDataType + "');\"  alt='" + attr.KeyOfEn + "'>" + attr.Name + "</a>");
                             break;
                         case FieldTypeS.Enum:
-                            this.Pub1.Add("<a href=\"javascript:EditEnum('" + this.MyPK + "','" + attr.MyPK + "');\" alt='" + attr.KeyOfEn + "' >" + attr.Name + "</a>");
+                            this.Pub1.Add("<a href=\"javascript:EditEnum('" + this.FK_MapDtl + "','" + attr.MyPK + "','" + attr.UIBindKey + "');\" alt='" + attr.KeyOfEn + "' >" + attr.Name + "</a>");
                             break;
                         case FieldTypeS.FK:
-                            this.Pub1.Add("<a href=\"javascript:EditTable('" + this.MyPK + "','" + attr.MyPK + "');\"  alt='" + attr.KeyOfEn + "'>" + attr.Name + "</a>");
+                            this.Pub1.Add("<a href=\"javascript:EditTable('" + this.FK_MapDtl + "','" + attr.MyPK + "','" + attr.UIBindKey + "');\"  alt='" + attr.KeyOfEn + "'>" + attr.Name + "</a>");
                             break;
                         default:
                             break;
@@ -158,7 +153,7 @@ namespace CCFlow.WF.MapDef
                 {
                     this.Pub1.Add(attr.Name);
                 }
-                this.Pub1.Add("<a href=\"javascript:Down('" + this.MyPK + "','" + attr.MyPK + "','" + t + "');\" ><img src='../../Img/Btn/Right.gif' class=Arrow alt='向右移动' border=0/></a>");
+                this.Pub1.Add("<a href=\"javascript:Down('" + this.FK_MapDtl + "','" + attr.MyPK + "','" + t + "');\" ><img src='../../Img/Btn/Right.gif' class=Arrow alt='向右移动' border=0/></a>");
                 this.Pub1.Add("</TH>");
             }
 

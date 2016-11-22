@@ -41,16 +41,16 @@
             var fk_sfTable = GetQueryString("FK_SFTable");
             var mypk = GetQueryString("MyPK");
 
-            //初始化 GroupID.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FieldInitGroupID&FK_MapData=" + fk_mapData + "&FK_SFTable=" + fk_sfTable + "&MyPK=" + mypk + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    data = JSON.parse(data);
-                }
-            });
+//            //初始化 GroupID.
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=FieldInitGroupID&FK_MapData=" + fk_mapData + "&FK_SFTable=" + fk_sfTable + "&MyPK=" + mypk + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
+//                    data = JSON.parse(data);
+//                }
+//            });
 
             $("#Msg").html("");
 
@@ -93,6 +93,8 @@
                         groupID = data.GroupID;
 
                     GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "NO", "NAME", groupID);
+
+                   // GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "No", "Name", groupID);
 
                     //是否可以编辑？
                     $("#RB_UIIsEnable_" + data.UIIsEnable).attr('checked', 'checked');

@@ -317,7 +317,7 @@
             <div style='clear:both'></div>
         </div>
         <div data-options="region:'center',noheader:true,border:false" style="overflow-y:hidden">
-            <iframe ID='F<%=dtl.No %>' frameborder='0' scrolling="auto" style='width:100%;height:100%' src='MapDtlDe.aspx?DoType=Edit&FK_MapData=<%=this.FK_MapData %>&FK_MapDtl=<%=dtl.No %>'></iframe>
+            <iframe ID='F<%=dtl.No %>' frameborder='0' scrolling="auto" style='width:100%;height:100%' src='MapDtlDe.htm?DoType=Edit&FK_MapData=<%=this.FK_MapData %>&FK_MapDtl=<%=dtl.No %>'></iframe>
         </div>
     </div>
 </asp:Content>

@@ -10,14 +10,14 @@
         window.close();
         //window.location.href = window.location.href;
     }
-    function EditEnum(mypk, refno, ftype) {
-        var url = 'EditEnum.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
+    function EditEnum(mypk, refno, enumKey) {
+        var url = 'EditEnum.aspx?DoType=Edit&MyPK=' + mypk + '&KeyOfEn=' + refno + '&EnumKey=' + enumKey;
         var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         window.close();
         //window.location.href = window.location.href;
     }
-    function EditTable(mypk, refno, ftype) {
-        var url = 'EditTable.aspx?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
+    function EditTable(mypk, keyOfEn, sfTable) {
+        var url = 'EditTable.aspx?DoType=Edit&MyPK=' + mypk + '&KeyOfEn=' + keyOfEn + '&SFTable=' + sfTable;
         var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         window.close();
         //window.location.href = window.location.href;

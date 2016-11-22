@@ -50,16 +50,17 @@
                           var field = data[i].KeyOfEn;
                           var name = data[i].Name;
                           var lgType = data[i].LGType;
+                          var uiBindKey = data[i].UIBindKey;
 
                           var nameLink = "";
                           if (lgType == 0) {
                               nameLink = "<a href=\"javascript:Edit('" + fk_mapDtl + "','" + mypk + "','" + dataType + "')\" > " + name + "</a>";
                           }
                           if (lgType == 1) {
-                              nameLink = "<a href=\"javascript:EditEnum('" + fk_mapDtl + "','" + mypk + "')\" > " + name + "</a>";
+                              nameLink = "<a href=\"javascript:EditEnum('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
                           }
                           if (lgType == 2) {
-                              nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "')\" > " + name + "</a>";
+                              nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
                           }
                           var col = "<th><a href=\"javascript:Up('"+fk_mapData+"','" + mypk + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('"+fk_mapData+"','" + mypk + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
                           $("#trTitle").append(col);
@@ -67,7 +68,7 @@
 
 
                       //生成内容行.
-                      for (var i = 0; i < 12; i++) {
+                      for (var i = 0; i < 6; i++) {
 
                           var newRow = "<tr><td class=Idx >" + i + "</td>";
 
@@ -116,25 +117,25 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditEnum(fk_mapdata, mypk) {
-            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&s=' + Math.random();
+        function EditEnum(fk_mapdata, mypk,enumKey) {
+            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
-        function EditTable(fk_mapdata, refno) {
-            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + refno + '&s=' + Math.random();
+        function EditTable(fk_mapdata, mypk,fk_sfTable) {
+            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + fk_sfTable + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function Up(fk_mapdata, mypk) {
             var url = 'Do.htm?DoType=DtlFieldUp&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&IsDtl=1&M=' + Math.random(); 
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 10px; dialogWidth: 10px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function Down(fk_mapdata, mypk) {
             var url = 'Do.htm?DoType=DtlFieldDown&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&IsDtl=1&M=' + Math.random();
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 10px; dialogWidth: 10px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function Del(fk_mapdata, refNo) {

@@ -183,7 +183,7 @@ namespace CCFlow.WF.MapDef
                             myidx++;
                             this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                             this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TD" + dtl.No + "'   > ");
-                            src = "MapDtlDe.aspx?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
+                            src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + this.FK_MapData + "&FK_MapDtl=" + dtl.No;
                             this.Pub1.Add("<iframe ID='F" + dtl.No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl.H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto' /></iframe>");
                             this.Pub1.AddTDEnd();
                             this.Pub1.AddTREnd();
@@ -917,6 +917,12 @@ namespace CCFlow.WF.MapDef
                         break;
                     case MapExtXmlList.InputCheck: /*js 检查 */
                         TB tbJS = this.Pub1.GetTBByID("TB_" + me.AttrOfOper);
+                        if (tbJS == null)
+                        {
+                            me.Delete();
+                            continue;
+                        }
+
                         if (tbJS != null)
                             tbJS.Attributes[me.Tag2] += me.Tag1 + "(this);";
                         else
@@ -924,6 +930,12 @@ namespace CCFlow.WF.MapDef
                         break;
                     case MapExtXmlList.PopVal: //弹出窗.
                         TB tbPop = this.Pub1.GetTBByID("TB_" + me.AttrOfOper);
+                        if (tbPop == null)
+                        {
+                            me.Delete();
+                            continue;
+                        }
+
                         tbPop.Attributes["onclick"] = "ShowHelpDiv('" + tbPop.ID + "','','" + me.MyPK + "','111','returnvalccformpopval');";
                         tbPop.Attributes["ondblclick"] = "ReturnValCCFormPopVal(this,'" + me.MyPK + "','111', " + me.W + "," + me.H + ",'" + me.GetParaString("Title") + "');";
 

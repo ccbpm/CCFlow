@@ -123,8 +123,7 @@
             position:fixed;
             float: left;
             width: 18%;
-            height: 70%;
-            margin-top: 8%;
+            height: 500px;
             overflow: hidden;
         }
             .navbars .s {
@@ -135,11 +134,11 @@
                 display: block;
                 width: 64px;
                 height: 30px;
-                background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat -75px 0px;
+                background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat -75px 4px;
                 margin: 0px auto;
             }
             .navbars i:hover{
-                background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px 0px;
+                background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat 0px 4px;
              }
                 .navbars i.bottom, .navbars i.bottom_disabled {
                     background: url("Scripts/bootstrap/css/img/arrow.png") no-repeat -75px -42px;
@@ -184,6 +183,7 @@
                 $("#nav").css("top", top);
             }
             nav.init();
+            $(".navbars").css("margin-top", ($(window).height() - $(".navbars").height()) / 2);
             $(".navbars i").click(function () {
                 $("#nav").removeClass("s");
             });

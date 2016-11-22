@@ -1161,11 +1161,11 @@ function Col8To4() {
     //$('#Message').css('width', '900px');
 
     var workNodeData = JSON.parse(jsonStr);
-    var width = 1150;
+    var width = 81;
     if (workNodeData.Sys_MapData != undefined && workNodeData.Sys_MapData.length > 0 && workNodeData.Sys_MapData[0].TableWidth > 900) {//处于中屏时设置宽度最小值
         width = workNodeData.Sys_MapData[0].TableWidth;
     }
-    width = width + 'px';
+    width = width + '%';
     $('#divCurrentForm').css('width', width);
     $('#divTrack').css('width', width);
     //显示左侧导航栏 暂时不显示

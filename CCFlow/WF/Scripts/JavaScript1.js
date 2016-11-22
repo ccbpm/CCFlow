@@ -30,10 +30,10 @@ var nav = {
         if (!btn.className.endsWith("_disabled")) {
             if (btn == this.btnB) {
                 this.ul.style.top =
-                    -(this.LIHEIGHT * (++this.moved) - 25) + "px";
+                    -(this.LIHEIGHT * (++this.moved) - 30) + "px";
             } else {
                 this.ul.style.top =
-                    -(this.LIHEIGHT * (--this.moved) - 25) + "px";
+                    -(this.LIHEIGHT * (--this.moved) - 30) + "px";
             }
             this.btnEnable();
         }

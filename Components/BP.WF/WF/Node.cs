@@ -2102,17 +2102,7 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsHandOver, value);
             }
         }
-        public bool IsCanHidReturn_del
-        {
-            get
-            {
-                return this.GetValBooleanByKey(NodeAttr.IsCanHidReturn);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.IsCanHidReturn, value);
-            }
-        }
+       
         /// <summary>
         /// 是否可以退回？
         /// </summary>

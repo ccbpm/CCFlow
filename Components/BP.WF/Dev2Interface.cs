@@ -1956,8 +1956,6 @@ namespace BP.WF
             dt.Columns.Add("IsBackTracking"); // 该节点是否可以退回并原路返回？ 0否, 1是.
 
 
-
-
             Node nd = new Node(fk_node);
             if (nd.HisRunModel == RunModel.SubThread)
             {
@@ -2010,7 +2008,7 @@ namespace BP.WF
             }
 
             string sql = "";
-          
+
 
             WorkNode wn = new WorkNode(workid, fk_node);
             WorkNodes wns = new WorkNodes();
@@ -2023,14 +2021,14 @@ namespace BP.WF
                     if (nd.IsHL || nd.IsFLHL)
                     {
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
-                        sql = "SELECT FK_Node AS No,FK_NodeText as Name, FK_Emp as Rec, FK_EmpText as RecName FROM WF_GenerWorkerlist WHERE FID=" + fid + " AND WorkID=" + workid + " AND FK_Node!=" + fk_node + " AND IsPass=1 ORDER BY RDT  ";
+                        sql = "SELECT a.FK_Node AS No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.FK_Node!=" + fk_node + " AND a.IsPass=1 ORDER BY RDT  ";
                         return DBAccess.RunSQLReturnTable(sql);
                     }
 
                     if (nd.TodolistModel == TodolistModel.Order)
-                        sql = "SELECT FK_Node as No,FK_NodeText as Name,FK_Emp as Rec,FK_EmpText as RecName FROM WF_GenerWorkerlist WHERE  (WorkID=" + workid + " AND IsEnable=1 AND IsPass=1 AND FK_Node!=" + fk_node + ") OR (FK_Node=" + fk_node + " AND IsPass <0)  ORDER BY RDT";
+                        sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + ") OR (a.FK_Node=" + fk_node + " AND a.IsPass <0)  ORDER BY a.RDT";
                     else
-                        sql = "SELECT FK_Node as No,FK_NodeText as Name,FK_Emp as Rec,FK_EmpText as RecName FROM WF_GenerWorkerlist WHERE  WorkID=" + workid + " AND IsEnable=1 AND IsPass=1 AND FK_Node!=" + fk_node + " ORDER BY RDT";
+                        sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " ORDER BY a.RDT";
                     return DBAccess.RunSQLReturnTable(sql);
                     break;
                 case ReturnRole.ReturnPreviousNode:
@@ -2042,6 +2040,10 @@ namespace BP.WF
 
                     dr1["Rec"] = mywnP.HisWork.Rec;
                     dr1["RecName"] = mywnP.HisWork.RecText;
+                    if (mywnP.HisNode.IsBackTracking == true) //是否可以原路返回？
+                        dr1["IsBackTracking"] = "1";
+                    else
+                        dr1["IsBackTracking"] = "0";
                     dt.Rows.Add(dr1);
                     break;
                 case ReturnRole.ReturnSpecifiedNodes: //退回指定的节点。
@@ -2066,6 +2068,12 @@ namespace BP.WF
                         dr["Name"] = mywn.HisNode.Name;
                         dr["Rec"] = mywn.HisWork.Rec;
                         dr["RecName"] = mywn.HisWork.RecText;
+
+                        if (mywn.HisNode.IsBackTracking) //是否可以原路返回.
+                            dr["IsBackTracking"] = "1";
+                        else
+                            dr["IsBackTracking"] = "0";
+
                         dt.Rows.Add(dr);
                     }
                     break;
@@ -2077,7 +2085,7 @@ namespace BP.WF
                     foreach (Direction dir in dirs)
                     {
                         Node toNode = new Node(dir.ToNode);
-                        sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerlist WHERE FK_Node=" + toNode.NodeID + " AND WorkID=" + workid + " AND IsEnable=1 AND IsPass=1";
+                        sql = "SELECT a.FK_Emp,a.FK_EmpText FROM WF_GenerWorkerlist a, WF_Node b WHERE   a.FK_Node=" + toNode.NodeID + " AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1";
                         DataTable dt1 = DBAccess.RunSQLReturnTable(sql);
                         if (dt1.Rows.Count == 0)
                             continue;
@@ -2087,6 +2095,10 @@ namespace BP.WF
                         dr["Name"] = toNode.Name;
                         dr["Rec"] = dt1.Rows[0][0];
                         dr["RecName"] = dt1.Rows[0][1];
+                        if (toNode.IsBackTracking == true)
+                            dr["IsBackTracking"] = "1";
+                        else
+                            dr["IsBackTracking"] = "0";
                         dt.Rows.Add(dr);
                     }
                     break;

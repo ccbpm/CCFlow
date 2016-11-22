@@ -1022,15 +1022,15 @@ namespace BP.En
                         continue; /*如果是外键,并且外键的默认值为null.*/
 
                     string str = this.GetValStrByKey(attr.Key);
-                    if (str == "" || str == attr.DefaultVal.ToString() || str == null)
+                    if (str == attr.DefaultVal.ToString())
                         continue;
+                    else
+                        return false;
 
                     if (attr.MyDataType == DataType.AppDate && attr.DefaultVal == null)
                     {
                         if (str == DataType.CurrentData)
                             continue;
-                        else
-                            return true;
                     }
 
                     if (str == attr.DefaultVal.ToString() && attr.IsFK == false)

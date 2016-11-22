@@ -216,6 +216,8 @@ namespace BP.Web.Controls
         {
             switch (this.SelfShowType)
             {
+                case DDLShowType.None:
+                    return;
                 case DDLShowType.Boolean:
                     this.Items.Add(new ListItem("是", "1"));
                     this.Items.Add(new ListItem("否", "0"));
@@ -237,9 +239,6 @@ namespace BP.Web.Controls
                     this.SelfBindEns();
                     break;
             }
-
-            //if (this.SelfAddAllLocation == AddAllLocation.TopAndEnd)
-            //    this.Items.Add(new ListItem("-=全部=-", "all"));
 
             if (this.SelfDefaultVal != null && this.SelfDefaultVal.Length > 0)
                 this.SetSelectItem(this.SelfDefaultVal);

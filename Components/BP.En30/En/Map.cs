@@ -1715,16 +1715,6 @@ namespace BP.En
         {
             AddDDLSysEnum(key, key, defaultVal, desc, isUIVisable, isUIEnable, sysEnumKey, null, false);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="defaultVal"></param>
-        /// <param name="desc"></param>
-        /// <param name="isUIVisable"></param>
-        /// <param name="isUIEnable"></param>
-        /// <param name="sysEnumKey"></param>
-        /// <param name="cfgVal"></param>
         public void AddDDLSysEnum(string key, int defaultVal, string desc, bool isUIVisable, bool isUIEnable, string sysEnumKey, string cfgVal, bool isLine)
         {
             AddDDLSysEnum(key, key, defaultVal, desc, isUIVisable, isUIEnable, sysEnumKey, cfgVal, isLine);

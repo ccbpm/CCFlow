@@ -1328,12 +1328,17 @@ namespace CCFlow.Web.Comm.UC
                                 }
                                 else
                                 {
+
+                                    DDL ddl1 = new DDL(attr, val.ToString(), "enumLab", true, this.Page.Request.ApplicationPath);
+                                    ddl1.ID = "DDL_" + attr.Key;
+                                    this.AddContral(attr.DescHelper, ddl1, true,3);
+
                                     /* 可以使用的情况. */
                                   //  DDL ddl1 = new DDL(attr, val.ToString(), "enumLab", true, this.Page.Request.ApplicationPath);
-                                    DDL ddl1 = new DDL();
-                                    ddl1.BindSysEnum(attr.UIBindKey, (int)val);
-                                    ddl1.ID = "DDL_" + attr.Key;
-                                    this.AddContral(attr.DescHelper, ddl1, true, 3);
+                                    //DDL ddlEnum = new DDL();
+                                    //ddlEnum.BindSysEnum(attr.UIBindKey, (int)val);
+                                    //ddlEnum.ID = "DDL_" + attr.Key;
+                                    //this.AddContral(attr.DescHelper, ddlEnum, true, 3);
 
                                 }
                                 break;
@@ -2045,13 +2050,11 @@ namespace CCFlow.Web.Comm.UC
                             {
                                 DDL ddl = new DDL();
                                 ddl.ID = "DDL_" + attr.Key;
-                                ddl.CssClass = "DDL" + WebUser.Style;
                                 string text = en.GetValRefTextByKey(attr.Key);
                                 if (text == null || text == "")
                                     text = val.ToString();
 
                                 ListItem li = new ListItem(text, val.ToString());
-                                li.Attributes["class"] = "TB";
                                 ddl.Items.Add(li);
                                 ddl.Enabled = false;
                                 this.AddContral(attr.Desc, ddl, true, 3);
@@ -2092,6 +2095,7 @@ namespace CCFlow.Web.Comm.UC
                                 {
                                     DDL ddl1 = new DDL(attr, val.ToString(), "enumLab", true, this.Page.Request.ApplicationPath);
                                     ddl1.ID = "DDL_" + attr.Key;
+
                                     this.AddContral(attr.DescHelper, ddl1, true,3);
                                 }
 

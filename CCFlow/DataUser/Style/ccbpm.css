@@ -892,7 +892,7 @@ body {
 #header {
     height: 50px;
     font: bold 16px "微软雅黑";
-    background:gray !important;
+    background:rgb(157, 159, 175) !important;
     color: #fff;
     text-align: left;
     cursor:pointer;
@@ -1048,7 +1048,7 @@ float:right;
 }
 
 #header {
-background: gray !important;
+background: rgb(192, 193, 204) !important;
 }
 
 

@@ -1502,12 +1502,18 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             ath.FK_MapData = this.FK_MapData;
             ath.NoOfObj = this.Ath;
             ath.FK_Node = this.FK_Node;
+            if (this.MyPK == null)
+            {
+                if (this.FK_Node == 0)
+                    ath.MyPK = this.FK_MapData + "_" + this.Ath;
+                else
+                    ath.MyPK = this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node;
+            }
+            else 
+            {
+                ath.MyPK = this.MyPK;
 
-            if (this.FK_Node == 0)
-                ath.MyPK = this.FK_MapData + "_" + this.Ath;
-            else
-                ath.MyPK = this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node;
-
+            }
             int i = ath.RetrieveFromDBSources();
             if (i == 0)
             {

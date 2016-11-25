@@ -58,11 +58,11 @@
         $(function Attachment_Init() {
             var FK_MapData = GetQueryString("FK_MapData");
             var Ath = GetQueryString("Ath");
-            
+            var MyPK = GetQueryString("MyPK");
             $.ajax({
                 type: 'POST',
                 async: true,
-                url: Handler + "?DoType=Attachment_Init&FK_MapData=" + FK_MapData + "&Ath=" + Ath,
+                url: Handler + "?DoType=Attachment_Init&FK_MapData=" + FK_MapData + "&Ath=" + Ath + "&MyPK=" + MyPK,
                 dataType: 'html',
                 success: function (data) {
 
@@ -86,7 +86,6 @@
 
         function Save() {
             var CheckBoxIDs = GenerCheckIDs(); //获得所有的checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-            alert(CheckBoxIDs);
             var frmData = $("#cc").serialize();
             var Ath = GetQueryString("Ath");
             $.ajax({

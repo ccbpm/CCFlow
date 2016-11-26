@@ -58,20 +58,13 @@
         $(function Attachment_Init() {
             var FK_MapData = GetQueryString("FK_MapData");
             var Ath = GetQueryString("Ath");
-<<<<<<< .mine
-
-||||||| .r1296
-            
-=======
             var MyPK = GetQueryString("MyPK");
->>>>>>> .r1297
             $.ajax({
                 type: 'POST',
                 async: true,
                 url: Handler + "?DoType=Attachment_Init&FK_MapData=" + FK_MapData + "&Ath=" + Ath + "&MyPK=" + MyPK,
                 dataType: 'html',
                 success: function (data) {
-                    alert(data);
                     data = JSON.parse(data);
 
                     //给整个界面的元素批量赋值.

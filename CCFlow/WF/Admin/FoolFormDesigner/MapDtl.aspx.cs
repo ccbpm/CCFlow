@@ -65,7 +65,7 @@ namespace CCFlow.WF.MapDef
         {
             //if (this.Request.QueryString["FK_MapData"] != null && this.FK_MapDtl.Length > 2)
             //{
-            //    this.Response.Redirect("/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&PK=" + this.FK_MapDtl+"&FK_MapData="+this.FK_MapData, true);
+            //    this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&PK=" + this.FK_MapDtl+"&FK_MapData="+this.FK_MapData, true);
             //    return;
             //}
 
@@ -269,7 +269,7 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("ID");
 
-            string url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&PK=" + this.FK_MapDtl + "&FK_MapData=" + this.FK_MapData;
+            string url = "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&PK=" + this.FK_MapDtl + "&FK_MapData=" + this.FK_MapData;
 
             this.Pub1.AddTDTitle("colspan=3", "基本设置 <div style='float:right'><a href='" + url + "'>高级设置</div>");
             this.Pub1.AddTREnd();

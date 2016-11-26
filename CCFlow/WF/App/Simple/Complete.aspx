@@ -61,7 +61,7 @@
             <td>
                 <% if (dr["Type"] + "" == "RUNNING")
                    { %>
-                <a href="/WF/WFRpt.aspx?FK_Flow=<%=dr["FK_Flow"] %>&WorkID=<%=dr["WorkID"] %>" target="_blank">
+                <a href="../../WFRpt.aspx?FK_Flow=<%=dr["FK_Flow"] %>&WorkID=<%=dr["WorkID"] %>" target="_blank">
                     <%=dr["Title"]%>
                 </a>
                 <% }
@@ -86,7 +86,7 @@
             <% if (dr["Type"] + "" == "RUNNING")
                { %>
             <td>
-                <a href="/WF/MyFlow.aspx?FK_Flow=<%= dr["FK_Flow"] %>&CopyFormWorkID=<%= dr["WorkID"] %>&CopyFormNode=<%= dr["FK_Node"] %>"
+                <a href="../../MyFlow.aspx?FK_Flow=<%= dr["FK_Flow"] %>&CopyFormWorkID=<%= dr["WorkID"] %>&CopyFormNode=<%= dr["FK_Node"] %>"
                     target="_blank">Copy发起流程</a>
             </td>
             <% }

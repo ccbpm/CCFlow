@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="/WF/SDKComponents/Site.Master"
+﻿<%@ Page Title="" Language="C#" MasterPageFile="SDKComponents/Site.Master"
  AutoEventWireup="true" Inherits="CCFlow.WF.WF_JumpWay" Codebehind="JumpWay.aspx.cs" %>
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc2" %>
 

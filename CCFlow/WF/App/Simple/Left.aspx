@@ -29,11 +29,11 @@
    <fieldset>
     <legend>流程高级功能</legend>
     <ul>
-  <li><a href="/WF/TaskPoolSharing.aspx">共享任务(<%=BP.WF.Dev2Interface.Todolist_Sharing%>)</a></li>
+  <li><a href="../../TaskPoolSharing.aspx">共享任务(<%=BP.WF.Dev2Interface.Todolist_Sharing%>)</a></li>
     <li><a href="CC.aspx">抄送(<%=BP.WF.Dev2Interface.Todolist_CCWorks%>)</a></li>
-    <li><a href="/WF/Batch.aspx">批处理</a></li>
-    <li><a href="/WF/GetTask.aspx">取回审批</a></li>
-    <li><a href="/WF/Search.htm">高级查询</a></li>
+    <li><a href="../../Batch.aspx">批处理</a></li>
+    <li><a href="../../GetTask.aspx">取回审批</a></li>
+    <li><a href="../../Search.htm">高级查询</a></li>
     </ul>
     </fieldset>
 
@@ -42,11 +42,11 @@
     <fieldset>
     <legend>系统管理</legend>
     <ul>
-    <li><a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Depts">部门维护</a></li>
-    <li><a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Stations">岗位维护</a></li>
-    <li><a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Emps">人员维护</a></li>
-    <li><a href="/WF/Comm/Sys/EnumList.aspx">枚举数据管理</a></li>
-    <li><a href="/WF/Comm/Sys/SFTableList.aspx">字典表</a></li>
+    <li><a href="../../Comm/Search.aspx?EnsName=BP.Port.Depts">部门维护</a></li>
+    <li><a href="../../Comm/Search.aspx?EnsName=BP.Port.Stations">岗位维护</a></li>
+    <li><a href="../../Comm/Search.aspx?EnsName=BP.Port.Emps">人员维护</a></li>
+    <li><a href="../../Comm/Sys/EnumList.aspx">枚举数据管理</a></li>
+    <li><a href="../../Comm/Sys/SFTableList.aspx">字典表</a></li>
     </ul>
     </fieldset>
 

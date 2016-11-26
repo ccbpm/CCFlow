@@ -4,15 +4,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>工作移交</title>
-     <script src="/WF/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+     <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
    
-    <link href="/WF/Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.css"
+    <link href="../../Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.css"
         rel="stylesheet" type="text/css" />
-    <script src="/WF/Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.pack.js"
+    <script src="../../Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.pack.js"
         type="text/javascript"></script>
-    <script src="/WF/Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.js"
+    <script src="../../Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.js"
         type="text/javascript"></script>
-    <script src="/WF/Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.min.js"
+    <script src="../../Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.min.js"
         type="text/javascript"></script>
     <script type="text/javascript">
 

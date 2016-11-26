@@ -8,7 +8,7 @@
         type="text/css" />
     <link href="../../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
-    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
 </head>
 <body>
@@ -57,84 +57,84 @@
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -34px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -34px transparent;
         }
         .step-first2
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -204px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -204px transparent;
         }
         .step-first3
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -272px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -272px transparent;
         }
         .step-flow1
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% 0px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% 0px transparent;
         }
         .step-flow0
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -102px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -102px transparent;
         }
         .step-flow2
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -170px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -170px transparent;
         }
         .step-flow3
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -238px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -238px transparent;
         }
         .step-last0
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -136px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -136px transparent;
         }
         .step-last1
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -68px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -68px transparent;
         }
         .step-none
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -306px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -306px transparent;
         }
         .step-first0
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -340px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -340px transparent;
         }
         .step-last2
         {
             height: 34px;
             line-height: 34px;
             font-size: 18px;
-            background: url("/WF/Admin/CCBPMDesigner/Img/process.png") no-repeat scroll 50% -374px transparent;
+            background: url("../Img/process.png") no-repeat scroll 50% -374px transparent;
         }
         .step-time
         {
@@ -267,7 +267,7 @@
 
                 if (flowinfo.WFSTA != 1) {
                     html = '<li><div>';
-                    html += '<div class="step-name"><img src="/WF/Admin/CCBPMDesigner/Img/arrow.png" align="middle" />' + (nTracks.length > 0 ? nTracks[nTracks.length - 1].NDTOT : findFromArray(nodes, 'ID', startNodeId)[0].NAME) + '</div>';
+                    html += '<div class="step-name"><img src="../Img/arrow.png" align="middle" />' + (nTracks.length > 0 ? nTracks[nTracks.length - 1].NDTOT : findFromArray(nodes, 'ID', startNodeId)[0].NAME) + '</div>';
                     html += '<div class="'+(nTracks.length > 0 ? 'step-last1' : 'step-first0')+'"></div>';
                     html += '<div class="step-time">&nbsp;<br />' + (nTracks.length > 0 ? nTracks[nTracks.length - 1].EMPTOT : flowinfo.STARTERNAME) + '</div>';
                     html += '</div></li>';
@@ -302,7 +302,7 @@
 
                 for (var i = 0; i < fd.nodes.length; i++) {
                     var html = '<li><div>';
-                    html += '<div class="' + (currNode != fd.nodes[i].ID ? 'step-name' : 'step-name1') + '">' + (currNode != fd.nodes[i].ID ? '' : '<img src="/WF/Admin/CCBPMDesigner/Img/arrow.png" align="middle">') + fd.nodes[i].NAME + '</div>';
+                    html += '<div class="' + (currNode != fd.nodes[i].ID ? 'step-name' : 'step-name1') + '">' + (currNode != fd.nodes[i].ID ? '' : '<img src="../Img/arrow.png" align="middle">') + fd.nodes[i].NAME + '</div>';
                     step = '';
                     emp = '';
                     tks = findFromArray(tracks, 'NDFROM', fd.nodes[i].ID);

@@ -4,10 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    <link href="/WF/Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="/WF/Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <link href="/WF/Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="js/AppData.js" type="text/javascript"></script>
     <script src="js/startPage.js" type="text/javascript"></script>
 </head>

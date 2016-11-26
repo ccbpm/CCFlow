@@ -11,7 +11,7 @@ namespace CCFlow.WF
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            this.Response.Redirect("/WF/CH/Default.aspx", true);
+            this.Response.Redirect("CH/Default.aspx", true);
         }
     }
 }

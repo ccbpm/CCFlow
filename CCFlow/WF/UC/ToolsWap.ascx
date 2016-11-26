@@ -1,9 +1,9 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="CCFlow.WF.UC.ToolWap"
     CodeBehind="ToolsWap.ascx.cs" %>
 <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-<script type="text/javascript" src="/WF/Comm/JS/Calendar/jquery-1.3.1.min.js"></script>
-<script type="text/javascript" src="/WF/Comm/JS/Calendar/jquery.bitmapcutter.js"></script>
-<link rel="Stylesheet" type="text/css" href="/WF/Comm/CSS/jquery.bitmapcutter.css" />
+<script type="text/javascript" src="../Comm/JS/Calendar/jquery-1.3.1.min.js"></script>
+<script type="text/javascript" src="../Comm/JS/Calendar/jquery.bitmapcutter.js"></script>
+<link rel="Stylesheet" type="text/css" href="../Comm/CSS/jquery.bitmapcutter.css" />
 <script type="text/javascript">
     function SetSelected(cb, ids) {
         //alert(ids);

@@ -100,8 +100,8 @@
             </div>
             <div class="logo_cz2">
                 <ul>
-                    <li><a href="/WF/Tools.aspx" target="main">设置</a></li>
-                    <li><a href="/WF/Messages.aspx" target="main">消息</a></li>
+                    <li><a href="../../Tools.aspx" target="main">设置</a></li>
+                    <li><a href="../../Messages.aspx" target="main">消息</a></li>
                     <li><a href="Login.aspx?DoType=Logout" target="_parent">退出</a></li>
                 </ul>
             </div>

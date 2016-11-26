@@ -80,7 +80,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
  <div id="silverlightControlHost">
         <object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
-		  <param name="source" value="/WF/Admin/ClientBin/BPPaint.xap"/>
+		  <param name="source" value="../Admin/ClientBin/BPPaint.xap"/>
 		  <param name="onError" value="onSilverlightError" />
 		  <param name="background" value="white" />
 		  <param name="minRuntimeVersion" value="4.0.50826.0" />

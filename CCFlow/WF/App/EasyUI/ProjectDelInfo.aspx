@@ -5,11 +5,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    <link href="/WF/Comm/JS/EasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="/WF/Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="/WF/Comm/JS/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="/WF/Comm/JS/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="/WF/Comm/JS/EasyUI/locale/easyui-lang-zh_CN.js" type="text/javascript"
+    <link href="../../Comm/JS/EasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Comm/JS/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Comm/JS/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Comm/JS/EasyUI/locale/easyui-lang-zh_CN.js" type="text/javascript"
         charset="UTF-8"></script>
     <script language="javascript" type="text/javascript">
         function winOpen(url) {

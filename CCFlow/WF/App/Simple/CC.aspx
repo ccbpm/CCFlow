@@ -48,7 +48,7 @@
         string fk_flow = dr["FK_Flow"].ToString();
         string fk_node = dr["FK_Node"].ToString();
 
-        string url = "/WF/WFRpt.aspx?FK_Flow="+fk_flow+"&FK_Node="+fk_node+"&WorkID="+workid+"&FID="+fid;
+        string url = "../../WFRpt.aspx?FK_Flow="+fk_flow+"&FK_Node="+fk_node+"&WorkID="+workid+"&FID="+fid;
         
         %>
         <tr>

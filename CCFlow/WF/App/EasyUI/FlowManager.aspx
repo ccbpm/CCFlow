@@ -3,18 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>流程调度</title>
-    <link href="/WF/App/EasyUI/jquery/tablestyle.css" rel="stylesheet" type="text/css" />
-    <link href="/WF/App/EasyUI/jquery/lib/ligerUI/skins/Aqua/css/ligerui-all.css"
+    <link href="../../App/EasyUI/jquery/tablestyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../App/EasyUI/jquery/lib/ligerUI/skins/Aqua/css/ligerui-all.css"
         rel="stylesheet" type="text/css" />
-    <link href="/WF/App/EasyUI/jquery/lib/ligerUI/skins/ligerui-icons.css" rel="stylesheet"
+    <link href="../../App/EasyUI/jquery/lib/ligerUI/skins/ligerui-icons.css" rel="stylesheet"
         type="text/css" />
-    <script src="/WF/App/EasyUI/jquery/lib/jquery/jquery-1.5.2.min.js" type="text/javascript"></script>
-    <script src="/WF/App/EasyUI/jquery/lib/ligerUI/js/core/base.js" type="text/javascript"></script>
-    <script src="/WF/App/EasyUI/jquery/lib/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
-    <script src="/WF/App/EasyUI/jquery/lib/ligerUI/js/plugins/ligerGrid.js" type="text/javascript"></script>
-    <script src="/WF/App/EasyUI/jquery/lib/ligerUI/js/plugins/ligerDialog.js" type="text/javascript"></script>
-    <script src="/WF/App/EasyUI/jquery/lib/ligerUI/js/plugins/ligerButton.js" type="text/javascript"></script>
-    <script src="/WF/App/EasyUI/jquery/lib/ligerUI/js/plugins/ligerTextBox.js" type="text/javascript"></script>
+    <script src="../../App/EasyUI/jquery/lib/jquery/jquery-1.5.2.min.js" type="text/javascript"></script>
+    <script src="../../App/EasyUI/jquery/lib/ligerUI/js/core/base.js" type="text/javascript"></script>
+    <script src="../../App/EasyUI/jquery/lib/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+    <script src="../../App/EasyUI/jquery/lib/ligerUI/js/plugins/ligerGrid.js" type="text/javascript"></script>
+    <script src="../../App/EasyUI/jquery/lib/ligerUI/js/plugins/ligerDialog.js" type="text/javascript"></script>
+    <script src="../../App/EasyUI/jquery/lib/ligerUI/js/plugins/ligerButton.js" type="text/javascript"></script>
+    <script src="../../App/EasyUI/jquery/lib/ligerUI/js/plugins/ligerTextBox.js" type="text/javascript"></script>
     <%-- <script src="../AppDemoLigerUI/js/QiYeList.js" type="text/javascript"></script>
     --%>
     <script type="text/javascript">
@@ -159,13 +159,13 @@
                               //                           + "' src='Img/Menu/Mail_UnRead.png'/>" + rowdata.Title + "</a>";
 
 
-                              var h = "/WF/WFRpt.aspx?WorkID=" + rowdata.WORKID + "&FK_Flow=" + rowdata.FK_FLOW + "&FID=" + rowdata.FID + "&T=" + dateNow;
+                              var h = "../../WFRpt.aspx?WorkID=" + rowdata.WORKID + "&FK_Flow=" + rowdata.FK_FLOW + "&FID=" + rowdata.FID + "&T=" + dateNow;
                               title = "<a href='javascript:void(0);' onclick=winOpen('" + h + "')><img align='middle' alt='' id='" + rowdata.OID + "' src='/WF/App/EasyUI/Img/Menu/Mail_UnRead.png' border=0 />" + rowdata.TITLE + "</a>";
                           } else {
                               //                                           title = "<a href=\"javascript:WinOpenIt('../WF/MyFlowSmall.aspx?FK_Flow=" + rowdata.FK_Flow + "&FK_Node=" + rowdata.FlowEndNode
                               //                           + "&FID=" + rowdata.FID + "&T=" + strTimeKey + "&WorkID=" + rowdata.OID + "','" + rowdata.OID
                               //                           + "','" + rowdata.FlowName + "');\"  ><img align='middle' id='" + rowdata.OID + "' alt='' src='Img/Menu/Mail_Read.png'/>" + rowdata.Title + "</a>";
-                              var h = "/WF/WFRpt.aspx?WorkID=" + rowdata.WORKID + "&FK_Flow=" + rowdata.FK_FLOW + "&FID=" + rowdata.FID + "&T=" + dateNow;
+                              var h = "../../WFRpt.aspx?WorkID=" + rowdata.WORKID + "&FK_Flow=" + rowdata.FK_FLOW + "&FID=" + rowdata.FID + "&T=" + dateNow;
                               title = "<a href='javascript:void(0);' onclick=winOpen('" + h + "')><img align='middle' alt='' id='" + rowdata.OID + "' src='/WF/App/EasyUI/Img/Menu/Mail_Read.png'/>" + rowdata.TITLE + "</a>";
 
                           }

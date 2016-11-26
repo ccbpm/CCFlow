@@ -10,11 +10,11 @@
 <th>序号</th>
 <th>类别</th>
 <th>流程</th>
-<th><img src="/WF/Img/TolistSta/0.png" alt="绿牌" />待办中</th>
-<th><img src="/WF/Img/TolistSta/1.png" alt="黄牌" />预警中</th>
-<th><img src="/WF/Img/TolistSta/2.png" alt="红牌"/>预期中</th>
-<th><img src="/WF/Img/TolistSta/1.png" alt="绿牌" />正常办结</th>
-<th><img src="/WF/Img/TolistSta/2.png" alt="绿牌" />超期办结</th>
+<th><img src="../Img/TolistSta/0.png" alt="绿牌" />待办中</th>
+<th><img src="../Img/TolistSta/1.png" alt="黄牌" />预警中</th>
+<th><img src="../Img/TolistSta/2.png" alt="红牌"/>预期中</th>
+<th><img src="../Img/TolistSta/1.png" alt="绿牌" />正常办结</th>
+<th><img src="../Img/TolistSta/2.png" alt="绿牌" />超期办结</th>
 <th>详细</th>
 </tr>
 

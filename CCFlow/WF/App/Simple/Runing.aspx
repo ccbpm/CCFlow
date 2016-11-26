@@ -76,7 +76,7 @@
             <td>
                 <% if ( 1==1 || dr["Type"] + "" == "RUNNING")
                    { %>
-                <a href="/WF/WFRpt.aspx?FK_Flow=<%= dr["FK_Flow"] %>&WorkID=<%= dr["WorkID"] %>"
+                <a href="../../WFRpt.aspx?FK_Flow=<%= dr["FK_Flow"] %>&WorkID=<%= dr["WorkID"] %>"
                     target="_blank">
                     <%= dr["Title"] %>
                 </a>
@@ -98,12 +98,12 @@
             <td nowarp=true>
                <% if (dr["FID"].ToString() != "0")
                   { %>
-                [<a href="/WF/MyFlowInfo.aspx?FK_Flow=<%= fk_flow %>&WorkID=<%= workid %>&DoType=DeleteFlow" target=_blank >删除</a>]
+                [<a href="../../MyFlowInfo.aspx?FK_Flow=<%= fk_flow %>&WorkID=<%= workid %>&DoType=DeleteFlow" target=_blank >删除</a>]
                 <% }
                   else
                   { %>
 
-                 [<a href="/WF/WorkOpt/UnSend.aspx?FK_Flow=<%= fk_flow %>&WorkID=<%= workid %>" target=_blank >撤销发送</a>]
+                 [<a href="../../WorkOpt/UnSend.aspx?FK_Flow=<%= fk_flow %>&WorkID=<%= workid %>" target=_blank >撤销发送</a>]
                 -[<a href="javascript:CopyAndStart('<%= path %>','<%= fk_flow %>','<%= nodeID %>','<%= workid %>')" >Copy发起</a>]
                 <%} %>
                 -[<a href="javascript:Press('<%= path %>','<%= fk_flow %>','<%= workid %>')" >催办</a>]

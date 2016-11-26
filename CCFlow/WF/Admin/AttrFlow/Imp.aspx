@@ -69,8 +69,8 @@
 <fieldset>
 <legend> 从云服务器导入 </legend>
 <ul>
-<li> <a href="/WF/Admin/Clound/PriFlow.aspx?FK_Flow=<%=this.FK_Flow %>"><img src="../CCBPMDesigner/Img/FlowPrivate.png" />从私有云导入</a></li>
-<li><a href="/WF/Admin/Clound/PubFlow.aspx?FK_Flow=<%=this.FK_Flow %>"><img src="../CCBPMDesigner/Img/FlowPublic.png" />从共有云导入</a> </li>
+<li> <a href="../Clound/PriFlow.aspx?FK_Flow=<%=this.FK_Flow %>"><img src="../CCBPMDesigner/Img/FlowPrivate.png" />从私有云导入</a></li>
+<li><a href="../Clound/PubFlow.aspx?FK_Flow=<%=this.FK_Flow %>"><img src="../CCBPMDesigner/Img/FlowPublic.png" />从共有云导入</a> </li>
 </ul>
  
 </fieldset>

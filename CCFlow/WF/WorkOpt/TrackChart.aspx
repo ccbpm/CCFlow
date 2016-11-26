@@ -11,7 +11,7 @@
      <div id="silverlightControlHost" style='height: 600px;'>
                     <object data="data:application/x-silverlight-2," type="application/x-silverlight-2"
                         width="99%" height="500px">
-                        <param name="source" value="/WF/Admin/ClientBin/CCBPMDesigner.xap" />
+                        <param name="source" value="../Admin/ClientBin/CCBPMDesigner.xap" />
                         <param name="onerror" value="onSilverlightError" />
                         <param name="background" value="white" />
                         <param name="minRuntimeVersion" value="2.0.31005.0" />

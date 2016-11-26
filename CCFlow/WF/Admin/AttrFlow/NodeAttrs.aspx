@@ -29,7 +29,7 @@
         }
         // 审核组件
         function OpenAuditModule(nodeID) {
-            var url = "/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" + nodeID;
+            var url = "../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" + nodeID;
             window.open(url, 'OpenFreeFrm', 'height=470, width=840, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
         }
 

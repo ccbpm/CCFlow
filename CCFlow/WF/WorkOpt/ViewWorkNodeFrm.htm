@@ -262,7 +262,7 @@
             break;
         case "Dtl":
             //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
-            var src = "/WF/CCForm/Dtl.aspx?s=2&EnsName=" +
+            var src = "../CCForm/Dtl.aspx?s=2&EnsName=" +
                 groupFiled.CtrlID +
                 "&RefPKVal=" +
                 pageData.WorkID +
@@ -284,7 +284,7 @@
                     continue;
                 var src = "";
                 if (pageData.IsReadonly == 1)
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" +
+                    src = "../CCForm/AttachmentUpload.aspx?PKVal=" +
                         pageData.WorkID +
                         "&Ath=" +
                         ath.NoOfObj +
@@ -294,7 +294,7 @@
                         ath.MyPK +
                         "&IsReadonly=1";
                 else
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" +
+                    src = "../CCForm/AttachmentUpload.aspx?PKVal=" +
                         pageData.WorkID +
                         "&Ath=" +
                         ath.NoOfObj +
@@ -315,7 +315,7 @@
             }
             break;
         case "FWC": //审核组件.
-            var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
+            var src = "../WorkOpt/WorkCheck.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
@@ -335,7 +335,7 @@
                 '</div>';
             break;
         case "SubFlow": //子流程..
-            var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
+            var src = "../WorkOpt/SubFlow.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
@@ -353,7 +353,7 @@
                 '</div>';
             break;
         case "Track": //轨迹图.
-            var src = "/WF/WorkOpt/OneWork/Track.aspx?s=2";
+            var src = "../WorkOpt/OneWork/Track.aspx?s=2";
             //var paras = pageParamToUrl();
             //if (paras.indexOf('OID') < 0) {
             //    paras += "&OID=" + pageData.WorkID;
@@ -373,7 +373,7 @@
 
             break;
         case "Thread": //子线程.
-            var src = "/WF/WorkOpt/Thread.aspx?s=2";
+            var src = "../WorkOpt/Thread.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
@@ -388,7 +388,7 @@
                 '</div>';
             break;
         case "FTC": //流转自定义.  有问题
-            var src = "/WF/WorkOpt/FTC.aspx?s=2";
+            var src = "../WorkOpt/FTC.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
@@ -549,7 +549,7 @@
                         ath = ath[0];
                         var src = "";
                         if (pageData.IsReadonly == 1)
-                            src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" +
+                            src = "../CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" +
                                 pageData.WorkID +
                                 "&Ath=" +
                                 ath.NoOfObj +
@@ -559,7 +559,7 @@
                                 ath.MyPK +
                                 "&IsReadonly=1";
                         else
-                            src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" +
+                            src = "../CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" +
                                 pageData.WorkID +
                                 "&Ath=" +
                                 ath.NoOfObj +

@@ -109,7 +109,7 @@ namespace CCFlow.WF.Admin
         protected void Page_Load(object sender, EventArgs e)
         {
             //add by dgq 不要在这里做转，影响其他地方使用
-            //this.Response.Redirect("/WF/Comm/Search.aspx?EnsName=BP.WF.Data.Monitors", true);
+            //this.Response.Redirect("../../Comm/Search.aspx?EnsName=BP.WF.Data.Monitors", true);
             //return;
 
             if (this.DoType == "DelIt")

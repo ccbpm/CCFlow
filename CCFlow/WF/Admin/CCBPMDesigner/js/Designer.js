@@ -366,7 +366,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "BindStations":  //绑定岗位.
-            url = "/WF/Admin/XAP/DoPort.aspx?DoType=StaDefNew&PK=" + FK_Node + "&Lang=CH";
+            url = "../XAP/DoPort.aspx?DoType=StaDefNew&PK=" + FK_Node + "&Lang=CH";
             WinOpenIt(url, 500, 400 );
             break;
            // Glo.OpenDialog(Glo.BPMHost + url, "执行", 500, 400);
@@ -405,7 +405,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "Listion": // 消息收听..
-            url = "/WF/Admin/Listen.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
+            url = "../Listen.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "消息收听" + FK_Node, url, item.iconCls);
             } else {
@@ -413,7 +413,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "SelfToolbar": // 自定义工具栏..
-            url = "/WF/Admin/Cond.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
+            url = "../Cond.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "自定义工具栏" + FK_Node, url, item.iconCls);
             } else {

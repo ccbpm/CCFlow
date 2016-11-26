@@ -432,7 +432,7 @@
 
         function OpenMarks() {
             var markName = $("#markName").val();
-            var url = "/WF/WebOffice/OfficeView.aspx?Path=DataUser/OfficeFile/<%=this.FK_Flow %>/" + markName + "&IsEdit=0";
+            var url = "../WebOffice/OfficeView.aspx?Path=DataUser/OfficeFile/<%=this.FK_Flow %>/" + markName + "&IsEdit=0";
             window.open(url);
         }
 
@@ -695,7 +695,7 @@
             <param name='_ExtentX' value='6350'>
             <param name='_ExtentY' value='6350'>
         </object>--%>
-        <script type="text/javascript" src="/WF/Scripts/LoadInAsp.js"></script>
+        <script type="text/javascript" src="../Scripts/LoadInAsp.js"></script>
     </div>
     <div data-options="region:'south'" title="附件" style="height: 150px; background-color: #E0ECFF;">
         <uc1:Pub ID="Pub1" runat="server" />

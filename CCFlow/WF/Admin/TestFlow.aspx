@@ -95,11 +95,11 @@
     <img src='../Img/Btn/Delete.gif'  border=0 />删除本流程数据(此功能要在测试环境里运行)</a>
     <br><font size="2" color="Green">清除本流程运行的数据，包括待办工作。</font>
      <br>
-    <a href="/WF/App/Simple/Login.aspx"  >
+    <a href="../App/Simple/Login.aspx"  >
     <img src='../Img/Login.gif'  border=0 />直接登录极速模式</a>
     <br><font size=2 color="Green">直接登录极速模式</font>
     <br>
-    <a href="/WF/App/Classic/Login.aspx"  >
+    <a href="../App/Classic/Login.aspx"  >
     <img src='../Img/Login.gif'  border=0 />登录经典模式</a>
     <br><font size=2 color="Green">登录经典模式</font>
     <br>

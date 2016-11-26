@@ -51,7 +51,7 @@ namespace CCFlow
                 Int64 CopyFormWorkID = Int64.Parse(dt.Rows[0][0].ToString());
                 int CopyFormNode = 301;
                 string fk_flow = "003";
-                string url = "/WF/MyFlow.aspx?CopyFormWorkID=" + CopyFormWorkID + "&CopyFormNode=" + CopyFormNode + "&FK_Flow=" + fk_flow;
+                string url = "./WF/MyFlow.aspx?CopyFormWorkID=" + CopyFormWorkID + "&CopyFormNode=" + CopyFormNode + "&FK_Flow=" + fk_flow;
             }
             else
             {

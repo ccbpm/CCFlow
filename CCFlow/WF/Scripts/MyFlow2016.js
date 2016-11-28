@@ -566,6 +566,19 @@ function setToobarUnVisible() {
     //隐藏下方的功能按钮
     $('#bottomToolBar').css('display', 'none');
 }
+
+//隐藏下方的功能按钮
+function setToobarDisiable() {
+    //隐藏下方的功能按钮
+    $('#bottomToolBar input').css('background', 'gray');
+    $('#bottomToolBar input').attr('disabled', 'disabled');
+}
+
+function setToobarEnable() {
+    //隐藏下方的功能按钮
+    $('#bottomToolBar input').css('background', '#2884fa');
+    $('#bottomToolBar input').removeAttr('disabled');
+}
 //设置表单元素不可用
 function setFormEleDisabled() {
     //文本框等设置为不可用
@@ -601,15 +614,15 @@ function Save() {
                 $('.Message').show();
             }
             else {
-                $('#Message').html(data);
-                $('.Message').show();
+                //$('#Message').html(data);
+                //$('.Message').show();
                 //表示退回OK
                 if (data.indexOf('工作已经被您退回到') == 0) {
-                    OptSuc();
+                    OptSuc(data);
 
-                    setAttachDisabled();
-                    setToobarUnVisible();
-                    setFormEleDisabled();
+                    //setAttachDisabled();
+                    //setToobarUnVisible();
+                    //setFormEleDisabled();
                 }
             }
         }
@@ -619,17 +632,17 @@ function Save() {
 //退回工作
 function returnWorkWindowClose(data) {
     $('#returnWorkModal').modal('hide');
-    $('#Message').html(data);
-    $('.Message').show();
+   
     if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
-        
+        $('#Message').html(data);
+        $('.Message').show();
     }
     else {
-        OptSuc();
-        //发送成功时
-        setAttachDisabled();
-        setToobarUnVisible();
-        setFormEleDisabled();
+        OptSuc(data);
+        ////发送成功时
+        //setAttachDisabled();
+        //setToobarUnVisible();
+        //setFormEleDisabled();
     }
 }
 //移交
@@ -810,7 +823,7 @@ function initTrackList(workNodeData) {
     var trackHtml = '';
     var trackList = workNodeData.Track;
     var filterTrackList= $.grep(trackList, function (value) {
-        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 ||value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1;
+        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 ||value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 ||  value.ActionType == 8;
     });
     workNodeData.Track = filterTrackList;
     $.each(workNodeData.Track, function (i, track) {
@@ -818,8 +831,9 @@ function initTrackList(workNodeData) {
 
         trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p></a></li>';
         var actionType = track.ActionType;
-        if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11) {
-            trackHtml += '<div class="trackDiv"><i></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
+        if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11 && actionType != 8) {
+            console.log(actionType)
+            trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
         } else {
             var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
             trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
@@ -861,6 +875,7 @@ function initTrackList(workNodeData) {
     } else {//新建单子时，不显示轨迹导航，表单宽度为100%
         $('.navbars').css('display', 'none');
         $('#divCurrentForm').css('width', '100%');
+        $('#header').css('background', '#5598f3');
     }
     $($('#nav li')[0]).addClass('current');
     $('#nav').onePageNav();
@@ -869,13 +884,16 @@ function initTrackList(workNodeData) {
 
     $('#divTrack').bind('click', function (obj) {
         var returnContentDiv = $(obj.target).next(".returnTackDiv");
+        var i = returnContentDiv.parent().children().first();
         if (returnContentDiv.length == 0) {
             returnContentDiv = $(obj.target).parent().next(".returnTackDiv");
         }
         if (returnContentDiv.css('display') != 'none') {
             returnContentDiv.css('display', 'none');
+            i.hide();
         } else {
             returnContentDiv.css('display', 'block');
+            i.show();
         }
     });
 }
@@ -1159,9 +1177,10 @@ function Col8To4() {
 
     var workNodeData = JSON.parse(jsonStr);
     var width = 81;
-    if (workNodeData.Sys_MapData != undefined && workNodeData.Sys_MapData.length > 0 && workNodeData.Sys_MapData[0].TableWidth > 900) {//处于中屏时设置宽度最小值
-        width = workNodeData.Sys_MapData[0].TableWidth;
-    }
+    //先去掉
+    //if (workNodeData.Sys_MapData != undefined && workNodeData.Sys_MapData.length > 0 && workNodeData.Sys_MapData[0].TableWidth > 900) {//处于中屏时设置宽度最小值
+    //    width = workNodeData.Sys_MapData[0].TableWidth;
+    //}
     width = width + '%';
     $('#divCurrentForm').css('width', width);
     $('#divTrack').css('width', width);
@@ -1926,6 +1945,9 @@ function Send() {
         }
     }
 
+    //先设置按钮等不可用
+    setToobarDisiable();
+
     $.ajax({
         type: 'post',
         async: true,
@@ -1936,6 +1958,7 @@ function Send() {
             if (data.indexOf('err@') == 0) {//发送时发生错误
                 $('#Message').html(data.substring(4, data.length));
                 $('.Message').show();
+                setToobarEnable();
             }
             else if (data.indexOf('url@') == 0) {//发送成功时转到指定的URL 
                 var url = data;
@@ -1946,15 +1969,15 @@ function Send() {
                 // $('.Message').show();
             }
             else if (data.indexOf('@当前工作') == 0) {
-                OptSuc();
+                OptSuc(data);
 
-                if (window.opener != null && window.opener != undefined && window.opener)
-                    $('#Message').html(data);
-                $('.Message').show();
-                //发送成功时
-                setAttachDisabled();
-                setToobarUnVisible();
-                setFormEleDisabled();
+                //if (window.opener != null && window.opener != undefined && window.opener)
+                //    $('#Message').html(data);
+                //$('.Message').show();
+                ////发送成功时
+                //setAttachDisabled();
+                //setToobarUnVisible();
+                //setFormEleDisabled();
             }
             else {//发送时发生错误信息
                 $('#Message').html(data);
@@ -1964,9 +1987,34 @@ function Send() {
     });
 }
 
+$(function () {
+    $('#btnMsgModalOK').bind('click', function () {
+        window.close();
+        if (opener != null && opener != undefined) {
+            opener.window.focus();
+        }
+    });
+
+    setAttachDisabled();
+    setToobarDisiable();
+    setFormEleDisabled();
+
+    $('#btnMsgModalOK1').bind('click', function () {
+        window.close();
+        opener.window.focus();
+    });
+
+})
+
 //发送 退回 移交等执行成功后转到  指定页面
-function OptSuc() {
-    window.location.href = "/WF/MyFlow.aspx";
+function OptSuc(msg) {
+    // window.location.href = "/WF/MyFlowInfo.aspx";
+    if ($('#returnWorkModal').length > 0) {
+        $('#returnWorkModal').modal().hide()
+    }
+
+    $("#msgModalContent").html(msg.replace(/@/g,'<br/>'));
+    $("#msgModal").modal().show();
 }
 //移交
 //初始化发送节点下拉框

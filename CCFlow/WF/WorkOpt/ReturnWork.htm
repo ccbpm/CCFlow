@@ -52,6 +52,8 @@
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
                         console.error("退回窗口错误信息" + data);
+
+                        alert(data);
                         return;
                     }
                     var returnNodeArr = JSON.parse(data);
@@ -91,7 +93,6 @@
                 url: Handler + "?DoType=DoReturnWork&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&FK_Node=" + pageData.FK_Node + "&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnMsg=' + $('#TB_Doc').val() + "&IsBack=" + isBack + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    alert(data);
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                         window.parent.returnWorkWindowClose(data);
                     } else {

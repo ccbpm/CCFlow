@@ -689,6 +689,7 @@ namespace CCFlow.WF
                     objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null,this.ToNode,null);
                     msg = objs.ToMsgOfHtml();
                     BP.WF.Glo.SessionMsg = msg;
+                    context.Session["Info"] = msg;
                 }
                 catch (Exception exSend)
                 {

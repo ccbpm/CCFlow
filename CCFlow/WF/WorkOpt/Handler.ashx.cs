@@ -330,6 +330,7 @@ namespace CCFlow.WF.WorkOpt
             rws.Retrieve(BP.WF.ReturnWorkAttr.ReturnToNode, this.FK_Node,
                 BP.WF.ReturnWorkAttr.WorkID, this.WorkID,
                 BP.WF.ReturnWorkAttr.RDT);
+
             string msgInfo = "";
             if (rws.Count != 0)
             {
@@ -340,7 +341,40 @@ namespace CCFlow.WF.WorkOpt
                     msgInfo += "</fieldset>";
                 }
             }
-            return msgInfo;
+
+            //把节点信息也传入过去，用于判断不同的按钮显示. 
+            BP.WF.Template.BtnLab btn = new BtnLab(this.FK_Node);
+            BP.WF.Node nd = new Node(this.FK_Node);
+
+            Hashtable ht = new Hashtable();
+            //消息.
+            ht.Add("MsgInfo", msgInfo);
+
+            //是否可以移交？
+            if (btn.ShiftEnable)
+                ht.Add("ShiftEnable", "1");
+            else
+                ht.Add("ShiftEnable", "0");
+
+            //是否可以撤销？
+            if (nd.HisCancelRole == CancelRole.None)
+                ht.Add("CancelRole", "0");
+            else
+                ht.Add("CancelRole", "1");
+
+            //是否可以删除子线程? 在分流节点上.
+            if (btn.ThreadIsCanDel)
+                ht.Add("ThreadIsCanDel", "1");
+            else
+                ht.Add("ThreadIsCanDel", "0");
+
+             //是否可以移交子线程? 在分流节点上.
+            if (btn.ThreadIsCanShift)
+                ht.Add("ThreadIsCanShift", "1");
+            else
+                ht.Add("ThreadIsCanShift", "0");
+
+            return BP.Tools.Json.ToJson(ht, false);
         }
         /// <summary>
         /// 保存

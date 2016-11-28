@@ -835,8 +835,10 @@ namespace CCFlow.WF
                 }
                 ds.Tables.Add(wf_node);
             }
+
             DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];
             ds.Tables.Add(trackDt.Copy());
+
             string xml = "c:\\WorkNode.xml";
             //ds.WriteXml(xml);
 

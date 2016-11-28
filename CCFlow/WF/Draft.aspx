@@ -114,11 +114,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <%
         string FK_Flow = this.Request.QueryString["FK_Flow"];
-
-       
-
         string GroupBy = this.Request.QueryString["GroupBy"];
-
                 GroupBy = "FlowName";
 
         System.Data.DataTable dt = null;

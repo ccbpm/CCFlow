@@ -1337,7 +1337,9 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Handler.ashx" />
-    <Content Include="web1.config" />
+    <Content Include="web1.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />

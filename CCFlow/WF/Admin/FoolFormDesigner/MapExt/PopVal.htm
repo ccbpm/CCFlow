@@ -457,8 +457,8 @@
 
 <li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'</li>
 <li>$Para=XB#Label=性别#EnumKey=XB</li>
-<li>$Para=DTFrom#Label=注册日期从#DefVal=@Now-30</li>
-<li>$Para=DTTo#Label=到#DefVal=@Now</li>
+<li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date().setDate(-30))</li>
+<li>$Para=DTTo#Label=到#DefVal=(new Date())</li>
 
  </ul>
  </div>

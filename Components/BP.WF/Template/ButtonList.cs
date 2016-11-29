@@ -22,6 +22,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string ThreadEnable = "ThreadEnable";
         /// <summary>
+        /// 是否可以删除（已经发出去的）子线程.
+        /// </summary>
+        public const string ThreadIsCanDel = "ThreadIsCanDel";
+        /// <summary>
+        /// 是否可以移交
+        /// </summary>
+        public const string ThreadIsCanShift = "ThreadIsCanShift";
+        /// <summary>
         /// 子线程按钮标签
         /// </summary>
         public const string ThreadLab = "ThreadLab";

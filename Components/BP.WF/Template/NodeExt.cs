@@ -340,7 +340,6 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeAttr.SubThreadType, 0, "子线程类型", true, true, NodeAttr.SubThreadType, "@0=同表单@1=异表单");
                 map.SetHelperUrl(NodeAttr.SubThreadType, "http://ccbpm.mydoc.io/?v=5404&t=17944"); //增加帮助
 
-
                 map.AddTBDecimal(NodeAttr.PassRate, 100, "完成通过率", true, false);
                 map.SetHelperUrl(NodeAttr.PassRate, "http://ccbpm.mydoc.io/?v=5404&t=17945"); //增加帮助.
 
@@ -349,6 +348,11 @@ namespace BP.WF.Template
                     NodeAttr.SubFlowStartWay, "@0=不启动@1=指定的字段启动@2=按明细表启动");
                 map.AddTBString(NodeAttr.SubFlowStartParas, null, "启动参数", true, false, 0, 100, 10, true);
                 map.SetHelperUrl(NodeAttr.SubFlowStartWay, "http://ccbpm.mydoc.io/?v=5404&t=17946"); //增加帮助
+
+                //增加对退回到合流节点的 子线城的处理控制.
+                map.AddBoolean(BtnAttr.ThreadIsCanDel, false, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
+                map.AddBoolean(BtnAttr.ThreadIsCanShift, false, "是否可以移交子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
+
 
                 //待办处理模式.
                 map.AddDDLSysEnum(NodeAttr.TodolistModel, (int)TodolistModel.QiangBan, "待办处理模式", true, true, NodeAttr.TodolistModel,

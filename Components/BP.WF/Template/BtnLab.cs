@@ -204,7 +204,26 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.ThreadEnable);
             }
         }
-
+        /// <summary>
+        /// 是否可以删除（当前分流，分合流节点发送出去的）子线程.
+        /// </summary>
+        public bool ThreadIsCanDel
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.ThreadIsCanDel);
+            }
+        }
+        /// <summary>
+        /// 是否可以移交.
+        /// </summary>
+        public bool ThreadIsCanShift
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.ThreadIsCanShift);
+            }
+        }
         /// <summary>
         /// 子流程按钮标签
         /// </summary>
@@ -215,7 +234,6 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.SubFlowLab);
             }
         }
-       
         /// <summary>
         /// 跳转标签
         /// </summary>
@@ -902,6 +920,9 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.ThreadLab, "子线程", "子线程按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ThreadEnable, false, "是否启用", true, true);
+
+                map.AddBoolean(BtnAttr.ThreadIsCanDel, false, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
+                map.AddBoolean(BtnAttr.ThreadIsCanShift, false, "是否可以移交子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
 
 
                 map.AddTBString(BtnAttr.SubFlowLab, "子流程", "子流程按钮标签", true, false, 0, 50, 10);

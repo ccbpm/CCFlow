@@ -70,7 +70,7 @@ namespace BP.WF.Template
     public enum SFShowCtrl
     {
         /// <summary>
-        /// 所有的子线城都可以看到
+        /// 所有的子线程都可以看到
         /// </summary>
         All,
         /// <summary>

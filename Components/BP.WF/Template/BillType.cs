@@ -77,7 +77,7 @@ namespace BP.WF.Template
 	/// <summary>
     /// 单据类型
 	/// </summary>
-    public class BillTypes : SimpleNoNames
+    public class BillTypes : EntitiesNoName
     {
         /// <summary>
         /// 单据类型s

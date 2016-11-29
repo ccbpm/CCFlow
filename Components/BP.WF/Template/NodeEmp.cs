@@ -8,7 +8,7 @@ using BP.WF.Port;
 namespace BP.WF.Template
 {
 	/// <summary>
-	/// 节点到人员属性
+	/// 节点人员属性
 	/// </summary>
 	public class NodeEmpAttr
 	{
@@ -17,12 +17,12 @@ namespace BP.WF.Template
 		/// </summary>
 		public const string FK_Node="FK_Node";
 		/// <summary>
-		/// 到人员
+		/// 人员
 		/// </summary>
 		public const string FK_Emp="FK_Emp";
 	}
 	/// <summary>
-	/// 节点到人员
+	/// 节点人员
 	/// 节点的到人员有两部分组成.	 
 	/// 记录了从一个节点到其他的多个节点.
 	/// 也记录了到这个节点的其他的节点.
@@ -69,9 +69,11 @@ namespace BP.WF.Template
 
 		#region 构造方法
 		/// <summary>
-		/// 节点到人员
+		/// 节点人员
 		/// </summary>
-		public NodeEmp(){}
+		public NodeEmp()
+        {
+        }
 		/// <summary>
 		/// 重写基类方法
 		/// </summary>
@@ -94,7 +96,7 @@ namespace BP.WF.Template
 		#endregion
 	}
 	/// <summary>
-	/// 节点到人员
+	/// 节点人员
 	/// </summary>
     public class NodeEmps : EntitiesMM
     {
@@ -130,11 +132,11 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 节点到人员
+        /// 节点人员
         /// </summary>
         public NodeEmps() { }
         /// <summary>
-        /// 节点到人员
+        /// 节点人员
         /// </summary>
         /// <param name="NodeID">节点ID</param>
         public NodeEmps(int NodeID)
@@ -144,7 +146,7 @@ namespace BP.WF.Template
             qo.DoQuery();
         }
         /// <summary>
-        /// 节点到人员
+        /// 节点人员
         /// </summary>
         /// <param name="EmpNo">EmpNo </param>
         public NodeEmps(string EmpNo)

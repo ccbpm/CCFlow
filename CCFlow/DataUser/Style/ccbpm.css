@@ -892,7 +892,7 @@ body {
 #header {
     height: 50px;
     font: bold 16px "微软雅黑";
-    background:rgb(157, 159, 175) !important;
+    background:rgb(157, 159, 175);
     color: #fff;
     text-align: left;
     cursor:pointer;
@@ -1047,9 +1047,6 @@ float:right;
     padding-left: 40px;
 }
 
-#header {
-background: rgb(192, 193, 204) !important;
-}
 
 
 #freeBarDiv {

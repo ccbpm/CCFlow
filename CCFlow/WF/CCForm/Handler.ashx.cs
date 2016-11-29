@@ -228,8 +228,29 @@ namespace CCFlow.WF.CCForm
 
                     if (val == "all")
                     {
+
                         countSQL = countSQL.Replace( para+"=@" + para, "1=1");
                         countSQL = countSQL.Replace( para + "='@" + para+"'", "1=1");
+
+                        //找到para 前面表的别名   如 t.1=1 把t. 去掉
+                        int startIndex = 0;
+                        while (startIndex != -1 && startIndex < countSQL.Length)
+                        {
+                            int index = countSQL.IndexOf("1=1",startIndex);
+                            if (index > 0 && countSQL.Substring(startIndex, index-startIndex).Trim().EndsWith("."))
+                            {
+                                int lastBlankIndex = countSQL.Substring(startIndex, index - startIndex).LastIndexOf(" ");
+
+
+                                countSQL.Remove(lastBlankIndex + 1+startIndex, index - lastBlankIndex);
+
+                                startIndex = startIndex - index - lastBlankIndex;
+                            }
+                            else
+                            {
+                                startIndex = index;
+                            }
+                        }
                     }
                     else
                     {
@@ -283,6 +304,25 @@ namespace CCFlow.WF.CCForm
                     {
                         sqlObjs = sqlObjs.Replace(para + "=@" + para, "1=1");
                         sqlObjs = sqlObjs.Replace(para + "='@" + para + "'", "1=1");
+
+                        int startIndex = 0;
+                        while (startIndex != -1 && startIndex < sqlObjs.Length)
+                        {
+                            int index = sqlObjs.IndexOf("1=1", startIndex);
+                            if (index > 0 && sqlObjs.Substring(startIndex, index - startIndex).Trim().EndsWith("."))
+                            {
+                                int lastBlankIndex = sqlObjs.Substring(startIndex, index - startIndex).LastIndexOf(" ");
+
+
+                                sqlObjs.Remove(lastBlankIndex + 1 + startIndex, index - lastBlankIndex);
+
+                                startIndex = startIndex - index - lastBlankIndex;
+                            }
+                            else
+                            {
+                                startIndex = index;
+                            }
+                        }
                     }
                     else
                     {

@@ -252,7 +252,9 @@
                             });
                         src = src.substr(0, src.indexOf('?')) + "?" + params.join('&');
                     }
+                    src += "&IsReadOnly=1";
                 } else {
+                    src += "?IsReadOnly=1";
                 }
                 groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' +
                     groupFiled.Idx +
@@ -345,9 +347,7 @@
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
             }
-            if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
-                paras += "&DoType=View";
-            }
+            paras += "&DoType=View";
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' +
                 groupFiled.Idx +
@@ -433,34 +433,34 @@
             //初始化分组
             var groupResultHtml = initGroup(workNodeData, groupFiled);
             if (groupResultHtml != '') { //返回的值如果为 ''，就表明是字段分组
+                if (groupFiled.CtrlType != "SubFlow") {
+                    var reloadBtn = '';
+                    if (groupFiled.CtrlType == "SubFlow") {
+                        reloadBtn = '<label class="reloadIframe">刷新</label>'
+                    } else if (groupFiled.CtrlType == "Track") {
+                        reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
+                    }
 
-                var reloadBtn = '';
-                if (groupFiled.CtrlType == "SubFlow") {
-                    reloadBtn = '<label class="reloadIframe">刷新</label>'
-                } else if (groupFiled.CtrlType == "Track") {
-                    reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
-                }
+                    groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12" style=""><div id="groupH' +
+                        groupFiled.Idx +
+                        '"  class="group section" data-target="group' +
+                        groupFiled.Idx +
+                        '"><label class="state">+</label>' +
+                        groupFiled.Lab +
+                        reloadBtn +
+                        '</div></div>';
 
-                groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12" style=""><div id="groupH' +
-                    groupFiled.Idx +
-                    '"  class="group section" data-target="group' +
-                    groupFiled.Idx +
-                    '"><label class="state">+</label>' +
-                    groupFiled.Lab +
-                    reloadBtn +
-                    '</div></div>';
-
-                navGroupHtml += '<li class="scrollNav"><a href="#groupH' +
-                    groupFiled.Idx +
-                    '">' +
-                    $('<p>' + groupFiled.Lab + '</p>').text() +
-                    '</a></li>';
-
+                    navGroupHtml += '<li class="scrollNav"><a href="#groupH' +
+                        groupFiled.Idx +
+                        '">' +
+                        $('<p>' + groupFiled.Lab + '</p>').text() +
+                        '</a></li>';
+                } else { }
                 groupHtml += groupResultHtml;
 
                 CCFormHtml += groupHtml;
                 continue;
-            } else if (groupResultHtml == '' && groupFiled.CtrlType == "Ath") { //无附件的分组不展示
+            } else if (groupResultHtml == '' && groupFiled.CtrlType == "Ath" ) { //无附件的分组不展示
                 continue;
             } else { //返回的值如果为 ''，就表明是字段分组  分组名称不显示
                 groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="section group" id="groupH' +
@@ -1323,11 +1323,8 @@
             var iframe = parent.document.getElementById(iframeId);
             if (iframe != undefined) {
                 var height = document.body.clientHeight;
-<<<<<<< .mine
                 $(iframe).height(height + 15);
-=======
-                $(iframe).height(height+15);
->>>>>>> .r1300
+
             }
         }
     }

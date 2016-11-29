@@ -689,10 +689,15 @@ namespace CCFlow.WF
                     objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null,this.ToNode,null);
                     msg = objs.ToMsgOfHtml();
                     BP.WF.Glo.SessionMsg = msg;
-                    context.Session["Info"] = msg;
                 }
                 catch (Exception exSend)
                 {
+
+
+#warning 杨玉慧
+                    return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
+
+
                     if (exSend.Message.Contains("请选择下一步骤工作") == true || exSend.Message.Contains("用户没有选择发送到的节点") == true)
                     {
                         /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
@@ -706,9 +711,6 @@ namespace CCFlow.WF
                     //{
                     //    return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
                     //}
-
-#warning 杨玉慧
-                    return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
                 }
 
 

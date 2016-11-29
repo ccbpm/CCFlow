@@ -62,6 +62,17 @@ namespace CCFlow.WF.SDKComponents
                 return this.Request.QueryString["FK_Flow"];
             }
         }
+
+        /// <summary>
+        /// 浏览类型，是查看还是处理
+        /// </summary>
+        public string DoType
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.Request.QueryString["DoType"]) ? "" : this.Request.QueryString["DoType"];
+            }
+        }
         #endregion 属性.
 
         protected void Page_Load(object sender, EventArgs e)
@@ -101,10 +112,10 @@ namespace CCFlow.WF.SDKComponents
                 //输出标题.
                 BP.WF.Flow fl = new Flow(str);
 
-                if (sf.SFSta == FrmSubFlowSta.Enable)
+                if (sf.SFSta == FrmSubFlowSta.Enable && this.DoType!="View")
                     html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'><a href=\"javascript:OpenIt('../MyFlow.aspx?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID=" + this.FID + "')\"  >[启动流程]</a></style>";
 
-                if (sf.SFSta == FrmSubFlowSta.Readonly)
+                if (sf.SFSta == FrmSubFlowSta.Readonly || this.DoType == "View")
                     html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div></style>";
 
                 this.AddTR();

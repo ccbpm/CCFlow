@@ -493,6 +493,12 @@ function initBar() {
                 $('[name=SelectAccepter]').unbind('click');
                 $('[name=SelectAccepter]').bind('click', function () { initModal("accepter"); $('#returnWorkModal').modal().show(); });
             }
+            if ($('[name=Delete]').length > 0) {
+                var onclickFun = $('[name=Delete]').attr('onclick');
+                if (onclickFun != undefined) {
+                    $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));
+                }
+            }
         }
     });
 }
@@ -500,7 +506,7 @@ function initBar() {
 //初始化退回、移交、加签窗口
 function initModal(modalType,toNode) {
     //初始化退回窗口的SRC
-    var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal">' +
+    var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
        '<div class="modal-dialog">'
            + '<div class="modal-content" style="border-radius:0px;width:700px;text-align:left;">'
               + '<div class="modal-header">'
@@ -602,6 +608,8 @@ function Save() {
         alert("请检查表单必填项和正则表达式");
         return;
     }
+    setToobarDisiable();
+
     $.ajax({
         type: 'post',
         async: true,
@@ -609,21 +617,24 @@ function Save() {
         url: "MyFlow.ashx?Method=Save",
         dataType: 'html',
         success: function (data) {
+
+            setToobarEnable();
             if (data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
                 $('.Message').show();
             }
             else {
+                //OptSuc(data);
                 //$('#Message').html(data);
                 //$('.Message').show();
                 //表示退回OK
-                if (data.indexOf('工作已经被您退回到') == 0) {
-                    OptSuc(data);
+                //if (data.indexOf('工作已经被您退回到') == 0) {
+                  //  OptSuc(data);
 
                     //setAttachDisabled();
                     //setToobarUnVisible();
                     //setFormEleDisabled();
-                }
+                //}
             }
         }
     });
@@ -726,8 +737,10 @@ function initGroup(workNodeData, groupFiled) {
                         });
                         src = src.substr(0, src.indexOf('?')) + "?" + params.join('&');
                     }
+                    src += "&IsReadOnly=0";
                 }
                 else {
+                    src += "?IsReadOnly=0";
                 }
                 groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             }
@@ -877,6 +890,27 @@ function initTrackList(workNodeData) {
         $('#divCurrentForm').css('width', '100%');
         $('#header').css('background', '#5598f3');
     }
+
+    //设置表单宽度为81%  当时新建工单的时候不显示左侧的导航栏
+    var width = 81;
+    //先去掉
+    //if (workNodeData.Sys_MapData != undefined && workNodeData.Sys_MapData.length > 0 && workNodeData.Sys_MapData[0].TableWidth > 900) {//处于中屏时设置宽度最小值
+    //    width = workNodeData.Sys_MapData[0].TableWidth;
+    //}
+    width = width + '%';
+    $('#divCurrentForm').css('width', width);
+    $('#divTrack').css('width', width);
+    //显示左侧导航栏 暂时不显示
+    $('#nav').css('display', 'block');
+
+    if (workNodeData.Track.length > 0) {
+        $('#nav').css('display', 'block');
+    } else {//新建单子时，不显示轨迹导航，表单宽度为100%
+        $('#nav').css('display', 'none');
+        $('#divCurrentForm').css('width', '100%');
+        $('#header').css('background','#5598f3');
+    }
+
     $($('#nav li')[0]).addClass('current');
     $('#nav').onePageNav();
 
@@ -896,6 +930,12 @@ function initTrackList(workNodeData) {
             i.show();
         }
     });
+      
+    //如果工作已经处理  提示用户工作已处理  并关闭处理页面
+    if (workNodeData.Track.length > 0 && workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node) {
+        alert("当前工作已处理");
+        window.close();
+    }
 }
 
 function InitForm() {
@@ -917,25 +957,25 @@ function InitForm() {
         var groupHtml = '';
         //初始化分组
         var groupResultHtml = initGroup(workNodeData, groupFiled);
-        if (groupResultHtml != '') {//返回的值如果为 ''，就表明是字段分组
+        if (groupResultHtml != '' ) {//返回的值如果为 ''，就表明是字段分组
+            //if (groupFiled.CtrlType != "SubFlow") {
+                var reloadBtn = '';
+                if (groupFiled.CtrlType == "SubFlow") {
+                    //reloadBtn = '<label class="reloadIframe">刷新</label>'
+                } else if (groupFiled.CtrlType == "Track") {
+                    //reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
+                }
 
-            var reloadBtn = '';
-            if (groupFiled.CtrlType == "SubFlow") {
-                reloadBtn = '<label class="reloadIframe">刷新</label>'
-            } else if (groupFiled.CtrlType == "Track") {
-                reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
-            }
+                groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12" style=""><div id="groupH' + groupFiled.Idx + '"  class="group section" data-target="group' + groupFiled.Idx + '"><label class="state">+</label>' +
+                    groupFiled.Lab + reloadBtn + '</div></div>';
 
-            groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12" style=""><div id="groupH' + groupFiled.Idx + '"  class="group section" data-target="group' + groupFiled.Idx + '"><label class="state">+</label>' +
-                groupFiled.Lab + reloadBtn + '</div></div>';
-
-            navGroupHtml += '<li class="scrollNav"><a href="#groupH' + groupFiled.Idx + '">' + $('<p>' + groupFiled.Lab + '</p>').text() + '</a></li>';
-
+                navGroupHtml += '<li class="scrollNav"><a href="#groupH' + groupFiled.Idx + '">' + $('<p>' + groupFiled.Lab + '</p>').text() + '</a></li>';
+            //} else { }
             groupHtml += groupResultHtml;
 
             CCFormHtml += groupHtml;
             continue;
-        } else if (groupResultHtml == '' && groupFiled.CtrlType == "Ath") {//无附件的分组不展示
+        } else if (groupResultHtml == '' && groupFiled.CtrlType == "Ath") {//无附件的分组不展示  子流程
             continue;
         }
         else {//返回的值如果为 ''，就表明是字段分组  分组名称不显示
@@ -1076,9 +1116,9 @@ function InitForm() {
     }
 
     //设置CCFORM的表格宽度  
-    if (document.body.clientWidth > 992) {//处于中屏时设置宽度最小值
-        $('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
-    }
+    //if (document.body.clientWidth > 992) {//处于中屏时设置宽度最小值
+        //$('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
+   // }
 
 
     showNoticeInfo();
@@ -1086,6 +1126,12 @@ function InitForm() {
     showTbNoticeInfo();
 }
 
+//刷新子流程
+function refSubSubFlowIframe() {
+    var iframe = $('iframe[src*="SubFlow.aspx"]');
+    //iframe[0].contentWindow.location.reload();
+    iframe[0].contentWindow.location.href = iframe[0].src;
+}
 //回填扩展字段的值
 function SetAth(data) {
     var atParamObj = $('#iframeAthForm').data();
@@ -1175,25 +1221,6 @@ function Col8To4() {
     //$('#header').css('width', '900px');
     //$('#Message').css('width', '900px');
 
-    var workNodeData = JSON.parse(jsonStr);
-    var width = 81;
-    //先去掉
-    //if (workNodeData.Sys_MapData != undefined && workNodeData.Sys_MapData.length > 0 && workNodeData.Sys_MapData[0].TableWidth > 900) {//处于中屏时设置宽度最小值
-    //    width = workNodeData.Sys_MapData[0].TableWidth;
-    //}
-    width = width + '%';
-    $('#divCurrentForm').css('width', width);
-    $('#divTrack').css('width', width);
-    //显示左侧导航栏 暂时不显示
-    $('#nav').css('display', 'block');
-
-    
-    if (workNodeData.Track.length > 0) {
-        $('#nav').css('display', 'block');
-    } else {//新建单子时，不显示轨迹导航，表单宽度为100%
-        $('#nav').css('display', 'none');
-        $('#divCurrentForm').css('width', '100%');
-    }
 }
 
 //解析表单字段 MapAttr
@@ -1248,7 +1275,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         } else {//文本区域
                             if (mapAttr.UIHeight <= 23) {
                                 eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                    "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<input maxlength=" + mapAttr.MaxLen/2 + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
                             }
                             else {//大于23就是多行
@@ -1262,7 +1289,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                     +
                                     (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                                     +
-                                    "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<textarea maxlength=" + mapAttr.MaxLen/2 + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
 
                             }
@@ -1270,7 +1297,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else if (mapAttr.ColSpan == "4" || (mapAttr.ColSpan == "3" && mapAttr.UIHeight > 23)) {//大文本区域  且占一整行
                         isInOneRow = true;
                         eleHtml += '<div class="col-lg-11 col-md-11 col-sm-10">' +
-                            "<textarea maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
+                            "<textarea maxlength=" + mapAttr.MaxLen/2 + "  name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
                             + '</div>';
                     }
                 } //AppDate
@@ -1281,7 +1308,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen/2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
                 else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                     var enableAttr = '';
@@ -1290,7 +1317,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen / 2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />" + "</div>";
                 }
                 else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
                     var colMd = 2;
@@ -1370,7 +1397,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
                 //AppMoney  AppRate
                 if (mapAttr.MyDataType == 8) {
@@ -1380,7 +1407,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
 
                 if (mapAttr.LGType == 2) {
@@ -1533,17 +1560,18 @@ function AfterBindEn_DealMapExt() {
                 }
                 break;
             case "InputCheck"://输入检查
-                var tbJS = $("#TB_" + mapExt.AttrOfOper);
-                if (tbJS != undefined) {
-                    tbJS.attr(mapExt.Tag2, mapExt.Tag1 + "(this)");
-                }
-                else {
-                    tbJS = $("#DDL_" + mapExt.AttrOfOper);
-                    if (ddl != null)
-                        ddl.attr(mapExt.Tag2, mapExt.Tag1 + "(this);");
-                }
+                //var tbJS = $("#TB_" + mapExt.AttrOfOper);
+                //if (tbJS != undefined) {
+                //    tbJS.attr(mapExt.Tag2, mapExt.Tag1 + "(this)");
+                //}
+                //else {
+                //    tbJS = $("#DDL_" + mapExt.AttrOfOper);
+                //    if (ddl != null)
+                //        ddl.attr(mapExt.Tag2, mapExt.Tag1 + "(this);");
+                //}
                 break;
             case "TBFullCtrl"://自动填充  先不做
+                break;
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
                 if (tbAuto == null)
                     continue;
@@ -1804,7 +1832,7 @@ function GenerWorkNode() {
 
                 });
 
-                $('#ShowPFlow').css('display', 'block');
+                $('#ShowPFlow').css('display', 'none');
             } else {
                 $('#ShowPFlow').css('display', 'none');
             }
@@ -1834,7 +1862,7 @@ function GenerWorkNode() {
             //
             Col8To4();
 
-            window.location.href = "#divCurrentForm";
+           // window.location.href = "#divCurrentForm";
         }
     });
 }
@@ -1968,9 +1996,11 @@ function Send() {
                 // $('#Message').html("<a href=" + data.substring(4, data.length) + ">待处理</a>");
                 // $('.Message').show();
             }
-            else if (data.indexOf('@当前工作') == 0) {
+            else {
                 OptSuc(data);
-
+                if (opener != null && opener.window != null && opener.window.parent != null && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
+                    opener.window.parent.refSubSubFlowIframe();
+                }
                 //if (window.opener != null && window.opener != undefined && window.opener)
                 //    $('#Message').html(data);
                 //$('.Message').show();
@@ -1978,10 +2008,6 @@ function Send() {
                 //setAttachDisabled();
                 //setToobarUnVisible();
                 //setFormEleDisabled();
-            }
-            else {//发送时发生错误信息
-                $('#Message').html(data);
-                $('.Message').show();
             }
         }
     });

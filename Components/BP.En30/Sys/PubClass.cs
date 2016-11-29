@@ -1651,13 +1651,15 @@ namespace BP.Sys
                         attrKey = attrKey.Replace("DDLPara_", "");
                     else if (key.StartsWith("RBPara_"))
                         attrKey = attrKey.Replace("RBPara_", "");
+                    else if (key.StartsWith("CBPara_"))
+                        attrKey = attrKey.Replace("CBPara_", "");
                     else
                         continue;
                     
                 }
 
                 string val = reqest.Form[key];
-                if (key.IndexOf("CB_") == 0)
+                if (key.IndexOf("CB_") == 0 || key.IndexOf("CBPara_") == 0)
                 {
                     en.Row[attrKey] = 1;
                     continue;

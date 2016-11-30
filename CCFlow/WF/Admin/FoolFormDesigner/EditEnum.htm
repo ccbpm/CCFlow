@@ -29,6 +29,14 @@
             $("Btn_New").attr("disabled", sta);
         }
 
+        //编辑枚举值
+        function EditEnumKey() {
+            var enumKey = GetQueryString("EnumKey");
+           
+            WinOpen("SysEnum.aspx?EnumKey=" + enumKey);
+
+        }
+
         //页面启动函数.
         $(function () {
 
@@ -161,8 +169,8 @@
 <select name="DDL_DefVal" id="DDL_DefVal"> 
 <option value="" > 选择约定默认值 </option> 
 <option value="-1" > 请选择 </option> 
-</select> 
-
+</select>
+    <a href="javascript:EditEnumKey()" />编辑枚举值</a>
  </td>
 </tr>
 

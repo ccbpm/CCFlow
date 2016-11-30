@@ -187,7 +187,7 @@
                     var dtgArr = initData.Depts;
                     var dteArr = initData.Emps;
                     //初始化到达节点数据
-                    if (firstLoad == true && pageUrlParam.toNode == 0) {
+                    if (firstLoad == true) {
                         firstLoad = false;
                         var html = '';
                         $.each(selDataArr, function (i, obje) {
@@ -195,7 +195,13 @@
                         });
                         $("#searchS1").html("");
                         $("#searchS1").html(html);
-                        $("#searchS1 option:nth(0)").attr("selected", "selected");
+                        if (pageUrlParam.toNode == 0) {
+                            $("#searchS1 option:nth(0)").attr("selected", "selected");
+                        } else {
+                            $("#searchS1:option[value=" + pageUrlParam.toNode + "]").attr("selected", "selected");
+
+                            alert($("#searchS1").val())
+                        }
                     }
 
                     var selectNodeVal = $('#searchS1').val();

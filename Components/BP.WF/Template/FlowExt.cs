@@ -349,6 +349,9 @@ namespace BP.WF.Template
                    "@0=数据轨迹模式@1=数据合并模式");
                 map.SetHelperUrl(FlowAttr.DataStoreModel, "http://ccbpm.mydoc.io/?v=5404&t=17038");
 
+                map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 30, 10);
+                map.SetHelperUrl(FlowAttr.PTable, "http://ccbpm.mydoc.io/?v=5404&t=17897");
+
                 //add 2013-05-22.
                 map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
                 //map.SetHelperBaidu(FlowAttr.HistoryFields, "ccflow 历史查看字段");

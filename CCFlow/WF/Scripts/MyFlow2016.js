@@ -962,7 +962,8 @@ function InitForm() {
                 var reloadBtn = '';
                 if (groupFiled.CtrlType == "SubFlow") {
                     //reloadBtn = '<label class="reloadIframe">刷新</label>'
-                    groupFiled.Lab = "关联的流程";
+                    // groupFiled.Lab = "关联的流程";
+                    groupFiled.Lab = workNodeData.WF_Node[0].SFLab;
                 } else if (groupFiled.CtrlType == "Track") {
                     //reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
                 }

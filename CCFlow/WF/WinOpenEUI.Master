@@ -26,7 +26,7 @@
             if(gw.length > 0){
                 gw.parent().parent().click(function(){
                     if($("#trackIframe").attr("src") == "Loading.htm"){
-                        $("#trackIframe").attr("src", "./WorkOpt/OneWork/ChartTrack.aspx?WorkID=<%=this.WorkID %>&FK_Flow=<%=this.FK_Flow %>&FID=<%=this.FID %>&FK_Node=<%=this.FK_Node %>&s=" + Math.random());
+                        $("#trackIframe").attr("src", "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=<%=this.WorkID %>&FK_Flow=<%=this.FK_Flow %>&FID=<%=this.FID %>&FK_Node=<%=this.FK_Node %>&s=" + Math.random());
                     }
                 });
             }

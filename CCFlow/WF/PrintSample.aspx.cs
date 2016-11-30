@@ -398,7 +398,7 @@ namespace CCFlow.WF
                 this.Pub1.AddTDBegin();
                 this.Pub1.Add("<a href=\"javascript:Do('您确认吗？','MyFlowInfo" + this.PageSmall + ".aspx?DoType=UnSend&FID=" + gwf.FID + "&WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "');\" ><img src='Img/Btn/delete.gif' border=0 />撤消</a>");
                 this.Pub1.Add("-<a href=\"javascript:WinOpen('WFRpt.aspx?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FID=0')\" ><img src='Img/Btn/rpt.gif' border=0 />报告</a>");
-                this.Pub1.Add("-<a href=\"javascript:WinOpen('/WorkOpt/OneWork/ChartTrack.aspx?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FID=0')\" ><img src='Img/Track.png' border=0 />轨迹</a>");
+                this.Pub1.Add("-<a href=\"javascript:WinOpen('/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FID=0')\" ><img src='Img/Track.png' border=0 />轨迹</a>");
                 this.Pub1.AddTDEnd();
                 this.Pub1.AddTREnd();
             }

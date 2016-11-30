@@ -37,8 +37,8 @@
 
 <script type="text/javascript">
     window.onload = function () {
-        var op = $("#<%=HiddenField1.ClientID%>").val();
-        $('#flowNote').append(op);
+//        var op = $("#<%=HiddenField1.ClientID%>").val();
+//        $('#flowNote').append(op);
 
         $(".main .year .list").each(function (e, target) {
             var $target = $(target),

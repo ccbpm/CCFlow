@@ -155,9 +155,9 @@
 
                 string extUrl = "";
                 if (fl.IsBatchStart)
-                    extUrl = "<div class='op'><a href='/WF/BatchStart.aspx?FK_Flow=" + fl.No + "' >批量发起</a>|<a href='/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "'>查询</a>|<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + fl.No + "&DoType=Chart&T=" + timeKey + "','sd');\"  >图</a></div>";
+                    extUrl = "<div class='op'><a href='/WF/BatchStart.aspx?FK_Flow=" + fl.No + "' >批量发起</a>|<a href='/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "'>查询</a>|<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fl.No + "&DoType=Chart&T=" + timeKey + "','sd');\"  >图</a></div>";
                 else
-                    extUrl = "<div class='op'><a  href='/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "'>查询</a>|<a href=\"javascript:WinOpen('/WF/Admin/CCBPMDesigner/truck/Truck.htm?FK_Flow=" + fl.No + "&WorkID=null&FID=null&DoType=Chart&T=" + timeKey + "','sd');\"  >流程图</a></div>";
+                    extUrl = "<div class='op'><a  href='/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "'>查询</a>|<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fl.No + "&WorkID=null&FID=null&DoType=Chart&T=" + timeKey + "','sd');\"  >流程图</a></div>";
 
                 if (isHaveIt)
                 {

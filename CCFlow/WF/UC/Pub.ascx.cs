@@ -66,7 +66,7 @@ namespace CCFlow.WF.UC
                     }
                 }
                 this.AddTD("<a href=\"./../WF/WFRpt.aspx?WorkID=" + en.GetValIntByKey("OID") + "&FID=" + en.GetValByKey("FID") + "&FK_Flow=" + nd.FK_Flow + "\" target=bk >报告</a>");
-                this.AddTD("<a href=\"./../WF/WorkOpt/OneWork/ChartTrack.aspx?WorkID=" + en.GetValIntByKey("OID") + "&FID=" + en.GetValByKey("FID") + "&FK_Flow=" + nd.FK_Flow + "\" target=bk >轨迹</a>");
+                this.AddTD("<a href=\"./../WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + en.GetValIntByKey("OID") + "&FID=" + en.GetValByKey("FID") + "&FK_Flow=" + nd.FK_Flow + "\" target=bk >轨迹</a>");
                 this.AddTREnd();
             }
 

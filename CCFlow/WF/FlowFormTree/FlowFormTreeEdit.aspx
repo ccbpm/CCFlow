@@ -432,7 +432,7 @@
                     $.messager.alert('提示', '保存成功！', 'info');
                     break;
                 case "showchart": //轨迹
-                    WinOpenPage("_blank", "../WorkOpt/OneWork/ChartTrack.aspx?WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&FK_Node=" + args.FK_Node + "&s=" + strTimeKey, "轨迹图");
+                    WinOpenPage("_blank", "../WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&FK_Node=" + args.FK_Node + "&s=" + strTimeKey, "轨迹图");
                     break;
                 case "search": //查询
                     WinOpenPage("_blank", "../Rpt/Search.aspx?RptNo=ND" + parseInt(args.FK_Flow) + "MyRpt&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "查询");
@@ -500,7 +500,7 @@
             }, this);
             var urlExt = urlExtFrm();
             if (args.WorkID) {
-                addTab("trackid", "轨迹", "../WorkOpt/OneWork/Track.aspx?1=1" + urlExt);
+                addTab("trackid", "轨迹", "../WorkOpt/OneWork/OneWork.htm?CurrTab=Track" + urlExt);
             }
             //tab页操作事件
             tabCloseEven();

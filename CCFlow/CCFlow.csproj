@@ -562,7 +562,10 @@
     <Content Include="WF\Admin\CCBPMDesigner\js\jquery.ez-bg-resize.js" />
     <Content Include="WF\Admin\CCBPMDesigner\js\Left.js" />
     <Content Include="WF\Admin\CCBPMDesigner\truck\FlowDesignerSvr.asmx" />
-    <Content Include="WF\Admin\CCBPMDesigner\truck\Truck.htm" />
+    <Content Include="WF\WorkOpt\OneWork\Ath.htm" />
+    <Content Include="WF\WorkOpt\OneWork\OP.htm" />
+    <Content Include="WF\WorkOpt\OneWork\Track.htm" />
+    <Content Include="WF\WorkOpt\OneWork\Truck.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx" />
     <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
     <Content Include="WF\Admin\CCFormDesigner\assets\content-background.jpg" />
@@ -1352,7 +1355,6 @@
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\Comm\Handler.ashx" />
     <Content Include="WF\Comm\Rpt\Handler.ashx" />
-    <Content Include="WF\Comm\RefFunc\Handler.ashx" />
     <Content Include="WF\Comm\Sys\Handler.ashx" />
     <None Include="WF\FlowFormTree\Data\Templete\NewFlow.json" />
     <Content Include="WF\FlowFormTree\Data\Install\SQLScript\InitView_MySQL.sql" />
@@ -2764,7 +2766,9 @@
     <Content Include="WF\WorkOpt\OneWork\CheckTrack.aspx" />
     <Content Include="WF\WorkOpt\OneWork\FlowBBSReplay.htm" />
     <Content Include="WF\WorkOpt\OneWork\NDRpt.aspx" />
+    <Content Include="WF\WorkOpt\OneWork\OneWork.htm" />
     <Content Include="WF\WorkOpt\OneWork\OP.aspx" />
+    <Content Include="WF\WorkOpt\OneWork\PreTrack.htm" />
     <Content Include="WF\WorkOpt\OneWork\Track.aspx" />
     <Content Include="WF\WorkOpt\OneWork\TrackUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
@@ -4771,9 +4775,6 @@
     </Compile>
     <Compile Include="WF\Comm\RefFunc\Exp.aspx.designer.cs">
       <DependentUpon>Exp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\RefFunc\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\RefFunc\MasterPageSingle.Master.cs">
       <DependentUpon>MasterPageSingle.Master</DependentUpon>

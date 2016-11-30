@@ -1,8 +1,14 @@
-﻿<%@ Page Title="流程日志" Language="C#" MasterPageFile="OneWork.master" AutoEventWireup="true"
-    CodeBehind="Track.aspx.cs" Inherits="CCFlow.WF.WorkOpt.OneWork.TruckUI" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Track.aspx.cs" Inherits="CCFlow.WF.WorkOpt.OneWork.TruckUI" %>
 
 <%@ Register Src="TrackUC.ascx" TagName="TrackUC" TagPrefix="uc1" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>流程日志</title>
+    <script src="../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+</head>
+<body class="easyui-layout">
+    <form id="form1" runat="server">
     <script language="javascript" type="text/javascript">
         $(document).ready(function () {
             $("table.Table tr:gt(0)").hover(
@@ -16,11 +22,9 @@
             return;
         }
     </script>
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="easyui-layout" data-options="fit:true">
-        <div data-options="region:'center',fit:true" id="flowNote" style="padding-left:20%; vertical-align: top;">
-            <uc1:TrackUC ID="TruakUC1" runat="server" />
-        </div>
+    <div id="flowNote" style="padding-left: 20%;vertical-align: top;">
+        <uc1:TrackUC ID="TruakUC1" runat="server" />
     </div>
-</asp:Content>
+    </form>
+</body>
+</html>

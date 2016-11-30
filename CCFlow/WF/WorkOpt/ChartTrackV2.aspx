@@ -58,7 +58,7 @@
             var workId = getArgsFromHref("WorkID");
             var iframe = document.getElementById("content");
             //iframe.src = "ChartTrack.htm?FID=" + fid + "&FK_Flow=" + fk_flow + "&WorkID=" + workId;
-            iframe.src = "../Admin/CCBPMDesigner/truck/Truck.htm?FID=" + fid + "&FK_Flow=" + fk_flow + "&WorkID=" + workId;
+            iframe.src = "../WorkOpt/OneWork/Truck.htm?FID=" + fid + "&FK_Flow=" + fk_flow + "&WorkID=" + workId;
         });
         //切换样式  图表/div隐藏
         function toggleStyle(obj) {

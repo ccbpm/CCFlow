@@ -170,12 +170,19 @@
                 dataType: 'html',
                 data: { ToNode: toNode },
                 success: function (data) {
-                    if (data == null && data == undefined ) {
+                    var initData = {};
+                    if (data == null && data == undefined) {
                         alert("AccepterInit&FK_Node=" + pageUrlParam.fk_node + '&WorkID=' +
                     pageUrlParam.WorkID + "未获取到数据" + data);
                         return;
                     }
-                    var initData = JSON.parse(data);
+                    try {
+                        initData = JSON.parse(data);
+                    }
+                    catch (err) {
+                        alert("转换JSON 失败" + err + data)
+                    }
+                    
                     var selDataArr = initData.Nodes;
                     var dtgArr = initData.Depts;
                     var dteArr = initData.Emps;

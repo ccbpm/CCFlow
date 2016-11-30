@@ -195,12 +195,13 @@
                         });
                         $("#searchS1").html("");
                         $("#searchS1").html(html);
+
+                        alert($("#searchS1").val())
+
                         if (pageUrlParam.toNode == 0) {
                             $("#searchS1 option:nth(0)").attr("selected", "selected");
                         } else {
-                            $("#searchS1:option[value=" + pageUrlParam.toNode + "]").attr("selected", "selected");
-
-                            alert($("#searchS1").val())
+                            $("#searchS1 option[value=" + pageUrlParam.toNode + "]").attr("selected", "selected");
                         }
                     }
 

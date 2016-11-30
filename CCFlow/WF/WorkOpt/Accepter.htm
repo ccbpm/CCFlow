@@ -215,7 +215,7 @@
                         $('#jstree').show();
                         var jsTreedata = [];
                         $.each(dtgArr, function (i, obj) {
-                            jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
+                            jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name, "data": obj, state: { opened: true }});
                         })
 
                         $.each(dteArr, function (i, obj) {
@@ -236,6 +236,7 @@
 
                         
                         $('#jstree').jstree({
+                            //"state": { opened: true },
                             plugins: [
                             "checkbox",
                             //"state",

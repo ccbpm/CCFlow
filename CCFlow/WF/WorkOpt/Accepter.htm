@@ -156,7 +156,7 @@
                 if (firstLoad) {
                     toNode = 0;
                 } else {
-                    toNode = $("#searchS1 option:selected").attr("val");
+                    toNode = $("#searchS1 option:selected").val()
                 }
             } else {
                 $("#searchS").css('display', 'none');
@@ -170,126 +170,163 @@
                 dataType: 'html',
                 data: { ToNode: toNode },
                 success: function (data) {
-                    
-                    if (data != null && data != undefined) {
-                        var selDataArr = JSON.parse(data).Nodes;
-                        var dtgArr = JSON.parse(data).Depts;
-                        var dteArr = JSON.parse(data).Emps;
+                    if (data == null && data == undefined ) {
+                        alert("AccepterInit&FK_Node=" + pageUrlParam.fk_node + '&WorkID=' +
+                    pageUrlParam.WorkID + "未获取到数据" + data);
+                        return;
+                    }
+                    var initData = JSON.parse(data);
+                    var selDataArr = initData.Nodes;
+                    var dtgArr = initData.Depts;
+                    var dteArr = initData.Emps;
+                    //初始化到达节点数据
+                    if (firstLoad == true && pageUrlParam.toNode == 0) {
+                        firstLoad = false;
+                        var html = '';
+                        $.each(selDataArr, function (i, obje) {
+                            html += '<option value="' + obje.No + '">' + obje.Name + '</option>';
+                        });
+                        $("#searchS1").html("");
+                        $("#searchS1").html(html);
+                        $("#searchS1 option:nth(0)").attr("selected", "selected");
+                    }
+
+                    var selectNodeVal = $('#searchS1').val();
+                    var selectNode = $.grep(selDataArr, function (value) {
+                        return value.No = selectNodeVal;
+                    });
+
+                    //通过SQL 和树的时候可以显示为树
+                    if (selectNode[0].SelectorDBShowWay == "Tree" && selectNode[0].SelectorModel == "SQL") {
                         //树展示
-                    $('#jstree').show();
-                    var jsTreedata = [];
-                    $.each(dtgArr, function (i, obj) {
-                            jsTreedata.push({ "id": obj.No, "parent": obj.ParentNo == "0" ? '#' : obj.ParentNo, "text": obj.Name });
+                        $('#jstree').show();
+                        var jsTreedata = [];
+                        $.each(dtgArr, function (i, obj) {
+                            jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
                         })
 
                         $.each(dteArr, function (i, obj) {
-                            jsTreedata.push({ "id": "user" + obj.No, "parent": obj.FK_Dept, "text": obj.Name,"icon": "jstree-file", });
+                            jsTreedata.push({ children: {}, "id": "user" + obj.No, "parent": obj.FK_Dept, "text": obj.Name, "icon": "jstree-file", "data": obj });
                         })
 
-                    $('#jstree').jstree({ 'core': {
-                        'data': jsTreedata
-                    }})
-                    $(".wait").hide();
-                            $("section").show();
-                    return;
-
-
-
-
-                        $('#groupTable').css('display', 'block');
-
-
-                        if (dtgArr == undefined && dteArr == undefined) {//通用人员选择其
-                            $('#selectEmpsDiv').css('display', 'block');
-                            $('#groupTable').css('display', 'none');
-
-                            $(".wait").hide();
-                            $("section").show();
-                            return;
-                        } else {
-                            $('#groupTable').css('display', 'block');
-                            $('#selectEmpsDiv').css('display', 'none');
-                        }
-                        window.fkName = '';
-                        if (dteArr != undefined && dteArr.length > 0) {
-                            for (var pro in dteArr[0]) {
-                                if (pro.toLowerCase() != "no" && pro.toLowerCase() != "name") {
-                                    fkName = pro;
-                                    break;
+                        //没有父节点的给到根节点
+                        for (var i = 0; i < jsTreedata.length; i++) {
+                            if (jsTreedata[i].parent != '#') {
+                                var pNode= $.grep(jsTreedata,function(value){
+                                return value.id==jsTreedata[i].parent;
+                                })
+                                if (pNode.length == 0) {
+                                    jsTreedata[i].parent='#'
                                 }
                             }
                         }
-                        var ultdg = '';
-                        var ultde = '';
-                        var ultdes = '';
-                        var s = "";
-                        $.each(dtgArr, function (i, obje) {
-                            for (var k = 0; k < dteArr.length; k++) {
-                                if (obje.No == dteArr[k][fkName]) {
-                                    ultde +=
-                                        "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
-                                }
+
+                        
+                        $('#jstree').jstree({
+                            plugins: [
+                            "checkbox",
+                            //"state",
+                            //"conditionalselect"
+                            ],
+                            'core': {
+                                "multiple": true,
+                                'data': jsTreedata
                             }
-                            ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
-                                    ultde + "</ul></li>";
-                            ultde = "";
-                        });
-                        //
-                        var groupFileds = $.grep(dteArr, function (value) {
-                            console.log(value)
-                            console.log($('[name="' + value.FK_Dept + '"]').length == "0");
-                            return ($('[name="' + value.FK_Dept + '"]').length != "0");
-                        });
-
-                        console.log(groupFileds)
-                        $.each(groupFileds, function (j, objj) {
-                            ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
-                        });
-                        s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
-                                ultdes + "</ul></li>";
-                        ultdg += s;
-
-                        //
-                        $("#groupTable #dt").html(ultdg);
+                        })
                         $(".wait").hide();
                         $("section").show();
-                        $(".ulm_head").click(function () {
-                            if (this.checked) {
-                                $(this).parent("li").children("ul").find("input").prop("checked", "checked");
-                            } else {
-                                $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                        return;
+                    }
+                    if (selectNode[0].SelectorModel = "GenerUserSelecter") {//通用人员选择
+                        $('#selectEmpsDiv').css('display', 'block');
+                        $('#groupTable').css('display', 'none');
+
+                        $(".wait").hide();
+                        $("section").show();
+                        return;
+                    } else {//其它均显示成分组
+                        $('#groupTable').css('display', 'block');
+                        $('#selectEmpsDiv').css('display', 'none');
+                    }
+                    window.fkName = '';
+                    if (dteArr != undefined && dteArr.length > 0) {
+                        for (var pro in dteArr[0]) {
+                            if (pro.toLowerCase() != "no" && pro.toLowerCase() != "name") {
+                                fkName = pro;
+                                break;
                             }
-                        });
-                        $(".ulm_head").click(function () {
-                            if (this.checked) {
-                                $(this).parent("li").children("ul").find("input").prop("checked", "checked");
-                            } else {
-                                $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                        }
+                    }
+                    var ultdg = '';
+                    var ultde = '';
+                    var ultdes = '';
+                    var s = "";
+                    $.each(dtgArr, function (i, obje) {
+                        for (var k = 0; k < dteArr.length; k++) {
+                            if (obje.No == dteArr[k][fkName]) {
+                                ultde +=
+                                    "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
                             }
-                        });
-                        //实体绑定
-                        $.each(dteArr, function (k, obj) {
-                            var lifs = $("#groupTable #dt .lif");
-                            for (var i = 0; i < lifs.length; i++) {
-                                if ($(lifs[i]).attr("name") == obj[fkName]) {
-                                    var limData = $(lifs[i]).find(".lim");
-                                    for (var m = 0; m < limData.length; m++) {
-                                        var lim = limData[m];
-                                        if ($(lim).text() == obj.Name && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
-                                            $(lim).data().data = obj;
-                                            break;
-                                        }
+                        }
+                        ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                                ultde + "</ul></li>";
+                        ultde = "";
+                    });
+                    //
+                    var groupFileds = $.grep(dteArr, function (value) {
+                        console.log(value)
+                        console.log($('[name="' + value.FK_Dept + '"]').length == "0");
+                        return ($('[name="' + value.FK_Dept + '"]').length != "0");
+                    });
+
+                    console.log(groupFileds)
+                    $.each(groupFileds, function (j, objj) {
+                        ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
+                    });
+                    s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                            ultdes + "</ul></li>";
+                    ultdg += s;
+
+                    //
+                    $("#groupTable #dt").html(ultdg);
+                    $(".wait").hide();
+                    $("section").show();
+                    $(".ulm_head").click(function () {
+                        if (this.checked) {
+                            $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                        } else {
+                            $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                        }
+                    });
+                    $(".ulm_head").click(function () {
+                        if (this.checked) {
+                            $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                        } else {
+                            $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                        }
+                    });
+                    //实体绑定
+                    $.each(dteArr, function (k, obj) {
+                        var lifs = $("#groupTable #dt .lif");
+                        for (var i = 0; i < lifs.length; i++) {
+                            if ($(lifs[i]).attr("name") == obj[fkName]) {
+                                var limData = $(lifs[i]).find(".lim");
+                                for (var m = 0; m < limData.length; m++) {
+                                    var lim = limData[m];
+                                    if ($(lim).text() == obj.Name && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
+                                        $(lim).data().data = obj;
+                                        break;
                                     }
                                 }
                             }
-                        });
-                    }
-
+                        }
+                    });
                 }
+
             });
         }
-        function sedmsg() {
-            if ($('#groupTable').css('display') != 'none') {
+        function getSelectEmps() {
+            if ($('#groupTable').css('display') != 'none') {//分组
                 var checked = $('input:checked');
                 //var selectedIdArrf = [];
                 //var selectedNodesf = [];
@@ -301,9 +338,28 @@
                 for (var i = 0; i < checked.parent(".lim").length; i++) {
                     selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
                 }
-                console.log(selectedIdArrm)
                 return selectedIdArrm.join(';');
-            } else {
+            } else if ($('#jstree').css('display') != 'none') {//树和BySql
+                //获取树选中的值
+                var instance = $('#jstree').jstree(true);
+                var selectedIdArr = instance.get_selected();
+                var selectedNodes = [];
+                var nodeDataArrs = [];
+                var noArr = [];
+                $.each(selectedIdArr, function (i, selectedId) {
+                    selectedNodes.push(instance.get_node(selectedId));
+                });
+                $.each(selectedNodes, function (i, selectedNode) {
+                    if (selectedNodes[i].icon != true) {
+                        nodeDataArrs.push(selectedNode.data);
+                    }
+                });
+
+                $.each(nodeDataArrs, function (i, nodeData) {
+                    noArr.push(nodeData.No);
+                });
+                return noArr.join(';');
+            } else {//通用人员选择器
                 return frames["iframeSelectEmpsForm"].window.returnVal.No;
                 var checked = $('input:checked');
                 var selectedIdArrm = [];
@@ -319,7 +375,7 @@
 
             //AccepterSave&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi
 
-            var empNos = sedmsg();
+            var empNos = getSelectEmps();
             if (empNos == '' || empNos == null) {
                 alert('请选择人员.');
                 return;
@@ -330,7 +386,7 @@
             console.log(pageUrlParam.WorkID);
 
             if (pageUrlParam.toNode == 0) {
-                toNode = $("#searchS1 option:selected").attr("val");
+                toNode = $("#searchS1 option:selected").val();
             } else {
                 toNode = pageUrlParam.toNode;
             }
@@ -379,9 +435,15 @@
         function Close() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("取消");
-            } else {
-                $('body').append($('<div>' + "已取消操作" + '</div>'));
+
                 window.close();
+            } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                window.opener.returnWorkWindowClose("取消");
+
+                window.close();
+            } else {
+                $('body').append($('<div>' + data + '</div>'));
+                $('#btnOk').attr('disabled', true);
             }
         }
         //初始化人员选择窗口

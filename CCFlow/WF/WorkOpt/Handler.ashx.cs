@@ -559,11 +559,16 @@ namespace CCFlow.WF.WorkOpt
             dtNodes.TableName = "Nodes";
             dtNodes.Columns.Add(new DataColumn("No", typeof(string)));
             dtNodes.Columns.Add(new DataColumn("Name", typeof(string)));
+            dtNodes.Columns.Add(new DataColumn("SelectorDBShowWay", typeof(string)));
+            dtNodes.Columns.Add(new DataColumn("SelectorModel", typeof(string)));
             foreach (Node item in toNodes)
             {
                 DataRow dr = dtNodes.NewRow();
+                Selector selectItem = new Selector(item.NodeID);
                 dr["No"] = item.NodeID;
                 dr["Name"] = item.Name;
+                dr["SelectorDBShowWay"] = selectItem.SelectorDBShowWay;
+                dr["SelectorModel"] = selectItem.SelectorModel;
                 dtNodes.Rows.Add(dr);
             }
 

@@ -44,6 +44,8 @@
             //说明保存人员成功,开始调用发送按钮.
             var btnSend = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Send");
             btnSend.click();
+        } else  {//可以重新打开接收人窗口
+            winSelectAccepter = null;
         }
 
         // alert(data);

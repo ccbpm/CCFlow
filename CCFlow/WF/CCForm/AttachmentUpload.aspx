@@ -12,7 +12,7 @@
         function Del(fk_ath, pkVal, delPKVal) {
             if (window.confirm('您确定要删除吗？ ') == false)
                 return;
-            window.location.href = 'AttachmentUpload.aspx?DoType=Del&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow=<%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
+            window.location.href = 'AttachmentUpload.aspx?DoType=Del&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow=<%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>' + (GetQueryString("IsExtend")!=undefined?"&IsExtend="+GetQueryString("IsExtend"):"");
         }
 
         function Down(fk_ath, pkVal, delPKVal) {
@@ -62,7 +62,7 @@
                 $('#bar').css('display', 'block');
                 $('#btn_Colse').bind('click', close);
             }
-            $('#bar').css('display', 'block');
+            //$('#bar').css('display', 'block');
             $('#btn_Colse').bind('click', close);
         });
     </script>

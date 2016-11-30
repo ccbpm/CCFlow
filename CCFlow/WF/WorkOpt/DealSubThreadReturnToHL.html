@@ -104,9 +104,30 @@
                     Math.random(),
                 data: {},
                 success: function(data) {
-                    if (data != null) {
-                        $("#mains h3").append(data);
+                    try{
+                        data=JSON.parse(data);
                     }
+                    catch(err){
+                        alert("DealSubThreadReturnToHL_Init 返回值错误："+ data);
+                    }
+                    $("#mains h3").append(data.MsgInfo);
+
+                    $("#mains h3").append("退回处理信息");
+                    if (data.ThreadIsCanShift == 1) {//子线程可以移交
+                        $('#yjother').show();
+                        $('label[for=yjother]').show();
+                    }
+                    if (data.ThreadIsCanDel == 1) {//子线程可以删除
+                        $('#yjdele').show();
+                        $('label[for=yjdele]').show();
+                    }
+                    if (data.CancelRole == "1") {//未知
+
+                    }
+
+                    //if (data != null && JSON.parse(data)) {
+                    //    $("#mains h3").append(data);
+                    //}
                 }
             });
         }
@@ -158,19 +179,23 @@
             <tr class="idea">
                 <td style="width: 20%; text-align: right;">方式</td>
                 <td>
-                    <input type="radio" name="radio1" value="Shift_移交给其他人处理" class="yjother" checked />移交给其他人处理
-                    <input type="radio" name="radio1" value="Return_退回给子线程处理人" class="yjback" />退回给子线程处理人
-                    <input type="radio" name="radio1" value="Kill_删除子线程" class="yjdele" />删除子线程
-                    <input type="radio" name="radio1" value="UnSend_撤销分流点发送" class="yj" />撤销分流点发送
-                </td>
+                    <input type="radio" name="radio1" value="Return_退回给子线程处理人" class="yjback" id="yjback" checked /><label for="yjback">
+    退回给子线程处理人
+</label>
+                    <input id="yjother" style="display:none;" type="radio" name="radio1" value="Shift_移交给其他人处理" class="yjother"  /><label for="yjother" style="display:none;"> 移交给其他人处理</label>
+                    <input type="radio" name="radio1" style="display:none;" value="Kill_删除子线程" class="yjdele" id="yjdele" /><label for="yjdele" style="display:none;">
+    删除子线程
+</label>
+    <input type="radio" name="radio1"  value="UnSend_撤销分流点发送" class="yj" id="yj" /><label for="yj">撤销分流点发送</label>
+</td>
             </tr>
-            <tr class="yjshow">
+            <tr class="yjshow" style="display:none;">
                 <td style="width: 25%; text-align: right;">移交人：</td>
                 <td style="position:relative;"><input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;" disabled /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: absolute; right: 145px; top: 3px; border-radius: 0px 25px 25px 0px; height: 27px; background: #2884fa; color: #fff;" />
                 </td>
             </tr>
             <tr>
-                <td style="width: 25%; text-align: right;" id="sjre">移交给其他人处理原因：</td>
+                <td style="width: 25%; text-align: right;" id="sjre">退回给子线程处理人处理原因：</td>
                 <td><textarea id="resj" style="width:100%;"></textarea></td>
             </tr>
             <tr class="foot">

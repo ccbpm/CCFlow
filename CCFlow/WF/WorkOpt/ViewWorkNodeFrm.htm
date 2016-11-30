@@ -436,7 +436,8 @@
                 if (groupFiled.CtrlType != "SubFlow") {
                     var reloadBtn = '';
                     if (groupFiled.CtrlType == "SubFlow") {
-                        reloadBtn = '<label class="reloadIframe">刷新</label>'
+                        //reloadBtn = '<label class="reloadIframe">刷新</label>'
+                        groupFiled.Lab = "关联的流程";
                     } else if (groupFiled.CtrlType == "Track") {
                         reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
                     }

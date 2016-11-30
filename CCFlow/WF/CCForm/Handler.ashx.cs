@@ -236,15 +236,15 @@ namespace CCFlow.WF.CCForm
                         int startIndex = 0;
                         while (startIndex != -1 && startIndex < countSQL.Length)
                         {
-                            int index = countSQL.IndexOf("1=1",startIndex);
-                            if (index > 0 && countSQL.Substring(startIndex, index-startIndex).Trim().EndsWith("."))
+                            int index = countSQL.IndexOf("1=1", startIndex + 1);
+                            if (index > 0 && countSQL.Substring(startIndex, index - startIndex).Trim().EndsWith("."))
                             {
                                 int lastBlankIndex = countSQL.Substring(startIndex, index - startIndex).LastIndexOf(" ");
 
 
-                                countSQL.Remove(lastBlankIndex + 1+startIndex, index - lastBlankIndex);
+                                countSQL = countSQL.Remove(lastBlankIndex + startIndex+1, index - lastBlankIndex-1);
 
-                                startIndex = startIndex - index - lastBlankIndex;
+                                startIndex = (startIndex + lastBlankIndex) + 3;
                             }
                             else
                             {
@@ -308,15 +308,15 @@ namespace CCFlow.WF.CCForm
                         int startIndex = 0;
                         while (startIndex != -1 && startIndex < sqlObjs.Length)
                         {
-                            int index = sqlObjs.IndexOf("1=1", startIndex);
+                            int index = sqlObjs.IndexOf("1=1", startIndex+1);
                             if (index > 0 && sqlObjs.Substring(startIndex, index - startIndex).Trim().EndsWith("."))
                             {
                                 int lastBlankIndex = sqlObjs.Substring(startIndex, index - startIndex).LastIndexOf(" ");
 
 
-                                sqlObjs.Remove(lastBlankIndex + 1 + startIndex, index - lastBlankIndex);
+                                sqlObjs= sqlObjs.Remove(lastBlankIndex  + startIndex+1 , index - lastBlankIndex-1);
 
-                                startIndex = startIndex - index - lastBlankIndex;
+                                startIndex = (startIndex + lastBlankIndex) + 3;
                             }
                             else
                             {
@@ -370,6 +370,21 @@ namespace CCFlow.WF.CCForm
                          string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
                          sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
                      }
+
+                     //处理日期的默认值
+                     //DefVal=@Now-30
+                     //if (cond.Contains("@Now"))
+                     //{
+                     //    int nowIndex = cond.IndexOf(cond);
+                     //    if (cond.Trim().Length - nowIndex > 5)
+                     //    {
+                     //        char optStr = cond.Trim()[nowIndex + 5];
+                     //        int day = 0;
+                     //        if (int.TryParse(cond.Trim().Substring(nowIndex + 6), out day)) {
+                     //            cond = cond.Substring(0, nowIndex) + DateTime.Now.AddDays(-1 * day).ToString("yyyy-MM-dd HH:mm");
+                     //        }
+                     //    }
+                     //}
 
                      if (sql == null)
                          continue;

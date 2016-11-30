@@ -625,8 +625,8 @@ function Save() {
             }
             else {
                 //OptSuc(data);
-                //$('#Message').html(data);
-                //$('.Message').show();
+                $('#Message').html(data);
+                $('.Message').show();
                 //表示退回OK
                 //if (data.indexOf('工作已经被您退回到') == 0) {
                   //  OptSuc(data);
@@ -962,6 +962,7 @@ function InitForm() {
                 var reloadBtn = '';
                 if (groupFiled.CtrlType == "SubFlow") {
                     //reloadBtn = '<label class="reloadIframe">刷新</label>'
+                    groupFiled.Lab = "关联的流程";
                 } else if (groupFiled.CtrlType == "Track") {
                     //reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
                 }
@@ -2035,12 +2036,26 @@ $(function () {
 //发送 退回 移交等执行成功后转到  指定页面
 function OptSuc(msg) {
     // window.location.href = "/WF/MyFlowInfo.aspx";
+    $('.Message').hide();
     if ($('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()
     }
+    msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
 
-    $("#msgModalContent").html(msg.replace(/@/g,'<br/>'));
-    $("#msgModal").modal().show();
+    $("#msgModalContent").html(msg.replace(/@/g, '<br/>'));
+    var trackA = $('#msgModalContent a:contains("工作轨迹")');
+    var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
+    trackA.remove();
+    trackImg.remove();
+
+    //如果是申请页面
+    if ($('.navbars').css('display') == "none") {
+        $("#msgModalContent").append("<a href='http://localhost:26507/WF/App/Classic/Default.aspx'>返回流程工作台</a>");
+        $('#CCForm').html($('#msgModalContent').html());
+        setToobarUnVisible();
+    } else {
+        $("#msgModal").modal().show();
+    }
 }
 //移交
 //初始化发送节点下拉框

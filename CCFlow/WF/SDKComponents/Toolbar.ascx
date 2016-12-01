@@ -183,7 +183,7 @@
          }
 
          if (btnID == 'Btn_Track') {
-             OpenUrl('TrackMsg', '流程步骤', '/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track', 800, 500);
+             OpenUrl('TrackMsg', '流程步骤', '/WF/WorkOpt/OneWork/Track.aspx?1=2', 800, 500);
              return;
          }
 

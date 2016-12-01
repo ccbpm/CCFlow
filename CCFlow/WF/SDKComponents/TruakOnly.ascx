@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TruakOnly.ascx.cs" Inherits="CCFlow.WF.App.Comm.TruakOnly" %>
 <%
     string enName = "ND" + this.Request.QueryString["FK_Node"];
-    string srcTrack = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.Request.QueryString["FK_Flow"];
+     string srcTrack = "/WF/WorkOpt/OneWork/Track.aspx?FK_Flow="+this.Request.QueryString["FK_Flow"];
     srcTrack += "&FK_Node=" + this.Request.QueryString["FK_Node"];
     srcTrack += "&WorkID=" + this.Request.QueryString["WorkID"];
  %>

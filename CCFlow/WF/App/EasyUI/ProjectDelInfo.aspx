@@ -153,7 +153,7 @@
             }
             },
             { title: '标题', field: 'Title', width: 240, align: 'left', sortable: true, formatter: function (rowindex, rowdata) {
-                var titleText = "../WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&WorkID=" + rowdata.OID + "&FK_Flow=" + rowdata.FK_Flow;
+                var titleText = "../WF/WorkOpt/OneWork/Track.aspx?WorkID=" + rowdata.OID + "&FK_Flow=" + rowdata.FK_Flow;
                 titleText = "<a href=javascript:winOpen('" + titleText + "');>" + rowdata.Title + "</a>";
                 return titleText;
             }

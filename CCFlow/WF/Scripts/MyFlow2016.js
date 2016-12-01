@@ -793,7 +793,7 @@ function initGroup(workNodeData, groupFiled) {
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Track": //轨迹图.
-            var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
+            var src = "/WF/WorkOpt/OneWork/Track.aspx?s=2";
             //var paras = pageParamToUrl();
             //if (paras.indexOf('OID') < 0) {
             //    paras += "&OID=" + pageData.WorkID;
@@ -962,8 +962,7 @@ function InitForm() {
                 var reloadBtn = '';
                 if (groupFiled.CtrlType == "SubFlow") {
                     //reloadBtn = '<label class="reloadIframe">刷新</label>'
-                    // groupFiled.Lab = "关联的流程";
-                    groupFiled.Lab = workNodeData.WF_Node[0].SFLab;
+                    groupFiled.Lab = "关联的流程";
                 } else if (groupFiled.CtrlType == "Track") {
                     //reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
                 }

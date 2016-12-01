@@ -68,7 +68,7 @@ function callBack(jsonData, scope) {
                         if (rec.FK_FLOWSORT == "")
                             return value;
                         //return "<a href='javascript:void(0);' onclick=OpenPage('" + rec.NO + "')>打开</a>";
-                        return "<a href='javascript:void(0);' onclick=LayerOpenFlow('/WF/WorkOpt/OneWork/Truck.htm?FK_Flow="+rec.NO+"&WorkID=null&FID=null&DoType=Chart&T=123')>打开</a>";
+                        return "<a href='javascript:void(0);' onclick=LayerOpenFlow('/WF/Admin/CCBPMDesigner/truck/Truck.htm?FK_Flow="+rec.NO+"&WorkID=null&FID=null&DoType=Chart&T=123')>打开</a>";
                     }
                     },
                     { field: 'HistoryFlow', title: '历史发起', width: 180, formatter: function (value, rec) {
@@ -126,7 +126,7 @@ function LayerOpenFlow(url) {
 }
 function OpenPage(flowno) {
 
-    window.open('/WF/WorkOpt/OneWork/Truck.htm?FK_Flow=' + flowno + '&WorkID=null&FID=null&DoType=Chart&T=123');
+    window.open('/WF/Admin/CCBPMDesigner/truck/Truck.htm?FK_Flow='+flowno+'&WorkID=null&FID=null&DoType=Chart&T=123');
 
 }
 //加载历史发起数据
@@ -163,8 +163,8 @@ function OpenEasyUiFlowPicture(flowNo, flowName) {
 
         //var pictureUrl = "../../../DataUser/FlowDesc/" + flowNo + "." + flowName + "/Flow.png";
 
-    //var pictureUrl = "/WF/WorkOpt/OneWork/Truck.htm?FK_Flow=" + fl.No + "&WorkID=null&FID=null&DoType=Chart&T=" + timeKey + "";
-    var pictureUrl = "/WF/WorkOpt/OneWork/Truck.htm?FK_Flow=" + flowNo + "&WorkID=null&FID=null&DoType=Chart&T=" + Date.now + "";
+    //var pictureUrl = "/WF/Admin/CCBPMDesigner/truck/Truck.htm?FK_Flow=" + fl.No + "&WorkID=null&FID=null&DoType=Chart&T=" + timeKey + "";
+    var pictureUrl = "/WF/Admin/CCBPMDesigner/truck/Truck.htm?FK_Flow=" + flowNo + "&WorkID=null&FID=null&DoType=Chart&T=" + Date.now + "";
     document.getElementById("FlowPic").src = pictureUrl;
     $("#flowPicDiv").dialog({
         height: 500,

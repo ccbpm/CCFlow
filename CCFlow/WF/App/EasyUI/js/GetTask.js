@@ -4,7 +4,7 @@
 }
 //打开流程图
 function OpenFlowPicture(flowNo, flowName) {
-    var pictureUrl = "../../WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + flowNo + "&DoType=Chart&T=" + strTimeKey;
+    var pictureUrl = "../../WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + flowNo + "&DoType=Chart&T=" + strTimeKey;
     var win = $.ligerDialog.open({
         height: 500, width: 800, url: pictureUrl, showMax: true, isResize: true, modal: true, title: flowName + "流程图", slide: false, buttons: [{
             text: '关闭', onclick: function (item, Dialog, index) {
@@ -26,7 +26,7 @@ function callBack(jsonData, scope) {
 
                    },
                      { display: '流程图', render: function (rowdata, rowindex) {
-                         var h = "../../WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + rowdata.NO + "&DoType=Chart&T=" + strTimeKey;
+                         var h = "../../WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + rowdata.NO + "&DoType=Chart&T=" + strTimeKey;
                          return "<a href='javascript:void(0);' onclick=OpenFlowPicture('" + rowdata.NO + "','" + rowdata.NAME + "')>打开</a>";
                         }
                       },

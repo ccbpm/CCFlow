@@ -9,7 +9,7 @@
   <Item No="PerPng"  CH="修改头像" B5="修改头像" EN="Personal Information Png" RU="5апускаемых"  JP="图标信息"  Url="PerPng.aspx" Img="./Img/Start.gif" Title="发起我能够发起的流程" />
   <Item No="Siganture"  CH="修改图片签名" B5="修改图片签名" EN="Personal Information Png" RU="5апускаемых"  JP="图标信息"  Url="Siganture.aspx" Img="./Img/Start.gif" Title="发起我能够发起的流程" />
   <Item No="EditPerInfo"  CH="修改个人资料" B5="修改个人资料" EN="Personal Information Png" RU="5апускаемых"  JP="图标信息"  Url="EditPerInfo.aspx" Img="./Img/Start.gif" Title="发起我能够发起的流程" />
-  <Item No="Pass"  CH="修改密码" B5="修改密码" EN="Personal Information Png" RU="5апускаемых"  JP="图标信息"  Url="Password.aspx" Img="./Img/Start.gif" Title="发起我能够发起的流程" />
+  <Item No="Password"  CH="修改密码" B5="修改密码" EN="Personal Information Png" RU="5апускаемых"  JP="图标信息"  Url="Password.aspx" Img="./Img/Start.gif" Title="发起我能够发起的流程" />
   <Item11 No="Holiday"  CH="节假日设置" B5="假期设置" EN="假期设置" RU="假期设置"  JP="图标信息"  Url="/WF/Comm/Sys/Holiday.aspx" Img="./Img/Start.gif" Title="发起我能够发起的流程" />
 
   <Item1 No="MyWorks" CH="我可做的工作" B5="我可做的工作"  EN="My works" RU="My works" JP="My works"   Url="AutoLou.aspx" Img="./Img/Runing.gif" Enable="1" Title="我可做的工作" />

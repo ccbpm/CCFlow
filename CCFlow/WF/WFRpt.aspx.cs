@@ -33,7 +33,7 @@ namespace CCFlow.WF
                         cc.Update();
                     }
                 }
-                this.Response.Redirect("./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
+                this.Response.Redirect("./WorkOpt/OneWork/Track.aspx?FK_Flow=" + BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace CCFlow.WF
             if (this.Request.QueryString["ViewWork"] != null)
                 return;
 
-            this.Response.Redirect("./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
+            this.Response.Redirect("./WorkOpt/OneWork/Track.aspx?FK_Flow=" + BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
             return;
         }
     }

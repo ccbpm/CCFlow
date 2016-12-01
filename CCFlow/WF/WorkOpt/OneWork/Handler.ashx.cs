@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Web;
 using BP.DA;
-using BP.En;
 using BP.Web;
 using System.Data;
 using BP.WF;
-using BP.WF.Template;
-using BP.WF.XML;
 
 namespace CCFlow.WF.WorkOpt.OneWork
 {
@@ -24,7 +21,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
             get
             {
                 string str = context.Request.QueryString["DoType"];
-
+      
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -69,7 +66,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
         }
 
 
-
+        
         public string UserName
         {
             get
@@ -266,10 +263,10 @@ namespace CCFlow.WF.WorkOpt.OneWork
                         msg = this.FlowBBSSave();
                         break;
                     case "FlowBBSDelete": //删除评论.
-                        msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK, WebUser.No);
+                        msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK,WebUser.No);
                         break;
                     case "FlowBBSCheck": //查看某一用户评论.
-                        msg = this.FlowBBSCheck();
+                          msg = this.FlowBBSCheck();
                         break;
                     case "FlowBBSReplay": //评论回复.
                         msg = this.FlowBBSReplay();
@@ -279,36 +276,6 @@ namespace CCFlow.WF.WorkOpt.OneWork
                         break;
                     case "FlowBBSUserName": //获得当前用户名称.
                         msg = this.FlowBBSUserName();
-                        break;
-                    case "OneWork_GetTabs": //获取标签列表
-                        msg = this.OneWorkGetTabs();
-                        break;
-                    case "GetFlowTrackJsonData":    //获取轨迹图数据
-                        msg = GetFlowTrackJsonData(this.FK_Flow, this.WorkID, this.FID);
-                        break;
-                    case "GetAthsAndBills": //获取附件列表及单据列表
-                        msg = GetAthsAndBills();
-                        break;
-                    case "OP_GetStatus":    //获取可操作状态信息
-                        msg = OPGetStatus();
-                        break;
-                    case "OP_DelFlow":
-                        msg = OPDelFlow();  //删除流程
-                        break;
-                    case "OP_HungUp":
-                        msg = OPHungUp();   //挂起流程
-                        break;
-                    case "OP_UnHungUp":
-                        msg = OPUnHungUp(); //解除挂起
-                        break;
-                    case "OP_ComeBack":
-                        msg = OPComeBack(); 
-                        break;
-                    case "OP_Takeback": /*取回审批.*/
-                        break;
-                    case "OP_UnSend":
-                        // 转化成编号.
-                        msg = BP.WF.Dev2Interface.Flow_DoUnSend(FK_Flow, WorkID);
                         break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
@@ -322,283 +289,12 @@ namespace CCFlow.WF.WorkOpt.OneWork
             }
             //输出信息.
         }
-
-        private string OPComeBack()
-        {
-            WorkFlow wf3 = new WorkFlow(FK_Flow, WorkID);
-            wf3.DoComeBackWorkFlow("无");
-            return "流程已经被重新启用.";
-        }
-
-        private string OPUnHungUp()
-        {
-            WorkFlow wf2 = new WorkFlow(FK_Flow, WorkID);
-            //  wf2.DoUnHungUp();
-            return "流程已经被解除挂起.";
-        }
-
-        private string OPHungUp()
-        {
-            WorkFlow wf1 = new WorkFlow(FK_Flow, WorkID);
-            //wf1.DoHungUp()
-            return "流程已经被挂起.";
-        }
-
-        private string OPDelFlow()
-        {
-            WorkFlow wf = new WorkFlow(FK_Flow, WorkID);
-            wf.DoDeleteWorkFlowByReal(true);
-            return "流程已经被删除！";
-        }
-
-        /// <summary>
-        /// 获取可操作状态信息
-        /// </summary>
-        /// <returns></returns>
-        private string OPGetStatus()
-        {
-            int wfState = BP.DA.DBAccess.RunSQLReturnValInt("SELECT WFState FROM WF_GenerWorkFlow WHERE WorkID=" + WorkID, 1);
-            WFState wfstateEnum = (WFState)wfState;
-            string json = "{";
-            bool isCan;
-
-            switch (wfstateEnum)
-            {
-                case WFState.Runing: /* 运行时*/
-                    /*删除流程.*/
-                    isCan = BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No);
-                    json += "\"CanFlowOverByCoercion\":" + isCan.ToString().ToLower() + ",";
-
-                    /*取回审批*/
-                    isCan = false;
-                    string para = "";
-                    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                    string sql = "SELECT NodeID FROM WF_Node WHERE CheckNodes LIKE '%" + gwf.FK_Node + "%'";
-                    int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
-
-                    if (myNode != 0)
-                    {
-                        GetTask gt = new GetTask(myNode);
-                        if (gt.Can_I_Do_It())
-                        {
-                            isCan = true;
-                            para = "\"TackBackFromNode\": " + gwf.FK_Node + ",\"TackBackToNode\":" + myNode + ",";
-                        }
-                    }
-
-                    json += "\"CanTackBack\":" + isCan.ToString().ToLower() + "," + para;
-
-                    /*催办*/
-                    json += "\"CanHurry\":false,";  //原逻辑，不能催办
-
-                    /*撤销发送*/
-                    GenerWorkerLists workerlists = new GenerWorkerLists();
-                    QueryObject info = new QueryObject(workerlists);
-                    info.AddWhere(GenerWorkerListAttr.FK_Emp, WebUser.No);
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.IsPass, "1");
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.IsEnable, "1");
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
-                    isCan = info.DoQuery() > 0;
-                    json += "\"CanUnSend\":" + isCan.ToString().ToLower();
-                    break;
-                case WFState.Complete: // 完成.
-                case WFState.Delete: // 逻辑删除..
-                    /*恢复使用流程*/
-                    isCan = WebUser.No == "admin";
-                    json += "\"CanRollBack\":" + isCan.ToString().ToLower();
-                    break;
-                case WFState.HungUp: // 挂起.
-                    /*撤销挂起*/
-                    isCan = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(FK_Flow, FK_Node, WorkID, WebUser.No);
-                    json += "\"CanUnHungUp\":" + isCan.ToString().ToLower();
-                    break;
-                default:
-                    break;
-            }
-
-            return json + "}";
-        }
-
-        /// <summary>
-        /// 获取附件列表及单据列表
-        /// </summary>
-        /// <returns></returns>
-        private string GetAthsAndBills()
-        {
-            string sql = "";
-            string json = "{\"Aths\":";
-
-            if (FK_Node == 0)
-                sql = "SELECT fadb.*,wn.Name NodeName FROM Sys_FrmAttachmentDB fadb INNER JOIN WF_Node wn ON wn.NodeID = fadb.NodeID WHERE fadb.FK_FrmAttachment IN (SELECT MyPK FROM Sys_FrmAttachment WHERE  " + BP.WF.Glo.MapDataLikeKey(this.FK_Flow, "FK_MapData") + "  AND IsUpload=1) AND fadb.RefPKVal='" + this.WorkID + "' ORDER BY fadb.RDT";
-            else
-                sql = "SELECT fadb.*,wn.Name NodeName FROM Sys_FrmAttachmentDB fadb INNER JOIN WF_Node wn ON wn.NodeID = fadb.NodeID WHERE fadb.FK_FrmAttachment IN (SELECT MyPK FROM Sys_FrmAttachment WHERE  FK_MapData='ND" + FK_Node + "' ) AND fadb.RefPKVal='" + this.WorkID + "' ORDER BY fadb.RDT";
-
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-
-            foreach (DataColumn col in dt.Columns)
-                col.ColumnName = col.ColumnName.ToUpper();
-
-            json += BP.Tools.Json.ToJson(dt) + ",\"Bills\":";
-
-            Bills bills = new Bills();
-            bills.Retrieve(BillAttr.WorkID, this.WorkID);
-
-            json += bills.ToJson() + ",\"AppPath\":\"" + BP.WF.Glo.CCFlowAppPath + "\"}";
-
-            return json;
-        }
-
-        /// <summary>
-        /// 获取OneWork页面的tabs集合
-        /// </summary>
-        /// <returns></returns>
-        private string OneWorkGetTabs()
-        {
-            string re = "[";
-            OneWorkXmls xmls = new OneWorkXmls();
-            xmls.RetrieveAll();
-
-            foreach (OneWorkXml item in xmls)
-            {
-                string url = "";
-                if (item.No == "Track")
-                    url = string.Format("{0}.aspx?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.No, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
-                else
-                    url = string.Format("{0}.htm?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.No, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
-
-                re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\"", item.No, item.Name, url) + "},";
-            }
-
-            return re.TrimEnd(',') + "]";
-        }
-        /// <summary>
-        /// 获取流程的JSON数据，以供显示工作轨迹/流程设计
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="workid">工作编号</param>
-        /// <param name="fid">父流程编号</param>
-        /// <returns></returns>
-        private string GetFlowTrackJsonData(string fk_flow, long workid, long fid)
-        {
-            DataSet ds = new DataSet();
-            DataTable dt = null;
-            string json = string.Empty;
-            try
-            {
-                //获取流程信息
-                var sql = "SELECT NO,Name,Paras,ChartType FROM WF_Flow WHERE No='" + fk_flow + "'";
-                dt = DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "WF_FLOW";
-                ds.Tables.Add(dt);
-
-                //获取流程中的节点信息
-                sql = "SELECT NodeID ID,Name,Icon,X,Y,NodePosType,RunModel,HisToNDs,TodolistModel FROM WF_Node WHERE FK_Flow='" +
-                    fk_flow + "' ORDER BY Step";
-                dt = DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "WF_NODE";
-                ds.Tables.Add(dt);
-
-                //获取流程中的标签信息
-                sql = "SELECT MyPK,Name,X,Y FROM WF_LabNote WHERE FK_Flow='" + fk_flow + "'";
-                dt = DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "WF_LABNOTE";
-                ds.Tables.Add(dt);
-
-                //获取流程中的线段方向信息
-                sql = "SELECT Node,ToNode,DirType,IsCanBack,Dots FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
-                dt = DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "WF_DIRECTION";
-                ds.Tables.Add(dt);
-
-
-                if (workid != 0)
-                {
-                    //获取流程信息，added by liuxc,2016-10-26
-                    sql =
-                        "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow wgwf WHERE wgwf.WorkID = " +
-                        workid;
-                    dt = DBAccess.RunSQLReturnTable(sql);
-                    dt.TableName = "FLOWINFO";
-                    ds.Tables.Add(dt);
-
-                    //获取工作轨迹信息
-                    var trackTable = "ND" + int.Parse(fk_flow) + "Track";
-                    sql = "SELECT NDFrom,NDFromT, NDTo,NDToT, ActionType,ActionTypeText,Msg,RDT,EmpFrom,EmpFromT,EmpToT,EmpTo FROM " + trackTable +
-                          " WHERE WorkID=" +
-                          workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT ASC";
-                    dt = DBAccess.RunSQLReturnTable(sql);
-
-                    //判断轨迹数据中，最后一步是否是撤销或退回状态的，如果是，则删除最后2条数据
-                    if (dt.Rows.Count > 0)
-                    {
-                        if (Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.UnSend))
-                        {
-                            if (dt.Rows.Count > 1)
-                            {
-                                dt.Rows.RemoveAt(0);
-                                dt.Rows.RemoveAt(0);
-                            }
-                            else
-                            {
-                                dt.Rows.RemoveAt(0);
-                            }
-                        }
-                    }
-
-                    dt.TableName = "TRACK";
-                    ds.Tables.Add(dt);
-
-                    //获取预先计算的节点处理人，以及处理时间,added by liuxc,2016-4-15
-                    sql = "SELECT wsa.FK_Node,wsa.FK_Emp,wsa.EmpName,wsa.TSpanDay,wsa.TSpanHour,wsa.ADT,wsa.SDT FROM WF_SelectAccper wsa WHERE wsa.WorkID = " + workid;
-                    dt = DBAccess.RunSQLReturnTable(sql);
-                    dt.TableName = "POSSIBLE";
-                    ds.Tables.Add(dt);
-
-                    //获取节点处理人数据，及处理/查看信息
-                    sql = "SELECT wgw.FK_Emp,wgw.FK_Node,wgw.FK_EmpText,wgw.RDT,wgw.IsRead,wgw.IsPass FROM WF_GenerWorkerlist wgw WHERE wgw.WorkID = " +
-                          workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid));
-                    dt = DBAccess.RunSQLReturnTable(sql);
-                    dt.TableName = "DISPOSE";
-                    ds.Tables.Add(dt);
-                }
-                else
-                {
-                    var trackTable = "ND" + int.Parse(fk_flow) + "Track";
-                    sql = "SELECT NDFrom, NDTo,ActionType,ActionTypeText,Msg,RDT,EmpFrom,EmpFromT,EmpToT,EmpTo FROM " + trackTable +
-                          " WHERE WorkID=0 ORDER BY RDT ASC";
-                    dt = DBAccess.RunSQLReturnTable(sql);
-                    dt.TableName = "TRACK";
-                    ds.Tables.Add(dt);
-                }
-                for (int i = 0; i < ds.Tables.Count; i++)
-                {
-                    dt = ds.Tables[i];
-                    dt.TableName = dt.TableName.ToUpper();
-                    for (int j = 0; j < dt.Columns.Count; j++)
-                    {
-                        dt.Columns[j].ColumnName = dt.Columns[j].ColumnName.ToUpper();
-                    }
-                }
-
-                var re = new { success = true, msg = string.Empty, ds = ds };
-                json = Newtonsoft.Json.JsonConvert.SerializeObject(re);
-            }
-            catch (Exception ex)
-            {
-                json = Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-            }
-
-            return json;
-        }
         /// <summary>
         /// 获得发起的BBS评论.
         /// </summary>
         /// <returns></returns>
         public string FlowBBSList()
-        {
+        {        
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
@@ -610,7 +306,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
         public string FlowBBSUser()
         {
             string name = string.Empty;
-            name = BP.Web.WebUser.No;
+            name=BP.Web.WebUser.No;
             return name;
 
         }
@@ -624,19 +320,19 @@ namespace CCFlow.WF.WorkOpt.OneWork
         public string FlowBBSDept()
         {
             Paras ps = new Paras();
-            ps.SQL = "select a.name from port_dept a INNER join port_emp b on b.FK_Dept=a.no and b.No='" + this.UserName + "'";
+            ps.SQL = "select a.name from port_dept a INNER join port_emp b on b.FK_Dept=a.no and b.No='"+this.UserName+"'";
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnString(ps));
         }
 
         /// 查看某一用户的评论.
-        public string FlowBBSCheck()
+        public  string FlowBBSCheck()
         {
             Paras pss = new Paras();
-            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND  EMPFROMT='" + this.UserName + "'";
+            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND  EMPFROMT='"+this.UserName+"'";
             pss.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(pss));
 
-        }
+       }
         /// <summary>
         /// 提交评论.
         /// </summary>
@@ -648,7 +344,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE MyPK=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "MyPK";
             ps.Add("MyPK", mypk);
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
+            return BP.Tools.Json.ToJson( BP.DA.DBAccess.RunSQLReturnTable(ps));
         }
 
         /// <summary>
@@ -657,16 +353,16 @@ namespace CCFlow.WF.WorkOpt.OneWork
         /// <returns></returns>
         public string FlowBBSReplay()
         {
-            SMS sms = new SMS();
-            sms.RetrieveByAttr(SMSAttr.MyPK, MyPK);
-            sms.MyPK = DBAccess.GenerGUID();
-            sms.RDT = DataType.CurrentDataTime;
-            sms.SendToEmpNo = this.UserName;
-            sms.Sender = WebUser.No;
-            sms.Title = this.Title;
-            sms.DocOfEmail = this.Msg;
-            sms.Insert();
-            return null;
+              SMS  sms = new SMS();
+              sms.RetrieveByAttr(SMSAttr.MyPK, MyPK);
+              sms.MyPK = DBAccess.GenerGUID();
+              sms.RDT = DataType.CurrentDataTime;
+              sms.SendToEmpNo = this.UserName;  
+              sms.Sender = WebUser.No;
+              sms.Title = this.Title;
+              sms.DocOfEmail = this.Msg;
+              sms.Insert(); 
+              return null;
         }
         /// <summary>
         /// 统计评论条数.
@@ -675,12 +371,12 @@ namespace CCFlow.WF.WorkOpt.OneWork
 
         public string FlowBBSCount()
         {
-
+  
             Paras ps = new Paras();
             ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             string count = BP.DA.DBAccess.RunSQLReturnValInt(ps).ToString();
-            return count;
+            return  count;
         }
 
         public bool IsReusable

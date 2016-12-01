@@ -201,7 +201,7 @@ namespace CCFlow.WF
 
                 this.Pub1.AddTD("<a href='GetTask" + pageid + ".aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01' >" + fl.Name + "</a>");
 
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
                 this.Pub1.AddTD(fl.Note);
                 this.Pub1.AddTREnd();
             }

@@ -113,7 +113,7 @@ namespace CCFlow.WF.SDKComponents
                 BP.WF.Flow fl = new Flow(str);
 
                 if (sf.SFSta == FrmSubFlowSta.Enable && this.DoType!="View")
-                    html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'><a href=\"javascript:OpenIt('../MyFlow.aspx?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID=" + this.FID + "')\"  >[启动流程]</a></style>";
+                    html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.aspx?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID=" + this.FID + "')\"  >"+sf.SFCaption+"</a>]</style>";
 
                 if (sf.SFSta == FrmSubFlowSta.Readonly || this.DoType == "View")
                     html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div></style>";

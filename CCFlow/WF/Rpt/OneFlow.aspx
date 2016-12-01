@@ -65,13 +65,8 @@
                         </li>
                         <li>
                             <div>
-                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S9_SearchFuncs.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
-                                    <span class="nav">5. 设置报表功能</span></a></div>
-                        </li>
-                        <li>
-                            <div>
                                 <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S8_RptExportTemplate.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
-                                    <span class="nav">6. 设置报表导出模板</span></a></div>
+                                    <span class="nav">5. 设置报表导出模板</span></a></div>
                         </li>
                         <%-- <li>
                             <div>

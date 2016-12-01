@@ -402,7 +402,7 @@ namespace CCFlow.WF.Rpt
                 //相关功能.
                 string ext = "";
                 ext += "<a href=\"javascript:WinOpen('Bill.aspx?DoType=Print&MyPK=" + en.PKVal + "','tdr');\" ><img src='./../Img/book.gif' />打印</a>";
-                ext += "-<a href=\"javascript:WinOpen('../WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + this.FK_Flow + "&WorkID=" + en.GetValStringByKey("WorkID") + "&FID=" + en.GetValStringByKey("FID") + "','tr');\" ><img src='./../Img/track.png' />轨迹图</a>";
+                ext += "-<a href=\"javascript:WinOpen('../WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + en.GetValStringByKey("WorkID") + "&FID=" + en.GetValStringByKey("FID") + "','tr');\" ><img src='./../Img/track.png' />轨迹图</a>";
                 // ext += "-<a href=\"javascript:WinOpen('./../WFRpt.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + en.GetValStringByKey("WorkID") + "&FID=" + en.GetValStringByKey("FID") + "','tdr');\" >工作报告</a>";
 
                 this.UCSys1.AddTD(ext);

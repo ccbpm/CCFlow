@@ -82,7 +82,7 @@ namespace CCFlow.App.FlowDB
                 this.Pub1.AddTDB(item.Title);
 
                 this.Pub1.AddTDBegin();
-                this.Pub1.Add("<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + item.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + item.FID + "','ds'); \" >轨迹图</a>-");
+                this.Pub1.Add("<a href=\"javascript:WinOpen('/WF/WorkOpt/OneWork/ChartTrack.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + item.FID + "','ds'); \" >轨迹图</a>-");
                 this.Pub1.Add("<a href=\"javascript:WinOpen('./../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + item.FID + "','ds'); \" >报告</a>-");
                 this.Pub1.Add("[<a href=\"javascript:DelIt('" + item.FK_Flow + "','" + item.WorkID + "');\"><img src='/WF/Img/Btn/Delete.gif' border=0/>删除</a>]");
                 this.Pub1.Add("[<a href=\"javascript:FlowShift('" + item.FK_Flow + "','" + item.WorkID + "');\">移交</a>]");

@@ -87,7 +87,7 @@ public partial class WF_OneFlow_UC_StartList : BP.Web.UC.UCBase3
             else
                 this.AddTD("<a href=\"javascript:StartListUrl('" + appPath + "','" + fl.StartGuidePara1 + "?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01','" + fl.No + "','" + pageid + "')\" >" + fl.Name + "</a>");
 
-            this.AddTD("<a href=\"javascript:WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
+            this.AddTD("<a href=\"javascript:WinOpen('" + appPath + "WF/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
             this.AddTD(fl.Note);
             this.AddTREnd();
         }

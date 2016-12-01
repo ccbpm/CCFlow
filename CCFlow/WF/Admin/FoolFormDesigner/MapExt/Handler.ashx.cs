@@ -283,7 +283,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         public string TBFullCtrl_Init()
         {
             MapExt ext = new MapExt();
-            ext.MyPK = this.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + this.KeyOfEn;
+            ext.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
             ext.FK_MapData = this.FK_MapData;
             ext.ExtType = MapExtXmlList.TBFullCtrl;
             if (ext.RetrieveFromDBSources() == 0)
@@ -295,7 +295,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         public string TBFullCtrl_Save()
         {
             MapExt me = new MapExt();
-            me.MyPK = this.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + this.KeyOfEn;
+            me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
             me.RetrieveFromDBSources();
 
             System.Console.WriteLine("已执行删除");
@@ -344,7 +344,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return;
 
             MapExt me = new MapExt();
-            me.MyPK = this.FK_MapData + "_" + this.KeyOfEn + "_RegularExpression_" + tagID;
+            me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
             me.FK_MapData = this.FK_MapData;
             me.AttrOfOper = this.KeyOfEn;
             me.ExtType = "RegularExpression";

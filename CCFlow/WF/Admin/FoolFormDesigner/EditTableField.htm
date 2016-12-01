@@ -73,7 +73,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FieldInitSFTable&MyPK=" + mypk + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&FType=2&FK_SFTable=" + fk_sfTable + "&GroupField=" + groupID + "&m=" + Math.random(),
+                url: Handler + "?DoType=EditTableField_Init&MyPK=" + mypk + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&FType=2&FK_SFTable=" + fk_sfTable + "&GroupField=" + groupID + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -324,7 +324,7 @@
             data: frmData,
             type: 'post',
             async: true,
-            url: Handler + "?DoType=FieldSaveSFTable&MyPK=" + mypk + "&FType=2&LGType=2&FK_MapData=" + fk_mapData + "&GroupField=" + gf + "&KeyOfEn=" + keyOfEn + "&FK_SFTable=" + sfTable + "&m=" + Math.random(),
+            url: Handler + "?DoType=EditTableField_Save&MyPK=" + mypk + "&FType=2&LGType=2&FK_MapData=" + fk_mapData + "&GroupField=" + gf + "&KeyOfEn=" + keyOfEn + "&FK_SFTable=" + sfTable + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
 

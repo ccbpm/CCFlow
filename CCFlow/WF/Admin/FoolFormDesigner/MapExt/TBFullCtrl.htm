@@ -76,6 +76,13 @@
             Save();
         }
 
+        //填充下拉框.
+        function FullDDL() {
+            var url = "TBFullCtrl_List.aspx?FK_MapData=" + GetQueryString("FK_MapData") + "&MyPK=" + GetQueryString("MyPK");
+            alert(url);
+            window.open(url);
+            return;
+        }
     </script>
 </head>
 <body>

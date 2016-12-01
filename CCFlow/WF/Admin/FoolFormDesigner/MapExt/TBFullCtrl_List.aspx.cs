@@ -44,8 +44,7 @@ namespace CCFlow.WF.MapDef
         #endregion 属性。
         protected void Page_Load(object sender, EventArgs e)
         {
-
-            if (IsPostBack==false)
+            if (this.IsPostBack==false)
             {
                 MapExt myme = new MapExt(this.MyPK);
                 MapAttrs attrs = new MapAttrs(myme.FK_MapData);

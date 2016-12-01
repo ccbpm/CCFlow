@@ -269,11 +269,11 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "DtlAttrs":
                         msg = this.DtlAttrs();
                         break;
-                    case "FieldSaveSFTable": //保存外键字段..
-                        msg = this.FieldSaveSFTable();
+                    case "EditTableField_Save": //保存外键字段..
+                        msg = this.EditTableField_Save();
                         break;
-                    case "FieldInitSFTable": //初始化枚举信息.
-                        msg = this.FieldInitSFTable();
+                    case "EditTableField_Init": //初始化外键表.
+                        msg = this.EditTableField_Init();
                         break;
                     case "SFTableList":
                         msg = this.SFTableList();
@@ -753,7 +753,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         /// 初始化表.
         /// </summary>
         /// <returns></returns>
-        public string FieldInitSFTable()
+        public string EditTableField_Init()
         {
             MapAttr attr = new MapAttr();
             attr.KeyOfEn = this.KeyOfEn;
@@ -1139,9 +1139,16 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 //默认值.
                 attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");
 
-                //分组.
-                if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
-                    attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+                try
+                {
+                    //分组.
+                    if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
+                        attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+                }
+                catch
+                {
+
+                }
 
                 //是否可用？所有类型的属性，都需要。
                 int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
@@ -1169,10 +1176,10 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             }
         }
         /// <summary>
-        /// 保存枚举
+        /// 保存外键表字段.
         /// </summary>
         /// <returns></returns>
-        public string FieldSaveSFTable()
+        public string EditTableField_Save()
         {
             try
             {
@@ -1218,9 +1225,16 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 //默认值.
                 attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");
 
-                //分组.
-                if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
-                    attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+                try
+                {
+                    //分组.
+                    if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
+                        attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+                }
+                catch
+                {
+
+                }
 
                 //是否可用？所有类型的属性，都需要。
                 int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
@@ -1290,9 +1304,19 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 //默认值.
                 attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");
 
-                //分组.
-                if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
-                    attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+
+                //对于明细表就可能没有值.
+                try
+                {
+                    //分组.
+                    if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
+                        attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+                }
+                catch
+                {
+                }
+
+
 
                 if (attr.MyDataType == BP.DA.DataType.AppString && lgType == FieldTypeS.Normal)
                 {

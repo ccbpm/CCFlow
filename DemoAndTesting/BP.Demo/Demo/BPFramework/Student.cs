@@ -287,8 +287,8 @@ namespace BP.Demo.BPFramework
                 map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
 
                 // 枚举字段 - 整治面貌.
-                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM, "@0=少先队员@1=团员@2=党员");
-
+                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM,
+                    "@0=少先队员@1=团员@2=党员");
 
                 map.AddMyFile("简历");
 

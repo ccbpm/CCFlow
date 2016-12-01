@@ -378,6 +378,26 @@ namespace CCFlow.WF.WorkOpt
         /// <returns></returns>
         public string CC_Send()
         {
+            string emps = this.GetRequestVal("Emps");
+            string stations = this.GetRequestVal("Stations");
+            string depts = this.GetRequestVal("Depts");
+
+            string ccToEmps = "";
+            ccToEmps += emps;
+            if (stations.Length > 1)
+            {
+                string[] stas = stations.Split(',');
+                foreach (string sta in stas)
+                {
+                }
+            }
+
+            string title = this.GetRequestVal("TB_Title");
+            string doc = this.GetRequestVal("TB_Doc");
+
+            //调用抄送接口执行抄送.
+            BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, 0, this.WorkID, title, doc, emps, depts, stations);
+
             return "执行抄送成功.";
         }
 

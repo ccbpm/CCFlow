@@ -5610,6 +5610,7 @@ namespace BP.WF
             {
                 list.HisSta = fromNode.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
             }
+
             if (fromNode.IsEndNode == true)//结束节点只写入抄送列表
             {
                 list.HisSta = CCSta.UnRead;
@@ -5625,10 +5626,11 @@ namespace BP.WF
                 list.CheckPhysicsTable();
                 list.Update();
             }
-            BP.WF.Dev2Interface.Port_SendMsg(toEmpNo, msgTitle, msgDoc, "CC" + gwf.FK_Node + "_" + gwf.WorkID, SMSMsgType.CC, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
-            //记录日志.
-            Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, workID, gwf.FID, gwf.FK_Node, gwf.NodeName,
-                WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toEmpNo, toEmpName, msgTitle, null);
+
+            //BP.WF.Dev2Interface.Port_SendMsg(toEmpNo, msgTitle, msgDoc, "CC" + gwf.FK_Node + "_" + gwf.WorkID, SMSMsgType.CC, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+            ////记录日志.
+            //Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, workID, gwf.FID, gwf.FK_Node, gwf.NodeName,
+            //    WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toEmpNo, toEmpName, msgTitle, null);
 
             return "已经成功的把工作抄送给:" + toEmpNo + "," + toEmpName;
         }

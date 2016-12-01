@@ -65,6 +65,8 @@ namespace BP.WF
                 if (nd.IsStartNode == false)
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
 
+                 
+
                 //增加转向下拉框数据.
                 if (nd.CondModel == CondModel.SendButtonSileSelect)
                 {
@@ -128,7 +130,7 @@ namespace BP.WF
                 //重设默认值.
                 wk.ResetDefaultVal();
 
-                //执行装载填充》
+                //执行装载填充.
                 MapExt me = new MapExt();
                 me.MyPK = wk.NodeFrmID + "_" + MapExtXmlList.PageLoadFull;
                 if (me.RetrieveFromDBSources() == 1)
@@ -347,6 +349,7 @@ namespace BP.WF
                 dtAlert.TableName = "AlertMsg";
                 dtAlert.Columns.Add("Title", typeof(string));
                 dtAlert.Columns.Add("Msg", typeof(string));
+                dtAlert.Columns.Add("URL", typeof(string));
 
               //  string msg = "";
                 switch (gwf.WFState)

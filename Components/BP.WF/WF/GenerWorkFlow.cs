@@ -865,11 +865,27 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 最后一个执行发送动作的ID.
+        /// </summary>
+        public string Paras_LastSendTruckID
+        {
+            get
+            {
+                string str= this.GetParaString("LastTruckID");
+                if (str == "")
+                    str =  this.WorkID.ToString();
+                return str;
+            }
+            set
+            {
+                this.SetPara("LastTruckID", value);
+            }
+        }
+        /// <summary>
         /// 加签信息
         /// </summary>
         public string Paras_AskForReply
         {
-
             get
             {
                 return this.GetParaString("AskForReply");

@@ -2422,10 +2422,11 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.IsGuestNode, 0, "是否是客户执行节点", false, false);
 
                 map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 100, 10);
-                map.AddTBString(NodeAttr.FK_FlowSort, null, "FK_FlowSort", false, true, 0, 4, 10);
-                map.AddTBString(NodeAttr.FK_FlowSortT, null, "FK_FlowSortT", false, true, 0, 100, 10);
-                map.AddTBString(NodeAttr.FrmAttr, null, "FrmAttr", false, true, 0, 300, 10);
 
+                //map.AddTBString(NodeAttr.FK_FlowSort, null, "FK_FlowSort", false, true, 0, 4, 10);
+                //map.AddTBString(NodeAttr.FK_FlowSortT, null, "FK_FlowSortT", false, true, 0, 100, 10);
+
+                map.AddTBString(NodeAttr.FrmAttr, null, "FrmAttr", false, true, 0, 300, 10);
                 map.AddTBInt(NodeAttr.IsBUnit, 0, "是否是节点模版(业务单元)", true, false);
                 #endregion 基本属性.
 
@@ -2433,15 +2434,12 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.FWCSta, 0, "审核组件", false, false);
                 #endregion 审核组件.
 
-
                 #region 考核属性.
-
                 map.AddTBFloat(NodeAttr.TSpanDay, 0, "限期(天)", true, false); //"限期(天)".
                 map.AddTBFloat(NodeAttr.TSpanHour, 8, "小时", true, false); //"限期(天)".
 
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)"
-
 
                 map.AddTBFloat(NodeAttr.WarningDay, 0, "工作预警(天)", true, false);    // "警告期限(0不警告)"
                 map.AddTBFloat(NodeAttr.WarningHour, 4, "工作预警(小时)", true, false); // "警告期限(0不警告)"
@@ -2452,12 +2450,9 @@ namespace BP.WF
 
                 map.AddTBFloat(NodeAttr.TCent, 2, "扣分(每延期1小时)", false, false);
                 map.AddTBInt(NodeAttr.CHWay, 0, "考核方式", false, false); //"限期(天)"
-
-
                 #endregion 考核属性.
 
                 map.AddTBString(FrmWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
-
                 map.AddTBString(NodeAttr.Doc, null, "描述", true, false, 0, 100, 10);
                 map.AddBoolean(NodeAttr.IsTask, true, "允许分配工作否?", true, true);
 

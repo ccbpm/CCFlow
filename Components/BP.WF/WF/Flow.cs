@@ -4963,17 +4963,7 @@ namespace BP.WF
             int oldFlowID = int.Parse(oldFlowNo);
             string timeKey = DateTime.Now.ToString("yyMMddhhmmss");
 
-            //判断流程标示.多个流程是否可以共用一个类，注释
-            //if (dtFlow.Columns.Contains("FlowMark") == true)
-            //{
-            //    string FlowMark = dtFlow.Rows[0]["FlowMark"].ToString();
-            //    if (string.IsNullOrEmpty(FlowMark) == false)
-            //    {
-            //        if (fl.IsExit(FlowAttr.FlowMark, FlowMark))
-            //            throw new Exception("@该流程标示:" + FlowMark + "已经存在于系统中,您不能导入.");
-            //    }
-            //}
-
+            #region 根据不同的流程模式，设置生成不同的流程编号.
             switch (model)
             {
                 case ImpFlowTempleteModel.AsNewFlow: /*做为一个新流程. */
@@ -5009,6 +4999,7 @@ namespace BP.WF
                 default:
                     throw new Exception("@没有判断");
             }
+            #endregion 根据不同的流程模式，设置生成不同的流程编号.
 
             // string timeKey = fl.No;
             int idx = 0;
@@ -6206,6 +6197,9 @@ namespace BP.WF
                                 {
                                     case "enname":
                                     case "keyofen":
+                                        val = val.Replace("ND" + oldFlowID, "ND" + flowID);
+                                        break;
+                                    case "ctrlid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
                                         val = val.Replace("ND" + oldFlowID, "ND" + flowID);
                                         break;
                                     default:

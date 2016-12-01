@@ -5515,7 +5515,10 @@ namespace BP.WF
                             GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Emp, this.Execer);
 
                         //执行时效考核.
+                        if (this.rptGe ==null)
                         Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
+                        else
+                            Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
 
                         //返回发送对象.
                         return this.HisMsgObjs;
@@ -6153,7 +6156,6 @@ namespace BP.WF
                 #endregion 设置流程的标记.
 
 
-
                 //执行时效考核.
                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
 
@@ -6222,7 +6224,7 @@ namespace BP.WF
                     string htmlInfo = "@<a href='" + url + "' >下一步工作，您仍然可以处理，点击这里现在处理。</a>.";
                     string textInfo = "@下一步工作，您仍然可以处理。";
 
-                    this.addMsg(SendReturnMsgFlag.ToEmps, textInfo, htmlInfo);
+                    this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, htmlInfo);
                 }
                 #endregion 判断当前处理人员，可否处理下一步工作.
 
@@ -6802,6 +6804,20 @@ namespace BP.WF
             {
                 t.CheckPhysicsTable();
             }
+
+            if (at == ActionType.SubFlowForward
+              || at == ActionType.StartChildenFlow
+              || at == ActionType.Start
+              || at == ActionType.Forward
+              || at == ActionType.SubFlowForward
+              || at == ActionType.ForwardHL
+              || at == ActionType.FlowOver)
+            {
+                this.HisGenerWorkFlow.Paras_LastSendTruckID = t.MyPK;
+            }
+
+
+             
         }
        
         /// <summary>

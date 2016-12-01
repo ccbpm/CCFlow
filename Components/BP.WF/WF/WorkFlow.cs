@@ -534,7 +534,6 @@ namespace BP.WF
             if (this.FID == 0)
                 throw new Exception("@该流程非子线程流程实例，不能执行该方法。");
 
-
             #region 正常的删除信息.
             string msg = "";
             try
@@ -582,13 +581,21 @@ namespace BP.WF
             #region 处理分流程删除的问题完成率的问题。
             if (1 == 2)
             {
-#warning 应该删除一个子线程后，就需要计算完成率的问题。但是目前应用到该场景极少,因为删除子线程的动作，1，合流点。2，分流点。能够看到河流点信息，说明已经到达了完成率了。
+                /*
+                 * 开发说明：
+                 * 1，当前是删除子线程操作,当前的节点就是子线程节点.
+                 * 2, 删除子线程的动作，1，合流点。2，分流点。
+                 * 3，这里要解决合流节点的完成率的问题.
+                 */
+
+#warning 应该删除一个子线程后，就需要计算完成率的问题。但是目前应用到该场景极少,因为。能够看到河流点信息，说明已经到达了完成率了。
 
                 /* 目前还没有必要，因为在分流点,才有计算完成率的需求. */
                 string sql = "";
                 /* 
                  * 取出来获取停留点,没有获取到说明没有任何子线程到达合流点的位置.
                  */
+
                 sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND IsPass=3";
                 int fk_node = DBAccess.RunSQLReturnValInt(sql, 0);
                 if (fk_node != 0)
@@ -1401,7 +1408,7 @@ namespace BP.WF
             ///* 获取它的工作者，向他们发送消息。*/
             //GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
 
-            //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/Track.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             //string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             //string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "冻结" + fixMsg;
             //string emps = "";
@@ -1455,7 +1462,7 @@ namespace BP.WF
             ///* 获取它的工作者，向他们发送消息。*/
             //GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
 
-            //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/Track.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             //string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             //string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "冻结" + unFixMsg;
             //string emps = "";
@@ -1912,7 +1919,7 @@ namespace BP.WF
 
             /* 获取它的工作者，向他们发送消息。*/
             GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
-            string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/Track.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "挂起" + hungNote;
             string emps = "";
@@ -2013,7 +2020,7 @@ namespace BP.WF
 
             /* 获取它的工作者，向他们发送消息。*/
             GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
-            string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/Track.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "解除挂起.";
             string emps = "";

@@ -434,7 +434,10 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(FrmSubFlowAttr.SFCaption);
+                string str= this.GetValStringByKey(FrmSubFlowAttr.SFCaption);
+                if (str == "")
+                    str = "启动子流程";
+                return str;
             }
             set
             {
@@ -564,7 +567,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFShowModel, (int)FrmWorkShowModel.Free, "显示方式",
                     true, true, FrmSubFlowAttr.SFShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
 
-                map.AddTBString(FrmSubFlowAttr.SFCaption, null, "标题", true, false, 0, 100, 10,true);
+                map.AddTBString(FrmSubFlowAttr.SFCaption, "启动子流程", "连接标题", true, false, 0, 100, 10, true);
                 map.AddTBString(FrmSubFlowAttr.SFDefInfo, null, "可启动的子流程", true, false, 0, 50, 10,true);
                 map.AddTBString(FrmSubFlowAttr.SFActiveFlows, null, "可触发的子流程", true, false, 0, 50, 10, true);
 

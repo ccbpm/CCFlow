@@ -378,19 +378,9 @@ namespace CCFlow.WF.WorkOpt
         /// <returns></returns>
         public string CC_Send()
         {
-            string emps = this.GetRequestVal("Emps");
-            string stations = this.GetRequestVal("Stations");
-            string depts = this.GetRequestVal("Depts");
-
-            string ccToEmps = "";
-            ccToEmps += emps;
-            if (stations.Length > 1)
-            {
-                string[] stas = stations.Split(',');
-                foreach (string sta in stas)
-                {
-                }
-            }
+            string emps = this.GetRequestVal("TB_Emps");
+            string stations = this.GetRequestVal("TB_Stations");
+            string depts = this.GetRequestVal("TB_Depts");
 
             string title = this.GetRequestVal("TB_Title");
             string doc = this.GetRequestVal("TB_Doc");
@@ -398,7 +388,7 @@ namespace CCFlow.WF.WorkOpt
             //调用抄送接口执行抄送.
             BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, 0, this.WorkID, title, doc, emps, depts, stations);
 
-            return "执行抄送成功.";
+            return "执行抄送成功.emps=" + emps + "  depts=" + depts + " stas=" + stations;
         }
 
         #region 退回到分流节点处理器.

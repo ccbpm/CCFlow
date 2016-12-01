@@ -116,7 +116,7 @@
                     htmlLink += "<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">设置列表过滤</a>";
                     //自动计算.
                     htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">设置级联(联动)</a>";
+                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&AttrOfOper=" + data.KeyOfEn + "')\">设置级联(联动)</a>";
                     htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">设置自动填充</a>";
                     htmlLink += "-<a href=\"javascript:WinOpen('./EleBatch.aspx?FK_MapData=" + fk_mapData + "&KeyOfEn=" + data.KeyOfEn + "&EleType=MapAttr')\">批处理</a>";
 

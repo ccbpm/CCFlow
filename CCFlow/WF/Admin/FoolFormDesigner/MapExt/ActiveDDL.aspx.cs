@@ -30,11 +30,11 @@ namespace CCFlow.WF.MapDef.MapExtUI
         /// <summary>
         /// 操作的Key
         /// </summary>
-        public string OperAttrKey
+        public string AttrOfOper
         {
             get
             {
-                return this.Request.QueryString["OperAttrKey"];
+                return this.Request.QueryString["AttrOfOper"];
             }
         }
         /// <summary>
@@ -56,9 +56,9 @@ namespace CCFlow.WF.MapDef.MapExtUI
            // me.MyPK = this.FK_MapData + "_" + this.ExtType + "_" + me.AttrOfOper + "_" + me.AttrsOfActive;
              
           int i=  me.Retrieve(MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
-                        MapExtAttr.AttrOfOper, this.RefNo);
+                        MapExtAttr.AttrOfOper, this.AttrOfOper);
 
-            this.Pub1.AddEasyUiPanelInfoBegin("为下拉框[" + this.RefNo + "]设置联动.", "icon-edit");
+          this.Pub1.AddEasyUiPanelInfoBegin("为下拉框[" + this.AttrOfOper + "]设置联动.", "icon-edit");
             me.FK_MapData = this.FK_MapData;
 
             this.Pub1.AddTableNormal();
@@ -80,7 +80,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
                 if (attr.UIContralType != UIContralType.DDL)
                     continue;
 
-                if (attr.KeyOfEn == this.RefNo)
+                if (attr.KeyOfEn == this.AttrOfOper)
                     continue;
 
                 ddl.Items.Add(new ListItem(attr.KeyOfEn + " - " + attr.Name, attr.KeyOfEn));
@@ -175,7 +175,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
             MapExt me = new MapExt();
             // me.MyPK = this.FK_MapData + "_" + this.ExtType + "_" + me.AttrOfOper + "_" + me.AttrsOfActive;
              me.Delete(MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
-                        MapExtAttr.AttrOfOper, this.RefNo);
+                        MapExtAttr.AttrOfOper, this.AttrOfOper);
 
             //关闭.
             BP.Sys.PubClass.Alert("删除成功.");
@@ -188,10 +188,11 @@ namespace CCFlow.WF.MapDef.MapExtUI
             me.MyPK = this.MyPK;
             if (me.MyPK.Length > 2)
                 me.RetrieveFromDBSources();
+
             me = (MapExt)this.Pub1.Copy(me);
             me.ExtType = this.ExtType;
             me.Doc = this.Pub1.GetTextBoxByID("TB_Doc").Text;
-            me.AttrOfOper = this.RefNo;
+            me.AttrOfOper = this.AttrOfOper;
             me.AttrsOfActive = this.Pub1.GetDDLByID("DDL_Attr").SelectedItemStringVal;
             if (me.AttrsOfActive == me.AttrOfOper)
             {
@@ -213,7 +214,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
             me.FK_MapData = this.FK_MapData;
             try
             {
-                me.MyPK = this.FK_MapData + "_" + me.ExtType + "_" + me.AttrOfOper + "_" + me.AttrsOfActive;
+                me.MyPK = me.ExtType + "_" + this.FK_MapData + "_" + me.AttrOfOper + "_" + me.AttrsOfActive;
                 if (me.Doc.Contains("No") == false || me.Doc.Contains("Name") == false)
                     throw new Exception("在您的SQL表达式里，必须有No,Name 还两个列，分别标识编码与名称。");
                 me.Save();
@@ -223,7 +224,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
                 this.Alert(ex.Message);
                 return;
             }
-            this.Response.Redirect("ActiveDDL.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + this.ExtType + "&RefNo=" + this.RefNo + "&MyPK=" + me.MyPK, true);
+            this.Response.Redirect("ActiveDDL.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + this.ExtType + "&AttrOfOper=" + this.AttrOfOper + "&MyPK=" + me.MyPK, true);
         }
     }
 }

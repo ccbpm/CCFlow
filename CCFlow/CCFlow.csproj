@@ -142,7 +142,6 @@
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
     <Content Include="SDKFlowDemo\Default.htm" />
-    <Content Include="Silverlight.js" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
@@ -1033,6 +1032,7 @@
     <Content Include="WF\App\Simple\Top.aspx" />
     <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\BatchSelfDeal.aspx" />
+    <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
     <Content Include="WF\CCForm\DtlOpSelectItems.aspx" />
     <Content Include="WF\CCForm\FrmExcel.aspx" />
@@ -2264,6 +2264,7 @@
     <Content Include="WF\WorkOpt\Askfor.htm" />
     <Content Include="WF\WorkOpt\AskForRe.aspx" />
     <Content Include="WF\WorkOpt\AskForRe.htm" />
+    <Content Include="WF\WorkOpt\CC.htm" />
     <Content Include="WF\WorkOpt\CCCheckNote.aspx" />
     <Content Include="WF\WorkOpt\CCFlowAPI.asmx" />
     <Content Include="WF\WorkOpt\CCFlowAPITester.aspx" />

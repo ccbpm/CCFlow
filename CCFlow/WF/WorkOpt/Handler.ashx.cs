@@ -257,6 +257,18 @@ namespace CCFlow.WF.WorkOpt
             {
                 switch (this.DoType)
                 {
+                    case "CC_Init": //抄送，初始化.
+                        msg = CC_Init();
+                        break;
+                    case "CC_SelectDepts": //抄送，选择部门.
+                        msg= CC_SelectDepts();
+                        break;
+                    case "CC_SelectStations": //抄送，选择岗位.
+                        msg= CC_SelectStations();
+                        break;
+                    case "CC_Send": //抄送，执行.
+                        msg = CC_Send();
+                        break;
                     case "DealSubThreadReturnToHL_Init":
                         msg = this.DealSubThreadReturnToHL_Init();
                         break;
@@ -316,6 +328,57 @@ namespace CCFlow.WF.WorkOpt
                 context.Response.Write("err@" + ex.Message);
             }
             //输出信息.
+        }
+        /// <summary>
+        /// 抄送初始化.
+        /// </summary>
+        /// <returns></returns>
+        public string CC_Init()
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            Hashtable ht = new Hashtable();
+            ht.Add("Title", gwf.Title);
+
+            //返回流程标题.
+            return BP.Tools.Json.ToJson(ht, false);
+        }
+        /// <summary>
+        /// 选择部门呈现信息.
+        /// </summary>
+        /// <returns></returns>
+        public string CC_SelectDepts()
+        {
+            BP.Port.Depts depts = new BP.Port.Depts();
+            depts.RetrieveAll();
+            return depts.ToJson();
+        }
+        /// <summary>
+        /// 选择部门呈现信息.
+        /// </summary>
+        /// <returns></returns>
+        public string CC_SelectStations()
+        {
+            //岗位类型.
+            string sql = "SELECT NO,NAME FROM Port_StationType";
+            DataSet ds = new DataSet();
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Port_StationType";
+            ds.Tables.Add(dt);
+
+            //岗位.ss
+            string sqlStas = "SELECT NO,NAME,FK_STATIONTYPE FROM Port_Station";
+            DataTable dtSta = BP.DA.DBAccess.RunSQLReturnTable(sqlStas);
+            dtSta.TableName = "Port_Station";
+            ds.Tables.Add(dtSta);
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 抄送发送.
+        /// </summary>
+        /// <returns></returns>
+        public string CC_Send()
+        {
+            return "执行抄送成功.";
         }
 
         #region 退回到分流节点处理器.

@@ -1022,7 +1022,7 @@ namespace BP.En
                         continue; /*如果是外键,并且外键的默认值为null.*/
 
                     string str = this.GetValStrByKey(attr.Key);
-                    if (str == attr.DefaultVal.ToString())
+                    if (str == attr.DefaultVal.ToString() || str=="0.00")
                         continue;
                     else
                         return false;

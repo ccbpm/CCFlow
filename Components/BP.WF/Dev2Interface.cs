@@ -5627,12 +5627,29 @@ namespace BP.WF
                 list.Update();
             }
 
-            //BP.WF.Dev2Interface.Port_SendMsg(toEmpNo, msgTitle, msgDoc, "CC" + gwf.FK_Node + "_" + gwf.WorkID, SMSMsgType.CC, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
-            ////记录日志.
-            //Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, workID, gwf.FID, gwf.FK_Node, gwf.NodeName,
-            //    WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toEmpNo, toEmpName, msgTitle, null);
+            //
+            BP.WF.Dev2Interface.Port_SendMsg(toEmpNo, msgTitle, msgDoc, "CC" + gwf.FK_Node + "_" + gwf.WorkID, SMSMsgType.CC, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+
+            //记录日志.
+            Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, workID, gwf.FID, gwf.FK_Node, gwf.NodeName,
+                WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toEmpNo, toEmpName, msgTitle, null);
 
             return "已经成功的把工作抄送给:" + toEmpNo + "," + toEmpName;
+        }
+        /// <summary>
+        /// 执行抄送
+        /// </summary>
+        /// <param name="ndFrom">从节点</param>
+        /// <param name="ndTo">到节点</param>
+        /// <param name="workID">工作ID</param>
+        /// <param name="title">标题</param>
+        /// <param name="doc">内容</param>
+        /// <param name="toEmps">到人员(zhangsan,lisi,wangwu)</param>
+        /// <param name="toDepts">到部门，格式:001,002,003</param>
+        /// <param name="toStations">到岗位 格式:001,002,003</param>
+        public static void Node_CC_WriteTo_CClist(int ndFrom, int ndTo, Int64 workID, string title, string doc, string toEmps=null, string toDepts=null, string toStations=null)
+        {
+
         }
         /// <summary>
         /// 执行删除

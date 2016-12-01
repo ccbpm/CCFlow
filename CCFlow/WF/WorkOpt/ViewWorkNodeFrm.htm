@@ -64,13 +64,8 @@
         background: #fff;
         margin: 12px;
         float: left;
-<<<<<<< .mine
-        padding-left: 7px;
-        color: #7E8DF9;
-=======
         text-align: center;
         color: rgb(192, 193, 204);
->>>>>>> .r1300
         line-height: 25px;
     }
 
@@ -291,7 +286,7 @@
                     continue;
                 var src = "";
                 if (pageData.IsReadonly == 1)
-                    src = "../CCForm/AttachmentUpload.aspx?PKVal=" +
+                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" +
                         pageData.WorkID +
                         "&Ath=" +
                         ath.NoOfObj +
@@ -301,7 +296,7 @@
                         ath.MyPK +
                         "&IsReadonly=1";
                 else
-                    src = "../CCForm/AttachmentUpload.aspx?PKVal=" +
+                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" +
                         pageData.WorkID +
                         "&Ath=" +
                         ath.NoOfObj +
@@ -555,7 +550,7 @@
                         ath = ath[0];
                         var src = "";
                         if (pageData.IsReadonly == 1)
-                            src = "../CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" +
+                            src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" +
                                 pageData.WorkID +
                                 "&Ath=" +
                                 ath.NoOfObj +
@@ -565,7 +560,7 @@
                                 ath.MyPK +
                                 "&IsReadonly=1";
                         else
-                            src = "../CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" +
+                            src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" +
                                 pageData.WorkID +
                                 "&Ath=" +
                                 ath.NoOfObj +
@@ -634,9 +629,9 @@
         }
 
         //设置CCFORM的表格宽度  
-        if (document.body.clientWidth > 992) { //处于中屏时设置宽度最小值
-            $('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
-        }
+        //if (document.body.clientWidth > 992) { //处于中屏时设置宽度最小值
+        //    $('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
+        //}
     }
 
     //解析表单字段 MapAttr
@@ -1086,7 +1081,6 @@
             var labTxt = workNodeData.MainTable[0][mapAttr.KeyOfEn + "Text"];
             var intVal = workNodeData.MainTable[0][mapAttr.KeyOfEn];
             operations += "<option selected='selected'  value='" + intVal + "'>" + labTxt + "</option>";
-            console.log(operations)
         } else {
             var enums = workNodeData.Sys_Enum;
             enums = $.grep(enums,
@@ -1325,7 +1319,7 @@
             if (iframe != undefined) {
                 var height = document.body.clientHeight;
                 $(iframe).height(height + 15);
-
+                $(iframe).parent('.trackDiv').height(height + 15);
             }
         }
     }

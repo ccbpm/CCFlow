@@ -836,17 +836,23 @@ function initTrackList(workNodeData) {
     var trackHtml = '';
     var trackList = workNodeData.Track;
     var filterTrackList= $.grep(trackList, function (value) {
-        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 ||value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 ||  value.ActionType == 8;
+        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 || value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 || value.ActionType == 8 || value.ActionType == 5;
     });
     workNodeData.Track = filterTrackList;
     $.each(workNodeData.Track, function (i, track) {
+        //流程执行人
+        var exerNoName = track.Exer.substr(1, track.Exer.length - 2).replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+
+        var exerNo = exerNoName.split(',')[0];
+        var exerName = exerNoName.split(',')[1];
+        var exerEmpP = (exerNo == track.EmpFrom ? "" : "<p>实际发送人：" + exerName + "</p>");
         track.RDT = track.RDT.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
 
-        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p></a></li>';
+        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p>' + exerEmpP + '</a></li>';
         var actionType = track.ActionType;
         if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11 && actionType != 8) {
             console.log(actionType)
-            trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
+            trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
         } else {
             var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
             trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
@@ -875,10 +881,11 @@ function initTrackList(workNodeData) {
                 + seperator2 + date.getSeconds()
         };
     }
-    var sendr = $.cookie("CCS").split("=")[2].split("&")[0];
+    var sendName = $.cookie("CCS").split("=")[2].split("&")[0];
+    var sendNo = $.cookie("CCS").split("=")[1].split("&")[0];
     var sendt = HgetNowFormatDate().currentdate;
     if (pageData.DoType != 'View') {
-        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendr + '</p><p>时间:' + sendt + '</p></a></li>';
+        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendName + '</p><p>时间:' + sendt + '</p></a></li>';
         $('#header b').text((workNodeData.Track.length + 1));
         //trackNavHtml += '<li class="scrollNav" title="发送人："><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + "dsfsf" + '</a></li>';
     }
@@ -932,7 +939,7 @@ function initTrackList(workNodeData) {
     });
       
     //如果工作已经处理  提示用户工作已处理  并关闭处理页面
-    if (workNodeData.Track.length > 0 && workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node) {
+    if (workNodeData.Track.length > 0 && workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) {
         alert("当前工作已处理");
         window.close();
     }
@@ -1026,11 +1033,20 @@ function InitForm() {
         }
     })
 
+    ////加载JS文件
+    var enName = workNodeData.Sys_MapData[0].No;
+    var jsSrc = '';
+    try {
+        jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
+        $('body').append($('<div>' + jsSrc + '</div>'));
+    }
+    catch (err) {
+        console.log("加载JS文件出错");
+    }
+
     try {
         ////加载JS文件
-        var enName = workNodeData.Sys_MapData[0].No;
-        var jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
-        jsSrc += "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
+        jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
         $('body').append($('<div>' + jsSrc + '</div>'));
     }
     catch (err) {
@@ -2050,7 +2066,7 @@ function OptSuc(msg) {
 
     //如果是申请页面
     if ($('.navbars').css('display') == "none") {
-        $("#msgModalContent").append("<a href='http://localhost:26507/WF/App/Classic/Default.aspx'>返回流程工作台</a>");
+        $("#msgModalContent").append("<a href='/ITILFlow/MainPage.html'>返回流程工作台</a>");
         $('#CCForm').html($('#msgModalContent').html());
         setToobarUnVisible();
     } else {

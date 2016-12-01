@@ -253,13 +253,15 @@ namespace BP.Web.WF
                         return;
                     case "LogAs":
                         BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(this.FK_Emp);
+                        BP.Port.Emp emp2 = null;
                         if (wfemp.AuthorIsOK == false)
                         {
                             this.WinCloseWithMsg("授权失败");
+
                             return;
                         }
                         BP.Port.Emp emp1 = new BP.Port.Emp(this.FK_Emp);
-                        BP.Web.WebUser.SignInOfGener(emp1);
+                        BP.Web.WebUser.SignInOfGener(emp1, "CH", false, false, wfemp.Author, WebUser.Name);
                         this.WinClose();
                         return;
                     case "TakeBack": // 取消授权。

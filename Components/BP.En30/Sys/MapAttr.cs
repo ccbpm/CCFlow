@@ -1471,7 +1471,28 @@ namespace BP.Sys
                     throw new Exception("@不能在非只读(不可编辑)的字段设置具有@的默认值. 您设置的默认值为:" + this.DefVal);
 
             //if (this.UIContralType == En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
-            
+
+            //added by liuxc,2016-12-2
+            //判断当前属性是否有分组，没有分组，则自动创建一个分组，并关联
+            if (this.GroupID == 0)
+            {
+                //查找分组，查找到的第一个分组，关联当前属性
+                GroupField group = new GroupField();
+                if (group.Retrieve(GroupFieldAttr.EnName, this.FK_MapData) > 0)
+                {
+                    this.GroupID = group.OID;
+                }
+                else
+                {
+                    group.EnName = this.FK_MapData;
+                    group.Lab = new MapData(this.FK_MapData).Name;
+                    group.Idx = 1;
+                    group.Insert();
+
+                    this.GroupID = group.OID;
+                }
+            }
+
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeUpdate()

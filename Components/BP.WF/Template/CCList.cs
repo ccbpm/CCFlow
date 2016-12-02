@@ -254,17 +254,17 @@ namespace BP.WF.Template
                 this.SetValByKey(CCListAttr.FK_Node, value);
             }
         }
-        public int NDFrom
-        {
-            get
-            {
-                return this.GetValIntByKey(CCListAttr.NDFrom);
-            }
-            set
-            {
-                this.SetValByKey(CCListAttr.NDFrom, value);
-            }
-        }
+        //public int NDFrom
+        //{
+        //    get
+        //    {
+        //        return this.GetValIntByKey(CCListAttr.NDFrom);
+        //    }
+        //    set
+        //    {
+        //        this.SetValByKey(CCListAttr.NDFrom, value);
+        //    }
+        //}
         public Int64 WorkID
         {
             get
@@ -450,8 +450,10 @@ namespace BP.WF.Template
                 map.AddTBString(CCListAttr.Title, null, "标题", true, true, 0, 500, 10, true);
                 map.AddTBString(CCListAttr.FK_Flow, null, "流程编号", true, true, 0, 3, 10, true);
                 map.AddTBString(CCListAttr.FlowName, null, "流程名称", true, true, 0, 200, 10, true);
-                map.AddTBInt(CCListAttr.NDFrom, 0, "从节点", true, true);
+                
+               // map.AddTBInt(CCListAttr.NDFrom, 0, "从节点", true, true);
                 map.AddTBInt(CCListAttr.FK_Node, 0, "节点", true, true);
+
                 map.AddTBString(CCListAttr.NodeName, null, "节点名称", true, true, 0, 500, 10, true);
                 map.AddTBInt(CCListAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBInt(CCListAttr.FID, 0, "FID", true, true);

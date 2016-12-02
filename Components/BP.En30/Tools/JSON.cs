@@ -306,7 +306,7 @@ namespace BP.Tools
             {
                 strs += "\"" + key + "\":\"" + ht[key] + "\",";
             }
-            strs += "\"OutEnd\":\"1\"";
+            strs += "\"OutEnd\":\"无效参数请忽略\"";
             strs += "}";
             strs = TranJsonStr(strs);
             return strs;

@@ -24,7 +24,7 @@ namespace BP.Port
 	/// <summary>
     /// 人员岗位 的摘要说明。
 	/// </summary>
-    public class EmpStation : Entity
+    public class EmpStation : EntityMM
     {
         #region 基本属性
         /// <summary>
@@ -106,9 +106,9 @@ namespace BP.Port
         #endregion
     }
 	/// <summary>
-    /// 人员岗位 
+    /// 人员岗位s 
 	/// </summary>
-	public class EmpStations : Entities
+	public class EmpStations : EntitiesMM
 	{
 		#region 构造
 		/// <summary>

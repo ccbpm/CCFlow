@@ -5547,9 +5547,9 @@ namespace BP.WF
         /// <param name="ccToEmpNo">抄送给</param>
         /// <param name="ccToEmpName">抄送给名称</param>
         /// <returns></returns>
-        public static string Node_CC_WriteTo_Todolist(int ndFrom, int ndTo, Int64 workID, string ccToEmpNo, string ccToEmpName)
+        public static string Node_CC_WriteTo_Todolist(int fk_node, Int64 workID, string ccToEmpNo, string ccToEmpName)
         {
-            return Node_CC_WriteTo_CClist(ndFrom, ndTo, workID, ccToEmpNo, ccToEmpName, "", "");
+            return Node_CC_WriteTo_CClist(fk_node, workID, ccToEmpNo, ccToEmpName, "", "");
         }
         /// <summary>
         /// 执行抄送
@@ -5561,27 +5561,27 @@ namespace BP.WF
         /// <param name="msgTitle">标题</param>
         /// <param name="msgDoc">内容</param>
         /// <returns>执行信息</returns>
-        public static string Node_CC_WriteTo_CClist(int ndFrom, int ndTo, Int64 workID, string toEmpNo, string toEmpName,
+        public static string Node_CC_WriteTo_CClist(int fk_node,  Int64 workID, string toEmpNo, string toEmpName,
             string msgTitle, string msgDoc)
         {
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
             if (gwf.RetrieveFromDBSources() == 0)
             {
-                Node nd = new Node(ndTo);
-                gwf.FK_Node = ndTo;
+                Node nd = new Node(fk_node);
+                gwf.FK_Node = fk_node;
                 gwf.FK_Flow = nd.FK_Flow;
                 gwf.FlowName = nd.FlowName;
                 gwf.NodeName = nd.Name;
             }
 
-            Node fromNode = new Node(ndFrom);
+            Node fromNode = new Node(fk_node);
 
             CCList list = new CCList();
             list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
             list.FK_Flow = gwf.FK_Flow;
             list.FlowName = gwf.FlowName;
-            list.FK_Node = ndTo;
+            list.FK_Node = fk_node;
             list.NodeName = gwf.NodeName;
             list.Title = msgTitle;
             list.Doc = msgDoc;
@@ -5597,7 +5597,7 @@ namespace BP.WF
             list.FID = gwf.FID;
             list.PFlowNo = gwf.PFlowNo;
             list.PWorkID = gwf.PWorkID;
-            list.NDFrom = ndFrom;
+          //  list.NDFrom = ndFrom;
 
             //是否要写入待办.
             if ( fromNode.CCWriteTo == CCWriteTo.CCList )
@@ -5639,17 +5639,265 @@ namespace BP.WF
         /// <summary>
         /// 执行抄送
         /// </summary>
-        /// <param name="ndFrom">从节点</param>
-        /// <param name="ndTo">到节点</param>
+        /// <param name="fk_node">节点</param>
         /// <param name="workID">工作ID</param>
         /// <param name="title">标题</param>
         /// <param name="doc">内容</param>
-        /// <param name="toEmps">到人员(zhangsan,lisi,wangwu)</param>
+        /// <param name="toEmps">到人员(zhangsan,张三;lisi,李四;wangwu,王五;)</param>
         /// <param name="toDepts">到部门，格式:001,002,003</param>
         /// <param name="toStations">到岗位 格式:001,002,003</param>
-        public static void Node_CC_WriteTo_CClist(int ndFrom, int ndTo, Int64 workID, string title, string doc, string toEmps=null, string toDepts=null, string toStations=null)
+        public static string Node_CC_WriteTo_CClist(int fk_node, Int64 workID, string title, string doc, 
+            string toEmps=null, string toDepts=null, string toStations=null)
         {
 
+            Node nd = new Node(fk_node);
+
+            //计算出来曾经抄送过的人.
+            string sql = "SELECT CCTo FROM WF_CCList WHERE FK_Node="+fk_node+" AND WorkID="+workID;
+            DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+            string toAllEmps = ",";
+            foreach (DataRow dr in mydt.Rows)
+                toAllEmps += dr[0].ToString() + ",";
+
+            //录制本次抄送的人员.
+            string ccRec = "";
+
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = workID;
+            if (gwf.RetrieveFromDBSources() == 0)
+            {
+                gwf.FK_Node = fk_node;
+                gwf.FK_Flow = nd.FK_Flow;
+                gwf.FlowName = nd.FlowName;
+                gwf.NodeName = nd.Name;
+            }
+
+            #region 处理抄送到人员. 
+            if (toEmps != null)
+            {
+                string[] emps = toEmps.Split(';');
+                foreach (string empStr in emps)
+                {
+                    if (string.IsNullOrEmpty(empStr) == true || empStr.Contains(",") == false)
+                        continue;
+
+                    string[] strs = empStr.Split(',');
+                    string empNo = strs[0];
+                    string empName = strs[1];
+
+                    if (toAllEmps.Contains(","+empNo + ",") == true)
+                        continue;
+
+                    CCList list = new CCList();
+                    list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+                    list.FK_Flow = gwf.FK_Flow;
+                    list.FlowName = gwf.FlowName;
+                    list.FK_Node = fk_node;
+                    list.NodeName = gwf.NodeName;
+                    list.Title = title;
+                    list.Doc = doc;
+                    list.CCTo = empNo;
+                    list.CCToName = empName;
+                    list.RDT = DataType.CurrentDataTime;
+                    list.Rec = WebUser.No;
+                    list.WorkID = gwf.WorkID;
+                    list.FID = gwf.FID;
+                    list.PFlowNo = gwf.PFlowNo;
+                    list.PWorkID = gwf.PWorkID;
+                   // list.NDFrom = ndFrom;
+
+                    //是否要写入待办.
+                    if (nd.CCWriteTo == CCWriteTo.CCList)
+                        list.InEmpWorks = true;    //added by liuxc,2015.7.6
+                    else
+                        list.InEmpWorks = false;    //added by liuxc,2015.7.6
+
+                    //写入待办和写入待办与抄送列表,状态不同
+                    if (nd.CCWriteTo == CCWriteTo.All || nd.CCWriteTo == CCWriteTo.Todolist)
+                    {
+                        list.HisSta = nd.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                    }
+
+                    if (nd.IsEndNode == true)//结束节点只写入抄送列表
+                    {
+                        list.HisSta = CCSta.UnRead;
+                        list.InEmpWorks = false;
+                    }
+
+                    try
+                    {
+                        list.Insert();
+                    }
+                    catch
+                    {
+                        list.CheckPhysicsTable();
+                        list.Update();
+                    }
+
+                    ccRec += "" + list.CCToName+";";
+                    //人员编号,加入这个集合.
+                    toAllEmps += empNo + ",";
+                }
+            }
+            #endregion 处理抄送到人员.
+
+            #region 处理抄送到部门.
+            if (toDepts != null)
+            {
+                toDepts = toDepts.Replace(";", ",");
+
+                string[] depts = toDepts.Split(',');
+                foreach (string deptNo in depts)
+                {
+                    if (string.IsNullOrEmpty(deptNo) == true)
+                        continue;
+
+                    sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + deptNo + "'";
+                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string empNo = dr[0].ToString();
+                        string empName = dr[1].ToString();
+                        if (toAllEmps.Contains("," + empNo + ",") == true)
+                            continue;
+
+                        CCList list = new CCList();
+                        list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+                        list.FK_Flow = gwf.FK_Flow;
+                        list.FlowName = gwf.FlowName;
+                        list.FK_Node = fk_node;
+                        list.NodeName = gwf.NodeName;
+                        list.Title = title;
+                        list.Doc = doc;
+                        list.CCTo = empNo;
+                        list.CCToName = empName;
+                        list.RDT = DataType.CurrentDataTime;
+                        list.Rec = WebUser.No;
+                        list.WorkID = gwf.WorkID;
+                        list.FID = gwf.FID;
+                        list.PFlowNo = gwf.PFlowNo;
+                        list.PWorkID = gwf.PWorkID;
+                       // list.NDFrom = ndFrom;
+
+                        //是否要写入待办.
+                        if (nd.CCWriteTo == CCWriteTo.CCList)
+                            list.InEmpWorks = true;    //added by liuxc,2015.7.6
+                        else
+                            list.InEmpWorks = false;    //added by liuxc,2015.7.6
+
+                        //写入待办和写入待办与抄送列表,状态不同
+                        if (nd.CCWriteTo == CCWriteTo.All || nd.CCWriteTo == CCWriteTo.Todolist)
+                        {
+                            list.HisSta = nd.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                        }
+
+                        if (nd.IsEndNode == true)//结束节点只写入抄送列表
+                        {
+                            list.HisSta = CCSta.UnRead;
+                            list.InEmpWorks = false;
+                        }
+
+                        try
+                        {
+                            list.Insert();
+                        }
+                        catch
+                        {
+                            list.CheckPhysicsTable();
+                            list.Update();
+                        }
+
+                        //录制本次抄送到的人员.
+                        ccRec += "" + list.CCToName + ";";
+
+                        //人员编号,加入这个集合.
+                        toAllEmps += empNo + ",";
+                    }
+                }
+            }
+            #endregion 处理抄送到部门.
+
+            #region 处理抄送到岗位.
+            if (toStations != null)
+            {
+                toStations = toStations.Replace(";", ",");
+                string[] stas = toStations.Split(',');
+                foreach (string staNo in stas)
+                {
+                    if (string.IsNullOrEmpty(staNo) == true)
+                        continue;
+
+                    sql = "SELECT No,Name, a.FK_Dept FROM Port_Emp a, " + Glo.EmpStation + " B  WHERE a.No=B.FK_Emp AND B.FK_Station='" + staNo + "'";
+
+                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string empNo = dr[0].ToString();
+                        string empName = dr[1].ToString();
+                        if (toAllEmps.Contains("," + empNo + ",") == true)
+                            continue;
+
+                        CCList list = new CCList();
+                        list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+                        list.FK_Flow = gwf.FK_Flow;
+                        list.FlowName = gwf.FlowName;
+                        list.FK_Node = fk_node;
+                        list.NodeName = gwf.NodeName;
+                        list.Title = title;
+                        list.Doc = doc;
+                        list.CCTo = empNo;
+                        list.CCToName = empName;
+                        list.RDT = DataType.CurrentDataTime;
+                        list.Rec = WebUser.No;
+                        list.WorkID = gwf.WorkID;
+                        list.FID = gwf.FID;
+                        list.PFlowNo = gwf.PFlowNo;
+                        list.PWorkID = gwf.PWorkID;
+                       // list.NDFrom = ndFrom;
+
+                        //是否要写入待办.
+                        if (nd.CCWriteTo == CCWriteTo.CCList)
+                            list.InEmpWorks = true;    //added by liuxc,2015.7.6
+                        else
+                            list.InEmpWorks = false;    //added by liuxc,2015.7.6
+
+                        //写入待办和写入待办与抄送列表,状态不同
+                        if (nd.CCWriteTo == CCWriteTo.All || nd.CCWriteTo == CCWriteTo.Todolist)
+                        {
+                            list.HisSta = nd.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                        }
+
+                        if (nd.IsEndNode == true)//结束节点只写入抄送列表
+                        {
+                            list.HisSta = CCSta.UnRead;
+                            list.InEmpWorks = false;
+                        }
+
+                        try
+                        {
+                            list.Insert();
+                        }
+                        catch
+                        {
+                            list.CheckPhysicsTable();
+                            list.Update();
+                        }
+                        
+                        //录制本次抄送到的人员.
+                        ccRec += "" + list.CCToName + ";";
+
+                        //人员编号,加入这个集合.
+                        toAllEmps += empNo + ",";
+                    }
+                }
+            }
+            #endregion 处理抄送到部门.
+
+            return ccRec;
+
+            ////记录日志.
+            //Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, workID, gwf.FID, gwf.FK_Node, gwf.NodeName,
+            //    WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toAllEmps, toAllEmps, title, null);
         }
         /// <summary>
         /// 执行删除

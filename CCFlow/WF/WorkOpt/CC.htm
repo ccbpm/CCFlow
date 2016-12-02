@@ -114,8 +114,7 @@
                 FK_Flow: GetQueryString("FK_Flow")
             };
             $.ajax({
-                //url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
-                url: Handler + "?DoType=CC_Init&FK_Node=1004&WorkID=029&FK_Flow=029&FID=" + '&m=' + Math.random(),
+                url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
                 success: function (data) {
                     if (data != null) {
                         var dataArr = JSON.parse(data);
@@ -361,7 +360,7 @@
                         $('#btnOk').attr('disabled', true);
                         alert(data);
                     }
-                    //window.close();
+                    window.close();
                     return;
                 }
             });

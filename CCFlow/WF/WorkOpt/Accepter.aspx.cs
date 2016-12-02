@@ -891,14 +891,14 @@ namespace CCFlow.WF
                 switch (nd.CCWriteTo)
                 {
                     case BP.WF.CCWriteTo.All:
-                        BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.FK_Node, this.WorkID, emp, myemp.Name, cs_titleV, cs_messageV);
-                        BP.WF.Dev2Interface.Node_CC_WriteTo_Todolist(this.FK_Node, this.FK_Node, this.WorkID, emp, myemp.Name);
+                        BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.WorkID, emp, myemp.Name, cs_titleV, cs_messageV);
+                        BP.WF.Dev2Interface.Node_CC_WriteTo_Todolist(this.FK_Node, this.WorkID, emp, myemp.Name);
                         break;
                     case BP.WF.CCWriteTo.CCList:
-                        BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.FK_Node, this.WorkID, emp, myemp.Name, cs_titleV, cs_messageV);
+                        BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.WorkID, emp, myemp.Name, cs_titleV, cs_messageV);
                         break;
                     case BP.WF.CCWriteTo.Todolist:
-                        BP.WF.Dev2Interface.Node_CC_WriteTo_Todolist(this.FK_Node, this.FK_Node, this.WorkID, emp, myemp.Name);
+                        BP.WF.Dev2Interface.Node_CC_WriteTo_Todolist(this.FK_Node, this.WorkID, emp, myemp.Name);
                         break;
                     default:
                         break;

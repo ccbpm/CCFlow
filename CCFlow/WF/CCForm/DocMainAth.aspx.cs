@@ -140,12 +140,12 @@ namespace CCFlow.WF.CCForm
 
                 CCList cc = new CCList();
                 int nnn = cc.Retrieve(CCListAttr.FK_Node, this.FK_Node, CCListAttr.WorkID, this.WorkID, CCListAttr.CCTo, WebUser.No);
-                this._fk_node = cc.NDFrom;
-                if (cc.NDFrom != 0)
+                this._fk_node = cc.FK_Node;
+                if (cc.FK_Node != 0)
                 {
-                    athDBs.Retrieve(FrmAttachmentDBAttr.FK_MapData, "ND" + cc.NDFrom, FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
+                    athDBs.Retrieve(FrmAttachmentDBAttr.FK_MapData, "ND" + cc.FK_Node, FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
 
-                    string ndFromMapdata = athDesc.MyPK.Replace(athDesc.FK_MapData, "ND" + cc.NDFrom);
+                    string ndFromMapdata = athDesc.MyPK.Replace(athDesc.FK_MapData, "ND" + cc.FK_Node);
                     athDB = athDBs.GetEntityByKey(FrmAttachmentDBAttr.FK_FrmAttachment, ndFromMapdata) as FrmAttachmentDB;
                     //重新设置文件描述。
                     athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, "DocMainAth");

@@ -338,7 +338,16 @@ namespace CCFlow.WF.WorkOpt
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             Hashtable ht = new Hashtable();
             ht.Add("Title", gwf.Title);
-            ht.Add("CCTo", "zhangsan,lisi");
+
+            //计算出来曾经抄送过的人.
+            string sql = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID;
+
+            DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+            string toAllEmps = "";
+            foreach (DataRow dr in mydt.Rows)
+                toAllEmps += dr[0].ToString() + ",";
+
+            ht.Add("CCTo", toAllEmps);
 
             //返回流程标题.
             return BP.Tools.Json.ToJson(ht, false);
@@ -360,14 +369,14 @@ namespace CCFlow.WF.WorkOpt
         public string CC_SelectStations()
         {
             //岗位类型.
-            string sql = "SELECT NO,NAME FROM Port_StationType";
+            string sql = "SELECT NO,NAME FROM Port_StationType ORDER BY NO";
             DataSet ds = new DataSet();
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Port_StationType";
             ds.Tables.Add(dt);
 
-            //岗位.ss
-            string sqlStas = "SELECT NO,NAME,FK_STATIONTYPE FROM Port_Station";
+            //岗位.
+            string sqlStas = "SELECT NO,NAME,FK_STATIONTYPE FROM Port_Station ORDER BY FK_STATIONTYPE,NO";
             DataTable dtSta = BP.DA.DBAccess.RunSQLReturnTable(sqlStas);
             dtSta.TableName = "Port_Station";
             ds.Tables.Add(dtSta);
@@ -384,19 +393,25 @@ namespace CCFlow.WF.WorkOpt
 
             //岗位信息. 格式:  001,002,003,
             string stations = this.GetRequestVal("Stations");
+            stations = stations.Replace(";", ",");
 
             //部门信息.  格式: 001,002,003,
             string depts = this.GetRequestVal("Depts");
 
             //标题.
             string title = this.GetRequestVal("TB_Title");
-            // 内容.
+            //内容.
             string doc = this.GetRequestVal("TB_Doc");
 
             //调用抄送接口执行抄送.
-            //   BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, 0, this.WorkID, title, doc, emps, depts, stations);
+            string ccRec = BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.WorkID, title, doc, emps, depts, stations);
 
-            return "执行抄送成功.emps=" + emps + "  depts=" + depts + " stas=" + stations;
+            if (ccRec == "")
+                return "没有抄送到任何人。";
+            else
+                return "本次抄送给如下人员：" + ccRec;
+
+            //return "执行抄送成功.emps=(" + emps + ")  depts=(" + depts + ") stas=(" + stations + ") 标题:" + title + " ,抄送内容:" + doc;
         }
 
         #region 退回到分流节点处理器.

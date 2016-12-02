@@ -158,7 +158,7 @@
             if (data == '取消') {
                 return;
             } else {
-                $('#ToEmpp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+                $('#ToEmps').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
             }
         }
         //部门
@@ -213,8 +213,8 @@
             });
             returnVal.Value = nameArr.join(';');
             returnVal.name = noArr.join(';');
-            $('#ToEmpb').val(returnVal.Value);
-            $('#ToEmpb').attr("name", returnVal.name);
+            $('#ToDepts').val(returnVal.Value);
+            $('#ToDepts').attr("name", returnVal.name);
             $("#jstreebs").hide();
         }
         //岗位
@@ -292,8 +292,8 @@
             }
             returnVal.Value = selectedIdArrm.join(',');
             returnVal.name = selectedNodesm.join(',');
-            $('#ToEmpg').val(returnVal.name);
-            $('#ToEmpg').attr("name", returnVal.Value);
+            $('#ToStations').val(returnVal.name);
+            $('#ToStations').attr("name", returnVal.Value);
             $("#jstreeg").hide();
         }
         //发送
@@ -314,9 +314,9 @@
         function SendNode() {
             var tb_Title = $(".csTitle").val();
             var tb_Doc = $("#yss").val();
-            var emps;
-            var stations;
-            var depts;
+            var emps; //选择的人员.
+            var stations; //选择的岗位.
+            var depts; //选择的部门.
             if (frames["iframeSelectEmpsForm"].window.returnVal != undefined) {
                 var empsn = frames["iframeSelectEmpsForm"].window.returnVal.No.split(",");
                 var empsm = frames["iframeSelectEmpsForm"].window.returnVal.Name.split(",");
@@ -329,22 +329,25 @@
             } else {
                 emps = "";
             }
-            if ($('#ToEmpb').attr("name") != undefined) {
-                stations = $('#ToEmpb').attr("name");
-            } else {
-                stations = "";
-            }
-            if ($('#ToEmpg').attr("name") != undefined) {
-                depts = $('#ToEmpg').attr("name");
+            if ($('#ToDepts').attr("name") != undefined) {
+                depts = $('#ToDepts').attr("name");
             } else {
                 depts = "";
             }
+
+            if ($('#ToStations').attr("name") != undefined) {
+                stations = $('#ToStations').attr("name");
+            } else {
+                stations = "";
+            }
+
             if (depts == "" && emps == "" && stations == "") {
-                alert('请选择人员、部门、机构中任意一种.');
+                alert('请选择人员、部门、岗位任意一种.');
                 return;
             }
+
             $.ajax({
-                url: Handler + "?DoType=CC_Send&m=" + Math.random() + "&Emps=" + emps + "&Stations=" + stations + "&Depts=" + depts + "&TB_Title=" + tb_Title + "&TB_Doc=" + tb_Doc,
+                url: Handler + "?DoType=CC_Send&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&Emps=" + emps + "&Stations=" + stations + "&Depts=" + depts + "&TB_Title=" + tb_Title + "&TB_Doc=" + tb_Doc + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
@@ -375,14 +378,14 @@
             <div class="ys">
                 请选择接受人：
                 <input type="button" id="BtnSelectEmpsp" value='选择接受人' />
-                <textarea id="ToEmpp" class="Tos"></textarea>
+                <textarea id="ToEmps" class="Tos"></textarea>
             </div>
         </div>
         <div class="selectEmpsDivg">
             <div class="ys">
                 请选择部门：
                 <input type="button" class="BtnSelectEmpsb" value='选择接部门' />
-                <textarea id="ToEmpb" class="Tos"></textarea>
+                <textarea id="ToDepts" class="Tos"></textarea>
             </div>
             <div class="modal fade jstree" style="background: #898F98;" id="jstreebs">
                 <div class="modal-dialog" style="width: 80%; margin: 40px auto;">
@@ -405,7 +408,7 @@
             <div class="ys">
                 请选择岗位：
                 <input type="button" class="BtnSelectEmpsb" value='选择岗位' />
-                <textarea id="ToEmpg" class="Tos"></textarea>
+                <textarea id="ToStations" class="Tos"></textarea>
             </div>
             <div class="modal fade jstree" style="background: #898F98;" id="jstreeg">
                 <div class="modal-dialog" style="width: 80%; margin: 40px auto;">

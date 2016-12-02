@@ -338,6 +338,7 @@ namespace CCFlow.WF.WorkOpt
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             Hashtable ht = new Hashtable();
             ht.Add("Title", gwf.Title);
+            ht.Add("CCTo", "zhangsan,lisi");
 
             //返回流程标题.
             return BP.Tools.Json.ToJson(ht, false);

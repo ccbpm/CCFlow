@@ -104,7 +104,7 @@
             });
             initTreeData();
             groupT();
-        });
+          });
         //初始化、接收人
         function dtTable() {
             var param = {
@@ -114,8 +114,7 @@
                 FK_Flow: GetQueryString("FK_Flow")
             };
             $.ajax({
-                //url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
-                url: Handler + "?DoType=CC_Init&FK_Node=029&WorkID=1004&FK_Flow=029&FID=" + '&m=' + Math.random(),
+                url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
                 success: function (data) {
                     if (data != null) {
                         var dataArr = JSON.parse(data);
@@ -232,10 +231,10 @@
                             $.each(datgArr, function (i, obje) {
                                 for (var k = 0; k < dateArr.length; k++) {
                                     if (obje.NO == dateArr[k].FK_STATIONTYPE) {
-                                        ultde += "<li data-data='true' style='min-width:120px;display: inline-block;margin:0px 5px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dateArr[k].NAME + "</li>";
+                                        ultde += "<li data-data='true' style='min-width:120px;display: inline-block;margin:0px 5px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/><span>" + dateArr[k].NAME + "</span></li>";
                                     }
                                 }
-                                ultdg += "<li data-data='true' class='lif' name='" + obje.NO + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.NAME + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;padding-left: 15px;'>" + ultde + "</ul></li>";
+                                ultdg += "<li data-data='true' class='lif' name='" + obje.NO + "' style='background: #D9E3F0;font-size:14px;font-weight: bold;'><input type='checkbox' class='ulm_head' style='margin: 10px 5px 0px 10px;'/><span>" + obje.NAME + "</span><ul style='overflow:hidden;margin:10px 0px 10px 0px;padding-left: 20px;background: #fff;font-size:12px;font-weight: normal;'>" + ultde + "</ul></li>";
                                 ultde = "";
                             });
                             $("#jstreeg #dt").html(ultdg);
@@ -252,6 +251,29 @@
                                             }
                                         }
                                     }
+                                }
+                            });
+                            $(".ulm_head").click(function () {
+                                if (this.checked) {
+                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                                } else {
+                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                                }
+                            });
+                            $(".lif>span").click(function () {
+                                if (this.parentNode.childNodes[0].checked) {
+                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                                    $(this).prev("input").removeAttr("checked", "checked");
+                                } else {
+                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                                    $(this).prev("input").prop("checked", "checked");
+                                }
+                            });
+                            $(".lim>span").click(function () {
+                                if (this.parentNode.childNodes[0].checked) {
+                                    $(this).prev("input").removeAttr("checked", "checked");
+                                } else {
+                                    $(this).prev("input").prop("checked", "checked");
                                 }
                             });
                         }
@@ -293,12 +315,24 @@
             var tb_Title = $(".csTitle").val();
             var tb_Doc = $("#yss").val();
             var emps;
+            var stations;
+            var depts;
             if (frames["iframeSelectEmpsForm"].window.returnVal != undefined) {
                 emps = frames["iframeSelectEmpsForm"].window.returnVal.No;
+            } else {
+                emps = "";
             }
-            var stations = $('#ToEmpb').attr("name");
-            var depts = $('#ToEmpg').attr("name");
-            if (depts == '' || depts == null && emps == '' || emps == null && stations == '' || stations == null) {
+            if ($('#ToEmpb').attr("name") != undefined) {
+                stations = $('#ToEmpb').attr("name");
+            } else {
+                stations = "";
+            }
+            if ($('#ToEmpg').attr("name") != undefined) {
+                depts = $('#ToEmpg').attr("name");
+            } else {
+                depts = "";
+            }
+            if (depts == "" && emps == "" && stations == "") {
                 alert('请选择人员、部门、机构中任意一种.');
                 return;
             }
@@ -314,11 +348,12 @@
                         window.parent.returnWorkWindowClose(data);
                     } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
                         window.opener.returnWorkWindowClose(data);
+                        alert(data);
                     } else {
                         $('#btnOk').attr('disabled', true);
                         alert(data);
                     }
-                    window.close();
+                    //window.close();
                     return;
                 }
             });

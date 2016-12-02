@@ -380,13 +380,13 @@ namespace CCFlow.WF.WorkOpt
         public string CC_Send()
         {
             //人员信息. 格式 zhangsan,张三;lisi,李四;
-            string emps = this.GetRequestVal("TB_Emps");
+            string emps = this.GetRequestVal("Emps");
 
             //岗位信息. 格式:  001,002,003,
-            string stations = this.GetRequestVal("TB_Stations");
+            string stations = this.GetRequestVal("Stations");
 
             //部门信息.  格式: 001,002,003,
-            string depts = this.GetRequestVal("TB_Depts");
+            string depts = this.GetRequestVal("Depts");
 
             //标题.
             string title = this.GetRequestVal("TB_Title");

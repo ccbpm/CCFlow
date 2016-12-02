@@ -114,7 +114,8 @@
                 FK_Flow: GetQueryString("FK_Flow")
             };
             $.ajax({
-                url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
+                //url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
+                url: Handler + "?DoType=CC_Init&FK_Node=1004&WorkID=029&FK_Flow=029&FID=" + '&m=' + Math.random(),
                 success: function (data) {
                     if (data != null) {
                         var dataArr = JSON.parse(data);
@@ -318,7 +319,14 @@
             var stations;
             var depts;
             if (frames["iframeSelectEmpsForm"].window.returnVal != undefined) {
-                emps = frames["iframeSelectEmpsForm"].window.returnVal.No;
+                var empsn = frames["iframeSelectEmpsForm"].window.returnVal.No.split(",");
+                var empsm = frames["iframeSelectEmpsForm"].window.returnVal.Name.split(",");
+                var s = [];
+                $.each(empsn, function (i, obj) {
+                    s.push(obj +','+ empsm[i]);
+                });
+                emps = s.join(";");
+
             } else {
                 emps = "";
             }

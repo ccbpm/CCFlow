@@ -379,15 +379,22 @@ namespace CCFlow.WF.WorkOpt
         /// <returns></returns>
         public string CC_Send()
         {
+            //人员信息. 格式 zhangsan,张三;lisi,李四;
             string emps = this.GetRequestVal("TB_Emps");
+
+            //岗位信息. 格式:  001,002,003,
             string stations = this.GetRequestVal("TB_Stations");
+
+            //部门信息.  格式: 001,002,003,
             string depts = this.GetRequestVal("TB_Depts");
 
+            //标题.
             string title = this.GetRequestVal("TB_Title");
+            // 内容.
             string doc = this.GetRequestVal("TB_Doc");
 
             //调用抄送接口执行抄送.
-            BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, 0, this.WorkID, title, doc, emps, depts, stations);
+            //   BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, 0, this.WorkID, title, doc, emps, depts, stations);
 
             return "执行抄送成功.emps=" + emps + "  depts=" + depts + " stas=" + stations;
         }

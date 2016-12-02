@@ -34,10 +34,11 @@
     body {
         background: #e0ecff;
     }
-    .ys{
+    .ys {
         margin: 20px auto;
         padding: 0px 30px;
         font-size: 14px;
+        overflow: hidden;
     }
     .ys .Tos {
         height: 30px;
@@ -50,10 +51,10 @@
         padding-left: 20px;
         font-size: 12px;
     }
-    .ys .csTitle {
-        width: 90%;
-        border-radius: 25px;
-    } 
+        .ys .csTitle, #csry {
+            width: 90%;
+            border-radius: 25px;
+        } 
     .ys input {
         width: 10%;
         border-radius: 0px 25px 25px 0px;
@@ -63,7 +64,7 @@
         color: #fff;
         border: none;
     }
-    #yss {
+    #yss{
         width: 90%;
         float: right;
         border-radius: 25px;
@@ -121,6 +122,11 @@
                         var dataArr = JSON.parse(data);
                         if (dataArr!= undefined) {
                             $(".csTitle").text(dataArr.Title);
+                            if (dataArr.CCTo != "") {
+                                $(".cs").show();
+                                $("#csry").text(dataArr.CCTo);
+                            }
+                            
                         }
                     }
 
@@ -292,7 +298,7 @@
             var tb_Title = $(".csTitle").text();
             var tb_Doc = $("#yss").text();
             var emps = $('#ToEmpp').val("");
-            if (empNos == '' || empNos == null) {
+            if (emps == '' || emps == null) {
                 alert('请选择人员.');
                 return;
             }
@@ -364,6 +370,10 @@
     <div class="ys">
         抄送信息：
         <textarea id="yss" name=""></textarea>
+    </div>
+    <div class="ys cs" style="display: none;">
+        已经抄送人员：
+        <textarea id="csry" name="" class="Tos"></textarea>
     </div>
     <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
         <button id="btnOk" class="btn btn-info" onclick="SendNode()">抄送</button>

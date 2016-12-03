@@ -64,32 +64,24 @@
                 url: Handler + "?DoType=FieldInitEnum&MyPK=" + mypk + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&FType=2&EnumKey=" + enumKey + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
                     data = JSON.parse(data);
-                    var mypk = data.FK_MapData + '_' + data.KeyOfEn;
 
                     //给公共属性赋值.
                     $("#TB_Name").val(data.Name);
-
                     $("#TB_KeyOfEn").val(data.KeyOfEn);
                     $("#TB_DefVal").val(data.DefVal);
 
-
                     //绑定枚举值, 让其可以选择默认值.
-                    GenerBindEnumKey("DDL_DefVal", data.UIBindKey, data.DefVal);
-
+                    GenerBindEnumKey("DDL_DefVal", mypk ? data.UIBindKey : enumKey, data.DefVal);
 
                     //设置事件.
                     $("#DDL_DefVal").change(function () {
                         var checkValue = $("#DDL_DefVal").val();
                         $("#TB_DefVal").val(checkValue);
                     });
-                    $("#DDL_DefVal").val(data.DefVal);
-
 
                     $("#TB_MinLen").val(data.MinLen);
                     $("#TB_MaxLen").val(data.MaxLen);
-
                     $("#DDL_ColSpan").val(data.ColSpan);   //跨的列数.
                     $("#TB_FontSize").val(data.FontSize);  //字体大小.
 
@@ -120,6 +112,7 @@
                     if (data.IsEnableJS == "1")
                         $("#CB_IsEnableJS").attr("checked", true);
 
+                    var mypk = data.FK_MapData + '_' + data.KeyOfEn;
                     var htmlLink = "";
                     //  htmlLink += "<a href=\"javascript:WinOpen('./MapExt/PopVal.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&MyPK=PopVal_" + mypk + "')\">设置开窗返回值</a>";
                     // htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&OperAttrKey=" + mypk + "')\">正则表达式</a>";
@@ -345,6 +338,8 @@
                     $("#Msg").html("<font color=red>" + data + "</font>");
                     return;
                 }
+
+                $("#Msg").html("");
 
                 if (btnCtl.id == 'Btn_Save') {
 

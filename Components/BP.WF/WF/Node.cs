@@ -498,7 +498,7 @@ namespace BP.WF
             // 单据信息，岗位，节点信息。
             foreach (Node nd in nds)
             {
-                DBAccess.RunSQL("UPDATE WF_Node SET FK_FlowSort='" + fl.FK_FlowSort + "',FK_FlowSortT='" + fs.Name + "'");
+              //  DBAccess.RunSQL("UPDATE WF_Node SET FK_FlowSort='" + fl.FK_FlowSort + "',FK_FlowSortT='" + fs.Name + "'");
 
                 BP.Sys.MapData md = new BP.Sys.MapData();
                 md.No = "ND" + nd.NodeID;

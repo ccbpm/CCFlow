@@ -229,7 +229,7 @@ namespace BP.WF.Data
 
         public string DoOpen()
         {
-            PubClass.WinOpen(Glo.CCFlowAppPath+"WF/WorkOpt/OneWork/Track.aspx?WorkID=" + this.OID + "&FK_Flow=" + this.FK_Flow, 900, 600);
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&WorkID=" + this.OID + "&FK_Flow=" + this.FK_Flow, 900, 600);
             return null;
         }
     }

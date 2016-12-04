@@ -29,6 +29,7 @@
             var iframe = document.getElementById("content");
 //            iframe.src = "ChartTrack.htm?FID=" + fid + "&FK_Flow=" + fk_flow + "&WorkID=" + workId; //SL版轨迹图
             iframe.src = "../../Admin/CCBPMDesigner/truck/Truck.htm?FID=" + fid + "&FK_Flow=" + fk_flow + "&WorkID=" + workId;    //JS版轨迹图
+//            iframe.src = "../../Admin/CCBPMDesigner/truck/TruckSimple.aspx?FID=" + fid + "&FK_Flow=" + fk_flow + "&WorkID=" + workId;
         });
     </script>
 </asp:Content>

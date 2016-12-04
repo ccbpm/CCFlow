@@ -115,7 +115,7 @@ namespace CCFlow.WF.CCForm
                             cc1.HisSta = CCSta.Read;
                             cc1.Update();
                         }
-                        this.Response.Redirect(this.Request.ApplicationPath + "WF/WorkOpt/OneWork/Track.aspx?FK_Flow=" + fk_flow1 + "&FK_Node=" + fk_node1 + "&WorkID=" + workid1 + "&FID=" + fid1, false);
+                        this.Response.Redirect(this.Request.ApplicationPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + fk_flow1 + "&FK_Node=" + fk_node1 + "&WorkID=" + workid1 + "&FID=" + fid1, false);
                         return;
                     case "DelCC": //É¾³ý³­ËÍ.
                         CCList cc = new CCList();

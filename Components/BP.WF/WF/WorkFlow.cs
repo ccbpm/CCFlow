@@ -1408,7 +1408,7 @@ namespace BP.WF
             ///* 获取它的工作者，向他们发送消息。*/
             //GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
 
-            //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/Track.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             //string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             //string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "冻结" + fixMsg;
             //string emps = "";
@@ -1462,7 +1462,7 @@ namespace BP.WF
             ///* 获取它的工作者，向他们发送消息。*/
             //GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
 
-            //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/Track.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            //string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             //string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             //string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "冻结" + unFixMsg;
             //string emps = "";
@@ -1919,7 +1919,7 @@ namespace BP.WF
 
             /* 获取它的工作者，向他们发送消息。*/
             GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
-            string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/Track.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "挂起" + hungNote;
             string emps = "";
@@ -2020,7 +2020,7 @@ namespace BP.WF
 
             /* 获取它的工作者，向他们发送消息。*/
             GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
-            string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/Track.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            string url = Glo.ServerIP + "/" + this.VirPath + this.AppType + "/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FID=" + this.HisGenerWorkFlow.FID + "&FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "解除挂起.";
             string emps = "";

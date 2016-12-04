@@ -428,7 +428,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     || at == ActionType.Skip)   //added by liuxc,2015-7-13,自动跳转的也显示表单
                 {
                     //this.AddTD("<a class='easyui-linkbutton' data-options=\"iconCls:'icon-sheet'\" href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + dr[TrackAttr.WorkID].ToString() + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + dr[TrackAttr.NDFrom].ToString() + "&DoType=View&MyPK=" + dr[TrackAttr.MyPK].ToString() + "','" + dr[TrackAttr.MyPK].ToString() + "');\">表单</a>");
-                    str += "<p><a class='easyui-linkbutton' data-options=\"iconCls:'icon-sheet'\" href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + dr[TrackAttr.WorkID].ToString() + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + dr[TrackAttr.NDFrom].ToString() + "&DoType=View&MyPK=" + dr[TrackAttr.MyPK].ToString() + "','" + dr[TrackAttr.MyPK].ToString() + "');\">打开<img src='../../Img/Form.png'>表单</a>" + "</p>";
+                    str += "<p><a class='easyui-linkbutton' data-options=\"iconCls:'icon-sheet'\" href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + dr[TrackAttr.WorkID].ToString() + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + dr[TrackAttr.NDFrom].ToString() + "&DoType=View&MyPK=" + dr[TrackAttr.MyPK].ToString() + "','" + dr[TrackAttr.MyPK].ToString() + "');\">打开表单</a>" + "</p>";
                 }
                
                 if (at == ActionType.FlowOver
@@ -657,7 +657,8 @@ namespace CCFlow.WF.WorkOpt.OneWork
             str += "</div>";
             str += "</div>";
             //this.Clear();
-            HiddenField1.Value = str.ToString();
+            //HiddenField1.Value = str.ToString();
+            UCEn1.Add(str);
         }
 
         #region 分流

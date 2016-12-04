@@ -353,7 +353,7 @@
                 '</div>';
             break;
         case "Track": //轨迹图.
-            var src = "../WorkOpt/OneWork/Track.aspx?s=2";
+            var src = "../WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
             //var paras = pageParamToUrl();
             //if (paras.indexOf('OID') < 0) {
             //    paras += "&OID=" + pageData.WorkID;
@@ -1319,7 +1319,7 @@
             if (iframe != undefined) {
                 var height = document.body.clientHeight;
                 $(iframe).height(height + 15);
-                $(iframe).parent('.trackDiv').height(height + 15);
+				$(iframe).parent('.trackDiv').height(height + 15);
             }
         }
     }

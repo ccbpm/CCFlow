@@ -7423,7 +7423,7 @@ namespace BP.WF
         {
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
                 500, 400);
         }
         /// <summary>
@@ -7452,7 +7452,7 @@ namespace BP.WF
         {
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + fk_flow,
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fk_flow,
                 500, 400);
         }
         /// <summary>
@@ -7465,7 +7465,7 @@ namespace BP.WF
         {
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/Track.aspx?FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
                 500, 400);
         }
         /// <summary>

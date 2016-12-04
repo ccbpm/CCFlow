@@ -793,7 +793,7 @@ function initGroup(workNodeData, groupFiled) {
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Track": //轨迹图.
-            var src = "/WF/WorkOpt/OneWork/Track.aspx?s=2";
+            var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
             //var paras = pageParamToUrl();
             //if (paras.indexOf('OID') < 0) {
             //    paras += "&OID=" + pageData.WorkID;
@@ -836,7 +836,7 @@ function initTrackList(workNodeData) {
     var trackHtml = '';
     var trackList = workNodeData.Track;
     var filterTrackList= $.grep(trackList, function (value) {
-        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 || value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 || value.ActionType == 8 || value.ActionType == 5;
+        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 || value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 || value.ActionType == 8  || value.ActionType == 5;
     });
     workNodeData.Track = filterTrackList;
     $.each(workNodeData.Track, function (i, track) {
@@ -852,7 +852,7 @@ function initTrackList(workNodeData) {
         var actionType = track.ActionType;
         if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11 && actionType != 8) {
             console.log(actionType)
-            trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
+            trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>退回信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
         } else {
             var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
             trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
@@ -885,7 +885,7 @@ function initTrackList(workNodeData) {
     var sendNo = $.cookie("CCS").split("=")[1].split("&")[0];
     var sendt = HgetNowFormatDate().currentdate;
     if (pageData.DoType != 'View') {
-        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendName + '</p><p>时间:' + sendt + '</p></a></li>';
+        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendr + '</p><p>时间:' + sendt + '</p></a></li>';
         $('#header b').text((workNodeData.Track.length + 1));
         //trackNavHtml += '<li class="scrollNav" title="发送人："><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + "dsfsf" + '</a></li>';
     }

@@ -218,7 +218,7 @@ function WebWordDownFile() {
         if (text != null && text != '' && no != null && no != '') {
             var myRange = webOffice.GetDocumentObject().Application.Selection.Range;  //定义光标位置
 
-            var myHyperLink = "http://" + location.host + "/WF/WorkOpt/OneWork/ChartTrack.aspx?FK_Flow=" + no + "&DoType=Chart&T=" + strTimeKey;
+            var myHyperLink = "http://" + location.host + "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + no + "&DoType=Chart&T=" + strTimeKey;
             //var myHyperLink = "http://www.goldgrid.cn/iSignature/MakeSignGif.rar";
             //定义下载地址，也可以为其它网址，这段内容可以通过后台获取
             var myTextToDisplay = text;                           //定义提示索引信息

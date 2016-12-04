@@ -131,7 +131,7 @@ namespace BP.Web.WF
                             cc1.HisSta = CCSta.Read;
                             cc1.Update();
                         }
-                        this.Response.Redirect("./WorkOpt/OneWork/Track.aspx?FK_Flow=" + fk_flow1 + "&FK_Node=" + fk_node1 + "&WorkID=" + workid1 + "&FID=" + fid1, false);
+                        this.Response.Redirect("./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + fk_flow1 + "&FK_Node=" + fk_node1 + "&WorkID=" + workid1 + "&FID=" + fid1, false);
                         return;
                     case "DelCC": //删除抄送.
                         CCList cc = new CCList();
@@ -222,7 +222,7 @@ namespace BP.Web.WF
                          mynd.RetrieveFromDBSources();
 
                          string fk_flow = mynd.FK_Flow;
-                         string myurl = "./WorkOpt/OneWork/Track.aspx?FK_Node=" + mynd.NodeID + "&WorkID=" + myWorkID + "&FK_Flow=" + fk_flow;
+                         string myurl = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Node=" + mynd.NodeID + "&WorkID=" + myWorkID + "&FK_Flow=" + fk_flow;
                          Web.WebUser.SignInOfGener( new BP.Port.Emp(fk_emp));
                          this.Response.Write("<script> window.location.href='" + myurl + "'</script> *^_^*  <br><br>正在进入系统请稍后，如果长时间没有反应，请<a href='" + myurl + "'>点这里进入。</a>");
                         return;
@@ -253,11 +253,9 @@ namespace BP.Web.WF
                         return;
                     case "LogAs":
                         BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(this.FK_Emp);
-                        BP.Port.Emp emp2 = null;
                         if (wfemp.AuthorIsOK == false)
                         {
                             this.WinCloseWithMsg("授权失败");
-
                             return;
                         }
                         BP.Port.Emp emp1 = new BP.Port.Emp(this.FK_Emp);

@@ -140,7 +140,7 @@ namespace BP.Demo
                 map.EnDesc = "简历";
 
                 map.AddTBIntPKOID();
-                map.AddTBString(ResumeAttr.FK_Stu, null, "学生", false, false, 0, 200, 10);
+                map.AddTBString(ResumeAttr.FK_Stu, null, "学生编号", false, false, 0, 200, 10);
                 map.AddTBString(ResumeAttr.NianYue, null, "年月", true, false, 0, 200, 50);
                 map.AddTBString(ResumeAttr.GongZuoDanWei, null, "工作单位", true, false, 0, 200, 70);
                 map.AddTBString(ResumeAttr.ZhengMingRen, "", "证明人", true, false, 0, 200, 50);

@@ -138,6 +138,15 @@ namespace BP.FlowEvent
 
         #region 与流程相关的操作.
         /// <summary>
+        /// 当创建WorkID的时候.
+        /// 经常根据当前用户的身份初始化数据.
+        /// </summary>
+        /// <returns>返回执行信息.</returns>
+        public override string FlowOnCreateWorkID()
+        {
+            return base.FlowOnCreateWorkID();
+        }
+        /// <summary>
         /// 流程结束之前
         /// </summary>
         /// <returns>返回null,不提示信息，返回string提示结束信息,抛出异常就阻止流程删除.</returns>

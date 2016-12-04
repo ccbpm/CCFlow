@@ -79,6 +79,7 @@ namespace CCFlow.WF.Admin.AttrFlow
                                            "public override string SendWhen()",
                                            "public override string SendSuccess()",
                                            "public override string SendError()",
+                                           "public override string FlowOnCreateWorkID()",
                                            "public override string FlowOverBefore()",
                                            "public override string FlowOverAfter()",
                                            "public override string BeforeFlowDel()",

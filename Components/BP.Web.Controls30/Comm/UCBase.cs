@@ -1737,6 +1737,13 @@ namespace BP.Web.UC
             else
                 this.Add("\n<TD  nowrap >" + str + "</TD>");
         }
+        public void AddTDTDTitle(string title, string str)
+        {
+            if (str == null || str == "")
+                this.Add("\n<TD  nowrap >&nbsp;</TD>");
+            else
+                this.Add("\n<TD  nowrap title='" + title + "' >" + str + "</TD>");
+        }
         public void AddTDA(string href, string str)
         {
             this.Add("\n<TD  nowrap ><a href=\"" + href + "\">" + str + "</a></TD>");
@@ -2259,6 +2266,10 @@ namespace BP.Web.UC
         public void AddTDTitleExt(string str)
         {
             this.Add("\n<TD class='TitleExt' nowrap=true >" + str + "</TD>");
+        }
+        public void AddTDTitleExt(string attr, string str)
+        {
+            this.Add("\n<TD class='TitleExt' nowrap=true " + attr + " >" + str + "</TD>");
         }
         public void AddTDTitle(string attr, string str)
         {

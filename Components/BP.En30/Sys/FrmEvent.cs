@@ -153,6 +153,10 @@ namespace BP.Sys
 
         #region 流程事件
         /// <summary>
+        /// 当创建workid的时候.
+        /// </summary>
+        public const string FlowOnCreateWorkID = "FlowOnCreateWorkID";
+        /// <summary>
         /// 流程完成时.
         /// </summary>
         public const string FlowOverBefore = "FlowOverBefore";

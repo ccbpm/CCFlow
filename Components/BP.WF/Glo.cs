@@ -165,6 +165,10 @@ namespace BP.WF
              * 1, 执行一次Sender发送人的升级，原来由GenerWorkerList 转入WF_GenerWorkFlow.
              * 0, 静默升级启用日期.2014-12
              */
+
+            if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
+                return "";
+
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
             string currVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (currVer == Ver)

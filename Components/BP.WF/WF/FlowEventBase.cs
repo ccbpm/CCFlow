@@ -244,6 +244,14 @@ namespace BP.WF
 
         #region 要求子类重写的方法(流程事件).
         /// <summary>
+        /// 当创建WorkID的时候
+        /// </summary>
+        /// <returns>创建WorkID所执行的操作</returns>
+        public virtual string FlowOnCreateWorkID()
+        {
+            return null;
+        }
+        /// <summary>
         /// 流程完成前
         /// </summary>
         /// <returns>返回null，不提示信息，返回string提示结束信息,抛出异常就阻止流程删除.</returns>
@@ -473,13 +481,16 @@ namespace BP.WF
                     return this.FlowOverBefore();
                 case EventListOfNode.QueueSendAfter://队列节点发送后
                     return this.AskerReAfter();
-                case EventListOfNode.FlowOverBefore: // 流程事件 -------------------------------------------。
+
+                case EventListOfNode.FlowOnCreateWorkID: // 流程事件 -------------------------------------------。
+                    return this.FlowOnCreateWorkID();
+                case EventListOfNode.FlowOverBefore: // 流程结束前.。
                     return this.FlowOverBefore();
-                case EventListOfNode.FlowOverAfter: // 流程事件。
+                case EventListOfNode.FlowOverAfter: // 流程结束后。
                     return this.FlowOverAfter();
-                case EventListOfNode.BeforeFlowDel: // 流程事件。
+                case EventListOfNode.BeforeFlowDel: // 流程删除前。
                     return this.BeforeFlowDel();
-                case EventListOfNode.AfterFlowDel: // 流程事件。
+                case EventListOfNode.AfterFlowDel: // 删除后.
                     return this.AfterFlowDel();
                 default:
                     throw new Exception("@没有判断的事件类型:" + eventType);

@@ -738,6 +738,10 @@ namespace BP.WF
                         rpt.FlowEnder = emp.No;
                         rpt.InsertAsOID(wk.OID);
                     }
+
+                    //调用 OnCreateWorkID的方法.  add by zhoupeng 2016.12.4 for LIMS.
+                    this.DoFlowEventEntity(EventListOfNode.FlowOnCreateWorkID, nd, wk, null, null, null);
+
                 }
             }
             catch (Exception ex)

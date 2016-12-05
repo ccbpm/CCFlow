@@ -22,11 +22,18 @@
         $(function () {
             $("#mtabs").tabs({
                 onSelect: function (title, index) {
-                    document.title = title;                    
+                    document.title = title;
                 }
             });
 
             InitPage();
+
+            if (window.screen) {
+                var w = screen.availWidth;
+                var h = screen.availHeight;
+                window.moveTo(0, 0);
+                window.resizeTo(w, h);
+            }
         });
 
         function InitPage() {
@@ -50,6 +57,10 @@
 
                     $.each(data, function () {
                         //增加标签
+                        if ((!workid || workid == "null" || workid == "0") && this.No != "Truck") {
+                            return true;
+                        }
+
                         $("#mtabs").tabs("add", {
                             id: this.No,
                             title: this.Name,
@@ -69,7 +80,23 @@
                     }
                 }
             });
-        } 
+        }
+
+        function RSize() {
+            if (document.body.scrollWidth > (window.screen.availWidth - 100)) {
+                window.dialogWidth = (window.screen.availWidth - 100).toString() + "px"
+            } else {
+                window.dialogWidth = (document.body.scrollWidth + 50).toString() + "px"
+            }
+
+            if (document.body.scrollHeight > (window.screen.availHeight - 70)) {
+                window.dialogHeight = (window.screen.availHeight - 50).toString() + "px"
+            } else {
+                window.dialogHeight = (document.body.scrollHeight + 115).toString() + "px"
+            }
+            window.dialogLeft = ((window.screen.availWidth - document.body.clientWidth) / 2).toString() + "px"
+            window.dialogTop = ((window.screen.availHeight - document.body.clientHeight) / 2).toString() + "px"
+        }
     </script>
 </head>
 <body class="easyui-layout">

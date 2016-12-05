@@ -73,13 +73,22 @@
             work_ID = uh["WorkID"];
             fid = uh["FID"];
 
+            if (!work_ID) {
+                work_ID = "0";
+            }
+
+            if (!fid) {
+                fid = "0";
+            }
+
             $.ajax({
                 type: "Post",
                 contentType: "application/json;utf-8",
-                url: Handler + "?DoType=GetFlowTrackJsonData&fk_flow=" + fk_Flow + "&workid=" + work_ID + "&fid=" + fid,
+                url: Handler + "?DoType=GetFlowTrackJsonData&FK_Flow=" + fk_Flow + "&WorkID=" + work_ID + "&FID=" + fid,
                 dataType: "html",
                 success: function (re) {
                     jdata = $.parseJSON(re);
+
                     if (!jdata.success) {
                         alert(jdata.msg);
                     }
@@ -193,7 +202,7 @@
                     rNode.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                     rNode.rTrackText.toFront();
                 }
-                else {
+                else if(datas.POSSIBLE) {
                     //检索是否有计算出节点处理人，以及可能处理时间，有则显示出来，added by liuxc,2016-4-15
                     rNode.rPossible = datas.POSSIBLE.findByField("FK_NODE", this.ID);
 

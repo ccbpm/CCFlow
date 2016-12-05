@@ -148,7 +148,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
             get
             {
                 string str = context.Request.QueryString["FK_Node"];
-                if (str == null || str == "" || str == "null")
+                if (str == null || str == "" || str == "null" || str == "undefined")
                     return 0;
                 return int.Parse(str);
             }
@@ -161,7 +161,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
             get
             {
                 string str = context.Request.QueryString["WorkID"];
-                if (str == null || str == "" || str == "null")
+                if (str == null || str == "" || str == "null" || str == "undefined")
                     return 0;
                 return Int64.Parse(str);
             }
@@ -174,7 +174,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
             get
             {
                 string str = context.Request.QueryString["FID"];
-                if (str == null || str == "" || str == "null")
+                if (str == null || str == "" || str == "null" || str == "undefined")
                     return 0;
                 return Int64.Parse(str);
             }

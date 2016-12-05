@@ -212,8 +212,10 @@
                         $('#jstree').show();
                         var jsTreedata = [];
                         $.each(dtgArr, function (i, obj) {
-                            jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
-                        })
+                            //jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
+							// 2016-12-05 by tianbaoyan 人员选择器默认展开  因为数据量通过sql过滤不是很大
+                            jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name, "data": obj, state: { opened: true} });
+						})
 
                         $.each(dteArr, function (i, obj) {
                             jsTreedata.push({ children: {}, "id": "user" + obj.No, "parent": obj.FK_Dept, "text": obj.Name, "icon": "jstree-file", "data": obj });

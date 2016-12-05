@@ -238,6 +238,7 @@
                                 ultde = "";
                             });
                             $("#jstreeg #dt").html(ultdg);
+                            $(".wait").hide();
                             $.each(dateArr, function (k, obj) {
                                 var lifs = $("#jstreeg #dt .lif");
                                 for (var i = 0; i < lifs.length; i++) {
@@ -417,6 +418,7 @@
                             选择岗位
                         </div>
                         <div class="modal-body" style="height: 380px; overflow-y: auto;">
+                            <div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
                             <ul id="dt" data-data="true"></ul>
                         </div>
                         <div class="modal-footer">

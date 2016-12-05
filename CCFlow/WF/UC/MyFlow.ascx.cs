@@ -420,7 +420,8 @@ namespace CCFlow.WF.UC
                 if (this.currND.CondModel == CondModel.SendButtonSileSelect && this.currND.IsEndNode==false)
                 {
                     /*如果流程的方向条件是按照下拉框拉来选择.*/
-                    toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"SendBtnCondClick('" + currND.FK_Flow + "','" + currND.NodeID + "','" + this.WorkID + "','"+this.FID+"')\" />");
+                    /*弹出下拉框来选择之前进行自定义js校验  by tianbaoyan 2016-12-05.*/
+                    toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + "SendBtnCondClick('" + currND.FK_Flow + "','" + currND.NodeID + "','" + this.WorkID + "','" + this.FID + "')\" />");
                  
                     toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                     Btn_Send.Style.Add("display", "none");

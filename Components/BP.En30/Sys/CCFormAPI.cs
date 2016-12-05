@@ -1001,7 +1001,7 @@ namespace BP.Sys
 
             //Sys_MapFrame.
             listNames.Add("Sys_MapFrame");
-            sql = "@SELECT MyPK,FK_MapData,Name,URL,W,H,GroupID FROM Sys_MapFrame WHERE " + where;
+            sql = "@SELECT MyPK,FK_MapData,Name,URL,W,H FROM Sys_MapFrame WHERE " + where;
             sqls += sql;
             
             // Sys_FrmAttachment. 

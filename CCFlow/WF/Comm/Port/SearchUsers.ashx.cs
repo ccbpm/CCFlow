@@ -98,6 +98,10 @@ namespace CCFlow.Web.Comm.Port
             {
                 filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
             }
+            else if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
+            {
+                filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name || ',' || Port_Emp.NO like '%{0}%'", name);
+            }
             string sql = String.Format("select Port_Emp.*,Port_Dept.Name as DeptName from Port_Emp,Port_Dept where Port_Emp.FK_Dept = Port_Dept.No {0}{1}{2}", filter_dept, filter_station, filter_name);
             return DBAccess.RunSQLReturnTable(sql);
         }
@@ -127,6 +131,10 @@ namespace CCFlow.Web.Comm.Port
             if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
             {
                 filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and CONCAT(Port_Emp.Name,',',Port_Emp.NO) like '%{0}%'", name);
+            }
+            else if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
+            {
+                filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name || ',' || Port_Emp.NO like '%{0}%'", name);
             }
             string sql = String.Format("select Port_Emp.*,Port_Dept.Name as DeptName from Port_Emp,Port_Dept where Port_Emp.FK_Dept = Port_Dept.No {0}{1}{2}", filter_dept, filter_station, filter_name);
             return DBAccess.RunSQLReturnTable(sql);

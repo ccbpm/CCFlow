@@ -215,6 +215,9 @@ namespace BP.WF.Data
                 this.SetValByKey(NDXRptBaseAttr.GuestName, value);
             }
         }
+        /// <summary>
+        /// 单据编号
+        /// </summary>
         public string BillNo
         {
             get

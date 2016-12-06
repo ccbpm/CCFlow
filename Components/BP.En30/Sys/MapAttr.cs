@@ -1425,12 +1425,52 @@ namespace BP.Sys
                 attr.Update("Idx",-1);
             }
         }
+    
         /// <summary>
         /// 下移
         /// </summary>
         public void DoDown()
         {
             this.DoOrderDown(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.FK_MapData + "_Title";
+            if (attr.RetrieveFromDBSources() == 1)
+            {
+                attr.Update("Idx", -1);
+            }
+        }
+        /// <summary>
+        /// 上移for 明细表.
+        /// </summary>
+        public void DoUpForMapDtl()
+        {
+            //规整groupID.
+            GroupField gf = new GroupField();
+            gf.Retrieve(GroupFieldAttr.EnName, this.FK_MapData);
+            BP.DA.DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
+
+            this.DoOrderUp(MapAttrAttr.FK_MapData,this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.FK_MapData + "_Title";
+            if (attr.RetrieveFromDBSources() == 1)
+            {
+                //  attr.Idx = -1;
+                attr.Update("Idx", -1);
+            }
+        }
+        /// <summary>
+        /// 下移 for 明细表.
+        /// </summary>
+        public void DoDownForMapDtl()
+        {
+            //规整groupID.
+            GroupField gf = new GroupField();
+            gf.Retrieve(GroupFieldAttr.EnName, this.FK_MapData);
+            BP.DA.DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
+
+            this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
             attr.MyPK = this.FK_MapData + "_Title";

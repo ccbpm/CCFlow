@@ -21,8 +21,8 @@ namespace BP.Sys
         /// <returns>附件信息.</returns>
         public static string GetAthInfos(string fk_mapdata, string pk)
         {
-            int num = BP.DA.DBAccess.RunSQL("SELECT COUNT(MYPK) FROM Sys_FrmAttachmentDB WHERE FK_MapData='"+fk_mapdata+"' AND RefPKVal="+pk);
-            return "附件("+num+")";
+            int num = BP.DA.DBAccess.RunSQL("SELECT COUNT(MYPK) FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + fk_mapdata + "' AND RefPKVal=" + pk);
+            return "附件(" + num + ")";
         }
 
         #region 创建修改字段.
@@ -55,7 +55,7 @@ namespace BP.Sys
                     FrmEle fe = new FrmEle();
                     fe.MyPK = fk_mapdata + "_" + no;
                     if (fe.RetrieveFromDBSources() != 0)
-                        throw new Exception("@创建失败，已经有同名元素["+no+"]的控件.");
+                        throw new Exception("@创建失败，已经有同名元素[" + no + "]的控件.");
                     fe.FK_MapData = fk_mapdata;
                     fe.EleType = "Fieldset";
                     fe.EleName = name;
@@ -66,7 +66,7 @@ namespace BP.Sys
                     //CreateOrSaveAthImg(fk_mapdata, no, name, x, y);
                     break;
                 default:
-                    throw new Exception("@没有判断的存储控件:"+ctrlType+",存储该控件前,需要做判断.");
+                    throw new Exception("@没有判断的存储控件:" + ctrlType + ",存储该控件前,需要做判断.");
             }
         }
         /// <summary>
@@ -132,8 +132,8 @@ namespace BP.Sys
             ath.FK_MapData = fk_mapdata;
             ath.NoOfObj = no;
             ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
-           int i= ath.RetrieveFromDBSources();
-            if (i==0)
+            int i = ath.RetrieveFromDBSources();
+            if (i == 0)
             {
                 ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
             }
@@ -209,7 +209,7 @@ namespace BP.Sys
                     break;
             }
             attr.Save();
-           
+
             //如果是普通的字段, 这个属于外部数据类型,或者webservices类型.
             if (attr.LGType == FieldTypeS.Normal)
             {
@@ -274,7 +274,7 @@ namespace BP.Sys
                     rb.IntKey = item.IntKey;
                     rb.MyPK = rb.FK_MapData + "_" + rb.KeyOfEn + "_" + rb.IntKey;
                     rb.RetrieveFromDBSources();
-                   
+
                     rb.EnumKey = ma.UIBindKey;
                     rb.Lab = item.Lab;
                     rb.X = ma.X;
@@ -296,7 +296,7 @@ namespace BP.Sys
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="colSpan"></param>
-        public static void NewField(string frmID, string field, string fieldDesc,int mydataType, float x, float y, int colSpan = 1)
+        public static void NewField(string frmID, string field, string fieldDesc, int mydataType, float x, float y, int colSpan = 1)
         {
             MapAttr ma = new MapAttr();
             ma.FK_MapData = frmID;
@@ -304,7 +304,7 @@ namespace BP.Sys
             ma.Name = fieldDesc;
             ma.MyDataType = mydataType;
             ma.X = x;
-            ma.Y =y;
+            ma.Y = y;
             ma.Insert();
 
         }
@@ -329,7 +329,7 @@ namespace BP.Sys
                 return;
 
             //删除可能存在的数据.
-            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='"+ma.KeyOfEn+"' AND FK_MapData='"+ma.FK_MapData+"'");
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + ma.KeyOfEn + "' AND FK_MapData='" + ma.FK_MapData + "'");
 
             SysEnums ses = new SysEnums(ma.UIBindKey);
             int idx = 0;
@@ -519,7 +519,7 @@ namespace BP.Sys
         /// <param name="frmName">表单名称</param>
         /// <param name="frmTreeID">表单类别编号（表单树ID）</param>
         /// <param name="frmType">表单类型</param>
-        public static void CreateFrm(string frmID, string frmName, string frmTreeID, FrmType frmType= FrmType.FreeFrm)
+        public static void CreateFrm(string frmID, string frmName, string frmTreeID, FrmType frmType = FrmType.FreeFrm)
         {
             MapData md = new MapData();
             md.No = frmID;
@@ -537,7 +537,7 @@ namespace BP.Sys
         /// <param name="jsonStrOfH5Frm"></param>
         public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
         {
-          //  BP.DA.DataType.WriteFile("D:\\AAA.JSON", jsonStrOfH5Frm);
+            //  BP.DA.DataType.WriteFile("D:\\AAA.JSON", jsonStrOfH5Frm);
 
             JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
             if (jd.IsObject == false)
@@ -571,7 +571,7 @@ namespace BP.Sys
             FrmLabs labs = new FrmLabs();
             labs.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
             foreach (FrmLab item in labs)
-                labelPKs +=  item.MyPK+"@";
+                labelPKs += item.MyPK + "@";
 
             //超链接.
             string linkPKs = "@";
@@ -630,7 +630,7 @@ namespace BP.Sys
 
             //图片附件.
             string athImgs = "@";
-            FrmImgAths fias = new FrmImgAths();;
+            FrmImgAths fias = new FrmImgAths(); ;
             fias.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
             foreach (FrmImgAth item in fias)
             {
@@ -651,7 +651,7 @@ namespace BP.Sys
             // 保存线.
             JsonData form_Lines = formData["m"]["connectors"];
             BP.Sys.CCFormParse.SaveLine(fk_mapdata, form_Lines);
-                
+
             //其他控件，Label,Img,TextBox
             JsonData form_Controls = formData["s"]["figures"];
             if (form_Controls.IsArray == false || form_Controls.Count == 0)
@@ -716,16 +716,16 @@ namespace BP.Sys
                         BP.Sys.CCFormParse.SaveImage(fk_mapdata, control, properties, imgPKs, ctrlID);
                         imgPKs = imgPKs.Replace(ctrlID + "@", "@");
                         continue;
-                     default:
+                    default:
                         break;
                 }
                 #endregion 装饰类控件.
 
                 #region 数据类控件.
-                if (shape.Contains("TextBox")==true
-                    || shape.Contains("DropDownList")==true)
+                if (shape.Contains("TextBox") == true
+                    || shape.Contains("DropDownList") == true)
                 {
-                    BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata,ctrlID,shape,control, properties,attrPKs);
+                    BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata, ctrlID, shape, control, properties, attrPKs);
                     attrPKs = attrPKs.Replace(ctrlID + "@", "@");
                     continue;
                 }
@@ -740,7 +740,7 @@ namespace BP.Sys
                 float width = maxX - x;
                 float height = maxY - y;
 
-                if (shape =="Dtl")
+                if (shape == "Dtl")
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveDtl(fk_mapdata, ctrlID, x, y, height, width);
@@ -790,7 +790,7 @@ namespace BP.Sys
                     if (ctrlID.Contains("RB_") == true)
                         ctrlID = ctrlID.Substring(3);
 
-                    string str= BP.Sys.CCFormParse.SaveFrmRadioButton(fk_mapdata, ctrlID, x, y);
+                    string str = BP.Sys.CCFormParse.SaveFrmRadioButton(fk_mapdata, ctrlID, x, y);
                     if (str == null)
                         continue;
 
@@ -809,7 +809,7 @@ namespace BP.Sys
 
             #region 删除没有替换下来的 PKs, 说明这些都已经被删除了.
             string[] pks = labelPKs.Split('@');
-            string sqls="";
+            string sqls = "";
             foreach (string pk in pks)
             {
                 if (string.IsNullOrEmpty(pk))
@@ -852,7 +852,7 @@ namespace BP.Sys
                 if (pk == "OID")
                     continue;
 
-                sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + pk + "' AND FK_MapData='"+fk_mapdata+"'";
+                sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
                 sqls += "@DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }
 
@@ -883,7 +883,7 @@ namespace BP.Sys
 
                 sqls += "@DELETE FROM Sys_FrmImgAth WHERE CtrlID='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }
-            
+
 
             //删除这些，没有替换下来的数据.
             BP.DA.DBAccess.RunSQLs(sqls);
@@ -963,30 +963,30 @@ namespace BP.Sys
 
             //if (isCheckFrmType == true && md.HisFrmType == FrmType.FreeFrm)
             //{
-                // line.
-                listNames.Add("Sys_FrmLine");
-                sql = "@SELECT MyPK,FK_MapData, X1,X2, Y1,Y2,BorderColor,BorderWidth from Sys_FrmLine WHERE " + where;
-                sqls += sql;
+            // line.
+            listNames.Add("Sys_FrmLine");
+            sql = "@SELECT MyPK,FK_MapData, X1,X2, Y1,Y2,BorderColor,BorderWidth from Sys_FrmLine WHERE " + where;
+            sqls += sql;
 
-                // link.
-                listNames.Add("Sys_FrmLink");
-                sql = "@SELECT FK_MapData,MyPK,Text,URL,Target,FontSize,FontColor,X,Y from Sys_FrmLink WHERE " + where;
-                sqls += sql;
+            // link.
+            listNames.Add("Sys_FrmLink");
+            sql = "@SELECT FK_MapData,MyPK,Text,URL,Target,FontSize,FontColor,X,Y from Sys_FrmLink WHERE " + where;
+            sqls += sql;
 
-                // btn.
-                listNames.Add("Sys_FrmBtn");
-                sql = "@SELECT FK_MapData,MyPK,Text,EventType,EventContext,MsgErr,MsgOK,X,Y FROM Sys_FrmBtn WHERE " + where;
-                sqls += sql;
+            // btn.
+            listNames.Add("Sys_FrmBtn");
+            sql = "@SELECT FK_MapData,MyPK,Text,EventType,EventContext,MsgErr,MsgOK,X,Y FROM Sys_FrmBtn WHERE " + where;
+            sqls += sql;
 
-                // Sys_FrmImg.
-                listNames.Add("Sys_FrmImg");
-                sql = "@SELECT * FROM Sys_FrmImg WHERE " + where;
-                sqls += sql;
+            // Sys_FrmImg.
+            listNames.Add("Sys_FrmImg");
+            sql = "@SELECT * FROM Sys_FrmImg WHERE " + where;
+            sqls += sql;
 
-                // Sys_FrmLab.
-                listNames.Add("Sys_FrmLab");
-                sql = "@SELECT MyPK,FK_MapData,Text,X,Y,FontColor,FontName,FontSize,FontStyle,FontWeight,IsBold,IsItalic FROM Sys_FrmLab WHERE " + where;
-                sqls += sql;
+            // Sys_FrmLab.
+            listNames.Add("Sys_FrmLab");
+            sql = "@SELECT MyPK,FK_MapData,Text,X,Y,FontColor,FontName,FontSize,FontStyle,FontWeight,IsBold,IsItalic FROM Sys_FrmLab WHERE " + where;
+            sqls += sql;
             //}
 
             // Sys_FrmRB.
@@ -1003,7 +1003,7 @@ namespace BP.Sys
             listNames.Add("Sys_MapFrame");
             sql = "@SELECT MyPK,FK_MapData,Name,URL,W,H FROM Sys_MapFrame WHERE " + where;
             sqls += sql;
-            
+
             // Sys_FrmAttachment. 
             listNames.Add("Sys_FrmAttachment");
             /* 20150730 小周鹏修改 添加AtPara 参数 START */
@@ -1032,6 +1032,7 @@ namespace BP.Sys
             DataSet ds = new DataSet();
 
             if (strs != null && strs.Length == listNames.Count)
+            {
                 for (int i = 0; i < listNames.Count; i++)
                 {
                     string s = strs[i];
@@ -1041,6 +1042,7 @@ namespace BP.Sys
                     dt.TableName = listNames[i];
                     ds.Tables.Add(dt);
                 }
+            }
 
             foreach (DataTable item in ds.Tables)
             {
@@ -1062,7 +1064,7 @@ namespace BP.Sys
         /// <param name="cfg">配置 @0=xxx@1=yyyy@n=xxxxxc</param>
         /// <param name="lang">语言</param>
         /// <returns></returns>
-        public static string SaveEnum(string enumKey, string enumLab, string cfg, string lang="CH")
+        public static string SaveEnum(string enumKey, string enumLab, string cfg, string lang = "CH")
         {
             SysEnumMain sem = new SysEnumMain();
             sem.No = enumKey;
@@ -1143,7 +1145,7 @@ namespace BP.Sys
                 s = s.Replace(".", "");
                 return s;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

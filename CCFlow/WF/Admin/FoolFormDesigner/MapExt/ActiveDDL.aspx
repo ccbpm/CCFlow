@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" CodeBehind="ActiveDD.aspx.cs" Inherits="CCFlow.WF.MapDef.MapExtUI.ActiveDDLUI" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" CodeBehind="ActiveDDL.aspx.cs" Inherits="CCFlow.WF.MapDef.MapExtUI.ActiveDDLUI" %>
 <%@ Register src="../Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />

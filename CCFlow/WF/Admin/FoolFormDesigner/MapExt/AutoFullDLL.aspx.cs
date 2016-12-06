@@ -15,7 +15,7 @@ using System.Collections;
 
 namespace CCFlow.WF.MapDef
 {
-    public partial class AutoFullDLLUIUI : BP.Web.WebPage
+    public partial class AutoFullDLLUI : BP.Web.WebPage
     {
 
 

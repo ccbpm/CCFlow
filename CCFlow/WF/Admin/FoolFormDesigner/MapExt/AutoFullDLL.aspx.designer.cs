@@ -10,7 +10,7 @@
 namespace CCFlow.WF.MapDef {
     
     
-    public partial class AutoFullDLLUIUI {
+    public partial class AutoFullDLLUI {
         
         /// <summary>
         /// TB_SQL 控件。

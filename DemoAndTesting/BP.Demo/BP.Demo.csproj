@@ -128,6 +128,9 @@
     <Compile Include="UnitTesting\SendMessage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Components\BP.En30\BP.En30.csproj">
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
@@ -136,9 +139,6 @@
       <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
       <Name>BP.WF</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

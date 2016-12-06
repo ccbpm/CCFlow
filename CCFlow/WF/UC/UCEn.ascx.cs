@@ -3068,21 +3068,21 @@ namespace CCFlow.WF.UC
                 #region 二维码
                 if (img.HisImgAppType == ImgAppType.QRCode)
                 {
+                    x = img.X + wtX;
                     string pk = en.PKVal.ToString();
                     string myPK = this.FK_MapData + "_" + img.MyPK + "_" + pk;
                     FrmEleDB frmEleDB = new FrmEleDB();
                     frmEleDB.MyPK = myPK;
-                    frmEleDB.RetrieveFromDBSources();
-                    if (!string.IsNullOrEmpty(frmEleDB.Tag2))
+                    if (frmEleDB.RetrieveFromDBSources() == 0)
                     {
-                        x = img.X + wtX;
-                        // 由于火狐 不支持onerror 所以 判断图片是否存在
-                        if (File.Exists(Server.MapPath(frmEleDB.Tag2)))
-                        {
-                            this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                            this.Add("\t\n<img src='" + frmEleDB.Tag2 + "' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
-                            this.Add("\t\n</DIV>");
-                        }
+                        //生成二维码
+                    }
+                    // 由于火狐 不支持onerror 所以 判断图片是否存在
+                    if (File.Exists(Server.MapPath(frmEleDB.Tag2)))
+                    {
+                        this.Add("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
+                        this.Add("\t\n<img src='" + frmEleDB.Tag2 + "' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
+                        this.Add("\t\n</DIV>");
                     }
                     continue;
                 }
@@ -3864,7 +3864,7 @@ namespace CCFlow.WF.UC
             foreach (BP.Sys.FrmRB rb in myrbs)
             {
                 x = rb.X + wtX;
-                this.Add("<DIV id='F" + rb.MyPK + "' style='position:absolute; left:" + x + "px; top:" + rb.Y + "px; width:100%; height:16px;text-align: left;word-break: keep-all;' >");
+                this.Add("<DIV id='F" + rb.MyPK + "' style='position:absolute; left:" + x + "px; top:" + rb.Y + "px; height:16px;text-align: left;word-break: keep-all;' >");
                 this.Add("<span style='word-break: keep-all;font-size:12px;'>");
 
                 System.Web.UI.WebControls.RadioButton rbCtl = new RadioButton();

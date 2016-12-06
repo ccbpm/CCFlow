@@ -7,7 +7,9 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-
-
-public partial class WF_MapDef_Pub {
+namespace CCFlow.WF.Admin.FoolFormDesigner {
+    
+    
+    public partial class WF_MapDef_Pub {
+    }
 }

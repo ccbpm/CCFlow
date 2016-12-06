@@ -286,7 +286,7 @@ namespace CCFlow.WF.MapDef
                 isItem = this.Pub1.AddTR(isItem);
                 this.Pub1.AddTDIdx(idx++);
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "')\">设置列表过滤</a>");
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn +  "&MyPK="+MapExtXmlList.ActiveDDL+"_"+mapAttr.MyPK+"')\">设置级联动(如:省份,城市联动)</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&AttrOfOper=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.ActiveDDL + "_" + mapAttr.MyPK + "')\">设置级联动(如:省份,城市联动)</a>");
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK="+MapExtXmlList.DDLFullCtrl+"_"+mapAttr.MyPK+"')\">设置自动填充</a>");
                 this.Pub1.AddTREnd();
             }

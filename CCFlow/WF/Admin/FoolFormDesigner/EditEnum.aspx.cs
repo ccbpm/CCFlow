@@ -305,7 +305,7 @@ namespace CCFlow.WF.MapDef
                 isItem = this.Pub1.AddTR(isItem);
                 this.Pub1.AddTDIdx(idx++);
                 string html = "<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">下拉框自动完成</a>";
-                html += " - <a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.ActiveDDL + "_" + mapAttr.MyPK + "')\">设置级联动(如:省份,城市联动)</a>";
+                html += " - <a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&AttrOfOper=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.ActiveDDL + "_" + mapAttr.MyPK + "')\">设置级联动(如:省份,城市联动)</a>";
                 html += " - <a href=\"javascript:WinOpen('./MapExt/RadioBtns.htm?FK_MapData=" + mapAttr.FK_MapData + "&KeyOfEn=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.KeyOfEn + "')\">高级JS设置</a>";
                 this.Pub1.AddTD("colspan=3", html);
                 this.Pub1.AddTREnd();

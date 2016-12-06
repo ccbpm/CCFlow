@@ -12,50 +12,53 @@ using BP.WF;
 using BP.En;
 using BP.Sys;
 
-public partial class WF_MapDef_Pub : BP.Web.UC.UCBase3
+namespace CCFlow.WF.Admin.FoolFormDesigner
 {
-    #region 变量
-    public string FK_MapData
+    public partial class WF_MapDef_Pub : BP.Web.UC.UCBase3
     {
-        get
+        #region 变量
+        public string FK_MapData
         {
-            return this.Request.QueryString["FK_MapData"];
-        }
-    }
-    public string ExtType
-    {
-        get
-        {
-            string s = this.Request.QueryString["ExtType"];
-            if (s == "")
-                s = null;
-            return s;
-        }
-    }
-    #endregion
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-    }
-    public void ShowExtMenu()
-    {
-        this.Add("\t\n<div id='tabsJ'  align='center'>");
-        MapExtXmls fss = new MapExtXmls();
-        fss.RetrieveAll();
-
-        this.AddUL();
-        foreach (MapExtXml fs in fss)
-        {
-            if (this.ExtType == fs.No)
+            get
             {
-               // this.Lab = fs.Name;
-                this.AddLiB("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + fs.No, "<span>" + fs.Name + "</span>");
+                return this.Request.QueryString["FK_MapData"];
             }
-            else
-                this.AddLi("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + fs.No, "<span>" + fs.Name + "</span>");
         }
-        this.AddLi("<a href='MapExt.aspx?FK_MapData=" + this.FK_MapData + "'><span>帮助</span></a>");
-        this.AddULEnd();
-        this.AddDivEnd();  
+        public string ExtType
+        {
+            get
+            {
+                string s = this.Request.QueryString["ExtType"];
+                if (s == "")
+                    s = null;
+                return s;
+            }
+        }
+        #endregion
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+        }
+        public void ShowExtMenu()
+        {
+            this.Add("\t\n<div id='tabsJ'  align='center'>");
+            MapExtXmls fss = new MapExtXmls();
+            fss.RetrieveAll();
+
+            this.AddUL();
+            foreach (MapExtXml fs in fss)
+            {
+                if (this.ExtType == fs.No)
+                {
+                    // this.Lab = fs.Name;
+                    this.AddLiB("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + fs.No, "<span>" + fs.Name + "</span>");
+                }
+                else
+                    this.AddLi("MapExt.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=" + fs.No, "<span>" + fs.Name + "</span>");
+            }
+            this.AddLi("<a href='MapExt.aspx?FK_MapData=" + this.FK_MapData + "'><span>帮助</span></a>");
+            this.AddULEnd();
+            this.AddDivEnd();
+        }
     }
 }

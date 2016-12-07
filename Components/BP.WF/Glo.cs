@@ -324,7 +324,7 @@ namespace BP.WF
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson BLOB NULL");
                             break;
                         case DBType.MySQL:
-                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson LONGTEXT");
+                            DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson LONGBLOB NULL");
                             break;
                         default:
                             break;
@@ -1013,7 +1013,7 @@ namespace BP.WF
             {
                 BP.Port.Emp emp = new BP.Port.Emp("admin");
                 BP.Web.WebUser.SignInOfGener(emp);
-
+                BP.Sys.Glo.WriteLineInfo("开始装载模板...");
                 string msg = "";
                 if (demoType == 0)
                 {
@@ -1028,9 +1028,11 @@ namespace BP.WF
                     msg = l2.Do() as string;
                 }
 
+                BP.Sys.Glo.WriteLineInfo("装载模板完成。开始修复视图...");
                 //修复视图.
                 Flow.RepareV_FlowData_View();
 
+                BP.Sys.Glo.WriteLineInfo("视图修复完成。");
             }
 
             if (isInstallFlowDemo == false)

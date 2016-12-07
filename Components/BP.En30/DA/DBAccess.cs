@@ -132,6 +132,45 @@ namespace BP.DA
                 }
                 return;
             }
+
+            //added by liuxc,2016-12-7，增加对mysql大数据longblob字段存储逻辑
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                MySqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as MySqlConnection;
+
+                if (cn.State != ConnectionState.Open)
+                    cn.Open();
+
+                MySqlCommand cm = new MySqlCommand();
+                cm.Connection = cn;
+                cm.CommandType = CommandType.Text;
+                cm.CommandText = "UPDATE " + tableName + " SET " + saveToFileField + "=@FlowJsonFile WHERE " + tablePK + " =@PKVal";
+
+                MySqlParameter spFile = new MySqlParameter("FlowJsonFile", MySqlDbType.LongBlob);
+                spFile.Value = bytes;
+                cm.Parameters.Add(spFile);
+
+                MySqlParameter spPK = new MySqlParameter("PKVal", MySqlDbType.VarChar);
+                spPK.Value = pkVal;
+                cm.Parameters.Add(spPK);
+
+                try
+                {
+                    cm.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " LONGBLOB NULL ";
+                        BP.DA.DBAccess.RunSQL(sql);
+                    }
+
+                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                }
+                return;
+            }
         }
         /// <summary>
         /// 保存文件到数据库
@@ -295,6 +334,51 @@ namespace BP.DA
                 
                 return byteFile;
             }
+
+            //added by liuxc,2016-12-7,增加对mysql数据库的逻辑
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                MySqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as MySqlConnection;
+                if (cn.State != ConnectionState.Open)
+                    cn.Open();
+
+                string strSQL = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + "='" + pkVal + "'";
+
+                MySqlDataReader dr = null;
+                MySqlCommand cm = new MySqlCommand();
+                cm.Connection = cn;
+                cm.CommandText = strSQL;
+                cm.CommandType = CommandType.Text;
+
+
+                // 执行它.
+                try
+                {
+                    dr = cm.ExecuteReader();
+                }
+                catch (Exception ex)
+                {
+                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " LONGBLOB NULL ";
+                        BP.DA.DBAccess.RunSQL(sql);
+                    }
+                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                }
+
+                byte[] byteFile = null;
+                if (dr.Read())
+                {
+                    if (dr[0] == null || string.IsNullOrEmpty(dr[0].ToString()))
+                        return null;
+
+                    byteFile = (byte[])dr[0];
+                }
+
+                return byteFile;
+            }
+
             //最后仍然没有找到.
             throw new Exception("@没有判断的数据库类型.");
         }

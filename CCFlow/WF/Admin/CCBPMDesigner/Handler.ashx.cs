@@ -385,9 +385,9 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             BP.BPMN.Flow fl = new BP.BPMN.Flow(flowNo);
             //修改版本
             fl.DType = fl.DType == BP.BPMN.CCBPM_DType.BPMN ? BP.BPMN.CCBPM_DType.BPMN : BP.BPMN.CCBPM_DType.CCBPM;
-            fl.Update();
             //直接保存了.
             fl.FlowJson = diagram;
+            fl.Update();
 
             //节点方向
             string[] dir_Nodes = direction.Split('@');
@@ -432,8 +432,8 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                             if (!string.IsNullOrEmpty(node.Name) && figure["rotationCoords"].Count > 0)
                             {
                                 JsonData rotationCoord = figure["rotationCoords"][0];
-                                node.X = int.Parse(rotationCoord["x"].ToString());
-                                node.Y = int.Parse(rotationCoord["y"].ToString());
+                                node.X = Convert.ToInt32(float.Parse(rotationCoord["x"].ToString()));
+                                node.Y =  Convert.ToInt32(float.Parse(rotationCoord["y"].ToString()));
                                 node.DirectUpdate();
                             }
                         }
@@ -445,8 +445,8 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                             labelNode = new LabNote();
                             labelNode.FK_Flow = flowNo;
                             labelNode.Name = primitives["str"].ToString();
-                            labelNode.X = int.Parse(vector["x"].ToString());
-                            labelNode.Y = int.Parse(vector["y"].ToString());
+                            labelNode.X = Convert.ToInt32(float.Parse(vector["x"].ToString()));
+                            labelNode.Y = Convert.ToInt32(float.Parse(vector["y"].ToString()));
                             labelNode.Insert();
                         }
                     }

@@ -1065,4 +1065,8 @@ display:none;
 #orgjstree {
 font-size:14px;display: none;height:90%;overflow:auto;
 }
-
+select {
+    apperance: none;
+-moz-appearance: none;
+-ms-appearance: none;
+}

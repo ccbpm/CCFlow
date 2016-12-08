@@ -262,6 +262,7 @@ namespace BP.WF
                     return InitWorkerLists(town, dt);
                 }
             }
+
             throw new Exception("@此部分代码已经移除了.");
         }
         #endregion GenerWorkerList 相关方法.
@@ -5636,9 +5637,10 @@ namespace BP.WF
                 oldSender = this.HisGenerWorkFlow.Sender; //旧发送人,在回滚的时候把该发送人赋值给他.
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
 
+                #region 处理退回的情况.
                 if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta)
                 {
-                    /* 检查该退回是否是原路返回? */
+                    /* 检查该退回是否是原路返回 ? */
                     Paras ps = new Paras();
                     ps.SQL = "SELECT ReturnNode,Returner,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
                     ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
@@ -5682,6 +5684,7 @@ namespace BP.WF
                         }
                     }
                 }
+                #endregion 处理退回的情况.
 
                 //做了不可能性的判断.
                 if (this.HisGenerWorkFlow.FK_Node != this.HisNode.NodeID)

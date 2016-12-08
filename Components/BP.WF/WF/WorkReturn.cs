@@ -798,7 +798,9 @@ namespace BP.WF
                 || this.HisNode.TodolistModel == TodolistModel.Sharing
                 || this.HisNode.TodolistModel == TodolistModel.Teamup)
             {
-                rw.IsBackTracking = true; /*如果是共享，顺序，协作模式，都必须是退回并原路返回.*/
+
+                // 为软通小杨屏蔽， 共享，顺序，协作模式的退回并原路返回的 问题. 
+                //rw.IsBackTracking = true; /*如果是共享，顺序，协作模式，都必须是退回并原路返回.*/
 
                 // 需要更新当前人待办的状态, 把1000作为特殊标记，让其发送时可以找到他.
                 string sql = "UPDATE WF_GenerWorkerlist SET IsPass=1000 WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'";

@@ -479,6 +479,9 @@ display:block;
     top:0px;
     z-index:10;
 
+    max-height:95%;
+    overflow:auto;
+
 }
 #topBar
 {
@@ -1051,19 +1054,48 @@ float:right;
 
 #freeBarDiv {
 display:none;
+text-align:right;
 }
 
 #freeBarDiv #BtnOk{
-    float:right;
+     margin-right:50px;
 }
 
 #freeBarDiv #BtnCancel{
-    float:right;
-    margin-right:50px;
+   
 }
 
 #orgjstree {
 font-size:14px;display: none;height:90%;overflow:auto;
+}
+body table {
+  table-layout: fixed;
+  /*width: 98% border:0px;
+                        margin: 0px;*/
+}
+body table tr td {
+  text-overflow: ellipsis;
+  /* for IE */
+  -moz-text-overflow: ellipsis;
+  /* for Firefox,mozilla */
+  overflow: hidden;
+  white-space: nowrap;
+}
+body table tr td:first-child {
+  text-overflow: initial;
+  /* for IE */
+  -moz-text-overflow: initial;
+  /* for Firefox,mozilla */
+  overflow: auto;
+  white-space: normal;
+}
+
+/*分页表格*/
+.tabPdiv {
+overflow:auto;
+}
+.tabPdiv table{
+width:100%;
 }
 select {
     apperance: none;

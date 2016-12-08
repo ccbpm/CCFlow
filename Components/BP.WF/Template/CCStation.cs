@@ -10,7 +10,7 @@ using BP.WF.Port;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 抄送到岗位属性	  
+    /// 抄送到岗位 属性	  
     /// </summary>
     public class CCStationAttr
     {

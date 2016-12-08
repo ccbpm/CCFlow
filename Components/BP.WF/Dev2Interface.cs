@@ -1722,28 +1722,6 @@ namespace BP.WF
             dt.DefaultView.Sort = "RDT DESC";
             return dt.DefaultView.ToTable();
         }
-        //获取我发起的流程
-        public static DataTable DB_MyFlow(string fk_flow, string title)
-        {
-            Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            if (string.IsNullOrEmpty(fk_flow))
-            {
-                if (string.IsNullOrEmpty(title))
-                    ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE Starter='" + WebUser.No + "' AND FK_Flow!='010' ";
-                else
-                    ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE Starter='" + WebUser.No + "' AND FK_Flow!='010' and Title Like '%" + title + "%' ";
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(title))
-                    ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE Starter='" + WebUser.No + "' AND FK_Flow='" + fk_flow + "' ";
-                else
-                    ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE Starter='" + WebUser.No + "' AND FK_Flow='" + fk_flow + "' and Title Like '%" + title + "%'";
-            }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
-        }
-
         /// <summary>
         /// 获得任务池的工作列表
         /// </summary>

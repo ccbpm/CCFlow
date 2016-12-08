@@ -778,7 +778,6 @@ namespace CCFlow.WF.UC
                 url = currND.FormUrl;
 
             string urlExt = this.RequestParas;
-
             //防止查询不到.
             urlExt = urlExt.Replace("?WorkID=", "&WorkID=");
             if (urlExt.Contains("&WorkID") == false)
@@ -977,7 +976,7 @@ namespace CCFlow.WF.UC
             #region 处理分合流的退回信息.
             if (this.WorkID != 0)
             {
-                if (this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL)
+                if ((this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL) && this.currND.HisFormType != NodeFormType.FixForm)
                 {
                     if (gwf.WFState == WFState.ReturnSta)
                     {
@@ -1136,7 +1135,7 @@ namespace CCFlow.WF.UC
                 gwf.RetrieveFromDBSources();
 
                 #region 处理分合流的退回信息.
-                if (this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL)
+                if ((this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL) && this.currND.HisFormType != NodeFormType.FixForm)
                 {
                     if (gwf.WFState == WFState.ReturnSta)
                     {

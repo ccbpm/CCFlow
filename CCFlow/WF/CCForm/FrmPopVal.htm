@@ -144,9 +144,6 @@
     </style>
     <script type="text/javascript">
         $(function () {
-            var bodyHeight = document.documentElement.clientHeight;
-            $('body').height(bodyHeight);
-
             dtTable();
             $('#test').bind('click', function () {
                 if ($('#orgjstree').css('display') == "none") {
@@ -160,13 +157,15 @@
                     $('#orgjstree').css('display', 'none');
                 }
             });
+            var bodyHeight = document.documentElement.clientHeight;
+            $('body').height(bodyHeight);
             if (parent == undefined || parent.frames["iframePopModalForm"] == undefined) {
                 $('#freeBarDiv').css('display', 'block');
                 //自由表单时使用
                 $('#BtnOk').bind('click', function () {
                     var ctrlId = GetQueryString("CtrlId");
                     var ctrl = opener.window.document.getElementById(ctrlId);
-                    
+
                     //为表单元素反填值
                     var returnValSetObj = window.pageSetData;
                     var returnValObj = window.returnVal;
@@ -198,7 +197,7 @@
                                 $(ctrl).val(returnValObj.Name);
                             } else {
                                 for (var property in returnValObj) {
-                                    
+
                                     //var valueArr = [];
                                     //$.each(selectedTrArr, function (i, selectedTr) {
                                     //    valueArr.push("(" + selectedTr.No + "," + selectedTr.Name + ")");
@@ -230,6 +229,15 @@
                     window.close();
                 })
             }
+
+            //设置表格的高度  和滚动条
+            var portletTitlePadding = parseInt($('#blackDiv .portlet-title').css('padding-top').substr(0, $('#blackDiv .portlet-title').css('padding-top').length - 2)) + parseInt($('#blackDiv .portlet-title').css('padding-bottom').substr(0, $('#blackDiv .portlet-title').css('padding-bottom').length - 2));
+            var pagetableHeight = bodyHeight - $('#blackDiv .portlet-title').height() - $('#blackDiv #flowListDiv .pagination-panel').height() - portletTitlePadding - 5 - 100;
+            
+            if ($('#freeBarDiv:hidden').length == 0 && $('#freeBarDiv').length==1) {
+                pagetableHeight = pagetableHeight - $('#freeBarDiv').height();
+            }
+            $('#flowListDiv .tabPdiv').height(pagetableHeight);
         });
 
         //配置数据
@@ -254,8 +262,6 @@
                 //formData2[formData[i].split('=')[0]] = formData[i].split('=')[1];
                 formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
             }
-
-            console.log(formData2)
 
             $.ajax({
                 type: 'post',
@@ -400,7 +406,7 @@
                             //设置表格的表头
                             var tableHeader = '';
                             if (pageSetData[0].PopValSelectModel == "More") {//选择模式是单选
-                                tableHeader = "<tr data-data='true'><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=checkbox class=ck_tbody@' data-coltype='Operation1'><input type='checkbox' class='ck_head'/></th>";
+                                tableHeader = "<tr data-data='true'><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=checkbox class=ck_tbody@' data-coltype='Operation1'></th>";
                             } else {//选择模式是多选
                                 tableHeader = "<tr data-data='true'><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=radio name=rb class=rb_tbody@' data-coltype='Operation1'></th>";
                             }
@@ -519,7 +525,7 @@
                                 $('#poptablew tbody .rb_tbody').bind('change', radioChange);
                                 //表格有分页模式
                             } else if (WorkM == "TablePage") {
-                                $("#flowListDiv table thead").html(tableHeader);
+                                $("#flowListDiv div table thead").html(tableHeader);
                                 //$('#main').css('display', 'block');
                                 //$('#btnSearch').bind('click', initTableData);
                                 //$('#btnSearch').trigger('click');
@@ -646,10 +652,10 @@
         //分页table
         function initTableData() {
             var fk_MapExt = GetQueryString("FK_MapExt");
-            var pageSize = $('#flowListDiv .pagination-panel select').val();
+            var pageSize = $('#flowListDiv  .pagination-panel select').val();
             if (pageSize == "-1") {
                 pageSize = 10;
-                $('#flowListDiv .pagination-panel select').children("[value=10]").attr('selected', 'selected');
+                $('#flowListDiv  .pagination-panel select').children("[value=10]").attr('selected', 'selected');
             }
             var searchData = $('#searchForm').serialize();
             var toDoListInitData = {
@@ -660,11 +666,11 @@
                 listUrl: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData ,
                 RenderOverFun: function () {
                     //为CHECKBOX radio绑定事件
-                    $('#flowListDiv table tbody .ck_tbody').bind('change', checkBoxChange);
-                    $('#flowListDiv table tbody .rb_tbody').bind('change', radioChange);
+                    $('#flowListDiv div table tbody .ck_tbody').bind('change', checkBoxChange);
+                    $('#flowListDiv div table tbody .rb_tbody').bind('change', radioChange);
                 }
             };
-            $('#flowListDiv table tbody tr').remove();
+            $('#flowListDiv div table tbody tr').remove();
             Common.CustomPagePlug(toDoListInitData);//绑定表格
 
             dtTable();
@@ -695,11 +701,8 @@
                         if (defVal != undefined && defVal.trim() != '') {
                             defVal = defVal.replace('<br/>', '');
                             defVal = defVal.replace('@Now', "(new Date())");
-                            console.log(1+":"+defVal)
                             defVal = new Date(eval(defVal));
-                            console.log(2 + ":" + defVal)
                             defVal = defVal.FormateDate("yyyy-MM-dd HH:mm:ss");
-                            console.log(3 + ":" + defVal)
                         }
                         conHtml += '<input value="' + defVal + '"  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
                     }
@@ -708,7 +711,6 @@
             });
 
             $('#searchDiv').append($(conHtml));
-            console.log(conHtml)
         }
         //checkbox的选中事件
         function checkBoxChange(obj) {
@@ -896,25 +898,28 @@
             <div>
                 <form id="searchForm">
                     <div id="searchDiv">
-                    </div></form>
+                    </div>
+                </form>
                 <div class="searchBtnDiv">
                     <button class="Btn" id="btnSearch">搜索</button>
                 </div>
 
-    <div style="font-size: 20px; float: left; width: 100%; display: none;">
-        已选择列表：
-        <span id="selectedlists" style="word-break: break-all;"></span>
-    </div>
-</div>
+                <div style="font-size: 20px; float: left; width: 100%; display: none;">
+                    已选择列表：
+                    <span id="selectedlists" style="word-break: break-all;"></span>
+                </div>
+            </div>
         </div>
         <div class="portlet-body " id="merDiv">
             <div class="tab-content" style="margin: 4px 0px;">
                 <div class="tab-pane active portlet_tab flowLists">
                     <div id="flowListDiv">
-                        <table class="table customthr customHover wupop" data-data="true">
-                            <thead></thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class="tabPdiv">
+                            <table class="tble customthr customHover wupop" data-data="true">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                         <div class="loadDate" style="text-align: center;">
                                 <img src="../Scripts/bootstrap/fonts/loading.gif" />
                         </div>

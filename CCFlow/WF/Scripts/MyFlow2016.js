@@ -441,7 +441,7 @@ function initPageParam() {
     pageData.FK_Flow = GetQueryString("FK_Flow");
     pageData.FK_Node = GetQueryString("FK_Node");
     //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
-    pageData.FID = GetQueryString("FID");
+    pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
     pageData.WorkID = GetQueryString("WorkID");
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
@@ -790,6 +790,7 @@ function initGroup(workNodeData, groupFiled) {
                 paras += "&DoType=View";
             }
             src += "&r=q" + paras;
+            src += "&IsShowTitle=0";
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Track": //轨迹图.
@@ -940,8 +941,8 @@ function initTrackList(workNodeData) {
       
     //如果工作已经处理  提示用户工作已处理  并关闭处理页面
     if (workNodeData.Track.length > 0 && workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) {
-        alert("当前工作已处理");
-        window.close();
+        //alert("当前工作已处理");
+        //window.close();
     }
 }
 
@@ -969,7 +970,8 @@ function InitForm() {
                 var reloadBtn = '';
                 if (groupFiled.CtrlType == "SubFlow") {
                     //reloadBtn = '<label class="reloadIframe">刷新</label>'
-                    groupFiled.Lab = "关联的流程";
+                    //groupFiled.Lab = "关联的流程";
+                    groupFiled.Lab = workNodeData.WF_Node[0].SFLab;
                 } else if (groupFiled.CtrlType == "Track") {
                     //reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
                 }
@@ -1292,7 +1294,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         } else {//文本区域
                             if (mapAttr.UIHeight <= 23) {
                                 eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                    "<input maxlength=" + mapAttr.MaxLen/2 + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
                             }
                             else {//大于23就是多行
@@ -1300,21 +1302,24 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                     mdCol = 4;
                                     smCol = 12;
                                 }
+
+                                var uiHeight = mapAttr.UIHeight / 23 * 30;
                                 islabelIsInEle = true;
                                 eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">'
                                     + "<label>" + mapAttr.Name + "</label>"
                                     +
                                     (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                                     +
-                                    "<textarea maxlength=" + mapAttr.MaxLen/2 + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
 
                             }
                         }
                     } else if (mapAttr.ColSpan == "4" || (mapAttr.ColSpan == "3" && mapAttr.UIHeight > 23)) {//大文本区域  且占一整行
+                        var uiHeight = mapAttr.UIHeight / 23 * 30;
                         isInOneRow = true;
                         eleHtml += '<div class="col-lg-11 col-md-11 col-sm-10">' +
-                            "<textarea maxlength=" + mapAttr.MaxLen/2 + "  name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
+                            "<textarea  style='height:"+uiHeight+"px' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
                             + '</div>';
                     }
                 } //AppDate
@@ -1325,7 +1330,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen/2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
                 else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                     var enableAttr = '';
@@ -1459,7 +1464,12 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         defValue = defValue;
                     }
-                    eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" +  defValue + "</div>";
+                    eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" + defValue + "</div>";
+
+                    //var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
+                //'<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
+                  //  tb.parent().html(eleHtml);
+
                     eleHtml += '</div>';
                 }
             }
@@ -1862,8 +1872,11 @@ function GenerWorkNode() {
             }
             //是分流或者分合流  且是 退回状态 转到页面 WF\WorkOpt\DealSubThreadReturnToHL.html
             if ((gengerWorkNode.WF_Node[0].RunModel == 2 || gengerWorkNode.WF_Node[0].RunModel == 3) && gengerWorkNode.WF_GenerWorkFlow[0].WFState == 5) {
+                $('#')
                 var iframeHtml = "<iframe style='width:100%;' src='./WorkOpt/DealSubThreadReturnToHL.html?FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + pageData.FK_Node + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "'></iframe>";
-                $('#divCurrentForm').html(iframeHtml);
+                $('#topContentDiv').html(iframeHtml);
+                $('#header span').html("处理退回信息");
+                return;
             }
             //加签回复
             if (gengerWorkNode.WF_GenerWorkFlow[0].WFState == 11) {
@@ -1974,7 +1987,7 @@ function Send() {
         formCheckResult = false;
     }
     if (!formCheckResult) {
-        alert("请检查表单必填项和正则表达式");
+        //alert("表单填写不正常，请检查！！！");
         return;
     }
     var toNode = 0;
@@ -2053,7 +2066,7 @@ $(function () {
 function OptSuc(msg) {
     // window.location.href = "/WF/MyFlowInfo.aspx";
     $('.Message').hide();
-    if ($('#returnWorkModal').length > 0) {
+    if ($('#returnWorkModal:hidden').length==0 && $('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()
     }
     msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')

@@ -923,7 +923,7 @@ namespace BP.Sys
 
             // Sys_Enum
             listNames.Add("Sys_Enum");
-            sql = "@SELECT * FROM Sys_Enum WHERE EnumKey IN ( SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData IN (" + ids + ") )";
+            sql = "@SELECT * FROM Sys_Enum WHERE EnumKey IN ( SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData IN (" + ids + ") ) order By EnumKey,IntKey";
             sqls += sql;
 
             // 审核组件

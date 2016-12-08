@@ -539,24 +539,24 @@ namespace CCFlow.WF.CCForm
                         {
                             if (athDesc.IsWoEnableWF)
                             {
-                                this.Pub1.AddTD("<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" +
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" +
                                      this.WorkID + "','" + db.MyPK + "','" + this.FK_MapData + "','" + this.Ath +
                                      "','" + this.FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                             }
                             else
                             {
-                                this.Pub1.AddTD("<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK +
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK +
                                             "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                             }
                         }
                         else if (DataType.IsImgExt(db.FileExts) || db.FileExts.ToUpper() == "PDF" || db.FileExts.ToUpper() == "CEB")
                         {
-                            this.Pub1.AddTD("<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK +
+                            this.Pub1.AddTDTDTitle(db.FileName,"<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK +
                                             "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         }
                         else
                         {
-                            this.Pub1.AddTD("<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK +
+                            this.Pub1.AddTDTDTitle(db.FileName,"<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK +
                                             "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         }
 
@@ -602,18 +602,18 @@ namespace CCFlow.WF.CCForm
                 {
                     this.Pub1.AddTR("style='border:0px;'");
 
-                    this.Pub1.AddTDTitleExt("序号");
+                    this.Pub1.AddTDTitleExt("style='width:50px;'","序号");
                     if (athDesc.Sort.Contains(","))
                     {
                         string sortColumn = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(0, athDesc.Sort.IndexOf("@")) : "类别";
                         if (sortColumn == "") sortColumn = "类别";
                         this.Pub1.AddTD("style='background:#f4f4f4; font-size:12px; padding:3px;'", sortColumn);
                     }
-                    this.Pub1.AddTDTitleExt("文件名");
-                    this.Pub1.AddTDTitleExt("大小KB");
-                    this.Pub1.AddTDTitleExt("上传时间");
-                    this.Pub1.AddTDTitleExt("上传人");
-                    this.Pub1.AddTDTitleExt("操作");
+                    this.Pub1.AddTDTitleExt("style='min-width:200px;'", "文件名");
+                    this.Pub1.AddTDTitleExt("style='width:50px;'", "大小KB");
+                    this.Pub1.AddTDTitleExt("style='width:90px;'", "上传时间");
+                    this.Pub1.AddTDTitleExt("style='width:50px;'", "上传人");
+                    this.Pub1.AddTDTitleExt("style='width:100px;'", "操作");
                     this.Pub1.AddTREnd();
                 }
 
@@ -659,16 +659,16 @@ namespace CCFlow.WF.CCForm
                         {
                             if (athDesc.IsWoEnableWF && CanEditor(db.FileExts))
                             {
-                                this.Pub1.AddTD("<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" + this.WorkID + "','" + db.MyPK + "','" + this.FK_MapData + "','" + this.Ath + "','" + this.FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" + this.WorkID + "','" + db.MyPK + "','" + this.FK_MapData + "','" + this.Ath + "','" + this.FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                             }
                             else if (db.FileExts.ToUpper() == "TXT" || db.FileExts.ToUpper() == "JPG" || db.FileExts.ToUpper() == "JPEG" || db.FileExts.ToUpper() == "GIF" || db.FileExts.ToUpper() == "PNG" || db.FileExts.ToUpper() == "BMP" || db.FileExts.ToUpper() == "PDF" || db.FileExts.ToUpper() == "CEB")
                             {
-                                this.Pub1.AddTD("<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
 
                             }
                             else
                             {
-                                this.Pub1.AddTD("<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK + "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK + "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                             }
                         }
                         else
@@ -723,7 +723,7 @@ namespace CCFlow.WF.CCForm
                     this.Pub1.AddTD("0");
                     if (athDesc.Sort.Contains(","))
                         this.Pub1.AddTD("&nbsp&nbsp");
-                    this.Pub1.AddTD("style='width:100px'", "<span style='color:red;' >上传附件</span>");
+                    this.Pub1.AddTD("style='width:100px'", "<span style='color:red;' >您还未上传任何附件，请点击下方按钮上传附件</span>");
                     this.Pub1.AddTD("&nbsp&nbsp");
                     this.Pub1.AddTD("&nbsp&nbsp");
                     this.Pub1.AddTD("&nbsp&nbsp");

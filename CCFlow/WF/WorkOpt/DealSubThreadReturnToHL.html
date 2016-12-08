@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet"/>
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script src="../Scripts/jquery/jquery.min.js"></script>
     <script src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
@@ -11,23 +12,23 @@
     
     <style>
         #mains {
-            width: 900px;
-            margin: 0px auto;
+            margin: 10px auto;
             background: #fff;
-            border: 1px solid #ccc;
+            /*border: 1px solid #ccc;*/
         } 
         #mains h3 {
             font-size: 20px;
-            background: #718BF2;
+            background: rgb(157, 159, 175) !important;
             color: white;
             padding: 10px;
             text-align: left;
             margin: 0px;
+
+            display:none;
         }
             #mains fieldset legend {
                 border-bottom: none;
                 float: left;
-                width:70%;
             }
             #mains form {
                 overflow: hidden;
@@ -49,7 +50,7 @@
                 width: 100%;
                 border: none;
               }
-        #mains tr td input, #mains tr td textarea {
+        #mains input, #mains textarea {
             border-radius: 15px;
             border: #2884fa 1px solid;
             margin: 8px 0px;
@@ -62,8 +63,13 @@
                 border-radius: 15px;
                 background: #2884fa;
             }
+
+        .yjback, yjother,.yjdele, .yj ,label[for=yjback],label[for=yjdele],label[for=yjother],label[for=yj]{
+            cursor: pointer;
+        }
     </style>
     <script>
+        var pageData = {};
         $(function () {
             var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
                '<div class="modal-dialog">'
@@ -86,21 +92,40 @@
                 //$('#selectEmpsModal').modal().show();
                 $('#selectEmpsModal').show().addClass("in");
             });
-            $("section").show();
+            $("#mains").show();
             $(".idea input").click(function () {
                 if ($(".idea input:checked").val().split("_")[1] == "移交给其他人处理") {
                     $(".yjshow").show();
                 } else {
                     $(".yjshow").hide();
                 }
-                var re = $(".idea input:checked").val().split("_")[1] + "原因：";
+                var re = $(".idea input:checked").val().split("_")[1] + "原因";
                 $("#sjre").text(re);
+
+                setParentHeight();
             });
+            pageData.FK_Flow=GetQueryString("FK_Flow");
+            pageData.FK_Node=GetQueryString("FK_Node");
+            pageData.WorkID=GetQueryString("WorkID");
+            pageData.FID=GetQueryString("FID");
             msg();
+
+            setParentHeight();
         });
+        //设置父IFRAME 高度  适用于傻瓜表单
+        function setParentHeight() {
+            if (parent != null) {
+                var height = document.body.clientHeight + 30;
+                var currentForm = parent.document.getElementById('topContentDiv');
+                //$(currentForm).height(height + 75);
+                if (currentForm != undefined) {
+                    $(currentForm).children('iframe').height(height);
+                }
+            }
+        }
         function msg() {
             $.ajax({
-                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Init&FK_Flow=029&FK_Node=2905&WorkID=923&FID=922&m=" +
+                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Init&FK_Flow=" + pageData.FK_Flow + "&FK_Node="+pageData.FK_Node+"&WorkID="+pageData.WorkID+"&FID="+pageData.FID+"&m=" +
                     Math.random(),
                 data: {},
                 success: function(data) {
@@ -124,10 +149,6 @@
                     if (data.CancelRole == "1") {//未知
 
                     }
-
-                    //if (data != null && JSON.parse(data)) {
-                    //    $("#mains h3").append(data);
-                    //}
                 }
             });
         }
@@ -136,12 +157,17 @@
             var note = $("#resj").val();
             var shiftToEmp = frames["iframeSelectEmpsForm"].window.returnVal.No;
             $.ajax({
-                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Done&FK_Flow=029&FK_Node=2905&WorkID=923&FID=922" + "&ActionType=" + actionType + "&Note=" + note + "&ShiftToEmp=" + shiftToEmp + "&=" + Math.random(),
+                url: "Handler.ashx?DoType=DealSubThreadReturnToHL_Done&FK_Flow=" + pageData.FK_Flow + "&FK_Node="+pageData.FK_Node+"&WorkID="+pageData.WorkID+"&FID="+pageData.FID + "&ActionType=" + actionType + "&Note=" + note + "&ShiftToEmp=" + shiftToEmp + "&=m" + Math.random(),
                 data: {},
                 success: function (data) {
                     if (data != null) {
-                        $("#mains h3").append(data);
-                     }
+                        if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                            window.parent.returnWorkWindowClose(data);
+                        } else {
+                            $("#mains h3").append(data);
+                            window.close();
+                        }
+                    }
                 }
             });
             $(".foot").hide();
@@ -165,46 +191,45 @@
         }
     </script>
 </head>
-<body style="margin: 0px; background: #eee;">
-    <section id="mains" style="display: none;">
+<body style="margin: 0px; ">
+    <div id="mains" style="display: none;" >
         <h3></h3>
-        <table>
+        <div class="row" style="margin: 0px;">
             <!--<tr>
-                <td colspan="2">
-                    <fieldset>
-                        <legend>&nbsp; 来自节点:</legend>
-                    </fieldset>
-                </td>
-            </tr>-->
-            <tr class="idea">
-                <td style="width: 20%; text-align: right;">方式</td>
-                <td>
+            <td colspan="2">
+                <fieldset>
+                    <legend>&nbsp; 来自节点:</legend>
+                </fieldset>
+            </td>
+        </tr>-->
+            <div class="idea">
+                <div class="col-md-3" style="text-align: right;padding-top:6px;">处理方式</div>
+                <div class="col-md-9" style="text-align: left;">
                     <input type="radio" name="radio1" value="Return_退回给子线程处理人" class="yjback" id="yjback" checked /><label for="yjback">
-    退回给子线程处理人
-</label>
-                    <input id="yjother" style="display:none;" type="radio" name="radio1" value="Shift_移交给其他人处理" class="yjother"  /><label for="yjother" style="display:none;"> 移交给其他人处理</label>
+                        退回给子线程处理人
+                    </label>
+                    <input id="yjother" style="display:none;" type="radio" name="radio1" value="Shift_移交给其他人处理" class="yjother" /><label for="yjother" style="display:none;"> 移交给其他人处理</label>
                     <input type="radio" name="radio1" style="display:none;" value="Kill_删除子线程" class="yjdele" id="yjdele" /><label for="yjdele" style="display:none;">
-    删除子线程
-</label>
-    <input type="radio" name="radio1"  value="UnSend_撤销分流点发送" class="yj" id="yj" /><label for="yj">撤销分流点发送</label>
-</td>
-            </tr>
-            <tr class="yjshow" style="display:none;">
-                <td style="width: 25%; text-align: right;">移交人：</td>
-                <td style="position:relative;"><input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;" disabled /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: absolute; right: 145px; top: 3px; border-radius: 0px 25px 25px 0px; height: 27px; background: #2884fa; color: #fff;" />
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 25%; text-align: right;" id="sjre">退回给子线程处理人处理原因：</td>
-                <td><textarea id="resj" style="width:100%;"></textarea></td>
-            </tr>
-            <tr class="foot">
-                <td colspan="2" style="text-align: right;">
-                    <button class="btn btn-info" onclick="save()">确定</button>
-                    <button class="btn btn-info" onclick="Close()">取消</button>
-                </td>
-            </tr>
-        </table>
-     </section>
+                        删除子线程
+                    </label>
+                    <input type="radio" name="radio1" value="UnSend_撤销分流点发送" class="yj" id="yj" /><label for="yj">撤销分流点发送</label>
+                </div>
+            </div>
+            <div class="yjshow " style="display:none;">
+                <div class=" col-md-3" style="text-align:right;padding-top:6px;">移交人</div>
+                <div class="col-md-9" style="text-align:left;">
+                    <input type="text" id="ToEmp" name="ToEmp" value='' disabled /> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: absolute; right: 15px; top: 1px; border-radius: 0px 25px 25px 0px;padding-top:0px; height: 27px; background: #2884fa; color: #fff;" />
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-3" style="text-align: right;padding-top:6px;" id="sjre">退回给子线程处理人处理原因</div>
+                <div class="col-md-9"><textarea id="resj" style="width:100%;"></textarea></div>
+            </div>
+            <div class="foot col-md-12" style="text-align: right;">
+                <button class="btn btn-info" onclick="save()">确定</button>
+                <button class="btn btn-info" onclick="Close()">取消</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

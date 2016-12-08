@@ -344,6 +344,7 @@
             }
             paras += "&DoType=View";
             src += "&r=q" + paras;
+            src += "&IsShowTitle=0";
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' +
                 groupFiled.Idx +
                 '">' +
@@ -1578,7 +1579,7 @@
 <div id="topContentDiv" class="row" style="display:none;">
     <i></i>
     <div id="contentDiv">
-        <form id="divCCForm" action="../MyFlow.ashx?method=login" method="post">
+        <div id="divCCForm" action="../MyFlow.ashx?method=login" >
             <!--LODOP_OB 先放着 不知道具体是什么-->
             <div>
                 <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0" height="0">
@@ -1611,7 +1612,7 @@
             </div>
             <!--DIVINFO-->
             <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; align: left'></div>
-        </form>
+        </div>
     </div>
 </div>
 

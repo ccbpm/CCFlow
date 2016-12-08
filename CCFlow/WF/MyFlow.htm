@@ -201,6 +201,10 @@
                 $("#nav").addClass("s");
                 $("#nav").css("top","30px");
             });
+
+            $('#btnCloseMsg').bind('click', function () {
+                $('.Message').hide();
+            });
          })
     </script>
 </head>
@@ -210,7 +214,7 @@
     </div>
     <!--Message-->
     <div class="Message alert">
-        <button type="button" data-dismiss="alert" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
+        <button type="button" id="btnCloseMsg" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
         <div id='Message'></div>
     </div>
 <!--分组导航-->

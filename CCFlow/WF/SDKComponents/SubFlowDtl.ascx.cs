@@ -90,12 +90,12 @@ namespace CCFlow.WF.SDKComponents
                 return;
 
             this.AddTR();
-            this.AddTDTitleExt("标题");
-            this.AddTDTitleExt("停留节点");
-            this.AddTDTitleExt("状态");
-            this.AddTDTitleExt("处理人");
-            this.AddTDTitleExt("处理时间");
-            this.AddTDTitleExt("信息");
+            this.AddTDB("style='min-width:150px;'", "标题");
+            this.AddTDB("style='width:150px;'", "停留节点");
+            this.AddTDB("style='width:80px;'", "状态");
+            this.AddTDB("style='min-width:150px;'", "处理人");
+            this.AddTDB("style='width:150px;'", "处理时间");
+            this.AddTDB("style='min-width:150px;'", "信息");
             this.AddTREnd();
 
             /*有要启动的子流程, 生成启动子流程的连接.*/
@@ -142,12 +142,12 @@ namespace CCFlow.WF.SDKComponents
                     this.AddTR();
                     if (sf.SFOpenType == 0)
                     {
-                        this.AddTD("style='word-break:break-all;'",
+                        this.AddTD("style='word-break:break-all;' title='" + item.Title + "'",
                             "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
                     }
                     else
                     {
-                        this.AddTD("style='word-break:break-all;'",
+                        this.AddTD("style='word-break:break-all;' title='"+item.Title+"'",
     "<a href=\"javascript:OpenIt('../WorkOpt/FoolFrmTrack.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
 
                     }
@@ -159,9 +159,9 @@ namespace CCFlow.WF.SDKComponents
                     else
                         this.AddTD("未完成");
 
-                    this.AddTD(item.TodoEmps); //到达人员.
+                    this.AddTD("title='"+item.TodoEmps+"'",item.TodoEmps); //到达人员.
                     this.AddTD(BP.DA.DataType.ParseSysDate2DateTimeFriendly(item.RDT)); //日期.
-                    this.AddTD(item.FlowNote); //流程备注.
+                    this.AddTD("title='"+item.FlowNote+"'",item.FlowNote); //流程备注.
                     this.AddTREnd();
 
                     //加载他下面的子流程.
@@ -198,16 +198,16 @@ namespace CCFlow.WF.SDKComponents
                 }
 
                 this.AddTR();
-                this.AddTD("style='word-break:break-all;'", DataType.GenerSpace(layer * 2) + "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                this.AddTD("style='word-break:break-all;' title='"+item.Title+"' ", DataType.GenerSpace(layer * 2) + "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
                 this.AddTD(item.NodeName); //到达节点名称.
                 if (item.WFState == WFState.Complete)
                     this.AddTD("已完成");
                 else
                     this.AddTD("未完成");
 
-                this.AddTD(item.TodoEmps); //到达人员.
+                this.AddTD("title='"+item.TodoEmps+"'",item.TodoEmps); //到达人员.
                 this.AddTD(BP.DA.DataType.ParseSysDate2DateTimeFriendly(item.RDT)); //日期.
-                this.AddTD(item.FlowNote); //流程备注.
+                this.AddTD("title='"+item.FlowNote+"'",item.FlowNote); //流程备注.
                 this.AddTREnd();
 
                 //加载他下面的子流程.

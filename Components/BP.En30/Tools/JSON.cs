@@ -104,8 +104,8 @@ namespace BP.Tools
             strJson = strJson.Replace(str1, "");
             strJson = strJson.Replace(str2, "");
 
-            strJson = strJson.Replace("*", str1);
-            strJson = strJson.Replace("#", str2);
+            //strJson = strJson.Replace("*", str1);
+            //strJson = strJson.Replace("#", str2);
 
             strJson = strJson.Replace(",\"", "*\"").Replace("\":", "\"#").ToString();
 

@@ -86,6 +86,9 @@
         //确定 退回 执行退回操作
         function ReturnWork(isBack) {
             //WorkID, this.FID, this.FK_Node
+            $('.foot input').attr('disabled', 'disabled');
+            $('.foot input').css('background', 'gray');
+
             $.ajax({
                 type: 'post',
                 async: true,
@@ -125,7 +128,7 @@
     </div>
     <div>
         退回原因：
-        <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 98%;"></textarea>
+        <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 98%;" maxlength="100"></textarea>
     </div>
     <div> 上传附件：</div>
     <div style="height:100px;">上传附件预留：该功能正在建设中</div>

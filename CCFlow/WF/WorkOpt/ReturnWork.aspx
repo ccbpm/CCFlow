@@ -17,7 +17,6 @@
 </script>
     <link href="../Comm/Style/Table.css" rel="stylesheet" type="text/css" />
     <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-
 <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
 <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
 <script type="text/javascript">

@@ -310,12 +310,12 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         break;
                     case "DtlFieldUp": //字段上移
                         MapAttr attrU = new MapAttr(this.MyPK);
-                        attrU.DoUp();
+                        attrU.DoUpForMapDtl();
                         msg = "";
                         break;
                     case "DtlFieldDown": //字段下移.
                         MapAttr attrD = new MapAttr(this.MyPK);
-                        attrD.DoDown();
+                        attrD.DoDownForMapDtl();
                         msg = "";
                         return;
                     case "DownTempFrm":

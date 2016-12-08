@@ -53,10 +53,11 @@ namespace CCFlow.WF.MapDef.MapExtUI
         protected void Page_Load(object sender, EventArgs e)
         {
             MapExt me = new MapExt();
-           // me.MyPK = this.FK_MapData + "_" + this.ExtType + "_" + me.AttrOfOper + "_" + me.AttrsOfActive;
-             
-          int i=  me.Retrieve(MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
-                        MapExtAttr.AttrOfOper, this.AttrOfOper);
+
+            string sql = "SELECT MyPK FROM Sys_MapExt WHERE FK_MapData='"+this.FK_MapData+"' AND ExtType='"+this.ExtType+"' AND AttrOfOper='"+this.AttrOfOper+"'";
+            string mypk = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, "");
+            me.MyPK = mypk; 
+            int i = me.RetrieveFromDBSources();
 
           this.Pub1.AddEasyUiPanelInfoBegin("为下拉框[" + this.AttrOfOper + "]设置联动.", "icon-edit");
             me.FK_MapData = this.FK_MapData;

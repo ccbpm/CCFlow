@@ -149,7 +149,7 @@ namespace CCFlow.SDKFlowDemo.SDK.F116
 
                     //执行抄送.
 
-                    BP.WF.Dev2Interface.Node_CC_WriteTo_Todolist(returnObjs.VarToNodeID, returnObjs.VarToNodeID,
+                    BP.WF.Dev2Interface.Node_CC_WriteTo_Todolist(returnObjs.VarToNodeID,
                         this.WorkID, "zhoupeng", "周朋");
 
                     BP.WF.Dev2Interface.Flow_SetFlowTitle(this.FK_Flow, this.WorkID, "sdsdsdfsdfsdfsdf");

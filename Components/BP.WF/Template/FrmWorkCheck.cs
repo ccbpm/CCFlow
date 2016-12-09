@@ -175,6 +175,10 @@ namespace BP.WF.Template
         /// 操作字段
         /// </summary>
         public const string FWCFields = "FWCFields";
+        /// <summary>
+        /// 是否显示未审核的轨迹
+        /// </summary>
+        public const string FWCIsShowTruck = "FWCIsShowTruck";
     }
     /// <summary>
     /// 审核组件
@@ -401,6 +405,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 是否显示轨迹在没有走到的节点
+        /// </summary>
+        public bool FWCIsShowTruck
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmWorkCheckAttr.FWCIsShowTruck);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCIsShowTruck, value);
+            }
+        }
+        /// <summary>
         /// 如果用户未审核是否按照默认意见填充?
         /// </summary>
         public bool FWCIsFullInfo
@@ -617,6 +635,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(FrmWorkCheckAttr.FWCFields, null, "审批格式字段", true, false, 0, 1000, 10, true);
 
+                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowTruck, true, "是否显示未审核的轨迹？", true, true, true);
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
                 this._enMap = map;

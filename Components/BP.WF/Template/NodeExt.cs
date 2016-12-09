@@ -605,6 +605,10 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FrmWorkCheckAttr.FWC_W, "如果是自由表单就不要变化该属性,为0，则标识为100%,应用的组件模式."); //增加帮助
                 
                 map.AddTBStringDoc(FrmWorkCheckAttr.FWCFields, null, "审批格式化字段", true, false,true);
+                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowTruck, true, "是否显示未审核的轨迹？", true, true, true);
+
+
+                
                 #endregion 审核组件属性.
 
                 #region 公文按钮 del by zhoupeng. 按照新昌的标准修改.

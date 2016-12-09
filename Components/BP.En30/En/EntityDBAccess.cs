@@ -231,7 +231,6 @@ namespace BP.En
         }
         public static int Retrieve(Entity en, string sql, Paras paras)
         {
-
             DataTable dt ;
             switch (en.EnMap.EnDBUrl.DBUrlType)
             {

@@ -636,6 +636,12 @@ namespace BP.WF.Template
                 map.AddTBString(FrmWorkCheckAttr.FWCFields, null, "审批格式字段", true, false, 0, 1000, 10, true);
 
                 map.AddBoolean(FrmWorkCheckAttr.FWCIsShowTruck, true, "是否显示未审核的轨迹？", true, true, true);
+
+
+                //增加如下字段是为了查询与排序的需要.
+                map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 3, 10);
+                map.AddTBInt(NodeAttr.Step, 0, "步骤", false, false);
+
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
                 this._enMap = map;
@@ -689,17 +695,6 @@ namespace BP.WF.Template
         /// </summary>
         public FrmWorkChecks()
         {
-        }
-        /// <summary>
-        /// 审核组件s
-        /// </summary>
-        /// <param name="fk_mapdata">s</param>
-        public FrmWorkChecks(string fk_mapdata)
-        {
-            if (SystemConfig.IsDebug)
-                this.Retrieve("No", fk_mapdata);
-            else
-                this.RetrieveFromCash("No", (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

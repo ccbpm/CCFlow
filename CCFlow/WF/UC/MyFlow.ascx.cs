@@ -452,9 +452,9 @@ namespace CCFlow.WF.UC
                         ddl.Items.Add(li);
                     }
 
-                    if (ddl.Items.Count != 0)
+                    if (ddl.Items.Count != 1)
                     {
-                        if (ddl.Items.Count == 1)
+                        if (ddl.Items.Count == 2)
                         {
                             this.toolbar.Add("<div style='display:none'>");
                             this.toolbar.Add(ddl);

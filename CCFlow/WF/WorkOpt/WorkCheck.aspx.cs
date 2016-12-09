@@ -875,7 +875,6 @@ namespace CCFlow.WF.WorkOpt
                 this.Pub1.AddTR();
                 this.Pub1.AddTD(item.Name);
                 this.Pub1.AddTD("<br><br><br>审核人: &nbsp;&nbsp; 审核日期：&nbsp;&nbsp;年&nbsp;&nbsp;月&nbsp;&nbsp;日<br>");
-                //this.Pub1.Add("<td rowspan='3' tyle='width:20px;border:1px solid #D6DDE6;'>" + title + "</td>");
                 this.Pub1.AddTREnd();
             }
             #endregion 增加空白.

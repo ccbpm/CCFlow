@@ -437,6 +437,8 @@ namespace CCFlow.WF.UC
                     DDL ddl = new DDL();
                     ddl.ID = "DDL_ToNode";
                     Nodes toNodes = this.currND.HisToNodes;
+                    ddl.Items.Add(new ListItem("请选择要到达的节点","0"));
+
                     foreach (Node nd in toNodes)
                     {
                         ListItem li = new ListItem();

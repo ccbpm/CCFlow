@@ -161,6 +161,8 @@ namespace CCFlow.WF.WorkOpt
             else
                 wc = new WorkCheck(this.FK_Flow, this.NodeID, this.WorkID, this.FID);
 
+           
+
             //检查是否可以处理当前工作.
             bool isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.NodeID, this.WorkID, BP.Web.WebUser.No);
 
@@ -202,11 +204,12 @@ namespace CCFlow.WF.WorkOpt
                 uploadJS.Append("<div id='s' style='text-align:right;float:right;margin-right:10px;' ><input type='file' name='file_upload' id='file_upload' width='60' height='30' /></div>");
             }
 
+            BP.WF.Tracks tks = wc.HisWorkChecks;
+
             #region 输出历史审核信息.
             if (wcDesc.FWCListEnable == true)
             {
                 //求轨迹表.
-                BP.WF.Tracks tks = wc.HisWorkChecks;
 
                 //求抄送列表,把抄送的信息与抄送的读取状态显示出来.
                 CCLists ccls = new CCLists(this.FK_Flow, this.WorkID, this.FID);
@@ -842,7 +845,42 @@ namespace CCFlow.WF.WorkOpt
                     this.Pub1.AddTableEnd();
                 }
             }
+
             #endregion 处理审核意见框.
+
+
+            #region 增加空白审批人，让表单更好看.
+
+            FrmWorkChecks fwcs = new FrmWorkChecks();
+            fwcs.Retrieve(NodeAttr.FK_Flow, this.FK_Flow, NodeAttr.Step);
+
+            foreach (FrmWorkCheck  item in fwcs)
+            {
+                if (item.FWCIsShowTruck == false)
+                    continue;
+
+                //是否存在这个节点？
+                bool isHave = true;
+                foreach (BP.WF.Track tk in tks)
+                {
+                    if (tk.NDFrom == item.NodeID || tk.NDTo == item.NodeID)
+                    {
+                        isHave = true;
+                        continue;
+                    }
+                }
+                if (isHave == false)
+                    continue; // 不存在轨迹里就让其显示.
+
+                this.Pub1.AddTR();
+                this.Pub1.AddTD(item.Name);
+                this.Pub1.AddTD("<br><br><br>审核人: &nbsp;&nbsp; 审核日期：&nbsp;&nbsp;年&nbsp;&nbsp;月&nbsp;&nbsp;日<br>");
+                //this.Pub1.Add("<td rowspan='3' tyle='width:20px;border:1px solid #D6DDE6;'>" + title + "</td>");
+                this.Pub1.AddTREnd();
+            }
+            #endregion 增加空白.
+
+
 
             this.Pub1.AddTableEnd();
         }

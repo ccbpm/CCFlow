@@ -28,14 +28,20 @@ var nav = {
             };
         }
         if (!btn.className.endsWith("_disabled")) {
-            if (btn == this.btnB) {
-                this.ul.style.top =
-                    -(this.LIHEIGHT * (++this.moved) - 30) + "px";
+            this.count = this.ul.$("li").length;
+            if (this.count < 5) {
+                this.btnT.className += "_disabled";
+                this.btnB.className += "_disabled";
             } else {
-                this.ul.style.top =
-                    -(this.LIHEIGHT * (--this.moved) - 30) + "px";
+                if (btn == this.btnB) {
+                    this.ul.style.top =
+                        -(this.LIHEIGHT * (++this.moved) - 30) + "px";
+                } else {
+                    this.ul.style.top =
+                        -(this.LIHEIGHT * (--this.moved) - 30) + "px";
+                }
+                this.btnEnable();
             }
-            this.btnEnable();
         }
     },
     btnEnable: function () {

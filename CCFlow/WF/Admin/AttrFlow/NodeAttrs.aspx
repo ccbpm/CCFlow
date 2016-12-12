@@ -7,7 +7,7 @@
     <script type="text/javascript">
         //节点属性.
         function OpenAttr(nodeID) {
-            var url = "../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.NodeSheet&PK=" + nodeID;
+            var url = "../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.NodeExt&PK=" + nodeID;
             window.open(url, 'att1r', 'height=590, width=1030, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
         }
         // 表单方案.

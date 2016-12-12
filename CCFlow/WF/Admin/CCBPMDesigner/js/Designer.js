@@ -396,7 +396,7 @@ function NodeProperty_Funs(item) {
             break;
         case "AdvFunc": // 高级功能..
         case "Node": // 批量设置 ..
-            url = "../AttrFlow/NodeAttrs.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
+            url = "../AttrFlow/NodeAttrs.htm?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
             //alert(url);
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "批量设置" + FK_Node, url, item.iconCls);

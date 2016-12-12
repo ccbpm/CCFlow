@@ -15,7 +15,7 @@
         }
         function NodesAttr(flowNo) {
             window.parent.closeTab('节点设置');
-            window.parent.addTab('NodesAttr', '节点设置', '../AttrFlow/NodeAttrs.aspx?FK_Flow=' + flowNo, '');
+            window.parent.addTab('NodesAttr', '节点设置', '../AttrFlow/NodeAttrs.htm?FK_Flow=' + flowNo, '');
         }
         function OpenDel(flowNo) {
             window.parent.closeTab('删除');

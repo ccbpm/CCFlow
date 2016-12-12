@@ -543,7 +543,9 @@ namespace BP.WF
                         int i = DBAccess.RunSQLReturnCOUNT("SELECT * FROM USER_TAB_COLUMNS WHERE TABLE_NAME = 'SYS_DEFVAL' AND COLUMN_NAME = 'PARENTNO'");
                         if (i == 0)
                         {
-                            DBAccess.RunSQL("drop table Sys_DefVal");
+                            if (DBAccess.IsExitsObject("SYS_DEFVAL") == true)
+                                DBAccess.RunSQL("drop table Sys_DefVal");
+
                             DefVal dv = new DefVal();
                             dv.CheckPhysicsTable();
                         }
@@ -554,7 +556,9 @@ namespace BP.WF
                         i = DBAccess.RunSQLReturnCOUNT("SELECT * FROM SYSCOLUMNS WHERE ID=OBJECT_ID('Sys_DefVal') AND NAME='ParentNo'");
                         if (i == 0)
                         {
-                            DBAccess.RunSQL("drop table Sys_DefVal");
+                            if (DBAccess.IsExitsObject("Sys_DefVal") == true)
+                                DBAccess.RunSQL("drop table Sys_DefVal");
+
                             DefVal dv = new DefVal();
                             dv.CheckPhysicsTable();
                         }

@@ -215,7 +215,7 @@ a:hover {
 	background: -o-linear-gradient(top, #f9f9f9 0%, #f3f3f3 100%); /* Opera 11.10+ */
 	background: -ms-linear-gradient(top, #f9f9f9 0%, #f3f3f3 100%); /* IE10+ */
 	background: linear-gradient(top, #f9f9f9 0%, #f3f3f3 100%); /* W3C */
- filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#f3f3f3', GradientType=0 ); /* IE6-9 */
+ /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#f3f3f3', GradientType=0 );*/ /* IE6-9 */
 	/*border-top: 1px solid #fcfcfc;*/
 }
 .scrollNav_1, .scrollNav_1 a {

@@ -6784,7 +6784,9 @@ namespace BP.WF
             Emp emp = new Emp(toEmp);
             Node nd = new Node(nodeID);
 
-            if (nd.TodolistModel == TodolistModel.Order || nd.TodolistModel == TodolistModel.Teamup)
+            if (nd.TodolistModel == TodolistModel.Order
+                || nd.TodolistModel == TodolistModel.Teamup 
+                || nd.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
                 /*如果是队列模式，或者是协作模式. */
                 try

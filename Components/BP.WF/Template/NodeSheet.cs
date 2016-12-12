@@ -374,7 +374,7 @@ namespace BP.WF.Template
 
                 //待办处理模式.
                 map.AddDDLSysEnum(NodeAttr.TodolistModel, (int)TodolistModel.QiangBan, "待办处理模式", true, true, NodeAttr.TodolistModel,
-                    "@0=抢办模式@1=协作模式@2=队列模式@3=共享模式");
+                    "@0=抢办模式@1=协作模式@2=队列模式@3=共享模式@4=协作组长模式");
                 map.SetHelperUrl(NodeAttr.TodolistModel, "http://ccbpm.mydoc.io/?v=5404&t=17947"); //增加帮助.
 
 

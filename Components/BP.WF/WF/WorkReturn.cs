@@ -796,6 +796,7 @@ namespace BP.WF
 
             if (this.HisNode.TodolistModel == TodolistModel.Order
                 || this.HisNode.TodolistModel == TodolistModel.Sharing
+                || this.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader
                 || this.HisNode.TodolistModel == TodolistModel.Teamup)
             {
 

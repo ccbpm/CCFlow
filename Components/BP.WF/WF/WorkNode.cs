@@ -5033,6 +5033,68 @@ namespace BP.WF
             throw new Exception("@不应该运行到这里。");
         }
         /// <summary>
+        /// 如果是协作
+        /// </summary>
+        public bool TeamupGroupLeader()
+        {
+            GenerWorkerLists gwls = new GenerWorkerLists();
+            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
+                GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.IsPass);
+
+            if (gwls.Count == 1)
+                return false; /*让其向下执行,因为只有一个人。就没有顺序的问题.*/
+
+            //判断自己是否是组长？如果是组长，就让返回false, 让其运动到最后一个节点，因为组长同意了，就全部同意了。
+            string sql = "SELECT COUNT(No) AS num FROM Port_Dept WHERE No='"+WebUser.FK_Dept+"' AND Leader='"+WebUser.No+"'";
+            if (BP.DA.DBAccess.RunSQLReturnValInt(sql, 0) == 1)
+                return false;
+
+            //查看是否我是最后一个？
+            int num = 0;
+            string todoEmps = ""; //记录没有处理的人.
+            foreach (GenerWorkerList item in gwls)
+            {
+                if (item.IsPassInt == 0)
+                {
+                    if (item.FK_Emp != WebUser.No)
+                        todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
+                    num++;
+                }
+            }
+
+            if (num == 1)
+            {
+                this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                return false; /*只有一个待办,说明自己就是最后的一个人.*/
+            }
+
+
+
+            //把当前的待办设置已办，并且提示未处理的人。
+            foreach (GenerWorkerList gwl in gwls)
+            {
+
+                if (gwl.FK_Emp != WebUser.No)
+                    continue;
+
+                //设置当前不可以用.
+                gwl.IsPassInt = 1;
+                gwl.Update();
+
+                // 检查完成条件。
+                if (this.HisNode.IsEndNode == false)
+                {
+                    this.CheckCompleteCondition();
+                }
+                //写入日志.
+                this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
+                this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
+                return true;
+            }
+
+            throw new Exception("@不应该运行到这里。");
+        }
+        /// <summary>
         /// 处理队列节点
         /// </summary>
         /// <returns>是否可以向下发送?</returns>
@@ -5626,6 +5688,21 @@ namespace BP.WF
                 }
             }
 
+            //如果是协作组长模式节点, 就判断当前的队列人员是否走完.
+            if (this.TodolistModel == TodolistModel.TeamupGroupLeader)
+            {
+                /* 如果是协作组长模式.*/
+                if (this.DealTeamUpNode() == true)
+                {
+                    //if (this._transferCustom != null)
+                    //    _transferCustom.Delete();
+
+                    //执行时效考核.
+                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
+                    return this.HisMsgObjs;
+                }
+            }
+
             // 启动事务, 这里没有实现.
             DBAccess.DoTransactionBegin();
             try
@@ -5657,6 +5734,7 @@ namespace BP.WF
                         {
                             /* 如果当前是退回, 并且当前的运行模式是按照流程图运行.*/
                             if (this.JumpToNode.TodolistModel == TodolistModel.Order
+                                || this.JumpToNode.TodolistModel == TodolistModel.TeamupGroupLeader
                                 || this.JumpToNode.TodolistModel == TodolistModel.Teamup)
                             {
                                 /*如果是多人处理节点.*/
@@ -5672,6 +5750,7 @@ namespace BP.WF
                         {
                             /* 如果当前是退回. 并且当前的运行模式按照自由流程设置方式运行。*/
                             if (this.HisGenerWorkFlow.TodolistModel == TodolistModel.Order
+                                || this.JumpToNode.TodolistModel == TodolistModel.TeamupGroupLeader
                                 || this.HisGenerWorkFlow.TodolistModel == TodolistModel.Teamup)
                             {
                                 /*如果是多人处理节点.*/

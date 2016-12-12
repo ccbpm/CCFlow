@@ -339,7 +339,11 @@ namespace BP.WF
         /// <summary>
         /// 共享模式(需要申请，申请后才能执行)
         /// </summary>
-        Sharing
+        Sharing,
+        /// <summary>
+        /// 协作组长模式
+        /// </summary>
+        TeamupGroupLeader
     }
     /// <summary>
     /// 阻塞模式

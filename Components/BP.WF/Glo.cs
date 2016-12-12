@@ -120,13 +120,14 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20161118";
+        public static string Ver = "20161210";
         /// <summary>
         /// 执行升级
         /// </summary>
         /// <returns></returns>
         public static string UpdataCCFlowVer()
         {
+             
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
             updataNote += "20161104.附件删除规则修复";
@@ -171,7 +172,7 @@ namespace BP.WF
 
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
             string currVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
-            if (currVer!=null && int.Parse(currVer) >= int.Parse(Ver))
+            if (currVer!=null && currVer!="" && int.Parse(currVer) >= int.Parse(Ver))
                 return null; //不需要升级.
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 
@@ -181,6 +182,9 @@ namespace BP.WF
                 //升级傻瓜表单.
                 MapFoolForm mff = new MapFoolForm();
                 mff.CheckPhysicsTable();
+
+                //删除枚举.
+                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='TodolistModel'");
 
                 // 运行升级SQL. D:\ccflow\CCFlow\WF\Data\UpdataCCFlowVer.sql
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");

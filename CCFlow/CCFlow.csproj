@@ -1334,6 +1334,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Handler.ashx" />
+    <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
@@ -3740,6 +3741,9 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\FrmAttr.aspx.designer.cs">
       <DependentUpon>FrmAttr.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>

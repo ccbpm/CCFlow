@@ -55,7 +55,6 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
 
         public void ProcessRequest(HttpContext mycontext)
         {
-
             context = mycontext;
             string msg = "";
             try
@@ -68,8 +67,14 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
                     case "Student_Save": //保存实体demo.
                         msg = this.Student_Save();
                         break;
-                    case "Student_Delete":
+                    case "Student_Delete": //删除.
                         msg = this.Student_Delete();
+                        break;
+                    case "StudentList_Init": //获取学生列表。
+                        msg = this.StudentList_Init();
+                        break;
+                    case "StudentList_Delete": //删除单个学生.
+                        msg = this.StudentList_Delete();
                         break;
                     default:
                         msg = "err@没有判断的标记:" + this.DoType;
@@ -84,6 +89,37 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
         }
+
+
+        #region 学生列表的操作.
+        /// <summary>
+        /// 初始化参数
+        /// </summary>
+        /// <returns></returns>
+        public string StudentList_Init()
+        {
+            BP.Demo.BPFramework.Students ens = new BP.Demo.BPFramework.Students();
+            ens.RetrieveAll();
+            return ens.ToJson();
+        }
+        public string StudentList_Delete()
+        {
+            try
+            {
+                BP.Demo.BPFramework.Student stu = new BP.Demo.BPFramework.Student();
+                stu.No = this.No;
+                stu.Delete();
+                return "删除成功";
+
+            }catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        #endregion 学生列表的操作.
+
+
+        #region 学生实体 操作.
         /// <summary>
         /// 实体保存
         /// </summary>
@@ -142,6 +178,8 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
             }
 
         }
+        #endregion 学生实体 操作.
+
 
         public bool IsReusable
         {

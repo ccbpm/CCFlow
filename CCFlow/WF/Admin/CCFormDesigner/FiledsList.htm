@@ -1,185 +1,137 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>字段列表</title>
+    <title>学生列表</title>
+    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <link href="/WF/Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
 
-	<link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-	<link href="/DataUser/Style/table0.css" rel="stylesheet" type="text/css"/>
-	<style type="text/css">
-		th {
-			text-align: center;
-		}
-	</style>
-	
-	<script type="text/javascript" src="/WF/Comm/JScript.js"></script>
-	<script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
-	<script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>    
-	<script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
-	<!-- 引用通用的js文件. -->
-	<script type="text/javascript" src="/WF/Comm/Gener.js"></script>
-	<script type="text/javascript" src="/WF/Scripts/config.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#Msg").html("正在加载,请稍后......");
-			InitPage();
-			$("#Msg").html("");
-		 });
-		 
-		 function InitPage() {
-			var	FormId = GetQueryString("FK_MapData");
+    <script language="javascript" type="text/javascript" >
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
 
-		 	$.ajax({
-		 		url: '/path/to/file',
-		 		type: 'default GET (Other values: POST)',
-		 		dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
-		 		data: {param1: 'value1'},
-		 	})
-		 	.done(function(data) {
-		 		console.log("success");
-		 	})
-		 	.fail(function() {
-		 		console.log("error");
-		 	})
-		 	.always(function() {
-		 		console.log("complete");
-		 	});
-		 }
-	</script>
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            //  var fk_mapData = GetQueryString("FK_MapData");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=StudentList_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    data = JSON.parse(data);
+
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+
+                        var newRow = "";
+
+                        newRow = "<tr ><td class=Idx>" + i + "</td>";
+                        newRow += "<td>" + data[i].No + "</td>";
+                        newRow += "<td>" + data[i].Name + "</td>";
+                        newRow += "<td>" + data[i].Tel + "</td>";
+                        newRow += "<td>" + data[i].Email + "</td>";
+                        newRow += "<td>" + data[i].Addr + "</td>";
+
+
+                        //普通类型的字段.
+                        //WF/Admin/FoolFormDesigner/EditF.htm?MyPK=WoDeZiADun_WoDeZiDuan&FK_MapData=WoDeZiADun&KeyOfEn=WoDeZiDuan
+
+                        //枚举类型
+                        //WF/Admin/FoolFormDesigner/EditEnum.htm?DoType=Edit&FK_MapData=WoDeZiADun&MyPK=WoDeZiADun_FaWenLeiXing&EnumKey=FaWenLeiXing&s=0.6022623278189881
+
+                        //外键.http://localhost:26507/WF/Admin/FoolFormDesigner/EditTableField.htm?DoType=Edit&FK_MapData=WoDeZiADun&FK_MapDtl=WoDeZiADun&MyPK=WoDeZiADun_CN_PQ&FK_SFTable=CN_PQ
+
+                        newRow += "<td>";
+                        newRow += "<a href=\"javascript:Edit('" + data[i].No + "')\"><img src='/WF/Img/Btn/Edit.gif' border=0 />编辑</a>";
+                        newRow += "<a href=\"javascript:Delete('" + data[i].MyPK + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                        newRow += "</td>";
+
+                        newRow += "</tr>";
+
+                        $("#Table1 tr:last").after(newRow);
+                    }
+                }
+            });
+        }
+
+        function Delete(no) {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            //删除学生.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=StudentList_Delete&No=" + no + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    $("#Msg").html(data);
+
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+
+                    } else {
+
+                        alert(data);
+
+                        window.location.href = window.location.href;
+                    }
+                }
+            });
+        }
+
+        function Edit(no) {
+            var url = 'Student.htm?No=' + no;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
+            window.location.href = window.location.href;
+        }
+     </script>
 </head>
-<body>
-	<!-- editer: liuhui -->
-	<table style="width: 100%">
-		<caption>
-			字段列表
-		</caption>
-		<tr>
-			<th>
-				序号
-			</th>
-			<th>
-				字段名
-			</th>
-			<th>
-				中文名
-			</th>
-			<th>
-				类型
-			</th>
-			<th>
-				长度
-			</th>
-			<th>
-				关联
-			</th>
-			<th>
-				扩展设置
-			</th>
-			<th>
-				数据质量
-			</th>
-			<th>
-				编辑
-			</th>
+<body onkeypress="Esc()" >
+
+
+<table id="Table1">
+<caption>字段列表  - <a href="javascript:WinOpen('/WF/Admin/FoolFormDesigner/FieldTypeList.htm?FK_MapData=WoDeZiADun')">新增</a></caption>
+	<tr>
+			<th>序号</th>
+			<th>字段名</th>
+			<th>中文名</th>
+			<th>类型</th>
+			<th>长度</th>
+			<th>关联</th>
+			<th>编辑</th>
 		</tr>
-		<tr>
-			<td colspan="9">
-				普通字段
-			</td>
-		</tr>
-		<tr>
-			<td class="Idx">
-				1
-			</td>
-			<td>
-				No
-			</td>
-			<td>
-				编号
-			</td>
-			<td>
-				String
-			</td>
-			<td>
-				min=1,max=20
-			</td>
-			<td>
-				-
-			</td>
-			<td>
-				-
-			</td>
-			<td>
-				[<a href="javascript:WinOpen('../EditF.aspx?')">编辑</a>]
-			</td>
-		</tr>
-		<tr>
-			<td class="Idx">
-				2
-			</td>
-			<td>
-				Name
-			</td>
-			<td>
-				名称
-			</td>
-			<td>
-				String
-			</td>
-			<td>
-				min=1,max=20
-			</td>
-			<td>
-				-
-			</td>
-			<td>
-				-
-			</td>
-			<td>
-				-
-			</td>
-			<td>
-				[<a href="javascript:WinOpen('../EditF.aspx?')">编辑</a>]
-			</td>
-		</tr>
-		<tr>
-			<td colspan="9">
-				枚举字段
-			</td>
-		</tr>
-		<tr>
-			<td class="Idx">
-				2
-			</td>
-			<td>
-				XB
-			</td>
-			<td>
-				性别
-			</td>
-			<td>
-				Int
-			</td>
-			<td>
-				-
-			</td>
-			<td>
-				<a href="javascript:EditEum('')">@0=女@1=男</a>
-			</td>
-			<td>
-				-
-			</td>
-			<td>
-				-
-			</td>
-			<td>
-				[<a href="javascript:WinOpen('../EditF.aspx?')">编辑</a>]
-			</td>
-		</tr>
-		<tr>
-			<td colspan="9">
-				外键字段
-			</td>
-		</tr>
-	</table>
+</table>
+
+
+<div id="Msg"></div>
+
 </body>
 </html>

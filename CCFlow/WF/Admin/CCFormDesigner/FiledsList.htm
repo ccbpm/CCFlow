@@ -1,77 +1,185 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+	<title>字段列表</title>
+
+	<link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+	<link href="/DataUser/Style/table0.css" rel="stylesheet" type="text/css"/>
+	<style type="text/css">
+		th {
+			text-align: center;
+		}
+	</style>
+	
+	<script type="text/javascript" src="/WF/Comm/JScript.js"></script>
+	<script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>    
+	<script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+	<!-- 引用通用的js文件. -->
+	<script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+	<script type="text/javascript" src="/WF/Scripts/config.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#Msg").html("正在加载,请稍后......");
+			InitPage();
+			$("#Msg").html("");
+		 });
+		 
+		 function InitPage() {
+			var	FormId = GetQueryString("FK_MapData");
+
+		 	$.ajax({
+		 		url: '/path/to/file',
+		 		type: 'default GET (Other values: POST)',
+		 		dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
+		 		data: {param1: 'value1'},
+		 	})
+		 	.done(function(data) {
+		 		console.log("success");
+		 	})
+		 	.fail(function() {
+		 		console.log("error");
+		 	})
+		 	.always(function() {
+		 		console.log("complete");
+		 	});
+		 }
+	</script>
 </head>
 <body>
-
-<!-- editer: liuhui -->
-
-<table style="width:100%" >
-<caption> 字段列表 </caption>
-<tr>
-<th>序</th>
-<th>字段名</th>
-<th>中文名</th>
-<th>类型</th>
-<th>长度</th>
-<th>关联</th>
-<th>扩展设置</th>
-<th>数据质量</th>
-<th>编辑</th>
-</tr>
-
-<tr>
-<th colspan=9 >普通字段  </th>
-</tr>
-
-
-<tr>
-<td class=Idx >1</td>
-<td>No</td>
-<td>编号</td>
-<td>String</td>
-<td>min=1,max=20</td>
-<td> - </td>
-<td> - </td>
-<td>[<a href="javascript:WinOpen('../EditF.aspx?')">编辑]</td>
-</tr>
-
-<tr>
-<td class=Idx >2</td>
-<td>Name</td>
-<td>名称</td>
-<td>String</td>
-<td>min=1,max=20</td>
-<td> - </td>
-<td> - </td>
-<td> - </td>
-<td>[<a href="javascript:WinOpen('../EditF.aspx?')">编辑]</td>
-</tr>
-
-
-<tr>
-<th colspan=9 >枚举字段  </th>
-</tr>
-
-<tr>
-<td class=Idx >2</td>
-<td>XB</td>
-<td>性别</td>
-<td>Int</td>
-<td> - </td>
-<td><a href="javascript:EditEum('')">@0=女@1=男</a></td>
-
-<td> - </td>
-
-<td> - </td>
-
-<td>[<a href="javascript:WinOpen('../EditF.aspx?')">编辑]</td>
-</tr>
-
-<tr>
-<th colspan=9 >外键字段  </th>
-</tr>
-</table>
+	<!-- editer: liuhui -->
+	<table style="width: 100%">
+		<caption>
+			字段列表
+		</caption>
+		<tr>
+			<th>
+				序号
+			</th>
+			<th>
+				字段名
+			</th>
+			<th>
+				中文名
+			</th>
+			<th>
+				类型
+			</th>
+			<th>
+				长度
+			</th>
+			<th>
+				关联
+			</th>
+			<th>
+				扩展设置
+			</th>
+			<th>
+				数据质量
+			</th>
+			<th>
+				编辑
+			</th>
+		</tr>
+		<tr>
+			<td colspan="9">
+				普通字段
+			</td>
+		</tr>
+		<tr>
+			<td class="Idx">
+				1
+			</td>
+			<td>
+				No
+			</td>
+			<td>
+				编号
+			</td>
+			<td>
+				String
+			</td>
+			<td>
+				min=1,max=20
+			</td>
+			<td>
+				-
+			</td>
+			<td>
+				-
+			</td>
+			<td>
+				[<a href="javascript:WinOpen('../EditF.aspx?')">编辑</a>]
+			</td>
+		</tr>
+		<tr>
+			<td class="Idx">
+				2
+			</td>
+			<td>
+				Name
+			</td>
+			<td>
+				名称
+			</td>
+			<td>
+				String
+			</td>
+			<td>
+				min=1,max=20
+			</td>
+			<td>
+				-
+			</td>
+			<td>
+				-
+			</td>
+			<td>
+				-
+			</td>
+			<td>
+				[<a href="javascript:WinOpen('../EditF.aspx?')">编辑</a>]
+			</td>
+		</tr>
+		<tr>
+			<td colspan="9">
+				枚举字段
+			</td>
+		</tr>
+		<tr>
+			<td class="Idx">
+				2
+			</td>
+			<td>
+				XB
+			</td>
+			<td>
+				性别
+			</td>
+			<td>
+				Int
+			</td>
+			<td>
+				-
+			</td>
+			<td>
+				<a href="javascript:EditEum('')">@0=女@1=男</a>
+			</td>
+			<td>
+				-
+			</td>
+			<td>
+				-
+			</td>
+			<td>
+				[<a href="javascript:WinOpen('../EditF.aspx?')">编辑</a>]
+			</td>
+		</tr>
+		<tr>
+			<td colspan="9">
+				外键字段
+			</td>
+		</tr>
+	</table>
 </body>
 </html>

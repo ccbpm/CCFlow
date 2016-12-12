@@ -1164,7 +1164,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoNodeAttrs()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/NodeAttrs.aspx?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/NodeAttrs.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
         public string DoBindFlowExt()
         {

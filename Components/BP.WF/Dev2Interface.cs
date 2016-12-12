@@ -2990,6 +2990,7 @@ namespace BP.WF
             else
             {
                 ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET Msg=" + dbStr + "Msg WHERE  Tag=" + dbStr + "Tag";
+                ps.Add(TrackAttr.Msg, msg);
                 ps.Add(TrackAttr.Tag, tag);
                 if (DBAccess.RunSQL(ps) == 0)
                 {

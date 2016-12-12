@@ -985,7 +985,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoNodeAttrs()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/NodeAttrs.aspx?NodeID=0&FK_Flow=" + this.FK_Flow;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/NodeAttrs.htm?NodeID=0&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 表单方案

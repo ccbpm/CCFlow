@@ -1098,7 +1098,10 @@ namespace BP.Sys
                 se.EnumKey = enumKey;
                 se.Lang = lang;
                 se.IntKey = int.Parse(kvs[0]);
-                se.Lab = kvs[1];
+                //解决当  枚举值含有 ‘=’号时，保存不进去的方法
+                string[] kvsValues = new string[kvs.Length - 1];
+                kvs.CopyTo(kvsValues, 1);
+                se.Lab = string.Join("=", kvsValues);
                 se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey;
                 se.Save();
             }

@@ -226,7 +226,7 @@
                 var keyValue = [];
                 keyValue= $.grep(cfgVals, function (value) {
                     var keyValue = value.split('=');
-                    return keyValue.length == 2 && keyValue[0] == i;
+                    return keyValue.length >= 2 && keyValue[0] == i;
                 });
                 if (keyValue.length == 0) {
                     str += '<tr>';
@@ -236,7 +236,7 @@
                 }
                 else {
                     var vls = keyValue[0].split('=');
-                    var text = vls[1];
+                    var text = vls.slice(1, vls.length).push('=');
                     if (text == undefined) {
                         continue;
                     }

@@ -13,7 +13,7 @@
 	<script type="text/javascript" >
 		/* ESC Key Down */
 		function Esc() {
-			if (event.keyCode == 27)
+			if (event.keyCode === 27)
 				window.close();
 			return true;
 		}
@@ -22,12 +22,12 @@
 		$(function () {
 			$("#Msg").html("正在加载,请稍后......");
 			InitPage();
-			$("#Msg").html("");
 		});
 
+		var FK_MapData;
 		//初始化数据.
 		function InitPage() {
-			var FK_MapData = GetQueryString("FK_MapData");
+			FK_MapData = GetQueryString("FK_MapData");
 			//初始化表格.
 			$.ajax({
 				type: 'post',
@@ -38,13 +38,12 @@
 					if (data.indexOf("err@") > -1) {
 						alert(data);
 					} else {
-						$("#Msg").html(data);
-
+						//$("#Msg").html(data);	//for test
 						data = JSON.parse(data);
 						//增加处理.
 						var newRow;
 						var normalFieldRows, enumFieldRows,fkFieldRows;
-						for (var i in data.Sys_MapAttr) {
+						for (var i in data) {
 							newRow = "";
 							/*<th>序号</th>
 							<th>字段名</th>
@@ -54,35 +53,27 @@
 							<th>关联</th>
 							<th>编辑</th>*/
 							newRow = "<tr ><td class=Idx>" + i + "</td>";
-							//newRow += "<td>" + data.Sys_MapAttr[i].MyPK + "</td>";
-							newRow += "<td>" + data.Sys_MapAttr[i].KeyOfEn + "</td>";
-							newRow += "<td>" + data.Sys_MapAttr[i].Name + "</td>";
-							newRow += "<td>" + GetMyDataTypeText(data.Sys_MapAttr[i].MyDataType) + "</td>";
-							newRow += "<td>min=" + data.Sys_MapAttr[i].MinLen + ",max=" + data.Sys_MapAttr[i].MaxLen + "</td>";
-							newRow += "<td>" + data.Sys_MapAttr[i].UIRefKey + "</td>";
-
-							//newRow += "<td>" + data.Sys_MapAttr[i].Email + "</td>";
-							//newRow += "<td>" + data.Sys_MapAttr[i].Addr + "</td>";
-
-							//普通类型的字段.
-							//WF/Admin/FoolFormDesigner/EditF.htm?MyPK=WoDeZiADun_WoDeZiDuan&FK_MapData=WoDeZiADun&KeyOfEn=WoDeZiDuan
-
-							//枚举类型
-							//WF/Admin/FoolFormDesigner/EditEnum.htm?DoType=Edit&FK_MapData=WoDeZiADun&MyPK=WoDeZiADun_FaWenLeiXing&EnumKey=FaWenLeiXing&s=0.6022623278189881
-
-							//外键.http://localhost:26507/WF/Admin/FoolFormDesigner/EditTableField.htm?DoType=Edit&FK_MapData=WoDeZiADun&FK_MapDtl=WoDeZiADun&MyPK=WoDeZiADun_CN_PQ&FK_SFTable=CN_PQ
-
-							/*
+							newRow += "<td>" + data[i].KeyOfEn + "</td>";
+							newRow += "<td>" + data[i].Name + "</td>";
+							newRow += "<td>" + GetMyDataTypeText(data[i].MyDataType) + "</td>";
+							newRow += "<td>min=" + data[i].MinLen + ",max=" + data[i].MaxLen + "</td>";
+							newRow += "<td>" + data[i].UIRefKey + "</td>";
 							newRow += "<td>";
-							newRow += "<a href=\"javascript:Edit('" + data[i].No + "')\"><img src='/WF/Img/Btn/Edit.gif' border=0 />编辑</a>";
+							newRow += "<a href=\"javascript:Edit('" +
+								data[i].MyPK +
+								"','" +
+								data[i].LGType +
+								"','" +
+								data[i].KeyOfEn +
+								"','" +
+								data[i].UIBindKey +
+								"')\"><img src='/WF/Img/Btn/Edit.gif' border=0 />编辑</a>";
 							newRow += "<a href=\"javascript:Delete('" +
 								data[i].MyPK +
 								"')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
 							newRow += "</td>";
-							*/
-
 							newRow += "</tr>";
-							switch(data.Sys_MapAttr[i].LGType) {
+							switch(data[i].LGType) {
 								case 0: //普通
 									normalFieldRows += newRow;
 									break;
@@ -102,31 +93,12 @@
 						$("#Table1 tr:last").after(enumFieldRows);
 						$("#Table1 tr:last").after("<tr><td colspan='9'>外键字段</td></tr>");
 						$("#Table1 tr:last").after(fkFieldRows);
-						/*for (var i in data.Sys_GroupField) {
-							newRow = "";
-							//<th>序号</th>
-							//<th>字段名</th>
-							//<th>中文名</th>
-							//<th>类型</th>
-							//<th>长度</th>
-							//<th>关联</th>
-							//<th>编辑</th>
-							newRow = "<tr ><td class=Idx>" + i + "</td>";
-							//newRow += "<td>" + data.Sys_MapAttr[i].MyPK + "</td>";
-							newRow += "<td>" + data.Sys_MapAttr[i].KeyOfEn + "</td>";
-							newRow += "<td>" + data.Sys_MapAttr[i].Name + "</td>";
-							newRow += "<td>" + GetMyDataTypeText(data.Sys_MapAttr[i].MyDataType) + "</td>";
-							newRow += "<td>min=" + data.Sys_MapAttr[i].MinLen + ",max=" + data.Sys_MapAttr[i].MaxLen + "</td><td>关联</td>";
-							//newRow += "<td>" + data.Sys_MapAttr[i].Email + "</td>";
-							//newRow += "<td>" + data.Sys_MapAttr[i].Addr + "</td>";
-							newRow += "</tr>";
-							$("#Table1 tr:last").after(newRow);
-						}*/
+						$("#Msg").html("");
 					}
 				}
 			});
 		}
-
+		//获取字段类型值（键）
 		function GetMyDataTypeText(key) {
 			switch (key) {
 				case 1:
@@ -150,46 +122,65 @@
 			}
 		}
 
-		function Delete(no) {
+		//新建字段
+		function New() {
+			var url = "/WF/Admin/FoolFormDesigner/FieldTypeList.htm?FK_MapData=" + FK_MapData;
+			var w =window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+			window.location.reload();
+		}
 
+		//编辑字段
+		function Edit(no, type, KeyOfEn, EnumKey) {
+			//普通类型的字段.
+			//WF/Admin/FoolFormDesigner/EditF.htm?MyPK=WoDeZiADun_WoDeZiDuan&FK_MapData=WoDeZiADun&KeyOfEn=WoDeZiDuan
+			//枚举类型
+			//WF/Admin/FoolFormDesigner/EditEnum.htm?DoType=Edit&FK_MapData=WoDeZiADun&MyPK=WoDeZiADun_FaWenLeiXing&EnumKey=FaWenLeiXing&s=0.6022623278189881
+			//外键.
+			//WF/Admin/FoolFormDesigner/EditTableField.htm?DoType=Edit&FK_MapData=WoDeZiADun&FK_MapDtl=WoDeZiADun&MyPK=WoDeZiADun_CN_PQ&FK_SFTable=CN_PQ
+			var url;
+			if (type == 0) {
+				url = "/WF/Admin/FoolFormDesigner/EditF.htm?MyPK=" + no + "&FK_MapData=" + FK_MapData +"&KeyOfEn=" + KeyOfEn;
+			}
+			else if (type == 1) {
+				url = "/WF/Admin/FoolFormDesigner/EditEnum.htm?DoType=Edit&MyPK=" + no + "&FK_MapData=" + FK_MapData + "&KeyOfEn=" + KeyOfEn + "&EnumKey=" + EnumKey;
+			}
+			else if (type == 2) {
+				url = "/WF/Admin/FoolFormDesigner/EditTableField.htm?DoType=Edit&MyPK=" + no + "&FK_MapData=" + FK_MapData + "&KeyOfEn=" + KeyOfEn + "&FK_MapDtl=" + KeyOfEn;
+			} else {
+				//alert(typeof(type));
+				alert("字段类型错误！");
+				return;
+			}
+			var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+			//WinOpen(url);	//for test
+			window.location.href = window.location.href;
+		}
+
+		//删除字段
+		function Delete(no) {
 			if (window.confirm('您确定要删除吗？') == false)
 				return;
-
-			//删除学生.
 			$.ajax({
 				type: 'post',
 				async: true,
-				url: Handler + "?DoType=FiledsList_Delete&No=" + no + "&m=" + Math.random(),
+				url: Handler + "?DoType=FiledsList_Delete&FK_MapData=" + FK_MapData + "&MyPK=" + no + "&m=" + Math.random(),
 				dataType: 'html',
 				success: function (data) {
-
-					$("#Msg").html(data);
-
-					if (data.indexOf('err@') == 0) {
-						alert(data);
+					alert(data);
+					if (data.indexOf('err@') > -1) {
 						return;
-
 					} else {
-
-						alert(data);
-
-						window.location.href = window.location.href;
+						window.location.reload();
 					}
 				}
 			});
-		}
-
-		function Edit(no) {
-			var url = 'Fileds.htm?No=' + no;
-			var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
-			window.location.href = window.location.href;
 		}
 	 </script>
 </head>
 <body onkeypress="Esc()" >
 
 <table id="Table1">
-<caption>字段列表  - <a href="javascript:WinOpen('/WF/Admin/FoolFormDesigner/FieldTypeList.htm?FK_MapData=WoDeZiADun')">新增</a></caption>
+<caption>字段列表  - <a href="javascript:New()">新增</a></caption>
 	<tr>
 		<th>序号</th>
 		<th>字段名</th>

@@ -100,6 +100,10 @@
         GenerWorkNode(); //表单数据.
         $("input:disabled").next("span").css("border", "none");
         $('#header b').text((Number(pageData.IframeId.split("track")[1]) + 1));
+
+        if (Number(pageData.IframeId.split("track")[1])==0){
+            $('#topContentDiv').css('display', 'block');
+        }
         $('#header')
             .bind('click',
                 function() {
@@ -1174,13 +1178,14 @@
                 showNoticeInfo();
                 setFormEleDisabled();
 
-                if (pageData.IframeId != undefined) {
-                    setParentIframeHeight(pageData.IframeId);
-                }
-
                 $('.col-sm-2').attr('class', 'col-lg-2 col-md-2 col-sm-2');
                 $('.col-sm-4').attr('class', 'col-lg-4 col-md-4 col-sm-4');
                 $('.col-sm-10').attr('class', 'col-lg-10 col-md-10 col-sm-10');
+
+
+                if (pageData.IframeId != undefined) {
+                    setParentIframeHeight(pageData.IframeId);
+                }
             }
         });
     }
@@ -1320,7 +1325,10 @@
             if (iframe != undefined) {
                 var height = document.body.clientHeight;
                 $(iframe).height(height + 15);
-				$(iframe).parent('.trackDiv').height(height + 15);
+                $(iframe).parent('.trackDiv').height(height + 15);
+
+                //为了  IE9  强给 IFRAME 宽度 100%
+                $(iframe).css('width', '100%');
             }
         }
     }

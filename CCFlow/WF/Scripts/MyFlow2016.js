@@ -664,8 +664,8 @@ function getData(data, url, dataParam) {
     var jsonStr = '{"IsSuccess":true,"Msg":null,"ErrMsg":null,"List":null,"Data":2}';
     var data = JSON.parse(jsonStr);
     if (data.IsSuccess != true) {
-        console.log('返回参数失败，ErrMsg:' + data.ErrMsg + ";Msg:" + data.Msg + ";url:" + url);
-        console.log(dataParam);
+       alert('返回参数失败，ErrMsg:' + data.ErrMsg + ";Msg:" + data.Msg + ";url:" + url);
+       
     }
     return data;
 }
@@ -852,7 +852,6 @@ function initTrackList(workNodeData) {
         trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p>' + exerEmpP + '</a></li>';
         var actionType = track.ActionType;
         if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11 && actionType != 8) {
-            console.log(actionType)
             trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
         } else {
             var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
@@ -940,9 +939,13 @@ function initTrackList(workNodeData) {
     });
       
     //如果工作已经处理  提示用户工作已处理  并关闭处理页面
-    if (workNodeData.Track.length > 0 && workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) {
-        //alert("当前工作已处理");
-        //window.close();
+    if (workNodeData.Track.length > 0 && ((workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) || (workNodeData.Track[workNodeData.Track.length - 1].ActionType == 5)) && pageData.DoType != 'View') {//ACTIONTYPE=5 是撤销移交
+        alert("当前工作已处理");
+        //刷新父窗口
+        if (window.opener != null) {
+            window.opener.location.reload();
+        }
+        window.close();
     }
 }
 
@@ -1035,25 +1038,39 @@ function InitForm() {
         }
     })
 
-    ////加载JS文件
+    ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
     var enName = workNodeData.Sys_MapData[0].No;
-    var jsSrc = '';
-    try {
-        jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
-        $('body').append($('<div>' + jsSrc + '</div>'));
-    }
-    catch (err) {
-        console.log("加载JS文件出错");
-    }
-
     try {
         ////加载JS文件
-        jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
-        $('body').append($('<div>' + jsSrc + '</div>'));
+        //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
+        //$('body').append($('<div>' + jsSrc + '</div>'));
+
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "/DataUser/JSLibData/" + enName + "_Self.js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
     }
     catch (err) {
-        console.log("加载JS文件出错");
+        
     }
+
+    var jsSrc = '';
+    try {
+        //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
+        //$('body').append($('<div>' + jsSrc + '</div>'));
+
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "/DataUser/JSLibData/" + enName + "_Self.js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
+        
+    }
+
+    
 
     //处理下拉框级联等扩展信息
     AfterBindEn_DealMapExt();
@@ -2085,6 +2102,11 @@ function OptSuc(msg) {
     } else {
         $("#msgModal").modal().show();
     }
+
+    if (window.opener != null) {
+        //刷新父窗口
+        window.opener.location.reload();
+    }
 }
 //移交
 //初始化发送节点下拉框
@@ -2113,6 +2135,7 @@ function showNoticeInfo() {
     var rbs = workNode.Sys_FrmRB;
     data = rbs;
     $("input[type=radio],select").bind('change', function (obj) {
+        var needShowDDLids = [];
         var methodVal = obj.target.value;
         for (var j = 0; j < data.length; j++) {
             var value = data[j].IntKey;
@@ -2135,6 +2158,7 @@ function showNoticeInfo() {
                         if (ele.css('display').toUpperCase() == "NONE") {
                             continue;
                         }
+
                         if (ele.parent().attr('class').indexOf('input-group') >= 0) {
                             labDiv = ele.parent().parent().prev();
                             eleDiv = ele.parent().parent();
@@ -2144,11 +2168,21 @@ function showNoticeInfo() {
                         }
                         switch (fieldConArr[1]) {
                             case "1"://可用
+                                if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
+                                    needShowDDLids.push(ele[0].id);
+                                }
+
                                 labDiv.css('display', 'block');
                                 eleDiv.css('display', 'block');
                                 ele.removeAttr('disabled');
+
+                                
                                 break;
                             case "2"://可见
+                                if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
+                                    needShowDDLids.push(ele[0].id);
+                                }
+
                                 labDiv.css('display', 'block');
                                 eleDiv.css('display', 'block');
                                 break;
@@ -2205,6 +2239,10 @@ function showNoticeInfo() {
                 break;
             }
         }
+
+        $.each(needShowDDLids, function (i, ddlId) {
+            $('#' + ddlId).change();
+        });
     });
 
 

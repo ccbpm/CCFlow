@@ -106,7 +106,7 @@ var rr=$("input[name=\""+_17+"\"][type=radio], input[name=\""+_17+"\"][type=chec
 $.fn.prop?rr.prop("checked",false):rr.attr("checked",false);
 rr.each(function(){
 var f=$(this);
-console.log(_17+":"+f.val()+","+val);
+//console.log(_17+":"+f.val()+","+val);
 if(f.val()==String(val)){
 $.fn.prop?f.prop("checked",true):f.attr("checked",true);
 }

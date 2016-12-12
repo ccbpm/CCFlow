@@ -45,6 +45,8 @@
             });
         });
 
+        var pageData = {};
+
         //转拼音，并去除开头为数字的字符
         function ParseStringToPinYin(parseString, parseModel) {
             parseString = $.trim(parseString);
@@ -159,6 +161,7 @@
 
             var div = this.document.getElementById('DivEnumList');
             div.innerHTML = str;
+            pageData.DoType = "NewEnum";
         }
 
         function Del() {
@@ -256,7 +259,10 @@
 
             var div = this.document.getElementById('DivEnumList');
             div.innerHTML = str;
+
+            pageData.DoType = "SaveEnum";
         }
+
 
         //执行保存.
         function SaveEnum() {
@@ -285,16 +291,17 @@
             //alert('将要保存' + strs + "  name=" + name + " keyofEn=" + keyofEn);
 
             // 定义参数，让其保存到数据库里。
+
             var param = {
                 action: "DoType",
-                DoType: "SaveEnum",
+                DoType: pageData.DoType,
                 EnumName: name,
                 EnumKey: keyofEn,
                 Vals: strs
             };
 
             $.post(controllerURLConfig, param, function (data) {
-                if (data == "true") {
+                if (data == "保存成功") {
                     alert('保存成功,请在列表里选择该枚举.');
                     LoadGridData(1, 6);
                 } else {

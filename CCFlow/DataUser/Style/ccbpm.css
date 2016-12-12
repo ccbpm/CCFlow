@@ -1102,3 +1102,20 @@ select {
 -moz-appearance: none;
 -ms-appearance: none;
 }
+
+
+
+/*让表格显示 ...*/
+body table {
+  table-layout: fixed;
+  /*width: 98% border:0px;
+                        margin: 0px;*/
+}
+body table tr td {
+  text-overflow: ellipsis;
+  /* for IE */
+  -moz-text-overflow: ellipsis;
+  /* for Firefox,mozilla */
+  overflow: hidden;
+  white-space: nowrap;
+}

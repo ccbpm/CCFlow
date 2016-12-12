@@ -1064,11 +1064,16 @@ namespace BP.Sys
         /// <param name="cfg">配置 @0=xxx@1=yyyy@n=xxxxxc</param>
         /// <param name="lang">语言</param>
         /// <returns></returns>
-        public static string SaveEnum(string enumKey, string enumLab, string cfg, string lang = "CH")
+        public static string SaveEnum(string enumKey, string enumLab, string cfg, bool isNew,string lang = "CH")
         {
             SysEnumMain sem = new SysEnumMain();
             sem.No = enumKey;
-            if (sem.RetrieveFromDBSources() == 0)
+            int dataCount=sem.RetrieveFromDBSources();
+            if (dataCount > 0 && isNew)
+            {
+                return "已存在枚举" + enumKey + ",请修改枚举名字";
+            }
+            if (dataCount == 0)
             {
                 sem.Name = enumLab;
                 sem.CfgVal = cfg;

@@ -173,20 +173,28 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
             string v3 = getUTF8ToString("v3");
             string v4 = getUTF8ToString("v4");
             string v5 = getUTF8ToString("v5");
+            string resutlStr = string.Empty;
             string sql = "";
             try
             {
                 switch (dotype.Trim())
                 {
                     case "SaveEnum":
-                    case "NewEnum":
                         string enumName = getUTF8ToString("EnumName");
                         string enumKey1 = getUTF8ToString("EnumKey");
                         string cfgVal = getUTF8ToString("Vals");
 
                         //调用接口执行保存.
-                        BP.Sys.CCFormAPI.SaveEnum(enumKey1, enumName, cfgVal);
-                        return "true";
+                        resutlStr = BP.Sys.CCFormAPI.SaveEnum(enumKey1, enumName, cfgVal, false);
+                        return resutlStr;
+                    case "NewEnum"://杨玉慧加  当枚举已经存在时，提示，不再添加
+                        string newnEumName = getUTF8ToString("EnumName");
+                        string newEnumKey1 = getUTF8ToString("EnumKey");
+                        string newCfgVal = getUTF8ToString("Vals");
+
+                        //调用接口执行保存.
+                        resutlStr = BP.Sys.CCFormAPI.SaveEnum(newEnumKey1, newnEumName, newCfgVal, true);
+                        return resutlStr;
                     case "PublicNoNameCtrlCreate": //创建通用的控件.
                         string ctrlType = getUTF8ToString("CtrlType");
                         try

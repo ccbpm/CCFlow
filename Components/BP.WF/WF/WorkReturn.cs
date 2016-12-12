@@ -806,6 +806,11 @@ namespace BP.WF
                 string sql = "UPDATE WF_GenerWorkerlist SET IsPass=1000 WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'";
                 if (BP.DA.DBAccess.RunSQL(sql) == 0)
                     throw new Exception("@退回错误，没有找到要更新的目标数据.技术信息:" + sql);
+
+                //杨玉慧 将流程的  任务池状态设置为  NONE
+                sql = "UPDATE WF_GenerWorkFlow SET TaskSta=0 WHERE  WorkID=" + this.WorkID;
+                if (BP.DA.DBAccess.RunSQL(sql) == 0)
+                    throw new Exception("@退回错误，没有找到要更新的目标数据.技术信息:" + sql);
             }
             else
             {

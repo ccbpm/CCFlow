@@ -164,7 +164,7 @@
         .input-group .input-group-addon {
             border: none;
             background: #F1F1F2;
-        }
+       
     </style>
 
     <!--杨玉慧 -->
@@ -194,17 +194,23 @@
             }
             nav.init();
             $(".navbars").css("margin-top", ($(window).height() - $(".navbars").height()) / 2);
-            $(".navbars i").click(function () {
-                $("#nav").removeClass("s");
-            });
-            $("#nav").bind("mouseover", function() {
-                $("#nav").addClass("s");
-                $("#nav").css("top","30px");
-            });
-
+            if (navigator.userAgent.indexOf('Chrome') >= 0) {
+                $(".navbars i").click(function () {
+                    $("#nav").removeClass("s");
+                });
+                $("#nav").bind("mouseover", function() {
+                    $("#nav").addClass("s");
+                    $("#nav").css("top","30px");
+                });
+            }
+            
             $('#btnCloseMsg').bind('click', function () {
                 $('.Message').hide();
             });
+            if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
+            (navigator.userAgent.indexOf('Trident') >= 0)) {
+                $('body').css('overflow-x', 'hidden');
+            }
          })
     </script>
 </head>

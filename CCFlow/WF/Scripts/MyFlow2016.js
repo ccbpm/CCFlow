@@ -856,15 +856,17 @@ function initTrackList(workNodeData) {
             console.log(actionType);
             switch (actionType) {
             case 5:
-                trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + + track.EmpFromT + track.ActionTypeText + "至" + track.NDFromT + "节点;操作时间" + track.RDT + '</div></div>';
+                trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "撤消" + track.NDFromT + "发起节点;操作时间" + track.RDT + '</div></div>';
                 break;
             case 2:
                 trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
                 break;
             default:
-                var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
-                trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
+                break;
             }
+          } else {
+            var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
+            trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
         }
     });
     //不是查看模式   显示当前处理节点
@@ -903,12 +905,7 @@ function initTrackList(workNodeData) {
         $('.navbars').css('display', 'block');
     } else {//新建单子时，不显示轨迹导航，表单宽度为100%
         $('.navbars').css('display', 'none');
-        if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
-        (navigator.userAgent.indexOf('Trident') >= 0)) {
-            $('#divCurrentForm').css('width', '83.5%').css("float", "left");
-        } else {
-            $('#divCurrentForm').css('width', '100%');
-        }
+        $('#divCurrentForm').css('width', '100%');
         $('#header').css('background', '#5598f3');
     }
 
@@ -928,12 +925,7 @@ function initTrackList(workNodeData) {
         $('#nav').css('display', 'block');
     } else {//新建单子时，不显示轨迹导航，表单宽度为100%
         $('#nav').css('display', 'none');
-        if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
-        (navigator.userAgent.indexOf('Trident') >= 0)) {
-            $('#divCurrentForm').css('width', '83.5%').css("float", "left");
-        } else {
-            $('#divCurrentForm').css('width', '100%');
-        }
+        $('#divCurrentForm').css('width', '100%');
        $('#header').css('background','#5598f3');
     }
 
@@ -958,7 +950,7 @@ function initTrackList(workNodeData) {
     });
 
     //如果工作已经处理  提示用户工作已处理  并关闭处理页面
-    if (workNodeData.Track.length > 0 && ((workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) || (workNodeData.Track[workNodeData.Track.length - 1].ActionType == 5)) && pageData.DoType != 'View') {//ACTIONTYPE=5 是撤销移交
+    if (workNodeData.Track.length > 0 && (workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) && (workNodeData.Track[workNodeData.Track.length - 1].ActionType != 5) && pageData.DoType != 'View') {//ACTIONTYPE=5 是撤销移交
         alert("当前工作已处理");
         //刷新父窗口
         if (window.opener != null) {

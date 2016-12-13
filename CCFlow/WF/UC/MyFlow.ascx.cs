@@ -419,50 +419,68 @@ namespace CCFlow.WF.UC
             {
                 if (this.currND.CondModel == CondModel.SendButtonSileSelect && this.currND.IsEndNode==false)
                 {
-                    /*如果流程的方向条件是按照下拉框拉来选择.*/
-                    /*弹出下拉框来选择之前进行自定义js校验  by tianbaoyan 2016-12-05.*/
-                    toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + "SendBtnCondClick('" + currND.FK_Flow + "','" + currND.NodeID + "','" + this.WorkID + "','" + this.FID + "')\" />");
-                 
-                    toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
-                    Btn_Send.Style.Add("display", "none");
-                    this.Btn_Send.UseSubmitBehavior = false;
-
-                    if (this.currND.HisFormType == NodeFormType.DisableIt)
-                        this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                    else
-                        this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
-                    this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
-
-                    // 增加方向到下拉框.
-                    DDL ddl = new DDL();
-                    ddl.ID = "DDL_ToNode";
-                    Nodes toNodes = this.currND.HisToNodes;
-                    ddl.Items.Add(new ListItem("请选择要到达的节点","0"));
-
-                    foreach (Node nd in toNodes)
+                    if (btnLab.SelectAccepterEnable == 2)
                     {
-                        ListItem li = new ListItem();
-                        if (nd.HisDeliveryWay == DeliveryWay.BySelected)
-                            li.Value = nd.NodeID.ToString() + ".1";
-                        else
-                            li.Value = nd.NodeID.ToString();
+                        /*如果启用了选择人窗口的模式是【选择既发送】.*/
+                        toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if ( OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; \" />");
+                        toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
+                        Btn_Send.Style.Add("display", "none");
+                        this.Btn_Send.UseSubmitBehavior = false;
 
-                        //li.Text = nd.Name+" - "+li.Value;
-                        li.Text = nd.Name ;
-                        ddl.Items.Add(li);
+                        if (this.currND.HisFormType == NodeFormType.DisableIt)
+                            this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
+                        else
+                            this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                        //   this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
+                        this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                     }
-
-                    if (ddl.Items.Count != 1)
+                    else
                     {
-                        if (ddl.Items.Count == 2)
-                        {
-                            this.toolbar.Add("<div style='display:none'>");
-                            this.toolbar.Add(ddl);
-                            this.toolbar.Add("</div>");
-                        }
+                        /*如果流程的方向条件是按照下拉框拉来选择.*/
+                        /*弹出下拉框来选择之前进行自定义js校验  by tianbaoyan 2016-12-05.*/
+                        Nodes toNodes = this.currND.HisToNodes;
+                        toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + "SendBtnCondClick('" + currND.FK_Flow + "','" + currND.NodeID + "','" + this.WorkID + "','" + this.FID + "','" + toNodes.Count + "')\" />");
+
+                        toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
+                        Btn_Send.Style.Add("display", "none");
+                        this.Btn_Send.UseSubmitBehavior = false;
+
+                        if (this.currND.HisFormType == NodeFormType.DisableIt)
+                            this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
                         else
+                            this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                        this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
+
+                        // 增加方向到下拉框.
+                        DDL ddl = new DDL();
+                        ddl.ID = "DDL_ToNode";
+                        ddl.Items.Add(new ListItem("请选择要到达的节点", "0"));
+
+                        foreach (Node nd in toNodes)
                         {
-                            this.toolbar.Add(ddl);
+                            ListItem li = new ListItem();
+                            if (nd.HisDeliveryWay == DeliveryWay.BySelected)
+                                li.Value = nd.NodeID.ToString() + ".1";
+                            else
+                                li.Value = nd.NodeID.ToString();
+
+                            //li.Text = nd.Name+" - "+li.Value;
+                            li.Text = nd.Name;
+                            ddl.Items.Add(li);
+                        }
+
+                        if (ddl.Items.Count != 1)
+                        {
+                            if (ddl.Items.Count == 2)
+                            {
+                                this.toolbar.Add("<div style='display:none'>");
+                                this.toolbar.Add(ddl);
+                                this.toolbar.Add("</div>");
+                            }
+                            else
+                            {
+                                this.toolbar.Add(ddl);
+                            }
                         }
                     }
                 }
@@ -2290,8 +2308,13 @@ namespace CCFlow.WF.UC
                     {
                         //求到达节点ID .
                         string toNodeIDStr = this.ToolBar1.GetDDLByID("DDL_ToNode").SelectedItemStringVal.Replace(".1", "");
-                        Node toNode = new Node(int.Parse(toNodeIDStr));
-                        msg = firstwn.NodeSend(toNode, null).ToMsgOfHtml();
+                        if (toNodeIDStr != "0")
+                        {
+                            Node toNode = new Node(int.Parse(toNodeIDStr));
+                            msg = firstwn.NodeSend(toNode, null).ToMsgOfHtml();
+                        }
+                        else
+                            msg = firstwn.NodeSend().ToMsgOfHtml();
                     }
                 }
             }

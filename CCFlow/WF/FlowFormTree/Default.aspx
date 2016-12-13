@@ -955,7 +955,9 @@
             if (window.opener) {
                 if (window.opener.name && window.opener.name == "main") {
                     window.opener.location.href = window.opener.location.href;
-                    window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+                    if (window.opener.top && window.opener.top.leftFrame) {
+                        window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+                    }
                 } else if (window.opener.name && window.opener.name == "运行流程") { 
                     //测试运行流程，不进行刷新
                 } else {

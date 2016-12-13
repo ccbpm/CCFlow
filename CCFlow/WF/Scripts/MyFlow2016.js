@@ -4,7 +4,7 @@
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
         FormOnLoadCheckIsNull();
     }
-    
+
 });
 
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.
@@ -69,7 +69,7 @@ function SetHegiht() {
             frmHeight = 0;
 
         if (screenHeight > parseFloat(frmHeight) + allHeight) {
-           // $("#divCCForm").height(screenHeight - allHeight);
+            // $("#divCCForm").height(screenHeight - allHeight);
 
             $("#TDWorkPlace").height(screenHeight - allHeight - 10);
 
@@ -107,7 +107,7 @@ function KindEditerSync() {
 }
 
 function Shift() {
-  //  var url = '/WF/WorkOpt/Forward.htm';
+    //  var url = '/WF/WorkOpt/Forward.htm';
     //window.open(url);
 }
 
@@ -150,7 +150,7 @@ function GetPageParas(sArgName) {
 }
 
 //获取Dtl中TB的值 20160106 from 柳辉
-function ReqDtlBObj(dtlTable,DtlColumn, onValue) {
+function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
 
     var getworkid = $('#HidWorkID').val();//hiddenValue
 
@@ -257,7 +257,7 @@ function WinOpen(url, winName) {
     newWindow.focus();
     return;
 }
- 
+
 
 function DoDelSubFlow(fk_flow, workid) {
     if (window.confirm('您确定要终止进程吗？') == false)
@@ -318,12 +318,12 @@ function printFrom() {
     var url = $("#PrintFrom_Url").val();
     LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
     LODOP.PRINT_INIT("打印表单");
- 
+
     // LODOP.ADD_PRINT_URL(30, 20, 746, "100%", location.href);
- 
+
     //LODOP.ADD_PRINT_HTM(20, 0, "100%", "100%", document.getElementById("divCCForm").innerHTML);
     LODOP.ADD_PRINT_URL(0, 0, "100%", "100%", url);
-   
+
     LODOP.SET_PRINT_STYLEA(0, "HOrient", 3);
     LODOP.SET_PRINT_STYLEA(0, "VOrient", 3);
     //LODOP.SET_PRINT_PAGESIZE(0, 0, 0, "");
@@ -331,7 +331,7 @@ function printFrom() {
     //		LODOP.SET_SHOW_MODE("MESSAGE_GETING_URL",""); //该语句隐藏进度条或修改提示信息
     //		LODOP.SET_SHOW_MODE("MESSAGE_PARSING_URL","");//该语句隐藏进度条或修改提示信息
     //  LODOP.PREVIEW();
-   
+
     LODOP.PREVIEW();
 }
 
@@ -383,7 +383,8 @@ function ReturnVal(ctrl, url, winName) {
         var startIndex = url.indexOf('#');
         //获取#号后面的& 符号的位置
         var endIndex = url.indexOf('&', startIndex);
-        if (endIndex < 0) {SetBottomTooBar
+        if (endIndex < 0) {
+            SetBottomTooBar
             endIndex = url.length;
         }
         var paramId = url.substring(startIndex + 1, endIndex);
@@ -504,7 +505,7 @@ function initBar() {
 }
 
 //初始化退回、移交、加签窗口
-function initModal(modalType,toNode) {
+function initModal(modalType, toNode) {
     //初始化退回窗口的SRC
     var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
        '<div class="modal-dialog">'
@@ -543,14 +544,14 @@ function initModal(modalType,toNode) {
                 break;
                 //发送选择接收节点和接收人
             case "sendAccepter":
-                $('#modalHeader').text("发送到节点："+toNode.Name);
+                $('#modalHeader').text("发送到节点：" + toNode.Name);
                 modalIframeSrc = "../WF/WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
                 break;
             default:
                 break;
         }
     }
-    $('#iframeReturnWorkForm').attr('src',modalIframeSrc );
+    $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
 }
 
 //退回操作  显示退回窗口
@@ -613,7 +614,7 @@ function Save() {
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData(true,true),
+        data: getFormData(true, true),
         url: "MyFlow.ashx?Method=Save",
         dataType: 'html',
         success: function (data) {
@@ -629,11 +630,11 @@ function Save() {
                 $('.Message').show();
                 //表示退回OK
                 //if (data.indexOf('工作已经被您退回到') == 0) {
-                  //  OptSuc(data);
+                //  OptSuc(data);
 
-                    //setAttachDisabled();
-                    //setToobarUnVisible();
-                    //setFormEleDisabled();
+                //setAttachDisabled();
+                //setToobarUnVisible();
+                //setFormEleDisabled();
                 //}
             }
         }
@@ -643,7 +644,7 @@ function Save() {
 //退回工作
 function returnWorkWindowClose(data) {
     $('#returnWorkModal').modal('hide');
-   
+
     if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
         $('#Message').html(data);
         $('.Message').show();
@@ -664,8 +665,8 @@ function getData(data, url, dataParam) {
     var jsonStr = '{"IsSuccess":true,"Msg":null,"ErrMsg":null,"List":null,"Data":2}';
     var data = JSON.parse(jsonStr);
     if (data.IsSuccess != true) {
-       alert('返回参数失败，ErrMsg:' + data.ErrMsg + ";Msg:" + data.Msg + ";url:" + url);
-       
+        alert('返回参数失败，ErrMsg:' + data.ErrMsg + ";Msg:" + data.Msg + ";url:" + url);
+
     }
     return data;
 }
@@ -688,7 +689,7 @@ function initGroup(workNodeData, groupFiled) {
                 var params = '&FID=' + pageData.FID;
                 params += '&WorkID=' + groupFiled.OID;
 
-               
+
                 if (src.indexOf("?") > 0) {
                     var params = getQueryStringFromUrl(src);
                     if (params != null && params.length > 0) {
@@ -836,8 +837,8 @@ function initTrackList(workNodeData) {
     var trackNavHtml = '';
     var trackHtml = '';
     var trackList = workNodeData.Track;
-    var filterTrackList= $.grep(trackList, function (value) {
-        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 || value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 || value.ActionType == 8  || value.ActionType == 5;
+    var filterTrackList = $.grep(trackList, function (value) {
+        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 || value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 || value.ActionType == 8 || value.ActionType == 5;
     });
     workNodeData.Track = filterTrackList;
     $.each(workNodeData.Track, function (i, track) {
@@ -852,10 +853,18 @@ function initTrackList(workNodeData) {
         trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p>' + exerEmpP + '</a></li>';
         var actionType = track.ActionType;
         if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11 && actionType != 8) {
-            trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
-        } else {
-            var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
-            trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
+            console.log(actionType);
+            switch (actionType) {
+            case 5:
+                trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + + track.EmpFromT + track.ActionTypeText + "至" + track.NDFromT + "节点;操作时间" + track.RDT + '</div></div>';
+                break;
+            case 2:
+                trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
+                break;
+            default:
+                var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
+                trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
+            }
         }
     });
     //不是查看模式   显示当前处理节点
@@ -894,7 +903,12 @@ function initTrackList(workNodeData) {
         $('.navbars').css('display', 'block');
     } else {//新建单子时，不显示轨迹导航，表单宽度为100%
         $('.navbars').css('display', 'none');
-        $('#divCurrentForm').css('width', '100%');
+        if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
+        (navigator.userAgent.indexOf('Trident') >= 0)) {
+            $('#divCurrentForm').css('width', '83.5%').css("float", "left");
+        } else {
+            $('#divCurrentForm').css('width', '100%');
+        }
         $('#header').css('background', '#5598f3');
     }
 
@@ -914,8 +928,13 @@ function initTrackList(workNodeData) {
         $('#nav').css('display', 'block');
     } else {//新建单子时，不显示轨迹导航，表单宽度为100%
         $('#nav').css('display', 'none');
-        $('#divCurrentForm').css('width', '100%');
-        $('#header').css('background','#5598f3');
+        if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
+        (navigator.userAgent.indexOf('Trident') >= 0)) {
+            $('#divCurrentForm').css('width', '83.5%').css("float", "left");
+        } else {
+            $('#divCurrentForm').css('width', '100%');
+        }
+       $('#header').css('background','#5598f3');
     }
 
     $($('#nav li')[0]).addClass('current');
@@ -937,7 +956,7 @@ function initTrackList(workNodeData) {
             i.show();
         }
     });
-      
+
     //如果工作已经处理  提示用户工作已处理  并关闭处理页面
     if (workNodeData.Track.length > 0 && ((workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) || (workNodeData.Track[workNodeData.Track.length - 1].ActionType == 5)) && pageData.DoType != 'View') {//ACTIONTYPE=5 是撤销移交
         alert("当前工作已处理");
@@ -952,7 +971,7 @@ function initTrackList(workNodeData) {
 function InitForm() {
     var workNodeData = JSON.parse(jsonStr);
     var CCFormHtml = '';
-    
+
     var navGroupHtml = '';
     //解析节点名称
     $('#header span').text(workNodeData.Sys_MapData[0].Name);
@@ -968,21 +987,21 @@ function InitForm() {
         var groupHtml = '';
         //初始化分组
         var groupResultHtml = initGroup(workNodeData, groupFiled);
-        if (groupResultHtml != '' ) {//返回的值如果为 ''，就表明是字段分组
+        if (groupResultHtml != '') {//返回的值如果为 ''，就表明是字段分组
             //if (groupFiled.CtrlType != "SubFlow") {
-                var reloadBtn = '';
-                if (groupFiled.CtrlType == "SubFlow") {
-                    //reloadBtn = '<label class="reloadIframe">刷新</label>'
-                    //groupFiled.Lab = "关联的流程";
-                    groupFiled.Lab = workNodeData.WF_Node[0].SFLab;
-                } else if (groupFiled.CtrlType == "Track") {
-                    //reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
-                }
+            var reloadBtn = '';
+            if (groupFiled.CtrlType == "SubFlow") {
+                //reloadBtn = '<label class="reloadIframe">刷新</label>'
+                //groupFiled.Lab = "关联的流程";
+                groupFiled.Lab = workNodeData.WF_Node[0].SFLab;
+            } else if (groupFiled.CtrlType == "Track") {
+                //reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
+            }
 
-                groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12" style=""><div id="groupH' + groupFiled.Idx + '"  class="group section" data-target="group' + groupFiled.Idx + '"><label class="state">+</label>' +
-                    groupFiled.Lab + reloadBtn + '</div></div>';
+            groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12" style=""><div id="groupH' + groupFiled.Idx + '"  class="group section" data-target="group' + groupFiled.Idx + '"><label class="state">+</label>' +
+                groupFiled.Lab + reloadBtn + '</div></div>';
 
-                navGroupHtml += '<li class="scrollNav"><a href="#groupH' + groupFiled.Idx + '">' + $('<p>' + groupFiled.Lab + '</p>').text() + '</a></li>';
+            navGroupHtml += '<li class="scrollNav"><a href="#groupH' + groupFiled.Idx + '">' + $('<p>' + groupFiled.Lab + '</p>').text() + '</a></li>';
             //} else { }
             groupHtml += groupResultHtml;
 
@@ -1052,7 +1071,7 @@ function InitForm() {
         tmp.parentNode.insertBefore(s, tmp);
     }
     catch (err) {
-        
+
     }
 
     var jsSrc = '';
@@ -1067,10 +1086,10 @@ function InitForm() {
         tmp.parentNode.insertBefore(s, tmp);
     }
     catch (err) {
-        
+
     }
 
-    
+
 
     //处理下拉框级联等扩展信息
     AfterBindEn_DealMapExt();
@@ -1153,8 +1172,8 @@ function InitForm() {
 
     //设置CCFORM的表格宽度  
     //if (document.body.clientWidth > 992) {//处于中屏时设置宽度最小值
-        //$('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
-   // }
+    //$('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
+    // }
 
 
     showNoticeInfo();
@@ -1199,7 +1218,7 @@ function SetAth(data) {
 }
 
 //查看页面的附件展示  查看页面调用
-function ShowViewNodeAth(athLab, atParamObj,src) {
+function ShowViewNodeAth(athLab, atParamObj, src) {
     var athForm = $('iframeAthForm');
     var athModal = $('athModal');
     var athFormTitle = $('#athModal .modal-title');
@@ -1242,9 +1261,9 @@ function Col4To8() {
 //8列切为4列
 function Col8To4() {
     pageData.Col = 4;
-  /*  $('.col-sm-2').attr('class', 'col-lg-2 col-md-2 col-sm-2');
-    $('.col-sm-4').attr('class', 'col-lg-4 col-md-4 col-sm-4')
-    $('.col-sm-10').attr('class', 'col-lg-10 col-md-10 col-sm-10');*/
+    /*  $('.col-sm-2').attr('class', 'col-lg-2 col-md-2 col-sm-2');
+      $('.col-sm-4').attr('class', 'col-lg-4 col-md-4 col-sm-4')
+      $('.col-sm-10').attr('class', 'col-lg-10 col-md-10 col-sm-10');*/
 
     $('.col-sm-2').attr('class', 'col-lg-2 col-md-2 col-sm-2');
     $('.col-sm-4').attr('class', 'col-lg-4 col-md-4 col-sm-4')
@@ -1286,7 +1305,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                 //添加文本框 ，日期控件等
                 //AppString   
                 if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
-                    if (mapAttr.ColSpan==0 || mapAttr.ColSpan == 2 || mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {//占有1-2  3列的文本框
+                    if (mapAttr.ColSpan == 0 || mapAttr.ColSpan == 2 || mapAttr.ColSpan == 1 || mapAttr.ColSpan == 3) {//占有1-2  3列的文本框
                         var mdCol = 2;
                         var smCol = 4;
                         switch (mapAttr.ColSpan) {
@@ -1336,7 +1355,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         var uiHeight = mapAttr.UIHeight / 23 * 30;
                         isInOneRow = true;
                         eleHtml += '<div class="col-lg-11 col-md-11 col-sm-10">' +
-                            "<textarea  style='height:"+uiHeight+"px' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
+                            "<textarea  style='height:" + uiHeight + "px' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
                             + '</div>';
                     }
                 } //AppDate
@@ -1472,7 +1491,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         colMd = 11;
                         colsm = 10;
                     }
-                    
+
                     eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' +
                             "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' >" + "</input>";
                     defValue = defValue != undefined && defValue != '' ? defValue : '&nbsp;';
@@ -1484,8 +1503,8 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" + defValue + "</div>";
 
                     //var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
-                //'<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
-                  //  tb.parent().html(eleHtml);
+                    //'<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
+                    //  tb.parent().html(eleHtml);
 
                     eleHtml += '</div>';
                 }
@@ -1505,7 +1524,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
             } else {
                 value = value.toString().replace(/：/g, ':').replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
             }
-            
+
             //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
             hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'></input>";
         }
@@ -1590,7 +1609,7 @@ function AfterBindEn_DealMapExt() {
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
 
-                if (tb.attr('class')!=undefined && tb.attr('class').indexOf('CheckRegInput') > 0) {
+                if (tb.attr('class') != undefined && tb.attr('class').indexOf('CheckRegInput') > 0) {
                     break;
                 } else {
                     tb.addClass("CheckRegInput");
@@ -1909,13 +1928,13 @@ function GenerWorkNode() {
             //
             Col8To4();
 
-           // window.location.href = "#divCurrentForm";
+            // window.location.href = "#divCurrentForm";
         }
     });
 }
 
 //获取表单数据
-function getFormData(isCotainTextArea,isCotainUrlParam) {
+function getFormData(isCotainTextArea, isCotainUrlParam) {
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -2083,7 +2102,7 @@ $(function () {
 function OptSuc(msg) {
     // window.location.href = "/WF/MyFlowInfo.aspx";
     $('.Message').hide();
-    if ($('#returnWorkModal:hidden').length==0 && $('#returnWorkModal').length > 0) {
+    if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()
     }
     msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
@@ -2150,7 +2169,7 @@ function showNoticeInfo() {
                     if (fieldCon != '' && fieldCon.split('=').length == 2) {
                         var fieldConArr = fieldCon.split('=');
                         var ele = $('[name$=' + fieldConArr[0] + ']');
-                        if (ele.length ==0) {
+                        if (ele.length == 0) {
                             continue;
                         }
                         var labDiv = undefined;
@@ -2176,7 +2195,7 @@ function showNoticeInfo() {
                                 eleDiv.css('display', 'block');
                                 ele.removeAttr('disabled');
 
-                                
+
                                 break;
                             case "2"://可见
                                 if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
@@ -2229,9 +2248,9 @@ function showNoticeInfo() {
                 } else {
                     $('#div_NoticeInfo').removeClass('bottom');
                     $('#div_NoticeInfo').addClass('top');
-                    top=top - $('#div_NoticeInfo').height() - 30;
+                    top = top - $('#div_NoticeInfo').height() - 30;
                 }
-                $('#div_NoticeInfo').css('top',top );
+                $('#div_NoticeInfo').css('top', top);
                 $('#div_NoticeInfo').css('left', left);
                 $('#div_NoticeInfo').css('display', 'block');
                 //$("#btnNoticeInfo").popover('show');
@@ -2278,7 +2297,7 @@ function showTbNoticeInfo() {
                 return;
 
             noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
-            
+
             $($('#div_NoticeInfo .popover-title span')[0]).text(mapAttr[0].Name);
             $('#div_NoticeInfo .popover-content').html(noticeInfo);
 
@@ -2290,7 +2309,7 @@ function showTbNoticeInfo() {
                 top += current.offsetTop;
                 current = current.offsetParent;
             }
-            
+
             if (top - $('#div_NoticeInfo').height() - 30 < 0) {
                 //让提示框在下方展示
                 $('#div_NoticeInfo').removeClass('top');
@@ -2350,7 +2369,7 @@ function checkBlanks() {
         }
     });
 
-    
+
     return checkBlankResult;
 }
 
@@ -2377,7 +2396,7 @@ function checkReg() {
         }
     });
 
-    
+
     return checkRegResult;
 }
 
@@ -2395,7 +2414,7 @@ function InitLoadFrame(obj) {
     var height = $(frames[obj.target.name].window.document.getElementsByTagName('BODY')).height();
 
 
-    $(obj.target).height(height+10);
+    $(obj.target).height(height + 10);
 }
 var colVisibleJsonStr = ''
 var jsonStr = '';

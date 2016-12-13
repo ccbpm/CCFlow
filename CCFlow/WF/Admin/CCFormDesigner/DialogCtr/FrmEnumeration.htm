@@ -236,7 +236,7 @@
                 }
                 else {
                     var vls = keyValue[0].split('=');
-                    var text = vls.slice(1, vls.length).push('=');
+                    var text = vls.slice(1, vls.length).join('=');
                     if (text == undefined) {
                         continue;
                     }

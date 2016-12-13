@@ -1220,7 +1220,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmAttachments(string fk_mapdata)
         {
-            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node);
+            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node, 0);
         }
         /// <summary>
         /// 得到它的 Entity

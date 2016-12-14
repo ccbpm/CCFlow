@@ -1073,6 +1073,7 @@ namespace BP.Sys
             {
                 return "已存在枚举" + enumKey + ",请修改枚举名字";
             }
+
             if (dataCount == 0)
             {
                 sem.Name = enumLab;

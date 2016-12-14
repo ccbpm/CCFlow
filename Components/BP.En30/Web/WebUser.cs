@@ -83,7 +83,7 @@ namespace BP.Web
             WebUser.Name = em.Name;
             if (string.IsNullOrEmpty(authNo) == false)
             {
-                WebUser.Auth = authNo;
+                WebUser.Auth = authNo; //被授权人，实际工作的执行者.
                 WebUser.AuthName = authName;
             }
             else
@@ -572,7 +572,6 @@ namespace BP.Web
             HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
             if (hc == null)
                 return null;
-
             try
             {
                 string val = null;
@@ -610,11 +609,11 @@ namespace BP.Web
                 {
                     if (IsBSMode == false)
                         return "admin";
+
                     //return "admin";
                     //string key = "CCS";
+
                     string key = "CCS";
-
-
                     HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
                     if (hc == null)
                         return null;
@@ -625,16 +624,8 @@ namespace BP.Web
                         WebUser.FK_Dept = hc["FK_Dept"];
                         WebUser.Auth = hc["Auth"];
                         WebUser.AuthName = hc["AuthName"];
-
                         WebUser.FK_DeptName = HttpUtility.UrlDecode(hc["FK_DeptName"]);
                         WebUser.Name = HttpUtility.UrlDecode(hc["Name"]);
-
-                        //if (BP.Sys.SystemConfig.IsUnit)
-                        //{
-                        //    WebUser.FK_Unit = HttpUtility.UrlDecode(hc["FK_Unit"]);
-                        //    WebUser.FK_UnitName = HttpUtility.UrlDecode(hc["FK_UnitName"]);
-                        //}
-
                         return hc.Values["No"];
                     }
                     throw new Exception("@err-001 No 登陆信息丢失。");

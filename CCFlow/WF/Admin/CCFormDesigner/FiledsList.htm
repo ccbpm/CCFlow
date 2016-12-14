@@ -30,36 +30,49 @@
 			FK_MapData = GetQueryString("FK_MapData");
 			//初始化表格.
 			$.ajax({
-				type: 'post',
-				async: true,
-				url: Handler + "?DoType=FiledsList_Init&FK_MapData=" + FK_MapData + "&m=" + Math.random(),
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf("err@") > -1) {
-						alert(data);
-					} else {
-						//$("#Msg").html(data);	//for test
-						data = JSON.parse(data);
-						//增加处理.
-						var newRow;
-						var normalFieldRows, enumFieldRows,fkFieldRows;
-						for (var i in data) {
-							newRow = "";
-							/*<th>序号</th>
-							<th>字段名</th>
-							<th>中文名</th>
-							<th>类型</th>
-							<th>长度</th>
-							<th>关联</th>
-							<th>编辑</th>*/
-							newRow = "<tr ><td class=Idx>" + i + "</td>";
-							newRow += "<td>" + data[i].KeyOfEn + "</td>";
-							newRow += "<td>" + data[i].Name + "</td>";
-							newRow += "<td>" + GetMyDataTypeText(data[i].MyDataType) + "</td>";
-							newRow += "<td>min=" + data[i].MinLen + ",max=" + data[i].MaxLen + "</td>";
-							newRow += "<td>" + data[i].UIRefKey + "</td>";
-							newRow += "<td>";
-							newRow += "<a href=\"javascript:Edit('" +
+			    type: 'post',
+			    async: true,
+			    url: Handler + "?DoType=FiledsList_Init&FK_MapData=" + FK_MapData + "&m=" + Math.random(),
+			    dataType: 'html',
+			    success: function (data) {
+			        if (data.indexOf("err@") > -1) {
+			            alert(data);
+			        } else {
+			            //$("#Msg").html(data);	//for test
+			            data = JSON.parse(data);
+			            //增加处理.
+			            var newRow;
+			            var normalFieldRows, enumFieldRows, fkFieldRows;
+			            for (var i in data) {
+			                newRow = "";
+			                /*<th>序号</th>
+			                <th>字段名</th>
+			                <th>中文名</th>
+			                <th>类型</th>
+			                <th>长度</th>
+			                <th>关联</th>
+			                <th>编辑</th>*/
+
+			                newRow = "<tr ><td class=Idx>" + i + "</td>";
+			                newRow += "<td>" + data[i].KeyOfEn + "</td>";
+			                newRow += "<td>" + data[i].Name + "</td>";
+			                newRow += "<td>" + GetMyDataTypeText(data[i].MyDataType) + "</td>";
+
+			                switch (GetMyDataTypeText(data[i].MyDataType)) {
+			                    case "string": //string
+			                    case "date":
+			                    case "datetime":
+			                        newRow += "<td>min=" + data[i].MinLen + ",max=" + data[i].MaxLen + "</td>";
+			                        break;
+			                    default:
+			                        newRow += "<td>...</td>";
+			                        break;
+			                }
+
+
+			                newRow += "<td>" + data[i].UIRefKey + "</td>";
+			                newRow += "<td>";
+			                newRow += "<a href=\"javascript:Edit('" +
 								data[i].MyPK +
 								"','" +
 								data[i].LGType +
@@ -68,34 +81,34 @@
 								"','" +
 								data[i].UIBindKey +
 								"')\"><img src='/WF/Img/Btn/Edit.gif' border=0 />编辑</a>";
-							newRow += "<a href=\"javascript:Delete('" +
+			                newRow += "<a href=\"javascript:Delete('" +
 								data[i].MyPK +
 								"')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
-							newRow += "</td>";
-							newRow += "</tr>";
-							switch(data[i].LGType) {
-								case 0: //普通
-									normalFieldRows += newRow;
-									break;
-								case 1: //枚举
-									enumFieldRows += newRow;
-									break;
-								case 2: //外键
-									fkFieldRows += newRow;
-									break;
-								default:
-									break;
-							}
-						}
-						$("#Table1 tr:last").after("<tr><td colspan='9'>普通字段</td></tr>");
-						$("#Table1 tr:last").after(normalFieldRows);
-						$("#Table1 tr:last").after("<tr><td colspan='9'>枚举字段</td></tr>");
-						$("#Table1 tr:last").after(enumFieldRows);
-						$("#Table1 tr:last").after("<tr><td colspan='9'>外键字段</td></tr>");
-						$("#Table1 tr:last").after(fkFieldRows);
-						$("#Msg").html("");
-					}
-				}
+			                newRow += "</td>";
+			                newRow += "</tr>";
+			                switch (data[i].LGType) {
+			                    case 0: //普通
+			                        normalFieldRows += newRow;
+			                        break;
+			                    case 1: //枚举
+			                        enumFieldRows += newRow;
+			                        break;
+			                    case 2: //外键
+			                        fkFieldRows += newRow;
+			                        break;
+			                    default:
+			                        break;
+			                }
+			            }
+			            $("#Table1 tr:last").after("<tr><th colspan='9'>普通字段</th></tr>");
+			            $("#Table1 tr:last").after(normalFieldRows);
+			            $("#Table1 tr:last").after("<tr><th colspan='9'>枚举字段</th></tr>");
+			            $("#Table1 tr:last").after(enumFieldRows);
+			            $("#Table1 tr:last").after("<tr><th colspan='9'>外键字段</th></tr>");
+			            $("#Table1 tr:last").after(fkFieldRows);
+			            $("#Msg").html("");
+			        }
+			    }
 			});
 		}
 		//获取字段类型值（键）

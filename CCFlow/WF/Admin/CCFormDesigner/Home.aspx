@@ -6,17 +6,33 @@
     string fk_mapdata=this.Request.QueryString["FK_MapData"];
     BP.Sys.MapData md = new BP.Sys.MapData(fk_mapdata);
 %>
+
 <fieldset>
 <legend>基础信息</legend>
+<ul>
+<li>表单编号：<%=md.No%></li>
+<li>表单名称：<%=md.Name%></li>
+<li>物理表：<%=md.PTable%></li>
+<li>表单类型：<%=md.HisFrmType%></li>
 
-表单编号：<%=md.No%>
-表单名称：<%=md.Name%>
+<li>总数据：<%=BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  "+md.PTable+" ")%>条</li>
 
+<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmExcels&PK=<%=fk_mapdata %>" >属性</a>：<%=md.HisFrmType%></li>
+
+</ul>
 </fieldset>
 
+<% 
+    if (md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
+    {
+     %>
 <fieldset>
 <legend>表单设计</legend>
-设计自由表单  WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=Demo_01
-  设计傻瓜表单  WF/Admin/FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=xxxxxx
+<ul>
+<li>设计自由表单  WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=Demo_01 </li>
+<li>设计自由表单  WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=Demo_01 </li>
+</ul>
 </fieldset>
+
+<%} %>
 </asp:Content>

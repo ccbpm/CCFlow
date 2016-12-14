@@ -342,9 +342,8 @@
         {
             sBuilder.Append("<br><br><br><div style='float:right;' ><a href=\"AutoTodolist.aspx\" >查看授权人的待办工作</a></div>");
         }
-           
-
         empWorksHtml = sBuilder.ToString();
+        
     %>
     <%=empWorksHtml %>
 

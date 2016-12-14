@@ -20,6 +20,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             get
             {
                 string str = context.Request.QueryString["KeyOfEn"];
+                if (str == null || str == "")
+                    str = context.Request.QueryString["RefNo"].ToString();
                 return str;
             }
         }
@@ -283,11 +285,14 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         public string TBFullCtrl_Init()
         {
             MapExt ext = new MapExt();
-            ext.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
-            ext.FK_MapData = this.FK_MapData;
-            ext.ExtType = MapExtXmlList.TBFullCtrl;
-            if (ext.RetrieveFromDBSources() == 0)
-                return "";
+            //ext.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
+            ext.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl, 
+                MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            //ext.FK_MapData = this.FK_MapData;
+            //ext.ExtType = MapExtXmlList.TBFullCtrl;
+            //if (ext.RetrieveFromDBSources() == 0)
+            //    return "";
 
             return ext.ToJson();
         }

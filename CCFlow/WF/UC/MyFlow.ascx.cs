@@ -955,8 +955,9 @@ namespace CCFlow.WF.UC
                 }
             }
 
-            if (this.WorkID == 0 && this.PWorkID == 0 && this.currND.IsStartNode && this.Request.QueryString["IsCheckGuide"] == null)
+            if (this.WorkID == 0 && this.currND.IsStartNode && this.Request.QueryString["IsCheckGuide"] == null)
             {
+                // && this.PWorkID == 0  这个条件被zhoupeng去掉，否则父子流程的调用就不能发起了。
                 switch (this.currFlow.StartGuideWay)
                 {
                     case StartGuideWay.None:

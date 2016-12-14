@@ -10,10 +10,36 @@ using System.Collections.Generic;
 namespace BP.WF.Template
 {
     /// <summary>
+    /// Excel表单属性 attr
+    /// </summary>
+    public class MapFrmExcelAttr : MapDataAttr
+    {
+        public const string TemplaterVer = "TemplaterVer";
+
+    }
+    /// <summary>
     /// Excel表单属性
     /// </summary>
     public class MapFrmExcel : EntityNoName
     {
+        #region 文件模版属性.
+        /// <summary>
+        /// 模版版本号
+        /// </summary>
+        public string TemplaterVer
+        {
+            get
+            {
+                return this.GetValStringByKey(MapFrmExcelAttr.TemplaterVer);
+            }
+            set
+            {
+                this.SetValByKey(MapFrmExcelAttr.TemplaterVer, value);
+            }
+        }
+        #endregion 文件模版属性.
+
+
         #region 属性
         /// <summary>
         /// 是否是节点表单?
@@ -51,7 +77,7 @@ namespace BP.WF.Template
         {
             get
             {
-                int i = this.GetValIntByKey(MapDataAttr.TableWidth);
+                int i = this.GetValIntByKey(MapFrmExcelAttr.TableWidth);
                 if (i <= 50)
                     return "900";
                 return i.ToString();
@@ -64,7 +90,7 @@ namespace BP.WF.Template
         {
             get
             {
-                int i = this.GetValIntByKey(MapDataAttr.TableHeight);
+                int i = this.GetValIntByKey(MapFrmExcelAttr.TableHeight);
                 if (i <= 500)
                     return "900";
                 return i.ToString();
@@ -78,14 +104,14 @@ namespace BP.WF.Template
             get
             {
                 return 4;
-                int i = this.GetValIntByKey(MapDataAttr.TableCol);
+                int i = this.GetValIntByKey(MapFrmExcelAttr.TableCol);
                 if (i == 0 || i == 1)
                     return 4;
                 return i;
             }
             set
             {
-                this.SetValByKey(MapDataAttr.TableCol, value);
+                this.SetValByKey(MapFrmExcelAttr.TableCol, value);
             }
         }
        
@@ -120,8 +146,7 @@ namespace BP.WF.Template
         /// Excel表单属性
         /// </summary>
         /// <param name="no">表单ID</param>
-        public MapFrmExcel(string no)
-            : base(no)
+        public MapFrmExcel(string no)  : base(no)
         {
         }
         /// <summary>
@@ -133,50 +158,62 @@ namespace BP.WF.Template
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_MapData", "傻瓜Excel表单属性");
+                Map map = new Map("Sys_MapData", "Excel表单属性");
                 map.Java_SetEnType(EnType.Sys);
-                map.Java_SetCodeStruct("4");
 
                 #region 基本属性.
-                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 190, 20);
-                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20);
-                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20);
+                map.AddTBStringPK(MapFrmExcelAttr.No, null, "表单编号", true, false, 1, 190, 20);
+                map.AddTBString(MapFrmExcelAttr.Name, null, "表单名称", true, false, 0, 500, 20);
+                map.AddTBString(MapFrmExcelAttr.PTable, null, "存储表", true, false, 0, 500, 20);
 
-                //map.AddTBInt(MapDataAttr.TableCol, 4, "表单显示列数", true, true);
-                //map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
-                //map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
+                //map.AddTBInt(MapFrmExcelAttr.TableCol, 4, "表单显示列数", true, true);
+                //map.AddTBInt(MapFrmExcelAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
+                //map.AddTBInt(MapFrmExcelAttr.TableHeight, 900, "傻瓜表单高度", true, false);
 
                 //数据源.
-                map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
-                map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                map.AddDDLEntities(MapFrmExcelAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
+                map.AddDDLEntities(MapFrmExcelAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
 
                 //表单的运行类型.
-                map.AddDDLSysEnum(MapDataAttr.FrmType, 1, "表单类型",
-                    true, false, MapDataAttr.FrmType,
+                map.AddDDLSysEnum(MapFrmExcelAttr.FrmType, 1, "表单类型",
+                    true, false, MapFrmExcelAttr.FrmType,
                     "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
-
                 #endregion 基本属性.
 
+                #region 模版属性。
+                map.AddTBString(MapFrmExcelAttr.TemplaterVer, null, "模版编号", true, false, 0, 30, 20);
+                #endregion 模版属性。
+
                 #region 设计者信息.
-                map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
-                map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
-                map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
-                map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
-                map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
-                map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
+                map.AddTBString(MapFrmExcelAttr.Designer, null, "设计者", true, false, 0, 500, 20);
+                map.AddTBString(MapFrmExcelAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
+                map.AddTBString(MapFrmExcelAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
+                map.AddTBString(MapFrmExcelAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
+                map.AddTBString(MapFrmExcelAttr.Ver, null, "版本号", true, true, 0, 30, 20);
+                map.AddTBStringDoc(MapFrmExcelAttr.Note, null, "备注", true, false, true);
+
                 //增加参数字段.
                 map.AddTBAtParas(4000);
-                map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
+                map.AddTBInt(MapFrmExcelAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
 
                 map.AddMyFile("表单模版");
 
                 //查询条件.
-                map.AddSearchAttr(MapDataAttr.DBSrc);
+                map.AddSearchAttr(MapFrmExcelAttr.DBSrc);
 
                 #region 方法 - 基本功能.
-
                 RefMethod rm = new RefMethod();
+                rm = new RefMethod();
+                rm.Title = "表单字段"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoFiledsList";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
@@ -254,14 +291,10 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/ReName.png";
-
                 map.AddRefMethod(rm);
 
-              
-
-
                 rm = new RefMethod();
-                rm.Title = "表单检查"; // "设计表单";
+                rm.Title = "表单检查";  //"设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
                 rm.Visable = true;
                 rm.RefAttrLinkLabel = "表单检查";
@@ -309,6 +342,14 @@ namespace BP.WF.Template
         #endregion
 
         #region 节点表单方法.
+        /// <summary>
+        /// 表单字段.
+        /// </summary>
+        /// <returns></returns>
+        public string DoFiledsList()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/FiledsList.htm?FK_MapData="+this.No;
+        }
         /// <summary>
         /// 节点表单组件
         /// </summary>

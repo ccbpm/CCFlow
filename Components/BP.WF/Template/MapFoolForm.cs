@@ -115,6 +115,7 @@ namespace BP.WF.Template
         /// </summary>
         public MapFoolForm()
         {
+
         }
         /// <summary>
         /// 表单属性

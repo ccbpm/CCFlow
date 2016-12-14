@@ -363,7 +363,7 @@ namespace CCFlow.WF.WorkOpt
             ht.Add("CCTo", toAllEmps);
 
             // 根据他判断是否显示权限组。
-            if (BP.DA.DBAccess.IsExits("GPM_Group") == true)
+            if (BP.DA.DBAccess.IsExitsObject("GPM_Group") == true)
                 ht.Add("IsGroup", "1");
             else
                 ht.Add("IsGroup", "0");
@@ -422,14 +422,13 @@ namespace CCFlow.WF.WorkOpt
 
             //部门信息.  格式: 001,002,003,
             string depts = this.GetRequestVal("Depts");
-
             //标题.
             string title = this.GetRequestVal("TB_Title");
             //内容.
             string doc = this.GetRequestVal("TB_Doc");
 
             //调用抄送接口执行抄送.
-            string ccRec = BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.WorkID, title, doc, emps, depts, stations);
+            string ccRec = BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.WorkID, title, doc, emps, depts, stations, groups);
 
             if (ccRec == "")
                 return "没有抄送到任何人。";

@@ -266,6 +266,9 @@ namespace CCFlow.WF.WorkOpt
                     case "CC_SelectStations": //抄送，选择岗位.
                         msg= CC_SelectStations();
                         break;
+                    case "CC_SelectGroups": //抄送，选择权限组.
+                        msg = CC_SelectGroups();
+                        break;
                     case "CC_Send": //抄送，执行.
                         msg = CC_Send();
                         break;
@@ -330,6 +333,16 @@ namespace CCFlow.WF.WorkOpt
             //输出信息.
         }
         /// <summary>
+        /// 选择权限组
+        /// </summary>
+        /// <returns></returns>
+        public string CC_SelectGroups()
+        {
+            string sql = "SELECT NO,NAME FROM GPM_Group ORDER BY IDX";
+            DataTable dt= DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
         /// 抄送初始化.
         /// </summary>
         /// <returns></returns>
@@ -348,6 +361,12 @@ namespace CCFlow.WF.WorkOpt
                 toAllEmps += dr[0].ToString() + ",";
 
             ht.Add("CCTo", toAllEmps);
+
+            // 根据他判断是否显示权限组。
+            if (BP.DA.DBAccess.IsExits("GPM_Group") == true)
+                ht.Add("IsGroup", "1");
+            else
+                ht.Add("IsGroup", "0");
 
             //返回流程标题.
             return BP.Tools.Json.ToJson(ht, false);
@@ -394,6 +413,12 @@ namespace CCFlow.WF.WorkOpt
             //岗位信息. 格式:  001,002,003,
             string stations = this.GetRequestVal("Stations");
             stations = stations.Replace(";", ",");
+
+            //权限组. 格式:  001,002,003,
+            string groups = this.GetRequestVal("Groups");
+            if (groups == null)
+                groups = "";
+            groups = groups.Replace(";", ",");
 
             //部门信息.  格式: 001,002,003,
             string depts = this.GetRequestVal("Depts");

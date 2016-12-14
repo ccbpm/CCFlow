@@ -102,8 +102,13 @@
                     stateb.removeClass("active").addClass("in").hide();
                 }
             });
+
             initTreeData();
-            groupT();
+
+            StationT();
+
+            GroupT();
+
           });
         //初始化、接收人
         function dtTable() {
@@ -217,8 +222,9 @@
             $('#ToDepts').attr("name", returnVal.name);
             $("#jstreebs").hide();
         }
+
         //岗位
-        function groupT() {
+        function StationT() {
             $.ajax({
                 url: Handler + "?DoType=CC_SelectStations&m=" + Math.random(),
                 success: function (data) {
@@ -283,7 +289,9 @@
 
             });
         }
-        function GetGroupReturnVal() {
+
+        // 岗位.
+        function GetStationsReturnVal() {
             var checked = $('input:checked');
             var selectedIdArrm = [];
             var selectedNodesm = [];
@@ -295,6 +303,22 @@
             returnVal.name = selectedNodesm.join(',');
             $('#ToStations').val(returnVal.name);
             $('#ToStations').attr("name", returnVal.Value);
+            $("#jstreeg").hide();
+        }
+
+        //权限组.
+        function GetGroupReturnVal() {
+            var checked = $('input:checked');
+            var selectedIdArrm = [];
+            var selectedNodesm = [];
+            for (var i = 0; i < checked.parent(".lim").length; i++) {
+                selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.NO);
+                selectedNodesm.push($(checked.parent(".lim")[i]).data().data.NAME);
+            }
+            returnVal.Value = selectedIdArrm.join(',');
+            returnVal.name = selectedNodesm.join(',');
+            $('#ToGroups').val(returnVal.name);
+            $('#ToGroups').attr("name", returnVal.Value);
             $("#jstreeg").hide();
         }
         //发送
@@ -422,6 +446,32 @@
                             <ul id="dt" data-data="true"></ul>
                         </div>
                         <div class="modal-footer">
+                            <button class="btn btn-info" onclick="GetStationReturnVal()">确定</button>
+                            <button class="btn btn-info closs">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+         <div class="selectEmpsDivg">
+            <div class="ys">
+                选择权限组：
+                <input type="button" class="BtnSelectEmpsb" value='选择权限组' />
+                <textarea id="ToGroups" class="Tos"></textarea>
+            </div>
+            <div class="modal fade jstree" style="background: #898F98;" id="Div1">
+                <div class="modal-dialog" style="width: 80%; margin: 40px auto;">
+                    <div class="modal-content" style="height: 487px; border-radius: 0px;">
+                        <div class="modal-header" style="font-size: 16px;">
+                            选择权限组
+                        </div>
+                        <div class="modal-body" style="height: 380px; overflow-y: auto;">
+                            <div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
+                            <ul id="Ul1" data-data="true"></ul>
+                        </div>
+                        <div class="modal-footer">
                             <button class="btn btn-info" onclick="GetGroupReturnVal()">确定</button>
                             <button class="btn btn-info closs">取消</button>
                         </div>
@@ -429,6 +479,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="ys">
             标题：
             <textarea class="Tos csTitle"></textarea>

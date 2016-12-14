@@ -444,8 +444,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                     if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.ExcelFrm &&
                         ext != ".xls" && ext != ".xlsx")
                     {
-
-
                         BP.Sys.PubClass.Alert("上传的Excel文件格式错误.");
                         return;
                     }
@@ -459,30 +457,18 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                     savePath = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\";
                     if (Directory.Exists(savePath) == false)
                         Directory.CreateDirectory(savePath);
-
                     file.SaveAs(savePath + this.Pub1.GetTextBoxByID("TB_No").Text + ext);
 
                     break;
                 default:
                     throw new Exception("未知表单类型.");
             }
-
             md.Insert();
 
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
             {
-
                 /*把表单模版存储到数据库里 */
-
-                this.Response.Redirect("Home.htm?FK_MapData", true);
-
-                this.Pub1.Clear();
-                this.Pub1.AddFieldSet("已经成功创建excel表单，请按照如下步骤处理。");
-                this.Pub1.AddUL();
-                this.Pub1.AddLi("请打开excel表单模版");
-                this.Pub1.AddLi("请打开excel表单模版");
-                this.Pub1.AddULEnd();
-                this.Pub1.AddFieldSetEnd();
+                this.Response.Redirect("/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No, true);
                 return;
             }
 

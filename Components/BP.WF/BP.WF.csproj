@@ -217,6 +217,7 @@
     <Compile Include="Template\FrmThread.cs" />
     <Compile Include="Template\FrmNodeComponent.cs" />
     <Compile Include="Template\FrmTransferCustom.cs" />
+    <Compile Include="Template\MapFrmExcel.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

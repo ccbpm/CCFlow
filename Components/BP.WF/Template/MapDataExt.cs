@@ -1143,8 +1143,6 @@ namespace BP.WF.Template
         }
         #endregion
 
-
-
         #region 方法.
         /// <summary>
         /// 替换名称

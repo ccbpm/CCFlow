@@ -558,8 +558,47 @@ namespace CCFlow.WF.Rpt
                             DataRow myDR = myDT.NewRow();
                             foreach (MapAttr attr in attrs)
                             {
-                                myDR[attr.Name] = dr[attr.Field];
+                                switch (attr.LGType)
+                                {
+                                    case FieldTypeS.Normal:
+                                        switch (attr.MyDataType)
+                                        {
+                                            case BP.DA.DataType.AppString:
+                                            case BP.DA.DataType.AppDate:
+                                            case BP.DA.DataType.AppDateTime:
+                                            case BP.DA.DataType.AppInt:
+                                            case BP.DA.DataType.AppFloat:
+                                            case BP.DA.DataType.AppDouble:
+                                            case BP.DA.DataType.AppMoney:
+                                                myDR[attr.Name] = dr[attr.Field];
+                                                break;
+                                            case BP.DA.DataType.AppBoolean:
+                                                if (dr[attr.Field].ToString() == "0")
+                                                    myDR[attr.Name] = "否";
+                                                else
+                                                    myDR[attr.Name] = "是";
+                                                break;
+
+                                        }
+                                        break;
+                                    case FieldTypeS.Enum:
+                                        SysEnum sem = new SysEnum();
+                                        sem.Retrieve(SysEnumAttr.EnumKey, attr.KeyOfEn, SysEnumAttr.IntKey, dr[attr.Field]);
+                                        myDR[attr.Name] = sem.Lab;
+                                        break;
+                                    case FieldTypeS.FK:
+                                        string tabName = attr.KeyOfEn;
+                                        DataTable drDt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM " + tabName + " WHERE NO='" + dr[attr.Field] + "'");
+                                        if (drDt.Rows.Count > 0)
+                                            myDR[attr.Name] = drDt.Rows[0]["NAME"].ToString();
+                                        break;
+                                    case FieldTypeS.WinOpen:
+                                        break;
+
+                                }
+
                             }
+
                             myDT.Rows.Add(myDR);
                         }
 

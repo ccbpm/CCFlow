@@ -474,6 +474,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
                 /*把表单模版存储到数据库里 */
 
+                this.Response.Redirect("Home.htm?FK_MapData", true);
+
                 this.Pub1.Clear();
                 this.Pub1.AddFieldSet("已经成功创建excel表单，请按照如下步骤处理。");
                 this.Pub1.AddUL();

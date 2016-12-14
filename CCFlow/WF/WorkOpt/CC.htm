@@ -107,7 +107,7 @@
 
             StationT();
 
-            GroupT();
+            SelectGroups();
 
           });
         //初始化、接收人
@@ -129,7 +129,9 @@
                                 $(".cs").show();
                                 $("#csry").val(dataArr.CCTo);
                             }
-
+                            if (dataArr.IsGroup == "1") {
+                                $(".gt").show();
+                            }
                         }
                     }
 
@@ -307,19 +309,42 @@
         }
 
         //权限组.
+        function SelectGroups() {
+            $.ajax({
+                url: Handler + "?DoType=CC_SelectGroups&m=" + Math.random(),
+                success: function (data) {
+                    if (data != null) {
+                        var datgArr = JSON.parse(data);
+                        if (datgArr != undefined) {
+                            var ultdg = '';
+                            $.each(datgArr, function (i, obje) {
+                                ultdg += "<li data-data='true' class='lig' name='" + obje.NO + "' title='" + obje.NAME + "'><input type='checkbox' class='ulm_head' style='margin: 10px 5px 0px 10px;'/><span>" + obje.NAME + "</span></li>";
+                            });
+                            $("#Div1 #Ul1").html(ultdg);
+                            $(".wait").hide();
+                        }
+                    }
+                }
+
+            });
+        }
+        
+
         function GetGroupReturnVal() {
             var checked = $('input:checked');
-            var selectedIdArrm = [];
-            var selectedNodesm = [];
-            for (var i = 0; i < checked.parent(".lim").length; i++) {
-                selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.NO);
-                selectedNodesm.push($(checked.parent(".lim")[i]).data().data.NAME);
+            var selectedIdArrms = [];
+            var selectedNodesms = [];
+            for (var i = 0; i < checked.length; i++) {
+                selectedIdArrms.push($(checked[i]).parent(".lig").attr("name"));
+                selectedNodesms.push($(checked[i]).parent(".lig").attr("title"));
             }
-            returnVal.Value = selectedIdArrm.join(',');
-            returnVal.name = selectedNodesm.join(',');
+            if (selectedIdArrms.length > 1 || selectedNodesms.length > 1) {
+                returnVal.Value = selectedIdArrms.join(',');
+                returnVal.name = selectedNodesms.join(',');
+            }
             $('#ToGroups').val(returnVal.name);
             $('#ToGroups').attr("name", returnVal.Value);
-            $("#jstreeg").hide();
+            $("#Div1").hide();
         }
         //发送
         function Close() {
@@ -342,6 +367,7 @@
             var emps; //选择的人员.
             var stations; //选择的岗位.
             var depts; //选择的部门.
+            var groups;//选择的权限组
             if (frames["iframeSelectEmpsForm"].window.returnVal != undefined) {
                 var empsn = frames["iframeSelectEmpsForm"].window.returnVal.No.split(",");
                 var empsm = frames["iframeSelectEmpsForm"].window.returnVal.Name.split(",");
@@ -365,14 +391,18 @@
             } else {
                 stations = "";
             }
-
+            if ($('#ToGroups').attr("name") != undefined) {
+                groups = $('#ToGroups').attr("name");
+            } else {
+                groups = "";
+            }
             if (depts == "" && emps == "" && stations == "") {
                 alert('请选择人员、部门、岗位任意一种.');
                 return;
             }
 
             $.ajax({
-                url: Handler + "?DoType=CC_Send&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&Emps=" + emps + "&Stations=" + stations + "&Depts=" + depts + "&TB_Title=" + tb_Title + "&TB_Doc=" + tb_Doc + "&m=" + Math.random(),
+                url: Handler + "?DoType=CC_Send&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&Emps=" + emps + "&Stations=" + stations + "&Depts=" + depts + "&TB_Title=" + tb_Title + "&TB_Doc=" + tb_Doc + "&Groups=" + groups + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
@@ -446,7 +476,7 @@
                             <ul id="dt" data-data="true"></ul>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-info" onclick="GetStationReturnVal()">确定</button>
+                            <button class="btn btn-info" onclick="GetStationsReturnVal()">确定</button>
                             <button class="btn btn-info closs">取消</button>
                         </div>
                     </div>
@@ -455,7 +485,7 @@
         </div>
 
 
-         <div class="selectEmpsDivg">
+        <div class="selectEmpsDivg gt" style="display: none;">
             <div class="ys">
                 选择权限组：
                 <input type="button" class="BtnSelectEmpsb" value='选择权限组' />

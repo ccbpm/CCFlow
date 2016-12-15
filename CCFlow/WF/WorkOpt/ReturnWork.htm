@@ -10,6 +10,7 @@
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <script src="../Scripts/bootstrap/js/commonYangYH.js"></script>
     <!-- 导入配置文件. -->
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
@@ -32,7 +33,6 @@
     <script type="text/javascript">
         var pageData = {};
         $(function () {
-
             //初始化页面退回信息
             
             pageData = {
@@ -70,9 +70,9 @@
 
                     $("section").show();
                     $(".wait").hide();
-                }
+                  }
             });
-
+            Common.MaxLengthError();
         });
 
         function SetIsBackTrackingDispaly() {
@@ -121,7 +121,7 @@
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
                 window.close();
             }
-        }
+         }
       
     </script>
 </head>

@@ -41,6 +41,16 @@ namespace CCFlow.WF
             tb.ID = "TB_Key";
             tb.Text = this.SKey;
             this.Pub1.Add(tb);
+
+            Flow fl = new Flow(this.FK_Flow);
+
+            if (fl.StartGuideLink.Length > 10)
+            {
+                string url = "<div style='float:right'><a href=\"javascript:WinOpen('" + fl.StartGuideLink + "')\" >" + fl.StartGuideLab + "</a></div>";
+                this.Pub1.Add(url);
+            }
+
+            
             this.Pub1.AddTD();
 
             //ImageButton imgbtn = new ImageButton();
@@ -57,7 +67,6 @@ namespace CCFlow.WF
             this.Pub1.Add(btn);
             this.Pub1.AddTD();
 
-            Flow fl = new Flow(this.FK_Flow);
             if (fl.StartGuideWay == StartGuideWay.SubFlowGuide)
             {
                 Button button = new Button();
@@ -109,7 +118,10 @@ namespace CCFlow.WF
                         //this.BindTableOne(dt);
                     }
                     else
+                    {
+
                         this.BindTableOne(dt);
+                    }
                     break;
                 case StartGuideWay.SubFlowGuide: //子父流程.
                     this.BindTableMulti(dt);

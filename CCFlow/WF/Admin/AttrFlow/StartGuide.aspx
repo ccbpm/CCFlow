@@ -141,6 +141,7 @@
                     if (fns.Count >=2 )
                     {
                   %>
+
                  <fieldset>
                     <legend>
                         <asp:RadioButton ID="RB_FrmList" Text="开始节点绑定的独立表单列表" runat="server"  GroupName="xzgz" /></legend>
@@ -157,6 +158,23 @@
 
             </td>
         </tr>
+
+
+         </tr>
+            <td>
+        </td>
+          <td>
+          右侧连接(对按设置的SQL-单条模式有效):
+              <br />
+               <asp:TextBox    ID="TB_GuideLink" runat="server" Width="564px"></asp:TextBox>
+ 
+                     
+              <br />连接标签  <br />
+                  <asp:TextBox 
+                  ID="TB_GuideLab" runat="server"></asp:TextBox>
+        </td>
+ </tr>
+
 
         <tr>
         <td>

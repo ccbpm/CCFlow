@@ -294,7 +294,7 @@ namespace CCFlow.WF.MapDef
             gf.OID = this.GroupField;
             gf.Delete();
 
-            BP.WF.Template.MapFoolForm md = new BP.WF.Template.MapFoolForm(this.FK_MapData);
+            BP.WF.Template.MapFrmFool md = new BP.WF.Template.MapFrmFool(this.FK_MapData);
             md.DoCheckFixFrmForUpdateVer();
             this.WinClose(); 
         }

@@ -104,17 +104,17 @@ namespace CCFlow.WF.MapDef
         }
         #endregion 属性.
 
-        public MapFoolForm md = null;
+        public MapFrmFool md = null;
         protected void Page_Load(object sender, EventArgs e)
         {
             
             string fk_node = this.Request.QueryString["FK_Node"];
-            md = new MapFoolForm(this.FK_MapData);
+            md = new MapFrmFool(this.FK_MapData);
 
             //如果是第一次进入，就执行旧版本的升级检查.
             if (this.IsFirst == true)
             {
-                MapFoolForm cols = new MapFoolForm(this.FK_MapData);
+                MapFrmFool cols = new MapFrmFool(this.FK_MapData);
                 cols.DoCheckFixFrmForUpdateVer();
                 this.Response.Redirect("Designer.aspx?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&MyPK=" + this.MyPK + "&IsEditMapData=" + this.IsEditMapData, true);
                 return;

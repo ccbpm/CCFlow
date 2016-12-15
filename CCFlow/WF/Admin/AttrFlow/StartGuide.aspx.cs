@@ -41,6 +41,11 @@ namespace CCFlow.WF.Admin.AttrFlow
                 en.No = this.FK_Flow;
                 en.RetrieveFromDBSources();
 
+                //右侧的超链接.
+                this.TB_GuideLink.Text = en.StartGuideLink;
+                this.TB_GuideLab.Text = en.StartGuideLab; 
+
+
                 switch (en.StartGuideWay)
                 {
                     case  BP.WF.Template.StartGuideWay.None://无
@@ -126,6 +131,11 @@ namespace CCFlow.WF.Admin.AttrFlow
                 if (this.RB_FrmList.Checked)
                     en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
             }
+
+            //右侧的超链接.
+            en.StartGuideLink = this.TB_GuideLink.Text;
+            en.StartGuideLab = this.TB_GuideLab.Text;
+
             en.Update();
             en.DirectUpdate();
 

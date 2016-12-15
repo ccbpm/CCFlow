@@ -677,7 +677,7 @@ namespace CCFlow.WF.UC
             this.HisEn = en;
             this.mapData = new MapData(enName);
 
-            MapFoolForm mff = new MapFoolForm(enName);
+            MapFrmFool mff = new MapFrmFool(enName);
 
             currGF = new GroupField();
             MapAttrs mattrs = this.mapData.MapAttrs;

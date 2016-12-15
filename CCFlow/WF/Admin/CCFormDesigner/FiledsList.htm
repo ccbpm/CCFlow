@@ -72,7 +72,12 @@
 
 			                newRow += "<td>" + data[i].UIRefKey + "</td>";
 			                newRow += "<td>";
-			                newRow += "<a href=\"javascript:Edit('" +
+
+			                if (data[i].KeyOfEn == 'RDT' || data[i].KeyOfEn == 'OID') {
+			                    newRow += "系统字段";
+			                } else {
+
+			                    newRow += "<a href=\"javascript:Edit('" +
 								data[i].MyPK +
 								"','" +
 								data[i].LGType +
@@ -81,11 +86,15 @@
 								"','" +
 								data[i].UIBindKey +
 								"')\"><img src='/WF/Img/Btn/Edit.gif' border=0 />编辑</a>";
-			                newRow += "<a href=\"javascript:Delete('" +
+			                    newRow += "<a href=\"javascript:Delete('" +
 								data[i].MyPK +
 								"')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+			                }
+
 			                newRow += "</td>";
 			                newRow += "</tr>";
+
+
 			                switch (data[i].LGType) {
 			                    case 0: //普通
 			                        normalFieldRows += newRow;
@@ -192,7 +201,7 @@
 </head>
 <body onkeypress="Esc()" >
 
-<table id="Table1">
+<table id="Table1" style="width:95%">
 <caption>字段列表  - <a href="javascript:New()">新增</a></caption>
 	<tr>
 		<th>序号</th>

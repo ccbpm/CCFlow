@@ -934,7 +934,7 @@ namespace CCFlow.WF.UC
                 }
             }
 
-            if (this.WorkID == 0 && this.PWorkID == 0 && this.currND.IsStartNode && this.Request.QueryString["IsCheckGuide"] == null)
+            if (this.WorkID == 0 && this.currND.IsStartNode && this.Request.QueryString["IsCheckGuide"] == null)
             {
                 switch (this.currFlow.StartGuideWay)
                 {
@@ -1492,7 +1492,7 @@ namespace CCFlow.WF.UC
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /*傻瓜表单*/
-                        MapFoolForm map = new MapFoolForm("ND" + FK_Node);
+                        MapFrmFool map = new MapFrmFool("ND" + FK_Node);
                         this.Width = map.TableWidth;
                         this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight + "px;overflow-x:auto;' >");
                         this.UCEn1.BindColumn4(wk, nd.NodeFrmID);

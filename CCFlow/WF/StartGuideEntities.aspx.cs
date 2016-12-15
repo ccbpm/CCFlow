@@ -52,6 +52,12 @@ namespace CCFlow.WF
             btn.Click += new EventHandler(btn_Click);
             this.Pub1.Add(btn);
 
+            if (fl.StartGuideLink.Length > 10)
+            {
+                string url = "<div style='float:right'><a href=\"javascript:WinOpen('" + fl.StartGuideLink + "')\" >" + fl.StartGuideLab + "</a></div>";
+                this.Pub1.Add(url);
+            }
+
             
             #region 显示数据.
             string key = this.Pub1.GetTextBoxByID("TB_Key").Text.Trim();

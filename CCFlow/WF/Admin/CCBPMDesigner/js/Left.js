@@ -396,7 +396,7 @@ function newFrm() {
             //在表单类别上单击，则传递表单类别
             var pnode = $('#formTree').tree('getParent', node.target);
             if (pnode != null) {
-                url += "&FrmType=" + node.id;
+                url += "&FK_FrmSort=" + node.id;
 
                 while (pnode && pnode.attributes) {
                     if (pnode.attributes.TTYPE == "SRC") {

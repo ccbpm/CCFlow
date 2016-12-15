@@ -934,7 +934,7 @@ namespace CCFlow.WF
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /*傻瓜表单*/
-                        MapFoolForm map = new MapFoolForm(nd.NodeFrmID);
+                        MapFrmFool map = new MapFrmFool(nd.NodeFrmID);
 
                         this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight + "px;overflow-x:auto;' >");
                         this.UCEn1.BindColumn4(wk, nd.NodeFrmID); //, false, false, null);

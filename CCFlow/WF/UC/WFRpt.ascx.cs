@@ -302,7 +302,7 @@ namespace CCFlow.WF.UC
 
                 if (nd.HisFormType == NodeFormType.FixForm)
                 {
-                    MapFoolForm map = new MapFoolForm(nd.NodeFrmID);
+                    MapFrmFool map = new MapFrmFool(nd.NodeFrmID);
 
                     this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight+ "px;overflow-x:scroll;' >");
                     /*傻瓜表单*/

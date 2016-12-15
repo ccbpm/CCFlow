@@ -251,7 +251,7 @@
 
 
         function MapDataEdit(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapFoolForm&PK=' + mypk
+            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapFrmFool&PK=' + mypk
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 850px;center: yes; help: no');
             window.location.href = window.location.href;
         }

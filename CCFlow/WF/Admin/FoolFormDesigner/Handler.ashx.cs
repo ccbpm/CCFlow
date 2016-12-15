@@ -583,7 +583,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             gf.OID = this.GetRequestValInt("GroupField");
             gf.Delete();
 
-            BP.WF.Template.MapFoolForm md = new BP.WF.Template.MapFoolForm(this.FK_MapData);
+            BP.WF.Template.MapFrmFool md = new BP.WF.Template.MapFrmFool(this.FK_MapData);
             md.DoCheckFixFrmForUpdateVer();
 
             return "删除成功...";

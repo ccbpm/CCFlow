@@ -112,7 +112,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             //this.Pub1.Add("<a href='http://ccflow.org/' ><img src='./Img/FrmType/FixFrm.png' width='400px' ></a>");
             this.Pub1.Add("</div>");
 
-
             this.Pub1.AddFieldSetEnd();
 
 
@@ -220,7 +219,11 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             DataTable dt = DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Sys_FormTree WHERE DBSrc='local' AND IsDir='0'");
             BP.Web.Controls.DDL ddl = new BP.Web.Controls.DDL();
             ddl.ID = "DDL_FrmTree";
-            BP.Web.Controls.DDL.MakeTree(dt, "ParentNo", "0", "No", "Name", ddl, -1);
+            BP.Web.Controls.DDL.MakeTree(dt, "ParentNo", "0", "No", "Name", ddl,-1);
+
+            //设置选择的值.
+            BP.Web.Controls.Glo.DDL_SetSelectVal(ddl,this.FK_FrmSort);
+
             //ddl.Bind(trees, this.DBSrc);
             this.Pub1.AddTD(ddl);
             this.Pub1.AddTD("表单类别.");

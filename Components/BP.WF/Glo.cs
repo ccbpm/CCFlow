@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20161210";
+        public static string Ver = "20161201";
         /// <summary>
         /// 执行升级
         /// </summary>

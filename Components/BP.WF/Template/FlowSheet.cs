@@ -751,6 +751,7 @@ namespace BP.WF.Template
             int i = rpt.RetrieveFromDBSources();
             if (i == 0)
                 throw new Exception("@错误，流程数据丢失。");
+
             if (backToNodeID == 0)
                 backToNodeID = rpt.FlowEndNode;
 
@@ -809,6 +810,7 @@ namespace BP.WF.Template
                     gwf.Insert(); /*插入流程引擎数据.*/
 
                 #endregion 创建流程引擎主表数据
+
                 string ndTrack = "ND" + int.Parse(this.No) + "Track";
                 string actionType = (int)ActionType.Forward + "," + (int)ActionType.FlowOver + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL;
                 string sql = "SELECT  * FROM " + ndTrack + " WHERE   ActionType IN (" + actionType + ")  and WorkID=" + workid + " ORDER BY RDT DESC, NDFrom ";

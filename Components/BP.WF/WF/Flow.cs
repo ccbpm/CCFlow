@@ -314,6 +314,34 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 右侧的超链接
+        /// </summary>
+        public string StartGuideLink
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.StartGuideLink);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.StartGuideLink, value);
+            }
+        }
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public string StartGuideLab
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.StartGuideLab);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.StartGuideLab, value);
+            }
+        }
+        /// <summary>
         /// 前置导航参数1
         /// </summary>
         public string StartGuidePara1
@@ -4720,6 +4748,8 @@ namespace BP.WF
 
                 #region 导航方式。
                 map.AddTBInt(FlowAttr.StartGuideWay, 0, "前置导航方式", false, false);
+                map.AddTBString(FlowAttr.StartGuideLink, null, "右侧的连接", true, false, 0, 200, 10, true);
+                map.AddTBString(FlowAttr.StartGuideLab, null, "连接标签", true, false, 0, 200, 10, true);
 
                 map.AddTBString(FlowAttr.StartGuidePara1, null, "参数1", true, false, 0, 500, 10, true);
                 map.AddTBString(FlowAttr.StartGuidePara2, null, "参数2", true, false, 0, 500, 10, true);

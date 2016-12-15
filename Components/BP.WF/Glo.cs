@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20161201";
+        public static string Ver = "20161200";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -171,9 +171,10 @@ namespace BP.WF
                 return "";
 
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
-            string currVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
-            if (currVer!=null && currVer!="" && int.Parse(currVer) >= int.Parse(Ver))
+            string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
+            if (currDBVer != null && currDBVer != "" && int.Parse(currDBVer) >= int.Parse(Ver))
                 return null; //不需要升级.
+
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 
             string msg = "";
@@ -705,7 +706,7 @@ namespace BP.WF
                     DBAccess.RunSQL(sql);
                 }
                 // 返回版本号.
-                return Ver; // +"\t\n解决问题:" + updataNote;
+                return "旧版本:("+currDBVer+")新版本:("+Ver+")"; // +"\t\n解决问题:" + updataNote;
             }
             catch (Exception ex)
             {

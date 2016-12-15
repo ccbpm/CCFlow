@@ -220,6 +220,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string StartGuideWay = "StartGuideWay";
         /// <summary>
+        /// 超链接
+        /// </summary>
+        public const string StartGuideLink = "StartGuideLink";
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public const string StartGuideLab = "StartGuideLab";
+        /// <summary>
         /// 发起前置参数1
         /// </summary>
         public const string StartGuidePara1 = "StartGuidePara1";
@@ -247,6 +255,7 @@ namespace BP.WF.Template
         /// 系统类别（第2级流程树节点编号）
         /// </summary>
         public const string SysType = "SysType";
+
         #endregion 开始节点数据导入规则.
 
         #region 父子流程

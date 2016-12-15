@@ -181,7 +181,7 @@ namespace BP.WF
             try
             {
                 //升级傻瓜表单.
-                MapFoolForm mff = new MapFoolForm();
+                MapFrmFool mff = new MapFrmFool();
                 mff.CheckPhysicsTable();
 
                 //删除枚举.

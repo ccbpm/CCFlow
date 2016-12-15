@@ -164,11 +164,7 @@ namespace BP.WF.Template
                 map.AddTBStringPK(MapFrmExcelAttr.No, null, "表单编号", true, false, 1, 190, 20);
                 map.AddTBString(MapFrmExcelAttr.Name, null, "表单名称", true, false, 0, 500, 20);
                 map.AddTBString(MapFrmExcelAttr.PTable, null, "存储表", true, false, 0, 500, 20);
-
-                //map.AddTBInt(MapFrmExcelAttr.TableCol, 4, "表单显示列数", true, true);
-                //map.AddTBInt(MapFrmExcelAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
-                //map.AddTBInt(MapFrmExcelAttr.TableHeight, 900, "傻瓜表单高度", true, false);
-
+                 
                 //数据源.
                 map.AddDDLEntities(MapFrmExcelAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
                 map.AddDDLEntities(MapFrmExcelAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
@@ -204,21 +200,32 @@ namespace BP.WF.Template
                 #region 方法 - 基本功能.
                 RefMethod rm = new RefMethod();
 
+                rm = new RefMethod();
+                rm.Title = "编辑Excel表单模版";
+                rm.ClassMethodName = this.ToString() + ".DoEditExcelTemplate";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/xlsx.gif";
+                rm.Visable = true;
+                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "表单字段维护";
+                rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/Img/field.png";
+                rm.Visable = true;
+                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "表单字段维护";
-                rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
-                rm.Visable = true;
-                rm.Target = "_blank";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
 
@@ -352,13 +359,17 @@ namespace BP.WF.Template
         #endregion
 
         #region 节点表单方法.
+        public string DoEditExcelTemplate()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/CCFormDesigner/FrmExcelDesigner.htm?FK_MapData=" + this.No;
+        }
         /// <summary>
         /// 表单字段.
         /// </summary>
         /// <returns></returns>
         public string DoEditFiledsList()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/FiledsList.htm?FK_MapData="+this.No;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/CCFormDesigner/FiledsList.htm?FK_MapData=" + this.No;
         }
         /// <summary>
         /// 节点表单组件

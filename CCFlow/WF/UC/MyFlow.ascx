@@ -13,7 +13,7 @@
 <script type="text/javascript">
 
     //发送按钮，当
-    function SendBtnCondClick(flowNo, nodeid, workID, fid,toNodesCount) {
+    function SendBtnCondClick(flowNo, nodeid, workID, fid) {
 
         if (SysCheckFrm() == false)
             return false;
@@ -23,14 +23,12 @@
 
         var dll = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_DDL_ToNode");
         var selectNodeID = dll.options[dll.selectedIndex].value;
-        //如果有多个达到节点，必须选择一个节点。如果只有一个到达节点，则不判断。
-        if (toNodesCount > 1) {
-            if (selectNodeID == "0") {
-                alert('请您在下拉框里选择要到达的节点.');
-                return false;
-            }
 
+        if (selectNodeID == "0") {
+            alert('请选择分支.');
+            return false;
         }
+
         if (selectNodeID.indexOf('.') != -1) {  //发送之前，需要调用选择人接收器.
             selectNodeID = selectNodeID.replace('.1', '');
             var url = "./WorkOpt/Accepter.htm?WorkID=" + workID + "&ToNode=" + selectNodeID + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2&DoType=AccepterSave";

@@ -203,7 +203,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "编辑Excel表单模版";
                 rm.ClassMethodName = this.ToString() + ".DoEditExcelTemplate";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/xlsx.gif";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
                 rm.Visable = true;
                 rm.Target = "_blank";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -211,9 +211,10 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
-                rm.Title = "表单字段维护";
+                rm.Title = "字段维护";
                 rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/Img/field.png";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
+               // rm.Icon = SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/Img/Field.png";
                 rm.Visable = true;
                 rm.Target = "_blank";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;

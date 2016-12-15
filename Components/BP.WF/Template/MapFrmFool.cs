@@ -10,9 +10,9 @@ using System.Collections.Generic;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 表单属性
+    /// 傻瓜表单属性
     /// </summary>
-    public class MapFoolForm : EntityNoName
+    public class MapFrmFool : EntityNoName
     {
         #region 属性
         /// <summary>
@@ -111,17 +111,16 @@ namespace BP.WF.Template
 
         #region 构造方法
         /// <summary>
-        /// 表单属性
+        /// 傻瓜表单属性
         /// </summary>
-        public MapFoolForm()
+        public MapFrmFool()
         {
-
         }
         /// <summary>
-        /// 表单属性
+        /// 傻瓜表单属性
         /// </summary>
         /// <param name="no">表单ID</param>
-        public MapFoolForm(string no)
+        public MapFrmFool(string no)
             : base(no)
         {
         }
@@ -134,7 +133,8 @@ namespace BP.WF.Template
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_MapData", "傻瓜表单属性");
+
+                Map map = new Map("Sys_MapData", "傻瓜傻瓜表单属性");
                 map.Java_SetEnType(EnType.Sys);
                 map.Java_SetCodeStruct("4");
 
@@ -571,7 +571,7 @@ namespace BP.WF.Template
             return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/InitScript.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         /// <summary>
-        /// 表单属性.
+        /// 傻瓜表单属性.
         /// </summary>
         /// <returns></returns>
         public string DoBodyAttr()
@@ -607,15 +607,15 @@ namespace BP.WF.Template
         #endregion 方法.
     }
     /// <summary>
-    /// 表单属性s
+    /// 傻瓜表单属性s
     /// </summary>
-    public class MapFoolForms : EntitiesNoName
+    public class MapFrmFools : EntitiesNoName
     {
         #region 构造
         /// <summary>
-        /// 表单属性s
+        /// 傻瓜表单属性s
         /// </summary>
-        public MapFoolForms()
+        public MapFrmFools()
         {
         }
         /// <summary>
@@ -625,7 +625,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new MapFoolForm();
+                return new MapFrmFool();
             }
         }
         #endregion
@@ -635,20 +635,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapFoolForm> ToJavaList()
+        public System.Collections.Generic.IList<MapFrmFool> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapFoolForm>)this;
+            return (System.Collections.Generic.IList<MapFrmFool>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapFoolForm> Tolist()
+        public System.Collections.Generic.List<MapFrmFool> Tolist()
         {
-            System.Collections.Generic.List<MapFoolForm> list = new System.Collections.Generic.List<MapFoolForm>();
+            System.Collections.Generic.List<MapFrmFool> list = new System.Collections.Generic.List<MapFrmFool>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapFoolForm)this[i]);
+                list.Add((MapFrmFool)this[i]);
             }
             return list;
         }

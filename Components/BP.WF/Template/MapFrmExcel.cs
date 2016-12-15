@@ -15,7 +15,6 @@ namespace BP.WF.Template
     public class MapFrmExcelAttr : MapDataAttr
     {
         public const string TemplaterVer = "TemplaterVer";
-
     }
     /// <summary>
     /// Excel表单属性
@@ -204,15 +203,6 @@ namespace BP.WF.Template
 
                 #region 方法 - 基本功能.
                 RefMethod rm = new RefMethod();
-                rm = new RefMethod();
-                rm.Title = "表单字段"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoFiledsList";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
 
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
@@ -221,6 +211,16 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "表单字段维护";
+                rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
+                rm.Visable = true;
+                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "表单事件"; // "设计表单";
@@ -246,14 +246,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "手机端表单";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/telephone.png";
-                rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+           
 
                 rm = new RefMethod();
                 rm.Title = "内置JavaScript脚本"; // "设计表单";
@@ -283,16 +276,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-                //带有参数的方法.
-                rm = new RefMethod();
-                rm.Title = "重命名字段";
-                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
-                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/ReName.png";
-                map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "表单检查";  //"设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
@@ -312,6 +295,33 @@ namespace BP.WF.Template
                 //rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Components.png";
                 //map.AddRefMethod(rm);
                 #endregion 方法 - 基本功能.
+
+                #region 高级设置.
+
+                //带有参数的方法.
+                rm = new RefMethod();
+                rm.Title = "重命名字段";
+                rm.GroupName = "高级设置";
+                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
+                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/ReName.png";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "手机端表单";
+                rm.GroupName = "高级设置";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/telephone.png";
+                rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+            
+
+                #endregion 高级设置.
+
 
                 #region 方法 - 开发接口.
                 rm = new RefMethod();
@@ -346,7 +356,7 @@ namespace BP.WF.Template
         /// 表单字段.
         /// </summary>
         /// <returns></returns>
-        public string DoFiledsList()
+        public string DoEditFiledsList()
         {
             return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/FiledsList.htm?FK_MapData="+this.No;
         }

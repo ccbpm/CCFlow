@@ -117,6 +117,7 @@ function ReturnWork() {
 }
 
 
+
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
 function ReqDDL(ddlID) {
@@ -1920,6 +1921,8 @@ function GenerWorkNode() {
             //
             Col8To4();
 
+
+            Common.MaxLengthError();
             // window.location.href = "#divCurrentForm";
         }
     });
@@ -2112,11 +2115,10 @@ function OptSuc(msg) {
         setToobarUnVisible();
     } else {
         $("#msgModal").modal().show();
-    }
-
-    if (window.opener != null) {
-        //刷新父窗口
-        window.opener.location.reload();
+        if (window.opener != null) {
+            //刷新父窗口
+            window.opener.location.reload();
+        }
     }
 }
 //移交

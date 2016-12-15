@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title></title>
     <script src="Scripts/JavaScript1.js"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
@@ -182,6 +183,7 @@
         .input-group .input-group-addon {
             border: none;
             background: #F1F1F2;
+        }
     </style>
 
     <!--杨玉慧 -->
@@ -205,6 +207,9 @@
                 var height = $(parent.document.getElementById('MainFrames')).height() - 110;
                 $('#topContentDiv').height(height);
             }
+            $(window).resize(function() {
+                $('#CCForm').height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color","#fff");
+            });
             function movetb() {
                 var move;
                 $("#nav").css("top", top);
@@ -228,6 +233,7 @@
             (navigator.userAgent.indexOf('Trident') >= 0)) {
                 $('body').css('overflow-x', 'hidden');
             }
+            
         })
     </script>
 </head>
@@ -264,7 +270,7 @@
             </div>
         </div>
         <!--上半部分表单-->
-        <div id="topContentDiv" class="row">
+        <div id="topContentDiv" class="row" style="padding: 0px 5px;">
             <i></i>
             <div id="contentDiv">
                 <form id="divCCForm" action="MyFlow.ashx?method=login" method="post">
@@ -309,7 +315,7 @@
         </div>
     </div>
     <!--杨玉慧加 暂时解决POP窗不好用的问题-->
-    <div class="modal fade" id="returnPopValModal">
+    <div class="modal fade" id="returnPopValModal" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 0px;">
                 <div class="modal-header">

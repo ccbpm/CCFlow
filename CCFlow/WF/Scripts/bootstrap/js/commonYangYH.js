@@ -16,7 +16,27 @@ Common.IsAdministrator = function () {
         return false;
     }
 }
-
+Common.MaxLengthError = function () {
+    if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
+            (navigator.userAgent.indexOf('Trident') >= 0)) {
+        $('textarea[maxlength]').bind('blur', function () {
+            var str = $(this).val();
+            var mx = parseInt($(this).attr('maxlength'));
+            if (str.length > mx) {
+                $(this).val(str.substr(0, mx));
+                return false;
+            }
+        });
+        $('input[maxlength]').bind('blur', function () {
+            var str = $(this).val();
+            var mx = parseInt($(this).attr('maxlength'));
+            if (str.length > mx) {
+                $(this).val(str.substr(0, mx));
+                return false;
+            }
+        });
+    }
+}
 //把后台返回的错误打印到控制台
 Common.ConsoleLogError = function (data, methodName) {
     if (data == undefined || data == "") {

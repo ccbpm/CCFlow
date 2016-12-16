@@ -209,7 +209,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "字段维护";
                 rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
@@ -220,7 +219,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
+                rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";

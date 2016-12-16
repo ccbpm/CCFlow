@@ -2648,11 +2648,20 @@ namespace BP.WF
         /// <returns>SID</returns>
         public static bool Port_SetSID(string userNo, string sid)
         {
-            Paras ps = new Paras();
-            ps.SQL = "UPDATE Port_Emp SET SID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "SID WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
-            ps.Add("SID", sid);
-            ps.Add("No", userNo);
-            if (BP.DA.DBAccess.RunSQL(ps) == 1)
+            //Paras ps = new Paras();
+            //ps.SQL = "UPDATE Port_Emp SET SID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "SID WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
+            //ps.Add("SID", sid);
+            //ps.Add("No", userNo);
+
+            string sql = "";
+            sql = BP.Sys.SystemConfig.GetValByKey("UpdateSID", sql);
+            if (sql=="")
+                sql="UPDATE Port_Emp SET SID=@SID WHERE No=@No";
+
+            sql = sql.Replace("@SID", "'" + sid + "'");
+            sql = sql.Replace("@No", "'" + userNo + "'");
+
+            if (BP.DA.DBAccess.RunSQL(sql) == 1)
                 return true;
             else
                 return false;

@@ -709,11 +709,10 @@ select {
 
 textarea,iframe[src*="AttachmentUpload.aspx"] {
     margin-top:6px !important;
-
     border-radius: 15px !important;
     border: #2884fa 1px solid;
     /*margin: 0px 10px;*/
-    line-height: 25px !important;
+    line-height: 15px !important;
     padding-left: 6px !important;
     margin: 8px 0px !important;
     width:100%;

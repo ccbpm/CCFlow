@@ -675,13 +675,19 @@
 
             dtTable();
         }
-
+        function tab() {
+            var event = window.event || arguments.callee.caller.arguments[0];
+            if (event.keyCode == "13") {
+                document.getElementById("btnSearch").click();
+                return false;
+            }
+        }
         //初始化多个搜索条件
         function initMoreConSearch(conditionStr) {
              var conditions = conditionStr.split('$');
              var conHtml = '';
             //先加上KEY 
-             conHtml += "<div class='searchGroup'><label>" + initPopValData.Hashtable[0].PopValSearchTip + "</label>"+"<input name='Key' id='Key' type='text'/></div>";
+             conHtml += "<div class='searchGroup'><label>" + initPopValData.Hashtable[0].PopValSearchTip + "</label>" + "<input name='Key' id='Key' type='text' onkeydown='tab()'/></div>";
             $.each(conditions, function (i, con) {
                 if (con != undefined && con.trim() != '') {
                     var paramList = con.split('#');

@@ -140,6 +140,7 @@
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
     <Content Include="SDKFlowDemo\Default.htm" />
+    <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
@@ -177,6 +178,8 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\ThreadDtl.png" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTableAttrEdit.htm" />
     <Content Include="WF\Admin\CCFormDesigner\FiledsList.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\FrmExcelDesigner.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\Home.htm" />
     <Content Include="WF\Admin\CCFormDesigner\js\Controls.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\ControlsPropertys.js" />
     <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\AthMulti.png" />
@@ -221,6 +224,7 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\commands\ConnectorCloneCommand.js" />
     <Content Include="WF\Admin\CCFormDesigner\Login.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Login.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.htm" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-style-bar.css" />
@@ -1030,6 +1034,7 @@
     <Content Include="WF\App\Simple\Top.aspx" />
     <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\BatchSelfDeal.aspx" />
+    <Content Include="WF\Cancel.aspx" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
     <Content Include="WF\CCForm\DtlOpSelectItems.aspx" />
@@ -1335,6 +1340,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
+    <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
@@ -1980,6 +1986,8 @@
     <Content Include="WF\Style\themes\icons\xitongleibie.png" />
     <Content Include="WF\TaskPoolApply.aspx" />
     <Content Include="WF\TaskPoolSharing.aspx" />
+    <Content Include="WF\EmpWorks.htm" />
+    <Content Include="WF\Todolist.htm" />
     <Content Include="WF\UC\ChangeDept.ascx" />
     <Content Include="WF\UC\ToolsWap.ascx" />
     <Content Include="WF\WebOffice\AttachOffice.aspx" />
@@ -2027,7 +2035,6 @@
     <Content Include="WF\BPR.aspx" />
     <Content Include="WF\Calendar.aspx" />
     <Content Include="WF\CallSubFlow.aspx" />
-    <Content Include="WF\Cancel.aspx" />
     <Content Include="WF\CC.aspx" />
     <Content Include="WF\CCForm\API.aspx" />
     <Content Include="WF\CCForm\APIDemo.htm" />
@@ -3401,6 +3408,9 @@
     <Compile Include="WF\Admin\AttrFlow\CheckFlow.aspx.designer.cs">
       <DependentUpon>CheckFlow.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Admin\AttrFlow\Limit.aspx.cs">
       <DependentUpon>Limit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -4536,6 +4546,13 @@
     </Compile>
     <Compile Include="WF\BatchSelfDeal.aspx.designer.cs">
       <DependentUpon>BatchSelfDeal.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Cancel.aspx.cs">
+      <DependentUpon>Cancel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Cancel.aspx.designer.cs">
+      <DependentUpon>Cancel.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\AttachmentUploadImg.aspx.cs">
       <DependentUpon>AttachmentUploadImg.aspx</DependentUpon>
@@ -6293,13 +6310,6 @@
     </Compile>
     <Compile Include="WF\CallSubFlow.aspx.designer.cs">
       <DependentUpon>CallSubFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Cancel.aspx.cs">
-      <DependentUpon>Cancel.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Cancel.aspx.designer.cs">
-      <DependentUpon>Cancel.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CC.aspx.cs">
       <DependentUpon>CC.aspx</DependentUpon>

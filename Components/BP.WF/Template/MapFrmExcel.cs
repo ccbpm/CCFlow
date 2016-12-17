@@ -361,7 +361,7 @@ namespace BP.WF.Template
         #region 节点表单方法.
         public string DoEditExcelTemplate()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/CCFormDesigner/FrmExcelDesigner.htm?FK_MapData=" + this.No;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/CCFormDesigner/ExcelFrmDesigner/Designer.htm?FK_MapData=" + this.No;
         }
         /// <summary>
         /// 表单字段.

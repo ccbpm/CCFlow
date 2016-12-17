@@ -6111,6 +6111,20 @@ namespace BP.WF
                 #region 处理发送成功后的消息提示
                 if (this.HisNode.HisTurnToDeal == TurnToDeal.SpecMsg)
                 {
+                    string htmlInfo = "";
+                    string textInfo = "";
+                    #region 判断当前处理人员，可否处理下一步工作.
+                    if (this.town != null
+                        && this.HisRememberMe != null
+                        && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
+                    {
+                        string url = "MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
+                          htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
+                          textInfo = "@下一步工作您仍然可以处理。";
+                        this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, htmlInfo);
+                    }
+                    #endregion 判断当前处理人员，可否处理下一步工作.
+
                     string msgOfSend = this.HisNode.TurnToDealDoc;
                     if (msgOfSend.Contains("@"))
                     {
@@ -6143,8 +6157,8 @@ namespace BP.WF
                                 msgOfSend = msgOfSend.Replace("@" + item.MsgFlag, item.MsgOfText);
                         }
 
-                        this.HisMsgObjs.OutMessageHtml = msgOfSend;
-                        this.HisMsgObjs.OutMessageText = msgOfSendText;
+                        this.HisMsgObjs.OutMessageHtml = msgOfSend+ htmlInfo;
+                        this.HisMsgObjs.OutMessageText = msgOfSendText + textInfo;
                     }
                     else
                     {

@@ -6296,15 +6296,13 @@ namespace BP.WF
                 #endregion 计算未来处理人.
 
                 #region 判断当前处理人员，可否处理下一步工作.
-
                 if (this.town != null
                     && this.HisRememberMe!=null 
                     && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                 {
                     string url = "MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
-
-                    string htmlInfo = "@<a href='" + url + "' >下一步工作，您仍然可以处理，点击这里现在处理。</a>.";
-                    string textInfo = "@下一步工作，您仍然可以处理。";
+                    string htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
+                    string textInfo = "@下一步工作您仍然可以处理。";
 
                     this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, htmlInfo);
                 }

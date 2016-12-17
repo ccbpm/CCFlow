@@ -1175,9 +1175,101 @@ namespace BP.WF
         /// <summary>
         /// 获取当前人员待处理的工作
         /// </summary>
-        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">节点编号</param>
         /// <returns>共享工作列表</returns>
-        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, string fk_flow)
+        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node=0)
+        {
+            //执行 todolist 调度.
+            DTS_GenerWorkFlowTodoSta();
+
+            Paras ps = new Paras();
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string sql;
+            if (WebUser.IsAuthorize == false)
+            {
+                /*不是授权状态*/
+                if (fk_node==0)
+                {
+                    if (BP.WF.Glo.IsEnableTaskPool == true)
+                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow,ADT DESC ";
+                    else
+                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp  AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow,ADT DESC ";
+
+                    ps.Add("FK_Emp", userNo);
+                }
+                else
+                {
+                    if (BP.WF.Glo.IsEnableTaskPool == true)
+                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND FK_Node=" + dbstr + "FK_Node  AND WFState!=" + (int)WFState.Batch + " ORDER BY  ADT DESC ";
+                    else
+                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node  AND WFState!=" + (int)WFState.Batch + " ORDER BY  ADT DESC ";
+
+                    ps.Add("FK_Node", fk_node);
+                    ps.Add("FK_Emp", userNo);
+                }
+                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            }
+
+            /*如果是授权状态, 获取当前委托人的信息. */
+            WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            switch (emp.HisAuthorWay)
+            {
+                case Port.AuthorWay.All:
+                    if ( fk_node==0 )
+                    {
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND TaskSta=0 ORDER BY FK_Flow,ADT DESC ";
+                        else
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  ORDER BY FK_Flow,ADT DESC ";
+
+                        ps.Add("FK_Emp", userNo);
+                    }
+                    else
+                    {
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND FK_Node" + dbstr + "FK_Node AND TaskSta=0 ORDER BY FK_Flow,ADT DESC ";
+                        else
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND FK_Node" + dbstr + "FK_Node ORDER BY FK_Flow,ADT DESC ";
+
+                        ps.Add("FK_Emp", userNo);
+                        ps.Add("FK_Node", fk_node);
+                    }
+                    break;
+                case Port.AuthorWay.SpecFlows:
+                    if (fk_node==0)
+                    {
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0 ORDER BY FK_Flow,ADT DESC ";
+                        else
+                            sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + "  ORDER BY FK_Flow,ADT DESC ";
+
+                        ps.Add("FK_Emp", userNo);
+                    }
+                    else
+                    {
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            sql = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND FK_Node" + dbstr + "FK_Node AND FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0  ORDER BY FK_Flow,ADT DESC ";
+                        else
+                            sql = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND FK_Node" + dbstr + "FK_Node AND FK_Flow IN " + emp.AuthorFlows + "  ORDER BY FK_Flow,ADT DESC ";
+
+                        ps.Add("FK_Emp", userNo);
+                        ps.Add("FK_Node", fk_node);
+                    }
+                    break;
+                case Port.AuthorWay.None:
+                    throw new Exception("对方(" + WebUser.No + ")已经取消了授权.");
+                default:
+                    throw new Exception("no such way...");
+            }
+            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+        }
+        /// <summary>
+        /// 获取当前人员待处理的工作
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">节点编号</param>
+        /// <returns>共享工作列表</returns>
+        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, string fk_flow=null)
         {
             //执行 todolist 调度.
             DTS_GenerWorkFlowTodoSta();

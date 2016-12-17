@@ -552,7 +552,7 @@ namespace BP.Pub
                         case "RDT":
                             return dr["RDT"].ToString(); //审核日期.
                         case "RDT-NYR":
-                            string rdt= dr["RDT"].ToString(); //审核日期.
+                            string rdt = dr["RDT"].ToString(); //审核日期.
                             return BP.DA.DataType.ParseSysDate2DateTimeFriendly(rdt);
                         case "Rec":
                             return dr["EmpFrom"].ToString(); //记录人.
@@ -561,13 +561,13 @@ namespace BP.Pub
                         case "Msg":
                         case "Note":
 
-                           #warning 输出的乱码，没有解决方案。
-                           // string text=dr["Msg"].ToString();
+#warning 输出的乱码，没有解决方案。
+                            // string text=dr["Msg"].ToString();
                             //return Encoding.GetEncoding("GB2312").GetString(Encoding.UTF8.GetBytes(dr["Msg"].ToString()));
 
-                            return  dr["Msg"].ToString();
+                            return dr["Msg"].ToString();
 
-                            //return System.Text.Encoder  //审核信息.
+                        //return System.Text.Encoder  //审核信息.
                         default:
                             break;
                     }
@@ -575,6 +575,30 @@ namespace BP.Pub
             }
 
             return "无";
+        }
+
+        private string GetValueCheckWorkByKey(DataRow row, string key)
+        {
+            key = key.Replace(" ", "");
+            key = key.Replace("\r\n", "");
+
+            switch (key)
+            {
+                case "RDT":
+                    return row["RDT"].ToString(); //审核日期.
+                case "RDT-NYR":
+                    string rdt = row["RDT"].ToString(); //审核日期.
+                    return BP.DA.DataType.ParseSysDate2DateTimeFriendly(rdt);
+                case "Rec":
+                    return row["EmpFrom"].ToString(); //记录人.
+                case "RecName":
+                    return row["EmpFromT"].ToString(); //审核人.
+                case "Msg":
+                case "Note":
+                    return row["Msg"].ToString();
+                default:
+                    return row[key] as string;
+            }
         }
         /// <summary>
         /// 审核节点的表示方法是 节点ID.Attr.
@@ -671,7 +695,7 @@ namespace BP.Pub
                     string[] checkVal = strs[1].Split('-');
                     if (checkVal.Length == 1)
                         return relVal;
-                    if(relVal.Equals(checkVal[0]))
+                    if (relVal.Equals(checkVal[0]))
                         return "[√]";
                     else
                         return "[×]";
@@ -969,10 +993,10 @@ namespace BP.Pub
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
                         else if (para.Contains("-EnumYes") == true)
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
-                        else if (para.Contains("WorkCheck.RDT") 
-                            || para.Contains("WorkCheck.Rec") 
+                        else if (para.Contains("WorkCheck.RDT")
+                            || para.Contains("WorkCheck.Rec")
                             || para.Contains("WorkCheck.RecName")
-                            || para.Contains("WorkCheck.Note") )   // 审核组件的审核日期.
+                            || para.Contains("WorkCheck.Note"))   // 审核组件的审核日期.
                             str = str.Replace("<" + para + ">", this.GetValueCheckWorkByKey(para));
                         else if (para.Contains(".") == true)
                             continue; /*有可能是明细表数据.*/
@@ -1107,6 +1131,49 @@ namespace BP.Pub
                     }
                 }
                 #endregion 从表合计
+
+                #region 审核组件组合信息，added by liuxc,2016-12-16
+                if (str.Contains("<WorkCheckBegin>") && str.Contains("<WorkCheckEnd>"))
+                {
+                    int beginIdx = str.IndexOf("<WorkCheckBegin>"); //len:16
+                    int endIdx = str.IndexOf("<WorkCheckEnd>"); //len:14
+                    string moduleStr = str.Substring(beginIdx + 16, endIdx - beginIdx - 16);
+                    ArrayList tags = new ArrayList();
+                    string val = string.Empty;
+                    string field = string.Empty;
+                    string checkStr = string.Empty;
+                    string[] ps = null;
+
+                    if (dtTrack != null)
+                    {
+                        foreach (string para in paras)
+                        {
+                            if (string.IsNullOrWhiteSpace(para) || !para.Contains("WorkCheckList."))
+                                continue;
+
+                            ps = para.Split('.');
+                            tags.Add(ps[1]);
+                        }
+
+                        foreach (DataRow row in dtTrack.Select("ACTIONTYPE=22", "RDT ASC")) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
+                        {
+                            checkStr = moduleStr;
+
+                            foreach (string tag in tags)
+                            {
+                                checkStr = checkStr.Replace("<WorkCheckList." + tag + ">",
+                                                             this.GetCode(this.GetValueCheckWorkByKey(row, tag)));
+                            }
+
+                            str = str.Insert(beginIdx, checkStr);
+                            beginIdx += checkStr.Length;
+                            endIdx += checkStr.Length;
+                        }
+
+                        str = str.Substring(0, beginIdx) + (endIdx < str.Length - 1 ? str.Substring(endIdx + 14) : "");
+                    }
+                }
+                #endregion
 
                 #region 要替换的字段
                 if (replaceVals != null && replaceVals.Contains("@"))

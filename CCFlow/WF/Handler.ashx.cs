@@ -19,6 +19,32 @@ namespace CCFlow.WF
         #region 执行.
         public HttpContext context = null;
         /// <summary>
+        /// 节点编号
+        /// </summary>
+        public int FK_Node
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_Node"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return int.Parse(str);
+            }
+        }
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public string FK_Flow
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_Flow"];
+                if (str == null || str == "" || str == "null")
+                    return str;
+                return str;
+            }
+        }
+        /// <summary>
         /// 执行类型
         /// </summary>
         public string DoType
@@ -149,6 +175,9 @@ namespace CCFlow.WF
             {
                 switch (this.DoType)
                 {
+                    case "Todolist_Init":
+                        msg = this.Todolist_Init();
+                        break;
                     case "LoginInit":  //处理login的初始化工作.
                         msg= this.LoginInit();
                         break;
@@ -170,6 +199,16 @@ namespace CCFlow.WF
 
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
+        }
+        /// <summary>
+        /// 获得待办.
+        /// </summary>
+        /// <returns></returns>
+        public string Todolist_Init()
+        {
+            DataTable dt = null;
+            dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, this.FK_Node);
+            return BP.Tools.Json.ToJson(dt);
         }
 
         #region 登录相关.

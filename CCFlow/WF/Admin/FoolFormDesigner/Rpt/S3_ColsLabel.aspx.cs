@@ -73,9 +73,10 @@ namespace CCFlow.WF.MapDef.Rpt
                     break;
             }
             #endregion 处理活动.
-            
-            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, this.RptNo, MapAttrAttr.Idx);    //edited by liuxc,2016-12-15,排序
+
+
+            BP.WF.Rpt.MapRpt mrpt = new BP.WF.Rpt.MapRpt(RptNo);
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs(this.RptNo);
 
             this.Pub2.AddTable("class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%'");
 

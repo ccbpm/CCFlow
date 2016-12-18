@@ -191,7 +191,7 @@ namespace CCFlow.WF
                     this.Pub1.AddTD(cb);
 
                     //this.Pub1.AddTD("<a href=\"javascript:WinOpen('MyFlow.aspx?WorkID=" + wk.OID + "&FK_Node=" + this.FK_Node + "&FK_Flow="+nd.FK_Flow+"','s')\" >" + dr["Title"].ToString() + "</a>");
-                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('FlowFormTree/Default.aspx?WorkID=" + wk.OID + "&FK_Node=" + this.FK_Node + "&IsSend=0&FK_Flow=" + nd.FK_Flow + "','s')\" >" + dr["Title"].ToString() + "</a>");
+                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('FrmTree/Default.aspx?WorkID=" + wk.OID + "&FK_Node=" + this.FK_Node + "&IsSend=0&FK_Flow=" + nd.FK_Flow + "','s')\" >" + dr["Title"].ToString() + "</a>");
                     this.Pub1.AddTD(dr["Starter"].ToString());
                     this.Pub1.AddTD(dr["ADT"].ToString());
                     break;

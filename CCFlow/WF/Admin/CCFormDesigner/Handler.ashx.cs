@@ -228,9 +228,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 					case "FiledsList_Delete":
 						msg = this.FiledsList_Delete();
 						break;
-					default:
-						msg = "err@没有判断的标记:" + this.DoType;
-						break;
 				}
 				context.Response.Write(msg);
 			}

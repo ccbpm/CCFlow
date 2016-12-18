@@ -139,7 +139,7 @@ namespace CCFlow.AppDemoLigerUI.Base
                 if (title == "")
                     return "noform";
                 long workID = BP.WF.Dev2Interface.Node_CreateStartNodeWork(flowId, null, null, WebUser.No, title);
-                Url = "../../FlowFormTree/Default.aspx?WorkID=" + workID + "&FK_Flow=" + flowId + "&FK_Node=" + flowId + "01&UserNo=" + WebUser.No + "&FID=0&SID=" + WebUser.SID;
+                Url = "../../FrmTree/Default.aspx?WorkID=" + workID + "&FK_Flow=" + flowId + "&FK_Node=" + flowId + "01&UserNo=" + WebUser.No + "&FID=0&SID=" + WebUser.SID;
             }
             return Url;
         }

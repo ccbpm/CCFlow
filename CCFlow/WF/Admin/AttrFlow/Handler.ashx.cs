@@ -8,9 +8,7 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
-using Microsoft.JScript;
 using Newtonsoft.Json.Converters;
-using NPOI.SS.Formula.Functions;
 
 
 namespace CCFlow.WF.Admin.AttrFlow
@@ -230,15 +228,6 @@ namespace CCFlow.WF.Admin.AttrFlow
 					case "NodeAttrs_Init":
 						msg = this.NodeAttrs_Init();
 						break;
-					case "Limit_Init":
-						msg = this.Limit_Init();
-						break;
-					case "Limit_Save":
-						msg = this.Limit_Save();
-						break;
-					default:
-						msg = "err@没有判断的标记:" + this.DoType;
-						break;
 				}
 				context.Response.Write(msg);
 			}
@@ -262,7 +251,7 @@ namespace CCFlow.WF.Admin.AttrFlow
 			}
 			Nodes nodes = new Nodes();
 			nodes.Retrieve("FK_Flow", strFlowId);
-			//因直接使用nodes.ToJson()无法获取某些字段（e.g. HisFormTypeText, 原因：Node没有自己的Attr类）
+			//因直接使用nodes.ToJson()无法获取某些字段（e.g.HisFormTypeText,原因：Node没有自己的Attr类）
 			//故此处手动创建前台所需的DataTable
 			DataTable dt = new DataTable();
 			dt.Columns.Add("NodeID");	//节点ID
@@ -283,9 +272,10 @@ namespace CCFlow.WF.Admin.AttrFlow
 			dt.Columns.Add("HisFrmEventsCount");	//消息&事件Count
 			dt.Columns.Add("HisFinishCondsCount");	//流程完成条件Count
 			dt.Columns.Add("HisListensCount");	//消息收听Count
+			DataRow dr;
 			foreach (Node node in nodes)
 			{
-				var dr = dt.NewRow();
+				dr = dt.NewRow();
 				dr["NodeID"] = node.NodeID;
 				dr["Name"] = node.Name;
 				dr["HisFormType"] = node.HisFormType;
@@ -341,67 +331,6 @@ namespace CCFlow.WF.Admin.AttrFlow
 			return BP.Tools.Json.ToJson(dt);
 		}
 		#endregion
-
-		#region 发起限制规则 的操作
-		/// <summary>
-		/// 初始化『发起限制规则』页面
-		/// </summary>
-		/// <returns></returns>
-		public string Limit_Init()
-		{
-			var strFlowId = GetRequestVal("FK_Flow");
-			var ds = new DataSet();
-			BP.WF.Flow flow = new BP.WF.Flow(strFlowId);
-			flow.RetrieveFromDBSources();
-			var dt = flow.ToDataTableField();
-			dt.Rows[0]["StartLimitAlert"] = flow.StartLimitAlert;	//上面的方法没有加上这个字段的值，why?
-			dt.TableName = "main";
-			ds.Tables.Add(dt);
-			ds.Tables.Add(EnumToDatatable(typeof(StartLimitRole)));
-			return BP.Tools.Json.ToJson(ds);
-		}
-		/// <summary>
-		/// 保存『限制规则』
-		/// </summary>
-		/// <returns></returns>
-		public string Limit_Save()
-		{
-			var strFlowId = GetRequestVal("FK_Flow");
-			BP.WF.Flow flow = new BP.WF.Flow(strFlowId);
-			flow.StartLimitRole = (StartLimitRole)GetRequestValInt("StartLimitRole");
-			flow.StartLimitPara = GetRequestVal("StartLimitPara");
-			flow.StartLimitAlert = GetRequestVal("StartLimitAlert");
-			return flow.Update() > 0 ? "保存成功！" : "保存失败，请稍后重试！";
-		}
-		#endregion
-
-		/// <summary>
-		/// 把Enum转换为DataTable，规则为（以enum Sex{Women=0,Men=1}为例）：
-		/// DataTable.TableName = EnumName;（Sex）
-		/// DataTalbe.Columns = Texts(value);（Women,Men）
-		/// DataTalbe.Rows[0] = Indexs(key);（0,1）
-		/// </summary>
-		/// <param name="typeOfEnum">typeof(EnumName)</param>
-		/// <returns>DataTable</returns>
-		public DataTable EnumToDatatable(Type typeOfEnum)
-		{
-			if (typeOfEnum == null)
-				return null;
-			var enumName = typeOfEnum.FullName;
-			var dt = new DataTable(enumName.Substring(enumName.LastIndexOf(".") + 1));
-
-			//生成列
-			foreach (var item in Enum.GetNames(typeOfEnum))
-				dt.Columns.Add(item, typeof(Int32));
-
-			//生成行
-			DataRow dr = dt.NewRow();
-			foreach (var item in Enum.GetValues(typeOfEnum))
-				dr[item.ToString()] = item.GetHashCode();
-
-			dt.Rows.Add(dr);
-			return dt;
-		}
 
 		public bool IsReusable
 		{

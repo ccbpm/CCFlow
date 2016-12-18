@@ -178,7 +178,7 @@
     <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\ThreadDtl.png" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmTableAttrEdit.htm" />
     <Content Include="WF\Admin\CCFormDesigner\FiledsList.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\FrmExcelDesigner.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Home.htm" />
     <Content Include="WF\Admin\CCFormDesigner\js\Controls.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\ControlsPropertys.js" />
@@ -1341,6 +1341,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
+    <Content Include="lims.web.config" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
@@ -1825,28 +1826,27 @@
     <Content Include="WF\Comm\Menu.js" />
     <Content Include="WF\Comm\Search.aspx" />
     <Content Include="WF\Comm\Style\Table.css" />
-    <Content Include="WF\FlowFormTree\Base\FormTreeBase.aspx" />
-    <Content Include="WF\FlowFormTree\Default.aspx" />
-    <Content Include="WF\FlowFormTree\FlowFormTreeEdit.aspx" />
-    <Content Include="WF\FlowFormTree\FlowFormTreeView.aspx" />
-    <Content Include="WF\FlowFormTree\Images\Banal.png" />
-    <Content Include="WF\FlowFormTree\Images\folder.gif" />
-    <Content Include="WF\FlowFormTree\Images\func.gif" />
-    <Content Include="WF\FlowFormTree\Images\logo.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\application.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\archive.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\collaboration.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\credit_card.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\customers.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\desktop_2.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\feed.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\forward.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\my_account.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\shipping.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\sitemap.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\sysset.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\user1.png" />
-    <Content Include="WF\FlowFormTree\Images\Menu\window.png" />
+    <Content Include="WF\FrmTree\Default.aspx" />
+    <Content Include="WF\FrmTree\FlowFormTreeEdit.aspx" />
+    <Content Include="WF\FrmTree\FlowFormTreeView.aspx" />
+    <Content Include="WF\FrmTree\Images\Banal.png" />
+    <Content Include="WF\FrmTree\Images\folder.gif" />
+    <Content Include="WF\FrmTree\Images\func.gif" />
+    <Content Include="WF\FrmTree\Images\logo.png" />
+    <Content Include="WF\FrmTree\Images\Menu\application.png" />
+    <Content Include="WF\FrmTree\Images\Menu\archive.png" />
+    <Content Include="WF\FrmTree\Images\Menu\collaboration.png" />
+    <Content Include="WF\FrmTree\Images\Menu\credit_card.png" />
+    <Content Include="WF\FrmTree\Images\Menu\customers.png" />
+    <Content Include="WF\FrmTree\Images\Menu\desktop_2.png" />
+    <Content Include="WF\FrmTree\Images\Menu\feed.png" />
+    <Content Include="WF\FrmTree\Images\Menu\forward.png" />
+    <Content Include="WF\FrmTree\Images\Menu\my_account.png" />
+    <Content Include="WF\FrmTree\Images\Menu\shipping.png" />
+    <Content Include="WF\FrmTree\Images\Menu\sitemap.png" />
+    <Content Include="WF\FrmTree\Images\Menu\sysset.png" />
+    <Content Include="WF\FrmTree\Images\Menu\user1.png" />
+    <Content Include="WF\FrmTree\Images\Menu\window.png" />
     <Content Include="WF\FlowSearch.aspx" />
     <Content Include="WF\Img\Action\AskforHelp.png" />
     <Content Include="WF\Img\Action\Skip.png" />
@@ -4887,6 +4887,9 @@
     <Compile Include="WF\FlowCheck\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
+    <Compile Include="WF\FrmTree\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="WF\FlowRpt.aspx.cs">
       <DependentUpon>FlowRpt.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -5716,32 +5719,25 @@
     <Compile Include="WF\Comm\Search.aspx.designer.cs">
       <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FlowFormTree\Base\FormTreeBase.aspx.cs">
-      <DependentUpon>FormTreeBase.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\Base\FormTreeBase.aspx.designer.cs">
-      <DependentUpon>FormTreeBase.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FlowFormTree\Default.aspx.cs">
+    <Compile Include="WF\FrmTree\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\FlowFormTree\Default.aspx.designer.cs">
+    <Compile Include="WF\FrmTree\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FlowFormTree\FlowFormTreeEdit.aspx.cs">
+    <Compile Include="WF\FrmTree\FlowFormTreeEdit.aspx.cs">
       <DependentUpon>FlowFormTreeEdit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\FlowFormTree\FlowFormTreeEdit.aspx.designer.cs">
+    <Compile Include="WF\FrmTree\FlowFormTreeEdit.aspx.designer.cs">
       <DependentUpon>FlowFormTreeEdit.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FlowFormTree\FlowFormTreeView.aspx.cs">
+    <Compile Include="WF\FrmTree\FlowFormTreeView.aspx.cs">
       <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\FlowFormTree\FlowFormTreeView.aspx.designer.cs">
+    <Compile Include="WF\FrmTree\FlowFormTreeView.aspx.designer.cs">
       <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\FlowSearch.aspx.cs">
@@ -7755,6 +7751,7 @@
     <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\FlowCheck\Site.Master" />
     <Content Include="WF\Handler.ashx" />
+    <Content Include="WF\FrmTree\Handler.ashx" />
     <None Include="WF\Img\Arr\Thumbs.db" />
     <None Include="WF\Img\FileType\Thumbs.db" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />

@@ -1314,8 +1314,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 }
                 catch
                 {
-                }
 
+                }
 
 
                 if (attr.MyDataType == BP.DA.DataType.AppString && lgType == FieldTypeS.Normal)
@@ -1332,8 +1332,18 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     attr.MinLen = this.GetValIntFromFrmByKey("TB_MinLen");
 
                     attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
+                }
+
+                //获取宽度.
+                try
+                {
+                    attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
+                }
+                catch
+                {
 
                 }
+               
 
                 //是否可用？所有类型的属性，都需要。
                 int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");

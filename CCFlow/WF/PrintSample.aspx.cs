@@ -539,7 +539,7 @@ namespace CCFlow.WF
 
                 string toUrl = "";
                 if (this.currND.HisFormType == NodeFormType.SheetTree)
-                    toUrl = "./FlowFormTree/Default.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&CWorkID=" + this.CWorkID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                    toUrl = "./FrmTree/Default.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&CWorkID=" + this.CWorkID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                 else
                     toUrl = "./WebOffice/Default.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&CWorkID=" + this.CWorkID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
 

@@ -7,6 +7,9 @@ using BP.En;
 
 namespace BP.Demo.SDK
 {
+    /// <summary>
+    /// 流程运行数据存储 Attr
+    /// </summary>
     public class ND018RptAttr : NDXRptBaseAttr
     {
         #region 基本属性
@@ -48,6 +51,9 @@ namespace BP.Demo.SDK
         public const string NoteRL = "NoteRL";
         #endregion
     }
+    /// <summary>
+    /// 流程运行数据存储
+    /// </summary>
     public class ND018Rpt : NDXRptBase
     {
         #region 属性
@@ -206,9 +212,7 @@ namespace BP.Demo.SDK
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("ND18Rpt");
-                map.EnDesc = "请假";
-                map.EnType = EnType.App;
+                Map map = new Map("ND18Rpt", "请假");
 
                 #region 流程的基本字段
                 map.AddTBIntPKOID();
@@ -234,13 +238,15 @@ namespace BP.Demo.SDK
                 map.AddTBString(ND018RptAttr.BillNo, null, "单据编号", false, true, 0, 100, 10);
                 #endregion 流程的基本字段
 
-                map.AddTBIntPKOID();
+
+                #region 业务字段 - 申请单部分.
                 map.AddTBString(ND018RptAttr.QingJiaRenNo, null, "请假人编号", false, false, 0, 200, 10);
                 map.AddTBString(ND018RptAttr.QingJiaRenName, null, "请假人名称", true, false, 0, 200, 70);
                 map.AddTBString(ND018RptAttr.QingJiaRenDeptNo, "", "请假人部门编号", true, false, 0, 200, 50);
                 map.AddTBString(ND018RptAttr.QingJiaRenDeptName, null, "请假人部门名称", true, false, 0, 200, 50);
                 map.AddTBString(ND018RptAttr.QingJiaYuanYin, null, "请假原因", true, false, 0, 200, 150);
                 map.AddTBFloat(ND018RptAttr.QingJiaTianShu, 0, "请假天数", true, false);
+                #endregion 业务字段 - 申请单部分.
 
                 // 审核信息.
                 map.AddTBString(ND018RptAttr.NoteBM, null, "部门经理意见", true, false, 0, 200, 150);
@@ -253,6 +259,9 @@ namespace BP.Demo.SDK
         }
         #endregion
     }
+    /// <summary>
+    /// 流程运行数据存储s
+    /// </summary>
     public class ND018Rpts : NDXRptBases
     { 
         #region 方法

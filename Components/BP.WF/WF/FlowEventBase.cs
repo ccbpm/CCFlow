@@ -42,7 +42,7 @@ namespace BP.WF
         /// <summary>
         /// 当前节点
         /// </summary>
-        public Node HisNode = null;      
+        public Node HisNode = null;
         /// <summary>
         /// 参数对象.
         /// </summary>

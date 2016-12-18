@@ -156,7 +156,9 @@ namespace BP.Sys
         {
             MapDtl dtl = new MapDtl();
             dtl.No = dtlNo;
-            dtl.RetrieveFromDBSources();
+
+            if (dtl.RetrieveFromDBSources() == 0)
+                dtl.W = 500;
 
             dtl.X = x;
             dtl.Y = y;

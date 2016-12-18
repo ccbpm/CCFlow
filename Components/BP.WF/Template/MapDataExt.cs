@@ -1133,8 +1133,6 @@ namespace BP.WF.Template
                 //rm.RefAttrLinkLabel = "数据源管理";
                 //rm.Target = "_blank";
                 //map.AddRefMethod(rm);
-
-
              
 
                 this._enMap = map;

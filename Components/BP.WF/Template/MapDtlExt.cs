@@ -1040,6 +1040,17 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
+                //rm = new RefMethod();
+                //rm.Title = "设计表单(Silverligth)"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoDesignerSL";
+                //rm.Icon = "/WF/Img/Setting.png";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                //rm.Target = "_blank";
+                //map.AddRefMethod(rm);
+
+
+
                 rm = new RefMethod();
                 rm.Title = "事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
@@ -1057,7 +1068,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
 
                 this._enMap = map;
                 return this._enMap;

@@ -62,6 +62,36 @@ namespace BP.Web
             return str;
         }
         /// <summary>
+        /// 更改一个人当前登录的主要部门
+        /// 再一个人有多个部门的情况下有效.
+        /// </summary>
+        /// <param name="empNo">人员编号</param>
+        /// <param name="fk_dept">当前所在的部门.</param>
+        public static void ChangeMainDept(string empNo, string fk_dept)
+        {
+            //这里要考虑集成的模式下，更新会出现是.
+
+            string sql = BP.Sys.SystemConfig.GetValByKey("UpdataMainDeptSQL", "");
+            if (sql == "")
+            { 
+                /*如果没有配置, 就取默认的配置.*/
+                sql = "UPDATE Port_Emp SET FK_Dept=@FK_Dept WHERE No=@No";
+            }
+
+            sql = sql.Replace("@FK_Dept","'"+fk_dept+"'");
+            sql = sql.Replace("@No", "'"+empNo+"'");
+
+            try
+            {
+                BP.DA.DBAccess.RunSQL(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("@执行更改当前操作员的主部门的时候错误,请检查SQL配置:" + ex.Message);
+            }
+
+        }
+        /// <summary>
         /// 通用的登陆
         /// </summary>
         /// <param name="em">人员</param>
@@ -103,7 +133,7 @@ namespace BP.Web
                 {
                     string sql = "";
                     if (BP.Sys.SystemConfig.OSModel== OSModel.OneOne)
-                        sql = "SELECT No FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + em.No + "'";
+                        sql = "SELECT FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + em.No + "'";
                     else
                         sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
                    
@@ -114,11 +144,9 @@ namespace BP.Web
                     }
                     else
                     {
-                        Dept mydept = new Dept(deptNo);
-                        em.FK_Dept = mydept.No;
-                        em.Update();
+                        //调用接口更改所在的部门.
+                        WebUser.ChangeMainDept(em.No, deptNo);
                     }
-
                 }
 
                 BP.Port.Dept dept = new Dept();

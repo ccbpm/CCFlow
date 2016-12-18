@@ -158,8 +158,8 @@ namespace BP.Sys
             get
             {
                 if (this.FK_MapData == null)
-                    return new GEEntityWordFrms();
-                return new GEEntityWordFrms(this.FK_MapData);
+                    return new GEEntityExcelFrms();
+                return new GEEntityExcelFrms(this.FK_MapData);
             }
         }
         #endregion

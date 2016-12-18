@@ -38,7 +38,6 @@ namespace BP.WF.Template
         }
         #endregion 文件模版属性.
 
-
         #region 属性
         /// <summary>
         /// 是否是节点表单?
@@ -162,16 +161,15 @@ namespace BP.WF.Template
 
                 #region 基本属性.
                 map.AddTBStringPK(MapFrmExcelAttr.No, null, "表单编号", true, false, 1, 190, 20);
-                map.AddTBString(MapFrmExcelAttr.Name, null, "表单名称", true, false, 0, 500, 20);
-                map.AddTBString(MapFrmExcelAttr.PTable, null, "存储表", true, false, 0, 500, 20);
+                map.AddTBString(MapFrmExcelAttr.PTable, null, "存储表", true, false, 0, 100, 20);
+                map.AddTBString(MapFrmExcelAttr.Name, null, "表单名称", true, false, 0, 500, 20,true);
                  
                 //数据源.
                 map.AddDDLEntities(MapFrmExcelAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
                 map.AddDDLEntities(MapFrmExcelAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
 
                 //表单的运行类型.
-                map.AddDDLSysEnum(MapFrmExcelAttr.FrmType, 1, "表单类型",
-                    true, false, MapFrmExcelAttr.FrmType,
+                map.AddDDLSysEnum(MapFrmExcelAttr.FrmType, 1, "表单类型",true, false, MapFrmExcelAttr.FrmType,
                     "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
                 #endregion 基本属性.
 
@@ -207,6 +205,16 @@ namespace BP.WF.Template
                 rm.Visable = true;
                 rm.Target = "_blank";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "启动傻瓜表单设计器";
+                rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
+                rm.Visable = true;
+                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -329,7 +337,6 @@ namespace BP.WF.Template
 
                 #endregion 高级设置.
 
-
                 #region 方法 - 开发接口.
                 rm = new RefMethod();
                 rm.Title = "调用查询API"; // "设计表单";
@@ -359,6 +366,13 @@ namespace BP.WF.Template
         #endregion
 
         #region 节点表单方法.
+
+        public string DoDesignerFool()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData="+this.No+"&MyPK="+this.No+"&IsEditMapData=True";
+        }
+        
+
         public string DoEditExcelTemplate()
         {
             return SystemConfig.CCFlowWebPath + "WF/Admin/CCFormDesigner/ExcelFrmDesigner/Designer.htm?FK_MapData=" + this.No;

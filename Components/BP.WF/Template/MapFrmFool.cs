@@ -139,9 +139,11 @@ namespace BP.WF.Template
                 map.Java_SetCodeStruct("4");
 
                 #region 基本属性.
+
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 190, 20);
-                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20);
-                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20);
+                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
+                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
+
                 map.AddTBInt(MapDataAttr.TableCol, 4, "表单显示列数", true, true);
                 map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
                 map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
@@ -150,9 +152,7 @@ namespace BP.WF.Template
                 map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 //表单的运行类型.
-                map.AddDDLSysEnum(MapDataAttr.FrmType, 1, "表单类型",
-                    true, false, MapDataAttr.FrmType,
-                    "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
+                map.AddDDLSysEnum(MapDataAttr.FrmType, 1, "表单类型", true, true);
                 #endregion 基本属性.
 
                 #region 设计者信息.

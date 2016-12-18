@@ -116,7 +116,12 @@ namespace BP.En
                 /*如果包含这个字段*/
                 AtPara ap = this.atPara;
                 foreach (string key in ap.HisHT.Keys)
+                {
+                    if (ht.ContainsKey(key) == true)
+                        continue;
+
                     ht.Add(key, ap.HisHT[key]);
+                }
             }
             return BP.Tools.Json.ToJson(ht,false);
         }

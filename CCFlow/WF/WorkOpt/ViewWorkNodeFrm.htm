@@ -103,9 +103,9 @@
 
         if (Number(pageData.IframeId.split("track")[1])==0){
             $('#topContentDiv').css('display', 'block');
-            $("#track0").css("width", $(window).width() * 81 + "%");
         }
-        $('#header').bind('click',
+        $('#header')
+            .bind('click',
                 function() {
                     if ($('#topContentDiv').css('display') != 'none') {
                         $('#topContentDiv').css('display', 'none');
@@ -1467,40 +1467,40 @@
                 }
                 break;
             case "TBFullCtrl": //自动填充  先不做
-                //var tbAuto = $("#TB_" + mapExt.AttrOfOper);
-                //if (tbAuto == null)
-                //    continue;
+                var tbAuto = $("#TB_" + mapExt.AttrOfOper);
+                if (tbAuto == null)
+                    continue;
 
-                //tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                //tbAuto.attr("onkeyup",
-                //    "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + mapExt.MyPK + "\');");
-                //tbAuto.attr("AUTOCOMPLETE", "OFF");
-                //if (me.Tag != "") {
-                //    /* 处理下拉框的选择范围的问题 */
-                //    var strs = mapExt.Tag.split('$');
-                //    for (var str in strs) {
-                //        var str = strs[k];
-                //        if (str = "") {
-                //            continue;
-                //        }
+                tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
+                tbAuto.attr("onkeyup",
+                    "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + mapExt.MyPK + "\');");
+                tbAuto.attr("AUTOCOMPLETE", "OFF");
+                if (me.Tag != "") {
+                    /* 处理下拉框的选择范围的问题 */
+                    var strs = mapExt.Tag.split('$');
+                    for (var str in strs) {
+                        var str = strs[k];
+                        if (str = "") {
+                            continue;
+                        }
 
-                //        var myCtl = str.Split(':');
-                //        var ctlID = myCtl[0];
-                //        var ddlC1 = $("#DDL_" + ctlID);
-                //        if (ddlC1 == null) {
-                //            continue;
-                //        }
+                        var myCtl = str.Split(':');
+                        var ctlID = myCtl[0];
+                        var ddlC1 = $("#DDL_" + ctlID);
+                        if (ddlC1 == null) {
+                            continue;
+                        }
 
-                //        //如果文本库数值为空，就让其返回.
-                //        var txt = tbAuto.val();
-                //        if (txt == '')
-                //            continue;
+                        //如果文本库数值为空，就让其返回.
+                        var txt = tbAuto.val();
+                        if (txt == '')
+                            continue;
 
-                //        //获取要填充 ddll 的SQL.
-                //        var sql = myCtl[1].Replace("~", "'");
-                //        sql = sql.Replace("@Key", txt);
-                //    }
-                //}
+                        //获取要填充 ddll 的SQL.
+                        var sql = myCtl[1].Replace("~", "'");
+                        sql = sql.Replace("@Key", txt);
+                    }
+                }
 
                 break;
             case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/

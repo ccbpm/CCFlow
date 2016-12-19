@@ -43,9 +43,6 @@ namespace CCFlow.AppDemoLigerUI.Base
                 case "getempworks"://获取待办
                     s_responsetext = GetEmpWorksEUI();
                     break;
-                case "getendflow"://获取已完成
-                    s_responsetext = GetEndFlow();
-                    break;
                 case "getccflowlist"://获取抄送
                     s_responsetext = GetCCList();
                     break;
@@ -139,7 +136,7 @@ namespace CCFlow.AppDemoLigerUI.Base
                 if (title == "")
                     return "noform";
                 long workID = BP.WF.Dev2Interface.Node_CreateStartNodeWork(flowId, null, null, WebUser.No, title);
-                Url = "../../FrmTree/Default.aspx?WorkID=" + workID + "&FK_Flow=" + flowId + "&FK_Node=" + flowId + "01&UserNo=" + WebUser.No + "&FID=0&SID=" + WebUser.SID;
+                Url = "../../FlowFormTree/Default.aspx?WorkID=" + workID + "&FK_Flow=" + flowId + "&FK_Node=" + flowId + "01&UserNo=" + WebUser.No + "&FID=0&SID=" + WebUser.SID;
             }
             return Url;
         }
@@ -262,19 +259,6 @@ namespace CCFlow.AppDemoLigerUI.Base
         private string GetEmpWorksEUI()
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
-            return GetEasyUIJson(dt);
-        }
-        /// <summary>
-        /// 获取已完成
-        /// </summary>
-        /// <returns></returns>
-        private string GetEndFlow()
-        {
-            DataTable dt = null;
-            if (BP.Sys.SystemConfig.AppSettings["IsAddCC"] == "1")
-                dt = BP.WF.Dev2Interface.DB_FlowComplete();
-            else
-                dt = BP.WF.Dev2Interface.DB_FlowCompleteAndCC();
             return GetEasyUIJson(dt);
         }
         private string GetStartFlowEUI()

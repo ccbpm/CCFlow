@@ -360,7 +360,7 @@ function NodeProperty_Funs(item) {
         case "NodeAccepterRole": // 工作处理人. NodeFromWorkModel
             url = "../FindWorker/NodeAccepterRole.aspx?FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
-                window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "设计表单" + FK_Node, url, item.iconCls);
+                window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "接收人" + FK_Node, url, item.iconCls);
             } else {
                 WinOpen(url);
             }

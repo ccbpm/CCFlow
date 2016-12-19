@@ -334,7 +334,10 @@ namespace CCFlow.WF.CCForm
                 en.FilePath = excelFile.FullName;
                 en.RDT = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 en.LastEditer = WebUser.Name;
-                en.SetPara(FK_Node.ToString(), true);
+                
+#warning 为什么要加入它？ 2016.12.17被 zhoupeng 注释.
+               // en.SetPara(FK_Node.ToString(), true);
+
                 en.ResetDefaultVal();
 
                 //接受外部参数数据。

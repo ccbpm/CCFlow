@@ -7,7 +7,6 @@
     BP.Sys.MapData md = new BP.Sys.MapData(fk_mapdata);
     md.RepairMap();
     md.HisGEEn.CheckPhysicsTable();
-    
 %>
 
 <fieldset>
@@ -19,11 +18,11 @@
 <li>表单类型：<%=md.HisFrmType%></li>
 <li>总数据：<%=BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM  "+md.PTable+" ")%>条</li>
 
-<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataExts&PK=<%=fk_mapdata %>" >自由表单属性</a>：<%=md.HisFrmType%></li>
-<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFools&PK=<%=fk_mapdata %>" >傻瓜表单属性</a>：<%=md.HisFrmType%></li>
+<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFrees&PK=<%=fk_mapdata %>" >自由表单属性</a></li>
+<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFools&PK=<%=fk_mapdata %>" >傻瓜表单属性</a></li>
 
-<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmExcels&PK=<%=fk_mapdata %>" >Excel表单属性</a>：<%=md.HisFrmType%></li>
-<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataURLs&PK=<%=fk_mapdata %>" >嵌入式表单属性</a>：<%=md.HisFrmType%></li>
+<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmExcels&PK=<%=fk_mapdata %>" >Excel表单属性</a></li>
+<li><a href="/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataURLs&PK=<%=fk_mapdata %>" >嵌入式表单属性</a></li>
 
 </ul>
 </fieldset>

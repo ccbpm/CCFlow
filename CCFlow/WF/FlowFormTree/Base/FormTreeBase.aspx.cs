@@ -803,6 +803,9 @@ namespace CCFlow.WF.FlowFormTree
 
                         mysql = mysql.Replace("@FK_Flow", this.FK_Flow);
 
+                        //替换特殊字符.
+                        mysql =mysql.Replace("~", "'");
+
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;
                         break;

@@ -28,11 +28,8 @@
             Count();
             $("#Msg").html("");
         });
-
-        var fk_flow = GetQueryString("FK_Flow");
-        var workid = GetQueryString("WorkID");
-        var fid = GetQueryString("FID");
-
+        var str = GetQueryString("FK_Flow");
+        var WID = GetQueryString("WorkID");
         //初始化数据.
         function InitPage() {
             $("#Table1  tr:not(:first)").html("");
@@ -40,7 +37,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSList&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&m=" + Math.random(),
+                url: Handler + "?DoType=FlowBBSList&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -70,19 +67,18 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSDelete&FK_Flow=" + fk_flow + "&MyPK=" + mypk + "&m=" + Math.random(),
+                url: Handler + "?DoType=FlowBBSDelete&FK_Flow=" + GetQueryString("FK_Flow") + "&MyPK=" + mypk + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
-
                     alert(data);
-                    $("#Table1  tr[id='" + mypk + "']").remove();
-                    Count();
+                    window.location.href = window.location.href;
                 }
             });
+            Count();
         }
         var wait = 0;
         function time(o) {
@@ -105,7 +101,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSCount&FK_Flow=" + fk_flow + "&WorkID=" + workid,
+                url: Handler + "?DoType=FlowBBSCount&FK_Flow=" + GetQueryString("FK_Flow"),
                 dataType: 'html',
                 success: function (data) {
                     document.getElementById("TB_count").innerText = data;
@@ -113,12 +109,12 @@
 
             });
         }
-        function Check(empName, fk_flow) {
+        function Check(empName, str) {
             $("#Table1  tr:not(:first)").html("");
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSCheck&FK_Flow=" + fk_flow + "&UserName=" + encodeURIComponent(empName) + "&WorkID=" + workid,
+                url: Handler + "?DoType=FlowBBSCheck&FK_Flow=" + str + "&UserName=" + empName,
                 dataType: 'html',
                 success: function (data) {
 
@@ -163,7 +159,7 @@
                 data: frmData,
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSSave&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
+                url: Handler + "?DoType=FlowBBSSave&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -219,8 +215,8 @@
                     leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
                     leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
                     leftInfo += "所属部门:&nbsp&nbsp" + data;
-                    var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + fk_flow + "');\">只看该用户</a> ";
-                    var newRow = "<tr id='" + mypk + "'><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</th></tr>";
+                    var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + str + "');\">只看该用户</a> ";
+                    var newRow = "<tr ><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</th></tr>";
                     $("#Table1 tr:last").after(newRow);
                     Count();
                 }
@@ -246,7 +242,7 @@
                     leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
                     leftInfo += "所属部门:&nbsp&nbsp" + data;
                     var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:InitPage();\">查看全部</a> ";
-                    var Row = "<tr id='" + mypk + "'><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th class=BigDoc colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' /> " + delLink + "</th></tr>";
+                    var Row = "<tr><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th class=BigDoc colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' /> " + delLink + "</th></tr>";
                     $("#Table1 tr:last").after(Row);
                     Count();
                 }

@@ -207,9 +207,9 @@
                 var height = $(parent.document.getElementById('MainFrames')).height() - 110;
                 $('#topContentDiv').height(height);
             }
-            //$(window).resize(function () {
-            //    $("#divCCForm").height($(window).height() - 150 + "px");
-            // });
+            $(window).resize(function() {
+                $('#CCForm').height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color","#fff");
+            });
             function movetb() {
                 var move;
                 $("#nav").css("top", top);
@@ -229,7 +229,12 @@
             $('#btnCloseMsg').bind('click', function () {
                 $('.Message').hide();
             });
-          })
+            if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
+            (navigator.userAgent.indexOf('Trident') >= 0)) {
+                $('body').css('overflow-x', 'hidden');
+            }
+            
+        })
     </script>
 </head>
 <body>
@@ -311,10 +316,10 @@
     </div>
     <!--杨玉慧加 暂时解决POP窗不好用的问题-->
     <div class="modal fade" id="returnPopValModal" data-backdrop="static">
-        <div class="modal-dialog" style="max-width: 800px;">
+        <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 0px;">
                 <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none; border: none; float: right;">×</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color: white; opacity: 1;">×</button>
                     <h4 class="modal-title">选择提出人</h4>
                 </div>
                 <div class="modal-body">

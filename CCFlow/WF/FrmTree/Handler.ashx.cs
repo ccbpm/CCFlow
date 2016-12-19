@@ -442,6 +442,7 @@ namespace CCFlow.WF.FrmTree
                     if (cond.IsPassed == false)
                         continue;
                     #endregion 过滤不能到达的节点.
+
                     tempToNodeID = mynd.NodeID;
                 }
             }
@@ -805,11 +806,12 @@ namespace CCFlow.WF.FrmTree
                         string mysql = frmNode.FrmEnableExp.Clone() as string;
                         mysql = mysql.Replace("@OID", this.WorkID.ToString());
                         mysql = mysql.Replace("@WorkID", this.WorkID.ToString());
-
                         mysql = mysql.Replace("@NodeID", this.FK_Node.ToString());
                         mysql = mysql.Replace("@FK_Node", this.FK_Node.ToString());
-
                         mysql = mysql.Replace("@FK_Flow", this.FK_Flow);
+
+                        //替换特殊字符.
+                        mysql = mysql.Replace("~", "'");
 
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;

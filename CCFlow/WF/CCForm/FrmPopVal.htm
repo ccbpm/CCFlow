@@ -28,10 +28,9 @@
     <script type="text/javascript" src="../Scripts/config.js"></script>
 
     <style type="text/css">
-        * {
-            list-style: none;
-        }
-
+    * {
+        list-style: none;
+    }
         body .table tbody tr td {
             line-height: 18px;
         }
@@ -86,6 +85,7 @@
             display: none;
         }*/
         #test {
+            
         }
 
         .form_tree {
@@ -102,19 +102,16 @@
                 border-radius: 0px 15px 15px 0px !important;
                 /*broder:#2884fa 1px solid;*/
             }
-
-        #groupTable #dt ul {
-            /*background: #f4f9ff;*/
-            font-weight: normal;
-            background: #d4e6fe;
-        }
-
+    #groupTable #dt ul {
+        /*background: #f4f9ff;*/
+        font-weight: normal;
+        background: #d4e6fe;
+    }
         #groupTable #dt > li {
             /*background: #d4e6fe;*/
             font-weight: bold;
             background: #f4f9ff;
         }
-
         #groupTable {
             display: none;
             height: 90%;
@@ -125,15 +122,12 @@
             float: left;
             padding-right: 25px;
         }
-
-            .searchGroup select, .searchGroup input[type=text] {
-                width: auto;
-            }
-
+        .searchGroup select, .searchGroup input[type=text] {
+            width:auto;
+        }
             .searchGroup label {
-                padding-right: 5px;
+            padding-right:5px;
             }
-
         #searchForm {
             float: left;
         }
@@ -239,8 +233,8 @@
             //设置表格的高度  和滚动条
             var portletTitlePadding = parseInt($('#blackDiv .portlet-title').css('padding-top').substr(0, $('#blackDiv .portlet-title').css('padding-top').length - 2)) + parseInt($('#blackDiv .portlet-title').css('padding-bottom').substr(0, $('#blackDiv .portlet-title').css('padding-bottom').length - 2));
             var pagetableHeight = bodyHeight - $('#blackDiv .portlet-title').height() - $('#blackDiv #flowListDiv .pagination-panel').height() - portletTitlePadding - 5 - 100;
-
-            if ($('#freeBarDiv:hidden').length == 0 && $('#freeBarDiv').length == 1) {
+            
+            if ($('#freeBarDiv:hidden').length == 0 && $('#freeBarDiv').length==1) {
                 pagetableHeight = pagetableHeight - $('#freeBarDiv').height();
             }
             $('#flowListDiv .tabPdiv').height(pagetableHeight);
@@ -273,14 +267,14 @@
                 type: 'post',
                 async: true,
                 data: formData2,
-                url: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+                url: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&"+searchData,
                 dataType: 'html',
                 success: function (data) {
                     if (data != null) {
                         var setDataArr = null;
                         //SelfUrl   自定义URL
-                        if (data.indexOf('@SelfUrl') == 0) {
-
+                        if (data.indexOf('@SelfUrl')==0) {
+                           
                             if (parent.window.jsonStr != undefined && parent.window.jsonStr.trim() != '') {
                                 var workNodeData = JSON.parse(parent.window.jsonStr);
                                 workNodeData.MainTable;
@@ -289,7 +283,7 @@
                                 if (params != null && params.length > 0) {
                                     $.each(params, function (i, param) {
                                         if (param.indexOf('@') == 0) {//是需要替换的参数
-                                            paramArr = param.split('=');
+                                            paramArr = param.split('='); 
                                             if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
                                                 if (paramArr[1].indexOf('@WebUser.') == 0) {
                                                     params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr('@WebUser.'.length)];
@@ -332,7 +326,7 @@
                         if (WorkM == "Group") {
                             $('#groupTable').css('display', 'block');
                             window.fkName = '';
-                            if (dteArr != undefined && dteArr.length > 0) {
+                            if (dteArr !=undefined &&  dteArr.length > 0) {
                                 for (var pro in dteArr[0]) {
                                     if (pro.toLowerCase() != "no" && pro.toLowerCase() != "name") {
                                         fkName = pro;
@@ -347,12 +341,12 @@
                                     for (var k = 0; k < dteArr.length; k++) {
                                         if (obje.No == dteArr[k][fkName]) {
                                             ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
-                                        }
+                                         }
                                     }
                                     ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" + ultde + "</ul></li>";
                                     ultde = "";
                                 });
-                            } else {//选择模式是单选
+                               } else {//选择模式是单选
                                 $.each(dtgArr, function (i, obje) {
                                     $.each(dteArr, function (k, obj) {
                                         if (obje.No == obj[fkName]) {
@@ -546,8 +540,8 @@
         function initTreeData(workModel) {
             //$('#tree').css('display', 'block');
             $('#orgjstree').css('display', 'block');
-
-            var url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt');
+           
+            var url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') ;
 
             //初始化Tree
             var jstreeOption = {
@@ -601,7 +595,7 @@
                                             itemArr.push({
                                                 "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
                                                     //"opened": false, "selected": false
-                                                },
+                                                }, 
                                             });
                                         });
 
@@ -609,7 +603,7 @@
                                             itemArr.push({
                                                 "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file", "data": rootNode, "state": {
                                                     //"opened": false, "selected": false
-                                                },
+                                                }, 
                                             });
                                         });
                                         cb(itemArr);
@@ -646,7 +640,7 @@
 
             jstreeOption.plugins = plugins;
 
-
+            
 
 
             $('#orgjstree').jstree(jstreeOption).on('changed.jstree', function (node, cb) {
@@ -669,7 +663,7 @@
                 PageIndex: 1,
                 DivId: 'flowListDiv',
                 countUrl: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
-                listUrl: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+                listUrl: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData ,
                 RenderOverFun: function () {
                     //为CHECKBOX radio绑定事件
                     $('#flowListDiv div table tbody .ck_tbody').bind('change', checkBoxChange);
@@ -681,19 +675,13 @@
 
             dtTable();
         }
-        function tab() {
-            var event = window.event || arguments.callee.caller.arguments[0];
-            if (event.keyCode == "13") {
-                document.getElementById("btnSearch").click();
-                return false;
-            }
-        }
+
         //初始化多个搜索条件
         function initMoreConSearch(conditionStr) {
-            var conditions = conditionStr.split('$');
-            var conHtml = '';
-            //先加上KEY
-            conHtml += "<div class='searchGroup'><label>" + initPopValData.Hashtable[0].PopValSearchTip + "</label>" + "<input name='Key' id='Key' type='text' onkeydown='tab()'/></div>";
+             var conditions = conditionStr.split('$');
+             var conHtml = '';
+            //先加上KEY 
+             conHtml += "<div class='searchGroup'><label>" + initPopValData.Hashtable[0].PopValSearchTip + "</label>"+"<input name='Key' id='Key' type='text'/></div>";
             $.each(conditions, function (i, con) {
                 if (con != undefined && con.trim() != '') {
                     var paramList = con.split('#');
@@ -714,7 +702,7 @@
                             defVal = defVal.replace('<br/>', '');
                             defVal = defVal.replace('@Now', "(new Date())");
                             defVal = new Date(eval(defVal));
-                            defVal = defVal.FormateDate("yyyy-MM-dd HH:mm");
+                            defVal = defVal.FormateDate("yyyy-MM-dd HH:mm:ss");
                         }
                         conHtml += '<input value="' + defVal + '"  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
                     }
@@ -728,7 +716,7 @@
         function checkBoxChange(obj) {
             var ck = obj.target;
             var trData = $(ck).parent().parent().data().data;
-
+            
             if (obj.target.checked) {
                 selectedTrArr.push(trData);
             } else {
@@ -802,8 +790,8 @@
             var selectedIdArr = instance.get_selected();
             var selectedNodes = [];
             var nameArrs = [];
-            var noArr = [];
-            var nameArr = [];
+            var noArr= [];
+            var nameArr= [];
             $.each(selectedIdArr, function (i, selectedId) {
                 selectedNodes.push(instance.get_node(selectedId));
             });
@@ -816,9 +804,9 @@
                     }
                 } else {
                     //if (selectedNodes[i].children.length == 0) {
-                    nameArrs.push(selectedNode.data);
-                    noArr.push(selectedNode.id);
-                    nameArr.push(selectedNode.text);
+                        nameArrs.push(selectedNode.data);
+                        noArr.push(selectedNode.id);
+                        nameArr.push(selectedNode.text);
                     //}
                 }
             });
@@ -859,7 +847,7 @@
             var selectedIdArrm = [];
             var selectedNodesm = [];
             var nameArr = [];
-
+            
             for (var i = 0; i < checked.parent(".lim").length; i++) {
                 selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
                 selectedNodesm.push($(checked.parent(".lim")[i]).data().data.Name);
@@ -882,89 +870,89 @@
 </head>
 <body>
     <div id="selectedlist" style="display:none;"></div>
-    <!--无分页显示table-->
-    <div id="poptablew" style="display: none;">
-        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
-            <div class="portlet-body " id="" style="overflow: auto;">
-                <div class="tab-content" style="margin: 4px 0px;">
-                    <div class="tab-pane active portlet_tab flowLists">
-                        <div id="" style="min-height: 520px; overflow: auto;">
-                            <table class="table wupop" data-data="true">
+<!--无分页显示table-->
+<div id="poptablew" style="display: none;">
+    <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
+        <div class="portlet-body " id="" style="overflow: auto;">
+            <div class="tab-content" style="margin: 4px 0px;">
+                <div class="tab-pane active portlet_tab flowLists">
+                    <div id="" style="min-height: 520px; overflow: auto;">
+                        <table class="table wupop" data-data="true">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="loadDate" style="text-align: center;">
+                        <img src="../Scripts/bootstrap/fonts/loading.gif" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--分页显示table-->
+<div id="main" style="display: none;">
+    <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
+        <!-- BEGIN CHART PORTLET-->
+        <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px; padding: 12px 0 0 20px;">
+            <div>
+                <form id="searchForm">
+                    <div id="searchDiv">
+                    </div>
+                </form>
+                <div class="searchBtnDiv">
+                    <button class="Btn" id="btnSearch">搜索</button>
+                </div>
+
+                <div style="font-size: 20px; float: left; width: 100%; display: none;">
+                    已选择列表：
+                    <span id="selectedlists" style="word-break: break-all;"></span>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body " id="merDiv">
+            <div class="tab-content" style="margin: 4px 0px;">
+                <div class="tab-pane active portlet_tab flowLists">
+                    <div id="flowListDiv">
+                        <div class="tabPdiv">
+                            <table class="tble customthr customHover wupop" data-data="true">
                                 <thead></thead>
                                 <tbody></tbody>
                             </table>
                         </div>
                         <div class="loadDate" style="text-align: center;">
-                            <img src="../Scripts/bootstrap/fonts/loading.gif" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--分页显示table-->
-    <div id="main" style="display: none;">
-        <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
-            <!-- BEGIN CHART PORTLET-->
-            <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px; padding: 12px 0 0 20px;">
-                <div>
-                    <form id="searchForm" action="" onkeydown="if(event.keyCode==13){return false;}">
-                        <div id="searchDiv">
-                        </div>
-                    </form>
-                    <div class="searchBtnDiv">
-                        <button class="Btn" id="btnSearch">搜索</button>
-                    </div>
-
-                    <div style="font-size: 20px; float: left; width: 100%; display: none;">
-                        已选择列表：
-                        <span id="selectedlists" style="word-break: break-all;"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="portlet-body " id="merDiv">
-                <div class="tab-content" style="margin: 4px 0px;">
-                    <div class="tab-pane active portlet_tab flowLists">
-                        <div id="flowListDiv">
-                            <div class="tabPdiv">
-                                <table class="tble customthr customHover wupop" data-data="true">
-                                    <thead></thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <div class="loadDate" style="text-align: center;">
                                 <img src="../Scripts/bootstrap/fonts/loading.gif" />
-                            </div>
-                            <div class="pagination-panel">
-                                页码 <button class="btn btnTxt  btn-sm default prev" title="上一页"><i class="fa fa-angle-left"></i></button>
-                                <button class="btn btnTxt btn-sm default next" title="下一页">
-                                    <i class="fa fa-angle-right"></i>
-                                </button>
-                                <span class="seperator">|</span>
-                                <button class="btn btnTxt btn-sm default prev" title="转到">转到</button>
+                        </div>
+                        <div class="pagination-panel">
+                            页码 <button class="btn btnTxt  btn-sm default prev" title="上一页"><i class="fa fa-angle-left"></i></button>
+                            <button class="btn btnTxt btn-sm default next" title="下一页">
+                                <i class="fa fa-angle-right"></i>
+                            </button>
+                            <span class="seperator">|</span>
+                            <button class="btn btnTxt btn-sm default prev" title="转到">转到</button>
                                 <input type="text" class="pagination-panel-input form-control input-mini input-inline input-sm" maxlenght="5" style="text-align: center; margin: 0 5px;" />
-                                页<span class="seperator">|</span>
-                                <span class="pagination-panel-total">20</span>
-                                <label>
-                                    页
-                                    <span class="seperator">|</span>每页
-                                    <select onchange="" style="width: auto !important;" class="form-control input-xsmall input-sm input-inline">
-                                        <option value="10">10</option>
-                                        <option value="20">20</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                        <option value="150">150</option>
-                                        <option value="-1">全部</option>
-                                    </select> 条
-                                </label>
-                            </div>
+                            页<span class="seperator">|</span>
+                            <span class="pagination-panel-total">20</span>
+                            <label>
+                                页
+                                <span class="seperator">|</span>每页
+                                <select onchange="" style="width: auto !important;" class="form-control input-xsmall input-sm input-inline">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                    <option value="-1">全部</option>
+                                </select> 条
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--树tree-->
+</div>
+<!--树tree-->
     <!--<div id="tree" style="display: none;">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding:0px;margin:0px;overflow:auto;">
             <div class="portlet-body " id="" style="overflow:auto;">
@@ -984,10 +972,10 @@
         </div>
     </div>-->
     <div><label id="treeVal"></label></div>
-    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default">
+    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" >
     </div>
     <!--分组显示table-->
-    <div id="groupTable">
+    <div id="groupTable" >
         <ul id="dt" data-data="true"></ul>
     </div>
 
@@ -995,7 +983,7 @@
     <!--为自由表单和从表加-->
     <div id="freeBarDiv">
         <input type="button" value="取消" id="BtnCancel" />
-        <input type="button" value="确定" id="BtnOk" />
+        <input type="button" value="确定" id="BtnOk"/>
     </div>
 </body>
 </html>

@@ -1,6 +1,7 @@
-﻿//var DefuaultUrl = "Base/FormTreeBase.aspx";
+﻿var DefuaultUrl = "Base/FormTreeBase.aspx";
 
-var DefuaultUrl = Handler + "?1=1" + urlExt;
+
+
 
 ccflowFormTree = {}
 Application = {}

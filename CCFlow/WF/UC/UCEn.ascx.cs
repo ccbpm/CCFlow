@@ -772,10 +772,16 @@ namespace CCFlow.WF.UC
                             this.AddTR(" ID='" + currGF.Idx + "_" + rowIdx + "' ");
                             this.Add("<TD colspan=" + this.mapData.PTable + " ID='TD" + dtl.No + "' height='50px' width='100%' style='align:left'>");
 
+                            string fk_node = this.Request.QueryString["FK_Node"];
+                          //  string fid = this.Request.QueryString["FID"];
                             if (en.EnMap.Attrs.Contains("FID"))
-                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+                            {
+                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&FID=" + this.HisEn.GetValStringByKey("FID") + "&IsWap=0&FK_Node=" + fk_node;
+                            }
                             else
-                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&FID=0&IsWap=0&FK_Node=" + dtl.FK_MapData.Replace("ND", "");
+                            {
+                                src = CCFlowAppPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&FID=0&IsWap=0&FK_Node=" + fk_node;
+                            }
 
                             if (this.IsReadonly || dtl.IsReadonly)
                             {

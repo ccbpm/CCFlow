@@ -2185,6 +2185,7 @@ namespace BP.Sys
             //检查特殊UIBindkey丢失的问题.
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, this.No);
+
             foreach (MapAttr item in attrs)
             {
                 if (item.LGType == FieldTypeS.Enum || item.LGType == FieldTypeS.FK)

@@ -2045,6 +2045,8 @@ namespace BP.WF
                                     sql = sql.Replace("@WebUser.FK_Dept", "'ss'");
                                     sql = sql.Replace("@WebUser.FK_DeptName", "'ss'");
 
+                                    sql = sql.Replace("''", "'"); //出现双引号的问题.
+
                                     if (sql.Contains("@"))
                                         throw new Exception("您编写的sql变量填写不正确，实际执行中，没有被完全替换下来" + sql);
 

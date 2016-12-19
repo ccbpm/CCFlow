@@ -189,11 +189,10 @@ namespace CCFlow.WF.MapDef.Rpt
 
         private void Save()
         {
-           
             MapAttrs mattrs = new MapAttrs(this.FK_MapData);
-            mattrs.Delete(MapAttrAttr.FK_MapData, this.RptNo);
+            MapAttrs mrattrs = new MapAttrs(this.RptNo);
+            MapAttr tattr = null;
 
-            MapData md = new MapData(this.FK_MapData);
             foreach (MapAttr attr in mattrs)
             {
                 CheckBox cb = this.Pub2.GetCBByID("CB_" + attr.KeyOfEn);
@@ -217,7 +216,21 @@ namespace CCFlow.WF.MapDef.Rpt
                     attr.UIContralType = BP.En.UIContralType.DDL;
                 }
 
+                tattr = mrattrs.GetEntityByKey(MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
+
+                if (tattr != null)
+                {
+                    attr.Idx = tattr.Idx;
+                    tattr.Delete();
+                    mrattrs.RemoveEn(tattr);
+                }
+
                 attr.Insert();
+            }
+
+            foreach(MapAttr attr in mrattrs)
+            {
+                attr.Delete();
             }
         }
     }

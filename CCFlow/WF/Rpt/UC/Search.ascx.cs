@@ -302,6 +302,30 @@ namespace CCFlow.WF.Rpt
             }
             return url;
         }
+
+        /// <summary>
+        /// 排序Attrs集合，按照MapAttr.Idx排序
+        /// added by liuxc,2016-12-19
+        /// </summary>
+        /// <param name="attrs">Attrs集合</param>
+        /// <returns></returns>
+        private Attrs SortAttrs(Attrs attrs)
+        {
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.FK_MapData, this.RptNo, MapAttrAttr.Idx);
+            Attrs nattrs = new Attrs();
+            Attr attr = null;
+
+            foreach(MapAttr mattr in mattrs)
+            {
+                attr = attrs.GetAttrByKey(mattr.KeyOfEn);
+
+                nattrs.Add(attr);
+            }
+
+            return nattrs;
+        }
+
         /// <summary>
         /// 绑定实体集合.
         /// </summary>
@@ -316,9 +340,7 @@ namespace CCFlow.WF.Rpt
 
             this.UCSys1.Controls.Clear();
             Entity myen = ens.GetNewEntity;
-            string pk = myen.PK;
-            string clName = myen.ToString();
-            Attrs attrs = myen.EnMap.Attrs;
+            Attrs attrs = SortAttrs(myen.EnMap.Attrs);  //edited by liuxc,2016-12-19,修改字段排序
             #endregion 定义变量.
 
             this.UCSys1.AddTable("class='Table' cellspacing='0' cellpadding='0' border='0' style='width:100%;line-height:22px'");
@@ -326,12 +348,12 @@ namespace CCFlow.WF.Rpt
             #region  生成表格标题
             this.UCSys1.AddTR();
             this.UCSys1.AddTDGroupTitle("style='text-align:center;width:40px;'", "序");
-            this.UCSys1.AddTDGroupTitle("标题");
-
+            //this.UCSys1.AddTDGroupTitle("标题");
+            
             foreach (Attr attr in attrs)
             {
                 if (attr.IsRefAttr
-                    || attr.Key == "Title"
+                    //|| attr.Key == "Title"
                     || attr.Key == "MyNum")
                     continue;
 
@@ -356,12 +378,18 @@ namespace CCFlow.WF.Rpt
                 idx++;
                 this.UCSys1.AddTR();
                 this.UCSys1.AddTDIdx(idx);
-                this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
+                //this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
 
                 foreach (Attr attr in attrs)
                 {
-                    if (attr.IsRefAttr || attr.Key == "MyNum" || attr.Key == "Title")
+                    if (attr.IsRefAttr || attr.Key == "MyNum")  // || attr.Key == "Title"
                         continue;
+
+                    if(attr.Key == "Title")
+                    {
+                        this.UCSys1.AddTD("<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?FK_Flow=" + this.currMapRpt.FK_Flow + "&WorkID=" + en.GetValStrByKey("OID") + "','tdr');\" >" + en.GetValByKey("Title") + "</a>");
+                        continue;
+                    }
 
                     if (attr.UIContralType == UIContralType.DDL)
                     {
@@ -470,14 +498,14 @@ namespace CCFlow.WF.Rpt
             if (IsHJ)
             {
                 this.UCSys1.Add("<TR class='Sum' >");
-                this.UCSys1.AddTD();
+                //this.UCSys1.AddTD();
                 this.UCSys1.AddTD("合计");
                 foreach (Attr attr in attrs)
                 {
                     //if (attr.Key == "MyNum")
                     //    continue;
                     if (attr.MyFieldType == FieldType.RefText
-                    || attr.Key == "Title"
+                    //|| attr.Key == "Title"
                     || attr.Key == "MyNum")
                         continue;
 
@@ -538,6 +566,7 @@ namespace CCFlow.WF.Rpt
                 {
                     case NamesOfBtn.Export: //数据导出.
                     case NamesOfBtn.Excel: //数据导出
+                        #region 数据导出
                         MapData md = new MapData(this.RptNo);
                         Entities ens = md.HisEns;
                         Entity en = ens.GetNewEntity;
@@ -612,8 +641,10 @@ namespace CCFlow.WF.Rpt
                         }
 
                         this.SetDGData();
+                        #endregion
                         return;
                     case NamesOfBtn.ExportByTemplate:   //导出数据到模板
+                        #region 数据导出至Excel模板
                         MapData mdMyRpt = new MapData(this.RptNo);
                         string fk_mapdata = "ND" + int.Parse(FK_Flow) + "Rpt";
                         string tmpFile = null;
@@ -622,6 +653,7 @@ namespace CCFlow.WF.Rpt
                         DirectoryInfo infoTmpDir = new DirectoryInfo(tmpDir);
                         FileInfo[] tmpFiles = null;
                         RptExportTemplate tmp = null;
+                        MapData mdRpt = new MapData(fk_mapdata);
 
                         if (!infoTmpDir.Exists)
                             infoTmpDir.Create();
@@ -641,9 +673,9 @@ namespace CCFlow.WF.Rpt
                             return;
                         }
 
-                        md = new MapData(fk_mapdata);
-                        ens = md.HisEns;
+                        ens = mdMyRpt.HisEns;
                         en = ens.GetNewEntity;
+                        ens = mdRpt.HisEns; //added by liuxc,2016-12-19,变更为Rpt集合类，这样查询的时候，就可以用MyRpt的查询条件，查询出Rpt实体集合
                         qo = this.ToolBar1.GetnQueryObject(ens, en);
                         qo.DoQuery();
 
@@ -969,8 +1001,9 @@ namespace CCFlow.WF.Rpt
                                 using (MemoryStream ms = new MemoryStream())
                                 {
                                     wb.Write(ms);
+                                    byte[] bs = ms.GetBuffer(); //2016-12-17，直接使用ms会报错，所以先将流内容存储出来再使用
 
-                                    Response.AddHeader("Content-Length", ms.Length.ToString());
+                                    Response.AddHeader("Content-Length", bs.Length.ToString());
                                     Response.ContentType = "application/octet-stream";
                                     Response.AddHeader("Content-Disposition",
                                                        "attachment; filename=" +
@@ -978,7 +1011,7 @@ namespace CCFlow.WF.Rpt
                                                            mdMyRpt.Name + "_" +
                                                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
                                                            Path.GetExtension(tmpFile), Encoding.UTF8));
-                                    Response.BinaryWrite(ms.ToArray());
+                                    Response.BinaryWrite(bs);
                                     wb = null;
                                 }
                             }
@@ -989,6 +1022,7 @@ namespace CCFlow.WF.Rpt
                         }
 
                         this.SetDGData();
+                        #endregion
                         return;
                     default:
                         this.PageIdx = 1;

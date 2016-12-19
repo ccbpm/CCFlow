@@ -568,7 +568,6 @@ namespace BP.Sys
                 this.SetPara(FrmAttachmentAttr.IsWoEnableMarks, value);
             }
         }
-
         /// <summary>
         /// 是否插入风险点
         /// </summary>
@@ -1571,7 +1570,6 @@ namespace BP.Sys
         /// <returns></returns>
         public static MapData ImpMapData(string fk_mapdata, DataSet ds, bool isSetReadonly)
         {
-
             #region 检查导入的数据是否完整.
             string errMsg = "";
             //if (ds.Tables[0].TableName != "Sys_MapData")
@@ -1636,7 +1634,9 @@ namespace BP.Sys
             }
 
             string timeKey = DateTime.Now.ToString("MMddHHmmss");
+
             // string timeKey = fk_mapdata;
+
             #region 表单元素
             foreach (DataTable dt in ds.Tables)
             {

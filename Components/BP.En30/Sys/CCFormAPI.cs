@@ -893,6 +893,16 @@ namespace BP.Sys
 
         }
         /// <summary>
+        /// 导入表单API
+        /// </summary>
+        /// <param name="toFrmID">要导入的表单ID</param>
+        /// <param name="fromds">数据源</param>
+        /// <param name="isSetReadonly">是否把空间设置只读？</param>
+        public static void ImpFrmTemplate(string toFrmID,DataSet fromds, bool isSetReadonly)
+        {
+            MapData.ImpMapData(toFrmID, fromds, isSetReadonly);
+        }
+        /// <summary>
         /// 获得表单模版dataSet格式.
         /// </summary>
         /// <param name="fk_mapdata">表单ID</param>

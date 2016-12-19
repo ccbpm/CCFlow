@@ -173,6 +173,18 @@ namespace BP.WF.Template
                 #region 方法 - 基本功能.
 
                 RefMethod rm = new RefMethod();
+
+                rm = new RefMethod();
+                rm.Title = "启动傻瓜表单设计器";
+                rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
+                rm.Visable = true;
+                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
@@ -306,6 +318,16 @@ namespace BP.WF.Template
         #endregion
 
         #region 节点表单方法.
+
+        /// <summary>
+        /// 傻瓜表单设计器
+        /// </summary>
+        /// <returns></returns>
+        public string DoDesignerFool()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
+        }
+
         /// <summary>
         /// 节点表单组件
         /// </summary>

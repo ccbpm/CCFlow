@@ -5681,9 +5681,9 @@ namespace BP.WF
 
             //是否要写入待办.
             if ( fromNode.CCWriteTo == CCWriteTo.CCList )
-            list.InEmpWorks =  true;    //added by liuxc,2015.7.6
+                list.InEmpWorks =  false;    //added by liuxc,2015.7.6
             else
-                list.InEmpWorks = false;    //added by liuxc,2015.7.6
+                list.InEmpWorks = true;    //added by liuxc,2015.7.6
 
             //写入待办和写入待办与抄送列表,状态不同
             if (fromNode.CCWriteTo == CCWriteTo.All || fromNode.CCWriteTo == CCWriteTo.Todolist)
@@ -5789,9 +5789,9 @@ namespace BP.WF
 
                     //是否要写入待办.
                     if (nd.CCWriteTo == CCWriteTo.CCList)
-                        list.InEmpWorks = true;    //added by liuxc,2015.7.6
-                    else
                         list.InEmpWorks = false;    //added by liuxc,2015.7.6
+                    else
+                        list.InEmpWorks = true;    //added by liuxc,2015.7.6
 
                     //写入待办和写入待办与抄送列表,状态不同
                     if (nd.CCWriteTo == CCWriteTo.All || nd.CCWriteTo == CCWriteTo.Todolist)
@@ -5862,9 +5862,9 @@ namespace BP.WF
 
                         //是否要写入待办.
                         if (nd.CCWriteTo == CCWriteTo.CCList)
-                            list.InEmpWorks = true;    //added by liuxc,2015.7.6
-                        else
                             list.InEmpWorks = false;    //added by liuxc,2015.7.6
+                        else
+                            list.InEmpWorks = true;    //added by liuxc,2015.7.6
 
                         //写入待办和写入待办与抄送列表,状态不同
                         if (nd.CCWriteTo == CCWriteTo.All || nd.CCWriteTo == CCWriteTo.Todolist)
@@ -5938,9 +5938,9 @@ namespace BP.WF
 
                         //是否要写入待办.
                         if (nd.CCWriteTo == CCWriteTo.CCList)
-                            list.InEmpWorks = true;    //added by liuxc,2015.7.6
-                        else
                             list.InEmpWorks = false;    //added by liuxc,2015.7.6
+                        else
+                            list.InEmpWorks = true;    //added by liuxc,2015.7.6
 
                         //写入待办和写入待办与抄送列表,状态不同
                         if (nd.CCWriteTo == CCWriteTo.All || nd.CCWriteTo == CCWriteTo.Todolist)
@@ -6018,9 +6018,9 @@ namespace BP.WF
 
                         //是否要写入待办.
                         if (nd.CCWriteTo == CCWriteTo.CCList)
-                            list.InEmpWorks = true;    //added by liuxc,2015.7.6
-                        else
                             list.InEmpWorks = false;    //added by liuxc,2015.7.6
+                        else
+                            list.InEmpWorks = true;    //added by liuxc,2015.7.6
 
                         //写入待办和写入待办与抄送列表,状态不同
                         if (nd.CCWriteTo == CCWriteTo.All || nd.CCWriteTo == CCWriteTo.Todolist)

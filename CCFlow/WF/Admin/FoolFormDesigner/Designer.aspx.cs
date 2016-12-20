@@ -99,7 +99,16 @@ namespace CCFlow.WF.MapDef
             {
                 if (this.FK_Flow == null || this.FK_Flow=="")
                     return 0;
-                return int.Parse(this.FK_MapData.Replace("ND", ""));
+                try
+                {
+                    if (this.FK_MapData.Contains("ND") == false)
+                        return 0;
+                    return int.Parse(this.FK_MapData.Replace("ND", ""));
+                }
+                catch
+                {
+                    return 0;
+                }
             }
         }
         #endregion 属性.

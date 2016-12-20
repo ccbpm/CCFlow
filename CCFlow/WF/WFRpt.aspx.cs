@@ -20,6 +20,10 @@ namespace CCFlow.WF
             string workid = this.Request.QueryString["WorkID"];
             string fid = this.Request.QueryString["FID"];
 
+            //在途链接 默认显示轨迹图tab页面   by tianbaoyan 2016-11-28
+            string redirectURL = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=";
+            //流程日志  ./WorkOpt/OneWork/Track.aspx?FK_Flow=
+
             if (this.Request.QueryString["DoType"] == "CC")
             {
                 if (this.Request.QueryString["CCSta"] != "0")
@@ -33,7 +37,7 @@ namespace CCFlow.WF
                         cc.Update();
                     }
                 }
-                this.Response.Redirect("./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
+                this.Response.Redirect(redirectURL +BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
                 return;
             }
 
@@ -43,7 +47,7 @@ namespace CCFlow.WF
             if (this.Request.QueryString["ViewWork"] != null)
                 return;
 
-            this.Response.Redirect("./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
+            this.Response.Redirect(redirectURL + BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
             return;
         }
     }

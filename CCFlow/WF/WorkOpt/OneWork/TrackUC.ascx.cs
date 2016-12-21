@@ -388,8 +388,8 @@ namespace CCFlow.WF.WorkOpt.OneWork
 
                 ActionType at = (ActionType)int.Parse(dr[TrackAttr.ActionType].ToString());
 
-                //如果是协作发送，就不输出他. edit 2016.02.20 .
-                if (at == ActionType.TeampUp)
+                //如果是协作发送，就不输出他. edit 2016.02.20 .BBS也不显示，added by liuxc,2016-12-15
+                if (at == ActionType.TeampUp || at == ActionType.FlowBBS)
                     continue;
 
                 // 记录审核节点。

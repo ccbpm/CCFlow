@@ -302,7 +302,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                         msg = OPUnHungUp(); //解除挂起
                         break;
                     case "OP_ComeBack":
-                        msg = OPComeBack(); 
+                        msg = OPComeBack();
                         break;
                     case "OP_Takeback": /*取回审批.*/
                         break;
@@ -600,8 +600,9 @@ namespace CCFlow.WF.WorkOpt.OneWork
         public string FlowBBSList()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
+            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
+            ps.Add("WorkID", this.WorkID);
 
             //转化成json
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
@@ -632,8 +633,9 @@ namespace CCFlow.WF.WorkOpt.OneWork
         public string FlowBBSCheck()
         {
             Paras pss = new Paras();
-            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND  EMPFROMT='" + this.UserName + "'";
+            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID AND  EMPFROMT='" + this.UserName + "'";
             pss.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
+            pss.Add("WorkID", this.WorkID);
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(pss));
 
         }
@@ -677,8 +679,9 @@ namespace CCFlow.WF.WorkOpt.OneWork
         {
 
             Paras ps = new Paras();
-            ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
+            ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
+            ps.Add("WorkID", this.WorkID);
             string count = BP.DA.DBAccess.RunSQLReturnValInt(ps).ToString();
             return count;
         }

@@ -196,10 +196,18 @@ namespace CCFlow.WF.MapDef.Rpt
             foreach (MapAttr attr in mattrs)
             {
                 CheckBox cb = this.Pub2.GetCBByID("CB_" + attr.KeyOfEn);
-                if (cb == null)
+                tattr = mrattrs.GetEntityByKey(MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
+
+                if (cb == null || cb.Checked == false)
+                {
+                    if(tattr != null)
+                    {
+                        tattr.Delete();
+                        mrattrs.RemoveEn(tattr);
+                    }
+
                     continue;
-                if (cb.Checked == false)
-                    continue;
+                }
 
                 attr.FK_MapData = this.RptNo;
                 if (attr.KeyOfEn == "FK_NY")
@@ -216,21 +224,15 @@ namespace CCFlow.WF.MapDef.Rpt
                     attr.UIContralType = BP.En.UIContralType.DDL;
                 }
 
-                tattr = mrattrs.GetEntityByKey(MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
-
                 if (tattr != null)
                 {
                     attr.Idx = tattr.Idx;
+                    attr.Name = tattr.Name;
                     tattr.Delete();
                     mrattrs.RemoveEn(tattr);
                 }
 
                 attr.Insert();
-            }
-
-            foreach(MapAttr attr in mrattrs)
-            {
-                attr.Delete();
             }
         }
     }

@@ -174,6 +174,7 @@ namespace CCFlow.WF.Rpt
         {
             #region 执行数据分页查询，并绑定分页控件.
 
+            BP.DA.Cash.Map_Cash.Clear();    //added by liuxc,2016-12-21,必须增加清除缓存，否则会因为缓存与数据库中数据对应不上而报错
             Entities ens = this.HisEns;
             Entity en = ens.GetNewEntity;
             QueryObject qo = new QueryObject(ens);
@@ -319,7 +320,6 @@ namespace CCFlow.WF.Rpt
             foreach(MapAttr mattr in mattrs)
             {
                 attr = attrs.GetAttrByKey(mattr.KeyOfEn);
-
                 nattrs.Add(attr);
             }
 

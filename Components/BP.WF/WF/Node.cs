@@ -498,8 +498,6 @@ namespace BP.WF
             // 单据信息，岗位，节点信息。
             foreach (Node nd in nds)
             {
-              //  DBAccess.RunSQL("UPDATE WF_Node SET FK_FlowSort='" + fl.FK_FlowSort + "',FK_FlowSortT='" + fs.Name + "'");
-
                 BP.Sys.MapData md = new BP.Sys.MapData();
                 md.No = "ND" + nd.NodeID;
                 if (md.IsExits == false)
@@ -581,7 +579,6 @@ namespace BP.WF
             /* 判断流程的类型 */
             sql = "SELECT Name FROM WF_Node WHERE (NodeWorkType=" + (int)NodeWorkType.StartWorkFL + " OR NodeWorkType=" + (int)NodeWorkType.WorkFHL + " OR NodeWorkType=" + (int)NodeWorkType.WorkFL + " OR NodeWorkType=" + (int)NodeWorkType.WorkHL + ") AND (FK_Flow='" + fl.No + "')";
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-
             fl.DirectUpdate();
             return null;
         }

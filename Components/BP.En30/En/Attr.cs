@@ -1541,6 +1541,7 @@ namespace BP.En
             foreach (string str in strs)
             {
                 AtPara ap = new AtPara(str.Replace(";", "@"));
+
                 FieldTypeS ft = (FieldTypeS)ap.GetValIntByKey("AppType");
                 switch (ft)
                 {

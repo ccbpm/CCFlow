@@ -3138,6 +3138,26 @@ namespace BP.WF
                 }
             }
 
+            if (attrs.Contains(md.No + "_" + GERptAttr.Title) == false)
+            {
+                /* 标题 */
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.FK_MapData = md.No;
+                attr.HisEditType = EditType.UnDel;
+                attr.KeyOfEn = GERptAttr.Title; // "FlowEmps";
+                attr.Name = "标题"; //  
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+                attr.UIVisible = true;
+                attr.UIIsEnable = false;
+                attr.UIIsLine = true;
+                attr.MinLen = 0;
+                attr.MaxLen = 400;
+                attr.Idx = -100;
+                attr.Insert();
+            }
+
             if (attrs.Contains(md.No + "_" + GERptAttr.OID) == false)
             {
                 /* WorkID */
@@ -3551,7 +3571,6 @@ namespace BP.WF
                 attr.Idx = -100;
                 attr.Insert();
             }
-
             #endregion 补充上流程字段。
 
             #region 为流程字段设置分组。
@@ -3578,8 +3597,8 @@ namespace BP.WF
             #endregion 为流程字段设置分组
 
             #region 尾后处理.
-            GERpt sw = this.HisGERpt;
-            sw.CheckPhysicsTable();  //让报表重新生成.
+            GERpt gerpt = this.HisGERpt;
+            gerpt.CheckPhysicsTable();  //让报表重新生成.
 
             DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE EnName='" + fk_mapData + "' AND OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='活动时间' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='CDT'");
@@ -4417,34 +4436,7 @@ namespace BP.WF
                 //return this.GetValRefTextByKey(FlowAttr.FK_FlowSort);
             }
         }
-        /// <summary>
-        /// 设计者编号
-        /// </summary>
-        public string DesignerNo1
-        {
-            get
-            {
-                return this.GetValStringByKey(FlowAttr.DesignerNo);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.DesignerNo, value);
-            }
-        }
-        /// <summary>
-        /// 设计者名称
-        /// </summary>
-        public string DesignerName1
-        {
-            get
-            {
-                return this.GetValStringByKey(FlowAttr.DesignerName);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.DesignerName, value);
-            }
-        }
+        
         /// <summary>
         /// 版本号
         /// </summary>

@@ -127,7 +127,7 @@ namespace BP.DA
                 return 0;
             }
         }
-        public int GetValIntByKey(string key)
+        public int GetValIntByKey(string key, int isNullAsVal=0)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace BP.DA
             }
             catch
             {
-                return 0;
+                return isNullAsVal;
             }
         }
         public Int64 GetValInt64ByKey(string key)

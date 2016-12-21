@@ -1460,6 +1460,54 @@ namespace BP.WF
             return BP.DA.DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
+        /// 获得待办(包括被授权的待办)
+        /// 区分是自己的待办，还是被授权的待办通过数据源的 FK_Emp 字段来区分。
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable DB_Todolist()
+        {
+            if (WebUser.IsAuthorize == false)
+                throw new Exception("@授权登录的模式下不能调用此接口.");
+
+            Paras ps = new Paras();
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string wfSql = "  WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + "  OR WFState=" + (int)WFState.AskForReplay + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + " OR WFState=" + (int)WFState.Fix;
+            /*不是授权状态*/
+            if (BP.WF.Glo.IsEnableTaskPool == true)
+                ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1  ORDER BY ADT DESC";
+            else
+                ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ORDER BY ADT DESC";
+
+            ps.Add("FK_Emp", BP.Web.WebUser.No);
+
+            //获取授权给他的人员列表.
+            BP.WF.Port.WFEmps emps = new Port.WFEmps();
+            emps.Retrieve(BP.WF.Port.WFEmpAttr.Author, BP.Web.WebUser.No);
+            foreach (BP.WF.Port.WFEmp emp in emps)
+            {
+                switch (emp.HisAuthorWay)
+                {
+                    case Port.AuthorWay.All:
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL += " UNION  SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + emp.No + "' AND TaskSta!=1  ORDER BY ADT DESC";
+                        else
+                            ps.SQL += " UNION  SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + emp.No + "' ORDER BY ADT DESC";
+                        break;
+                    case Port.AuthorWay.SpecFlows:
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL += " UNION SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + emp.No + "' AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta!=0    ORDER BY ADT DESC";
+                        else
+                            ps.SQL += " UNION SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + emp.No + "' AND  FK_Flow IN " + emp.AuthorFlows + "   ORDER BY ADT DESC";
+                        break;
+                    case Port.AuthorWay.None: //非授权状态下.
+                        continue;
+                    default:
+                        throw new Exception("no such way...");
+                }
+            }
+            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+        }
+        /// <summary>
         /// 获取当前操作人员的待办信息
         /// 数据内容请参考图:WF_EmpWorks
         /// </summary>

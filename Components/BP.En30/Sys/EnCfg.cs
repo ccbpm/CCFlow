@@ -172,7 +172,6 @@ namespace BP.Sys
             return cfg.Save();
         }
 
-
     }
     /// <summary>
     ///  配置信息

@@ -1102,27 +1102,31 @@ namespace BP.WF
                 Node nd = this.NodeSend_GenerNextStepNode_Ext(mynd);
                 mynd = nd;
                 Work skipWork = null;
-                if (mywork.NodeFrmID != nd.NodeFrmID && skipWork.EnMap.PhysicsTable != skipWork.EnMap.PhysicsTable)
+                if (mywork.NodeFrmID != nd.NodeFrmID)
                 {
                     /* 跳过去的节点也要写入数据，不然会造成签名错误。*/
                     skipWork = nd.HisWork;
-                    skipWork.Copy(this.rptGe);
-                    skipWork.Copy(mywork);
 
-                    skipWork.OID = this.WorkID;
-                    skipWork.Rec = this.Execer;
-                    skipWork.SetValByKey(WorkAttr.RDT, DataType.CurrentDataTimess);
-                    skipWork.SetValByKey(WorkAttr.CDT, DataType.CurrentDataTimess);
-                    skipWork.ResetDefaultVal();
+                    if (skipWork.EnMap.PhysicsTable != this.rptGe.EnMap.PhysicsTable)
+                    {
+                        skipWork.Copy(this.rptGe);
+                        skipWork.Copy(mywork);
 
-                    // 把里面的默认值也copy报表里面去.
-                    rptGe.Copy(skipWork);
+                        skipWork.OID = this.WorkID;
+                        skipWork.Rec = this.Execer;
+                        skipWork.SetValByKey(WorkAttr.RDT, DataType.CurrentDataTimess);
+                        skipWork.SetValByKey(WorkAttr.CDT, DataType.CurrentDataTimess);
+                        skipWork.ResetDefaultVal();
 
-                    //如果存在就修改
-                    if (skipWork.IsExit(skipWork.PK, this.WorkID) == true)
-                        skipWork.DirectUpdate();
-                    else
-                        skipWork.InsertAsOID(this.WorkID);
+                        // 把里面的默认值也copy报表里面去.
+                        rptGe.Copy(skipWork);
+
+                        //如果存在就修改
+                        if (skipWork.IsExit(skipWork.PK, this.WorkID) == true)
+                            skipWork.DirectUpdate();
+                        else
+                            skipWork.InsertAsOID(this.WorkID);
+                    }
 
                     #region  初始化发起的工作节点。
 

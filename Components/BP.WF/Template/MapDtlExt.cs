@@ -999,6 +999,8 @@ namespace BP.WF.Template
                 map.AddTBFloat(MapDtlAttr.FrmW, 900, "FrmW", true, true);
                 map.AddTBFloat(MapDtlAttr.FrmH, 1200, "FrmH", true, true);
 
+                //对显示的结果要做一定的限制.
+                map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤数据SQL表达式", true, false, 0, 200, 20,true);
                
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 #endregion 基础信息.

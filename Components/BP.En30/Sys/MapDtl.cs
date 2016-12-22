@@ -174,6 +174,10 @@ namespace BP.Sys
         /// </summary>
         public const string DtlShowModel = "DtlShowModel";
         /// <summary>
+        /// 过滤的SQL 表达式.
+        /// </summary>
+        public const string FilterSQLExp = "FilterSQLExp";
+        /// <summary>
         /// 是否可见
         /// </summary>
         public const string IsView = "IsView";
@@ -194,14 +198,13 @@ namespace BP.Sys
         /// </summary>
         public const string W = "W";
         /// <summary>
-        /// 
+        /// 宽度
         /// </summary>
         public const string FrmW = "FrmW";
         /// <summary>
-        /// 
+        /// 高度
         /// </summary>
         public const string FrmH = "FrmH";
-       
         /// <summary>
         /// 是否启用多附件
         /// </summary>
@@ -1183,6 +1186,24 @@ namespace BP.Sys
                 this.SetValByKey(MapDtlAttr.PTable, value);
             }
         }
+         /// <summary>
+        /// 过滤的SQL表达式.
+        /// </summary>
+        public string FilterSQLExp
+        {
+            get
+            {
+                string s = this.GetValStrByKey(MapDtlAttr.FilterSQLExp);
+                if (string.IsNullOrEmpty(s) == true)
+                    return "";
+                s = s.Replace("~", "'");
+                return  s.Trim();
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.FilterSQLExp, value);
+            }
+        }
         /// <summary>
         /// 多表头
         /// </summary>
@@ -1327,10 +1348,16 @@ namespace BP.Sys
 
                 //MTR 多表头列.
                 map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
+
+
+                map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 200, 20, true);
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 //add 2014-02-21.
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
+
+
+
 
                 //参数.
                 map.AddTBAtParas(300);

@@ -1464,10 +1464,14 @@ namespace BP.WF
         /// 区分是自己的待办，还是被授权的待办通过数据源的 FK_Emp 字段来区分。
         /// </summary>
         /// <returns></returns>
-        public static DataTable DB_Todolist()
+        public static DataTable DB_Todolist(string userNo=null)
         {
-            if (WebUser.IsAuthorize == true)
-                throw new Exception("@授权登录的模式下不能调用此接口.");
+            if (userNo == null)
+            {
+                userNo = BP.Web.WebUser.No;
+                if (WebUser.IsAuthorize == false)
+                    throw new Exception("@授权登录的模式下不能调用此接口.");
+            }
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -1478,11 +1482,11 @@ namespace BP.WF
             else
                 ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ";
 
-            ps.Add("FK_Emp", BP.Web.WebUser.No);
+            ps.Add("FK_Emp", userNo);
 
             //获取授权给他的人员列表.
             BP.WF.Port.WFEmps emps = new Port.WFEmps();
-            emps.Retrieve(BP.WF.Port.WFEmpAttr.Author, BP.Web.WebUser.No);
+            emps.Retrieve(BP.WF.Port.WFEmpAttr.Author, userNo);
             foreach (BP.WF.Port.WFEmp emp in emps)
             {
                 switch (emp.HisAuthorWay)

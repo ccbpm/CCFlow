@@ -8,6 +8,7 @@ using BP.WF;
 using BP.DA;
 using BP.Web;
 using BP.Port;
+using BP.WF.Port;
 
 namespace CCFlow.WF
 {
@@ -176,7 +177,7 @@ namespace CCFlow.WF
                 switch (this.DoType)
                 {
                     case "Todolist_Init":
-                        msg = this.Todolist_Init();
+                        msg = this.Todolist_Init(BP.Web.WebUser.No,this.FK_Node);
                         break;
                     case "LoginInit":  //处理login的初始化工作.
                         msg= this.LoginInit();
@@ -186,6 +187,21 @@ namespace CCFlow.WF
                         break;
                     case "LoginExit": //退出安全登录.
                         BP.WF.Dev2Interface.Port_SigOut();
+                        break;
+                    case "IsAuthorize"://是否有授权
+                        msg=this.IsHaveAuthor();
+                        break;
+                    case "Load_Author"://获取授权人
+                        msg = LoadAuthor();
+                        break;
+                    case "Todolist_Author"://获取授权人待办
+                        msg = this.Todolist_Init(this.No, this.FK_Node);
+                        break;
+                    case "LoginAs"://授权登录
+                        msg = this.LoginAs();
+                        break;
+                    case "AuthExit":
+                        msg = this.AuthExitAndLogin(this.No,BP.Web.WebUser.Auth);
                         break;
                     default:
                         msg = "err@没有判断的标记:" + this.DoType;
@@ -204,10 +220,10 @@ namespace CCFlow.WF
         /// 获得待办.
         /// </summary>
         /// <returns></returns>
-        public string Todolist_Init()
+        public string Todolist_Init(string UserNo,int FK_Node)
         {
             DataTable dt = null;
-            dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, this.FK_Node);
+            dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(UserNo, FK_Node);
             return BP.Tools.Json.ToJson(dt);
         }
 
@@ -251,9 +267,62 @@ namespace CCFlow.WF
            string sid= BP.WF.Dev2Interface.Port_Login(emp.No);
            return sid;
         }
+        /// <summary>
+        /// 执行授权登录
+        /// </summary>
+        /// <returns></returns>
+        public string LoginAs()
+        {
+            BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(this.No);
+            if (wfemp.AuthorIsOK == false)
+                return "err@授权登录失败！";
+            BP.Port.Emp emp1 = new BP.Port.Emp(this.No);
+            BP.Web.WebUser.SignInOfGener(emp1,"CH",false,false,BP.Web.WebUser.No,BP.Web.WebUser.Name);
+            return "success@授权登录成功！";
+        }
+        public string AuthExitAndLogin(string UserNo,string Author)
+        {
+            string msg = "suess@退出成功！";
+            try
+            {
+                BP.Port.Emp emp = new BP.Port.Emp(UserNo);
+                //首先退出
+                BP.Web.WebUser.Exit();
+                //再进行登录
+                BP.Port.Emp emp1 = new BP.Port.Emp(Author);
+                BP.Web.WebUser.SignInOfGener(emp1, "CH", false, false, null, null);
+            }
+            catch (Exception ex)
+            {
+                msg = "err@退出时发生错误。";
+            }
+            return msg;
+        }
         #endregion 登录相关.
 
+        /// <summary>
+        /// 当前登陆人是否有授权
+        /// </summary>
+        /// <returns></returns>
+        public string IsHaveAuthor()
+        {
+            WFEmp em = new WFEmp();
+            em.Retrieve(WFEmpAttr.Author, BP.Web.WebUser.No);
 
+            if (em.Row.Count>0)
+                return "suess@有授权";
+            else
+                return "err@没有授权";
+        }
+        /// <summary>
+        /// 获取授权人列表
+        /// </summary>
+        /// <returns></returns>
+        public string LoadAuthor()
+        {
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='"+BP.Web.WebUser.No+"'");
+            return BP.Tools.Json.ToJson(dt);
+        }
         public bool IsReusable
         {
             get

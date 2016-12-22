@@ -306,10 +306,11 @@ namespace CCFlow.WF
         /// <returns></returns>
         public string IsHaveAuthor()
         {
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='"+BP.Web.WebUser.No+"'");
             WFEmp em = new WFEmp();
             em.Retrieve(WFEmpAttr.Author, BP.Web.WebUser.No);
 
-            if (em.Row.Count>0)
+            if (dt.Rows.Count > 0 && BP.Web.WebUser.IsAuthorize==false)
                 return "suess@有授权";
             else
                 return "err@没有授权";

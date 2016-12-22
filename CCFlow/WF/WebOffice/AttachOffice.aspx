@@ -478,12 +478,8 @@
         <asp:TextBox ID="fileName" runat="server" Text=""></asp:TextBox>
         <asp:TextBox ID="fileType" runat="server" Text=""></asp:TextBox>
     </div>
-    <div data-options="region:'center',border:false">
-        <object id="WebOffice1" height="99%" width='100%' classid='clsid:E77E049B-23FC-4DB8-B756-60529A35FAD5'
-            codebase='/WF/Activex/WebOffice.cab#V7.0.1.0'>
-            <param name='_ExtentX' value='6350'>
-            <param name='_ExtentY' value='6350'>
-        </object>
+    <div data-options="region:'center',border:false,noheader:true" >
+        <script src="../Scripts/LoadInAsp.js" type="text/javascript"></script>
     </div>
     </form>
 </body>

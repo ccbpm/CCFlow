@@ -397,10 +397,18 @@ namespace CCFlow.WF.CCForm
                             qo.AddWhere(GEDtlAttr.FID, this.RefPKVal);
                         break;
                 }
+
+                if (mdtl.FilterSQLExp != "")
+                {
+                    string[] strs = mdtl.FilterSQLExp.Split('=');
+                    qo.addAnd();
+                    qo.AddWhere(strs[0], strs[1]);
+                }
             }
-            catch
+            catch(Exception ex)
             {
                 dtls.GetNewEntity.CheckPhysicsTable();
+                throw ex;
             }
 
             //取出来附件集合，用户显示个数.

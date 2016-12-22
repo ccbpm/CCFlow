@@ -208,6 +208,41 @@
                         else {
                             newRow += "<td><img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
                         }
+
+
+                        //待办的状态.
+                        switch (data[i].WFState) {
+                            case "1":
+                                newRow += "<td>草稿</td>";
+                                break;
+                            case "2":
+                                newRow += "<td>待办</td>";
+                                break;
+                            case "3": //已完成.
+                                break;
+                            case "4":
+                                newRow += "<td>挂起</td>";
+                                break;
+                            case "5":
+                                newRow += "<td>退回</td>";
+                                break;
+                            case "6":
+                                newRow += "<td>转发</td>";
+                                break;
+                            case "7":
+                                newRow += "<td>删除</td>";
+                                break;
+                            case "8":
+                                newRow += "<td>加签</td>";
+                                break;
+                            case "11":
+                                newRow += "<td>加签回复</td>";
+                                break;
+                            default:
+                                newRow += "<td>其他</td>";
+                                break;
+                        }
+
                         //备注
                         newRow += "<td width='200'><div style='width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + data[i].FlowNote + "'>" + data[i].FlowNote + "</div></td>";
                         newRow += "</tr>";
@@ -268,6 +303,7 @@
 <th>接受日期</th>
 <th>应完成日期</th>
 <th>状态</th>
+<th>类型</th>
 <th>备注</th>
 </tr>
 

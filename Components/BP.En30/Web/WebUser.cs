@@ -401,8 +401,8 @@ namespace BP.Web
             get
             {
                 string val = GetValFromCookie("Auth", null, false);
-                if (val == null)
-                    val = GetSessionByKey("Auth", null);
+                //if (val == null)
+                //    val = GetSessionByKey("Auth", null);
                 return val;
             }
             set

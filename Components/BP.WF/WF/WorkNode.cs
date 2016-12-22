@@ -1102,7 +1102,7 @@ namespace BP.WF
                 Node nd = this.NodeSend_GenerNextStepNode_Ext(mynd);
                 mynd = nd;
                 Work skipWork = null;
-                if (mywork.NodeFrmID != nd.NodeFrmID)
+                if (mywork.NodeFrmID != nd.NodeFrmID && skipWork.EnMap.PhysicsTable != skipWork.EnMap.PhysicsTable)
                 {
                     /* 跳过去的节点也要写入数据，不然会造成签名错误。*/
                     skipWork = nd.HisWork;

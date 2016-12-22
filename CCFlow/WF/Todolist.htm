@@ -215,21 +215,20 @@
                         $("#Table1 tr:last").after(newRow);
 
                     }
-                    $("#Table1").after("<div style='float:right;' ><a href=\"AutoTodolist.htm\" >查看授权人的待办工作</a></div>");
-//                    $.ajax({
-//                        type: 'post',
-//                        async: false,
-//                        url: Handler + "?DoType=IsAuthorize&m=" + Math.random(),
-//                        dataType: 'html',
-//                        success: function (msg) {
-//                            if (msg.indexOf('err') == 0) {
+                    $.ajax({
+                        type: 'post',
+                        async: false,
+                        url: Handler + "?DoType=IsAuthorize&m=" + Math.random(),
+                        dataType: 'html',
+                        success: function (msg) {
+                            if (msg.indexOf('err') == 0) {
 //                                alert('没有授权!');
-//                            }
-//                            else {
-//                                $("#Table1").after("<div style='float:right;' ><a href=\"AutoTodolist.htm\" >查看授权人的待办工作</a></div>");
-//                            }
-//                        }
-//                    });
+                            }
+                            else {
+                                $("#Table1").after("<div style='float:right;' ><a href=\"AutoTodolist.htm\" >查看授权人的待办工作</a></div>");
+                            }
+                        }
+                    });
                     
                 }
             });

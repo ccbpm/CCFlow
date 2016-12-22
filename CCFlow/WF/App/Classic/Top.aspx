@@ -5,7 +5,31 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>无标题文档</title>
-</head>
+    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+     <base target="_self" />
+     <script type="text/javascript">
+         function AuthExit(userNo) {
+             $.ajax({
+                 type: 'post',
+                 async: false,
+                 url: "/WF/Handler.ashx?DoType=AuthExit&No=" + userNo + "&m=" + Math.random(),
+                 dataType: 'html',
+                 success: function (msg) {
+                     if (msg.indexOf('err') == 0) {
+                         alert('授权退出失败!');
+                     }
+                     else {
+                         parent.location.reload();
+                         top.location.href = '/WF/App/Classic/Default.aspx';
+                     }
+                 }
+             });
+         }
+     </script>
 <style>
     body
     {
@@ -85,7 +109,30 @@
         list-style-type: none;
         float: left;
     }
+    .logo_cz3
+    {
+        background: url(Img/TopRight1.png);
+        float: right;
+        height: 34px;
+        width: 270px;
+    }
+    .logo_cz3 ul
+    {
+        font-size: 14px;
+        margin-top: 10px;
+        margin-left: 30px;
+    }
+    .logo_cz3 li
+    {
+        font-weight: bold;
+        color: #1977cc;
+        width: 106px;
+        list-style-type: none;
+        float: left;
+    }
 </style>
+</head>
+
 <body>
     <div class="top">
         <div class="logo">
@@ -98,13 +145,31 @@
                     <li>部门：<%=BP.Web.WebUser.FK_DeptName %></li>
                 </ul>
             </div>
+            <%
+                if (BP.Web.WebUser.IsAuthorize==false)
+                {
+                 %>
             <div class="logo_cz2">
                 <ul>
-                    <li><a href="../../Tools.aspx" target="main">设置</a></li>
+                <li><a href="../../Tools.aspx" target="main">设置</a></li>
                     <li><a href="../../Messages.aspx" target="main">消息</a></li>
                     <li><a href="Login.aspx?DoType=Logout" target="_parent">退出</a></li>
                 </ul>
             </div>
+            <%
+                }
+                else
+                {
+                     %>
+
+            <div class="logo_cz3">
+                <ul>
+                <li><a href="javascript:AuthExit('<%=BP.Web.WebUser.No %>');">退出授权登录</a></li>
+                </ul>
+            </div>
+            <%
+                }
+                     %>
         </div>
     </div>
 </body>

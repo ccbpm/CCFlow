@@ -113,7 +113,7 @@ public partial class AppDemo_Default1 : System.Web.UI.Page
     }
     #endregion
 
-    public string mainSrc = "../../Start.aspx";
+    public string mainSrc = "../../Todolist.htm";
     protected void Page_Load(object sender, EventArgs e)
     {
         if (BP.Web.WebUser.No == null)

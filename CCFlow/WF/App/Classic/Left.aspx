@@ -67,14 +67,22 @@ img { border:none;}
                  <!-- 菜单的配置在: \\DataUser\\XML\\BarOfTop.xml -->
                 <ul>
                 <% 
-                    BP.WF.XML.ClassicMenus ens = new BP.WF.XML.ClassicMenus();
-                    ens.RetrieveAll();
                     string strs = "";
-                    foreach (BP.WF.XML.ClassicMenu en in ens)
+                    if (!BP.Web.WebUser.IsAuthorize)
                     {
-                        if (en.Enable == false)
-                            continue;
-                        strs += "<li style='background:url(" + en.Img + ") no-repeat;background-position-x:1%' ><a  href='"+en.Url+"' target='main'>"+en.Name+"</a></li>";
+                        BP.WF.XML.ClassicMenus ens = new BP.WF.XML.ClassicMenus();
+                        ens.RetrieveAll();
+                        
+                        foreach (BP.WF.XML.ClassicMenu en in ens)
+                        {
+                            if (en.Enable == false)
+                                continue;
+                            strs += "<li style='background:url(" + en.Img + ") no-repeat;background-position-x:1%' ><a  href='" + en.Url + "' target='main'>" + en.Name + "</a></li>";
+                        }
+                    }
+                    else
+                    {
+                        strs = "<li style='background:url(Img/Menu/EmpWorks.png) no-repeat;background-position-x:1%' ><a  href='../../Todolist.htm' target='main'>待办</a></li>";
                     }
                     %>
                     <%=strs %>

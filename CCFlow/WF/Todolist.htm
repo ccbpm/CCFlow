@@ -208,34 +208,32 @@
                         else {
                             newRow += "<td><img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
                         }
-
-
                         //待办的状态.
                         switch (data[i].WFState) {
-                            case "1":
+                            case 1:
                                 newRow += "<td>草稿</td>";
                                 break;
-                            case "2":
+                            case 2:
                                 newRow += "<td>待办</td>";
                                 break;
-                            case "3": //已完成.
+                            case 3: //已完成.
                                 break;
-                            case "4":
+                            case 4:
                                 newRow += "<td>挂起</td>";
                                 break;
-                            case "5":
+                            case 5:
                                 newRow += "<td>退回</td>";
                                 break;
-                            case "6":
+                            case 6:
                                 newRow += "<td>转发</td>";
                                 break;
-                            case "7":
+                            case 7:
                                 newRow += "<td>删除</td>";
                                 break;
-                            case "8":
+                            case 8:
                                 newRow += "<td>加签</td>";
                                 break;
-                            case "11":
+                            case 11:
                                 newRow += "<td>加签回复</td>";
                                 break;
                             default:
@@ -244,7 +242,7 @@
                         }
 
                         //备注
-                        newRow += "<td width='200'><div style='width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + data[i].FlowNote + "'>" + data[i].FlowNote + "</div></td>";
+                        newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + data[i].FlowNote + "'>" + data[i].FlowNote + "</div></td>";
                         newRow += "</tr>";
 
                         $("#Table1 tr:last").after(newRow);
@@ -257,14 +255,14 @@
                         dataType: 'html',
                         success: function (msg) {
                             if (msg.indexOf('err') == 0) {
-//                                alert('没有授权!');
+                                //                                alert('没有授权!');
                             }
                             else {
                                 $("#Table1").after("<div style='float:right;' ><a href=\"AutoTodolist.htm\" >查看授权人的待办工作</a></div>");
                             }
                         }
                     });
-                    
+
                 }
             });
         }

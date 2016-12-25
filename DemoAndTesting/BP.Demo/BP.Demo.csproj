@@ -80,6 +80,7 @@
     <Compile Include="UnitTesting\AttrFlow\GenerTitle.cs" />
     <Compile Include="UnitTesting\AttrFlow\GeneWorkID.cs" />
     <Compile Include="UnitTesting\AttrFlow\RebackWorkFlow.cs" />
+    <Compile Include="UnitTesting\AttrFlow\SaveDraft.cs" />
     <Compile Include="UnitTesting\AttrNode\DoOutTimeCond.cs" />
     <Compile Include="UnitTesting\AttrNode\FindByDept.cs" />
     <Compile Include="UnitTesting\AttrNode\FindLeader.cs" />

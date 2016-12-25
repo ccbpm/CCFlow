@@ -11,6 +11,9 @@ using BP.UnitTesting;
 
 namespace BP.UnitTesting.AttrFlow
 {
+    /// <summary>
+    /// 回滚一个流程
+    /// </summary>
     public class RebackWorkFlow : TestBase
     {
         /// <summary>
@@ -22,6 +25,9 @@ namespace BP.UnitTesting.AttrFlow
             this.DescIt = "流程完成后，由于种种原因需要回滚它。";
             this.EditState = EditState.Passed;
         }
+        /// <summary>
+        /// 执行的方法
+        /// </summary>
         public override void Do()
         {
             // 执行完成一个流程。
@@ -34,14 +40,14 @@ namespace BP.UnitTesting.AttrFlow
 
             #region 检查数据是否完整.
             string sql = "SELECT COUNT(*) AS N FROM WF_EmpWorks where fk_emp='zhanghaicheng' and workid=" + workid;
-            DataTable dt= DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count==0)
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
                 throw new Exception("@不应该找不到 zhanghaicheng 的待办.");
             #endregion 检查数据是否完整.
 
             //让他向下发送.
-         //   BP.WF.Dev2Interface.Port_Login("zhanghaicheng");
-        //    BP.WF.Dev2Interface.Node_SendWork("024", workid);
+            // BP.WF.Dev2Interface.Port_Login("zhanghaicheng");
+            // BP.WF.Dev2Interface.Node_SendWork("024", workid);
 
             //恢复到第二个节点上去。
             workid = this.RunCompeleteOneWork();
@@ -49,7 +55,7 @@ namespace BP.UnitTesting.AttrFlow
 
             #region 检查数据是否完整.
             sql = "SELECT COUNT(*) AS N FROM WF_EmpWorks where fk_emp='zhoupeng' and workid=" + workid;
-             dt = DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
                 throw new Exception("@不应该找不到 zhoupeng 的待办.");
             #endregion 检查数据是否完整.

@@ -152,7 +152,7 @@ namespace BP.Web
                 BP.Port.Dept dept = new Dept();
                 dept.No = em.FK_Dept;
                 if (dept.RetrieveFromDBSources() == 0)
-                    throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门.");
+                    throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门,或者部门编号{"+em.FK_Dept+"}不存在.");
             }
 
 
@@ -401,8 +401,8 @@ namespace BP.Web
             get
             {
                 string val = GetValFromCookie("Auth", null, false);
-                //if (val == null)
-                //    val = GetSessionByKey("Auth", null);
+                if (val == null)
+                    val = GetSessionByKey("Auth", null);
                 return val;
             }
             set

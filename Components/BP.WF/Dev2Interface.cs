@@ -6317,10 +6317,6 @@ namespace BP.WF
         {
             //转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            Flow fl = new Flow(fk_flow);
-
-            //保存数据
-            Node_SaveWork(fk_flow, fl.StartNodeID, workID);
 
             //设置引擎表.
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -6330,12 +6326,8 @@ namespace BP.WF
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置草稿错误，只有在开始节点时才能设置草稿，现在的节点是:" + gwf.Title);
 
-                if (gwf.WFState != WFState.Blank)
-                    return;
-                //规则设置为写入待办，将状态置为运行中，其他设置为草稿
-                WFState wfState = fl.DraftRole == DraftRole.SaveToTodolist ? WFState.Runing : WFState.Draft;
                 //设置成草稿.
-                gwf.Update(GenerWorkFlowAttr.WFState, (int)wfState);
+                gwf.Update(GenerWorkFlowAttr.WFState, (int)WFState.Draft);
             }
         }
         /// <summary>
@@ -6532,8 +6524,13 @@ namespace BP.WF
                     if (fl.DraftRole == DraftRole.None)
                         return "保存成功";
 
-                    //规则设置为写入待办，将状态置为运行中，其他设置为草稿
-                    WFState wfState = fl.DraftRole == DraftRole.SaveToTodolist ? WFState.Runing : WFState.Draft;
+                    //规则设置为写入待办，将状态置为运行中，其他设置为草稿.
+                    WFState wfState = WFState.Blank;
+                    if (fl.DraftRole == DraftRole.SaveToDraftList)
+                        wfState = WFState.Draft;
+                    if (fl.DraftRole == DraftRole.SaveToTodolist)
+                        wfState = WFState.Runing;
+
 
                     gwf.WorkID = workID;
                     int i = gwf.RetrieveFromDBSources();
@@ -7918,12 +7915,6 @@ namespace BP.WF
             // 以下代码是从 MyFlow.aspx Send 方法copy 过来的，需要保持业务逻辑的一致性，所以代码需要保持一致.
             WorkNode firstwn = new WorkNode(wk, nd);
             string msg = "";
-            //发送到节点使用跳转
-            if (!string.IsNullOrEmpty(toNodes) && toNodes.Contains(",") == false)
-            {
-                Node toNode = new Node(int.Parse(toNodes));
-                return firstwn.NodeSend(toNode, null);
-            }
             SendReturnObjs objs = firstwn.NodeSend();
             return objs;
         }

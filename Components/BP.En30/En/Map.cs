@@ -377,25 +377,6 @@ namespace BP.En
             Attr attr = this.GetAttrByKey(key);
             this.SearchAttrs.Add(attr, isShowSelectedAll, relationalDtlKey);
         }
-        /// <summary>
-        /// 加入查找属性.
-        /// </summary>
-        /// <param name="attr">属性</param>
-        public void AddSearchAttr_del(Attr attr)
-        {
-            //if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum
-            //    || attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK
-            //    || attr.MyDataType == DataType.AppBoolean
-            //    || attr.MyDataType == DataType.AppDate
-            //    || attr.MyDataType == DataType.AppDateTime)
-            //{
-            //    this.SearchAttrs.Add(attr, true, this.IsAddRefName);
-            //}
-            //else
-            //{
-            //    throw new Exception("@属性[" + attr.Key + "," + attr.Desc + "]不能添加到查找集合里.因为他不是枚举与外键类型.");
-            //}
-        }
         #endregion
 
         #endregion

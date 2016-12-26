@@ -381,7 +381,6 @@ namespace BP.WF
                 selectAccper.CheckPhysicsTable();
                 #endregion
 
-
                 #region  升级 NodeToolbar
                 FrmField ff = new FrmField();
                 ff.CheckPhysicsTable();

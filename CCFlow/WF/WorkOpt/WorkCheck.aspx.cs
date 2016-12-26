@@ -201,7 +201,7 @@ namespace CCFlow.WF.WorkOpt
                 uploadJS.Append("\t\n });");
                 uploadJS.Append("\t\n </script>");
                 uploadJS.Append("<div id='file_upload-queue' class='uploadify-queue'></div>");
-                uploadJS.Append("<div id='s' style='text-align:right;float:right;margin-right:10px;' ><input type='file' name='file_upload' id='file_upload' width='60' height='30' /></div>");
+                uploadJS.Append("<div id='s' style='float:right;margin-right:10px;' ><input type='file' name='file_upload' id='file_upload' width='60' height='30' /></div>");
             }
 
             BP.WF.Tracks tks = wc.HisWorkChecks;

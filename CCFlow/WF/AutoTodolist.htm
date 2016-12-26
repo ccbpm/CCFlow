@@ -82,7 +82,7 @@
                         conMenu += "<table id='Table" + (i + 1) + "' width='100%'  cellspacing='0' cellpadding='0' align='left'>";
                         conMenu += "<tr class='centerTitle'>";
                         conMenu += "<th>序</th><th>优先级</th><th>标题</th><th>流程</th><th>节点</th><th>发起人</th>";
-                        conMenu += "<th>发起日期</th><th>接受日期</th><th>应完成日期</th><th>状态</th><th>备注</th>";
+                        conMenu += "<th>发起日期</th><th>接受日期</th><th>应完成日期</th><th>状态</th><th>类型</th><th>备注</th>";
                         conMenu += "</tr>";
 
                         //输出待办详细信息
@@ -132,8 +132,40 @@
                                     else {
                                         conMenu += "<td><img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
                                     }
+                                    //待办的状态.
+                                    switch (msg[j].WFState) {
+                                        case 1:
+                                            conMenu += "<td>草稿</td>";
+                                            break;
+                                        case 2:
+                                            conMenu += "<td>待办</td>";
+                                            break;
+                                        case 3: //已完成.
+                                            break;
+                                        case 4:
+                                            conMenu += "<td>挂起</td>";
+                                            break;
+                                        case 5:
+                                            conMenu += "<td>退回</td>";
+                                            break;
+                                        case 6:
+                                            conMenu += "<td>转发</td>";
+                                            break;
+                                        case 7:
+                                            conMenu += "<td>删除</td>";
+                                            break;
+                                        case 8:
+                                            conMenu += "<td>加签</td>";
+                                            break;
+                                        case 11:
+                                            conMenu += "<td>加签回复</td>";
+                                            break;
+                                        default:
+                                            conMenu += "<td>其他</td>";
+                                            break;
+                                    }
                                     //备注
-                                    conMenu += "<td width='200'><div style='width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FlowNote + "'>" + msg[j].FlowNote + "</div></td>";
+                                    conMenu += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FlowNote + "'>" + msg[j].FlowNote + "</div></td>";
                                     conMenu += "</tr>";
                                 }
                             }

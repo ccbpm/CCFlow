@@ -3257,6 +3257,7 @@ namespace CCFlow.WF.UC
                 this.Add("\t\n<span >");
 
                 string doDoc = BP.WF.Glo.DealExp(btn.EventContext, en, null);
+                doDoc = doDoc.Replace("~", "'");
                 switch (btn.HisBtnEventType)
                 {
                     case BtnEventType.Disable:

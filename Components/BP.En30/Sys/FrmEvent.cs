@@ -852,7 +852,7 @@ namespace BP.Sys
                 /*如果是 bs 系统, 有可能参数来自于url ,就用url的参数替换它们 .*/
                 string url = BP.Sys.Glo.Request.RawUrl;
                 if (url.IndexOf('?') != -1)
-                    url = url.Substring(url.IndexOf('?'));
+                    url = url.Substring(url.IndexOf('?')).TrimStart('?');
 
                 string[] paras = url.Split('&');
                 foreach (string s in paras)
@@ -883,7 +883,7 @@ namespace BP.Sys
                     /*是bs系统，并且是url参数执行类型.*/
                     string url = BP.Sys.Glo.Request.RawUrl;
                     if (url.IndexOf('?') != -1)
-                        url = url.Substring(url.IndexOf('?'));
+                        url = url.Substring(url.IndexOf('?')).TrimStart('?');
                     string[] paras = url.Split('&');
                     foreach (string s in paras)
                     {

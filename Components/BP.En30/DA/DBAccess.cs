@@ -2738,7 +2738,7 @@ namespace BP.DA
         /// <param name="orderKey">排序字段（此字段必须包含在返回字段中）</param>
         /// <param name="orderType">排序方式，ASC/DESC</param>
         /// <returns></returns>
-        public static DataTable RunSQLReturnTable_201612_SQL(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
+        private static DataTable RunSQLReturnTable_201612_SQL(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
         {
             string sqlstr = string.Empty;
 
@@ -2781,7 +2781,7 @@ namespace BP.DA
         /// <param name="orderKey">排序字段（此字段必须包含在返回字段中）</param>
         /// <param name="orderType">排序方式，ASC/DESC</param>
         /// <returns></returns>
-        public static DataTable RunSQLReturnTable_201612_Ora(string sql, int pageSize, int pageIdx, string orderKey, string orderType)
+        private static DataTable RunSQLReturnTable_201612_Ora(string sql, int pageSize, int pageIdx, string orderKey, string orderType)
         {
             if (pageIdx < 1)
                 pageIdx = 1;
@@ -2812,7 +2812,7 @@ namespace BP.DA
         /// <param name="orderKey">排序字段（此字段必须包含在返回字段中）</param>
         /// <param name="orderType">排序方式，ASC/DESC</param>
         /// <returns></returns>
-        public static DataTable RunSQLReturnTable_201612_MySql(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
+        private static DataTable RunSQLReturnTable_201612_MySql(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
         {
             string sqlstr = string.Empty;
             orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();

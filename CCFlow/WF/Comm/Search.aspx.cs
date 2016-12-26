@@ -83,7 +83,9 @@ namespace CCFlow.Web.Comm
                 return _HisEn;
             }
         }
-
+        /// <summary>
+        /// œ‘ æ∑Ω Ω.
+        /// </summary>
         public ShowWay ShowWay
         {
             get

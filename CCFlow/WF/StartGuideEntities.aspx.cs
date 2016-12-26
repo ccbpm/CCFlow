@@ -28,6 +28,13 @@ namespace CCFlow.WF
                 return this.Request.QueryString["SKey"];
             }
         }
+        public string WorkID
+        {
+            get
+            {
+                return this.Request.QueryString["WorkID"];
+            }
+        }
         #endregion 属性.
 
         protected void Page_Load(object sender, EventArgs e)
@@ -108,7 +115,7 @@ namespace CCFlow.WF
         void btn_Click(object sender, EventArgs e)
         {
             string key = this.Pub1.GetTextBoxByID("TB_Key").Text.Trim();
-            this.Response.Redirect("StartGuideEntities.aspx?FK_Flow=" + this.FK_Flow + "&SKey=" + key, true);
+            this.Response.Redirect("StartGuideEntities.aspx?FK_Flow=" + this.FK_Flow + "&SKey=" + key+"&WorkID="+this.WorkID, true);
         }
         /// <summary>
         /// 初始化数据
@@ -135,7 +142,7 @@ namespace CCFlow.WF
             }
             this.Pub2.AddTREnd();
 
-            string url = "MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
+            string url = "MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID="+this.WorkID+"&IsCheckGuide=1";
             // 输出数据.
             int idx = 0;
             foreach (DataRow dr in dt.Rows)
@@ -158,7 +165,6 @@ namespace CCFlow.WF
 
                 //输出名称列
                 this.Pub2.AddTD("<a href='" + paras + "' >" +dr["No"]+" - "+ dr["Name"] + "</a>");
-
                 foreach (DataColumn dc in dt.Columns)
                 {
                     switch (dc.ColumnName.ToLower())
@@ -181,7 +187,7 @@ namespace CCFlow.WF
                     //if (i == 1)
                     //    this.Pub2.AddTD("<a href='" + paras + "' >" + val + "</a>");
                     //else
-                        this.Pub2.AddTD(val);
+                    this.Pub2.AddTD(val);
                 }
                 this.Pub2.AddTREnd();
             }
@@ -192,11 +198,6 @@ namespace CCFlow.WF
         /// </summary>
         public void BindTableMulti(DataTable dt)
         {
-            //if (dt.Columns.Contains("CTitle") == false || dt.Columns.Contains("CWorkID") == false)
-            //{
-            //    this.Pub2.AddFieldSetRed("导航参数设置错误", "缺少CFlowNo,CWorkID列.");
-            //    return;
-            //}
 
             string pksVal = "no";
             string pksLab = "name";
@@ -262,8 +263,6 @@ namespace CCFlow.WF
                 this.Pub2.AddTREnd();
             }
             this.Pub2.AddTableEnd();
-
-
         }
 
         void btn_Start_Click(object sender, EventArgs e)

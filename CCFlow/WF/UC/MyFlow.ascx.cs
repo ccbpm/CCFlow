@@ -936,13 +936,14 @@ namespace CCFlow.WF.UC
 
             if (this.WorkID == 0 && this.currND.IsStartNode && this.Request.QueryString["IsCheckGuide"] == null)
             {
+                Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow);
                 switch (this.currFlow.StartGuideWay)
                 {
                     case StartGuideWay.None:
                         break;
                     case StartGuideWay.SubFlowGuide:
                     case StartGuideWay.SubFlowGuideEntity:
-                        this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No, true);
+                        this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
                         break;
                     case StartGuideWay.ByHistoryUrl: // 历史数据.
                         if (this.currFlow.IsLoadPriData == true)
@@ -950,17 +951,17 @@ namespace CCFlow.WF.UC
                             this.ToMsg("流程配置错误，您不能同时启用前置导航，自动装载上一笔数据两个功能。", "Info");
                             return;
                         }
-                        this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No, true);
+                        this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
                         break;
                     case StartGuideWay.BySystemUrlOneEntity:
                     case StartGuideWay.BySQLOne:
-                        this.Response.Redirect("StartGuideEntities.aspx?FK_Flow=" + this.currFlow.No, true);
+                        this.Response.Redirect("StartGuideEntities.aspx?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
                         return;
                     case StartGuideWay.BySelfUrl: //按照定义的url.
-                        this.Response.Redirect(this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" + BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null), true);
+                        this.Response.Redirect(this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" +workid,true);
                         break;
                     case StartGuideWay.ByFrms: //选择表单.
-                        this.Response.Redirect("./WorkOpt/StartGuideFrms.aspx?FK_Flow=" + this.currFlow.No, true);
+                        this.Response.Redirect("./WorkOpt/StartGuideFrms.aspx?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
                         break;
                     default:
                         break;
@@ -2240,7 +2241,9 @@ namespace CCFlow.WF.UC
                 }
                 //处理草稿.
                 if (currND.IsStartNode == true && this.currFlow.DraftRole != DraftRole.None)
+                {
                     BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, currWK.OID);
+                }
 
                 if (string.IsNullOrEmpty(this.Request.QueryString["WorkID"]))
                     return;

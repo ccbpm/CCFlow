@@ -200,6 +200,7 @@
 
             //接受修订
             doc.AcceptAllRevisions();
+            webOffice.ProtectDoc(1, 2, Math.random() + "");
         }
 
         function replace(field, text, type) {

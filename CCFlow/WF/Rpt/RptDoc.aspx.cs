@@ -159,28 +159,60 @@ namespace CCFlow.WF.Rpt
             }
             else
             {
-                IsFirst = false;
+                IsFirst = true;
             }
 
             //装载数据.
             var rptName = "ND" + int.Parse(this.FK_Flow) + "Rpt";
-            var rpt = new GERpt(rptName);
-            rpt.OID = int.Parse(WorkID);
-            if (rpt.RetrieveFromDBSources() == 0)
-            {
-                Response.Write("<h3>" + rptName + "中不存在WorkID=" + WorkID + "的数据</h3>");
-                return;
-            }
+            var ndName = "ND" + this.FK_Node;
+            var flow = new Flow(this.FK_Flow);
+            Entity en = null;
+            string enName = string.Empty;
 
-            var attrs = new MapAttrs(rptName);
-            this.LoadFrmData(attrs, rpt);
+            if (flow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
+            {
+                enName = ndName;
+                var gen = new GEEntity(enName);
+                gen.OID = int.Parse(WorkID);
+
+                if (gen.RetrieveFromDBSources() == 0)
+                {
+                    Response.Write("<h3>" + enName + "中不存在WorkID=" + WorkID + "的数据</h3>");
+                    return;
+                }
+
+                en = gen;
+            }
+            else
+            {
+                enName = rptName;
+                var rpt = new GERpt(enName);
+                rpt.OID = int.Parse(WorkID);
+
+                if (rpt.RetrieveFromDBSources() == 0)
+                {
+                    Response.Write("<h3>" + enName + "中不存在WorkID=" + WorkID + "的数据</h3>");
+                    return;
+                }
+
+                en = rpt;
+            }
+            //var rpt = new GERpt(rptName);
+            //rpt.OID = int.Parse(WorkID);
+            //if (rpt.RetrieveFromDBSources() == 0)
+            //{
+            //    Response.Write("<h3>" + rptName + "中不存在WorkID=" + WorkID + "的数据</h3>");
+            //    return;
+            //}
+
+            var attrs = new MapAttrs(enName);
+            this.LoadFrmData(attrs, en);
 
             //替换掉 word 里面的数据.
             fileName.Text = string.Format(@"\{0}{1}{2}", docDirName, docFileName, wordFile.Extension);
             fileType.Text = wordFile.Extension.TrimStart('.');
         }
-
-
+        
         private void InitOffice()
         {
             #region 初始化按钮
@@ -243,7 +275,7 @@ namespace CCFlow.WF.Rpt
                         break;
                 }
                 
-                dictParams.Add(attr.Key, attrVal, type);
+                dictParams.Add(attr.Key, string.IsNullOrWhiteSpace(attrVal) ? string.Empty : attrVal.Replace("\r\n", "\\r\\n"), type);
                 fields.Add(attr.Key);
             }
 

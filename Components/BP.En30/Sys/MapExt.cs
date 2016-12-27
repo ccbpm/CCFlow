@@ -605,7 +605,7 @@ namespace BP.Sys
                 string sql = this.Tag;
                 sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                 sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                sql = sql.Replace("@WebUser.FK_DeptFullName", BP.Web.WebUser.FK_DeptFullName);
+                sql = sql.Replace("@WebUser.FK_DeptNameOfFull", BP.Web.WebUser.FK_DeptNameOfFull);
                 sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
                 sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
                 return sql;
@@ -619,7 +619,7 @@ namespace BP.Sys
                 string sql = this.Doc;
                 sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                 sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                sql = sql.Replace("@WebUser.FK_DeptFullName", BP.Web.WebUser.FK_DeptFullName);
+                sql = sql.Replace("@WebUser.FK_DeptNameOfFull", BP.Web.WebUser.FK_DeptNameOfFull);
                 sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
                 sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
                 return sql;

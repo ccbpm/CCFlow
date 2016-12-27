@@ -188,8 +188,8 @@ namespace BP.En
                     if (_DefaultVal.Contains("@WebUser.FK_DeptName"))
                         return _DefaultVal.Replace("@WebUser.FK_DeptName", Web.WebUser.FK_DeptName);
 
-                    if (_DefaultVal.Contains("@WebUser.FK_DeptFullName"))
-                        return _DefaultVal.Replace("@WebUser.FK_DeptFullName", Web.WebUser.FK_DeptFullName);
+                    if (_DefaultVal.Contains("@WebUser.FK_DeptNameOfFull"))
+                        return _DefaultVal.Replace("@WebUser.FK_DeptNameOfFull", Web.WebUser.FK_DeptNameOfFull);
 
                     //if (_DefaultVal.Contains("@WebUser.FK_Unit"))
                     //    return _DefaultVal.Replace("@WebUser.FK_Unit", Web.WebUser.FK_Unit);

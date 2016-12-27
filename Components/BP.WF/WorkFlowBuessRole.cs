@@ -45,7 +45,7 @@ namespace BP.WF
 
             titleRole = titleRole.Replace("@WebUser.No", emp.No);
             titleRole = titleRole.Replace("@WebUser.Name", emp.Name);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptFullName", WebUser.FK_DeptFullName);
+            titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
             titleRole = titleRole.Replace("@WebUser.FK_DeptName", emp.FK_DeptText);
             titleRole = titleRole.Replace("@WebUser.FK_Dept", emp.FK_Dept);
             titleRole = titleRole.Replace("@RDT", rdt);
@@ -115,7 +115,7 @@ namespace BP.WF
 
             titleRole = titleRole.Replace("@WebUser.No", wk.Rec);
             titleRole = titleRole.Replace("@WebUser.Name", wk.RecText);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptFullName", WebUser.FK_DeptFullName);
+            titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
             titleRole = titleRole.Replace("@WebUser.FK_DeptName", wk.RecOfEmp.FK_DeptText);
             titleRole = titleRole.Replace("@WebUser.FK_Dept", wk.RecOfEmp.FK_Dept);
             titleRole = titleRole.Replace("@RDT", wk.RDT);
@@ -194,7 +194,7 @@ namespace BP.WF
 
             titleRole = titleRole.Replace("@WebUser.No", wk.FlowStarter);
             titleRole = titleRole.Replace("@WebUser.Name", WebUser.Name);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptFullName", WebUser.FK_DeptFullName);
+            titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
             titleRole = titleRole.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             titleRole = titleRole.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
             titleRole = titleRole.Replace("@RDT", wk.FlowStartRDT);

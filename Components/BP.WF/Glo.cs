@@ -2158,7 +2158,7 @@ namespace BP.WF
         {
             exp = exp.Replace("@WebUser.No", WebUser.No);
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_DeptFullName", WebUser.FK_DeptFullName);
+            exp = exp.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
             

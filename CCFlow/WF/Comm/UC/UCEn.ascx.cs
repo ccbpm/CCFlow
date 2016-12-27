@@ -1971,7 +1971,8 @@ namespace CCFlow.Web.Comm.UC
                                     TB area = new TB();
                                     area.LoadMapAttr(attr);
                                     area.ID = "TB_" + attr.Key;
-                                    area.Text = val.ToString();
+                                    if (val != null)
+                                        area.Text = val.ToString();
                                     area.Rows = 5;
                                     area.TextMode = TextBoxMode.MultiLine;
                                     area.IsHelpKey = true;

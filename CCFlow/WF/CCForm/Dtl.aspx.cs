@@ -310,14 +310,9 @@ namespace CCFlow.WF.CCForm
             if (mdtl.IsShowTitle)
             {
                 this.Pub1.AddTR();
-                if (this.IsWap == 1)
+                if (mdtl.IsDelete && this.IsReadonly == 0)
                 {
-                    string url = "../WAP/MyFlow.aspx?WorkID=" + this.RefPKVal + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow;
-                    this.Pub1.AddTD("<img onclick=\"javascript:SaveDtlDataTo('" + url + "');\" src='../Wap/Img/Back.png' style='width:50px;height:16px' border=0/>");
-                }
-                else
-                {
-                    this.Pub1.Add("<TD class='Idx' ><img src='../Img/Btn/Table.gif' onclick=\"return DtlOpt('" + this.RefPKVal + "','" + this.EnsName + "','" + this.FID + "');\" border=0/></TD>");
+                    this.Pub1.Add("<TD class='TitleExt' nowarp=true ><img src='../Img/Btn/Save.gif' border=0 onclick='SaveDtlData();' ></TD>");
                     numOfCol++;
                 }
 
@@ -356,11 +351,18 @@ namespace CCFlow.WF.CCForm
                     numOfCol++;
                 }
 
-                if (mdtl.IsDelete && this.IsReadonly == 0)
+
+                if (this.IsWap == 1)
                 {
-                    this.Pub1.Add("<TD class='TitleExt' nowarp=true ><img src='../Img/Btn/Save.gif' border=0 onclick='SaveDtlData();' ></TD>");
+                    string url = "../WAP/MyFlow.aspx?WorkID=" + this.RefPKVal + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow;
+                    this.Pub1.AddTD("<img onclick=\"javascript:SaveDtlDataTo('" + url + "');\" src='../Wap/Img/Back.png' style='width:50px;height:16px' border=0/>");
+                }
+                else
+                {
+                    this.Pub1.Add("<TD class='Idx' ><img src='../Img/Btn/Table.gif' onclick=\"return DtlOpt('" + this.RefPKVal + "','" + this.EnsName + "','" + this.FID + "');\" border=0/></TD>");
                     numOfCol++;
                 }
+
 
                 if (mdtl.IsEnableLink)
                 {

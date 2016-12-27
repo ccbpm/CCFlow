@@ -2133,6 +2133,12 @@ namespace CCFlow.WF.UC
 
             // 处理节点表单保存事件.
             currND.MapData.FrmEvents.DoEventNode(FrmEventList.SaveBefore, currWK);
+
+            //执行保存前事件.
+            this.currFlow.DoFlowEventEntity(EventListOfNode.SaveBefore, this.currND, this.currWK, null);
+
+          //this.HisWork, null, jumpToNode, JumpToEmp);
+
             try
             {
                 if (currND.IsStartNode)
@@ -2181,6 +2187,10 @@ namespace CCFlow.WF.UC
             {
                 //处理表单保存后。
                 string s = currND.MapData.FrmEvents.DoEventNode(FrmEventList.SaveAfter, currWK);
+
+                //执行保存前事件.
+                s+=this.currFlow.DoFlowEventEntity(EventListOfNode.SaveAfter, this.currND, this.currWK, null);
+
                 if (s != null)
                 {
                     /*如果不等于null,说明已经执行过数据保存，就让其从数据库里查询一次。*/

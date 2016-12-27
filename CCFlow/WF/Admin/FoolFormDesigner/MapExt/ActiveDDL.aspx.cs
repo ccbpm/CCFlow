@@ -55,9 +55,23 @@ namespace CCFlow.WF.MapDef.MapExtUI
             MapExt me = new MapExt();
 
             string sql = "SELECT MyPK FROM Sys_MapExt WHERE FK_MapData='"+this.FK_MapData+"' AND ExtType='"+this.ExtType+"' AND AttrOfOper='"+this.AttrOfOper+"'";
-            string mypk = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, "");
-            me.MyPK = mypk; 
-            int i = me.RetrieveFromDBSources();
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+            int i =0;
+            string mypk="";
+            if (dt.Rows.Count == 1)
+            {
+                me.MyPK = dt.Rows[0][0].ToString();
+                i = me.RetrieveFromDBSources();
+            }
+            else if (dt.Rows.Count > 1)
+            {
+                //处理数据版本不一致的问题.
+                BP.Sys.MapExt.DeleteDB();
+                this.Response.Redirect(this.Request.RawUrl, true);
+                return;
+            }
+
 
           this.Pub1.AddEasyUiPanelInfoBegin("为下拉框[" + this.AttrOfOper + "]设置联动.", "icon-edit");
             me.FK_MapData = this.FK_MapData;
@@ -148,8 +162,6 @@ namespace CCFlow.WF.MapDef.MapExtUI
             if (me.DoWay == 1)
                 rb.Checked = true;
 
-         
-            //this.Pub1.AddFieldSetEnd();
 
             //this.Pub1.Add("</TD>");
             this.Pub1.AddTDEnd();
@@ -215,7 +227,9 @@ namespace CCFlow.WF.MapDef.MapExtUI
             me.FK_MapData = this.FK_MapData;
             try
             {
+                
                 me.MyPK = me.ExtType + "_" + this.FK_MapData + "_" + me.AttrOfOper + "_" + me.AttrsOfActive;
+
                 if (me.Doc.Contains("No") == false || me.Doc.Contains("Name") == false)
                     throw new Exception("在您的SQL表达式里，必须有No,Name 还两个列，分别标识编码与名称。");
                 me.Save();

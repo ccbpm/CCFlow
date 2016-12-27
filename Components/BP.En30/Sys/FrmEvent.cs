@@ -857,12 +857,11 @@ namespace BP.Sys
                 string[] paras = url.Split('&');
                 foreach (string s in paras)
                 {
-                    if (doc.Contains("@" + s) == false)
-                        continue;
-
                     string[] mys = s.Split('=');
+                    
                     if (doc.Contains("@" + mys[0]) == false)
                         continue;
+
                     doc = doc.Replace("@" + mys[0], mys[1]);
                 }
             }
@@ -882,15 +881,21 @@ namespace BP.Sys
                 {
                     /*是bs系统，并且是url参数执行类型.*/
                     string url = BP.Sys.Glo.Request.RawUrl;
+
                     if (url.IndexOf('?') != -1)
                         url = url.Substring(url.IndexOf('?')).TrimStart('?');
+
                     string[] paras = url.Split('&');
                     foreach (string s in paras)
                     {
-                        if (doc.Contains(s))
+                        string[] mys = s.Split('=');
+
+                        if (doc.Contains(mys[0] + "="))
                             continue;
+
                         doc += "&" + s;
                     }
+
                     doc = doc.Replace("&?", "&");
                 }
 

@@ -180,6 +180,9 @@ namespace BP.WF
             string msg = "";
             try
             {
+                //删除垃圾数据.
+                BP.Sys.MapExt.DeleteDB();
+
                 //升级傻瓜表单.
                 MapFrmFool mff = new MapFrmFool();
                 mff.CheckPhysicsTable();

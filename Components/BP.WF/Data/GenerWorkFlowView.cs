@@ -774,14 +774,11 @@ namespace BP.WF.Data
                 rm.HisAttrs.AddTBString("Note", null, "移交原因", true, false, 0, 300, 100);
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Back.png";
                 rm.Title = "回滚";
-                rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".DoComeBack";
-                rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
-                rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 300, 100);
+                rm.ClassMethodName = this.ToString() + ".DoRollback";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -841,16 +838,14 @@ namespace BP.WF.Data
             PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/Admin/FlowDB/FlowSkip.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node, 900, 800);
             return null;
         }
+
         /// <summary>
-        /// 回滚
+        /// 回滚流程
         /// </summary>
-        /// <param name="nodeid">节点ID</param>
-        /// <param name="note">回滚原因</param>
-        /// <returns>回滚的结果</returns>
-        public string DoComeBack(int nodeid, string note)
+        /// <returns></returns>
+        public string Rollback()
         {
-            BP.WF.Template.FlowSheet fl = new Template.FlowSheet(this.FK_Flow);
-            return fl.DoRebackFlowData(this.WorkID, nodeid, note);
+            return SystemConfig.CCFlowWebPath + "WF/Admin/Rollback.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         #endregion
 		 

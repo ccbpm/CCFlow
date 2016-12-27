@@ -777,7 +777,6 @@ namespace BP.Sys
         }
         #endregion
 
-
         #region 其他方法.
         /// <summary>
         /// 统一生成主键的规则.
@@ -800,6 +799,83 @@ namespace BP.Sys
             }
         }
         #endregion 
+
+        /// <summary>
+        /// 删除垃圾数据.
+        /// </summary>
+        public static void DeleteDB()
+        {
+            MapExts exts = new MapExts();
+            exts.RetrieveAll();
+           
+            foreach (MapExt ext in exts)
+            {
+                if (ext.ExtType == MapExtXmlList.ActiveDDL)
+                {
+                    if (ext.AttrOfOper.Trim().Length == 0)
+                    {
+                        ext.Delete();
+                        continue;
+                    }
+
+                    MapAttr attr = new MapAttr();
+                    attr.MyPK = ext.AttrOfOper;
+                    if (attr.IsExits == true)
+                    {
+                        ext.AttrOfOper = attr.KeyOfEn;
+                        ext.Delete();
+
+                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.Save();
+                    }
+
+                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.FK_MapData + "_" + ext.AttrOfOper)
+                    {
+                        ext.Delete(); //直接删除.
+
+                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.Save();
+                        continue;
+                    }
+
+                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive)
+                    {
+                        ext.Delete(); //直接删除.
+                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.Save();
+                        continue;
+                    }
+
+                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.FK_MapData + "_" + ext.AttrsOfActive + "_" + ext.AttrOfOper)
+                    {
+                        ext.Delete(); //直接删除.
+                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.Save();
+                        continue;
+                    }
+
+
+                    //三个主键的情况.
+                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper )
+                    {
+                        ext.Delete();
+                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.Save();
+                        continue;
+                    }
+
+                    //三个主键的情况.
+                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrsOfActive)
+                    {
+                        ext.Delete();
+                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.Save();
+                        continue;
+                    }
+
+                }
+            }
+        }
     }
     /// <summary>
     /// 扩展s

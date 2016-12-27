@@ -175,6 +175,7 @@
     <Compile Include="Sys\CCFormParse.cs" />
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
+    <Compile Include="Sys\Frm\FrmEventBase.cs" />
     <Compile Include="Sys\SysFileManager.cs">
       <SubType>Code</SubType>
     </Compile>

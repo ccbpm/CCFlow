@@ -1019,7 +1019,13 @@ namespace BP.En
                     //    continue; /*如果是外键,并且外键的默认值为null.*/
 
                     if (attr.IsFK)
-                        continue; /*如果是外键,并且外键的默认值为null.*/
+                    {
+                        if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key)== attr.DefaultValOfReal)
+                            continue;
+
+                        return false;
+                        //continue; /*如果是外键,并且外键的默认值为null.*/
+                    }
 
                     string str = this.GetValStrByKey(attr.Key);
                     if (str == attr.DefaultVal.ToString() || str=="0.00")

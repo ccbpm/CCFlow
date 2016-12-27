@@ -72,44 +72,46 @@ namespace BP.WF.Template
         public DataTable GenerCCers(Entity rpt)
         {
             string sql = "";
-            if (this.CCIsSQLs == true)
+            string ccSql = "";
+            ccSql += this.CCSQL.Clone() as string;
+            ccSql = ccSql.Replace("@WebUser.No", BP.Web.WebUser.No);
+            ccSql = ccSql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            ccSql = ccSql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            switch (this.CCCtrlWay)
             {
-                sql = "\t\n UNION    \t\n   ";
-                sql += this.CCSQL.Clone() as string;
-                sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
-                sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                if (sql.Contains("@"))
-                {
-                    foreach (Attr attr in rpt.EnMap.Attrs)
+                case CtrlWay.ByDept:
+                    sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
+                    break;
+                case CtrlWay.ByEmp:
+                    sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM WF_CCEmp WHERE FK_Node=" + this.NodeID + ")";
+                    break;
+                case CtrlWay.ByStation:
+                    sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ( SELECT FK_Station FROM WF_CCStation WHERE FK_Node=" + this.NodeID + "))";
+                    break;
+                case CtrlWay.BySQL:
+                    if (this.CCIsStations == true)
                     {
-                        if (sql.Contains("@") == false)
-                            break;
-                        sql = sql.Replace("@" + attr.Key, rpt.GetValStrByKey(attr.Key));
+                        sql = "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + ""
+                        + " WHERE FK_Station IN ( SELECT FK_Station FROM WF_CCStation WHERE FK_Node=" + this.NodeID + "))"
+                        + " AND NO IN(" + ccSql + ") ";
                     }
-                }
-            }
-            if (this.CCIsEmps == true)
-            {
-                sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM WF_CCEmp WHERE FK_Node=" + this.NodeID + ")";
-            }
+                    if (this.CCIsEmps == true)
+                    {
+                        sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM WF_CCEmp WHERE FK_Node=" + this.NodeID + ")"
+                            + " AND NO IN(" + ccSql + ")";
+                    }
 
-            if (this.CCIsDepts == true)
-            {
-                if (Glo.OSModel == Sys.OSModel.OneMore)
-                    sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
-                else
-                    sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT No FROM Port_Emp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
+                    if (this.CCIsDepts == true)
+                    {
+                        sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))"
+                        + " AND NO IN(" + ccSql + ")";
+                    }
+                    if (this.CCIsSQLs == true)
+                    {
+                        sql = ccSql;
+                    }
+                    break;
             }
-
-            if (this.CCIsStations == true)
-            {
-                sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ( SELECT FK_Station FROM WF_CCStation WHERE FK_Node=" + this.NodeID + "))";
-            }
-
-            if (sql.Length > 20)
-
-                sql = sql.Substring("\t\n UNION  \t\n  ".Length );
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
@@ -118,6 +120,53 @@ namespace BP.WF.Template
                 return dt;
             }
             return dt;
+            //string sql = "";
+            //if (this.CCIsSQLs == true)
+            //{
+            //    sql = "\t\n UNION    \t\n   ";
+            //    sql += this.CCSQL.Clone() as string;
+            //    sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+            //    sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            //    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            //    if (sql.Contains("@"))
+            //    {
+            //        foreach (Attr attr in rpt.EnMap.Attrs)
+            //        {
+            //            if (sql.Contains("@") == false)
+            //                break;
+            //            sql = sql.Replace("@" + attr.Key, rpt.GetValStrByKey(attr.Key));
+            //        }
+            //    }
+            //}
+            //if (this.CCIsEmps == true)
+            //{
+            //    sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM WF_CCEmp WHERE FK_Node=" + this.NodeID + ")";
+            //}
+
+            //if (this.CCIsDepts == true)
+            //{
+            //    if (Glo.OSModel == Sys.OSModel.OneMore)
+            //        sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
+            //    else
+            //        sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT No FROM Port_Emp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
+            //}
+
+            //if (this.CCIsStations == true)
+            //{
+            //    sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ( SELECT FK_Station FROM WF_CCStation WHERE FK_Node=" + this.NodeID + "))";
+            //}
+
+            //if (sql.Length > 20)
+
+            //    sql = sql.Substring("\t\n UNION  \t\n  ".Length );
+
+            //DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            //if (dt.Rows.Count == 0)
+            //{
+            //    BP.DA.Log.DebugWriteWarning("@流程节点设计错误，未找到抄送人员，NodeID=[" + this.NodeID + "]。 SQL:" + sql);
+            //    return dt;
+            //}
+            //return dt;
         }
         /// <summary>
         ///节点ID
@@ -259,6 +308,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(CCAttr.CCIsSQLs, value);
+            }
+        }
+        /// <summary>
+        /// 抄送方式
+        /// </summary>
+        public CtrlWay CCCtrlWay
+        {
+            get
+            {
+                return (CtrlWay)this.GetValIntByKey(CCAttr.CCCtrlWay);
+            }
+            set
+            {
+                this.SetValByKey(CCAttr.CCCtrlWay, value);
             }
         }
         #endregion

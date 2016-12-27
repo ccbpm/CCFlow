@@ -71,7 +71,7 @@ namespace BP.GPM
         {
             get
             {
-                if (BP.Web.WebUser.No == "admin")
+                if ( this.No == "admin")
                     return true;
 
                 if (BP.Sys.SystemConfig.OSModel == Sys.OSModel.OneMore)

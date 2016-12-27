@@ -71,6 +71,9 @@ namespace BP.GPM
         {
             get
             {
+                if (BP.Web.WebUser.No == "admin")
+                    return true;
+
                 if (BP.Sys.SystemConfig.OSModel == Sys.OSModel.OneMore)
                 {
                     string sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmpStation WHERE FK_Emp='" + this.No + "'";

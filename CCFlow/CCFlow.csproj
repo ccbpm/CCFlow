@@ -140,7 +140,9 @@
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
     <Content Include="SDKFlowDemo\Default.htm" />
+    <Content Include="WF\Admin\AttrFlow\Limit.htm" />
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
+    <Content Include="WF\Admin\AttrFlow\Rollback.htm" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
@@ -896,6 +898,7 @@
     <Content Include="WF\Admin\ConditionLine.aspx" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
     <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
+    <Content Include="WF\App\Classic\ChangePassword.htm" />
     <Content Include="WF\App\Classic\Img\TopLeft.jpg" />
     <Content Include="WF\App\Classic\Img\TopRight.png" />
     <Content Include="WF\App\Classic\Top.aspx" />
@@ -1351,6 +1354,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\Handler.ashx" />
+    <Content Include="WF\App\Classic\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\Comm\Handler.ashx" />
     <Content Include="WF\Comm\Rpt\Handler.ashx" />
@@ -4182,6 +4186,9 @@
     </Compile>
     <Compile Include="WF\Admin\ConditionSubFlowDtl.aspx.designer.cs">
       <DependentUpon>ConditionSubFlowDtl.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\App\Classic\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\App\Classic\Top.aspx.cs">
       <DependentUpon>Top.aspx</DependentUpon>

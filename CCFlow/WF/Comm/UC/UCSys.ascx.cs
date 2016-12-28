@@ -1913,8 +1913,9 @@ namespace CCFlow.WF.Comm.UC
                     RefMethods myreffuncs = en.EnMap.HisRefMethods;
                     foreach (RefMethod func in myreffuncs)
                     {
-                        if (func.Visable == false || func.IsForEns == false)
+                        if (func.Visable == false || func.IsForEns == false || func.RefAttrKey!=null )
                             continue;
+                        
                         str += "<A style='cursor:hand;' nowrap=true onclick=\"javascript:RefMethod1('" + this.Request.ApplicationPath + "', '" + func.Index + "', '" + func.Warning + "', '" + func.Target + "', '" + ens.ToString() + "','" + url + "') \"  > " + func.GetIcon(this.Request.ApplicationPath) + "" + func.Title + "</A>";
                     }
                     #endregion

@@ -287,7 +287,7 @@ public partial class CCFlow_Comm_UIEnsV10 : BP.Web.WebPage
                 else
                     this.ucsys1.AddTD();
             }
-            if (uicfg.IsEnableOpenICON)
+            if (uicfg.IsEnableOpenICON && dtl.PKVal.ToString().Length >= 2  )
                 this.ucsys1.Add("<TD class='TD' style='cursor:hand;' nowrap=true><a href=" + urlExt + " ><img src='../Img/Btn/Open.gif' border=0/></a></TD>");
             else
                 this.ucsys1.AddTD();
@@ -336,7 +336,6 @@ public partial class CCFlow_Comm_UIEnsV10 : BP.Web.WebPage
         //            this.ucsys1.AddTD();
         //        }
         //    }
-
         //    if (map.IsHaveFJ)
         //        this.ucsys1.AddTD();
 

@@ -1147,6 +1147,7 @@ namespace CCFlow.WF.UC
                 #endregion 处理分合流的退回信息.
 
                 currWK = this.currFlow.GenerWork(this.WorkID, this.currND, this.IsPostBack);
+
                 if (BP.WF.Glo.IsEnableTaskPool && gwf.TaskSta == TaskSta.Takeback)
                 {
                     /*如果是任务池状态，并且被人取走，要检查取走的人是不是自己。*/

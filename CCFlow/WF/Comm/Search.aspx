@@ -100,12 +100,12 @@
 	</HEAD>
 	<body   onkeypress="Esc()"   onkeydown='DoKeyDown();' topmargin="0" leftmargin="0"  >
 		<form id="Form1" method="post" runat="server">
-			<table id="Table1" align="left" CellSpacing="0" CellPadding="0" border="0" width="100%">
-				 <caption  class="CaptionMsg" >
+			<table id="Table1" align="left" CellSpacing="0" CellPadding="0" border="0"  topMargin=0  leftMargin=0  width="100%">
+				<%-- <caption  class="CaptionMsg" >
 						<asp:Label id="Label1" runat="server">Label</asp:Label>
-                        </caption>
+                        </caption>--%>
 				<TR>
-					<TD class="ToolBar"   >
+					<TD class="ToolBar"  topmargin="0" leftmargin="0"   >
                         <uc2:ToolBar ID="ToolBar1" runat="server" />
                     </TD>
 				</TR>

@@ -764,7 +764,7 @@ namespace CCFlow.WF.Comm.UC
         {
             UserRegedit ur = new UserRegedit(WebUser.No, ensName + "_SearchAttrs");
             string cfgKey = ur.Vals;
-            this.InitByMapV2(map.IsShowSearchKey, map.DTSearchWay, map.AttrsOfSearch, map.SearchAttrs, null, page, ur);
+            this.InitByMapV2(map.IsShowSearchKey, map.DTSearchWay, map.AttrsOfSearch, map.SearchAttrs, null, page, ur,map.DTSearchLable);
 
             #region 设置默认值
             string[] keys = cfgKey.Split('@');
@@ -785,7 +785,14 @@ namespace CCFlow.WF.Comm.UC
                     TB tb = (TB)ti;
                     if (map.DTSearchWay == DTSearchWay.ByDate)
                     {
-                        tb.Text = DateTime.Parse(ur.DTFrom_Datatime).ToString("yyyy-MM-dd"); //ur.DTFrom_Data;
+                        try
+                        {
+                            tb.Text = DateTime.Parse(ur.DTFrom_Datatime).ToString("yyyy-MM-dd"); //ur.DTFrom_Data;
+                        }
+                        catch
+                        {
+                        }
+
                         tb.Attributes["onfocus"] = "WdatePicker();";
                     }
                     else
@@ -798,8 +805,14 @@ namespace CCFlow.WF.Comm.UC
                     TB tb = (TB)ti;
                     if (map.DTSearchWay == DTSearchWay.ByDate)
                     {
-                        tb.Text = DateTime.Parse(ur.DTTo_Datatime).ToString("yyyy-MM-dd"); //ur.DTTo_Data;
-                        tb.Attributes["onfocus"] = "WdatePicker();";
+                        try
+                        {
+                            tb.Text = DateTime.Parse(ur.DTTo_Datatime).ToString("yyyy-MM-dd"); //ur.DTTo_Data;
+                            tb.Attributes["onfocus"] = "WdatePicker();";
+                        }
+                        catch
+                        {
+                        }
                     }
                     else
                         tb.Text = ur.DTFrom_Datatime;
@@ -941,7 +954,7 @@ namespace CCFlow.WF.Comm.UC
         /// <param name="attrD1"></param>
         /// <param name="page"></param>
         /// <param name="ur"></param>
-        public void InitByMapV2(bool isShowKey, DTSearchWay sw, AttrsOfSearch attrsOfSearch, AttrSearchs attrsOfFK, Attrs attrD1, int page, UserRegedit ur)
+        public void InitByMapV2(bool isShowKey, DTSearchWay sw, AttrsOfSearch attrsOfSearch, AttrSearchs attrsOfFK, Attrs attrD1, int page, UserRegedit ur, string dtSearchLabel)
         {
             int keysNum = 0;
             // 关键字。
@@ -960,7 +973,7 @@ namespace CCFlow.WF.Comm.UC
             {
                 Label lab = new Label();
                 lab.ID = "Lab_From";
-                lab.Text = "日期从:";
+                lab.Text = dtSearchLabel;
                 this.Add(lab);
                 TB tbDT = new TB();
                 tbDT.ID = "TB_S_From";

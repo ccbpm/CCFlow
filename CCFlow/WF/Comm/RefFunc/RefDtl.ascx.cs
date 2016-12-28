@@ -272,7 +272,7 @@ namespace CCFlow.WF.Comm.RefFunc
                                 }
                                 else
                                 {
-                                    ddl.BindEntities(attr.HisFKEns, attr.UIRefKeyValue, attr.UIRefKeyText);
+                                    ddl.BindEntities(attr.HisFKEns, attr.UIRefKeyValue, attr.UIRefKeyText,true);
                                 }
                             }
                             this.ucsys1.AddTD(ddl);
@@ -380,6 +380,7 @@ namespace CCFlow.WF.Comm.RefFunc
             en = this.ucsys1.Copy(en, "0", map);
             en.PKVal = "";
             bool isInsert = false;
+
             if (en.IsBlank == false)
             {
                 if (en.IsNoEntity)

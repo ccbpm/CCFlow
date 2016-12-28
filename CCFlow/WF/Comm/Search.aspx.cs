@@ -251,7 +251,8 @@ namespace CCFlow.Web.Comm
 
             this.SetDGData();
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Search).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
-            this.Label1.Text = this.GenerCaption(this.HisEn.EnMap.EnDesc + "" + this.HisEn.EnMap.TitleExt);
+           // this.Label1.Text = this.GenerCaption(this.HisEn.EnMap.EnDesc + "" + this.HisEn.EnMap.TitleExt);
+
             //临时文件名
             this.expFileName.Value = this.HisEns.GetNewEntity.EnDesc + "数据导出" + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
         }

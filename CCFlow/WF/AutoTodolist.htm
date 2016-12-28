@@ -126,7 +126,7 @@
                                     conMenu += "<td>" + msg[j].ADT + "</td>"; //接受时间
                                     conMenu += "<td>" + msg[j].SDT + "</td>"; //应完成时间
                                     //判断流程是否逾期
-                                    if (cdt > msg[j].SDT) {
+                                    if (cdt > msg[j].SDT && msg[j].WFState==2) {
                                         conMenu += "<td><img src='/WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
                                     }
                                     else {

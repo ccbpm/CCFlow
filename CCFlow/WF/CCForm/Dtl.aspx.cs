@@ -329,7 +329,7 @@ namespace CCFlow.WF.CCForm
                         continue;
 
                     //for lijian 增加了 @符号是一个换行符. 
-                    this.Pub1.AddTDTitleExt(attr.Name.Replace("@", "<br>"));// ("<TD class='FDesc' nowarp=true ><label>" + attr.Name + "</label></TD>");
+                    this.Pub1.AddTDTitleExt("style='width:" + (attr.UIWidthInt + 10) + "'px", attr.Name.Replace("@", "<br>"));// ("<TD class='FDesc' nowarp=true ><label>" + attr.Name + "</label></TD>");
                     numOfCol++;
                 }
 

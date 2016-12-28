@@ -1015,13 +1015,18 @@ namespace BP.En
                 {
                     if (attr.UIIsReadonly && attr.IsFKorEnum == false)
                         continue;
+
                     //if (attr.IsFK && string.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
                     //    continue; /*如果是外键,并且外键的默认值为null.*/
 
                     if (attr.IsFK)
                     {
-                        if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key)== attr.DefaultValOfReal)
+                        //如果打开下面的代码，就会出现 /RefFunc/dtl.aspx 连续增加的问题. 
+                        if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key) == attr.DefaultValOfReal)
                             continue;
+
+                        //if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key)== attr.DefaultValOfReal)
+                        //    continue;
 
                         return false;
                         //continue; /*如果是外键,并且外键的默认值为null.*/

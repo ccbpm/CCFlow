@@ -70,7 +70,7 @@ namespace BP.Web.Controls
                 this.Items.Add(new ListItem(val, val));
             }
         }
-        public void BindEntities(Entities ens, string refkey, string reftext, bool isShowKey)
+        public void BindEntitiesDel(Entities ens, string refkey, string reftext, bool isShowKey)
         {
             this.Items.Clear();
             foreach (Entity en in ens)
@@ -1288,8 +1288,7 @@ namespace BP.Web.Controls
             i--;
         }
 
-
-        public void BindEntities(Entities ens, string refKey, string refText)
+        public void BindEntities(Entities ens, string refKey, string refText, bool isShowSelect=false)
         {
             this.Items.Clear();
 
@@ -1311,6 +1310,10 @@ namespace BP.Web.Controls
                 MakeTree(dt, "ParentNo", "0", "No", "Name", this, -1);
                 return;
             }
+
+            //为了避免IsBlank的判断出错增加.. 2016.12.28 by zhoupeng.
+            if (isShowSelect==true)
+               this.Items.Add(new ListItem("请选择", "" ));
 
             foreach (Entity en in ens)
             {

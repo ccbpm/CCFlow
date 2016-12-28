@@ -957,7 +957,7 @@ namespace BP.WF
                 // 在执行copy后，有可能这两个字段会被冲掉。
                 if (CopyFormWorkID != null)
                 {
-                    /*如果不是执行的从已经完成的流程copy.*/
+                    /*如果不是 执行的从已经完成的流程copy.*/
 
                     wk.SetValByKey(StartWorkAttr.PFlowNo, PFlowNo);
                     wk.SetValByKey(StartWorkAttr.PNodeID, PNodeID);
@@ -990,6 +990,10 @@ namespace BP.WF
 
                     if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                         rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No + "," + emp.Name);
+
+                   
+
+
                 }
 
                 if (rpt.EnMap.PhysicsTable != wk.EnMap.PhysicsTable)

@@ -165,7 +165,7 @@
                 //删除下载的签名图片
                 webOffice.DelLocalFile(path);
             } catch (e) {
-                
+
             }
         }
 
@@ -208,7 +208,7 @@
             /// <param name="field" type="String">要设置的字段名</param>
             /// <param name="text" type="String">要设置的值</param>
             //app.Selection.Find.Execute(oldStr, true, true, false, false, false, true, 1, false, text, 2);
-            var ccflow_bm_name = 'ccflow_bm_main_' + field;
+            var ccflow_bm_name = 'cbm_' + field;
             if (doc.Bookmarks.Exists(ccflow_bm_name)) {
                 var bm = doc.Bookmarks(ccflow_bm_name);
                 var bmRange = bm.Range;
@@ -234,89 +234,156 @@
             /// <summary>填充明细表数据</summary>
             /// <param name="dtlno" type="String">明细表No</param>
             /// <param name="rows" type="Array">明细表数据行集合</param>
-            var ccflow_table_bm_prefix = 'ccflow_bm_dtl_' + dtlno + '_';
-            var ccflow_formula_bm_prefix = 'ccflow_bm_dtl_formula_';
+            var ccflow_table_bm_prefix = 'cbd_' + dtlno + '_';
+            var ccflow_formula_bm_prefix = 'cbdf_';
             var ccflow_table = getTable(ccflow_table_bm_prefix);
 
             if (ccflow_table != null) {
-
-                //补全行数
-                if (ccflow_table.Rows.Count < rows.length + 1) {
-                    ccflow_table.Rows(ccflow_table.Rows.Count).Select();
-                    app.Selection.InsertRowsBelow(rows.length + 1 - ccflow_table.Rows.Count);
-                }
-
                 var cellIDPrefixLen = ccflow_table_bm_prefix.length;
                 var formulaPrefixLen = ccflow_formula_bm_prefix.length;
 
-                //填充数据
-                for (var j = 1; j <= ccflow_table.Columns.Count; j++) {
-                    var firstCell = ccflow_table.Rows(1).Cells(j);
+                //计算明细表的区域
+                var titleRowIndex = 0;
+                var arrColumns = [];
+                var tbm;
+                var cell;
+                var re;
+                var item;
+                var currTableRowsCount = 0;
+                var cellRegion = { begin: 0, end: 0 };
 
-                    if (firstCell.Range.Bookmarks.Count == 0) continue;
-                    var validBookmark;
-                    var colField;
-                    var formula;
-                    var cell;
+                for (var i = 1; i <= doc.Bookmarks.Count; i++) {
+                    tbm = doc.Bookmarks(i);
 
-                    for (var b = 1; b <= firstCell.Range.Bookmarks.Count; b++) {
-                        //此处firstCell.Range.Bookmarks获取的是当前表格中的所有Bookmark，与设想的只获取当前单元格中的Bookmark不一致，因此要对单元格范围与书签范围进行对比排除非当前单元格内的书签
-                        if ((firstCell.Range.Bookmarks(b).Range.Start >= firstCell.Range.Start && firstCell.Range.Bookmarks(b).Range.End < firstCell.Range.End) == false) {
+                    if (tbm.Name.indexOf(ccflow_table_bm_prefix) == -1) {
+                        continue;
+                    }
+
+                    cell = tbm.Range.Cells(1);
+                    cellRegion.start = cell.Range.Start;
+                    cellRegion.end = cell.Range.End;
+                    re = Find(arrColumns, "colIndex", cell.ColumnIndex);
+                    //tbm.Range.Text = cell.Width + "," + cell.Height;
+                    if (re.length != 0) {
+                        continue;   //一个单元格中只能设置一个字段的书签
+                    }
+
+                    titleRowIndex = Math.max(cell.RowIndex, titleRowIndex);
+
+                    item = {
+                        bmName: tbm.Name,
+                        field: tbm.Name.substr(ccflow_table_bm_prefix.length),
+                        formula: "",
+                        rowIndex: cell.RowIndex,
+                        colIndex: cell.ColumnIndex
+                    };
+
+                    //判断是否有汇总函数
+                    for (var j = 1; j <= doc.Bookmarks.Count; j++) {
+                        if (doc.Bookmarks(j).Name.indexOf(ccflow_formula_bm_prefix) == -1
+                         || !(doc.Bookmarks(j).Range.Start >= cellRegion.start && doc.Bookmarks(j).Range.End <= cellRegion.end)
+                         || doc.Bookmarks(j).Name == tbm.Name) {
                             continue;
                         }
 
-                        //判断该列是否有汇总
-                        if (firstCell.Range.Bookmarks(b).Name.length > formulaPrefixLen && firstCell.Range.Bookmarks(b).Name.substr(0, formulaPrefixLen) == ccflow_formula_bm_prefix) {
-                            formula = firstCell.Range.Bookmarks(b).Name.substr(formulaPrefixLen).split('_')[0];
-                        }
-                        else {
-                            formula = '';
-                        }
-
-                        if (firstCell.Range.Bookmarks(b).Name.length > cellIDPrefixLen && firstCell.Range.Bookmarks(b).Name.substr(0, cellIDPrefixLen) == ccflow_table_bm_prefix) {
-                            colField = firstCell.Range.Bookmarks(b).Name.substr(cellIDPrefixLen);
-
-                            for (var i = 0; i < rows.length; i++) {
-                                cell = getCell(rows[i], colField);
-
-                                if (cell == null) continue;
-                                
-                                ccflow_table.Rows(i + 2).Cells(j).Range.Text = cell.value;
-
-                                if (cell.type == "sign") {
-                                    AddSignPicture(ccflow_table.Rows(i + 2).Cells(j).Range, cell.value);
-                                }
-                            }
-                        }
-
-                        //增加汇总域函数
-                        if (formula.length > 0) {
-                            var colAlpha = String.fromCharCode(64 + j);
-                            var formulaString = '=' + formula + '(' + colAlpha + '2:' + colAlpha + (rows.length + 1) + ')';
-                            var formulaFormat = '';
-                            var formulaLower = formula.toLocaleLowerCase();
-
-                            if (formulaLower == 'count') {
-                                formulaFormat = '总数：0';
-                            }
-                            else if (formulaLower == 'average') {
-                                formulaFormat = '平均：0.00';
-                            }
-
-                            //判断是否已经增加了汇总行
-                            if (ccflow_table.Rows.Count < rows.length + 2) {
-                                ccflow_table.Rows(ccflow_table.Rows.Count).Select();
-                                app.Selection.InsertRowsBelow(1);
-                            }
-
-                            //此处使用Cell.Formula方法会出现问题，原因不详
-                            ccflow_table.Cell(ccflow_table.Rows.Count, j).Select();
-                            app.Selection.MoveLeft(1, 1);
-                            app.Selection.InsertFormula(formulaString, formulaFormat);
+                        if (doc.Bookmarks(j).Name.length > formulaPrefixLen && doc.Bookmarks(j).Name.substr(0, formulaPrefixLen) == ccflow_formula_bm_prefix) {
+                            item.formula = doc.Bookmarks(j).Name.substr(formulaPrefixLen).split('_')[0];
                         }
                     }
+
+                    arrColumns.push(item);
                 }
+
+                //计算当前表格的行数
+                var islast;
+
+                while (currTableRowsCount < ccflow_table.Rows.Count - titleRowIndex) {
+                    islast = false;
+
+                    for (var i = 0; i < arrColumns.length; i++) {
+                        try {
+                            var c = ccflow_table.Cell(titleRowIndex + currTableRowsCount + 1, arrColumns[i].colIndex);
+                        }
+                        catch (e) {
+                            islast = true;
+                            break;
+                        }
+                    }
+
+                    if (islast) {
+                        break;
+                    }
+
+                    currTableRowsCount++;
+                }
+
+                alert(currTableRowsCount);
+
+                //补全行数
+                if (currTableRowsCount < rows.length) {
+                    ccflow_table.Cell(titleRowIndex + currTableRowsCount, arrColumns[0].colIndex).Select();
+                    app.Selection.InsertRowsBelow(rows.length - currTableRowsCount);
+                }
+
+                //如果有汇总行，则再增加一行
+                if (Find(arrColumns, "formula", "").length < arrColumns.length && currTableRowsCount < rows.length + 1) {
+                    app.Selection.InsertRowsBelow(1);
+                }
+
+                //填充数据
+                $.each(arrColumns, function () {
+                    for (var i = 0; i < rows.length; i++) {
+                        cell = getCell(rows[i], this.field);
+
+                        if (cell == null) continue;
+
+                        ccflow_table.Cell(titleRowIndex + i + 1, this.colIndex).Range.Text = this.field == "rowid" ? (i+1).toString() : cell.value;
+
+                        if (cell.type == "sign") {
+                            AddSignPicture(ccflow_table.Cell(titleRowIndex + i + 1, this.colIndex).Range, cell.value);
+                        }
+                    }
+
+                    //增加汇总域函数
+                    if (this.formula.length > 0) {
+                        var colAlpha = String.fromCharCode(64 + this.colIndex);
+                        var formulaString = '=' + this.formula + '(' + colAlpha + (titleRowIndex + 1) + ':' + colAlpha + (titleRowIndex + rows.length) + ')';
+                        var formulaFormat = '';
+                        var formulaLower = this.formula.toLocaleLowerCase();
+
+                        if (formulaLower == 'count') {
+                            formulaFormat = '总数：0';
+                        }
+                        else if (formulaLower == 'average') {
+                            formulaFormat = '平均：0.00';
+                        }
+
+                        //此处使用Cell.Formula方法会出现问题，原因不详
+                        ccflow_table.Cell(titleRowIndex + rows.length + 1, this.colIndex).Select();
+                        app.Selection.MoveLeft(1, 1);
+                        app.Selection.InsertFormula(formulaString, formulaFormat);
+                    }
+                });
             }
+        }
+
+        function Find(aItems, sField, oValue, sField1, oValue1) {
+            /// <summary>查找数组中指定字段值的元素</summary>
+            /// <param name="aItems" type="Array">要查找的数组</param>
+            /// <param name="sField" type="String">依据字段名称</param>
+            /// <param name="oValue" type="Object">字段的值</param>
+            /// <param name="sField1" type="String">第2个依据字段名称</param>
+            /// <param name="oValue1" type="Object">第2个字段的值</param>
+            /// <return>返回集合</return>
+            var re = [];
+
+            $.each(aItems, function () {
+                if (this[sField] == oValue && (!sField1 || this[sField1] == oValue1)) {
+                    re.push(this);
+                }
+            });
+
+            return re;
         }
 
         function getCell(row, colName) {

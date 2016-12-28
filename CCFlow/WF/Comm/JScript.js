@@ -580,7 +580,7 @@ function parseVal2Float(ctrl) {
             tb_Ctrl.value = 0;
         }
 
-        return parsedouble(tb_Ctrl.value.replace(',', ''))
+        return parseFloat(tb_Ctrl.value.replace(',', ''))
     }
     return 0;
 }

@@ -285,12 +285,9 @@
                     });
                     //
                     var groupFileds = $.grep(dteArr, function (value) {
-                        console.log(value)
-                        console.log($('[name="' + value.FK_Dept + '"]').length == "0");
                         return ($('[name="' + value.FK_Dept + '"]').length != "0");
                     });
 
-                    console.log(groupFileds)
                     $.each(groupFileds, function (j, objj) {
                         ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
                     });
@@ -394,8 +391,7 @@
 
            // var empNos = "zhoupeng";
 
-            console.log(pageUrlParam.WorkID);
-
+            
             if (pageUrlParam.toNode == 0) {
                 toNode = $("#searchS1 option:selected").val();
             } else {

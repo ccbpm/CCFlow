@@ -151,15 +151,13 @@ namespace BP.Sys
                 //创建数据源.
                 SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
 
-                #region 自己定义的表.
+                #region BP类
                 if (this.SrcType == Sys.SrcType.BPClass)
                 {
                     Entities ens = ClassFactory.GetEns(this.No);
                     return ens.RetrieveAllToTable();
                 }
                 #endregion
-
-
 
                 #region  WebServices
                 // this.SrcType == Sys.SrcType.WebServices，by liuxc 
@@ -262,10 +260,14 @@ namespace BP.Sys
                 }
                 #endregion
 
-                #region 如果是一个SQL.
-                if (this.SrcType == Sys.SrcType.SQL)
+                #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
+                if (this.SrcType == Sys.SrcType.SQL || this.SrcType == Sys.SrcType.TableOrView)
                 {
                     string runObj = this.SelectStatement;
+
+                    if(runObj == null)
+                        runObj = string.Empty;
+
                     runObj = runObj.Replace("~", "'");
                     if (runObj.Contains("@WebUser.No"))
                         runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
@@ -275,27 +277,21 @@ namespace BP.Sys
 
                     if (runObj.Contains("@WebUser.FK_Dept"))
                         runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                    if(this.SrcType == Sys.SrcType.TableOrView)
+                        runObj = "SELECT No, Name"+(this.CodeStruct == Sys.CodeStruct.Tree ? ",ParentNo" : string.Empty)+" FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(runObj) ? string.Empty : (" WHERE " + runObj));
+
                     return src.RunSQLReturnTable(runObj);
                 }
-                #endregion 如果是一个SQL.
-
-                #region 如果是一个外键表.
-                if (this.SrcType == Sys.SrcType.TableOrView)
-                {
-                    string sql = "SELECT No, Name FROM " + this.No;
-                    return src.RunSQLReturnTable(sql);
-                }
-                #endregion 如果是一个SQL.
-
-                #region 自己定义的表.
+                #endregion
+                
+                #region 自定义表.
                 if (this.SrcType == Sys.SrcType.CreateTable)
                 {
                     string sql = "SELECT No, Name FROM " + this.No;
                     return src.RunSQLReturnTable(sql);
                 }
                 #endregion
-
- 
 
                 throw new Exception("@没有判断的数据类型."+this.SrcType +" - "+this.SrcTypeText );
             }
@@ -808,7 +804,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoGuide()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFGuide.aspx";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFGuide.htm";
         }
         /// <summary>
         /// 编辑数据
@@ -927,7 +923,7 @@ namespace BP.Sys
                     {
                         string no = i.ToString();
                         no = no.PadLeft(3, '0');
-                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo,GUID) VALUES('" + no + "','Item" + no + "','" + this.DefVal + "', '" + DBAccess.GenerGUID() + "') ";
+                        sql = "INSERT INTO " + this.SrcTable + " (No,Name,GUID) VALUES('" + no + "','Item" + no + "','" + DBAccess.GenerGUID() + "') ";
                         this.RunSQL(sql);
                     }
                 }

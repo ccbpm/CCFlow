@@ -16,14 +16,12 @@
         }
 
     </script>
-    
-            
-
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <table class="easyui-layout" style="width: 100%;">
-        <div  style=" float:left">
-           数据源表： <a href="javascript:WinOpen('/WF/Comm/Sys/SFGuide.aspx?DoType=New&FromApp=SL')">新建</a>
+        <div style="float: left">
+            数据源表： <a href="javascript:WinOpen('/WF/Comm/Sys/SFGuide.htm?DoType=New&FromApp=SL')">
+                新建</a>
         </div>
         <tr>
             <th width="3%">
@@ -73,18 +71,18 @@
             foreach (BP.Sys.SFTable tab in tabs)
             {
                 idx++;
-                
+
                 if (tab.No.Contains("BP.") == false)
                 {
-                     icon = "./Img/DBSrcTable.png";
+                    icon = "./Img/DBSrcTable.png";
                 }
                 else
                 {
-                     icon = "./Img/Form.png";
+                    icon = "./Img/Form.png";
                 }
         
         %>
-        <tr  onmouseover='TROver(this)' onmouseout='TROut(this)'>
+        <tr onmouseover='TROver(this)' onmouseout='TROut(this)'>
             <td class="Idx">
                 <%=idx %>
             </td>
@@ -102,28 +100,30 @@
                 <%=tab.CodeStructT%>
             </td>
             <%
-        int refNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE UIBindKey='" + tab.No + "'", 0);
-        string delLink = "";
-        if (refNum == 0)
-            delLink = "<a href=\"javascript:Del('" + tab.No + "')\">删除</a>";
+                int refNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE UIBindKey='" + tab.No + "'", 0);
+                string delLink = "";
+                if (refNum == 0)
+                    delLink = "<a href=\"javascript:Del('" + tab.No + "')\">删除</a>";
 
-        string editDBLink = "无";
-        BP.Sys.SFDBSrc src = new BP.Sys.SFDBSrc(tab.FK_SFDBSrc);
-        if (src.DBSrcType != BP.Sys.DBSrcType.WebServices && tab.No.Contains("BP.") == false)
-        {
-            int dbNum = src.RunSQLReturnInt("SELECT COUNT(*) FROM " + tab.No + " ", 0);
-            editDBLink = "<a href=\"javascript:WinOpen('/WF/Admin/FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + tab.No + "')\">编辑(" + dbNum + ")</a>";
-        }
+                string editDBLink = "无";
+                //edited by liuxc,2016-12-29,只显示创建表类型数据源可以编辑数据，SQL查询、外键表/视图，一律使用直接查询方式，不再创建表
+                if (tab.SrcType == BP.Sys.SrcType.CreateTable)
+                {
+                    int dbNum = new BP.Sys.SFDBSrc(tab.FK_SFDBSrc).RunSQLReturnInt("SELECT COUNT(*) FROM " + tab.No + " ", 0);
+                    editDBLink = "<a href=\"javascript:WinOpen('/WF/Admin/FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + tab.No + "')\">编辑(" + dbNum + ")</a>";
+                }
         
     //int refNum = tab.db("SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE UIBindKey='" + tab.No + "'", 0);
     //int dataNum=
         
             %>
             <td>
-                <a href="javascript:WinOpen('/WF/Admin/CCFormDesigner/TableRef.aspx?RefNo=<%=tab.No %>&FromApp=SL')">引用(<%=refNum %>)</a>
+                <a href="javascript:WinOpen('/WF/Admin/CCFormDesigner/TableRef.aspx?RefNo=<%=tab.No %>&FromApp=SL')">
+                    引用(<%=refNum %>)</a>
             </td>
             <td>
-                <a href="javascript:WinOpen('/WF/Admin/FoolFormDesigner/SFTable.aspx?RefNo=<%=tab.No %>&FromApp=SL')">编辑属性</a>
+                <a href="javascript:WinOpen('/WF/Admin/FoolFormDesigner/SFTable.aspx?RefNo=<%=tab.No %>&FromApp=SL')">
+                    编辑属性</a>
             </td>
             <td>
                 <%=editDBLink %>
@@ -133,7 +133,7 @@
             </td>
         </tr>
         <%
-    }
+            }
         %>
     </table>
 </asp:Content>

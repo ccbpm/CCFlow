@@ -180,7 +180,7 @@
                     var coltext = sftable.COLUMNTEXT ? sftable.COLUMNTEXT : '';
                     var colparent = sftable.PARENTVALUE ? sftable.PARENTVALUE : '';
                     var rootvalue = sftable.DEFVAL ? sftable.DEFVAL : '0';
-                    var sql = sftable.SELECTSTATEMENT ? sftable.SELECTSTATEMENT : ''
+                    var sql = sftable.SELECTSTATEMENT ? sftable.SELECTSTATEMENT.replace(/~/g, "'"): ''
 
                     t.addTR(null, 'r4')
                      .addTD('r4', 'c40', CONST_GROUPTITLE, '数据源：')

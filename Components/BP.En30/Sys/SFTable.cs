@@ -22,23 +22,23 @@ namespace BP.Sys
         /// <summary>
         /// 本地的类
         /// </summary>
-        BPClass=0,
+        BPClass = 0,
         /// <summary>
         /// 通过ccform创建表
         /// </summary>
-        CreateTable=1,
+        CreateTable = 1,
         /// <summary>
         /// 表或视图
         /// </summary>
-        TableOrView=2,
+        TableOrView = 2,
         /// <summary>
         /// SQL查询数据
         /// </summary>
-        SQL=3,
+        SQL = 3,
         /// <summary>
         /// WebServices
         /// </summary>
-        WebServices=4
+        WebServices = 4
     }
     /// <summary>
     /// 编码表类型
@@ -265,7 +265,7 @@ namespace BP.Sys
                 {
                     string runObj = this.SelectStatement;
 
-                    if(runObj == null)
+                    if (runObj == null)
                         runObj = string.Empty;
 
                     runObj = runObj.Replace("~", "'");
@@ -278,13 +278,13 @@ namespace BP.Sys
                     if (runObj.Contains("@WebUser.FK_Dept"))
                         runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-                    if(this.SrcType == Sys.SrcType.TableOrView)
-                        runObj = "SELECT No, Name"+(this.CodeStruct == Sys.CodeStruct.Tree ? ",ParentNo" : string.Empty)+" FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(runObj) ? string.Empty : (" WHERE " + runObj));
+                    if (this.SrcType == Sys.SrcType.TableOrView)
+                        runObj = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? (", " + this.ParentValue + " ParentNo") : string.Empty) + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(runObj) ? string.Empty : (" WHERE " + runObj));
 
                     return src.RunSQLReturnTable(runObj);
                 }
                 #endregion
-                
+
                 #region 自定义表.
                 if (this.SrcType == Sys.SrcType.CreateTable)
                 {
@@ -293,7 +293,7 @@ namespace BP.Sys
                 }
                 #endregion
 
-                throw new Exception("@没有判断的数据类型."+this.SrcType +" - "+this.SrcTypeText );
+                throw new Exception("@没有判断的数据类型." + this.SrcType + " - " + this.SrcTypeText);
             }
         }
         /// <summary>
@@ -425,7 +425,7 @@ namespace BP.Sys
         {
             get
             {
-                string str= this.GetValStringByKey(SFTableAttr.SrcTable);
+                string str = this.GetValStringByKey(SFTableAttr.SrcTable);
                 if (str == "" || str == null)
                     return this.No;
                 return str;
@@ -544,7 +544,7 @@ namespace BP.Sys
                     return SrcType.BPClass;
                 else
                 {
-                    SrcType src= (SrcType)this.GetValIntByKey(SFTableAttr.SrcType);
+                    SrcType src = (SrcType)this.GetValIntByKey(SFTableAttr.SrcType);
                     if (src == Sys.SrcType.BPClass)
                         return Sys.SrcType.CreateTable;
                     return src;
@@ -866,7 +866,7 @@ namespace BP.Sys
                 //初始化数据.
                 this.InitDataTable();
             }
-           
+
             return base.beforeInsert();
         }
         /// <summary>
@@ -897,14 +897,14 @@ namespace BP.Sys
         public void InitDataTable()
         {
             DataTable dt = this.GenerData();
-            
+
             string sql = "";
             if (dt.Rows.Count == 0)
             {
                 /*初始化数据.*/
                 if (this.CodeStruct == Sys.CodeStruct.Tree)
                 {
-                    sql = "INSERT INTO "+this.SrcTable+" (No,Name,ParentNo,GUID) VALUES('"+this.DefVal+"','根目录','"+this.DefVal+"','"+DBAccess.GenerGUID()+"') ";
+                    sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo,GUID) VALUES('" + this.DefVal + "','根目录','" + this.DefVal + "','" + DBAccess.GenerGUID() + "') ";
                     this.RunSQL(sql);
 
                     for (int i = 1; i < 4; i++)
@@ -929,7 +929,7 @@ namespace BP.Sys
                 }
             }
         }
- 
+
     }
     /// <summary>
     /// 用户自定义表s

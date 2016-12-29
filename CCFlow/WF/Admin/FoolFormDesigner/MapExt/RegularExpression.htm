@@ -16,7 +16,7 @@
         $(function () {
 
             var fk_mapdata = GetQueryString("FK_MapData"); //表单id.
-            var keyOfEn = GetQueryString("KeyOfEn"); //字段
+            var keyOfEn = GetQueryString("RefNo"); //字段
 
             $.ajax({
                 type: 'post',
@@ -86,7 +86,7 @@
                 data: frmData,
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=RegularExpression_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+                url: Handler + "?DoType=RegularExpression_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("RefNo") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
@@ -238,7 +238,7 @@
             </td>
             <td>
                 <textarea name="TB_Doc_onsubmit" rows="1" cols="50" id="TB_Doc_onsubmit" style="width: 99%;">
-/^\d{15}|\d{}18$/</textarea>
+                </textarea>
             </td>
             <td>
                 <input name="TB_Tag1_onsubmit" type="text" value="" size="20" id="TB_Tag1_onsubmit"

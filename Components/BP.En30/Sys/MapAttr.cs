@@ -1548,7 +1548,12 @@ namespace BP.Sys
                 default:
                     break;
             }
-            this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+
+            if (string.IsNullOrWhiteSpace(this.KeyOfEn))
+                this.MyPK = this.FK_MapData;
+            else
+                this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+
             return base.beforeUpdate();
         }
         /// <summary>

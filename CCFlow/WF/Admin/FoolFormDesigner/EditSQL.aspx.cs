@@ -123,18 +123,12 @@ namespace CCFlow.WF.MapDef
             isItem = this.Pub1.AddTR(isItem);
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("字段英文名"); // "字段英文名称"
+
             tb = new TB();
-            if (this.MyPK != null)
-            {
-                this.Pub1.AddTD(mapAttr.KeyOfEn);
-            }
-            else
-            {
-                tb = new TB();
-                tb.ID = "TB_KeyOfEn";
-                tb.Text = mapAttr.KeyOfEn;
-                this.Pub1.AddTD(tb);
-            }
+            tb.ID = "TB_KeyOfEn";
+            tb.Text = mapAttr.KeyOfEn;
+            tb.Enabled = string.IsNullOrWhiteSpace(this.MyPK);
+            this.Pub1.AddTD(tb);
 
             if (string.IsNullOrEmpty(mapAttr.KeyOfEn))
                 this.Pub1.AddTD("字母/数字/下划线组合");
@@ -166,7 +160,7 @@ namespace CCFlow.WF.MapDef
             tb.Attributes["width"] = "100%";
             tb.Text = mapAttr.DefValReal;
             this.Pub1.AddTD(tb);
-            
+
 
             if (mapAttr.UIBindKey.Contains("."))
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('../Comm/Search.aspx?EnsName=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
@@ -287,7 +281,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTDIdx(idx++);
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "')\">设置列表过滤</a>");
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + mapAttr.FK_MapData + "&AttrOfOper=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.ActiveDDL + "_" + mapAttr.MyPK + "')\">设置级联动(如:省份,城市联动)</a>");
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK="+MapExtXmlList.DDLFullCtrl+"_"+mapAttr.MyPK+"')\">设置自动填充</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.KeyOfEn + "&MyPK=" + MapExtXmlList.DDLFullCtrl + "_" + mapAttr.MyPK + "')\">设置自动填充</a>");
                 this.Pub1.AddTREnd();
             }
             #endregion 扩展功能.
@@ -295,7 +289,7 @@ namespace CCFlow.WF.MapDef
             #region 字段按钮
             this.Pub1.AddTRSum();
             this.Pub1.Add("<TD colspan=4>");
-             
+
             Button btn = new Button();
             btn.ID = "Btn_Save";
             btn.Text = "保存";
@@ -373,30 +367,31 @@ namespace CCFlow.WF.MapDef
                 if (this.MyPK == null || this.MyPK == "")
                 {
                     attr.MyPK = this.MyPK + "_" + this.Pub1.GetTBByID("TB_KeyOfEn").Text;
-                    attr.KeyOfEn =  this.Pub1.GetTBByID("TB_KeyOfEn").Text;
+                    attr.KeyOfEn = this.Pub1.GetTBByID("TB_KeyOfEn").Text;
                     attr.UIContralType = UIContralType.DDL;
                     attr.MyDataType = BP.DA.DataType.AppString;
                     attr.LGType = FieldTypeS.Normal;
                     attr.DefVal = "";
-                    attr.UIBindKey = this.FK_SFTable ;
+                    attr.UIBindKey = this.FK_SFTable;
                     attr.UIIsEnable = true;
                     if (attr.IsExits == true)
-                        throw new Exception("@字段名["+attr.KeyOfEn+"]已经存在，保存失败。");
+                        throw new Exception("@字段名[" + attr.KeyOfEn + "]已经存在，保存失败。");
 
                     attr = (MapAttr)this.Pub1.Copy(attr);
                 }
                 else
                 {
                     attr.MyPK = this.MyPK;
-                    attr.Retrieve();
+                    attr.RetrieveFromDBSources();
                     attr = (MapAttr)this.Pub1.Copy(attr);
                 }
 
-                attr.FK_MapData = this.MyPK;
+                attr.FK_MapData = this.FK_MapData;
                 attr.GroupID = this.Pub1.GetDDLByID("DDL_GroupID").SelectedItemIntVal;
                 attr.ColSpan = this.Pub1.GetDDLByID("DDL_ColSpan").SelectedItemIntVal;
                 attr.DefVal = this.Pub1.GetTBByID("TB_DefVal").Text;
                 attr.UIBindKey = this.Pub1.GetTBByID("TB_UIBindKey").Text;
+                attr.KeyOfEn = this.Pub1.GetTBByID("TB_KeyOfEn").Text;
 
                 string field = attr.KeyOfEn;
                 if (this.MyPK == null || this.MyPK == "")
@@ -423,7 +418,7 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&MyPK=" + this.MyPK + "&FK_MapData="+this.FK_MapData+"&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
+                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
                         return;
                     default:
                         break;

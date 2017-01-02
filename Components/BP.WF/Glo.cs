@@ -3661,18 +3661,22 @@ namespace BP.WF
         /// <param name="title"></param>
         public static void InitCH(Flow fl, Node nd, Int64 workid, Int64 fid, string title)
         {
-            InitCH(fl, nd, workid, fid, title, null, null, DateTime.Now);
+            InitCH2017(fl, nd, workid, fid, title, null, null, DateTime.Now);
         }
+
         /// <summary>
-        /// 当流程发送下去以后，就开始执行考核。
+        /// 执行考核
         /// </summary>
         /// <param name="fl">流程</param>
         /// <param name="nd">节点</param>
         /// <param name="workid">工作ID</param>
         /// <param name="fid">FID</param>
         /// <param name="title">标题</param>
-        /// <param name="dtNow">计算的当前时间，如果为null,就取当前日期.</param>
-        public static void InitCH(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt, DateTime dtNow)
+        /// <param name="prvRDT">上一个时间点</param>
+        /// <param name="sdt">应完成日期</param>
+        /// <param name="dtNow">当前日期</param>
+        public static void InitCH2017(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt,
+            DateTime dtNow)
         {
             //开始节点不考核.
             if (nd.IsStartNode)
@@ -3711,8 +3715,129 @@ namespace BP.WF
                 if (dt.Rows.Count == 0)
                     return;
 
-                prvRDT = dt.Rows[0][0].ToString();
-                sdt = dt.Rows[0][1].ToString();
+                prvRDT = dt.Rows[0][0].ToString(); //上一个时间点的记录日期.
+                sdt = dt.Rows[0][1].ToString(); //应完成日期.
+            }
+
+            #region 初始化基础数据.
+            BP.WF.Data.CH ch = new CH();
+            ch.WorkID = workid;
+            ch.FID = fid;
+            ch.Title = title;
+
+            //记录当时设定的值.
+            ch.TSpan = nd.TSpanDay + "天" + nd.TSpanHour + "时";
+
+            ch.FK_NY = dtNow.ToString("yyyy-MM");
+
+            ch.DTFrom = prvRDT;  //任务下达时间.
+            ch.DTTo = dtNow.ToString("yyyy-MM-dd HH:mm"); //时间到.
+
+            ch.SDT = sdt; //应该完成时间.
+
+            ch.FK_Flow =  nd.FK_Flow; //流程信息.
+            ch.FK_FlowT = nd.FlowName;
+
+            ch.FK_Node = nd.NodeID; //节点.
+            ch.FK_NodeT = nd.Name;
+
+            ch.FK_Dept = WebUser.FK_Dept; //部门.
+            ch.FK_DeptT = WebUser.FK_DeptName;
+
+            ch.FK_Emp = WebUser.No;//当事人.
+            ch.FK_EmpT = WebUser.Name;
+        
+            // mypk.
+            ch.MyPK = nd.NodeID + "_" + workid + "_" + fid + "_" + WebUser.No;
+            #endregion 初始化基础数据.
+
+            #region 求计算属性.
+            //求出是第几个周.
+            System.Globalization.CultureInfo myCI =
+                        new System.Globalization.CultureInfo("zh-CN");
+            ch.WeekNum = myCI.Calendar.GetWeekOfYear(dtNow, System.Globalization.CalendarWeekRule.FirstDay, System.DayOfWeek.Monday);
+
+            // UseDays . 求出实际使用天数.
+            DateTime dtFrom = DataType.ParseSysDate2DateTime(ch.DTFrom);
+            DateTime dtTo = DataType.ParseSysDate2DateTime(ch.DTTo);
+            
+            TimeSpan ts = dtTo - dtFrom;
+            ch.UseDays = ts.Days;
+            int hour = ts.Hours;
+            ch.UseDays += ts.Hours / 8; //使用的天数.
+
+            // OverDays . 求出 逾期天 数.
+            DateTime sdtOfDT = DataType.ParseSysDate2DateTime(ch.SDT);
+            if (sdtOfDT >= dtTo)
+            {
+                /* 正常完成 */
+                ch.OverDays = 0;
+                ch.CHSta = CHSta.AnQi; //按期完成.
+            }
+            else
+            {
+                /*逾期完成.*/
+                TimeSpan myts = dtTo - sdtOfDT;
+                ch.OverDays = myts.Days; //预期的天数.
+                ch.OverDays += ts.Hours/8;
+                ch.CHSta = CHSta.AnQi; //按期完成.
+            }
+            #endregion 求计算属性.
+
+            //执行保存.
+            try
+            {
+                ch.DirectInsert();
+            }
+            catch
+            {
+                //如果遇到退回的情况就可能涉及到主键重复的问题.
+                ch.MyPK = BP.DA.DBAccess.GenerGUID();
+                ch.Insert();
+            }
+
+        }
+        public static void InitCH2016(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt, DateTime dtNow)
+        {
+            //开始节点不考核.
+            if (nd.IsStartNode)
+                return;
+
+            //如果设置为0 则不考核.
+            if (nd.TSpanDay == 0 && nd.TSpanHour == 0)
+                return;
+
+            if (dtNow == null)
+                dtNow = DateTime.Now;
+
+            if (sdt == null || prvRDT == null)
+            {
+                string dbstr = SystemConfig.AppCenterDBVarStr;
+                Paras ps = new Paras();
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        ps.SQL = "SELECT TOP 1 RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
+                        break;
+                    case DBType.Oracle:
+                        ps.SQL = "SELECT  RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        break;
+                    case DBType.MySQL:
+                        ps.SQL = "SELECT  RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
+                        break;
+                    default:
+                        break;
+                }
+                ps.Add("WorkID", workid);
+                ps.Add("FK_Emp", WebUser.No);
+                ps.Add("FK_Node", nd.NodeID);
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                    return;
+
+                prvRDT = dt.Rows[0][0].ToString(); //上一个时间点的记录日期.
+                sdt = dt.Rows[0][1].ToString(); //应完成日期.
             }
 
             #region 初始化基础数据.
@@ -3745,12 +3870,12 @@ namespace BP.WF
             // ch.Week = (int)dtNow.w;
             System.Globalization.CultureInfo myCI =
                         new System.Globalization.CultureInfo("zh-CN");
+
             ch.WeekNum = myCI.Calendar.GetWeekOfYear(dtNow, System.Globalization.CalendarWeekRule.FirstDay, System.DayOfWeek.Monday);
 
             // mypk.
             ch.MyPK = nd.NodeID + "_" + workid + "_" + fid + "_" + WebUser.No;
             #endregion 初始化基础数据.
-
 
             // 求出结算时间点 dtFrom.
             DateTime dtFrom = BP.DA.DataType.ParseSysDateTime2DateTime(ch.DTFrom);
@@ -3763,106 +3888,105 @@ namespace BP.WF
             int dtHHmm = 0;
             if (dtFrom.Year == dtNow.Year && dtFrom.Month == dtNow.Month && dtFrom.Day == dtFrom.Day)
             {
-                // 计算发送时间是否是中午?
-                dtHHmm = int.Parse(dtFrom.ToString("HHmm"));
-                bool isSendAM = false;
-                if (dtHHmm >= Glo.AMFromInt && dtHHmm <= Glo.AMToInt)
-                {
-                    /*发送人发送时间是上午, 并且处理人处理时间也是上午.*/
-                    isSendAM = true;
-                }
+                //// 计算发送时间是否是中午?
+                //dtHHmm = int.Parse(dtFrom.ToString("HHmm"));
+                //bool isSendAM = false;
+                //if (dtHHmm >= Glo.AMFromInt && dtHHmm <= Glo.AMToInt)
+                //{
+                //    /*发送人发送时间是上午, 并且处理人处理时间也是上午.*/
+                //    isSendAM = true;
+                //}
 
-                // 计算处理时间是否是中午？
-                dtHHmm = int.Parse(dtFrom.ToString("HHmm"));
-                bool isCurrAM = false;
-                if (dtHHmm >= Glo.AMFromInt && dtHHmm <= Glo.AMToInt)
-                {
-                    /*发送人发送时间是上午, 并且处理人处理时间也是上午.*/
-                    isCurrAM = true;
-                }
+                //// 计算处理时间是否是中午？
+                //dtHHmm = int.Parse(dtFrom.ToString("HHmm"));
+                //bool isCurrAM = false;
+                //if (dtHHmm >= Glo.AMFromInt && dtHHmm <= Glo.AMToInt)
+                //{
+                //    /*发送人发送时间是上午, 并且处理人处理时间也是上午.*/
+                //    isCurrAM = true;
+                //}
 
-                /* 如果是同一天.  如果都是中午.*/
-                if (isSendAM && isCurrAM)
-                {
-                    TimeSpan ts = dtNow - dtFrom;
-                    ch.UseMinutes += (int)ts.TotalMinutes; // 得到实际用的时间.
-                }
+                ///* 如果是同一天.  如果都是中午.*/
+                //if (isSendAM && isCurrAM)
+                //{
+                //    TimeSpan ts = dtNow - dtFrom;
+                //    ch.UseMinutes += (int)ts.TotalMinutes; // 得到实际用的时间.
+                //}
 
-                /* 如果是同一天.  如果都是下午.*/
-                if (isSendAM == false && isCurrAM == false)
-                {
-                    TimeSpan ts = dtNow - dtFrom;
+                ///* 如果是同一天.  如果都是下午.*/
+                //if (isSendAM == false && isCurrAM == false)
+                //{
+                //    TimeSpan ts = dtNow - dtFrom;
 
-                    //两个时间差，并减去午休的时间.
-                    ch.UseMinutes += (int)ts.TotalMinutes; // 得到实际用的时间.
-                }
+                //    //两个时间差，并减去午休的时间.
+                //    ch.UseMinutes += (int)ts.TotalMinutes; // 得到实际用的时间.
+                //}
 
-                /* 如果是同一天.  如果一个是中午一个是下午.*/
-                if (isSendAM == true && isCurrAM == false)
-                {
-                    float f60 = 60;
-                    TimeSpan ts = dtNow - dtFrom;
-                    //ts.TotalMinutes
-                    float hours = (float)ts.TotalHours - Glo.AMPMTimeSpan; // 得到实际用的时间.
+                ///* 如果是同一天.  如果一个是中午一个是下午.*/
+                //if (isSendAM == true && isCurrAM == false)
+                //{
+                //    float f60 = 60;
+                //    TimeSpan ts = dtNow - dtFrom;
+                //    //ts.TotalMinutes
+                //    float hours = (float)ts.TotalHours - Glo.AMPMTimeSpan; // 得到实际用的时间.
 
-                    // 实际使用时间.
-                    ch.UseMinutes += (int)hours * 60;
-                }
+                //    // 实际使用时间.
+                //    ch.UseMinutes += (int)hours * 60;
+                //}
 
-                //求超过时限.
-                ch.OverMinutes = ch.UseMinutes - nd.TSpanMinues;
+                ////求超过时限.
+                //ch.OverMinutes = ch.UseMinutes - nd.TSpanMinues;
 
-                //设置时限状态.
-                if (ch.OverMinutes > 0)
-                {
-                    /* 如果是正数，就说明它是一个超期完成的状态. */
-                    if (ch.OverMinutes / 2 > nd.TSpanMinues)
-                        ch.CHSta = CHSta.ChaoQi; //如果超过了时间的一半，就是超期.
-                    else
-                        ch.CHSta = CHSta.YuQi;   //在规定的时间段以内完成，就是预期。
-                }
-                else
-                {
-                    /* 是负数就是提前完成. */
-                    if (ch.OverMinutes / 2 > -nd.TSpanMinues)
-                        ch.CHSta = CHSta.JiShi; //如果提前了一半的时间，就是及时完成.
-                    else
-                        ch.CHSta = CHSta.AnQi; // 否则就是按期完成.
-                }
+                ////设置时限状态.
+                //if (ch.OverMinutes > 0)
+                //{
+                //    /* 如果是正数，就说明它是一个超期完成的状态. */
+                //    if (ch.OverMinutes / 2 > nd.TSpanMinues)
+                //        ch.CHSta = CHSta.ChaoQi; //如果超过了时间的一半，就是超期.
+                //    else
+                //        ch.CHSta = CHSta.YuQi;   //在规定的时间段以内完成，就是预期。
+                //}
+                //else
+                //{
+                //    /* 是负数就是提前完成. */
+                //    if (ch.OverMinutes / 2 > -nd.TSpanMinues)
+                //        ch.CHSta = CHSta.JiShi; //如果提前了一半的时间，就是及时完成.
+                //    else
+                //        ch.CHSta = CHSta.AnQi; // 否则就是按期完成.
+                //}
 
                 #region 计算出来可以识别的分钟数.
-                //求使用天数.
-                float day = ch.UseMinutes / 60f / Glo.AMPMHours;
-                int dayInt = (int)day;
+                ////求使用天数.
+                //float day = ch.UseMinutes / 60f / Glo.AMPMHours;
+                //int dayInt = (int)day;
 
-                //求小时数.
-                float hour = (ch.UseMinutes - dayInt * Glo.AMPMHours * 60f) / 60f;
-                int hourInt = (int)hour;
+                ////求小时数.
+                //float hour = (ch.UseMinutes - dayInt * Glo.AMPMHours * 60f) / 60f;
+                //int hourInt = (int)hour;
 
-                //求分钟数.
-                float minute = (hour - hourInt) * 60;
+                ////求分钟数.
+                //float minute = (hour - hourInt) * 60;
 
-                //使用时间.
-                ch.UseTime = dayInt + "天" + hourInt + "时" + minute + "分";
+                ////使用时间.
+                //ch.UseTime = dayInt + "天" + hourInt + "时" + minute + "分";
 
+                ////求预期天数.
+                //int overMinus = Math.Abs(ch.OverMinutes);
+                //day = overMinus / 60f / Glo.AMPMHours;
+                //dayInt = (int)day;
 
-                //求预期天数.
-                int overMinus = Math.Abs(ch.OverMinutes);
-                day = overMinus / 60f / Glo.AMPMHours;
-                dayInt = (int)day;
+                ////求小时数.
+                //hour = (overMinus - dayInt * Glo.AMPMHours * 60f) / 60f;
+                //hourInt = (int)hour;
 
-                //求小时数.
-                hour = (overMinus - dayInt * Glo.AMPMHours * 60f) / 60f;
-                hourInt = (int)hour;
+                ////求分钟数.
+                //minute = (hour - hourInt) * 60;
 
-                //求分钟数.
-                minute = (hour - hourInt) * 60;
-
-                //使用时间.
-                if (ch.OverMinutes > 0)
-                    ch.OverTime = "预期:" + dayInt + "天" + hourInt + "小时" + (int)minute + "分";
-                else
-                    ch.OverTime = "提前:" + dayInt + "天" + hourInt + "小时" + (int)minute + "分";
+                ////使用时间.
+                //if (ch.OverMinutes > 0)
+                //    ch.OverTime = "预期:" + dayInt + "天" + hourInt + "小时" + (int)minute + "分";
+                //else
+                //    ch.OverTime = "提前:" + dayInt + "天" + hourInt + "小时" + (int)minute + "分";
 
                 #endregion 计算出来可以识别的分钟数.
 

@@ -80,19 +80,19 @@ namespace BP.WF.Data
         /// <summary>
         /// 实际期限
         /// </summary>
-        public const string UseMinutes = "UseMinutes";
+        public const string UseDays = "UseDays";
         /// <summary>
         /// 使用时间
         /// </summary>
-        public const string UseTime = "UseTime";
+        public const string UseHours = "UseHours";
         /// <summary>
         /// 逾期
         /// </summary>
-        public const string OverMinutes = "OverMinutes";
+        public const string OverDays = "OverDays";
         /// <summary>
         /// 预期
         /// </summary>
-        public const string OverTime = "OverTime";
+        public const string OverHours = "OverHours";
         /// <summary>
         /// 状态
         /// </summary>
@@ -248,54 +248,29 @@ namespace BP.WF.Data
         /// <summary>
         /// 实际完成用时.
         /// </summary>
-        public int UseMinutes
+        public float UseDays
         {
             get
             {
-                return this.GetValIntByKey(CHAttr.UseMinutes);
+                return this.GetValFloatByKey(CHAttr.UseDays);
             }
             set
             {
-                this.SetValByKey(CHAttr.UseMinutes, value);
-            }
-        }
-        public string UseTime
-        {
-            get
-            {
-                return this.GetValStringByKey(CHAttr.UseTime);
-            }
-            set
-            {
-                this.SetValByKey(CHAttr.UseTime, value);
+                this.SetValByKey(CHAttr.UseDays, value);
             }
         }
         /// <summary>
         /// 超过时限
         /// </summary>
-        public int OverMinutes
+        public float OverDays
         {
             get
             {
-                return this.GetValIntByKey(CHAttr.OverMinutes);
+                return this.GetValFloatByKey(CHAttr.OverDays);
             }
             set
             {
-                this.SetValByKey(CHAttr.OverMinutes, value);
-            }
-        }
-        /// <summary>
-        /// 预期
-        /// </summary>
-        public string OverTime
-        {
-            get
-            {
-                return this.GetValStringByKey(CHAttr.OverTime);
-            }
-            set
-            {
-                this.SetValByKey(CHAttr.OverTime, value);
+                this.SetValByKey(CHAttr.OverDays, value);
             }
         }
         /// <summary>
@@ -485,9 +460,9 @@ namespace BP.WF.Data
 
                 map.AddMyPK();
 
+                #region 基本属性.
                 map.AddTBInt(CHAttr.WorkID, 0, "工作ID", false, true);
                 map.AddTBInt(CHAttr.FID, 0, "FID", false, true);
-                
                 map.AddTBString(CHAttr.Title, null, "标题", false, false, 0, 900, 5);
 
                 map.AddTBString(CHAttr.FK_Flow, null, "流程", false, false, 3, 3, 3);
@@ -496,57 +471,34 @@ namespace BP.WF.Data
                 map.AddTBInt(CHAttr.FK_Node, 0, "节点", false, false);
                 map.AddTBString(CHAttr.FK_NodeT, null, "节点名称", true, true, 0, 50, 5);
 
+                map.AddTBString(CHAttr.FK_Emp, null, "当事人", true, true, 0, 30, 3);
+                map.AddTBString(CHAttr.FK_EmpT, null, "当事人名称", true, true, 0, 50, 5);
+
                 map.AddTBString(CHAttr.DTFrom, null, "时间从", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.DTTo, null, "到", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.SDT, null, "应完成日期", true, true, 0, 50, 5);
 
-                map.AddTBString(CHAttr.TSpan, null, "规定限期", true, true, 0, 50, 5);
-
-                map.AddTBInt(CHAttr.UseMinutes, 0, "实际使用分钟", false, true);
-                map.AddTBString(CHAttr.UseTime, null, "实际使用时间", true, true, 0, 50, 5);
-
-                map.AddTBInt(CHAttr.OverMinutes, 0, "逾期分钟", false, true);
-                map.AddTBString(CHAttr.OverTime, null, "逾期", true, true, 0, 50, 5);
-
                 map.AddTBString(CHAttr.FK_Dept, null, "隶属部门", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.FK_DeptT, null, "部门名称", true, true, 0, 50, 5);
-
-                map.AddTBString(CHAttr.FK_Emp, null, "当事人", true, true, 0, 30, 3);
-                map.AddTBString(CHAttr.FK_EmpT, null, "当事人名称", true, true, 0, 50, 5);
-
                 map.AddTBString(CHAttr.FK_NY, null, "隶属月份", true, true, 0, 10, 10);
-                map.AddTBInt(CHAttr.WeekNum, 0, "第几周", false, true);
+                #endregion 基本属性.
 
-                map.AddTBInt(CHAttr.FID, 0, "FID", false, true);
+
+                #region 计算属性.
+                map.AddTBString(CHAttr.TSpan, null, "规定限期", true, true, 0, 50, 5);
+                map.AddTBFloat(CHAttr.UseDays, 0, "实际使用天", false, true);
+                map.AddTBFloat(CHAttr.OverDays, 0, "逾期天", false, true);
                 map.AddTBInt(CHAttr.CHSta, 0, "状态", true, true);
+                map.AddTBInt(CHAttr.WeekNum, 0, "第几周", false, true);
                 map.AddTBIntMyNum();
-
-                //map.AddSearchAttr(CHAttr.FK_Dept);
-                //map.AddSearchAttr(CHAttr.FK_NY);
-                //map.AddSearchAttr(CHAttr.FK_Emp);
-
-                //RefMethod rm = new RefMethod();
-                //rm.Title = "打开";
-                //rm.ClassMethodName = this.ToString() + ".DoOpen";
-                //rm.Icon = "/WF/Img/FileType/doc.gif";
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "打开";
-                //rm.ClassMethodName = this.ToString() + ".DoOpenPDF";
-                //rm.Icon = "/WF/Img/FileType/pdf.gif";
-                //map.AddRefMethod(rm);
+                #endregion 计算属性.
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
-
-        protected override bool beforeUpdateInsertAction()
-        {
-            return base.beforeUpdateInsertAction();
-        }
+       
     }
 	/// <summary>
 	/// 时效考核s

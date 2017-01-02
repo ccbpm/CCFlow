@@ -5582,8 +5582,8 @@ namespace BP.WF
                             GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Emp, this.Execer);
 
                         //执行时效考核.
-                        if (this.rptGe ==null)
-                        Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
+                        if (this.rptGe == null)
+                            Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                         else
                             Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
 
@@ -7098,40 +7098,40 @@ namespace BP.WF
         /// </summary>
         private void DealAutoRunEnable()
         {
-               //检查当前节点是否是自动运行的.
-            if (this.HisNode.AutoRunEnable==false)
+            //检查当前节点是否是自动运行的.
+            if (this.HisNode.AutoRunEnable == false)
                 return;
 
-                /*如果是自动运行就要设置自动运行参数.*/
-                string exp = this.HisNode.AutoRunParas.Clone() as string;
-                if (exp == null  || exp=="")
-                    throw new Exception("@您设置当前是自动运行，但是没有在该节点上设置参数。");
+            /*如果是自动运行就要设置自动运行参数.*/
+            string exp = this.HisNode.AutoRunParas.Clone() as string;
+            if (exp == null || exp == "")
+                throw new Exception("@您设置当前是自动运行，但是没有在该节点上设置参数。");
 
-                exp = exp.Replace("@OID",this.WorkID.ToString());
-                exp = exp.Replace("@WorkID",this.WorkID.ToString());
+            exp = exp.Replace("@OID", this.WorkID.ToString());
+            exp = exp.Replace("@WorkID", this.WorkID.ToString());
 
-                exp = exp.Replace("@NodeID", this.HisNode.NodeID.ToString());
-                exp = exp.Replace("@FK_Node", this.HisNode.NodeID.ToString());
+            exp = exp.Replace("@NodeID", this.HisNode.NodeID.ToString());
+            exp = exp.Replace("@FK_Node", this.HisNode.NodeID.ToString());
 
-                exp = exp.Replace("@WebUser.No", BP.Web.WebUser.No);
-                exp = exp.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                exp = exp.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                exp = exp.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.No", BP.Web.WebUser.No);
+            exp = exp.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
 
-            if (exp.Contains("@")==true)
+            if (exp.Contains("@") == true)
                 exp = Glo.DealExp(exp, this.HisWork, null);
 
             if (exp.Contains("@") == true)
-                throw new Exception("@您配置的表达式没有没被完全的解析下来"+exp);
+                throw new Exception("@您配置的表达式没有没被完全的解析下来:" + exp);
 
             //没有查询到就不设置了.
             string strs = DBAccess.RunSQLReturnStringIsNull(exp, null);
             if (strs == null)
-                return ;
+                return;
 
             //把约定的参数写入到引擎
             Dev2Interface.Flow_SetFlowTransferCustom(this.HisFlow.No, this.WorkID,
-                BP.WF.TransferCustomType.ByWorkerSet,strs);
+                BP.WF.TransferCustomType.ByWorkerSet, strs);
 
             //重新执行查询.
             this.HisGenerWorkFlow.RetrieveFromDBSources();

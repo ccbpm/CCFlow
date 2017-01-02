@@ -187,6 +187,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string TSpanDay = "TSpanDay";
         /// <summary>
+        /// 时间计算方式
+        /// </summary>
+        public const string TWay = "TWay";
+        /// <summary>
         /// 逾期提示规则
         /// </summary>
         public const string TAlertRole = "TAlertRole";

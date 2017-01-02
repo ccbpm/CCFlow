@@ -308,18 +308,16 @@ namespace BP.WF.Data
                 map.AddTBString(CHAttr.DTTo, null, "到", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.SDT, null, "应完成日期", true, true, 0, 50, 5);
 
-
                 map.AddTBString(CHAttr.TSpan, null, "限期", true, true, 0, 50, 5);
-                map.AddTBString(CHAttr.UseTime, null, "用时", true, true, 0, 50, 5);
-                map.AddTBString(CHAttr.OverTime, null, "逾期", true, true, 0, 50, 5);
+
+                map.AddTBString(CHAttr.UseDays, null, "用时", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.OverDays, null, "逾期", true, true, 0, 50, 5);
                  
                 map.AddDDLSysEnum(CHAttr.CHSta, 0, "状态", true, true, CHAttr.CHSta,
                     "@0=及时完成@1=按期完成@2=逾期完成@3=超期完成");
 
                 map.AddDDLEntities(CHAttr.FK_Dept, null, "隶属部门", new BP.Port.Depts(), false);
-
                 map.AddDDLEntities(CHAttr.FK_Emp, null, "当事人", new BP.Port.Emps(), false);
-
                 map.AddDDLEntities(CHAttr.FK_NY, null, "月份", new BP.Pub.NYs(), false);
 
                 map.AddTBIntMyNum();

@@ -1004,6 +1004,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 时间计算方式
+        /// </summary>
+        public TWay TWay
+        {
+            get
+            {
+                return (TWay)this.GetValIntByKey(NodeAttr.TWay);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.TWay, (int)value);
+            }
+        }
+        /// <summary>
         /// 逾期 - 提醒方式
         /// </summary>
         public CHAlertWay TAlertWay
@@ -2432,8 +2446,9 @@ namespace BP.WF
                 #endregion 审核组件.
 
                 #region 考核属性.
-                map.AddTBFloat(NodeAttr.TSpanDay, 0, "限期(天)", true, false); //"限期(天)".
-                map.AddTBFloat(NodeAttr.TSpanHour, 8, "小时", true, false); //"限期(天)".
+                map.AddTBFloat(NodeAttr.TSpanDay, 1, "限期(天)", true, false); //"限期(天)".
+                map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(天)".
+                map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
 
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)"
@@ -2447,6 +2462,12 @@ namespace BP.WF
 
                 map.AddTBFloat(NodeAttr.TCent, 2, "扣分(每延期1小时)", false, false);
                 map.AddTBInt(NodeAttr.CHWay, 0, "考核方式", false, false); //"限期(天)"
+
+                //考核相关.
+                map.AddTBInt(NodeAttr.IsEval, 0, "是否工作质量考核", true, true);
+                map.AddTBInt(NodeAttr.OutTimeDeal, 0, "超时处理方式", false, false);
+                map.AddTBString(NodeAttr.DoOutTime, null, "超时处理内容", true, false, 0, 300, 10, true);
+
                 #endregion 考核属性.
 
                 map.AddTBString(FrmWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
@@ -2472,7 +2493,6 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.CCWriteTo, 0, "抄送数据写入规则", true, true);
 
                 map.AddTBInt(BtnAttr.DelEnable, 0, "删除规则", true, true);
-                map.AddTBInt(NodeAttr.IsEval, 0, "是否工作质量考核", true, true);
                 map.AddTBInt(NodeAttr.SaveModel, 0, "保存模式", true, true);
 
 
@@ -2513,9 +2533,7 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.BatchParas, null, "参数", true, false, 0, 100, 10);
                 map.AddTBInt(NodeAttr.PrintDocEnable, 0, "打印方式", true, true);
 
-                //考核相关.
-                map.AddTBInt(NodeAttr.OutTimeDeal, 0, "超时处理方式", false, false);
-                map.AddTBString(NodeAttr.DoOutTime, null, "超时处理内容", true, false, 0, 300, 10, true);
+             
 
                 //与未来处理人有关系.
               //  map.AddTBInt(NodeAttr.IsFullSA, 1, "是否计算未来处理人?", false, false);

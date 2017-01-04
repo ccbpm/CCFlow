@@ -20,6 +20,7 @@ namespace CCFlow.WF.Comm
 {
     public partial class Comm_Batch : BP.Web.WebPage
     {
+        #region 属性。
         public bool IsS
         {
             get
@@ -46,10 +47,12 @@ namespace CCFlow.WF.Comm
             {
                 string s = this.Request.QueryString["EnsName"];
                 if (s == null)
-                    s = "BP.Port.0000";
+                    throw new Exception("@参数错误 EnsName 为空.");
                 return s;
             }
         }
+        #endregion 属性。
+
         protected void Page_Load(object sender, EventArgs e)
         {
             Entities ens = ClassFactory.GetEns(this.EnsName);
@@ -144,7 +147,6 @@ namespace CCFlow.WF.Comm
             this.Response.Redirect("Batch.aspx?EnsName=" + this.EnsName, true);
         }
 
-
         #region 处理
         public Entities SetDGData()
         {
@@ -201,10 +203,17 @@ namespace CCFlow.WF.Comm
                 btn.ID = "Btn_" + rm.Index;
                 btn.Text = rm.Title;
                 btn.CssClass = "Btn";
-                if (rm.Warning == null)
+                if (rm.Warning == null && rm.HisAttrs.Count == 0)
+                {
                     btn.Attributes["onclick"] = " return confirm('您确定要执行吗？');";
+                }
                 else
-                    btn.Attributes["onclick"] = " return confirm('" + rm.Warning + "');";
+                {
+                    if (rm.HisAttrs.Count > 0)
+                        btn.Attributes["onclick"] = "";
+                    else
+                        btn.Attributes["onclick"] = " return confirm('" + rm.Warning + "');";
+                }
 
                 this.UCSys3.Add(btn);
                 btn.Click += new EventHandler(btn_Click);
@@ -225,7 +234,6 @@ namespace CCFlow.WF.Comm
             }
 
             UIConfig cfg=new UIConfig(en);
-
             MoveToShowWay showWay = cfg.MoveToShowWay; 
 
             // 执行移动.
@@ -347,7 +355,6 @@ namespace CCFlow.WF.Comm
             else
                 val = btn.ID.Substring("Btn_Move".Length + 1);
 
-
             Entity en = this.HisEns.GetNewEntity;
             Map map = en.EnMap;
             string msg = "";
@@ -427,26 +434,41 @@ namespace CCFlow.WF.Comm
                         msg += "<hr>删除错误：<font color=red>" + en.PKVal + ", 异常信息:" + ex.Message + "</font>";
                     }
                 }
+                if (msg == "")
+                    msg = "您没有选择行...";
+
+                this.Session["Info"] = msg;
+                this.Response.Redirect("Batch.aspx?EnsName=" + this.EnsName, true);
+
             }
-            else
+
+            int idx = int.Parse(btn.ID.Replace("Btn_", ""));
+
+            string pks = null;
+            BP.En.RefMethod myrm = en.EnMap.HisRefMethods[idx];
+            if (myrm.HisAttrs.Count != 0)
+                pks = "";
+
+            foreach (Control ctl in this.UCSys1.Controls)
             {
-                int idx = int.Parse(btn.ID.Replace("Btn_", ""));
-                foreach (Control ctl in this.UCSys1.Controls)
+                if (ctl == null || ctl.ID == null || ctl.ID == "")
+                    continue;
+                if (ctl.ID.Contains("CB_") == false)
+                    continue;
+
+                CheckBox cb = ctl as CheckBox;
+                if (cb == null)
+                    continue;
+                if (cb.Checked == false)
+                    continue;
+
+                string id = ctl.ID.Substring(3);
+
+                if (pks == null)
                 {
-                    if (ctl == null || ctl.ID == null || ctl.ID == "")
-                        continue;
-                    if (ctl.ID.Contains("CB_") == false)
-                        continue;
-
-                    CheckBox cb = ctl as CheckBox;
-                    if (cb == null)
-                        continue;
-                    if (cb.Checked == false)
-                        continue;
-
-                    string id = ctl.ID.Substring(3);
                     try
                     {
+
                         en.PKVal = id;
                         en.Retrieve();
                         BP.En.RefMethod rm = en.EnMap.HisRefMethods[idx];
@@ -458,12 +480,39 @@ namespace CCFlow.WF.Comm
                         msg += "<hr>执行错误：<font color=red>主键值：" + en.PKVal + "<br>" + ex.Message + "</font>";
                     }
                 }
+                else
+                {
+                    pks += id + ",";
+                }
             }
+            if (pks != null)
+            {
+                if (pks == "")
+                {
+                    msg = "您没有选择行...";
+                    this.Session["Info"] = msg;
+                    this.Response.Redirect("Batch.aspx?EnsName=" + this.EnsName, true);
+                    return;
+                }
+
+                BP.Sys.PubClass.WinOpen("RefMethod.aspx?Index="+idx+"&EnsName="+this.EnsName+"&OID="+pks+"&r="+DateTime.Now.ToString());
+                return;
+            }
+          
+
             if (msg == "")
+            {
                 msg = "您没有选择行...";
+                this.Session["Info"] = msg;
+                this.Response.Redirect("Batch.aspx?EnsName=" + this.EnsName, true);
+                return;
+            }
+
+
 
             this.Session["Info"] = msg;
             this.Response.Redirect("Batch.aspx?EnsName=" + this.EnsName, true);
+
             // this.Response.Redirect(this.Request.RawUrl, true);
         }
         #endregion

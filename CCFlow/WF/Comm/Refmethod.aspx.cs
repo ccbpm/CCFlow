@@ -66,15 +66,11 @@ namespace CCFlow.Web.Comm
                     this.WinCloseWithMsg(info);
                 return;
             }
-            this.Bind(rm);
-            this.Label1.Text = this.GenerCaption(en.EnMap.EnDesc + "=>" + rm.GetIcon(this.Request.ApplicationPath) + rm.Title);
-        }
-        public void Bind(RefMethod rm)
-        {
 
             this.UCEn1.BindAttrs(rm.HisAttrs);
-            //检查是否有选择项目。
+            this.Label1.Text = this.GenerCaption(en.EnMap.EnDesc + "=>" + rm.GetIcon(this.Request.ApplicationPath) + rm.Title);
         }
+     
 
 		#region Web 窗体设计器生成的代码
 		override protected void OnInit(EventArgs e)
@@ -102,10 +98,42 @@ namespace CCFlow.Web.Comm
             int index = int.Parse(this.Request.QueryString["Index"]);
             Entities ens = BP.En.ClassFactory.GetEns(ensName);
             Entity en = ens.GetNewEntity;
-            en.PKVal = this.Request.QueryString[en.PK];
-            en.Retrieve();
+            string msg = "";
+            string pk = this.Request.QueryString[en.PK];
+            if (pk.Contains(",") == false)
+            {
+                /*批处理的方式.*/
+                en.PKVal = pk;
+                en.Retrieve();
+                msg = DoOneEntity(en, index);
+                if (msg == null)
+                    this.WinClose();
+                else
+                    this.ToWFMsgPage(msg);
+                return;
+            }
 
-            BP.En.RefMethod rm = en.EnMap.HisRefMethods[index];
+            //如果是批处理.
+            string[] pks = pk.Split(',');
+            foreach (string mypk in pks)
+            {
+                if (string.IsNullOrEmpty(mypk) == true)
+                    continue;
+                en.PKVal = mypk;
+                en.Retrieve();
+                string s = DoOneEntity(en, index);
+                if (s != null)
+                    msg += "@" + s;
+            }
+            if (msg == "")
+                this.WinClose();
+            else
+                this.ToWFMsgPage(msg);
+        }
+        public string DoOneEntity(Entity en, int rmIdx)
+        {
+
+            BP.En.RefMethod rm = en.EnMap.HisRefMethods[rmIdx];
             rm.HisEn = en;
             int mynum = 0;
             foreach (Attr attr in rm.HisAttrs)
@@ -114,7 +142,7 @@ namespace CCFlow.Web.Comm
                     continue;
                 mynum++;
             }
-            
+
             object[] objs = new object[mynum];
 
             int idx = 0;
@@ -200,20 +228,20 @@ namespace CCFlow.Web.Comm
             {
                 object obj = rm.Do(objs);
                 if (obj != null)
-                {
-                    this.ToWFMsgPage(obj.ToString());
-                }
-                this.WinClose();
+                  return obj.ToString();
+
+                return null;
             }
             catch (Exception ex)
             {
                 string msg = "";
                 foreach (object obj in objs)
                     msg += "@" + obj.ToString();
-                string err="@执行[" + ensName + "]期间出现错误：" + ex.Message + " InnerException= " + ex.InnerException + "[参数为：]" + msg;
-                this.ToWFMsgPage("<font color=red>" + err + "</font>");
+                string err = "@执行[" + this.EnsName + "]期间出现错误：" + ex.Message + " InnerException= " + ex.InnerException + "[参数为：]" + msg;
+                return "<font color=red>" + err + "</font>";
             }
         }
+
 
         protected void btnClose_Click(object sender, EventArgs e)
         {

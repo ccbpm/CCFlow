@@ -11,5 +11,5 @@
 
   <!-- 字段分组 -->
   <Item No="GroupField" SQL="SELECT OID AS NO, Lab as NAME FROM Sys_GroupField WHERE  ( CtrlType IS NULL OR CtrlType='' ) AND EnName='@FK_MapData'"
-        Note="获得一个表单的附件列表"  />
+        Note="获得一个表单的字段分组列表"  />
 </NewDataSet>

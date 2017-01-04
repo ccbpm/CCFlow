@@ -126,7 +126,7 @@ namespace BP.WF.Template
 
                 //表单的运行类型.
                 map.AddDDLSysEnum(FrmAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
-                    true, false, FrmAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=嵌入式表单@3=Excel表单@4=Word表单");
+                    true, false, FrmAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
 
                 map.AddTBString(FrmAttr.PTable, null, "物理表", true, false, 0, 50, 10);
                 map.AddTBInt(FrmAttr.DBURL, 0, "DBURL", true, false);

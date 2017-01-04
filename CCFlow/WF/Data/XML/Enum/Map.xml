@@ -71,10 +71,16 @@ RU="" />
     EN="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file"
     JP="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file"
     RU="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" />
-    
- <Item Key="TBModel"
-    CH="@0=单行文本@1=多行文本@2=富文本@3=超大文本"
-    EN="@0=单行文本@1=多行文本@2=富文本@3=超大文本"
-    JP="@0=单行文本@1=多行文本@2=富文本@3=超大文本"
-    RU="@0=单行文本@1=多行文本@2=富文本@3=超大文本" />
+
+  <Item Key="TBModel"
+     CH="@0=单行文本@1=多行文本@2=富文本@3=超大文本"
+     EN="@0=单行文本@1=多行文本@2=富文本@3=超大文本"
+     JP="@0=单行文本@1=多行文本@2=富文本@3=超大文本"
+     RU="@0=单行文本@1=多行文本@2=富文本@3=超大文本" />
+
+  <Item Key="FrmType" Name="表单类型"
+     CH="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单"
+     EN="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单"
+     JP="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单"
+     RU="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单" />
 </NewDataSet>

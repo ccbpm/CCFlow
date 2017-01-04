@@ -1477,7 +1477,8 @@ namespace BP.Sys
 
 
                 // enumFrmType  @自由表单，@傻瓜表单，@嵌入式表单.  
-                map.AddTBInt(MapDataAttr.FrmType, 1, "表单类型", true, false);
+                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
+                    true, false, MapDataAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
 
                 // 应用类型.  0独立表单.1节点表单
                 map.AddTBInt(MapDataAttr.AppType, 0, "应用类型", true, false);

@@ -31,6 +31,7 @@ function getArgsFromHref(sArgName) {
     return retval;
 }
 var ensName = '';
+var fk_flow = '';
 //加载表格数据
 function LoadGridData(pageNumber, pageSize) {
     this.pageNumber = pageNumber;
@@ -158,7 +159,15 @@ function EditEntityForm() {
     var url = "UIEn.aspx?EnName=" + enName;
     var row = $('#ensGrid').datagrid('getSelected');
     if (row) {
-        url = "UIEn.aspx?EnName=" + enName + "&PK=" + row[PK];
+        if (fk_flow && fk_flow.length > 2 && !isNaN(fk_flow) && (ensName == "ND" + parseInt(fk_flow) + "MyRpt")) {
+            url = "/WF/WFRpt.aspx?FK_Flow=" + fk_flow + "&WorkID=" + row[PK];
+            window.open(url);
+            return;
+        }
+        else {
+            url = "UIEn.aspx?EnName=" + enName + "&PK=" + row[PK];
+        }
+
         var winWidth = document.body.clientWidth;
         //计算显示宽度
         winWidth = winWidth * 0.9;
@@ -266,3 +275,44 @@ function DelSelected() {
         $.messager.alert("提示", "您没有选中数据!");
     }
 }
+
+$(function () {
+    ensName = getArgsFromHref("EnsName");
+    fk_flow = getArgsFromHref("FK_Flow");
+
+    var params = {
+        method: "getuserrole",
+        EnsName: ensName,
+        FK_Flow: fk_flow
+    };
+
+    queryData(params, function (js, scope) {
+        if (js) {
+            if (js == "") js = "{}";
+
+            //系统错误
+            if (js.status && js.status == 500) {
+                $("body").html("<b style='color:red;'>请传入正确的参数名。如：SearchEasyUI.aspx?EnsName=BP.GPM.Depts<b>");
+                return;
+            }
+
+            var data = eval('(' + js + ')');
+
+            if (data.IsCanConfigReport == true) {
+                $("#rtools").append('<a href="' + data.ConfigReportUrl + '" data-options="iconCls:\'icon-config\',plain:true" class="lazyEUI" target="_blank">设置</a>&nbsp;&nbsp;');
+            }
+
+            if (data.IsCanStartFlow == true) {
+                $("#rtools").append('<a href="' + data.StartFlowUrl + '" data-options="iconCls:\'icon-ok\',plain:true" class="lazyEUI" target="_blank">发起</a>&nbsp;&nbsp;');
+            }
+
+            if (fk_flow && fk_flow.length > 2 && !isNaN(fk_flow) && (ensName == "ND" + parseInt(fk_flow) + "MyRpt")) {
+                $("#newWin").remove();
+                $("#editWin").remove();
+                $("#delSelected").remove();
+            }
+
+            $(".lazyEUI").linkbutton();
+        }
+    }, this);
+});

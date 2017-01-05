@@ -91,6 +91,9 @@ namespace CCFlow.WF.Comm
                 case "delSelected"://获取列表数据
                     s_responsetext = EnsDel();
                     break;
+                case "getuserrole"://获取是否具有发起流程及配置，added by liuxc,2017-1-5
+                    s_responsetext = GetUserRole();
+                    break;
             }
             if (string.IsNullOrEmpty(s_responsetext))
                 s_responsetext = "";
@@ -128,6 +131,26 @@ namespace CCFlow.WF.Comm
             }
             return "0";
         }
+
+        /// <summary>
+        /// 获取用户是否可以发起流程/配置
+        /// </summary>
+        /// <returns></returns>
+        private string GetUserRole()
+        {
+            string fk_flow = getUTF8ToString("FK_Flow");
+
+            if (new BP.WF.Flow().IsExit("No", fk_flow) == false || EnsName != ("ND" + int.Parse(fk_flow) + "MyRpt"))
+                return "{\"IsCanStartFlow\":false,\"IsCanConfigReport\":false}";
+
+            string json = "{\"IsCanStartFlow\":";
+            json += BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(fk_flow, BP.Web.WebUser.No).ToString().ToLower() + ",\"StartFlowUrl\":";
+            json += "\"/WF/MyFlow.aspx?FK_Flow=" + fk_flow + "\",\"IsCanConfigReport\":";
+            json += (BP.Web.WebUser.No == "admin").ToString().ToLower() + ",\"ConfigReportUrl\":\"/WF/Rpt/OneFlow.aspx?FK_MapData=" + EnsName.Replace("MyRpt","Rpt") + "&FK_Flow=" + fk_flow + "\"}";
+
+            return json;
+        }
+
         /// <summary>
         /// 获取ens数据
         /// </summary>

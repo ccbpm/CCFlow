@@ -136,10 +136,8 @@ namespace BP.Sys
         public const string OfficeMarks = "OfficeMarks";
         public const string OfficePrint = "OfficePrint";
         public const string OfficeSeal = "OfficeSeal";
-        public const string OfficeSealEnabel = "OfficeSealEnabel";
 
         public const string OfficeInsertFlow = "OfficeInsertFlow";
-        public const string OfficeInsertFlowEnabel = "OfficeInsertFlowEnabel";
         #endregion
     }
     /// <summary>

@@ -235,6 +235,7 @@ namespace CCFlow.WF
                 {
                     IsTab = true;
                     OfficeTabName = btnLab.WebOfficeLab;
+                    IsOfficeTabFront = btnLab.WebOfficeWorkModel == WebOfficeWorkModel.WordFirst;
                     if (WorkID == 0)
                     {
                         Flow currFlow = new Flow(this.FK_Flow);

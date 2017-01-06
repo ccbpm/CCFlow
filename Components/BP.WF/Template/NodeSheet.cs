@@ -740,10 +740,10 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.OfficePrintEnable, false, "是否启用", true, true);
 
                 map.AddTBString(BtnAttr.OfficeSeal, "签章按钮", "签章按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeSealEnabel, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.OfficeSealEnable, false, "是否启用", true, true);
 
                 map.AddTBString(BtnAttr.OfficeInsertFlow, "插入流程", "插入流程标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeInsertFlowEnabel, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.OfficeInsertFlowEnable, false, "是否启用", true, true);
 
                 map.AddBoolean(BtnAttr.OfficeNodeInfo, false, "是否记录节点信息", true, true);
                 map.AddBoolean(BtnAttr.OfficeReSavePDF, false, "是否该自动保存为PDF", true, true);

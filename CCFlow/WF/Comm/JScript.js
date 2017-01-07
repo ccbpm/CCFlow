@@ -573,11 +573,14 @@ function IsDigit(s) {
     return true;
 }
 
-function parseVal2Float(ctrl) {
+function parseVal2Float(ctrl, defVal) {
+    /// <summary>转换指定ID控件值为float数值</summary>
+    /// <param name="ctrl" type="String">控件ID</param>
+    /// <param name="defVal" type="String">控件默认值（值不填时自动符此默认值）</param>
     var tb_Ctrl = document.getElementById(ctrl);
     if (tb_Ctrl) {
-        if (tb_Ctrl.value == "") {
-            tb_Ctrl.value = 0;
+        if (tb_Ctrl.value == "" || tb_Ctrl.value.replace(/ /g, "") == "") {
+            tb_Ctrl.value = !defVal || defVal == "" || defVal.replace(/ /g, "") == "" ? "0" : defVal;
         }
 
         return parseFloat(tb_Ctrl.value.replace(',', ''))

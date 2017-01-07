@@ -2166,8 +2166,8 @@ namespace CCFlow.WF.CCForm
                         continue;
 
                     //添加分号，解决因字段匹配问题：@GWDZ 被字段GW替换后DZ
-                    right = right.Replace("@" + mattr.Name, " parseFloat(replaceAll(document.forms[0]." + tb.ClientID + ".value,',' ,  '' ) ) ");
-                    right = right.Replace("@" + mattr.KeyOfEn + ";", " parseFloat( replaceAll(document.forms[0]." + tb.ClientID + ".value, ',' ,  '' ) ) ");
+                    right = right.Replace("@" + mattr.Name, " parseVal2Float('" + tb.ClientID + "', '"+mattr.DefVal+"') ");
+                    right = right.Replace("@" + mattr.KeyOfEn + ";", " parseVal2Float('" + tb.ClientID + "', '"+mattr.DefVal+"') ");
                 }
                 //适应老规则，替换不带；号的参数
                 foreach (MapAttr mattr in attrs)
@@ -2176,10 +2176,10 @@ namespace CCFlow.WF.CCForm
                     TextBox tb = this.Pub1.GetTextBoxByID(tbID);
                     if (tb == null)
                         continue;
-
+                    
                     //添加分号，解决因字段匹配问题：@GWDZ 被字段GW替换后DZ
-                    right = right.Replace("@" + mattr.Name, " parseFloat(replaceAll(document.forms[0]." + tb.ClientID + ".value,',' ,  '' ) ) ");
-                    right = right.Replace("@" + mattr.KeyOfEn, " parseFloat( replaceAll(document.forms[0]." + tb.ClientID + ".value, ',' ,  '' ) ) ");
+                    right = right.Replace("@" + mattr.Name, " parseVal2Float('" + tb.ClientID + "', '" + mattr.DefVal + "') ");
+                    right = right.Replace("@" + mattr.KeyOfEn, " parseVal2Float('" + tb.ClientID + "', '"+mattr.DefVal+"') ");
                 }
                 string s = left + right;
                 s += "\t\n  document.forms[0]." + this.Pub1.GetTextBoxByID("TB_" + ext.AttrOfOper + "_" + pk).ClientID + ".value= VirtyMoney(document.forms[0]." + this.Pub1.GetTextBoxByID("TB_" + ext.AttrOfOper + "_" + pk).ClientID + ".value ) ;";

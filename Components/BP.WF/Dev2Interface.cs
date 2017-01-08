@@ -6326,6 +6326,25 @@ namespace BP.WF
         /// <param name="workID"></param>
         public static void Node_SetDraft2Todolist(string fk_flow, Int64 workID)
         {
+        }
+        /// <summary>
+        /// 设置当前工作的应该完成日期.
+        /// </summary>
+        /// <param name="workID">设置的WorkID.</param>
+        /// <param name="sdt">应完成日期</param>
+        public static void Node_SetSDT(Int64 workID, string sdt)
+        {
+            Paras ps = new Paras();
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET SDT=" + SystemConfig.AppCenterDBVarStr + "SDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=0";
+            ps.Add("SDT", sdt);
+            ps.Add("WorkID", workID);
+            BP.DA.DBAccess.RunSQL(ps);
+
+            ps = new Paras();
+            ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfNode=" + SystemConfig.AppCenterDBVarStr + "SDTOfNode WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=0";
+            ps.Add("SDTOfNode", sdt);
+            ps.Add("WorkID", workID);
+            BP.DA.DBAccess.RunSQL(ps);
 
         }
         /// <summary>

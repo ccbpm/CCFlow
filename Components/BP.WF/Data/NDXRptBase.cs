@@ -138,11 +138,11 @@ namespace BP.WF.Data
         /// <summary>
         /// 流程时间跨度
         /// </summary>
-        public int FlowDaySpan
+        public float FlowDaySpan
         {
             get
             {
-                return this.GetValIntByKey(NDXRptBaseAttr.FlowDaySpan);
+                return this.GetValFloatByKey(NDXRptBaseAttr.FlowDaySpan);
             }
             set
             {

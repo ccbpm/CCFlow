@@ -3345,7 +3345,7 @@ namespace BP.WF
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.FlowDaySpan; // "FlowStartRDT";
                 attr.Name = "跨度(天)";
-                attr.MyDataType = DataType.AppMoney;
+                attr.MyDataType = DataType.AppFloat;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = true;
@@ -3835,7 +3835,7 @@ namespace BP.WF
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.FlowDaySpan; // "FlowStartRDT";
                 attr.Name = "跨度(天)";
-                attr.MyDataType = DataType.AppMoney;
+                attr.MyDataType = DataType.AppFloat;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = true;

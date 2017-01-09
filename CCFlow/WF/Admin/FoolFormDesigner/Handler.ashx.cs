@@ -1334,6 +1334,16 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
                 }
 
+                switch(attr.MyDataType)
+                {
+                    case DataType.AppInt:
+                    case DataType.AppFloat:
+                    case DataType.AppDouble:
+                    case DataType.AppMoney:
+                        attr.IsSum = this.GetValBoolenFromFrmByKey("CB_IsSum");
+                        break;
+                }
+
                 //获取宽度.
                 try
                 {

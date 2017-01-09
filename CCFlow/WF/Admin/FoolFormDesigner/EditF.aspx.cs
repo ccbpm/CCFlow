@@ -747,11 +747,13 @@ namespace CCFlow.WF.MapDef
             CheckBox cb = new CheckBox();
             cb.Text = "是否是超大文本？";
             cb.ID = "CB_IsSupperText";
+            cb.Checked = mapAttr.IsSupperText;
             this.Pub1.AddTD(cb);
 
             cb = new CheckBox();
             cb.Text = "是否启用富文本编辑器？";
             cb.ID = "CB_IsRichText";
+            cb.Checked = mapAttr.IsRichText;
             this.Pub1.AddTD(cb);
             this.Pub1.AddTD("");
             this.Pub1.AddTREnd();
@@ -1041,6 +1043,8 @@ namespace CCFlow.WF.MapDef
                     case DataType.AppString:
                         // attr.UIBindKey = this.Pub1.GetDDLByID("DDL_TBModel").SelectedItemStringVal;
                         attr.UIHeightInt = this.Pub1.GetDDLByID("DDL_UIRows").SelectedItemIntVal * 23;
+                        attr.IsSupperText = this.Pub1.GetCBByID("CB_IsSupperText").Checked;
+                        attr.IsRichText = this.Pub1.GetCBByID("CB_IsRichText").Checked;
                         if (attr.TBModel == TBModel.SupperText)
                         {
                             attr.UIBindKey = "1";

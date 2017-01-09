@@ -220,7 +220,10 @@ namespace BP.Sys
         public const string UIIsInput = "UIIsInput";
         #endregion 参数属性.
 
-
+        /// <summary>
+        /// 数值字段是否合计
+        /// </summary>
+        public const string IsSum = "IsSum";
     }
     /// <summary>
     /// 实体属性
@@ -254,6 +257,23 @@ namespace BP.Sys
             set
             {
                 this.SetPara("IsRichText", value);
+            }
+        }
+        #endregion
+
+        #region 数值字段参数属性,2017-1-9,liuxc
+        /// <summary>
+        /// 数值字段是否合计(默认true)
+        /// </summary>
+        public bool IsSum
+        {
+            get
+            {
+                return this.GetParaBoolen(MapAttrAttr.IsSum, true);
+            }
+            set
+            {
+                this.SetPara(MapAttrAttr.IsSum, value);
             }
         }
         #endregion

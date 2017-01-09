@@ -1735,7 +1735,7 @@ namespace CCFlow.WF.CCForm
                     if (attr.Field == mdtl.GroupField && mdtl.IsEnableGroupField)
                         continue;
 
-                    if (attr.IsNum && attr.LGType == FieldTypeS.Normal)
+                    if (attr.IsNum && attr.LGType == FieldTypeS.Normal && attr.IsSum)
                     {
                         TextBox tb = new TextBox();
                         tb.ID = "TB_" + attr.KeyOfEn;
@@ -2206,7 +2206,8 @@ namespace CCFlow.WF.CCForm
             }
 
             string left = "\n  document.forms[0]." + ClientID + ".value = ";
-            string right = "";
+            string right = "(";
+            string multi = "1000000000000";
             int i = 0;
             foreach (GEDtl dtl in dtls)
             {
@@ -2216,12 +2217,12 @@ namespace CCFlow.WF.CCForm
                     continue;
 
                 if (i == 0)
-                    right += " parseVal2Float('" + tb.ClientID + "')";
+                    right += " parseVal2Float('" + tb.ClientID + "', '" + mattr.DefVal + "')*" + multi;
                 else
-                    right += " +parseVal2Float('" + tb.ClientID + "')";
+                    right += " +parseVal2Float('" + tb.ClientID + "', '" + mattr.DefVal + "')*" + multi;
                 i++;
             }
-            string s = left + right + " ;";
+            string s = left + right + ")/" + multi + " ;";
             switch (mattr.MyDataType)
             {
                 case BP.DA.DataType.AppMoney:

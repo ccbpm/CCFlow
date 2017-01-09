@@ -9,6 +9,16 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
+        //DataType定义
+        var AppString = 1;
+        var AppInt = 2;
+        var AppFloat = 3;
+        var AppBoolean = 4;
+        var AppDouble = 5;
+        var AppDate = 6;
+        var AppDateTime = 7;
+        var AppMoney = 8;
+
         /* ESC Key Down */
         function Esc() {
             if (event.keyCode == 27)
@@ -53,17 +63,28 @@
 
             var fType = GetQueryString("FType");
             if (fType == null || fType == "none")
-                fType = 1;
+                fType = AppString;
+            else
+                fType = parseInt(fType);
 
-            if (fType != 1) {
+            if (fType != AppString) {
                 //非string类型，就默认把他屏蔽掉.
                 // document.getElementById("tr0").style.display = 'none';
                 document.getElementById("tr1").style.display = 'none';
                 document.getElementById("tr2").style.display = 'none';
                 document.getElementById("tr3").style.display = 'none';
                 document.getElementById("tr4").style.display = 'none';
-             //  document.getElementById("tr5").style.display = 'none';
-              //  document.getElementById("tr6").style.display = 'none';
+                //  document.getElementById("tr5").style.display = 'none';
+                //  document.getElementById("tr6").style.display = 'none';
+            }
+
+            switch(fType) {
+                case AppString:
+                case AppBoolean:
+                case AppDate:
+                case AppDateTime:
+                    document.getElementById("tr14").style.display = 'none';
+                    break;
             }
 
             //设置不可以用.
@@ -100,32 +121,34 @@
                         groupID = data.GroupID;
 
                     GenerBindSQL("DDL_GroupID", "GroupField", "@FK_MapData=" + GetQueryString("FK_MapData"), "NO", "NAME", groupID);
-
-
+                    
                     //是否可以编辑？
                     $("#RB_UIIsEnable_" + data.UIIsEnable).attr('checked', 'checked');
                     $("#RB_UIVisible_" + data.UIVisible).attr('checked', 'checked');
 
                     //是否必填项.
-                    if (data.UIIsInput == "1")
+                    if (data.UIIsInput == true)
                         $("#CB_IsInput").attr("checked", true);
 
                     //是否是大块文本.
-                    if (data.IsSupperText == "1")
+                    if (data.IsSupperText == true)
                         $("#CB_IsSupperText").attr("checked", true);
 
                     //是否是富文本?
-                    if (data.IsRichText == "1")
+                    if (data.IsRichText == true)
                         $("#CB_IsRichText").attr("checked", true);
 
+                    //是否合计?
+                    if (typeof data.IsSum == "undefined" || data.IsSum == true)
+                        $("#CB_IsSum").attr("checked", true);
+
                     var htmlLink = "";
-                    if (data.MyDataType == 1) {
+                    if (data.MyDataType == AppString) {
 
                         //最大最小长度.
                         $("#TB_MinLen").val(data.MinLen);
                         $("#TB_MaxLen").val(data.MaxLen);
                         $("#TB_UIWidth").val(data.UIWidth);  //宽度..
-
 
                         //默认值.
                         $("#DDL_DefVal").val(data.DefVal); // 设置默认值.
@@ -145,11 +168,10 @@
                         var rows = data.UIHeight / 23;
                         if (rows <= 0)
                             rows = 1;
+
                         rows = parseInt(rows);
                         $("#DDL_Rows").val(rows); //行数.
-
-
-
+                        
                         htmlLink += "<a href=\"javascript:WinOpen('./MapExt/PopVal.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&MyPK=PopVal_" + mypk + "')\">设置开窗返回值</a>";
                         htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&OperAttrKey=" + mypk + "')\">正则表达式</a>";
                         htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&MyPK=TBFullCtrl_" + mypk + "')\">文本框自动完成</a>";
@@ -161,9 +183,8 @@
                         htmlLink += "-<a href=\"javascript:WinOpen('EditFExtContral.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "')\">扩展控件</a>";
                     }
 
-
                     //如果是日期类型的.
-                    if (data.MyDataType == 6 || data.MyDataType == 7) {
+                    if (data.MyDataType == AppDate || data.MyDataType == AppDateTime) {
 
                         //清空默认值.
                         $("#DDL_DefVal").empty();
@@ -186,7 +207,7 @@
                     }
 
                     //boolen 类型.
-                    if (data.MyDataType == 4) {
+                    if (data.MyDataType == AppBoolean) {
 
                         //清空默认值.
                         $("#DDL_DefVal").empty();
@@ -204,7 +225,7 @@
                     }
 
                     //对于num类型的数据，隐藏控件,不让其在选择默认值了.
-                    if (data.MyDataType == 2 || data.MyDataType == 3 || data.MyDataType == 8) {
+                    if (data.MyDataType == AppInt || data.MyDataType == AppFloat || data.MyDataType == AppMoney) {
 
                         document.getElementById("DDL_DefVal").style.visibility = "hidden";
 
@@ -378,6 +399,11 @@
 <td> </td>
 </tr>
 
+<!-- 数值类是否合计.added by liuxc,2017-1-9 -->
+<tr id="tr14">
+<td>是否合计</td>
+<td><input  type="checkbox"  name="CB_IsSum" id="CB_IsSum" /> <label for="CB_IsSum">合计</label></td>
+</tr>
 <!-- 相关功能的设置. -->
 <tr>
 <td>高级设置</td>
@@ -450,7 +476,7 @@
         var fType = GetQueryString("FType");
 
         if (fType == null || fType == "")
-            fType = 1;
+            fType = AppString;
 
         var frmData = $("#cc").serialize();
         $.ajax({

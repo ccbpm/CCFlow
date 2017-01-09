@@ -4037,13 +4037,12 @@ namespace BP.WF
                 return false;
         }
         /// <summary>
-        /// 检查当前人员是否有权限处理当前的工作.
+        /// 检查当前人员是否有权限处理当前的工作
         /// </summary>
-        /// <param name="nodeID">节点ID</param>
-        /// <param name="workID">工作ID</param>
-        /// <param name="userNo">要判断的操作人员</param>
-        /// <returns>返回指定的人员是否有操作当前工作的权限</returns>
-        public static bool Flow_IsCanDoCurrentWork(string fk_flow, int nodeID, Int64 workID, string userNo)
+        /// <param name="workID"></param>
+        /// <param name="userNo"></param>
+        /// <returns></returns>
+        public static bool Flow_IsCanDoCurrentWork(string flowNo, int nodeID, Int64 workID, string userNo)
         {
             if (workID == 0)
                 return true;
@@ -4080,8 +4079,7 @@ namespace BP.WF
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            ps.SQL = "SELECT c.RunModel,c.IsGuestNode, a.GuestNo, a.TaskSta, a.WFState, IsPass FROM WF_GenerWorkFlow a, WF_GenerWorkerlist b, WF_Node c WHERE a.FK_Node=" + dbstr + "FK_Node  AND b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.FK_Emp=" + dbstr + "FK_Emp AND b.IsEnable=1 AND a.WorkID=" + dbstr + "WorkID ";
-            ps.Add("FK_Node", nodeID);
+            ps.SQL = "SELECT c.RunModel,c.IsGuestNode, a.GuestNo, a.TaskSta, a.WFState, IsPass FROM WF_GenerWorkFlow a, WF_GenerWorkerlist b, WF_Node c WHERE  b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.FK_Emp=" + dbstr + "FK_Emp AND b.IsEnable=1 AND a.WorkID=" + dbstr + "WorkID ";
             ps.Add("FK_Emp", userNo);
             ps.Add("WorkID", workID);
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
@@ -6341,7 +6339,7 @@ namespace BP.WF
             BP.DA.DBAccess.RunSQL(ps);
 
             ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfNode=" + SystemConfig.AppCenterDBVarStr + "SDTOfNode WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=0";
+            ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfNode=" + SystemConfig.AppCenterDBVarStr + "SDTOfNode WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ";
             ps.Add("SDTOfNode", sdt);
             ps.Add("WorkID", workID);
             BP.DA.DBAccess.RunSQL(ps);

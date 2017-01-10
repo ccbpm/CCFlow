@@ -4783,6 +4783,8 @@ namespace CCFlow.WF.UC
                 {
                     if (func.Visable == false)
                         continue;
+                    if (func.IsCanBatch == true)
+                        continue;
 
                     // string url = path + "/Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
                     string url = appPath + "WF/Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;

@@ -13,6 +13,7 @@ using System.Web.UI;
 using BP.DA;
 using BP.WF.Template;
 using BP.WF;
+using BP.Sys;
 using CCFlow.WF.CCForm;
 
 
@@ -23,53 +24,123 @@ namespace CCFlow.WF.CCForm
     /// </summary>
     public class CCFormHeader : IHttpHandler
     {
+        #region 属性.
         public HttpContext context = null;
         public string FK_MapExt
         {
             get
             {
-                string str = context.Request.QueryString["FK_MapExt"];
-                return str;
+                return context.Request.QueryString["FK_MapExt"];
             }
         }
+        public string EnsName
+        {
+            get
+            {
+                return context.Request.QueryString["EnsName"];
+            }
+        }
+        public string FK_Flow
+        {
+            get
+            {
+                return context.Request.QueryString["FK_Flow"];
+            }
+        }
+        public string DoType
+        {
+            get
+            {
+                return context.Request.QueryString["DoType"];
+            }
+        }
+        public string PKVal
+        {
+            get
+            {
+                return context.Request.QueryString["PKVal"];
+            }
+        }
+        public Int64 WorkID
+        {
+            get
+            {
+                string str= context.Request.QueryString["WorkID"];
+                if (str == null)
+                    return 0;
+                return Int64.Parse(str);
+            }
+        }
+        public Int64 FID
+        {
+            get
+            {
+                string str = context.Request.QueryString["FID"];
+                if (str == null)
+                    return 0;
+                return Int64.Parse(str);
+            }
+        }
+        public int FK_Node
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_Node"];
+                if (str == null)
+                    return 0;
+                return int.Parse(str);
+            }
+        }
+        public string AttachPK
+        {
+            get
+            {
+                return context.Request.QueryString["AttachPK"];
+            }
+        }
+
+        #endregion 属性.
+
         public void ProcessRequest(HttpContext mycontext)
         {
             context = mycontext;
             context.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
-            string doType = context.Request["DoType"];
-            string attachPk = context.Request["AttachPK"];
-            string workid = context.Request["WorkID"];
-            string fid = context.Request["FID"];
-            string fk_node = context.Request["FK_Node"];
-            string ensName = context.Request["EnsName"];
-            string fk_flow = context.Request["FK_Flow"];
-            string pkVal = context.Request["PKVal"];
+            //string attachPk = context.Request["AttachPK"];
+            //string workid = context.Request["WorkID"];
+            //string fid = context.Request["FID"];
+            //string fk_node = context.Request["FK_Node"];
+            //string ensName = context.Request["EnsName"];
+            //string fk_flow = context.Request["FK_Flow"];
+            //string pkVal = context.Request["PKVal"];
             string message = "true";
             //判断是否包含附件，包含附件则是上传，否则是功能执行
             if (context.Request.Files.Count > 0)
             {
-                switch (doType)
+                switch (this.DoType)
                 {
                     case "SingelAttach"://单附件上传
-                        SingleAttach(context, attachPk, workid, fid, fk_node, ensName);
+                        SingleAttach(context, this.AttachPK, this.WorkID, this.FID, this.FK_Node, this.EnsName);
                         break;
                     case "MoreAttach"://多附件上传
-                        MoreAttach(context, attachPk, workid, fid, fk_node, ensName, fk_flow, pkVal);
+                        MoreAttach(context, this.AttachPK, this.WorkID, this.FID, this.FK_Node, this.EnsName, this.FK_Flow, this.PKVal);
                         break;
                 }
             }
             else
             {
-                switch (doType)
+                switch (this.DoType)
                 {
+                    case "Dtl_Init":
+                        message = Dtl_Init();
+                        break;
                     case "InitPopVal":
                         message = InitPopVal();
                         break;
                     case "InitPopValTree":
                         message = InitPopValTree();
                         break;
-                    case "DelWorkCheckAttach"://删除附件
-                        message = DelWorkCheckAttach(pkVal);
+                    case "DelWorkCheckAttach": //删除附件
+                        message = DelWorkCheckAttach(this.PKVal);
                         break;
                     default:
                         break;
@@ -82,6 +153,25 @@ namespace CCFlow.WF.CCForm
             context.Response.Write(message);
             context.Response.End();
         }
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <returns></returns>
+        public string Dtl_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //求出列.
+            MapAttrs attrs = new BP.Sys.MapAttrs(this.EnsName);
+
+            string sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='"+this.EnsName+"'";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapAttr";
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+
         /// <summary>
         /// 处理SQL的表达式.
         /// </summary>
@@ -445,7 +535,7 @@ namespace CCFlow.WF.CCForm
         }
 
         //单附件上传方法
-        private void SingleAttach(HttpContext context, string attachPk, string workid, string fid, string fk_node, string ensName)
+        private void SingleAttach(HttpContext context, string attachPk, Int64 workid, Int64 fid, int fk_node, string ensName)
         {
             FrmAttachment frmAth = new FrmAttachment();
             frmAth.MyPK = attachPk;
@@ -455,7 +545,7 @@ namespace CCFlow.WF.CCForm
 
             BP.WF.Node currND = new BP.WF.Node(fk_node);
             BP.WF.Work currWK = currND.HisWork;
-            currWK.OID = long.Parse(workid);
+            currWK.OID = workid;
             currWK.Retrieve();
             //处理保存路径.
             string saveTo = frmAth.SaveTo;
@@ -488,8 +578,8 @@ namespace CCFlow.WF.CCForm
             FrmAttachmentDB dbUpload = new FrmAttachmentDB();
             dbUpload.MyPK = athDBPK;
             dbUpload.FK_FrmAttachment = attachPk;
-            dbUpload.RefPKVal = workid;
-            dbUpload.FID = string.IsNullOrEmpty(fid) ? 0 : long.Parse(fid);
+            dbUpload.RefPKVal = this.WorkID.ToString();
+            dbUpload.FID = fid;
             dbUpload.FK_MapData = ensName;
 
             dbUpload.FileExts = info.Extension;
@@ -515,7 +605,7 @@ namespace CCFlow.WF.CCForm
             dbUpload.RecName = WebUser.Name;
             dbUpload.RDT = BP.DA.DataType.CurrentDataTime;
 
-            dbUpload.NodeID = fk_node;
+            dbUpload.NodeID = fk_node.ToString();
             dbUpload.Save();
 
             if (frmAth.SaveWay == 1)
@@ -527,7 +617,7 @@ namespace CCFlow.WF.CCForm
         }
 
         //多附件上传方法
-        public void MoreAttach(HttpContext context, string attachPk, string workid,string fid, string fk_node, string ensNamestring, string fk_flow, string pkVal)
+        public void MoreAttach(HttpContext context, string attachPk, Int64 workid, Int64 fid, int fk_node, string ensNamestring, string fk_flow, string pkVal)
         {
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
@@ -544,12 +634,12 @@ namespace CCFlow.WF.CCForm
                     en.Retrieve();
                     savePath = BP.WF.Glo.DealExp(savePath, en, null);
 
-                    if (savePath.Contains("@") && fk_node != null)
+                    if (savePath.Contains("@") && this.FK_Node !=0)
                     {
                         /*如果包含 @ */
                         BP.WF.Flow flow = new BP.WF.Flow(fk_flow);
                         BP.WF.Data.GERpt myen = flow.HisGERpt;
-                        myen.OID = long.Parse(workid);
+                        myen.OID = this.WorkID;
                         myen.RetrieveFromDBSources();
                         savePath = BP.WF.Glo.DealExp(savePath, myen, null);
                     }
@@ -627,7 +717,8 @@ namespace CCFlow.WF.CCForm
                 dbUpload.Rec = BP.Web.WebUser.No;
                 dbUpload.RecName = BP.Web.WebUser.Name;
                 dbUpload.RefPKVal = pkVal;
-                dbUpload.FID = string.IsNullOrEmpty(fid) ? 0 : long.Parse(fid);
+                dbUpload.FID = this.FID;
+
                 //if (athDesc.IsNote)
                 //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
 

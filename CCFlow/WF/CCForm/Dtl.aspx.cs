@@ -296,7 +296,6 @@ namespace CCFlow.WF.CCForm
 
             GEDtls dtls = new GEDtls(this.EnsName);
             this.FK_MapData = mdtl.FK_MapData;
-
             GEEntity mainEn = null;
 
             #region 生成标题
@@ -310,9 +309,15 @@ namespace CCFlow.WF.CCForm
             if (mdtl.IsShowTitle)
             {
                 this.Pub1.AddTR();
-                if (mdtl.IsDelete && this.IsReadonly == 0)
+
+                if (this.IsWap == 1)
                 {
-                    this.Pub1.Add("<TD class='TitleExt' nowarp=true ><img src='../Img/Btn/Save.gif' border=0 onclick='SaveDtlData();' ></TD>");
+                    string url = "../WAP/MyFlow.aspx?WorkID=" + this.RefPKVal + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow;
+                    this.Pub1.AddTD("<img onclick=\"javascript:SaveDtlDataTo('" + url + "');\" src='../Wap/Img/Back.png' style='width:50px;height:16px' border=0/>");
+                }
+                else
+                {
+                    this.Pub1.Add("<TD class='Idx' ><img src='../Img/Btn/Table.gif' onclick=\"return DtlOpt('" + this.RefPKVal + "','" + this.EnsName + "','" + this.FID + "');\" border=0/></TD>");
                     numOfCol++;
                 }
 
@@ -329,7 +334,7 @@ namespace CCFlow.WF.CCForm
                         continue;
 
                     //for lijian 增加了 @符号是一个换行符. 
-                    this.Pub1.AddTDTitleExt("style='width:" + (attr.UIWidthInt + 10) + "'px", attr.Name.Replace("@", "<br>"));// ("<TD class='FDesc' nowarp=true ><label>" + attr.Name + "</label></TD>");
+                    this.Pub1.AddTDTitleExt(attr.Name.Replace("@", "<br>"));// ("<TD class='FDesc' nowarp=true ><label>" + attr.Name + "</label></TD>");
                     numOfCol++;
                 }
 
@@ -351,18 +356,11 @@ namespace CCFlow.WF.CCForm
                     numOfCol++;
                 }
 
-
-                if (this.IsWap == 1)
+                if (mdtl.IsDelete && this.IsReadonly == 0)
                 {
-                    string url = "../WAP/MyFlow.aspx?WorkID=" + this.RefPKVal + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow;
-                    this.Pub1.AddTD("<img onclick=\"javascript:SaveDtlDataTo('" + url + "');\" src='../Wap/Img/Back.png' style='width:50px;height:16px' border=0/>");
-                }
-                else
-                {
-                    this.Pub1.Add("<TD class='Idx' ><img src='../Img/Btn/Table.gif' onclick=\"return DtlOpt('" + this.RefPKVal + "','" + this.EnsName + "','" + this.FID + "');\" border=0/></TD>");
+                    this.Pub1.Add("<TD class='TitleExt' nowarp=true ><img src='../Img/Btn/Save.gif' border=0 onclick='SaveDtlData();' ></TD>");
                     numOfCol++;
                 }
-
 
                 if (mdtl.IsEnableLink)
                 {
@@ -440,7 +438,6 @@ namespace CCFlow.WF.CCForm
                         {
                             mdtl.RowsOfList = num;
                             _allRowCount = num;
-
                         }
                     }
                     else
@@ -472,9 +469,10 @@ namespace CCFlow.WF.CCForm
                         //}
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                     dtls.GetNewEntity.CheckPhysicsTable();
+                    throw ex;
                 }
             }
             else
@@ -1537,7 +1535,7 @@ namespace CCFlow.WF.CCForm
                                     continue;
 #warning 此处需要优化
                                 string ddlC = "Pub1_DDL_" + me.AttrsOfActive + "_" + mydtl.OID;
-                                ddlPerant.Attributes["onchange"] = " SetChange (true); DDLAnsc(this.value, \'" + ddlC + "\', \'" + me.MyPK + "\')";
+                                ddlPerant.Attributes["onchange"] = " SetChange (true); DDLAnsc(this.value, \'" + ddlC + "\', \'" + me.MyPK + "\','" + mydtl.OID+ "')";
                                 DDL ddlChild = this.Pub1.GetDDLByID("DDL_" + me.AttrsOfActive + "_" + mydtl.OID);
                                 val = ddlPerant.SelectedItemStringVal;
                                 if (ddlChild.Items.Count == 0)
@@ -1921,9 +1919,10 @@ namespace CCFlow.WF.CCForm
                         break;
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 dtls.GetNewEntity.CheckPhysicsTable();
+                throw ex;
             }
 
             int num = 0;

@@ -39,6 +39,22 @@
 <td style=" color:Gray">提前xx天xx小时预警(必须输入正整数)，预警就是提醒该工作应该处理了的时间点。</td>
 </tr>
 
+
+<tr>
+<td>节假日</td>
+
+<td> 
+   <asp:DropDownList ID="DDL_TWay" runat="server">
+    </asp:DropDownList>
+    </td>
+
+<td colspan="2"  >
+<a href="javascript:WinOpen('/WF/Comm/Sys/Holiday.aspx');" > 节假日维护</a>
+
+</td>
+</tr>
+
+
 <tr>
 <td> 扣分</td>
 <td> <asp:TextBox ID="TB_TCent" runat="server" Width="35px"></asp:TextBox>分</td>

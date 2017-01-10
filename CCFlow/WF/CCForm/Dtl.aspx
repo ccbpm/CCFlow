@@ -17,7 +17,6 @@
     <link href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript">
 
-
         var isChange = false;
         function SaveDtlData() {
 

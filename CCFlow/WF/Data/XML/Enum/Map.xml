@@ -3,10 +3,7 @@
 
 <Item Key="UploadFileCheck" Name="多附件文件上传控制"
 CH="@0=不控制@1=上传附件个数不能为0@2=每个类别下面的个数不能为0"
-EN=""
-JP=""
-RU=""
- />
+EN="" JP="" RU=""  />
   
   
   <Item Key="CodeStruct" Name="表数据来源类型"

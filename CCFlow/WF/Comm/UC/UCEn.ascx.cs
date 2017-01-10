@@ -82,6 +82,8 @@ namespace CCFlow.Web.Comm.UC
                 {
                     if (func.Visable == false)
                         continue;
+                    if (func.IsCanBatch == true)
+                        continue;
 
                     // string url = path + "/Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
                     string url = "./Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;

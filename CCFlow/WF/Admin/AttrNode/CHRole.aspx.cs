@@ -35,6 +35,8 @@ namespace CCFlow.WF.Admin.AttrFlow
 
                 BP.Web.Controls.Glo.DDL_BindEnum(this.DDL_WAlertRole, "CHAlertRole", (int)nd.WAlertRole);
                 BP.Web.Controls.Glo.DDL_BindEnum(this.DDL_WAlertWay, "CHAlertWay", (int)nd.WAlertWay);
+                BP.Web.Controls.Glo.DDL_BindEnum(this.DDL_TWay, "TWay", (int)nd.TWay); //节假日计算.
+
 
 
                 this.TB_WarningHour.Text = nd.WarningHour.ToString();
@@ -76,7 +78,7 @@ namespace CCFlow.WF.Admin.AttrFlow
 
             nd.WAlertRole = (BP.WF.CHAlertRole)int.Parse(this.DDL_WAlertRole.SelectedValue);
             nd.WAlertWay = (BP.WF.CHAlertWay)int.Parse(this.DDL_WAlertWay.SelectedValue);
-
+            nd.TWay = (BP.WF.TWay)int.Parse(this.DDL_TWay.SelectedValue); //节假日计算方式.
 
             if (this.RB_None.Checked)
                 nd.HisCHWay = BP.WF.CHWay.None;

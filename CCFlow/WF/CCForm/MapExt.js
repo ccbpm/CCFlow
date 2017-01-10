@@ -235,6 +235,7 @@ function ReturnValTBFullCtrl(ctrl, fk_mapExt) {
 }
 
 var kvs = null;
+
 function GenerPageKVs() {
     var ddls = null;
     ddls = parent.document.getElementsByTagName("select");
@@ -260,6 +261,46 @@ function GenerPageKVs() {
         kvs += '~' + myid + '=' + ddls[i].value;
     }
     return kvs;
+}
+
+//根据.
+function GenerPageKVsWithRow(rowPK) {
+    var ddls = null;
+    ddls = parent.document.getElementsByTagName("select");
+    kvs = "";
+    for (var i = 0; i < ddls.length; i++) {
+
+        var id = ddls[i].name;
+        if (id == null)
+            continue;
+
+        if (id.indexOf('DDL_') == -1) {
+            continue;
+        }
+
+        if (id.indexOf('_' + rowPK) == -1) {
+            continue;
+        }
+
+        var myid = id.substring(id.indexOf('DDL_') + 4);
+
+        myid = myid.replace('_' + rowPK, '');
+
+        kvs += '~' + myid + '=' + ddls[i].value;
+
+    }
+    return kvs;
+
+    //    ddls = document.getElementsByTagName("select");
+    //    for (var i = 0; i < ddls.length; i++) {
+    //        var id = ddls[i].name;
+
+    //        if (id.indexOf('DDL_') == -1) {
+    //            continue;
+    //        }
+    //        var myid = id.substring(id.indexOf('DDL_') + 4);
+    //        kvs += '~' + myid + '=' + ddls[i].value;
+    //    }
 }
 
 //var kvs = null;
@@ -352,6 +393,9 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
     GenerPageKVs();
     var url = GetLocalWFPreHref();
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
+
+    alert(kvs);
+
     $.ajax({
         type: "get",
         url: url + "/WF/CCForm/HanderMapExt.ashx?KVs=" + kvs,
@@ -380,11 +424,22 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
         }
     });
 }
-/* 级联下拉框*/
-function DDLAnsc(e, ddlChild, fk_mapExt) {
-    GenerPageKVs();
+/* 级联下拉框 */
+function DDLAnsc(e, ddlChild, fk_mapExt, rowPK) {
+
+    var strs = "";
+    if (rowPK == 'undefined' || rowPK == null) {
+        strs = GenerPageKVs();
+    }
+    else {
+        strs = GenerPageKVsWithRow(rowPK);
+        // alert(strs);
+    }
+
     var url = GetLocalWFPreHref();
-    var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
+    //alert(kvs);
+
+    var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": strs };
     $.ajax({
         type: "get",
         url: url + "/WF/CCForm/HanderMapExt.ashx",

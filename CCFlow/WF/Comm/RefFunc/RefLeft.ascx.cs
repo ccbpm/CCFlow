@@ -340,6 +340,8 @@ namespace CCFlow.WF.Comm.RefFunc
             {
                 if (func.Visable == false || func.RefAttrKey != null)
                     continue;
+                if (func.IsCanBatch == true)
+                    continue;
 
                 haveGroup = !string.IsNullOrWhiteSpace(func.GroupName);
 

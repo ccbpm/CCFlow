@@ -195,6 +195,8 @@ namespace CCFlow.WF.Comm.RefFunc
             {
                 if (func.Visable == false || func.RefAttrKey!=null)
                     continue;
+                if (func.IsCanBatch == true)
+                    continue;
 
                 if (func.RefMethodType != RefMethodType.Func)
                 {

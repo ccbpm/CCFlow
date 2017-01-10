@@ -45,7 +45,6 @@ public class Handler : IHttpHandler, IRequiresSessionState
                     || s.Contains("=") == false)
                     continue;
 
-
                 string[] mykv = s.Split('=');
                 sql = sql.Replace("@" + mykv[0], mykv[1]);
 
@@ -83,6 +82,18 @@ public class Handler : IHttpHandler, IRequiresSessionState
             //    return;
             case BP.Sys.MapExtXmlList.ActiveDDL: // 动态填充ddl。
                 sql = this.DealSQL(me.DocOfSQLDeal, key);
+
+                if (sql.Contains("@") == true)
+                {
+                    foreach (string strKey in context.Request.QueryString)
+                    {
+                        sql = sql.Replace("@" + strKey, context.Request[strKey]);
+                    }
+                }
+
+                //写错误日志?
+                BP.DA.Log.DebugWriteError(sql);
+                
                 dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 context.Response.Write(JSONTODT(dt));
                 return;

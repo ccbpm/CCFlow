@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>枚举字段属性</title>
+    <title>外键表字段属性</title>
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -112,11 +112,11 @@
                     // htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&OperAttrKey=" + mypk + "')\">正则表达式</a>";
                     // htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&MyPK=TBFullCtrl_" + mypk + "')\">文本框自动完成</a>";
                     //  htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/InputCheck.htm?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">脚本验证</a>";
-
-                    htmlLink += "<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">设置列表过滤</a>";
+                    //htmlLink += "<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">设置列表过滤</a>";
                     //自动计算.
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
-                    htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&AttrOfOper=" + data.KeyOfEn + "')\">设置级联(联动)</a>";
+                    //htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFullDLL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
+
+                    htmlLink += "<a href=\"javascript:WinOpen('./MapExt/ActiveDDL.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&AttrOfOper=" + data.KeyOfEn + "')\">设置级联(联动)</a>";
                     htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/DDLFullCtrl.aspx?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">设置自动填充</a>";
                     htmlLink += "-<a href=\"javascript:WinOpen('./EleBatch.aspx?FK_MapData=" + fk_mapData + "&KeyOfEn=" + data.KeyOfEn + "&EleType=MapAttr')\">批处理</a>";
 

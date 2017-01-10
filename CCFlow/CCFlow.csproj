@@ -1040,6 +1040,7 @@
     <Content Include="WF\Cancel.aspx" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
+    <Content Include="WF\CCForm\Dtl.htm" />
     <Content Include="WF\CCForm\DtlOpSelectItems.aspx" />
     <Content Include="WF\CCForm\FrmExcel.aspx" />
     <Content Include="WF\CCForm\FrmPopVal.htm" />
@@ -1344,7 +1345,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
-    <Content Include="lims.web.config" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.svg" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />

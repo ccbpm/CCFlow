@@ -165,11 +165,13 @@ namespace CCFlow.WF.Comm
             if (url.IndexOf("PageIdx") != -1)
                 url = url.Substring(0, url.IndexOf("PageIdx") - 1);
 
+            BP.Sys.EnCfg encfg = new EnCfg(this.EnsName);
+
             this.UCSys2.Clear();
             int maxPageNum = 0;
             try
             {
-                maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(), SystemConfig.PageSize, pageIdx, "Batch.aspx?EnsName=" + this.EnsName);
+                maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(), encfg.PageSizeOfBatch, pageIdx, "Batch.aspx?EnsName=" + this.EnsName);
             }
             catch (Exception ex)
             {
@@ -184,7 +186,7 @@ namespace CCFlow.WF.Comm
             if (maxPageNum > 1)
                 this.UCSys2.Add( "翻页键:← → PageUp PageDown");
 
-            qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx);
+            qo.DoQuery(en.PK, encfg.PageSizeOfBatch, pageIdx);
 
             this.UCSys1.DataPanelDtlCheckBox(ens);
 

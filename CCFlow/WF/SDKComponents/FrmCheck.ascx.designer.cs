@@ -11,5 +11,68 @@ namespace CCFlow.WF.App.Comm {
     
     
     public partial class FrmCheck {
+        
+        /// <summary>
+        /// FrmCheck1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::CCFlow.WF.App.Comm.FrmCheck FrmCheck1;
+        
+        /// <summary>
+        /// FTC1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::CCFlow.WF.SDKComponents.FTC FTC1;
+        
+        /// <summary>
+        /// AccepterCCerSelecter1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::CCFlow.WF.SDKComponents.AccepterCCerSelecter AccepterCCerSelecter1;
+        
+        /// <summary>
+        /// PostBackTextBox1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::CCFlow.WF.WorkOpt.PostBackTextBox PostBackTextBox1;
+        
+        /// <summary>
+        /// BPRadioButtonList1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::BP.Web.Controls.BPRadioButtonList BPRadioButtonList1;
+        
+        /// <summary>
+        /// DatePicker1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::BP.Web.Controls.DatePicker DatePicker1;
+        
+        /// <summary>
+        /// LineChart1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::BP.Web.Controls.LineChart LineChart1;
     }
 }

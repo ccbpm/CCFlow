@@ -11,11 +11,10 @@
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
-
     <style type="text/css">
     .icon-reddot{
 	 background:url('../../Img/OK.png') no-repeat center center;
-     }
+    }
      </style>
     <script language="javascript" type="text/javascript">
         $(function () {
@@ -656,9 +655,7 @@
                             <tr id="YC_08">
                                 <td class="BigDoc">
                                     <ul>
-                                        <li >当前节点的处理人与开始节点一致，发起人是zhangsan,现在节点的处理人也是他。</li>
-                                        <li >也就是说自己发给自己。</li>
-
+                                        <li >当前节点的处理人与开始节点一致，发起人是 zhangsan,现在节点的处理人也是zhangsan。</li>
                                     </ul>
                                 </td>
                             </tr>
@@ -673,7 +670,8 @@
                             <tr id="YC_09">
                                 <td class="BigDoc">
                                     <ul>
-                                        <li >节点A是甲处理，发送到节点B,也是需要甲处理。</li>
+                                        <li >节点A是zhangsan处理，发送到节点B,也是需要甲zhangsan处理。</li>
+                                        <li >就是自己发送给自己的模式。</li>
                                     </ul>
                                 </td>
                             </tr>
@@ -683,8 +681,8 @@
                                     <div style="float: left">
                                         <asp:RadioButton ID="RB_BySpecNodeEmp" Text="与指定节点处理人相同" GroupName="xxx" runat="server" />
                                     </div>
-                                    <div style="float: right">
-                                        请选择</div>
+                                    <div style="float: right">指定一个节点，当前节点的处理人就是他.</div>
+
                                 </th>
                             </tr>
                             <tr id="YC_10">

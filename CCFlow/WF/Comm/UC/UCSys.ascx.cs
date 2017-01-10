@@ -1775,6 +1775,7 @@ namespace CCFlow.WF.Comm.UC
                     AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
                     foreach (AttrOfOneVSM vsM in oneVsM)
                     {
+
                         str += "[<A onclick=\"javascript:EditOneVsM1('" + this.Request.ApplicationPath + "','" + en.ToString() + "','" + vsM.EnsOfMM.ToString() + "s','" + vsM.EnsOfMM + "&dt=" + DateTime.Now.ToString("hhss") + "','" + myen.ToString() + "','" + url + "'); return; \" >" + vsM.Desc + "</A>]";
                     }
                     #endregion

@@ -108,8 +108,8 @@ namespace CCFlow.WF.Comm
                 this.ToolBar1.AddLab("sw", "<input type=button class=Btn  id='ToolBar1$Btn_P' class=Btn name='ToolBar1$Btn_P'  onclick=\"javascript:OpenAttrs('" + this.EnsName + "');\"  value='设置(P)'  />");
 
             //this.ToolBar1.AddLab("sw", "<input type=button class=Btn  id='ToolBar1$Btn_P' name='ToolBar1$Btn_P'  onclick=\"javascript:OpenAttrs('" + this.EnsName + "');\"  value='设置(P)'  />");
-
             // this.ToolBar1.AddLab("s", "<input type=button onclick=\"javascript:OpenAttrs('" + this.EnsName + "');\"  value='设置(S)'  />");
+
             this.SetDGData();
 
             //输出执行信息。

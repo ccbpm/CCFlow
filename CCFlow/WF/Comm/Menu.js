@@ -91,7 +91,7 @@ function EditOneVsM( vsMName , attrKey )
 
 /*编辑一对多的关系*/
 function EditOneVsM1(path, enName, vsMName, attrKey, ensName, keys) {
-    var url = '../Comm/UIEn1ToM.aspx?EnName=' + enName + '&EnsName=' + ensName + "&AttrKey=" + attrKey + keys;
+    var url = 'UIEn1ToM.aspx?EnName=' + enName + '&EnsName=' + ensName + "&AttrKey=" + attrKey + keys;
     var a = window.showModalDialog(url, 'OneVs', 'dialogHeight: 600px; dialogWidth: 800px; dialogTop: 100px; dialogLeft: 110px; center: yes; help: no');
     return true;
 }

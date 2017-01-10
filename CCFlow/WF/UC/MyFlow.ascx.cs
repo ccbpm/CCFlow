@@ -417,8 +417,32 @@ namespace CCFlow.WF.UC
             #region 内置表单..
             if (this.currND.HisFormType != NodeFormType.SelfForm)
             {
-                if (this.currND.CondModel == CondModel.SendButtonSileSelect && this.currND.IsEndNode == false)
+
+                //是否需要显示方向选择?
+                bool isCanAddSelectDDL = false;
+                if ( this.currND.CondModel == CondModel.SendButtonSileSelect  && this.currND.IsEndNode == false )
                 {
+                    if (this.currND.TodolistModel == TodolistModel.Teamup)
+                    {
+                        /*如果是协作模式，就判断是否是最后一个人？*/
+                        int num = DBAccess.RunSQLReturnValInt("SELECT COUNT(WORKID) FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.currND.NodeID + " AND IsPass = 0", 0);
+                        if (num == 1)
+                            isCanAddSelectDDL = true;
+                        else
+                            isCanAddSelectDDL = false;
+                    }
+                    else
+                    {
+                        isCanAddSelectDDL = true;
+                    }
+                }
+
+
+
+                if (isCanAddSelectDDL ==true)
+                {
+
+
                     /*如果流程的方向条件是按照下拉框拉来选择.*/
                     /*弹出下拉框来选择之前进行自定义js校验  by tianbaoyan 2016-12-05.*/
                     toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + "SendBtnCondClick('" + currND.FK_Flow + "','" + currND.NodeID + "','" + this.WorkID + "','" + this.FID + "')\" />");
@@ -433,7 +457,7 @@ namespace CCFlow.WF.UC
                         this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
                     this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
 
-                    // 增加方向到下拉框.
+                    //增加方向到下拉框.
                     DDL ddl = new DDL();
                     ddl.ID = "DDL_ToNode";
                     Nodes toNodes = this.currND.HisToNodes;
@@ -447,7 +471,6 @@ namespace CCFlow.WF.UC
                             li.Value = nd.NodeID.ToString() + ".1";
                         else
                             li.Value = nd.NodeID.ToString();
-
                         //li.Text = nd.Name+" - "+li.Value;
                         li.Text = nd.Name;
                         ddl.Items.Add(li);
@@ -578,7 +601,6 @@ namespace CCFlow.WF.UC
             //    this.Btn_ReturnWork.OnClientClick = "this.disabled=true;";
             //    this.Btn_ReturnWork.Click += new System.EventHandler(ToolBar1_ButtonClick);
             //}
-
             //  if (btnLab.HungEnable && this.currND.IsStartNode == false)
             if (btnLab.HungEnable)
             {

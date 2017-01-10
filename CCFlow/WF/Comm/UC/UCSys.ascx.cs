@@ -1772,12 +1772,11 @@ namespace CCFlow.WF.Comm.UC
                     #endregion
 
                     #region 加入一对多的实体编辑
-                    AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
-                    foreach (AttrOfOneVSM vsM in oneVsM)
-                    {
-
-                        str += "[<A onclick=\"javascript:EditOneVsM1('" + this.Request.ApplicationPath + "','" + en.ToString() + "','" + vsM.EnsOfMM.ToString() + "s','" + vsM.EnsOfMM + "&dt=" + DateTime.Now.ToString("hhss") + "','" + myen.ToString() + "','" + url + "'); return; \" >" + vsM.Desc + "</A>]";
-                    }
+                    //AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
+                    //foreach (AttrOfOneVSM vsM in oneVsM)
+                    //{
+                    //    str += "[<A onclick=\"javascript:EditOneVsM1('" + this.Request.ApplicationPath + "','" + en.ToString() + "','" + vsM.EnsOfMM.ToString() + "s','" + vsM.EnsOfMM + "&dt=" + DateTime.Now.ToString("hhss") + "','" + myen.ToString() + "','" + url + "'); return; \" >" + vsM.Desc + "</A>]";
+                    //}
                     #endregion
 
                     if (cfg.IsEnableOpenICON)

@@ -1104,9 +1104,12 @@ namespace CCFlow.Web.Comm.UC
             }
 
             //增加tab工具栏
-            this.Add("<div id='tab-tools'>");
-            this.Add("<a href='javascript:void(0)' class='easyui-menubutton' data-options=\"plain:true,menu:'#tab-menu'\">选</a>");
-            this.Add("</div>");
+            if (dictGroups.Count > 1)
+            {
+                this.Add("<div id='tab-tools'>");
+                this.Add("<a href='javascript:void(0)' class='easyui-menubutton' data-options=\"plain:true,menu:'#tab-menu'\">选</a>");
+                this.Add("</div>");
+            }
 
             //生成tab导航菜单
             this.Add("<div class='easyui-menu' id='tab-menu'>");
@@ -1139,7 +1142,7 @@ namespace CCFlow.Web.Comm.UC
             this.Add(hiddenField);
 
             this.Add(
-                "<div id='nav-tab' class='easyui-tabs' data-options=\"tools:'#tab-tools',fit:true,onSelect:function(title){ $('#" +
+                "<div id='nav-tab' class='easyui-tabs' data-options=\"" + (dictGroups.Count > 1 ? "tools:'#tab-tools'," : string.Empty) + "fit:true,onSelect:function(title){ $('#" +
                 hiddenField.ClientID + "').val(title); }\" style='width:740px;height:auto'>");
 
             // 循环组来输出数据.

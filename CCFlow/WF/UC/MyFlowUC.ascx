@@ -22,7 +22,7 @@
             text-align:left;
         }
     </style>
-	<script language="JavaScript" src="/WF/Comm/JScript.js"></script>
+	<script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript"></script>
     <div align="center">
  <%--   <span >
     <uc1:FlowInfoSimple ID="FlowInfoSimple1" runat="server" />

@@ -16,18 +16,28 @@
     <meta http-equiv="Page-Enter" content="revealTrans(duration=0.5, transition=8)" />
     <link href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript">
-
         var isChange = false;
         function SaveDtlData() {
-
-            //var changeVal = $("#<%=isChange.ClientID %>").val();
-            //alert(isChange + "--" + changeVal);
             if (isChange == false)
                 return;
+
             var btn = document.getElementById('Button1');
             btn.click();
             isChange = false;
         }
+
+        $(function () {
+            try {
+                var ptitle = window.parent.document.title;
+                if (ptitle && ptitle.length > 0) {
+                    window.parent.DtlsLoadedCount++;    //加载完，承载页面明细表已加载数量+1
+                }
+            }
+            catch (e) {
+
+            }
+        });
+
         function SaveDtlDataTo(url) {
 
             if (isChange == true) {

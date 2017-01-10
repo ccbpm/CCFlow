@@ -1111,31 +1111,31 @@ namespace CCFlow.Web.Comm.UC
                 this.Add("<div id='tab-tools'>");
                 this.Add("<a href='javascript:void(0)' class='easyui-menubutton' data-options=\"plain:true,menu:'#tab-menu'\">选</a>");
                 this.Add("</div>");
+
+                //生成tab导航菜单
+                this.Add("<div class='easyui-menu' id='tab-menu'>");
+
+                foreach (var de in dictGroups)
+                {
+                    idxL1 = de.Value.IndexOf(',');
+                    idxL2 = de.Value.IndexOf('，');
+
+                    //去除有英文/中文括号内的内容，标题只显示括号之前的内容，防止标题过长
+                    if (idxL1 > 0)
+                        tabTitle = de.Value.Substring(0, idxL1);
+                    else if (idxL2 > 0)
+                        tabTitle = de.Value.Substring(0, idxL2);
+                    else
+                        tabTitle = de.Value;
+
+                    this.Add(string.Format("<div onclick=\"{2}selectTab('{0}')\">{1}.{0}</div>", tabTitle, ++idx, Environment.NewLine));
+                }
+
+                if (haveFile)
+                    this.Add("<div onclick=\"selectTab('附件管理')\">" + (++idx) + ".附件管理</div>");
+
+                this.Add("</div>");
             }
-
-            //生成tab导航菜单
-            this.Add("<div class='easyui-menu' id='tab-menu'>");
-
-            foreach (var de in dictGroups)
-            {
-                idxL1 = de.Value.IndexOf(',');
-                idxL2 = de.Value.IndexOf('，');
-
-                //去除有英文/中文括号内的内容，标题只显示括号之前的内容，防止标题过长
-                if (idxL1 > 0)
-                    tabTitle = de.Value.Substring(0, idxL1);
-                else if (idxL2 > 0)
-                    tabTitle = de.Value.Substring(0, idxL2);
-                else
-                    tabTitle = de.Value;
-
-                this.Add(string.Format("<div onclick=\"{2}selectTab('{0}')\">{1}.{0}</div>", tabTitle, ++idx, Environment.NewLine));
-            }
-
-            if (haveFile)
-                this.Add("<div onclick=\"selectTab('附件管理')\">" + (++idx) + ".附件管理</div>");
-
-            this.Add("</div>");
 
             //为处理保存后显示之前打开的标签，所增加的隐藏域，记录当前打开的标签title
             //在保存事件处理后，获取该隐藏域中记录的标签title,将该title加入到redirect的url参数中,在页面前端的JS中捕获title，选中该标签

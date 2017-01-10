@@ -1800,6 +1800,12 @@ namespace CCFlow.WF.UC
                 scriptSaveDtl = "\t\n<script type='text/javascript' >";
                 scriptSaveDtl += "\t\n function SaveDtlAll(){ ";
 
+                //added by liuxc,2017-1-10，增加对已经加载的明细表数量进行判断
+                scriptSaveDtl += "\t\n  if(DtlsLoadedCount < DtlsCount){ ";
+                scriptSaveDtl += "\t\n    alert('明细表未完全加载完成，请稍候！'); ";
+                scriptSaveDtl += "\t\n    return false;";
+                scriptSaveDtl += "\t\n  }";
+
                 foreach (MapDtl dtl in dtls)
                 {
                     if (dtl.IsUpdate == true || dtl.IsInsert == true)
@@ -2423,10 +2429,10 @@ namespace CCFlow.WF.UC
             if (this.IsReadonly)
                 return;
             this.Page.RegisterClientScriptBlock("y7",
-          "<script language='JavaScript' src='" + CCFlowAppPath + "DataUser/JSLibData/" + this.EnName + "_Self.js' charset='gb2312'></script>");
+          "<script language='JavaScript' src='" + CCFlowAppPath + "DataUser/JSLibData/" + this.EnName + "_Self.js' charset='gb2312' type='text/javascript'></script>");
 
             this.Page.RegisterClientScriptBlock("yfd7",
-          "<script language='JavaScript' src='" + CCFlowAppPath + "DataUser/JSLibData/" + this.EnName + ".js' charset='gb2312'></script>");
+          "<script language='JavaScript' src='" + CCFlowAppPath + "DataUser/JSLibData/" + this.EnName + ".js' charset='gb2312' type='text/javascript'></script>");
             foreach (MapAttr attr in mattrs)
             {
                 if (attr.DefValReal.Contains("@") == false)
@@ -3917,11 +3923,15 @@ namespace CCFlow.WF.UC
             #endregion 输出数据控件.
 
             #region 输出明细.
+
+            int dtlsCount = 0;
+
             foreach (MapDtl dtl in dtls)
             {
                 if (dtl.IsView == false)
                     continue;
 
+                dtlsCount++;
                 x = dtl.X + wtX;
                 float y = dtl.Y;
 
@@ -3963,6 +3973,9 @@ namespace CCFlow.WF.UC
                 this.Add("</span>");
                 this.Add("</DIV>");
             }
+
+            //added by liuxc,2017-1-10,此处前台JS中增加变量DtlsLoadedCount记录明细表的数量，用于加载完全部明细表的判断
+            this.Add("<script type='text/javascript'>var DtlsCount = " + dtlsCount + "; //应该加载的明细表数量</script>");
 
             string js = "";
             if (this.IsReadonly == false)

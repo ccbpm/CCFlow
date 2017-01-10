@@ -430,7 +430,7 @@ namespace CCFlow.WF.UC
                     if (this.currND.HisFormType == NodeFormType.DisableIt)
                         this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
                     else
-                        this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                        this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
                     this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
 
                     // 增加方向到下拉框.
@@ -476,7 +476,7 @@ namespace CCFlow.WF.UC
                             /*如果启用了选择人窗口的模式是【选择既发送】.*/
                             toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                             this.Btn_Send.UseSubmitBehavior = false;
-                            this.Btn_Send.OnClientClick = btnLab.SendJS + " if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();";
+                            this.Btn_Send.OnClientClick = btnLab.SendJS + " if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();";
                             this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                         }
                     }
@@ -498,7 +498,7 @@ namespace CCFlow.WF.UC
                                 if (this.currND.HisFormType == NodeFormType.DisableIt)
                                     this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
                                 else
-                                    this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                                    this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
                                 //   this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
                                 this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                             }
@@ -508,7 +508,7 @@ namespace CCFlow.WF.UC
                                 this.Btn_Send.UseSubmitBehavior = false;
                                 if (btnLab.SendJS.Trim().Length > 2)
                                 {
-                                    this.Btn_Send.OnClientClick = btnLab.SendJS + ";if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                                    this.Btn_Send.OnClientClick = btnLab.SendJS + ";if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
                                 }
                                 else
                                 {
@@ -516,7 +516,7 @@ namespace CCFlow.WF.UC
                                     if (this.currND.HisFormType == NodeFormType.DisableIt)
                                         this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
                                     else
-                                        this.Btn_Send.OnClientClick = "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                                        this.Btn_Send.OnClientClick = "if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
                                 }
                                 this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                             }
@@ -529,7 +529,7 @@ namespace CCFlow.WF.UC
                 {
                     toolbar.AddBtn(NamesOfBtn.Save, btnLab.SaveLab);
                     this.Btn_Save.UseSubmitBehavior = false;
-                    this.Btn_Save.OnClientClick = "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
+                    this.Btn_Save.OnClientClick = "if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
                     this.Btn_Save.Click += new System.EventHandler(ToolBar1_ButtonClick);
                 }
             }
@@ -1642,6 +1642,7 @@ namespace CCFlow.WF.UC
                             this.UCEn1.Add("\t\n   var contentWidow = scope.contentWindow;");
                             this.UCEn1.Add("\t\n   contentWidow.SaveDtlData();");
                             this.UCEn1.Add("\t\n   }");
+                            this.UCEn1.Add("\t\n  return true;");
                             this.UCEn1.Add("\t\n}");
                             #endregion
 
@@ -1778,6 +1779,7 @@ namespace CCFlow.WF.UC
                             this.UCEn1.Add("\t\n   var contentWidow = scope.contentWindow;");
                             this.UCEn1.Add("\t\n   contentWidow.SaveDtlData();");
                             this.UCEn1.Add("\t\n   }");
+                            this.UCEn1.Add("\t\n  return true;");
                             this.UCEn1.Add("\t\n}");
                             #endregion
 

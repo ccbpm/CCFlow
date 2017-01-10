@@ -13,6 +13,8 @@
     <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
     <script type="text/javascript" language="javascript" src="Scripts/MyFlow.js"></script>
     <script type="text/javascript">
+        var DtlsLoadedCount = 0;    //已加载明细表数量
+
         function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
             var date = new Date();
             var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();

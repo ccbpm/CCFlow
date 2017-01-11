@@ -78,7 +78,10 @@ namespace BP.Sys
         /// Idx
         /// </summary>
         public const string Idx = "Idx";
-
+        /// <summary>
+        /// 保存方式
+        /// </summary>
+        public const string SaveWay = "SaveWay";
     }
     /// <summary>
     /// 附件数据存储
@@ -330,6 +333,17 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmAttachmentDBAttr.Idx, value);
+            }
+        }
+        public int SaveWay
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmAttachmentDBAttr.SaveWay);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentDBAttr.SaveWay, value);
             }
         }
         /// <summary>

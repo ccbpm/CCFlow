@@ -2533,7 +2533,6 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.BatchParas, null, "参数", true, false, 0, 100, 10);
                 map.AddTBInt(NodeAttr.PrintDocEnable, 0, "打印方式", true, true);
 
-             
 
                 //与未来处理人有关系.
               //  map.AddTBInt(NodeAttr.IsFullSA, 1, "是否计算未来处理人?", false, false);

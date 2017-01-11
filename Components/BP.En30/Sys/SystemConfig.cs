@@ -84,6 +84,31 @@ namespace BP.Sys
     /// </summary>
     public class SystemConfig
     {
+        #region ftp配置.
+        public static string FTPServerIP
+        {
+            get
+            {
+                return SystemConfig.AppSettings["FTPServerIP"];
+            }
+        }
+
+        public static string FTPUserNo
+        {
+            get
+            {
+                return SystemConfig.AppSettings["FTPUserNo"];
+            }
+        }
+
+        public static string FTPUserPassword
+        {
+            get
+            {
+                return SystemConfig.AppSettings["FTPUserPassword"];
+            }
+        }
+        #endregion
 
         #region 组织结构的配置.
         /// <summary>

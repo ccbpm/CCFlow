@@ -1449,8 +1449,8 @@ namespace CCFlow.Web.Comm.UC
                                     case DataType.AppInt:
                                     case DataType.AppFloat:
                                     case DataType.AppDouble:
-                                        tb.Attributes["Class"] = "TBNum";
                                         tb.ShowType = TBType.Float;
+                                        tb.CssClass = isReadonly || attr.UIIsReadonly ? "TBNumReadonly" : "TBNum";
                                         tb.Text = val.ToString();
                                         break;
                                     case DataType.AppDate:

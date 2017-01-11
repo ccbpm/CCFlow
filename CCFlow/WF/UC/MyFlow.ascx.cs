@@ -2295,7 +2295,27 @@ namespace CCFlow.WF.UC
             }
             else
             {
-                if (currND.CondModel == CondModel.ByUserSelected && currND.HisToNDNum > 1)
+
+                //是否需要显示方向选择?
+                bool isCanAddSelectDDL = false;
+                if (this.currND.CondModel == CondModel.ByUserSelected && this.currND.IsEndNode == false &&  currND.HisToNDNum > 1)
+                {
+                    if (this.currND.TodolistModel == TodolistModel.Teamup)
+                    {
+                        /*如果是协作模式，就判断是否是最后一个人？*/
+                        int num = DBAccess.RunSQLReturnValInt("SELECT COUNT(WORKID) FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.currND.NodeID + " AND IsPass = 0", 0);
+                        if (num == 1)
+                            isCanAddSelectDDL = true;
+                        else
+                            isCanAddSelectDDL = false;
+                    }
+                    else
+                    {
+                        isCanAddSelectDDL = true;
+                    }
+                }
+
+                if (isCanAddSelectDDL)
                 {
                     //如果是用户选择的方向条件.
                     this.Response.Redirect("./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID, true);

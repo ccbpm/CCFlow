@@ -82,21 +82,31 @@ namespace CCFlow.WF.SDKComponents
 
             Node nd=new Node(this.FK_Node);
 
-            this.AddTable(" width='100%' ");
+            this.AddTable("width='100%'");
             if (sf.SFCaption.Length !=0)
                 this.AddCaption(sf.SFCaption); //标题可以为空
 
             if (sf.SFDefInfo.Trim().Length == 0)
                 return;
 
+            //this.AddTR();
+            //this.AddTDB("style='min-width:150px;'", "标题");
+            //this.AddTDB("style='width:150px;'", "停留节点");
+            //this.AddTDB("style='width:80px;'", "状态");
+            //this.AddTDB("style='min-width:150px;'", "处理人");
+            //this.AddTDB("style='width:150px;'", "处理时间");
+            //this.AddTDB("style='min-width:150px;'", "信息");
+            //this.AddTREnd();
+
             this.AddTR();
-            this.AddTDB("style='min-width:150px;'", "标题");
-            this.AddTDB("style='width:150px;'", "停留节点");
-            this.AddTDB("style='width:80px;'", "状态");
-            this.AddTDB("style='min-width:150px;'", "处理人");
-            this.AddTDB("style='width:150px;'", "处理时间");
-            this.AddTDB("style='min-width:150px;'", "信息");
+            this.AddTH("标题");
+            this.AddTH("停留节点");
+            this.AddTH("状态");
+            this.AddTH("处理人");
+            this.AddTH("处理时间");
+            this.AddTH("信息");
             this.AddTREnd();
+
 
             /*有要启动的子流程, 生成启动子流程的连接.*/
             string html = "";

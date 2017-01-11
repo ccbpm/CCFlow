@@ -1048,12 +1048,13 @@ namespace CCFlow.WF.CCForm
 
         protected void btn_Click(object sender, EventArgs e)
         {
+            bool isIE=this.CheckBrowserIsIE();
             try
             {
-                if (!CheckBrowserIsIE())
+                if (isIE == false)
                 {
+                    //附件描述.
                     BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(this.FK_FrmAttachment);
-
                     System.Web.UI.WebControls.FileUpload fu = this.Pub1.FindControl("file") as System.Web.UI.WebControls.FileUpload;
                     if (fu.HasFile == false || fu.FileName.Length <= 2)
                     {
@@ -1076,114 +1077,210 @@ namespace CCFlow.WF.CCForm
                         }
                     }
 
-                    string savePath = athDesc.SaveTo;
-
-                    if (savePath.Contains("@") == true || savePath.Contains("*") == true)
+                    #region 保存到iis服务器. 
+                    if (athDesc.SaveWay == 0)
                     {
-                        /*如果有变量*/
-                        savePath = savePath.Replace("*", "@");
-                        GEEntity en = new GEEntity(athDesc.FK_MapData);
-                        en.PKVal = this.PKVal;
-                        en.Retrieve();
-                        savePath = BP.WF.Glo.DealExp(savePath, en, null);
-
-                        if (savePath.Contains("@") && this.FK_Node != 0)
+                        /* 如果是保存到服务器上,把文件. */
+                        string savePath = athDesc.SaveTo;
+                        if (savePath.Contains("@") == true || savePath.Contains("*") == true)
                         {
-                            /*如果包含 @ */
-                            BP.WF.Flow flow = new BP.WF.Flow(this.FK_Flow);
-                            BP.WF.Data.GERpt myen = flow.HisGERpt;
-                            myen.OID = this.WorkID;
-                            myen.RetrieveFromDBSources();
-                            savePath = BP.WF.Glo.DealExp(savePath, myen, null);
-                        }
-                        if (savePath.Contains("@") == true)
-                            throw new Exception("@路径配置错误,变量没有被正确的替换下来." + savePath);
-                    }
-                    else
-                    {
-                        savePath = athDesc.SaveTo + "\\" + this.PKVal;
-                    }
+                            /*如果有变量*/
+                            savePath = savePath.Replace("*", "@");
+                            GEEntity en = new GEEntity(athDesc.FK_MapData);
+                            en.PKVal = this.PKVal;
+                            en.Retrieve();
+                            savePath = BP.WF.Glo.DealExp(savePath, en, null);
 
-                    //替换关键的字串.
-                    savePath = savePath.Replace("\\\\", "\\");
-                    try
-                    {
-                        savePath = Server.MapPath("~/" + savePath);
-                        if (System.IO.Directory.Exists(savePath) == false)
+                            if (savePath.Contains("@") && this.FK_Node != 0)
+                            {
+                                /*如果包含 @ */
+                                BP.WF.Flow flow = new BP.WF.Flow(this.FK_Flow);
+                                BP.WF.Data.GERpt myen = flow.HisGERpt;
+                                myen.OID = this.WorkID;
+                                myen.RetrieveFromDBSources();
+                                savePath = BP.WF.Glo.DealExp(savePath, myen, null);
+                            }
+                            if (savePath.Contains("@") == true)
+                                throw new Exception("@路径配置错误,变量没有被正确的替换下来." + savePath);
+                        }
+                        else
                         {
-                            System.IO.Directory.CreateDirectory(savePath);
+                            savePath = athDesc.SaveTo + "\\" + this.PKVal;
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + Server.MapPath("~/" + savePath) + "===" + savePath + "@技术问题:" + ex.Message);
-                    }
 
-                    string guid = BP.DA.DBAccess.GenerGUID();
-                    string realSaveTo = savePath + "/" + guid + "." + fu.FileName.Replace("~", "-").Replace("'", "-").Replace("*", "-");    //edited by liuxc,2016-08-30，此处如果不将特殊字符替换掉，则会与保存在数据库中的附件名可能不一致
-                    string saveTo = realSaveTo;
-
-                    try
-                    {
-                        fu.SaveAs(realSaveTo);
-                    }
-                    catch (Exception ex)
-                    {
-                        this.Response.Write("@文件存储失败,有可能是路径的表达式出问题,导致是非法的路径名称:" + ex.Message);
-                        return;
-                    }
-
-                    FileInfo info = new FileInfo(realSaveTo);
-                    FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                    dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
-                    dbUpload.NodeID = FK_Node.ToString();
-                    dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
-                    dbUpload.FID = this.FID; //流程id.
-                    if (athDesc.AthUploadWay == AthUploadWay.Inherit)
-                    {
-                        /*如果是继承，就让他保持本地的PK. */
-                        dbUpload.RefPKVal = this.PKVal.ToString();
-                    }
-
-                    if (athDesc.AthUploadWay == AthUploadWay.Interwork)
-                    {
-                        /*如果是协同，就让他是PWorkID. */
-                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PKVal, 0).ToString();
-                        if (pWorkID == null || pWorkID == "0")
-                            pWorkID = this.PKVal;
-                        dbUpload.RefPKVal = pWorkID;
-                    }
-
-                    dbUpload.FK_MapData = athDesc.FK_MapData;
-                    dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
-
-                    dbUpload.FileExts = info.Extension;
-                    dbUpload.FileFullName = saveTo;
-                    dbUpload.FileName = fu.FileName;
-                    dbUpload.FileSize = (float)info.Length;
-
-                    dbUpload.RDT = DataType.CurrentDataTimess;
-                    dbUpload.Rec = BP.Web.WebUser.No;
-                    dbUpload.RecName = BP.Web.WebUser.Name;
-                    //if (athDesc.IsNote)
-                    //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
-
-                    if (athDesc.Sort.Contains(","))
-                    {
-                        string[] strs = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(athDesc.Sort.LastIndexOf("@") + 1).Split(',') : athDesc.Sort.Split(',');
-                        BP.Web.Controls.DDL ddl = this.Pub1.GetDDLByID("ddl");
-                        dbUpload.Sort = strs[0];
-                        if (ddl != null)
+                        //替换关键的字串.
+                        savePath = savePath.Replace("\\\\", "\\");
+                        try
                         {
-                            int selectedIndex = string.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
-                            dbUpload.Sort = strs[selectedIndex];
+                            savePath = Server.MapPath("~/" + savePath);
+                            if (System.IO.Directory.Exists(savePath) == false)
+                            {
+                                System.IO.Directory.CreateDirectory(savePath);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + Server.MapPath("~/" + savePath) + "===" + savePath + "@技术问题:" + ex.Message);
+                        }
+
+                        string guid = BP.DA.DBAccess.GenerGUID();
+                        string realSaveTo = savePath + "/" + guid + "." + fu.FileName.Replace("~", "-").Replace("'", "-").Replace("*", "-");    //edited by liuxc,2016-08-30，此处如果不将特殊字符替换掉，则会与保存在数据库中的附件名可能不一致
+                        string saveTo = realSaveTo;
+                        try
+                        {
+                            fu.SaveAs(realSaveTo);
+                        }
+                        catch (Exception ex)
+                        {
+                            this.Response.Write("@文件存储失败,有可能是路径的表达式出问题,导致是非法的路径名称:" + ex.Message);
+                            return;
+                        }
+
+                        FileInfo info = new FileInfo(realSaveTo);
+                        FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+                        dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
+                        dbUpload.NodeID = FK_Node.ToString();
+                        dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
+                        dbUpload.FID = this.FID; //流程id.
+                        dbUpload.SaveWay = athDesc.SaveWay; //设置保存方式,以方便前台读取.
+
+                        if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                        {
+                            /*如果是继承，就让他保持本地的PK. */
+                            dbUpload.RefPKVal = this.PKVal.ToString();
+                        }
+
+                        if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                        {
+                            /*如果是协同，就让他是PWorkID. */
+                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PKVal, 0).ToString();
+                            if (pWorkID == null || pWorkID == "0")
+                                pWorkID = this.PKVal;
+                            dbUpload.RefPKVal = pWorkID;
+                        }
+
+                        dbUpload.FK_MapData = athDesc.FK_MapData;
+                        dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
+
+                        dbUpload.FileExts = info.Extension;
+                        dbUpload.FileFullName = saveTo;
+                        dbUpload.FileName = fu.FileName;
+                        dbUpload.FileSize = (float)info.Length;
+
+                        dbUpload.RDT = DataType.CurrentDataTimess;
+                        dbUpload.Rec = BP.Web.WebUser.No;
+                        dbUpload.RecName = BP.Web.WebUser.Name;
+                        //if (athDesc.IsNote)
+                        //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
+
+                        if (athDesc.Sort.Contains(","))
+                        {
+                            string[] strs = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(athDesc.Sort.LastIndexOf("@") + 1).Split(',') : athDesc.Sort.Split(',');
+                            BP.Web.Controls.DDL ddl = this.Pub1.GetDDLByID("ddl");
+                            dbUpload.Sort = strs[0];
+                            if (ddl != null)
+                            {
+                                int selectedIndex = string.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
+                                dbUpload.Sort = strs[selectedIndex];
+                            }
+                        }
+                        dbUpload.UploadGUID = guid;
+                        dbUpload.Insert();
+                    }
+                    #endregion 保存到iis服务器.
+
+
+                    #region 保存到数据库 / FTP服务器上.
+                    if (athDesc.SaveWay == 1 || athDesc.SaveWay == 2)
+                    {
+                        string guid = DBAccess.GenerGUID();
+
+                        //把文件临时保存到一个位置.
+                        string temp = SystemConfig.PathOfTemp+""+guid+".tmp";
+                        fu.SaveAs(temp);
+
+                        FileInfo info = new FileInfo(temp);
+                        FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+                        dbUpload.MyPK = BP.DA.DBAccess.GenerGUID(); 
+                        dbUpload.NodeID = FK_Node.ToString();
+                        dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
+                        dbUpload.FID = this.FID; //流程id.
+                        if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                        {
+                            /*如果是继承，就让他保持本地的PK. */
+                            dbUpload.RefPKVal = this.PKVal.ToString();
+                        }
+
+                        if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                        {
+                            /*如果是协同，就让他是PWorkID. */
+                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PKVal, 0).ToString();
+                            if (pWorkID == null || pWorkID == "0")
+                                pWorkID = this.PKVal;
+                            dbUpload.RefPKVal = pWorkID;
+                        }
+
+                        dbUpload.FK_MapData = athDesc.FK_MapData;
+                        dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
+                        dbUpload.SaveWay = athDesc.SaveWay; //设置保存方式,以方便前台展示读取.
+                        dbUpload.FileExts = info.Extension;
+                       // dbUpload.FileFullName = saveTo;
+                        dbUpload.FileName = fu.FileName;
+                        dbUpload.FileSize = (float)info.Length;
+
+                        dbUpload.RDT = DataType.CurrentDataTimess;
+                        dbUpload.Rec = BP.Web.WebUser.No;
+                        dbUpload.RecName = BP.Web.WebUser.Name;
+                        //if (athDesc.IsNote)
+                        //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
+
+                        if (athDesc.Sort.Contains(","))
+                        {
+                            string[] strs = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(athDesc.Sort.LastIndexOf("@") + 1).Split(',') : athDesc.Sort.Split(',');
+                            BP.Web.Controls.DDL ddl = this.Pub1.GetDDLByID("ddl");
+                            dbUpload.Sort = strs[0];
+                            if (ddl != null)
+                            {
+                                int selectedIndex = string.IsNullOrEmpty(ddl.SelectedItemStringVal) ? 0 : int.Parse(ddl.SelectedItemStringVal);
+                                dbUpload.Sort = strs[selectedIndex];
+                            }
+                        }
+                        dbUpload.UploadGUID = guid;
+                        dbUpload.Insert();
+
+                        if (athDesc.SaveWay == 1)
+                        {
+                            //把文件保存到指定的字段里.
+                            dbUpload.SaveFileToDB("FileDB", temp);
+                        }
+
+                        if (athDesc.SaveWay == 2)
+                        {
+                            /*保存到fpt服务器上.*/
+                            FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
+                                SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+
+                            //判断目录是否存在.
+                            if (ftpconn.DirectoryExist(athDesc.SaveTo) == false)
+                                ftpconn.CreateDirectory(athDesc.SaveTo);
+
+                            //设置当前目录，为操作的目录。
+                            ftpconn.SetCurrentDirectory(athDesc.SaveTo);
+
+                            //把文件放上去.
+                            ftpconn.PutFile(temp, guid + "." + dbUpload.FileExts);
+
                         }
                     }
-                    dbUpload.UploadGUID = guid;
-                    dbUpload.Insert();
+                    #endregion 保存到数据库.
+
+                     
+
+
                     //this.Response.Redirect("AttachmentUpload.aspx?FK_FrmAttachment=" + this.FK_FrmAttachment + "&FK_Node=" + this.FK_Node + "&PKVal=" + this.PKVal, true);
                 }
-                else
+
+                if (isIE==true)
                 {
                     BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(this.FK_FrmAttachment);
                     if (athDesc.Sort.Contains(","))

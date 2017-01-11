@@ -158,6 +158,7 @@ namespace CCFlow.WF.MapDef
             ddl.ID = "DDL_" + FrmAttachmentAttr.SaveWay;
             ddl.Items.Add(new ListItem("按文件方式保存", "0"));
             ddl.Items.Add(new ListItem("保存到数据库", "1"));
+            ddl.Items.Add(new ListItem("保存ftp服务器", "2"));
             ddl.SetSelectItem(ath.SaveWay);
             this.Pub1.AddTD(ddl);
             this.Pub1.AddTD("上传的附件如何保存?");

@@ -104,7 +104,7 @@ namespace BP.WF.Template
                 }
 
                 dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker==false)
+                if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker == false)
                     throw new Exception("@没有找到可接受的工作人员。@技术信息：执行的SQL没有发现人员:" + sql);
                 return dt;
             }
@@ -276,7 +276,7 @@ namespace BP.WF.Template
 
                     //就要到轨迹表里查,因为有可能是跳过的节点.
                     ps = new Paras();
-                    ps.SQL = "SELECT " + TrackAttr.EmpFrom +" FROM ND" + int.Parse(fl.No) + "Track WHERE (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3 OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5) AND NDFrom=" + dbStr + "NDFrom AND WorkID=" + dbStr + "WorkID";
+                    ps.SQL = "SELECT " + TrackAttr.EmpFrom + " FROM ND" + int.Parse(fl.No) + "Track WHERE (ActionType=" + dbStr + "ActionType1 OR ActionType=" + dbStr + "ActionType2 OR ActionType=" + dbStr + "ActionType3 OR ActionType=" + dbStr + "ActionType4 OR ActionType=" + dbStr + "ActionType5) AND NDFrom=" + dbStr + "NDFrom AND WorkID=" + dbStr + "WorkID";
                     ps.Add("ActionType1", (int)ActionType.Skip);
                     ps.Add("ActionType2", (int)ActionType.Forward);
                     ps.Add("ActionType3", (int)ActionType.ForwardFL);
@@ -500,7 +500,15 @@ namespace BP.WF.Template
                 if (flowAppType == FlowAppType.Normal)
                 {
                     ps = new Paras();
-                    ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                    if (BP.WF.Glo.OSModel == OSModel.OneOne)
+                    {
+                        ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                    }
+                    else if (BP.WF.Glo.OSModel == OSModel.OneMore)
+                    {
+                        ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                    }
+
                     ps.Add("FK_Node", town.HisNode.NodeID);
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count > 0 && town.HisNode.HisWhenNoWorker == false)
@@ -511,7 +519,7 @@ namespace BP.WF.Template
 
                 if (flowAppType == FlowAppType.PRJ)
                 {
-                    sql =  " SELECT A.No,A.Name FROM Port_Emp A, WF_NodeDept B, Prj_EmpPrjStation C, WF_NodeStation D ";
+                    sql = " SELECT A.No,A.Name FROM Port_Emp A, WF_NodeDept B, Prj_EmpPrjStation C, WF_NodeStation D ";
                     sql += "  WHERE A.FK_Dept=B.FK_Dept AND A.No=C.FK_Emp AND C.FK_Station=D.FK_Station AND B.FK_Node=D.FK_Node ";
                     sql += "  AND C.FK_Prj=" + dbStr + "FK_Prj  AND D.FK_Node=" + dbStr + "FK_Node";
 
@@ -606,7 +614,7 @@ namespace BP.WF.Template
             {
                 /* 按指定的节点的人员岗位 */
                 string para = town.HisNode.DeliveryParas;
-                para=para.Replace("@","");
+                para = para.Replace("@", "");
 
                 if (DataType.IsNumStr(para) == true)
                 {
@@ -624,7 +632,7 @@ namespace BP.WF.Template
                 }
                 else
                 {
-                    if (this.currWn.rptGe.Row.ContainsKey(para)==false)
+                    if (this.currWn.rptGe.Row.ContainsKey(para) == false)
                         throw new Exception("@在找人接收人的时候错误@字段{" + para + "}不包含在rpt里，流程设计错误。");
 
                     empNo = this.currWn.rptGe.GetValStrByKey(para);
@@ -733,7 +741,7 @@ namespace BP.WF.Template
                         DataTable dtStas = BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + town.HisNode.NodeID);
                         string stas = DBAccess.GenerWhereInPKsString(dtStas);
                         var ws = DataType.GetPortalInterfaceSoapClientInstance();
-                        return  ws.GenerEmpsBySpecDeptAndStats(empDept, stas);
+                        return ws.GenerEmpsBySpecDeptAndStats(empDept, stas);
                     }
                 }
 
@@ -863,7 +871,7 @@ namespace BP.WF.Template
             if (mydt == null)
             {
                 mydt = new DataTable();
-                mydt.Columns.Add( new DataColumn("No",typeof(string)));
+                mydt.Columns.Add(new DataColumn("No", typeof(string)));
                 mydt.Columns.Add(new DataColumn("Name", typeof(string)));
             }
 
@@ -964,9 +972,9 @@ namespace BP.WF.Template
             {
                 /*到达的节点是客户参与的节点. add by zhoupeng 2016.5.11*/
                 DataTable mydt = new DataTable();
-                mydt.Columns.Add("No",typeof(string));
-                mydt.Columns.Add("Name",typeof(string));
-                
+                mydt.Columns.Add("No", typeof(string));
+                mydt.Columns.Add("Name", typeof(string));
+
                 DataRow dr = mydt.NewRow();
                 dr["No"] = "Guest";
                 dr["Name"] = "外部用户";
@@ -993,7 +1001,7 @@ namespace BP.WF.Template
                         re_dt = new DataTable();
                         re_dt.Columns.Add("No", typeof(string));
                     }
-                    
+
                     //获取配置规则
                     string[] reWays = this.town.HisNode.DeliveryParas.Split('@');
                     foreach (string reWay in reWays)
@@ -1048,9 +1056,9 @@ namespace BP.WF.Template
                     }
                 }
                 #endregion
-                
+
                 //本节点接收人不允许包含上一步发送人 。
-                if (this.town.HisNode.IsExpSender == true && re_dt.Columns.Count <=2 )
+                if (this.town.HisNode.IsExpSender == true && re_dt.Columns.Count <= 2)
                 {
                     /*
                      * 排除了接受人分组的情况, 因为如果有了分组，就破坏了分组的结构了.
@@ -1107,6 +1115,6 @@ namespace BP.WF.Template
             return null;
         }
 
-       
+
     }
 }

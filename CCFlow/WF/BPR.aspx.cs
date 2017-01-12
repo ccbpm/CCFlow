@@ -173,7 +173,7 @@ namespace CCFlow.WF
                 this.Pub1.AddTDNum("<a href=\"javascript:WinOpen('BPR.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&DoType=NodeEmp')\" >" + val + "</a>");
 
                 this.Pub1.AddTD(nd.WarningHour);
-             //   this.Pub1.AddTD(nd.TSpanDay+"天"+nd.TSpanHour+"小时");
+             //   this.Pub1.AddTD(nd.TimeLimit+"天"+nd.TSpanHour+"小时");
 
                 this.Pub1.AddTD(0);
                 this.Pub1.AddTD(0);

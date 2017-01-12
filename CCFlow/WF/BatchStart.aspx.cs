@@ -571,6 +571,7 @@ namespace CCFlow.WF
                         DateTime tdt;
                         SysEnum en;
                         EntityNoName enn;
+                        int lastRowNum = 0;
 
                         using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                         {
@@ -619,9 +620,49 @@ namespace CCFlow.WF
                             if (fields.Count == 0)
                                 CloseAndException(wb, fs, "上传文件中，未检索到要提取的字段，请重新确认数据的正确性！");
 
+                            //added by liuxc,2017-1-12，增加判断真实最后一行的逻辑
+                            lastRowNum = sheet.LastRowNum;
+                            bool isRowEmpty = false;
+
+                            for (int r = 2; r < sheet.LastRowNum; r++)
+                            {
+                                row = sheet.GetRow(r);
+
+                                if (row == null) continue;
+
+                                isRowEmpty = true;
+
+                                foreach (KeyValuePair<int, MapAttr> field in fields)
+                                {
+                                    cell = row.GetCell(field.Key);
+
+                                    if (cell == null)
+                                    {
+                                        if (field.Value.UIIsInput)
+                                            CloseAndException(wb, fs,
+                                                                 string.Format("{0}，数据不能为空，请填写！", RptExportTemplateCell.GetCellName(field.Key, r)));
+                                        continue;
+                                    }
+
+                                    cellValue = GetCellValue(cell, cell.CellType, field.Value.MyDataType);
+
+                                    if(!string.IsNullOrWhiteSpace(cellValue))
+                                    {
+                                        isRowEmpty = false;
+                                        break;
+                                    }
+                                }
+
+                                if(isRowEmpty)
+                                {
+                                    lastRowNum = r;
+                                    break;
+                                }
+                            }
+
                             //遍历行，提取数据，存于dt中
                             //提取过程中，进行数据有效性验证，不通过验证直接退出遍历，提示错误
-                            for (int r = 2; r < sheet.LastRowNum + 1; r++)
+                            for (int r = 2; r < lastRowNum; r++)
                             {
                                 row = sheet.GetRow(r);
 

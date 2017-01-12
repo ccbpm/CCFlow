@@ -2134,7 +2134,6 @@ namespace BP.WF
                 case ReturnRole.CanNotReturn:
                     return dt;
                 case ReturnRole.ReturnAnyNodes:
-
                     if (nd.IsHL || nd.IsFLHL)
                     {
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
@@ -2152,7 +2151,7 @@ namespace BP.WF
                 case ReturnRole.ReturnPreviousNode:
                     WorkNode mywnP = wn.GetPreviousWorkNode();
 
-                        if (nd.IsHL || nd.IsFLHL)
+                    if (nd.IsHL || nd.IsFLHL)
                     {
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
                         sql = "SELECT a.FK_Node AS No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.FK_Node=" + mywnP.HisNode.NodeID + " AND a.IsPass=1 ORDER BY RDT  ";
@@ -2162,28 +2161,9 @@ namespace BP.WF
                     if (nd.TodolistModel == TodolistModel.Order)
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node=" + mywnP.HisNode.NodeID + ") OR (a.FK_Node=" + mywnP.HisNode.NodeID + " AND a.IsPass <0)  ORDER BY a.RDT";
                     else
-                        sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + mywnP.HisNode.NodeID + " ORDER BY a.RDT";
+                        sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + mywnP.HisNode.NodeID + " ORDER BY a.RDT ";
+
                     return DBAccess.RunSQLReturnTable(sql);
-
-
-                    ////  turnTo = mywnP.HisWork.Rec + mywnP.HisWork.RecText;
-                    //DataRow dr1 = dt.NewRow();
-                    //dr1["No"] = mywnP.HisNode.NodeID.ToString();
-                    //dr1["Name"] = mywnP.HisNode.Name;
-
-                    //sql = "SELECT FK_Emp, FK_EmpText FROM WF_GenerWorkerlist WHERE FK_Node=" + mywnP.HisNode.NodeID + " AND WorkID=" + workid + " AND IsEnable=1 AND IsPass=1";
-                    
-                    //DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-
-                    //dr1["Rec"] = mywnP.HisWork.Rec;
-                    //dr1["RecName"] = mywnP.HisWork.RecText;
-
-                    //if (mywnP.HisNode.IsBackTracking == true) //是否可以原路返回？
-                    //    dr1["IsBackTracking"] = "1";
-                    //else
-                    //    dr1["IsBackTracking"] = "0";
-                    //dt.Rows.Add(dr1);
-                    break;
                 case ReturnRole.ReturnSpecifiedNodes: //退回指定的节点。
                     if (wns.Count == 0)
                         wns.GenerByWorkID(wn.HisNode.HisFlow, workid);
@@ -2245,7 +2225,7 @@ namespace BP.WF
             }
 
             if (dt.Rows.Count == 0)
-                throw new Exception("@没有计算出来要退回的节点，请管理员确认节点退回规则是否合理？当前节点名称:"+nd.Name+",退回规则:"+nd.HisReturnRole.ToString() );
+                throw new Exception("@没有计算出来要退回的节点，请管理员确认节点退回规则是否合理？当前节点名称:" + nd.Name + ",退回规则:" + nd.HisReturnRole.ToString());
             return dt;
         }
         /// <summary>

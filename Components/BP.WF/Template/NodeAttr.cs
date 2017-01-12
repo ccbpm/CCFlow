@@ -185,7 +185,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 限期天
         /// </summary>
-        public const string TSpanDay = "TSpanDay";
+        public const string TimeLimit = "TimeLimit";
         /// <summary>
         /// 时间计算方式
         /// </summary>

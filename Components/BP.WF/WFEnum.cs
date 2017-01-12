@@ -41,20 +41,7 @@ namespace BP.WF
         /// </summary>
         ByCCIM
     }
-    /// <summary>
-    /// 时间计算方式
-    /// </summary>
-    public enum TWay
-    {
-        /// <summary>
-        /// 不计算节假日
-        /// </summary>
-        AllDays,
-        /// <summary>
-        /// 计算节假日
-        /// </summary>
-        Holiday
-    }
+  
     /// <summary>
     /// 运行平台
     /// </summary>

@@ -54,7 +54,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 时限天
         /// </summary>
-        public const string TSpanDay = "TSpanDay";
+        public const string TimeLimit = "TimeLimit";
         /// <summary>
         /// 时限小时
         /// </summary>
@@ -311,7 +311,7 @@ namespace BP.WF.Template
                  */
                 map.AddTBString(SelectAccperAttr.Tag, null, "维度信息Tag", true, false, 0, 200, 10);
 
-                map.AddTBInt(SelectAccperAttr.TSpanDay, 0, "时限-天", true, false);
+                map.AddTBInt(SelectAccperAttr.TimeLimit, 0, "时限-天", true, false);
                 map.AddTBFloat(SelectAccperAttr.TSpanHour, 0, "时限-小时", true, false);
 
                 //应该完成日期，为了自动计算未来的日期.

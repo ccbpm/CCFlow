@@ -59,9 +59,9 @@ namespace BP.DA
         /// <param name="dt">日期</param>
         /// <param name="days">增加的天数</param>
         /// <returns></returns>
-        public static DateTime AddDays(string dt, int days)
+        public static DateTime AddDays(string dt, int days, TWay tway)
         {
-            return AddDays(BP.DA.DataType.ParseSysDate2DateTime(dt), days);
+            return AddDays(BP.DA.DataType.ParseSysDate2DateTime(dt), days, tway);
         }
         /// <summary>
         /// 增加日期去掉周末
@@ -69,8 +69,11 @@ namespace BP.DA
         /// <param name="dt"></param>
         /// <param name="days"></param>
         /// <returns>返回天数</returns>
-        public static DateTime AddDays(DateTime dt, int days)
+        public static DateTime AddDays(DateTime dt, int days, TWay tway)
         {
+            if (tway == TWay.AllDays)
+                return dt.AddDays(days);
+
             if (BP.Sys.GloVar.Holidays == "")
             {
                 // 2015年以前的算法.
@@ -1523,7 +1526,7 @@ namespace BP.DA
         /// <param name="dtoffrom"></param>
         /// <param name="dtofto"></param>
         /// <returns></returns>
-        public static float GetSpanDays(string dtoffrom, string dtofto)
+        public static float GeTimeLimits(string dtoffrom, string dtofto)
         {
             DateTime dtfrom = DataType.ParseSysDate2DateTime(dtoffrom);
             DateTime dtto = DataType.ParseSysDate2DateTime(dtofto);
@@ -1536,9 +1539,9 @@ namespace BP.DA
         /// </summary>
         /// <param name="dtoffrom">时间从</param>
         /// <returns></returns>
-        public static float GetSpanDays(string dtoffrom )
+        public static float GeTimeLimits(string dtoffrom )
         {
-            return GetSpanDays(dtoffrom, DataType.CurrentDataTime);
+            return GeTimeLimits(dtoffrom, DataType.CurrentDataTime);
         }
         public static float GetSpanMinute(string fromdatetim, string toDateTime)
         {

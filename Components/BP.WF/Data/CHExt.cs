@@ -116,15 +116,15 @@ namespace BP.WF.Data
         /// <summary>
         /// 限期
         /// </summary>
-        public float TSpan
+        public int TimeLimit
         {
             get
             {
-                return this.GetValFloatByKey(CHAttr.TSpan);
+                return this.GetValIntByKey(CHAttr.TimeLimit);
             }
             set
             {
-                this.SetValByKey(CHAttr.TSpan, value);
+                this.SetValByKey(CHAttr.TimeLimit, value);
             }
         }
         /// <summary>
@@ -308,7 +308,7 @@ namespace BP.WF.Data
                 map.AddTBString(CHAttr.DTTo, null, "到", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.SDT, null, "应完成日期", true, true, 0, 50, 5);
 
-                map.AddTBString(CHAttr.TSpan, null, "限期", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.TimeLimit, null, "限期", true, true, 0, 50, 5);
 
                 map.AddTBString(CHAttr.UseDays, null, "用时", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.OverDays, null, "逾期", true, true, 0, 50, 5);

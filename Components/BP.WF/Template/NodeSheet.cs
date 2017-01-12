@@ -550,7 +550,7 @@ namespace BP.WF.Template
 
                 #region 考核属性
                 // 考核属性
-                map.AddTBFloat(NodeAttr.TSpanDay, 0, "限期(天)", true, false); //"限期(天)".
+                map.AddTBFloat(NodeAttr.TimeLimit, 0, "限期(天)", true, false); //"限期(天)".
                 map.AddTBFloat(NodeAttr.TSpanHour, 8, "小时", true, false); //"限期(天)".
 
                 map.AddTBFloat(NodeAttr.WarningDay, 0, "工作预警(天)", true, false);    // "警告期限(0不警告)"

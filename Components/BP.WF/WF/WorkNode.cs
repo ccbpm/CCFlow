@@ -462,13 +462,13 @@ namespace BP.WF
                 int day = 0;
                 int hh = 0;
 
-                //增加天数. 考虑到了节假日.
-                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TSpanDay,this.town.HisNode.TSpanMinues);
+                //增加天数. 考虑到了节假日.                
+                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,this.town.HisNode.TSpanMinues, this.town.HisNode.TWay);
             }
 
             //求警告日期.
             DateTime dtOfWarning = DateTime.Now;
-            if (this.town.HisNode.TSpanDay == 0 && this.town.HisNode.TSpanHour == 0)
+            if (this.town.HisNode.WarningDay == 0 && this.town.HisNode.WarningHour == 0)
             {
                 dtOfWarning = dtOfShould;
             }
@@ -476,7 +476,7 @@ namespace BP.WF
             {
                 //计算警告日期。
                 // 增加小时数. 考虑到了节假日.
-                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TSpanDay, this.town.HisNode.TSpanMinues);
+                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.WarningDay, this.town.HisNode.WarningHour, this.town.HisNode.TWay);
             }
 
             switch (this.HisNode.HisNodeWorkType)
@@ -2015,7 +2015,7 @@ namespace BP.WF
             }
 
             this.rptGe.SetValByKey(GERptAttr.FlowDaySpan,
-                DataType.GetSpanDays(rptGe.FlowStartRDT, DataType.CurrentDataTime));
+                DataType.GeTimeLimits(rptGe.FlowStartRDT, DataType.CurrentDataTime));
 
             //如果两个物理表不想等.
             if (this.HisWork.EnMap.PhysicsTable != this.rptGe.EnMap.PhysicsTable)
@@ -5858,7 +5858,7 @@ namespace BP.WF
                     }
 
                     //计算从发送到现在的天数.
-                    this.rptGe.FlowDaySpan = DataType.GetSpanDays(this.HisGenerWorkFlow.RDT);
+                    this.rptGe.FlowDaySpan = DataType.GeTimeLimits(this.HisGenerWorkFlow.RDT);
                     this.rptGe.Update();
                     #endregion 第二步: 5*5 的方式处理不同的发送情况.
                 }
@@ -6076,35 +6076,6 @@ namespace BP.WF
 
                 }
                 #endregion 执行启动子流程.
-
-                #region 处理发送成功后事件.
-                try
-                {
-                    //调起发送成功后的事件，把参数传入进去。
-                    if (this.SendHTOfTemp != null)
-                    {
-                        foreach (string key in this.SendHTOfTemp.Keys)
-                        {
-                            if (rptGe.Row.ContainsKey(key) == true)
-                                this.rptGe.Row[key] = this.SendHTOfTemp[key].ToString();
-                            else
-                                this.rptGe.Row.Add(key, this.SendHTOfTemp[key].ToString());
-                        }
-                    }
-
-                    //执行发送.
-                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
-                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
-
-                    //string SendSuccess = this.HisNode.MapData.FrmEvents.DoEventNode(EventListOfNode.SendSuccess, this.HisWork);
-                    if (sendSuccess != null)
-                        this.addMsg(SendReturnMsgFlag.SendSuccessMsg, sendSuccess);
-                }
-                catch (Exception ex)
-                {
-                    this.addMsg(SendReturnMsgFlag.SendSuccessMsgErr, ex.Message);
-                }
-                #endregion 处理发送成功后事件.
 
                 #region 处理流程数据与业务表的数据同步.
                 if (this.HisFlow.DTSWay != FlowDTSWay.None)
@@ -6325,6 +6296,37 @@ namespace BP.WF
                     this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, htmlInfo);
                 }
                 #endregion 判断当前处理人员，可否处理下一步工作.
+
+
+                #region 处理发送成功后事件.
+                try
+                {
+                    //调起发送成功后的事件，把参数传入进去。
+                    if (this.SendHTOfTemp != null)
+                    {
+                        foreach (string key in this.SendHTOfTemp.Keys)
+                        {
+                            if (rptGe.Row.ContainsKey(key) == true)
+                                this.rptGe.Row[key] = this.SendHTOfTemp[key].ToString();
+                            else
+                                this.rptGe.Row.Add(key, this.SendHTOfTemp[key].ToString());
+                        }
+                    }
+
+                    //执行发送.
+                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
+
+                    //string SendSuccess = this.HisNode.MapData.FrmEvents.DoEventNode(EventListOfNode.SendSuccess, this.HisWork);
+                    if (sendSuccess != null)
+                        this.addMsg(SendReturnMsgFlag.SendSuccessMsg, sendSuccess);
+                }
+                catch (Exception ex)
+                {
+                    this.addMsg(SendReturnMsgFlag.SendSuccessMsgErr, ex.Message);
+                }
+                #endregion 处理发送成功后事件.
+
 
                 //返回这个对象.
                 return this.HisMsgObjs;
@@ -6749,7 +6751,7 @@ namespace BP.WF
             rptGe.FlowEnderRDT = DataType.CurrentDataTime;
 
             //设置当前的流程所有的用时.
-            rptGe.FlowDaySpan = DataType.GetSpanDays(this.rptGe.GetValStringByKey(GERptAttr.FlowStartRDT), DataType.CurrentDataTime);
+            rptGe.FlowDaySpan = DataType.GeTimeLimits(this.rptGe.GetValStringByKey(GERptAttr.FlowStartRDT), DataType.CurrentDataTime);
 
             if (this.HisNode.IsEndNode || this.IsStopFlow)
                 rptGe.WFState = WFState.Complete;

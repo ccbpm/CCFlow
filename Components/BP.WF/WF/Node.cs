@@ -968,15 +968,18 @@ namespace BP.WF
         /// <summary>
         /// 限期天
         /// </summary>
-        public int TSpanDay
+        public int TimeLimit
         {
             get
             {
-                return this.GetValIntByKey(NodeAttr.TSpanDay);
+                int i= this.GetValIntByKey(NodeAttr.TimeLimit);
+                if (i == 0)
+                    return 2;
+                return i;
             }
             set
             {
-                this.SetValByKey(NodeAttr.TSpanDay, value);
+                this.SetValByKey(NodeAttr.TimeLimit, value);
             }
         }
         /// <summary>
@@ -1039,18 +1042,20 @@ namespace BP.WF
         {
             get
             {
-                float dayM = this.TSpanDay * (float)Glo.AMPMHours * 60f;
+                float dayM = this.TimeLimit * (float)Glo.AMPMHours * 60f;
                 return (int)(this.TSpanHour * 60f) + (int)dayM;
             }
         }
         /// <summary>
         /// 预警天
         /// </summary>
-        public float WarningDay
+        public int WarningDay
         {
             get
             {
-                float i = this.GetValFloatByKey(NodeAttr.WarningDay);
+                int i = this.GetValIntByKey(NodeAttr.WarningDay);
+                if (i == 0)
+                    return 1;
                 return i;
             }
             set
@@ -1061,13 +1066,13 @@ namespace BP.WF
         /// <summary>
         /// 预警(小时)
         /// </summary>
-        public float WarningHour
+        public int WarningHour
         {
             get
             {
-                float i = this.GetValFloatByKey(NodeAttr.WarningHour);
+                int i = this.GetValIntByKey(NodeAttr.WarningHour);
                 if (i == 0)
-                    return 1;
+                    return 0;
                 return i;
             }
             set
@@ -2446,15 +2451,15 @@ namespace BP.WF
                 #endregion 审核组件.
 
                 #region 考核属性.
-                map.AddTBFloat(NodeAttr.TSpanDay, 1, "限期(天)", true, false); //"限期(天)".
+                map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
                 map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(天)".
                 map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
 
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)"
 
-                map.AddTBFloat(NodeAttr.WarningDay, 0, "工作预警(天)", true, false);    // "警告期限(0不警告)"
-                map.AddTBFloat(NodeAttr.WarningHour, 4, "工作预警(小时)", true, false); // "警告期限(0不警告)"
+                map.AddTBFloat(NodeAttr.WarningDay, 1, "工作预警(天)", true, false);    // "警告期限(0不警告)"
+                map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
                 map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
 
                 map.AddTBInt(NodeAttr.WAlertRole, 0, "预警提醒规则", false, false); //"限期(天)"

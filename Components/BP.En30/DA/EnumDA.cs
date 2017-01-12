@@ -5,6 +5,20 @@ using System.Text;
 namespace BP.DA
 {
     /// <summary>
+    /// 时间计算方式
+    /// </summary>
+    public enum TWay
+    {
+        /// <summary>
+        /// 计算节假日
+        /// </summary>
+        Holiday,
+        /// <summary>
+        /// 不计算节假日
+        /// </summary>
+        AllDays
+    }
+    /// <summary>
     /// 数据库部署类型
     /// </summary>
     public enum DBModel

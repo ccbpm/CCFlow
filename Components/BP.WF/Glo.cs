@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20161200";
+        public static string Ver = "20161201";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -189,6 +189,7 @@ namespace BP.WF
 
                 //删除枚举.
                 DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='TodolistModel'");
+                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='TWay'");
 
                 // 运行升级SQL. D:\ccflow\CCFlow\WF\Data\UpdataCCFlowVer.sql
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
@@ -2083,13 +2084,11 @@ namespace BP.WF
         {
             if (SystemConfig.IsBSsystem == false)
                 return false;
-
             string agent = (BP.Sys.Glo.Request.UserAgent + "").ToLower().Trim();
             if (agent == "" || agent.IndexOf("mozilla") != -1 || agent.IndexOf("opera") != -1)
                 return false;
             return true;
         }
-
         /// <summary>
         /// 加入track
         /// </summary>
@@ -3505,7 +3504,7 @@ namespace BP.WF
             if (minutes == Glo.AMPMHours * 60)
             {
                 /*如果需要在一天完成*/
-                dt = DataType.AddDays(dt, 1);
+                dt = DataType.AddDays(dt, 1, TWay.Holiday);
                 return dt;
             }
 
@@ -3544,7 +3543,7 @@ namespace BP.WF
                         }
 
                         //说明要跨到第2天上去了.
-                        dt = DataType.AddDays(dt, 1);
+                        dt = DataType.AddDays(dt, 1, TWay.Holiday);
                         return Glo.AddMinutes(dt.ToString("yyyy-MM-dd") + " " + Glo.AMFrom, minutes - leftMuit);
                     }
 
@@ -3601,7 +3600,7 @@ namespace BP.WF
                         int leftMin = minutes - (int)ts.TotalMinutes;
 
                         /*否则要计算到第2天上去了， 计算时间要从下一个有效的工作日上班时间开始. */
-                        dt = DataType.AddDays(DataType.ParseSysDateTime2DateTime(dt.ToString("yyyy-MM-dd") + " " + Glo.AMFrom), 1);
+                        dt = DataType.AddDays(DataType.ParseSysDateTime2DateTime(dt.ToString("yyyy-MM-dd") + " " + Glo.AMFrom), 1, TWay.Holiday);
 
                         //递归调用,让其在次日的上班时间在增加，分钟数。
                         return Glo.AddMinutes(dt, leftMin);
@@ -3631,9 +3630,9 @@ namespace BP.WF
         /// <param name="day">天数</param>
         /// <param name="minutes">分钟数</param>
         /// <returns>返回计算后的日期</returns>
-        public static DateTime AddDayHoursSpan(string specDT, int day, int minutes)
+        public static DateTime AddDayHoursSpan(string specDT, int day, int minutes, TWay tway)
         {
-            DateTime mydt = BP.DA.DataType.AddDays(specDT, day);
+            DateTime mydt = BP.DA.DataType.AddDays(specDT, day,   tway);
             return Glo.AddMinutes(mydt, minutes);
         }
         /// <summary>
@@ -3643,9 +3642,9 @@ namespace BP.WF
         /// <param name="day">天数</param>
         /// <param name="minutes">分钟数</param>
         /// <returns>返回计算后的日期</returns>
-        public static DateTime AddDayHoursSpan(DateTime specDT, int day, int minutes)
+        public static DateTime AddDayHoursSpan(DateTime specDT, int day, int minutes, TWay tway)
         {
-            DateTime mydt = BP.DA.DataType.AddDays(specDT, day);
+            DateTime mydt = BP.DA.DataType.AddDays(specDT, day, tway);
             return Glo.AddMinutes(mydt, minutes);
         }
         #endregion ssxxx.
@@ -3683,7 +3682,7 @@ namespace BP.WF
                 return;
 
             //如果设置为0 则不考核.
-            if (nd.TSpanDay == 0 && nd.TSpanHour == 0)
+            if (nd.TimeLimit == 0 && nd.TSpanHour == 0)
                 return;
 
             if (dtNow == null)
@@ -3726,7 +3725,7 @@ namespace BP.WF
             ch.Title = title;
 
             //记录当时设定的值.
-            ch.TSpan = nd.TSpanDay + "天" + nd.TSpanHour + "时";
+            ch.TimeLimit = nd.TimeLimit;
 
             ch.FK_NY = dtNow.ToString("yyyy-MM");
 
@@ -3763,24 +3762,23 @@ namespace BP.WF
             
             TimeSpan ts = dtTo - dtFrom;
             ch.UseDays = ts.Days;
-            int hour = ts.Hours;
-            ch.UseDays += ts.Hours / 8; //使用的天数.
+            //int hour = ts.Hours;
+            //ch.UseDays += ts.Hours / 8; //使用的天数.
 
             // OverDays . 求出 逾期天 数.
             DateTime sdtOfDT = DataType.ParseSysDate2DateTime(ch.SDT);
+
+            TimeSpan myts = dtTo - sdtOfDT;
+            ch.UseDays = myts.Days; //预期的天数.
             if (sdtOfDT >= dtTo)
             {
                 /* 正常完成 */
-                ch.OverDays = 0;
                 ch.CHSta = CHSta.AnQi; //按期完成.
             }
             else
             {
                 /*逾期完成.*/
-                TimeSpan myts = dtTo - sdtOfDT;
-                ch.OverDays = myts.Days; //预期的天数.
-                ch.OverDays += ts.Hours/8;
-                ch.CHSta = CHSta.AnQi; //按期完成.
+                ch.CHSta = CHSta.YuQi; //按期完成.
             }
             #endregion 求计算属性.
 
@@ -3804,7 +3802,7 @@ namespace BP.WF
                 return;
 
             //如果设置为0 则不考核.
-            if (nd.TSpanDay == 0 && nd.TSpanHour == 0)
+            if (nd.TimeLimit == 0 && nd.TSpanHour == 0)
                 return;
 
             if (dtNow == null)
@@ -3848,7 +3846,7 @@ namespace BP.WF
 
             int hh = (int)nd.TSpanHour;
             float mm = (nd.TSpanHour - hh) * 60;
-            ch.TSpan = nd.TSpanDay + "天" + hh + "时" + mm + "分";
+            ch.TimeLimit = nd.TimeLimit; // +"天" + hh + "时" + mm + "分";
             ch.FK_NY = dtNow.ToString("yyyy-MM");
 
             ch.DTFrom = prvRDT;  //任务下达时间.

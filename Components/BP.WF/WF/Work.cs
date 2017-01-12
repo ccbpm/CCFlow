@@ -405,7 +405,7 @@ namespace BP.WF
         /// 得到从工作完成到现在的日期
         /// </summary>
         /// <returns></returns>
-        public int GetCDTSpanDays(string todata)
+        public int GetCDTimeLimits(string todata)
         {
             return DataType.SpanDays(this.CDT, todata);
         }

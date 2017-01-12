@@ -76,7 +76,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 限期
         /// </summary>
-        public const string TSpan = "TSpan";
+        public const string TimeLimit = "TimeLimit";
         /// <summary>
         /// 实际期限
         /// </summary>
@@ -234,15 +234,15 @@ namespace BP.WF.Data
         /// <summary>
         /// 限期
         /// </summary>
-        public string TSpan
+        public int TimeLimit
         {
             get
             {
-                return this.GetValStringByKey(CHAttr.TSpan);
+                return this.GetValIntByKey(CHAttr.TimeLimit);
             }
             set
             {
-                this.SetValByKey(CHAttr.TSpan, value);
+                this.SetValByKey(CHAttr.TimeLimit, value);
             }
         }
         /// <summary>
@@ -257,20 +257,6 @@ namespace BP.WF.Data
             set
             {
                 this.SetValByKey(CHAttr.UseDays, value);
-            }
-        }
-        /// <summary>
-        /// 超过时限
-        /// </summary>
-        public float OverDays
-        {
-            get
-            {
-                return this.GetValFloatByKey(CHAttr.OverDays);
-            }
-            set
-            {
-                this.SetValByKey(CHAttr.OverDays, value);
             }
         }
         /// <summary>
@@ -485,7 +471,7 @@ namespace BP.WF.Data
 
 
                 #region 计算属性.
-                map.AddTBString(CHAttr.TSpan, null, "规定限期", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.TimeLimit, null, "规定限期", true, true, 0, 50, 5);
                 map.AddTBFloat(CHAttr.UseDays, 0, "实际使用天", false, true);
                 map.AddTBFloat(CHAttr.OverDays, 0, "逾期天", false, true);
                 map.AddTBInt(CHAttr.CHSta, 0, "状态", true, true);

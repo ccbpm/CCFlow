@@ -263,10 +263,10 @@ function GenerPageKVs() {
     return kvs;
 }
 
-//根据.
-function GenerPageKVsWithRow(rowPK) {
+//根据一行数据获得其他列的字段信息.
+function GenerRowKVs(rowPK) {
     var ddls = null;
-    ddls = parent.document.getElementsByTagName("select");
+    ddls = document.getElementsByTagName("select");
     kvs = "";
     for (var i = 0; i < ddls.length; i++) {
 
@@ -278,7 +278,7 @@ function GenerPageKVsWithRow(rowPK) {
             continue;
         }
 
-        if (id.indexOf('_' + rowPK) == -1) {
+        if (id.indexOf('_' + rowPK) == -1 || (id.indexOf('_' + rowPK) + ('_' + rowPK).length) != id.length) {
             continue;
         }
 
@@ -432,7 +432,7 @@ function DDLAnsc(e, ddlChild, fk_mapExt, rowPK) {
         strs = GenerPageKVs();
     }
     else {
-        strs = GenerPageKVsWithRow(rowPK);
+        strs = GenerRowKVs(rowPK);
         // alert(strs);
     }
 

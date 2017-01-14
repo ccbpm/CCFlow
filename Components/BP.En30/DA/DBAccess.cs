@@ -2840,10 +2840,8 @@ namespace BP.DA
         public static DataTable RunSQLReturnTable(string sql, Paras paras)
         {
             if (string.IsNullOrEmpty(sql))
-            {
-                int SZJFG = 00;
                 throw new Exception("要执行的 sql = null ");
-            }
+
             try
             {
                 DataTable dt = null;

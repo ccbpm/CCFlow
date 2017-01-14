@@ -278,8 +278,11 @@ namespace BP.Sys
                     if (runObj.Contains("@WebUser.FK_Dept"))
                         runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
+                    #warning  这是写的什么？ 不是说了吗 不采用这样的表达式,不好转java.  写的这样长，谁能看懂了？ 读完这行代码，还能传过来气吗？
                     if (this.SrcType == Sys.SrcType.TableOrView)
                         runObj = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? (", " + this.ParentValue + " ParentNo") : string.Empty) + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(runObj) ? string.Empty : (" WHERE " + runObj));
+
+                        //runObj = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? (", " + this.ParentValue + " ParentNo") : string.Empty) + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(runObj) ? string.Empty : (" WHERE " + runObj));
 
                     return src.RunSQLReturnTable(runObj);
                 }

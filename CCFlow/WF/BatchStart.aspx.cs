@@ -82,15 +82,21 @@ namespace CCFlow.WF
 
             int fieldCount = 0;
             string[] strs = fl.BatchStartFields.Split(',');
+            List<string> endStrs = new List<string>();  //过滤后的批量发起字段列表
             foreach (string str in strs)
             {
                 if (string.IsNullOrEmpty(str))
                     continue;
 
+                if (endStrs.Contains(str))
+                    continue;
+                
                 foreach (MapAttr attr in attrs)
                 {
                     if (str != attr.KeyOfEn)
                         continue;
+
+                    endStrs.Add(str);
                     this.Pub2.AddTDTitle(attr.Name);
                     fieldCount++;
                 }
@@ -119,7 +125,7 @@ namespace CCFlow.WF
                 cbIdx.ID = "CB_IDX_" + i;
                 this.Pub2.AddTD(cbIdx);
 
-                foreach (string str in strs)
+                foreach (string str in endStrs)
                 {
                     if (string.IsNullOrEmpty(str))
                         continue;

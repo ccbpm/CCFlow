@@ -1373,10 +1373,11 @@ namespace CCFlow.WF.CCForm
                                     cb.Checked = true;
                                 else
                                     cb.Checked = false;
-                                //  cb.Attributes["onchecked"] = "alert('ss'); isChange= true; ";
-                                cb.Attributes["onclick"] = "isChange= true;";
-                                cb.Enabled = attr.UIIsEnable;
 
+                                if (attr.UIIsEnable)
+                                    cb.Attributes["onclick"] = " SetChange(true);";
+
+                                cb.Enabled = attr.UIIsEnable;
                                 this.Pub1.AddTD(cb);
                                 break;
                             default:

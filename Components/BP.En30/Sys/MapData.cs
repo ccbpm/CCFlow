@@ -46,7 +46,7 @@ namespace BP.Sys
         Dtl
     }
     /// <summary>
-    /// 表单类型
+    /// 表单类型 0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单
     /// </summary>
     public enum FrmType
     {
@@ -59,13 +59,17 @@ namespace BP.Sys
         /// </summary>
         FreeFrm = 1,
         /// <summary>
+        /// Silverlight表单(已取消)
+        /// </summary>
+        Silverlight = 2,
+        /// <summary>
         /// URL表单(自定义)
         /// </summary>
-        Url = 2,
+        Url = 3,
         /// <summary>
         /// Excel类型表单
         /// </summary>
-        ExcelFrm = 3,
+        ExcelFrm = 5,
         /// <summary>
         /// Word类型表单
         /// </summary>

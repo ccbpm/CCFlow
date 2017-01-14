@@ -869,6 +869,23 @@ namespace BP.Sys
 
             return base.beforeInsert();
         }
+
+        protected override void afterInsert()
+        {
+            if (this.SrcType == Sys.SrcType.TableOrView)
+            {
+                //暂时这样处理
+                string sql = "CREATE VIEW " + this.No + " (";
+                sql += "[No],";
+                sql += "[Name]) AS ";
+                sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
+
+                this.RunSQL(sql);
+            }
+
+            base.afterInsert();
+        }
+
         /// <summary>
         /// 获得该数据源的数据
         /// </summary>

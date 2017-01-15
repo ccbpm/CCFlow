@@ -837,9 +837,25 @@ namespace BP.WF
         #endregion 扩展属性
 
         #region 参数属性.
+        /// <summary>
+        /// 选择的表单(用于子流程列表里，打开草稿，记录当初选择的表单.)
+        /// </summary>
+        public string Paras_Frms
+        {
+            get
+            {
+                return this.GetParaString("Frms");
+            }
+            set
+            {
+                this.SetPara("Frms", value);
+            }
+        }
+        /// <summary>
+        /// 到达的节点
+        /// </summary>
         public string Paras_ToNodes
         {
-
             get
             {
                 return this.GetParaString("ToNodes");

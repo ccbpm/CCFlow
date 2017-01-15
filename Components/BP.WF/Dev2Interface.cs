@@ -2126,7 +2126,6 @@ namespace BP.WF
 
             string sql = "";
 
-
             WorkNode wn = new WorkNode(workid, fk_node);
             WorkNodes wns = new WorkNodes();
             switch (nd.HisReturnRole)
@@ -6344,8 +6343,13 @@ namespace BP.WF
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置草稿错误，只有在开始节点时才能设置草稿，现在的节点是:" + gwf.Title);
 
+                gwf.TodoEmps = BP.Web.WebUser.No + "," + WebUser.Name + ";";
+                gwf.TodoEmpsNum = 1;
+                gwf.WFState = WFState.Draft;
+                gwf.Update();
+
                 //设置成草稿.
-                gwf.Update(GenerWorkFlowAttr.WFState, (int)WFState.Draft);
+                //  gwf.Update(GenerWorkFlowAttr.WFState, (int)WFState.Draft);
             }
         }
         /// <summary>

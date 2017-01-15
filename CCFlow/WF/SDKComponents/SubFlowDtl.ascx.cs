@@ -83,8 +83,9 @@ namespace CCFlow.WF.SDKComponents
             Node nd=new Node(this.FK_Node);
 
             this.AddTable("width='100%'");
-            if (sf.SFCaption.Length !=0)
-                this.AddCaption(sf.SFCaption); //标题可以为空
+
+            //if (sf.SFCaption.Length !=0)
+            //    this.AddCaption(sf.SFCaption); //标题可以为空
 
             if (sf.SFDefInfo.Trim().Length == 0)
                 return;
@@ -99,12 +100,13 @@ namespace CCFlow.WF.SDKComponents
             //this.AddTREnd();
 
             this.AddTR();
-            this.AddTH("标题");
-            this.AddTH("停留节点");
-            this.AddTH("状态");
-            this.AddTH("处理人");
-            this.AddTH("处理时间");
-            this.AddTH("信息");
+            this.AddTDTitleExt("发起人");
+            this.AddTDTitleExt("标题");
+            this.AddTDTitleExt("停留节点");
+            this.AddTDTitleExt("状态");
+            this.AddTDTitleExt("处理人");
+            this.AddTDTitleExt("处理时间");
+            this.AddTDTitleExt("信息");
             this.AddTREnd();
 
 
@@ -150,16 +152,25 @@ namespace CCFlow.WF.SDKComponents
                         continue;
 
                     this.AddTR();
-                    if (sf.SFOpenType == 0)
+                    this.AddTD(item.StarterName); //发起人.
+                    if (item.TodoEmps.Contains("" + WebUser.No + "," + WebUser.Name + ";") == true)
                     {
                         this.AddTD("style='word-break:break-all;' title='" + item.Title + "'",
-                            "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                            "<a href=\"javascript:OpenIt('../MyFlow.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&&IsCheckGuide=1&Frms="+item.Paras_Frms+"&FK_Node="+item.FK_Node+"&PNodeID="+item.PNodeID+"')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
                     }
                     else
                     {
-                        this.AddTD("style='word-break:break-all;' title='"+item.Title+"'",
-    "<a href=\"javascript:OpenIt('../WorkOpt/FoolFrmTrack.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
 
+                        if (sf.SFOpenType == 0)
+                        {
+                            this.AddTD("style='word-break:break-all;' title='" + item.Title + "'",
+                                "<a href=\"javascript:OpenIt('../WFRpt.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                        }
+                        else
+                        {
+                            this.AddTD("style='word-break:break-all;' title='" + item.Title + "'",
+        "<a href=\"javascript:OpenIt('../WorkOpt/FoolFrmTrack.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                        }
                     }
 
                     this.AddTD(item.NodeName); //到达节点名称.

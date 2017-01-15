@@ -153,8 +153,17 @@ namespace CCFlow.WF.SheetTree
         {
             this.currND = new BP.WF.Node(this.FK_Node);
             this.Page.Title = "第" + this.currND.Step + "步:" + this.currND.Name;
-            if (IsPostBack==false)
+            if (IsPostBack == false)
+            {
                 InitToolsBar();
+
+                if (this.Request.QueryString["Frms"] != null)
+                {
+                    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                    gwf.Paras_Frms = this.Request.QueryString["Frms"]; ;
+                    gwf.Update();
+                }
+            }
         }
         /// <summary>
         /// 初始化工具栏
@@ -373,7 +382,6 @@ namespace CCFlow.WF.SheetTree
                 string urlExt = this.RequestParas;
                 //urlExt = "WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&CWorkID=" + this.CWorkID;
                 url = item.Url;
-
                 if (url.Contains("?"))
                 {
                     url += urlExt;

@@ -22,8 +22,6 @@
             }
         })
 </script>
-    <link href="../Comm/Style/Table.css" rel="stylesheet" type="text/css" />
-    <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">

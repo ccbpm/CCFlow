@@ -9,8 +9,7 @@
     <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"
         type="text/javascript"></script>
     <link href="../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
-<link rel="shortcut icon" href="./Img/ccbpm.ico" type="image/x-icon" />
-
+    <link rel="shortcut icon" href="./Img/ccbpm.ico" type="image/x-icon" />
     <asp:ContentPlaceHolder ID="head" runat="server">
         <style type="text/css">
             body

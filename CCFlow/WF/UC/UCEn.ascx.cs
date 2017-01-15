@@ -1877,7 +1877,7 @@ namespace CCFlow.WF.UC
                     {
                         case MapExtXmlList.AutoFullDLL: // 下拉框的数据过滤.
                             DDL ddlFull = this.GetDDLByID("DDL_" + me.AttrOfOper);
-                            if (ddlFull == null)
+                            if (ddlFull == null )
                             {
                                 me.Delete();
                                 continue;
@@ -1885,6 +1885,13 @@ namespace CCFlow.WF.UC
 
                             string valOld = ddlFull.SelectedItemStringVal;
                             string fullSQL = me.Doc.Clone() as string;
+
+                            if (string.IsNullOrEmpty(fullSQL) == true)
+                            {
+                                me.Delete();
+                                continue;
+                            }
+
                             if (!IsLoadData)
                             {
                                 //替换保存的时候EN中表单中变量
@@ -1904,6 +1911,7 @@ namespace CCFlow.WF.UC
                             }
 
                             fullSQL = BP.WF.Glo.DealExp(fullSQL, en, "");
+
 
                             ddlFull.Items.Clear();
                             DataTable table = DBAccess.RunSQLReturnTable(fullSQL);

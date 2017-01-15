@@ -131,7 +131,7 @@ namespace CCFlow.WF.SDKComponents
                     html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div></style>";
 
                 this.AddTR();
-                this.AddTD(" class=TRSum colspan=6", html);
+                this.AddTD(" class=TRSum colspan=7", html);
                 this.AddTREnd();
 
                 //该流程的子流程信息.

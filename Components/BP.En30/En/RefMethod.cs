@@ -64,7 +64,7 @@ namespace BP.En
         /// <summary>
         /// 是否显示在Ens中?
         /// </summary>
-        public bool IsForEns = true;
+        public bool IsForEns = false;
         /// <summary>
         /// 相关功能
         /// </summary>

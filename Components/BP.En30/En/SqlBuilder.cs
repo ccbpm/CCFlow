@@ -2321,9 +2321,7 @@ namespace BP.En
                             }
                             break;
                         case DataType.AppMoney:
-                            string str = en.GetValStrByKey(attr.Key).ToString();
-                            str = str.Replace("￥", "");
-                            str = str.Replace(",", "");
+                            string str = en.GetValStrByKey(attr.Key) as string;
                             if (string.IsNullOrEmpty(str))
                             {
                                 if (IsEnableNull)
@@ -2333,6 +2331,9 @@ namespace BP.En
                             }
                             else
                             {
+                                str = str.Replace("￥", "");
+                                str = str.Replace(",", "");
+
                                 ps.Add(attr.Key, decimal.Parse(str));
                             }
                             break;

@@ -379,6 +379,7 @@ namespace BP.Sys
         /// 保存方式
         /// 0 =文件方式保存。
         /// 1 = 保存到数据库.
+        /// 2 = ftp服务器.
         /// </summary>
         public int SaveWay
         {

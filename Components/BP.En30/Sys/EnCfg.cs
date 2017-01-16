@@ -28,7 +28,6 @@ namespace BP.Sys
                 paraStr = "@UIRowStyleGlo=0@IsEnableDouclickGlo=1@IsEnableRefFunc=1@IsEnableFocusField=1@IsEnableOpenICON=1@FocusField=''@WinCardH=600@@WinCardW=800@ShowColumns=";
             HisAP = new AtPara(paraStr);
         }
-
         /// <summary>
         /// 获取显示列数组，中间用,隔开
         /// </summary>
@@ -87,7 +86,6 @@ namespace BP.Sys
                 return this.HisAP.GetValIntByKey("UIRowStyleGlo");
             }
         }
-
         /// <summary>
         /// 是否启用双击打开？
         /// </summary>
@@ -118,7 +116,6 @@ namespace BP.Sys
                 return this.HisAP.GetValBoolenByKey("IsEnableFocusField");
             }
         }
-
         /// <summary>
         /// 是否打开ICON
         /// </summary>
@@ -171,7 +168,6 @@ namespace BP.Sys
             cfg.UI = this.HisAP.GenerAtParaStrs();
             return cfg.Save();
         }
-
 
     }
     /// <summary>
@@ -282,6 +278,38 @@ namespace BP.Sys
         }
         #endregion
 
+        #region 参数属性.
+        /// <summary>
+        /// 批处理-设置页面大小
+        /// </summary>
+        public int PageSizeOfBatch
+        {
+            get
+            {
+                return this.GetParaInt("PageSizeOfBatch", 600);
+            }
+            set
+            {
+                this.SetPara("PageSizeOfBatch", value);
+            }
+        }
+        /// <summary>
+        /// 批处理-设置页面大小
+        /// </summary>
+        public int PageSizeOfSearch
+        {
+            get
+            {
+                return this.GetParaInt("PageSizeOfSearch", 15);
+            }
+            set
+            {
+                this.SetPara("PageSizeOfSearch", value);
+            }
+        }
+        #endregion 参数属性.
+
+
         #region 构造方法
         /// <summary>
         /// 系统实体
@@ -325,6 +353,8 @@ namespace BP.Sys
                 map.AddTBString(EnCfgAttr.FJWebPath, null, "附件Web路径", true, false, 0, 100, 60);
                 map.AddTBString(EnCfgAttr.Datan, null, "字段数据分析方式", true, false, 0, 200, 60);
                 map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, false, 0, 2000, 60);
+
+                map.AddTBAtParas(3000);  //参数属性.
                 this._enMap = map;
                 return this._enMap;
             }

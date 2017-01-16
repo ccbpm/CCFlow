@@ -108,6 +108,14 @@ namespace BP.Sys
                 return SystemConfig.AppSettings["FTPUserPassword"];
             }
         }
+
+        public static string AttachWebSite
+        {
+            get
+            {
+                return SystemConfig.AppSettings["AttachWebSite"];
+            }
+        }
         #endregion
 
         #region 组织结构的配置.

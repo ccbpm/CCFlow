@@ -269,7 +269,7 @@ namespace BP.En
                                 this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
                         }
                         continue;
-                    case "@WebUser.FK_DeptFullName":
+                    case "@WebUser.FK_DeptNameOfFull":
                         if (attr.UIIsReadonly == true)
                         {
                             this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
@@ -371,7 +371,7 @@ namespace BP.En
                     case "@WebUser.FK_DeptName":
                         this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
                         continue;
-                    case "@WebUser.FK_DeptFullName":
+                    case "@WebUser.FK_DeptNameOfFull":
                         this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                         continue;
                     case "@RDT":
@@ -1015,11 +1015,22 @@ namespace BP.En
                 {
                     if (attr.UIIsReadonly && attr.IsFKorEnum == false)
                         continue;
+
                     //if (attr.IsFK && string.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
                     //    continue; /*如果是外键,并且外键的默认值为null.*/
 
                     if (attr.IsFK)
-                        continue; /*如果是外键,并且外键的默认值为null.*/
+                    {
+                        //如果打开下面的代码，就会出现 /RefFunc/dtl.aspx 连续增加的问题. 
+                        if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key) == attr.DefaultValOfReal)
+                            continue;
+
+                        //if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key)== attr.DefaultValOfReal)
+                        //    continue;
+
+                        return false;
+                        //continue; /*如果是外键,并且外键的默认值为null.*/
+                    }
 
                     string str = this.GetValStrByKey(attr.Key);
                     if (str == attr.DefaultVal.ToString() || str=="0.00")

@@ -272,12 +272,12 @@ namespace BP.En
                     case "@WebUser.FK_DeptFullName":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, Web.WebUser.FK_DeptFullName);
+                            this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                         }
                         else
                         {
                             if (string.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, Web.WebUser.FK_DeptFullName);
+                                this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                         }
                         continue;
                     case "@RDT":
@@ -372,7 +372,7 @@ namespace BP.En
                         this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
                         continue;
                     case "@WebUser.FK_DeptFullName":
-                        this.SetValByKey(attr.Key, Web.WebUser.FK_DeptFullName);
+                        this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                         continue;
                     case "@RDT":
                         if (attr.MyDataType == DataType.AppDate)

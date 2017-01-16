@@ -1125,7 +1125,7 @@ namespace BP.WF
         /// </summary>
         /// <param name="fk_flow">流程编号</param>
         /// <returns>返回草稿数据集合,列信息. OID=工作ID,Title=标题,RDT=记录日期,FK_Flow=流程编号,FID=流程ID, FK_Node=节点ID</returns>
-        public static DataTable DB_GenerDraftDataTable(string flowNo=null )
+        public static DataTable DB_GenerDraftDataTable(string flowNo=null)
         {
             /*获取数据.*/
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;

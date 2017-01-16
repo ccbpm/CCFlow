@@ -4983,9 +4983,18 @@ namespace BP.WF
         /// <summary>
         /// 如果是协作.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>ture = 不可以向下运行，false =可以向下运行。</returns>
         public bool DealTeamUpNode()
         {
+            if (this.TodolistModel == TodolistModel.TeamupGroupLeader)
+            {
+                /*判断当前是否是领导？*/
+                string sql = "SELECT COUNT(*) as Num FROM Port_Dept WHERE Leader='" + BP.Web.WebUser.No + "' AND No='" + BP.Web.WebUser.FK_Dept + "'";
+                if (DBAccess.RunSQLReturnValInt(sql, 0) == 1)
+                    return false;
+            }
+
+            //查询出来待办的数量.
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
                 GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.IsPass);
@@ -5033,6 +5042,8 @@ namespace BP.WF
                 this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
                 return true;
             }
+
+        
 
             throw new Exception("@不应该运行到这里。");
         }
@@ -5698,9 +5709,6 @@ namespace BP.WF
                 /* 如果是协作组长模式.*/
                 if (this.DealTeamUpNode() == true)
                 {
-                    //if (this._transferCustom != null)
-                    //    _transferCustom.Delete();
-
                     //执行时效考核.
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                     return this.HisMsgObjs;

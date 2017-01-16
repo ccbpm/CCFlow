@@ -2702,6 +2702,134 @@ namespace BP.DA
             ens.Add(key, val);
             return RunSQLReturnTable(sql, ens);
         }
+
+        /// <summary>
+        /// 通用SQL查询分页返回DataTable
+        /// </summary>
+        /// <param name="sql">SQL语句，不带排序（Order By）语句</param>
+        /// <param name="pageSize">每页记录数量</param>
+        /// <param name="pageIdx">请求页码</param>
+        /// <param name="key">记录主键（不能为空，不能有重复，必须包含在返回字段中）</param>
+        /// <param name="orderKey">排序字段（此字段必须包含在返回字段中）</param>
+        /// <param name="orderType">排序方式，ASC/DESC</param>
+        /// <returns></returns>
+        public static DataTable RunSQLReturnTable(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
+        {
+            switch(DBAccess.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    return RunSQLReturnTable_201612_SQL(sql, pageSize, pageIdx, key, orderKey, orderType);
+                case DBType.Oracle:
+                    return RunSQLReturnTable_201612_Ora(sql, pageSize, pageIdx, orderKey, orderType);
+                case DBType.MySQL:
+                    return RunSQLReturnTable_201612_MySql(sql, pageSize, pageIdx, key, orderKey, orderType);
+                default:
+                    throw new Exception("@未涉及的数据库类型！");
+            }
+        }
+
+        /// <summary>
+        /// 通用SqlServer查询分页返回DataTable
+        /// </summary>
+        /// <param name="sql">SQL语句，不带排序（Order By）语句</param>
+        /// <param name="pageSize">每页记录数量</param>
+        /// <param name="pageIdx">请求页码</param>
+        /// <param name="key">记录主键（不能为空，不能有重复，必须包含在返回字段中）</param>
+        /// <param name="orderKey">排序字段（此字段必须包含在返回字段中）</param>
+        /// <param name="orderType">排序方式，ASC/DESC</param>
+        /// <returns></returns>
+        private static DataTable RunSQLReturnTable_201612_SQL(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
+        {
+            string sqlstr = string.Empty;
+
+            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
+
+            if (pageIdx < 1)
+                pageIdx = 1;
+
+            if(pageIdx == 1)
+            {
+                sqlstr = "SELECT TOP " + pageSize + " * FROM (" + sql + ") T1" +
+                         (string.IsNullOrWhiteSpace(orderKey)
+                              ? string.Empty
+                              : string.Format(" ORDER BY T1.{0} {1}", orderKey, orderType));
+            }
+            else
+            {
+                sqlstr = "SELECT TOP " + pageSize + " * FROM (" + sql + ") T1"
+                         + " WHERE T1." + key + (orderType == "ASC" ? " > " : " < ") + "("
+                         + " SELECT " + (orderType == "ASC" ? "MAX(T3." : "MIN(T3.") + key + ") FROM ("
+                         + " SELECT TOP ((" + pageIdx + " - 1) * 10) T2." + key + "FROM (" + sql + ") T2"
+                         + (string.IsNullOrWhiteSpace(orderKey)
+                                ? string.Empty
+                                : string.Format(" ORDER BY T2.{0} {1}", orderKey, orderType))
+                         + " ) T3)"
+                         + (string.IsNullOrWhiteSpace(orderKey)
+                                ? string.Empty
+                                : string.Format(" ORDER BY T.{0} {1}", orderKey, orderType));
+            }
+
+            return RunSQLReturnTable(sqlstr);
+        }
+
+        /// <summary>
+        /// 通用Oracle查询分页返回DataTable
+        /// </summary>
+        /// <param name="sql">SQL语句，不带排序（Order By）语句</param>
+        /// <param name="pageSize">每页记录数量</param>
+        /// <param name="pageIdx">请求页码</param>
+        /// <param name="orderKey">排序字段（此字段必须包含在返回字段中）</param>
+        /// <param name="orderType">排序方式，ASC/DESC</param>
+        /// <returns></returns>
+        private static DataTable RunSQLReturnTable_201612_Ora(string sql, int pageSize, int pageIdx, string orderKey, string orderType)
+        {
+            if (pageIdx < 1)
+                pageIdx = 1;
+
+            int start = (pageIdx - 1)*pageSize + 1;
+            int end = pageSize*pageIdx;
+
+            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
+            
+            string sqlstr = "SELECT * FROM ( SELECT T1.*, ROWNUM RN "
+                            + "FROM (SELECT * FROM  (" + sql + ") T2 "
+                            +
+                            (string.IsNullOrWhiteSpace(orderType)
+                                 ? string.Empty
+                                 : string.Format("ORDER BY T2.{0} {1}", orderKey, orderType)) + ") T1 WHERE ROWNUM <= " +
+                            end + " ) WHERE RN >=" + start;
+
+            return RunSQLReturnTable(sqlstr);
+        }
+
+        /// <summary>
+        /// 通用MySql查询分页返回DataTable
+        /// </summary>
+        /// <param name="sql">SQL语句，不带排序（Order By）语句</param>
+        /// <param name="pageSize">每页记录数量</param>
+        /// <param name="pageIdx">请求页码</param>
+        /// <param name="key">记录主键（不能为空，不能有重复，必须包含在返回字段中）</param>
+        /// <param name="orderKey">排序字段（此字段必须包含在返回字段中）</param>
+        /// <param name="orderType">排序方式，ASC/DESC</param>
+        /// <returns></returns>
+        private static DataTable RunSQLReturnTable_201612_MySql(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
+        {
+            string sqlstr = string.Empty;
+            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
+
+            if (pageIdx < 1)
+                pageIdx = 1;
+
+            sqlstr = "SELECT * FROM (" + sql + ") T1 WHERE T1." + key + (orderType == "ASC" ? " >= " : " <= ")
+                     + "(SELECT T2." + key + " FROM (" + sql + ") T2"
+                     + (string.IsNullOrWhiteSpace(orderKey)
+                            ? string.Empty
+                            : string.Format(" ORDER BY T2.{0} {1}", orderKey, orderType))
+                     + " LIMIT " + ((pageIdx - 1)*pageSize) + ",1) LIMIT " + pageSize;
+
+            return RunSQLReturnTable(sqlstr);
+        }
+
         private static bool lockRunSQLReTable = false;
         /// <summary>
         /// 运行SQL
@@ -2712,10 +2840,8 @@ namespace BP.DA
         public static DataTable RunSQLReturnTable(string sql, Paras paras)
         {
             if (string.IsNullOrEmpty(sql))
-            {
-                int SZJFG = 00;
                 throw new Exception("要执行的 sql = null ");
-            }
+
             try
             {
                 DataTable dt = null;

@@ -382,21 +382,7 @@ namespace BP.WF
                 throw new Exception("当前节点，不允许撤销。");
             }
 
-            //如果当前节点是协作节点，平且判断是否是当前处理人在队列里.
-            if (nd.TodolistModel == TodolistModel.Teamup || nd.TodolistModel == TodolistModel.TeamupGroupLeader)
-            {
-                string sql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + nd.NodeID + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "' AND IsPass=1 ";
-                if (DBAccess.RunSQLReturnValInt(sql, 0) == 1)
-                {
-                    gwf.TodoEmps = WebUser.No + "," + WebUser.Name;
-                    gwf.Update();
-
-                    sql = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + nd.NodeID + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "' AND IsPass=1 ";
-                    BP.DA.DBAccess.RunSQL(sql);
-                    return "@已经撤销成功.";
-                }
-            }
-
+            
 
             switch (nd.HisNodeWorkType)
             {
@@ -468,15 +454,12 @@ namespace BP.WF
 
             if (nd.HisCancelRole == CancelRole.OnlyNextStep)
             {
-               
-
                 /*如果仅仅允许撤销上一步骤.*/
                 WorkNode wnPri = wn.GetPreviousWorkNode();
 
                 GenerWorkerList wl = new GenerWorkerList();
                 int num = wl.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No,
                     GenerWorkerListAttr.FK_Node, wnPri.HisNode.NodeID);
-
                 if (num == 0)
                     throw new Exception("@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。");
                 cancelToNodeID = wnPri.HisNode.NodeID;

@@ -9,8 +9,6 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text.RegularExpressions;
-using System.Web.Script.Serialization;
-using Newtonsoft.Json;
 
 namespace BP.Tools
 {
@@ -33,13 +31,6 @@ namespace BP.Tools
         /// <returns>序列化的datatable</returns>
         public static DataTable ToDataTable(string strJson)
         {
-            if (strJson.Trim().IndexOf('[') != 0)
-            {
-                strJson = "[" + strJson + "]";
-            }
-            DataTable dtt = (DataTable)JsonConvert.DeserializeObject<DataTable>(strJson);
-            return dtt;
-
             //转换json格式
             strJson = strJson.Replace(",\"", "*\"").Replace("\":", "\"#").ToString();
 
@@ -105,17 +96,8 @@ namespace BP.Tools
         /// <returns>序列化的datatable</returns>
         public static DataTable ToDataTableOneRow(string strJson)
         {
-            ////杨玉慧  写  用这个写
-            if (strJson.Trim().IndexOf('[') != 0)
-            {
-                strJson = "[" + strJson + "]";
-            }
-            DataTable dtt = (DataTable)JsonConvert.DeserializeObject<DataTable>(strJson);
-            
-            return dtt;
-
             //转换json格式
-            
+            //杨玉慧  写
             //把 *  和# 先替换成别的符号
             string str1 = "@@@~~~+++";
             string str2 = "+++---$$$";
@@ -202,7 +184,6 @@ namespace BP.Tools
             }
             return tb;
         }
-
         /// <summary>
         /// 把一个json转化一个datatable
         /// </summary>
@@ -210,10 +191,6 @@ namespace BP.Tools
         /// <returns>序列化的datatable</returns>
         public static DataSet ToDataSet(string json)
         {
-            ////杨玉慧  写  用这个写
-            DataSet ds2 = JsonConvert.DeserializeObject<DataSet>(json);
-            return ds2;
-
             DataSet ds = new DataSet();
             return ds;
         }
@@ -224,10 +201,6 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToJson(object jsonObject)
         {
-            string json = JsonConvert.SerializeObject(jsonObject, Formatting.Indented);
-
-            return json;
-
             string jsonString = "{";
             PropertyInfo[] propertyInfo = jsonObject.GetType().GetProperties();
             for (int i = 0; i < propertyInfo.Length; i++)
@@ -261,9 +234,6 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToJson(IEnumerable array)
         {
-            string jsonStr = JsonConvert.SerializeObject(array);
-            return jsonStr;
-
             string jsonString = "[";
             foreach (object item in array)
             {
@@ -279,9 +249,6 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToArrayString(IEnumerable array)
         {
-            string jsonStr = JsonConvert.SerializeObject(array);
-            return jsonStr;
-
             string jsonString = "[";
             foreach (object item in array)
             {
@@ -296,7 +263,6 @@ namespace BP.Tools
         /// <returns>完成后的字符串</returns>
         private static string DeleteLast(string str)
         {
-
             if (str.Length > 1)
             {
                 return str.Substring(0, str.Length - 1);
@@ -311,9 +277,7 @@ namespace BP.Tools
         /// <returns></returns>
         public static string ToJson(Hashtable ht, bool isNoNameFormat)
         {
-
-
-            if (isNoNameFormat == true)
+            if (isNoNameFormat ==true)
             {
                 /*如果是datatable 模式. */
                 DataTable dt = new DataTable();
@@ -337,22 +301,6 @@ namespace BP.Tools
                 return ToJson(dt);
             }
 
-            else {
-                DataTable dt = new DataTable();
-                foreach (string key in ht.Keys)
-                {
-                    dt.Columns.Add(key);
-                }
-
-                List<object> l=new List<object> ();
-                foreach (string key in ht.Keys)
-                {
-                    l.Add(ht[key]);
-                }
-                dt.Rows.Add(l.ToArray());
-                return ToJson(dt);
-            }
-
             string strs = "{";
             foreach (string key in ht.Keys)
             {
@@ -371,9 +319,6 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToJson(DataTable table)
         {
-            string jsonStr = JsonConvert.SerializeObject(table);
-            return jsonStr;
-
             string jsonString = "[";
             DataRowCollection drc = table.Rows;
             for (int i = 0; i < drc.Count; i++)
@@ -409,9 +354,6 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToJson(DataSet dataSet)
         {
-            string jsonStr = JsonConvert.SerializeObject(dataSet);
-            return jsonStr;
-
             string jsonString = "{";
             foreach (DataTable table in dataSet.Tables)
             {

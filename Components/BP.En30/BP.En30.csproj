@@ -113,9 +113,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>

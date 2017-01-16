@@ -176,8 +176,11 @@ namespace CCFlow.WF
             {
                 switch (this.DoType)
                 {
+                    case "Draft_Init":
+                        msg = this.Draft_Init(BP.Web.WebUser.No, this.FK_Flow);
+                        break;
                     case "Todolist_Init":
-                        msg = this.Todolist_Init(BP.Web.WebUser.No,this.FK_Node);
+                        msg = this.Todolist_Init(WebUser.No,this.FK_Node);
                         break;
                     case "LoginInit":  //处理login的初始化工作.
                         msg= this.LoginInit();
@@ -215,6 +218,18 @@ namespace CCFlow.WF
 
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
+        }
+        /// <summary>
+        /// 草稿
+        /// </summary>
+        /// <param name="UserNo">用户编号</param>
+        /// <param name="fk_flow">流程编号</param>
+        /// <returns></returns>
+        public string Draft_Init(string UserNo, string fk_flow)
+        {
+            DataTable dt = null;
+            dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 获得待办.

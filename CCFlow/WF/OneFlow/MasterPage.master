@@ -58,13 +58,13 @@
    { %>
 <li><a href='Archive.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/Save.png' class=Icon>查询</a></li>
 <li><a href='MyFlow.aspx?FK_Flow=<%=fk_flow %>' ><img src='./../Img/New.png' class=Icon>新建</a></li>
-<li><a href='Draft.aspx?FK_Flow=<%=fk_flow %>' ><img src='./../Img/WFState/Draft.png' class=Icon>草稿</a></li>
+<li><a href='Draft.htm?FK_Flow=<%=fk_flow %>' ><img src='./../Img/WFState/Draft.png' class=Icon>草稿</a></li>
 <li><a href='Working.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/EmpWorks.gif' class=Icon>待办</a></li>
-<li><a href='HungUp.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName&IsHungUp=1' ><img src='./../Img/WFState/HungUp.png' class=Icon>挂起</a></li>
-<li><a href='Runing.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/Runing.png' class=Icon>运行中</a></li>
-<li><a href='CC.aspx?FK_Flow=<%=fk_flow %>&GroupBy=Rec' ><img src='./../Img/CCSta/CC.gif' class=Icon>抄送</a></li>
-<li><a href='Cancel.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/Action/FlowOverByCoercion.png' class=Icon>撤销</a></li>
-<li><a href='Archive.aspx?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/Save.png' class=Icon>归档</a></li>
+<li><a href='HungUp.htm?FK_Flow=<%=fk_flow %>&GroupBy=StarterName&IsHungUp=1' ><img src='./../Img/WFState/HungUp.png' class=Icon>挂起</a></li>
+<li><a href='Runing.htm?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/Runing.png' class=Icon>运行中</a></li>
+<li><a href='CC.htm?FK_Flow=<%=fk_flow %>&GroupBy=Rec' ><img src='./../Img/CCSta/CC.gif' class=Icon>抄送</a></li>
+<li><a href='Cancel.htm?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/Action/FlowOverByCoercion.png' class=Icon>撤销</a></li>
+<li><a href='Archive.htm?FK_Flow=<%=fk_flow %>&GroupBy=StarterName' ><img src='./../Img/WFState/Save.png' class=Icon>归档</a></li>
 <%}
    else
    { %>

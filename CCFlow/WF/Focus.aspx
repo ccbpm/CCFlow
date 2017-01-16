@@ -16,9 +16,7 @@
                     window.location.href = window.location.href;
                     alert("您已取消关注！");
                 }
-
             });
-
         }
     </script>
     <table style="width: 100%; height: 700px; border: 0px">
@@ -29,36 +27,16 @@
             <td valign="top">
                 <table width="100%">
                     <tr>
-                        <th>
-                            序
-                        </th>
-                        <th>
-                            流程
-                        </th>
-                        <th>
-                            标题
-                        </th>
-                        <th>
-                            发起人
-                        </th>
-                        <th>
-                            发起日期
-                        </th>
-                        <th>
-                            状态
-                        </th>
-                        <th>
-                            停留节点
-                        </th>
-                        <th>
-                            当前处理人
-                        </th>
-                        <th>
-                            最后处理人
-                        </th>
-                        <th>
-                            操作
-                        </th>
+                        <th>序 </th>
+                        <th>流程 </th>
+                        <th>标题 </th>
+                        <th>发起人</th>
+                        <th> 发起日期</th>
+                        <th>状态</th>
+                        <th> 停留节点 </th>
+                        <th>当前处理人 </th>
+                        <th>最后处理人</th>
+                        <th>操作</th>
                     </tr>
                     <% 
                         string flowNo = this.Request.QueryString["FK_Flow"];
@@ -123,9 +101,7 @@
                         <td>
                             <%=nodeName%>
                         </td>
-                        <td>
-                            <%= currEmp %>
-                        </td>
+                        <td> <%= currEmp %> </td>
                         <td>
                             <%=wfsta == (int)BP.WF.WFSta.Complete ? dr["Sender"].ToString().TrimStart('(').TrimEnd(')').Split(',')[1] : ""%>
                         </td>

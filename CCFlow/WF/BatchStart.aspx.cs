@@ -630,7 +630,7 @@ namespace CCFlow.WF
                             lastRowNum = sheet.LastRowNum;
                             bool isRowEmpty = false;
 
-                            for (int r = 2; r < sheet.LastRowNum; r++)
+                            for (int r = 2; r <= sheet.LastRowNum; r++)
                             {
                                 row = sheet.GetRow(r);
 
@@ -668,7 +668,7 @@ namespace CCFlow.WF
 
                             //遍历行，提取数据，存于dt中
                             //提取过程中，进行数据有效性验证，不通过验证直接退出遍历，提示错误
-                            for (int r = 2; r < lastRowNum; r++)
+                            for (int r = 2; r <= lastRowNum; r++)
                             {
                                 row = sheet.GetRow(r);
 

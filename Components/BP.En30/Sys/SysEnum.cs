@@ -334,7 +334,13 @@ namespace BP.Sys
                     string[] vk = s.Split('=');
                     SysEnum se = new SysEnum();
                     se.IntKey = int.Parse(vk[0]);
-                    se.Lab = vk[1];
+                    //解决当  枚举值含有 ‘=’号时，保存不进去的方法
+                    string[] kvsValues = new string[vk.Length - 1];
+                    for (int i = 0; i < kvsValues.Length; i++)
+                    {
+                        kvsValues[i] = vk[i + 1];
+                    }
+                    se.Lab = string.Join("=", kvsValues);
                     se.EnumKey = EnumKey;
                     se.Lang = BP.Web.WebUser.SysLang;
                     se.Insert();

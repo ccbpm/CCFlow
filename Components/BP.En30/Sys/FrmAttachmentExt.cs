@@ -770,15 +770,14 @@ namespace BP.Sys
                 map.AddTBString(FrmAttachmentAttr.NoOfObj, null, "附件编号", true, true, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentAttr.FK_Node, 0, "节点控制(对sln有效)", false, false);
 
-                map.AddTBString(FrmAttachmentAttr.Name, null, "附件名称", true, false, 0, 50, 20);
-                map.AddTBString(FrmAttachmentAttr.Exts, null, "文件格式(*.*,*.doc)", true, false, 0, 50, 20, true, null);
+                map.AddTBString(FrmAttachmentAttr.Name, null, "名称", true, false, 0, 50, 20);
+                map.AddTBString(FrmAttachmentAttr.Exts, null, "要求上传的格式", true, false, 0, 50, 20, true, null);
                 
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20,true,null);
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20, true, null);
 
-                //位置.
-                map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", false, false);
-                map.AddTBFloat(FrmAttachmentAttr.Y, 5, "Y", false, false);
+                map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", true, false);
+                map.AddTBFloat(FrmAttachmentAttr.Y, 5, "Y", true, false);
 
                 map.AddTBFloat(FrmAttachmentAttr.W, 40, "宽度", false, false);
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "高度", false, false);
@@ -831,9 +830,13 @@ namespace BP.Sys
                 #region 节点相关
                 //map.AddDDLSysEnum(FrmAttachmentAttr.DtlOpenType, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
                 //    "@0=不能删除@1=删除所有@2=只能删除自己上传的");
+
+                #endregion 节点相关
+
                 map.AddBoolean(FrmAttachmentAttr.IsToHeLiuHZ, true, "该附件是否要汇总到合流节点上去？(对子线程节点有效)", true, true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsHeLiuHuiZong, true, "是否是合流节点的汇总附件组件？(对合流节点有效)", true, true, true);
-                #endregion 节点相关
+
+
 
                 //map.AddTBInt(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式0=继承模式,1=协作模式.", true, false);
 

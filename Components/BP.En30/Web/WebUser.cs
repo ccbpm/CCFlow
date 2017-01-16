@@ -152,7 +152,7 @@ namespace BP.Web
                 BP.Port.Dept dept = new Dept();
                 dept.No = em.FK_Dept;
                 if (dept.RetrieveFromDBSources() == 0)
-                    throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门,或者部门编号{"+em.FK_Dept+"}不存在.");
+                    throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门.");
             }
 
 
@@ -349,7 +349,9 @@ namespace BP.Web
                 try
                 {
                     string token = WebUser.Token;
-                    System.Web.HttpContext.Current.Response.Cookies.Clear();
+                    
+                    WebUser.Token = token;
+                    //System.Web.HttpContext.Current.Response.Cookies.Clear();
                     BP.Sys.Glo.Request.Cookies.Clear();
                     HttpCookie cookie = new HttpCookie("CCS", string.Empty);
                     cookie.Expires = DateTime.Now.AddDays(2);
@@ -358,12 +360,15 @@ namespace BP.Web
                     // 2013.06.07 H
                     cookie.Values.Add("Pass", string.Empty);
                     cookie.Values.Add("IsRememberMe", "0");
-                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
-                    WebUser.Token = token;
+                    cookie.Values.Add("Auth", string.Empty); //授权人.
+                    cookie.Values.Add("AuthName", string.Empty); //授权人.
+                    BP.Sys.Glo.Request.Cookies.Add(cookie);
+                    //System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
                     BP.Port.Current.Session.Clear();
                 }
-                catch
+                catch(Exception ex)
                 {
+                    
                 }
             }
             else
@@ -371,6 +376,9 @@ namespace BP.Web
                 try
                 {
                     string token = WebUser.Token;
+                    //杨玉慧加
+                    BP.Port.Current.Session.Clear();
+
                     System.Web.HttpContext.Current.Response.Cookies.Clear();
                     BP.Sys.Glo.Request.Cookies.Clear();
 
@@ -385,11 +393,14 @@ namespace BP.Web
                     cookie.Values.Add("Pass", string.Empty);
                     cookie.Values.Add("IsRememberMe", "0");
                     cookie.Values.Add("Auth", string.Empty); //授权人.
+                    cookie.Values.Add("AuthName", string.Empty); //授权人.
                     System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+                    
                     WebUser.Token = token;
                 }
-                catch
+                catch(Exception ex)
                 {
+                    
                 }
             }
         }

@@ -1502,9 +1502,9 @@ namespace BP.En
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public int GetParaInt(string key,int isNullAsVal=0)
+        public int GetParaInt(string key)
         {
-            return atPara.GetValIntByKey(key, isNullAsVal);
+            return atPara.GetValIntByKey(key);
         }
         public float GetParaFloat(string key)
         {
@@ -2039,7 +2039,7 @@ namespace BP.En
             }
             catch (System.Exception ex)
             {
-                if (ex.Message.Contains("列名") || ex.Message.Contains("将截断字符串") || ex.Message.Contains("缺少") || ex.Message.Contains("的值太大"))
+                if (ex.Message.Contains("将截断字符串") && ex.Message.Contains("缺少") && ex.Message.Contains("的值太大"))
                 {
                     /*说明字符串长度有问题.*/
                     this.CheckPhysicsTable();

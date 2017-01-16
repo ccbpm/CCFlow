@@ -173,11 +173,7 @@ namespace BP.GPM
                 return;
             }
 
-            Dept dept = new Dept();
-            dept.No = this.ParentNo;
-            if (dept.RetrieveFromDBSources() == 0)
-                return;
-
+            Dept dept = new Dept(this.ParentNo);
             while (true)
             {
                 if (dept.IsRoot)

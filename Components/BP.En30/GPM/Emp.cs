@@ -65,41 +65,6 @@ namespace BP.GPM
     {
         #region 扩展属性
         /// <summary>
-        /// 该人员是否被禁用.
-        /// </summary>
-        public bool IsEnable
-        {
-            get
-            {
-                if ( this.No == "admin")
-                    return true;
-
-                if (BP.Sys.SystemConfig.OSModel == Sys.OSModel.OneMore)
-                {
-                    string sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmpStation WHERE FK_Emp='" + this.No + "'";
-                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                        return false;
-
-                    sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmp WHERE FK_Emp='" + this.No + "'";
-                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                        return false;
-                }
-
-                if (BP.Sys.SystemConfig.OSModel == Sys.OSModel.OneOne)
-                {
-                    string sql = "SELECT COUNT(FK_Emp) FROM Port_EmpStation WHERE FK_Emp='" + this.No + "'";
-                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                        return false;
-
-                    sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmp WHERE FK_Emp='" + this.No + "'";
-                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                        return false;
-                }
-
-                return true;
-            }
-        }
-        /// <summary>
         /// 员工编号
         /// </summary>
         public string EmpNo

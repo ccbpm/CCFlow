@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>草稿</title>
+    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+     <base target="_self" />
+    <link href="/DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" >
+        function Do(warning, url) {
+            if (window.confirm(warning) == false)
+                return;
+            window.location.href = url;
+        }
+        // 撤销。
+        function UnSend(appPath, pageID, fid, workid, fk_flow) {
+            if (window.confirm('您确定要撤销本次发送吗？') == false)
+                return;
+            var url = appPath + 'WF/Do.aspx?DoType=UnSend&FID=' + fid + '&WorkID=' + workid + '&FK_Flow=' + fk_flow + '&PageID=' + pageID;
+            window.location.href = url;
+            return;
+        }
+        function Press(appPath, fid, workid, fk_flow) {
+            var url = appPath + 'WF/WorkOpt/Press.htm?FID=' + fid + '&WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            var v = window.showModalDialog(url, 'sd', 'dialogHeight: 200px; dialogWidth: 350px;center: yes; help: no');
+        }
+
+      
+        function WinOpenIt(url) {
+            //窗口最大化e
+            var scrWidth = screen.availWidth;
+            var scrHeight = screen.availHeight;
+            var self = window.open(url, '_blank', "resizable=1,scrollbars=yes");
+            self.moveTo(0, 0);
+            self.resizeTo(scrWidth, scrHeight);
+            self.focus();
+            return;
+        }
+
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Runing_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    data = JSON.parse(data);
+
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+
+                        var newRow = "";
+                        newRow = "<tr ><td class=Idx>" + i + "</td>";
+                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + data[i].FK_Flow + "&FID=0&WorkID=" + data[i].WorkID + "&FK_Node=" + data[i].FK_Flow + "01&IsRead=0&T=" + timeKey + "');\" >" + data[i].Title + "</a></td>";
+                        newRow += "<td>" + data[i].FlowName + "</td>";
+                        newRow += "<td>" + data[i].RDT + "</td>";
+                        newRow += "<td>" + data[i].FlowNote + "</td>";
+                        newRow += "<td>";
+                        newRow += "<a href=\"javascript:Delete('" + data[i].WorkID + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                        newRow += "</td>";
+                        newRow += "</tr>";
+
+                        $("#Table1 tr:last").after(newRow);
+                    }
+                }
+            });
+        }
+     </script>
+     
+ <style type="text/css">
+        table
+        {
+            font: 12px 宋体, Arial, Verdana;
+        }
+        .TRSum
+        {
+            font: 12px 宋体, Arial, Verdana;
+        }
+        .centerTitle th
+        {
+            text-align: center;
+        }
+        .Idx
+        {
+            font-size: 16px;
+            font-family: Vijaya;
+        }
+    </style>
+
+</head>
+<body onkeypress="Esc()" >
+
+<table id="Table1" style="width:100%;">
+<caption ><div class='CaptionMsg' >在途工作</div></caption>
+<tr>
+<th>序</th>
+<th>标题</th>
+<th>流程</th>
+<th>发起人</th>
+<th>当前节点</th>
+<th>发起日期</th>
+<th>操作</th>
+</tr>
+</table>
+
+<div id="Msg"></div>
+
+</body>
+</html>

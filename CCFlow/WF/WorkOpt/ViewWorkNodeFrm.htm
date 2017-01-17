@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title></title>
+    <meta charset="utf-8"/>
 <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
 <script src="../Comm/JScript.js" type="text/javascript"></script>
 <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
@@ -41,7 +42,9 @@
     /*除了字段分组之外的分组都是可以折叠的*/
     .group {
     }
-
+    .no:hover {
+    text-decoration:none;
+    }
     .mustInput {
     }
 
@@ -85,6 +88,11 @@
         border: none;
         resize: none;
     }
+    button[readonly], html input[readonly], textarea[readonly] {
+        background: #F1F1F2;
+        border: none;
+        resize: none;
+    }
 
     .input-group .input-group-addon {
         border: none;
@@ -103,6 +111,7 @@
 
         if (Number(pageData.IframeId.split("track")[1])==0){
             $('#topContentDiv').css('display', 'block');
+            $('#header .no').show();
         }
         $('#header')
             .bind('click',
@@ -175,6 +184,12 @@
         $('#divCCForm textarea').attr('disabled', 'disabled');
         $('#divCCForm select').attr('disabled', 'disabled');
         $('#divCCForm input[type!=button]').attr('disabled', 'disabled');
+
+        //为 DISABLED 的 TEXTAREA 加TITLE 
+        var disabledTextAreas = $('#divCCForm textarea:disabled');
+        $.each(disabledTextAreas, function (i, obj) {
+            $(obj).attr('title', $(obj).val());
+        })
     }
 
     var pageData = {};
@@ -262,7 +277,7 @@
                     fram.H +
                     "'     src='" +
                     src +
-                    "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" +
+                    "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>" +
                     '</div>';
             }
             break;
@@ -419,6 +434,7 @@
         var navGroupHtml = '';
         //解析节点名称
         $('#header span').text(workNodeData.Sys_MapData[0].Name);
+        $('#header a').text("【" + workNodeData.MainTable[0].BillNo + "】");
         //解析分组
         var groupFileds = workNodeData.Sys_GroupField.sort(function(a, b) {
             return a.Idx - b.Idx;
@@ -633,6 +649,37 @@
             setFormEleDisabled();
         }
 
+        ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
+        var enName = workNodeData.Sys_MapData[0].No;
+        try {
+            ////加载JS文件
+            //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' 
+            //$('body').append($('<div>' + jsSrc + '</div>'));
+
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = "/DataUser/JSLibData/" + enName + "_Self.js";
+            var tmp = document.getElementsByTagName('script')[0];
+            tmp.parentNode.insertBefore(s, tmp);
+        }
+        catch (err) {
+
+        }
+
+        var jsSrc = '';
+        try {
+            //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js'
+            //$('body').append($('<div>' + jsSrc + '</div>'));
+
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = "/DataUser/JSLibData/" + enName + "_Self.js";
+            var tmp = document.getElementsByTagName('script')[0];
+            tmp.parentNode.insertBefore(s, tmp);
+        }
+        catch (err) {
+
+        }
         //设置CCFORM的表格宽度  
         //if (document.body.clientWidth > 992) { //处于中屏时设置宽度最小值
         //    $('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
@@ -1196,114 +1243,129 @@
         var workNode = JSON.parse(jsonStr);
         var rbs = workNode.Sys_FrmRB;
         data = rbs;
-        $("input[type=radio],select")
-            .bind('change',
-                function(obj) {
-                    var methodVal = obj.target.value;
-                    for (var j = 0; j < data.length; j++) {
-                        var value = data[j].IntKey;
-                        var noticeInfo = data[j].Tip;
-                        var drdlColName = data[j].KeyOfEn;
-                        if (methodVal == value &&
-                            obj.target.name.indexOf(drdlColName) == (obj.target.name.length - drdlColName.length)) {
-                            //高级JS设置;  设置表单字段的  可用 可见 不可用 
-                            var fieldConfig = data[j].FieldsCfg;
-                            var fieldConfigArr = fieldConfig.split('@');
-                            $.each(fieldConfigArr,
-                                function(i, fieldCon) {
-                                    if (fieldCon != '' && fieldCon.split('=').length == 2) {
-                                        var fieldConArr = fieldCon.split('=');
-                                        var ele = $('[name$=' + fieldConArr[0] + ']');
-                                        if (ele.length != 0) {
-                                            var labDiv = undefined;
-                                            var eleDiv = undefined;
-                                            var eleParClass = ele.parent().attr('class');
-                                            if (eleParClass != undefined && eleParClass.indexOf('input-group') >= 0) {
-                                                labDiv = ele.parent().parent().prev();
-                                                eleDiv = ele.parent().parent();
-                                            } else {
-                                                labDiv = ele.parent().prev();
-                                                eleDiv = ele.parent();
-                                            }
-                                            switch (fieldConArr[1]) {
-                                            case "1": //可用
-                                                labDiv.css('display', 'block');
-                                                eleDiv.css('display', 'block');
-                                                ele.removeAttr('disabled');
-                                                break;
-                                            case "2": //可见
-                                                labDiv.css('display', 'block');
-                                                eleDiv.css('display', 'block');
-                                                break;
-                                            case "3": //不可见
-                                                labDiv.css('display', 'none');
-                                                eleDiv.css('display', 'none');
-                                                break;
-                                            }
-                                        }
-                                    }
-                                });
+        $("input[type=radio],select").bind('change', function (obj) {
+            var needShowDDLids = [];
+            var methodVal = obj.target.value;
 
-                            //根据下拉列表的值选择弹出提示信息
-                            if (noticeInfo == undefined || noticeInfo.trim() == '') {
-                                break;
-                            }
-                            noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
-                            var selectText = '';
-                            if (obj.target.tagName
-                                .toUpperCase() ==
-                                'INPUT' &&
-                                obj.target.type.toUpperCase() == 'RADIO') { //radio button
-                                selectText = obj.target.nextSibling.textContent;
-                            } else { //select
-                                selectText = $(obj.target).find("option:selected").text();
-                            }
-                            $($('#div_NoticeInfo .popover-title span')[0]).text(selectText);
-                            $('#div_NoticeInfo .popover-content').html(noticeInfo);
+            for (var j = 0; j < data.length; j++) {
+                var value = data[j].IntKey;
+                var noticeInfo = data[j].Tip;
+                var drdlColName = data[j].KeyOfEn;
 
-                            var top = obj.target.offsetHeight;
-                            var left = obj.target.offsetLeft;
-                            var current = obj.target.offsetParent;
-                            while (current !== null) {
-                                left += current.offsetLeft;
-                                top += current.offsetTop;
-                                current = current.offsetParent;
+                if (obj.target.tagName == "SELECT") {
+                    drdlColName = 'DDL_' + drdlColName;
+                } else {
+                    drdlColName = 'RB_' + drdlColName;
+                }
+                //if (methodVal == value &&  obj.target.name.indexOf(drdlColName) == (obj.target.name.length - drdlColName.length)) {
+                if (methodVal == value && (obj.target.name == drdlColName)) {
+                    //高级JS设置;  设置表单字段的  可用 可见 不可用 
+                    var fieldConfig = data[j].FieldsCfg;
+                    var fieldConfigArr = fieldConfig.split('@');
+                    for (var k = 0; k < fieldConfigArr.length; k++) {
+                        var fieldCon = fieldConfigArr[k];
+                        if (fieldCon != '' && fieldCon.split('=').length == 2) {
+                            var fieldConArr = fieldCon.split('=');
+                            var ele = $('[name$=' + fieldConArr[0] + ']');
+                            if (ele.length == 0) {
+                                continue;
+                            }
+                            var labDiv = undefined;
+                            var eleDiv = undefined;
+                            if (ele.css('display').toUpperCase() == "NONE") {
+                                continue;
                             }
 
-
-                            if (obj.target.tagName
-                                .toUpperCase() ==
-                                'INPUT' &&
-                                obj.target.type.toUpperCase() == 'RADIO') { //radio button
-                                left = left - 40;
-                                top = top + 10;
-                            }
-                            if (top - $('#div_NoticeInfo').height() - 30 < 0) {
-                                //让提示框在下方展示
-                                $('#div_NoticeInfo').removeClass('top');
-                                $('#div_NoticeInfo').addClass('bottom');
-                                top = top;
+                            if (ele.parent().attr('class').indexOf('input-group') >= 0) {
+                                labDiv = ele.parent().parent().prev();
+                                eleDiv = ele.parent().parent();
                             } else {
-                                $('#div_NoticeInfo').removeClass('bottom');
-                                $('#div_NoticeInfo').addClass('top');
-                                top = top - $('#div_NoticeInfo').height() - 30;
+                                labDiv = ele.parent().prev();
+                                eleDiv = ele.parent();
                             }
-                            $('#div_NoticeInfo').css('top', top);
-                            $('#div_NoticeInfo').css('left', left);
-                            $('#div_NoticeInfo').css('display', 'block');
-                            //$("#btnNoticeInfo").popover('show');
-                            //$('#btnNoticeInfo').trigger('click');
-                            break;
+                            switch (fieldConArr[1]) {
+                                case "1"://可用
+                                    if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
+                                        needShowDDLids.push(ele[0].id);
+                                    }
+
+                                    labDiv.css('display', 'block');
+                                    eleDiv.css('display', 'block');
+                                    ele.removeAttr('disabled');
+
+
+                                    break;
+                                case "2"://可见
+                                    if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
+                                        needShowDDLids.push(ele[0].id);
+                                    }
+
+                                    labDiv.css('display', 'block');
+                                    eleDiv.css('display', 'block');
+                                    break;
+                                case "3"://不可见
+                                    labDiv.css('display', 'none');
+                                    eleDiv.css('display', 'none');
+                                    break;
+                            }
                         }
                     }
-                });
+                    //根据下拉列表的值选择弹出提示信息
+                    if (noticeInfo == undefined || noticeInfo.trim() == '') {
+                        break;
+                    }
+                    noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
+                    var selectText = '';
+                    if (obj.target.tagName.toUpperCase() == 'INPUT' && obj.target.type.toUpperCase() == 'RADIO') {//radio button
+                        selectText = obj.target.nextSibling.textContent;
+                    } else {//select
+                        selectText = $(obj.target).find("option:selected").text();
+                    }
+                    $($('#div_NoticeInfo .popover-title span')[0]).text(selectText);
+                    $('#div_NoticeInfo .popover-content').html(noticeInfo);
+
+                    var top = obj.target.offsetHeight;
+                    var left = obj.target.offsetLeft;
+                    var current = obj.target.offsetParent;
+                    while (current !== null) {
+                        left += current.offsetLeft;
+                        top += current.offsetTop;
+                        current = current.offsetParent;
+                    }
 
 
-        $('#span_CloseNoticeInfo')
-            .bind('click',
-                function() {
-                    $('#div_NoticeInfo').css('display', 'none');
-                })
+                    if (obj.target.tagName.toUpperCase() == 'INPUT' && obj.target.type.toUpperCase() == 'RADIO') {//radio button
+                        left = left - 40;
+                        top = top + 10;
+                    }
+                    if (top - $('#div_NoticeInfo').height() - 30 < 0) {
+                        //让提示框在下方展示
+                        $('#div_NoticeInfo').removeClass('top');
+                        $('#div_NoticeInfo').addClass('bottom');
+                        top = top;
+                    } else {
+                        $('#div_NoticeInfo').removeClass('bottom');
+                        $('#div_NoticeInfo').addClass('top');
+                        top = top - $('#div_NoticeInfo').height() - 30;
+                    }
+                    $('#div_NoticeInfo').css('top', top);
+                    $('#div_NoticeInfo').css('left', left);
+                    $('#div_NoticeInfo').css('display', 'block');
+                    //$("#btnNoticeInfo").popover('show');
+                    //$('#btnNoticeInfo').trigger('click');
+                    break;
+                }
+            }
+
+            $.each(needShowDDLids, function (i, ddlId) {
+                $('#' + ddlId).change();
+            });
+        });
+
+
+        $('#span_CloseNoticeInfo').bind('click', function () {
+            $('#div_NoticeInfo').css('display', 'none');
+        })
 
         $("input[type=radio]:checked,select").change();
         $('#span_CloseNoticeInfo').click();
@@ -1467,40 +1529,40 @@
                 }
                 break;
             case "TBFullCtrl": //自动填充  先不做
-                var tbAuto = $("#TB_" + mapExt.AttrOfOper);
-                if (tbAuto == null)
-                    continue;
+                //var tbAuto = $("#TB_" + mapExt.AttrOfOper);
+                //if (tbAuto == null)
+                //    continue;
 
-                tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                tbAuto.attr("onkeyup",
-                    "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + mapExt.MyPK + "\');");
-                tbAuto.attr("AUTOCOMPLETE", "OFF");
-                if (me.Tag != "") {
-                    /* 处理下拉框的选择范围的问题 */
-                    var strs = mapExt.Tag.split('$');
-                    for (var str in strs) {
-                        var str = strs[k];
-                        if (str = "") {
-                            continue;
-                        }
+                //tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
+                //tbAuto.attr("onkeyup",
+                //    "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + mapExt.MyPK + "\');");
+                //tbAuto.attr("AUTOCOMPLETE", "OFF");
+                //if (me.Tag != "") {
+                //    /* 处理下拉框的选择范围的问题 */
+                //    var strs = mapExt.Tag.split('$');
+                //    for (var str in strs) {
+                //        var str = strs[k];
+                //        if (str = "") {
+                //            continue;
+                //        }
 
-                        var myCtl = str.Split(':');
-                        var ctlID = myCtl[0];
-                        var ddlC1 = $("#DDL_" + ctlID);
-                        if (ddlC1 == null) {
-                            continue;
-                        }
+                //        var myCtl = str.Split(':');
+                //        var ctlID = myCtl[0];
+                //        var ddlC1 = $("#DDL_" + ctlID);
+                //        if (ddlC1 == null) {
+                //            continue;
+                //        }
 
-                        //如果文本库数值为空，就让其返回.
-                        var txt = tbAuto.val();
-                        if (txt == '')
-                            continue;
+                //        //如果文本库数值为空，就让其返回.
+                //        var txt = tbAuto.val();
+                //        if (txt == '')
+                //            continue;
 
-                        //获取要填充 ddll 的SQL.
-                        var sql = myCtl[1].Replace("~", "'");
-                        sql = sql.Replace("@Key", txt);
-                    }
-                }
+                //        //获取要填充 ddll 的SQL.
+                //        var sql = myCtl[1].Replace("~", "'");
+                //        sql = sql.Replace("@Key", txt);
+                //    }
+                //}
 
                 break;
             case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
@@ -1581,7 +1643,7 @@
 <body>
     <!--标题-->
     <div id="header">
-        <b></b><span style=""></span>
+        <b></b><span style=""></span><a class="no" style="color:#fff;display:none;margin-left:10px;"></a>
     </div>
     <!--上半部分表单-->
 <div id="topContentDiv" class="row" style="display:none;">

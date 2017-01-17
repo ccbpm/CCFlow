@@ -796,7 +796,7 @@ namespace CCFlow.WF.WorkOpt
         public string ReturnWork()
         {
             int toNodeID = int.Parse(context.Request.QueryString["ReturnToNode"]);
-            string reMesage = context.Request.QueryString["ReturnMsg"];
+            string reMesage = context.Request.QueryString["ReturnInfo"];
 
             bool isBackBoolen = false;
             string isBack = context.Request.QueryString["IsBack"];

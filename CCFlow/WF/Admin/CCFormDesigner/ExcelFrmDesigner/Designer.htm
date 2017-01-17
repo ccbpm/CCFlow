@@ -1,10 +1,565 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+	<title></title>
+	<link href="/WF/Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+	<link href="/WF/Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+	<!--<link href="/WF/Comm/JS/EasyUI/themes/default/layout.css" rel="stylesheet" type="text/css" />-->
+	<style>
+		html, body
+		{
+			margin: 0px;
+			padding: 0px;
+		}
+		div.top
+		{
+			width: 100%;
+			height: 25px;
+			/*background-color: #ffeeee;*/
+		}
+		div.left
+		{
+			width: 350px;
+			/*background-color: #eeffee;*/
+		}
+		div.center
+		{
+			width: calc(100% - 200px);
+			background-color: #eeeeff;
+		}
+	</style>
+	<script src="/WF/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="/WF/Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+	<script src="/WF/Scripts/EasyUIUtility.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/WF/Scripts/QueryString.js"></script>
+	<script type="text/javascript" src="/WF/Scripts/config.js"></script>
+	<script type="text/javascript" src="./Excel.js"></script>
+	<script type="text/javascript">
+		var Events = {
+			//选中区域: ["SheetSelectionChange"],
+			输入_Enter: ["a34", "SheetChange", "SheetSelectionChange"],
+			输入_Tab: ["a34", "SheetChange", "SheetSelectionChange"],
+
+			Delete: ["SheetChange", "a34"],
+			DeleteRow: ["SheetChange", "a34"],
+			DeleteColumn: ["SheetChange", "a34"],
+
+			RightClick_删除: ["SheetBeforeRightClick", /*出现右键菜单，点击删除*/"SheetChange", "a34"],
+			RightClickOnRowHead_删除: ["SheetSelectionChange", "SheetBeforeRightClick", /*出现右键菜单，点击删除*/"SheetChange", "a34"],
+			RightClickOnColumnHead_删除: ["SheetSelectionChange", "SheetBeforeRightClick", /*出现右键菜单，点击删除*/"SheetChange", "a34"]
+		};
+	</script>
+	<script language="javascript" for="WebOffice1" event="NotifyCtrlReady">
+		WebOffice1_NotifyCtrlReady();
+		///初始化excel
+		function WebOffice1_NotifyCtrlReady() {
+			console.group("WebOffice1_NotifyCtrlReady");
+			woObj = document.getElementById("WebOffice1");
+			//var url = "../../../../../DataUser/FrmOfficeTemplate/" + _FormNo + ".xlsx";
+			var url;
+			$.ajax({
+				async: false,
+				url: Handler + "?DoType=GetFileUrl&FK_MapData=" + _FormNo + "&m=" + Math.random(),
+				dataType: 'html',
+				success: function(data) {
+					url = data;
+				}
+			});
+			console.log("WebOffice1_NotifyCtrlReady | url: " + url);
+			if (url.indexOf("err@") > -1) {
+				alert(url);
+				return false;
+			}
+			var ext = url.substr(url.lastIndexOf(".") + 1, url.length - url.lastIndexOf(".") + 1);
+			console.log("WebOffice1_NotifyCtrlReady | ext: " + ext);
+			woObj.LoadOriginalFile(url, ext); //参数 ext 必需！
+			woObj.HideMenuItem(
+				0x01		//新建
+				+ 0x02		//打开
+				+ 0x04		//保存
+				+ 0x10		//打印
+				+ 0x20		//打印预览
+				+ 0x1000	//全屏
+				//+ 0x4000	//显示/隐藏菜单
+				+ 0x2000	//返回
+			);
+			excel = new Excel(woObj);
+			ConsoleLogOnSelect();
+			console.groupEnd();
+		}
+	</script>
+	<script language="javascript" for="WebOffice1" event="NotifyWordEvent(eventname)">
+		WebOffice1_NotifyWordEvent(eventname);
+		//WebOffice事件监听
+		function WebOffice1_NotifyWordEvent(eventname) {
+			switch (eventname) {
+			case "DocumentBeforeSave":
+				if (vNoSave) {
+					woObj.lContinue = 0;
+					alert("此文档已经禁止保存");
+				} else {
+					woObj.lContinue = 1;
+				}
+				break;
+			case "DocumentBeforePrint":
+				if (vNoPrint) {
+					woObj.lContinue = 0;
+					alert("此文档已经禁止打印");
+				} else {
+					woObj.lContinue = 1;
+				}
+				break;
+			case "WindowSelectionChange":
+				if (vNoCopy) {
+					woObj.lContinue = 0;
+					//alert("此文档已经禁止复制");
+				} else {
+					woObj.lContinue = 1;
+				}
+				break;
+			case "DocumentBeforeClose":
+				if (vClose == 0) {
+					woObj.lContinue = 0;
+				} else {
+					//alert("word");
+					woObj.lContinue = 1;
+				}
+				break;
+			case "SheetSelectionChange": //变更选中区域//使用代码执行操作时也会触发/Q如何排除？
+				ConsoleLogOnSelect();
+				if (excel.IsCell()) {
+					//根据命名选中DataGrid行
+					var name = excel.GetCellInName();
+					if(name == null){
+						name = "main";
+					}
+					//选中
+					var name = excel.GetName();
+					if (name != null) {
+						SetColumnSelection(name); //gird.select();
+					}
+				} else {
+
+				}
+				break;
+			case "WorkbookNewSheet": //新建sheet页（UnknownID:0x0000061a/UnknownID:0x00000619：切换sheet页）
+				break;
+			default:
+				console.log("WebOffice1_NotifyWordEvent | case default | eventname: " + eventname);
+				break;
+			}
+		}
+	</script>
+	<script type="text/javascript">
+
+		function ConsoleLogOnSelect() {
+			console.group("function ConsoleLogOnSelect");
+			console.log("excel.GetSheet():" + excel.GetSheet());
+			console.group("ActiveCell");
+			console.log("excel.GetCell_$():" + excel.GetCell_$());
+			console.log("excel.GetCell():" + excel.GetCell());
+			console.log("excel.GetCellS():" + excel.GetCellS());
+			//console.log("excel.GetCellR1C1S():" + excel.GetCellR1C1S());
+			console.log("excel.GetValue():" + excel.GetValue());
+			console.log("excel.GetName():" + excel.GetName());
+			//console.log("excel.GetCellInName():" + excel.GetCellInName());
+			console.groupEnd();
+			console.group("Selection");
+			console.log("excel.GetRange():" + excel.GetRange());
+			console.log("excel.GetRangeName():" + excel.GetRangeName());
+			console.groupEnd();
+			console.groupEnd();
+		}
+
+		var _FormNo;
+		var woObj, excel;
+		var form, tableMain;
+		$(document).ready(function () {
+			_FormNo = GetQueryString("FK_MapData");
+			//布局
+			$("body").layout();
+			//主表字段
+			InitTable("main", _FormNo); //TODO: “main”改为和 _FormNo 一致？
+			//子表字段
+			InitSub();
+		});
+
+		//初始化子表
+		function InitSub() {
+			$.ajax({
+				//async: false,
+				url: Handler + "?DoType=GetSubTables&FK_MapData=" + _FormNo + "&m=" + Math.random(),
+				dataType: 'json',
+				success: function (data) { //[{id:},{}]
+					console.log(typeof (data)); //object
+					for (var i in data) {
+						CreateSubDom(data[i].No, null, false);
+					}
+				}
+			});
+		}
+
+		//创建子表dom
+		function CreateSubDom(id, range, isSelect) { //TODO: 将range信息保存到数据库
+			var btn = document.createElement("button");
+			btn.onclick = function () {
+				ShowSubRange(id);
+			};
+			btn.innerText = "显示子表区域";
+			var table = document.createElement("table");
+			table.id = id;
+			table.style = "overflow: auto; padding: 0;";
+			var div = document.createElement("div");
+			div.appendChild(btn);
+			div.appendChild(table);
+			$("#aa").accordion("add", {
+				title: "子表：" + id,
+				content: div,
+				selected: isSelect
+			});
+			InitTable(table.id, id);
+		}
+
+		//在excel中显示子表的区域
+		function ShowSubRange(id) {
+			alert("显示子表区域：" + id);
+			var range = excel.GetRangeByName(id);
+			if(range != null){
+				excel.SetSelection(range.split("!")[0].replace("=",""), range.split("!")[1]);
+			}
+		}
+
+		//初始化grid
+		function InitTable(tableid, id) {
+			$("#" + tableid).datagrid({
+				url: "/WF/Admin/CCFormDesigner/handler.ashx?DoType=FiledsList_Init&FK_MapData=" + id + "&m=" + Math.random(), //TODO: 改成专用的？
+				idField: 'KeyOfEn',
+				striped: true,
+				showFooter: false,
+				singleSelect: true,
+				columns: [
+					[
+						{ field: 'KeyOfEn', title: '字段名', width: 70, align: 'left' },
+						{ field: 'Name', title: '中文名', width: 85, align: 'left' },
+						{ field: 'MyDataType', title: '类型', width: 50, align: 'left' },
+						{ field: '单元格', title: '单元格', width: 50, align: 'left' },
+						{ field: '操作', title: '操作', width: 55, align: 'left' }
+					]
+				],
+				onSelect: function (i, r) {
+					//if (r.Sheet && r.Cell) {
+					//	//选中sheet/单元格
+					//	excel.SetSelection(r.Sheet, r.Cell);
+					excel.SetSelection(null, "B2"); //for test
+					//}
+				}
+			});
+		}
+
+		//打开【字段列表】页面
+		function OpenFieldsList() {
+			var url = "/WF/Admin/CCFormDesigner/FiledsList.htm?FK_MapData=" + _FormNo;
+			var w = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+			alert("重新加载【字段列表】");
+		}
+	</script>
+	<!--__________________________________________________________________________________________Methods-->
+	<script type="text/javascript">
+		//选中字段
+		function SetColumnSelection(id) {
+			//TODO: 会触发 datagrid.onSelect 导致循环执行
+			$('#main').datagrid("selectRecord", id);
+		}
+
+		//新增字段//表(主/子)
+		function NewColumn(table) {
+			alert("在此表中新建字段：" + table);
+
+			var FK_MapData = table == "main" ? _FormNo : table;
+			var url = "/WF/Admin/FoolFormDesigner/FieldTypeList.htm?FK_MapData=" + FK_MapData;
+			//打开新建子表页面
+			//var newcolumn = showModalDialog(url);
+
+			//error: easyui的方法会产生图层错误
+			OpenEasyUiDialog(url, 'eudlgframe', '新建字段', 760, 470, 'icon-edit', true, function () {
+				var innerWin = document.getElementById('eudlgframe').contentWindow;
+				//$('#' + txtId).val(innerWin.getReturnText());
+				//$('#' + hiddenId).val(innerWin.getReturnValue());
+			});
+
+			//return newcolumn;
+		}
+
+		//新建子表并返回子表id
+		function NewSub() {
+			var subId = prompt("请输入子表ID，要求值唯一。", _FormNo + "Dtl1");
+			if (subId == null) {
+				return false;
+			} else if (subId == "") {
+				alert('子表ID不能为空，请重新输入！');
+				//NewSub(); //因需要返回值，故不可再次调用自身
+				return false;
+			}
+
+			//请求服务器创建子表
+			$.ajax({
+				async: false,
+				url: Handler + "?DoType=NewSub&FK_MapData=" + _FormNo + "&SubId=" + subId + "&m=" + Math.random(),
+				dataType: 'html',
+				success: function (data) {
+					if (data.indexOf("err@") > -1) {
+						alert(data);
+						//NewSub(); //因需要返回值，故不可再次调用自身
+						return false;
+					} else {
+						subId = data;
+					}
+				}
+			});
+			return subId;
+		}
+
+		//获取枚举列表
+		function GetEnumList(enumkey) {
+			return [{Lab:"abc"}, {Lab:"def"}, {Lab:"xyz"}]; //for test
+			var enumlist;
+			$.ajax({
+				async: false,
+				url: Handler + "?DoType=GetEnumList&EnumKey=" + enumkey + "&m=" + Math.random(),
+				dataType: 'json',
+				success: function (data) {
+					if (data.indexOf("err@") > -1) {
+						alert(data);
+						return false;
+					} else {
+						enumlist = data;
+					}
+				}
+			});
+			return enumlist;
+		}
+
+		// 根据前缀与字段名，返回他的区域对象，如果没有就返回空.//CopyFrom:D:\ccflow\CCFlow\WF\CCForm\FrmExcel.aspx
+		function getRangeName(sName, sCcflowPrefix, aCurrSheets) {
+			/// <summary>获取指定字段所标识的单元格区域名称对象</summary>
+			/// <param name="sName" type="String">字段名称</param>
+			/// <param name="sCcflowPrefix" type="String">ccflow的名称标识字符串</param>
+			/// <param name="aCurrSheets" type="Array">要检索的sheet集合</param>
+			var nms, //当前工作簿的命名区域集合.
+				na,
+				na_len;
+			for (var s = 0; s < aCurrSheets.length; s++) {
+				nms = aCurrSheets[s].Names;
+				na = aCurrSheets[s].Name + '!' + sCcflowPrefix + sName;
+				na_len = na.length;
+
+				for (var i = 1; i <= nms.Count; i++) {
+					if (aCurrSheets[s].Names(i).Name == na ||
+					(aCurrSheets[s].Names(i).Name.length > na_len &&
+						aCurrSheets[s].Names(i).Name.substr(0, na_len) == na &&
+						aCurrSheets[s].Names(i).Name.substr(na_len).split('_').length < 3)) {    //此处过滤掉有相同前缀的属性
+						return aCurrSheets[s].Names(i);
+					}
+				}
+			}
+			return null;
+		}
+
+		//保存文件到服务器
+		function SaveFile() {
+			// 初始化Http引擎
+			document.all.WebOffice1.HttpInit();
+			// 添加相应的Post元素 
+			//document.all.WebOffice1.HttpAddPostString("DoType", "SaveFile"); //会使用HttpRequest.Form方式传递，而handler的通用『属性.』无法正常读取
+			//document.all.WebOffice1.HttpAddPostString("FK_MapData", _FormNo);
+			// 添加上传文件
+			document.all.WebOffice1.HttpAddPostCurrFile("File ", "");
+			// 提交上传文件
+			var url = location.href.substr(0, location.href.lastIndexOf("/") + 1) + Handler + "?DoType=SaveFile&FK_MapData=" + _FormNo + "&m=" + Math.random();
+			var returnValue = document.all.WebOffice1.HttpPost(url);
+			if (returnValue == "true") {
+				alert("保存成功！");
+			} else {
+				alert("保存失败！" + returnValue);
+			}
+		}
+
+	</script>
+	<!--__________________________________________________________________________________________Events-->
+	<script type="text/javascript">
+		//保存按钮事件
+		function onclick_btnSave() {
+			SaveFile();
+		}
+
+		//新建字段
+		function onclick_btnNewColumn() {
+			console.group("onclick_btnNewColumn");
+
+			console.log(excel.IsCell());
+			if (excel.IsCell() != true) {
+				alert("请选中单个单元格创建字段！");
+				return false;
+			}
+			//获取单元格
+			var add = excel.GetCell();
+			console.log("onclick_btnNewColumn | Address: " + add);
+			//单元格是否已绑定字段
+			var name = excel.GetName();
+			console.log("onclick_btnNewColumn | name: " + name);
+			if (name === null) { //未绑定字段
+				//判断是否为子表
+				name = excel.GetCellInName();
+				console.log("onclick_btnNewColumn | in name: " + name);
+				if (name === null) {
+					name = "main"; //TODO: type actual value
+				}
+				var newcolumn = NewColumn(name);
+				if(newcolumn){
+					//0.切换手风琴
+					$("#aa").accordion("select","子表：" + name);
+
+					//1.刷新Gird
+					$("#" + name).datagrid("reload");
+
+					//2.Excel操作
+					if(newcolumn.MyDataType == 2){ //枚举/外键 //TODO: 根据新字段类型进行excel的处理
+						//普通字段：设置命名
+						//枚举/外键：参考 onclick_btnNewColumnEnum
+
+					}
+				}
+				console.groupEnd();
+			} else {
+				alert("该单元格已存在关联字段，不能重复创建！");
+				console.groupEnd();
+				return false;
+			}
+
+			//for test:
+			////设置值
+			//excel.SetValue("SetValue:" + add);
+			////设置命名
+			//excel.SetName("SetName_" + excel.GetCell_$());
+
+			console.groupEnd();
+		}
+
+		//新建枚举/外键字段//for test
+		function onclick_btnNewColumnEnum() {
+			console.group("onclick_btnNewColumnEnum");
+
+			//1.设置枚举/外键区域
+			//1.1.建立枚举/外键sheet页
+			excel.AddSheet("MetaData");
+			excel.HideSheet("MetaData");
+			//1.2.获取枚举值列表
+			var enumkey = "EnumName" + Math.round(Math.random() * 10000); //EnumKey
+			var enumList = GetEnumList(enumkey);
+			//1.3.枚举区域赋值
+			//TODO: 先判断EnumKey是否已存在
+			var c1 = 1;
+			while (excel.GetValue("MetaData", excel.ConvertInt2Letter(c1) + 1) != null) { //TODO: 改为根据命名判断
+				c1 += 1;
+			}
+			var cL = excel.ConvertInt2Letter(c1);
+			for (var i in enumList) {
+				excel.SetValue(enumList[i].Lab, "MetaData", cL + (parseInt(i) + 1));
+			}
+			//1.4.枚举区域命名
+			excel.SetRangeName(enumkey,
+				"MetaData",
+				"$" + cL + "$1:$" + cL + "$" + enumList.length
+			//"$" + cL + ":$" + cL //不可设置整列！作为数据有效性使用时，可以填入序列以外的值（应不允许）！
+			);
+
+			//2.字段
+			//2.1.字段(单元格)本身的命名
+			excel.SetName("ColumnNameOf" + enumkey);
+			//2.2.字段(单元格)本身的数据有效性
+			excel.SetValidation(enumkey);
+
+			console.groupEnd();
+		}
+
+		//新建子表
+		function onclick_btnNewSub() {
+			console.group("onclick_btnNewSub");
+
+			//获取区域
+			var range = excel.GetRange();
+			//判断是否已有命名
+			var name = excel.GetRangeName(); //TODO: 是否遍历所有选中单元格，不允许同一个单元格在两个子表中？
+			if (name === null) {
+				//创建子表
+				//name = "SubName" + Math.round(Math.random() * 10000); //for test
+				name = NewSub();
+				if (name) {
+					//命名
+					excel.SetRangeName(name);
+					CreateSubDom(name);
+				}
+			} else {
+				alert("该区域已存在关联子表，不能重复创建！");
+				console.groupEnd();
+				return false;
+			}
+
+			console.groupEnd();
+		}
+
+		//关闭/刷新页面前询问
+		window.onbeforeunload = function () {
+			if (confirm("是否需要保存？")) {
+				//保存文档
+				SaveFile();
+				//关闭文档
+				woObj.CloseDoc(0);
+			} else {
+				if (confirm("关闭本页面将丢失所有更改，确定关闭？")) {
+					//关闭文档
+					woObj.CloseDoc(0);
+				}
+				else {
+					return "请选择“留在本页”！"; //ie //TODO: other browser?
+				}
+			}
+		}
+	</script>
 </head>
 <body>
-
-<h2>研发过程中.</h2>
+	<div data-options="region:'north'" class="top">
+		<button onclick="onclick_btnSave();">
+			保存</button>
+		<button onclick="JavaScript:alert('预览功能尚在开发中！');">
+			预览（开发中）</button>
+		<button onclick="JavaScript:alert('复制功能尚在开发中！');">
+			复制（开发中）</button>
+		<button onclick="onclick_btnNewColumn();">
+			新建字段</button>
+		<button onclick="onclick_btnNewColumnEnum();">
+			新建枚举/外键字段（测试用）</button>
+		<button onclick="onclick_btnNewSub();">
+			新建明细表</button>
+	</div>
+	<div data-options="region:'west'" class="left">
+		<div id="aa" class="easyui-accordion" style="width: 100%; height: 100%;">
+			<div title="主表字段" style="overflow: auto; padding: 0;">
+				<button onclick="OpenFieldsList();">
+					维护明细</button>
+				<button onclick="SetColumnSelection('ZiDuan2016121202');">
+					测试选中行事件</button>
+				<table id="main" border="0" cellpadding="0" cellspacing="0">
+				</table>
+			</div>
+		</div>
+	</div>
+	<div data-options="region:'center'" class="center">
+		<object id="WebOffice1" height="99%" width='100%' classid='clsid:E77E049B-23FC-4DB8-B756-60529A35FAD5'
+			codebase='/WF/Activex/WebOffice.cab#V7.0.1.0'>
+			<param name='_ExtentX' value='6350'>
+			<param name='_ExtentY' value='6350'>
+		</object>
+	</div>
 </body>
 </html>

@@ -71,9 +71,9 @@
                 ];
             }
             //返回节点数组
-            var initNodeData = function (data) {
+            var initNodeData = function (data,fk_dept2) {
                 data = JSON.parse(data);
-                var fk_dept = pageData.FK_Dept;
+                var fk_dept = fk_dept2;//pageData.FK_Dept;
                 var parentNo = undefined;
                 var fkDeptObj = $.grep(data.Depts, function (value) {
                     return value.No == fk_dept;
@@ -161,14 +161,16 @@
                                 data: {},
                                 dataType: 'html',
                                 success: function (data) {
-                                    cb(initNodeData(data));
+                                    var fk_dept2 = pageData.FK_Dept;
+                                    cb(initNodeData(data, fk_dept2));
                                 }
                             }
                         );
                         }
                         else {
-                            if (node.data != undefined && node.data.childrenData != undefined) {
-                                cb(node.data.childrenData);
+                            if (node.data != undefined && node.data.childrenData != undefined && node.data.childrenData.length>0) {
+                                var fk_dept2 = node.id;
+                                cb(node.data.childrenData, fk_dept2);
                             }
                             else {
                                 pageData.FK_Dept = node.id;
@@ -180,7 +182,8 @@
                                     data: {},
                                     dataType: 'html',
                                     success: function (data) {
-                                        cb(initNodeData(data));
+                                        var fk_dept2 = node.id;
+                                        cb(initNodeData(data,fk_dept2));
                                     }
                                 });
                             }

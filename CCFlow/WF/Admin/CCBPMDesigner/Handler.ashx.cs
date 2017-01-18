@@ -422,62 +422,48 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
 
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
             {
-                BP.WF.Port.Depts depts = new BP.WF.Port.Depts();
-                depts.Retrieve(BP.WF.Port.DeptAttr.ParentNo, rootid);
-                BP.WF.Port.Stations sts = new BP.WF.Port.Stations();
+                BP.Port.Depts depts = new BP.Port.Depts();
+                depts.Retrieve(BP.Port.DeptAttr.ParentNo, rootid, BP.Port.DeptAttr.Name);
+                BP.Port.Stations sts = new BP.Port.Stations();
                 sts.RetrieveAll();
-                BP.WF.Port.Emps emps = new BP.WF.Port.Emps();
-                emps.RetrieveAll(BP.WF.Port.EmpAttr.Name);
-                BP.WF.Port.EmpStations empsts = new BP.WF.Port.EmpStations();
+                BP.Port.Emps emps = new BP.Port.Emps();
+                emps.Retrieve(BP.Port.EmpAttr.FK_Dept, rootid, BP.Port.EmpAttr.Name);
+                BP.Port.EmpStations empsts = new BP.Port.EmpStations();
                 empsts.RetrieveAll();
-                BP.GPM.DeptEmps empdetps = new BP.GPM.DeptEmps();
-                empdetps.RetrieveAll();
 
-                //部门人员
-                Dictionary<string, List<string>> des = new Dictionary<string, List<string>>();
-                //岗位人员
-                Dictionary<string, List<string>> ses = new Dictionary<string, List<string>>();
-                //部门岗位
-                Dictionary<string, List<string>> dss = new Dictionary<string, List<string>>();
-                BP.WF.Port.Station stt = null;
+                BP.Port.EmpStations ess = null;
+                List<string> insts = new List<string>();
+                List<BP.Port.Emp> inemps = new List<BP.Port.Emp>();
 
                 //增加部门
-                foreach (BP.WF.Port.Dept dept in depts)
+                foreach (BP.Port.Dept dept in depts)
                 {
                     dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
                 }
 
-                //获取部门下的岗位
-                empdetps.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, rootid);
-                dss.Add(rootid, new List<string>());
-
-                foreach (BP.GPM.DeptEmp empdept in empdetps)
+                //增加岗位
+                foreach(BP.Port.Emp emp in emps)
                 {
-                    //判断该人员拥有的岗位
-                    empsts.Retrieve(BP.WF.Port.EmpStationAttr.FK_Emp, empdept.FK_Emp);
-                    foreach (BP.WF.Port.EmpStation es in empsts)
+                    ess = new BP.Port.EmpStations();
+                    ess.Retrieve(BP.Port.EmpStationAttr.FK_Emp, emp.No);
+
+                    foreach(BP.Port.EmpStation es in ess)
                     {
-                        if (ses.ContainsKey(es.FK_Station))
-                        {
-                            if (ses[es.FK_Station].Contains(es.FK_Emp) == false)
-                                ses[es.FK_Station].Add(es.FK_Emp);
-                        }
-                        else
-                        {
-                            ses.Add(es.FK_Station, new List<string> { es.FK_Emp });
-                        }
+                        if (insts.Contains(es.FK_Station))
+                            continue;
 
-                        //增加部门的岗位
-                        if (dss[rootid].Contains(es.FK_Station) == false)
-                        {
-                            stt = sts.GetEntityByKey(es.FK_Station) as BP.WF.Port.Station;
-
-                            if (stt == null) continue;
-
-                            dss[rootid].Add(es.FK_Station);
-                            dt.Rows.Add(es.FK_Station, rootid, stt.Name, "STATION");
-                        }
+                        insts.Add(es.FK_Station);
+                        dt.Rows.Add(es.FK_Station, rootid, es.FK_StationT, "STATION");
                     }
+
+                    if(ess.Count == 0)
+                        inemps.Add(emp);
+                }
+
+                //增加没有岗位的人员
+                foreach (BP.Port.Emp emp in inemps)
+                {
+                    dt.Rows.Add(emp.No, rootid, emp.Name, "EMP");
                 }
             }
             else
@@ -488,7 +474,13 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                 sts.RetrieveAll();
                 BP.GPM.DeptStations dss = new BP.GPM.DeptStations();
                 dss.Retrieve(BP.GPM.DeptStationAttr.FK_Dept, rootid);
+                BP.GPM.DeptEmps des = new BP.GPM.DeptEmps();
+                des.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, rootid);
+                BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
+                dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, rootid);
                 BP.GPM.Station stt = null;
+                BP.GPM.Emp emp = null;
+                List<string> inemps = new List<string>();
 
                 foreach (BP.GPM.Dept dept in depts)
                 {
@@ -504,6 +496,24 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                     if (stt == null) continue;
 
                     dt.Rows.Add(ds.FK_Station, rootid, stt.Name, "STATION");
+                }
+
+                //增加没有岗位的人员
+                foreach(BP.GPM.DeptEmp de in des)
+                {
+                    if (dess.GetEntityByKey(BP.GPM.DeptEmpStationAttr.FK_Emp, de.FK_Emp) == null)
+                    {
+                        if (inemps.Contains(de.FK_Emp))
+                            continue;
+
+                        inemps.Add(de.FK_Emp);
+                    }
+                }
+
+                foreach(string inemp in inemps)
+                {
+                    emp = new BP.GPM.Emp(inemp);
+                    dt.Rows.Add(emp.No, rootid, emp.Name, "EMP");
                 }
             }
 

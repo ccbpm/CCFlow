@@ -706,23 +706,43 @@ function ShowSubDepts(node, treeid) {
             }
 
             $.each(data, function () {
+                var n = {
+                    id: this.TTYPE + "_" + this.NO,
+                    text: this.NAME,
+                    attributes: {
+                        TType: this.TTYPE
+                    }
+                };
+
+                switch (this.TTYPE) {
+                    case "DEPT":
+                        n.iconCls = "icon-tree_folder";
+                        n.state = "closed";
+                        n.attributes.IsLoad = false;
+                        n.children = [{
+                            text: "加载中..."
+                        }];
+                        break;
+                    case "STATION":
+                        n.iconCls = "icon-station";
+                        n.state = "closed";
+                        n.attributes.IsLoad = false;
+                        n.attributes.StationId = this.NO;
+                        n.attributes.DeptId = deptid;
+                        n.children = [{
+                            text: "加载中..."
+                        }];
+                        break;
+                    case "EMP":
+                        n.iconCls = "icon-user";
+                        n.attributes.DeptId = deptid;
+                        n.attributes.EmpId = this.NO;
+                        break;
+                }
+
                 $("#" + treeid).tree("append", {
                     parent: node.target,
-                    data: [{
-                        id: this.TTYPE + "_" + this.NO,
-                        text: this.NAME,
-                        iconCls: this.TTYPE == "STATION" ? "icon-station" : "icon-tree_folder",
-                        state: "closed",
-                        attributes: {
-                            TType: this.TTYPE,
-                            IsLoad: false,
-                            StationId: this.TTYPE == "STATION" ? this.NO : undefined,
-                            DeptId: this.TTYPE == "STATION" ? deptid : undefined 
-                        },
-                        children: [{
-                            text: "加载中..."
-                        }]
-                    }]
+                    data: [n]
                 });
             });
 

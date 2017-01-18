@@ -236,42 +236,13 @@ functrees.push({
 		  ]
 });
 //3.组织结构
-//functrees.push({
-//    Id: "OrgTree",
-//    Name: "组织结构",
-//    AttrCols: ["TTYPE"],
-//    ServiceCount: 1,
-//    Nodes: [
-//			{ Type: "Node", Id: "OneOne", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneOne",
-//			    Nodes: [
-//						{ Type: "Node", Id: "OneOneDeptTypies", ParentId: "OneOne", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
-//						{ Type: "Node", Id: "OneOneStations", ParentId: "OneOne", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
-//					  ]
-//			},
-//            { Type: "Node", Id: "OneMore", ParentId: null, Name: "基础设置", Opened: true, TType: "BASICROOT", IconCls: "icon-tree_folder", OSModel: "OneMore",
-//            			    Nodes: [
-//						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "部门类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.DeptTypes" },
-//						{ Type: "Node", Id: "Duties", ParentId: "OneMore", Name: "职务维护", TType: "DUTIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.GPM.Dutys" },
-//						{ Type: "Node", Id: "DeptTypies", ParentId: "OneMore", Name: "岗位类型", TType: "DEPTTYPIES", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.StationTypes" },
-//						{ Type: "Node", Id: "Stations", ParentId: "OneMore", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
-//					  ]
-//            			},
-//			{ Type: "Service", ServiceMethod: "GetStructureTree", MethodParams: { rootid: '0' }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "0",
-//			    ColDefine: "TTYPE", Defines: [
-//											{ Value: "DEPT", ColDefine: "PARENTNO",
-//											    Defines: [
-//															{ Value: "0", IconCls: "icon-tree_folder", MenuId: "mDeptRoot", InheritForChild: [{ From: "@@id", To: "fk_dept"}], Opened: true },
-//															{ IconCls: "icon-dept", MenuId: "mDept", InheritForChild: [{ From: "@@id", To: "fk_dept"}] }
-//														]
-//											},
-//											{ Value: "STATION", IconCls: "icon-station", MenuId: "mStation", Inherits: ["fk_dept"], InheritForChild: [{ From: "`'@@id'.split('|')[1]`", To: "fk_station"}], LazyLoad: true, Nodes: [
-//                                                { Type: "Service", ServiceMethod: "GetEmpsFromStation", Inherits: ["fk_dept", "fk_station"], MethodParams: { fk_dept: "@@fk_dept", fk_station: "@@fk_station" }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null, IconCls: "icon-user", MenuId: "mEmp", Url: "" }
-//                                            ]
-//											}
-//										  ]
-//			}
-//		  ]
-//});
+functrees.push({
+    Id: "OrgTree",
+    Name: "组织结构",
+    AttrCols: [],
+    ServiceCount: 0,
+    Nodes: [{ Type: "Function", ServiceMethod: "GenerStructureTree", MethodParams: [{name:"parentrootid", value:"0"}], OnExpandFunction: "ShowSubDepts"}]
+});
 //4.系统维护
 functrees.push({
     Id: "sysTree",
@@ -633,7 +604,7 @@ function OnDbClick(oFuncTree) {
             }
         },
         onExpand: function (node) {
-            if (node.attributes.LazyLoad) {
+            if (node.attributes && node.attributes.LazyLoad) {
                 $("#" + oFuncTree.Id).tree('select', node.target);
                 var children = $("#" + oFuncTree.Id).tree('getChildren', node.target);
                 if (children && children.length >= 1) {
@@ -929,6 +900,41 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
     /// <param name="oFuncTree" type="Object">树定义对象</param>
     //生成附加属性
     if (oNode.Type == "Service") {
+        return;
+    }
+
+    if(oNode.Type == "Function"){
+        var exp = oNode.ServiceMethod + "(";
+
+        if(oNode.MethodParams && oNode.MethodParams.length > 0){
+            $.each(oNode.MethodParams, function(){
+                if(typeof this.value == "String"){
+                    exp += "'" + ReplaceParams(this, oNode, oFuncTree) + "',";
+                }
+                else{
+                    exp += this.value + ",";
+                }
+            });
+
+            if(exp[exp.length - 1] == ","){
+                exp = exp.substr(0,exp.length - 1);
+            }
+        }
+
+        if(oNode.MethodParams.length > 0){
+            exp += ",";
+        }
+
+        if(oParentNode){
+            exp += $("#" + oFuncTree.Id).tree("getNode", oParentNode).id;
+        }
+        else{
+            exp += "null";
+        }
+
+        exp += ",'" + oFuncTree.Id + "'";
+        exp += ");";
+        CalculateJS(exp);
         return;
     }
     

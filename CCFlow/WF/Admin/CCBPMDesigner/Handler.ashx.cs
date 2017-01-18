@@ -269,6 +269,15 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                     case "GetStructureTree"://获取组织结构数据
                         msg = GetStructureTreeTable();
                         break;
+                    case "GetStructureTreeRoot"://获取组织结构根结点数据
+                        msg = GetStructureTreeRootTable();
+                        break;
+                    case "GetSubDepts": //获取指定部门下一级子部门及岗位列表
+                        msg = GetSubDeptsTable();
+                        break;
+                    case "GetEmpsByStation":    //根据部门、岗位获取人员列表
+                        msg = GetEmpsByStationTable();
+                        break;
                     case "GetBindingForms"://获取流程绑定表单列表
                         msg = GetBindingFormsTable();
                         break;
@@ -294,6 +303,213 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
         }
+
+        /// <summary>
+        /// 根据部门、岗位获取人员列表
+        /// </summary>
+        /// <returns></returns>
+        private string GetEmpsByStationTable()
+        {
+            string deptid = context.Request.QueryString["deptid"];
+            string stid = context.Request.QueryString["stationid"];
+
+            if (string.IsNullOrWhiteSpace(deptid) || string.IsNullOrWhiteSpace(stid))
+                return "[]";
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("NO", typeof(string));
+            dt.Columns.Add("PARENTNO", typeof(string));
+            dt.Columns.Add("NAME", typeof(string));
+            dt.Columns.Add("TTYPE", typeof(string));
+            
+            if (BP.WF.Glo.OSModel == OSModel.OneOne)
+            {
+                BP.GPM.DeptEmp de = null;
+                BP.Port.Emp emp = null;
+                BP.WF.Port.EmpStations ess = new BP.WF.Port.EmpStations(stid);
+
+                BP.GPM.DeptEmps des = new BP.GPM.DeptEmps();
+                des.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, deptid);
+
+                BP.Port.Emps emps = new BP.Port.Emps();
+                emps.RetrieveAll();
+
+                foreach(BP.WF.Port.EmpStation es in ess)
+                {
+                    de = des.GetEntityByKey(BP.GPM.DeptEmpAttr.FK_Emp, es.FK_Emp) as BP.GPM.DeptEmp;
+
+                    if (de == null)
+                        continue;
+
+                    emp = emps.GetEntityByKey(es.FK_Emp) as BP.Port.Emp;
+
+                    dt.Rows.Add(emp.No, deptid + "|" + stid, emp.Name, "EMP");
+                }
+            }
+            else
+            {
+                BP.GPM.Emp emp = null;
+                BP.GPM.Emps emps = new BP.GPM.Emps();
+                emps.RetrieveAll();
+
+                BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
+                dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, deptid, BP.GPM.DeptEmpStationAttr.FK_Station, stid);
+
+                foreach(BP.GPM.DeptEmpStation des in dess)
+                {
+                    emp = emps.GetEntityByKey(des.FK_Emp) as BP.GPM.Emp;
+
+                    dt.Rows.Add(emp.No, deptid + "|" + stid, emp.Name, "EMP");
+                }
+            }
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+        }
+
+        private string GetStructureTreeRootTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("NO", typeof(string));
+            dt.Columns.Add("PARENTNO", typeof(string));
+            dt.Columns.Add("NAME", typeof(string));
+            dt.Columns.Add("TTYPE", typeof(string));
+
+            string parentrootid = context.Request.QueryString["parentrootid"];
+
+            if (BP.WF.Glo.OSModel == OSModel.OneOne)
+            {
+                BP.WF.Port.Dept dept = new BP.WF.Port.Dept();
+                
+                if (dept.Retrieve(BP.WF.Port.DeptAttr.ParentNo, parentrootid) == 0)
+                {
+                    dept.No = "-1";
+                    dept.Name = "无部门";
+                    dept.ParentNo = "";
+                }
+
+                dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
+            }
+            else
+            {
+                BP.GPM.Dept dept = new BP.GPM.Dept();
+
+                if (dept.Retrieve(BP.GPM.DeptAttr.ParentNo, parentrootid) == 0)
+                {
+                    dept.No = "-1";
+                    dept.Name = "无部门";
+                    dept.ParentNo = "";
+                }
+
+                dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
+            }
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+        }
+        
+        /// <summary>
+        /// 获取指定部门下一级子部门及岗位列表
+        /// </summary>
+        /// <returns></returns>
+        private string GetSubDeptsTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("NO", typeof(string));
+            dt.Columns.Add("PARENTNO", typeof(string));
+            dt.Columns.Add("NAME", typeof(string));
+            dt.Columns.Add("TTYPE", typeof(string));
+
+            string rootid = context.Request.QueryString["rootid"];
+
+            if (BP.WF.Glo.OSModel == OSModel.OneOne)
+            {
+                BP.WF.Port.Depts depts = new BP.WF.Port.Depts();
+                depts.Retrieve(BP.WF.Port.DeptAttr.ParentNo, rootid);
+                BP.WF.Port.Stations sts = new BP.WF.Port.Stations();
+                sts.RetrieveAll();
+                BP.WF.Port.Emps emps = new BP.WF.Port.Emps();
+                emps.RetrieveAll(BP.WF.Port.EmpAttr.Name);
+                BP.WF.Port.EmpStations empsts = new BP.WF.Port.EmpStations();
+                empsts.RetrieveAll();
+                BP.GPM.DeptEmps empdetps = new BP.GPM.DeptEmps();
+                empdetps.RetrieveAll();
+
+                //部门人员
+                Dictionary<string, List<string>> des = new Dictionary<string, List<string>>();
+                //岗位人员
+                Dictionary<string, List<string>> ses = new Dictionary<string, List<string>>();
+                //部门岗位
+                Dictionary<string, List<string>> dss = new Dictionary<string, List<string>>();
+                BP.WF.Port.Station stt = null;
+
+                //增加部门
+                foreach (BP.WF.Port.Dept dept in depts)
+                {
+                    dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
+                }
+
+                //获取部门下的岗位
+                empdetps.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, rootid);
+                dss.Add(rootid, new List<string>());
+
+                foreach (BP.GPM.DeptEmp empdept in empdetps)
+                {
+                    //判断该人员拥有的岗位
+                    empsts.Retrieve(BP.WF.Port.EmpStationAttr.FK_Emp, empdept.FK_Emp);
+                    foreach (BP.WF.Port.EmpStation es in empsts)
+                    {
+                        if (ses.ContainsKey(es.FK_Station))
+                        {
+                            if (ses[es.FK_Station].Contains(es.FK_Emp) == false)
+                                ses[es.FK_Station].Add(es.FK_Emp);
+                        }
+                        else
+                        {
+                            ses.Add(es.FK_Station, new List<string> { es.FK_Emp });
+                        }
+
+                        //增加部门的岗位
+                        if (dss[rootid].Contains(es.FK_Station) == false)
+                        {
+                            stt = sts.GetEntityByKey(es.FK_Station) as BP.WF.Port.Station;
+
+                            if (stt == null) continue;
+
+                            dss[rootid].Add(es.FK_Station);
+                            dt.Rows.Add(es.FK_Station, rootid, stt.Name, "STATION");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                BP.GPM.Depts depts = new BP.GPM.Depts();
+                depts.Retrieve(BP.GPM.DeptAttr.ParentNo, rootid);
+                BP.GPM.Stations sts = new BP.GPM.Stations();
+                sts.RetrieveAll();
+                BP.GPM.DeptStations dss = new BP.GPM.DeptStations();
+                dss.Retrieve(BP.GPM.DeptStationAttr.FK_Dept, rootid);
+                BP.GPM.Station stt = null;
+
+                foreach (BP.GPM.Dept dept in depts)
+                {
+                    //增加部门
+                    dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
+                }
+
+                //增加部门岗位
+                foreach (BP.GPM.DeptStation ds in dss)
+                {
+                    stt = sts.GetEntityByKey(ds.FK_Station) as BP.GPM.Station;
+
+                    if (stt == null) continue;
+
+                    dt.Rows.Add(ds.FK_Station, rootid, stt.Name, "STATION");
+                }
+            }
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+        }
+
         /// <summary>
         /// 初始化登录界面.
         /// </summary>

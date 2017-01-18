@@ -626,6 +626,111 @@ function InitUserInfo() {
     }, this);
 }
 
+function GenerStructureTree(parentrootid, pnodeid, treeid) {
+    ajaxService({ action: "GetStructureTreeRoot", parentrootid: parentrootid }, function (re) {
+        var data = $.parseJSON(re);
+        var roottarget;
+
+        if (pnodeid) {
+            roottarget = $("#" + treeid).tree("find", pnodeid).target;
+        }
+
+        $("#" + treeid).tree("append", {
+            parent: roottarget,
+            data: [{
+                id: "DEPT_" + data[0].NO,
+                text: data[0].NAME,
+                state: "closed",
+                attributes: {TType: "DEPT", IsLoad: false},
+                children: [{
+                    text: "加载中..."
+                }]
+            }]
+        });
+
+        $("#" + treeid).tree({
+            onExpand: function (node) {
+                ShowSubDepts(node, treeid);
+            }
+        });
+    });
+}
+
+function ShowSubDepts(node, treeid) {
+    if (node.attributes.IsLoad) {
+        return;
+    }
+
+    var isStation = node.attributes.TType == "STATION";
+    var data;
+
+    if (isStation) {
+        var deptid = node.attributes.DeptId;
+        var stid = node.attributes.StationId;
+
+        ajaxService({ action: "GetEmpsByStation", deptid: deptid, stationid: stid }, function (re) {
+            data = $.parseJSON(re);
+
+            var children = $("#" + treeid).tree('getChildren', node.target);
+            if (children && children.length >= 1) {
+                if (children[0].text == "加载中...") {
+                    $("#" + treeid).tree("remove", children[0].target);
+                }
+            }
+
+            $.each(data, function () {
+                $("#" + treeid).tree("append", {
+                    parent: node.target,
+                    data: [{
+                        id: this.PARENTNO +  "|" + this.NO,
+                        text: this.NAME,
+                        iconCls: "icon-user",
+                        attributes: { TType: "EMP", StationId: stid, DeptId: deptid }
+                    }]
+                });
+            });
+
+            node.attributes.IsLoad = true;
+        });
+    }
+    else {
+        var deptid = node.id.replace(/DEPT_/g, "");
+        ajaxService({ action: "GetSubDepts", rootid: deptid }, function (re) {
+            data = $.parseJSON(re);
+
+            var children = $("#" + treeid).tree('getChildren', node.target);
+            if (children && children.length >= 1) {
+                if (children[0].text == "加载中...") {
+                    $("#" + treeid).tree("remove", children[0].target);
+                }
+            }
+
+            $.each(data, function () {
+                $("#" + treeid).tree("append", {
+                    parent: node.target,
+                    data: [{
+                        id: this.TTYPE + "_" + this.NO,
+                        text: this.NAME,
+                        iconCls: this.TTYPE == "STATION" ? "icon-station" : "icon-tree_folder",
+                        state: "closed",
+                        attributes: {
+                            TType: this.TTYPE,
+                            IsLoad: false,
+                            StationId: this.TTYPE == "STATION" ? this.NO : undefined,
+                            DeptId: this.TTYPE == "STATION" ? deptid : undefined 
+                        },
+                        children: [{
+                            text: "加载中..."
+                        }]
+                    }]
+                });
+            });
+
+            node.attributes.IsLoad = true;
+        });
+    }
+}
+
 var treesObj;   //保存功能区处理对象
 
 $(function () {

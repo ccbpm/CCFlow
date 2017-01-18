@@ -298,7 +298,6 @@
     </Compile>
     <Compile Include="Tools\Entitis2Json.cs" />
     <Compile Include="Port\Current.cs" />
-    <Compile Include="Port\DeptStation.cs" />
     <Compile Include="Web\GuestUser.cs">
       <SubType>Code</SubType>
     </Compile>

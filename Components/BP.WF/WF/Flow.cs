@@ -970,6 +970,15 @@ namespace BP.WF
                     //忘记了增加这句话.
                     rpt.SetValByKey(GERptAttr.PEmp, WebUser.No);
 
+                    //要处理单据编号 BillNo .
+                    if (this.BillNoFormat != "")
+                    {
+                        rpt.SetValByKey(GERptAttr.BillNo, BP.WF.WorkFlowBuessRole.GenerBillNo(this.BillNoFormat, workid,rpt, this.PTable  ) );
+                        
+                        //设置单据编号.
+                        wk.SetValByKey(GERptAttr.BillNo, rpt.BillNo);
+                    }
+
 
                     rpt.SetValByKey(GERptAttr.FID, 0);
                     rpt.SetValByKey(GERptAttr.FlowStartRDT, BP.DA.DataType.CurrentDataTime);
@@ -990,9 +999,6 @@ namespace BP.WF
 
                     if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                         rpt.SetValByKey(GERptAttr.FlowEmps, "@" + emp.No + "," + emp.Name);
-
-                   
-
 
                 }
 

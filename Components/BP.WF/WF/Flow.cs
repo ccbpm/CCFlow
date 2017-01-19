@@ -973,7 +973,7 @@ namespace BP.WF
                     //要处理单据编号 BillNo .
                     if (this.BillNoFormat != "")
                     {
-                        rpt.SetValByKey(GERptAttr.BillNo, BP.WF.WorkFlowBuessRole.GenerBillNo(this.BillNoFormat, workid,rpt, this.PTable  ) );
+                        rpt.SetValByKey(GERptAttr.BillNo, BP.WF.WorkFlowBuessRole.GenerBillNo(this.BillNoFormat, rpt.OID,rpt, this.PTable  ) );
                         
                         //设置单据编号.
                         wk.SetValByKey(GERptAttr.BillNo, rpt.BillNo);

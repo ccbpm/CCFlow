@@ -100,7 +100,6 @@ namespace CCFlow.WF
             if (this.GroupBy != "StarterName")
                 this.Pub1.AddTDTitle("<a href='" + this.PageID + ".aspx?GroupBy=StarterName" + extStr + "' >发起人</a>");
 
-
             this.Pub1.AddTDTitle("发起日期");
             this.Pub1.AddTDTitle("接受日期");
             this.Pub1.AddTDTitle("应完成日期");

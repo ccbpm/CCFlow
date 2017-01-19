@@ -176,6 +176,12 @@ namespace CCFlow.WF
             {
                 switch (this.DoType)
                 {
+                    case "Runing_Init":
+                        msg = this.Runing_Init(BP.Web.WebUser.No, this.FK_Flow);
+                        break;
+                    case "HungUpList_Init":
+                        msg = this.HungUpList_Init(BP.Web.WebUser.No, this.FK_Flow);
+                        break;
                     case "Draft_Init":
                         msg = this.Draft_Init(BP.Web.WebUser.No, this.FK_Flow);
                         break;
@@ -218,6 +224,30 @@ namespace CCFlow.WF
 
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
+        }
+        /// <summary>
+        /// 运行
+        /// </summary>
+        /// <param name="UserNo">人员编号</param>
+        /// <param name="fk_flow">流程编号</param>
+        /// <returns>运行中的流程</returns>
+        public string Runing_Init(string UserNo, string fk_flow)
+        {
+            DataTable dt = null;
+            dt = BP.WF.Dev2Interface.DB_GenerRuning();
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 挂起列表
+        /// </summary>
+        /// <param name="UserNo">用户编号</param>
+        /// <param name="fk_flow">流程编号</param>
+        /// <returns>挂起列表</returns>
+        public string HungUpList_Init(string UserNo, string fk_flow)
+        {
+            DataTable dt = null;
+            dt = BP.WF.Dev2Interface.DB_GenerHungUpList();
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 草稿

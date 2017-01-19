@@ -2,7 +2,7 @@
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script language="JavaScript" src="./Comm/JScript.js"></script>
-    <script language=javascript>
+    <script language="javascript" >
         function Do(warning, url) {
             if (window.confirm(warning) == false)
                 return;
@@ -10,9 +10,6 @@
             window.location.href = url;
             // WinOpen(url);
         }
-		</script>
-
-          <script   type="text/javascript">
               // 撤销。
               function UnSend(appPath, pageID, fid, workid, fk_flow) {
                   if (window.confirm('您确定要撤销本次发送吗？') == false)
@@ -48,7 +45,6 @@
                       } else {
                           document.getElementById(rowIdx + '_' + i).style.display = sta;
                       }
-
                   }
               }
     </script>

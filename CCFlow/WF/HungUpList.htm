@@ -47,7 +47,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Draft_Init&m=" + Math.random(),
+                url: Handler + "?DoType=HungUpList_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -62,6 +62,10 @@
                         newRow += "<td>" + data[i].FlowName + "</td>";
                         newRow += "<td>" + data[i].RDT + "</td>";
                         newRow += "<td>" + data[i].FlowNote + "</td>";
+                        newRow += "<td>" + data[i].FlowNote + "</td>";
+                        newRow += "<td>" + data[i].FlowNote + "</td>";
+                        newRow += "<td>" + data[i].FlowNote + "</td>";
+
                         newRow += "<td>";
                         newRow += "<a href=\"javascript:Delete('" + data[i].WorkID + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                         newRow += "</td>";
@@ -97,14 +101,18 @@
 </head>
 <body onkeypress="Esc()" >
 
-<table id="Table1" style="width:100%;">
-<caption ><div class='CaptionMsg' >草稿</div></caption>
+<table id="Table1" style="width:100%;  text-align:left">
+<caption ><div class='CaptionMsg' >挂起</div></caption>
 <tr>
 <th>序</th>
 <th>标题</th>
 <th>流程</th>
-<th>日期</th>
-<th>备注</th>
+<th>节点</th>
+<th>发起人</th>
+<th>发起日期</th>
+<th>接受日期</th>
+<th>应完成日期</th>
+<th>状态</th>
 </tr>
 </table>
 

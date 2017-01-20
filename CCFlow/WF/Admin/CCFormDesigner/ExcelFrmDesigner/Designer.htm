@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title></title>
+	<meta charset="utf-8">
 	<link href="/WF/Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
 	<link href="/WF/Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
 	<!--<link href="/WF/Comm/JS/EasyUI/themes/default/layout.css" rel="stylesheet" type="text/css" />-->
@@ -46,7 +47,9 @@
 
 			RightClick_删除: ["SheetBeforeRightClick", /*出现右键菜单，点击删除*/"SheetChange", "a34"],
 			RightClickOnRowHead_删除: ["SheetSelectionChange", "SheetBeforeRightClick", /*出现右键菜单，点击删除*/"SheetChange", "a34"],
-			RightClickOnColumnHead_删除: ["SheetSelectionChange", "SheetBeforeRightClick", /*出现右键菜单，点击删除*/"SheetChange", "a34"]
+			RightClickOnColumnHead_删除: ["SheetSelectionChange", "SheetBeforeRightClick", /*出现右键菜单，点击删除*/"SheetChange", "a34"],
+
+			Name_删除 :[/*公式-命名管理器-选中-删除-关闭*/ "UnkonwID:0x00000a34"]
 		};
 	</script>
 	<script language="javascript" for="WebOffice1" event="NotifyCtrlReady">
@@ -68,14 +71,15 @@
 			console.log("WebOffice1_NotifyCtrlReady | url: " + url);
 			if (url.indexOf("err@") > -1) {
 				alert(url);
-				return false;
+				woObj.LoadOriginalFile("", "xlsx");
+			}else{
+				var ext = url.substr(url.lastIndexOf(".") + 1, url.length - url.lastIndexOf(".") + 1);
+				console.log("WebOffice1_NotifyCtrlReady | ext: " + ext);
+				woObj.LoadOriginalFile(url, ext); //参数 ext 必需！
 			}
-			var ext = url.substr(url.lastIndexOf(".") + 1, url.length - url.lastIndexOf(".") + 1);
-			console.log("WebOffice1_NotifyCtrlReady | ext: " + ext);
-			woObj.LoadOriginalFile(url, ext); //参数 ext 必需！
 			woObj.HideMenuItem(
 				0x01		//新建
-				+ 0x02		//打开
+				//+ 0x02		//打开
 				+ 0x04		//保存
 				+ 0x10		//打印
 				+ 0x20		//打印预览
@@ -93,61 +97,65 @@
 		//WebOffice事件监听
 		function WebOffice1_NotifyWordEvent(eventname) {
 			switch (eventname) {
-			case "DocumentBeforeSave":
-				if (vNoSave) {
-					woObj.lContinue = 0;
-					alert("此文档已经禁止保存");
-				} else {
-					woObj.lContinue = 1;
-				}
-				break;
-			case "DocumentBeforePrint":
-				if (vNoPrint) {
-					woObj.lContinue = 0;
-					alert("此文档已经禁止打印");
-				} else {
-					woObj.lContinue = 1;
-				}
-				break;
-			case "WindowSelectionChange":
-				if (vNoCopy) {
-					woObj.lContinue = 0;
-					//alert("此文档已经禁止复制");
-				} else {
-					woObj.lContinue = 1;
-				}
-				break;
-			case "DocumentBeforeClose":
-				if (vClose == 0) {
-					woObj.lContinue = 0;
-				} else {
-					//alert("word");
-					woObj.lContinue = 1;
-				}
-				break;
-			case "SheetSelectionChange": //变更选中区域//使用代码执行操作时也会触发/Q如何排除？
-				ConsoleLogOnSelect();
-				if (excel.IsCell()) {
-					//根据命名选中DataGrid行
-					var name = excel.GetCellInName();
-					if(name == null){
-						name = "main";
+				case "DocumentBeforeSave":
+					if (vNoSave) {
+						woObj.lContinue = 0;
+						alert("此文档已经禁止保存");
+					} else {
+						woObj.lContinue = 1;
 					}
-					//选中
-					var name = excel.GetName();
-					if (name != null) {
-						SetColumnSelection(name); //gird.select();
+					break;
+				case "DocumentBeforePrint":
+					if (vNoPrint) {
+						woObj.lContinue = 0;
+						alert("此文档已经禁止打印");
+					} else {
+						woObj.lContinue = 1;
 					}
-				} else {
-
-				}
-				break;
-			case "WorkbookNewSheet": //新建sheet页（UnknownID:0x0000061a/UnknownID:0x00000619：切换sheet页）
-				break;
-			default:
-				console.log("WebOffice1_NotifyWordEvent | case default | eventname: " + eventname);
-				break;
+					break;
+				case "WindowSelectionChange":
+					if (vNoCopy) {
+						woObj.lContinue = 0;
+						//alert("此文档已经禁止复制");
+					} else {
+						woObj.lContinue = 1;
+					}
+					break;
+				case "DocumentBeforeClose":
+					if (vClose == 0) {
+						woObj.lContinue = 0;
+					} else {
+						//alert("word");
+						woObj.lContinue = 1;
+					}
+					break;
+				case "SheetSelectionChange": //变更选中区域//使用代码执行操作时也会触发/Q如何排除？
+					ConsoleLogOnSelect();
+					if (excel.IsSingle()) {
+						//选中accordion
+						var tableId = excel.GetCellInName();
+						if(tableId == null){
+							tableId = "main";
+							$("#aa").accordion("select", "表单字段");
+						}
+						else{
+							$("#aa").accordion("select", "子表：" + tableId);
+						}
+						//选中行
+						var columnName = excel.GetName();
+						if (columnName != null) {
+							$("#" + tableId).datagrid("selectRecord", columnName);
+						}
+					} else {
+					}
+					break;
+				case "WorkbookNewSheet": //新建sheet页（UnknownID:0x0000061a/UnknownID:0x00000619：切换sheet页）
+					break;
+				default:
+					// console.log("WebOffice1_NotifyWordEvent | case default | eventname: " + eventname);
+					break;
 			}
+			console.log("WebOffice1_NotifyWordEvent | eventname: " + eventname);
 		}
 	</script>
 	<script type="text/javascript">
@@ -173,14 +181,14 @@
 
 		var _FormNo;
 		var woObj, excel;
-		var form, tableMain;
+		// var form, tableMain;
 		$(document).ready(function () {
 			_FormNo = GetQueryString("FK_MapData");
 			//布局
 			$("body").layout();
 			//主表字段
-			InitTable("main", _FormNo); //TODO: “main”改为和 _FormNo 一致？
-			//子表字段
+			InitTable("main", _FormNo);
+			//子表
 			InitSub();
 		});
 
@@ -200,60 +208,104 @@
 		}
 
 		//创建子表dom
-		function CreateSubDom(id, range, isSelect) { //TODO: 将range信息保存到数据库
-			var btn = document.createElement("button");
-			btn.onclick = function () {
-				ShowSubRange(id);
+		function CreateSubDom(tableId, range, isSelect) { //TODO: 将range信息保存到数据库
+			var btnRefresh = document.createElement("button");
+			btnRefresh.innerText = "刷新";
+			btnRefresh.onclick = function () {
+				RefreshGrid(tableId);
 			};
-			btn.innerText = "显示子表区域";
+
+			var btnShowRange = document.createElement("button");
+			btnShowRange.innerText = "显示子表区域";
+			btnShowRange.onclick = function () {
+				ShowSubRange(tableId);
+			};
 			var table = document.createElement("table");
-			table.id = id;
+			table.id = tableId;
 			table.style = "overflow: auto; padding: 0;";
 			var div = document.createElement("div");
-			div.appendChild(btn);
+			div.appendChild(btnRefresh);
+			div.appendChild(btnShowRange);
 			div.appendChild(table);
 			$("#aa").accordion("add", {
-				title: "子表：" + id,
+				title: "子表：" + tableId,
 				content: div,
 				selected: isSelect
 			});
-			InitTable(table.id, id);
+			InitTable(table.id, tableId);
+		}
+
+		function RefreshGrid(id){
+			$("#" + id).datagrid("reload");
 		}
 
 		//在excel中显示子表的区域
-		function ShowSubRange(id) {
-			alert("显示子表区域：" + id);
-			var range = excel.GetRangeByName(id);
+		function ShowSubRange(tableId) {
+			console.log("ShowSubRange | 显示子表区域：" + tableId);
+			var range = excel.GetRangeByName(tableId);
 			if(range != null){
 				excel.SetSelection(range.split("!")[0].replace("=",""), range.split("!")[1]);
 			}
 		}
 
 		//初始化grid
-		function InitTable(tableid, id) {
-			$("#" + tableid).datagrid({
+		function InitTable(tableId, id) {
+			$("#" + tableId).datagrid({
 				url: "/WF/Admin/CCFormDesigner/handler.ashx?DoType=FiledsList_Init&FK_MapData=" + id + "&m=" + Math.random(), //TODO: 改成专用的？
 				idField: 'KeyOfEn',
 				striped: true,
 				showFooter: false,
 				singleSelect: true,
-				columns: [
-					[
-						{ field: 'KeyOfEn', title: '字段名', width: 70, align: 'left' },
+				columns: [[
+						{ field: 'KeyOfEn', title: '字段名', width: 50, align: 'left' },
 						{ field: 'Name', title: '中文名', width: 85, align: 'left' },
-						{ field: 'MyDataType', title: '类型', width: 50, align: 'left' },
-						{ field: '单元格', title: '单元格', width: 50, align: 'left' },
-						{ field: '操作', title: '操作', width: 55, align: 'left' }
-					]
-				],
+						// { field: 'LGTypeText', title: '类型', width: 50, align: 'left' },
+						{ field: 'AtPara', title: '单元格', width: 70, align: 'left',
+							formatter: function(value,row,index){
+								return GetAtPara(value, "BindCell");
+							}
+						},
+						{ field: '操作', title: '操作', width: 57, align: 'left',
+							formatter: function(value,row,index){
+								// if (row.user){
+								// 	return row.user.name;
+								// } else {
+								// 	return value;
+								// }
+								if(row.CellName)
+									return "<button onclick=\"Unbind('" + tableId + "','" + index + "','" + row.KeyOfEn + "')\" title='解除单元格绑定'>解绑</button>";
+								else
+									return "<button onclick=\"Insert('" + tableId + "','" + index + "','" + row.KeyOfEn + "')\" title='插入到当前单元格'>插入</button>";
+							}
+						}
+				]],
 				onSelect: function (i, r) {
 					//if (r.Sheet && r.Cell) {
 					//	//选中sheet/单元格
 					//	excel.SetSelection(r.Sheet, r.Cell);
-					excel.SetSelection(null, "B2"); //for test
 					//}
+					var bindCell = GetAtPara(r.AtPara, "BindCell");
+					if(bindCell != null){
+						var arrayAddress = bindCell.split("!");
+						var sheet = arrayAddress[0].replace("=", "");
+						var cell = arrayAddress[1];
+						excel.SetSelection(sheet, cell);
+					}
 				}
 			});
+		}
+
+		function GetAtPara(atPara,name){
+			if(atPara){
+				// return atPara;//for test
+				var aryAtPara = atPara.split("@");
+				for(var i = 1; i < aryAtPara.length; i++){
+					if(aryAtPara[i].split("=")[0] == name){
+						return aryAtPara[i].substr(aryAtPara[i].indexOf("=") + 1);
+					}
+				}
+			}
+			// return null;
 		}
 
 		//打开【字段列表】页面
@@ -271,23 +323,239 @@
 			$('#main').datagrid("selectRecord", id);
 		}
 
+		function Unbind(tableId,rowIndex,columnName){
+			//TODO: 更改数据库数据
+			//删除命名
+		}
+
+
+		//grid行的“插入”方法//表id(主子)/
+		function Insert(tableId,rowIndex,columnName){
+			var row = $("#"+tableId).datagrid("getData").rows[rowIndex];
+			//TODO: 判断row本身是否存在绑定单元格信息，->信息是否有效？
+			var bindCell = GetAtPara(row.AtPara, "BindCell");
+			if(bindCell != null){
+				var actualBindCell = excel.GetRangeByName(columnName);
+				if(actualBindCell == null){ //没有该字段对应的命名 -> 继续执行
+
+				}else {
+					if("=" + bindCell == actualBindCell){ //绑定单元格信息有效 -> 
+
+					}else{ 
+					/*/绑定单元格信息无效（row的绑定信息与实际不符）-> 
+						1.清除绑定信息|清除实际命名|绑定当前单元格
+						2.清除绑定信息|使用实际命名
+						3.使用绑定信息|清除实际命名|重新绑定
+					*/
+
+					}
+				}
+			}
+
+			//判断是否选中单个单元格
+			if (excel.IsSingle() != true) {
+				alert("请选中『单个单元格』创建字段！");
+				return false;
+			}
+			//单元格是否已绑定字段
+			var cellName = excel.GetName();
+			if (cellName != null) { //已绑定字段
+				alert("该单元格已存在关联字段，不能重复创建字段！");
+				return false;
+			}
+			//判断单元格是否位于某子表区域内
+			var cellInTable = excel.GetCellInName();
+			if (cellInTable === null) {
+				cellInTable = "main";
+			}
+			if(tableId != cellInTable){
+				if(tableId == "main")
+					alert("当前单元格位于子表'"+cellInTable+"'区域内，不能将主字段'"+columnName+"'插入该单元格！");
+				else
+					alert("当前单元格不在子表'"+tableId+"'区域内，不能将字段'"+columnName+"'插入该单元格！");
+				return false;
+			}
+			var insertExcelResult = false;
+			switch (row.LGType) {
+				case 0: //普通
+					insertExcelResult = InsertNormal(tableId,row);
+					break;
+				case 1: //枚举
+					insertExcelResult = InsertEnum(tableId,row);
+					break;
+				case 2: //外键
+					insertExcelResult = InsertFkey(tableId,row);
+					break;
+				default:
+					break;
+			}
+			if(insertExcelResult){
+				SetBindCell(row.MyPK);
+			}
+			RefreshGrid(tableId);
+		}
+
+		//在当前单元格插入普通字段//tableId(gridId)/columnName:(object)字段
+		function InsertNormal(tableId,column){
+			if(typeof(column)=="object" && column.KeyOfEn!=null) {
+				//单元格命名
+				excel.SetName(column.KeyOfEn);
+				if(tableId != "main"){ //为子表时
+					excel.SetValue(column.Name); //子表表头
+				}
+				return true;
+			}else{
+				console.error("InsertNormal | 字段信息错误！");
+				alert("字段信息错误！");
+				return false;
+			}
+		}
+
+		//在当前单元格插入枚举字段
+		function InsertEnum(tableId,column){
+			//1.设置枚举/外键区域
+			//1.1.建立枚举/外键sheet页
+			excel.AddSheet("MetaData");
+			excel.HideSheet("MetaData");
+			//1.2.获取枚举值列表
+			// var enumKey = "EnumName" + Math.round(Math.random() * 10000);
+			// var enumList = GetEnumList(enumKey);
+			var enumKey = column.UIBindKey;
+			var enumList = GetEnumList(enumKey);
+			//1.3.枚举区域赋值
+			//TODO: 先判断EnumKey是否已存在
+			var c1 = 1;
+			//while (excel.GetValue("MetaData", excel.ConvertInt2Letter(c1) + 1) != null) { //改为根据命名判断
+			while (excel.GetCellInName("MetaData", "$" + excel.ConvertInt2Letter(c1) + "$1") != null) {
+				c1 += 1;
+			}
+			var cL = excel.ConvertInt2Letter(c1);
+			for (var i in enumList) {
+				excel.SetValue(enumList[i].Lab, "MetaData", cL + (parseInt(i) + 1));
+			}
+			//1.4.枚举区域命名
+			excel.SetRangeName(enumKey,
+				"MetaData",
+				"$" + cL + "$1:$" + cL + "$" + enumList.length
+			//"$" + cL + ":$" + cL //不可设置整列！作为数据有效性使用时，可以填入序列以外的值（应不允许）！
+			);
+
+			//2.字段
+			if(tableId == "main"){
+				//2.1.字段(单元格)本身的命名
+				excel.SetName(column.KeyOfEn);
+				//2.2.字段(单元格)本身的数据有效性
+				excel.SetValidation(enumKey);
+			}else{
+				//2.0.子表标题
+				excel.SetValue(column.Name);
+				//2.1.字段(单元格)本身的命名
+				excel.SetName(column.KeyOfEn);
+				//2.2.子表字段(单元格)的数据有效性
+				var tableRange = excel.GetRangeByName(tableId); //e.g. =Sheet1!$B$3:$E$5 => [=Sheet1!,B,3:,E,5]
+				var add = excel.GetCell(); //e.g. $C$2
+				var aryAdd = add.split("$");
+				var range = "$" + aryAdd[1] + "$" + (parseInt(aryAdd[2]) + 1) + ":$" + aryAdd[1] + "$" + tableRange.split("$")[4];
+				excel.SetValidation(enumKey,
+					tableRange.split("!")[0].replace("=",""),
+					range);
+			}
+			return true;
+		}
+
+		//在当前单元格插入外键字段
+		function InsertFkey(tableId,column){
+			//1.设置外键区域
+			//1.1.建立外键sheet页
+			excel.AddSheet("MetaData");
+			excel.HideSheet("MetaData");
+			//1.2.获取外键值列表
+			var fKey = column.UIBindKey;
+			var fList = GetFkeyList(column.MyPK, fKey);
+			//1.3.外键区域赋值
+			//TODO: 先判断Fkey是否已存在
+			var c1 = 1;
+			//while (excel.GetValue("MetaData", excel.ConvertInt2Letter(c1) + 1) != null) { //改为根据命名判断
+			while (excel.GetCellInName("MetaData", "$" + excel.ConvertInt2Letter(c1) + "$1") != null) {
+				c1 += 1;
+			}
+			var cL = excel.ConvertInt2Letter(c1);
+			for (var i in fList) {
+				// excel.SetValue(fList[i][column.UIRefKeyText], "MetaData", cL + (parseInt(i) + 1)); //TODO: 因数据库（MS SQL）中保存的UIRefKeyText为『NAME』,无法正常取值，故暂时写死为『Name』:
+				excel.SetValue(fList[i]["Name"], "MetaData", cL + (parseInt(i) + 1)); //TODO: 其他数据库的大小写情况？
+			}
+			//1.4.外键区域命名
+			excel.SetRangeName(fKey,
+				"MetaData",
+				"$" + cL + "$1:$" + cL + "$" + fList.length
+			//"$" + cL + ":$" + cL //不可设置整列！作为数据有效性使用时，可以填入序列以外的值（应不允许）！
+			);
+
+			//2.字段
+			if(tableId == "main"){
+				//2.1.字段(单元格)本身的命名
+				excel.SetName(column.KeyOfEn);
+				//2.2.字段(单元格)本身的数据有效性
+				excel.SetValidation(fKey);
+			}else{
+				//2.0.子表标题
+				excel.SetValue(column.Name);
+				//2.1.字段(单元格)本身的命名
+				excel.SetName(column.KeyOfEn);
+				//2.2.子表字段(单元格)的数据有效性
+				var tableRange = excel.GetRangeByName(tableId); //e.g. =Sheet1!$B$3:$E$5 => [=Sheet1!,B,3:,E,5]
+				var add = excel.GetCell(); //e.g. $C$2
+				var aryAdd = add.split("$");
+				var range = "$" + aryAdd[1] + "$" + (parseInt(aryAdd[2]) + 1) + ":$" + aryAdd[1] + "$" + tableRange.split("$")[4];
+				excel.SetValidation(fKey,
+					tableRange.split("!")[0].replace("=",""),
+					range);
+			}
+			return true;
+		}
+
+		//保存关联单元格信息到数据库
+		function SetBindCell(pk){
+			var result = false;
+			$.ajax({
+				async: false,
+				url: Handler + "?DoType=SetBindCell&MyPK=" + pk + "&Cell=" + escape(excel.GetCellS()) + "&m=" + Math.random(),
+				dataType: 'json',
+				success: function (data) {
+					if (data.indexOf("err@") > -1) {
+						alert(data);
+						result = false;
+					} else {
+						result = true;
+					}
+				}
+			});
+			return result;
+		}
+
 		//新增字段//表(主/子)
 		function NewColumn(table) {
-			alert("在此表中新建字段：" + table);
+			console.log("NewColumn | 在此表中新建字段：" + table);
+
+			//TODO: 需要注意：字段“英文名”不能和单元格地址类似，例如 ZD1
 
 			var FK_MapData = table == "main" ? _FormNo : table;
 			var url = "/WF/Admin/FoolFormDesigner/FieldTypeList.htm?FK_MapData=" + FK_MapData;
+
 			//打开新建子表页面
-			//var newcolumn = showModalDialog(url);
-
-			//error: easyui的方法会产生图层错误
-			OpenEasyUiDialog(url, 'eudlgframe', '新建字段', 760, 470, 'icon-edit', true, function () {
-				var innerWin = document.getElementById('eudlgframe').contentWindow;
-				//$('#' + txtId).val(innerWin.getReturnText());
-				//$('#' + hiddenId).val(innerWin.getReturnValue());
-			});
-
-			//return newcolumn;
+			// var newcolumn = showModalDialog(url);
+			// return newcolumn;
+			// // //error: easyui的方法会产生图层错误
+			// // OpenEasyUiDialog(url, 'eudlgframe', '新建字段', 760, 470, 'icon-edit', true, function () {
+			// // 	var innerWin = document.getElementById('eudlgframe').contentWindow;
+			// // 	//$('#' + txtId).val(innerWin.getReturnText());
+			// // 	//$('#' + hiddenId).val(innerWin.getReturnValue());
+			// // });
+			//for test:
+			// return {"MyPK":"CSExcelBDDtl6_RDT","FK_MapData":table=="main"?_FormNo:table,"KeyOfEn":"ceshi_normal","Name":"测试普通字段","DefVal":"","UIContralType":0,"MyDataType":7,"LGType":0,"LGTypeText":"普通","UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"","UIRefKey":"无","UIRefKeyText":"","UIVisible":"0","UIIsEnable":"0","UIIsLine":"0","UIIsInput":"0","IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"1","EditType":1,"ColSpan":1,"GroupID":2091,"Idx":999,"AtPara":""};
+			// return {"MyPK":"CSExcelBDDtl6_RDT","FK_MapData":table=="main"?_FormNo:table,"KeyOfEn":"ceshi_enum","Name":"测试枚举字段（费用类型）","DefVal":"","UIContralType":0,"MyDataType":7,"LGType":1,"LGTypeText":"枚举","UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"FYLX","UIRefKey":"无","UIRefKeyText":"","UIVisible":"0","UIIsEnable":"0","UIIsLine":"0","UIIsInput":"0","IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"1","EditType":1,"ColSpan":1,"GroupID":2091,"Idx":999,"AtPara":""};
+			//BP.Port.Emps
+			return {"MyPK":"CSExcelBDDtl6_RDT","FK_MapData":table=="main"?_FormNo:table,"KeyOfEn":"ceshi_enum","Name":"测试枚举字段（费用类型）","DefVal":"","UIContralType":0,"MyDataType":7,"LGType":2,"LGTypeText":"外键","UIWidth":100,"UIHeight":23,"MinLen":0,"MaxLen":300,"UIBindKey":"BP.Port.Emps","UIRefKey":"无","UIRefKeyText":"","UIVisible":"0","UIIsEnable":"0","UIIsLine":"0","UIIsInput":"0","IsSigan":0,"X":5,"Y":5,"GUID":"","Tag":"1","EditType":1,"ColSpan":1,"GroupID":2091,"Idx":999,"AtPara":""};
 		}
 
 		//新建子表并返回子表id
@@ -321,7 +589,7 @@
 
 		//获取枚举列表
 		function GetEnumList(enumkey) {
-			return [{Lab:"abc"}, {Lab:"def"}, {Lab:"xyz"}]; //for test
+			// return [{Lab:"abc"}, {Lab:"def"}, {Lab:"xyz"}]; //for test
 			var enumlist;
 			$.ajax({
 				async: false,
@@ -339,7 +607,26 @@
 			return enumlist;
 		}
 
-		// 根据前缀与字段名，返回他的区域对象，如果没有就返回空.//CopyFrom:D:\ccflow\CCFlow\WF\CCForm\FrmExcel.aspx
+		//获取外键列表
+		function GetFkeyList(pk,Fkey){
+			var fkeyList;
+			$.ajax({
+				async: false,
+				url: Handler + "?DoType=GetFkeyList&FK_MapData=" + _FormNo + "&MyPK=" + pk + "&Fkey=" + Fkey + "&m=" + Math.random(),
+				dataType: 'json',
+				success: function (data) {
+					if (data.indexOf("err@") > -1) {
+						alert(data);
+						return false;
+					} else {
+						fkeyList = data;
+					}
+				}
+			});
+			return fkeyList;
+		}
+
+		//// 根据前缀与字段名，返回他的区域对象，如果没有就返回空.//CopyFrom:D:\ccflow\CCFlow\WF\CCForm\FrmExcel.aspx
 		function getRangeName(sName, sCcflowPrefix, aCurrSheets) {
 			/// <summary>获取指定字段所标识的单元格区域名称对象</summary>
 			/// <param name="sName" type="String">字段名称</param>
@@ -394,55 +681,52 @@
 
 		//新建字段
 		function onclick_btnNewColumn() {
-			console.group("onclick_btnNewColumn");
-
-			console.log(excel.IsCell());
-			if (excel.IsCell() != true) {
-				alert("请选中单个单元格创建字段！");
+			//判断是否选中单个单元格
+			if (excel.IsSingle() != true) {
+				alert("请选中『单个单元格』创建字段！");
 				return false;
 			}
-			//获取单元格
-			var add = excel.GetCell();
-			console.log("onclick_btnNewColumn | Address: " + add);
 			//单元格是否已绑定字段
-			var name = excel.GetName();
-			console.log("onclick_btnNewColumn | name: " + name);
-			if (name === null) { //未绑定字段
-				//判断是否为子表
-				name = excel.GetCellInName();
-				console.log("onclick_btnNewColumn | in name: " + name);
-				if (name === null) {
-					name = "main"; //TODO: type actual value
-				}
-				var newcolumn = NewColumn(name);
-				if(newcolumn){
-					//0.切换手风琴
-					$("#aa").accordion("select","子表：" + name);
-
-					//1.刷新Gird
-					$("#" + name).datagrid("reload");
-
-					//2.Excel操作
-					if(newcolumn.MyDataType == 2){ //枚举/外键 //TODO: 根据新字段类型进行excel的处理
-						//普通字段：设置命名
-						//枚举/外键：参考 onclick_btnNewColumnEnum
-
-					}
-				}
-				console.groupEnd();
-			} else {
-				alert("该单元格已存在关联字段，不能重复创建！");
-				console.groupEnd();
+			var cellName = excel.GetName();
+			if (cellName != null) { //已绑定字段
+				alert("该单元格已存在关联字段，不能重复创建字段！");
 				return false;
 			}
+			//根据当前单元格判断是否为子表
+			var cellInTable = excel.GetCellInName();
+			// console.log("onclick_btnNewColumn | in name: " + name);
+			if (cellInTable === null) {
+				cellInTable = "main";
+			}
+			//创建并获取字段
+			var newcolumn = NewColumn(cellInTable);
+			if(newcolumn){
+				var insertExcelResult = false;
+				switch (newcolumn.LGType) {
+					case 0: //普通
+						insertExcelResult = InsertNormal(cellInTable,newcolumn);
+						break;
+					case 1: //枚举
+						insertExcelResult = InsertEnum(cellInTable,newcolumn);
+						break;
+					case 2: //外键
+						insertExcelResult = InsertFkey(cellInTable,newcolumn);
+						break;
+					default:
+						break;
+				}
+				if(insertExcelResult == true){
+					//保存关联信息 //TODO: 如果新建字段页面改进了（执行了此操作），则此处不用再处理一边
+					SetBindCell(newcolumn.MyPK);
+				}
+				//切换手风琴
+				var accPart = cellInTable == "main" ? "主表字段" : "子表：" + cellInTable;
+				$("#aa").accordion("select",accPart);
 
-			//for test:
-			////设置值
-			//excel.SetValue("SetValue:" + add);
-			////设置命名
-			//excel.SetName("SetName_" + excel.GetCell_$());
-
-			console.groupEnd();
+				//刷新Gird并选中行
+				$("#" + cellInTable).datagrid("reload");
+				$("#" + cellInTable).datagrid("selectRecord",newcolumn.KeyOfEn);
+			}
 		}
 
 		//新建枚举/外键字段//for test
@@ -459,7 +743,8 @@
 			//1.3.枚举区域赋值
 			//TODO: 先判断EnumKey是否已存在
 			var c1 = 1;
-			while (excel.GetValue("MetaData", excel.ConvertInt2Letter(c1) + 1) != null) { //TODO: 改为根据命名判断
+			//while (excel.GetValue("MetaData", excel.ConvertInt2Letter(c1) + 1) != null) { //改为根据命名判断
+			while (excel.GetCellInName("MetaData", "$" + excel.ConvertInt2Letter(c1) + "$1") != null) {
 				c1 += 1;
 			}
 			var cL = excel.ConvertInt2Letter(c1);
@@ -484,28 +769,24 @@
 
 		//新建子表
 		function onclick_btnNewSub() {
-			console.group("onclick_btnNewSub");
-
-			//获取区域
-			var range = excel.GetRange();
-			//判断是否已有命名
-			var name = excel.GetRangeName(); //TODO: 是否遍历所有选中单元格，不允许同一个单元格在两个子表中？
-			if (name === null) {
-				//创建子表
-				//name = "SubName" + Math.round(Math.random() * 10000); //for test
-				name = NewSub();
-				if (name) {
-					//命名
-					excel.SetRangeName(name);
-					CreateSubDom(name);
-				}
-			} else {
-				alert("该区域已存在关联子表，不能重复创建！");
-				console.groupEnd();
+			//判断是否选中单个单元格
+			if (excel.IsSingle() == true) {
+				alert("无法在『单个单元格』中创建子表，请选中一个区域！");
 				return false;
 			}
-
-			console.groupEnd();
+			//判断是否已有命名
+			var rangeName = excel.GetRangeName(); //TODO: 是否遍历所有选中单元格，不允许同一个单元格在两个子表中？
+			if (rangeName != null) {
+				alert("该区域已存在关联子表，不能重复创建！");
+				return false;
+			}
+			//创建子表
+			var newTableId = NewSub();
+			if (newTableId) {
+				//命名
+				excel.SetRangeName(newTableId);
+				CreateSubDom(newTableId);
+			}
 		}
 
 		//关闭/刷新页面前询问
@@ -521,7 +802,7 @@
 					woObj.CloseDoc(0);
 				}
 				else {
-					return "请选择“留在本页”！"; //ie //TODO: other browser?
+					return "请选择“留在本页”！"; //ie //xTODO: other browser?x暂时只支持IE
 				}
 			}
 		}
@@ -544,11 +825,11 @@
 	</div>
 	<div data-options="region:'west'" class="left">
 		<div id="aa" class="easyui-accordion" style="width: 100%; height: 100%;">
-			<div title="主表字段" style="overflow: auto; padding: 0;">
+			<div title="表单字段" style="overflow: auto; padding: 0;">
+				<button onclick="RefreshGrid('main');">
+					刷新</button>
 				<button onclick="OpenFieldsList();">
-					维护明细</button>
-				<button onclick="SetColumnSelection('ZiDuan2016121202');">
-					测试选中行事件</button>
+					维护明细(测试用)</button>
 				<table id="main" border="0" cellpadding="0" cellspacing="0">
 				</table>
 			</div>

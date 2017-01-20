@@ -9,9 +9,16 @@ var Excel = function (wo) {
 };
 Excel.prototype = {
 
-	//是否选中单个单元格
-	IsCell: function() {
-		return (this.GetRange().indexOf(":") == -1);
+	//是否选中单个单元格（包含合并后的单元格）
+	IsSingle: function(){
+		this.Log("Excel.IsSingle | Selection.Count: " + this.app.Selection.Count);
+		this.Log("Excel.IsSingle | Selection.Address: " + this.GetRange());
+		this.Log("Excel.IsSingle | ActiveCell.MergeArea.Address: " + this.app.ActiveCell.MergeArea.Address);
+		if(this.app.Selection.Count == 1){
+			return true;
+		}else{
+			return (this.GetRange() == this.app.ActiveCell.MergeArea.Address);
+		}
 	},
 	//获取当前单元格（不带$符号）//e.g. C2
 	GetCell_$: function() {
@@ -103,8 +110,10 @@ Excel.prototype = {
 			var range = this.app.Names.Item(i).RefersToLocal; //e.g. =Sheet1!$B$3:$E$5
 			if (range.indexOf(":") < 0) { //range不是“区域”时
 				continue;
+			}else if(range.indexOf(sheet) < 0) { //range不在『当前单元格所在sheet页』时
+				continue;
 			} else {
-				var aryRange = range.split("$");
+				var aryRange = range.replace(":","").split("$");
 				if (aryRange.length < 5) { //排除 range 为『单/多整行/列』（e.g. =MetaData!$A:$B）的情况
 					continue;
 				} else {
@@ -123,12 +132,17 @@ Excel.prototype = {
 	},
 	//根据命名获取address
 	GetRangeByName: function(name){
-		for (var i = 1; i <= this.app.Names.Count; i++) {
-			if(this.app.Names.Item(i).Name == name){
-				return this.app.Names.Item(i).RefersToLocal; //e.g. =Sheet1!$B$3:$E$5
-			}
+		// for (var i = 1; i <= this.app.Names.Count; i++) {
+		// 	if(this.app.Names.Item(i).Name == name){
+		// 		return this.app.Names.Item(name).RefersToLocal; //e.g. =Sheet1!$B$3:$E$5
+		// 	}
+		// }
+		// return null;
+		try{
+			return this.app.Names.Item(name).RefersToLocal; //e.g. =Sheet1!$B$3:$E$5
+		}catch(e){
+			return null;
 		}
-		return null;
 	},
 
 	//设置选中范围//'Sheet1', "C2"/$C$2/$B$3:$E$5

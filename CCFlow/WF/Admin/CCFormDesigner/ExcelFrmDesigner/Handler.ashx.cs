@@ -237,11 +237,17 @@ namespace CCFlow.WF.Admin.CCFormDesigner.ExcelFrmDesigner
 					case "NewSub": //新建子表
 						msg = NewSub();
 						break;
+					case "SetBindCell":
+						msg = SetBindCell();
+						break;
 					case "GetSubTables": //获取所有子表信息
 						msg = GetSubTables();
 						break;
 					case "GetEnumList": //获取枚举值列表
 						msg = GetEnumList();
+						break;
+					case "GetFkeyList":
+						msg = GetFkeyList();
 						break;
 					case "DelSub": //删除子表
 						break;
@@ -378,6 +384,27 @@ namespace CCFlow.WF.Admin.CCFormDesigner.ExcelFrmDesigner
 		}
 
 		/// <summary>
+		/// 删除子表（暂时没用）
+		/// </summary>
+		/// <returns></returns>
+		public string DelSub()
+		{
+			return null;
+		}
+
+		/// <summary>
+		/// 设置字段对应单元格
+		/// </summary>
+		/// <returns></returns>
+		public string SetBindCell()
+		{
+			MapAttr ma = new MapAttr(this.MyPK);
+			ma.SetPara("BindCell", this.GetRequestVal("Cell"));
+			ma.Update();
+			return "success";
+		}
+
+		/// <summary>
 		/// 获取所有子表
 		/// </summary>
 		/// <returns></returns>
@@ -399,7 +426,23 @@ namespace CCFlow.WF.Admin.CCFormDesigner.ExcelFrmDesigner
 			return enums.ToJson();
 		}
 
-		public string GetAttrList()
+		/// <summary>
+		/// 获取外键列表
+		/// </summary>
+		/// <returns></returns>
+		public string GetFkeyList()
+		{
+			MapAttr ma = new MapAttr(this.MyPK);
+			//ma.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, this.GetRequestVal("Fkey"));
+			DataTable dt = ma.HisDT;
+			return BP.Tools.Json.ToJson(dt);
+		}
+
+		/// <summary>
+		/// 获取字段列表（暂时没用）
+		/// </summary>
+		/// <returns></returns>
+		public string GetAttrList() //copy from: CCFlow.WF.Admin.CCFormDesigner.Handler.FiledsList_Init()
 		{
 			//DataSet ds = new DataSet();
 			MapAttrs attrs = new MapAttrs();
@@ -426,7 +469,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.ExcelFrmDesigner
 		}
 
 		/// <summary>
-		/// 加载Excel模板
+		/// 加载Excel模板（暂时没用）
 		/// </summary>
 		/// <returns></returns>
 		public void LoadFile(HttpContext context)

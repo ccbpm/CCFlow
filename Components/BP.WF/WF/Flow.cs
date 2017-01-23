@@ -979,7 +979,6 @@ namespace BP.WF
                         wk.SetValByKey(GERptAttr.BillNo, rpt.BillNo);
                     }
 
-
                     rpt.SetValByKey(GERptAttr.FID, 0);
                     rpt.SetValByKey(GERptAttr.FlowStartRDT, BP.DA.DataType.CurrentDataTime);
                     rpt.SetValByKey(GERptAttr.FlowEnderRDT, BP.DA.DataType.CurrentDataTime);

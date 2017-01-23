@@ -5164,11 +5164,13 @@ namespace BP.WF
             gwf.FK_Node = fl.StartNodeID;
             gwf.NodeName = nd.Name;
             gwf.WFState = WFState.Blank;
-            //默认启用草稿,如果写入待办则状态为运行
-            if(fl.DraftRole == DraftRole.SaveToTodolist)
-                gwf.WFState = WFState.Runing;
-            if (fl.DraftRole == DraftRole.SaveToDraftList)
-                gwf.WFState = WFState.Draft;
+
+
+            //默认启用草稿,如果写入待办则状态为运行, zhoupeng 去掉. 2017.1.23 
+            //if(fl.DraftRole == DraftRole.SaveToTodolist)
+            //    gwf.WFState = WFState.Runing;
+            //if (fl.DraftRole == DraftRole.SaveToDraftList)
+            //    gwf.WFState = WFState.Draft;
 
             if (string.IsNullOrEmpty(title))
                 gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);

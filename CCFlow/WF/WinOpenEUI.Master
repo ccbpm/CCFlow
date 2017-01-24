@@ -116,7 +116,7 @@
             请稍候...
         </div>
     </div>
-    <form id="form1" runat="server" onkeypress="NoSubmit(event);">
+    <form id="form1" runat="server" onkeypress="NoSubmit(event);" onkeydown="if(event.keyCode==13){ return false;}" >
     <div id="mainPanel" region="center" border="false" class="mainPanel">
         <% if (IsTab)
            { %>

@@ -8,7 +8,7 @@
     </asp:ContentPlaceHolder>   
 </head>
 <body class="easyui-layout">
-    <form id="aspnetForm" runat="server">
+    <form id="aspnetForm" runat="server"  onkeydown="if(event.keyCode==13){ return false;}" >
     <div data-options="region:'center'" style="padding:5px;">
         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>

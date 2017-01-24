@@ -8,14 +8,12 @@
             //alert(v);
             if (v == null || v == "")
                 return;
-
             window.location.href = appPath + '../MyFlow.aspx?FK_Flow=' + fk_flow + v;
         }
         //发起时打开窗口
         function WinOpenIt(url,winName) {
            // var newWindow = window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
             var newWindow = window.open(url, winName, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
-         
             newWindow.focus();
             return;
         }

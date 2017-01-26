@@ -395,7 +395,7 @@ namespace BP.Web.UC
                     TextBox mytb = ctl as TextBox;
                     if (mytb != null)
                     {
-                        if (!mytb.Enabled || mytb.ReadOnly)
+                        if (mytb.Enabled==false || mytb.ReadOnly)
                         {
                             if (Request.Path.EndsWith("Frm.aspx") || Request.Path.EndsWith("MyFlow.aspx"))
                             {

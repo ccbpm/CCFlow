@@ -1279,24 +1279,22 @@ namespace BP.WF
                                 int i = -1;
                                 foreach (Sys.MapDtl dtl in dtls)
                                 {
+                                    if (dtl.IsCopyNDData == false)
+                                        continue;
+
                                     recDtlLog += "@进入循环开始执行明细表(" + dtl.No + ")copy.";
-
-                                    //i++;
-                                    //if (toDtls.Count <= i)
-                                    //    continue;
-
-                                    //Sys.MapDtl toDtl = (Sys.MapDtl)toDtls[i];
-
 
                                     i++;
                                     //if (toDtls.Count <= i)
                                     //    continue;
                                     Sys.MapDtl toDtl = null;
-
                                     foreach (MapDtl todtl in toDtls)
                                     {
                                         if (todtl.Name.Substring(6, todtl.Name.Length - 6).Equals(dtl.Name.Substring(6, dtl.Name.Length - 6)))
                                         {
+                                            if (todtl.PTable == dtl.PTable)
+                                                break;
+
                                             toDtl = todtl;
                                             break;
                                         }
@@ -3981,6 +3979,10 @@ namespace BP.WF
                 {
                     recDtlLog += "@进入循环开始执行明细表(" + dtl.No + ")copy.";
 
+                    //如果当前的明细表，不需要copy.
+                    if (dtl.IsCopyNDData == false)
+                        continue;
+
                     //i++;
                     //if (toDtls.Count <= i)
                     //    continue;
@@ -3992,11 +3994,13 @@ namespace BP.WF
                     Sys.MapDtl toDtl = null;
                     foreach (MapDtl todtl in toDtls)
                     {
+                        if (todtl.PTable == dtl.PTable)
+                            continue;
+
                         string toDtlName = "";
                         string dtlName = "";
                         try
                         {
-
                             toDtlName = todtl.HisGEDtl.FK_MapDtl.Substring(todtl.HisGEDtl.FK_MapDtl.IndexOf("Dtl"), todtl.HisGEDtl.FK_MapDtl.Length - todtl.HisGEDtl.FK_MapDtl.IndexOf("Dtl"));
                             dtlName = dtl.HisGEDtl.FK_MapDtl.Substring(dtl.HisGEDtl.FK_MapDtl.IndexOf("Dtl"), dtl.HisGEDtl.FK_MapDtl.Length - dtl.HisGEDtl.FK_MapDtl.IndexOf("Dtl"));
                         }

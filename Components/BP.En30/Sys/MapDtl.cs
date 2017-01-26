@@ -1694,8 +1694,23 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_GroupField WHERE CtrlID='" + this.No + "'";
             DBAccess.RunSQLs(sql);
 
+
             if (DBAccess.IsExitsObject(this.PTable))
-                DBAccess.RunSQL("DROP TABLE " + this.PTable);
+            {
+                //如果其他表单引用了该表，就不能删除它.
+                sql = "SELECT COUNT(No) AS NUM  FROM Sys_MapData WHERE PTable='" + this.PTable + "' OR ( PTable='' AND No='" + this.PTable + "')";
+                if (DBAccess.RunSQLReturnValInt(sql, 0) > 1)
+                {
+                    /* 说明有多个表单在引用.*/
+                }
+                else
+                {
+                    DBAccess.RunSQL("DROP TABLE " + this.PTable);
+                }
+            }
+
+            //if (DBAccess.IsExitsObject(this.PTable))
+            //    DBAccess.RunSQL("DROP TABLE " + this.PTable);
 
             return base.beforeDelete();
         }

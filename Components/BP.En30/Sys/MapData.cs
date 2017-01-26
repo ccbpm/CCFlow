@@ -2449,7 +2449,18 @@ namespace BP.Sys
             #region 删除物理表。
             //如果存在物理表.
             if (DBAccess.IsExitsObject(this.PTable))
-                DBAccess.RunSQL("DROP TABLE " + this.PTable);
+            {
+                //如果其他表单引用了该表，就不能删除它.
+                sql = "SELECT COUNT(No) AS NUM  FROM Sys_MapData WHERE PTable='" + this.PTable + "' OR ( PTable='' AND No='" + this.PTable + "')";
+                if (DBAccess.RunSQLReturnValInt(sql, 0) > 1)
+                {
+                    /*说明有多个表单在引用.*/
+                }
+                else
+                {
+                    DBAccess.RunSQL("DROP TABLE " + this.PTable);
+                }
+            }
 
             MapDtls dtls = new MapDtls(this.No);
             foreach (MapDtl dtl in dtls)

@@ -1029,6 +1029,16 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "傻瓜表单设计器";
+                rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
+                rm.Visable = true;
+                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
                 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
@@ -1137,6 +1147,17 @@ namespace BP.WF.Template
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        #endregion
+
+        #region 基本方法.
+        /// <summary>
+        /// 傻瓜表单设计器
+        /// </summary>
+        /// <returns></returns>
+        public string DoDesignerFool()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
         }
         #endregion
 

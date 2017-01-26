@@ -371,7 +371,7 @@ namespace BP.Web.UC
                     TB tb = ctl as TB;
                     if (tb != null)
                     {
-                        if (!tb.Enabled || tb.ReadOnly)
+                        if (tb.Enabled==false || tb.ReadOnly)
                         {
                             if (Request.Path.EndsWith("Frm.aspx") || Request.Path.EndsWith("MyFlow.aspx"))
                             {
@@ -563,19 +563,25 @@ namespace BP.Web.UC
                         TextBox mytb = ctl as TextBox;
                         if (mytb != null)
                         {
+
                             if (mytb.ReadOnly == true)
                             {
-                                if (Request.Path.EndsWith("Dtl.aspx"))
-                                {
-                                    foreach (string paramKey in Request.Params.AllKeys)
-                                    {
-                                        if (paramKey.EndsWith(ctlid))
-                                        {
-                                            en.SetValByKey(attr.Key, Request[paramKey]);
-                                            break;
-                                        }
-                                    }
-                                }
+                                #warning 什么要加这个部分？ 被zhoupeng 去掉  2017.1.26 .
+                                //if (Request.Path.EndsWith("Dtl.aspx"))
+                                //{
+                                //    /*是不是明细表？*/
+                                //    foreach (string paramKey in Request.Params.AllKeys)
+                                //    {
+                                //        if (paramKey == null || paramKey == "")
+                                //            continue;
+
+                                //        if (paramKey.EndsWith(ctlid))
+                                //        {
+                                //            en.SetValByKey(attr.Key, Request[paramKey]);
+                                //            break;
+                                //        }
+                                //    }
+                                //}
                             }
                             else
                             {

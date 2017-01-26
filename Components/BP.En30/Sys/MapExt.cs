@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using BP.DA;
+using BP.Web;
 using BP.En;
 
 namespace BP.Sys
@@ -595,6 +596,58 @@ namespace BP.Sys
                 this.SetValByKey("Doc", value);
             }
         }
+
+       /// <summary>
+       ///  处理自动填充SQL
+       /// </summary>
+       /// <param name="ht"></param>
+       /// <returns></returns>
+        public string AutoFullDLL_SQL_ForDtl(Hashtable htMainEn, Hashtable htDtlEn)
+        {
+            string fullSQL = this.Doc.Replace("@WebUser.No", WebUser.No);
+            fullSQL = fullSQL.Replace("@WebUser.Name", WebUser.Name);
+            fullSQL = fullSQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            fullSQL = fullSQL.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+
+            if (fullSQL.Contains("@"))
+            {
+                foreach (string key in htDtlEn.Keys)
+                {
+                    if (fullSQL.Contains("@") == false)
+                        break;
+                    if (fullSQL.Contains("@" + key + ";") == true)
+                    {
+                        fullSQL = fullSQL.Replace("@" + key + ";", htDtlEn[key] as string);
+                    }
+
+                    if (fullSQL.Contains("@" + key) == true)
+                    {
+                        fullSQL = fullSQL.Replace("@" + key, htDtlEn[key] as string);
+                    }
+                }
+            }
+
+            if (fullSQL.Contains("@"))
+            {
+                foreach (string key in htMainEn.Keys)
+                {
+                    if (fullSQL.Contains("@") == false)
+                        break;
+
+                    if (fullSQL.Contains("@" + key + ";") == true)
+                    {
+                        fullSQL = fullSQL.Replace("@" + key + ";", htMainEn[key] as string);
+                    }
+
+                    if (fullSQL.Contains("@" + key) == true)
+                    {
+                        fullSQL = fullSQL.Replace("@" + key, htMainEn[key] as string);
+                    }
+                }
+            }
+            return fullSQL;
+        }
+
         public string TagOfSQL_autoFullTB
         {
             get

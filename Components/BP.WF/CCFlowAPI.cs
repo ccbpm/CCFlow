@@ -424,6 +424,8 @@ namespace BP.WF
                                 str = str.Replace("@WorkID", workID.ToString());
                                 str = str.Replace("@OID", workID.ToString());
 
+
+
                                 DataRow drMsg = dtAlert.NewRow();
                                 drMsg["Title"] = "退回信息";
                                 drMsg["Msg"] = str;

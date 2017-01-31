@@ -660,14 +660,14 @@ namespace BP.WF
                 }
                 else
                 {
-                    ps.SQL = "SELECT WorkID,FK_Node FROM WF_GenerWorkFlow WHERE Starter=" + dbstr + "FlowStarter AND WFState=" + dbstr + "WFState AND FK_Flow=" + dbstr + "FK_Flow ";
+                    
+                    ps.SQL = "SELECT WorkID,FK_Node FROM WF_GenerWorkFlow WHERE WFState=0 AND Starter=" + dbstr + "FlowStarter AND FK_Flow=" + dbstr + "FK_Flow ";
                     ps.Add(GERptAttr.FlowStarter, emp.No);
-                    ps.Add(GERptAttr.WFState, (int)WFState.Blank);
                     ps.Add(GenerWorkFlowAttr.FK_Flow, this.No);
-                    // throw new Exception(ps.SQL);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
+
                     //如果没有启用草稿，并且存在草稿就取第一条 by dgq 5.28
-                    if (dt.Rows.Count > 0 && IsNewWorkID == false)
+                    if (dt.Rows.Count >0 )
                     {
                         wk.OID = Int64.Parse(dt.Rows[0][0].ToString());
                         wk.RetrieveFromDBSources();
@@ -682,7 +682,7 @@ namespace BP.WF
                 }
 
                 //启用草稿或空白就创建WorkID
-                if (wk.OID == 0 || IsNewWorkID == true)
+                if (wk.OID == 0 )
                 {
                     /* 说明没有空白,就创建一个空白..*/
                     wk.ResetDefaultVal();

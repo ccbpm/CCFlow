@@ -785,6 +785,9 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.WFSta, (int)value);
             }
         }
+        /// <summary>
+        /// 状态
+        /// </summary>
         public string WFStateText
         {
             get
@@ -800,8 +803,12 @@ namespace BP.WF
                         return "挂起";
                     case WF.WFState.Askfor:
                         return "加签";
+                    case WF.WFState.Draft:
+                        return "草稿";
+                    case WF.WFState.ReturnSta:
+                        return "退回";
                     default:
-                        return "未判断";
+                        return "其他"+ws.ToString();
                 }
             }
         }

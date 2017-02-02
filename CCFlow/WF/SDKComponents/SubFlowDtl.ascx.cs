@@ -175,10 +175,13 @@ namespace CCFlow.WF.SDKComponents
 
                     this.AddTD(item.NodeName); //到达节点名称.
 
-                    if (item.WFState == WFState.Complete)
-                        this.AddTD("已完成");
-                    else
-                        this.AddTD("未完成");
+                    // 
+                    this.AddTD(item.WFStateText); //流程的状态.
+
+                    //if (item.WFState == WFState.Complete)
+                    //    this.AddTD("已完成");
+                    //else
+                    //    this.AddTD("未完成");
 
                     this.AddTD("title='"+item.TodoEmps+"'",item.TodoEmps); //到达人员.
                     this.AddTD(BP.DA.DataType.ParseSysDate2DateTimeFriendly(item.RDT)); //日期.

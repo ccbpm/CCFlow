@@ -181,13 +181,13 @@ namespace CCFlow.WF.FlowFormTree
                     int i = flow.RetrieveFromDBSources();
                     if (i <= 0)
                         BP.WF.Dev2Interface.Node_CreateStartNodeWork(this.FK_Flow, null, null, WebUser.No, null);
-                }
 
-                //处理草稿. add by zhoupeng, 开始节点，保存处理草稿.
-                BP.WF.Flow fl = new Flow(this.FK_Flow);
-                if (node.IsStartNode == true && fl.DraftRole != DraftRole.None)
-                {
-                    BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
+                    //处理草稿. add by zhoupeng, 开始节点，保存处理草稿.
+                    BP.WF.Flow fl = new Flow(this.FK_Flow);
+                    if (node.IsStartNode == true && fl.DraftRole != DraftRole.None)
+                    {
+                        BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
+                    }
                 }
 
             }
@@ -811,9 +811,9 @@ namespace CCFlow.WF.FlowFormTree
 
                         mysql = mysql.Replace("@FK_Flow", this.FK_Flow);
 
-                                mysql = mysql.Replace("@WebUser.No", WebUser.No);
+                        mysql = mysql.Replace("@WebUser.No", WebUser.No);
                         mysql = mysql.Replace("@WebUser.Name", WebUser.Name);
-                        mysql = mysql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
 
                         //替换特殊字符.
                         mysql =mysql.Replace("~", "'");

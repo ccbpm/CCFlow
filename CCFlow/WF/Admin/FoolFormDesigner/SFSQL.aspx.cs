@@ -36,6 +36,9 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["DoType"];
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public string FK_MapData
         {
             get
@@ -43,11 +46,17 @@ namespace CCFlow.WF.MapDef
                 return this.Request.QueryString["FK_MapData"];
             }
         }
+        /// <summary>
+        /// 外键表
+        /// </summary>
         public string FK_SFTable
         {
             get
             {
-                return this.Request.QueryString["FK_SFTable"];
+                string str= this.Request.QueryString["FK_SFTable"];
+                if (string.IsNullOrEmpty(str))
+                    str = this.Request.QueryString["RefNo"];
+                return str;
             }
         }
         public string IDX

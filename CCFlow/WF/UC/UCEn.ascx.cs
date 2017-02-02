@@ -3946,20 +3946,31 @@ namespace CCFlow.WF.UC
                 this.Add("<DIV id='Fd" + dtl.No + "' style='position:absolute; left:" + x + "px; top:" + y + "px; width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;' >");
                 this.Add("<span>");
 
+                string paras = this.RequestParas;
+                string strs = "";
+                foreach (string str in this.Request.QueryString.Keys)
+                {
+                    if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+                        continue;
+
+                    strs += "&" + str + "=" + this.Request.QueryString[str];
+                }
+
+
                 string src = "";
                 if (dtl.HisDtlShowModel == DtlShowModel.Table)
                 {
                     if (isReadonly == true)
-                        src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1&FID=" + en.GetValStrByKey("FID", "0") + "&FK_Node=" + this.Request.QueryString["FK_Node"];
+                        src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1" + strs;
                     else
-                        src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=0&FID=" + en.GetValStrByKey("FID", "0") + "&FK_Node=" + this.Request.QueryString["FK_Node"];
+                        src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=0" + strs;
                 }
                 else
                 {
                     if (isReadonly == true)
-                        src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1&FID=" + en.GetValStrByKey("FID", "0");
+                        src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1" + strs;
                     else
-                        src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=0&FID=" + en.GetValStrByKey("FID", "0");
+                        src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=0" + strs;
                 }
 
                 if (this.IsReadonly == true || dtl.IsReadonly)
@@ -3975,7 +3986,6 @@ namespace CCFlow.WF.UC
 
                     //this.Add("<iframe ID='F" + dtl.No + "' Onblur=\"SaveDtl('" + dtl.No + "');\"  src='" + src + "' frameborder=0  style='position:absolute;width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
                     this.Add("<iframe ID='F" + dtl.No + "' onload= 'F" + dtl.No + "load();'  src='" + src + "' frameborder=0  style='position:absolute;width:" + dtl.W + "px; height:" + dtl.H + "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
-
                 }
 
                 this.Add("</span>");

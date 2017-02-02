@@ -810,10 +810,8 @@ namespace CCFlow.WF.FrmTree
                         mysql = mysql.Replace("@FK_Node", this.FK_Node.ToString());
                         mysql = mysql.Replace("@FK_Flow", this.FK_Flow);
 
-                                mysql = mysql.Replace("@WebUser.No", WebUser.No);
+                        mysql = mysql.Replace("@WebUser.No", WebUser.No);
                         mysql = mysql.Replace("@WebUser.Name", WebUser.Name);
-                        mysql = mysql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-
 
                         //替换特殊字符.
                         mysql = mysql.Replace("~", "'");

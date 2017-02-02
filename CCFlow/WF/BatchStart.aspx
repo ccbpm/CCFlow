@@ -20,8 +20,8 @@
             return true;
         }
     </script>
-    <script language="JavaScript" src="./../Comm/JScript.js" type="text/javascript"></script>
-    <script language="JavaScript" src="./../Comm/JS/Calendar/WdatePicker.js" defer="defer"
+    <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript"></script>
+    <script language="JavaScript" src="./Comm/JS/Calendar/WdatePicker.js" defer="defer"
         type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 　　        function SelectAllBS(ctrl) {

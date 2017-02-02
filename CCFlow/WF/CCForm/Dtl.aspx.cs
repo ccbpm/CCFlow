@@ -234,6 +234,7 @@ namespace CCFlow.WF.CCForm
             }
         }
         public string FK_MapData = null;
+        private Hashtable HTTemp = new Hashtable();
         #endregion 属性.
 
         protected void Page_Load(object sender, EventArgs e)
@@ -1301,22 +1302,59 @@ namespace CCFlow.WF.CCForm
                                         ddl1.Attributes["onfocus"] = "SetChange(true);";
                                         if (attr.UIIsEnable)
                                         {
-                                            //   ddl1.Attributes["onchange"] = "SetChange(true);";
-                                            EntitiesNoName ens = attr.HisEntitiesNoName;
-                                            ens.RetrieveAll();
-
-                                            if (ddl1.Bind(ens, val) == false)
+                                            DataTable mydt = this.HTTemp[attr.KeyOfEn] as DataTable;
+                                            if (mydt == null)
                                             {
-
-                                                if (ens.Count >= 1)
+                                                #region 检查是否有 sql 过滤填充?
+                                                foreach (MapExt me in mes)
                                                 {
-                                                    Entity en = ens[0] as Entity;
-                                                    if (en != null && en.GetValStrByKey("Name").Contains("请选择") == false)
+                                                    if (me.ExtType != MapExtXmlList.AutoFullDLL)
+                                                        continue;
+
+                                                    //如果没有数据了，就删除他.
+                                                    if (string.IsNullOrEmpty(me.Doc) == true)
+                                                    {
+                                                        me.Delete();
+                                                        continue;
+                                                    }
+
+                                                    Hashtable htdtl = dtl.Row;
+                                                    foreach (string key in this.Request.QueryString.Keys)
+                                                    {
+                                                        if (string.IsNullOrEmpty(key) == true)
+                                                            continue;
+                                                        if (htdtl.ContainsKey(key) == true)
+                                                            continue;
+                                                        htdtl.Add(key, this.Request.QueryString[key]);
+                                                    }
+
+                                                    string fullSQL = me.AutoFullDLL_SQL_ForDtl(htdtl, this.MainEn.Row);
+                                                    // dtl.GetValStrByKey(me.AttrOfOper);
+
+                                                    mydt = DBAccess.RunSQLReturnTable(fullSQL);
+                                                    this.HTTemp[attr.KeyOfEn] = mydt;
+                                                }
+                                                #endregion
+
+                                                if (mydt == null)
+                                                {
+                                                    EntitiesNoName ens = attr.HisEntitiesNoName;
+                                                    ens.RetrieveAll();
+                                                    mydt = ens.ToDataTableField();
+                                                    HTTemp[attr.KeyOfEn] = mydt;
+                                                }
+                                            }
+
+                                            if (ddl1.Bind(mydt, "No","Name", val) == false)
+                                            {
+                                                if (mydt.Rows.Count >= 1)
+                                                {
+                                                    DataRow dr = mydt.Rows[0]; // en = ens[0] as Entity;
+                                                    if (  dr[1].ToString().Contains("请选择") == false)
                                                     {
                                                         ddl1.Items.Insert(0, new ListItem("请选择", val));
                                                     }
                                                 }
-                                               // ddl1.Items.Insert(0, new ListItem("请选择", val));
                                             }
                                         }
                                         else
@@ -1573,72 +1611,45 @@ namespace CCFlow.WF.CCForm
                                 ddlChild.Attributes["onchange"] = " SetChange (true);";
                                 break;
                             case MapExtXmlList.AutoFullDLL: //自动填充下拉框的范围.
-                                DDL ddlFull = this.Pub1.GetDDLByID("DDL_" + me.AttrOfOper + "_" + mydtl.OID);
-                                if (ddlFull == null)
-                                    continue;
+                                //DDL ddlFull = this.Pub1.GetDDLByID("DDL_" + me.AttrOfOper + "_" + mydtl.OID);
+                                //if (ddlFull == null)
+                                //    continue;
 
-                                string valOld = mydtl.GetValStrByKey(me.AttrOfOper);
+                                //string fullSQL = mydtl.GetValStrByKey(me.AttrOfOper);
                                 //string valOld =ddlFull.SelectedItemStringVal;
+                                //Hashtable htdtl = mydtl.Row;
+                                //foreach (string key in this.Request.QueryString.Keys)
+                                //{
+                                //    if (htdtl.ContainsKey(key) == true)
+                                //        continue;
+                                //    htdtl.Add(key, this.Request.QueryString[key]);
+                                //}
+                                  
+                                //// 宋洪刚 解决如果是退回状态，并且设置自动填充没有值情况下则不进行自动填充！
+                                //DataTable autoFullTable = DBAccess.RunSQLReturnTable(fullSQL);
+                                //bool isHaveValue = string.IsNullOrEmpty(valOld) ? true : false;
+                                //if (autoFullTable.Rows.Count > 0 || isHaveValue)
+                                //{
 
-                                string fullSQL = me.Doc.Replace("@WebUser.No", WebUser.No);
-                                fullSQL = fullSQL.Replace("@WebUser.Name", WebUser.Name);
-                                fullSQL = fullSQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-                                fullSQL = fullSQL.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-                                fullSQL = fullSQL.Replace("@Key", this.Request.QueryString["Key"]);
+                                //    ddlFull.Items.Clear();
+                                //    ddlFull.Bind(autoFullTable, "No", "Name");
+                                //    if (ddlFull.SetSelectItem(valOld) == false)
+                                //    {
+                                //        if (autoFullTable.Rows.Count >= 1)
+                                //        {
+                                //            DataRow dr = autoFullTable.Rows[0];
+                                //            if (dr["Name"].ToString().Contains("请选择") == false)
+                                //            {
+                                //                ddlFull.Items.Insert(0, new ListItem("请选择", valOld));
+                                //            }
+                                //        }
+                                //        ddlFull.SelectedIndex = 0;
 
-                                if (fullSQL.Contains("@"))
-                                {
-                                    Attrs attrsFull = mydtl.EnMap.Attrs;
-                                    foreach (Attr attr in attrsFull)
-                                    {
-                                        if (fullSQL.Contains("@") == false)
-                                            break;
-                                        if (fullSQL.Contains("@" + attr.Key + ";") == false)
-                                            continue;
-                                        fullSQL = fullSQL.Replace("@" + attr.Key + ";", mydtl.GetValStrByKey(attr.Key));
-                                    }
-                                }
-
-                                if (fullSQL.Contains("@"))
-                                {
-                                    /*从主表中取数据*/
-                                    Attrs attrsFull = this.MainEn.EnMap.Attrs;
-                                    foreach (Attr attr in attrsFull)
-                                    {
-                                        if (fullSQL.Contains("@") == false)
-                                            break;
-
-                                        if (fullSQL.Contains("@" + attr.Key + ";") == false)
-                                            continue;
-
-                                        fullSQL = fullSQL.Replace("@" + attr.Key + ";", this.MainEn.GetValStrByKey(attr.Key));
-                                    }
-                                }
-                                // 宋洪刚 解决如果是退回状态，并且设置自动填充没有值情况下则不进行自动填充！
-                                DataTable autoFullTable = DBAccess.RunSQLReturnTable(fullSQL);
-                                bool isHaveValue = string.IsNullOrEmpty(valOld) ? true : false;
-                                if (autoFullTable.Rows.Count > 0 || isHaveValue)
-                                {
-
-                                    ddlFull.Items.Clear();
-                                    ddlFull.Bind(autoFullTable, "No", "Name");
-                                    if (ddlFull.SetSelectItem(valOld) == false)
-                                    {
-                                        if (autoFullTable.Rows.Count >= 1)
-                                        {
-                                            DataRow dr = autoFullTable.Rows[0];
-                                            if (dr["Name"].ToString().Contains("请选择") == false)
-                                            {
-                                                ddlFull.Items.Insert(0, new ListItem("请选择", valOld));
-                                            }
-                                        }
-                                        ddlFull.SelectedIndex = 0;
-
-                                        //ddlFull.Items.Insert(0, new ListItem("请选择" + valOld, valOld));
-                                        //ddlFull.SelectedIndex = 0;
-                                    }
-                                }
-                                ddlFull.Attributes["onchange"] = " SetChange (true);";
+                                //        //ddlFull.Items.Insert(0, new ListItem("请选择" + valOld, valOld));
+                                //        //ddlFull.SelectedIndex = 0;
+                                //    }
+                                //}
+                                //ddlFull.Attributes["onchange"] = " SetChange (true);";
                                 break;
                             case MapExtXmlList.TBFullCtrl: // 自动填充.
                                 TextBox tbAuto = this.Pub1.GetTextBoxByID("TB_" + me.AttrOfOper + "_" + mydtl.OID);
@@ -1990,6 +2001,20 @@ namespace CCFlow.WF.CCForm
                     if (isRowLock == true && dtl.IsRowLock)
                         continue;
 
+                    #region 给系统变量赋值, 经常遇到是 null 的情况.
+                    if (mdtl.DtlOpenType == DtlOpenType.ForFID)
+                        dtl.RefPK = this.FID.ToString();
+                    else
+                        dtl.RefPK = this.RefPKVal;
+
+                    //给FID 赋值.
+                    if (this.FID == 0)
+                        dtl.FID = Int64.Parse(this.RefPKVal);
+                    else
+                        dtl.FID = this.FID;
+                    #endregion
+
+
                     if (dtl.OID < mdtl.RowsOfList + 2)
                     {
                         int myOID = dtl.OID;
@@ -2000,17 +2025,6 @@ namespace CCFlow.WF.CCForm
                         dtl.OID = myOID;
                         if (dtl.OID == mdtl.RowsOfList + 1)
                             isTurnPage = true;
-
-                        if (mdtl.DtlOpenType == DtlOpenType.ForFID)
-                             dtl.RefPK = this.FID.ToString();
-                        else
-                            dtl.RefPK = this.RefPKVal;
-
-                        //给FID 赋值.
-                        if (this.FID == 0)
-                            dtl.FID = Int64.Parse(this.RefPKVal);
-                        else
-                            dtl.FID = this.FID;
 
                         if (isHaveBefore)
                         {
@@ -2033,6 +2047,7 @@ namespace CCFlow.WF.CCForm
                     {
                         if (this.FID != 0)
                             dtl.FID = this.FID;
+
                         if (isHaveBefore)
                         {
                             try
@@ -2048,6 +2063,7 @@ namespace CCFlow.WF.CCForm
                         dtl.Update();
                     }
 
+                    #region 执行保存后的事件.
                     if (isHaveEnd)
                     {
                         /* 如果有保存后的事件。*/
@@ -2060,6 +2076,8 @@ namespace CCFlow.WF.CCForm
                             err += ex.Message;
                         }
                     }
+                    #endregion 执行保存后的事件.
+
                 }
                 catch (Exception ex)
                 {
@@ -2095,6 +2113,15 @@ namespace CCFlow.WF.CCForm
             }
             #endregion 处理事件.
 
+            string url = "";
+            string[] paras = this.RequestParas.Split('&');
+            foreach (string str in paras)
+            {
+                if (str.Contains("EnsName=") || str.Contains("RefPKVal=") || str.Contains("PageIdx")==true )
+                    continue;
+                url += "&"+str;
+            }
+
             if (isTurnPage)
             {
                 int pageNum = 0;
@@ -2105,11 +2132,11 @@ namespace CCFlow.WF.CCForm
                     pageNum = int.Parse(strs[0]) + 1;
                 else
                     pageNum = int.Parse(strs[0]);
-                this.Response.Redirect("Dtl.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&PageIdx=" + pageNum + "&IsWap=" + this.IsWap + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&Key=" + this.Key, true);
+                this.Response.Redirect("Dtl.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&PageIdx=" + pageNum + url, true);
             }
             else
             {
-                this.Response.Redirect("Dtl.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&PageIdx=" + this.PageIdx + "&IsWap=" + this.IsWap + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&Key=" + this.Key, true);
+                this.Response.Redirect("Dtl.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&PageIdx=" + this.PageIdx  +url, true);
             }
         }
         public void ExpExcel()

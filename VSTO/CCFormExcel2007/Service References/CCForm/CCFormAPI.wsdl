@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s1="http://tempuri.org/AbstractTypes" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenerExcelFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="frmID" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="oid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenerExcelFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GenerExcelFileResult" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveExcelFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="frmID" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="oid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="json" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="byt" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SaveExcelFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SaveExcelFileResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="base64Binary" nillable="true" type="s:base64Binary" />
+      <s:element name="boolean" type="s:boolean" />
+    </s:schema>
+    <s:schema targetNamespace="http://tempuri.org/AbstractTypes">
+      <s:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <s:complexType name="StringArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="String" type="s:string" />
+            </s:sequence>
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="GenerExcelFileSoapIn">
+    <wsdl:part name="parameters" element="tns:GenerExcelFile" />
+  </wsdl:message>
+  <wsdl:message name="GenerExcelFileSoapOut">
+    <wsdl:part name="parameters" element="tns:GenerExcelFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="SaveExcelFileSoapIn">
+    <wsdl:part name="parameters" element="tns:SaveExcelFile" />
+  </wsdl:message>
+  <wsdl:message name="SaveExcelFileSoapOut">
+    <wsdl:part name="parameters" element="tns:SaveExcelFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldHttpGetIn" />
+  <wsdl:message name="HelloWorldHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerExcelFileHttpGetIn">
+    <wsdl:part name="userNo" type="s:string" />
+    <wsdl:part name="sid" type="s:string" />
+    <wsdl:part name="frmID" type="s:string" />
+    <wsdl:part name="oid" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerExcelFileHttpGetOut">
+    <wsdl:part name="Body" element="tns:base64Binary" />
+  </wsdl:message>
+  <wsdl:message name="SaveExcelFileHttpGetIn">
+    <wsdl:part name="userNo" type="s:string" />
+    <wsdl:part name="sid" type="s:string" />
+    <wsdl:part name="frmID" type="s:string" />
+    <wsdl:part name="oid" type="s:string" />
+    <wsdl:part name="json" type="s:string" />
+    <wsdl:part name="byt" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="SaveExcelFileHttpGetOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldHttpPostIn" />
+  <wsdl:message name="HelloWorldHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerExcelFileHttpPostIn">
+    <wsdl:part name="userNo" type="s:string" />
+    <wsdl:part name="sid" type="s:string" />
+    <wsdl:part name="frmID" type="s:string" />
+    <wsdl:part name="oid" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerExcelFileHttpPostOut">
+    <wsdl:part name="Body" element="tns:base64Binary" />
+  </wsdl:message>
+  <wsdl:message name="SaveExcelFileHttpPostIn">
+    <wsdl:part name="userNo" type="s:string" />
+    <wsdl:part name="sid" type="s:string" />
+    <wsdl:part name="frmID" type="s:string" />
+    <wsdl:part name="oid" type="s:string" />
+    <wsdl:part name="json" type="s:string" />
+    <wsdl:part name="byt" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="SaveExcelFileHttpPostOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:portType name="CCFormAPISoap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerExcelFile">
+      <wsdl:input message="tns:GenerExcelFileSoapIn" />
+      <wsdl:output message="tns:GenerExcelFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveExcelFile">
+      <wsdl:input message="tns:SaveExcelFileSoapIn" />
+      <wsdl:output message="tns:SaveExcelFileSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="CCFormAPIHttpGet">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldHttpGetIn" />
+      <wsdl:output message="tns:HelloWorldHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerExcelFile">
+      <wsdl:input message="tns:GenerExcelFileHttpGetIn" />
+      <wsdl:output message="tns:GenerExcelFileHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveExcelFile">
+      <wsdl:input message="tns:SaveExcelFileHttpGetIn" />
+      <wsdl:output message="tns:SaveExcelFileHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="CCFormAPIHttpPost">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldHttpPostIn" />
+      <wsdl:output message="tns:HelloWorldHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerExcelFile">
+      <wsdl:input message="tns:GenerExcelFileHttpPostIn" />
+      <wsdl:output message="tns:GenerExcelFileHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveExcelFile">
+      <wsdl:input message="tns:SaveExcelFileHttpPostIn" />
+      <wsdl:output message="tns:SaveExcelFileHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CCFormAPISoap" type="tns:CCFormAPISoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerExcelFile">
+      <soap:operation soapAction="http://tempuri.org/GenerExcelFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveExcelFile">
+      <soap:operation soapAction="http://tempuri.org/SaveExcelFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CCFormAPISoap12" type="tns:CCFormAPISoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerExcelFile">
+      <soap12:operation soapAction="http://tempuri.org/GenerExcelFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveExcelFile">
+      <soap12:operation soapAction="http://tempuri.org/SaveExcelFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CCFormAPIHttpGet" type="tns:CCFormAPIHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="HelloWorld">
+      <http:operation location="/HelloWorld" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerExcelFile">
+      <http:operation location="/GenerExcelFile" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveExcelFile">
+      <http:operation location="/SaveExcelFile" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CCFormAPIHttpPost" type="tns:CCFormAPIHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="HelloWorld">
+      <http:operation location="/HelloWorld" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerExcelFile">
+      <http:operation location="/GenerExcelFile" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveExcelFile">
+      <http:operation location="/SaveExcelFile" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CCFormAPI">
+    <wsdl:port name="CCFormAPISoap" binding="tns:CCFormAPISoap">
+      <soap:address location="http://localhost:26507/WF/CCForm/CCFormAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CCFormAPISoap12" binding="tns:CCFormAPISoap12">
+      <soap12:address location="http://localhost:26507/WF/CCForm/CCFormAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CCFormAPIHttpGet" binding="tns:CCFormAPIHttpGet">
+      <http:address location="http://localhost:26507/WF/CCForm/CCFormAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CCFormAPIHttpPost" binding="tns:CCFormAPIHttpPost">
+      <http:address location="http://localhost:26507/WF/CCForm/CCFormAPI.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -108,7 +108,6 @@ namespace BP.WF
                 //Flow fl = new Flow(fk_flow);
                 //myds.Tables.Add(fl.ToDataTableField("WF_Flow"));
                 #endregion 流程设置信息.
-                
 
                 #region 把主从表数据放入里面.
                 //.工作数据放里面去, 放进去前执行一次装载前填充事件.
@@ -214,7 +213,6 @@ namespace BP.WF
                 //}
                 #endregion
 
-
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"] ;
 
@@ -263,7 +261,6 @@ namespace BP.WF
                     myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
                 }
                 #endregion End把外键表加入DataSet
-
 
                 #region 把流程信息放入里面.
                 //把流程信息表发送过去.
@@ -475,7 +472,6 @@ namespace BP.WF
                 #endregion
 
                 myds.Tables.Add(dtAlert);
-
                 return myds;
             }
             catch (Exception ex)

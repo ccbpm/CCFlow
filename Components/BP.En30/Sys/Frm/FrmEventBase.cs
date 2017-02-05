@@ -208,7 +208,6 @@ namespace BP.Sys
         }
         #endregion
          
-
         #region 要求子类重写的方法(节点事件).
         /// <summary>
         /// 保存后
@@ -243,7 +242,6 @@ namespace BP.Sys
         public string DoIt(string eventType, Entity en, Row row, string atPara)
         {
             this.Row = row;
-
             
             #region 处理参数.
             Row r = en.Row;

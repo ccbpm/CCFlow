@@ -2095,6 +2095,9 @@ namespace BP.Sys
             mdNew.Update();
             return mdNew;
         }
+        /// <summary>
+        /// 修复map.
+        /// </summary>
         public void RepairMap()
         {
             GroupFields gfs = new GroupFields(this.No);
@@ -2203,7 +2206,6 @@ namespace BP.Sys
                     }
                 }
             }
-
         }
         protected override bool beforeInsert()
         {
@@ -2444,7 +2446,6 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_M2M WHERE " + where;
             DBAccess.RunSQLs(sql);
             #endregion 删除相关的数据。
-
             
             #region 删除物理表。
             //如果存在物理表.
@@ -2499,7 +2500,41 @@ namespace BP.Sys
             }
             return " alert( document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value ) ; \t\n " + left + right;
         }
-         
+        /// <summary>
+        /// 获得Excel文件流
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public byte[] ExcelGenerFile(int oid)
+        {
+            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, oid.ToString(), "DBFile");
+            if (by != null)
+                return by;
+            else
+                throw new Exception("@文件没有找到.");
+
+            //说明当前excel文件没有被.
+            string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
+
+            System.IO.FileStream file = new System.IO.FileStream(tempExcel, System.IO.FileMode.Open);
+            file.Read(by, 0, 99999999);
+            return by;
+
+            //if (System.IO.File.Exists(tempExcel) == false)
+            //{
+            //      tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xls";
+            //      if (System.IO.File.Exists(tempExcel) == false)
+            //          throw new Exception("@没有找到模版文件."+tempExcel+" 请确认表单配置.");
+            //}
+            //string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + this.PTable + oid.ToString() + ".xlsx";
+            //System.IO.File.Copy(tempExcel, tempfile);
+            //return "";
+        }
+
+        public void ExcelSaveFile(int oid, byte[] bty)
+        {
+
+        }
     }
     /// <summary>
     /// 映射基础s

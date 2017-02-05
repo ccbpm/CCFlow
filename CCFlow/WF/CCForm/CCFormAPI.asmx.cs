@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using System.Data;
 using System.Web.Services;
 using BP.WF.Template;
 using BP.Sys;
+using BP.DA;
 
 namespace CCFlow.WF.CCForm
 {
@@ -37,6 +39,19 @@ namespace CCFlow.WF.CCForm
             return md.ExcelGenerFile(oid);
         }
         /// <summary>
+        /// 生成vsto模式的数据
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <param name="sid"></param>
+        /// <param name="frmID"></param>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid)
+        {
+            return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid);
+        }
+        /// <summary>
         /// 保存成功
         /// </summary>
         /// <param name="userNo">用户编号</param>
@@ -46,9 +61,74 @@ namespace CCFlow.WF.CCForm
         /// <param name="byt">表单</param>
         /// <returns>保存是否成功</returns>
         [WebMethod]
-        public bool SaveExcelFile(string userNo, string sid, string frmID, int oid,string json, byte[] byt)
+        public void SaveExcelFile(string userNo, string sid, string frmID, int oid, System.Collections.Hashtable htWork, System.Data.DataSet dsDtls, byte[] byt)
         {
-            return true;
+            // 执行保存文件.
+            MapData md = new MapData(frmID);
+            md.ExcelSaveFile(oid, byt);
+
+            //实体.
+            GEEntity wk = new GEEntity(frmID, oid);
+            wk.ResetDefaultVal();
+
+            if (htWork != null)
+            {
+                foreach (string str in htWork.Keys)
+                {
+                    if (wk.Row.ContainsKey(str))
+                        wk.SetValByKey(str, htWork[str]);
+                    else
+                        wk.Row.Add(str, htWork[str]);
+                }
+            }
+            wk.OID = oid;
+            wk.Save();
+
+            if (dsDtls == null)
+                return;
+
+
+            #region 保存从表
+            //明细集合.
+            MapDtls dtls = new MapDtls(frmID);
+
+            //保存从表
+            foreach (System.Data.DataTable dt in dsDtls.Tables)
+            {
+                foreach (MapDtl dtl in dtls)
+                {
+                    if (dt.TableName != dtl.No)
+                        continue;
+                    //获取dtls
+                    GEDtls daDtls = new GEDtls(dtl.No);
+                    daDtls.Delete(GEDtlAttr.RefPK, oid); // 清除现有的数据.
+
+                    // 为从表复制数据.
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
+                        daDtl.RefPK = oid.ToString();
+                        //明细列.
+                        foreach (DataColumn dc in dt.Columns)
+                        {
+                            //设置属性.
+                            daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
+                        }
+
+                        daDtl.ResetDefaultVal();
+
+                        daDtl.RefPK = oid.ToString();
+                        daDtl.RDT = DataType.CurrentDataTime;
+
+                        //执行保存.
+                        if (daDtl.OID > 100)
+                            daDtl.Update(); //插入数据.
+                        else
+                            daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
+                    }
+                }
+            }
+            #endregion 保存从表结束
         }
     }
 }

@@ -1990,7 +1990,6 @@
     <Content Include="WF\Style\themes\icons\xitongleibie.png" />
     <Content Include="WF\TaskPoolApply.aspx" />
     <Content Include="WF\TaskPoolSharing.aspx" />
-    <Content Include="WF\EmpWorks.htm" />
     <Content Include="WF\Todolist.htm" />
     <Content Include="WF\UC\ChangeDept.ascx" />
     <Content Include="WF\UC\ToolsWap.ascx" />
@@ -2174,7 +2173,6 @@
     <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\UC\UIEn.ascx" />
     <Content Include="WF\Do.aspx" />
-    <Content Include="WF\Emps.aspx" />
     <Content Include="WF\EmpWorks.aspx" />
     <Content Include="WF\FlowSearchDtl.aspx" />
     <Content Include="WF\FlowSearchMyWork.aspx" />
@@ -6786,13 +6784,6 @@
     </Compile>
     <Compile Include="WF\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Emps.aspx.cs">
-      <DependentUpon>Emps.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Emps.aspx.designer.cs">
-      <DependentUpon>Emps.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\EmpWorks.aspx.cs">
       <DependentUpon>EmpWorks.aspx</DependentUpon>

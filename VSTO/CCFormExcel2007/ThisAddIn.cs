@@ -5,6 +5,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
 using BP.Excel;
+using System.Management;
 
 namespace CCFlowExcel2007
 {
@@ -15,31 +16,45 @@ namespace CCFlowExcel2007
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             #region 获得外部参数, 这是通过外部传递过来的参数.
-            BP.Excel.Glo.UserNo = "wangtao";
-            BP.Excel.Glo.SID = "2323232323sdsds";
-            BP.Excel.Glo.FK_Flow = "001";
-            BP.Excel.Glo.FK_Node = 301;
-            BP.Excel.Glo.FrmID = "CY6602";
-            BP.Excel.Glo.FK_Node = 305;
-            BP.Excel.Glo.WorkID = 10000;
-            BP.Excel.Glo.WSUrl = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
+
+            Dictionary<string, string> args = Glo.GetArguments();
+            Glo.LoadSuccessful = args["fromccflow"] == "true";
+
+            if(!Glo.LoadSuccessful)
+                return;
+
+            Glo.UserNo = args["UserNo"];
+            Glo.SID = args["SID"];
+            Glo.FK_Flow = args["FK_Flow"];
+            Glo.FK_Node = int.Parse(args["FK_Node"]);
+            Glo.FrmID = args["FrmID"];
+            Glo.WorkID = int.Parse(args["WorkID"]);
+            Glo.WSUrl = args["WSUrl"];
             #endregion 获得外部参数, 这是通过外部传递过来的参数.
 
             #region 校验用户安全与下载文件.
-            CCFlowExcel2007.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
-            byte[] byt = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
+            //CCFlowExcel2007.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
+            //byte[] byt = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
 
             // 把这个bye 保存到 c:\temp.xls 里面.
 
             //打开这个文档.
-
+            System.Windows.Forms.MessageBox.Show("UserNo:" + Glo.UserNo);
             #endregion 校验用户安全与下载文件.
 
 
             //加载保存代码.
             this.Application.WorkbookBeforeSave += new Excel.AppEvents_WorkbookBeforeSaveEventHandler(Application_WorkbookBeforeSave);
-
-
+            
+        //using (ManagementObjectSearcher mos = new ManagementObjectSearcher(  
+        //    "SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + System.Diagnostics.Process.GetCurrentProcess().StartInfo.Arguments))  
+        //{  
+        //    foreach (ManagementObject mo in mos.Get())  
+        //    {
+        //        System.Windows.Forms.MessageBox.Show(mo["CommandLine"] as string);
+        //        //Console.WriteLine(mo["CommandLine"]);  
+        //    }  
+        //}  
 
             //Excel.Worksheet activeWorksheet = ((Excel.Worksheet)Application.ActiveSheet);
             //Excel.Range firstRow = activeWorksheet.get_Range("A1");
@@ -76,9 +91,12 @@ namespace CCFlowExcel2007
         /// <param name="Cancel"></param>
         void Application_WorkbookBeforeSave(Excel.Workbook Wb, bool SaveAsUI, ref bool Cancel)
         {
+            if (!Glo.LoadSuccessful) return;
+
             //执行保存.
-            CCFlowExcel2007.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
-            client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID,null,null);
+            //CCFlowExcel2007.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
+            //client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID,null,null);
+            //System.Windows.Forms.MessageBox.Show("before save");
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)

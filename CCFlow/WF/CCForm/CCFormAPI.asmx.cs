@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Web;
 using System.Data;
 using System.Web.Services;
@@ -51,17 +52,19 @@ namespace CCFlow.WF.CCForm
         {
             return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid);
         }
+      
         /// <summary>
-        /// 保存成功
+        /// 执行保存
         /// </summary>
-        /// <param name="userNo">用户编号</param>
-        /// <param name="sid">SID</param>
-        /// <param name="frmID">表单ID</param>
-        /// <param name="oid">OID</param>
-        /// <param name="byt">表单</param>
-        /// <returns>保存是否成功</returns>
+        /// <param name="userNo"></param>
+        /// <param name="sid"></param>
+        /// <param name="frmID"></param>
+        /// <param name="oid"></param>
+        /// <param name="mainTableAtParas"></param>
+        /// <param name="dsDtls"></param>
+        /// <param name="byt"></param>
         [WebMethod]
-        public void SaveExcelFile(string userNo, string sid, string frmID, int oid, System.Collections.Hashtable htWork, System.Data.DataSet dsDtls, byte[] byt)
+        public void SaveExcelFile(string userNo, string sid, string frmID, int oid, string mainTableAtParas, System.Data.DataSet dsDtls, byte[] byt)
         {
             // 执行保存文件.
             MapData md = new MapData(frmID);
@@ -71,16 +74,18 @@ namespace CCFlow.WF.CCForm
             GEEntity wk = new GEEntity(frmID, oid);
             wk.ResetDefaultVal();
 
-            if (htWork != null)
+            if (mainTableAtParas != null)
             {
-                foreach (string str in htWork.Keys)
+                AtPara ap = new AtPara(mainTableAtParas);
+                foreach (string str in ap.HisHT.Keys)
                 {
                     if (wk.Row.ContainsKey(str))
-                        wk.SetValByKey(str, htWork[str]);
+                        wk.SetValByKey(str, ap.GetValStrByKey(str));
                     else
-                        wk.Row.Add(str, htWork[str]);
+                        wk.Row.Add(str, ap.GetValStrByKey(str));
                 }
             }
+
             wk.OID = oid;
             wk.Save();
 

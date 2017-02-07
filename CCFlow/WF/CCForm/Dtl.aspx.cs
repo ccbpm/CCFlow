@@ -1881,9 +1881,9 @@ namespace CCFlow.WF.CCForm
             }
 
             if (val.Contains("+"))
-                url = "Dtl.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&PageIdx=" + this.PageIdx + "&rowCount=" + _allRowCount + "&AddRowNum=" + ddl.SelectedItemStringVal.Replace("+", "").Replace("-", "") + "&IsCut=0&IsWap=" + this.IsWap + "&FK_Node=" + this.FK_Node + "&Key=" + this.Request.QueryString["Key"]+"&FID="+this.FID;
+                url = "Dtl.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&PageIdx=" + this.PageIdx + "&rowCount=" + _allRowCount + "&AddRowNum=" + ddl.SelectedItemStringVal.Replace("+", "").Replace("-", "") + "&IsCut=0&IsWap=" + this.IsWap + "&FK_Node=" + this.FK_Node + "&Key=" + this.Request.QueryString["Key"]+"&FID="+this.FID+"&PWorkID="+this.Request.QueryString["PWorkID"];
             else
-                url = "Dtl.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&PageIdx=" + this.PageIdx + "&rowCount=" + _allRowCount + "&AddRowNum=" + ddl.SelectedItemStringVal.Replace("+", "").Replace("-", "") + "&IsWap=" + this.IsWap + "&FK_Node=" + this.FK_Node + "&Key=" + this.Request.QueryString["Key"] + "&FID=" + this.FID;
+                url = "Dtl.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&PageIdx=" + this.PageIdx + "&rowCount=" + _allRowCount + "&AddRowNum=" + ddl.SelectedItemStringVal.Replace("+", "").Replace("-", "") + "&IsWap=" + this.IsWap + "&FK_Node=" + this.FK_Node + "&Key=" + this.Request.QueryString["Key"] + "&FID=" + this.FID + "&PWorkID=" + this.Request.QueryString["PWorkID"];
 
             this.Response.Redirect(url, true);
         }

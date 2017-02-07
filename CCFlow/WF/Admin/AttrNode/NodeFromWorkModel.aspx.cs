@@ -185,7 +185,7 @@ namespace CCFlow.WF.Admin
                 nd.FormUrl = this.TB_CustomURL.Text;
                 nd.DirectUpdate();
 
-                md.HisFrmType = BP.Sys.FrmType.Url;  //同事更新表单表住表.
+                md.HisFrmType = BP.Sys.FrmType.Url;  //同时更新表单表住表.
                 md.Url = this.TB_CustomURL.Text;
                 md.Update();
 
@@ -210,8 +210,7 @@ namespace CCFlow.WF.Admin
                     nd.FormType = NodeFormType.SheetTree;
                     nd.DirectUpdate();
 
-
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同事更新表单表住表.
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
                     md.Update();
                 }
                 else
@@ -219,7 +218,7 @@ namespace CCFlow.WF.Admin
                     nd.FormType = NodeFormType.DisableIt;
                     nd.DirectUpdate();
 
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同事更新表单表住表.
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
                     md.Update();
                 }
             }
@@ -245,14 +244,14 @@ namespace CCFlow.WF.Admin
                 {
                     btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm;
 
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;  //同事更新表单表住表.
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;  //同时更新表单表住表.
                     md.Update();
                 }
                 else
                 {
                     btn.WebOfficeFrmModel = BP.Sys.FrmType.FoolForm;
 
-                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同事更新表单表住表.
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
                     md.Update();
                 }
                 

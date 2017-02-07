@@ -476,7 +476,6 @@ namespace BP
                 _Service.DoCompleted += Server_DoCompletedToRefreshSortTree;
                 _Service.DoAsync("DelFlow", flowid, true);
                 flowNoToDel = flowid;
-
             }
         }
         void Server_DoCompletedToRefreshSortTree(object sender, DoCompletedEventArgs e)
@@ -1256,8 +1255,6 @@ namespace BP
                             SelectedContainer.btnRun();
                         break;
                     case "Btn_ToolBarEditFlow":
-                        Glo.OpenWinByDoType("CH", "FlowP", SelectedContainer.FlowID, null, null);
-                        break;
                     case "Btn_ToolBarEditFlowNew":
                         Glo.OpenWinByDoType("CH", "FlowPNew", SelectedContainer.FlowID, null, null);
                         break;

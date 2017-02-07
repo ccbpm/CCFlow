@@ -385,7 +385,7 @@ namespace BP
 
         public static void OpenHelp()
         {
-            Glo.OpenWindow("http://online.ccflow.org/","");
+            Glo.OpenWindow("http://ccbpm.mydoc.io/","");
         }
         public static void OpenGPM()
         {

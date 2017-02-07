@@ -73,7 +73,11 @@ namespace BP.Sys
         /// <summary>
         /// Word类型表单
         /// </summary>
-        WordFrm = 4
+        WordFrm = 4,
+        /// <summary>
+        /// VSTOExccel模式.
+        /// </summary>
+        VSTOForExcel=6
     }
     /// <summary>
     /// 映射基础
@@ -1481,8 +1485,7 @@ namespace BP.Sys
 
 
                 // enumFrmType  @自由表单，@傻瓜表单，@嵌入式表单.  
-                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
-                    true, false, MapDataAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
+                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",true, false, MapDataAttr.FrmType);
 
                 // 应用类型.  0独立表单.1节点表单
                 map.AddTBInt(MapDataAttr.AppType, 0, "应用类型", true, false);

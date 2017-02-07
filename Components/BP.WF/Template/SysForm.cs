@@ -119,12 +119,9 @@ namespace BP.WF.Template
                 map.AddTBStringPK(SysFormAttr.No, null, null, true, true, 1, 200, 4);
                 map.AddTBString(SysFormAttr.Name, null, null, true, false, 0, 500, 10);
 
-                //表单的运行类型.
-                map.AddDDLSysEnum(SysFormAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
-                    true, false, SysFormAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
-
-                //map.AddDDLSysEnum(SysFormAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "运行类型",
-                //    true, false, SysFormAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=嵌入式表单@4=Silverlight表单");
+                //表单类型.
+                map.AddTBInt(Sys.MapDataAttr.FrmType, 1, "表单类型", true, false);
+               
 
                 //该表单对应的物理表
                 map.AddTBString(SysFormAttr.PTable, null, "物理表", true, false, 0, 50, 10);

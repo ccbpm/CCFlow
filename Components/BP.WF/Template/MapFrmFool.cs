@@ -153,7 +153,7 @@ namespace BP.WF.Template
                 map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
-                    true, false, MapDataAttr.FrmType, "@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单");
+                    true, false, MapDataAttr.FrmType);
                 #endregion 基本属性.
 
                 #region 设计者信息.

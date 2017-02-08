@@ -395,7 +395,7 @@ namespace BP.Tools
             appendMenus.Append("[{");
             appendMenus.Append("'id':'" + root.No + "'");
             appendMenus.Append(",'text':'" + root.Name + "'");
-
+            appendMenus.Append(",'state':'open'");
             // 增加它的子级.
             appendMenus.Append(",'children':");
             AddChildren(root, ens);
@@ -417,10 +417,13 @@ namespace BP.Tools
                     continue;
 
                 appendMenuSb.Append("{'id':'" + item.No + "','text':'" + item.Name + "','state':'closed'");
-                EntityTree treeNode = item as EntityTree;
-                // 增加它的子级.
-                appendMenuSb.Append(",'children':");
-                AddChildren(item, ens);
+                EntityTree treeNode = ens.GetEntityByKey(EntityTreeAttr.ParentNo, item.No) as EntityTree;
+                if (treeNode != null)
+                {
+                    // 增加它的子级.
+                    appendMenuSb.Append(",'children':");
+                    AddChildren(item, ens);
+                }
                 appendMenuSb.Append("},");
             }
             if (appendMenuSb.Length > 1)

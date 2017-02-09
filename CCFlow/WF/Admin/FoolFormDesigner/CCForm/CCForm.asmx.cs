@@ -535,13 +535,20 @@ namespace BP.Web
                     attr.LGType = FieldTypeS.FK;
                     attr.Insert(); //执行保存.
 
+                    //added by liuxc,2017-2-9,增加影子字段，修复级联时报错问题
+                    attr.MyPK = fk_mapData + "_" + fieldKey + "T";
+                    attr.KeyOfEn = fieldKey + "T";
+                    attr.UIContralType = UIContralType.TB;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false; // 隐藏字段.
+                    attr.Insert();
+
                     //在数据库里增加相应的字段,等到修复表的时候创建报错误.
                     MapData md = new MapData(attr.FK_MapData);
                     GEEntity ge = md.HisGEEn;
                     ge.CheckPhysicsTable(); //创建该字段.
                     return "OK";
                 }
-
                 
                 // 外部数据或者WS数据.
                 MapAttr myattr = new MapAttr();
@@ -567,7 +574,7 @@ namespace BP.Web
                 myattr.KeyOfEn = fieldKey + "T";
                 myattr.UIContralType = UIContralType.TB;
                 myattr.UIVisible = false;
-                myattr.UIIsEnable = false; // 让其不是隐藏字段.
+                myattr.UIIsEnable = false; // 隐藏字段.
                 myattr.Insert();
 
                 //在数据库里增加相应的字段,等到修复表的时候创建报错误.

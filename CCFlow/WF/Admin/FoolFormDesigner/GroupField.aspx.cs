@@ -42,9 +42,13 @@ namespace CCFlow.WF.MapDef
             {
                 string s = this.Request.QueryString["FK_MapData"];
                 if (s == null)
-                    return "t";
-                else
+                {
+                    s = this.Request.QueryString["RefNo"];
+                    if (s == null)
+                        return "t"; 
                     return s;
+                }
+                return s;
             }
         }
         #endregion 属性.

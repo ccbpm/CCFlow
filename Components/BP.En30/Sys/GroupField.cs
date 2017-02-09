@@ -227,7 +227,7 @@ namespace BP.Sys
           //  this.Update("Lab", this.Lab);
             string sql = "UPDATE Sys_GroupField SET LAB='"+this.Lab+"' WHERE OID="+this.OID;
             BP.DA.DBAccess.RunSQL(sql);
-            return false;
+            return base.beforeUpdate(); //edited by liuxc,2017-2-9,修复GroupField不能更新的问题
         }
 
        

@@ -5,10 +5,6 @@
 CH="@0=不控制@1=上传附件个数不能为0@2=每个类别下面的个数不能为0"
 EN="" JP="" RU=""  />
 
-<Item Key="FrmType" Name="表单类型"
-  CH="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单"
-  EN="" JP="" RU=""  />
-  
 <Item Key="CodeStruct" Name="表数据来源类型"
 CH="@0=普通的编码表(具有No,Name)@1=树结构(具有No,Name,ParentNo)@2=行政机构编码表(编码以两位编号标识级次树形关系)" 
 EN=""
@@ -79,8 +75,8 @@ RU="" />
      RU="@0=单行文本@1=多行文本@2=富文本@3=超大文本" />
 
   <Item Key="FrmType" Name="表单类型"
-     CH="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单"
-     EN="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单"
-     JP="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单"
-     RU="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单" />
+     CH="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单"
+     EN="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单"
+     JP="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单"
+     RU="@0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单" />
 </NewDataSet>

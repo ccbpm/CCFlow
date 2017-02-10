@@ -216,7 +216,6 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="Entities\StartupArgs.cs" />
     <Compile Include="FrmWorks.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -240,6 +239,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="RibbonCCFlow.resx">
+      <DependentUpon>RibbonCCFlow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TaskPanel.resx">
       <DependentUpon>TaskPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -254,6 +256,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RibbonCCFlow.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RibbonCCFlow.Designer.cs">
+      <DependentUpon>RibbonCCFlow.cs</DependentUpon>
     </Compile>
     <Compile Include="Service References\CCForm\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -299,6 +307,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <!-- Include the build rules for a C# project. -->
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -313,7 +322,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
         <ProjectProperties HostName="Excel" HostPackage="{20A848B8-E01F-4801-962E-25DB0FF57389}" OfficeVersion="14.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="VSTOTemplates" DebugInfoExeName="#Software\Microsoft\Office\14.0\Excel\InstallRoot\Path#excel.exe" AddItemTemplatesGuid="{147FB6A7-F239-4523-AE65-B6A4E49B361F}" />
-        <Host Name="Excel" GeneratedCodeNamespace="CCFlowExcel2007" IconIndex="0">
+        <Host Name="Excel" GeneratedCodeNamespace="CCFlowExcel" IconIndex="0">
           <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
         </Host>
       </FlavorProperties>

@@ -6,8 +6,9 @@ using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
 using BP.Excel;
 using System.Management;
+using System.Windows.Forms;
 
-namespace CCFlowExcel2007
+namespace CCFlowExcel
 {
     public partial class ThisAddIn
     {
@@ -16,13 +17,18 @@ namespace CCFlowExcel2007
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             #region 获得外部参数, 这是通过外部传递过来的参数.
-
+            
             Dictionary<string, string> args = Glo.GetArguments();
             Glo.LoadSuccessful = args["fromccflow"] == "true";
 
             if(!Glo.LoadSuccessful)
+            {
+                //隐藏操作按钮区域
+                Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = false;
                 return;
+            }
 
+            Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
             Glo.UserNo = args["UserNo"];
             Glo.SID = args["SID"];
             Glo.FK_Flow = args["FK_Flow"];
@@ -38,24 +44,13 @@ namespace CCFlowExcel2007
 
             // 把这个bye 保存到 c:\temp.xls 里面.
 
-            //打开这个文档.
-            System.Windows.Forms.MessageBox.Show("UserNo:" + Glo.UserNo);
             #endregion 校验用户安全与下载文件.
 
-
-            //加载保存代码.
-            this.Application.WorkbookBeforeSave += new Excel.AppEvents_WorkbookBeforeSaveEventHandler(Application_WorkbookBeforeSave);
+            //单元格内容变动监听事件
+            this.Application.SheetChange += new Excel.AppEvents_SheetChangeEventHandler(Application_SheetChange);
+            //保存事件
+            this.Application.WorkbookAfterSave += new Excel.AppEvents_WorkbookAfterSaveEventHandler(Application_WorkbookAfterSave);
             
-        //using (ManagementObjectSearcher mos = new ManagementObjectSearcher(  
-        //    "SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + System.Diagnostics.Process.GetCurrentProcess().StartInfo.Arguments))  
-        //{  
-        //    foreach (ManagementObject mo in mos.Get())  
-        //    {
-        //        System.Windows.Forms.MessageBox.Show(mo["CommandLine"] as string);
-        //        //Console.WriteLine(mo["CommandLine"]);  
-        //    }  
-        //}  
-
             //Excel.Worksheet activeWorksheet = ((Excel.Worksheet)Application.ActiveSheet);
             //Excel.Range firstRow = activeWorksheet.get_Range("A1");
             //firstRow.EntireRow.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
@@ -84,12 +79,24 @@ namespace CCFlowExcel2007
         }
 
         /// <summary>
-        /// 执行保存.
+        /// 单元格内容变动监听事件
+        /// </summary>
+        /// <param name="sh"></param>
+        /// <param name="range"></param>
+        void Application_SheetChange(object sh, Excel.Range range)
+        {
+            if (!Glo.LoadSuccessful) return;
+
+            Excel.Worksheet sheet = sh as Excel.Worksheet;
+            MessageBox.Show(sheet.Name + "," + range.Value);
+        }
+
+        /// <summary>
+        /// 执行保存
         /// </summary>
         /// <param name="Wb"></param>
-        /// <param name="SaveAsUI"></param>
-        /// <param name="Cancel"></param>
-        void Application_WorkbookBeforeSave(Excel.Workbook Wb, bool SaveAsUI, ref bool Cancel)
+        /// <param name="Success"></param>
+        void Application_WorkbookAfterSave(Excel.Workbook Wb, bool Success)
         {
             if (!Glo.LoadSuccessful) return;
 

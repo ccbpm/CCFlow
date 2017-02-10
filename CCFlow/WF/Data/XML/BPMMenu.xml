@@ -5,6 +5,7 @@
     <Item No="0102" Name="岗位类型" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.StationTypes" Img="../WF/Img/Btn/Card.gif" />
     <Item No="0103" Name="岗位" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Stations" Img="../WF/Img/Btn/WorkerList.gif" />
     <Item No="0104" Name="职务维护" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.Dutys" Img="../WF/Img/Btn/Reply.gif" />
+    <Item No="0107" Name="岗位分配" Url="StationToDeptEmp.aspx" Img="../WF/Img/Btn/Reply.gif" />
     <!--<Item No="0105" Name="组织结构" Url="OrganizationalStructure.aspx" Img="../WF/Img/Btn/DTS.gif" />-->
     <Item No="0105" Name="组织结构" Url="Organization.aspx" Img="../WF/Img/Btn/DTS.gif" />
     <Item No="0106" Name="管理员设置" Url="ManagerDept.aspx" Img="../WF/Img/Btn/DTS.gif" />

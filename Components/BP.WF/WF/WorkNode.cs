@@ -1974,7 +1974,6 @@ namespace BP.WF
                 if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.IsPass)
                 {
                     /*如果有流程完成条件，并且流程完成条件是通过的。*/
-
                     string stopMsg = this.HisFlowCompleteConditions.ConditionDesc;
                     /* 如果流程完成 */
                     string overMsg = this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, "符合流程完成条件:" + stopMsg, this.HisNode, this.rptGe);
@@ -1982,8 +1981,8 @@ namespace BP.WF
 
                     // string path = BP.Sys.Glo.Request.ApplicationPath;
                     string mymsg = "@符合工作流程完成条件" + stopMsg + "" + overMsg;
-                    string mymsgHtml = mymsg + "@查看<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='" + VirPath + "WF/WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
-                    this.addMsg(SendReturnMsgFlag.FlowOver, mymsg, mymsgHtml, SendReturnMsgType.Info);
+                    //   string mymsgHtml = mymsg + "@查看<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='" + VirPath + "WF/WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
+                    this.addMsg(SendReturnMsgFlag.FlowOver, mymsg, mymsg, SendReturnMsgType.Info);
                 }
             }
             catch (Exception ex)

@@ -520,19 +520,6 @@ namespace BP.WF
                     strs += "@" + dr[0].ToString();
                 nd.HisDeptStrs = strs;
 
-                // 可执行人员。
-                //NodeEmps ndemps = new NodeEmps(nd.NodeID);
-                //strs = "";
-                //foreach (NodeEmp ndp in ndemps)
-                //    strs += "@" + ndp.FK_Emp;
-                //nd.HisEmps = strs;
-
-                //// 子流程。
-                //NodeFlows ndflows = new NodeFlows(nd.NodeID);
-                //strs = "";
-                //foreach (NodeFlow ndp in ndflows)
-                //    strs += "@" + ndp.FK_Flow;
-                //nd.HisSubFlows = strs;
 
                 // 节点方向.
                 strs = "";

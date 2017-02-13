@@ -2387,21 +2387,6 @@ namespace BP.En
                     if (mykey.Contains("@" + attr.Key + ",") == false)
                         continue;
 
-                //if (attr.IsPK)
-                //{
-                //    // #warning add 2009 - 11- 04
-                //    // 两个PK 的情况。
-                //    // continue;
-                //    if (en.PKCount == 1)
-                //        continue;
-                //}
-                //else
-                //{
-                //    if (keys != null)
-                //        if (mykey.Contains("@" + attr.Key+",") == false)
-                //            continue;
-                //}
-
                 if (dbVarStr == "?")
                     val = val + "," + attr.Field + "=" + dbVarStr;
                 else

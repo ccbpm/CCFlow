@@ -3040,15 +3040,17 @@ namespace BP.WF
             t.NDToT = nd.Name;
 
             if (empNoTo == null)
+            {
                 t.EmpTo = WebUser.No;
-            else
-                t.EmpTo = empNoTo;
-
-            if (empNameTo == null)
                 t.EmpToT = WebUser.Name;
+            }
             else
+            {
+                t.EmpTo = empNoTo;
                 t.EmpToT = empNameTo;
+            }
 
+             
             t.Msg = msg;
 
             if (tag != null)
@@ -6976,7 +6978,7 @@ namespace BP.WF
                 }
             }
 
-
+            //写入日志.
             BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, workid, gwf.FID, askForNote, ActionType.AskforHelp, "", null, null, emp.No, emp.Name);
 
             Flow fl = new Flow(gwf.FK_Flow);

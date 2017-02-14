@@ -2471,57 +2471,10 @@ namespace BP.Sys
 				dtl.Delete();
 
 			#endregion
-<<<<<<< .mine
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="mes"></param>
-        /// <param name="en"></param>
-        /// <returns></returns>
-        public GEEntity GenerHisEn(MapExts mes, GEEntity en)
-        {
-            return en;
-        }
-        /// <summary>
-        /// 生成自动的ｊｓ程序。
-        /// </summary>
-        /// <param name="pk"></param>
-        /// <param name="attrs"></param>
-        /// <param name="attr"></param>
-        /// <param name="tbPer"></param>
-        /// <returns></returns>
-        public static string GenerAutoFull(string pk, MapAttrs attrs, MapExt me, string tbPer)
-        {
-            string left = "\n document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value = ";
-            string right = me.Doc;
-            foreach (MapAttr mattr in attrs)
-            {
-                right = right.Replace("@" + mattr.KeyOfEn, " parseFloat( document.forms[0]." + tbPer + "_TB_" + mattr.KeyOfEn + "_" + pk + ".value) ");
-            }
-            return " alert( document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value ) ; \t\n " + left + right;
-        }
 
-        #region 与Excel相关的操作 .
-        /// <summary>
-        /// 获得 Excel 文件流
-        /// </summary>
-        /// <param name="oid"></param>
-        /// <returns></returns>
-        public byte[] ExcelGenerFile(int oid)
-        {
-            //先在数据里找，如果数据库没有就加载模版文件.
-            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, oid.ToString(), "DBFile");
-            if (by != null)
-                return by;
-=======
 			return base.beforeDelete();
 		}
->>>>>>> .r1557
 
-<<<<<<< .mine
-            //说明当前excel文件没有,就加载模版文件.
-            string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
-=======
 		/// <summary>
 		/// 
 		/// </summary>
@@ -2550,14 +2503,8 @@ namespace BP.Sys
 			}
 			return " alert( document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value ) ; \t\n " + left + right;
 		}
->>>>>>> .r1557
 
-<<<<<<< .mine
-            by = null;
-            System.IO.FileStream file = new System.IO.FileStream(tempExcel, System.IO.FileMode.Open);
-            file.Read(by, 0, 99999999);
-            return by;
-=======
+		#region 与Excel相关的操作 .
 		/// <summary>
 		/// 获得Excel文件流
 		/// </summary>
@@ -2586,10 +2533,6 @@ namespace BP.Sys
 					throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
 				}
 			}
->>>>>>> .r1557
-<<<<<<< .mine
-        }
-=======
 
 			//if (System.IO.File.Exists(tempExcel) == false)
 			//{
@@ -2601,42 +2544,12 @@ namespace BP.Sys
 			//System.IO.File.Copy(tempExcel, tempfile);
 			//return "";
 		}
->>>>>>> .r1557
 
 		public void ExcelSaveFile(int oid, byte[] bty)
 		{
-            //先在数据里找，如果数据库没有就加载模版文件.
-            BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, oid.ToString(), "DBFile");
-        }
-        #endregion 与Excel相关的操作 .
-
-<<<<<<< .mine
-    }
-    /// <summary>
-    /// 映射基础s
-    /// </summary>
-    public class MapDatas : EntitiesMyPK
-    {
-        #region 构造
-        /// <summary>
-        /// 映射基础s
-        /// </summary>
-        public MapDatas()
-        {
-        }
-        /// <summary>
-        /// 得到它的 Entity
-        /// </summary>
-        public override Entity GetNewEntity
-        {
-            get
-            {
-                return new MapData();
-            }
-        }
-        #endregion
-=======
+			BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, oid.ToString(), "DBFile");
 		}
+		#endregion 与Excel相关的操作 .
 	}
 	/// <summary>
 	/// 映射基础s
@@ -2661,7 +2574,6 @@ namespace BP.Sys
 			}
 		}
 		#endregion
->>>>>>> .r1557
 
 		#region 为了适应自动翻译成java的需要,把实体转换成List.
 		/// <summary>

@@ -261,7 +261,6 @@ namespace BP.DA
                 cm.CommandText = strSQL;
                 cm.CommandType = CommandType.Text;
 
-
                 // 执行它.
                 try
                 {

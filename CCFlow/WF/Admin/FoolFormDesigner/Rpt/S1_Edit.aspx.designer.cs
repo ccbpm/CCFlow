@@ -40,6 +40,15 @@ namespace CCFlow.WF.MapDef.Rpt {
         protected global::System.Web.UI.WebControls.TextBox TB_Note;
         
         /// <summary>
+        /// Btn_New 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::BP.Web.Controls.LinkBtn Btn_New;
+        
+        /// <summary>
         /// Btn_Save1 控件。
         /// </summary>
         /// <remarks>

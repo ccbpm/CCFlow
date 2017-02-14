@@ -878,7 +878,11 @@ namespace CCFlow.WF.UC
             {
                 this.gwf = new GenerWorkFlow();
                 this.gwf.WorkID = this.WorkID;
-                this.gwf.Retrieve();
+                if (this.gwf.RetrieveFromDBSources() == 0)
+                {
+                    this.ToMsgPage("@该流程ID{"+this.WorkID+"}不存在，或者已经被删除.");
+                    return;
+                }
             }
 
             // 检查是否可以发起该流程？

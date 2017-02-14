@@ -32,10 +32,47 @@
         </tr>
     </table>
     <br />
+     <cc1:LinkBtn ID="Btn_New" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-new'"
+        Text="创建新报表" OnClick="Btn_New_Click" />
+
     <cc1:LinkBtn ID="Btn_Save1" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-save'"
         Text="保存" OnClick="Btn_Save_Click" />
     <cc1:LinkBtn ID="Btn_SaveAndNext1" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-save'"
         Text="保存并设置显示列" OnClick="Btn_SaveAndNext1_Click" />
     <cc1:LinkBtn ID="Btn_Cancel1" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-undo'"
         Text="取消" OnClick="Btn_Cancel_Click" />
+    <br />
+    <%
+        string sql = "SELECT No,Name FROM Sys_MapData WHERE AtPara LIKE '%"+this.FK_Flow+"%'";
+        System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+        if (dt.Rows.Count == 0)
+        {
+            
+         %>
+        <table>
+        <caption> 报表列表 </caption>
+
+        <tr>
+        <th> 编号</th>
+        <th> 名称</th>
+        <th> 操作</th>
+        </tr>
+
+        <% foreach (System.Data.DataRow dr in dt.Rows)
+           {
+               string no = dr["No"].ToString();
+               %>
+               <tr>
+               <td> <%=dr["No"] %> </td>
+               <td> <%=dr["Name"] %> </td>
+               <td> <a href="" > 修改 </a> | <a href="" > 删除 </a> </td>
+               </tr>
+               <%
+           } %>
+        <tr>
+        <td> </td>
+        </tr>
+        </table>
+
+        <%} %>
 </asp:Content>

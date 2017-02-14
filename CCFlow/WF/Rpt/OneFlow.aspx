@@ -43,6 +43,12 @@
                    { %>
                 <div class="easyui-panel" title="报表设计/监控" data-options="collapsible:true,border:false" style="height: auto">
                     <ul class="navlist">
+                     <%-- <li>
+                            <div>
+                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S0_RptsList.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
+                                    <span class="nav">0. 报表列表</span></a></div>
+                        </li>--%>
+
                         <li>
                             <div>
                                 <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S1_Edit.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">

@@ -33,6 +33,9 @@ namespace CCFlow.WF.Rpt
                 return s;
             }
         }
+        /// <summary>
+        /// 报表编号
+        /// </summary>
         public string RptNo
         {
             get

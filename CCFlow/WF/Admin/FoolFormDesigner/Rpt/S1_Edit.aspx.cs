@@ -54,6 +54,16 @@ namespace CCFlow.WF.MapDef.Rpt
             if (string.IsNullOrEmpty(rpt.No) == false)
                 this.TB_No.Enabled = false;
         }
+        /// <summary>
+        /// 创建新报表
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void Btn_New_Click(object sender, EventArgs e)
+        {
+            Response.Redirect(string.Format("S1_Edit.aspx?FK_MapData={0}&FK_Flow={1}&RptNo={2}&s={3}", FK_MapData,
+                                            FK_Flow, RptNo, DateTime.Now.ToString("yyyyMMddHHmmssffffff")), true);
+        }
 
         protected void Btn_Save_Click(object sender, EventArgs e)
         {
@@ -76,6 +86,7 @@ namespace CCFlow.WF.MapDef.Rpt
                 rpt.No = this.RptNo;
 
             Flow fl = new Flow(this.FK_Flow);
+
             rpt.PTable = fl.PTable;
             rpt.Save();
         }

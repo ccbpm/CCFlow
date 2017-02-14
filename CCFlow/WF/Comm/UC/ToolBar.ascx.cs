@@ -569,6 +569,24 @@ namespace CCFlow.WF.Comm.UC
             {
                 string dtFrom = this.GetTBByID("TB_S_From").Text.Trim();
                 string dtTo = this.GetTBByID("TB_S_To").Text.Trim();
+
+                if (string.IsNullOrEmpty(dtFrom) == true)
+                {
+                    if (dw == DTSearchWay.ByDate)
+                        dtFrom = "1900-01-01";
+                    else
+                        dtFrom = "1900-01-01 01:01";
+                }
+
+                if (string.IsNullOrEmpty(dtTo) == true)
+                {
+                    if (dw == DTSearchWay.ByDate)
+                        dtFrom = "2999-01-01";
+                    else
+                        dtFrom = "2999-01-01 01:01";
+                }
+
+
                 if (dw == DTSearchWay.ByDate)
                 {
                     qo.addAnd();
@@ -577,11 +595,6 @@ namespace CCFlow.WF.Comm.UC
                     qo.addAnd();
                     qo.SQL = dtKey + " <= '" + dtTo + " 23:59'";
                     qo.addRightBracket();
-
-                    //qo.AddWhere(dtKey, ">=", dtFrom+" 01:01");
-                    //qo.addAnd();
-                    //qo.AddWhere(dtKey, "<=", dtTo + " 23:59");
-                    //qo.addRightBracket();
                 }
 
                 if (dw == DTSearchWay.ByDateTime)
@@ -592,14 +605,8 @@ namespace CCFlow.WF.Comm.UC
                     qo.addAnd();
                     qo.SQL = dtKey + " <= '" + dtTo + "'";
                     qo.addRightBracket();
-
-                    //qo.addAnd();
-                    //qo.addLeftBracket();
-                    //qo.AddWhere(dtKey, ">=", dtFrom);
-                    //qo.addAnd();
-                    //qo.AddWhere(dtKey, "<=", dtTo);
-                    //qo.addRightBracket();
                 }
+
             }
 
             //  throw new Exception(qo.SQL);

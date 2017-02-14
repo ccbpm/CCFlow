@@ -1408,7 +1408,7 @@ namespace BP.Web
 
             msg = msg.Replace("@", "<br>@");
             System.Web.HttpContext.Current.Session["info"] = msg;
-            string url = "MsgPage.aspx?d=" + DateTime.Now.ToString();
+            string url = "InfoPage.aspx?d=" + DateTime.Now.ToString();
             this.WinOpen(url, "信息", this.Session.SessionID, 500, 400, 150, 270);
         }
         /// <summary>

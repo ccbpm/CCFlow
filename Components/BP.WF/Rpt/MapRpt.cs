@@ -563,28 +563,26 @@ namespace BP.WF.Rpt
                 Map map = new Map("Sys_MapData", "报表设计");
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.Java_SetCodeStruct("4");;
+                map.Java_SetCodeStruct("4"); ;
 
                 map.AddTBStringPK(MapRptAttr.No, null, "编号", true, false, 1, 200, 20);
                 map.AddTBString(MapRptAttr.Name, null, "描述", true, false, 0, 500, 20);
-           //     map.AddTBString(MapRptAttr.SearchKeys, null, "查询键", true, false, 0, 500, 20);
+                //     map.AddTBString(MapRptAttr.SearchKeys, null, "查询键", true, false, 0, 500, 20);
                 map.AddTBString(MapRptAttr.PTable, null, "物理表", true, false, 0, 500, 20);
                 map.AddTBString(MapRptAttr.FK_Flow, null, "流程编号", true, false, 0, 3, 3);
 
                 //Tag
-             //   map.AddTBString(MapRptAttr.Tag, null, "Tag", true, false, 0, 500, 20);
-
+                //map.AddTBString(MapRptAttr.Tag, null, "Tag", true, false, 0, 500, 20);
                 //时间查询:用于报表查询.
-              //  map.AddTBInt(MapRptAttr.IsSearchKey, 0, "是否需要关键字查询", true, false);
-             //   map.AddTBInt(MapRptAttr.DTSearchWay, 0, "时间查询方式", true, false);
-             //   map.AddTBString(MapRptAttr.DTSearchKey, null, "时间查询字段", true, false, 0, 200, 20);
+                //  map.AddTBInt(MapRptAttr.IsSearchKey, 0, "是否需要关键字查询", true, false);
+                //   map.AddTBInt(MapRptAttr.DTSearchWay, 0, "时间查询方式", true, false);
+                //   map.AddTBString(MapRptAttr.DTSearchKey, null, "时间查询字段", true, false, 0, 200, 20);
                 map.AddTBString(MapRptAttr.Note, null, "备注", true, false, 0, 500, 20);
-            
+
 
                 #region 权限控制. 2014-12-18
                 map.AddTBInt(MapRptAttr.RightViewWay, 0, "报表查看权限控制方式", true, false);
                 map.AddTBString(MapRptAttr.RightViewTag, null, "报表查看权限控制Tag", true, false, 0, 4000, 20);
-
                 map.AddTBInt(MapRptAttr.RightDeptWay, 0, "部门数据查看控制方式", true, false);
                 map.AddTBString(MapRptAttr.RightDeptTag, null, "部门数据查看控制Tag", true, false, 0, 4000, 20);
 
@@ -596,13 +594,13 @@ namespace BP.WF.Rpt
                  DeptAttr.Name, DeptAttr.No, "人员权限");
                 #endregion 权限控制.
 
+                //增加参数字段.
+                map.AddTBAtParas(1000);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
-
-         
         #endregion
 
         #region 其他方法.

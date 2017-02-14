@@ -2603,7 +2603,7 @@ namespace BP.Web.UC
         protected void ToMsgPage(string mess)
         {
             System.Web.HttpContext.Current.Session["info"] = mess;
-            System.Web.HttpContext.Current.Response.Redirect(SystemConfig.CCFlowWebPath + "WF/Comm/Port/MsgPage.aspx");
+            System.Web.HttpContext.Current.Response.Redirect(SystemConfig.CCFlowWebPath + "WF/Comm/Port/InfoPage.aspx?Dt="+DateTime.Now.ToString(),true);
         }
         #endregion
 

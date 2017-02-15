@@ -18,7 +18,12 @@
                 FK_Flow: GetQueryString("FK_Flow"),
             };
             pageData.FK_Flow="020";
-            $.ajax({
+            
+            InitTable();
+        });
+
+        function InitTable(){
+        $.ajax({
                 type: 'post',
                 async: true,
                 url: Handler + "?DoType=S0_RptList_Init&FK_Flow=" + pageData.FK_Flow+ "&m=" + Math.random(),
@@ -38,9 +43,9 @@
                     alert(errorThrown);
                 }
             })
+        }
 
-        });
-        function OpenRpt(no){
+        function OpenRpt(no,name,note){
             WinOpen("../../../RPT/OneFlow.aspx?FK_Flow="+pageData.FK_Flow+"&FK_MapData="+no+"&RptNo="+no);
         }
         function BindRptList(data){
@@ -53,7 +58,7 @@
             tbodyHtml+="<td>"+obj.Note+"</td>";
             tbodyHtml+="<td>"+obj.PTable+"</td>";
             tbodyHtml+="<td>"+obj.FK_Flow+"</td>";
-             tbodyHtml+="<td>"+"<a href='#'  onclick=DelRpt('"+obj.No+ "')>删除</a>" +"</td>";
+             tbodyHtml+="<td>"+"<a href='#' style='margin-right:8px;'  onclick=NewOrEditRpt('"+obj.No+"','"+obj.Name+"','"+obj.Note+"'"+ ")>编辑</a>" +"<a href='#'  onclick=DelRpt('"+obj.No+ "')>删除</a>" +"</td>";
             tbodyHtml+="</tr>"
             })
             //为TR赋上  data- 数据
@@ -67,10 +72,11 @@
             $.ajax({
                     type: 'post',
                     async: true,
-                    url: Handler + "?DoType=S0_RptList_Delete&No=" + rptNo+ "&m=" + Math.random(),
+                    url: Handler + "?DoType=S0_RptList_Delete&No=" + rptNo+"&FK_Flow="+pageData.FK_Flow+ "&m=" + Math.random(),
                     dataType: 'html',
                     success: function (data) {
                         alert(data)
+                        InitTable();
                     },
                     error: function (xml, textSta, errorThrown) {
                         alert(xml);
@@ -80,8 +86,8 @@
                 })
         }
 
-        function newRpt(){
-            WinOpen('S1_Edit.htm');
+        function NewOrEditRpt(no,name,note){
+            WinOpen('S1_Edit.htm?No='+escape(no)+"&Name="+escape(name)+"&Note="+escape(note));
         }
 
         function SaveAndClose() {
@@ -96,8 +102,7 @@
 </head>
 <body>
      <div id="Fields">
-     <div><input  value="新建报表" type="button" onclick="newRpt()"/></div>
-        <table>
+        <table style="width:100%;">
             <thead>
                 <tr>
                     <th>报表编号</th>
@@ -110,6 +115,7 @@
             </thead>
             <tbody></tbody>
         </table>
+        <div><input  value="新建报表" type="button" onclick="NewOrEditRpt('','','')"/></div>
     </div>
 </body>
 </html>

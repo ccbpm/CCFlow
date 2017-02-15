@@ -47,7 +47,7 @@ namespace BP.Excel
         /// <summary>
         /// 参数是否加载成功，加载不成功，所有插件功能不启用
         /// </summary>
-        public static bool LoadSuccessful { get; set; }
+        public static bool LoadSuccessful = false;
 
         #region 方法.
         /// <summary>
@@ -137,6 +137,43 @@ namespace BP.Excel
 
             return args;
         }
+
+        /// <summary>
+        /// 写入一个文件
+        /// </summary>
+        /// <param name="filePathName"></param>
+        /// <param name="objData"></param>
+        /// <returns></returns>
+        public static string WriteFile(string filePathName, byte[] objData)
+        {
+            string folder = System.IO.Path.GetDirectoryName(filePathName);
+            if (System.IO.Directory.Exists(folder) == false)
+                System.IO.Directory.CreateDirectory(folder);
+
+            if (System.IO.File.Exists(filePathName) == true)
+                System.IO.File.Delete(filePathName);
+
+            System.IO.FileStream fs = new System.IO.FileStream(filePathName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
+            System.IO.BinaryWriter w = new System.IO.BinaryWriter(fs);
+            try
+            {
+                w.Write(objData);
+                w.Close();
+                fs.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                w.Close();
+                fs.Close();
+            }
+            return filePathName;
+        }
+
+
 
     }
 }

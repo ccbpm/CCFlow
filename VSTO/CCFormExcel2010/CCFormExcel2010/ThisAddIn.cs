@@ -11,25 +11,25 @@ using System.Management;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Diagnostics;
 
 namespace CCFormExcel2010
 {
     public partial class ThisAddIn
     {
-
-         	// 定义一个任务窗体 
+        // 定义一个任务窗体 
 		//internal Microsoft.Office.Tools.CustomTaskPane helpTaskPane;
         /// <summary>
         /// 测试的参数变量.
         /// </summary>
         public void InitTester()
         {
-            Glo.UserNo = "zhoupeng";
+            Glo.UserNo = "anjian";
             Glo.SID = "d-d-d-d-sdsds";
             Glo.WorkID = 10001;
             Glo.FK_Flow = "002";
             Glo.FK_Node = 201;
-
             Glo.FrmID = "CY_6501"; //采样表单ID.
             Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
         }
@@ -45,100 +45,105 @@ namespace CCFormExcel2010
             Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
         }
 
-		private void ThisAddIn_Startup(object sender, System.EventArgs e)
-		{
-			#region 获得外部参数, 这是通过外部传递过来的参数.
-			Dictionary<string, string> args = Glo.GetArguments();
-			Glo.LoadSuccessful = args["fromccflow"] == "true";
+        private void ThisAddIn_Startup(object sender, System.EventArgs e)
+        {
+            #region 获得外部参数, 这是通过外部传递过来的参数.
+            try
+            {
+                Dictionary<string, string> args = Glo.GetArguments();
+                Glo.LoadSuccessful = args["fromccflow"] == "true";
 
-			if (Glo.LoadSuccessful==false)
-			{
-				//隐藏操作按钮区域
-			//	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = false;
-				return;
-			}
-
-		//	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
-			Glo.UserNo = args["UserNo"];
-			Glo.SID = args["SID"];
-			Glo.FK_Flow = args["FK_Flow"];
-			Glo.FK_Node = int.Parse(args["FK_Node"]);
-			Glo.FrmID = args["FrmID"];
-			Glo.WorkID = int.Parse(args["WorkID"]);
-			Glo.WSUrl = args["WSUrl"];
-			//MessageBox.Show(Glo.UserNo);
-			#endregion 获得外部参数, 这是通过外部传递过来的参数.
+                //	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
+                Glo.UserNo = args["UserNo"];
+                Glo.SID = args["SID"];
+                Glo.FK_Flow = args["FK_Flow"];
+                Glo.FK_Node = int.Parse(args["FK_Node"]);
+                Glo.FrmID = args["FrmID"];
+                Glo.WorkID = int.Parse(args["WorkID"]);
+                Glo.WSUrl = args["WSUrl"];
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("加载期间出现错误", ex.Message);
+            }
+            #endregion 获得外部参数, 这是通过外部传递过来的参数.
 
             // 测试当前数据.
             this.InitTester();
 
             #region 校验用户安全与下载文件.
             try
-			{
+            {
+                CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
+                byte[] bytes = null;
+                var isExists = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
 
-				CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
-				byte[] bytes = null;
-				var isExists = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
+                string tempFile="C:\\CCFlow\\temp.xlsx";
+                if (System.IO.File.Exists(tempFile) == true)
+                    System.IO.File.Delete(tempFile);
 
-				// 把这个byt 保存到 c:\temp.xlsx 里面.
-				FileStream fs = new FileStream("C:\\CCFlow\\temp.xlsx", FileMode.Create);
-				fs.Write(bytes, 0, bytes.Length);
-				fs.Close();
-				//打开文件
+                //写入文件.
+                BP.Excel.Glo.WriteFile(tempFile, bytes);
 
+                string tempFile2 = "C:\\CCFlow\\temp2.xlsx";
+                System.IO.File.Copy(tempFile, tempFile2, true);
 
-				//如果打开的是模板，则还需填充数据
+                //启动这个文件.
+                Process.Start("excel.exe", tempFile2);
+
+                //如果打开的是模板，则还需填充数据
                 if (isExists == false)
                 {
                     //获得该表单的，物理数据.
                     DataSet ds = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
 
+                    #region 给主从表赋值.
                     //给主表赋值.
-                    DataTable dtMain = ds.Tables["MainData"];
+                    DataTable dtMain = ds.Tables["MainTable"];
 
                     //给从表赋值.
                     foreach (DataTable dt in ds.Tables)
                     {
-                        if (dt.TableName == "MainData")
+                        if (dt.TableName == "MainTable")
                             continue;
-                        
                     }
+                    #endregion 给主从表赋值.
                 }
 
-			}
-			catch (Exception exp)
-			{
-				MessageBox.Show(exp.Message);
-				//TODO: 
-			}
-			#endregion 校验用户安全与下载文件.
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                //TODO: 
+            }
+            #endregion 校验用户安全与下载文件.
 
-			//Excel.Worksheet activeWorksheet = ((Excel.Worksheet)Application.ActiveSheet);
-			//Excel.Range firstRow = activeWorksheet.get_Range("A1");
-			//firstRow.EntireRow.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
-			//Excel.Range newFirstRow = activeWorksheet.get_Range("A1");
-			//newFirstRow.Value2 = "This text was added by using code";
-			//newFirstRow.Interior.Color = 100;
-			//this.Application.WorkbookBeforeSave += new Excel.AppEvents_WorkbookBeforeSaveEventHandler(Application_WorkbookBeforeSave);
+            //Excel.Worksheet activeWorksheet = ((Excel.Worksheet)Application.ActiveSheet);
+            //Excel.Range firstRow = activeWorksheet.get_Range("A1");
+            //firstRow.EntireRow.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
+            //Excel.Range newFirstRow = activeWorksheet.get_Range("A1");
+            //newFirstRow.Value2 = "This text was added by using code";
+            //newFirstRow.Interior.Color = 100;
+            //this.Application.WorkbookBeforeSave += new Excel.AppEvents_WorkbookBeforeSaveEventHandler(Application_WorkbookBeforeSave);
 
-			//保存到.
-			//activeWorksheet.SaveAs("c:\\" + BP.Excel.Glo.FK_Flow + ".xls");
+            //保存到.
+            //activeWorksheet.SaveAs("c:\\" + BP.Excel.Glo.FK_Flow + ".xls");
 
-			// 把自定义窗体添加到CustomTaskPanes集合中 
-			//// ExcelHelp 是一个自定义控件类 
-			//helpTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(new TaskPanel(), "采样任务列表");
-			//// 使任务窗体可见 
-			//helpTaskPane.Visible = true;
+            // 把自定义窗体添加到CustomTaskPanes集合中 
+            //// ExcelHelp 是一个自定义控件类 
+            //helpTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(new TaskPanel(), "采样任务列表");
+            //// 使任务窗体可见 
+            //helpTaskPane.Visible = true;
 
-			// 通过DockPosition属性来控制任务窗体的停靠位置， 
-			// 设置为 MsoCTPDockPosition.msoCTPDockPositionRight这个代表停靠到右边，这个值也是默认值 
-			//helpTaskPane.DockPosition = MsoCTPDockPosition.msoCTPDockPositionRight; 
-			// Application.ThisWorkbook.OpenLinks(
-			//  Application.ThisWorkbook.Open(
-			//Workbooks.Open Filename
-			//  Utility
-			// activeWorksheet.r
-		}
+            // 通过DockPosition属性来控制任务窗体的停靠位置， 
+            // 设置为 MsoCTPDockPosition.msoCTPDockPositionRight这个代表停靠到右边，这个值也是默认值 
+            //helpTaskPane.DockPosition = MsoCTPDockPosition.msoCTPDockPositionRight; 
+            // Application.ThisWorkbook.OpenLinks(
+            //  Application.ThisWorkbook.Open(
+            //Workbooks.Open Filename
+            //  Utility
+            // activeWorksheet.r
+        }
 
 		/// <summary>
 		/// 单元格内容变动监听事件

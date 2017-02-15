@@ -149,7 +149,6 @@ namespace CCFlowExcel
 		/// <returns></returns>
 		public string GetJsonData()
 		{
-
 			return null;
 		}
 

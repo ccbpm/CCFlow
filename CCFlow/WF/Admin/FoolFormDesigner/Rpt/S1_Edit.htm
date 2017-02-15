@@ -2,11 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
+     <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../../../Scripts/QueryString2016.js"></script>
+    <link href="../../../../DataUser/Style/Table0.css" rel="stylesheet" />
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
         /* ESC Key Down */
         function Esc() {
@@ -14,21 +13,6 @@
                 window.close();
             return true;
         }
-        function Copy() {
-            var val = $("#TB_KeyOfEn").val();
-
-            //对于火狐不兼容. #warning.
-            clipboardData.setData('Text', val);
-            alert('已经把字段[' + val + ']copy到粘帖版上');
-        }
-
-        function SetButtonSta(sta) {
-            $("Btn_Save").attr("disabled", sta);
-            $("Btn_SaveAndClose").attr("disabled", sta);
-            $("Btn_SaveAndNew").attr("disabled", sta);
-            $("Btn_New").attr("disabled", sta);
-        }
-
         //页面启动函数.
         $(function () {
 
@@ -36,178 +20,33 @@
 
             InitPage();
 
-            //初始化groupID.
-            var fk_mapData = GetQueryString("FK_MapData");
-
-            //初始化 GroupID.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=FieldInitGroupID&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    //alert(data);
-                    //var data="[{"OID":404,"Lab":"填写请假申请单","EnName":"ND201","Idx":1,"GUID":"","CtrlType":"","CtrlID":"","AtPara":""}]";
-
-                    data = JSON.parse(data);
-
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
-                        $("#DDL_GroupID").append("<option value='" + data[i].OID + "' >" + data[i].Lab + "</option>");
-                    }
-                }
-            });
-
             $("#Msg").html("");
 
         });
-
         function InitPage() {
+            var myPk = GetQueryString("MyPK");
 
-            var mypk = GetQueryString("MyPK");
+        }
 
+        function Save() {
+            var fk_flow = GetQueryString("FK_Flow");
+            var no = $('#TxbNo').val();
+            var name = $('#TxbName').val();
+            var note = $('#TxbNote').val();
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FieldInit&MyPK=" + mypk + "&FType=" + fType + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
+                url: Handler + "?DoType=S0_RptList_New&No=" + no + "&Name=" + name + "&Note=" + note + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
-                    // alert(data);
-                    data = JSON.parse(data);
-
-                    var mypk = data.FK_MapData + '_' + data.KeyOfEn;
-                    keyOfEn = data.KeyOfEn;
-
-                    //给公共属性赋值.
-                    $("#TB_Name").val(data.Name);
-                    $("#TB_KeyOfEn").val(data.KeyOfEn);
-                    $("#TB_DefVal").val(data.DefVal);
-
-                    $("#DDL_ColSpan").val(data.ColSpan);   //跨的列数.
-                    $("#TB_FontSize").val(data.FontSize);  //字体大小.
-
-                    //所在的字段分组.
-                    if (data.GroupID != 0)
-                        $("#DDL_GroupID").val(data.GroupID);
-                    else
-                        $('DDL_GroupID').prop('selectedIndex', 0);
-
-                    //是否可以编辑？
-                    $("#RB_UIIsEnable_" + data.UIIsEnable).attr('checked', 'checked');
-                    $("#RB_UIVisible_" + data.UIVisible).attr('checked', 'checked');
-
-                    //是否必填项.
-                    if (data.UIIsInput == "1")
-                        $("#CB_IsInput").attr("checked", true);
-
-                    //是否是大块文本.
-                    if (data.IsSupperText == "1")
-                        $("#CB_IsSupperText").attr("checked", true);
-
-                    //是否是富文本?
-                    if (data.IsRichText == "1")
-                        $("#CB_IsRichText").attr("checked", true);
-
-
-
-                    var htmlLink = "";
-                    if (data.MyDataType == 1) {
-
-                        //最大最小长度.
-                        $("#TB_MinLen").val(data.MinLen);
-                        $("#TB_MaxLen").val(data.MaxLen);
-
-
-                        //默认值.
-                        $("#DDL_DefVal").val(data.DefVal); // 设置默认值.
-
-                        // 如果是日期格式， 当下拉框选择值的时候，让其进行给tb赋值。
-                        $("#DDL_DefVal").change(function () {
-                            var checkValue = $("#DDL_DefVal").val();
-                            $("#TB_DefVal").val(checkValue);
-                        });
-
-                        // 清空默认值, 写一个循环把数据给值.
-                        $("#DDL_Rows").empty();
-                        for (var i = 1; i < 30; i++) {
-                            $("#DDL_Rows").append("<option value='" + i + "'>" + i + "行</option>");
-                        }
-
-                        //计算文本框的行数.
-                        var rows = data.UIHeight / 23;
-                        if (rows <= 0)
-                            rows = 1;
-
-                        $("#DDL_Rows").val(rows); //行数.
-
-                        htmlLink += "<a href=\"javascript:WinOpen('./MapExt/PopVal.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&MyPK=PopVal_" + mypk + "')\">设置开窗返回值</a>";
-                        htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&OperAttrKey=" + mypk + "')\">正则表达式</a>";
-                        htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.htm?FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&MyPK=TBFullCtrl_" + mypk + "')\">文本框自动完成</a>";
-                        htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/InputCheck.htm?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">脚本验证</a>";
-
-                        //自动计算.
-                        htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
-                    }
-
-
-                    //如果是日期类型的.
-                    if (data.MyDataType == 6 || data.MyDataType == 7) {
-
-                        //清空默认值.
-                        $("#DDL_DefVal").empty();
-                        $("#DDL_DefVal").append("<option value=''>默认值</option>");
-                        $("#DDL_DefVal").append("<option value='@RDT'>当前日期</option>");
-
-                        //设置事件.
-                        $("#DDL_DefVal").change(function () {
-                            var checkValue = $("#DDL_DefVal").val();
-                            $("#TB_DefVal").val(checkValue);
-
-                        });
-
-                        //设置默认值.
-                        $("#DDL_DefVal").val(data.DefVal);
-
-                        htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/RegularExpression.htm?FK_MapData=" + fk_mapData + "&RefNo=" + keyOfEn + "&OperAttrKey=" + mypk + "')\">正则表达式</a>";
-                        htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/InputCheck.htm?FK_MapData=" + fk_mapData + "&RefNo=" + mypk + "')\">脚本验证</a>";
-                        htmlLink += "-<a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
-                    }
-
-                    //boolen 类型.
-                    if (data.MyDataType == 4) {
-
-                        //清空默认值.
-                        $("#DDL_DefVal").empty();
-                        $("#DDL_DefVal").append("<option value='0'>默认否</option>");
-                        $("#DDL_DefVal").append("<option value='1'>默认是</option>");
-
-                        //设置事件.
-                        $("#DDL_DefVal").change(function () {
-                            var checkValue = $("#DDL_DefVal").val();
-                            $("#TB_DefVal").val(checkValue);
-                        });
-
-                        //设置默认值.
-                        $("#DDL_DefVal").val(data.DefVal);
-                    }
-
-                    //对于num类型的数据，隐藏控件,不让其在选择默认值了.
-                    if (data.MyDataType == 2 || data.MyDataType == 3 || data.MyDataType == 8) {
-
-                        document.getElementById("DDL_DefVal").style.visibility = "hidden";
-
-                        htmlLink += "<a href=\"javascript:WinOpen('../MapExt/AutoFull.htm?FK_MapData=" + fk_mapData + "&ExtType=AutoFull&RefNo=" + mypk + "')\">自动计算</a>";
-                    }
-
-                    if (htmlLink == "")
-                        htmlLink = "无";
-
-                    //设置超链接属性.
-                    $("#htmlLink").html(htmlLink);
+                    alert(data)
+                    window.close();
                 }
             });
+        }
+
+        function Cancel() {
+            window.close();
         }
     </script>
     <base target="_self" /> 
@@ -222,7 +61,7 @@
                 编号:
             </td>
             <td>
-                <asp:TextBox ID="TB_No" runat="server"></asp:TextBox>
+                <input type="text" id="TxbNo"/>
             </td>
         </tr>
         <tr>
@@ -230,7 +69,7 @@
                 名称:
             </td>
             <td>
-                <asp:TextBox ID="TB_Name" runat="server"></asp:TextBox>
+                <input type="text" id="TxbName"/>
             </td>
         </tr>
         <tr>
@@ -238,23 +77,15 @@
                 备注:
             </td>
             <td>
-                <asp:TextBox ID="TB_Note" runat="server"></asp:TextBox>
+                <input type="text" id="TxbNote"/>
             </td>
         </tr>
     </table>
     <br />
 
     <input type="button" id="Btn_Save" name="Btn_Save" value="保存" onclick="Save()" />
-    <input type="button" id="Button1" name="Btn_Save" value="保存并设置显示列" onclick="SaveAndNext()" />
-    <input type="button" id="Button2" name="Btn_Save" value="取消" onclick="SaveAndNext()" />
-
-
-    <cc1:LinkBtn ID="Btn_Save1" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-save'"
-        Text="保存" OnClick="Btn_Save_Click" />
-    <cc1:LinkBtn ID="Btn_SaveAndNext1" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-save'"
-        Text="保存并设置显示列" OnClick="Btn_SaveAndNext1_Click" />
-    <cc1:LinkBtn ID="Btn_Cancel1" runat="server" IsPlainStyle="false" data-options="iconCls:'icon-undo'"
-        Text="取消" OnClick="Btn_Cancel_Click" />
+    <!--<input type="button" id="Button1" name="Btn_Save" value="保存并设置显示列" onclick="SaveAndNext()" />-->
+    <input type="button" id="Button2" name="Btn_Save" value="取消" onclick="Cancel()" />
 
 </form>
 

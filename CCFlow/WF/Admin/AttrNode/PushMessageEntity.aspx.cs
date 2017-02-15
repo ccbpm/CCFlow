@@ -221,8 +221,9 @@ namespace CCFlow.WF.Admin.AttrNode
             msg.SMSField = this.DDL_SMS_Fields.SelectedValue;
             //替换变量
             string smsstr = this.TB_SMS.Text;
-            smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
+            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
+            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
 
             System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
            // smsstr = smsstr.Replace("@RDT",);

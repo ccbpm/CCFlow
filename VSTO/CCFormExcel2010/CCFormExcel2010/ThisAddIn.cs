@@ -12,28 +12,53 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace CCFlowExcel
+namespace CCFormExcel2010
 {
-	public partial class ThisAddIn
-	{
-		// 定义一个任务窗体 
+    public partial class ThisAddIn
+    {
+
+         	// 定义一个任务窗体 
 		//internal Microsoft.Office.Tools.CustomTaskPane helpTaskPane;
+        /// <summary>
+        /// 测试的参数变量.
+        /// </summary>
+        public void InitTester()
+        {
+            Glo.UserNo = "zhoupeng";
+            Glo.SID = "d-d-d-d-sdsds";
+            Glo.WorkID = 10001;
+            Glo.FK_Flow = "002";
+            Glo.FK_Node = 201;
+
+            Glo.FrmID = "CY_6501"; //采样表单ID.
+            Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
+        }
+
+        public void InitTesterDemo()
+        {
+            Glo.UserNo = "zhoupeng";
+            Glo.SID = "d-d-d-d-sdsds";
+            Glo.WorkID = 10001;
+            Glo.FK_Flow = "001";
+            Glo.FK_Node = 101;
+            Glo.FrmID = "ND101";
+            Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
+        }
 
 		private void ThisAddIn_Startup(object sender, System.EventArgs e)
 		{
 			#region 获得外部参数, 这是通过外部传递过来的参数.
-
 			Dictionary<string, string> args = Glo.GetArguments();
 			Glo.LoadSuccessful = args["fromccflow"] == "true";
 
-			if (!Glo.LoadSuccessful)
+			if (Glo.LoadSuccessful==false)
 			{
 				//隐藏操作按钮区域
-				Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = false;
+			//	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = false;
 				return;
 			}
 
-			Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
+		//	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
 			Glo.UserNo = args["UserNo"];
 			Glo.SID = args["SID"];
 			Glo.FK_Flow = args["FK_Flow"];
@@ -42,14 +67,16 @@ namespace CCFlowExcel
 			Glo.WorkID = int.Parse(args["WorkID"]);
 			Glo.WSUrl = args["WSUrl"];
 			//MessageBox.Show(Glo.UserNo);
-
 			#endregion 获得外部参数, 这是通过外部传递过来的参数.
 
-			#region 校验用户安全与下载文件.
-			try
+            // 测试当前数据.
+            this.InitTester();
+
+            #region 校验用户安全与下载文件.
+            try
 			{
 
-				CCFlowExcel2007.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
+				CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
 				byte[] bytes = null;
 				var isExists = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
 
@@ -57,7 +84,6 @@ namespace CCFlowExcel
 				FileStream fs = new FileStream("C:\\CCFlow\\temp.xlsx", FileMode.Create);
 				fs.Write(bytes, 0, bytes.Length);
 				fs.Close();
-
 				//打开文件
 
 
@@ -138,7 +164,8 @@ namespace CCFlowExcel
 
 
 			//若插件没有加载成功：直接
-			if (!Glo.LoadSuccessful) return;
+			if (!Glo.LoadSuccessful)
+                return;
 
 			//执行保存.
 			//CCFlowExcel2007.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
@@ -263,5 +290,5 @@ namespace CCFlowExcel
 		}
 
 		#endregion
-	}
+    }
 }

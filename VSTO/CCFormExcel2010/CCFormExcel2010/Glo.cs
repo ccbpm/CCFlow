@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.Collections.Generic;
 using System.Management;
 
 namespace BP.Excel
@@ -55,7 +54,7 @@ namespace BP.Excel
         /// 得到 WebService 对象 
         /// </summary>
         /// <returns></returns>
-        public static CCFlowExcel2007.CCForm.CCFormAPISoapClient GetCCFormAPISoapClient()
+        public static CCFormExcel2010.CCForm.CCFormAPISoapClient GetCCFormAPISoapClient()
         {
             TimeSpan ts = new TimeSpan(0, 5, 0);
             var basicBinding = new BasicHttpBinding()
@@ -69,15 +68,17 @@ namespace BP.Excel
             basicBinding.Security.Mode = BasicHttpSecurityMode.None;
 
             string url = Glo.WSUrl;
+            if (url == null)
+                url = "http://localhost/WF/CCForm/CCFormAPI.asmx";
 
             var endPoint = new EndpointAddress(url);
             var ctor =
-                typeof(CCFlowExcel2007.CCForm.CCFormAPISoapClient).GetConstructor(
+                typeof(CCFormExcel2010.CCForm.CCFormAPISoapClient).GetConstructor(
                 new Type[] {
                     typeof(Binding), 
                     typeof(EndpointAddress)
                 });
-            return (CCFlowExcel2007.CCForm.CCFormAPISoapClient)ctor.Invoke(
+            return (CCFormExcel2010.CCForm.CCFormAPISoapClient)ctor.Invoke(
                 new object[] { basicBinding, endPoint });
         }
         #endregion 方法.

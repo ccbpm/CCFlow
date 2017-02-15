@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CCFlowExcel2007.CCForm {
+namespace CCFormExcel2010.CCForm {
     using System.Data;
     
     
@@ -23,7 +23,7 @@ namespace CCFlowExcel2007.CCForm {
         // CODEGEN: 参数“bytes”需要其他方案信息，使用参数模式无法捕获这些信息。特定特性为“System.Xml.Serialization.XmlElementAttribute”。
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenerExcelFile", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        CCFlowExcel2007.CCForm.GenerExcelFileResponse GenerExcelFile(CCFlowExcel2007.CCForm.GenerExcelFileRequest request);
+        CCFormExcel2010.CCForm.GenerExcelFileResponse GenerExcelFile(CCFormExcel2010.CCForm.GenerExcelFileRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenerDBForVSTOExcelFrmModel", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -32,7 +32,7 @@ namespace CCFlowExcel2007.CCForm {
         // CODEGEN: 参数“byt”需要其他方案信息，使用参数模式无法捕获这些信息。特定特性为“System.Xml.Serialization.XmlElementAttribute”。
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SaveExcelFile", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        CCFlowExcel2007.CCForm.SaveExcelFileResponse SaveExcelFile(CCFlowExcel2007.CCForm.SaveExcelFileRequest request);
+        CCFormExcel2010.CCForm.SaveExcelFileResponse SaveExcelFile(CCFormExcel2010.CCForm.SaveExcelFileRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -144,12 +144,12 @@ namespace CCFlowExcel2007.CCForm {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface CCFormAPISoapChannel : CCFlowExcel2007.CCForm.CCFormAPISoap, System.ServiceModel.IClientChannel {
+    public interface CCFormAPISoapChannel : CCFormExcel2010.CCForm.CCFormAPISoap, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class CCFormAPISoapClient : System.ServiceModel.ClientBase<CCFlowExcel2007.CCForm.CCFormAPISoap>, CCFlowExcel2007.CCForm.CCFormAPISoap {
+    public partial class CCFormAPISoapClient : System.ServiceModel.ClientBase<CCFormExcel2010.CCForm.CCFormAPISoap>, CCFormExcel2010.CCForm.CCFormAPISoap {
         
         public CCFormAPISoapClient() {
         }
@@ -175,18 +175,18 @@ namespace CCFlowExcel2007.CCForm {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        CCFlowExcel2007.CCForm.GenerExcelFileResponse CCFlowExcel2007.CCForm.CCFormAPISoap.GenerExcelFile(CCFlowExcel2007.CCForm.GenerExcelFileRequest request) {
+        CCFormExcel2010.CCForm.GenerExcelFileResponse CCFormExcel2010.CCForm.CCFormAPISoap.GenerExcelFile(CCFormExcel2010.CCForm.GenerExcelFileRequest request) {
             return base.Channel.GenerExcelFile(request);
         }
         
         public bool GenerExcelFile(string userNo, string sid, string frmID, int oid, ref byte[] bytes) {
-            CCFlowExcel2007.CCForm.GenerExcelFileRequest inValue = new CCFlowExcel2007.CCForm.GenerExcelFileRequest();
+            CCFormExcel2010.CCForm.GenerExcelFileRequest inValue = new CCFormExcel2010.CCForm.GenerExcelFileRequest();
             inValue.userNo = userNo;
             inValue.sid = sid;
             inValue.frmID = frmID;
             inValue.oid = oid;
             inValue.bytes = bytes;
-            CCFlowExcel2007.CCForm.GenerExcelFileResponse retVal = ((CCFlowExcel2007.CCForm.CCFormAPISoap)(this)).GenerExcelFile(inValue);
+            CCFormExcel2010.CCForm.GenerExcelFileResponse retVal = ((CCFormExcel2010.CCForm.CCFormAPISoap)(this)).GenerExcelFile(inValue);
             bytes = retVal.bytes;
             return retVal.GenerExcelFileResult;
         }
@@ -196,12 +196,12 @@ namespace CCFlowExcel2007.CCForm {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        CCFlowExcel2007.CCForm.SaveExcelFileResponse CCFlowExcel2007.CCForm.CCFormAPISoap.SaveExcelFile(CCFlowExcel2007.CCForm.SaveExcelFileRequest request) {
+        CCFormExcel2010.CCForm.SaveExcelFileResponse CCFormExcel2010.CCForm.CCFormAPISoap.SaveExcelFile(CCFormExcel2010.CCForm.SaveExcelFileRequest request) {
             return base.Channel.SaveExcelFile(request);
         }
         
         public void SaveExcelFile(string userNo, string sid, string frmID, int oid, string mainTableAtParas, System.Data.DataSet dsDtls, byte[] byt) {
-            CCFlowExcel2007.CCForm.SaveExcelFileRequest inValue = new CCFlowExcel2007.CCForm.SaveExcelFileRequest();
+            CCFormExcel2010.CCForm.SaveExcelFileRequest inValue = new CCFormExcel2010.CCForm.SaveExcelFileRequest();
             inValue.userNo = userNo;
             inValue.sid = sid;
             inValue.frmID = frmID;
@@ -209,7 +209,7 @@ namespace CCFlowExcel2007.CCForm {
             inValue.mainTableAtParas = mainTableAtParas;
             inValue.dsDtls = dsDtls;
             inValue.byt = byt;
-            CCFlowExcel2007.CCForm.SaveExcelFileResponse retVal = ((CCFlowExcel2007.CCForm.CCFormAPISoap)(this)).SaveExcelFile(inValue);
+            CCFormExcel2010.CCForm.SaveExcelFileResponse retVal = ((CCFormExcel2010.CCForm.CCFormAPISoap)(this)).SaveExcelFile(inValue);
         }
     }
 }

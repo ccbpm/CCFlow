@@ -6,11 +6,11 @@ using System.Security;
 // 有关程序集的常规信息通过下列特性集
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("CCFlowExcel2007")]
+[assembly: AssemblyTitle("CCFormExcel2010")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CCFlowExcel2007")]
+[assembly: AssemblyProduct("CCFormExcel2010")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +21,7 @@ using System.Security;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("1e02fb55-67e5-4e69-b804-7062660edf04")]
+[assembly: Guid("29d7c459-eff0-4b0c-9ace-b26f6feb52c6")]
 
 // 程序集的版本信息由下面四个值组成:
 //

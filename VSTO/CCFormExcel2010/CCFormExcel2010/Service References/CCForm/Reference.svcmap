@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="a56c2138-211f-4be1-bcbc-36fd818e346c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="1457e136-5221-47c9-b9f2-fa54ae56ebde" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,8 +21,8 @@
     <MetadataSource Address="http://localhost/WF/CCForm/CCFormAPI.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="CCFormAPI1.disco" MetadataType="Disco" ID="4bd7c89a-9609-4ed0-b309-3e175ddeda38" SourceId="1" SourceUrl="http://localhost/WF/CCForm/CCFormAPI.asmx?disco" />
-    <MetadataFile FileName="CCFormAPI1.wsdl" MetadataType="Wsdl" ID="bfad7735-31cd-4ba2-80b4-0bbec58aefd2" SourceId="1" SourceUrl="http://localhost/WF/CCForm/CCFormAPI.asmx?wsdl" />
+    <MetadataFile FileName="CCFormAPI.disco" MetadataType="Disco" ID="9301f6b3-4aec-4fce-8e30-2196bf61b5f9" SourceId="1" SourceUrl="http://localhost/WF/CCForm/CCFormAPI.asmx?disco" />
+    <MetadataFile FileName="CCFormAPI.wsdl" MetadataType="Wsdl" ID="3037a48a-679a-4288-92ea-b8cd8b611f74" SourceId="1" SourceUrl="http://localhost/WF/CCForm/CCFormAPI.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -119,6 +119,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner.Rpt
                     case "S0_RptList_Delete": //删除报表.
                         msg = this.S0_RptList_Delete();
                         break;
+                    case "S0_RptList_Edit": //删除报表.
+                        msg = this.S0_RptList_Edit();
+                        break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
@@ -178,10 +181,32 @@ namespace CCFlow.WF.Admin.FoolFormDesigner.Rpt
         public string S0_RptList_Delete()
         {
             string no = this.GetRequestVal("No");
+            if (no == "ND" + int.Parse(this.FK_Flow) + "MyRpt")
+                return "err@默认报表，不能删除。";
+
             BP.WF.Rpt.MapRpt en = new BP.WF.Rpt.MapRpt();
             en.No = no;
             en.Delete();
             return "@删除成功.";
+        }
+
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <returns></returns>
+        public string S0_RptList_Edit()
+        {
+            string no = this.GetRequestVal("No");
+
+            BP.WF.Rpt.MapRpt en = new BP.WF.Rpt.MapRpt();
+            en.No = no;
+            en.Retrieve();
+
+            en.Name = this.GetValFromFrmByKey("Name");
+            en.Note = this.GetValFromFrmByKey("Note");
+            en.Update();
+
+            return "@保存成功.";
         }
 
         public bool IsReusable

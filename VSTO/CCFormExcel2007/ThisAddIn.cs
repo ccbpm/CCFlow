@@ -62,10 +62,22 @@ namespace CCFlowExcel
 
 
 				//如果打开的是模板，则还需填充数据
-				if (!isExists)
-				{
-					//var mainData = Get
-				}
+                if (isExists == false)
+                {
+                    //获得该表单的，物理数据.
+                    DataSet ds = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
+
+                    //给主表赋值.
+                    DataTable dtMain = ds.Tables["MainData"];
+
+                    //给从表赋值.
+                    foreach (DataTable dt in ds.Tables)
+                    {
+                        if (dt.TableName == "MainData")
+                            continue;
+                        
+                    }
+                }
 
 			}
 			catch (Exception exp)

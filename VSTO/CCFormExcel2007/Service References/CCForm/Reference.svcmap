@@ -18,11 +18,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:26507/WF/CCForm/CCFormAPI.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost/WF/CCForm/CCFormAPI.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="CCFormAPI.wsdl" MetadataType="Wsdl" ID="5f6df7f3-1b8e-42bf-8005-1eed941aface" SourceId="1" SourceUrl="http://localhost:26507/WF/CCForm/CCFormAPI.asmx?wsdl" />
-    <MetadataFile FileName="CCFormAPI.disco" MetadataType="Disco" ID="1cbaf605-aa1f-4a28-a7cf-217145838735" SourceId="1" SourceUrl="http://localhost:26507/WF/CCForm/CCFormAPI.asmx?disco" />
+    <MetadataFile FileName="CCFormAPI1.disco" MetadataType="Disco" ID="4bd7c89a-9609-4ed0-b309-3e175ddeda38" SourceId="1" SourceUrl="http://localhost/WF/CCForm/CCFormAPI.asmx?disco" />
+    <MetadataFile FileName="CCFormAPI1.wsdl" MetadataType="Wsdl" ID="bfad7735-31cd-4ba2-80b4-0bbec58aefd2" SourceId="1" SourceUrl="http://localhost/WF/CCForm/CCFormAPI.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -245,9 +245,11 @@
     <EmbeddedResource Include="TaskPanel.resx">
       <DependentUpon>TaskPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="CCFlowExcel2007_TemporaryKey.pfx" />
-    <None Include="ClassDiagram1.cd" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -277,7 +279,7 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="Service References\CCForm\CCFormAPI.wsdl" />
+    <None Include="Service References\CCForm\CCFormAPI1.wsdl" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -293,9 +295,6 @@
     <WCFMetadataStorage Include="Service References\CCForm\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\CCForm\CCFormAPI.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\CCForm\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
@@ -307,7 +306,9 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Service References\CCForm\CCFormAPI1.disco" />
+  </ItemGroup>
   <!-- Include the build rules for a C# project. -->
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

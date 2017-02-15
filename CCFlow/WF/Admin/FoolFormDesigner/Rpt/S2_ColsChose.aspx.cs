@@ -132,46 +132,9 @@ namespace CCFlow.WF.MapDef.Rpt
             this.Pub2.AddTableEnd();
         }
 
-        //void btn_SelectColumns_Click(object sender, EventArgs e)
-        //{
-        //    MapAttrs mattrs = new MapAttrs(this.FK_MapData);
-        //    mattrs.Delete(MapAttrAttr.FK_MapData, this.RptNo);
-
-        //    MapData md = new MapData(this.FK_MapData);
-        //    foreach (MapAttr attr in mattrs)
-        //    {
-        //        CheckBox cb = this.Pub2.GetCBByID("CB_" + attr.KeyOfEn);
-        //        if (cb == null)
-        //            continue;
-
-        //        if (cb.Checked == false)
-        //            continue;
-
-        //        attr.FK_MapData = this.RptNo;
-        //        attr.Insert();
-
-        //        switch (attr.KeyOfEn)
-        //        {
-        //            case NDXRptBaseAttr.Title:
-        //                attr.Idx = -1;
-        //                attr.Update();
-        //                break;
-        //            case NDXRptBaseAttr.MyNum:
-        //            case NDXRptBaseAttr.OID:
-        //                attr.Idx = 1000;
-        //                attr.Update();
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //    }
-        //    this.Response.Redirect("ColsLabel.aspx?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.RptNo, true);
-        //}
-
         protected void Btn_Save_Click(object sender, EventArgs e)
         {
             Save();
-
             Response.Redirect("S2_ColsChose.aspx?FK_MapData=" + this.FK_MapData + "&RptNo=" + this.RptNo + "&FK_Flow=" + this.FK_Flow + "&s=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff"), true);
         }
 
@@ -183,7 +146,6 @@ namespace CCFlow.WF.MapDef.Rpt
         protected void Btn_SaveAndNext1_Click(object sender, EventArgs e)
         {
             Save();
-
             Response.Redirect("S3_ColsLabel.aspx?FK_MapData=" + this.FK_MapData + "&RptNo=" + this.RptNo + "&FK_Flow=" + this.FK_Flow + "&s=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff"), true);
         }
 

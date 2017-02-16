@@ -83,7 +83,7 @@ namespace CCFormExcel2010
 				var isExists = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
 
 				// 把这个byt 保存到 c:\temp.xlsx 里面.
-				string tempFile="C:\\CCFlow\\temp.xlsx";
+				string tempFile = "C:\\CCFlow\\temp.xlsx";
 				if (System.IO.File.Exists(tempFile) == true)
 					System.IO.File.Delete(tempFile);
 				//写入文件.
@@ -91,8 +91,6 @@ namespace CCFormExcel2010
 
 				//打开文件
 				Globals.ThisAddIn.Application.Workbooks.Open("C:\\CCFlow\\temp.xlsx");
-
-			   
 
 				//如果打开的是模板，则还需填充数据
 				if (isExists == false)
@@ -103,13 +101,14 @@ namespace CCFormExcel2010
 					#region 给主从表赋值.
 					//给主表赋值.
 					DataTable dtMain = ds.Tables["MainTable"];
-					//TODO: 赋值
+					SetMainData(dtMain);
 
 					//给从表赋值.
 					foreach (DataTable dt in ds.Tables)
 					{
 						if (dt.TableName == "MainTable")
 							continue;
+						SetDtlData(dt);
 					}
 					#endregion 给主从表赋值.
 				}
@@ -392,6 +391,27 @@ namespace CCFormExcel2010
 			{
 				return Convert.ToChar(64 + (i / 26)).ToString() + Convert.ToChar((64 + (i % 26)));
 			}
+		}
+
+		/// <summary>
+		/// 是否为合并单元格（并取得合并的行、列数）
+		/// </summary>
+		/// <param name="range"></param>
+		/// <param name="c"></param>
+		/// <param name="r"></param>
+		/// <returns></returns>
+		public bool IsMerge(Excel.Range range, ref int c, ref int r)
+		{
+			if (range.MergeCells)
+			{
+				if (range.MergeArea != null)
+				{
+					c = range.MergeArea.Columns.Count;
+					r = range.MergeArea.Rows.Count;
+				}
+				return true;
+			}
+			return false;
 		}
 
 		/// <summary>

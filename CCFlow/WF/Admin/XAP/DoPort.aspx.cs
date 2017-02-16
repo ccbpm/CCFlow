@@ -154,7 +154,9 @@ namespace CCFlow.WF.Admin.XAP
                     this.Response.Redirect("../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.NodeSheets&EnName=BP.WF.Template.NodeSheet&AttrKey=BP.WF.Template.NodeStations&NodeID=" + this.PK + "&r=0319061642&1=FK_StationType&ShowWay=None" + this.PK, true);
                     break;
                 case "WFRpt": // 报表设计.r
-                    this.Response.Redirect("../../Rpt/OneFlow.aspx?FK_MapData=ND" + int.Parse(this.PK) + "Rpt&FK_Flow=" + this.PK, true);
+                    //杨玉慧 点击报表设计改成打开该流程的报表列表
+                    //this.Response.Redirect("../../Rpt/OneFlow.aspx?FK_MapData=ND" + int.Parse(this.PK) + "Rpt&FK_Flow=" + this.PK, true);
+                    this.Response.Redirect("../FoolFormDesigner/Rpt/S0_RptList.htm?FK_Flow=" + this.PK, true);
                     break;
                 case "MapDef": //表单定义.
                     int nodeid = int.Parse(this.PK.Replace("ND", ""));

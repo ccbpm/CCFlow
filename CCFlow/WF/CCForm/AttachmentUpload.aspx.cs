@@ -160,7 +160,19 @@ namespace CCFlow.WF.CCForm
                 downDB.Retrieve();
 
                 string downpath = GetRealPath(downDB.FileFullName);
-                BP.Sys.PubClass.DownloadFile(downpath, downDB.FileName);
+
+                FrmAttachment dbAtt = new FrmAttachment();
+                dbAtt.MyPK = downDB.FK_FrmAttachment;
+                dbAtt.Retrieve();
+                
+                if (dbAtt.SaveWay == 0)
+                {
+                    PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
+                }
+                else if (dbAtt.SaveWay == 2)
+                {
+                    PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
+                }
                 this.WinClose();
                 return;
             }
@@ -1224,7 +1236,7 @@ namespace CCFlow.WF.CCForm
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
                         dbUpload.SaveWay = athDesc.SaveWay; //设置保存方式,以方便前台展示读取.
                         dbUpload.FileExts = info.Extension;
-                       // dbUpload.FileFullName = saveTo;
+                        // dbUpload.FileFullName = saveTo;
                         dbUpload.FileName = fu.FileName;
                         dbUpload.FileSize = (float)info.Length;
 
@@ -1246,14 +1258,18 @@ namespace CCFlow.WF.CCForm
                             }
                         }
                         dbUpload.UploadGUID = guid;
+
+                        dbUpload.FileFullName = athDesc.SaveTo + guid + "." + dbUpload.FileExts;
+
+
                         dbUpload.Insert();
+
 
                         if (athDesc.SaveWay == 1)
                         {
                             //把文件保存到指定的字段里.
                             dbUpload.SaveFileToDB("FileDB", temp);
                         }
-
                         if (athDesc.SaveWay == 2)
                         {
                             /*保存到fpt服务器上.*/
@@ -1269,8 +1285,8 @@ namespace CCFlow.WF.CCForm
 
                             //把文件放上去.
                             ftpconn.PutFile(temp, guid + "." + dbUpload.FileExts);
-
                         }
+                        
                     }
                     #endregion 保存到数据库.
 

@@ -68,14 +68,17 @@
                 fType = parseInt(fType);
 
             if (fType != AppString) {
-                //非string类型，就默认把他屏蔽掉.
+                 //非string类型，就默认把他屏蔽掉. 
+                 //必填项都放出来 杨玉慧
                 // document.getElementById("tr0").style.display = 'none';
                 document.getElementById("tr1").style.display = 'none';
                 document.getElementById("tr2").style.display = 'none';
                 document.getElementById("tr3").style.display = 'none';
-                document.getElementById("tr4").style.display = 'none';
-                //  document.getElementById("tr5").style.display = 'none';
-                //  document.getElementById("tr6").style.display = 'none';
+                //document.getElementById("tr4").style.display = 'none';
+                $('#tr4 td:nth(1)').css('display', 'none');
+                $('#tr4 td:nth(2)').css('display', 'none');
+             //  document.getElementById("tr5").style.display = 'none';
+              //  document.getElementById("tr6").style.display = 'none';
             }
 
             switch(fType) {
@@ -99,7 +102,10 @@
 
                     // alert(data);
                     data = JSON.parse(data);
-
+					//杨玉慧 改JSON类
+					if (data instanceof Array) {//判断是否是数组 如果是数组就取第一个对象 杨玉慧
+                        data = data[0];
+                    }
                     var mypk = data.FK_MapData + '_' + data.KeyOfEn;
                     keyOfEn = data.KeyOfEn;
 

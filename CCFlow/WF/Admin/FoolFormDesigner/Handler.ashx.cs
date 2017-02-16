@@ -1318,9 +1318,10 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 }
 
 
+                //把必填项拿出来，所有字段都可以设置成必填项 杨玉慧
+                attr.UIIsInput = this.GetValBoolenFromFrmByKey("CB_IsInput");   //是否是必填项.
                 if (attr.MyDataType == BP.DA.DataType.AppString && lgType == FieldTypeS.Normal)
                 {
-                    attr.UIIsInput = this.GetValBoolenFromFrmByKey("CB_IsInput");   //是否是必填项.
                     attr.IsRichText = this.GetValBoolenFromFrmByKey("CB_IsRichText"); //是否是富文本？
                     attr.IsSupperText = this.GetValBoolenFromFrmByKey("CB_IsSupperText"); //是否是超大文本？
 
@@ -1334,7 +1335,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
                 }
 
-                switch(attr.MyDataType)
+		switch(attr.MyDataType)
                 {
                     case DataType.AppInt:
                     case DataType.AppFloat:

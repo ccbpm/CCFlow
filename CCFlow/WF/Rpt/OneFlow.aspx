@@ -51,7 +51,9 @@
 
                         <li>
                             <div>
-                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S1_Edit.aspx?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
+                                <%--<a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S1_Edit.htm?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
+                                    <span class="nav">1. 基本信息</span></a>--%>
+                                    <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S1_Edit.htm?FK_Flow=<%=this.FK_Flow%>&No=<%=this.RptNo%>')">
                                     <span class="nav">1. 基本信息</span></a></div>
                         </li>
                         <li>

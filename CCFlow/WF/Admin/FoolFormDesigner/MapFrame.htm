@@ -33,6 +33,9 @@
                   dataType: 'html',
                   success: function (data) {
                       data = JSON.parse(data);
+                      if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
+                          data = data[0];
+                      }
                       GenerFullAllCtrlsVal(data);
                   }
 

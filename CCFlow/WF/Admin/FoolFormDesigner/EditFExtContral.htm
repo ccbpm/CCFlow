@@ -34,18 +34,21 @@
                         alert(data);
                     }
 
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
 
-                    data = data.replace(/\n/g, "");
-                    data = data.replace(/\r/g, "");
+                    //data = data.replace(/\n/g, "");
+                    //data = data.replace(/\r/g, "");
 
                     data = JSON.parse(data);
+                    if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
+                        data = data[0];
+                    }
 
                     //设置选择的模式.
                     $("#RB_CtrlType_" + data.UIContralType).attr("checked", "checked");

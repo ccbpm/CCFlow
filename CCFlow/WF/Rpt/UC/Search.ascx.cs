@@ -88,8 +88,10 @@ namespace CCFlow.WF.Rpt
             }
 
             Flow fl = new Flow(this.currMapRpt.FK_Flow);
-
-            this.Page.Title = fl.Name;
+            
+            //this.Page.Title = fl.Name;
+            //杨玉慧  改成 流程名字+ 报表的名字  因为一个流程有多个报表
+            this.Page.Title = fl.Name + "(" + this.currMapRpt.Name + ")";
 
             //初始化查询工具栏.
             this.ToolBar1.InitToolbarOfMapRpt(fl, currMapRpt, this.RptNo, en, 1);
@@ -104,7 +106,7 @@ namespace CCFlow.WF.Rpt
 
             if (BP.Web.WebUser.No == "admin")
             {
-                string url = "/WF/Rpt/OneFlow.aspx?FK_MapData=ND" + int.Parse(this.FK_Flow) + "Rpt&FK_Flow=" + this.FK_Flow;
+                string url = "/WF/Rpt/OneFlow.aspx?FK_MapData=ND" + int.Parse(this.FK_Flow) + "Rpt&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.currMapRpt.No;
 
                 //  string str = "<div style='float:right'><a href=\"javascript:Setting('"+this.RptNo+"','"+this.FK_Flow+"');\" >设置</a></div>";
                 string str = "<div style='float:right'><a href='" + url + "' ><img src='/WF/Img/Setting.png' width='12px' border=0/>&nbsp;设置</a></div>";
@@ -616,7 +618,14 @@ namespace CCFlow.WF.Rpt
                                         myDR[attr.Name] = sem.Lab;
                                         break;
                                     case FieldTypeS.FK:
-                                        string tabName = attr.KeyOfEn;
+                                        string tabName = attr.UIBindKey;
+                                        if (attr.KeyOfEn == "FK_NY") {
+                                            tabName = "Pub_NY";
+                                        }
+                                        else if (attr.KeyOfEn == "FK_Dept")
+                                        {
+                                            tabName = "Port_Dept";
+                                        }
                                         DataTable drDt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM " + tabName + " WHERE NO='" + dr[attr.Field] + "'");
                                         if (drDt.Rows.Count > 0)
                                             myDR[attr.Name] = drDt.Rows[0]["NAME"].ToString();

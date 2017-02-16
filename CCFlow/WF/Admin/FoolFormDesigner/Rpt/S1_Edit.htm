@@ -27,14 +27,31 @@
 
         function InitPage() {
             var no = unescape(GetQueryString("No"));
-            var name = unescape(GetQueryString("Name"));
-            var note = unescape(GetQueryString("Note"));
+
             if (no != undefined && no != '') {
-                $('#TxbNo').val(no);
-                $('#TxbName').val(name);
-                $('#TxbNote').val(note);
                 pageData.DoType = "Edit";
-            } else {
+                $.ajax({
+                    type: 'post',
+                    async: true,
+                    url: Handler + "?DoType=S0_OneRpt_Init&No=" + no + "&m=" + Math.random(),
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.indexOf("@")==0) {
+                            alert(data);
+                            return;
+                        }
+                        var jsData = JSON.parse(data);
+                        if (jsData.length == 1) {
+                            var name = jsData[0].Name;
+                            var note = jsData[0].Note;
+                            $('#TxbNo').val(no);
+                            $('#TxbName').val(name);
+                            $('#TxbNote').val(note);
+                        }
+                    }
+                });
+            } 
+            else {
                 pageData.DoType = "Add";
             }
         }

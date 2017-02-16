@@ -436,7 +436,18 @@ namespace CCFlow.WF.CCForm
                             FrmAttachmentDBAttr.RefPKVal, this.WorkID, FrmAttachmentDBAttr.FK_FrmAttachment, frmAth.FK_MapData + "_" + frmAth.NoOfObj);
                     }
                     string downPath = GetRealPath(dbDown.FileFullName);
-                    PubClass.DownloadFile(dbDown.FileFullName, dbDown.FileName);
+
+                    FrmAttachment dbAtt = new FrmAttachment();
+                    dbAtt.MyPK = dbDown.FK_FrmAttachment;
+
+                    if (dbAtt.SaveWay == 0)
+                    {
+                        PubClass.DownloadFile(dbDown.FileFullName, dbDown.FileName);
+                    }
+                    else if (dbAtt.SaveWay == 2)
+                    {
+                        PubClass.DownloadHttpFile(dbDown.FileFullName, dbDown.FileName);
+                    }
                     break;
                 case "Open":
                     var url = BP.WF.Glo.CCFlowAppPath + "WF/WebOffice/AttachOffice.aspx?DoType=EditOffice&DelPKVal=" + athDBPK + "&FK_FrmAttachment=" + frmAth.MyPK + "&PKVal=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_MapData=" + frmAth.FK_MapData + "&NoOfObj=" + frmAth.NoOfObj;

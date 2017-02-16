@@ -180,6 +180,7 @@
   -->
   <ItemGroup>
     <Compile Include="Glo.cs" />
+    <Compile Include="MapAttr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

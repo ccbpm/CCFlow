@@ -73,7 +73,7 @@ namespace CCFormExcel2010
 			#endregion 获得外部参数, 这是通过外部传递过来的参数.
 
 			// 测试当前数据.
-			//this.InitTester();
+			this.InitTester();
 
 			#region 校验用户安全与下载文件.
 			try
@@ -106,13 +106,12 @@ namespace CCFormExcel2010
 					//    int lgType=int.Parse(dr["LGType"].ToString());
 					//    if (lgType == 0)
 					//        continue; //普通类型的字段。
-
 					//    string uiBindKey = dr["UIBindKey"].ToString();
 					//    if (string.IsNullOrEmpty(uiBindKey) == true)
 					//        continue; // 没有外键枚举.
-
 					//    DataTable dt = ds.Tables[uiBindKey];
 					//}
+
 					SetMetaData(ds);
 
 					#endregion 加载外键枚举数据
@@ -191,7 +190,6 @@ namespace CCFormExcel2010
 
 			//若插件没有加载成功：直接
 			if (!Glo.LoadSuccessful) return;
-
 			//执行保存.
 			//CCFlowExcel2007.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
 			//string json = "";
@@ -212,35 +210,43 @@ namespace CCFormExcel2010
 		/// </summary>
 		/// <param name="ds"></param>
 		/// <returns></returns>
-		public bool SetMetaData(DataSet ds)
-		{
-			//x Worksheet ws = (Worksheet)Application.Worksheets.get_Item("MetaData"); 
-			//x var ws = Application.Sheets.Item["MetaData"];
-			var ws = Application.Worksheets["MetaData"]; //只遍历元数据sheet内的名称
+        public bool SetMetaData(DataSet ds)
+        {
+            //x Worksheet ws = (Worksheet)Application.Worksheets.get_Item("MetaData"); 
+            //x var ws = Application.Sheets.Item["MetaData"];
 
-			if (ws != null) //如果存在MetaData这个sheet页
-			{
-				for (var i = 1; i < ws.Names.Count; i++)
-				{
-					var name = ws.Names.Item(i).NameLocal;
-					if (ds.Tables.Contains(name)) //需确保name使用的是UIBindKey
-					{
-						var range = ws.Names.Item(i).RefersToRange;
-						var col = ConvertInt2Letter(range.Column);
-						//填充数据
-						for (var r = 1; r <= ds.Tables[name].Rows.Count; r++)
-						{
-							ws.get_Range(col + r, missing).Value2 = ds.Tables[name].Rows[i - 1]["Name"].ToString();
-						}
-						//设置命名
-						Application.Names.Add("name", "=MetaData!$" + col + "$1:$" + col + "$" + ds.Tables[name].Rows.Count);
-					}
-				}
-				return true;
-			}
-			MessageBox.Show("不存在Sheet页：MetaData");
-			return false;
-		}
+            var ws = Application.Worksheets["MetaData"]; //只遍历元数据sheet内的名称
+            if (ws == null)
+            {
+                MessageBox.Show("不存在Sheet页：MetaData");
+                return false;
+            }
+
+            //遍历明明区域.
+            for (var i = 1; i < Application.Names.Count; i++)
+            {
+                var name = Application.Names.Item(i).NameLocal;
+                var location = Application.Names.Item(i).RefersToLocal;
+                if (location.IndexOf("MetaData") > -1)
+                {
+                    if (ds.Tables.Contains(name)) //需确保name使用的是UIBindKey
+                    {
+                        var range = Application.Names.Item(i).RefersToRange;
+                        var col = ConvertInt2Letter(range.Column);
+                        //填充数据
+                        for (var r = 1; r <= ds.Tables[name].Rows.Count; r++)
+                        {
+                            Application.Sheets["MetaData"].get_Range(col + r, missing).Value2 = ds.Tables[name].Rows[i - 1]["Name"].ToString();
+                        }
+                        //设置命名
+                        Application.Names.Add("name", "=MetaData!$" + col + "$1:$" + col + "$" + ds.Tables[name].Rows.Count);
+                    }
+                }
+            }
+            return true;
+
+
+        }
 
 		/// <summary>
 		/// 填充表单数据

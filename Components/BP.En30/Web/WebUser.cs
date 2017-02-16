@@ -155,7 +155,6 @@ namespace BP.Web
                     throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门,或者部门编号{"+em.FK_Dept+"}不存在.");
             }
 
-
             if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
             {
                 var ws = DataType.GetPortalInterfaceSoapClientInstance();
@@ -177,7 +176,6 @@ namespace BP.Web
                 BP.DA.DBAccess.RunSQL(ps);
                 WebUser.HisStationsStr = strs;
             }
-
             #endregion 解决部门的问题.
 
             WebUser.FK_Dept = em.FK_Dept;
@@ -223,25 +221,111 @@ namespace BP.Web
                 }
 
                 cookie.Values.Add("Lang", lang);
-
-                //string isEnableStyle = SystemConfig.AppSettings["IsEnableStyle"];
-                //if (isEnableStyle == "1")
-                //{
-                //    try
-                //    {
-                //        string sql = "SELECT Style FROM WF_Emp WHERE No='" + em.No + "' ";
-                //        int val = DBAccess.RunSQLReturnValInt(sql, 0);
-                //        cookie.Values.Add("Style", val.ToString());
-                //        WebUser.Style = val.ToString();
-                //    }
-                //    catch
-                //    {
-                //    }
-                //}
                 if (authNo == null)
                     authNo = "";
                 cookie.Values.Add("Auth", authNo); //授权人.
 
+                if (authName == null)
+                    authName = "";
+                cookie.Values.Add("AuthName", authName); //授权人名称..
+
+                System.Web.HttpContext.Current.Response.AppendCookie(cookie);
+            }
+        }
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="userName">用户名称</param>
+        /// <param name="deptNo">部门编号</param>
+        /// <param name="deptName">名称</param>
+        /// <param name="authNo">授权人编号</param>
+        /// <param name="authName">名称</param>
+        public static void SignInOfGener2017(string userNo, string userName = null, string deptNo = null, string deptName = null,
+            string authNo = null, string authName = null)
+        {
+            if (System.Web.HttpContext.Current == null)
+                SystemConfig.IsBSsystem = false;
+            else
+                SystemConfig.IsBSsystem = true;
+
+
+            WebUser.No = userNo;
+            WebUser.Name = userName;
+            if (string.IsNullOrEmpty(authNo) == false)
+            {
+                WebUser.Auth = authNo; //被授权人，实际工作的执行者.
+                WebUser.AuthName = authName;
+            }
+            else
+            {
+                WebUser.Auth = null;
+                WebUser.AuthName = null;
+            }
+
+
+            //登录模式？
+            BP.Web.WebUser.UserWorkDev = Web.UserWorkDev.PC;
+
+            #region 解决部门的问题.
+            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
+            {
+                if (string.IsNullOrEmpty(deptNo) == true)
+                {
+                    string sql = "";
+                    if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
+                        sql = "SELECT FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + userNo + "'";
+                    else
+                        sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + userNo + "'";
+
+                    deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
+                    if (string.IsNullOrEmpty(deptNo) == true)
+                    {
+                        throw new Exception("@登录人员(" + userNo + "," + userName + ")没有维护部门...");
+                    }
+                    else
+                    {
+                        //调用接口更改所在的部门.
+                        // WebUser.ChangeMainDept(em.No, deptNo);
+                    }
+                }
+            }
+
+
+            #endregion 解决部门的问题.
+
+            WebUser.FK_Dept = deptNo;
+            WebUser.FK_DeptName = deptName;
+            WebUser.HisDepts = null;
+            WebUser.HisStations = null;
+
+            if (BP.Sys.SystemConfig.IsBSsystem)
+            {
+                //System.Web.HttpContext.Current.Response.Cookies.Clear();
+                HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
+                if (hc != null)
+                    BP.Sys.Glo.Request.Cookies.Remove("CCS");
+
+                HttpCookie cookie = new HttpCookie("CCS");
+                cookie.Expires = DateTime.Now.AddDays(2);
+                cookie.Values.Add("No", userNo);
+                cookie.Values.Add("Name", HttpUtility.UrlEncode(userName));
+
+
+
+                cookie.Values.Add("FK_Dept", deptNo);
+                cookie.Values.Add("FK_DeptName", HttpUtility.UrlEncode(deptName));
+
+                if (System.Web.HttpContext.Current.Session != null)
+                {
+                    cookie.Values.Add("Token", System.Web.HttpContext.Current.Session.SessionID);
+                    cookie.Values.Add("SID", System.Web.HttpContext.Current.Session.SessionID);
+                }
+
+                if (authNo == null)
+                    authNo = "";
+
+                cookie.Values.Add("Auth", authNo); //授权人.
                 if (authName == null)
                     authName = "";
                 cookie.Values.Add("AuthName", authName); //授权人名称..
@@ -507,7 +591,7 @@ namespace BP.Web
             }
         }
         /// <summary>
-        /// FK_Dept
+        /// 当前登录人员的部门
         /// </summary>
         public static string FK_Dept
         {

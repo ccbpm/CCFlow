@@ -417,6 +417,33 @@ namespace BP.DA
             doc = emailregex.Replace(doc, "<a href=mailto:></a>");
             return doc;
         }
+        /// <summary>
+        /// 将文件转化为二进制
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static byte[] ConvertFileToByte(string fileName)
+        {
+            System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Open,
+                System.IO.FileAccess.Read, FileShare.ReadWrite);
+
+            byte[] nowByte = new byte[(int)fs.Length];
+            try
+            {
+                fs.Read(nowByte, 0, (int)fs.Length);
+                return nowByte;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+      
+        
 
         /// <summary>
         /// 写文件
@@ -440,6 +467,38 @@ namespace BP.DA
 
             sr.Write(Doc);
             sr.Close();
+        }
+        /// <summary>
+        /// 写入一个文件
+        /// </summary>
+        /// <param name="filePathName"></param>
+        /// <param name="objData"></param>
+        /// <returns></returns>
+        public static string WriteFile(string filePathName, byte[] objData)
+        {
+            string folder = System.IO.Path.GetDirectoryName(filePathName);
+            if (System.IO.Directory.Exists(folder)==false)
+                System.IO.Directory.CreateDirectory(folder);
+
+            if (System.IO.File.Exists(filePathName)==true)
+                System.IO.File.Delete(filePathName);
+
+            System.IO.FileStream fs = new System.IO.FileStream(filePathName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
+            System.IO.BinaryWriter w = new System.IO.BinaryWriter(fs);
+            try
+            {
+                w.Write(objData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                w.Close();
+                fs.Close();
+            }
+            return filePathName;
         }
         /// <summary>
         /// Http下载文件

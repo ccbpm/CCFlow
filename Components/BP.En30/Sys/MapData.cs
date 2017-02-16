@@ -2513,36 +2513,24 @@ namespace BP.Sys
 		public bool ExcelGenerFile(int oid, ref byte[] bytes)
 		{
 			byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, oid.ToString(), "DBFile");
-			if (by != null)
-			{
-				bytes = by;
-				return true;
-			}
-			else //说明当前excel文件没有生成.
-			{
-				string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
-				if (System.IO.File.Exists(tempExcel))
-				{
-					System.IO.FileStream file = new System.IO.FileStream(tempExcel, System.IO.FileMode.Open);
-					file.Read(by, 0, 99999999);
-					bytes = by;
-					return false;
-				}
-				else //模板文件也不存在时
-				{
-					throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
-				}
-			}
-
-			//if (System.IO.File.Exists(tempExcel) == false)
-			//{
-			//      tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xls";
-			//      if (System.IO.File.Exists(tempExcel) == false)
-			//          throw new Exception("@没有找到模版文件."+tempExcel+" 请确认表单配置.");
-			//}
-			//string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + this.PTable + oid.ToString() + ".xlsx";
-			//System.IO.File.Copy(tempExcel, tempfile);
-			//return "";
+            if (by != null)
+            {
+                bytes = by;
+                return true;
+            }
+            else //说明当前excel文件没有生成.
+            {
+                string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
+                if (System.IO.File.Exists(tempExcel) == true)
+                {
+                    bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+                    return false;
+                }
+                else //模板文件也不存在时
+                {
+                    throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
+                }
+            }
 		}
 
 		public void ExcelSaveFile(int oid, byte[] bty)

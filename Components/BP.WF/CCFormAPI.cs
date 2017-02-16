@@ -54,17 +54,32 @@ namespace BP.WF
             //数据容器
             DataSet myds = new DataSet();
 
+            //增加表单字段描述.
+            string sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "' ";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapAttr";
+            myds.Tables.Add(dt);
+
+
             //映射.
             MapData md = new MapData(frmID);
 
             //实体.
-            GEEntity wk = new GEEntity(frmID, pkval);
+            GEEntity wk = new GEEntity(frmID);
+            wk.OID = pkval;
+            if (wk.RetrieveFromDBSources() == 0)
+                wk.Insert();
+
+           // GEEntity wk = new GEEntity(frmID, pkval);
 
             #region 把主从表数据放入里面.
-            // 处理传递过来的参数。
-            foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+            if (BP.Sys.SystemConfig.IsBSsystem == true)
             {
-                wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                // 处理传递过来的参数。
+                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                {
+                    wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                }
             }
 
             // 执行表单事件..
@@ -86,12 +101,10 @@ namespace BP.WF
                 wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as GEEntity;
             }
 
+            //增加主表数据.
             DataTable mainTable = wk.ToDataTableField(md.No);
             mainTable.TableName = "MainTable";
             myds.Tables.Add(mainTable);
-
-            string sql = "";
-            DataTable dt = null;
 
             ////把附件的数据放入.
             //if (md.FrmAttachments.Count > 0)
@@ -161,9 +174,7 @@ namespace BP.WF
 
             #region 把外键表加入DataSet
             DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
-
             MapExts mes = md.MapExts;
-
             foreach (DataRow dr in dtMapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();

@@ -73,7 +73,7 @@ namespace CCFormExcel2010
 			#endregion 获得外部参数, 这是通过外部传递过来的参数.
 
 			// 测试当前数据.
-			this.InitTester();
+			//this.InitTester();
 
 			#region 校验用户安全与下载文件.
 			try
@@ -98,30 +98,27 @@ namespace CCFormExcel2010
 					//获得该表单的，物理数据.
 					DataSet ds = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
 
+					#region 加载外键枚举数据
 
-                    #region 加载外键枚举数据
-                    DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
-                    foreach (DataRow dr in dtMapAttr.Rows)
-                    {
-                        int lgType=int.Parse(dr["LGType"].ToString());
-                        if (lgType == 0)
-                            continue; //普通类型的字段。
+					//DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
+					//foreach (DataRow dr in dtMapAttr.Rows)
+					//{
+					//    int lgType=int.Parse(dr["LGType"].ToString());
+					//    if (lgType == 0)
+					//        continue; //普通类型的字段。
 
-                        string uiBindKey = dr["UIBindKey"].ToString();
-                        if (string.IsNullOrEmpty(uiBindKey) == true)
-                            continue; // 没有外键枚举.
+					//    string uiBindKey = dr["UIBindKey"].ToString();
+					//    if (string.IsNullOrEmpty(uiBindKey) == true)
+					//        continue; // 没有外键枚举.
 
-                        DataTable dt = ds.Tables[uiBindKey];
+					//    DataTable dt = ds.Tables[uiBindKey];
+					//}
+					SetMetaData(ds);
 
+					#endregion 加载外键枚举数据
 
-                    }
-
-                    #endregion 加载外键枚举数据
-
-
-
-                    #region 给主从表赋值.
-                    //给主表赋值.
+					#region 给主从表赋值.
+					//给主表赋值.
 					DataTable dtMain = ds.Tables["MainTable"];
 					SetMainData(dtMain);
 
@@ -134,12 +131,10 @@ namespace CCFormExcel2010
 					}
 					#endregion 给主从表赋值.
 				}
-
-				//TODO: 填充元数据（枚举、外键）
 			}
 			catch (Exception exp)
 			{
-				MessageBox.Show(exp.Message);
+				MessageBox.Show(exp.Message + "\r@\r" + exp.StackTrace);
 				//TODO: 
 			}
 			#endregion 校验用户安全与下载文件.
@@ -213,6 +208,41 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
+		/// 填充枚举、外键元数据
+		/// </summary>
+		/// <param name="ds"></param>
+		/// <returns></returns>
+		public bool SetMetaData(DataSet ds)
+		{
+			//x Worksheet ws = (Worksheet)Application.Worksheets.get_Item("MetaData"); 
+			//x var ws = Application.Sheets.Item["MetaData"];
+			var ws = Application.Worksheets["MetaData"]; //只遍历元数据sheet内的名称
+
+			if (ws != null) //如果存在MetaData这个sheet页
+			{
+				for (var i = 1; i < ws.Names.Count; i++)
+				{
+					var name = ws.Names.Item(i).NameLocal;
+					if (ds.Tables.Contains(name)) //需确保name使用的是UIBindKey
+					{
+						var range = ws.Names.Item(i).RefersToRange;
+						var col = ConvertInt2Letter(range.Column);
+						//填充数据
+						for (var r = 1; r <= ds.Tables[name].Rows.Count; r++)
+						{
+							ws.get_Range(col + r, missing).Value2 = ds.Tables[name].Rows[i - 1]["Name"].ToString();
+						}
+						//设置命名
+						Application.Names.Add("name", "=MetaData!$" + col + "$1:$" + col + "$" + ds.Tables[name].Rows.Count);
+					}
+				}
+				return true;
+			}
+			MessageBox.Show("不存在Sheet页：MetaData");
+			return false;
+		}
+
+		/// <summary>
 		/// 填充表单数据
 		/// </summary>
 		/// <param name="dt"></param>
@@ -222,7 +252,7 @@ namespace CCFormExcel2010
 			//var r = false;
 			foreach (DataColumn dc in dt.Columns)
 			{
-				if (dt.Rows[0][dc.ColumnName] != null && Application.Names.Item(dc.ColumnName) != null)
+				if (dt.Rows[0][dc.ColumnName] != null && Application.Name.Contains(dc.ColumnName))//字段值不为空 且 Excel文档中存在此字段的命名
 				{
 					var range = Application.Names.Item(dc.ColumnName).RefersToRange;
 					var location = Application.Names.Item(dc.ColumnName).RefersToLocal; //=Sheet1!$B$2
@@ -248,10 +278,74 @@ namespace CCFormExcel2010
 			var location = Application.Names.Item(dt.TableName).RefersToLocal;
 			if (!Regex.IsMatch(location, regexRangeArea)) //excel中子表所在区域不是『区域』（是单个单元格）
 				return false;
-			if (dt.Rows.Count > range.Rows.Count - 1) //表单实际数据子表行数多于excel文档行数时
+
+			#region 获取字段信息
+			//获取字段信息，及数据开始的行号
+			Hashtable htColumns = new Hashtable();
+			int intMaxTableHeadHeight = 1;
+			for (var c = range.Column; c <= range.Column + range.Columns.Count - 1; )
 			{
-				//TODO: 插入行
+				string name = string.Empty;
+				var currentColumnMergeColumnsCount = 1; //当前表头所占列数
+				for (var r = range.Row; r < range.Row + range.Rows.Count - 1; )
+				{
+					var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + range.Row, missing);
+
+					//!下一个要循环的行
+					//r += (rangeTableHead.MergeCells ? rangeTableHead.MergeArea.Rows.Count - 1 : 1);
+					if (rangeTableHead.MergeCells)
+					{
+						r += rangeTableHead.MergeArea.Rows.Count;
+					}
+					else
+					{
+						r++;
+					}
+
+					//若该单元格有命名
+					if (rangeTableHead.Name.Name != null)
+					{
+						name = rangeTableHead.Name.Name;
+						if (rangeTableHead.MergeCells)
+						{
+							currentColumnMergeColumnsCount = rangeTableHead.MergeArea.Columns.Count;
+						}
+						if (intMaxTableHeadHeight < r)
+							intMaxTableHeadHeight = r;
+						break;
+					}
+				}
+
+				//若该列有绑定列
+				if (!string.IsNullOrEmpty(name))
+				{
+					htColumns.Add(c, name);
+				}
+
+				//!下一个要循环的列
+				c += currentColumnMergeColumnsCount;
 			}
+			#endregion
+
+			if (dt.Rows.Count > range.Rows.Count - intMaxTableHeadHeight) //表单实际数据子表行数多于excel文档行数时
+			{
+				//TODO: 插入行（区域结尾？or 倒数第二行？）
+			}
+
+			//填充数据
+			foreach (DictionaryEntry col in htColumns)
+			{
+				if (dt.Columns.Contains(col.Value.ToString())) //DataTable中含有该字段
+				{
+					var colL = ConvertInt2Letter(Convert.ToInt32(col.Key));
+					for (var r = 0; r <= dt.Rows.Count; r++)
+					{
+						var rangeCell = range.Worksheet.get_Range(colL + (range.Row + intMaxTableHeadHeight + r - 1), missing);
+						rangeCell.Value2 = dt.Rows[r][col.Value.ToString()].ToString();
+					}
+				}
+			}
+
 			//遍历excel文档的子表的列//TODO: 表头存在合并单元格的情况？
 			for (var c = range.Column; c <= range.Column + range.Columns.Count - 1; c++)
 			{

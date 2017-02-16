@@ -31,7 +31,7 @@ namespace CCFormExcel2010
 		{
 			Glo.UserNo = "anjian";
 			Glo.SID = "d-d-d-d-sdsds";
-			Glo.WorkID = 10001;
+			Glo.WorkID = 2201;
 			Glo.FK_Flow = "002";
 			Glo.FK_Node = 201;
 			Glo.FrmID = "CY_6501"; //采样表单ID.
@@ -73,7 +73,7 @@ namespace CCFormExcel2010
 			#endregion 获得外部参数, 这是通过外部传递过来的参数.
 
 			// 测试当前数据.
-			//this.InitTester();
+			this.InitTester();
 
 			#region 校验用户安全与下载文件.
 			try
@@ -98,8 +98,30 @@ namespace CCFormExcel2010
 					//获得该表单的，物理数据.
 					DataSet ds = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
 
-					#region 给主从表赋值.
-					//给主表赋值.
+
+                    #region 加载外键枚举数据
+                    DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
+                    foreach (DataRow dr in dtMapAttr.Rows)
+                    {
+                        int lgType=int.Parse(dr["LGType"].ToString());
+                        if (lgType == 0)
+                            continue; //普通类型的字段。
+
+                        string uiBindKey = dr["UIBindKey"].ToString();
+                        if (string.IsNullOrEmpty(uiBindKey) == true)
+                            continue; // 没有外键枚举.
+
+                        DataTable dt = ds.Tables[uiBindKey];
+
+
+                    }
+
+                    #endregion 加载外键枚举数据
+
+
+
+                    #region 给主从表赋值.
+                    //给主表赋值.
 					DataTable dtMain = ds.Tables["MainTable"];
 					SetMainData(dtMain);
 

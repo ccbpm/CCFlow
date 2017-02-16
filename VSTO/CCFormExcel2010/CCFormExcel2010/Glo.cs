@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
 using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -13,6 +13,25 @@ namespace BP.Excel
     /// </summary>
     public class Glo
     {
+        /// <summary>
+        /// 获得编号根据表名，与名称
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <param name="tableName"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetNoByName(DataSet ds, string tableName, string name)
+        {
+            DataTable dt = ds.Tables[tableName];
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (dr["Name"].ToString() == name)
+                    return dr["No"].ToString();
+            }
+
+            return "";
+        }
+
         #region 参数.
         /// <summary>
         /// 当前登录用户编号

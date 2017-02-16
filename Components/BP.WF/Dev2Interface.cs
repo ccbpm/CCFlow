@@ -2149,7 +2149,7 @@ namespace BP.WF
                     break;
                 case ReturnRole.ReturnPreviousNode:
                     WorkNode mywnP = wn.GetPreviousWorkNode();
-
+                    
                     if (nd.IsHL || nd.IsFLHL)
                     {
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
@@ -6736,6 +6736,20 @@ namespace BP.WF
             int i = DBAccess.RunSQL(ps);
 
             BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, workid, 0, "任务被" + WebUser.Name + "从任务池取走.", "获取");
+            if (i > 0)
+            {
+                Paras ps1 = new Paras();
+                //取走后 将WF_GenerWorkFlow 中的 TodoEmps,TodoEmpsNum 修改下  杨玉慧 
+                ps1.SQL = "UPDATE WF_GenerWorkFlow SET TodoEmps=" + dbstr + "TodoEmps,TodoEmpsNum=1 WHERE  WorkID=" + dbstr + "WorkID";
+                string toDoEmps = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name;
+                ps1.Add(GenerWorkFlowAttr.TodoEmps, toDoEmps);
+                ps1.Add(GenerWorkerListAttr.WorkID, workid);
+                BP.DA.Log.DefaultLogWriteLineInfo(toDoEmps);
+                BP.DA.Log.DefaultLogWriteLineInfo(ps1.SQL);
+                DBAccess.RunSQL(ps1);
+            }
+
+            BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, workid, 0, "任务被" + WebUser.Name + "从任务池取走.", "获取");
             if (i == 1)
                 return true;
             else
@@ -6769,8 +6783,38 @@ namespace BP.WF
             ps.SQL = "UPDATE WF_GenerWorkerlist SET IsEnable=1 WHERE IsEnable=-1 AND WorkID=" + dbstr + "WorkID ";
             ps.Add(GenerWorkerListAttr.WorkID, workid);
             int i = DBAccess.RunSQL(ps);
-            if (i == 0)
+            if (i < 0)//有可能是只有一个人
                 throw new Exception("@流程数据错误,不应当更新不到数据。");
+
+            if (i > 0)
+            {
+                Paras ps1 = new Paras();
+                //设置已经被取走的状态。
+                ps1.SQL = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerlist  WHERE IsEnable=1 AND WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ";
+                ps1.Add(GenerWorkerListAttr.WorkID, workid);
+                ps1.Add(GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+                ps1.Add(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
+                DataTable toDoEmpsTable = DBAccess.RunSQLReturnTable(ps1);
+                string toDoEmps = string.Empty;
+                string toDoEmpsNum = string.Empty;
+                if (toDoEmpsTable == null || toDoEmpsTable.Rows.Count == 0)
+                    throw new Exception("@流程数据错误,没有找到需更新的待处理人。");
+
+                toDoEmpsNum = toDoEmpsTable.Rows.Count.ToString();
+                foreach (DataRow dr in toDoEmpsTable.Rows)
+                {
+                    toDoEmps += string.Format("{0},{1}", dr["FK_Emp"].ToString(), dr["FK_EmpText"].ToString()) + ";";
+                }
+                Paras ps2 = new Paras();
+                //将任务放回后 将WF_GenerWorkFlow 中的 TodoEmps,TodoEmpsNum 修改下  杨玉慧 
+                ps2.SQL = "UPDATE WF_GenerWorkFlow SET TodoEmps=" + dbstr + "TodoEmps,TodoEmpsNum=" + dbstr + "TodoEmpsNum WHERE  WorkID=" + dbstr + "WorkID";
+                ps2.Add(GenerWorkFlowAttr.TodoEmps, toDoEmps);
+                ps2.Add(GenerWorkFlowAttr.TodoEmpsNum, toDoEmpsNum);
+                ps2.Add(GenerWorkerListAttr.WorkID, workid);
+                BP.DA.Log.DefaultLogWriteLineInfo(toDoEmps);
+                BP.DA.Log.DefaultLogWriteLineInfo(ps2.SQL);
+                DBAccess.RunSQL(ps2);
+            }
 
             BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, workid, 0, "任务被" + WebUser.Name + "放入了任务池.", "放入");
         }

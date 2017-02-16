@@ -754,9 +754,9 @@ namespace BP.WF
                 }
             }
 
-            // 改变当前待办工作节点。
+            // 改变当前待办工作节点。            
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkFlow  SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE  WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkFlow  SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName  WHERE  WorkID=" + dbStr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
             ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
             ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
@@ -793,6 +793,12 @@ namespace BP.WF
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = gwl.FK_Emp; //退回给。
             rw.Note = Msg;
+            //杨玉慧 
+            Emp emp = new Emp(rw.ReturnToEmp);
+            //更新待办人员
+            string updateToDoEmpSql = "UPDATE WF_GenerWorkFlow  SET TodoEmps='" + emp.No + "," + emp.Name + "',TodoEmpsNum=1 WHERE  WorkID=" + this.WorkID;
+            //更新WF_GenerWorkFlow 的待办人员
+            DBAccess.RunSQL(updateToDoEmpSql);
 
             if (this.HisNode.TodolistModel == TodolistModel.Order
                 || this.HisNode.TodolistModel == TodolistModel.Sharing
@@ -997,8 +1003,8 @@ namespace BP.WF
                             infoLog += "\r\n " + attr.Desc + ":" + subWK.GetValStrByKey(attr.Key);
                         }
 
-                        //递归调用。
-                        ReorderLog(subNd, toND);
+                        //递归调用。 //递归调用。  先把此处注释掉   会造成死循环 杨玉慧
+                        //ReorderLog(subNd, toND);
                     }
                 }
                 else
@@ -1021,8 +1027,8 @@ namespace BP.WF
                 if (nd.NodeID == toND.NodeID)
                     break;
 
-                //递归调用。
-                ReorderLog(nd, toND);
+                //递归调用。  先把此处注释掉   会造成死循环 杨玉慧
+                //ReorderLog(nd, toND);
             }
         }
         /// <summary>

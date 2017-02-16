@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Diagnostics;
 
+
 namespace CCFormExcel2010
 {
     public partial class ThisAddIn
@@ -47,12 +48,12 @@ namespace CCFormExcel2010
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+
             #region 获得外部参数, 这是通过外部传递过来的参数.
             try
             {
                 Dictionary<string, string> args = Glo.GetArguments();
                 Glo.LoadSuccessful = args["fromccflow"] == "true";
-
                 //	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
                 Glo.UserNo = args["UserNo"];
                 Glo.SID = args["SID"];
@@ -85,11 +86,15 @@ namespace CCFormExcel2010
                 //写入文件.
                 BP.Excel.Glo.WriteFile(tempFile, bytes);
 
-                string tempFile2 = "C:\\CCFlow\\temp2.xlsx";
-                System.IO.File.Copy(tempFile, tempFile2, true);
+
+                System.Diagnostics.ProcessStartInfo processStartInfo = new System.Diagnostics.ProcessStartInfo();
+                 processStartInfo.FileName = "excel.exe";
+                 processStartInfo.Arguments = @"D:\";
+                 System.Diagnostics.Process.Start(processStartInfo);
+            
 
                 //启动这个文件.
-                Process.Start("excel.exe", tempFile2);
+                Process.Start("excel.exe", tempFile,);
 
                 //如果打开的是模板，则还需填充数据
                 if (isExists == false)

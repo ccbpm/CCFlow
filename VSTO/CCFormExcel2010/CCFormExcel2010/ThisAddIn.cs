@@ -17,138 +17,138 @@ using System.Diagnostics;
 
 namespace CCFormExcel2010
 {
-    public partial class ThisAddIn
-    {
-        // 定义一个任务窗体 
+	public partial class ThisAddIn
+	{
+		private readonly string regexRangeSingle = "^\\=\\S+\\!\\$\\D+\\$\\d+$"; //=Sheet1!$B$2 //TODO: 存在问题：合并后的单元格无法通过此验证
+		private readonly string regexRangeArea = "^\\=\\S+\\!\\$\\D+\\$\\d+\\:\\$\\D+\\$\\d+$"; //=Sheet1!$B$2:$C$3
+
+		// 定义一个任务窗体 
 		//internal Microsoft.Office.Tools.CustomTaskPane helpTaskPane;
-        /// <summary>
-        /// 测试的参数变量.
-        /// </summary>
-        public void InitTester()
-        {
-            Glo.UserNo = "anjian";
-            Glo.SID = "d-d-d-d-sdsds";
-            Glo.WorkID = 10001;
-            Glo.FK_Flow = "002";
-            Glo.FK_Node = 201;
-            Glo.FrmID = "CY_6501"; //采样表单ID.
-            Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
-        }
+		/// <summary>
+		/// 测试的参数变量.
+		/// </summary>
+		public void InitTester()
+		{
+			Glo.UserNo = "anjian";
+			Glo.SID = "d-d-d-d-sdsds";
+			Glo.WorkID = 10001;
+			Glo.FK_Flow = "002";
+			Glo.FK_Node = 201;
+			Glo.FrmID = "CY_6501"; //采样表单ID.
+			Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
+		}
 
-        public void InitTesterDemo()
-        {
-            Glo.UserNo = "zhoupeng";
-            Glo.SID = "d-d-d-d-sdsds";
-            Glo.WorkID = 10001;
-            Glo.FK_Flow = "001";
-            Glo.FK_Node = 101;
-            Glo.FrmID = "ND101";
-            Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
-        }
+		public void InitTesterDemo()
+		{
+			Glo.UserNo = "zhoupeng";
+			Glo.SID = "d-d-d-d-sdsds";
+			Glo.WorkID = 10001;
+			Glo.FK_Flow = "001";
+			Glo.FK_Node = 101;
+			Glo.FrmID = "ND101";
+			Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
+		}
 
-        private void ThisAddIn_Startup(object sender, System.EventArgs e)
-        {
+		private void ThisAddIn_Startup(object sender, System.EventArgs e)
+		{
 
-            #region 获得外部参数, 这是通过外部传递过来的参数.
-            try
-            {
-                Dictionary<string, string> args = Glo.GetArguments();
-                Glo.LoadSuccessful = args["fromccflow"] == "true";
-                //	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
-                Glo.UserNo = args["UserNo"];
-                Glo.SID = args["SID"];
-                Glo.FK_Flow = args["FK_Flow"];
-                Glo.FK_Node = int.Parse(args["FK_Node"]);
-                Glo.FrmID = args["FrmID"];
-                Glo.WorkID = int.Parse(args["WorkID"]);
-                Glo.WSUrl = args["WSUrl"];
-            }
-            catch (Exception ex)
-            {
-                //MessageBox.Show("加载期间出现错误", ex.Message);
-            }
-            #endregion 获得外部参数, 这是通过外部传递过来的参数.
+			#region 获得外部参数, 这是通过外部传递过来的参数.
+			try
+			{
+				Dictionary<string, string> args = Glo.GetArguments();
+				Glo.LoadSuccessful = args["fromccflow"] == "true";
+				//	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
+				Glo.UserNo = args["UserNo"];
+				Glo.SID = args["SID"];
+				Glo.FK_Flow = args["FK_Flow"];
+				Glo.FK_Node = int.Parse(args["FK_Node"]);
+				Glo.FrmID = args["FrmID"];
+				Glo.WorkID = int.Parse(args["WorkID"]);
+				Glo.WSUrl = args["WSUrl"];
+			}
+			catch (Exception ex)
+			{
+				//MessageBox.Show("加载期间出现错误", ex.Message);
+			}
+			#endregion 获得外部参数, 这是通过外部传递过来的参数.
 
-            // 测试当前数据.
-            this.InitTester();
+			// 测试当前数据.
+			//this.InitTester();
 
-            #region 校验用户安全与下载文件.
-            try
-            {
-                CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
-                byte[] bytes = null;
-                var isExists = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
+			#region 校验用户安全与下载文件.
+			try
+			{
+				CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
+				byte[] bytes = null;
+				var isExists = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
 
-                string tempFile="C:\\CCFlow\\temp.xlsx";
-                if (System.IO.File.Exists(tempFile) == true)
-                    System.IO.File.Delete(tempFile);
+				// 把这个byt 保存到 c:\temp.xlsx 里面.
+				string tempFile="C:\\CCFlow\\temp.xlsx";
+				if (System.IO.File.Exists(tempFile) == true)
+					System.IO.File.Delete(tempFile);
+				//写入文件.
+				BP.Excel.Glo.WriteFile(tempFile, bytes);
 
-                //写入文件.
-                BP.Excel.Glo.WriteFile(tempFile, bytes);
+				//打开文件
+				Globals.ThisAddIn.Application.Workbooks.Open("C:\\CCFlow\\temp.xlsx");
 
+			   
 
-                System.Diagnostics.ProcessStartInfo processStartInfo = new System.Diagnostics.ProcessStartInfo();
-                 processStartInfo.FileName = "excel.exe";
-                 processStartInfo.Arguments = @"D:\";
-                 System.Diagnostics.Process.Start(processStartInfo);
-            
+				//如果打开的是模板，则还需填充数据
+				if (isExists == false)
+				{
+					//获得该表单的，物理数据.
+					DataSet ds = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
 
-                //启动这个文件.
-                Process.Start("excel.exe", tempFile,);
+					#region 给主从表赋值.
+					//给主表赋值.
+					DataTable dtMain = ds.Tables["MainTable"];
+					//TODO: 赋值
 
-                //如果打开的是模板，则还需填充数据
-                if (isExists == false)
-                {
-                    //获得该表单的，物理数据.
-                    DataSet ds = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
+					//给从表赋值.
+					foreach (DataTable dt in ds.Tables)
+					{
+						if (dt.TableName == "MainTable")
+							continue;
+					}
+					#endregion 给主从表赋值.
+				}
 
-                    #region 给主从表赋值.
-                    //给主表赋值.
-                    DataTable dtMain = ds.Tables["MainTable"];
+				//TODO: 填充元数据（枚举、外键）
+			}
+			catch (Exception exp)
+			{
+				MessageBox.Show(exp.Message);
+				//TODO: 
+			}
+			#endregion 校验用户安全与下载文件.
 
-                    //给从表赋值.
-                    foreach (DataTable dt in ds.Tables)
-                    {
-                        if (dt.TableName == "MainTable")
-                            continue;
-                    }
-                    #endregion 给主从表赋值.
-                }
+			//Excel.Worksheet activeWorksheet = ((Excel.Worksheet)Application.ActiveSheet);
+			//Excel.Range firstRow = activeWorksheet.get_Range("A1");
+			//firstRow.EntireRow.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
+			//Excel.Range newFirstRow = activeWorksheet.get_Range("A1");
+			//newFirstRow.Value2 = "This text was added by using code";
+			//newFirstRow.Interior.Color = 100;
+			//this.Application.WorkbookBeforeSave += new Excel.AppEvents_WorkbookBeforeSaveEventHandler(Application_WorkbookBeforeSave);
 
-            }
-            catch (Exception exp)
-            {
-                MessageBox.Show(exp.Message);
-                //TODO: 
-            }
-            #endregion 校验用户安全与下载文件.
+			//保存到.
+			//activeWorksheet.SaveAs("c:\\" + BP.Excel.Glo.FK_Flow + ".xls");
 
-            //Excel.Worksheet activeWorksheet = ((Excel.Worksheet)Application.ActiveSheet);
-            //Excel.Range firstRow = activeWorksheet.get_Range("A1");
-            //firstRow.EntireRow.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
-            //Excel.Range newFirstRow = activeWorksheet.get_Range("A1");
-            //newFirstRow.Value2 = "This text was added by using code";
-            //newFirstRow.Interior.Color = 100;
-            //this.Application.WorkbookBeforeSave += new Excel.AppEvents_WorkbookBeforeSaveEventHandler(Application_WorkbookBeforeSave);
+			// 把自定义窗体添加到CustomTaskPanes集合中 
+			//// ExcelHelp 是一个自定义控件类 
+			//helpTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(new TaskPanel(), "采样任务列表");
+			//// 使任务窗体可见 
+			//helpTaskPane.Visible = true;
 
-            //保存到.
-            //activeWorksheet.SaveAs("c:\\" + BP.Excel.Glo.FK_Flow + ".xls");
-
-            // 把自定义窗体添加到CustomTaskPanes集合中 
-            //// ExcelHelp 是一个自定义控件类 
-            //helpTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(new TaskPanel(), "采样任务列表");
-            //// 使任务窗体可见 
-            //helpTaskPane.Visible = true;
-
-            // 通过DockPosition属性来控制任务窗体的停靠位置， 
-            // 设置为 MsoCTPDockPosition.msoCTPDockPositionRight这个代表停靠到右边，这个值也是默认值 
-            //helpTaskPane.DockPosition = MsoCTPDockPosition.msoCTPDockPositionRight; 
-            // Application.ThisWorkbook.OpenLinks(
-            //  Application.ThisWorkbook.Open(
-            //Workbooks.Open Filename
-            //  Utility
-            // activeWorksheet.r
-        }
+			// 通过DockPosition属性来控制任务窗体的停靠位置， 
+			// 设置为 MsoCTPDockPosition.msoCTPDockPositionRight这个代表停靠到右边，这个值也是默认值 
+			//helpTaskPane.DockPosition = MsoCTPDockPosition.msoCTPDockPositionRight; 
+			// Application.ThisWorkbook.OpenLinks(
+			//  Application.ThisWorkbook.Open(
+			//Workbooks.Open Filename
+			//  Utility
+			// activeWorksheet.r
+		}
 
 		/// <summary>
 		/// 单元格内容变动监听事件
@@ -170,12 +170,11 @@ namespace CCFormExcel2010
 		/// <param name="Success"></param>
 		void Application_WorkbookAfterSave(Excel.Workbook Wb, bool Success)
 		{
-			var a = GetMainTableAtParas();
-
+			DataSet ds = new DataSet();
+			var a = GetData(ref ds);
 
 			//若插件没有加载成功：直接
-			if (!Glo.LoadSuccessful)
-                return;
+			if (!Glo.LoadSuccessful) return;
 
 			//执行保存.
 			//CCFlowExcel2007.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
@@ -193,15 +192,77 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
-		/// 获取excel中所有的表单字段数据（json）
+		/// 填充表单数据
 		/// </summary>
+		/// <param name="dt"></param>
 		/// <returns></returns>
-		public string GetJsonData()
+		public bool SetMainData(DataTable dt) //尚未测试
 		{
-			return null;
+			//var r = false;
+			foreach (DataColumn dc in dt.Columns)
+			{
+				if (dt.Rows[0][dc.ColumnName] != null && Application.Names.Item(dc.ColumnName) != null)
+				{
+					var range = Application.Names.Item(dc.ColumnName).RefersToRange;
+					var location = Application.Names.Item(dc.ColumnName).RefersToLocal; //=Sheet1!$B$2
+					if (Regex.IsMatch(location, regexRangeSingle)) //是单个单元格
+					{
+						range.Value2 = dt.Rows[0][dc.ColumnName].ToString();
+					}
+				}
+			}
+			return true;
 		}
 
-		public string GetMainTableAtParas()//ref DataSet ds)
+		/// <summary>
+		/// 填充子表数据
+		/// </summary>
+		/// <param name="dt">确保TableName为子表表名</param>
+		/// <returns>是否填充成功</returns>
+		public bool SetDtlData(DataTable dt) //尚未测试
+		{
+			if (!Application.Name.Contains(dt.TableName)) //excel中不存在该子表时
+				return false;
+			var range = Application.Names.Item(dt.TableName).RefersToRange;
+			var location = Application.Names.Item(dt.TableName).RefersToLocal;
+			if (!Regex.IsMatch(location, regexRangeArea)) //excel中子表所在区域不是『区域』（是单个单元格）
+				return false;
+			if (dt.Rows.Count > range.Rows.Count - 1) //表单实际数据子表行数多于excel文档行数时
+			{
+				//TODO: 插入行
+			}
+			//遍历excel文档的子表的列//TODO: 表头存在合并单元格的情况？
+			for (var c = range.Column; c <= range.Column + range.Columns.Count - 1; c++)
+			{
+				var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + range.Row, missing);
+				//如果存在表头 且 dt中存在该字段
+				if (rangeTableHead.Name.Name != null && dt.Columns.Contains(rangeTableHead.Name.Name))
+				{
+					for (var r = 0; r < dt.Rows.Count; r++)
+					{
+						var rangeCell = range.Worksheet.get_Range(ConvertInt2Letter(c) + (r + 1), missing);
+						rangeCell.set_Value(dt.Rows[r][rangeTableHead.Name.Name].ToString());
+					}
+				}
+			}
+			return true;
+		}
+
+		///// <summary>
+		///// 获取excel中所有的表单字段数据（json）
+		///// </summary>
+		///// <returns></returns>
+		//public string GetJsonData()
+		//{
+		//    return null;
+		//}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ds"></param>
+		/// <returns></returns>
+		public string GetData(ref DataSet ds) //x尚未测试
 		{
 			Hashtable htParas = new Hashtable();
 			for (int i = 1; i <= Application.Names.Count; i++)
@@ -226,7 +287,10 @@ namespace CCFormExcel2010
 					}
 					else //属于子表
 					{
-
+						if (!ds.Tables.Contains(strBelongDtl))
+						{
+							ds.Tables.Add(GetDtlData(strBelongDtl));
+						}
 					}
 				}
 				else
@@ -244,20 +308,60 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
-		/// 判断某单元格是否属于某个子表
+		/// 获取从表数据
 		/// </summary>
-		/// <param name="strAddr">单元格Address</param>
+		/// <param name="strTableName"></param>
+		/// <returns></returns>
+		public DataTable GetDtlData(string strTableName) //x尚未测试
+		{
+			var range = Application.Names.Item(strTableName).RefersToRange;
+			DataTable dt = new DataTable(strTableName);
+			//初始化字段
+			for (var i = range.Column; i < range.Column + range.Columns.Count; i++)
+			{
+				var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(i) + range.Row, missing);//TODO: 验证合并单元格是否可用
+				if (rangeTableHead.Name.Name != null)
+				{
+					dt.Columns.Add(rangeTableHead.Name.Name);
+				}
+			}
+			//填充数据
+			for (var r = range.Row + 1; r < range.Row + range.Rows.Count; r++)
+			{
+				DataRow dr = dt.NewRow();
+				for (var c = range.Column; c < range.Column + range.Columns.Count; c++)
+				{
+					var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + range.Row, missing);
+					if (rangeTableHead.Name.Name != null)
+					{
+						var rangeCell = range.Worksheet.get_Range(ConvertInt2Letter(c) + r, missing);
+						if (rangeCell.Value2 != null)
+						{
+							dr[rangeTableHead.Name.Name] = rangeCell.Value2;
+						}
+					}
+				}
+				dt.Rows.Add(dr);
+			}
+			return dt;
+		}
+
+		/// <summary>
+		/// 获取所属子表名称
+		/// </summary>
+		/// <param name="strSheet">Range.WorkSheet.Name</param>
+		/// <param name="col">Range.Column</param>
+		/// <param name="row">Range.Row</param>
 		/// <returns>子表名/null</returns>
-		public string GetBelongDtlName(string strSheet, int col, int row)
+		public string GetBelongDtlName(string strSheet, int col, int row) //x尚未测试
 		{
 			for (int i = 1; i <= Application.Names.Count; i++)
 			{
 				var location = Application.Names.Item(i).RefersToLocal; //=Sheet1!$B$2:$C$3
-				string rgxArea = "^\\=\\S+\\!\\$\\D+\\$\\d+\\:\\$\\D+\\$\\d+$";
-				if (Regex.IsMatch(location, rgxArea)) //是区域
+				var range = Application.Names.Item(i).RefersToRange;
+				if (range.Count > 1 && Regex.IsMatch(location, regexRangeArea)) //是区域
 				{
 					var name = Application.Names.Item(i).NameLocal;
-					var range = Application.Names.Item(i).RefersToRange;
 					if (strSheet == range.Worksheet.Name
 						&& col >= range.Column && col <= range.Column + range.Columns.Count - 1
 						&& row >= range.Row && col <= range.Row + range.Rows.Count - 1)
@@ -271,6 +375,23 @@ namespace CCFormExcel2010
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// 将整数转换为英文字母（e.g. 1->A,2->B，27->AA）
+		/// </summary>
+		/// <param name="i"></param>
+		/// <returns></returns>
+		public string ConvertInt2Letter(int i)
+		{
+			if (i <= 26)
+			{
+				return Convert.ToChar(64 + i).ToString();
+			}
+			else
+			{
+				return Convert.ToChar(64 + (i / 26)).ToString() + Convert.ToChar((64 + (i % 26)));
+			}
 		}
 
 		/// <summary>
@@ -300,5 +421,5 @@ namespace CCFormExcel2010
 		}
 
 		#endregion
-    }
+	}
 }

@@ -830,7 +830,7 @@ namespace BP.WF.Template
 
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeEmps(),
                     new BP.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
-                    DeptAttr.No, "节点绑定接受人", Dot2DotModel.TreeDeptEmp);
+                    DeptAttr.No, "节点绑定接受人", Dot2DotModel.TreeDeptEmp, new Depts(), EmpAttr.FK_Dept);
 
                 // 傻瓜表单可以调用的子流程. 2014.10.19 去掉.
                 //map.AttrsOfOneVSM.Add(new BP.WF.NodeFlows(), new Flows(), NodeFlowAttr.FK_Node, NodeFlowAttr.FK_Flow, DeptAttr.Name, DeptAttr.No,

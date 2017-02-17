@@ -33,6 +33,14 @@ namespace BP.En
         /// 工作模式
         /// </summary>
         public Dot2DotModel Dot2DotModel = Dot2DotModel.Default;
+        /// <summary>
+        /// 树
+        /// </summary>
+        public EntitiesTree EnsTree = null;
+        /// <summary>
+        /// 关联的树字段
+        /// </summary>
+        public string RefTreeAttr =null; 
 		/// <summary>
 		/// 多对多的实体.
 		/// </summary>
@@ -245,13 +253,16 @@ namespace BP.En
 		/// <param name="AttrOfMValue"></param>
 		/// <param name="desc">描述</param>
 		public void Add(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM , string AttrOfMText,
-            string AttrOfMValue, string desc, Dot2DotModel model= Dot2DotModel.Default)
+            string AttrOfMValue, string desc, Dot2DotModel model= Dot2DotModel.Default, EntitiesTree ensTree=null, string refTreeAttr=null)
 		{
-            // 
+
+            //属性.
 			AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM,_ensOfM,AttrOfOneInMM,AttrOfMInMM,AttrOfMText,AttrOfMValue,desc);
             
             //工作模式.
             en.Dot2DotModel = model;
+            en.EnsTree = ensTree;
+            en.RefTreeAttr = refTreeAttr;
 			 
 			this.Add(en);				
 		}

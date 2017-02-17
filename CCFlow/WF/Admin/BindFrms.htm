@@ -54,7 +54,7 @@
                     },
                     onClick: function (node) {
                         if (node) {
-                            
+                            $('#formTree').tree('expand', node.target);   
                         }
                     }
                 });
@@ -153,8 +153,9 @@
             <div style="float:left;">查询节点：<input type="text" id="searchContent" name="searchContent" /></div>
             <a href="#" style="float:left;" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" id="QueryFlowNodes"> 查询</a>
             <div class="datagrid-btn-separator"></div>
-            <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save',disabled:true" id="saveBindTree">保存</a>
-            <a href="#" id="rightC" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-add'" onclick="CopyFormTrees()">复制表单到其他节点</a>
+            <a href="#" style="float:left;" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save',disabled:true" id="saveBindTree">保存</a>
+            <a href="#" style="float:left;" id="rightC" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-add'" onclick="CopyFormTrees()">复制表单到其他节点</a>
+            <div class="datagrid-btn-separator"></div>
             <a href="#" id="A1" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-4'" onclick="SetFormSln()">设置方案</a>
         </div>
     </div>

@@ -285,7 +285,7 @@ namespace CCFlow.WF.Admin
                         BP.WF.Template.FlowFormTree formFolder = new BP.WF.Template.FlowFormTree();
                         formFolder.No = map.No;
                         formFolder.ParentNo = map.FK_FormTree;
-                        formFolder.Name = map.Name;
+                        formFolder.Name = map.Name + "[" + map.No + "]";
                         formFolder.NodeType = "form";
                         appendFormTrees.AddEntity(formFolder);
                     }
@@ -365,6 +365,7 @@ namespace CCFlow.WF.Admin
             appendMenus.Append("[{");
             appendMenus.Append("\"id\":\"" + rootNo + "\"");
             appendMenus.Append(",\"text\":\"" + root.Name + "\"");
+            appendMenus.Append(",\"state\":\"open\"");
 
             //attributes
             BP.WF.Template.FlowFormTree formTree = root as BP.WF.Template.FlowFormTree;
@@ -404,6 +405,7 @@ namespace CCFlow.WF.Admin
                 {
                     string url = formTree.Url == null ? "" : formTree.Url;
                     string ico = "icon-tree_folder";
+                    string treeState = "closed";
                     url = url.Replace("/", "|");
                     appendMenuSb.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
                     //图标
@@ -411,6 +413,7 @@ namespace CCFlow.WF.Admin
                     {
                         ico = "icon-sheet";
                     }
+                    appendMenuSb.Append(",\"state\":\"" + treeState + "\"");
                     appendMenuSb.Append(",iconCls:\"");
                     appendMenuSb.Append(ico);
                     appendMenuSb.Append("\"");

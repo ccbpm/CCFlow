@@ -68,14 +68,13 @@ namespace CCFlow.WF.Admin.AttrNode
                     this.RB_Email_1.Text = "撤销工作后通知的节点接受人";
                     this.RB_SMS_1.Text = "撤销工作后通知的节点接受人"; ;
                     break;
-
                 case BP.Sys.EventListOfNode.FlowOverAfter://6.流程结束后
-                    this.RB_Email_1.Text = "流程结束后通知的节点接受人";
-                    this.RB_SMS_1.Text = "流程结束通知的节点接受人";
+                    this.RB_Email_1.Text = "流程结束通知的所有流程的参与人";
+                    this.RB_SMS_1.Text = "流程结束通知的所有流程的参与人.";
                     break;
                 case BP.Sys.EventListOfNode.AfterFlowDel://7.流程删除后
-                    this.RB_Email_1.Text = "流程删除后通知的节点接受人";
-                    this.RB_SMS_1.Text = "流程删除通知的节点接受人";
+                    this.RB_Email_1.Text = "流程删除后通知所有流程的参与人";
+                    this.RB_SMS_1.Text = "流程删除通知所有流程的参与人";
                     break;
             }
 
@@ -201,7 +200,6 @@ namespace CCFlow.WF.Admin.AttrNode
             msg.MailNodes = nodesOfEmail;
             msg.SMSNodes = nodesOfSMS;
             #endregion 求出来选择的节点.
-
 
             #region 短信保存.
             //短信推送方式。

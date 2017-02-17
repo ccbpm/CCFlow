@@ -63,7 +63,9 @@
          <td><%=en.MailPushWayText %></td>
 
          <td><%=en.MailTitle_Real%></td>
+         
          <td><%=en.SMSPushWayText %></td>
+
          <td>  <a href="javascript:Del('<%=en.MyPK %>','<%=nodeID %>')" >删除</a> </td>
          </tr>
         <%

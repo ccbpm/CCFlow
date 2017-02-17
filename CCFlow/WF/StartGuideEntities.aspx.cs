@@ -154,7 +154,10 @@ namespace CCFlow.WF
                 string paras = url + "";
                 foreach (DataColumn dc in dt.Columns)
                 {
-                    string str= dr[dc.ColumnName].ToString();
+                    string str = dr[dc.ColumnName] as string;
+                    if (string.IsNullOrEmpty(str) == true)
+                        continue;
+
                     if (str.Contains("<"))
                     {
                         /*如果包含特殊标记, 就去掉它.*/

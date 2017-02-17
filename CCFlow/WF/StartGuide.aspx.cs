@@ -179,7 +179,13 @@ namespace CCFlow.WF
 
                 string paras = url + "";
                 foreach (DataColumn dc in dt.Columns)
-                    paras += "&" + dc.ColumnName + "=" + dr[dc.ColumnName];
+                {
+                    string val = dr[dc.ColumnName] as string;
+                    if (string.IsNullOrEmpty(val) == true)
+                        continue;
+
+                    paras += "&" + dc.ColumnName + "=" + val;
+                }
 
                 int i = 0;
                 foreach (DataColumn dc in dt.Columns)

@@ -36,6 +36,8 @@ namespace CCFlow.WF.CCForm
 		[WebMethod]
 		public bool GenerExcelFile(string userNo, string sid, string frmID, int oid, ref byte[] bytes)
 		{
+            BP.WF.Dev2Interface.Port_Login(userNo);
+
 			MapData md = new MapData(frmID);
 			return md.ExcelGenerFile(oid, ref bytes);
 		}
@@ -50,6 +52,9 @@ namespace CCFlow.WF.CCForm
 		[WebMethod]
 		public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid)
 		{
+            //让他登录.
+            BP.WF.Dev2Interface.Port_Login(userNo);
+
 			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid);
 		}
 		/// <summary>
@@ -62,76 +67,78 @@ namespace CCFlow.WF.CCForm
 		/// <param name="mainTableAtParas">主表参数</param>
 		/// <param name="dsDtls">从表参数</param>
 		/// <param name="byt">文件流</param>
-		[WebMethod]
-		public void SaveExcelFile(string userNo, string sid, string frmID, int oid, string mainTableAtParas, System.Data.DataSet dsDtls, byte[] byt)
-		{
-			// 执行保存文件.
-			MapData md = new MapData(frmID);
-			md.ExcelSaveFile(oid, byt);
+        [WebMethod]
+        public void SaveExcelFile(string userNo, string sid, string frmID, int oid, string mainTableAtParas, System.Data.DataSet dsDtls, byte[] byt)
+        {
+            BP.WF.Dev2Interface.Port_Login(userNo);
 
-			//实体.
-			GEEntity wk = new GEEntity(frmID, oid);
-			wk.ResetDefaultVal();
+            // 执行保存文件.
+            MapData md = new MapData(frmID);
+            md.ExcelSaveFile(oid, byt); //把文件保存到数据库里.
 
-			if (mainTableAtParas != null)
-			{
-				AtPara ap = new AtPara(mainTableAtParas);
-				foreach (string str in ap.HisHT.Keys)
-				{
-					if (wk.Row.ContainsKey(str))
-						wk.SetValByKey(str, ap.GetValStrByKey(str));
-					else
-						wk.Row.Add(str, ap.GetValStrByKey(str));
-				}
-			}
+            //保存主表数据.
+            GEEntity wk = new GEEntity(frmID, oid);
+            wk.ResetDefaultVal();
 
-			wk.OID = oid;
-			wk.Save();
+            if (mainTableAtParas != null)
+            {
+                AtPara ap = new AtPara(mainTableAtParas);
+                foreach (string str in ap.HisHT.Keys)
+                {
+                    if (wk.Row.ContainsKey(str))
+                        wk.SetValByKey(str, ap.GetValStrByKey(str));
+                    else
+                        wk.Row.Add(str, ap.GetValStrByKey(str));
+                }
+            }
 
-			if (dsDtls == null)
-				return;
+            wk.OID = oid;
+            wk.Save();
 
-			#region 保存从表
-			//明细集合.
-			MapDtls dtls = new MapDtls(frmID);
+            if (dsDtls == null)
+                return;
 
-			//保存从表
-			foreach (System.Data.DataTable dt in dsDtls.Tables)
-			{
-				foreach (MapDtl dtl in dtls)
-				{
-					if (dt.TableName != dtl.No)
-						continue;
-					//获取dtls
-					GEDtls daDtls = new GEDtls(dtl.No);
-					daDtls.Delete(GEDtlAttr.RefPK, oid); // 清除现有的数据.
+            #region 保存从表
+            //明细集合.
+            MapDtls dtls = new MapDtls(frmID);
 
-					// 为从表复制数据.
-					foreach (DataRow dr in dt.Rows)
-					{
-						GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-						daDtl.RefPK = oid.ToString();
-						//明细列.
-						foreach (DataColumn dc in dt.Columns)
-						{
-							//设置属性.
-							daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
-						}
+            //保存从表
+            foreach (System.Data.DataTable dt in dsDtls.Tables)
+            {
+                foreach (MapDtl dtl in dtls)
+                {
+                    if (dt.TableName != dtl.No)
+                        continue;
+                    //获取dtls
+                    GEDtls daDtls = new GEDtls(dtl.No);
+                    daDtls.Delete(GEDtlAttr.RefPK, oid); // 清除现有的数据.
 
-						daDtl.ResetDefaultVal();
+                    // 为从表复制数据.
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
+                        daDtl.RefPK = oid.ToString();
+                        //明细列.
+                        foreach (DataColumn dc in dt.Columns)
+                        {
+                            //设置属性.
+                            daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
+                        }
 
-						daDtl.RefPK = oid.ToString();
-						daDtl.RDT = DataType.CurrentDataTime;
+                        daDtl.ResetDefaultVal();
 
-						//执行保存.
-						if (daDtl.OID > 100)
-							daDtl.Update(); //插入数据.
-						else
-							daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
-					}
-				}
-			}
-			#endregion 保存从表结束
-		}
+                        daDtl.RefPK = oid.ToString();
+                        daDtl.RDT = DataType.CurrentDataTime;
+
+                        //执行保存.
+                        if (daDtl.OID > 100)
+                            daDtl.Update(); //插入数据.
+                        else
+                            daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
+                    }
+                }
+            }
+            #endregion 保存从表结束
+        }
 	}
 }

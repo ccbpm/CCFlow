@@ -31,6 +31,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return str;
             }
         }
+        /// <summary>
+        /// 主键
+        /// </summary>
         public string MyPK
         {
             get
@@ -55,6 +58,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             }
         }
+        /// <summary>
+        /// 枚举键
+        /// </summary>
         public string EnumKey
         {
             get
@@ -163,7 +169,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 return str;
             }
         }
-
         public HttpContext context = null;
         /// <summary>
         /// 获得表单的属性.

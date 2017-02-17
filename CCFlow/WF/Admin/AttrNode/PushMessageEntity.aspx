@@ -57,6 +57,7 @@
              <li>您可以使用@符号来编写您所需要的内容。</li>
              <li>对于信息提示有两个系统参数分别是{Title}流程标题， {URL} 打开流程的连接。</li>
              <li>cc在生成消息的时候会根据模版把信息替换下来，发送给用户。</li>
+             <li>最新格式的cc字段表达式为: <font color=red> @+字段名+分号</font> 比如 @QingJiaLeiXing; </li>
             </ul>
             </div>
  </fieldset>
@@ -98,6 +99,7 @@
             <ul>
              <li>该参数支持cc表达式。</li>
              <li>您可以使用@符号来编写您所需要的内容。</li>
+             <li>最新格式的cc字段表达式为:<font color=red> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
             </ul>
             </div>
             </fieldset>
@@ -114,6 +116,7 @@
             <ul>
              <li>该参数支持cc表达式。</li>
              <li>您可以使用@符号来编写您所需要的内容。</li>
+             <li>最新格式的cc字段表达式为:<font color=red> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
             </ul>
             </div>
  </fieldset>

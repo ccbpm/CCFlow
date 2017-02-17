@@ -574,8 +574,16 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public bool IsValidList(Excel.Range range)
 		{
-			MessageBox.Show(range.Validation.Type.ToString());
-			return (range.Validation.Type.ToString() == "3");
+			try
+			{
+				//MessageBox.Show(range.Validation.Type.ToString());
+				return (range.Validation.Type == Excel.XlDVType.xlValidateList.GetHashCode());
+			}
+			catch (Exception exp)
+			{
+				//MessageBox.Show(exp.Message);
+				return false;
+			}
 		}
 
 		#endregion

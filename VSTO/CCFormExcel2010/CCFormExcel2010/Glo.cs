@@ -8,191 +8,214 @@ using System.Management;
 
 namespace BP.Excel
 {
-    /// <summary>
-    /// 全局
-    /// </summary>
-    public class Glo
-    {
-        /// <summary>
-        /// 获得编号根据表名，与名称
-        /// </summary>
-        /// <param name="ds"></param>
-        /// <param name="tableName"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public string GetNoByName(DataSet ds, string tableName, string name)
-        {
-            DataTable dt = ds.Tables[tableName];
-            foreach (DataRow dr in dt.Rows)
-            {
-                if (dr["Name"].ToString() == name)
-                    return dr["No"].ToString();
-            }
+	/// <summary>
+	/// 全局
+	/// </summary>
+	public class Glo
+	{
+		/// <summary>
+		/// （枚举/外键）根据value获取key
+		/// </summary>
+		/// <param name="ds">OriginData(Set)</param>
+		/// <param name="tableName">TableName(UIBindKey)</param>
+		/// <param name="name">value</param>
+		/// <returns>key</returns>
+		public static string GetNoByName(DataSet ds, string tableName, string value)
+		{
+			if (ds.Tables.Contains(tableName))
+			{
+				DataTable dt = ds.Tables[tableName];
+				foreach (DataRow dr in dt.Rows)
+				{
+					if (dr["Name"].ToString() == value)
+						return dr["No"].ToString();
+				}
+			}
+			return ""; //TODO: 是否返回原value值?
+		}
 
-            return "";
-        }
+		/// <summary>
+		/// （枚举/外键）根据key获取value
+		/// </summary>
+		/// <param name="ds">OriginData(Set)</param>
+		/// <param name="tableName">TableName(UIBindKey)</param>
+		/// <param name="name">key</param>
+		/// <returns>value</returns>
+		public static string GetNameByNo(DataSet ds, string tableName, string key)
+		{
+			if (ds.Tables.Contains(tableName))
+			{
+				DataTable dt = ds.Tables[tableName];
+				foreach (DataRow dr in dt.Rows)
+				{
+					if (dr["No"].ToString() == key)
+						return dr["Name"].ToString();
+				}
+			}
+			return ""; //TODO: 是否返回原key值?
+		}
 
-        #region 参数.
-        /// <summary>
-        /// 当前登录用户编号
-        /// </summary>
-        public static string UserNo = "wangtao";
-        /// <summary>
-        /// 当前登录用户SID
-        /// </summary>
-        public static string SID = "2222";
-        /// <summary>
-        /// Excel表单编号
-        /// </summary>
-        public static string FrmID = "CY3023";
-        /// <summary>
-        /// 发起流程编号
-        /// </summary>
-        public static string FK_Flow = "002";
-        /// <summary>
-        /// 当前工作ID
-        /// </summary>
-        public static int WorkID = 1000;
-        /// <summary>
-        /// 当前Excel表单绑定的节点ID
-        /// </summary>
-        public static int FK_Node = 301;
-        /// <summary>
-        /// 插件引用的服务地址
-        /// </summary>
-        public static string WSUrl = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
-        #endregion 参数.
+		#region 参数.
+		/// <summary>
+		/// 当前登录用户编号
+		/// </summary>
+		public static string UserNo = "wangtao";
+		/// <summary>
+		/// 当前登录用户SID
+		/// </summary>
+		public static string SID = "2222";
+		/// <summary>
+		/// Excel表单编号
+		/// </summary>
+		public static string FrmID = "CY3023";
+		/// <summary>
+		/// 发起流程编号
+		/// </summary>
+		public static string FK_Flow = "002";
+		/// <summary>
+		/// 当前工作ID
+		/// </summary>
+		public static int WorkID = 1000;
+		/// <summary>
+		/// 当前Excel表单绑定的节点ID
+		/// </summary>
+		public static int FK_Node = 301;
+		/// <summary>
+		/// 插件引用的服务地址
+		/// </summary>
+		public static string WSUrl = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
+		#endregion 参数.
 
-        /// <summary>
-        /// 参数是否加载成功，加载不成功，所有插件功能不启用
-        /// </summary>
-        public static bool LoadSuccessful = false;
+		/// <summary>
+		/// 参数是否加载成功，加载不成功，所有插件功能不启用
+		/// </summary>
+		public static bool LoadSuccessful = false;
 
-        #region 方法.
-        /// <summary>
-        /// 得到 WebService 对象 
-        /// </summary>
-        /// <returns></returns>
-        public static CCFormExcel2010.CCForm.CCFormAPISoapClient GetCCFormAPISoapClient()
-        {
-            TimeSpan ts = new TimeSpan(0, 5, 0);
-            var basicBinding = new BasicHttpBinding()
-            {
-                ReceiveTimeout = ts,
-                SendTimeout = ts,
-                MaxBufferSize = 2147483647,
-                MaxReceivedMessageSize = 2147483647,
-                Name = "PortalInterfaceSoap"
-            };
-            basicBinding.Security.Mode = BasicHttpSecurityMode.None;
+		#region 方法.
+		/// <summary>
+		/// 得到 WebService 对象 
+		/// </summary>
+		/// <returns></returns>
+		public static CCFormExcel2010.CCForm.CCFormAPISoapClient GetCCFormAPISoapClient()
+		{
+			TimeSpan ts = new TimeSpan(0, 5, 0);
+			var basicBinding = new BasicHttpBinding()
+			{
+				ReceiveTimeout = ts,
+				SendTimeout = ts,
+				MaxBufferSize = 2147483647,
+				MaxReceivedMessageSize = 2147483647,
+				Name = "PortalInterfaceSoap"
+			};
+			basicBinding.Security.Mode = BasicHttpSecurityMode.None;
 
-            string url = Glo.WSUrl;
-            if (url == null)
-                url = "http://localhost/WF/CCForm/CCFormAPI.asmx";
+			string url = Glo.WSUrl;
+			if (url == null)
+				url = "http://localhost/WF/CCForm/CCFormAPI.asmx";
 
-            var endPoint = new EndpointAddress(url);
-            var ctor =
-                typeof(CCFormExcel2010.CCForm.CCFormAPISoapClient).GetConstructor(
-                new Type[] {
-                    typeof(Binding), 
-                    typeof(EndpointAddress)
-                });
-            return (CCFormExcel2010.CCForm.CCFormAPISoapClient)ctor.Invoke(
-                new object[] { basicBinding, endPoint });
-        }
-        #endregion 方法.
+			var endPoint = new EndpointAddress(url);
+			var ctor =
+				typeof(CCFormExcel2010.CCForm.CCFormAPISoapClient).GetConstructor(
+				new Type[] {
+					typeof(Binding), 
+					typeof(EndpointAddress)
+				});
+			return (CCFormExcel2010.CCForm.CCFormAPISoapClient)ctor.Invoke(
+				new object[] { basicBinding, endPoint });
+		}
+		#endregion 方法.
 
-        /// <summary>
-        /// 获取EXCEL的启动参数
-        /// <para>fromccflow:true表示是从ccflow启动的Excel进程</para>
-        /// </summary>
-        /// <returns></returns>
-        public static Dictionary<string, string> GetArguments()
-        {
-            string argstr = string.Empty;
-            string prefix = "-fromccflow,";
-            int beginidx = -1;
-            Dictionary<string, string> args = new Dictionary<string, string>();
+		/// <summary>
+		/// 获取EXCEL的启动参数
+		/// <para>fromccflow:true表示是从ccflow启动的Excel进程</para>
+		/// </summary>
+		/// <returns></returns>
+		public static Dictionary<string, string> GetArguments()
+		{
+			string argstr = string.Empty;
+			string prefix = "-fromccflow,";
+			int beginidx = -1;
+			Dictionary<string, string> args = new Dictionary<string, string>();
 
-            using (ManagementObjectSearcher mos = new ManagementObjectSearcher(
-                "SELECT CommandLine FROM Win32_Process WHERE ProcessId = "
-                + System.Diagnostics.Process.GetCurrentProcess().Id))
-            {
-                foreach (ManagementObject mo in mos.Get())
-                {
-                    argstr = mo["CommandLine"] as string;
-                    break;
-                }
-            }
+			using (ManagementObjectSearcher mos = new ManagementObjectSearcher(
+				"SELECT CommandLine FROM Win32_Process WHERE ProcessId = "
+				+ System.Diagnostics.Process.GetCurrentProcess().Id))
+			{
+				foreach (ManagementObject mo in mos.Get())
+				{
+					argstr = mo["CommandLine"] as string;
+					break;
+				}
+			}
 
-            beginidx = argstr.IndexOf(prefix);
+			beginidx = argstr.IndexOf(prefix);
 
-            if (beginidx == -1 || (beginidx + prefix.Length) == argstr.Length - 1)
-            {
-                args.Add("fromccflow", "false");
-                return args;
-            }
+			if (beginidx == -1 || (beginidx + prefix.Length) == argstr.Length - 1)
+			{
+				args.Add("fromccflow", "false");
+				return args;
+			}
 
-            beginidx = beginidx + prefix.Length;
-            argstr = argstr.Substring(beginidx);
+			beginidx = beginidx + prefix.Length;
+			argstr = argstr.Substring(beginidx);
 
-            if (argstr.IndexOf(' ') != -1)
-                argstr = argstr.Substring(0, argstr.IndexOf(' '));
+			if (argstr.IndexOf(' ') != -1)
+				argstr = argstr.Substring(0, argstr.IndexOf(' '));
 
-            string[] argsArr = argstr.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            string[] ars = null;
-            
-            args.Add("fromccflow", "true");
+			string[] argsArr = argstr.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+			string[] ars = null;
 
-            foreach(string arg in argsArr)
-            {
-                ars = arg.Split('=');
+			args.Add("fromccflow", "true");
 
-                if (ars.Length == 1)
-                    continue;
+			foreach (string arg in argsArr)
+			{
+				ars = arg.Split('=');
 
-                args.Add(ars[0], ars[1]);
-            }
+				if (ars.Length == 1)
+					continue;
 
-            return args;
-        }
+				args.Add(ars[0], ars[1]);
+			}
 
-        /// <summary>
-        /// 写入一个文件
-        /// </summary>
-        /// <param name="filePathName"></param>
-        /// <param name="objData"></param>
-        /// <returns></returns>
-        public static string WriteFile(string filePathName, byte[] objData)
-        {
-            string folder = System.IO.Path.GetDirectoryName(filePathName);
-            if (System.IO.Directory.Exists(folder) == false)
-                System.IO.Directory.CreateDirectory(folder);
+			return args;
+		}
 
-            if (System.IO.File.Exists(filePathName) == true)
-                System.IO.File.Delete(filePathName);
+		/// <summary>
+		/// 写入一个文件
+		/// </summary>
+		/// <param name="filePathName"></param>
+		/// <param name="objData"></param>
+		/// <returns></returns>
+		public static string WriteFile(string filePathName, byte[] objData)
+		{
+			string folder = System.IO.Path.GetDirectoryName(filePathName);
+			if (System.IO.Directory.Exists(folder) == false)
+				System.IO.Directory.CreateDirectory(folder);
 
-            System.IO.FileStream fs = new System.IO.FileStream(filePathName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
-            System.IO.BinaryWriter w = new System.IO.BinaryWriter(fs);
-            try
-            {
-                w.Write(objData);
-                w.Close();
-                fs.Close();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                w.Close();
-                fs.Close();
-            }
-            return filePathName;
-        }
+			if (System.IO.File.Exists(filePathName) == true)
+				System.IO.File.Delete(filePathName);
+
+			System.IO.FileStream fs = new System.IO.FileStream(filePathName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
+			System.IO.BinaryWriter w = new System.IO.BinaryWriter(fs);
+			try
+			{
+				w.Write(objData);
+				w.Close();
+				fs.Close();
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			finally
+			{
+				w.Close();
+				fs.Close();
+			}
+			return filePathName;
+		}
 
 
 
-    }
+	}
 }

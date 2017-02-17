@@ -19,8 +19,10 @@ namespace CCFormExcel2010
 {
 	public partial class ThisAddIn
 	{
-		private readonly string regexRangeSingle = "^\\=\\S+\\!\\$\\D+\\$\\d+$"; //=Sheet1!$B$2 //TODO: 存在问题：合并后的单元格无法通过此验证
+		private readonly string regexRangeSingle = "^\\=\\S+\\!\\$\\D+\\$\\d+$"; //=Sheet1!$B$2 //合并的单元格：仅通过Selection获取区域时不能使用此正则验证
 		private readonly string regexRangeArea = "^\\=\\S+\\!\\$\\D+\\$\\d+\\:\\$\\D+\\$\\d+$"; //=Sheet1!$B$2:$C$3
+		private DataSet _originData; //原始数据
+		private Hashtable _htDtlsColumns = new Hashtable(); //excel中的子表字段信息
 
 		// 定义一个任务窗体 
 		//internal Microsoft.Office.Tools.CustomTaskPane helpTaskPane;
@@ -96,7 +98,7 @@ namespace CCFormExcel2010
 				if (isExists == false)
 				{
 					//获得该表单的，物理数据.
-					DataSet ds = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
+					_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
 
 					#region 加载外键枚举数据
 
@@ -112,17 +114,17 @@ namespace CCFormExcel2010
 					//    DataTable dt = ds.Tables[uiBindKey];
 					//}
 
-					SetMetaData(ds);
+					SetMetaData(_originData);
 
 					#endregion 加载外键枚举数据
 
 					#region 给主从表赋值.
 					//给主表赋值.
-					DataTable dtMain = ds.Tables["MainTable"];
+					DataTable dtMain = _originData.Tables["MainTable"];
 					SetMainData(dtMain);
 
 					//给从表赋值.
-					foreach (DataTable dt in ds.Tables)
+					foreach (DataTable dt in _originData.Tables)
 					{
 						if (dt.TableName == "MainTable")
 							continue;
@@ -134,7 +136,7 @@ namespace CCFormExcel2010
 			catch (Exception exp)
 			{
 				MessageBox.Show(exp.Message + "\r@\r" + exp.StackTrace);
-				//TODO: 
+				//TODO: ThisAddIn需要执行什么操作？
 			}
 			#endregion 校验用户安全与下载文件.
 
@@ -259,7 +261,11 @@ namespace CCFormExcel2010
 					var location = Application.Names.Item(dc.ColumnName).RefersToLocal; //=Sheet1!$B$2
 					if (Regex.IsMatch(location, regexRangeSingle)) //是单个单元格
 					{
-						range.Value2 = dt.Rows[0][dc.ColumnName].ToString();
+						var strUiBindKey = string.Empty;
+						if (IsEnumOrFk("Sys_MapAttr", dc.ColumnName, ref strUiBindKey))
+							range.Value2 = Glo.GetNameByNo(_originData, strUiBindKey, dt.Rows[0][dc.ColumnName].ToString());
+						else
+							range.Value2 = dt.Rows[0][dc.ColumnName].ToString(); //TODO: 枚举/外键key转换为value
 					}
 				}
 			}
@@ -280,27 +286,73 @@ namespace CCFormExcel2010
 			if (!Regex.IsMatch(location, regexRangeArea)) //excel中子表所在区域不是『区域』（是单个单元格）
 				return false;
 
-			#region 获取字段信息
+			//获取字段信息
+			var htColumns = GetAreaColumns(range); //只在加载时运行一次故不需要判断是否已经获取了该子表区域的字段信息
+			_htDtlsColumns[dt.TableName] = htColumns;
+
+			//若子表区域行数不够，则插入行
+			var intTableHeadHeight = Convert.ToInt32(htColumns["TableHeadHeight"]);
+			if (dt.Rows.Count > range.Rows.Count - intTableHeadHeight) //表单实际数据中『子表行数』多于excel文档子表『区域行数』时
+			{
+				//插入行（在区域最后一行上方）
+				int addRowsCount = dt.Rows.Count - (range.Rows.Count - intTableHeadHeight);
+				var rangeLastRow = range.Worksheet.get_Range(ConvertInt2Letter(range.Column) + (range.Row + range.Rows.Count - 1), missing);
+				while (addRowsCount > 0)
+				{
+					rangeLastRow.Insert();
+					addRowsCount--;
+				}
+			}
+
+			//填充数据
+			foreach (DictionaryEntry col in htColumns)
+			{
+				if (dt.Columns.Contains(col.Value.ToString())) //DataTable中含有该字段
+				{
+					var colL = ConvertInt2Letter(Convert.ToInt32(col.Key));
+					for (var r = 0; r <= dt.Rows.Count; r++)
+					{
+						var rangeCell = range.Worksheet.get_Range(colL + (range.Row + intTableHeadHeight - 1 + r), missing);
+						rangeCell.Value2 = dt.Rows[r][col.Value.ToString()].ToString();
+					}
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// 获取子表区域中的表头（字段）信息
+		/// </summary>
+		/// <param name="range"></param>
+		/// <returns></returns>
+		public Hashtable GetAreaColumns(Excel.Range range)
+		{
 			//获取字段信息，及数据开始的行号
 			Hashtable htColumns = new Hashtable();
-			int intMaxTableHeadHeight = 1;
+			int intTableHeadHeight = 1; //表头占子表区域的高度（行数）
 			for (var c = range.Column; c <= range.Column + range.Columns.Count - 1; )
 			{
 				string name = string.Empty;
-				var currentColumnMergeColumnsCount = 1; //当前表头所占列数
+				var currentThMergeColumnsCount = 1; //当前表头（单元格）所占列数
 				for (var r = range.Row; r < range.Row + range.Rows.Count - 1; )
 				{
 					var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + range.Row, missing);
-					
+
 					//若该单元格有命名
 					if (rangeTableHead.Name.Name != null)
 					{
 						name = rangeTableHead.Name.Name;
+						var currentThMergeRowsCount = 1;
 						if (rangeTableHead.MergeCells)
-							currentColumnMergeColumnsCount = rangeTableHead.MergeArea.Columns.Count;
-						if (intMaxTableHeadHeight < r)
-							intMaxTableHeadHeight = r;
-						break;
+						{
+							currentThMergeColumnsCount = rangeTableHead.MergeArea.Columns.Count; //用于计算下一个要循环的列
+							currentThMergeRowsCount = rangeTableHead.MergeArea.Rows.Count; //用于计算当前表头所占行数
+						}
+						var currentThHeight = rangeTableHead.Row + currentThMergeRowsCount - range.Row; //当前表头占子表区域的高度（行数）
+						if (intTableHeadHeight < currentThHeight)
+							intTableHeadHeight = currentThHeight;
+						break; //发现表头即停止循环，不再往下寻找表头
 					}
 
 					//!下一个要循环的行
@@ -316,30 +368,10 @@ namespace CCFormExcel2010
 					htColumns.Add(c, name);
 
 				//!下一个要循环的列
-				c += currentColumnMergeColumnsCount;
+				c += currentThMergeColumnsCount;
 			}
-			#endregion
-
-			if (dt.Rows.Count > range.Rows.Count - intMaxTableHeadHeight) //表单实际数据子表行数多于excel文档行数时
-			{
-				//TODO: 插入行（区域结尾？or 倒数第二行？）
-			}
-
-			//填充数据
-			foreach (DictionaryEntry col in htColumns)
-			{
-				if (dt.Columns.Contains(col.Value.ToString())) //DataTable中含有该字段
-				{
-					var colL = ConvertInt2Letter(Convert.ToInt32(col.Key));
-					for (var r = 0; r <= dt.Rows.Count; r++)
-					{
-						var rangeCell = range.Worksheet.get_Range(colL + (range.Row + intMaxTableHeadHeight + r - 1), missing);
-						rangeCell.Value2 = dt.Rows[r][col.Value.ToString()].ToString();
-					}
-				}
-			}
-
-			return true;
+			htColumns["TableHeadHeight"] = intTableHeadHeight; //约定：使用Key=TableHeadHeight存放该子表区域中表头所占行数
+			return htColumns;
 		}
 
 		///// <summary>
@@ -352,10 +384,10 @@ namespace CCFormExcel2010
 		//}
 
 		/// <summary>
-		/// 
+		/// 获取主、从表数据
 		/// </summary>
-		/// <param name="ds"></param>
-		/// <returns></returns>
+		/// <param name="ds">ref子表数据</param>
+		/// <returns>(AtParas)主表数据</returns>
 		public string GetData(ref DataSet ds) //x尚未测试
 		{
 			Hashtable htParas = new Hashtable();
@@ -377,13 +409,22 @@ namespace CCFormExcel2010
 					var strBelongDtl = GetBelongDtlName(range.Worksheet.Name, range.Column, range.Row);
 					if (strBelongDtl == null) //不属于某个子表
 					{
-						htParas.Add(name, range.Value2);
+						if (range.Value2 != null)
+						{
+							var strUiBindKey = string.Empty;
+							if (IsValidList(range) && IsEnumOrFk("Sys_MapAttr", name, ref strUiBindKey))
+								htParas.Add(name, Glo.GetNoByName(_originData, strUiBindKey, range.Value2)); //TODO: 是否型的字段
+							else
+								htParas.Add(name, range.Value2);
+						}
 					}
 					else //属于子表
 					{
 						if (!ds.Tables.Contains(strBelongDtl))
 						{
-							ds.Tables.Add(GetDtlData(strBelongDtl));
+							var dt = GetDtlData(strBelongDtl);
+							if (dt != null)
+								ds.Tables.Add();
 						}
 					}
 				}
@@ -404,37 +445,75 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public DataTable GetDtlData(string strTableName) //x尚未测试
 		{
-			var range = Application.Names.Item(strTableName).RefersToRange;
-			DataTable dt = new DataTable(strTableName);
-			//初始化字段
-			for (var i = range.Column; i < range.Column + range.Columns.Count; i++)
+			var range = Application.Names.Item(strTableName).RefersToRange; //需确保Names[strTableName]存在
+			if (!_originData.Tables.Contains(strTableName)) //理论上不存在这种情况，_originData中包含所有的子表数据
+				return null;
+			DataTable dt = _originData.Tables[strTableName].Clone(); //是否会复制表名？
+			dt.TableName = strTableName;
+
+
+			//获取字段信息
+			var htColumns = new Hashtable();
+			if (_htDtlsColumns.Contains(strTableName))
 			{
-				var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(i) + range.Row, missing);//TODO: 验证合并单元格是否可用
-				if (rangeTableHead.Name.Name != null)
-				{
-					dt.Columns.Add(rangeTableHead.Name.Name);
-				}
+				htColumns = (Hashtable)_htDtlsColumns[strTableName];
 			}
-			//填充数据
-			for (var r = range.Row + 1; r < range.Row + range.Rows.Count; r++)
+			else
 			{
-				DataRow dr = dt.NewRow();
-				for (var c = range.Column; c < range.Column + range.Columns.Count; c++)
+				htColumns = GetAreaColumns(range);
+				_htDtlsColumns[strTableName] = htColumns;
+			}
+
+			//填充数据
+			DataRow dr = dt.NewRow();
+			var intTableHeadHeight = Convert.ToInt32(htColumns["TableHeadHeight"]);
+			for (var r = range.Row + intTableHeadHeight; r < range.Row + range.Rows.Count; r++)
+			{
+				foreach (DictionaryEntry col in htColumns)
 				{
-					var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + range.Row, missing);
-					if (rangeTableHead.Name.Name != null)
+					var rangeCell = range.Worksheet.get_Range(ConvertInt2Letter((int)col.Key) + r, missing);
+					if (rangeCell.Value2 != null)
 					{
-						var rangeCell = range.Worksheet.get_Range(ConvertInt2Letter(c) + r, missing);
-						if (rangeCell.Value2 != null)
-						{
-							dr[rangeTableHead.Name.Name] = rangeCell.Value2;
-						}
+						var strUiBindKey = string.Empty;
+						if (IsValidList(rangeCell) && IsEnumOrFk(strTableName, (string)col.Value, ref strUiBindKey))
+							dr[(string)col.Value] = Glo.GetNoByName(_originData, strUiBindKey, rangeCell.Value2); //TODO: 是否型的字段
+						else
+							dr[(string)col.Value] = rangeCell.Value2;
 					}
 				}
 				dt.Rows.Add(dr);
 			}
 			return dt;
 		}
+
+		#region 表单数据相关方法
+
+		/// <summary>
+		/// 判断某个字段是否是枚举/外键类型
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <param name="strKeyOfEn"></param>
+		/// <param name="UiBindKey"></param>
+		/// <returns></returns>
+		public bool IsEnumOrFk(string tableName, string strKeyOfEn, ref string UiBindKey)//TODO: 外键类型、有范围限制的字段，不能直接使用UiBindKey
+		{
+			if (_originData.Tables.Contains(tableName))
+			{
+				foreach (DataRow dr in _originData.Tables[tableName].Rows)
+				{
+					if (dr["KeyOfEn"].ToString() == strKeyOfEn && dr["LGType"].ToString() != "0")
+					{
+						UiBindKey = dr["UIBindKey"].ToString();
+						return !string.IsNullOrEmpty(UiBindKey);
+					}
+				}
+			}
+			return false;
+		}
+
+		#endregion
+
+		#region VSTO相关方法
 
 		/// <summary>
 		/// 获取所属子表名称
@@ -459,10 +538,6 @@ namespace CCFormExcel2010
 						return name;
 					}
 				}
-				else
-				{
-					continue;
-				}
 			}
 			return null;
 		}
@@ -483,6 +558,19 @@ namespace CCFormExcel2010
 				return Convert.ToChar(64 + (i / 26)).ToString() + Convert.ToChar((64 + (i % 26)));
 			}
 		}
+
+		/// <summary>
+		/// 判断单元格是否有“数据有效性-序列”的设置
+		/// </summary>
+		/// <param name="range"></param>
+		/// <returns></returns>
+		public bool IsValidList(Excel.Range range)
+		{
+			MessageBox.Show(range.Validation.Type.ToString());
+			return (range.Validation.Type.ToString() == "3");
+		}
+
+		#endregion
 
 		/// <summary>
 		/// 是否为合并单元格（并取得合并的行、列数）

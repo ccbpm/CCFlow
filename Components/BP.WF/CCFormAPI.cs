@@ -51,7 +51,7 @@ namespace BP.WF
         /// <returns>数据</returns>
         public static DataSet GenerDBForVSTOExcelFrmModel(string frmID, int pkval)
         {
-            //数据容器
+            //数据容器,就是要返回的对象.
             DataSet myds = new DataSet();
 
             //增加表单字段描述.
@@ -59,7 +59,6 @@ namespace BP.WF
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapAttr";
             myds.Tables.Add(dt);
-
 
             //映射.
             MapData md = new MapData(frmID);
@@ -69,8 +68,6 @@ namespace BP.WF
             wk.OID = pkval;
             if (wk.RetrieveFromDBSources() == 0)
                 wk.Insert();
-
-           // GEEntity wk = new GEEntity(frmID, pkval);
 
             #region 把主从表数据放入里面.
             if (BP.Sys.SystemConfig.IsBSsystem == true)
@@ -178,7 +175,7 @@ namespace BP.WF
             foreach (DataRow dr in dtMapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();
-                if (lgType != "2")
+                if (lgType != "2" )
                     continue;
 
                 string UIIsEnable = dr["UIIsEnable"].ToString();

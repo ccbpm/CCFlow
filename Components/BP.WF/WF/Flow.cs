@@ -4155,6 +4155,7 @@ namespace BP.WF
                 case EventListOfNode.ReturnAfter:
                 case EventListOfNode.UndoneAfter:
                 case EventListOfNode.AskerReAfter:
+                case EventListOfNode.FlowOverAfter: //流程结束后.
                     break;
                 default:
                     return str;

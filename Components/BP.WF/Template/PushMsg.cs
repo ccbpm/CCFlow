@@ -499,6 +499,18 @@ namespace BP.WF.Template
                         return "向指定的字段发送";
                 }
 
+                if (this.FK_Event == EventListOfNode.FlowOverAfter)
+                {
+                    if (this.SMSPushWay == 0)
+                        return "不发送";
+
+                    if (this.SMSPushWay == 1)
+                        return "发送给所有节点处理人";
+
+                    if (this.SMSPushWay == 2)
+                        return "向指定的字段发送";
+                }
+
                 return "未知";
             }
         }
@@ -632,7 +644,8 @@ namespace BP.WF.Template
         /// <param name="jumpToNode">跳转到的节点</param>
         /// <param name="jumpToEmps">跳转到的人员</param>
         /// <returns>执行成功的消息</returns>
-        public string DoSendMessage(Node currNode, Entity en, string atPara, SendReturnObjs objs, Node jumpToNode = null, string jumpToEmps = null)
+        public string DoSendMessage(Node currNode, Entity en, string atPara, SendReturnObjs objs, Node jumpToNode = null, 
+            string jumpToEmps = null)
         {
             if (en == null)
                 return "";
@@ -665,19 +678,20 @@ namespace BP.WF.Template
                 }
             }
 
+            //生成标题.
             Int64 workid = Int64.Parse(en.PKVal.ToString());
-
             string title = "标题";
             if (en.Row.ContainsKey("Title") == true)
                 title = en.GetValStringByKey("Title"); // 获得工作标题.
             else
                 title = BP.DA.DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
 
+            //生成URL.
             string hostUrl = Glo.HostURL;
             string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DataType.CurrentDataTime;
             string openWorkURl = hostUrl + "WF/Do.aspx?DoType=OF&SID=" + sid;
             openWorkURl = openWorkURl.Replace("//", "/");
-            openWorkURl = openWorkURl.Replace("//", "/");
+            openWorkURl = openWorkURl.Replace("http:/", "http://");
             #endregion 
 
             //发送短消息.
@@ -811,6 +825,8 @@ namespace BP.WF.Template
                     {
                         if (string.IsNullOrEmpty(emp))
                             continue;
+                        if (emp == WebUser.No)
+                            continue;
 
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
                         string mailDocReal = mailDocTmp.Clone() as string;
@@ -844,6 +860,53 @@ namespace BP.WF.Template
             }
             #endregion 发送成功事件.
 
+
+
+            #region SendSuccess - 流程结束. - 邮件处理.
+            if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter)
+            {
+                /*发送成功事件.*/
+                if (this.MailPushWay == 1)
+                {
+                    /*如果向接受人发送邮件.*/
+                    /*向所有参与人. */
+                    string empsStrs = DBAccess.RunSQLReturnStringIsNull("SELECT Emps FROM WF_GenerWorkFlow WHERE WorkID=" + workid, "");
+                    string[] emps = empsStrs.Split('@');
+
+                    foreach (string emp in emps)
+                    {
+                        if (string.IsNullOrEmpty(emp))
+                            continue;
+
+                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                        string mailDocReal = mailDocTmp.Clone() as string;
+                        mailDocReal = mailDocReal.Replace("{EmpStr}", emp);
+
+                        //获得当前人的邮件.
+                        BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
+
+                        string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+
+                        //发送邮件.
+                        BP.WF.Dev2Interface.Port_SendEmail(empEn.Email, mailTitleTmp, mailDocReal, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, emp, paras);
+                    }
+                    return "@已向:{" + toEmpIDs + "}发送提醒邮件.";
+                }
+
+                if (this.MailPushWay == 2)
+                {
+                    /*如果向指定的字段作为发送邮件的对象, 从字段里取数据. */
+                    string emailAddress = r[this.MailAddress] as string;
+
+                    string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
+
+                    //发送邮件
+                    BP.WF.Dev2Interface.Port_SendEmail(emailAddress, mailTitleTmp, mailDocTmp, this.FK_Event, "FlowOver" + workid, BP.Web.WebUser.No, null, null, paras);
+                    return "@已向:{" + emailAddress + "}发送提醒邮件.";
+                }
+            }
+            #endregion 发送成功事件.
+
             return generAlertMessage;
         }
         /// <summary>
@@ -863,7 +926,7 @@ namespace BP.WF.Template
             if (this.SMSPushWay == 0)
                 return "";
 
-            //定义短信内容.
+            //定义短信内容.......
             string smsDocTmp = "";
 
             #region  生成短信内容
@@ -872,7 +935,6 @@ namespace BP.WF.Template
             smsDocTmp = smsDocTmp.Replace("{Url}", openWorkURl);
             smsDocTmp = smsDocTmp.Replace("@WebUser.No", WebUser.No);
             smsDocTmp = smsDocTmp.Replace("@WebUser.Name", WebUser.Name);
-
             smsDocTmp = smsDocTmp.Replace("@WorkID", en.PKVal.ToString());
             smsDocTmp = smsDocTmp.Replace("@OID", en.PKVal.ToString());
 
@@ -920,7 +982,7 @@ namespace BP.WF.Template
             #endregion 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
 
             //求发送给的人员ID.
-            #region WorkArrive - 发送成功事件
+            #region WorkArrive - 工作到达事件.
             if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
                 || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
             {
@@ -963,7 +1025,6 @@ namespace BP.WF.Template
                 }
             }
             #endregion WorkArrive - 工作到达事件
-
 
             #region SendSuccess - 发送成功事件
             if (this.FK_Event == BP.Sys.EventListOfNode.SendSuccess)
@@ -1009,8 +1070,54 @@ namespace BP.WF.Template
             }
             #endregion SendSuccess - 发送成功事件
 
-            return "";
+            #region FlowOverAfter - 流程结束后的事件
+            if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter)
+            {
+                /*发送成功事件.*/
+                if (this.SMSPushWay == 1 )
+                {
+                    /*向所有参与人. */
+                    string empsStrs = DBAccess.RunSQLReturnStringIsNull("SELECT Emps FROM WF_GenerWorkFlow WHERE WorkID=" + workid, "");
+                    string[] emps = empsStrs.Split('@');
+                    foreach (string empID in emps)
+                    {
+                        if (string.IsNullOrEmpty(empID))
+                            continue;
 
+                        if (empID == WebUser.No)
+                            continue;
+
+                        string smsDocTmpReal = smsDocTmp.Clone() as string;
+                        smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", empID);
+
+                        BP.WF.Port.WFEmp empEn = new Port.WFEmp();
+                        empEn.No = empID;
+                        empEn.RetrieveFromDBSources();
+
+                        string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+
+                        //发送短信.
+                        Dev2Interface.Port_SendSMS(empEn.Tel, smsDocTmpReal, this.FK_Event, "FlowOver"  + workid, BP.Web.WebUser.No, null, empID, paras);
+                    }
+                    return "@已向:{" + toEmpIDs + "}发送提醒手机短信.";
+                }
+
+                if (this.SMSPushWay == 2)
+                {
+                    /*如果向指定的字段作为发送短信的发送对象, 从字段里取数据. */
+                    string tel = r[this.SMSField] as string;
+                    if (tel != null || tel.Length > 6)
+                    {
+                        string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID;
+                        //发送短信.
+                        BP.WF.Dev2Interface.Port_SendSMS(tel, smsDocTmp, this.FK_Event, "FlowOver"+ workid, BP.Web.WebUser.No, null, paras);
+                        return "@已向:{" + tel + "}发送提醒手机短信.";
+                    }
+                }
+            }
+            #endregion SendSuccess - 发送成功事件
+
+            return "";
         }
         
         /// <summary>

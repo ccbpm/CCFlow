@@ -99,6 +99,7 @@ namespace BP.WF.DTS
 
                         //标题.
                         string title = BP.DA.DBAccess.RunSQLReturnStringIsNull("select title from wf_generworkflow where workid=" + workid, "");
+
                         //调用他.
                         Glo.InitCH2017(nd.HisFlow, nd, workid, fid, title, priRDT, sdt,
                             DataType.ParseSysDate2DateTime(dr[TrackAttr.RDT].ToString()));

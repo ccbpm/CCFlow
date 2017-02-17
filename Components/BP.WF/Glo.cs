@@ -2371,10 +2371,11 @@ namespace BP.WF
             }
 
             //增加对新规则的支持. @MyField; 格式.
-            foreach (Attr item in en.EnMap.Attrs)
+            Row row=en.Row;
+            foreach (string key in row.Keys)
             {
-                if (exp.Contains("@" + item.Key + ";"))
-                    exp = exp.Replace("@" + item.Key + ";", en.GetValStrByKey(item.Key));
+                if (exp.Contains("@" + key + ";"))
+                    exp = exp.Replace("@" + key + ";", row[key].ToString());
             }
             if (exp.Contains("@") == false)
                 return exp;
@@ -2417,9 +2418,7 @@ namespace BP.WF
                     exp = exp.Replace("@" + key, en.GetValStrByKey(key));
                 }
                 else
-                {
                     exp = exp.Replace("@" + key, en.GetValStrByKey(key));
-                }
             }
 
             // 处理Para的替换.
@@ -3662,7 +3661,6 @@ namespace BP.WF
         {
             InitCH2017(fl, nd, workid, fid, title, null, null, DateTime.Now);
         }
-
         /// <summary>
         /// 执行考核
         /// </summary>
@@ -3681,6 +3679,9 @@ namespace BP.WF
             if (nd.IsStartNode)
                 return;
 
+            if (nd.HisCHWay == CHWay.None)
+                return;
+
             //如果设置为0 则不考核.
             if (nd.TimeLimit == 0 && nd.TSpanHour == 0)
                 return;
@@ -3695,17 +3696,18 @@ namespace BP.WF
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        ps.SQL = "SELECT TOP 1 RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
+                        ps.SQL = "SELECT TOP 1 RDT,SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
                         break;
                     case DBType.Oracle:
-                        ps.SQL = "SELECT  RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        ps.SQL = "SELECT  RDT,SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
                         break;
                     case DBType.MySQL:
-                        ps.SQL = "SELECT  RDT,SDT FROM WF_GENERWORKERLIST  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
+                        ps.SQL = "SELECT  RDT,SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
                         break;
                     default:
                         break;
                 }
+
                 ps.Add("WorkID", workid);
                 ps.Add("FK_Emp", WebUser.No);
                 ps.Add("FK_Node", nd.NodeID);
@@ -3762,6 +3764,7 @@ namespace BP.WF
             
             TimeSpan ts = dtTo - dtFrom;
             ch.UseDays = ts.Days;
+
             //int hour = ts.Hours;
             //ch.UseDays += ts.Hours / 8; //使用的天数.
 

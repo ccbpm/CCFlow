@@ -174,8 +174,8 @@ namespace CCFormExcel2010
 		{
 			//if (!Glo.LoadSuccessful) return;
 
-			Excel.Worksheet sheet = sh as Excel.Worksheet;
-			MessageBox.Show(sheet.Name + "," + range.Value);
+			//Excel.Worksheet sheet = sh as Excel.Worksheet;
+			//MessageBox.Show(sheet.Name + "," + range.Value);
 		}
 
 		/// <summary>
@@ -215,7 +215,7 @@ namespace CCFormExcel2010
 			//x Worksheet ws = (Worksheet)Application.Worksheets.get_Item("MetaData"); 
 			//x var ws = Application.Sheets.Item["MetaData"];
 
-			var ws = Application.Worksheets["MetaData"]; //只遍历元数据sheet内的名称
+			var ws = Application.Worksheets["MetaData"]; //只遍历元数据sheet内的名称//未发现Contains方法
 			if (ws == null)
 			{
 				MessageBox.Show("不存在Sheet页：MetaData");
@@ -223,24 +223,21 @@ namespace CCFormExcel2010
 			}
 
 			//遍历命名区域.
-			for (var i = 1; i < Application.Names.Count; i++)
+			foreach (Excel.Name name in Application.Names)
 			{
-				var name = Application.Names.Item(i).NameLocal;
-				var location = Application.Names.Item(i).RefersToLocal;
-				if (location.IndexOf("MetaData") > -1)
+				var strName = name.NameLocal;
+				var location = name.RefersToLocal;
+				if (location.IndexOf("MetaData") > -1 && ds.Tables.Contains(strName)) //需确保name使用的是UIBindKey
 				{
-					if (ds.Tables.Contains(name)) //需确保name使用的是UIBindKey
+					var range = name.RefersToRange;
+					var col = ConvertInt2Letter(range.Column);
+					//填充数据
+					for (var r = 1; r <= ds.Tables[strName].Rows.Count; r++)
 					{
-						var range = Application.Names.Item(i).RefersToRange;
-						var col = ConvertInt2Letter(range.Column);
-						//填充数据
-						for (var r = 1; r <= ds.Tables[name].Rows.Count; r++)
-						{
-							range.Worksheet.get_Range(col + r, missing).Value2 = ds.Tables[name].Rows[r - 1]["Name"].ToString();
-						}
-						//设置命名
-						Application.Names.Add("name", "=MetaData!$" + col + "$1:$" + col + "$" + ds.Tables[name].Rows.Count);
+						range.Worksheet.get_Range(col + r, missing).Value2 = ds.Tables[strName].Rows[r - 1]["Name"].ToString();
 					}
+					//设置命名
+					Application.Names.Add(strName, "=MetaData!$" + col + "$1:$" + col + "$" + ds.Tables[strName].Rows.Count);
 				}
 			}
 			return true;
@@ -294,37 +291,29 @@ namespace CCFormExcel2010
 				for (var r = range.Row; r < range.Row + range.Rows.Count - 1; )
 				{
 					var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + range.Row, missing);
-
-					//!下一个要循环的行
-					//r += (rangeTableHead.MergeCells ? rangeTableHead.MergeArea.Rows.Count - 1 : 1);
-					if (rangeTableHead.MergeCells)
-					{
-						r += rangeTableHead.MergeArea.Rows.Count;
-					}
-					else
-					{
-						r++;
-					}
-
+					
 					//若该单元格有命名
 					if (rangeTableHead.Name.Name != null)
 					{
 						name = rangeTableHead.Name.Name;
 						if (rangeTableHead.MergeCells)
-						{
 							currentColumnMergeColumnsCount = rangeTableHead.MergeArea.Columns.Count;
-						}
 						if (intMaxTableHeadHeight < r)
 							intMaxTableHeadHeight = r;
 						break;
 					}
+
+					//!下一个要循环的行
+					//r += (rangeTableHead.MergeCells ? rangeTableHead.MergeArea.Rows.Count - 1 : 1);
+					if (rangeTableHead.MergeCells)
+						r += rangeTableHead.MergeArea.Rows.Count;
+					else
+						r++;
 				}
 
 				//若该列有绑定列
 				if (!string.IsNullOrEmpty(name))
-				{
 					htColumns.Add(c, name);
-				}
 
 				//!下一个要循环的列
 				c += currentColumnMergeColumnsCount;
@@ -350,20 +339,6 @@ namespace CCFormExcel2010
 				}
 			}
 
-			//遍历excel文档的子表的列//TODO: 表头存在合并单元格的情况？
-			for (var c = range.Column; c <= range.Column + range.Columns.Count - 1; c++)
-			{
-				var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + range.Row, missing);
-				//如果存在表头 且 dt中存在该字段
-				if (rangeTableHead.Name.Name != null && dt.Columns.Contains(rangeTableHead.Name.Name))
-				{
-					for (var r = 0; r < dt.Rows.Count; r++)
-					{
-						var rangeCell = range.Worksheet.get_Range(ConvertInt2Letter(c) + (r + 1), missing);
-						rangeCell.set_Value(dt.Rows[r][rangeTableHead.Name.Name].ToString());
-					}
-				}
-			}
 			return true;
 		}
 
@@ -411,10 +386,6 @@ namespace CCFormExcel2010
 							ds.Tables.Add(GetDtlData(strBelongDtl));
 						}
 					}
-				}
-				else
-				{
-					continue;
 				}
 			}
 			//把hashtable转换为@a=1形式的字符串

@@ -6322,6 +6322,24 @@ namespace BP.WF
         /// <param name="workID"></param>
         public static void Node_SetDraft2Todolist(string fk_flow, Int64 workID)
         {
+            //转化成编号.
+            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
+
+            //设置引擎表.
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = workID;
+            if (gwf.RetrieveFromDBSources() == 1 && (gwf.WFState == WFState.Draft || gwf.WFState == WFState.Blank))
+            {
+                if (gwf.FK_Node != int.Parse(fk_flow + "01"))
+                    throw new Exception("@设置待办错误，只有在开始节点时才能设置待办，现在的节点是:" + gwf.NodeName);
+
+                gwf.TodoEmps = BP.Web.WebUser.No + "," + WebUser.Name + ";";
+                gwf.TodoEmpsNum = 1;
+                gwf.WFState = WFState.Runing;
+                gwf.Update();
+                //重置标题
+                Flow_ReSetFlowTitle(fk_flow, gwf.FK_Node, gwf.WorkID);
+            }
         }
         /// <summary>
         /// 设置当前工作的应该完成日期.
@@ -6357,7 +6375,7 @@ namespace BP.WF
             //设置引擎表.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
-            if (gwf.RetrieveFromDBSources() == 1)
+            if (gwf.RetrieveFromDBSources() == 1 && gwf.WFState == WFState.Blank)
             {
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置草稿错误，只有在开始节点时才能设置草稿，现在的节点是:" + gwf.Title);

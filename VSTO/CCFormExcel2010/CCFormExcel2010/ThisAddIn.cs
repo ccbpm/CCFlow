@@ -309,6 +309,7 @@ namespace CCFormExcel2010
 			{
 				if (dt.Columns.Contains(col.Value.ToString())) //DataTable中含有该字段
 				{
+					if (col.Key == "TableHeadHeight") continue;
 					var colL = ConvertInt2Letter(Convert.ToInt32(col.Key));
 					for (var r = 0; r <= dt.Rows.Count; r++)
 					{
@@ -337,22 +338,28 @@ namespace CCFormExcel2010
 				var currentThMergeColumnsCount = 1; //当前表头（单元格）所占列数
 				for (var r = range.Row; r < range.Row + range.Rows.Count - 1; )
 				{
-					var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + range.Row, missing);
+					var rangeTableHead = range.Worksheet.get_Range(ConvertInt2Letter(c) + r, missing);
 
-					//若该单元格有命名
-					if (rangeTableHead.Name.Name != null)
+					try
 					{
-						name = rangeTableHead.Name.Name;
-						var currentThMergeRowsCount = 1;
-						if (rangeTableHead.MergeCells)
+						//若该单元格有命名
+						if (rangeTableHead.Name != null && rangeTableHead.Name.Name != null) //rangeTableHead.Name抛出异常
 						{
-							currentThMergeColumnsCount = rangeTableHead.MergeArea.Columns.Count; //用于计算下一个要循环的列
-							currentThMergeRowsCount = rangeTableHead.MergeArea.Rows.Count; //用于计算当前表头所占行数
+							name = rangeTableHead.Name.Name;
+							var currentThMergeRowsCount = 1;
+							if (rangeTableHead.MergeCells)
+							{
+								currentThMergeColumnsCount = rangeTableHead.MergeArea.Columns.Count; //用于计算下一个要循环的列
+								currentThMergeRowsCount = rangeTableHead.MergeArea.Rows.Count; //用于计算当前表头所占行数
+							}
+							var currentThHeight = rangeTableHead.Row + currentThMergeRowsCount - range.Row; //当前表头占子表区域的高度（行数）
+							if (intTableHeadHeight < currentThHeight)
+								intTableHeadHeight = currentThHeight;
+							break; //发现表头即停止循环，不再往下寻找表头
 						}
-						var currentThHeight = rangeTableHead.Row + currentThMergeRowsCount - range.Row; //当前表头占子表区域的高度（行数）
-						if (intTableHeadHeight < currentThHeight)
-							intTableHeadHeight = currentThHeight;
-						break; //发现表头即停止循环，不再往下寻找表头
+					}
+					catch (Exception exp)
+					{
 					}
 
 					//!下一个要循环的行
@@ -403,8 +410,7 @@ namespace CCFormExcel2010
 				//range.Address //$B$2
 				//range.AddressLocal //$B$2
 
-				string strRgxSingleCell = "^\\=\\S+\\!\\$\\D+\\$\\d+$";
-				if (range.Value2 != null && Regex.IsMatch(location, strRgxSingleCell)) //是单个单元格
+				if (range.Value2 != null && Regex.IsMatch(location, this.regexRangeSingle)) //是单个单元格
 				{
 					var strBelongDtl = GetBelongDtlName(range.Worksheet.Name, range.Column, range.Row);
 					if (strBelongDtl == null) //不属于某个子表
@@ -424,7 +430,7 @@ namespace CCFormExcel2010
 						{
 							var dt = GetDtlData(strBelongDtl);
 							if (dt != null)
-								ds.Tables.Add();
+								ds.Tables.Add(dt);
 						}
 					}
 				}
@@ -465,12 +471,14 @@ namespace CCFormExcel2010
 			}
 
 			//填充数据
-			DataRow dr = dt.NewRow();
+			DataRow dr;
 			var intTableHeadHeight = Convert.ToInt32(htColumns["TableHeadHeight"]);
 			for (var r = range.Row + intTableHeadHeight; r < range.Row + range.Rows.Count; r++)
 			{
+				dr = dt.NewRow();
 				foreach (DictionaryEntry col in htColumns)
 				{
+					if (col.Key == "TableHeadHeight") continue;
 					var rangeCell = range.Worksheet.get_Range(ConvertInt2Letter((int)col.Key) + r, missing);
 					if (rangeCell.Value2 != null)
 					{

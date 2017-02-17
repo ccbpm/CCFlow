@@ -476,7 +476,8 @@ namespace BP.Web
                     cookie.Values.Add("IsRememberMe", "0");
                     cookie.Values.Add("Auth", string.Empty); //授权人.
                     //杨玉慧 加
-                    cookie.Values.Add("AuthName", string.Empty); //授权人.                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+                    cookie.Values.Add("AuthName", string.Empty); //授权人.                    
+                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
                     WebUser.Token = token;
                 }
                 catch

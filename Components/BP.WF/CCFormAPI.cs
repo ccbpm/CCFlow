@@ -60,7 +60,7 @@ namespace BP.WF
             dt.TableName = "Sys_MapAttr";
             myds.Tables.Add(dt);
 
-            //映射.
+            //映射实体.
             MapData md = new MapData(frmID);
 
             //实体.
@@ -169,12 +169,26 @@ namespace BP.WF
             }
             #endregion
 
-            #region 把外键表加入DataSet
+            #region 把主表的- 外键表/枚举 加入 DataSet.
             DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
             MapExts mes = md.MapExts;
             foreach (DataRow dr in dtMapAttr.Rows)
             {
+                string uiBindKey = dr["UIBindKey"].ToString();
                 string lgType = dr["LGType"].ToString();
+                if (lgType == "1")
+                {
+                    // 判断是否存在.
+                    if (myds.Tables.Contains(uiBindKey) == true)
+                        continue;
+
+                    string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
+                    DataTable dtEnum = BP.DA.DBAccess.RunSQLReturnTable(mysql);
+                    dtEnum.TableName = uiBindKey;
+                    myds.Tables.Add(dtEnum);
+                    continue;
+                }
+
                 if (lgType != "2" )
                     continue;
 
@@ -182,7 +196,6 @@ namespace BP.WF
                 if (UIIsEnable == "0")
                     continue;
 
-                string uiBindKey = dr["UIBindKey"].ToString();
                 if (string.IsNullOrEmpty(uiBindKey) == true)
                 {
                     string myPK = dr["MyPK"].ToString();

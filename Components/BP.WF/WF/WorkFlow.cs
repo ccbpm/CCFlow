@@ -1288,11 +1288,10 @@ namespace BP.WF
 
             //加入轨迹.
             WorkNode wn = new WorkNode(WorkID, this.HisGenerWorkFlow.FK_Node);
-            wn.AddToTrack(at, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name,
-                    stopMsg);
+            wn.AddToTrack(at, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name,stopMsg);
 
             //调用结束后事件.
-            this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter, currNode, rpt, null);
+           msg+= this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter, currNode, rpt, null);
             #endregion 处理后续的业务.
 
             //执行最后一个子流程发送后的检查，不管是否成功，都要结束该流程。

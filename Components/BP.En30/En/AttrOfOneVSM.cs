@@ -4,6 +4,24 @@ using BP.En;
 
 namespace BP.En
 {
+    /// <summary>
+    /// 工作模式
+    /// </summary>
+    public enum Dot2DotModel
+    {
+        /// <summary>
+        /// 默认模式
+        /// </summary>
+        Default,
+        /// <summary>
+        /// 树模式
+        /// </summary>
+        TreeDept,
+        /// <summary>
+        /// 树叶子模式
+        /// </summary>
+        TreeDeptEmp
+    }
 	/// <summary>
 	/// SearchKey 的摘要说明。
 	/// 用来处理一条记录的存放，问题。
@@ -11,6 +29,10 @@ namespace BP.En
 	public class AttrOfOneVSM 
 	{
 		#region 基本属性
+        /// <summary>
+        /// 工作模式
+        /// </summary>
+        public Dot2DotModel Dot2DotModel = Dot2DotModel.Default;
 		/// <summary>
 		/// 多对多的实体.
 		/// </summary>
@@ -145,7 +167,8 @@ namespace BP.En
 		/// AttrOfOneVSM
 		/// </summary>
 		public AttrOfOneVSM()
-		{}
+		{
+        }
 		/// <summary>
 		/// AttrOfOneVSM
 		/// </summary>
@@ -221,9 +244,14 @@ namespace BP.En
 		/// <param name="AttrOfMText"></param>
 		/// <param name="AttrOfMValue"></param>
 		/// <param name="desc">描述</param>
-		public void Add(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM , string AttrOfMText, string AttrOfMValue, string desc)
+		public void Add(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM , string AttrOfMText,
+            string AttrOfMValue, string desc, Dot2DotModel model= Dot2DotModel.Default)
 		{
-			AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM,_ensOfM,AttrOfOneInMM,AttrOfMInMM,AttrOfMText,AttrOfMValue,desc) ;
+            // 
+			AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM,_ensOfM,AttrOfOneInMM,AttrOfMInMM,AttrOfMText,AttrOfMValue,desc);
+            
+            //工作模式.
+            en.Dot2DotModel = model;
 			 
 			this.Add(en);				
 		}

@@ -242,6 +242,15 @@ namespace CCFlow.WF.Comm.RefFunc
             ddl.Items.Clear();
             ddl.SelectedIndexChanged += new EventHandler(DDL_Group_SelectedIndexChanged);
             Entity open = ensattr.EnsOfM.GetNewEntity;
+
+            ////如果被选择是一个树的实体.
+            //if (open.IsTreeEntity)
+            //{
+            //    this.Response.Redirect("Dot2DotTree.htm?1=1" + this.RequestParas, true);
+            //    return;
+            //}
+       
+
             Map map = open.EnMap;
             int len = 19;
 

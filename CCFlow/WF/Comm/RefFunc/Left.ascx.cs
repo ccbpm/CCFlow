@@ -140,7 +140,17 @@ namespace CCFlow.WF.Comm.RefFunc
             {
                 foreach (AttrOfOneVSM vsM in oneVsM)
                 {
-                    string url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
+                    string url = "";
+
+                    if (vsM.Dot2DotModel== Dot2DotModel.Default)
+                      url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
+
+                    if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
+                        url = "Dot2DotTreeDeptModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
+
+                    if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
+                        url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
+
                     try
                     {
                         sql = "SELECT COUNT(" + vsM.AttrOfOneInMM + ") as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "='" + en.PKVal + "'";

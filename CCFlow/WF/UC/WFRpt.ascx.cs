@@ -159,6 +159,8 @@ namespace CCFlow.WF.UC
                     toolbar.Add("<input type=button class=Btn value='" + btnLab.PrintDocLab + "' enable=true onclick=\"printFrom(); \" />");
                 }
             }
+            toolbar.Add("<input type=button  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "','ds'); \" />");
+            toolbar.Add("<input type=button  value='处理过程' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/SubFlowTrack.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "','ds'); \" />");
         }
         public void ViewWork()
         {
@@ -217,9 +219,15 @@ namespace CCFlow.WF.UC
             if (this.FID == 0)
                 fid = tk.FID;
 
-            DataTable ndrpt = DBAccess.RunSQLReturnTable("SELECT PFlowNo,PWorkID FROM " + fl.PTable + " WHERE OID=" + workid);
+            if (fid > 0)
+                workid = fid;
 
-            string urlExt = "&PFlowNo=" + ndrpt.Rows[0]["PFlowNo"] + "&PWorkID=" + ndrpt.Rows[0]["PWorkID"] + "&IsToobar=0&IsHidden=true";
+            string urlExt="";
+            DataTable ndrpt = DBAccess.RunSQLReturnTable("SELECT PFlowNo,PWorkID FROM " + fl.PTable + " WHERE OID=" + workid);
+            if(ndrpt.Rows.Count==0)
+                urlExt = "&PFlowNo=0&PWorkID=0&IsToobar=0&IsHidden=true";
+            else
+                urlExt = "&PFlowNo=" + ndrpt.Rows[0]["PFlowNo"] + "&PWorkID=" + ndrpt.Rows[0]["PWorkID"] + "&IsToobar=0&IsHidden=true";
             urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" + WebUser.No ?? string.Empty + "&SID=" + WebUser.SID ?? string.Empty;
 
             if (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm)
@@ -241,27 +249,27 @@ namespace CCFlow.WF.UC
                 //added by liuxc,2016-01-25
                 if (nd.FormUrl.Contains("?"))
                 {
-                    this.Response.Redirect(nd.FormUrl + "&WorkID=" + tk.WorkID + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+                    this.Response.Redirect(nd.FormUrl + "&WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
                     return;
                 }
 
-                this.Response.Redirect(nd.FormUrl + "?WorkID=" + tk.WorkID + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+                this.Response.Redirect(nd.FormUrl + "?WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
                 return;
             }
 
             Work wk = nd.HisWork;
-            wk.OID = tk.WorkID;
+            wk.OID = workid;
             if (wk.RetrieveFromDBSources() == 0)
             {
                 GERpt rtp = nd.HisFlow.HisGERpt;
-                rtp.OID = this.WorkID;
+                rtp.OID = workid;
                 if (rtp.RetrieveFromDBSources()==0)
                 {
                     this.UCEn1.AddFieldSet("打开(" + nd.Name + ")错误");
                     this.UCEn1.AddH1("当前的节点数据已经被删除！！！<br> 造成此问题出现的原因如下。");
                     this.UCEn1.AddBR("1、当前节点数据被非法删除。");
                     this.UCEn1.AddBR("2、节点数据是退回人与被退回人中间的节点，这部分节点数据查看不支持。");
-                    this.UCEn1.AddH1("技术信息:表" + wk.EnMap.PhysicsTable + " WorkID=" + this.WorkID);
+                    this.UCEn1.AddH1("技术信息:表" + wk.EnMap.PhysicsTable + " WorkID=" + workid);
                     this.UCEn1.AddFieldSetEnd();
                     return;
                 }
@@ -323,7 +331,7 @@ namespace CCFlow.WF.UC
                     foreach (BillTemplate item in bills)
                         title += "<img src='/WF/Img/Btn/Word.gif' border=0/>" + item.Name + "</a>";
 
-                    string urlr = appPath + "WF/WorkOpt/PrintDoc.aspx?FK_Node=" + nd.NodeID + "&FID=" + fid + "&WorkID=" + tk.WorkID + "&FK_Flow=" + nd.FK_Flow;
+                    string urlr = appPath + "WF/WorkOpt/PrintDoc.aspx?FK_Node=" + nd.NodeID + "&FID=" + fid + "&WorkID=" + workid + "&FK_Flow=" + nd.FK_Flow;
                     this.UCEn1.Add("<p><a  href=\"javascript:WinOpen('" + urlr + "','dsdd');\"  />" + title + "</a></p>");
                     //this.UCEn1.Add("<a href='' target=_blank><img src='/WF/Img/Btn/Word.gif' border=0/>" + bt.Name + "</a>");
                 }
@@ -333,7 +341,7 @@ namespace CCFlow.WF.UC
                 /* 涉及到多个表单的情况...*/
                 if (nd.HisFormType == NodeFormType.SheetTree)
                 {
-                    Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?WorkID=" + tk.WorkID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + "&FK_Node=" + nd.NodeID + "&CWorkID=" + this.CWorkID);
+                    Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?WorkID=" + workid + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + "&FK_Node=" + nd.NodeID + "&CWorkID=" + this.CWorkID);
                 }
                 else if (nd.HisFormType != NodeFormType.DisableIt)
                 {
@@ -369,7 +377,7 @@ namespace CCFlow.WF.UC
                     Frm frm = (Frm)frms[0];
                     FrmNode fn = frm.HisFrmNode;
                     string src = "";
-                    src = fn.FrmUrl + ".aspx?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + tk.WorkID + "&CWorkID=" + this.CWorkID;
+                    src = fn.FrmUrl + ".aspx?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + workid + "&CWorkID=" + this.CWorkID;
                     this.UCEn1.Add("\t\n <DIV id='" + frm.No + "' style='width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left; background-color:white;margin:0;padding:0;' >");
                     this.UCEn1.Add("\t\n <iframe ID='F" + frm.No + "' src='" + src + "' frameborder=0  style='margin:0;padding:0;width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left;'  leftMargin='0'  topMargin='0'  /></iframe>");
                     this.UCEn1.Add("\t\n </DIV>");
@@ -409,7 +417,7 @@ namespace CCFlow.WF.UC
                     {
                         FrmNode fn = frm.HisFrmNode;
                         string src = "";
-                        src = fn.FrmUrl + ".aspx?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + tk.WorkID + "&CWorkID=" + this.CWorkID + "&FK_Flow=" + this.FK_Flow;//edited by liuxc,2015-6-17
+                        src = fn.FrmUrl + ".aspx?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + workid + "&CWorkID=" + this.CWorkID + "&FK_Flow=" + this.FK_Flow;//edited by liuxc,2015-6-17
                         this.UCEn1.Add("\t\n<li><a href=\"#" + frm.No + "\" onclick=\"TabClick('" + frm.No + "','" + src + "');\" >" + frm.Name + "</a></li>");
                     }
                     this.UCEn1.Add("\t\n </ul>");

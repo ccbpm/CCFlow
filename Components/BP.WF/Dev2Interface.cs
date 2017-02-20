@@ -1745,6 +1745,29 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 获取某一个人已完成的工作
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <returns></returns>
+        public static DataTable DB_FlowComplete(string userNo)
+        {
+            if (Glo.IsDeleteGenerWorkFlow == false)
+            {
+                /* 如果不是删除流程注册表. */
+                Paras ps = new Paras();
+                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + userNo + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
+                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            }
+            else
+            {
+                Paras ps = new Paras();
+                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM V_FlowData T WHERE T.FlowEmps LIKE '%@" + userNo + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY RDT DESC";
+                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            }
+        }
+        /// <summary>
         /// 获取已经完成
         /// </summary>
         /// <returns></returns>
@@ -2489,6 +2512,24 @@ namespace BP.WF
         public static DataTable DB_GenerRuning()
         {
             DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null);
+            dt.Columns.Add("Type");
+
+            foreach (DataRow row in dt.Rows)
+            {
+                row["Type"] = "RUNNING";
+            }
+
+            dt.DefaultView.Sort = "RDT DESC";
+            return dt.DefaultView.ToTable();
+        }
+        /// <summary>
+        /// 获取某一个人的在途（参与、未完成的工作）
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <returns></returns>
+        public static DataTable DB_GenerRuning(string userNo)
+        {
+            DataTable dt = DB_GenerRuning(userNo, null);
             dt.Columns.Add("Type");
 
             foreach (DataRow row in dt.Rows)
@@ -4387,7 +4428,100 @@ namespace BP.WF
             else
                 return true;
         }
+        /// <summary>
+        /// 保存到待办
+        /// </summary>
+        /// <param name="flowNo"></param>
+        /// <param name="title"></param>
+        /// <param name="workid"></param>
+        /// <param name="userNo"></param>
+        public static void Node_SaveEmpWorks(string flowNo, string title, string workid, string userNo)
+        {
+            // 转化成编号.
+            flowNo = TurnFlowMarkToFlowNo(flowNo);
 
+            Flow fl = new Flow(flowNo);
+            Node nd = new Node(fl.StartNodeID);
+            Emp emp = new Emp(userNo);
+
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = long.Parse(workid);
+            int i = gwf.RetrieveFromDBSources();
+
+            gwf.FlowName = fl.Name;
+            gwf.FK_Flow = flowNo;
+            gwf.FK_FlowSort = fl.FK_FlowSort;
+
+            gwf.FK_Dept = emp.FK_Dept;
+            gwf.DeptName = emp.FK_DeptText;
+            gwf.FK_Node = fl.StartNodeID;
+
+            gwf.NodeName = nd.Name;
+            gwf.WFSta = WFSta.Runing;
+            gwf.WFState = WFState.Runing;
+
+            gwf.Title = title;
+
+            gwf.Starter = emp.No;
+            gwf.StarterName = emp.Name;
+            gwf.RDT = DataType.CurrentDataTime;
+
+            gwf.PWorkID = 0;
+            gwf.PFlowNo = null;
+            gwf.PNodeID = 0;
+            if (i == 0)
+                gwf.Insert();
+            else
+                gwf.Update();
+
+            // 产生工作列表.
+            string sql = "SELECT workid FROM wf_generworkerlist WHERE workid='" + workid + "'";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
+            {
+                GenerWorkerList gwl = new GenerWorkerList();
+                gwl.WorkID = long.Parse(workid);
+                if (gwl.RetrieveFromDBSources() == 0)
+                {
+                    gwl.FK_Emp = emp.No;
+                    gwl.FK_EmpText = emp.Name;
+
+                    gwl.FK_Node = nd.NodeID;
+                    gwl.FK_NodeText = nd.Name;
+                    gwl.FID = 0;
+
+                    gwl.FK_Flow = fl.No;
+                    gwl.FK_Dept = emp.FK_Dept;
+
+                    gwl.SDT = DataType.CurrentDataTime;
+                    gwl.DTOfWarning = DataType.CurrentDataTime;
+                    gwl.RDT = DataType.CurrentDataTime;
+                    gwl.IsEnable = true;
+                    gwl.IsRead = true;
+                    gwl.IsPass = false;
+                    gwl.Sender = userNo;
+                    gwl.PRI = gwf.PRI;
+                    gwl.Insert();
+                }
+            }
+            BP.DA.DBAccess.RunSQL("INSERT INTO WF_JILU(WORKID,FK_NODE) VALUES('" + workid + "','" + nd.NodeID + "')");
+            // 执行对报表的数据表WFState状态的更新,让它为runing的状态. 
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            Paras ps = new Paras();
+            ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Title=" + dbstr
+                + "Title,FK_Dept=" + dbstr + "FK_Dept,PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID WHERE OID=" + dbstr + "OID";
+            ps.Add("WFState", (int)WFState.Runing);
+            ps.Add("WFSta", (int)WFSta.Runing);
+            ps.Add("Title", gwf.Title);
+            ps.Add("FK_Dept", gwf.FK_Dept);
+
+            ps.Add("PFlowNo", gwf.PFlowNo);
+            ps.Add("PWorkID", gwf.PWorkID);
+
+            ps.Add("OID", workid);
+            DBAccess.RunSQL(ps);
+
+        }
         /// <summary>
         /// 调度流程
         /// 说明：

@@ -985,8 +985,8 @@ namespace BP.WF.Template
             if (smsDocTmp.Contains("@"))
                 smsDocTmp = Glo.DealExp(smsDocTmp, en, null);
 
-            if (smsDocTmp.Contains("@"))
-                throw new Exception("@短信消息内容配置错误,里面有未替换的变量，请确认参数是否正确:"+smsDocTmp);
+            //if (smsDocTmp.Contains("@"))
+            //    throw new Exception("@短信消息内容配置错误,里面有未替换的变量，请确认参数是否正确:"+smsDocTmp);
 
             string toEmpIDs = "";
             #endregion 处理当前的内容.

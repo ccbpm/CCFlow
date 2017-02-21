@@ -4504,7 +4504,7 @@ namespace BP.WF
                     gwl.Insert();
                 }
             }
-            BP.DA.DBAccess.RunSQL("INSERT INTO WF_JILU(WORKID,FK_NODE) VALUES('" + workid + "','" + nd.NodeID + "')");
+
             // 执行对报表的数据表WFState状态的更新,让它为runing的状态. 
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();

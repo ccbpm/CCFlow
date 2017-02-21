@@ -3644,7 +3644,8 @@ namespace BP.WF
         public static DateTime AddDayHoursSpan(DateTime specDT, int day, int minutes, TWay tway)
         {
             DateTime mydt = BP.DA.DataType.AddDays(specDT, day, tway);
-            return Glo.AddMinutes(mydt, minutes);
+            return mydt;
+            //return Glo.AddMinutes(mydt, minutes);
         }
         #endregion ssxxx.
 
@@ -3676,8 +3677,8 @@ namespace BP.WF
             DateTime dtNow)
         {
             //开始节点不考核.
-            if (nd.IsStartNode)
-                return;
+            //if (nd.IsStartNode)
+            //    return;
 
             if (nd.HisCHWay == CHWay.None)
                 return;
@@ -3696,20 +3697,19 @@ namespace BP.WF
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        ps.SQL = "SELECT TOP 1 RDT,SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
+                        ps.SQL = "SELECT TOP 1 RDT,SDTOfNode FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
                         break;
                     case DBType.Oracle:
-                        ps.SQL = "SELECT  RDT,SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        ps.SQL = "SELECT  RDT,SDTOfNode FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
                         break;
                     case DBType.MySQL:
-                        ps.SQL = "SELECT  RDT,SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
+                        ps.SQL = "SELECT  RDT,SDTOfNode FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
                         break;
                     default:
                         break;
                 }
 
                 ps.Add("WorkID", workid);
-                ps.Add("FK_Emp", WebUser.No);
                 ps.Add("FK_Node", nd.NodeID);
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
@@ -3763,8 +3763,8 @@ namespace BP.WF
             DateTime dtTo = DataType.ParseSysDate2DateTime(ch.DTTo);
             
             TimeSpan ts = dtTo - dtFrom;
-            ch.UseDays = ts.Days;
-
+            ch.UseDays = ts.Days;//用时，天数
+            ch.UseMinutes = ts.Minutes;//用时，分钟
             //int hour = ts.Hours;
             //ch.UseDays += ts.Hours / 8; //使用的天数.
 
@@ -3772,7 +3772,8 @@ namespace BP.WF
             DateTime sdtOfDT = DataType.ParseSysDate2DateTime(ch.SDT);
 
             TimeSpan myts = dtTo - sdtOfDT;
-            ch.UseDays = myts.Days; //预期的天数.
+            ch.OverDays = myts.Days; //逾期的天数.
+            ch.OverMinutes = myts.Minutes;//逾期的分钟数
             if (sdtOfDT >= dtTo)
             {
                 /* 正常完成 */

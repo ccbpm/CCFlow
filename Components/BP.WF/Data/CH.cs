@@ -94,6 +94,14 @@ namespace BP.WF.Data
         /// </summary>
         public const string OverHours = "OverHours";
         /// <summary>
+        /// 用时（分钟）
+        /// </summary>
+        public const string UseMinutes = "UseMinutes";
+        /// <summary>
+        /// 超时（分钟）
+        /// </summary>
+        public const string OverMinutes = "OverMinutes";
+        /// <summary>
         /// 状态
         /// </summary>
         public const string CHSta = "CHSta";
@@ -257,6 +265,48 @@ namespace BP.WF.Data
             set
             {
                 this.SetValByKey(CHAttr.UseDays, value);
+            }
+        }
+        /// <summary>
+        /// 逾期时间
+        /// </summary>
+        public float OverDays
+        {
+            get
+            {
+                return this.GetValFloatByKey(CHAttr.OverDays);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.OverDays, value);
+            }
+        }
+        /// <summary>
+        /// 用时（分钟）
+        /// </summary>
+        public float UseMinutes
+        {
+            get
+            {
+                return this.GetValFloatByKey(CHAttr.UseMinutes);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.UseMinutes, value);
+            }
+        }
+        /// <summary>
+        /// 超时（分钟）
+        /// </summary>
+        public float OverMinutes
+        {
+            get
+            {
+                return this.GetValFloatByKey(CHAttr.OverMinutes);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.OverMinutes, value);
             }
         }
         /// <summary>

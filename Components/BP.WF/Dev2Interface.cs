@@ -6901,7 +6901,6 @@ namespace BP.WF
                 DBAccess.RunSQL(ps1);
             }
 
-            BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, workid, 0, "任务被" + WebUser.Name + "从任务池取走.", "获取");
             if (i == 1)
                 return true;
             else

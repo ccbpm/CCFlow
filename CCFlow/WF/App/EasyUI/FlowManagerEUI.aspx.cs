@@ -5,14 +5,14 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
-using BP.GPM.Utility;
 using BP.WF;
 using BP.En;
 using System.Text;
 
-namespace CCFlow.WF.App.EasyUI
+
+namespace CCFlow.AppDemoLigerUI.Base
 {
-    public partial class FlowManagerEUI : System.Web.UI.Page
+    public partial class FlowManagerEUI : BasePage
     {
 
         HttpContext _Context = null;

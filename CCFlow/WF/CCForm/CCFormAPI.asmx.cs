@@ -20,11 +20,6 @@ namespace CCFlow.WF.CCForm
 	// [System.Web.Script.Services.ScriptService]
 	public class CCFormAPI : System.Web.Services.WebService
 	{
-		[WebMethod]
-		public string HelloWorld()
-		{
-			return "Hello World";
-		}
 		/// <summary>
 		/// 获得Excel文件
 		/// </summary>
@@ -70,9 +65,10 @@ namespace CCFlow.WF.CCForm
         [WebMethod]
         public void SaveExcelFile(string userNo, string sid, string frmID, int oid, string mainTableAtParas, System.Data.DataSet dsDtls, byte[] byt)
         {
+            //执行登录.
             BP.WF.Dev2Interface.Port_Login(userNo);
 
-            // 执行保存文件.
+            //执行保存文件.
             MapData md = new MapData(frmID);
             md.ExcelSaveFile(oid, byt); //把文件保存到数据库里.
 

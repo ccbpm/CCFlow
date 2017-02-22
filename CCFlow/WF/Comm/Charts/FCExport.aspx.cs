@@ -9,6 +9,7 @@ using System.Collections;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace CCFlow.WF.Comm.Charts
 {

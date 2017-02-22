@@ -1046,7 +1046,6 @@ namespace BP.WF.Template
 
                 map.AddTBInt(CondAttr.MyPOID, 0, "MyPOID", true, true);
                 map.AddTBInt(CondAttr.PRI, 0, "计算优先级", true, true);
-
                 map.AddTBInt(CondAttr.CondOrAnd, 0, "方向条件类型", true, true);
 
                 //参数 for wangrui add 2015.10.6. 条件为station,depts模式的时候，需要指定人员。

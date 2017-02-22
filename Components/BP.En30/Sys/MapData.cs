@@ -1665,8 +1665,6 @@ namespace BP.Sys
 							}
 							if (isSetReadonly)
 							{
-								//dtl.IsReadonly = true;
-
 								dtl.IsInsert = false;
 								dtl.IsUpdate = false;
 								dtl.IsDelete = false;
@@ -2012,7 +2010,15 @@ namespace BP.Sys
 								}
 							}
 							en.MyPK = en.FK_MapData + "_" + en.KeyOfEn;
-							en.DirectInsert();
+
+                            //直接插入.
+                            try
+                            {
+                                en.DirectInsert();
+                            }
+                            catch
+                            {
+                            }
 						}
 						break;
 					case "Sys_GroupField":
@@ -2025,7 +2031,6 @@ namespace BP.Sys
 								object val = dr[dc.ColumnName] as object;
 								if (val == null)
 									continue;
-
 								try
 								{
 									en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));

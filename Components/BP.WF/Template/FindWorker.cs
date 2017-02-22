@@ -103,6 +103,12 @@ namespace BP.WF.Template
                     }
                 }
 
+                if (sql.Contains("@GuestUser.No"))
+                    sql=sql.Replace("@GuestUser.No",GuestUser.No);
+
+                if (sql.Contains("@GuestUser.Name"))
+                    sql = sql.Replace("@GuestUser.Name", GuestUser.Name);
+
                 dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker == false)
                     throw new Exception("@没有找到可接受的工作人员。@技术信息：执行的SQL没有发现人员:" + sql);

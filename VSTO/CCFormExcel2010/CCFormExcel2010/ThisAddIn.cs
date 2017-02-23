@@ -85,7 +85,7 @@ namespace CCFormExcel2010
 			{
 				client = BP.Excel.Glo.GetCCFormAPISoapClient();
 				byte[] bytes = null;
-				var isExists = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
+				var isExistDbFile = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
 
 				// 把这个byt 保存到 c:\temp.xlsx 里面.
 				string tempFile = "C:\\CCFlow\\temp.xlsx";
@@ -101,27 +101,11 @@ namespace CCFormExcel2010
 				_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
 
 				//如果打开的是模板，则还需填充数据//TODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）
-				if (isExists == false)
+				if (isExistDbFile == false)
 				{
-					#region 加载外键枚举数据
-
-					//DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
-					//foreach (DataRow dr in dtMapAttr.Rows)
-					//{
-					//    int lgType=int.Parse(dr["LGType"].ToString());
-					//    if (lgType == 0)
-					//        continue; //普通类型的字段。
-					//    string uiBindKey = dr["UIBindKey"].ToString();
-					//    if (string.IsNullOrEmpty(uiBindKey) == true)
-					//        continue; // 没有外键枚举.
-					//    DataTable dt = ds.Tables[uiBindKey];
-					//}
-
+					//加载外键枚举数据
 					SetMetaData(_originData);
 
-					#endregion 加载外键枚举数据
-
-					#region 给主从表赋值.
 					//给主表赋值.
 					DataTable dtMain = _originData.Tables["MainTable"];
 					SetMainData(dtMain);
@@ -133,7 +117,6 @@ namespace CCFormExcel2010
 							continue;
 						SetDtlData(dt);
 					}
-					#endregion 给主从表赋值.
 				}
 			}
 			catch (Exception exp)
@@ -180,19 +163,26 @@ namespace CCFormExcel2010
 			if (!Glo.LoadSuccessful)
 				return;
 
-			if (range.Name == null) //单元格没有绑定字段
-				return;
+			//若为子表字段则可能无命名，因此不能使用该过滤条件
+			//xif (range.Name == null) //单元格没有绑定字段
+			//x	return;
 
 			if (!IsValidList(range)) //单元格不是下拉列表类型 //TODO: 『手填』类型的字段是否有可能与其他字段联动？
 				return;
 
-			if (!_originData.Tables.Contains("Sys_MapExt")) //没有MapExt信息
+			if (!_originData.Tables.Contains("Sys_MapExt")) //没有MapExt信息//TODO: 分主、子表
 				return;
 
 			var strBelongDtlName = GetBelongDtlName(range);
-			if (strBelongDtlName == null)
+			if (strBelongDtlName == null) //单元格不在某子表中
 			{
-				var drs = _originData.Tables["Sys_MapExt"].Select("AttrOfOper='" + "strKeyOfEn" + "'");
+				if (range.Name == null) //单元格没有绑定字段
+					return;
+
+				if (!_originData.Tables.Contains("Sys_MapExt")) //没有MapExt信息
+					return;
+
+				var drs = _originData.Tables["Sys_MapExt"].Select("AttrOfOper='" + range.Name + "'");
 				if (drs.Length == 0) //MapExt信息中不含当前单元格绑定字段
 					return;
 
@@ -225,9 +215,9 @@ namespace CCFormExcel2010
 				//清除字段值
 				range.Value2 = null;
 			}
-			else //TODO: 字段属于某子表时。。待添加处理
+			else //字段属于某子表时
 			{
-
+				if (_htDtlsColumns.Contains(strBelongDtlName)) { }
 			}
 		}
 

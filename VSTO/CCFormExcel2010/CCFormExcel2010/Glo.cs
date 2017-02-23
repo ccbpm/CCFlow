@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -215,7 +216,33 @@ namespace BP.Excel
 			return filePathName;
 		}
 
+		public static byte[] ReadFile(string strFilePath)
+		{
+			string folder = System.IO.Path.GetDirectoryName(strFilePath);
 
+			if (System.IO.Directory.Exists(folder) == false)
+				return null;
+
+			if (System.IO.File.Exists(strFilePath) == false)
+				return null;
+
+			/*
+			System.IO.FileInfo fi = new System.IO.FileInfo(strFilePath);
+			byte[] buffer = new byte[fi.Length];
+
+			System.IO.FileStream fs = fi.OpenRead(); //会提示：文件“ ”正由另一进程使用,因此该进程无法访问此文件
+			fs.Read(buffer, 0, Convert.ToInt32(fs.Length));
+			fs.Close();*/
+
+
+			FileStream fs = new FileStream(strFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			var buffer = new byte[fs.Length];
+			fs.Position = 0;
+			fs.Read(buffer, 0, buffer.Length);
+			fs.Close();
+
+			return buffer;
+		}
 
 	}
 }

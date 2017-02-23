@@ -23,7 +23,10 @@ namespace CCFormExcel2010
 		private readonly string regexRangeArea = "^\\=\\S+\\!\\$\\D+\\$\\d+\\:\\$\\D+\\$\\d+$"; //=Sheet1!$B$2:$C$3
 
 		private CCFormExcel2010.CCForm.CCFormAPISoapClient client;
-		private DataSet _originData; //原始数据
+        /// <summary>
+        ///  原始数据(包括表单的描述、业务逻辑、主表子表数据。)
+        /// </summary>
+		private DataSet _originData;
 		private Hashtable _htDtlsColumns = new Hashtable(); //excel中的子表字段信息
 
 		// 定义一个任务窗体 
@@ -103,7 +106,7 @@ namespace CCFormExcel2010
 				//如果打开的是模板，则还需填充数据//TODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）
 				if (isExistDbFile == false)
 				{
-					//加载外键枚举数据
+					//加载外键枚举数据.
 					SetMetaData(_originData);
 
 					//给主表赋值.
@@ -126,31 +129,6 @@ namespace CCFormExcel2010
 			}
 			#endregion 校验用户安全与下载文件.
 
-			//Excel.Worksheet activeWorksheet = ((Excel.Worksheet)Application.ActiveSheet);
-			//Excel.Range firstRow = activeWorksheet.get_Range("A1");
-			//firstRow.EntireRow.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
-			//Excel.Range newFirstRow = activeWorksheet.get_Range("A1");
-			//newFirstRow.Value2 = "This text was added by using code";
-			//newFirstRow.Interior.Color = 100;
-			//this.Application.WorkbookBeforeSave += new Excel.AppEvents_WorkbookBeforeSaveEventHandler(Application_WorkbookBeforeSave);
-
-			//保存到.
-			//activeWorksheet.SaveAs("c:\\" + BP.Excel.Glo.FK_Flow + ".xls");
-
-			// 把自定义窗体添加到CustomTaskPanes集合中 
-			//// ExcelHelp 是一个自定义控件类 
-			//helpTaskPane = Globals.ThisAddIn.CustomTaskPanes.Add(new TaskPanel(), "采样任务列表");
-			//// 使任务窗体可见 
-			//helpTaskPane.Visible = true;
-
-			// 通过DockPosition属性来控制任务窗体的停靠位置， 
-			// 设置为 MsoCTPDockPosition.msoCTPDockPositionRight这个代表停靠到右边，这个值也是默认值 
-			//helpTaskPane.DockPosition = MsoCTPDockPosition.msoCTPDockPositionRight; 
-			// Application.ThisWorkbook.OpenLinks(
-			//  Application.ThisWorkbook.Open(
-			//Workbooks.Open Filename
-			//  Utility
-			// activeWorksheet.r
 		}
 
 		/// <summary>
@@ -160,17 +138,17 @@ namespace CCFormExcel2010
 		/// <param name="range"></param>
 		void Application_SheetChange(object sh, Excel.Range range)
 		{
-			if (!Glo.LoadSuccessful)
+			if (Glo.LoadSuccessful==false)
 				return;
 
 			//若为子表字段则可能无命名，因此不能使用该过滤条件
 			//xif (range.Name == null) //单元格没有绑定字段
 			//x	return;
 
-			if (!IsValidList(range)) //单元格不是下拉列表类型 //TODO: 『手填』类型的字段是否有可能与其他字段联动？
+			if (this.IsValidList(range)==false) //单元格不是下拉列表类型 //TODO: 『手填』类型的字段是否有可能与其他字段联动？
 				return;
 
-			if (!_originData.Tables.Contains("Sys_MapExt")) //没有MapExt信息//TODO: 分主、子表
+			if (_originData.Tables.Contains("Sys_MapExt")==false) //没有MapExt信息//TODO: 分主、子表
 				return;
 
 			var strBelongDtlName = GetBelongDtlName(range);
@@ -217,7 +195,10 @@ namespace CCFormExcel2010
 			}
 			else //字段属于某子表时
 			{
-				if (_htDtlsColumns.Contains(strBelongDtlName)) { }
+				if (_htDtlsColumns.Contains(strBelongDtlName))
+                {
+
+                }
 			}
 		}
 

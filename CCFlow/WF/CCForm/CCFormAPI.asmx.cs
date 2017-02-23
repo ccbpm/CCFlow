@@ -6,6 +6,7 @@ using System.Data;
 using System.Web.Services;
 using BP.WF.Template;
 using BP.Sys;
+using BP.Web;
 using BP.DA;
 
 namespace CCFlow.WF.CCForm
@@ -63,17 +64,17 @@ namespace CCFlow.WF.CCForm
 		/// <param name="dsDtls">从表参数</param>
 		/// <param name="byt">文件流</param>
         [WebMethod]
-        public void SaveExcelFile(string userNo, string sid, string frmID, int oid, string mainTableAtParas, System.Data.DataSet dsDtls, byte[] byt)
+        public void SaveExcelFile(string userNo, string sid, string frmID, int mainEnPKOID, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
         {
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(userNo);
 
             //执行保存文件.
             MapData md = new MapData(frmID);
-            md.ExcelSaveFile(oid, byt); //把文件保存到数据库里.
+            md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到数据库里.
 
             //保存主表数据.
-            GEEntity wk = new GEEntity(frmID, oid);
+            GEEntity wk = new GEEntity(frmID, mainEnPKOID);
             wk.ResetDefaultVal();
 
             if (mainTableAtParas != null)
@@ -88,10 +89,10 @@ namespace CCFlow.WF.CCForm
                 }
             }
 
-            wk.OID = oid;
+            wk.OID = mainEnPKOID;
             wk.Save();
 
-            if (dsDtls == null)
+            if (dsDtlsChange == null)
                 return;
 
             #region 保存从表
@@ -99,21 +100,48 @@ namespace CCFlow.WF.CCForm
             MapDtls dtls = new MapDtls(frmID);
 
             //保存从表
-            foreach (System.Data.DataTable dt in dsDtls.Tables)
+            foreach (System.Data.DataTable dt in dsDtlsChange.Tables)
             {
                 foreach (MapDtl dtl in dtls)
                 {
                     if (dt.TableName != dtl.No)
                         continue;
+
+
+#region 根据原始数据,与当前数据求出已经删除的oids .
+                    DataTable dtDtlOld = dsDtlsOld.Tables[dtl.No]; // ???
+                    foreach (DataRow dr in dtDtlOld.Rows)
+                    {
+                        string oidOld = dr["OID"].ToString();
+
+                        bool isHave = false;
+                        //遍历变更的数据.
+                        foreach (DataRow dtNew in dt.Rows)
+                        {
+                            string oidNew = dtNew["OID"].ToString();
+                            if (oidOld == oidNew)
+                            {
+                                isHave = true;
+                                break;
+                            }
+                        }
+
+                        //如果不存在.
+                        if (isHave == false)
+                            DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE OID=" + oidOld);
+                    }
+#endregion 根据原始数据,与当前数据求出已经删除的oids .
+                     
+
                     //获取dtls
                     GEDtls daDtls = new GEDtls(dtl.No);
-                    daDtls.Delete(GEDtlAttr.RefPK, oid); // 清除现有的数据.
 
-                    // 为从表复制数据.
+                    // 更新数据.
                     foreach (DataRow dr in dt.Rows)
                     {
                         GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-                        daDtl.RefPK = oid.ToString();
+                        daDtl.RefPK = mainEnPKOID.ToString();
+
                         //明细列.
                         foreach (DataColumn dc in dt.Columns)
                         {
@@ -121,9 +149,13 @@ namespace CCFlow.WF.CCForm
                             daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
                         }
 
+                        if (daDtl.OID > 100)
+                            daDtl.RetrieveFromDBSources();
+
+
                         daDtl.ResetDefaultVal();
 
-                        daDtl.RefPK = oid.ToString();
+                        daDtl.RefPK = mainEnPKOID.ToString();
                         daDtl.RDT = DataType.CurrentDataTime;
 
                         //执行保存.
@@ -135,6 +167,60 @@ namespace CCFlow.WF.CCForm
                 }
             }
             #endregion 保存从表结束
+
+
+            //缺少表单保存后的方法.
+
+        }
+
+        /// <summary>
+        /// 级联接口
+        /// </summary>
+        /// <param name="userNo">用户</param>
+        /// <param name="sid">安全校验码</param>
+        /// <param name="mainEnPK">表单主键值</param>
+        /// <param name="mapExtMyPK">逻辑逐渐值</param>
+        /// <param name="cheaneKey">变动的key(一定是编号)</param>
+        /// <param name="paras">@Key=Val@Key1=Val1@Key2=Val2</param>
+        /// <returns>查询的要填充数据</returns>
+        [WebMethod]
+        public DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, int mainEnPK, string mapExtMyPK, string cheaneKey, 
+            string paras)
+        {
+            BP.WF.Dev2Interface.Port_Login(userNo);
+
+            MapExt me = new MapExt(mapExtMyPK);
+
+            string sql = me.DocOfSQLDeal.Clone() as string;
+            sql = sql.Replace("@Key", cheaneKey);
+            sql = sql.Replace("@key", cheaneKey);
+            sql = sql.Replace("@Val", cheaneKey);
+            sql = sql.Replace("@val", cheaneKey);
+
+            sql = sql.Replace("@WebUser.No", WebUser.No);
+            sql = sql.Replace("@WebUser.Name", WebUser.Name);
+            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+            sql = sql.Replace("@OID", mainEnPK.ToString());
+            sql = sql.Replace("@WorkID", mainEnPK.ToString());
+
+            if (sql.Contains("@") == true)
+            {
+                string[] strs = paras.Split('@');
+                foreach (string s in strs)
+                {
+                    if (string.IsNullOrEmpty(s)
+                        || s.Contains("=") == false)
+                        continue;
+
+                    string[] mykv = s.Split('=');
+                    sql = sql.Replace("@" + mykv[0], mykv[1]);
+
+                    if (sql.Contains("@") == false)
+                        break;
+                }
+            }
+            return BP.DA.DBAccess.RunSQLReturnTable(sql);
         }
 	}
 }

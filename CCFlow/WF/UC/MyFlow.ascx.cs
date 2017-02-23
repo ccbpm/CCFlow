@@ -2192,8 +2192,6 @@ namespace CCFlow.WF.UC
                     {
                         string title = BP.WF.WorkFlowBuessRole.GenerTitle(this.currFlow, currWK);
                         BP.WF.Dev2Interface.Flow_SetFlowTitle(this.FK_Flow, this.WorkID, title);
-                        if (this.currFlow.DraftRole == DraftRole.SaveToTodolist && isSave == true) //如果是开始节点并且是保存事件
-                            BP.WF.Dev2Interface.Node_SaveEmpWorks(this.FK_Flow, title, this.WorkID.ToString(), WebUser.No);
                     }
                 }
             }

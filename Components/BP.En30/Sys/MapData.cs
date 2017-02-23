@@ -2537,7 +2537,11 @@ namespace BP.Sys
                 }
             }
 		}
-
+        /// <summary>
+        /// 保存excel文件
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <param name="bty"></param>
 		public void ExcelSaveFile(int oid, byte[] bty)
 		{
 			BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, oid.ToString(), "DBFile");

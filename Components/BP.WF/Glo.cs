@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20161201";
+        public static string Ver = "20170223";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -130,6 +130,7 @@ namespace BP.WF
              
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+            updataNote += "20170217.影子字段";
             updataNote += "20161104.附件删除规则修复";
             updataNote += "20161101.升级表单，增加图片附件必填验证 by:liuxianchen";
             updataNote += "20161018.升级用户表密码加密.";
@@ -701,6 +702,33 @@ namespace BP.WF
                 }
                 #endregion
 
+                #region 外键下拉框影子字段创建
+                MapAttrs mapAttrs = new MapAttrs();
+                QueryObject obj = new QueryObject(mapAttrs);
+                obj.AddWhere(MapAttrAttr.UIContralType, (int)UIContralType.DDL);
+                //obj.addAnd();
+                //obj.AddWhere(MapAttrAttr.LGType, (int)FieldTypeS.Normal);
+                obj.DoQuery();
+                foreach (MapAttr mapAttr in mapAttrs)
+                {
+                    if (mapAttr.IsExit(MapAttrAttr.MyPK, mapAttr.FK_MapData + "_" + mapAttr.KeyOfEn + "T") == true)
+                        continue;
+                    //插入影子字段.
+                    MapAttr myattr = new MapAttr();
+                    myattr.MyPK = mapAttr.FK_MapData + "_" + mapAttr.KeyOfEn + "T";
+                    if (myattr.IsExits == true)
+                        continue;
+                    myattr.Copy(mapAttr);
+                    myattr.KeyOfEn = mapAttr.KeyOfEn + "T";
+                    myattr.UIContralType = UIContralType.TB;
+                    myattr.UIVisible = false;
+                    myattr.UIIsEnable = false; // 让其不是隐藏字段.
+                    myattr.UIBindKey = string.Empty;
+                    myattr.UIRefKey = string.Empty;
+                    myattr.UIRefKeyText = string.Empty;
+                    myattr.Insert();
+                }
+                #endregion
                 // 最后更新版本号，然后返回.
                 sql = "UPDATE Sys_Serial SET IntVal=" + Ver + " WHERE CfgKey='Ver'";
                 if (DBAccess.RunSQL(sql) == 0)

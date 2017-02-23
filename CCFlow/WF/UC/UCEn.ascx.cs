@@ -3141,7 +3141,7 @@ namespace CCFlow.WF.UC
                             if (fk_dept == "all")
                             {
                                 //默认当前登陆人
-                                //  fk_dept = WebUser.FK_Dept;
+                                 fk_dept = WebUser.FK_Dept;
                                 //发起人
                                 if (sealType == "1")
                                 {

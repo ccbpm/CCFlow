@@ -765,7 +765,7 @@ namespace BP.WF.Template
 
             #endregion 生成相关的变量？
 
-            //求发送给的人员ID.
+            //求发送给的人员 ID.
             string toEmpIDs = "";
 
             #region 如果发送给指定的节点处理人, 就计算出来直接退回, 任何方式的处理人都是一致的.
@@ -1039,7 +1039,7 @@ namespace BP.WF.Template
             if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
                 || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
             {
-                /*发送成功事件.*/
+                /*发送成功事件, 退回后事件. */
                 if (this.SMSPushWay == 1)
                 {
                     /*如果向接受人发送短信.*/
@@ -1053,8 +1053,6 @@ namespace BP.WF.Template
                         string smsDocTmpReal = smsDocTmp.Clone() as string;
                         smsDocTmpReal = smsDocTmpReal.Replace("{EmpStr}", emp);
                         BP.WF.Port.WFEmp empEn = new Port.WFEmp(emp);
-
-
 
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + currNode.NodeID ;
 

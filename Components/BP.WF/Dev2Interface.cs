@@ -4429,100 +4429,6 @@ namespace BP.WF
                 return true;
         }
         /// <summary>
-        /// 保存到待办
-        /// </summary>
-        /// <param name="flowNo"></param>
-        /// <param name="title"></param>
-        /// <param name="workid"></param>
-        /// <param name="userNo"></param>
-        public static void Node_SaveEmpWorks(string flowNo, string title, string workid, string userNo)
-        {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
-            Flow fl = new Flow(flowNo);
-            Node nd = new Node(fl.StartNodeID);
-            Emp emp = new Emp(userNo);
-
-            GenerWorkFlow gwf = new GenerWorkFlow();
-            gwf.WorkID = long.Parse(workid);
-            int i = gwf.RetrieveFromDBSources();
-
-            gwf.FlowName = fl.Name;
-            gwf.FK_Flow = flowNo;
-            gwf.FK_FlowSort = fl.FK_FlowSort;
-
-            gwf.FK_Dept = emp.FK_Dept;
-            gwf.DeptName = emp.FK_DeptText;
-            gwf.FK_Node = fl.StartNodeID;
-
-            gwf.NodeName = nd.Name;
-            gwf.WFSta = WFSta.Runing;
-            gwf.WFState = WFState.Runing;
-
-            gwf.Title = title;
-
-            gwf.Starter = emp.No;
-            gwf.StarterName = emp.Name;
-            gwf.RDT = DataType.CurrentDataTime;
-
-            gwf.PWorkID = 0;
-            gwf.PFlowNo = null;
-            gwf.PNodeID = 0;
-            if (i == 0)
-                gwf.Insert();
-            else
-                gwf.Update();
-
-            // 产生工作列表.
-            string sql = "SELECT workid FROM wf_generworkerlist WHERE workid='" + workid + "'";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count == 0)
-            {
-                GenerWorkerList gwl = new GenerWorkerList();
-                gwl.WorkID = long.Parse(workid);
-                if (gwl.RetrieveFromDBSources() == 0)
-                {
-                    gwl.FK_Emp = emp.No;
-                    gwl.FK_EmpText = emp.Name;
-
-                    gwl.FK_Node = nd.NodeID;
-                    gwl.FK_NodeText = nd.Name;
-                    gwl.FID = 0;
-
-                    gwl.FK_Flow = fl.No;
-                    gwl.FK_Dept = emp.FK_Dept;
-
-                    gwl.SDT = DataType.CurrentDataTime;
-                    gwl.DTOfWarning = DataType.CurrentDataTime;
-                    gwl.RDT = DataType.CurrentDataTime;
-                    gwl.IsEnable = true;
-                    gwl.IsRead = true;
-                    gwl.IsPass = false;
-                    gwl.Sender = userNo;
-                    gwl.PRI = gwf.PRI;
-                    gwl.Insert();
-                }
-            }
-
-            // 执行对报表的数据表WFState状态的更新,让它为runing的状态. 
-            string dbstr = SystemConfig.AppCenterDBVarStr;
-            Paras ps = new Paras();
-            ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Title=" + dbstr
-                + "Title,FK_Dept=" + dbstr + "FK_Dept,PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID WHERE OID=" + dbstr + "OID";
-            ps.Add("WFState", (int)WFState.Runing);
-            ps.Add("WFSta", (int)WFSta.Runing);
-            ps.Add("Title", gwf.Title);
-            ps.Add("FK_Dept", gwf.FK_Dept);
-
-            ps.Add("PFlowNo", gwf.PFlowNo);
-            ps.Add("PWorkID", gwf.PWorkID);
-
-            ps.Add("OID", workid);
-            DBAccess.RunSQL(ps);
-
-        }
-        /// <summary>
         /// 调度流程
         /// 说明：
         /// 1，通常是由admin执行的调度。
@@ -6509,7 +6415,10 @@ namespace BP.WF
             //设置引擎表.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
-            if (gwf.RetrieveFromDBSources() == 1 && gwf.WFState == WFState.Blank)
+            if (gwf.RetrieveFromDBSources() == 0)
+                throw new Exception("@工作丢失..");
+
+            if ( gwf.WFState == WFState.Blank)
             {
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置草稿错误，只有在开始节点时才能设置草稿，现在的节点是:" + gwf.Title);
@@ -6519,8 +6428,22 @@ namespace BP.WF
                 gwf.WFState = WFState.Draft;
                 gwf.Update();
 
-                //设置成草稿.
-                //  gwf.Update(GenerWorkFlowAttr.WFState, (int)WFState.Draft);
+                GenerWorkerList gwl = new GenerWorkerList();
+                gwl.WorkID = workID;
+                gwl.FK_Node = int.Parse(fk_flow + "01");
+                gwl.FK_Emp = WebUser.No;
+                if (gwl.RetrieveFromDBSources() == 0)
+                {
+                    gwl.FK_EmpText = WebUser.Name;
+                    gwl.IsPassInt = 0;
+                    gwl.SDT = DataType.CurrentDataTime;
+                    gwl.DTOfWarning = DataType.CurrentDataTime;
+                    gwl.RDT = DataType.CurrentDataTime;
+                    gwl.IsEnable = true;
+                    gwl.IsRead = true;
+                    gwl.IsPass = false;
+                    gwl.Insert();
+                }
             }
         }
         /// <summary>

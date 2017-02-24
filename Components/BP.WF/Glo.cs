@@ -720,6 +720,7 @@ namespace BP.WF
                         continue;
                     myattr.Copy(mapAttr);
                     myattr.KeyOfEn = mapAttr.KeyOfEn + "T";
+                    myattr.LGType = FieldTypeS.Normal;
                     myattr.UIContralType = UIContralType.TB;
                     myattr.UIVisible = false;
                     myattr.UIIsEnable = false; // 让其不是隐藏字段.

@@ -41,6 +41,14 @@
             ctrl.style.backgroundColor = 'LightSteelBlue';
         }
 
+        function OpenCard() {
+            var mypk = GetQueryString("MyPK");
+            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.Sys.FrmAttachmentExt&PK=' + mypk;
+            WinOpen(url, '_self');
+            //alert(url);
+            //window.location.href = url;
+        }
+
         function TROut(ctrl) {
             ctrl.style.backgroundColor = 'white';
         }
@@ -138,8 +146,8 @@
     <div>
         
 <center>
-    <Table class='Table' cellpadding='2' cellspacing='2'>
-<Caption >附件属性设置</Caption>
+    <table class='Table' cellpadding='2' cellspacing='2'>
+<caption >附件属性设置 - <a href='javascript:OpenCard()'  >卡片设置</a> </caption>
 <tr>
 <td class='Idx' >0</td>
 <th class='Title' colspan="3" =true >基本属性</th>

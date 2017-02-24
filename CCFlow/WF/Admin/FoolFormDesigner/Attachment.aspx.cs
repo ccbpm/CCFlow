@@ -108,7 +108,7 @@ namespace CCFlow.WF.MapDef
             #region 基本属性.
             this.Title = "附件属性设置";
             this.Pub1.AddTable();
-            this.Pub1.AddCaption("附件属性设置");
+            this.Pub1.AddCaption("附件属性设置 - <a href='/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.Sys.FrmAttachmentExt&PK="+ath.MyPK+"' target=_parent >卡片设置</a>");
 
             int idx = 0;
             this.Pub1.AddTR();

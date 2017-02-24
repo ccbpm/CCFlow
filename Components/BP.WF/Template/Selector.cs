@@ -80,6 +80,28 @@ namespace BP.WF.Template
         //WhenToSpecDataAutoSend
     }
     /// <summary>
+    /// 选择的数据类别
+    /// </summary>
+    public enum AccepterDBSort
+    {
+        /// <summary>
+        /// 人员
+        /// </summary>
+        Emp,
+        /// <summary>
+        /// 部门
+        /// </summary>
+        Dept,
+        /// <summary>
+        /// 岗位
+        /// </summary>
+        Station,
+        /// <summary>
+        /// 权限组
+        /// </summary>
+        Group
+    }
+    /// <summary>
     /// 显示方式
     /// </summary>
     public enum SelectorDBShowWay
@@ -140,6 +162,10 @@ namespace BP.WF.Template
         /// 数据显示方式(表格与树)
         /// </summary>
         public const string SelectorDBShowWay = "SelectorDBShowWay";
+        /// <summary>
+        /// 选择的数据类别
+        /// </summary>
+        public const string AccepterDBSort = "AccepterDBSort";
     }
     /// <summary>
     /// 选择器
@@ -182,7 +208,20 @@ namespace BP.WF.Template
                 this.SetValByKey(SelectorAttr.SelectorModel, (int)value);
             }
         }
-
+        /// <summary>
+        /// 选择的数据类型
+        /// </summary>
+        public AccepterDBSort AccepterDBSort
+        {
+            get
+            {
+                return (AccepterDBSort)this.GetValIntByKey(SelectorAttr.AccepterDBSort);
+            }
+            set
+            {
+                this.SetValByKey(SelectorAttr.AccepterDBSort, (int)value);
+            }
+        }
         public string SelectorP1
         {
             get
@@ -279,6 +318,10 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "窗口模式", true, true, SelectorAttr.SelectorModel,
                     "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url@5=使用通用人员选择器");
+
+                map.AddDDLSysEnum(SelectorAttr.AccepterDBSort, 0, "选择的数据类别", true, true,
+              SelectorAttr.AccepterDBSort, "@0=人员@1=部门@2=岗位@3=权限组");
+                
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name,ParentNo FROM  Port_Dept", true, false, true);
                 map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源:比如:SELECT No,Name,FK_Dept FROM  Port_Emp", true, false, true);

@@ -189,6 +189,10 @@ namespace BP.Sys
         /// </summary>
         public const string SaveTo = "SaveTo";
         /// <summary>
+        /// 是否要转换成html，方便在线浏览.
+        /// </summary>
+        public const string IsTurn2Hmtl = "IsTurn2Hmtl";
+        /// <summary>
         /// 类别
         /// </summary>
         public const string Sort = "Sort";

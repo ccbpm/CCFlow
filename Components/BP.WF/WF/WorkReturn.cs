@@ -6,6 +6,8 @@ using System.Data;
 using BP.Port;
 using BP.Web;
 using BP.Sys;
+using BP.WF.Data;
+
 namespace BP.WF
 {
     /// <summary>
@@ -729,9 +731,20 @@ namespace BP.WF
         /// <returns></returns>
         private string ExeReturn1_1()
         {
+            //为软通小杨处理rpt变量不能替换的问题.
+            GERpt rpt = this.HisNode.HisFlow.HisGERpt;
+            rpt.OID = this.WorkID;
+            if (rpt.RetrieveFromDBSources() == 0)
+            {
+                rpt.OID = this.FID;
+                rpt.RetrieveFromDBSources();
+            }
+            rpt.Row.Add("ReturnMsg", Msg);
+
+           
             //退回前事件
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
-            string msg = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, this.HisWork,
+            string msg = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, rpt,
                 atPara);
            
             if (this.HisNode.FocusField != "")
@@ -872,9 +885,8 @@ namespace BP.WF
             //    BP.WF.Dev2Interface.Port_SendMsg(gwl.FK_Emp, title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnWork, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
             //}
 
-            //把退回原因加入特殊变量里.
-            this.HisWork.Row.Add("ReturnMsg", Msg);
-            string text = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, this.HisWork,
+            //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
+            string text = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,
                 atPara,null,gwl.FK_Emp);
 
             if (text != null && text.Length > 1000)

@@ -6457,7 +6457,7 @@ namespace BP.WF
                         mwk.DirectDelete();
                     }
                 }
-                this.HisFlow.DoFlowEventEntity(EventListOfNode.SendError, this.HisNode, this.HisWork, null);
+                this.HisFlow.DoFlowEventEntity(EventListOfNode.SendError, this.HisNode, this.rptGe, null);
 
             }
             catch (Exception ex1)

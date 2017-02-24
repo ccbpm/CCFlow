@@ -749,7 +749,6 @@ namespace CCFlow.WF.UC
                 string urlr3 = appPath + "WF/WorkOpt/SubFlow.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar.Add("<input type=button  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />");
             }
-            toolbar.Add("<input type=button  value='处理过程' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/SubFlowTrack.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />");
             if (btnLab.CHEnable == true)
             {
                 /* 节点时限设置 */

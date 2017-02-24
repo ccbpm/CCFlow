@@ -16,11 +16,9 @@
         </style>
         <base target="_blank" />
 	</head>
-	<body   >
-
     
     <body >
-  <center>
+    <center>
   <table style="text-align:center; border:1px; width:70%;" >
   <caption style="CaptionMsgLong"    >驰骋工作流程引擎ccbpm测试导航</caption>
   <tr>
@@ -33,16 +31,13 @@
     <li><font size="30" color="green" ><a href="WF/Admin/CCBPMDesigner/Login.htm" >进入流程设计器</a></font> 用户名:admin 密码:123</li>
     <li> <a href='./WF/App/Classic/Login.aspx' >前台登录</a></li>
     <li> <a href="http://ccflow.org" target=_blank >ccflow 官方网站</a> |  <a href="http://bbs.ccflow.org" target=_blank >  技术论坛</a> </li>
-    <li> 商务问题 QQ:<span class="style4">793719823</span> 电话:<span  class="style5">0531-82374939 , 18660153393</span> </li> 
+    <li> 商务问题 QQ:<span class="style4">793719823</span> 电话:<span  class="style5">0531-82374939 , 18660153393</span>  - <a href="http://ccflow.org/CCS/Site/PG.aspx" target=_blank > 申请专业人员评估</a> </li> 
     </ul>
   </td>
   </tr>
 
-
    <tr>
-  <th>
-  在线文档，需要高版本的IE浏览器或者谷歌火狐浏览器查看。
-  </th>
+  <th>在线文档，需要高版本的IE浏览器或者谷歌火狐浏览器查看。 </th>
   </tr>
 
   <tr>
@@ -50,6 +45,7 @@
     <ul>
     <li> <a href="http://ccbpm.mydoc.io/" >驰骋流程引擎文档</a></li>
     <li> <a href="http://ccform.mydoc.io/" >驰骋表单引擎文档</a></li>
+    <li> <a href="http://git.oschina.net/opencc/ccflow/attach_files" target=_blank >最新文档 - 下载地址</a> </li>
     </ul>
   </td>
   </tr>
@@ -61,7 +57,6 @@
   <tr>
   
   <td style=" text-align:center"> 
-
   <div  style=" float:left">
   <table>
   <tr>
@@ -188,7 +183,6 @@
   </tr>
   </table>
   </center>
-
 
 
  </body>

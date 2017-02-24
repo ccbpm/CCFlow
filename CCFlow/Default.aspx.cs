@@ -21,6 +21,8 @@ namespace CCFlow
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+          //BP.LI.Glo.LoadFenXiFrms();
+            return;
 
             BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  start ------------------ ");
             BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  end ------------------ ");
@@ -36,7 +38,6 @@ namespace CCFlow
             }
             return;
         }
-
         /// <summary>
         /// 
         /// </summary>

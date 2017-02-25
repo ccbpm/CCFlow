@@ -26,7 +26,7 @@ namespace BP.Sys
 	/// <summary>
 	/// 列选择
 	/// </summary>
-	public class CField: Entity
+	public class CField: EntityMyPK
 	{
 		#region 基本属性
 		/// <summary>
@@ -106,10 +106,12 @@ namespace BP.Sys
             get
             {
                 if (this._enMap != null) return this._enMap;
-                Map map = new Map("Sys_CField");
+                Map map = new Map("Sys_UserRegedit");
                 map.EnType = EnType.Sys;
                 map.EnDesc = "列选择";
                 map.DepositaryOfEntity = Depositary.None;
+
+                map.AddMyPK();
                 map.AddTBStringPK(CFieldAttr.EnsName, null, "实体类名称", false, true, 1, 100, 10);
                 map.AddTBStringPK(CFieldAttr.FK_Emp, Web.WebUser.No, "工作人员", false, true, 1, 100, 10);
                 map.AddTBStringDoc(CFieldAttr.Attrs, null, "属性s", true, false);
@@ -118,6 +120,12 @@ namespace BP.Sys
             }
         }
 		#endregion 
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.MyPK = this.EnsName + "_" + this.FK_Emp;
+            return base.beforeUpdateInsertAction();
+        }
 	
         public static Attrs GetMyAttrs(Entities ens, Map map)
         {
@@ -131,34 +139,12 @@ namespace BP.Sys
                     attrs.Add(attr);
             }
             return attrs;
-
-            //string no = Web.WebUser.No;
-            //if (no == null)
-            //    throw new Exception("@您的登陆时间太长。。。");
-
-            //CField cf = new CField(no, ens.ToString());
-            //if (cf.Attrs == "")
-            //    return ens.GetNewEntity.EnMap.Attrs;
-
-            //Attrs myattrs = new Attrs();
-            //Attrs attrs = ens.GetNewEntity.EnMap.Attrs;
-            //foreach (Attr attr in attrs)
-            //{
-            //    if (attr.IsPK)
-            //    {
-            //        myattrs.Add(attr);
-            //        continue;
-            //    }
-            //    if (cf.Attrs.IndexOf("@" + attr.Key + "@") >= 0)
-            //        myattrs.Add(attr);
-            //}
-            //return myattrs;
         }
 	}
 	/// <summary>
 	/// 列选择s
 	/// </summary>
-	public class CFields : Entities
+	public class CFields : EntitiesMyPK
 	{
 		/// <summary>
 		/// 列选择s

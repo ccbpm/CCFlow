@@ -46,7 +46,7 @@ namespace BP.Sys
     /// <summary>
     /// 默认值
     /// </summary>
-    public class DefVal : EntityOID
+    public class DefVal : EntityMyPK
     {
         #region 基本属性
         /// <summary>
@@ -178,12 +178,15 @@ namespace BP.Sys
         {
             get
             {
-                if (this._enMap != null) return this._enMap;
-                Map map = new Map("Sys_DefVal");
+                if (this._enMap != null) 
+                    return this._enMap;
+
+                Map map = new Map("Sys_UserRegedit", "选择词汇");
                 map.EnType = EnType.Sys;
-                map.EnDesc = "选择词汇";
-                map.CodeStruct = "2";
-                map.AddTBIntPKOID();
+                map.Java_SetCodeStruct("2");
+
+                //设置PK.
+                map.AddMyPK();
 
                 //秦2015-1-10   根据公司需求改动   以下是源码
                 //map.AddTBStringPK(DefValAttr.No, null, "编号", true, true, 1, 50, 20);
@@ -198,10 +201,11 @@ namespace BP.Sys
                 //map.AddTBString(DefValAttr.HistoryWords, null, "历史词汇", false, false, 0, 2000, 20);
 
                 map.AddTBString(DefValAttr.FK_MapData, null, "实体", false, false, 0, 100, 20);
+                map.AddTBString(DefValAttr.FK_Emp, null, "人员", false, true, 0, 100, 10);
                 map.AddTBString(DefValAttr.AttrKey, null, "节点对应字段", false, false, 0, 50, 20);
+
                 //map.AddTBInt(DefValAttr.WordsSort, 0, "词汇类型", false, false);//1,2,3... 退回-移交-表单...(暂时)
                 map.AddTBInt(DefValAttr.LB, 0, "类别", false, false);//我的，历史,系统，
-                map.AddTBString(DefValAttr.FK_Emp, null, "人员", false, true, 0, 100, 10);
                 map.AddTBString(DefValAttr.CurValue, null, "文本", false, true, 0, 4000, 10);
 
                 this._enMap = map;
@@ -209,11 +213,18 @@ namespace BP.Sys
             }
         }
         #endregion
+
+        protected override bool beforeInsert()
+        {
+            //设置主键.
+            this.MyPK = BP.DA.DBAccess.GenerGUID();
+            return base.beforeInsert();
+        }
     }
     /// <summary>
     /// 默认值s
     /// </summary>
-    public class DefVals : EntitiesOID
+    public class DefVals : EntitiesMyPK
     {
         /// <summary>
         /// 默认值

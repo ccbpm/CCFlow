@@ -270,12 +270,12 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_FrmImgAthDB");
+                Map map = new Map("Sys_FrmImgAthDB", "剪切图片附件数据存储");
 
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.EnDesc = "剪切图片附件数据存储";
-                map.EnType = EnType.Sys;
+                map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
 
                 // 以下三个字段组成一个主键. FK_FrmImgAth+"_"+RefPKVal

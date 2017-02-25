@@ -134,12 +134,11 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_UserLogT");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
+                Map map = new Map("Sys_UserLogT", "用户日志");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
 
-                map.EnDesc = "用户日志";
-                map.EnType = EnType.Sys;
+                map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
                 map.AddTBString(UserLogAttr.FK_Emp, null, "用户", true, false, 0, 30, 20);
                 map.AddTBString(UserLogAttr.IP, null, "IP", true, false, 0, 200, 20);

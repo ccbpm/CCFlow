@@ -52,14 +52,15 @@ namespace BP.En
         {
             get
             {
-                if (this._enMap != null) return this._enMap;
-                Map map = new Map(this.PhysicsTable);
-                map.EnDesc = this.Desc;
+                if (this._enMap != null) 
+                    return this._enMap;
+
+                Map map = new Map(this.PhysicsTable,this.Desc);
                 map.IsAutoGenerNo = true;
 
-                map.DepositaryOfEntity = Depositary.Application;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnType = EnType.App;
+                map.Java_SetDepositaryOfEntity( Depositary.Application);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.App);
                 map.IsAutoGenerNo = true;
 
                 map.AddTBStringPK(GENoNameAttr.No, null, "编号", true, true, 1, 30, 3);

@@ -116,7 +116,7 @@ namespace BP.GPM
 
                 Map map = new Map("Port_DeptSearchScorp");
                 map.EnDesc = "部门查询权限";
-                map.EnType = EnType.Dot2Dot;
+                map.Java_SetEnType(EnType.Dot2Dot);
 
                 map.AddTBStringPK(DeptSearchScorpAttr.FK_Emp, null, "操作员", true, true, 1, 50, 11);
                 map.AddDDLEntitiesPK(DeptSearchScorpAttr.FK_Dept, null, "部门", new Depts(), true);

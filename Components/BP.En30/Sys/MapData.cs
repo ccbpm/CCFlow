@@ -1317,12 +1317,11 @@ namespace BP.Sys
 				mapAttrs = this.MapAttrs;
 			}
 
-			Map map = new Map(this.PTable);
-			map.EnDBUrl = new DBUrl(this.HisDBUrl); ;
-			map.EnDesc = this.Name;
-			map.EnType = EnType.App;
-			map.DepositaryOfEntity = Depositary.None;
-			map.DepositaryOfMap = Depositary.Application;
+			Map map = new Map(this.PTable,this.Name);
+			map.EnDBUrl = new DBUrl(this.HisDBUrl); 
+			map.Java_SetEnType(EnType.App);
+			map.Java_SetDepositaryOfEntity(Depositary.None);
+			map.Java_SetDepositaryOfMap( Depositary.Application);
 
 			Attrs attrs = new Attrs();
 			foreach (MapAttr mapAttr in mapAttrs)
@@ -1454,12 +1453,11 @@ namespace BP.Sys
 				if (this._enMap != null)
 					return this._enMap;
 
-				Map map = new Map("Sys_MapData");
-				map.DepositaryOfEntity = Depositary.None;
-				map.DepositaryOfMap = Depositary.Application;
-				map.EnDesc = "表单注册表";
-				map.EnType = EnType.Sys;
-				map.CodeStruct = "4";
+                Map map = new Map("Sys_MapData", "表单注册表");
+				map.Java_SetDepositaryOfEntity(Depositary.None);
+				map.Java_SetDepositaryOfMap( Depositary.Application);
+				map.Java_SetEnType(EnType.Sys);
+				map.Java_SetCodeStruct("4");
 
 				#region 基础信息.
 				map.AddTBStringPK(MapDataAttr.No, null, "编号", true, false, 1, 200, 100);

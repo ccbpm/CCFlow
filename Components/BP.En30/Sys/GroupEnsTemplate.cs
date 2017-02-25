@@ -152,10 +152,10 @@ namespace BP.Sys
 			{
 				if (this._enMap!=null) 
 					return this._enMap;
-				Map map = new Map("Sys_GroupEnsTemplate");
+                Map map = new Map("Sys_GroupEnsTemplate", "报表模板");
 				map.DepositaryOfEntity=Depositary.None;
-				map.EnDesc="报表模板";
 				map.EnType=EnType.Sys;
+
 				map.AddTBIntPKOID();
 				map.AddTBString(GroupEnsTemplateAttr.EnName,null,"表称",false,false,0,500,20);
 				map.AddTBString(GroupEnsTemplateAttr.Name,null,"报表名",true,false,0,500,20);

@@ -193,9 +193,8 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_EnVerDtl");
-                map.EnDesc = "实体修改明细";
-                map.EnType = EnType.Dot2Dot; //实体类型，admin 系统管理员表，PowerAble 权限管理表,也是用户表,你要想把它加入权限管理里面请在这里设置。。
+                Map map = new Map("Sys_EnVerDtl", "实体修改明细");
+                map.Java_SetEnType(EnType.Dot2Dot); //实体类型，admin 系统管理员表，PowerAble 权限管理表,也是用户表,你要想把它加入权限管理里面请在这里设置。。
 
                 map.AddMyPK();
                 map.AddTBString(EnVerDtlAttr.EnName, null, "实体名", true, false, 0, 200, 30);

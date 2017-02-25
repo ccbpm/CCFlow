@@ -154,10 +154,9 @@ namespace BP.Sys
                 if (this._enMap != null) 
                     return this._enMap;
 
-                Map map = new Map("Sys_UserRegedit");
-                map.EnType = EnType.Sys;
-                map.EnDesc = "对比状态存储";
-                map.DepositaryOfEntity = Depositary.None;
+                Map map = new Map("Sys_UserRegedit", "对比状态存储");
+                map.Java_SetEnType(EnType.Sys);
+                map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.AddMyPK();
 
                 map.AddTBString(ContrastAttr.ContrastKey, null, "对比项目", false, true, 0, 20, 10);

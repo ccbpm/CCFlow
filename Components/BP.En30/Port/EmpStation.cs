@@ -92,9 +92,8 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_EmpStation");
-                map.EnDesc = "人员岗位";
-                map.EnType = EnType.Dot2Dot;
+                Map map = new Map("Port_EmpStation", "人员岗位");
+                map.Java_SetEnType(EnType.Dot2Dot);
 
                 map.AddDDLEntitiesPK(EmpStationAttr.FK_Emp, null, "操作员", new Emps(), true);
                 map.AddDDLEntitiesPK(EmpStationAttr.FK_Station, null, "工作岗位", new Stations(), true);

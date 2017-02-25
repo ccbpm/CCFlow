@@ -278,6 +278,14 @@ namespace BP.En
         /// 为java
         /// </summary>
         /// <param name="val"></param>
+        public void Java_SetDepositaryOfMap(Depositary val)
+        {
+            this.DepositaryOfMap = val;
+        }
+        /// <summary>
+        /// 为java
+        /// </summary>
+        /// <param name="val"></param>
         public void Java_SetDepositaryOfEntity(Depositary val)
         {
             this.DepositaryOfEntity = val;

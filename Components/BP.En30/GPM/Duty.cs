@@ -42,12 +42,11 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Port_Duty");
-                map.EnDesc = "职务";
-                map.CodeStruct = "2";
+                Map map = new Map("Port_Duty", "职务");
+                map.Java_SetCodeStruct("2");
 
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
 
                 map.AddTBStringPK(DutyAttr.No, null, "编号", true, true, 2, 2, 2);
                 map.AddTBString(DutyAttr.Name, null, "名称", true, false, 1, 50, 20);

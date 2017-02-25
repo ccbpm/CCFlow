@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections;
 using BP.DA;
 using BP.Sys;
@@ -6,144 +6,17 @@ using BP.En;
 
 namespace BP.Sys
 {
-    /// <summary>
-    /// ToolbarExcelAttr 属性
-    /// </summary>
-    public class ToolbarExcelAttr : EntityNoNameAttr
+    public class ToolbarExcelSlnAttr : ToolbarExcelAttr
     {
-        #region  公文按钮
-        /// <summary>
-        /// 打开本地-标签
-        /// </summary>
-        public const string OfficeOpenLab = "OfficeOpenLab";
-        /// <summary>
-        /// 打开本地
-        /// </summary>
-        public const string OfficeOpenEnable = "OfficeOpenEnable";
-        /// <summary>
-        /// 打开模板
-        /// </summary>
-        public const string OfficeOpenTemplateLab = "OfficeOpenTemplateLab";
-        public const string OfficeOpenTemplateEnable = "OfficeOpenTemplateEnable";
-        /// <summary>
-        /// 保存
-        /// </summary>
-        public const string OfficeSaveLab = "OfficeSaveLab";
-        public const string OfficeSaveEnable = "OfficeSaveEnable";
-        /// <summary>
-        /// 接受修订
-        /// </summary>
-        public const string OfficeAcceptLab = "OfficeAcceptLab";
-        public const string OfficeAcceptEnable = "OfficeAcceptEnable";
-        /// <summary>
-        /// 拒绝修订
-        /// </summary>
-        public const string OfficeRefuseLab = "OfficeRefuseLab";
-        public const string OfficeRefuseEnable = "OfficeRefuseEnable";
-        /// <summary>
-        /// 套红按钮
-        /// </summary>
-        public const string OfficeOverLab = "OfficeOverLab";
-        public const string OfficeOverEnable = "OfficeOverEnable";
+        public const string  FK_Flow="FK_Flow";
+        public const string  FK_Node="FK_Node";
+        public const string FK_Frm = "FK_Frm";
 
-        //public const string OfficeOVerLab = "OfficeOVerLab";
-
-        /// <summary>
-        /// 查看用户留痕
-        /// </summary>
-        public const string OfficeMarksEnable = "OfficeMarksEnable";
-        /// <summary>
-        /// 打印
-        /// </summary>
-        public const string OfficePrintLab = "OfficePrintLab";
-        public const string OfficePrintEnable = "OfficePrintEnable";
-        /// <summary>
-        /// 签章
-        /// </summary>
-        public const string OfficeSealLab = "OfficeSealLab";
-        public const string OfficeSealEnable = "OfficeSealEnable";
-
-        /// <summary>
-        /// 插入流程
-        /// </summary>
-        public const string OfficeInsertFlowLab = "OfficeInsertFlowLab";
-        public const string OfficeInsertFlowEnable = "OfficeInsertFlowEnable";
-
-        /// <summary>
-        /// 是否自动记录节点信息
-        /// </summary>
-        public const string OfficeNodeInfo = "OfficeNodeInfo";
-        /// <summary>
-        /// 是否该节点保存为PDF
-        /// </summary>
-        public const string OfficeReSavePDF = "OfficeReSavePDF";
-        /// <summary>
-        /// 是否进入留痕模式
-        /// </summary>
-        public const string OfficeIsMarks = "OfficeIsMarks";
-        /// <summary>
-        /// 指定文档模板
-        /// </summary>
-        public const string OfficeTemplate = "OfficeTemplate";
-        /// <summary>
-        /// 是否使用父流程的文档
-        /// </summary>
-        public const string OfficeIsParent = "OfficeIsParent";
-        /// <summary>
-        /// 是否启用下载
-        /// </summary>
-        public const string OfficeDownLab = "OfficeDownLab";
-        public const string OfficeDownEnable = "OfficeDownEnable";
-        
-        /// <summary>
-        /// //是否自动套红
-        /// </summary>
-        public const string OfficeTHEnable = "OfficeTHEnable";
-        public const string OfficeTHTemplate = "OfficeTHTemplate";
-        /// <summary>
-        /// 风险点模板
-        /// </summary>
-        public const string OfficeFengXianTemplate = "OfficeFengXianTemplate";
-        /// <summary>
-        /// 插入风险点标签
-        /// </summary>
-        public const string OfficeInsertFengXian = "OfficeInsertFengXian";
-        /// <summary>
-        /// 是否启用
-        /// </summary>
-        public const string OfficeInsertFengXianEnabel = "OfficeInsertFengXianEnabel";
-
-        /// <summary>
-        /// OfficeReadOnly
-        /// </summary>
-        public const string OfficeReadOnly = "OfficeReadOnly";
-        /// <summary>
-        /// 是否可以下载.
-        /// </summary>
-        public const string OfficeIsDown = "OfficeIsDown";
-
-        public const string OfficeIsTrueTH = "OfficeIsTrueTH";
-        public const string OfficeOpen = "OfficeOpen";
-        public const string OfficeOpenTemplate = "OfficeOpenTemplate";
-
-        public const string OfficeSave = "OfficeSave";
-
-        public const string OfficeAccept = "OfficeAccept";
-        public const string OfficeRefuse = "OfficeRefuse";
-
-        public const string OfficeOver = "OfficeOver";
-
-        public const string OfficeMarks = "OfficeMarks";
-        public const string OfficePrint = "OfficePrint";
-        public const string OfficeSeal = "OfficeSeal";
-
-        public const string OfficeInsertFlow = "OfficeInsertFlow";
-        #endregion
     }
     /// <summary>
     ///  ToolbarExcel 控制器
     /// </summary>
-    public class ToolbarExcel : EntityNoName
+    public class ToolbarExcelSln : EntityMyPK
     {
         #region 界面上的访问控制
         /// <summary>
@@ -525,15 +398,11 @@ namespace BP.Sys
         /// <summary>
         /// 下载
         /// </summary>
-        public bool OfficeDownEnable
+        public bool OfficeIsDown
         {
             get
             {
-                return this.GetValBooleanByKey(ToolbarExcelAttr.OfficeDownEnable);
-            }
-            set
-            {
-                this.SetValByKey(ToolbarExcelAttr.OfficeDownEnable, value);
+                return this.GetValBooleanByKey(ToolbarExcelAttr.OfficeIsDown);
             }
         }
         /// <summary>
@@ -570,15 +439,25 @@ namespace BP.Sys
         /// <summary>
         /// ToolbarExcel功能控制区域
         /// </summary>
-        public ToolbarExcel() { }
+        public ToolbarExcelSln() { }
         /// <summary>
         /// ToolbarExcel功能控制
         /// </summary>
         /// <param name="no">表单ID</param>
-        public ToolbarExcel(string no)
+        public ToolbarExcelSln(string mypk)
         {
-            this.No = no;
+            this.MyPK = mypk;
             this.Retrieve();
+        }
+        public ToolbarExcelSln(string fk_flow, int fk_node, string fk_frm)
+        {
+            int i = this.Retrieve(ToolbarExcelSlnAttr.FK_Flow, fk_flow, 
+                ToolbarExcelSlnAttr.FK_Node, fk_node, ToolbarExcelSlnAttr.FK_Frm, fk_frm);
+            if (i == 0)
+            {
+                return;
+                throw new Exception("@表单关联信息已被删除。");
+            }
         }
         /// <summary>
         /// 重写基类方法
@@ -590,14 +469,16 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapData");
-                map.EnDesc = "ToolbarExcel功能控制";
+                Map map = new Map("WF_FrmNode","ToolbarExcelSln功能控制");
 
-                map.DepositaryOfEntity = Depositary.Application;
-                map.DepositaryOfMap = Depositary.Application;
+                map.Java_SetDepositaryOfEntity( Depositary.Application);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
 
-                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 200, 20);
-                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20);
+                map.AddMyPK();
+                map.AddTBString(ToolbarExcelSlnAttr.FK_Frm, null, "表单ID", true, true, 1, 32, 32);
+                map.AddTBInt(ToolbarExcelSlnAttr.FK_Node, 0, "节点编号", true, true);
+                map.AddTBString(ToolbarExcelSlnAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);
+
 
                 #region 公文按钮
                 map.AddTBString(ToolbarExcelAttr.OfficeOpenLab, "打开本地", "打开本地标签", true, false, 0, 50, 10);
@@ -652,12 +533,12 @@ namespace BP.Sys
     /// <summary>
     /// ToolbarExcel表单.
     /// </summary>
-    public class ToolbarExcels : EntitiesNoName
+    public class ToolbarExcelSlns : EntitiesMyPK
     {
         /// <summary>
         /// 功能控制
         /// </summary>
-        public ToolbarExcels()
+        public ToolbarExcelSlns()
         {
         }
         /// <summary>
@@ -667,21 +548,31 @@ namespace BP.Sys
         {
             get
             {
-                return new ToolbarExcel();
+                return new ToolbarExcelSln();
             }
         }
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List.
+        #region 为了适应自动翻译成java的需要,把实体转换成IList, c#代码调用会出错误。
+
+        /// <summary>
+        /// 转化成 java list,C#不能调用.
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.IList<ToolbarExcelSln> ToJavaList()
+        {
+            return (System.Collections.Generic.IList<ToolbarExcelSln>)this;
+        }
+
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<ToolbarExcel> Tolist()
+        public System.Collections.Generic.List<ToolbarExcelSln> Tolist()
         {
-            System.Collections.Generic.List<ToolbarExcel> list = new System.Collections.Generic.List<ToolbarExcel>();
+            System.Collections.Generic.List<ToolbarExcelSln> list = new System.Collections.Generic.List<ToolbarExcelSln>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((ToolbarExcel)this[i]);
+                list.Add((ToolbarExcelSln)this[i]);
             }
             return list;
         }

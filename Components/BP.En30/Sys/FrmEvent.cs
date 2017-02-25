@@ -718,11 +718,10 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_FrmEvent");
-                map.EnDesc = "事件";
+                Map map = new Map("Sys_FrmEvent", "事件");
 
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.AddMyPK();
 
                 map.AddTBString(FrmEventAttr.FK_Event, null, "事件名称", true, true, 0, 400, 10);

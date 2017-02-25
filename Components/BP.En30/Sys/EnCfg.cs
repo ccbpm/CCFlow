@@ -341,11 +341,10 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_EnCfg");
-                map.DepositaryOfEntity = Depositary.Application;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "实体配置";
-                map.EnType = EnType.Sys;
+                Map map = new Map("Sys_EnCfg", "实体配置");
+                map.Java_SetDepositaryOfEntity( Depositary.Application);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);
                 map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, false, 0, 2000, 60);

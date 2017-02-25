@@ -255,11 +255,10 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_FrmLink");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "超连接";
-                map.EnType = EnType.Sys;
+                Map map = new Map("Sys_FrmLink", "超连接");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);

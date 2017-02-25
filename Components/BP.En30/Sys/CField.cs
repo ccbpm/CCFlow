@@ -106,10 +106,10 @@ namespace BP.Sys
             get
             {
                 if (this._enMap != null) return this._enMap;
-                Map map = new Map("Sys_UserRegedit");
-                map.EnType = EnType.Sys;
-                map.EnDesc = "列选择";
-                map.DepositaryOfEntity = Depositary.None;
+                Map map = new Map("Sys_UserRegedit","列选择");
+
+                map.Java_SetEnType(EnType.Sys);
+                map.Java_SetDepositaryOfEntity(Depositary.None);
 
                 map.AddMyPK();
                 map.AddTBStringPK(CFieldAttr.EnsName, null, "实体类名称", false, true, 1, 100, 10);

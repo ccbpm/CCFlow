@@ -44,10 +44,10 @@ namespace BP.GPM
                     return this._enMap;
                 Map map = new Map("Port_DeptType");
                 map.EnDesc = "部门类型";
-                map.CodeStruct = "2";
+                map.Java_SetCodeStruct("2");
 
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
 
                 map.AddTBStringPK(DeptTypeAttr.No, null, "编号", true, true, 2, 2, 2);
                 map.AddTBString(DeptTypeAttr.Name, null, "名称", true, false, 1, 50, 20);

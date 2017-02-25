@@ -156,12 +156,11 @@ namespace BP.Tools
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_WFSealData");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
+                Map map = new Map("Sys_WFSealData", "签名信息");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
 
-                map.EnDesc = "签名信息";
-                map.EnType = EnType.Sys;
+                map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
                 map.AddTBString(WFSealDataAttr.OID, null, "OID", false, false, 0, 200, 20);
                 map.AddTBString(WFSealDataAttr.FK_Node, null, "FK_Node", true, false, 0, 200, 20);

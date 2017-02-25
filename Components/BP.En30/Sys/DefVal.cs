@@ -182,7 +182,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_UserRegedit", "选择词汇");
-                map.EnType = EnType.Sys;
+                map.Java_SetEnType(EnType.Sys);
                 map.Java_SetCodeStruct("2");
 
                 //设置PK.

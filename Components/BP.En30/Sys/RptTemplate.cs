@@ -313,9 +313,8 @@ namespace BP.Sys
 			{
 				if (this._enMap!=null) 
 					return this._enMap;
-				Map map = new Map("Sys_RptTemplate");
+                Map map = new Map("Sys_RptTemplate", "报表模板");
 				map.DepositaryOfEntity=Depositary.Application;
-				map.EnDesc="报表模板";
 				map.EnType=EnType.Sys;
 
                 map.AddMyPK();

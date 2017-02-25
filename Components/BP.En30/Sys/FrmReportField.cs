@@ -156,11 +156,10 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_FrmRePortField");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "表单报表";
-                map.EnType = EnType.Sys;
+                Map map = new Map("Sys_FrmRePortField", "表单报表");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
                 map.AddTBString(FrmReportFieldAttr.FK_MapData, null, "表单编号", true, false, 1, 100, 80);
                 map.AddTBString(FrmReportFieldAttr.KeyOfEn, null, "字段名", true, false,1,100,100);

@@ -74,9 +74,8 @@ namespace BP.Sys
 			get
 			{
 				if (this._enMap!=null) return this._enMap;
-				Map map = new Map("Sys_Serial");
+                Map map = new Map("Sys_Serial", "序列号");
 				map.EnType=EnType.Sys;
-				map.EnDesc="序列号";
 				map.DepositaryOfEntity=Depositary.None;
 				map.AddTBStringPK(SerialAttr.CfgKey,"OID","CfgKey",false,true,1,100,10);
 				map.AddTBInt(SerialAttr.IntVal,0,"属性",true,false);

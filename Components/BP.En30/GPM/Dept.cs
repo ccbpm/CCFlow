@@ -122,11 +122,11 @@ namespace BP.GPM
                 Map map = new Map();
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //连接到的那个数据库上. (默认的是: AppCenterDSN )
                 map.PhysicsTable = "Port_Dept";
-                map.EnType = EnType.Admin;
+                map.Java_SetEnType(EnType.Admin);
 
                 map.EnDesc = "部门"; //  实体的描述.
-                map.DepositaryOfEntity = Depositary.Application; //实体map的存放位置.
-                map.DepositaryOfMap = Depositary.Application;    // Map 的存放位置.
+                map.Java_SetDepositaryOfEntity( Depositary.Application); //实体map的存放位置.
+                map.Java_SetDepositaryOfMap( Depositary.Application);    // Map 的存放位置.
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, true, 1, 50, 20);
 

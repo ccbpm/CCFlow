@@ -112,11 +112,10 @@ namespace BP.Sys
             get
             {
                 if (this._enMap != null) return this._enMap;
-                Map map = new Map("Sys_EnumMain");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "枚举";
-                map.EnType = EnType.Sys;
+                Map map = new Map("Sys_EnumMain", "枚举");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBStringPK(SysEnumMainAttr.No, null, "编号", true, false, 1, 40, 8);
                 map.AddTBString(SysEnumMainAttr.Name, null, "名称", true, false, 0, 40, 8);

@@ -24,7 +24,6 @@ using System.Web;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.OracleClient;
-
 using System.IO;
 using MySql;
 using MySql.Data;
@@ -79,6 +78,20 @@ namespace BP.Sys
         Open
     }
     /// <summary>
+    /// 运行平台
+    /// </summary>
+    public enum Plant
+    {
+        /// <summary>
+        /// 默认不打开.
+        /// </summary>
+        CSharp,
+        /// <summary>
+        /// 打开
+        /// </summary>
+        Java
+    }
+    /// <summary>
     /// 系统配值
     /// </summary>
     public class SystemConfig
@@ -118,6 +131,7 @@ namespace BP.Sys
         #endregion
 
         #region 组织结构的配置.
+
         /// <summary>
         /// OS结构
         /// </summary>
@@ -135,7 +149,7 @@ namespace BP.Sys
                 return (OSDBSrc)SystemConfig.GetValByKeyInt("OSDBSrc", 0);
             }
         }
-          /// <summary>
+        /// <summary>
         /// 结束流程 窗口配置
         /// </summary>
         public static IsOpenEndFlow IsOpenEndFlow
@@ -145,10 +159,12 @@ namespace BP.Sys
                 return (IsOpenEndFlow)SystemConfig.GetValByKeyInt("IsOpenEndFlow", 0);
             }
         }
-       
-
         #endregion
 
+        /// <summary>
+        /// 运行的平台为转换java平台使用.
+        /// </summary>
+        public static Plant Plant = Sys.Plant.CSharp;
         /// <summary>
         /// 读取配置文件
         /// </summary>

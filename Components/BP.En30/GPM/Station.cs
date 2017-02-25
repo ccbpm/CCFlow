@@ -76,12 +76,12 @@ namespace BP.GPM
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_Station");
-                map.EnDesc = "岗位"; // "岗位";
-                map.EnType = EnType.Admin;
-                map.DepositaryOfMap = Depositary.Application;
-                map.DepositaryOfEntity = Depositary.Application;
-                map.CodeStruct = "2"; // 最大级别是 7 .
+                Map map = new Map("Port_Station","岗位");
+
+                map.Java_SetEnType(EnType.Admin);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfEntity( Depositary.Application);
+                map.Java_SetCodeStruct("2");
 
                 map.AddTBStringPK(EmpAttr.No, null, "编号", true, true, 1, 20, 100);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 100, 200);

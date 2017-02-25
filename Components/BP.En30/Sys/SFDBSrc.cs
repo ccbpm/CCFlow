@@ -82,6 +82,9 @@ namespace BP.Sys
     public class SFDBSrc : EntityNoName
     {
         #region 属性
+        /// <summary>
+        /// 标签
+        /// </summary>
         public string Icon
         {
             get
@@ -151,6 +154,9 @@ namespace BP.Sys
                 this.SetValByKey(SFDBSrcAttr.DBSrcType, (int)value);
             }
         }
+        /// <summary>
+        /// IP地址
+        /// </summary>
         public string IP
         {
             get
@@ -162,6 +168,9 @@ namespace BP.Sys
                 this.SetValByKey(SFDBSrcAttr.IP, value);
             }
         }
+        /// <summary>
+        /// 数据库类型
+        /// </summary>
         public DBType HisDBType
         {
             get
@@ -699,9 +708,9 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_SFDBSrc", "数据源");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnType = EnType.Sys;
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBStringPK(SFDBSrcAttr.No, null, "数据源编号(必须是英文)", true, false, 1, 20, 20);
                 map.AddTBString(SFDBSrcAttr.Name, null, "数据源名称", true, false, 0, 30, 20);

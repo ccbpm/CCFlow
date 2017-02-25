@@ -174,9 +174,8 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_M2M");
-                map.EnDesc = "M2M数据存储";
-                map.DepositaryOfMap = Depositary.Application;
+                Map map = new Map("Sys_M2M", "M2M数据存储");
+                map.Java_SetDepositaryOfMap( Depositary.Application);
 
                 map.AddMyPK();
                 map.AddTBString(M2MAttr.FK_MapData, null, "FK_MapData", true, true, 0, 100, 20);

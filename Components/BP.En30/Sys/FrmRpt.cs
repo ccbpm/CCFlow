@@ -834,11 +834,10 @@ namespace BP.Sys
             }
 
             MapAttrs mapAttrs = this.MapAttrs;
-            Map map = new Map(this.PTable);
-            map.EnDesc = this.Name;
-            map.EnType = EnType.App;
-            map.DepositaryOfEntity = Depositary.None;
-            map.DepositaryOfMap = Depositary.Application;
+            Map map = new Map(this.PTable,this.Name);
+            map.Java_SetEnType(EnType.App);
+            map.Java_SetDepositaryOfEntity(Depositary.None);
+            map.Java_SetDepositaryOfMap( Depositary.Application);
 
             Attrs attrs = new Attrs();
             foreach (MapAttr mapAttr in mapAttrs)
@@ -881,11 +880,10 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_FrmRpt");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "纬度报表";
-                map.EnType = EnType.Sys;
+                Map map = new Map("Sys_FrmRpt", "纬度报表");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
                
                 map.AddTBStringPK(FrmRptAttr.No, null, "编号", true, false, 1, 20, 20);
                 map.AddTBString(FrmRptAttr.Name, null, "描述", true, false, 1, 50, 20);

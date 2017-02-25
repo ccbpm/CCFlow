@@ -433,11 +433,10 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_MapM2M");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "多选";
-                map.EnType = EnType.Sys;
+                Map map = new Map("Sys_MapM2M", "多选");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
                 map.AddTBString(MapM2MAttr.FK_MapData, null, "主表", true, false, 1, 100, 20);

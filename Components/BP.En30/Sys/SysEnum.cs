@@ -180,11 +180,10 @@ namespace BP.Sys
             get
             {
                 if (this._enMap != null) return this._enMap;
-                Map map = new Map("Sys_Enum");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "枚举";
-                map.EnType = EnType.Sys;
+                Map map = new Map("Sys_Enum", "枚举数据");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
 
                 map.AddTBString(SysEnumAttr.Lab, null, "Lab", true, false, 1, 80, 8);

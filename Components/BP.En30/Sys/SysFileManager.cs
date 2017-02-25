@@ -275,8 +275,8 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_FileManager");
-                map.EnDesc = "文件管理者";
+                Map map = new Map("Sys_FileManager", "文件管理者");
+
                 map.AddTBIntPKOID();
                 map.AddTBString(SysFileManagerAttr.AttrFileName, null, "指定名称", true, false, 0, 50, 20);
                 map.AddTBString(SysFileManagerAttr.AttrFileNo, null, "指定编号", true, false, 0, 50, 20);

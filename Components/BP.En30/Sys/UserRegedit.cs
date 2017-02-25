@@ -356,12 +356,12 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_UserRegedit");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
+                Map map = new Map("Sys_UserRegedit", "用户注册表");
 
-                map.EnDesc = "用户注册表";
-                map.EnType = EnType.Sys;
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetEnType(EnType.Sys);
+
                 map.AddMyPK();
                 map.AddTBString(UserRegeditAttr.FK_Emp, null, "用户", false, false, 1, 30, 20);
                 map.AddTBString(UserRegeditAttr.CfgKey, null, "键", true, false, 1, 200, 20);

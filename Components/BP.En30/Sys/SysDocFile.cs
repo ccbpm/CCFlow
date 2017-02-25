@@ -402,10 +402,8 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_DocFile");
-                map.EnDesc = "备注字段文件管理者";
-               // map.DepositaryOfEntity = Depositary.Application;
-                map.DepositaryOfMap = Depositary.Application;
+                Map map = new Map("Sys_DocFile", "备注字段文件管理者");
+                map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.AddMyPK();
 
                 map.AddTBString(SysDocFileAttr.FileName, null, "名称", false, true, 0, 200, 30);

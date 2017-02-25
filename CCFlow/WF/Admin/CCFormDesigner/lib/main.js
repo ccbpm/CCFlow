@@ -3311,9 +3311,11 @@ function exportCanvas() {
 function loadTempDiagram(FK_MapData) {
     $.post(controllerURLConfig, { action: 'loadform', FK_MapData: FK_MapData },
         function (data) {
-            //alert(data);
+
             try {
-                if (data == "") return;
+
+                if (data == "" || data =="" )
+                    return;
 
                 var obj = eval('(' + data + ')');
 

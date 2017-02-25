@@ -361,8 +361,9 @@ namespace BP.Web
 
                 s = s.Trim().Replace(" ", "");
                 s = s.Trim().Replace(" ", "");
+
                 //常见符号
-                s = s.Replace(",", "").Replace(".", "").Replace("，", "").Replace("。", "").Replace("!", "");
+                s = s.Replace(",", "").Replace(".", "").Replace("，", "").Replace("。", "").Replace("!", "").Replace("？", "").Replace("?", "");
                 s = s.Replace("*", "").Replace("@", "").Replace("#", "").Replace("~", "").Replace("|", "");
                 s = s.Replace("$", "").Replace("%", "").Replace("&", "").Replace("（", "").Replace("）", "").Replace("【", "").Replace("】", "");
                 s = s.Replace("(", "").Replace(")", "").Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "").Replace("/", "");
@@ -1459,10 +1460,15 @@ namespace BP.Web
                 float.TryParse(mdr["MaxTop"].ToString(), out tmp);
                 md.MaxTop = tmp == 0 ? md.MaxTop : tmp;
 
+                //表单设计类型.
+                md.DesignerTool = "Silverlight";
+                md.FormJson = ""; //把他的元素设置为空，以防止在打开.
+
                 md.Update();
             }
             //md.ResetMaxMinXY();
             md.UpdateVer();
+
             //清空缓存，后面优化对一个缓存项进行清除
             BP.Sys.SystemConfig.DoClearCash_del();
 

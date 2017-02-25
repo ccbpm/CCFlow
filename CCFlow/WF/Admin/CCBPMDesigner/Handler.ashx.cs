@@ -607,6 +607,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             string flowNo = GetValFromFrmByKey("diagramId");
             //节点到节点关系
             string direction = GetValFromFrmByKey("direction");
+
             //直接保存流程图信息
             BP.BPMN.Flow fl = new BP.BPMN.Flow(flowNo);
             //修改版本
@@ -701,7 +702,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         /// <returns></returns>
         private string Flow_ResetFlowVersion()
         {
-            DBAccess.RunSQL("UPDATE WF_FLOW SET DTYPE=0,FLOWJSON='' WHERE NO='" + this.FK_Flow + "'");
+            DBAccess.RunSQL("UPDATE WF_FLOW SET DType=0, FlowJson='' WHERE No='" + this.FK_Flow + "'");
             return "true";
         }
 

@@ -261,6 +261,7 @@ function CCForm_BrowserView() {
     var url = "../../CCForm/Frm.aspx?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
     OpenWindow(url);
 }
+
 //预览表单
 function CCForm_FoolFrm() {
     var url = '/WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData=' + CCForm_FK_MapData + '&FK_Flow=001&MyPK=ND101&IsEditMapData=True';
@@ -268,16 +269,32 @@ function CCForm_FoolFrm() {
     OpenWindow(url);
 }
 
+
+//表单属性
+function CCForm_Attr() {
+    var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFrees&PK=' + CCForm_FK_MapData;
+    OpenWindow(url, 500,400);
+}
+
 //打开页面方法
-function OpenWindow(url) {
+function OpenWindow(url, h, w) {
+
     var winWidth = 850;
     var winHeight = 680;
+
+    if (w > 0)
+        winWidth = w;
+
+    if (h > 0)
+        winHeight = h;
+
     if (screen && screen.availWidth) {
         winWidth = screen.availWidth;
         winHeight = screen.availHeight - 36;
     }
     window.open(url, "_blank", "height=" + winHeight + ",width=" + winWidth + ",top=0,left=0,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
 }
+ 
 
 function GetDateString() {
     var strTimeKey = "";

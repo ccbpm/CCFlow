@@ -462,7 +462,8 @@
     <WCFMetadataStorage Include="Service References\CCInterface\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BPMN\" />
+    <Folder Include="CodeBak\BPMN\" />
+    <Folder Include="CodeBak\XML\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

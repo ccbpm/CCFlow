@@ -47,7 +47,6 @@ namespace BP.WF.XML
 	public class DefVals:XmlEns
 	{
 		#region 构造
-        
 		/// <summary>
 		/// 考核率的数据元素
 		/// </summary>
@@ -86,7 +85,7 @@ namespace BP.WF.XML
 		{
 			get
 			{
-				return null; //new BP.ZF1.AdminDefVals();
+				return null;
 			}
 		}
 		#endregion

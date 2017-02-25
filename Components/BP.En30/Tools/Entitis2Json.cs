@@ -200,6 +200,7 @@ namespace BP.Tools
                     {
                         strValue = strValue.Substring(0, strValue.LastIndexOf("\\"));
                     }
+                    strValue = strValue == null ? "" : strValue.Trim();
                     append.Append(attr.Key + ":'" + strValue + "',");
                 }
                 append = append.Remove(append.Length - 1, 1);

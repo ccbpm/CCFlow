@@ -283,14 +283,12 @@ namespace BP.Demo.License
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map();
+                Map map = new Map("Demo_License","用户");
 
                 #region 基本属性
-                map.PhysicsTable = "Demo_License"; // 要物理表。
-                map.DepositaryOfMap = Depositary.Application;    //实体map的存放位置.
-                map.DepositaryOfEntity = Depositary.None; //实体存放位置
-                map.EnDesc = "用户"; // "用户"; // 实体的描述.
-                map.EnType = EnType.App;   //实体类型。
+                map.Java_SetDepositaryOfMap( Depositary.Application);    //实体map的存放位置.
+                map.Java_SetDepositaryOfEntity(Depositary.None); //实体存放位置
+                map.Java_SetEnType(EnType.App);   //实体类型。
                 #endregion
 
                 #region 字段

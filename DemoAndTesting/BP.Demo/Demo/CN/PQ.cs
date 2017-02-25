@@ -51,16 +51,14 @@ namespace BP.CN
 			{
 				if (this._enMap!=null) 
 					return this._enMap;
-				Map map = new Map();
+				Map map = new Map("CN_PQ","片区");
 
 				#region 基本属性 
 				map.EnDBUrl =new DBUrl(DBUrlType.AppCenterDSN) ; 
-				map.PhysicsTable="CN_PQ";  
 				map.AdjunctType = AdjunctType.AllType ;  
 				map.DepositaryOfMap=Depositary.Application; 
 				map.DepositaryOfEntity=Depositary.None; 
 				map.IsCheckNoLength=false;
-				map.EnDesc="片区";
 				map.EnType=EnType.App;
 				map.CodeStruct="4";
 				#endregion

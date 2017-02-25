@@ -212,8 +212,7 @@ namespace BP.Demo.SDK
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Demo_QingJia");
-                map.EnDesc = "«ÎºŸ";
+                Map map = new Map("Demo_QingJia", "«ÎºŸ");
 
                 map.AddTBIntPKOID();
                 map.AddTBString(QingJiaAttr.QingJiaRenNo, null, "«ÎºŸ»À±‡∫≈", false, false, 0, 200, 10);

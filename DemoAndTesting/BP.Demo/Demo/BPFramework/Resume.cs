@@ -136,8 +136,7 @@ namespace BP.Demo
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Demo_Resume");
-                map.EnDesc = "简历";
+                Map map = new Map("Demo_Resume", "简历");
 
                 map.AddTBIntPKOID();
                 map.AddTBString(ResumeAttr.FK_Stu, null, "学生编号", false, false, 0, 200, 10);

@@ -64,12 +64,12 @@ namespace BP.Demo.YS
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Demo_YS_ProjectSort");
-                map.EnDesc = "项目类型"; // "项目类型";
-                map.EnType = EnType.Admin;
-                map.DepositaryOfMap = Depositary.Application;
-                map.DepositaryOfEntity = Depositary.Application;
-                map.CodeStruct = "2"; // 最大级别是 7 .
+                Map map = new Map("Demo_YS_ProjectSort", "项目类型");
+
+                map.Java_SetEnType(EnType.Admin);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfEntity( Depositary.Application);
+                map.Java_SetCodeStruct("2"); // 最大级别是 7 .
                 map.IsAutoGenerNo = true;
 
                 map.AddTBStringPK(ProjectSortAttr.No, null, "编号", true, true, 2, 2, 2);
@@ -77,7 +77,6 @@ namespace BP.Demo.YS
 
                 //map.AddDDLSysEnum(ProjectSortAttr.StaGrade, 0, "类型", true, true, ProjectSortAttr.StaGrade,
                 //    "@1=高层岗@2=中层岗@3=执行岗");
-
 
                 this._enMap = map;
                 return this._enMap;

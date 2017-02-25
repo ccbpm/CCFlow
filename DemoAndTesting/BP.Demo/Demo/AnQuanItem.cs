@@ -58,18 +58,17 @@ namespace BP.Demo
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map();
+
+                Map map = new Map("Demo_AnQuanItem","安全项目");
 
                 #region 基本属性
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN);
-                map.PhysicsTable = "Demo_AnQuanItem";
                 map.AdjunctType = AdjunctType.AllType;
-                map.DepositaryOfMap = Depositary.Application;
-                map.DepositaryOfEntity = Depositary.None;
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.IsCheckNoLength = false;
-                map.EnDesc = "安全项目";
-                map.EnType = EnType.App;
-                map.CodeStruct = "2";
+                map.Java_SetEnType(EnType.App);
+                map.Java_SetCodeStruct("2");
                 #endregion
 
                 #region 字段

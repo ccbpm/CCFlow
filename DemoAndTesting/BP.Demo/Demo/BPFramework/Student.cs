@@ -252,14 +252,11 @@ namespace BP.Demo.BPFramework
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map();
-
+                Map map = new Map("学生", "Demo_Student");
                 //基础信息.
-                map.EnDesc = "学生";
-                map.PhysicsTable = "Demo_Student";
                 map.IsAllowRepeatName = true; //是否允许名称重复.
                 map.IsAutoGenerNo = true; //是否自动生成编号.
-                map.CodeStruct = "4"; // 4位数的编号，从 0001 开始，到 9999.
+                map.Java_SetCodeStruct("4"); // 4位数的编号，从 0001 开始，到 9999.
 
                 //普通字段.
                 map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 4); // 如果设置自动编号字段必须是只读的.

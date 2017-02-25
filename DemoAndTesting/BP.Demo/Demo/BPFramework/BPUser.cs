@@ -193,8 +193,7 @@ namespace BP.Demo.BPFramework
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Demo_BPUser");
-                map.EnDesc = "注册用户";
+                Map map = new Map("Demo_BPUser", "注册用户");
                 
                 // 普通字段
                 map.AddTBStringPK(BPUserAttr.No, null, "用户名", true, false, 1, 100, 100);

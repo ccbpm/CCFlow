@@ -117,8 +117,7 @@ namespace BP.Demo.BPFramework
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Demo_EmpCent");
-                map.EnDesc = "员工考核得分";
+                Map map = new Map("Demo_EmpCent", "员工考核得分");
                 
                 // 普通字段
                 map.AddMyPK();

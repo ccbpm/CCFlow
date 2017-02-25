@@ -90,18 +90,16 @@ namespace BP.Demo.CRM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map();
+                Map map = new Map("Demo_Product","产品");
 
                 #region 基本属性
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN);
-                map.PhysicsTable = "Demo_Product";
                 map.AdjunctType = AdjunctType.AllType;
-                map.DepositaryOfMap = Depositary.Application;
-                map.DepositaryOfEntity = Depositary.None;
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.IsCheckNoLength = false;
-                map.EnDesc = "产品";
-                map.EnType = EnType.App;
-                map.CodeStruct = "4";
+                map.Java_SetEnType(EnType.App);
+                map.Java_SetCodeStruct("4");
                 #endregion
 
                 #region 字段

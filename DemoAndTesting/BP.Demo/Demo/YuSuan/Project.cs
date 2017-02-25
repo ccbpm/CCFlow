@@ -126,11 +126,10 @@ namespace BP.Demo.YS
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Demo_YS_Project");
-                map.EnDesc = "项目";
+                Map map = new Map("Demo_YS_Project", "项目");
 
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.IsAutoGenerNo = true;
 
                 map.AddTBStringPK(EmpAttr.No, null, "编号", true, true, 5, 5, 5);

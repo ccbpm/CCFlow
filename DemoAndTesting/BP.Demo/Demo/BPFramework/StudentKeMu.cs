@@ -92,9 +92,8 @@ namespace BP.Demo.BPFramework
 			{
 				if (this._enMap!=null) 
 					return this._enMap;
-				
-				Map map = new Map("Demo_StudentKeMu");
-				map.EnDesc="学生科目对应";	
+
+                Map map = new Map("Demo_StudentKeMu", "学生科目对应");
 				map.EnType=EnType.Dot2Dot;
 
                 map.AddTBStringPK(StudentKeMuAttr.FK_Student, null, "学生", false, false, 1, 20, 1);

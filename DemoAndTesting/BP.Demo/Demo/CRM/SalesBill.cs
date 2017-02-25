@@ -147,8 +147,8 @@ namespace BP.Demo
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Demo_SaleBill");
-                map.EnDesc = "销售帐单";
+                Map map = new Map("Demo_SaleBill","销售帐单");
+
                 map.AddTBIntPKOID();
                 map.AddDDLEntities(SaleBillAttr.FK_Dept, null, "部门", new BP.Port.Depts(), false);
                 map.AddDDLEntities(SaleBillAttr.FK_Emp, null, "人员", new BP.Port.Emps(),false);

@@ -103,9 +103,8 @@ namespace BP.Demo.YS
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Demo_YS_PrjKM");
-                map.EnDesc = "项目vs科目";
-                map.EnType = EnType.Dot2Dot;
+                Map map = new Map("Demo_YS_PrjKM", "项目vs科目");
+                map.Java_SetEnType(EnType.Dot2Dot);
 
               //  map.AddDDLEntitiesPK(PrjKMAttr.FK_Prj, null, "操作员", new Emps(), true);
                 map.AddTBStringPK(PrjKMAttr.FK_Prj, null, "项目", true, false, 0, 100, 100);

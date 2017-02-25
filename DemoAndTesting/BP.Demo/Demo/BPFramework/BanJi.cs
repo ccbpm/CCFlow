@@ -70,14 +70,11 @@ namespace BP.Demo.BPFramework
 				if (this._enMap!=null) 
 					return this._enMap;
 
-				Map map = new Map();
+				Map map = new Map("Demo_BanJi","班级");
 
 				#region 基本属性 
-             //   map.EnDBUrl = new DBUrl();
-				map.PhysicsTable="Demo_BanJi";   //表
 				map.DepositaryOfEntity=Depositary.None;  //实体村放位置.
                 map.IsAllowRepeatName = true;
-				map.EnDesc="班级";
 				map.EnType=EnType.App;
 				map.CodeStruct="3"; //让其编号为3位, 从001 到 999 .
 				#endregion

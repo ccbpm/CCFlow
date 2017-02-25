@@ -42,13 +42,12 @@ namespace BP.Demo.YS
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Demo_YS_KM");
-                map.EnDesc = "科目";
-                map.CodeStruct = "2";
+                Map map = new Map("Demo_YS_KM", "科目");
+                map.Java_SetCodeStruct("2");
                 map.IsAllowRepeatName = false;
 
-                map.DepositaryOfEntity = Depositary.Application;
-                map.DepositaryOfMap = Depositary.Application;
+                map.Java_SetDepositaryOfEntity( Depositary.Application);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
 
                 map.AddTBStringPK(KMAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(KMAttr.Name, null, "名称", true, false, 0, 100, 30);

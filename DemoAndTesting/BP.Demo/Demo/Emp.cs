@@ -141,8 +141,8 @@ namespace BP.Demo
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Demo_Emp");
-                map.EnDesc = "员工";
+
+                Map map = new Map("Demo_Emp","员工");
                 map.DepositaryOfEntity= Depositary.None;
                 //字段映射.
                 map.AddTBStringPK(EmpAttr.No,null,"编号",true,false,5,40,4);

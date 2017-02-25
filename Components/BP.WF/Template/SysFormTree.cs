@@ -115,7 +115,7 @@ namespace BP.WF.Template
                 map.Java_SetCodeStruct("2");
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.DepositaryOfMap = Depositary.Application;
+                map.Java_SetDepositaryOfMap( Depositary.Application);
 
                 map.AddTBStringPK(SysFormTreeAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(SysFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);

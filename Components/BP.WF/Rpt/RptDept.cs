@@ -112,9 +112,8 @@ namespace BP.WF.Rpt
 			{
 				if (this._enMap!=null) 
 					return this._enMap;
-				
-				Map map = new Map("Sys_RptDept");
-				map.EnDesc="报表部门对应信息";	
+
+                Map map = new Map("Sys_RptDept", "报表部门对应信息");
 				map.EnType=EnType.Dot2Dot;
 
                 map.AddTBStringPK(RptDeptAttr.FK_Rpt, null, "报表", false, false, 1, 15, 1);

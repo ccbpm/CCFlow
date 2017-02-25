@@ -139,11 +139,11 @@ namespace BP.BPMN
 
                 Map map = new Map("WF_Flow", "流程属性");
 
-              
                 map.AddTBStringPK(FlowAttr.No, null, "No", true, false, 1, 10, 6);
                 map.AddTBString(FlowAttr.Name, null, "Name", true, false, 0, 200, 20);
                 map.AddTBString(FlowAttr.FK_FlowSort, null, "类别", true, false, 0, 200, 20);
-                //设计类型 .
+
+                //设计类型 . @0=CCForm@1=CCBPM@2=BPMN 
                 map.AddTBInt(FlowAttr.DType, 1, "设计类型0=CCFlow,1=CCBPM,2=BPMN", true, false);
 
                 this._enMap=map;

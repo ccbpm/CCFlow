@@ -677,6 +677,9 @@ namespace BP.WF.Data
         #endregion 参数属性.
 
         #region 构造函数
+        /// <summary>
+        /// 访问权限
+        /// </summary>
         public override UAC HisUAC
         {
             get
@@ -692,6 +695,10 @@ namespace BP.WF.Data
 		public GenerWorkFlowView()
 		{
 		}
+        /// <summary>
+        /// 产生的工作流程
+        /// </summary>
+        /// <param name="workId"></param>
         public GenerWorkFlowView(Int64 workId)
         {
             QueryObject qo = new QueryObject(this);
@@ -725,6 +732,7 @@ namespace BP.WF.Data
                 map.AddTBString(GenerWorkFlowViewAttr.Title, null, "标题", true, false, 0, 100, 10,true);
                 map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFSta, 0, "流程状态", true, false, GenerWorkFlowViewAttr.WFSta,
                     "@0=运行中@1=已完成@2=其他");
+
                 map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFState, 0, "流程状态", true, false, MyStartFlowAttr.WFState);
                 map.AddTBString(GenerWorkFlowViewAttr.NodeName, null, "当前节点名称", true, false, 0, 100, 10);
                 map.AddTBDateTime(GenerWorkFlowViewAttr.RDT, "记录日期", true, true);

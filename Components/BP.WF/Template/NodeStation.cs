@@ -98,7 +98,7 @@ namespace BP.WF.Template
 
                 map.AddTBIntPK(NodeStationAttr.FK_Node, 0,"节点", false,false);
 
-                if (Glo.OSModel == BP.Sys.OSModel.OneOne)
+                if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
                 {
                     map.AddDDLEntitiesPK(NodeStationAttr.FK_Station, null, "工作岗位",
                         new BP.Port.Stations(), true);

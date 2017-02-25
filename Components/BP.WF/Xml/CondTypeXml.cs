@@ -8,7 +8,7 @@ using BP.Sys;
 namespace BP.WF.XML
 {
     /// <summary>
-    /// 皮肤
+    /// 方向条件类型
     /// </summary>
 	public class CondTypeXml:XmlEnNoName
 	{
@@ -22,7 +22,7 @@ namespace BP.WF.XML
 
 		#region 构造
 		/// <summary>
-		/// 节点扩展信息
+        /// 方向条件类型
 		/// </summary>
         public CondTypeXml()
 		{
@@ -40,13 +40,13 @@ namespace BP.WF.XML
 		#endregion
 	}
 	/// <summary>
-    /// 皮肤s
+    /// 方向条件类型s
 	/// </summary>
 	public class CondTypeXmls:XmlEns
 	{
 		#region 构造
 		/// <summary>
-        /// 皮肤s
+        /// 方向条件类型s
 		/// </summary>
         public CondTypeXmls() { }
 		#endregion

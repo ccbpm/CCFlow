@@ -91,14 +91,14 @@ namespace BP.WF.Template
                 sql = sql.Replace("@FK_Node", this.town.HisNode.NodeID.ToString());
                 sql = sql.Replace("@NodeID", this.town.HisNode.NodeID.ToString());
 
-                sql = Glo.DealExp(sql, this.currWn.rptGe, null);
+                sql = BP.WF.Glo.DealExp(sql, this.currWn.rptGe, null);
                 if (sql.Contains("@"))
                 {
-                    if (Glo.SendHTOfTemp != null)
+                    if (BP.WF.Glo.SendHTOfTemp != null)
                     {
-                        foreach (string key in Glo.SendHTOfTemp.Keys)
+                        foreach (string key in BP.WF.Glo.SendHTOfTemp.Keys)
                         {
-                            sql = sql.Replace("@" + key, Glo.SendHTOfTemp[key].ToString());
+                            sql = sql.Replace("@" + key, BP.WF.Glo.SendHTOfTemp[key].ToString());
                         }
                     }
                 }
@@ -540,7 +540,7 @@ namespace BP.WF.Template
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。*/
                         sql = "SELECT NO FROM Port_Emp WHERE NO IN ";
 
-                        if (Glo.OSModel == OSModel.OneOne)
+                        if (BP.WF.Glo.OSModel == OSModel.OneOne)
                             sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
                         else
                             sql += "(SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept IN ";
@@ -767,7 +767,7 @@ namespace BP.WF.Template
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。 */
 
-                        if (Glo.OSModel == OSModel.OneOne)
+                        if (BP.WF.Glo.OSModel == OSModel.OneOne)
                         {
                             sql = "SELECT No FROM Port_Emp WHERE NO IN "
                           + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"

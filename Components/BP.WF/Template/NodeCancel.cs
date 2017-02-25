@@ -145,7 +145,6 @@ namespace BP.WF.Template
         }
         #endregion 构造与属性.
 
-
         #region 公共方法.
         /// <summary>
         /// 可撤销的节点s
@@ -205,7 +204,6 @@ namespace BP.WF.Template
             return ens;
         }
         #endregion 公共方法.
-
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

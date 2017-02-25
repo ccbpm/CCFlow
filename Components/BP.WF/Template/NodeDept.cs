@@ -73,9 +73,8 @@ namespace BP.WF.Template
 			{
 				if (this._enMap!=null) 
 					return this._enMap;
-				
-				Map map = new Map("WF_NodeDept");				 
-				map.EnDesc="节点部门";
+
+                Map map = new Map("WF_NodeDept", "节点部门");			 
 
 				map.DepositaryOfEntity=Depositary.None;
 				map.DepositaryOfMap=Depositary.Application;

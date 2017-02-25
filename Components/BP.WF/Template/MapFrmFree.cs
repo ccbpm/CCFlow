@@ -156,6 +156,7 @@ namespace BP.WF.Template
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("Sys_MapData", "自由表单属性");
                 map.Java_SetEnType(EnType.Sys);
 
@@ -182,6 +183,8 @@ namespace BP.WF.Template
                 map.AddTBString(MapFrmFreeAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
                 map.AddTBString(MapFrmFreeAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapFrmFreeAttr.Ver, null, "版本号", true, true, 0, 30, 20);
+                map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
+
                 map.AddTBStringDoc(MapFrmFreeAttr.Note, null, "备注", true, false, true);
 
                 //增加参数字段.
@@ -197,23 +200,23 @@ namespace BP.WF.Template
                 #region 方法 - 基本功能.
                 RefMethod rm = new RefMethod();
 
-                rm = new RefMethod();
-                rm.Title = "启动自由表单设计器(SL)";
-                rm.ClassMethodName = this.ToString() + ".DoDesignerSL";
-              //  rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
-                rm.Visable = true;
-                rm.Target = "_blank";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
+              //  rm = new RefMethod();
+              //  rm.Title = "启动自由表单设计器(SL)";
+              //  rm.ClassMethodName = this.ToString() + ".DoDesignerSL";
+              ////  rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
+              //  rm.Visable = true;
+              //  rm.Target = "_blank";
+              //  rm.RefMethodType = RefMethodType.LinkeWinOpen;
+              //  map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "启动自由表单设计器(H5)";
-                rm.ClassMethodName = this.ToString() + ".DoDesignerH5";
-                //  rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
-                rm.Visable = true;
-                rm.Target = "_blank";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
+              //  rm = new RefMethod();
+              //  rm.Title = "启动自由表单设计器(H5)";
+              //  rm.ClassMethodName = this.ToString() + ".DoDesignerH5";
+              //  //  rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
+              //  rm.Visable = true;
+              //  rm.Target = "_blank";
+              //  rm.RefMethodType = RefMethodType.LinkeWinOpen;
+              //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "启动傻瓜表单设计器";
@@ -266,8 +269,6 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
-             
 
                 rm = new RefMethod();
                 rm.Title = "内置JavaScript脚本"; // "设计表单";

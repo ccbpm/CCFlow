@@ -182,6 +182,8 @@ namespace BP.WF.Template
                 map.AddTBString(MapFrmExcelAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
                 map.AddTBString(MapFrmExcelAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapFrmExcelAttr.Ver, null, "版本号", true, true, 0, 30, 20);
+                map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
+
                 map.AddTBStringDoc(MapFrmExcelAttr.Note, null, "备注", true, false, true);
 
                 //增加参数字段.

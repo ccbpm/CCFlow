@@ -7,19 +7,22 @@ namespace BP.WF.Template
     /// <summary>
     /// 
     /// </summary>
-    public class Glo
+    public class TemplateGlo
     {
         /// <summary>
         /// 创建一个流程.
         /// </summary>
         /// <param name="flowSort">流程类别</param>
         /// <returns>string</returns>
-        public static string NewFlow(string flowSort, string flowName, WF.Template.DataStoreModel dsm, string ptable, string flowMark, string flowVer)
+        public static string NewFlow(string flowSort, string flowName, BP.WF.Template.DataStoreModel dsm, string ptable, string flowMark, string flowVer)
         {
             //执行保存.
             BP.WF.Flow fl = new BP.WF.Flow();
             //修改类型为CCBPMN
-            fl.DType = string.IsNullOrEmpty(flowVer) ? 1 : Int32.Parse(flowVer);
+            //fl.DType = string.IsNullOrEmpty(flowVer) ? 1 : Int32.Parse(flowVer);
+
+            fl.DType = CCBPM_DType.CCBPM;
+
             string flowNo = fl.DoNewFlow(flowSort, flowName, dsm, ptable, flowMark);
             fl.No = flowNo;
 

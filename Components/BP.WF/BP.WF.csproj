@@ -134,48 +134,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BPMN\Activity.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\ActivityList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\CCBPMType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\EleBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\EleListXml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\EleTypeXml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\Event.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\EventList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\Flow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\FlowObjects.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\FlowSort.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\GateWay.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\GateWayList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BPMN\Glo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CCFormAPI.cs" />
     <Compile Include="Cloud\CCLover.cs" />
     <Compile Include="Cloud\Glo.cs" />
@@ -209,6 +167,9 @@
     </Compile>
     <Compile Include="Template\Direction.cs" />
     <Compile Include="Template\FlowSort.cs" />
+    <Compile Include="Template\TemplateGlo.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
     <Compile Include="Template\NodeExt.cs" />
@@ -232,12 +193,6 @@
     <Compile Include="Glo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MS\DutyAndPower.cs" />
-    <Compile Include="MS\NodeDtl.cs" />
-    <Compile Include="MS\Sort.cs" />
-    <Compile Include="MS\ZhiDu.cs" />
-    <Compile Include="MS\ZhiDuDept.cs" />
-    <Compile Include="MS\ZhiDuDtl.cs" />
     <Compile Include="CCFlowPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -416,25 +371,31 @@
     <Compile Include="WF\WorkFlowDeleteLog.cs" />
     <Compile Include="Data\NDXRptBase.cs" />
     <Compile Include="WorkFlowBuessRole.cs" />
-    <Compile Include="Xml\AdminMenu.cs" />
+    <Compile Include="Xml\ClassicMenuAdvFunc.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Xml\DefVal.cs" />
     <Compile Include="Xml\EventSource.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Xml\GovWordLeft.cs" />
     <Compile Include="Xml\GovWordRight.cs" />
+    <Compile Include="Xml\Lang.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Xml\MapMenu.cs" />
     <Compile Include="Xml\MobileMenu.cs" />
+    <Compile Include="Xml\Skin.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Xml\SysDataType.cs" />
     <Compile Include="Xml\Toolbar.cs" />
     <Compile Include="Xml\Tool.cs" />
-    <Compile Include="Xml\Lang.cs" />
     <Compile Include="Xml\GovDocBar.cs" />
     <Compile Include="Xml\FlowBar.cs" />
     <Compile Include="Xml\EventList.cs" />
     <Compile Include="Xml\FeatureSet.cs" />
     <Compile Include="Xml\SDK.cs" />
-    <Compile Include="Xml\Skin.cs" />
     <Compile Include="Xml\CondTypeXml.cs" />
     <Compile Include="Xml\WorkOpt.cs" />
     <Compile Include="Xml\WorkOptDtl.cs" />
@@ -447,11 +408,8 @@
     <Compile Include="Dev2InterfaceAnonymous.cs" />
     <Compile Include="Xml\Mobile.cs" />
     <Compile Include="Xml\OnlineHelper.cs" />
-    <Compile Include="Xml\ClassicMenu.cs" />
     <Compile Include="PortalInterface.cs" />
-    <Compile Include="Xml\ClassicMenuAdvFunc.cs" />
     <Compile Include="Xml\MsgType.cs" />
-    <Compile Include="Xml\CCMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -502,6 +460,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CCInterface\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BPMN\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

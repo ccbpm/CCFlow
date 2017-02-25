@@ -373,7 +373,6 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.FlowName, value);
             }
         }
-       
         /// <summary>
         /// 优先级
         /// </summary>

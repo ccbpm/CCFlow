@@ -519,7 +519,6 @@ namespace BP.WF.Data
                 map.AddTBString(CHAttr.FK_NY, null, "隶属月份", true, true, 0, 10, 10);
                 #endregion 基本属性.
 
-
                 #region 计算属性.
                 map.AddTBString(CHAttr.TimeLimit, null, "规定限期", true, true, 0, 50, 5);
                 map.AddTBFloat(CHAttr.UseDays, 0, "实际使用天", false, true);

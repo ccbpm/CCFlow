@@ -941,11 +941,10 @@ namespace BP.WF.Template
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_MapDtl");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "明细";
-                map.EnType = EnType.Sys;
+                Map map = new Map("Sys_MapDtl", "明细");
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.Java_SetEnType(EnType.Sys);
+                map.Java_SetEnType(EnType.Sys);
 
                 #region 基础信息.
 
@@ -1015,12 +1014,10 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.ImpSQLFull, null, "数据填充SQL", true, false, 0, 500, 20,true);
                 #endregion 导入导出填充.
 
-
                 #region 多表头.
                 //MTR 多表头列.
                 map.AddTBStringDoc(MapDtlAttr.MTR, null, "请书写html标记,以《TR》开头，以《/TR》结尾。", true, false, true);
                 #endregion 多表头.
-
 
                 #region 工作流相关.
                 //add 2014-02-21.
@@ -1041,7 +1038,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-
                 //rm = new RefMethod();
                 //rm.Title = "设计表单(Silverligth)"; // "设计表单";
                 //rm.ClassMethodName = this.ToString() + ".DoDesignerSL";
@@ -1050,8 +1046,6 @@ namespace BP.WF.Template
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 //rm.Target = "_blank";
                 //map.AddRefMethod(rm);
-
-
 
                 rm = new RefMethod();
                 rm.Title = "事件"; // "设计表单";
@@ -1091,12 +1085,10 @@ namespace BP.WF.Template
         {
             return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Action.aspx?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
-
         public string HidAttr()
         {
             return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/HidAttr.aspx?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
-        
 
         #region 基本属性.
         public float X
@@ -1143,17 +1135,13 @@ namespace BP.WF.Template
         }
         #endregion 基本属性.
 
-
         protected override bool beforeUpdate()
         {
             MapDtl dtl = new MapDtl(this.No);
             dtl.IsEnablePass = this.IsEnableAthM;
             dtl.Update();
-
-
             return base.beforeUpdate();
         }
-
         /// <summary>
         /// 获取个数
         /// </summary>

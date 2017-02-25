@@ -27,7 +27,6 @@ namespace BP.WF.Rpt
     /// </summary>
     public class RptStation : Entity
     {
-
         public override UAC HisUAC
         {
             get
@@ -115,6 +114,7 @@ namespace BP.WF.Rpt
                     return this._enMap;
 
                 Map map = new Map("Sys_RptStation", "报表岗位对应信息");
+
                 map.Java_SetEnType(EnType.Dot2Dot);
 
                 map.AddTBStringPK(RptStationAttr.FK_Rpt, null, "报表", false, false, 1, 15, 1);

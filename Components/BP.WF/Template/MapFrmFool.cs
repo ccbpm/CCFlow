@@ -162,6 +162,8 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
+                map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
+
                 map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
                 //增加参数字段.
                 map.AddTBAtParas(4000);
@@ -174,7 +176,6 @@ namespace BP.WF.Template
                 #region 方法 - 基本功能.
 
                 RefMethod rm = new RefMethod();
-
                 rm = new RefMethod();
                 rm.Title = "启动傻瓜表单设计器";
                 rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
@@ -183,7 +184,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
@@ -263,12 +263,8 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/ReName.png";
-
                 map.AddRefMethod(rm);
-
               
-
-
                 rm = new RefMethod();
                 rm.Title = "表单检查"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
@@ -277,18 +273,8 @@ namespace BP.WF.Template
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Check.png";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "节点表单组件"; // "设计表单";
-                //rm.ClassMethodName = this.ToString() + ".DoNodeFrmCompent";
-                //rm.Visable = true;
-                //rm.RefAttrLinkLabel = "节点表单组件";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Target = "_blank";
-                //rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Components.png";
-                //map.AddRefMethod(rm);
+             
                 #endregion 方法 - 基本功能.
-
 
                 #region 方法 - 开发接口.
                 rm = new RefMethod();

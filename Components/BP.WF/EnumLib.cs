@@ -6,6 +6,24 @@ using System.Text;
 namespace BP.WF
 {
     /// <summary>
+    /// 设计器类型
+    /// </summary>
+    public enum CCBPM_DType
+    {
+        /// <summary>
+        /// siverlight 模式
+        /// </summary>
+        CCFlow = 0,
+        /// <summary>
+        /// V1.0
+        /// </summary>
+        CCBPM = 1,
+        /// <summary>
+        /// V2.0
+        /// </summary>
+        BPMN = 2
+    }
+    /// <summary>
     /// 流程删除规则
     /// </summary>
     public enum FlowDeleteRole

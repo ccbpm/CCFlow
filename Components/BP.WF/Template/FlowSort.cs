@@ -79,7 +79,7 @@ namespace BP.WF.Template
                 string sysRootNo = DBAccess.RunSQLReturnStringIsNull(sql, "0");
                 // 取得该功能菜单的主键编号.
                 pMenuNo = DBAccess.GenerOID("BP.GPM.Menu").ToString();
-                string url = Glo.HostURL;
+                string url = BP.WF.Glo.HostURL;
                 /*如果没有系统，就插入该系统菜单.*/
                 sql = "INSERT INTO GPM_Menu(No,Name,ParentNo,IsDir,MenuType,FK_App,IsEnable,Flag)";
                 sql += " VALUES('{0}','{1}','{2}',1,2,'{3}',1,'{4}')";

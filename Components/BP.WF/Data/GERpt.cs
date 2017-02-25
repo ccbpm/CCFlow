@@ -124,7 +124,6 @@ namespace BP.WF.Data
         /// 数量
         /// </summary>
         public const string MyNum = "MyNum";
-
     }
     /// <summary>
     /// 报表
@@ -596,7 +595,7 @@ namespace BP.WF.Data
         }
         #endregion
 
-        #region attrs - attrs
+        #region 属性.
         private string _RptName = null;
         public string RptName
         {
@@ -675,12 +674,12 @@ namespace BP.WF.Data
         #endregion attrs
     }
     /// <summary>
-    /// 报表集合
+    /// 报表s
     /// </summary>
     public class GERpts : BP.En.EntitiesOID
     {
         /// <summary>
-        /// 报表集合
+        /// 报表s
         /// </summary>
         public GERpts()
         {

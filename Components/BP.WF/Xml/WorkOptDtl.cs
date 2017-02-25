@@ -12,6 +12,9 @@ namespace BP.WF.XML
     /// </summary>
 	public class WorkOptDtlXml:XmlEnNoName
 	{
+        /// <summary>
+        /// 名称
+        /// </summary>
         public new string Name
         {
             get
@@ -19,6 +22,9 @@ namespace BP.WF.XML
                 return this.GetValStringByKey(BP.Web.WebUser.SysLang);
             }
         }
+        /// <summary>
+        /// 超链接
+        /// </summary>
         public string URL
         {
             get

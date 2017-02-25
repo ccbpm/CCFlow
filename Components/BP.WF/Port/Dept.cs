@@ -77,7 +77,7 @@ namespace BP.WF.Port
                 Map map = new Map("Port_Dept", "部门");
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application); //实体map的存放位置.
-                map.DepositaryOfMap = Depositary.Application;    // Map 的存放位置.
+                map.Java_SetDepositaryOfMap( Depositary.Application);    // Map 的存放位置.
 
                 map.AdjunctType = AdjunctType.None;
 

@@ -182,6 +182,34 @@ namespace BP.WF
 
         #region 基础属性.
         /// <summary>
+        /// 流程图数据
+        /// </summary>
+        public string FlowJson
+        {
+            get
+            {
+                return this.GetBigTextFromDB("FlowJson");
+            }
+            set
+            {
+                this.SaveBigTxtToDB("FlowJson", value);
+            }
+        }
+        /// <summary>
+        /// 设计类型
+        /// </summary>
+        public CCBPM_DType DType
+        {
+            get
+            {
+                return (CCBPM_DType)this.GetValIntByKey(FlowAttr.DType);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.DType, (int)value);
+            }
+        }
+        /// <summary>
         /// 流程事件实体
         /// </summary>
         public string FlowEventEntity
@@ -4461,21 +4489,6 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.Ver, value);
             }
         }
-        /// <summary>
-        /// 类型
-        /// </summary>
-        public int DType
-        {
-            get
-            {
-                return this.GetValIntByKey(FlowAttr.DType);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.DType, value);
-            }
-        }
-
         #endregion
 
         #region 计算属性
@@ -4776,6 +4789,7 @@ namespace BP.WF
 
                 map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "(当前节点为子流程时)是否检查所有子流程完成后父流程自动发送", true, true);
                 map.AddTBString(FlowAttr.Ver, null, "版本号", true, true, 0, 20, 10);
+
                 //设计类型 .
                 map.AddTBInt(FlowAttr.DType, 0, "设计类型0=ccbpm,1=bpmn", true, false);
 

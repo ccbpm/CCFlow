@@ -708,7 +708,7 @@ namespace BP.WF.Template
                 title = BP.DA.DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
 
             //生成URL.
-            string hostUrl = Glo.HostURL;
+            string hostUrl = BP.WF.Glo.HostURL;
             string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DataType.CurrentDataTime;
             string openWorkURl = hostUrl + "WF/Do.aspx?DoType=OF&SID=" + sid;
             openWorkURl = openWorkURl.Replace("//", "/");
@@ -761,7 +761,7 @@ namespace BP.WF.Template
 
             /*如果仍然有没有替换下来的变量.*/
             if (mailDocTmp.Contains("@"))
-                mailDocTmp = Glo.DealExp(mailDocTmp, en, null);
+                mailDocTmp = BP.WF.Glo.DealExp(mailDocTmp, en, null);
 
             #endregion 生成相关的变量？
 
@@ -979,11 +979,11 @@ namespace BP.WF.Template
 
             /*如果仍然有没有替换下来的变量.*/
             if (smsDocTmp.Contains("@") == true)
-                smsDocTmp = Glo.DealExp(smsDocTmp, en, null);
+                smsDocTmp = BP.WF.Glo.DealExp(smsDocTmp, en, null);
 
             /*如果仍然有没有替换下来的变量.*/
             if (smsDocTmp.Contains("@"))
-                smsDocTmp = Glo.DealExp(smsDocTmp, en, null);
+                smsDocTmp = BP.WF.Glo.DealExp(smsDocTmp, en, null);
 
             //if (smsDocTmp.Contains("@"))
             //    throw new Exception("@短信消息内容配置错误,里面有未替换的变量，请确认参数是否正确:"+smsDocTmp);

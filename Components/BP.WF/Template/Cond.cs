@@ -736,7 +736,7 @@ namespace BP.WF.Template
                         url = url + "?1=2";
 
                     url = url.Replace("@SDKFromServHost", BP.Sys.SystemConfig.AppSettings["SDKFromServHost"]);
-                    url = Glo.DealExp(url, this.en, "");
+                    url = BP.WF.Glo.DealExp(url, this.en, "");
 
                     #region 加入必要的参数.
                     if (url.Contains("&FK_Flow") == false)
@@ -881,9 +881,9 @@ namespace BP.WF.Template
                         try
                         {
                             /*如果不包含指定的关键的key, 就到公共变量里去找. */
-                            if (Glo.SendHTOfTemp.ContainsKey(key) == false)
+                            if (BP.WF.Glo.SendHTOfTemp.ContainsKey(key) == false)
                                 throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
-                            valPara = Glo.SendHTOfTemp[key].ToString().Trim();
+                            valPara = BP.WF.Glo.SendHTOfTemp[key].ToString().Trim();
                         }
                         catch
                         {

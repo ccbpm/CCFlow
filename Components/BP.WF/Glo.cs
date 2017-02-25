@@ -3702,37 +3702,38 @@ namespace BP.WF
         /// <param name="prvRDT">上一个时间点</param>
         /// <param name="sdt">应完成日期</param>
         /// <param name="dtNow">当前日期</param>
-        public static void InitCH2017(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt,
+        private static void InitCH2017(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt,
             DateTime dtNow)
         {
-            //开始节点不考核.
-            //if (nd.IsStartNode)
-            //    return;
-
-            if (nd.HisCHWay == CHWay.None)
+           // 开始节点不考核.
+            if (nd.IsStartNode || nd.HisCHWay == CHWay.None)
                 return;
 
             //如果设置为0 则不考核.
-            if (nd.TimeLimit == 0 && nd.TSpanHour == 0)
+            if (nd.TimeLimit == 0)
                 return;
 
             if (dtNow == null)
                 dtNow = DateTime.Now;
 
-            if (sdt == null || prvRDT == null)
+            #region 求参与人员 todoEmps ，应完成日期 sdt ，与工作派发日期 prvRDT.
+            //参与人员.
+            string todoEmps = "";
+            if (nd.IsEndNode == true)
             {
+                /* 如果是最后一个节点，可以使用这样的方式来求人员信息 。*/
                 string dbstr = SystemConfig.AppCenterDBVarStr;
                 Paras ps = new Paras();
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        ps.SQL = "SELECT TOP 1 RDT,SDTOfNode FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
+                        ps.SQL = "SELECT TOP 1 RDT, SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
                         break;
                     case DBType.Oracle:
-                        ps.SQL = "SELECT  RDT,SDTOfNode FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        ps.SQL = "SELECT  RDT, SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
                         break;
                     case DBType.MySQL:
-                        ps.SQL = "SELECT  RDT,SDTOfNode FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
+                        ps.SQL = "SELECT  RDT, SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
                         break;
                     default:
                         break;
@@ -3747,7 +3748,72 @@ namespace BP.WF
 
                 prvRDT = dt.Rows[0][0].ToString(); //上一个时间点的记录日期.
                 sdt = dt.Rows[0][1].ToString(); //应完成日期.
+                todoEmps = dt.Rows[0][2].ToString(); //参与人员.
             }
+
+            if (nd.IsEndNode == false)
+            {
+                /* 不是最后一个节点, 就要从工作人员列表里获取 . */
+                string dbstr = SystemConfig.AppCenterDBVarStr;
+                Paras ps = new Paras();
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        ps.SQL = "SELECT TOP 1 RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
+                        break;
+                    case DBType.Oracle:
+                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        break;
+                    case DBType.MySQL:
+                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
+                        break;
+                    default:
+                        break;
+                }
+
+                ps.Add("WorkID", workid);
+                ps.Add("FK_Node", nd.NodeID);
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                    return;
+
+                prvRDT = dt.Rows[0][0].ToString(); //上一个时间点的记录日期.
+                sdt = dt.Rows[0][1].ToString(); //应完成日期.
+
+                #region 从轨迹里找到他的相关责任人. 
+                todoEmps = WebUser.No + "," + WebUser.Name + ";";
+                ps = new Paras();
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        ps.SQL = "SELECT TOP 1 Tag FROM ND" + int.Parse(fl.No) + "Track WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo ORDER BY RDT DESC";
+                        break;
+                    case DBType.Oracle:
+                        ps.SQL = "SELECT  Tag FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND ROWNUM=1 ORDER BY RDT DESC ";
+                        break;
+                    case DBType.MySQL:
+                        ps.SQL = "SELECT  Tag FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID AND NDTo=" + dbstr + "NDTo ORDER BY RDT DESC limit 0,1 ";
+                        break;
+                    default:
+                        break;
+                }
+                ps.Add("WorkID", workid);
+                ps.Add("NDTo", nd.NodeID);
+
+                dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count ==1)
+                {
+                    string str=dt.Rows[0][0] as string;
+                    if (string.IsNullOrEmpty(str)==false)
+                        todoEmps=str;
+                }
+                #endregion 从轨迹里找到他的相关责任人. // 应该处理的人员,需要从轨迹表里取,上一步骤的处理人.
+
+                //todoEmps = dt.Rows[0][2].ToString(); //参与人员.
+            }
+            #endregion 求参与人员，应完成日期，与工作派发日期.
+
 
             #region 初始化基础数据.
             BP.WF.Data.CH ch = new CH();
@@ -3776,7 +3842,27 @@ namespace BP.WF
 
             ch.FK_Emp = WebUser.No;//当事人.
             ch.FK_EmpT = WebUser.Name;
-        
+
+            // 处理相关联的当事人.
+            ch.GroupEmpsNames = todoEmps;
+
+            //求参与人员数量.
+            string[] strs = todoEmps.Split(';');
+            ch.GroupEmpsNum = strs.Length-1; //个数.
+
+            //求参与人的ids.
+            string empids = ",";
+            foreach (string str in strs)
+            {
+                if (string.IsNullOrEmpty(str))
+                    continue;
+
+                string[] mystr = str.Split(',');
+                empids += str + ",";
+            }
+            ch.GroupEmps = empids;
+
+
             // mypk.
             ch.MyPK = nd.NodeID + "_" + workid + "_" + fid + "_" + WebUser.No;
             #endregion 初始化基础数据.
@@ -3822,9 +3908,16 @@ namespace BP.WF
             }
             catch
             {
-                //如果遇到退回的情况就可能涉及到主键重复的问题.
-                ch.MyPK = BP.DA.DBAccess.GenerGUID();
-                ch.Insert();
+                if (ch.IsExits)
+                {
+                    ch.Update();
+                }
+                else
+                {
+                    //如果遇到退回的情况就可能涉及到主键重复的问题.
+                    ch.MyPK = BP.DA.DBAccess.GenerGUID();
+                    ch.Insert();
+                }
             }
 
         }

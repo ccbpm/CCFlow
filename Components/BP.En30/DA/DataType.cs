@@ -83,17 +83,23 @@ namespace BP.DA
 
                 if (dt.DayOfWeek == DayOfWeek.Sunday)
                     return dt.AddDays(1);
+                return dt;
             }
 
             /* 如果没有设置，节假日. */
-            for (int i = 0; i < days; i++)
+            while (days > 0)
             {
                 if (BP.Sys.GloVar.Holidays.Contains(dt.ToString("MM-dd")))
                 {
-                    i = i - 1;
                     dt = dt.AddDays(1);
                     continue;
                 }
+
+                days--;
+
+                if (days == 0)
+                    break;
+
                 dt = dt.AddDays(1);
             }
             return dt;

@@ -503,7 +503,7 @@ namespace BP.WF.Template
 	/// <summary>
 	/// 单据s
 	/// </summary>
-	public class Bills :Entities
+	public class Bills :EntitiesMyPK
 	{
 		#region 构造方法属性
 		/// <summary>

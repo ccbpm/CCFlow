@@ -100,6 +100,9 @@ namespace BP.WF.Template.XML
 				return new ModeXml();
 			}
 		}
+        /// <summary>
+        /// 文件路径
+        /// </summary>
         public override string File
         {
             get
@@ -117,6 +120,9 @@ namespace BP.WF.Template.XML
                 return "Model";
 			}
 		}
+        /// <summary>
+        /// 关联的实体
+        /// </summary>
 		public override Entities RefEns
 		{
 			get

@@ -125,7 +125,7 @@ namespace BP.WF.Port
     /// <summary>
     /// 流程部门数据查询权限 
     /// </summary>
-    public class DeptFlowSearchs : Entities
+    public class DeptFlowSearchs : EntitiesMyPK
     {
         #region 构造
         /// <summary>
@@ -159,5 +159,29 @@ namespace BP.WF.Port
 
         #region 查询方法
         #endregion
+
+        #region 为了适应自动翻译成java的需要,把实体转换成List.
+        /// <summary>
+        /// 转化成 java list,C#不能调用.
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.IList<DeptFlowSearch> ToJavaList()
+        {
+            return (System.Collections.Generic.IList<DeptFlowSearch>)this;
+        }
+        /// <summary>
+        /// 转化成list
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.List<DeptFlowSearch> Tolist()
+        {
+            System.Collections.Generic.List<DeptFlowSearch> list = new System.Collections.Generic.List<DeptFlowSearch>();
+            for (int i = 0; i < this.Count; i++)
+            {
+                list.Add((DeptFlowSearch)this[i]);
+            }
+            return list;
+        }
+        #endregion 为了适应自动翻译成java的需要,把实体转换成List.
     }
 }

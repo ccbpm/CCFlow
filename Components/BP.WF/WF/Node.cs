@@ -949,6 +949,9 @@ namespace BP.WF
             }
             set
             {
+                if (value != 0)
+                    throw new Exception("@目前不支持小时制.");
+
                 this.SetValByKey(NodeAttr.TSpanHour, value);
             }
         }

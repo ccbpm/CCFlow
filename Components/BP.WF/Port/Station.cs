@@ -95,5 +95,30 @@ namespace BP.WF.Port
 				return new Station();
 			}
 		}
+
+        #region 为了适应自动翻译成java的需要,把实体转换成List.
+        /// <summary>
+        /// 转化成 java list,C#不能调用.
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.IList<Station> ToJavaList()
+        {
+            return (System.Collections.Generic.IList<Station>)this;
+        }
+        /// <summary>
+        /// 转化成list
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.List<Station> Tolist()
+        {
+            System.Collections.Generic.List<Station> list = new System.Collections.Generic.List<Station>();
+            for (int i = 0; i < this.Count; i++)
+            {
+                list.Add((Station)this[i]);
+            }
+            return list;
+        }
+        #endregion 为了适应自动翻译成java的需要,把实体转换成List.
+
 	}
 }

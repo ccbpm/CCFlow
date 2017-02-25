@@ -4,20 +4,33 @@ using BP.DA;
 using BP.En;
 using BP.Sys.XML;
 using BP.Sys;
-using BP.Sys;
 
-namespace BP.WF.Template.XML
+namespace BP.WF.XML
 {
     /// <summary>
-    /// 模式
+    /// 抄送菜单属性
     /// </summary>
-	public class ModeSortXml:XmlEnNoName
+    public class CCMenuAttr
+    {
+        /// <summary>
+        /// 编号
+        /// </summary>
+        public const string No = "No";
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public const string Name = "Name";
+    }
+    /// <summary>
+    /// 抄送菜单
+    /// </summary>
+	public class CCMenu:XmlEnNoName
 	{
 		#region 构造
 		/// <summary>
 		/// 节点扩展信息
 		/// </summary>
-        public ModeSortXml()
+		public CCMenu()
 		{
 		}
 		/// <summary>
@@ -27,21 +40,21 @@ namespace BP.WF.Template.XML
 		{
 			get
 			{
-                return new ModeSortXmls();
+				return new CCMenus();
 			}
 		}
 		#endregion
 	}
 	/// <summary>
-    /// 模式s
+	/// 抄送菜单s
 	/// </summary>
-	public class ModeSortXmls:XmlEns
+	public class CCMenus:XmlEns
 	{
 		#region 构造
 		/// <summary>
-        /// 模式s
+		/// 考核率的数据元素
 		/// </summary>
-        public ModeSortXmls() { }
+        public CCMenus() { }
 		#endregion
 
 		#region 重写基类属性或方法。
@@ -52,20 +65,19 @@ namespace BP.WF.Template.XML
 		{
 			get
 			{
-				return new ModeSortXml();
+				return new CCMenu();
 			}
 		}
         /// <summary>
-        /// 文件位置
+        /// XML文件位置.
         /// </summary>
-        public override string File
-        {
-            get
-            {
-                return SystemConfig.PathOfWebApp + "\\WF\\Admin\\AccepterRole\\AccepterRole.xml";
-
-            }
-        }
+		public override string File
+		{
+			get
+			{
+                return SystemConfig.CCFlowAppPath + "WF\\Data\\Xml\\SysDataType.xml";
+			}
+		}
 		/// <summary>
 		/// 物理表名
 		/// </summary>
@@ -73,17 +85,14 @@ namespace BP.WF.Template.XML
 		{
 			get
 			{
-                return "ModelSort";
+				return "CCMenu";
 			}
 		}
-        /// <summary>
-        /// 关联的实体
-        /// </summary>
 		public override Entities RefEns
 		{
 			get
 			{
-				return null;  
+				return null;
 			}
 		}
 		#endregion

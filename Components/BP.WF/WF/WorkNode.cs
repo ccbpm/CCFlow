@@ -463,7 +463,8 @@ namespace BP.WF
                 int hh = 0;
 
                 //增加天数. 考虑到了节假日.                
-                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,this.town.HisNode.TSpanMinues, this.town.HisNode.TWay);
+                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,
+                    this.town.HisNode.TSpanMinues, this.town.HisNode.TWay);
             }
 
             //求警告日期.
@@ -866,11 +867,17 @@ namespace BP.WF
             else
             {
                 string info = "共(" + this.HisWorkerLists.Count + ")人接收\t\n";
+
+                string emps = "";
                 foreach (GenerWorkerList wl in this.HisWorkerLists)
                 {
                     info += BP.WF.Glo.DealUserInfoShowModel(wl.FK_DeptT, wl.FK_EmpText) + "\t\n";
+
+                    emps += wl.FK_Emp + ","+wl.FK_EmpText+";";
                 }
-                this.AddToTrack(at, this.Execer, "多人接受(见信息栏)", town.HisNode.NodeID, town.HisNode.Name, info, this.ndFrom);
+
+                //写入到日志.
+                this.AddToTrack(at, this.Execer, "多人接受(见信息栏)", town.HisNode.NodeID, town.HisNode.Name, info, this.ndFrom, null, emps);
             }
             #endregion
 
@@ -6827,7 +6834,7 @@ namespace BP.WF
         /// <param name="toNDid">到节点</param>
         /// <param name="toNDName">到节点名称</param>
         /// <param name="msg">消息</param>
-        public void AddToTrack(ActionType at, string toEmp, string toEmpName, int toNDid, string toNDName, string msg, Node ndFrom, string frmDBJson=null)
+        public void AddToTrack(ActionType at, string toEmp, string toEmpName, int toNDid, string toNDName, string msg, Node ndFrom, string frmDBJson=null, string tag=null)
         {
             Track t = new Track();
             t.WorkID = this.HisWork.OID;
@@ -6841,7 +6848,7 @@ namespace BP.WF
             t.EmpFrom = this.Execer;
             t.EmpFromT = this.ExecerName;
             t.FK_Flow = this.HisNode.FK_Flow;
-
+            t.Tag = tag;
 
             if (toNDid == 0)
             {

@@ -69,10 +69,25 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_DeptT = "FK_DeptT";
         /// <summary>
-        /// 送达否
+        /// 当事人
         /// </summary>
         public const string FK_Emp = "FK_Emp";
+        /// <summary>
+        /// 当事人名称
+        /// </summary>
         public const string FK_EmpT = "FK_EmpT";
+        /// <summary>
+        /// 相关当事人
+        /// </summary>
+        public const string GroupEmps = "GroupEmps";
+        /// <summary>
+        /// 相关当事人名称
+        /// </summary>
+        public const string GroupEmpsNames = "GroupEmpsNames";
+        /// <summary>
+        /// 相关当事人数量
+        /// </summary>
+        public const string GroupEmpsNum = "GroupEmpsNum";
         /// <summary>
         /// 限期
         /// </summary>
@@ -338,6 +353,48 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
+        /// 相关当事人
+        /// </summary>
+        public string GroupEmps
+        {
+            get
+            {
+                return this.GetValStringByKey(CHAttr.GroupEmps);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.GroupEmps, value);
+            }
+        }
+        /// <summary>
+        /// 相关当事人名称
+        /// </summary>
+        public string GroupEmpsNames
+        {
+            get
+            {
+                return this.GetValStringByKey(CHAttr.GroupEmpsNames);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.GroupEmpsNames, value);
+            }
+        }
+        /// <summary>
+        /// 相关当事人数量
+        /// </summary>
+        public int GroupEmpsNum
+        {
+            get
+            {
+                return this.GetValIntByKey(CHAttr.GroupEmpsNum);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.GroupEmpsNum, value);
+            }
+        }
+        /// <summary>
         /// 部门
         /// </summary>
         public string FK_Dept
@@ -509,6 +566,12 @@ namespace BP.WF.Data
 
                 map.AddTBString(CHAttr.FK_Emp, null, "当事人", true, true, 0, 30, 3);
                 map.AddTBString(CHAttr.FK_EmpT, null, "当事人名称", true, true, 0, 50, 5);
+
+                //为邓州增加的属性. 解决多人处理一个节点的工作的问题.
+                map.AddTBString(CHAttr.GroupEmps, null, "相关当事人", true, true, 0, 30, 3);
+                map.AddTBString(CHAttr.GroupEmpsNames, null, "相关当事人名称", true, true, 0, 30, 3);
+                map.AddTBInt(CHAttr.GroupEmpsNum, 1, "相关当事人数量", false, false);
+
 
                 map.AddTBString(CHAttr.DTFrom, null, "时间从", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.DTTo, null, "到", true, true, 0, 50, 5);

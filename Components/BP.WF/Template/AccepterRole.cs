@@ -118,7 +118,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 接受人规则集合
     /// </summary>
-    public class AccepterRoles : Entities
+    public class AccepterRoles : EntitiesOID
     {
         #region 方法
         /// <summary>

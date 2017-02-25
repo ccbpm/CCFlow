@@ -345,19 +345,32 @@ namespace BP.WF.Port
         public Emps()
         {
         }
-        /// <summary>
-        /// 查询全部
-        /// </summary>
-        /// <returns></returns>
-        public override int RetrieveAll()
-        {
-           return  base.RetrieveAll();
 
-            //QueryObject qo = new QueryObject(this);
-            //qo.AddWhere(EmpAttr.FK_Dept, " like ", BP.Web.WebUser.FK_Dept + "%");
-            //qo.addOrderBy(EmpAttr.No);
-            //return qo.DoQuery();
+        #region 为了适应自动翻译成java的需要,把实体转换成List.
+        /// <summary>
+        /// 转化成 java list,C#不能调用.
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.IList<Emp> ToJavaList()
+        {
+            return (System.Collections.Generic.IList<Emp>)this;
         }
+        /// <summary>
+        /// 转化成list
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.List<Emp> Tolist()
+        {
+            System.Collections.Generic.List<Emp> list = new System.Collections.Generic.List<Emp>();
+            for (int i = 0; i < this.Count; i++)
+            {
+                list.Add((Emp)this[i]);
+            }
+            return list;
+        }
+        #endregion 为了适应自动翻译成java的需要,把实体转换成List.
+
+
     }
 }
  

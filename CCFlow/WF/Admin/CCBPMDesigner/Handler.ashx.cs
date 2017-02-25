@@ -590,7 +590,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
         private string Flow_LoadFlowJsonData()
         {
             string diagramId = this.GetValFromFrmByKey("diagramId");
-            BP.BPMN.Flow fl = new BP.BPMN.Flow(diagramId);
+            BP.WF.Flow fl = new BP.WF.Flow(diagramId);
             return fl.FlowJson;
         }
         /// <summary>
@@ -609,9 +609,9 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
             string direction = GetValFromFrmByKey("direction");
 
             //直接保存流程图信息
-            BP.BPMN.Flow fl = new BP.BPMN.Flow(flowNo);
+            BP.WF.Flow fl = new BP.WF.Flow(flowNo);
             //修改版本
-            fl.DType = fl.DType == BP.BPMN.CCBPM_DType.BPMN ? BP.BPMN.CCBPM_DType.BPMN : BP.BPMN.CCBPM_DType.CCBPM;
+            fl.DType = fl.DType == BP.WF.CCBPM_DType.BPMN ? BP.WF.CCBPM_DType.BPMN : BP.WF.CCBPM_DType.CCBPM;
             //直接保存了.
             fl.FlowJson = diagram;
             fl.Update();
@@ -757,7 +757,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                 if (!string.IsNullOrEmpty(x)) iX = (int)double.Parse(x);
                 if (!string.IsNullOrEmpty(y)) iY = (int)double.Parse(y);
 
-                int nodeId = BP.BPMN.Glo.NewNode(FK_Flow, iX, iY);
+                int nodeId = BP.WF.Template.TemplateGlo.NewNode(FK_Flow, iX, iY);
 
                 BP.WF.Node node = new BP.WF.Node(nodeId);
                 node.HisRunModel = Node_GetRunModelByFigureName(figureName);
@@ -1563,7 +1563,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
                         string flowMark = ps[4]; // 流程标记.
                         string flowVer = ps[5]; // 流程版本
 
-                        string FK_Flow = BP.BPMN.Glo.NewFlow(fk_floSort, flowName, dataSaveModel, pTable, flowMark, flowVer);
+                        string FK_Flow = BP.WF.Template.TemplateGlo.NewFlow(fk_floSort, flowName, dataSaveModel, pTable, flowMark, flowVer);
                         return
                             Newtonsoft.Json.JsonConvert.SerializeObject(
                                 new { success = true, msg = string.Empty, data = new { no = FK_Flow, name = flowName } });

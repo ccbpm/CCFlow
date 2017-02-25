@@ -10,7 +10,6 @@ using System.Configuration;
 using System.Web.SessionState;
 using BP.DA;
 using BP.Web;
-using BP.BPMN;
 using BP.Sys;
 using BP.En;
 using BP.WF.Template;

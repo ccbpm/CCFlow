@@ -218,8 +218,8 @@ namespace CCFlow.AppDemoLigerUI.Base
         {
             StringBuilder returnVal = new StringBuilder();
             returnVal.Append("{config:[{");
-            returnVal.Append(string.Format("IsWinOpenStartWork:'{0}',", Glo.IsWinOpenStartWork));
-            returnVal.Append(string.Format("IsWinOpenEmpWorks:'{0}'", Glo.IsWinOpenEmpWorks));
+            returnVal.Append(string.Format("IsWinOpenStartWork:'{0}',", BP.WF.Glo.IsWinOpenStartWork));
+            returnVal.Append(string.Format("IsWinOpenEmpWorks:'{0}'", BP.WF.Glo.IsWinOpenEmpWorks));
             returnVal.Append("}]}");
             return returnVal.ToString();
         }
@@ -789,7 +789,7 @@ namespace CCFlow.AppDemoLigerUI.Base
         {
             get
             {
-                if (Glo.IsEnableTaskPool == false)
+                if (BP.WF.Glo.IsEnableTaskPool == false)
                     return 0;
 
                 string sql = "SELECT COUNT(WorkID) AS Num FROM WF_EmpWorks WHERE FK_Emp='" + BP.Web.WebUser.No + "' AND WFState=2 AND TaskSta=1";

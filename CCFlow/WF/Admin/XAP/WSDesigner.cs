@@ -49,7 +49,6 @@ namespace CCFlow.WF.Admin.XAP
             dtFlow.TableName = "WF_Flow";
             myds.Tables.Add(dtFlow);
 
-
             //加入表单树.
             sql = "SELECT No,Name,ParentNo FROM Sys_FormTree ORDER BY Idx ASC,No ASC";
             DataTable dtFormTree = BP.DA.DBAccess.RunSQLReturnTable(sql);

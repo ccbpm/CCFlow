@@ -26,6 +26,9 @@ namespace BP.Sys
         /// 记录日期
         /// </summary>
         public const string RDT = "RDT";
+        /// <summary>
+        /// IP地址
+        /// </summary>
         public const string IP = "IP";
 
     }

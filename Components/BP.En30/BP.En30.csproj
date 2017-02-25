@@ -175,22 +175,28 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Sys\CCFormAPI.cs" />
-    <Compile Include="Sys\CCFormParse.cs" />
+    <Compile Include="Sys\Frm\CCFormAPI.cs" />
+    <Compile Include="Sys\Frm\CCFormParse.cs" />
+    <Compile Include="Sys\Contrast.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
     <Compile Include="Sys\Frm\FrmEventBase.cs" />
-    <Compile Include="Sys\SysFileManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\ToolbarExcel.cs" />
-    <Compile Include="Sys\ToolbarExcelSln.cs" />
+    <Compile Include="Sys\Frm\ToolbarExcel.cs" />
+    <Compile Include="Sys\Frm\ToolbarExcelSln.cs" />
     <Compile Include="Sys\GEEntityExcelFrm.cs" />
     <Compile Include="Sys\GEEntityWordFrm.cs" />
     <Compile Include="Sys\Glo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sys\GloVar.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Sys\PubClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sys\SysFileManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\SystemConfig.cs">
@@ -198,7 +204,7 @@
     </Compile>
     <Compile Include="Sys\ExtContral.cs" />
     <Compile Include="Sys\XML\SQLList.cs" />
-    <Compile Include="Sys\FrmAttachmentExt.cs" />
+    <Compile Include="Sys\Frm\FrmAttachmentExt.cs" />
     <Compile Include="Tools\Cryptography.cs" />
     <Compile Include="Tools\DataSet2Json.cs" />
     <Compile Include="DA\EnumDA.cs" />
@@ -310,30 +316,29 @@
     <Compile Include="Pub\YF.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\GloVar.cs" />
     <Compile Include="Sys\GroupEnsTemplate.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\FrmImgAthDB.cs" />
-    <Compile Include="Sys\M2M.cs">
+    <Compile Include="Sys\Frm\FrmImgAthDB.cs" />
+    <Compile Include="Sys\Frm\M2M.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\FrmEle.cs" />
-    <Compile Include="Sys\FrmEleDB.cs" />
-    <Compile Include="Sys\FrmEvent.cs" />
-    <Compile Include="Sys\FrmReportField.cs" />
-    <Compile Include="Sys\FrmRpt.cs" />
+    <Compile Include="Sys\Frm\FrmEle.cs" />
+    <Compile Include="Sys\Frm\FrmEleDB.cs" />
+    <Compile Include="Sys\Frm\FrmEvent.cs" />
+    <Compile Include="Sys\Frm\FrmReportField.cs" />
+    <Compile Include="Sys\Frm\FrmRpt.cs" />
     <Compile Include="Sys\GETree.cs" />
     <Compile Include="Sys\RptTemplate.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\EnsAppXml.cs" />
     <Compile Include="Sys\EnsAppGroupXml.cs" />
-    <Compile Include="Sys\FieldGroupXml.cs" />
+    <Compile Include="Sys\Frm\FieldGroupXml.cs" />
     <Compile Include="Sys\GEDtl.cs" />
-    <Compile Include="Sys\GroupField.cs" />
-    <Compile Include="Sys\MapData.cs" />
-    <Compile Include="Sys\MapAttr.cs" />
+    <Compile Include="Sys\Frm\GroupField.cs" />
+    <Compile Include="Sys\Frm\MapData.cs" />
+    <Compile Include="Sys\Frm\MapAttr.cs" />
     <Compile Include="En\AttrOfSearch.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -378,25 +383,25 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\GENoName.cs" />
-    <Compile Include="Sys\MapDtl.cs" />
+    <Compile Include="Sys\Frm\MapDtl.cs" />
     <Compile Include="Sys\GEEntity.cs" />
-    <Compile Include="Sys\MapExtXml.cs" />
-    <Compile Include="Sys\MapFrame.cs" />
-    <Compile Include="Sys\MapExt.cs" />
-    <Compile Include="Sys\MapM2M.cs" />
+    <Compile Include="Sys\Frm\MapExtXml.cs" />
+    <Compile Include="Sys\Frm\MapFrame.cs" />
+    <Compile Include="Sys\Frm\MapExt.cs" />
+    <Compile Include="Sys\Frm\MapM2M.cs" />
     <Compile Include="Sys\InputCheckXml.cs" />
     <Compile Include="Sys\ExpFucnXml.cs" />
     <Compile Include="Sys\XML\TBEventXml.cs" />
-    <Compile Include="Sys\FrmLine.cs" />
-    <Compile Include="Sys\FrmLab.cs" />
-    <Compile Include="Sys\FrmLink.cs" />
-    <Compile Include="Sys\FrmRB.cs" />
-    <Compile Include="Sys\FrmImg.cs" />
-    <Compile Include="Sys\FrmAttachment.cs" />
-    <Compile Include="Sys\FrmImgAth.cs" />
-    <Compile Include="Sys\FrmBtn.cs" />
-    <Compile Include="Sys\FrmAttachmentDB.cs" />
-    <Compile Include="Sys\SFTable.cs" />
+    <Compile Include="Sys\Frm\FrmLine.cs" />
+    <Compile Include="Sys\Frm\FrmLab.cs" />
+    <Compile Include="Sys\Frm\FrmLink.cs" />
+    <Compile Include="Sys\Frm\FrmRB.cs" />
+    <Compile Include="Sys\Frm\FrmImg.cs" />
+    <Compile Include="Sys\Frm\FrmAttachment.cs" />
+    <Compile Include="Sys\Frm\FrmImgAth.cs" />
+    <Compile Include="Sys\Frm\FrmBtn.cs" />
+    <Compile Include="Sys\Frm\FrmAttachmentDB.cs" />
+    <Compile Include="Sys\Frm\SFTable.cs" />
     <Compile Include="Sys\XML\RegularExpression.cs" />
     <Compile Include="Sys\XML\RegularExpressionDtl.cs" />
     <Compile Include="Sys\XML\WebConfig.cs" />
@@ -410,7 +415,7 @@
     <Compile Include="Sys\Serial.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\SysEnum.cs">
+    <Compile Include="Sys\Frm\SysEnum.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\UserRegedit.cs">
@@ -431,12 +436,10 @@
     <Compile Include="Sys\XML\GroupTitle.cs" />
     <Compile Include="Sys\SysDocFile.cs" />
     <Compile Include="Sys\XML\GlobalKeyVal.cs" />
-    <Compile Include="Sys\Contrast.cs" />
-    <Compile Include="Sys\SysEnumMain.cs" />
+    <Compile Include="Sys\Frm\SysEnumMain.cs" />
     <Compile Include="Sys\EnCfg.cs" />
     <Compile Include="Sys\UserLog.cs" />
-    <Compile Include="Sys\Domain.cs" />
-    <Compile Include="Sys\SFDBSrc.cs" />
+    <Compile Include="Sys\Frm\SFDBSrc.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

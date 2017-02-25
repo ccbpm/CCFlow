@@ -52,18 +52,18 @@ namespace BP.En
         }
         #endregion
 
-        public static string GetEnFilesUrl(Entity en)
-        {
-            string str = null;
-            SysFileManagers ens = null; // en.HisSysFileManagers;
+        //public static string GetEnFilesUrl(Entity en)
+        //{
+        //    string str = null;
+        //    SysFileManagers ens = null; // en.HisSysFileManagers;
 
-            string path = BP.Sys.Glo.Request.ApplicationPath;
-            foreach (SysFileManager file in ens)
-            {
-                str += "[<a href='" + path + file.MyFilePath + "' target='f" + file.OID + "' >" + file.MyFileName + "</a>]";
-            }
-            return str;
-        }
+        //    string path = BP.Sys.Glo.Request.ApplicationPath;
+        //    foreach (SysFileManager file in ens)
+        //    {
+        //        str += "[<a href='" + path + file.MyFilePath + "' target='f" + file.OID + "' >" + file.MyFileName + "</a>]";
+        //    }
+        //    return str;
+        //}
 
         #region 关于对entity 的处理
 

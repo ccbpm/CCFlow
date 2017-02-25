@@ -14,7 +14,13 @@ namespace BP.Sys
         /// 对比项目
         /// </summary>
         public const string ContrastKey = "ContrastKey";
+        /// <summary>
+        /// KeyVal1
+        /// </summary>
         public const string KeyVal1 = "KeyVal1";
+        /// <summary>
+        /// KeyVal2
+        /// </summary>
         public const string KeyVal2 = "KeyVal2";
         /// <summary>
         /// 分类条件
@@ -24,7 +30,13 @@ namespace BP.Sys
         /// 对比的值
         /// </summary>
         public const string KeyOfNum = "KeyOfNum";
+        /// <summary>
+        /// 分组方式
+        /// </summary>
         public const string GroupWay = "GroupWay";
+        /// <summary>
+        /// 排序
+        /// </summary>
         public const string OrderWay = "OrderWay";
     }
 	/// <summary>
@@ -142,11 +154,12 @@ namespace BP.Sys
                 if (this._enMap != null) 
                     return this._enMap;
 
-                Map map = new Map("Sys_Contrast");
+                Map map = new Map("Sys_UserRegedit");
                 map.EnType = EnType.Sys;
                 map.EnDesc = "对比状态存储";
                 map.DepositaryOfEntity = Depositary.None;
                 map.AddMyPK();
+
                 map.AddTBString(ContrastAttr.ContrastKey, null, "对比项目", false, true, 0, 20, 10);
                 map.AddTBString(ContrastAttr.KeyVal1, null, "KeyVal1", false, true, 0, 20, 10);
                 map.AddTBString(ContrastAttr.KeyVal2, null, "KeyVal2", false, true, 0, 20, 10);

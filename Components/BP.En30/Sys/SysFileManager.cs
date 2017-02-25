@@ -6,8 +6,12 @@ using BP.En;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.OleDb;
+
 namespace BP.Sys
 {
+    /// <summary>
+    /// 文件管理属性
+    /// </summary>
     public class SysFileManagerAttr : EntityNoNameAttr
     {
         /// <summary>
@@ -42,9 +46,21 @@ namespace BP.Sys
         /// 备注
         /// </summary>
         public const string Note = "Note";
+        /// <summary>
+        /// 高度（如果是图片）
+        /// </summary>
         public const string MyFileH = "MyFileH";
+        /// <summary>
+        /// 宽度（如果是图片）
+        /// </summary>
         public const string MyFileW = "MyFileW";
+        /// <summary>
+        /// 文件名称
+        /// </summary>
         public const string MyFileName = "MyFileName";
+        /// <summary>
+        /// 内容
+        /// </summary>
         public const string Doc = "Doc";
         public const string AttrFileName = "AttrFileName";
         public const string AttrFileNo = "AttrFileNo";

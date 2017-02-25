@@ -363,11 +363,11 @@ namespace BP.Sys
 		{
 			get
 			{
-				return this.GetParaString(MapDataAttr.DesignerTool, "SL");
+                return this.GetValStringByKey(MapDataAttr.DesignerTool, "Silverlight");
 			}
 			set
 			{
-				this.SetPara(MapDataAttr.DesignerTool, value);
+				this.SetValByKey(MapDataAttr.DesignerTool, value);
 			}
 		}
 
@@ -1041,7 +1041,10 @@ namespace BP.Sys
 		{
 			get
 			{
-				return this.GetBigTextFromDB("FormJson");
+				string str= this.GetBigTextFromDB("FormJson");
+                if (str == null)
+                    return "";
+                return str;
 			}
 			set
 			{
@@ -1502,6 +1505,8 @@ namespace BP.Sys
 				map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", true, true);
 				map.AddTBString(MapDataAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 				map.AddTBString(MapDataAttr.Ver, null, "版本号", true, false, 0, 30, 20);
+                map.AddTBString(MapDataAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
+
 
 				//增加参数字段.
 				map.AddTBAtParas(4000);

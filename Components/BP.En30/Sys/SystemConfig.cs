@@ -78,7 +78,6 @@ namespace BP.Sys
         /// </summary>
         Open
     }
-
     /// <summary>
     /// 系统配值
     /// </summary>

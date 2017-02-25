@@ -32,7 +32,7 @@ namespace CCFlow.WF.CCForm
 		[WebMethod]
 		public bool GenerExcelFile(string userNo, string sid, string frmID, int oid, ref byte[] bytes)
 		{
-            BP.WF.Dev2Interface.Port_Login(userNo);
+			BP.WF.Dev2Interface.Port_Login(userNo);
 
 			MapData md = new MapData(frmID);
 			return md.ExcelGenerFile(oid, ref bytes);
@@ -48,8 +48,8 @@ namespace CCFlow.WF.CCForm
 		[WebMethod]
 		public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid)
 		{
-            //让他登录.
-            BP.WF.Dev2Interface.Port_Login(userNo);
+			//让他登录.
+			BP.WF.Dev2Interface.Port_Login(userNo);
 
 			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid);
 		}
@@ -59,168 +59,169 @@ namespace CCFlow.WF.CCForm
 		/// <param name="userNo">用户编号</param>
 		/// <param name="sid">SID</param>
 		/// <param name="frmID">表单编号</param>
-		/// <param name="oid">主键</param>
-		/// <param name="mainTableAtParas">主表参数</param>
-		/// <param name="dsDtls">从表参数</param>
+		/// <param name="mainEnPKOID">主键（OID）</param>
+		/// <param name="mainTableAtParas">主表数据（"@KeyOfEn=value@..."）</param>
+		/// <param name="dsDtlsChange">从表数据（新）</param>
+		/// <param name="dsDtlsOld">从表数据（原始）</param>
 		/// <param name="byt">文件流</param>
-        [WebMethod]
-        public void SaveExcelFile(string userNo, string sid, string frmID, int mainEnPKOID, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
-        {
-            //执行登录.
-            BP.WF.Dev2Interface.Port_Login(userNo);
+		[WebMethod]
+		public void SaveExcelFile(string userNo, string sid, string frmID, int mainEnPKOID, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
+		{
+			//执行登录.
+			BP.WF.Dev2Interface.Port_Login(userNo);
 
-            //执行保存文件.
-            MapData md = new MapData(frmID);
-            md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到数据库里.
+			//执行保存文件.
+			MapData md = new MapData(frmID);
+			md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到数据库里.
 
-            //保存主表数据.
-            GEEntity wk = new GEEntity(frmID, mainEnPKOID);
-            wk.ResetDefaultVal();
+			//保存主表数据.
+			GEEntity wk = new GEEntity(frmID, mainEnPKOID);
+			wk.ResetDefaultVal();
 
-            if (mainTableAtParas != null)
-            {
-                AtPara ap = new AtPara(mainTableAtParas);
-                foreach (string str in ap.HisHT.Keys)
-                {
-                    if (wk.Row.ContainsKey(str))
-                        wk.SetValByKey(str, ap.GetValStrByKey(str));
-                    else
-                        wk.Row.Add(str, ap.GetValStrByKey(str));
-                }
-            }
+			if (mainTableAtParas != null)
+			{
+				AtPara ap = new AtPara(mainTableAtParas);
+				foreach (string str in ap.HisHT.Keys)
+				{
+					if (wk.Row.ContainsKey(str))
+						wk.SetValByKey(str, ap.GetValStrByKey(str));
+					else
+						wk.Row.Add(str, ap.GetValStrByKey(str));
+				}
+			}
 
-            wk.OID = mainEnPKOID;
-            wk.Save();
+			wk.OID = mainEnPKOID;
+			wk.Save();
 
-            if (dsDtlsChange == null)
-                return;
+			if (dsDtlsChange == null)
+				return;
 
-            #region 保存从表
-            //明细集合.
-            MapDtls dtls = new MapDtls(frmID);
+			#region 保存从表
+			//明细集合.
+			MapDtls dtls = new MapDtls(frmID);
 
-            //保存从表
-            foreach (System.Data.DataTable dt in dsDtlsChange.Tables)
-            {
-                foreach (MapDtl dtl in dtls)
-                {
-                    if (dt.TableName != dtl.No)
-                        continue;
-
-
-#region 根据原始数据,与当前数据求出已经删除的oids .
-                    DataTable dtDtlOld = dsDtlsOld.Tables[dtl.No]; // ???
-                    foreach (DataRow dr in dtDtlOld.Rows)
-                    {
-                        string oidOld = dr["OID"].ToString();
-
-                        bool isHave = false;
-                        //遍历变更的数据.
-                        foreach (DataRow dtNew in dt.Rows)
-                        {
-                            string oidNew = dtNew["OID"].ToString();
-                            if (oidOld == oidNew)
-                            {
-                                isHave = true;
-                                break;
-                            }
-                        }
-
-                        //如果不存在.
-                        if (isHave == false)
-                            DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE OID=" + oidOld);
-                    }
-#endregion 根据原始数据,与当前数据求出已经删除的oids .
-                     
-
-                    //获取dtls
-                    GEDtls daDtls = new GEDtls(dtl.No);
-
-                    // 更新数据.
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-                        daDtl.RefPK = mainEnPKOID.ToString();
-
-                        //明细列.
-                        foreach (DataColumn dc in dt.Columns)
-                        {
-                            //设置属性.
-                            daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
-                        }
-
-                        if (daDtl.OID > 100)
-                            daDtl.RetrieveFromDBSources();
+			//保存从表
+			foreach (System.Data.DataTable dt in dsDtlsChange.Tables)
+			{
+				foreach (MapDtl dtl in dtls)
+				{
+					if (dt.TableName != dtl.No)
+						continue;
 
 
-                        daDtl.ResetDefaultVal();
+					#region 根据原始数据,与当前数据求出已经删除的oids .
+					DataTable dtDtlOld = dsDtlsOld.Tables[dtl.No]; // ???
+					foreach (DataRow dr in dtDtlOld.Rows)
+					{
+						string oidOld = dr["OID"].ToString();
 
-                        daDtl.RefPK = mainEnPKOID.ToString();
-                        daDtl.RDT = DataType.CurrentDataTime;
+						bool isHave = false;
+						//遍历变更的数据.
+						foreach (DataRow dtNew in dt.Rows)
+						{
+							string oidNew = dtNew["OID"].ToString();
+							if (oidOld == oidNew)
+							{
+								isHave = true;
+								break;
+							}
+						}
 
-                        //执行保存.
-                        if (daDtl.OID > 100)
-                            daDtl.Update(); //插入数据.
-                        else
-                            daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
-                    }
-                }
-            }
-            #endregion 保存从表结束
+						//如果不存在.
+						if (isHave == false)
+							DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE OID=" + oidOld);
+					}
+					#endregion 根据原始数据,与当前数据求出已经删除的oids .
 
 
-            //缺少表单保存后的方法.
+					//获取dtls
+					GEDtls daDtls = new GEDtls(dtl.No);
 
-        }
+					// 更新数据.
+					foreach (DataRow dr in dt.Rows)
+					{
+						GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
+						daDtl.RefPK = mainEnPKOID.ToString();
 
-        /// <summary>
-        /// 级联接口
-        /// </summary>
-        /// <param name="userNo">用户</param>
-        /// <param name="sid">安全校验码</param>
-        /// <param name="mainEnPK">表单主键值</param>
-        /// <param name="mapExtMyPK">逻辑逐渐值</param>
-        /// <param name="cheaneKey">变动的key(一定是编号)</param>
-        /// <param name="paras">@Key=Val@Key1=Val1@Key2=Val2</param>
-        /// <returns>查询的要填充数据</returns>
-        [WebMethod]
-        public DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, int mainEnPK, string mapExtMyPK, string cheaneKey, 
-            string paras)
-        {
-            BP.WF.Dev2Interface.Port_Login(userNo);
+						//明细列.
+						foreach (DataColumn dc in dt.Columns)
+						{
+							//设置属性.
+							daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
+						}
 
-            MapExt me = new MapExt(mapExtMyPK);
+						if (daDtl.OID > 100)
+							daDtl.RetrieveFromDBSources();
 
-            string sql = me.DocOfSQLDeal.Clone() as string;
-            sql = sql.Replace("@Key", cheaneKey);
-            sql = sql.Replace("@key", cheaneKey);
-            sql = sql.Replace("@Val", cheaneKey);
-            sql = sql.Replace("@val", cheaneKey);
 
-            sql = sql.Replace("@WebUser.No", WebUser.No);
-            sql = sql.Replace("@WebUser.Name", WebUser.Name);
-            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+						daDtl.ResetDefaultVal();
 
-            sql = sql.Replace("@OID", mainEnPK.ToString());
-            sql = sql.Replace("@WorkID", mainEnPK.ToString());
+						daDtl.RefPK = mainEnPKOID.ToString();
+						daDtl.RDT = DataType.CurrentDataTime;
 
-            if (sql.Contains("@") == true)
-            {
-                string[] strs = paras.Split('@');
-                foreach (string s in strs)
-                {
-                    if (string.IsNullOrEmpty(s)
-                        || s.Contains("=") == false)
-                        continue;
+						//执行保存.
+						if (daDtl.OID > 100)
+							daDtl.Update(); //插入数据.
+						else
+							daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
+					}
+				}
+			}
+			#endregion 保存从表结束
 
-                    string[] mykv = s.Split('=');
-                    sql = sql.Replace("@" + mykv[0], mykv[1]);
 
-                    if (sql.Contains("@") == false)
-                        break;
-                }
-            }
-            return BP.DA.DBAccess.RunSQLReturnTable(sql);
-        }
+			//缺少表单保存后的方法.
+
+		}
+
+		/// <summary>
+		/// 级联接口
+		/// </summary>
+		/// <param name="userNo">用户</param>
+		/// <param name="sid">安全校验码</param>
+		/// <param name="mainEnPK">表单主键值</param>
+		/// <param name="mapExtMyPK">逻辑逐渐值</param>
+		/// <param name="cheaneKey">变动的key(一定是编号)</param>
+		/// <param name="paras">@Key=Val@Key1=Val1@Key2=Val2</param>
+		/// <returns>查询的要填充数据</returns>
+		[WebMethod]
+		public DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, int mainEnPK, string mapExtMyPK, string cheaneKey,
+			string paras)
+		{
+			BP.WF.Dev2Interface.Port_Login(userNo);
+
+			MapExt me = new MapExt(mapExtMyPK);
+
+			string sql = me.DocOfSQLDeal.Clone() as string;
+			sql = sql.Replace("@Key", cheaneKey);
+			sql = sql.Replace("@key", cheaneKey);
+			sql = sql.Replace("@Val", cheaneKey);
+			sql = sql.Replace("@val", cheaneKey);
+
+			sql = sql.Replace("@WebUser.No", WebUser.No);
+			sql = sql.Replace("@WebUser.Name", WebUser.Name);
+			sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+			sql = sql.Replace("@OID", mainEnPK.ToString());
+			sql = sql.Replace("@WorkID", mainEnPK.ToString());
+
+			if (sql.Contains("@") == true)
+			{
+				string[] strs = paras.Split('@');
+				foreach (string s in strs)
+				{
+					if (string.IsNullOrEmpty(s)
+						|| s.Contains("=") == false)
+						continue;
+
+					string[] mykv = s.Split('=');
+					sql = sql.Replace("@" + mykv[0], mykv[1]);
+
+					if (sql.Contains("@") == false)
+						break;
+				}
+			}
+			return BP.DA.DBAccess.RunSQLReturnTable(sql);
+		}
 	}
 }

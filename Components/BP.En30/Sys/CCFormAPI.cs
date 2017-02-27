@@ -1155,14 +1155,9 @@ namespace BP.Sys
                 if (s.Length > 0)
                 {
                     //去除开头数字
-                    int iHead = 0;
                     string headStr = s.Substring(0, 1);
-                    while (int.TryParse(headStr, out iHead) == true)
-                    {
-                        //替换为空
-                        s = s.Substring(1);
-                        if (s.Length > 0) headStr = s.Substring(0, 1);
-                    }
+                    if (DataType.IsNumStr(headStr) == true)
+                        s = "F" + s;
                 }
                 //去掉空格，去掉点.
                 s = s.Replace(" ", "");

@@ -123,7 +123,7 @@ namespace BP.En
                     ht.Add(key, ap.HisHT[key]);
                 }
             }
-            return BP.Tools.Json.ToJson(ht,false);
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
 
         /// <summary>

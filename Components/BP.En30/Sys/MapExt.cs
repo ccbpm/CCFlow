@@ -166,7 +166,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string PopValToJson()
         {
-            return BP.Tools.Json.ToJson(this.PopValToHashtable(),false);
+            return BP.Tools.Json.ToJsonEntityModel(this.PopValToHashtable());
         }
         public Hashtable PopValToHashtable()
         {

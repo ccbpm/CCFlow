@@ -22,9 +22,10 @@ namespace BP.Tools
         /// </summary>
         /// <param name="ht"></param>
         /// <returns></returns>
-        public static string Hastable2Json(Hashtable ht)
+        public static string Hastable2Json_del(Hashtable ht)
         {
-            return ToJson(ht, false);
+            return ToJsonEntityModel(ht);
+            //return ToJson(ht, false);
         }
         /// <summary>
         /// 把一个json转化一个datatable
@@ -304,15 +305,43 @@ namespace BP.Tools
             return str;
         }
         /// <summary>
+        /// 把Ht转换成Entity模式.
+        /// </summary>
+        /// <param name="ht"></param>
+        /// <returns></returns>
+        public static string ToJsonEntityModel(Hashtable ht)
+        {
+            string strs = "{";
+            foreach (string key in ht.Keys)
+            {
+                strs += "\"" + key + "\":\"" + ht[key] + "\",";
+            }
+            strs += "\"OutEnd\":\"无效参数请忽略\"";
+            strs += "}";
+            strs = TranJsonStr(strs);
+            return strs;
+        }
+        public static string ToJsonEntitiesNoNameModel(Hashtable ht)
+        {
+            string strs = "{";
+            foreach (string key in ht.Keys)
+            {
+                strs += "\"" + key + "\":\"" + ht[key] + "\",";
+            }
+            strs += "\"OutEnd\":\"无效参数请忽略\"";
+            strs += "}";
+            strs = TranJsonStr(strs);
+            return strs;
+        }
+        /// <summary>
         /// 转化成Json.
         /// </summary>
         /// <param name="ht">Hashtable</param>
         /// <param name="isNoNameFormat">是否编号名称格式</param>
         /// <returns></returns>
-        public static string ToJson(Hashtable ht, bool isNoNameFormat)
+        public static string ToJson(Hashtable ht)
         {
-
-
+            bool isNoNameFormat = false;
             if (isNoNameFormat == true)
             {
                 /*如果是datatable 模式. */
@@ -336,15 +365,15 @@ namespace BP.Tools
                 }
                 return ToJson(dt);
             }
-
-            else {
+            else
+            {
                 DataTable dt = new DataTable();
                 foreach (string key in ht.Keys)
                 {
                     dt.Columns.Add(key);
                 }
 
-                List<object> l=new List<object> ();
+                List<object> l = new List<object>();
                 foreach (string key in ht.Keys)
                 {
                     l.Add(ht[key]);
@@ -352,18 +381,7 @@ namespace BP.Tools
                 dt.Rows.Add(l.ToArray());
                 return ToJson(dt);
             }
-
-            string strs = "{";
-            foreach (string key in ht.Keys)
-            {
-                strs += "\"" + key + "\":\"" + ht[key] + "\",";
-            }
-            strs += "\"OutEnd\":\"无效参数请忽略\"";
-            strs += "}";
-            strs = TranJsonStr(strs);
-            return strs;
         }
-        
         /// <summary>
         /// Datatable转换为Json
         /// </summary>

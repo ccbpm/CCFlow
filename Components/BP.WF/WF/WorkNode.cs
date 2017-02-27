@@ -534,7 +534,10 @@ namespace BP.WF
 
                 wl.FK_Emp = dt.Rows[0][0].ToString();
 
-                Emp emp = new Emp(wl.FK_Emp);
+                Emp emp = new Emp();
+                emp.No = wl.FK_Emp;
+                if (emp.RetrieveFromDBSources() == 0)
+                    throw new Exception("@接收人规则设置错误，求出来的接收人["+wl.FK_Emp+"]不存在或者被停用。");
 
                 wl.FK_EmpText = emp.Name;
                 wl.FK_Dept = emp.FK_Dept;

@@ -3858,10 +3858,9 @@ namespace BP.WF
                     continue;
 
                 string[] mystr = str.Split(',');
-                empids += str + ",";
+                empids += mystr[0] + ",";
             }
             ch.GroupEmps = empids;
-
 
             // mypk.
             ch.MyPK = nd.NodeID + "_" + workid + "_" + fid + "_" + WebUser.No;
@@ -3952,6 +3951,7 @@ namespace BP.WF
                     default:
                         break;
                 }
+
                 ps.Add("WorkID", workid);
                 ps.Add("FK_Emp", WebUser.No);
                 ps.Add("FK_Node", nd.NodeID);

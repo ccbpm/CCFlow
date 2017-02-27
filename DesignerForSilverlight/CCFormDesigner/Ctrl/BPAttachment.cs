@@ -40,16 +40,14 @@ namespace CCForm
         /// </summary>
         public bool IsUpload = true;
         /// <summary>
-        /// 是否可以删除
-        /// </summary>
-        public bool IsDelete = true;
-        /// <summary>
         /// 是否可以下载
         /// </summary>
         public bool IsDownload = true;
         public string Label = "";
-
-
+        /// <summary>
+        /// 删除规则
+        /// </summary>
+        public AthDeleteWay DeleteWay;
 
         /// <summary>
         /// Exts

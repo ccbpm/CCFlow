@@ -26,7 +26,7 @@ namespace CCForm
             this.TB_Name.Text = ment.Label;
             this.TB_Exts.Text = ment.Exts;
             this.TB_SaveTo.Text = ment.SaveTo;
-            this.CB_IsDelete.IsChecked = ment.IsDelete;
+            this.cmbDeleteWay.SelectedIndex = (int)ment.DeleteWay;
             this.CB_IsDownload.IsChecked = ment.IsDownload;
             this.CB_IsUpload.IsChecked = ment.IsUpload;
         }
@@ -55,11 +55,7 @@ namespace CCForm
             vals += "@SaveTo=" + this.TB_SaveTo.Text.Trim();
             vals += "@X=" +this.HisBPAttachment.X;
             vals += "@Y=" + this.HisBPAttachment.Y;
-
-            if (this.CB_IsDelete.IsChecked == true)
-                vals += "@IsDelete=1";
-            else
-                vals += "@IsDelete=0";
+            vals += "@DeleteWay=" + this.cmbDeleteWay.SelectedIndex;
 
             if (this.CB_IsDownload.IsChecked == true)
                 vals += "@IsDownload=1";
@@ -90,7 +86,7 @@ namespace CCForm
 
             this.HisBPAttachment.Label = this.TB_Name.Text;
             this.HisBPAttachment.Exts = this.TB_Exts.Text;
-            this.HisBPAttachment.IsDelete = (bool)this.CB_IsDelete.IsChecked;
+            this.HisBPAttachment.DeleteWay = (AthDeleteWay)this.cmbDeleteWay.SelectedIndex;
             this.HisBPAttachment.IsDownload = (bool)this.CB_IsDownload.IsChecked;
             this.HisBPAttachment.IsUpload = (bool)this.CB_IsUpload.IsChecked;
             this.HisBPAttachment.SaveTo = this.TB_SaveTo.Text;

@@ -646,7 +646,7 @@ namespace CCForm
                     atthMy.X = Glo.X;
                     atthMy.Y = Glo.Y;
                     atthMy.IsUpload = (bool)this.winSelectAttachment.CB_IsUpload.IsChecked;
-                    atthMy.IsDelete = (bool)this.winSelectAttachment.CB_IsDelete.IsChecked;
+                    atthMy.DeleteWay = (AthDeleteWay) this.winSelectAttachment.cmbDeleteWay.SelectedIndex;
                     atthMy.IsDownload = (bool)this.winSelectAttachment.CB_IsDownload.IsChecked;
 
                     this.attachElementEvent(atthMy);
@@ -1571,7 +1571,7 @@ namespace CCForm
                                             ath.Y = dr["Y"];
 
                                             ath.IsUpload = dr["ISUPLOAD"] == 1 ? true : false;
-                                            ath.IsDelete = dr["ISDELETE"] == 1 ? true : false;
+                                            ath.DeleteWay = (AthDeleteWay) (int)dr["DELETEWAY"];
                                             ath.IsDownload = dr["ISDOWNLOAD"] == 1 ? true : false;
 
                                             attachElementEvent(ath);
@@ -3531,7 +3531,7 @@ namespace CCForm
 
                         break;
                     case ToolBox.Attachment:  // 附件
-                        BPAttachment bpAth = new BPAttachment() { X = Glo.X, Y = Glo.Y };
+                        BPAttachment bpAth = new BPAttachment() { X = Glo.X, Y = Glo.Y, DeleteWay = AthDeleteWay.DeleteSelf };
                         Glo.currEle = bpAth;
                         this.winSelectAttachment.BindIt(bpAth);
                         this.winSelectAttachment.Show();
@@ -3547,7 +3547,7 @@ namespace CCForm
                         myAthM.Name = name;
                         myAthM.Label = "";
                         myAthM.SaveTo = @"/DataUser/UploadFile/";
-                        myAthM.IsDelete = true;
+                        myAthM.DeleteWay = AthDeleteWay.DeleteSelf;
                         myAthM.IsDownload = true;
                         myAthM.IsUpload = true;
 

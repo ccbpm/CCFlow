@@ -6,13 +6,33 @@ using System.Windows.Media;
 
 namespace CCForm
 {
+    /// <summary>
+    /// 删除归则
+    /// </summary>
+    public enum AthDeleteWay
+    {
+        /// <summary>
+        /// 0=不能删除
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 1=删除所有
+        /// </summary>
+        DeleteAll = 1,
+        /// <summary>
+        /// 2=只能删除自己上传的
+        /// </summary>
+        DeleteSelf = 2
+    }
+
     public class BPAttachmentM : UCExt, IDelete
     {
+
         public string Label = null;
         public string SaveTo = null;
-        public bool IsDelete = false;
         public bool IsDownload = false;
         public bool IsUpload = false;
+        public AthDeleteWay DeleteWay;
 
         public BPAttachmentM()
         {
@@ -93,14 +113,14 @@ namespace CCForm
             string sql = "DELETE FROM Sys_FrmAttachment WHERE NoOfObj='" + this.Name + "' AND FK_MapData='" + Glo.FK_MapData + "'";
             FF.CCFormSoapClient da = Glo.GetCCFormSoapClientServiceInstance();
             da.RunSQLAsync(sql, Glo.UserNo, Glo.SID);
-            da.RunSQLCompleted += (object sender, FF.RunSQLCompletedEventArgs e)=>
+            da.RunSQLCompleted += (object sender, FF.RunSQLCompletedEventArgs e) =>
             {
                 if (e.Result != 1)
                     return;
                 Glo.Remove(this);
             };
         }
-     
+
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             TrackingMouseMove = true;
@@ -115,6 +135,6 @@ namespace CCForm
         public void HidIt()
         {
             this.Visibility = System.Windows.Visibility.Collapsed;
-        }      
+        }
     }
 }

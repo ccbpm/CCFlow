@@ -121,6 +121,11 @@ namespace CCFlow.WF.Comm.RefFunc
             bool isFJ = false;
             if (attrs.Contains("MyFileName"))
                 isFJ = true;
+            //是否打开卡片.
+            bool isOpenCard = false;
+            if (attrs.Count > 12)
+                isOpenCard = true;
+
 
             this.ucsys1.AddTable("class='Table' cellSpacing='1' cellPadding='1' border='1' style='width:100%'");
             this.ucsys1.AddTR();
@@ -132,13 +137,13 @@ namespace CCFlow.WF.Comm.RefFunc
             {
                 if (attr.UIVisible == false)
                     continue;
-
                 this.ucsys1.AddTDTitle(attr.Desc);
             }
 
             if (isFJ)
                 this.ucsys1.AddTDTitle();
-
+            if (isOpenCard)
+                this.ucsys1.AddTDTitle();
             this.ucsys1.AddTREnd();
 
             #endregion 生成标题
@@ -299,6 +304,9 @@ namespace CCFlow.WF.Comm.RefFunc
                     if (ext != "")
                         this.ucsys1.AddTD("<img src='../Images/FileType/" + ext + ".gif' border=0/>" + dtl.GetValStrByKey("MyFileName"));
                 }
+                if (isOpenCard)
+                    this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.LI.ZhiBiaoFXFF&PK=" + dtl.PKVal + "')\" >详细</a>");
+
                 this.ucsys1.AddTREnd();
             }
             #region 生成合计

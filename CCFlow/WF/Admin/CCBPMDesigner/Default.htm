@@ -207,8 +207,12 @@
                 dataType: 'html',
                 success: function (data) {
 
+                    alert(data);
+
                     if (data.indexOf('err@') == 0) {
+
                         alert(data);
+
                         return;
                     }
 
@@ -227,7 +231,7 @@
 
                 }
             });
-            
+
             var content = createFrame('Welcome.htm');
             $('#tabs').tabs('add', {
                 title: '首页',

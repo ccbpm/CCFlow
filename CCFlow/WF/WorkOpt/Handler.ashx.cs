@@ -369,7 +369,7 @@ namespace CCFlow.WF.WorkOpt
                 ht.Add("IsGroup", "0");
 
             //返回流程标题.
-            return BP.Tools.Json.ToJson(ht, false);
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
         /// <summary>
         /// 选择部门呈现信息.
@@ -494,7 +494,7 @@ namespace CCFlow.WF.WorkOpt
             else
                 ht.Add("ThreadIsCanShift", "0");
 
-            return BP.Tools.Json.ToJson(ht, false);
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
         /// <summary>
         /// 保存
@@ -587,10 +587,10 @@ namespace CCFlow.WF.WorkOpt
             ht.Add("Url", nd.FormUrl + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node);
 
             if (nd.FormType == NodeFormType.SDKForm)
-                return BP.Tools.Json.ToJson(ht, false);
+                return BP.Tools.Json.ToJsonEntityModel(ht);
 
             if (nd.FormType == NodeFormType.SelfForm)
-                return BP.Tools.Json.ToJson(ht, false);
+                return BP.Tools.Json.ToJsonEntityModel(ht);
 
             //表单模版.
             DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID, true);

@@ -17,7 +17,7 @@ namespace CCFlow.WF
     /// </summary>
     public class Handler : IHttpHandler
     {
-        #region 执行.
+        #region 公共的属性，方法变量。
         public HttpContext context = null;
         /// <summary>
         /// 节点编号
@@ -85,55 +85,6 @@ namespace CCFlow.WF
             }
         }
         /// <summary>
-        /// 枚举值
-        /// </summary>
-        public string EnumKey
-        {
-            get
-            {
-                string str = context.Request.QueryString["EnumKey"];
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        /// <summary>
-        /// 实体 EnsName
-        /// </summary>
-        public string EnsName
-        {
-            get
-            {
-                string str = context.Request.QueryString["EnsName"];
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        public string SFTable
-        {
-            get
-            {
-                string str = context.Request.QueryString["SFTable"];
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        /// <summary>
-        /// 表单外键
-        /// </summary>
-        public string FK_MapData
-        {
-            get
-            {
-                string str = context.Request.QueryString["FK_MapData"];
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        /// <summary>
         /// 获得表单的属性.
         /// </summary>
         /// <param name="key"></param>
@@ -168,6 +119,11 @@ namespace CCFlow.WF
         }
         #endregion 执行.
 
+        #region 入口函数.
+        /// <summary>
+        /// 入口函数
+        /// </summary>
+        /// <param name="mycontext"></param>
         public void ProcessRequest(HttpContext mycontext)
         {
             context = mycontext;
@@ -221,10 +177,19 @@ namespace CCFlow.WF
             {
                 msg = "err@" + ex.Message;
             }
-
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
         }
+        public bool IsReusable
+        {
+            get
+            {
+                return false;
+            }
+        }
+        #endregion 入口函数.
+
+        #region 获得列表. 
         /// <summary>
         /// 运行
         /// </summary>
@@ -271,6 +236,7 @@ namespace CCFlow.WF
             dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(UserNo, FK_Node);
             return BP.Tools.Json.ToJson(dt);
         }
+        #endregion 获得列表.
 
         #region 登录相关.
         /// <summary>
@@ -291,7 +257,7 @@ namespace CCFlow.WF
             else
                 ht.Add("Auth", "");
 
-            return BP.Tools.Json.ToJson(ht, false);
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
         /// <summary>
         /// 执行登录.
@@ -325,6 +291,12 @@ namespace CCFlow.WF
             BP.Web.WebUser.SignInOfGener(emp1,"CH",false,false,BP.Web.WebUser.No,BP.Web.WebUser.Name);
             return "success@授权登录成功！";
         }
+        /// <summary>
+        /// 退出登录
+        /// </summary>
+        /// <param name="UserNo"></param>
+        /// <param name="Author"></param>
+        /// <returns></returns>
         public string AuthExitAndLogin(string UserNo,string Author)
         {
             string msg = "suess@退出成功！";
@@ -343,38 +315,31 @@ namespace CCFlow.WF
             }
             return msg;
         }
-        #endregion 登录相关.
-
-        /// <summary>
-        /// 当前登陆人是否有授权
-        /// </summary>
-        /// <returns></returns>
-        public string IsHaveAuthor()
-        {
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='"+BP.Web.WebUser.No+"'");
-            WFEmp em = new WFEmp();
-            em.Retrieve(WFEmpAttr.Author, BP.Web.WebUser.No);
-
-            if (dt.Rows.Count > 0 && BP.Web.WebUser.IsAuthorize==false)
-                return "suess@有授权";
-            else
-                return "err@没有授权";
-        }
         /// <summary>
         /// 获取授权人列表
         /// </summary>
         /// <returns></returns>
         public string LoadAuthor()
         {
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='"+BP.Web.WebUser.No+"'");
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + BP.Web.WebUser.No + "'");
             return BP.Tools.Json.ToJson(dt);
         }
-        public bool IsReusable
+        /// <summary>
+        /// 当前登陆人是否有授权
+        /// </summary>
+        /// <returns></returns>
+        public string IsHaveAuthor()
         {
-            get
-            {
-                return false;
-            }
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + BP.Web.WebUser.No + "'");
+            WFEmp em = new WFEmp();
+            em.Retrieve(WFEmpAttr.Author, BP.Web.WebUser.No);
+
+            if (dt.Rows.Count > 0 && BP.Web.WebUser.IsAuthorize == false)
+                return "suess@有授权";
+            else
+                return "err@没有授权";
         }
+        #endregion 登录相关.
+      
     }
 }

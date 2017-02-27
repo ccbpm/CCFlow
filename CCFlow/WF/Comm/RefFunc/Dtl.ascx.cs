@@ -119,9 +119,16 @@ namespace CCFlow.WF.Comm.RefFunc
             Entity en = this.HisEn;
             Map map = this.HisEn.EnMap;
             Attrs attrs = map.Attrs;
+
+            //是否打开附件？
             bool isFJ = false;
             if (attrs.Contains("MyFileName"))
                 isFJ = true;
+
+            //是否打开卡片.
+            bool isOpenCard = false;
+            if (attrs.Count > 12)
+                isOpenCard = true;
 
             this.ucsys1.AddTable();
             this.ucsys1.AddTR();
@@ -137,6 +144,8 @@ namespace CCFlow.WF.Comm.RefFunc
                 this.ucsys1.AddTDTitle(attr.Desc);
             }
             if (isFJ)
+                this.ucsys1.AddTDTitle();
+            if (isOpenCard)
                 this.ucsys1.AddTDTitle();
 
             this.ucsys1.AddTREnd();
@@ -162,6 +171,7 @@ namespace CCFlow.WF.Comm.RefFunc
                 return;
             }
             #endregion 生成翻页
+
             UAC uac = en.HisUAC;
             if (uac.IsDelete == false)
                 this.ToolBar1.GetBtnByID(NamesOfBtn.Delete).Enabled = false;
@@ -297,8 +307,13 @@ namespace CCFlow.WF.Comm.RefFunc
                     if (ext != "")
                         this.ucsys1.AddTD("<img src='../Images/FileType/" + ext + ".gif' border=0/>" + dtl.GetValStrByKey("MyFileName"));
                 }
+
+                if (isOpenCard)
+                    this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.LI.ZhiBiaoFXFF&PK=" + dtl.PKVal + "')\" >打开</a>");
+
                 this.ucsys1.AddTREnd();
             }
+
             #region 生成合计
             //this.ucsys1.AddTRSum();
             //this.ucsys1.AddTD("colspan=2", "合计");
@@ -343,6 +358,7 @@ namespace CCFlow.WF.Comm.RefFunc
             #endregion 生成合计
 
             #endregion 生成数据
+
             this.ucsys1.AddTableEnd();
         }
         public void Save(bool isclose)

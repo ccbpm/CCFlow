@@ -293,7 +293,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner.App
             int runningFlowOverTime = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
             ht.Add("runningFlowOverTime", runningFlowOverTime);
 
-            return  BP.Tools.Json.ToJson(ht,false);
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
 
         public bool IsReusable

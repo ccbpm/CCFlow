@@ -345,48 +345,8 @@ namespace BP.Web
         [WebMethod]
         public string ParseStringToPinyin(string name, bool flag)
         {
-            string s = string.Empty; ;
-            try
-            {
-                if (flag)
-                {
-                    s = BP.DA.DataType.ParseStringToPinyin(name);
-                    if (s.Length > 15)
-                        s = BP.DA.DataType.ParseStringToPinyinWordFirst(name);
-                }
-                else
-                {
-                    s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
-                }
-
-                s = s.Trim().Replace(" ", "");
-                s = s.Trim().Replace(" ", "");
-
-                //常见符号
-                s = s.Replace(",", "").Replace(".", "").Replace("，", "").Replace("。", "").Replace("!", "").Replace("？", "").Replace("?", "");
-                s = s.Replace("*", "").Replace("@", "").Replace("#", "").Replace("~", "").Replace("|", "");
-                s = s.Replace("$", "").Replace("%", "").Replace("&", "").Replace("（", "").Replace("）", "").Replace("【", "").Replace("】", "");
-                s = s.Replace("(", "").Replace(")", "").Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "").Replace("/", "");
-                if (s.Length > 0)
-                {
-                    //去除开头数字
-                    int iHead = 0;
-                    string headStr = s.Substring(0, 1);
-                    while (int.TryParse(headStr, out iHead) == true)
-                    {
-                        //替换为空
-                        s = s.Substring(1);
-                        if (s.Length > 0) headStr = s.Substring(0, 1);
-                    }
-                }
-                return s;
-            }
-            catch
-            {
-                return null;
-            }
+            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, flag);
         }
-
         private string DealPK(string pk, string fromMapdata, string toMapdata)
         {
             if (pk.Contains("*" + fromMapdata))

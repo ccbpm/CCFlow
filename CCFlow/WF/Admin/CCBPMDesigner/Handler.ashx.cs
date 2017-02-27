@@ -556,7 +556,7 @@ namespace CCFlow.WF.Admin.CCBPMDesigner
          
 
             //生成Json.
-            return BP.Tools.Json.ToJson(ht, false);
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
 
         public string Login()

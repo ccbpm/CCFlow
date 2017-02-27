@@ -32,7 +32,7 @@ namespace BP.Excel
 						return dr["No"].ToString();
 				}
 			}
-			return ""; //TODO: 是否返回原value值?
+			return ""; //TODO: 返回 string.Empty or 原值?
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace BP.Excel
 						return dr["Name"].ToString();
 				}
 			}
-			return ""; //TODO: 是否返回原key值?
+			return key; //TODO: 返回 string.Empty or 原值?
 		}
 
 		#region 参数.

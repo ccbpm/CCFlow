@@ -1629,7 +1629,7 @@ namespace BP.Sys
         /// <returns></returns>
         protected override bool beforeDelete()
         {
-            string sqls = "DELETE FROM Sys_MapExt WHERE (AttrOfOper='" + this.KeyOfEn + "' OR AttrsOfActive='" + this.KeyOfEn + "' ) AND (FK_MapData='')";
+            string sqls = "DELETE FROM Sys_MapExt WHERE (AttrOfOper='" + this.KeyOfEn + "' OR AttrsOfActive='" + this.KeyOfEn + "' ) AND (FK_MapData='" + this.FK_MapData + "')";
             //删除权限管理字段.
             sqls += "@DELETE FROM Sys_FrmSln WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
 

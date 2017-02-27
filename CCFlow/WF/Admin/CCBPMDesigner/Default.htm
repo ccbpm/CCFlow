@@ -207,12 +207,8 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    alert(data);
-
                     if (data.indexOf('err@') == 0) {
-
                         alert(data);
-
                         return;
                     }
 
@@ -225,10 +221,8 @@
 
                     var msg = data.Msg;
                     osModel = data.OSModel;
-
                     if (msg != "")
                         alert(msg);
-
                 }
             });
 

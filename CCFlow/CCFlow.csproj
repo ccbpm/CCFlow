@@ -571,7 +571,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\assets\javascript\jquery-1.11.0.min.js" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\javascript\json2.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Default.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\Default1.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Designer.xml" />
     <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.htm" />
@@ -1917,7 +1916,6 @@
     <Content Include="WF\BPR.aspx" />
     <Content Include="WF\Calendar.aspx" />
     <Content Include="WF\CallSubFlow.aspx" />
-    <Content Include="WF\Cancel.aspx" />
     <Content Include="WF\CC.aspx" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\API.aspx" />
@@ -2899,7 +2897,6 @@
     <Content Include="WF\Data\XML\WFAdmin.xml" />
     <Content Include="WF\Data\XML\XmlDB.xml" />
     <Content Include="WF\Do.aspx" />
-    <Content Include="WF\Draft.aspx" />
     <Content Include="WF\Draft.htm" />
     <Content Include="WF\EmpWorks.aspx" />
     <Content Include="WF\ErrorPage.aspx" />
@@ -7641,8 +7638,8 @@
     <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.woff" />
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx" />
-    <Content Include="WF\Admin\CCFormDesigner\FormDesignerController.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
+    <Content Include="WF\Admin\CCFormDesigner\CCFromHandler.ashx" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
@@ -8758,6 +8755,9 @@
     <Compile Include="WF\Admin\CCFormDesigner\CCFormDesignerSL.aspx.designer.cs">
       <DependentUpon>CCFormDesignerSL.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\CCFromHandler.ashx.cs">
+      <DependentUpon>CCFromHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8774,9 +8774,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\FormDesignerController.ashx.cs">
-      <DependentUpon>FormDesignerController.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\FrmAttr.aspx.cs">
       <DependentUpon>FrmAttr.aspx</DependentUpon>
@@ -10612,13 +10609,6 @@
     <Compile Include="WF\CallSubFlow.aspx.designer.cs">
       <DependentUpon>CallSubFlow.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Cancel.aspx.cs">
-      <DependentUpon>Cancel.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Cancel.aspx.designer.cs">
-      <DependentUpon>Cancel.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\CC.aspx.cs">
       <DependentUpon>CC.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -11515,13 +11505,6 @@
     </Compile>
     <Compile Include="WF\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Draft.aspx.cs">
-      <DependentUpon>Draft.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Draft.aspx.designer.cs">
-      <DependentUpon>Draft.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\EmpWorks.aspx.cs">
       <DependentUpon>EmpWorks.aspx</DependentUpon>

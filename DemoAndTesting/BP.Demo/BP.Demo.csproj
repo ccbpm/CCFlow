@@ -64,13 +64,13 @@
     <Compile Include="Demo\FlowEvent\F189.cs" />
     <Compile Include="Demo\License\License.cs" />
     <Compile Include="Demo\License\People.cs" />
-    <Compile Include="ImplementCode\DTS\GenerFrmHelpLink.cs" />
-    <Compile Include="ImplementCode\MS\DutyAndPower.cs" />
-    <Compile Include="ImplementCode\MS\NodeDtl.cs" />
-    <Compile Include="ImplementCode\MS\Sort.cs" />
-    <Compile Include="ImplementCode\MS\ZhiDu.cs" />
-    <Compile Include="ImplementCode\MS\ZhiDuDept.cs" />
-    <Compile Include="ImplementCode\MS\ZhiDuDtl.cs" />
+    <Compile Include="ImplementCode\DutyAndPower.cs" />
+    <Compile Include="ImplementCode\GenerFrmHelpLink.cs" />
+    <Compile Include="ImplementCode\NodeDtl.cs" />
+    <Compile Include="ImplementCode\Sort.cs" />
+    <Compile Include="ImplementCode\ZhiDu.cs" />
+    <Compile Include="ImplementCode\ZhiDuDept.cs" />
+    <Compile Include="ImplementCode\ZhiDuDtl.cs" />
     <Compile Include="Rpt\RptStudent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Demo\BPFramework\Resume.cs">
@@ -149,9 +149,7 @@
       <Name>BP.WF</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Demo\FrmEvent\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

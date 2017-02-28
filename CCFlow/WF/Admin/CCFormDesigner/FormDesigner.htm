@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>CCForm 表单设计器 </title>
+    <title>CCForm 表单设计器 For Html5 </title>
 
     <!-- 引用配置文件.-->
     <script src="./js/config.js" type="text/javascript" ></script>
@@ -91,19 +91,17 @@
         }
     </style>
 
-    <script type="text/javascript" type="text/javascript">
-    
-function Exp() {
-    CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData, '导出');
-    return;
-}
+    <script type="text/javascript" >
 
-function Srcipt() {
- 
-   //alert('ddd');
-    CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData,'Javascript编程');
-    return;
-}
+        function Exp() {
+            CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData, '导出');
+            return;
+        }
+
+        function Srcipt() {
+            CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData, 'Javascript编程');
+            return;
+        }
     </script>
 </head>
 <body id="body">

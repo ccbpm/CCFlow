@@ -159,8 +159,11 @@ namespace CCFlow.WF.UC
                     toolbar.Add("<input type=button class=Btn value='" + btnLab.PrintDocLab + "' enable=true onclick=\"printFrom(); \" />");
                 }
             }
+            
             toolbar.Add("<input type=button  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "','ds'); \" />");
-            toolbar.Add("<input type=button  value='处理过程' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/SubFlowTrack.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "','ds'); \" />");
+            
+            //被zhoupeng注释了, 2017-02-28
+            //toolbar.Add("<input type=button  value='处理过程' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/SubFlowTrack.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "','ds'); \" />");
         }
         public void ViewWork()
         {
@@ -249,11 +252,11 @@ namespace CCFlow.WF.UC
                 //added by liuxc,2016-01-25
                 if (nd.FormUrl.Contains("?"))
                 {
-                    this.Response.Redirect(nd.FormUrl + "&WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+                    this.Response.Redirect(nd.FormUrl + "&IsReadonly=1&WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
                     return;
                 }
 
-                this.Response.Redirect(nd.FormUrl + "?WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+                this.Response.Redirect(nd.FormUrl + "?&IsReadonly=1WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
                 return;
             }
 

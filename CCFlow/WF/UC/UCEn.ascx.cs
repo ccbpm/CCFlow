@@ -2828,7 +2828,8 @@ namespace CCFlow.WF.UC
             #endregion 处理事件.
 
             //处理默认值.
-            this.DealDefVal(mattrs);
+            if (this.IsReadonly==false)
+                this.DealDefVal(mattrs);
 
             //处理装载前填充.
             if (IsEnableLoadData == true)

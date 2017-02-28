@@ -38,15 +38,15 @@
                 window.parent.addTab('flow', flowName, '../CCBPMDesigner/Designer.htm?FK_Flow=' +
                   flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=1", '');
             } else {
-                if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
-                    window.parent.closeTab(flowName);
-                    window.parent.addTab('flow', flowName, "../CCBPMDesigner/Designer.htm?FK_Flow=" +
+                //if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
+                window.parent.closeTab(flowName);
+                window.parent.addTab('flow', flowName, "../CCBPMDesigner/Designer.htm?FK_Flow=" +
                   flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
-                } else {
-                    window.parent.closeTab(flowName);
-                    window.parent.addTab('flow', flowName, "../CCBPMDesigner/DesignerSL.htm?FK_Flow=" +
-                  flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
-                }
+                //} else {
+                //  window.parent.closeTab(flowName);
+                // window.parent.addTab('flow', flowName, "../CCBPMDesigner/DesignerSL.htm?FK_Flow=" +
+                //flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
+                //}
             }
         }
     </script>

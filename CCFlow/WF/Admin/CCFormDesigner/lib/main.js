@@ -3314,7 +3314,10 @@ function loadTempDiagram(FK_MapData) {
 
             try {
 
-                if (data == "" || data =="" )
+               // alert(data);
+               // 装载表单入口.
+
+                if (data == "" || data == "")
                     return;
 
                 var obj = eval('(' + data + ')');
@@ -3424,11 +3427,12 @@ var currentDiagramId = null;
 * @param {Integer} diagramId (optional) the diagram Id to load
 * */
 function init(diagramId) {
+
     var canvas = getCanvas();
 
     minimap = new Minimap(canvas, document.getElementById("minimap"), 115);
-    minimap.updateMinimap();
 
+    minimap.updateMinimap();
 
     //Canvas properties (width and height)
     if (canvasProps == null) {//only create a new one if we have not already loaded one
@@ -3442,6 +3446,8 @@ function init(diagramId) {
     if (isBrowserReady() == 0) { //no support at all
         modal();
     }
+
+
     //Edit panel
     setUpEditPanel(canvasProps);
 

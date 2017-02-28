@@ -42,18 +42,18 @@ function OpenFlowToCanvas(node, id, text) {
     } else if (node.attributes.DTYPE == "1") {//CCBPM
         addTab(id, text, "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls);
     } else {
-        if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
-            var attrs = node.attributes;    //这样写，是为了不将attributes里面原有的属性丢失，edited by liuxc,2015-11-05
-            attrs.DTYPE = "1";
-            attrs.Url = "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
-            $('#flowTree').tree('update', {
-                target: node.target,
-                attributes: attrs
-            });
-            addTab(id, text, "Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
-        } else {
-            addTab(id, text, "DesignerSL.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
-        }
+        //        if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
+        var attrs = node.attributes;    //这样写，是为了不将attributes里面原有的属性丢失，edited by liuxc,2015-11-05
+        attrs.DTYPE = "1";
+        attrs.Url = "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
+        $('#flowTree').tree('update', {
+            target: node.target,
+            attributes: attrs
+        });
+        addTab(id, text, "Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+        //        } else {
+        //            addTab(id, text, "DesignerSL.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+        //        }
     }
     //延时3秒
     setTimeout(DesignerLoaded, 3000);

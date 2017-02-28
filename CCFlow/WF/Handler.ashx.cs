@@ -311,7 +311,7 @@ namespace CCFlow.WF
             }
             catch (Exception ex)
             {
-                msg = "err@退出时发生错误。";
+                msg = "err@退出时发生错误。"+ex.Message;
             }
             return msg;
         }

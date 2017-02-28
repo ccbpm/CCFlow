@@ -252,7 +252,7 @@ namespace BP.Demo.BPFramework
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("学生", "Demo_Student");
+                Map map = new Map("Demo_Student","学生");
                 //基础信息.
                 map.IsAllowRepeatName = true; //是否允许名称重复.
                 map.IsAutoGenerNo = true; //是否自动生成编号.

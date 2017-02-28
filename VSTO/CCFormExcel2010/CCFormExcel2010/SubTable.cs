@@ -76,6 +76,7 @@ namespace CCFormExcel2010
 		public DataTable OriginData
 		{
 			get { return _originData; }
+			set { _originData = value; }
 		}
 
 		#endregion
@@ -91,7 +92,7 @@ namespace CCFormExcel2010
 		{
 			this._range = range;
 			this._originData = data.Copy();
-			this._newData = data;
+			this._newData = data.Copy();
 			this._name = data.TableName;
 			this._columns = columns;
 			this._rowsConnection = new Hashtable();
@@ -99,6 +100,14 @@ namespace CCFormExcel2010
 			if (!_newData.Columns.Contains("RowInExcel"))
 			{
 				_newData.Columns.Add("RowInExcel");
+			}
+			else
+			{
+				foreach (DataRow dr in _newData.Rows) //!若Excel表单数据与数据库数据不一致，则需修改此方法
+				{
+					if (!string.IsNullOrEmpty(dr["RowInExcel"].ToString()))
+						this.SetConnection((int)dr["RowInExcel"], (int)dr["OID"]);
+				}
 			}
 		}
 
@@ -122,6 +131,24 @@ namespace CCFormExcel2010
 			}
 		}
 
+		/// <summary>
+		/// 初始化行关联（用于表单数据已填充到Excel时执行）
+		/// </summary>
+		public void InitConnection()
+		{
+			_rowsConnection = new Hashtable();
+			foreach (DataRow dr in _newData.Rows) //!若Excel表单数据与数据库数据不一致，则需修改此方法
+			{
+				if (!string.IsNullOrEmpty(dr["RowInExcel"].ToString()))
+					this.SetConnection((int)dr["RowInExcel"], (int)dr["OID"]);
+			}
+		}
+
+		/// <summary>
+		/// 获取RowInExcel关联的OID
+		/// </summary>
+		/// <param name="rowInExcel"></param>
+		/// <returns></returns>
 		public string GetOidByRowid(int rowInExcel)
 		{
 			if (_rowsConnection.Contains(rowInExcel))
@@ -180,6 +207,7 @@ namespace CCFormExcel2010
 		/// <param name="rowInExcel"></param>
 		public void DeleteRow(int rowInExcel, Excel.Range range)
 		{
+			//TODO: 删除多行的情况
 			//记录操作
 			_operations.Push(new RowOperation(rowInExcel, (string)_rowsConnection[rowInExcel], OperationType.Delete));
 
@@ -242,37 +270,7 @@ namespace CCFormExcel2010
 			}
 		}
 
-		/// <summary>
-		/// 获取新数据（在AfterSave时使用）
-		/// </summary>
-		/// <returns></returns>
-		public DataTable GetNewData()
-		{
-			//删除已删除的行
-			foreach (DataRow dr in _newData.Rows)
-			{
-				if (dr["RowInExcel"] == RowStatus.Deleted.ToString())
-					_newData.Rows.Remove(dr);
-				//else if (dr["RowInExcel"] == RowStatus.New.ToString()) //此时还没有dr["RowInExcel"]="new"的行
-				//	dr["OID"] = "0";
-			}
-
-			/* 下面这部分操作在外部执行
-			//新增行
-			foreach (DictionaryEntry conn in _rowsConnection)
-			{
-				if (conn.Value == "new")
-				{
-					//!注意：要把实际的rowInExcel存到_newData.Rows[x]["RowInExcel"]中
-				}
-			}*/
-
-			return _newData;
-		}
-
 		#endregion
-
-		//TODO: 删除多行的情况
 	}
 
 	/// <summary>

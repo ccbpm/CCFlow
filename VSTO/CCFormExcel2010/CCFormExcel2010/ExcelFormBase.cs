@@ -14,6 +14,7 @@ namespace CCFormExcel2010
 		public readonly string regexRangeSingle = "^\\=\\S+\\!\\$\\D+\\$\\d+$"; //=Sheet1!$B$2 //合并的单元格：仅通过Selection获取区域时不能使用此正则验证
 		public readonly string regexRangeArea = "^\\=\\S+\\!\\$\\D+\\$\\d+\\:\\$\\D+\\$\\d+$"; //=Sheet1!$B$2:$C$3
 		public readonly string regexAddressRows = "^\\$\\d+\\:\\$\\d+$"; //$2:$2
+		public readonly string regexAddressColumns = "^\\$\\D+\\:\\$\\D+$"; //$C:$C
 		private Excel.Application _app;
 
 		#endregion
@@ -45,7 +46,6 @@ namespace CCFormExcel2010
 
 		#region Cell相关
 
-
 		/// <summary>
 		/// 将整数转换为英文字母（e.g. 1->A,2->B，27->AA）
 		/// </summary>
@@ -60,6 +60,106 @@ namespace CCFormExcel2010
 			else
 			{
 				return Convert.ToChar(64 + (i / 26)).ToString() + Convert.ToChar((64 + (i % 26)));
+			}
+		}
+
+		/// <summary>
+		/// 判断单元格是否是单个单元格（包括合并后的单元格）
+		/// </summary>
+		/// <param name="range"></param>
+		/// <returns></returns>
+		public bool IsSingle(Excel.Range range)
+		{
+			if (range.Count == 1)
+				return true;
+			else
+				return IsMerge(range);
+		}
+
+		/// <summary>
+		/// 是否为合并单元格：仅当range只包含一个合并单元格时返回true（并取得合并的行、列数）
+		/// </summary>
+		/// <param name="range"></param>
+		/// <param name="c"></param>
+		/// <param name="r"></param>
+		/// <returns></returns>
+		public bool IsMerge(Excel.Range range, ref int c, ref int r)
+		{
+			if (range.MergeCells)
+			{
+				if (range.MergeArea != null)
+				{
+					c = range.MergeArea.Columns.Count;
+					r = range.MergeArea.Rows.Count;
+				}
+				return true;
+			}
+			return false;
+		}
+		/// <summary>
+		/// 是否为合并单元格：仅当range只包含一个合并单元格时返回true
+		/// （若Range中『第一个单元格为合并』且『还有其他单元格』，此时仍然会返回false）
+		/// </summary>
+		/// <param name="range"></param>
+		/// <returns></returns>
+		public bool IsMerge(Excel.Range range)
+		{
+			try
+			{
+				if (range.MergeCells)
+				{
+					return true;
+				}
+				return false;
+			}
+			catch (Exception exp)
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// 判断连个区域是否有交集
+		/// </summary>
+		/// <param name="range1"></param>
+		/// <param name="range2"></param>
+		/// <returns></returns>
+		public bool IsIntersect(Excel.Range range1, Excel.Range range2)
+		{
+			var isRowIntersect = false;
+			for (var r1 = range1.Row; r1 < range1.Row + range1.Rows.Count; r1++)
+			{
+				for (var r2 = range2.Row; r2 < range2.Row + range2.Rows.Count; r2++)
+				{
+					if (r1 == r2)
+					{
+						isRowIntersect = true;
+						break;
+					}
+				}
+				if (isRowIntersect) break;
+			}
+			if (isRowIntersect) //若行有交叉
+			{
+				var isColumnIntersect = false;
+				for (var r1 = range1.Column; r1 < range1.Column + range1.Columns.Count; r1++)
+				{
+					for (var r2 = range2.Column; r2 < range2.Column + range2.Columns.Count; r2++)
+					{
+						if (r1 == r2)
+						{
+							isColumnIntersect = true;
+							break;
+						}
+					}
+					if (isColumnIntersect) break;
+				}
+				return (isRowIntersect && isColumnIntersect); //行、列均有交叉时才有交集
+				//TODO: 整行、整列的情况？
+			}
+			else //若行无交叉
+			{
+				return false;
 			}
 		}
 
@@ -82,41 +182,10 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
-		/// 是否为合并单元格（并取得合并的行、列数）
+		/// 判断区域是否为空（所有单元格均没有值）
 		/// </summary>
 		/// <param name="range"></param>
-		/// <param name="c"></param>
-		/// <param name="r"></param>
 		/// <returns></returns>
-		public bool IsMerge(Excel.Range range, ref int c, ref int r)
-		{
-			if (range.MergeCells)
-			{
-				if (range.MergeArea != null)
-				{
-					c = range.MergeArea.Columns.Count;
-					r = range.MergeArea.Rows.Count;
-				}
-				return true;
-			}
-			return false;
-		}
-		public bool IsMerge(Excel.Range range)
-		{
-			try
-			{
-				if (range.MergeCells)
-				{
-					return true;
-				}
-				return false;
-			}
-			catch (Exception exp)
-			{
-				return false;
-			}
-		}
-
 		public bool IsEmpty(Excel.Range range)
 		{
 			if (range.Count == 1)
@@ -204,7 +273,7 @@ namespace CCFormExcel2010
 		/// <param name="col">Range.Column</param>
 		/// <param name="row">Range.Row</param>
 		/// <returns>子表名/null</returns>
-		public string GetBelongDtlName(Excel.Range range) //x尚未测试
+		public string GetBelongDtlName(Excel.Range range)
 		{
 			var strSheet = range.Worksheet.Name;
 			var col = range.Column;

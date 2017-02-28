@@ -124,9 +124,15 @@ namespace CCFormExcel2010
 						SetDtlData(dt);
 					}
 				}
-				else //xTODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）暂时不考虑这种情况
+				else //xTODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）//A:暂时不考虑这种情况，按数据库数据与Excel数据完全一致处理
 				{
-					//TODO: 初始化_htSubTables数据
+					//初始化_htSubTables数据
+					foreach (DataTable dt in _originData.Tables)
+					{
+						if (dt.TableName == "MainTable")
+							continue;
+						SetDtlData(dt);
+					}
 				}
 			}
 			catch (Exception exp)
@@ -148,74 +154,104 @@ namespace CCFormExcel2010
 			//Application.UndoRecord;
 			Show(range.Address);
 
-			#region 排除不需要处理的情况
-			if (Glo.LoadSuccessful == false)
-				return;
-
-			//若为子表字段则可能无命名，因此不能使用该过滤条件
-			//xif (range.Name == null) //单元格没有绑定字段
-			//x	return;
-
-			if (this._base.IsValidList(range) == false) //单元格不是下拉列表类型 //TODO: 『手填』类型的字段是否有可能与其他字段联动？
-				return;
-
-			if (_originData.Tables.Contains("Sys_MapExt") == false) //没有MapExt信息//TODO: 分主、子表
-				return;
-			#endregion
-
-			if (Regex.IsMatch(range.Address, _base.regexAddressRows)) //若是针对『整行』的操作
+			if (_base.IsSingle(range)) //是单个单元格
 			{
-				//TODO: 监听“插入行”“删除行”操作
-				return;//暂时不做处理
-			}
-
-			var strBelongDtlName = _base.GetBelongDtlName(range);
-			if (strBelongDtlName == null) //单元格不在某子表中
-			{
-				if (range.Name == null) //单元格没有绑定字段
-					return;
-
-				if (!_originData.Tables.Contains("Sys_MapExt")) //没有MapExt信息
-					return;
-
-				var drs = _originData.Tables["Sys_MapExt"].Select("AttrOfOper='" + range.Name + "'");
-				if (drs.Length == 0) //MapExt信息中不含当前单元格绑定字段
-					return;
-
-				DataRow dr = drs[0];
-
-				//填充数据（序列）
-				//0.获取联动目标单元格range
-				if (!_base.IsExistsName(dr["AttrsOfActive"].ToString()))
-					return;
-				Excel.Range rangeAim = Application.Names.Item(dr["AttrsOfActive"].ToString()).RefersToRange;
-				if (!_base.IsValidList(rangeAim)) //如果联动目标单元格不是下拉列表类型
-					return;
-				//1.获取序列区域命名
-				var strListAreaName = rangeAim.Validation.Formula1.Replace("=", "");
-				if (!_base.IsExistsName(strListAreaName)) //若Workbook中没有该区域
-					return;
-				//x2.清除原序列 //用新序列覆盖即可
-				//3.填充新序列
-				var val = Glo.GetNoByName(_originData, range.Validation.Formula1.Replace("=", ""), range.Value2); //获取当前单元格的值(key)
-				//var dt = client.GetActiveList(val,dr["Doc"]); //获取联动目标单元格的值列表 //或者使用MapExt的相关方法？//TODO: 如何获取『目标单元格的值列表』?
-				DataTable dt = new DataTable();
-				Excel.Range rangeList = Application.Names.Item(strListAreaName).RefersToRange;
-				var colL = _base.ConvertInt2Letter(rangeList.Column);
-				for (var r = 1; r <= dt.Rows.Count; r++)
+				var strBelongDtlName = _base.GetBelongDtlName(range);
+				if (strBelongDtlName == null) //单元格不属于子表 //TODO: 在设置序列值时触发的本事件，会进入到此处
 				{
-					Excel.Range rangeTemp = rangeList.get_Range(colL + r, missing);
-					rangeTemp.Value2 = dt.Rows[r - 1]["Name"].ToString();
+					if (range.Name == null) //也不属于主表
+						return;
+
+					//↓是主表字段
+					if (_base.IsValidList(range)) //是下拉
+					{
+						//TODO: 增加判断：值是否匹配数据有效性规则？
+
+						var listName = string.Empty;
+						var type = GetFieldType("MainTable", range.Name.Name, out listName);
+						if (type == FieldType.CascadeParentList) //是级联的父级字段
+						{
+							var drs = _originData.Tables["Sys_MapExt"].Select("AttrOfOper='" + range.Name.Name + "'");
+							foreach (DataRow dr in drs)
+							{
+								//填充数据（序列）
+
+								//0.获取联动字段
+								if (!_base.IsExistsName(dr["AttrsOfActive"].ToString()))
+									return;
+								Excel.Range rangeAim = Application.Names.Item(dr["AttrsOfActive"].ToString()).RefersToRange;
+								if (!_base.IsValidList(rangeAim)) //如果联动目标单元格不是下拉列表类型
+									return;
+
+								//1.获取联动字段的序列区域的命名
+								var strListAreaName = rangeAim.Validation.Formula1.Replace("=", "");
+								if (!_base.IsExistsName(strListAreaName)) //若Workbook中没有该区域
+									return;
+								//x2.清除原序列 //用新序列覆盖即可
+
+								//3.填充新序列
+								var val = GetSaveValue("MainTable", range.Name.Name, range, fieldType: type); //获取当前单元格的值(key)
+								//获取新序列
+								var dt = client.MapExtGenerAcitviDDLDataTable(Glo.UserNo, Glo.SID, Glo.WorkID, dr["MyPK"].ToString(),
+									GetSaveValue("MainTable", range.Name.Name, range),
+									GetData()); //TODO: 改为传递所有字段
+								Excel.Range rangeList = Application.Names.Item(strListAreaName).RefersToRange;
+								var colL = _base.ConvertInt2Letter(rangeList.Column);
+								var r = 1;
+								for (; r <= dt.Rows.Count; r++)
+								{
+									Excel.Range rangeTemp = rangeList.Worksheet.get_Range(colL + r, missing);
+									rangeTemp.Value2 = dt.Rows[r - 1]["Name"].ToString();
+								}
+								Application.Names.Add(strListAreaName, "=MetaData!$" + colL + "$1:$" + colL + "$" + (r == 1 ? r : r - 1));
+
+								//清除关联的子级的值
+								rangeAim.Value2 = null;
+							}
+						}
+					}
+					//不是下拉//不是级联-父级：终止执行
 				}
-
-				//清除字段值
-				range.Value2 = null;
-			}
-			else //字段属于某子表时
-			{
-				var subTable = (SubTable)_htSubTables[strBelongDtlName];
-				if (subTable.Columns.Contains(strBelongDtlName))
+				else
 				{
+					if (!_htSubTables.Contains(strBelongDtlName)) //属于MetaData的某个区域
+						return;
+
+					//↓属于某子表时
+					//TODO: 判断是否是表头：
+
+					//不是表头的情况：
+					var subTable = (SubTable)_htSubTables[strBelongDtlName];
+					if (subTable.Columns.Contains(strBelongDtlName))
+					{
+
+					}
+				}
+			}
+			else //不是单个单元格（是区域）
+			{
+				if (Regex.IsMatch(range.Address, _base.regexAddressRows)) //若是针对『整行』的操作
+				{
+					//TODO: 监听“插入行”“删除行”操作
+					//判断操作行数
+					//判断各子表Range是否有变化
+					return;//暂时不做处理
+				}
+				else if (Regex.IsMatch(range.Address, _base.regexAddressColumns)) //若是对『整列』的操作
+				{
+					//如果操作涉及到了某个子表，则Undo该操作
+					foreach (DictionaryEntry st in _htSubTables)
+					{
+						if (_base.IsIntersect(range, ((SubTable)st.Value).Range)) //TODO: st.Range是否会实时变化？？？
+						{
+							Application.Undo();
+							return;
+						}
+					}
+				}
+				else
+				{
+					//判断操作对象是否是某个子表的“整行”
 
 				}
 			}
@@ -228,20 +264,38 @@ namespace CCFormExcel2010
 		/// <param name="Success"></param>
 		void Application_WorkbookAfterSave(Excel.Workbook Wb, bool Success)
 		{
-			//若插件没有加载成功：直接
+			//若插件没有加载成功：直接跳出
 			if (!Glo.LoadSuccessful) return;
 
-			//执行保存.
+			//Excel文件流
 			byte[] bytes = Glo.ReadFile("C:\\CCFlow\\temp.xlsx");
-			//Globals.ThisAddIn.Application.Workbooks.Item[0]
-			//DataSet dsDtls = new DataSet();
-			string mainTableAtParas = GetData();//ref dsDtls); //主表字段
 
+			//主表字段
+			//DataSet dsDtls = new DataSet();
+			string mainTableAtParas = GetData();//ref dsDtls);
+
+			//子表字段
 			DataSet dsDtlsOld = new DataSet();
 			DataSet dsDtlsNew = GetDtls(dsOld: dsDtlsOld);
 
+			//保存到服务器
 			CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
-			client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes);
+			client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //TODO: 能否返回保存结果（成功/失败）？
+
+			//获取新的子表数据，绑定行对应关系
+			_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
+			//保存成功后用『新数据』替换『旧数据』
+			foreach (DictionaryEntry st in _htSubTables)
+			{
+				var stnew = (SubTable)st.Value;
+				if (_originData.Tables.Contains(stnew.Name))
+				{
+					stnew.OriginData = _originData.Tables[stnew.Name].Copy();
+					stnew.Data = _originData.Tables[stnew.Name].Copy();
+					stnew.InitConnection();
+					_htSubTables[st.Key] = stnew;
+				}
+			}
 		}
 
 		private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
@@ -316,7 +370,7 @@ namespace CCFormExcel2010
 		/// </summary>
 		/// <param name="dt">确保TableName为子表表名</param>
 		/// <returns>是否填充成功</returns>
-		public bool SetDtlData(DataTable dt) //尚未测试
+		public bool SetDtlData(DataTable dt, bool isFill = true) //尚未测试
 		{
 			#region 排除不是子表的情况
 
@@ -366,87 +420,104 @@ namespace CCFormExcel2010
 
 			#endregion
 
-			//填充数据
-			foreach (DictionaryEntry col in st.Columns)
+			#region 填充数据
+			if (isFill)
 			{
-				if (col.Key == "TableHeadHeight") continue;
-
-				if (!st.Data.Columns.Contains(col.Value.ToString())) continue; //DataTable中不含该字段
-
-				#region 为子表的每一行的DropdownList类型的字段添加 Validation
-
-				var colL = _base.ConvertInt2Letter(Convert.ToInt32(col.Key));
-
-				//（分两种情况：作为级联的子级；有范围限制的外键/枚举） //另：验证插入行是否能自动添加上 Validation
-				var strListName = string.Empty;
-				FieldType ftype = GetFieldType(st.Data.TableName, col.Value.ToString(), out strListName);
-				if (ftype == FieldType.CascadeSonList) //有范围限制的外键字段 且 为级联字段的子级（值需要动态获取）
+				foreach (DictionaryEntry col in st.Columns)
 				{
-					//为每行的该字段声明一个区域（但暂时不赋值）并设置 Validation
+					if (col.Key == "TableHeadHeight") continue;
+
+					if (!st.Data.Columns.Contains(col.Value.ToString())) continue; //DataTable中不含该字段
+
+					#region 为子表的每一行的DropdownList类型的字段添加 Validation
+
+					var colL = _base.ConvertInt2Letter(Convert.ToInt32(col.Key));
+
+					//（分两种情况：作为级联的子级；有范围限制的外键/枚举） //另：验证插入行是否能自动添加上 Validation
+					var strListName = string.Empty;
+					FieldType ftype = GetFieldType(st.Data.TableName, col.Value.ToString(), out strListName);
+					if (ftype == FieldType.CascadeSonList) //有范围限制的外键字段 且 为级联字段的子级（值需要动态获取）
+					{
+						//为每行的该字段声明一个区域（但暂时不赋值）并设置 Validation
+						for (var r = 0; r < st.Data.Rows.Count; r++)
+						{
+							var row = range.Row + intTableHeadHeight + r;
+							var rangeCell = range.Worksheet.get_Range(colL + row, missing);
+							var tempListName = strListName + "_R" + row;
+							AddMetaList(tempListName);
+							rangeCell.Validation.Add(Excel.XlDVType.xlValidateList, Formula1: "=" + tempListName);
+						}
+					}
+					else if (ftype == FieldType.CascadeParentList || ftype == FieldType.LimitedList || ftype == FieldType.List)
+					//枚举字段/无范围限制的外键字段/有范围限制但无级联关系的外键字段/有范围限制且有级联关系且不为级联的子级的外键字段
+					{
+						#region 设置下拉序列（枚举、外键）
+
+						if (_originData.Tables.Contains(strListName)) //原数据中包含
+						{
+							if (!_base.IsExistsName(strListName))
+							{
+								//若没有则新建一个
+								AddMetaList(strListName);
+							}
+							var dtAreaData = _originData.Tables[strListName];
+							Excel.Range rangeListArea = Application.Names.Item(strListName).RefersToRange;
+							var colLetterListArea = _base.ConvertInt2Letter(Convert.ToInt32(rangeListArea.Column));
+							for (var r = 0; r < dtAreaData.Rows.Count; r++)
+							{
+								var rangeListCell = rangeListArea.Worksheet.get_Range(colLetterListArea + (r + 1), missing);
+								rangeListCell.Value2 = dtAreaData.Rows[r]["Name"].ToString();
+							}
+							//更名区域命名
+							var maxRowIdxInExcel = dtAreaData.Rows.Count == 0 ? 1 : dtAreaData.Rows.Count;
+							Application.Names.Add(strListName,
+								"=MetaData!$" + colLetterListArea + "$1:$" + colLetterListArea + "$" + maxRowIdxInExcel);
+							//设置数据有效性
+							var rangeColumn = range.Worksheet.get_Range(colL + (range.Row + intTableHeadHeight),
+								colL + (range.Row + range.Rows.Count - 1));
+							rangeColumn.Validation.Delete(); //若存在Validation，再执行Add()方法时会报错。
+							rangeColumn.Validation.Add(Excel.XlDVType.xlValidateList, Formula1: "=" + strListName);
+						}
+
+						#endregion
+					}
+					else if (ftype == FieldType.TrueOrFalse)
+					{
+						#region 设置下拉序列（是否型）
+
+						//设置数据有效性
+						var rangeColumn = range.Worksheet.get_Range(colL + (range.Row + intTableHeadHeight),
+							colL + (range.Row + range.Rows.Count - 1));
+						rangeColumn.Validation.Delete();
+						rangeColumn.Validation.Add(Excel.XlDVType.xlValidateList, Formula1: "=" + strListName);
+						//此时strListName="TrueOrFalse"
+
+						#endregion
+					}
+
+					#endregion
+
+					#region 填充行数据
+
 					for (var r = 0; r < st.Data.Rows.Count; r++)
 					{
-						var row = range.Row + intTableHeadHeight + r;
-						var rangeCell = range.Worksheet.get_Range(colL + row, missing);
-						var tempListName = strListName + "_R" + row;
-						AddMetaList(tempListName);
-						rangeCell.Validation.Add(Excel.XlDVType.xlValidateList, Formula1: "=" + tempListName);
-					}
-				}
-				else if (ftype == FieldType.LimitedList || ftype == FieldType.List) //枚举字段/无范围限制的外键字段/有范围限制但无级联关系的外键字段/有范围限制且有级联关系且不为级联的子级的外键字段
-				{
-					#region 设置下拉序列（枚举、外键）
+						var intRangeColumn = range.Row + intTableHeadHeight + r; //当前行在excel中的行号
+						var rangeCell = range.Worksheet.get_Range(colL + intRangeColumn, missing);
+						this.GetDisplayValue(st.Data.TableName, col.Value.ToString(), st.Data.Rows[r][col.Value.ToString()].ToString(),
+							rangeCell: rangeCell, fieldType: ftype);
 
-					if (_originData.Tables.Contains(strListName)) //原数据中包含
-					{
-						if (!_base.IsExistsName(strListName))
-						{
-							//若没有则新建一个
-							AddMetaList(strListName);
-						}
-						var dtAreaData = _originData.Tables[strListName];
-						Excel.Range rangeListArea = Application.Names.Item(strListName).RefersToRange;
-						var colLetterListArea = _base.ConvertInt2Letter(Convert.ToInt32(rangeListArea.Column));
-						for (var r = 0; r < dtAreaData.Rows.Count; r++)
-						{
-							var rangeCell = rangeListArea.Worksheet.get_Range(colLetterListArea + (r + 1), missing);
-							rangeCell.Value2 = dtAreaData.Rows[r]["Name"].ToString();
-						}
-						//更名区域命名
-						var maxRowIdxInExcel = dtAreaData.Rows.Count == 0 ? 1 : dtAreaData.Rows.Count;
-						Application.Names.Add(strListName, "=MetaData!$" + colLetterListArea + "$1:$" + colLetterListArea + "$" + maxRowIdxInExcel);
-						//设置数据有效性
-						var rangeColumn = range.Worksheet.get_Range(colL + (range.Row + intTableHeadHeight), colL + (range.Row + range.Rows.Count - 1));
-						rangeColumn.Validation.Add(Excel.XlDVType.xlValidateList, Formula1: "=" + strListName);
+						//设置关联
+						st.SetConnection(intRangeColumn, r);
 					}
 
 					#endregion
-				}
-				else if (ftype == FieldType.TrueOrFalse)
-				{
-					#region 设置下拉序列（是否型）
-					//设置数据有效性
-					var rangeColumn = range.Worksheet.get_Range(colL + (range.Row + intTableHeadHeight), colL + (range.Row + range.Rows.Count - 1));
-					rangeColumn.Validation.Add(Excel.XlDVType.xlValidateList, Formula1: "=" + strListName); //此时strListName="TrueOrFalse"
-					#endregion
-				}
-				#endregion
 
-				#region 填充行数据
-				for (var r = 0; r < st.Data.Rows.Count; r++)
-				{
-					var intRangeColumn = range.Row + intTableHeadHeight + r; //当前行在excel中的行号
-					var rangeCell = range.Worksheet.get_Range(colL + intRangeColumn, missing);
-					this.GetDisplayValue(st.Data.TableName, col.Value.ToString(), st.Data.Rows[r][col.Value.ToString()].ToString(),
-						rangeCell: rangeCell, fieldType: ftype);
-
-					//设置关联
-					st.SetConnection(intRangeColumn, r);
+					//TODO: 如果该字段是『级联的父级』，则需根据此字段的值来设置相应子级字段的“数据有效性”
 				}
-				#endregion
-
-				//TODO: 如果该字段是『级联的父级』，则需根据此字段的值来设置相应子级字段的“数据有效性”
 			}
-			_htSubTables[dt.TableName] = st; //更新st//TODO：是否需要？
+			#endregion
+
+			_htSubTables[dt.TableName] = st; //更新st
 			return true;
 		}
 
@@ -486,13 +557,7 @@ namespace CCFormExcel2010
 					var strBelongDtl = _base.GetBelongDtlName(range);
 					if (strBelongDtl == null) //不属于某个子表
 					{
-						//根据字段类型分别处理
-						string strListName = string.Empty; //序列名
-						FieldType ftype = GetFieldType("MainTable", name, out strListName);
-						if (ftype == FieldType.CascadeSonList || ftype == FieldType.LimitedList || ftype == FieldType.List)
-							htParas.Add(name, Glo.GetNoByName(_originData, strListName, range.Value2));
-						else
-							htParas.Add(name, range.Value2);
+						htParas.Add(name, GetSaveValue("MainTable", name, range));
 					}
 					//else //属于子表
 					//{
@@ -704,19 +769,35 @@ namespace CCFormExcel2010
 		/// <param name="keyOfEn"></param>
 		/// <param name="rangeCell"></param>
 		/// <returns></returns>
-		public string GetSaveValue(string tableName, string keyOfEn, Excel.Range rangeCell)
+		public string GetSaveValue(string tableName, string keyOfEn, Excel.Range rangeCell, FieldType fieldType = FieldType.Nothing)
 		{
-			if (rangeCell.Value2 == null || string.IsNullOrEmpty(rangeCell.Value2) ||
-				string.IsNullOrEmpty(rangeCell.Value2.ToString().Trim()))
+			if (rangeCell == null || rangeCell.Value2 == null)
 			{
 				return null;
 			}
+			else
+			{
+				string text = rangeCell.Text;
+				if (string.IsNullOrEmpty(text) || text.Trim().Length == 0)
+				{
+					return null;
+				}
+				else //特殊类型的字段：日期
+				{
+					DateTime dt;
+					if (DateTime.TryParse(rangeCell.Text, out dt))
+					{
+						return rangeCell.Text;
+					}
+				}
+			}
 			var strListName = string.Empty;
-			var type = GetFieldType(tableName, keyOfEn, out strListName);
+			if (fieldType == FieldType.Nothing)
+				fieldType = GetFieldType(tableName, keyOfEn, out strListName);
 			//TODO: 是否需要判断单元格IsValidList？？
-			if (_base.IsValidList(rangeCell) && (type == FieldType.CascadeSonList || type == FieldType.LimitedList || type == FieldType.List))//下拉类型的字段（枚举、外键）
+			if (_base.IsValidList(rangeCell) && (fieldType == FieldType.CascadeParentList || fieldType == FieldType.CascadeSonList || fieldType == FieldType.LimitedList || fieldType == FieldType.List))//下拉类型的字段（枚举、外键）
 				return Glo.GetNoByName(_originData, strListName, rangeCell.Value2);
-			else if (_base.IsValidList(rangeCell) && type == FieldType.TrueOrFalse) //是否型字段
+			else if (_base.IsValidList(rangeCell) && fieldType == FieldType.TrueOrFalse) //是否型字段
 				return rangeCell.Value2 == "是" ? "1" : "0";
 			else
 				return rangeCell.Value2;

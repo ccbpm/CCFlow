@@ -568,8 +568,8 @@ namespace BP.WF.Data
                 map.AddTBString(CHAttr.FK_EmpT, null, "当事人名称", true, true, 0, 50, 5);
 
                 //为邓州增加的属性. 解决多人处理一个节点的工作的问题.
-                map.AddTBString(CHAttr.GroupEmps, null, "相关当事人", true, true, 0, 30, 3);
-                map.AddTBString(CHAttr.GroupEmpsNames, null, "相关当事人名称", true, true, 0, 30, 3);
+                map.AddTBString(CHAttr.GroupEmps, null, "相关当事人", true, true, 0, 400, 3);
+                map.AddTBString(CHAttr.GroupEmpsNames, null, "相关当事人名称", true, true, 0, 900, 3);
                 map.AddTBInt(CHAttr.GroupEmpsNum, 1, "相关当事人数量", false, false);
 
 

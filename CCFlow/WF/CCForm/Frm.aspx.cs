@@ -596,7 +596,7 @@ namespace CCFlow.WF.CCForm
                 this.UCEn1.Add("</div>");
                 #endregion
 
-                if (!IsPostBack)
+                if (IsPostBack==false)
                 {
                     if (md.IsHaveCA)
                     {

@@ -49,6 +49,30 @@ namespace CCFlow.WF.Admin.XAP
             dtFlow.TableName = "WF_Flow";
             myds.Tables.Add(dtFlow);
 
+
+            // 检查根目录是否符合要求.
+            sql = "SELECT * FROM Sys_FormTree where ParentNo='0'";
+            if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
+            {
+                sql = "SELECT * FROM Sys_FormTree where No='1'";
+                if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
+                {
+                    /*没有根目录就插入*/
+                    sql = "INSERT INTO Sys_FormTree (No,Name,ParentNo,DBSrc,IsDir,Idx) VALUES ('1','跟目录','0','local',0,0)";
+                    DBAccess.RunSQL(sql);
+                }
+                else
+                {
+                    /*没有根目录就插入*/
+                    sql = "UPDATE Sys_FormTree SET ParentNo='0' WHERE No='1'";
+                    DBAccess.RunSQL(sql);
+                }
+            }
+            else
+            {
+                /*有多个根目录的情况.*/
+            }
+
             //加入表单树.
             sql = "SELECT No,Name,ParentNo FROM Sys_FormTree ORDER BY Idx ASC,No ASC";
             DataTable dtFormTree = BP.DA.DBAccess.RunSQLReturnTable(sql);

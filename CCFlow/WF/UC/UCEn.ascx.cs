@@ -648,7 +648,6 @@ namespace CCFlow.WF.UC
 
         public void LoadData(MapAttrs mattrs, Entity en)
         {
-
             this.LinkFields = "";
             if (mes.Count == 0)
                 return;

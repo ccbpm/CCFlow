@@ -97,6 +97,7 @@ namespace CCFlow.WF.SheetTree
             {
                 toolsDefault += "<a id=\"PrintDoc\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-print'\" onclick=\"EventFactory('printdoc')\">" + btnLab.PrintDocLab + "</a>";
             }
+            toolsDefault += "<a id=\"Track\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-flowmap'\" onclick=\"EventFactory('showchart')\">" + btnLab.TrackLab + "</a>";
             toolsDefault += "<a id=\"closeWin\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-no'\" onclick=\"EventFactory('closeWin')\">关闭</a>";
             //添加内容
             this.toolBars.InnerHtml = toolsDefault;

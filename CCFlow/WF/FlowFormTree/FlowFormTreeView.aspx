@@ -226,6 +226,9 @@
                     }
                     window.showModalDialog("../CCForm/Print.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "打印单据", "dialogHeight: 350px; dialogWidth:450px; center: yes; help: no");
                     break;
+                case "showchart": //轨迹
+                    WinOpenPage("_blank", "../WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&FK_Node=" + args.FK_Node + "&s=" + strTimeKey, "轨迹图");
+                    break;
                 case "closeWin":
                     closeWin();
                     break;

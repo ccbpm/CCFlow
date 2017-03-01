@@ -74,6 +74,7 @@ namespace BP.DA
             if (tway == TWay.AllDays)
                 return dt.AddDays(days);
 
+            //没有设置节假日.
             if (BP.Sys.GloVar.Holidays == "")
             {
                 // 2015年以前的算法.
@@ -86,7 +87,7 @@ namespace BP.DA
                 return dt;
             }
 
-            /* 如果没有设置，节假日. */
+            /* 设置节假日. */
             while (days > 0)
             {
                 if (BP.Sys.GloVar.Holidays.Contains(dt.ToString("MM-dd")))

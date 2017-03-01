@@ -2392,7 +2392,8 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-            
+          //  exp = exp.Replace("@WorkID", "0");
+
             if (exp.Contains("@") == false)
             {
                 exp = exp.Replace("~", "'");
@@ -2400,54 +2401,66 @@ namespace BP.WF
             }
 
             //增加对新规则的支持. @MyField; 格式.
-            Row row=en.Row;
-            foreach (string key in row.Keys)
+            if (en != null)
             {
-                if (exp.Contains("@" + key + ";"))
-                    exp = exp.Replace("@" + key + ";", row[key].ToString());
-            }
-            if (exp.Contains("@") == false)
-                return exp;
 
-            #region 解决排序问题.
-            Attrs attrs = en.EnMap.Attrs;
-            string mystrs = "";
-            foreach (Attr attr in attrs)
-            {
-                if (attr.MyDataType == DataType.AppString)
-                    mystrs += "@" + attr.Key + ",";
-                else
-                    mystrs += "@" + attr.Key;
-            }
-            string[] strs = mystrs.Split('@');
-            DataTable dt = new DataTable();
-            dt.Columns.Add(new DataColumn("No", typeof(string)));
-            foreach (string str in strs)
-            {
-                if (string.IsNullOrEmpty(str))
-                    continue;
+                Row row = en.Row;
 
-                DataRow dr = dt.NewRow();
-                dr[0] = str;
-                dt.Rows.Add(dr);
-            }
-            DataView dv = dt.DefaultView;
-            dv.Sort = "No DESC";
-            DataTable dtNew = dv.Table;
-            #endregion  解决排序问题.
+                //特殊判断.
+                if (row.ContainsKey("OID")==true)
+                    exp = exp.Replace("@WorkID", row["OID"].ToString());
 
-            #region 替换变量.
-            foreach (DataRow dr in dtNew.Rows)
-            {
-                string key = dr[0].ToString();
-                bool isStr = key.Contains(",");
-                if (isStr == true)
+                foreach (string key in row.Keys)
                 {
-                    key = key.Replace(",", "");
-                    exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                    if (exp.Contains("@" + key + ";"))
+                        exp = exp.Replace("@" + key + ";", row[key].ToString());
                 }
-                else
-                    exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                if (exp.Contains("@") == false)
+                    return exp;
+
+
+
+                #region 解决排序问题.
+                Attrs attrs = en.EnMap.Attrs;
+                string mystrs = "";
+                foreach (Attr attr in attrs)
+                {
+                    if (attr.MyDataType == DataType.AppString)
+                        mystrs += "@" + attr.Key + ",";
+                    else
+                        mystrs += "@" + attr.Key;
+                }
+                string[] strs = mystrs.Split('@');
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("No", typeof(string)));
+                foreach (string str in strs)
+                {
+                    if (string.IsNullOrEmpty(str))
+                        continue;
+
+                    DataRow dr = dt.NewRow();
+                    dr[0] = str;
+                    dt.Rows.Add(dr);
+                }
+                DataView dv = dt.DefaultView;
+                dv.Sort = "No DESC";
+                DataTable dtNew = dv.Table;
+                #endregion  解决排序问题.
+
+                #region 替换变量.
+                foreach (DataRow dr in dtNew.Rows)
+                {
+                    string key = dr[0].ToString();
+                    bool isStr = key.Contains(",");
+                    if (isStr == true)
+                    {
+                        key = key.Replace(",", "");
+                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                    }
+                    else
+                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                }
+                #endregion
             }
 
             // 处理Para的替换.
@@ -2463,7 +2476,6 @@ namespace BP.WF
                 foreach (string key in System.Web.HttpContext.Current.Request.QueryString.Keys)
                     exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
             }
-            #endregion
 
             exp = exp.Replace("~", "'");
             //exp = exp.Replace("''", "'");
@@ -3729,19 +3741,18 @@ namespace BP.WF
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        ps.SQL = "SELECT TOP 1 SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
+                        ps.SQL = "SELECT TOP 1 SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID ";
                         break;
                     case DBType.Oracle:
-                        ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  ";
                         break;
                     case DBType.MySQL:
-                        ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
+                        ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  ";
                         break;
                     default:
                         break;
                 }
                 ps.Add("WorkID", workid);
-                ps.Add("FK_Node", nd.NodeID);
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count == 0)
                     return;

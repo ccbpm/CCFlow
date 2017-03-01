@@ -22,18 +22,24 @@
         KindEditerSync();
 
         var dll = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_DDL_ToNode");
-        var selectNodeID = dll.options[dll.selectedIndex].value;
+        if (dll) {
+            var selectNodeID = dll.options[dll.selectedIndex].value;
 
-        if (selectNodeID == "0") {
-            alert('请选择分支.');
-            return false;
-        }
+            if (selectNodeID == "0") {
+                alert('请选择分支.');
+                return false;
+            }
 
-        if (selectNodeID.indexOf('.') != -1) {  //发送之前，需要调用选择人接收器.
-            selectNodeID = selectNodeID.replace('.1', '');
-            var url = "./WorkOpt/Accepter.htm?WorkID=" + workID + "&ToNode=" + selectNodeID + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2&DoType=AccepterSave";
-            winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
+            if (selectNodeID.indexOf('.') != -1) {  //发送之前，需要调用选择人接收器.
+                selectNodeID = selectNodeID.replace('.1', '');
+                var url = "./WorkOpt/Accepter.htm?WorkID=" + workID + "&ToNode=" + selectNodeID + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2&DoType=AccepterSave";
+                winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
 
+            } else {
+                //开始调用发送按钮.
+                var btnSend = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Send");
+                btnSend.click();
+            }
         } else {
             //开始调用发送按钮.
             var btnSend = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Send");

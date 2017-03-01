@@ -410,7 +410,10 @@ namespace BP.WF
             {
                 return this.GetValStrByKey(GenerWorkFlowAttr.TodoEmps);
             }
-           
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.TodoEmps, value);
+            }
         }
         /// <summary>
         /// 参与人

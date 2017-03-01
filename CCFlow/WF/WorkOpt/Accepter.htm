@@ -402,7 +402,7 @@
                 type: 'post',
                 async: true,
                 data: { "FK_Flow": pageUrlParam.FK_Flow, "WorkID": pageUrlParam.WorkID, ToNode: toNode, FK_Node: pageUrlParam.fk_node },
-                url: Handler + "?DoType=" + doType + "&m=" + Math.random() + "&SelectEmps=" + empNos + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
+                url: Handler + "?DoType=" + doType + "&m=" + Math.random() + "&SelectEmps=" +encodeURI(empNos) + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
                 dataType: 'html',
                 success: function (data) {
                     // alert(data);

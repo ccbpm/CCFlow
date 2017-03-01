@@ -218,6 +218,9 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.EmpTo, value);
             }
         }
+        /// <summary>
+        /// 参数数据.
+        /// </summary>
         public string Tag
         {
             get

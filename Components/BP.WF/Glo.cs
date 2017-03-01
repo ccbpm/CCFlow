@@ -3732,10 +3732,10 @@ namespace BP.WF
                         ps.SQL = "SELECT TOP 1 SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
                         break;
                     case DBType.Oracle:
-                        ps.SQL = "SELECT  SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
                         break;
                     case DBType.MySQL:
-                        ps.SQL = "SELECT   SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
+                        ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
                         break;
                     default:
                         break;

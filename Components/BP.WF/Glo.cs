@@ -3759,27 +3759,26 @@ namespace BP.WF
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        ps.SQL = "SELECT TOP 1 RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC";
+                        ps.SQL = "SELECT TOP 2 RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID ORDER BY RDT DESC";
                         break;
                     case DBType.Oracle:
-                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM=1 ORDER BY RDT DESC ";
+                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND ROWNUM >=2 ORDER BY RDT DESC ";
                         break;
                     case DBType.MySQL:
-                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
+                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  ORDER BY RDT DESC limit 0,2 ";
                         break;
                     default:
                         break;
                 }
 
                 ps.Add("WorkID", workid);
-                ps.Add("FK_Node", nd.NodeID);
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                if (dt.Rows.Count == 0)
+                if (dt.Rows.Count != 2)
                     return;
 
-                prvRDT = dt.Rows[0][0].ToString(); //上一个时间点的记录日期.
-                sdt = dt.Rows[0][1].ToString(); //应完成日期.
+                prvRDT = dt.Rows[1][0].ToString(); //上一个时间点的记录日期.
+                sdt = dt.Rows[1][1].ToString(); //应完成日期.
 
                 #region 从轨迹里找到他的相关责任人. 
                 todoEmps = WebUser.No + "," + WebUser.Name + ";";

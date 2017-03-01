@@ -44,7 +44,13 @@
                 error: function (XMLHttpRequest, errorThrown) {
                     callback(XMLHttpRequest);
                 },
-                success: function (msg) {//msg为返回的数据，在这里做数据绑定
+                success: function (msg) {  //msg为返回的数据，在这里做数据绑定
+
+                    if (msg.indexOf('err@') == 0) {
+                        alert(msg);
+                        return;
+                    }
+                     
                     var data = msg;
                     callback(data, scope);
                 }

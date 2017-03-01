@@ -40,15 +40,6 @@ namespace CCFlow.WF.Admin.AttrFlow {
         protected global::System.Web.UI.WebControls.TextBox TB_TimeLimit;
         
         /// <summary>
-        /// TB_TSpanHour 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TB_TSpanHour;
-        
-        /// <summary>
         /// TB_WarningDay 控件。
         /// </summary>
         /// <remarks>
@@ -56,15 +47,6 @@ namespace CCFlow.WF.Admin.AttrFlow {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TB_WarningDay;
-        
-        /// <summary>
-        /// TB_WarningHour 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TB_WarningHour;
         
         /// <summary>
         /// DDL_TWay 控件。

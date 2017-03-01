@@ -213,6 +213,9 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 //检查SQL是否符合要求.
                 try
                 {
+                    //替换.
+                    sql = sql.Replace("@WorkID", "0");
+
                     sql = BP.WF.Glo.DealExp(sql, null, null);
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     if (dt.Columns.Contains("No") == false || dt.Columns.Contains("Name") == false)

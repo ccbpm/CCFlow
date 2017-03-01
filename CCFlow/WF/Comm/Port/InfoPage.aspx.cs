@@ -23,7 +23,7 @@ namespace CCFlow.Web.Comm
             Response.AddHeader("P3P", "CP=CAO PSA OUR");
 
             this.UCSys1.AddFieldSet("ÌבÊ¾");
-            this.UCSys1.AddMsgOfInfo("<img src='../CSS/images/ccflowInfo.jpg' />", this.Msg);
+            this.UCSys1.AddMsgOfInfo("<img src='../CSS/images/ccflowInfo.jpg' style='width:30px;' />", this.Msg);
             this.UCSys1.AddFieldSetEnd(); 
 
             this.Session["Info"] = null;

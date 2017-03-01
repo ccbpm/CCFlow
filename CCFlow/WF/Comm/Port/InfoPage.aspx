@@ -11,7 +11,6 @@
     <meta content="C#" name="CODE_LANGUAGE">
     <meta content="JavaScript" name="vs_defaultClientScript">
     <meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
-    <link href="Style.css" type="text/css" rel="stylesheet">
     <script language="javascript" src="../JScript.js"></script>
     <script language="javascript" src="../Menu.js"></script>
     <script language="javascript" src="../ActiveX.js"></script>
@@ -33,9 +32,13 @@
 </head>
 <body class="Body" onkeypress="Esc()">
     <form id="ErrPage" method="post" runat="server">
-
    
+
+   <center>
     <uc1:UCSys ID="UCSys1" runat="server"></uc1:UCSys>
+    </center>
+
+
     </form>
 </body>
 </html>

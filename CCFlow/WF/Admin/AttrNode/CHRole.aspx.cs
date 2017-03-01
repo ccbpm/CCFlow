@@ -29,7 +29,7 @@ namespace CCFlow.WF.Admin.AttrFlow
                 BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
 
                 this.TB_TimeLimit.Text = nd.TimeLimit.ToString();
-                this.TB_TSpanHour.Text = nd.TSpanHour.ToString();
+                //this.TB_TSpanHour.Text = nd.TSpanHour.ToString();
 
                 BP.Web.Controls.Glo.DDL_BindEnum(this.DDL_TAlertRole, "CHAlertRole", (int)nd.TAlertRole);
                 BP.Web.Controls.Glo.DDL_BindEnum(this.DDL_TAlertWay, "CHAlertWay", (int)nd.TAlertWay);
@@ -38,7 +38,7 @@ namespace CCFlow.WF.Admin.AttrFlow
                 BP.Web.Controls.Glo.DDL_BindEnum(this.DDL_WAlertWay, "CHAlertWay", (int)nd.WAlertWay);
                 BP.Web.Controls.Glo.DDL_BindEnum(this.DDL_TWay, "TWay", (int)nd.TWay); //节假日计算.
 
-                this.TB_WarningHour.Text = nd.WarningHour.ToString();
+               // this.TB_WarningHour.Text = nd.WarningHour.ToString();
                 this.TB_WarningDay.Text = nd.WarningDay.ToString();
                 
                 this.TB_TCent.Text = nd.TCent.ToString();
@@ -64,32 +64,42 @@ namespace CCFlow.WF.Admin.AttrFlow
 
         protected void Btn_Save_Click(object sender, EventArgs e)
         {
-            //执行保存.
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            nd.TimeLimit = int.Parse(this.TB_TimeLimit.Text);
-            nd.TSpanHour = int.Parse(this.TB_TSpanHour.Text);
-            nd.WarningHour = int.Parse(this.TB_WarningHour.Text);
-            nd.WarningDay = int.Parse(this.TB_WarningDay.Text);
-            nd.TCent = int.Parse(this.TB_TCent.Text);
+            try
+            {
+                //执行保存.
+                BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+                nd.TimeLimit = int.Parse(this.TB_TimeLimit.Text);
+                
+                //nd.TSpanHour = int.Parse(this.TB_TSpanHour.Text);
+                //nd.WarningHour = int.Parse(this.TB_WarningHour.Text);
 
-            nd.TAlertRole =  (BP.WF.CHAlertRole) int.Parse(this.DDL_TAlertRole.SelectedValue);
-            nd.TAlertWay = (BP.WF.CHAlertWay)int.Parse(this.DDL_TAlertWay.SelectedValue);
+                nd.WarningDay = int.Parse(this.TB_WarningDay.Text);
+                nd.TCent = int.Parse(this.TB_TCent.Text);
 
-            nd.WAlertRole = (BP.WF.CHAlertRole)int.Parse(this.DDL_WAlertRole.SelectedValue);
-            nd.WAlertWay = (BP.WF.CHAlertWay)int.Parse(this.DDL_WAlertWay.SelectedValue);
-            nd.TWay = (BP.DA.TWay)int.Parse(this.DDL_TWay.SelectedValue); //节假日计算方式.
+                nd.TAlertRole = (BP.WF.CHAlertRole)int.Parse(this.DDL_TAlertRole.SelectedValue);
+                nd.TAlertWay = (BP.WF.CHAlertWay)int.Parse(this.DDL_TAlertWay.SelectedValue);
 
-            if (this.RB_None.Checked)
-                nd.HisCHWay = BP.WF.CHWay.None;
+                nd.WAlertRole = (BP.WF.CHAlertRole)int.Parse(this.DDL_WAlertRole.SelectedValue);
+                nd.WAlertWay = (BP.WF.CHAlertWay)int.Parse(this.DDL_WAlertWay.SelectedValue);
+                nd.TWay = (BP.DA.TWay)int.Parse(this.DDL_TWay.SelectedValue); //节假日计算方式.
 
-            if (this.RB_ByTime.Checked)
-                nd.HisCHWay = BP.WF.CHWay.ByTime;
+                if (this.RB_None.Checked)
+                    nd.HisCHWay = BP.WF.CHWay.None;
 
-            if (this.RB_ByWorkNum.Checked)
-                nd.HisCHWay = BP.WF.CHWay.ByWorkNum;
+                if (this.RB_ByTime.Checked)
+                    nd.HisCHWay = BP.WF.CHWay.ByTime;
 
-            nd.IsEval = this.CB_IsEval.Checked;
-            nd.Update();
+                if (this.RB_ByWorkNum.Checked)
+                    nd.HisCHWay = BP.WF.CHWay.ByWorkNum;
+
+                nd.IsEval = this.CB_IsEval.Checked;
+                nd.Update();
+            }
+            catch (Exception ex)
+            {
+                BP.Sys.PubClass.Alert(ex.Message);
+                return;
+            }
         }
     }
 }

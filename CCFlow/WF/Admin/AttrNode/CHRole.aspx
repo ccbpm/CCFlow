@@ -28,15 +28,15 @@
 <tr>
 <td nowarp=true> 限期完成时限：</td>
 <td> <asp:TextBox ID="TB_TimeLimit" runat="server" Width="35px"></asp:TextBox>天,</td>
-<td> <asp:TextBox ID="TB_TSpanHour" runat="server" Width="35px"></asp:TextBox>小时.</td>
-<td style=" color:Gray">工作量考核是按照小时来计算(必须输入正整数,不能大于8)</td>
+<td><%-- <asp:TextBox ID="TB_TSpanHour" runat="server" Width="35px"></asp:TextBox>小时.--%></td>
+<td style=" color:Gray"><%--工作量考核是按照小时来计算(必须输入正整数,不能大于8)--%></td>
 </tr>
 
 <tr>
 <td>预警：</td>
 <td> <asp:TextBox ID="TB_WarningDay" runat="server" Width="35px"></asp:TextBox>天,</td>
-<td> <asp:TextBox ID="TB_WarningHour" runat="server" Width="35px"></asp:TextBox>小时.</td>
-<td style=" color:Gray">提前xx天xx小时预警(必须输入正整数)，预警就是提醒该工作应该处理了的时间点。</td>
+<td> <%--<asp:TextBox ID="TB_WarningHour" runat="server" Width="35px"></asp:TextBox>小时.--%></td>
+<td style=" color:Gray"><%--提前xx天xx小时预警(必须输入正整数)，预警就是提醒该工作应该处理了的时间点。--%></td>
 </tr>
 
 

@@ -109,50 +109,56 @@ namespace CCFlow.WF.FlowFormTree
                 return;
 
             string method = string.Empty;
-
-            //返回值
             string s_responsetext = string.Empty;
-            if (!string.IsNullOrEmpty(Request["method"]))
-                method = Request["method"].ToString();
-
-            switch (method)
+            try
             {
-                case "getapptoolbar":
-                    s_responsetext = GetAppToolBar();
-                    break;
-                case "getflowformtree"://获取表单树
-                    s_responsetext = GetFlowFormTree();
-                    break;
-                case "saveblank":
-                    s_responsetext = SaveBlank();
-                    break;
-                case "checkaccepter"://接受人检查
-                    s_responsetext = CheckAccepterOper();
-                    break;
-                case "sendcase"://执行发送
-                    s_responsetext = SendCase();
-                    break;
-                case "sendcasetonode"://执行发送到指定节点
-                    s_responsetext = SendCaseToNode();
-                    break;
-                case "unsendcase"://撤销发送
-                    s_responsetext = UnSendCase();
-                    break;
-                case ""://保存
-                    s_responsetext = Send();
-                    break;
-                case "delcase"://删除流程
-                    s_responsetext = Delcase();
-                    break;
-                case "signcase"://流程签名
-                    s_responsetext = Signcase();
-                    break;
-                case "endcase"://结束流程
-                    s_responsetext = EndCase();
-                    break;
+                //返回值
+                if (!string.IsNullOrEmpty(Request["method"]))
+                    method = Request["method"].ToString();
+
+                switch (method)
+                {
+                    case "getapptoolbar":
+                        s_responsetext = GetAppToolBar();
+                        break;
+                    case "getflowformtree"://获取表单树
+                        s_responsetext = GetFlowFormTree();
+                        break;
+                    case "saveblank":
+                        s_responsetext = SaveBlank();
+                        break;
+                    case "checkaccepter"://接受人检查
+                        s_responsetext = CheckAccepterOper();
+                        break;
+                    case "sendcase"://执行发送
+                        s_responsetext = SendCase();
+                        break;
+                    case "sendcasetonode"://执行发送到指定节点
+                        s_responsetext = SendCaseToNode();
+                        break;
+                    case "unsendcase"://撤销发送
+                        s_responsetext = UnSendCase();
+                        break;
+                    case ""://保存
+                        s_responsetext = Send();
+                        break;
+                    case "delcase"://删除流程
+                        s_responsetext = Delcase();
+                        break;
+                    case "signcase"://流程签名
+                        s_responsetext = Signcase();
+                        break;
+                    case "endcase"://结束流程
+                        s_responsetext = EndCase();
+                        break;
+                }
+                if (string.IsNullOrEmpty(s_responsetext))
+                    s_responsetext = "";
             }
-            if (string.IsNullOrEmpty(s_responsetext))
-                s_responsetext = "";
+            catch (Exception ex)
+            {
+                s_responsetext = "err@doType=" + method + " err="+ex.Message;
+            }
 
             //组装ajax字符串格式,返回调用客户端
             Response.Charset = "UTF-8";

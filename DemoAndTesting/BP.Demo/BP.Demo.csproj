@@ -64,8 +64,8 @@
     <Compile Include="Demo\FlowEvent\F189.cs" />
     <Compile Include="Demo\License\License.cs" />
     <Compile Include="Demo\License\People.cs" />
-    <Compile Include="ImplementCode\DutyAndPower.cs" />
     <Compile Include="ImplementCode\GenerFrmHelpLink.cs" />
+    <Compile Include="ImplementCode\DutyAndPower.cs" />
     <Compile Include="ImplementCode\NodeDtl.cs" />
     <Compile Include="ImplementCode\Sort.cs" />
     <Compile Include="ImplementCode\ZhiDu.cs" />

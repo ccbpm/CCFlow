@@ -1141,6 +1141,10 @@ namespace CCFlow.WF.CCForm
                         try
                         {
                             fu.SaveAs(realSaveTo);
+
+                            //转换html，added by liuxc,2017-03-01
+                            if (new FrmAttachmentExt(athDesc.MyPK).IsTurn2Html)
+                                ConvertOfficeFileToHtml(realSaveTo);
                         }
                         catch (Exception ex)
                         {
@@ -1344,6 +1348,91 @@ namespace CCFlow.WF.CCForm
             }
 
             this.Response.Redirect(this.Request.RawUrl, true);
+        }
+
+        /// <summary>
+        /// 转换office文件为html文件
+        /// <para>added by liuxc, 2017-03-01</para>
+        /// </summary>
+        /// <param name="file">office文件路径</param>
+        private void ConvertOfficeFileToHtml(string file)
+        {
+            if (!File.Exists(file))
+                return;
+
+            string ext = Path.GetExtension(file).ToLower();
+            string officeexts = ".doc.docx.xls.xlsx.";
+
+            if (officeexts.IndexOf(ext + ".") == -1)
+                return;
+
+            bool isWord = ext.IndexOf(".doc") != -1;
+            string htmlFile = file.Substring(0, file.Length - ext.Length) + ".html";
+            Microsoft.Office.Interop.Word.Application wApp = null;
+            Microsoft.Office.Interop.Word.Document wDoc = null;
+            Microsoft.Office.Interop.Excel.Application xApp = null;
+            Microsoft.Office.Interop.Excel.Workbook xDoc = null;
+
+            if (File.Exists(htmlFile))
+                File.Delete(htmlFile);
+
+            try
+            {
+                if (isWord)
+                {
+                    wApp = new Microsoft.Office.Interop.Word.Application();
+                    wApp.Visible = false;
+                    wDoc = wApp.Documents.Open(file, false, true, Visible: false);
+                    wDoc.SaveAs(htmlFile, Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatFilteredHTML);
+                }
+                else
+                {
+                    xApp = new Microsoft.Office.Interop.Excel.Application();
+                    xApp.Visible = false;
+                    xDoc = xApp.Workbooks.Open(file, ReadOnly: true);
+                    xDoc.SaveAs(htmlFile, Microsoft.Office.Interop.Excel.XlFileFormat.xlHtml);
+                }
+            }
+            catch { }
+            finally
+            {
+                if (isWord)
+                {
+                    if (wDoc != null)
+                    {
+                        try
+                        {
+                            wDoc.Close(false);
+                            wApp.Quit(false);
+                        }
+                        catch { }
+                        finally
+                        {
+                            wDoc = null;
+                            wApp = null;
+                        }
+                    }
+                }
+                else
+                {
+                    if (xDoc != null)
+                    {
+                        try
+                        {
+                            xDoc.Close(false);
+                            xApp.Quit();
+                        }
+                        catch { }
+                        finally
+                        {
+                            xDoc = null;
+                            xApp = null;
+                        }
+                    }
+                }
+
+                GC.Collect();
+            }
         }
 
         //获取浏览器版本号   

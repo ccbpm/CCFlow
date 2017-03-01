@@ -4332,7 +4332,7 @@ namespace CCFlow.WF.UC
 
                     if (this.IsReadonly == false)
                     {
-                        if (ath.HisDeleteWay == AthDeleteWay.DelAll || (ath.HisDeleteWay == AthDeleteWay.DelSelf && athDB.Rec == WebUser.No))
+                        if (ath.HisDeleteWay == AthDeleteWay.DelAll || (ath.HisDeleteWay == AthDeleteWay.DelSelf && athDB != null && athDB.Rec == WebUser.No))  //edited by liuxc,2017-03-01,修复无上传文件报错问题
                         {
                             mybtn = new Button();
                             mybtn.CssClass = "Btn";
@@ -4528,10 +4528,9 @@ namespace CCFlow.WF.UC
                         this.Alert("您上传的文件超过30M,请使用大附件上传!");
                         return;
                     }
+
                     //处理保存路径.
                     string saveTo = frmAth.SaveTo;
-
-
 
                     if (saveTo.Contains("*") || saveTo.Contains("@"))
                     {
@@ -4554,6 +4553,10 @@ namespace CCFlow.WF.UC
 
                     saveTo = saveTo + "\\" + athDBPK + "." + fu.FileName.Substring(fu.FileName.LastIndexOf('.') + 1);
                     fu.SaveAs(saveTo);
+
+                    //转换html，added by liuxc,2017-03-01
+                    if (new FrmAttachmentExt(frmAth.MyPK).IsTurn2Html)
+                        ConvertOfficeFileToHtml(saveTo);
 
                     FileInfo info = new FileInfo(saveTo);
 
@@ -4650,6 +4653,91 @@ namespace CCFlow.WF.UC
                     break;
                 default:
                     break;
+            }
+        }
+
+        /// <summary>
+        /// 转换office文件为html文件
+        /// <para>added by liuxc, 2017-03-01</para>
+        /// </summary>
+        /// <param name="file">office文件路径</param>
+        private void ConvertOfficeFileToHtml(string file)
+        {
+            if (!File.Exists(file))
+                return;
+
+            string ext = Path.GetExtension(file).ToLower();
+            string officeexts = ".doc.docx.xls.xlsx.";
+
+            if (officeexts.IndexOf(ext + ".") == -1)
+                return;
+
+            bool isWord = ext.IndexOf(".doc") != -1;
+            string htmlFile = file.Substring(0, file.Length - ext.Length) + ".html";
+            Microsoft.Office.Interop.Word.Application wApp = null;
+            Microsoft.Office.Interop.Word.Document wDoc = null;
+            Microsoft.Office.Interop.Excel.Application xApp = null;
+            Microsoft.Office.Interop.Excel.Workbook xDoc = null;
+
+            if (File.Exists(htmlFile))
+                File.Delete(htmlFile);
+
+            try
+            {
+                if(isWord)
+                {
+                    wApp = new Microsoft.Office.Interop.Word.Application();
+                    wApp.Visible = false;
+                    wDoc = wApp.Documents.Open(file, false, true, Visible: false);
+                    wDoc.SaveAs(htmlFile, Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatFilteredHTML);
+                }
+                else
+                {
+                    xApp = new Microsoft.Office.Interop.Excel.Application();
+                    xApp.Visible = false;
+                    xDoc = xApp.Workbooks.Open(file, ReadOnly: true);
+                    xDoc.SaveAs(htmlFile, Microsoft.Office.Interop.Excel.XlFileFormat.xlHtml);
+                }
+            }
+            catch{}
+            finally
+            {
+                if(isWord)
+                {
+                    if(wDoc != null)
+                    {
+                        try
+                        {
+                            wDoc.Close(false);
+                            wApp.Quit(false);
+                        }
+                        catch{}
+                        finally
+                        {
+                            wDoc = null;
+                            wApp = null;
+                        }
+                    }
+                }
+                else
+                {
+                    if(xDoc != null)
+                    {
+                        try
+                        {
+                            xDoc.Close(false);
+                            xApp.Quit();
+                        }
+                        catch { }
+                        finally
+                        {
+                            xDoc = null;
+                            xApp = null;
+                        }
+                    }
+                }
+
+                GC.Collect();
             }
         }
 

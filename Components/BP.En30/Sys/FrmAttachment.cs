@@ -191,7 +191,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否要转换成html，方便在线浏览.
         /// </summary>
-        public const string IsTurn2Hmtl = "IsTurn2Hmtl";
+        public const string IsTurn2Html = "IsTurn2Html";
         /// <summary>
         /// 类别
         /// </summary>

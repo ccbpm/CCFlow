@@ -476,6 +476,17 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.FK_MapData, value);
             }
         }
+
+        /// <summary>
+        /// 是否要转换成html
+        /// </summary>
+        public bool IsTurn2Html
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsTurn2Html);
+            }
+        }
         #endregion
 
         #region weboffice文档属性(参数属性)
@@ -774,7 +785,7 @@ namespace BP.Sys
                 
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20,true,null);
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20, true, null);
-                map.AddBoolean(FrmAttachmentAttr.IsTurn2Hmtl, false, "是否转换成html(方便手机浏览)", true, true,true);
+                map.AddBoolean(FrmAttachmentAttr.IsTurn2Html, false, "是否转换成html(方便手机浏览)", true, true,true);
 
                 //位置.
                 map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", false, false);

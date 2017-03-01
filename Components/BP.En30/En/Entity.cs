@@ -111,7 +111,10 @@ namespace BP.En
         public string ToJson()
         {
             Hashtable ht = this.Row;
-            if (ht.ContainsKey("AtPara") == true)
+            if (ht.ContainsKey("AtPara") == false)
+                return BP.Tools.Json.ToJsonEntityModel(ht);
+
+            try
             {
                 /*如果包含这个字段*/
                 AtPara ap = this.atPara;
@@ -119,21 +122,15 @@ namespace BP.En
                 {
                     if (ht.ContainsKey(key) == true)
                         continue;
-
-                    try
-                    {
-                        ht.Add(key, ap.HisHT[key]);
-                    }
-                    catch(Exception ex)
-                    {
-                        Log.DebugWriteWarning("@ ToJson " + ex.Message);
-                    }
+                    ht.Add(key, ap.HisHT[key]);
                 }
             }
-
+            catch (Exception ex)
+            {
+                Log.DebugWriteWarning("@ ToJson " + ex.Message);
+            }
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }
-
         /// <summary>
         /// 转化成json字符串，包含外键与枚举，主表使用Main命名。
         /// 外键使用外键表命名，枚举值使用枚举值命名。

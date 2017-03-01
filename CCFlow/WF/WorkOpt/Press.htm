@@ -30,7 +30,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Press&FK_Flow=" + GetQueryString('FK_Flow') + '&WorkID=' + GetQueryString('WorkID') + '&FID=' + GetQueryString('FID') + "&Msg=" + msg + "&m=" + Math.random(),
+                url: Handler + "?DoType=Press&FK_Flow=" + GetQueryString('FK_Flow') + '&WorkID=' + GetQueryString('WorkID') + '&FID=' + GetQueryString('FID') + "&Msg=" +encodeURI(msg) + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

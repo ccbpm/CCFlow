@@ -1352,19 +1352,27 @@ namespace BP.En
         /// <param name="val"></param>
         public int Delete(string attr, object val)
         {
-            Paras ps = new Paras();
-            ps.Add(attr, val);
-            switch (this.EnMap.EnDBUrl.DBType)
+            try
             {
-                case DBType.Oracle:
-                case DBType.MSSQL:
-                case DBType.Informix:
-                case DBType.MySQL:
-                    return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
-                case DBType.Access:
-                    return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
-                default:
-                    throw new Exception("没有涉及到的类型。");
+                Paras ps = new Paras();
+                ps.Add(attr, val);
+                switch (this.EnMap.EnDBUrl.DBType)
+                {
+                    case DBType.Oracle:
+                    case DBType.MSSQL:
+                    case DBType.Informix:
+                    case DBType.MySQL:
+                        return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
+                    case DBType.Access:
+                        return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetAttrByKey(attr).Field + " =" + this.HisDBVarStr + attr, ps);
+                    default:
+                        throw new Exception("没有涉及到的类型。");
+                }
+            }
+            catch(Exception ex)
+            {
+                this.CheckPhysicsTable();
+                throw ex;
             }
         }
         public int Delete(string attr1, object val1, string attr2, object val2)

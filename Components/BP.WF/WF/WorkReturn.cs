@@ -404,12 +404,10 @@ namespace BP.WF
                     {
                         case RunModel.Ordinary:    /*2.1 分流点to普通节点 */
                             return ExeReturn1_1(); //
-                            break;
                         case RunModel.FL:  /*2.2 分流点to分流点  */
                         case RunModel.HL:  /*2.3 分流点to合流点,分合流点   */
                         case RunModel.FHL:
                             return ExeReturn1_1(); //
-                            break;
                         case RunModel.SubThread: /* 2.4 分流点to子线程点   */
                             return ExeReturn2_4(); //
                            // throw new Exception("@退回错误:非法的设计模式或退回模式.分流点to子线程点,请反馈给管理员.");
@@ -423,17 +421,13 @@ namespace BP.WF
                     {
                         case RunModel.Ordinary: /*3.1 普通工作节点 */
                             return ExeReturn1_1(); //
-                            break;
                         case RunModel.FL: /*3.2 合流点向分流点退回 */
                             return ExeReturn3_2(); //
-                            break;
                         case RunModel.HL: /*3.3 合流点 */
                         case RunModel.FHL:
                             throw new Exception("@尚未完成.");
-                            break;
                         case RunModel.SubThread:/*3.4 合流点向子线程退回 */
                             return ExeReturn3_4();
-                            break;
                         default:
                             throw new Exception("@退回错误:非法的设计模式或退回模式.普通节to子线程点");
                     }
@@ -443,14 +437,12 @@ namespace BP.WF
                     {
                         case RunModel.Ordinary: /*4.1 普通工作节点 */
                             return ExeReturn1_1();
-                            break;
                         case RunModel.FL: /*4.2 分流点 */
                         case RunModel.HL: /*4.3 合流点 */
                         case RunModel.FHL:
                             throw new Exception("@尚未完成.");
                         case RunModel.SubThread:/*4.5 子线程*/
                             return ExeReturn3_4();
-                            break;
                         default:
                             throw new Exception("@没有判断的节点类型(" + this.ReturnToNode.Name + ")");
                     }
@@ -460,20 +452,16 @@ namespace BP.WF
                     {
                         case RunModel.Ordinary: /*5.1 普通工作节点 */
                             throw new Exception("@非法的退回模式,,请反馈给管理员.");
-                            break;
                         case RunModel.FL: /*5.2 分流点 */
                             /*子线程退回给分流点.*/
                            return ExeReturn5_2();
                         case RunModel.HL: /*5.3 合流点 */
                             throw new Exception("@非法的退回模式,请反馈给管理员.");
-                            break;
                         case RunModel.FHL: /*5.4 分合流点 */
                             return ExeReturn5_2();
                             //throw new Exception("@目前不支持此场景下的退回,请反馈给管理员.");
-                            break;
                         case RunModel.SubThread: /*5.5 子线程*/
                             return ExeReturn1_1();
-                            break;
                         default:
                             throw new Exception("@没有判断的节点类型(" + ReturnToNode.Name + ")");
                     }
@@ -522,7 +510,6 @@ namespace BP.WF
                 item.IsPassInt = -2;
                 item.Update();
             }
-
             return "成功的把信息退回到：" + this.ReturnToNode.Name + " , 退回给:(" + this.ReturnToEmp + ")";
         }
         /// <summary>

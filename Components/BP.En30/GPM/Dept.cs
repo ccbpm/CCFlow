@@ -230,7 +230,6 @@ namespace BP.GPM
         /// </summary>
         public Depts()
         {
-
         }
         /// <summary>
         /// 部门集合

@@ -44,7 +44,6 @@ namespace BP.GPM
             }
         }
 
-
         #region 基本属性
         /// <summary>
         /// 工作人员ID

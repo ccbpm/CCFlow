@@ -36,7 +36,7 @@ namespace BP.En
         /// <summary>
         /// 树
         /// </summary>
-        public EntitiesTree EnsTree = null;
+        public EntitiesSimpleTree EnsTree = null;
         /// <summary>
         /// 关联的树字段
         /// </summary>
@@ -253,7 +253,7 @@ namespace BP.En
 		/// <param name="AttrOfMValue"></param>
 		/// <param name="desc">描述</param>
 		public void Add(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM , string AttrOfMText,
-            string AttrOfMValue, string desc, Dot2DotModel model= Dot2DotModel.Default, EntitiesTree ensTree=null, string refTreeAttr=null)
+            string AttrOfMValue, string desc, Dot2DotModel model= Dot2DotModel.Default, EntitiesSimpleTree ensTree=null, string refTreeAttr=null)
 		{
 
             //属性.

@@ -120,9 +120,17 @@ namespace BP.En
                     if (ht.ContainsKey(key) == true)
                         continue;
 
-                    ht.Add(key, ap.HisHT[key]);
+                    try
+                    {
+                        ht.Add(key, ap.HisHT[key]);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.DebugWriteWarning("@ ToJson " + ex.Message);
+                    }
                 }
             }
+
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }
 

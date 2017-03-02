@@ -106,7 +106,7 @@ namespace CCFormExcel2010
 				foreach (DataRow dr in _newData.Rows) //!若Excel表单数据与数据库数据不一致，则需修改此方法
 				{
 					if (!string.IsNullOrEmpty(dr["RowInExcel"].ToString()))
-						this.SetConnection((int)dr["RowInExcel"], (int)dr["OID"]);
+						this.SetConnection(int.Parse(dr["RowInExcel"].ToString()), _newData.Rows.IndexOf(dr));
 				}
 			}
 		}
@@ -130,6 +130,20 @@ namespace CCFormExcel2010
 				_rowsConnection.Add(rowInExcel, _newData.Rows[rowInDatatable]["OID"]);
 			}
 		}
+		/*
+		public void SetConnection(int rowInExcel, string OID)
+		{
+			if (_rowsConnection.Contains(rowInExcel))
+			{
+				_newData.Rows[rowInDatatable]["RowInExcel"] = rowInExcel;
+				_rowsConnection[rowInExcel] = _newData.Rows[rowInDatatable]["OID"];
+			}
+			else
+			{
+				_newData.Rows[rowInDatatable]["RowInExcel"] = rowInExcel;
+				_rowsConnection.Add(rowInExcel, _newData.Rows[rowInDatatable]["OID"]);
+			}
+		}*/
 
 		/// <summary>
 		/// 初始化行关联（用于表单数据已填充到Excel时执行）
@@ -140,7 +154,7 @@ namespace CCFormExcel2010
 			foreach (DataRow dr in _newData.Rows) //!若Excel表单数据与数据库数据不一致，则需修改此方法
 			{
 				if (!string.IsNullOrEmpty(dr["RowInExcel"].ToString()))
-					this.SetConnection((int)dr["RowInExcel"], (int)dr["OID"]);
+					this.SetConnection(int.Parse(dr["RowInExcel"].ToString()), _newData.Rows.IndexOf(dr));
 			}
 		}
 
@@ -153,6 +167,47 @@ namespace CCFormExcel2010
 		{
 			if (_rowsConnection.Contains(rowInExcel))
 				return _rowsConnection[rowInExcel].ToString();
+			else
+				return null;
+		}
+
+		/// <summary>
+		/// 获取子表某一列在WorkSheet中的Column
+		/// </summary>
+		/// <param name="column"></param>
+		/// <returns></returns>
+		public int GetColumnCx(string column)
+		{
+			foreach (DictionaryEntry col in _columns)
+			{
+				if (col.Value.ToString() == column)
+					return (int)col.Key;
+			}
+			return -1;
+		}
+
+		/// <summary>
+		/// 获取子表中某一列绑定的字段名
+		/// </summary>
+		/// <param name="rangeColumn"></param>
+		/// <returns></returns>
+		public string GetColumnName(int rangeColumn)
+		{
+			if (_columns.Contains(rangeColumn))
+				return (string)_columns[rangeColumn];
+			else
+				return null;
+		}
+
+		/// <summary>
+		/// 获取子表中某一列绑定的字段名
+		/// </summary>
+		/// <param name="range"></param>
+		/// <returns></returns>
+		public string GetColumnName(Excel.Range range)
+		{
+			if (_columns.Contains(range.Column))
+				return (string)_columns[range.Column];
 			else
 				return null;
 		}

@@ -13,27 +13,11 @@
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <style type="text/css">
     .icon-reddot{
-	 background:url('../../Img/OK.png') no-repeat center center;
-    }
+	     background:url('../../Img/OK.png') no-repeat center center;
+        }
      </style>
     <script language="javascript" type="text/javascript">
         $(function () {
-            //绑定树单击事件
-            //            $('#tt').tree({
-            //                 iconCls: 'icon-ok',
-            //                onClick: function (node) {
-            //                    $('#tt').tree('select', node.target);
-            //                   // alert(node.id);  // 在用户点击的时候提示
-            ////                    $('#tt').tree('update', {
-            ////                       
-            ////                    });
-            //                    $('#tt').tree('update', {
-            //                        target: node.target,
-            //                        iconCls: 'icon-ok'
-            //                    });
-            //                }
-            //            });
-
             //按当前操作员所属组织结构逐级查找岗位
             $("#RB0").hide();
             $("#YC_1").hide();
@@ -698,7 +682,7 @@
                                         <asp:RadioButton ID="RB_BySQL" Text="按设置的SQL获取接受人计算" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        请在文本框里里输入SQL.</div>
+                                        请在文本框里输入SQL.</div>
                                 </th>
                             </tr>
                             <tr id="YC_11">
@@ -717,7 +701,7 @@
                                         <asp:RadioButton ID="RB_BySQLAsSubThreadEmpsAndData" Text="按SQL确定子线程接受人与数据源" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        请在文本框里里输入SQL.
+                                        请在文本框里输入SQL.
                                     </div>
                                 </th>
                                 <%

@@ -143,18 +143,18 @@ namespace CCFlow.WF.CCForm
 						GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
 						daDtl.RefPK = mainEnPKOID.ToString();
 
+						daDtl.OID = int.Parse(dr["OID"].ToString());
+
+						if (daDtl.OID > 100)
+							daDtl.RetrieveFromDBSources();
+						daDtl.ResetDefaultVal();
+
 						//明细列.
 						foreach (DataColumn dc in dt.Columns)
 						{
 							//设置属性.
 							daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
 						}
-
-						if (daDtl.OID > 100)
-							daDtl.RetrieveFromDBSources();
-
-
-						daDtl.ResetDefaultVal();
 
 						daDtl.RefPK = mainEnPKOID.ToString();
 						daDtl.RDT = DataType.CurrentDataTime;
@@ -179,10 +179,10 @@ namespace CCFlow.WF.CCForm
 		/// </summary>
 		/// <param name="userNo">用户</param>
 		/// <param name="sid">安全校验码</param>
-		/// <param name="mainEnPK">表单主键值</param>
+		/// <param name="mainEnPK">表单主键值（WorkId）</param>
 		/// <param name="mapExtMyPK">逻辑逐渐值</param>
-		/// <param name="cheaneKey">变动的key(一定是编号)</param>
-		/// <param name="paras">@Key=Val@Key1=Val1@Key2=Val2</param>
+		/// <param name="cheaneKey">级联父字段的值（No)</param>
+		/// <param name="paras">『主表/子表整行』的【所有字段】（@Key=Val@Key1=Val1@Key2=Val2）</param>
 		/// <returns>查询的要填充数据</returns>
 		[WebMethod]
 		public DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, int mainEnPK, string mapExtMyPK, string cheaneKey,

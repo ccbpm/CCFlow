@@ -1558,10 +1558,12 @@ namespace CCFlow.WF.CCForm
                     //ddl.ID = "DDL_" + attr.KeyOfEn + "_" + dtl.OID;
                     foreach (MapExt me in mes)
                     {
+#warning 此处需要优化
+                        string ddlC = "DDL" + me.AttrOfOper.Replace(me.FK_MapData,"") + "_" + mydtl.OID;
                         switch (me.ExtType)
                         {
                             case MapExtXmlList.DDLFullCtrl: // 自动填充.
-                                DDL ddlOper = this.Pub1.GetDDLByID("DDL_" + me.AttrOfOper + "_" + mydtl.OID);
+                                DDL ddlOper = this.Pub1.GetDDLByID(ddlC);
                                 if (ddlOper == null)
                                     continue;
                                 ddlOper.Attributes["onchange"] = "DDLFullCtrl(this.value,\'" + ddlOper.ClientID + "\', \'" + me.MyPK + "\')";
@@ -1573,7 +1575,7 @@ namespace CCFlow.WF.CCForm
                                 if (ddlPerant == null)
                                     continue;
 #warning 此处需要优化
-                                string ddlC = "Pub1_DDL_" + me.AttrsOfActive + "_" + mydtl.OID;
+                                ddlC = "Pub1_DDL_" + me.AttrsOfActive + "_" + mydtl.OID;
                                 ddlPerant.Attributes["onchange"] = " SetChange (true); DDLAnsc(this.value, \'" + ddlC + "\', \'" + me.MyPK + "\','" + mydtl.OID+ "')";
                                 DDL ddlChild = this.Pub1.GetDDLByID("DDL_" + me.AttrsOfActive + "_" + mydtl.OID);
                                 val = ddlPerant.SelectedItemStringVal;

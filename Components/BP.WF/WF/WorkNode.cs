@@ -5517,6 +5517,17 @@ namespace BP.WF
             {
                 if (Glo.CheckIsCanStartFlow_SendStartFlow(this.HisFlow, this.HisWork) == false)
                     throw new Exception("@违反了流程发起限制条件:" + Glo.DealExp(this.HisFlow.StartLimitAlert, this.HisWork, null));
+
+                if (this.HisGenerWorkFlow.WFState == WFState.Blank || this.HisGenerWorkFlow.WFState == WFState.Draft)
+                {
+                    //设置或改变流程发起时间.
+                    this.HisGenerWorkFlow.RDT = DataType.CurrentDataTime;
+                    Paras ps = new Paras();
+                    ps.SQL = "UPDATE WF_GenerWorkerlist SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                    ps.Add("RDT", this.HisGenerWorkFlow.RDT);
+                    ps.Add("WorkID", this.WorkID);
+                    DBAccess.RunSQL(ps);
+                }
             }
             
             // 第1.3: 判断当前流程状态.

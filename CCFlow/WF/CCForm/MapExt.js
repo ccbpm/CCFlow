@@ -394,7 +394,7 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
     var url = GetLocalWFPreHref();
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
 
-    alert(kvs);
+    //alert(kvs);
 
     $.ajax({
         type: "get",

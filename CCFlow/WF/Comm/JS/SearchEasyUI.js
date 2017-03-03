@@ -196,7 +196,7 @@ function EditEntityForm() {
             },
             buttons: [{
                 text: '关闭',
-                iconCls: 'icon-cancel',
+                iconCls: 'icon-no',
                 handler: function () {
                     $('#dialogEnPanel').dialog("close");
                 }

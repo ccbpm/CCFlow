@@ -26,6 +26,7 @@ $(function () {
     buildPanel();
     //设置属性高度
     ReSetEditDivCss();
+
 });
 
 //初始化右键菜单
@@ -346,3 +347,290 @@ function ReSetEditDivCss() {
         $(this).removeClass("hover");
     });
 }
+
+
+//将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
+function Conver_CCForm_V1ToV2() {
+    //transe old CCForm to new
+    $.post(controllerURLConfig, {
+        action: 'CcformElements',
+        FK_MapData: CCForm_FK_MapData
+    }, function (jsonData) {
+        var jData = $.parseJSON(jsonData);
+        console.log(jData)
+        if (jData.success == true) {
+            var flow_Data = $.parseJSON(jData.data);
+            //循环MapAttr
+            for (var mapAtrrIndex in flow_Data.MapAttr) {
+                var mapAttr = flow_Data.MapAttr[mapAtrrIndex];
+                var createdFigure = figure_MapAttr_Template(mapAttr);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(mapAttr.X - createdFigure.rotationCoords[0].x, mapAttr.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
+
+            //循环FrmLab
+            for (var i in flow_Data.FrmLab) {
+                var frmLab = flow_Data.FrmLab[i];
+                var createdFigure = figure_Template_Label(frmLab);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(frmLab.X - createdFigure.rotationCoords[0].x, frmLab.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
+
+            //循环FrmRB
+            //for (var i in flow_Data.FrmRb) {
+            //    var frmRb = flow_Data.FrmRb[i];
+            //    var createdFigure = figure_Template_Rb(frmRb);
+            //    //move it into position
+            //    createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
+            //    createdFigure.style.lineWidth = defaultLineWidth;
+            //    //add to STACK
+            //    STACK.figureAdd(createdFigure);
+            //}
+
+            //循环FrmBtn
+            for (var i in flow_Data.FrmBtn) {
+                var frmBtn = flow_Data.FrmBtn[i];
+                var createdFigure = figure_Template_Btn(frmBtn);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(frmBtn.X - createdFigure.rotationCoords[0].x, frmBtn.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
+            redraw = true;
+            draw();
+            //save(false);
+        } else {
+            Designer_ShowMsg('错误: ' + jData.msg);
+        }
+    });
+}
+
+//升级表单元素 初始化文本框、日期、时间
+function figure_MapAttr_Template(mapAttr) {
+    var f = undefined;
+    if (mapAttr.UIContralType == 0) {
+        f = new Figure("TextBox");
+        //控件数据类型
+        if (mapAttr.MyDataType == "1") {
+            f.CCForm_Shape = "TextBoxStr";
+        } else if (mapAttr.MyDataType == "2") {
+            f.CCForm_Shape = "TextBoxInt";
+        } else if (mapAttr.MyDataType == "3") {
+            f.CCForm_Shape = "TextBoxFloat";
+        } else if (mapAttr.MyDataType == "4") {
+            f.CCForm_Shape = "TextBoxBoolean";
+        } else if (mapAttr.MyDataType == "5") {
+            f.CCForm_Shape = "TextBoxDouble";
+        } else if (mapAttr.MyDataType == "6") {
+            f.CCForm_Shape = "TextBoxDate";
+        } else if (mapAttr.MyDataType == "7") {
+            f.CCForm_Shape = "TextBoxDateTime";
+        } else if (mapAttr.MyDataType == "8") {
+            f.CCForm_Shape = "TextBoxMoney";
+        }
+    } else if (mapAttr.UIContralType == 1) {
+        f = new Figure("DropDownList");
+        //枚举下拉框
+        if (mapAttr.LGType == 1 ) {
+            f.CCForm_Shape = "DropDownListEnum";
+        }//外键下拉框
+        else if (mapAttr.LGType == 2) {
+            f.CCForm_Shape = "DropDownListTable";
+        }
+    } else if (mapAttr.UIContralType == 2) {//复选框
+        f = new Figure("TextBox");
+        f.CCForm_Shape = "TextBoxBoolean";
+    } else if (mapAttr.UIContralType == 3) {//单选妞
+        return;
+    }
+    f.name = f.CCForm_Shape;
+    f.CCForm_MyPK = mapAttr.KeyOfEn;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+    f.style.strokeStyle = FigureDefaults.strokeStyle;
+    f.properties.push(new BuilderProperty('控件属性-' + f.CCForm_Shape, 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+
+    for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
+        var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
+        var propertyVale = mapAttr[property.proName];
+        if (property.proName == 'FieldText') {
+            propertyVale = mapAttr["Name"];
+        }
+        if (propertyVale == undefined) {
+            propertyVale = property.DefVal;
+        }
+
+        f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
+    }
+
+    //Image
+    var url = figureSetsURL + "/DataView/" + f.CCForm_Shape + ".png";
+
+    var ifig = new ImageFrame(url, mapAttr.X, mapAttr.Y, true, 150, 30);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
+
+    var t2 = new Text(mapAttr.KeyOfEn, mapAttr.X, mapAttr.Y, FigureDefaults.textFont, FigureDefaults.textSize);
+    t2.style.fillStyle = FigureDefaults.textColor;
+    f.addPrimitive(t2);
+
+    f.gradientBounds = [100, 100, 200, 200];
+
+    f.finalise();
+    return f;
+}
+
+//升级表单元素 初始化Label
+function figure_Template_Label(frmLab) {
+    var f = new Figure('Label');
+    //ccform Property
+    f.CCForm_Shape = "Label";
+    f.style.fillStyle = FigureDefaults.fillStyle;
+   
+    f.CCForm_MyPK = frmLab.MyPK;
+    f.name = "Label";
+    var x = frmLab.X;
+    var y = frmLab.Y;
+    f.properties.push(new BuilderProperty('基本属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT,frmLab.Text));
+    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE,frmLab.FontSize));
+    f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY,frmLab.FontName));
+    //f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
+    f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
+    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT,frmLab.IsBold));
+    f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR, frmLab.FontColor));
+
+    var t2 = new Text(frmLab.Text, frmLab.X, frmLab.Y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    t2.style.fillStyle = FigureDefaults.textColor;
+
+    f.addPrimitive(t2);
+
+    f.finalise();
+    return f;
+}
+
+//初始化按钮
+function figure_Template_Btn(frmLab) {
+    var f = new Figure("Button");
+    f.CCForm_MyPK = frmLab.MyPK;
+    //ccform Property
+    f.CCForm_Shape = CCForm_Controls.Button;
+
+    f.style.strokeStyle = "#c0c0c0";
+    f.style.lineWidth = 2;
+
+    f.properties.push(new BuilderProperty('基本属性-Button', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    f.properties.push(new BuilderProperty('字体大小', 'primitives.1.size', BuilderProperty.TYPE_TEXT_FONT_SIZE));
+    f.properties.push(new BuilderProperty('字体', 'primitives.1.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY));
+    f.properties.push(new BuilderProperty('字体加粗', 'primitives.1.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT));
+    f.properties.push(new BuilderProperty('字体颜色', 'primitives.1.style.fillStyle', BuilderProperty.TYPE_COLOR));
+
+    f.properties.push(new BuilderProperty('控件属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    f.properties.push(new BuilderProperty('按钮标签', 'primitives.1.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLab.Text));
+    f.properties.push(new BuilderProperty('按钮事件', 'ButtonEvent', BuilderProperty.CCFormEnum, frmLab.EventType));
+    f.properties.push(new BuilderProperty('事件内容', 'BtnEventDoc', BuilderProperty.TYPE_TEXT,frmLab.EventContext));
+
+    var x = frmLab.X;
+    var y = frmLab.Y;
+    var p = new Path();
+    var hShrinker = 12;
+    var vShrinker = 15;
+    var l1 = new Line(new Point(x + hShrinker, y + vShrinker),
+        new Point(x + FigureDefaults.segmentSize - hShrinker, y + vShrinker));
+
+    var c1 = new QuadCurve(new Point(x + FigureDefaults.segmentSize - hShrinker, y + vShrinker),
+        new Point(x + FigureDefaults.segmentSize - hShrinker + FigureDefaults.corner * (FigureDefaults.cornerRoundness / 10), y + FigureDefaults.corner / FigureDefaults.cornerRoundness + vShrinker),
+        new Point(x + FigureDefaults.segmentSize - hShrinker + FigureDefaults.corner, y + FigureDefaults.corner + vShrinker))
+
+    var l2 = new Line(new Point(x + FigureDefaults.segmentSize - hShrinker + FigureDefaults.corner, y + FigureDefaults.corner + vShrinker),
+        new Point(x + FigureDefaults.segmentSize - hShrinker + FigureDefaults.corner, y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker));
+
+    var c2 = new QuadCurve(new Point(x + FigureDefaults.segmentSize - hShrinker + FigureDefaults.corner, y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker),
+        new Point(x + FigureDefaults.segmentSize - hShrinker + FigureDefaults.corner * (FigureDefaults.cornerRoundness / 10), y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker + FigureDefaults.corner * (FigureDefaults.cornerRoundness / 10)),
+        new Point(x + FigureDefaults.segmentSize - hShrinker, y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker + FigureDefaults.corner))
+
+    var l3 = new Line(new Point(x + FigureDefaults.segmentSize - hShrinker, y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker + FigureDefaults.corner),
+        new Point(x + hShrinker, y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker + FigureDefaults.corner));
+
+    var c3 = new QuadCurve(
+        new Point(x + hShrinker, y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker + FigureDefaults.corner),
+        new Point(x + hShrinker - FigureDefaults.corner * (FigureDefaults.cornerRoundness / 10), y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker + FigureDefaults.corner * (FigureDefaults.cornerRoundness / 10)),
+        new Point(x + hShrinker - FigureDefaults.corner, y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker))
+
+    var l4 = new Line(new Point(x + hShrinker - FigureDefaults.corner, y + FigureDefaults.corner + FigureDefaults.segmentShortSize - vShrinker),
+        new Point(x + hShrinker - FigureDefaults.corner, y + FigureDefaults.corner + vShrinker));
+
+    var c4 = new QuadCurve(
+        new Point(x + hShrinker - FigureDefaults.corner, y + FigureDefaults.corner + vShrinker),
+        new Point(x + hShrinker - FigureDefaults.corner * (FigureDefaults.cornerRoundness / 10), y + vShrinker),
+        new Point(x + hShrinker, y + vShrinker))
+
+    p.addPrimitive(l1);
+    p.addPrimitive(c1);
+    p.addPrimitive(l2);
+    p.addPrimitive(c2);
+    p.addPrimitive(l3);
+    p.addPrimitive(c3);
+    p.addPrimitive(l4);
+    p.addPrimitive(c4);
+    f.addPrimitive(p);
+
+    var t2 = new Text(frmLab.Text, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentShortSize / 2 + FigureDefaults.corner, FigureDefaults.textFont, FigureDefaults.textSize);
+    t2.style.fillStyle = FigureDefaults.textColor;
+
+    f.addPrimitive(t2);
+
+    f.finalise();
+    return f;
+}
+//初始化单选按钮
+function figure_Template_Rb(frmLab) {
+    var f = new Figure("RadioButton");
+    f.CCForm_Shape = "RadioButton";
+    f.name = "Label";
+    f.CCForm_MyPK = mapAttr.KeyOfEn;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+    f.style.strokeStyle = FigureDefaults.strokeStyle;
+    f.properties.push(new BuilderProperty('控件属性-' + f.CCForm_Shape, 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+
+    for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
+        var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
+        var propertyVale = mapAttr[property.proName];
+        if (property.proName == 'FieldText') {
+            propertyVale = mapAttr["Name"];
+        }
+        if (propertyVale == undefined) {
+            propertyVale = property.DefVal;
+        }
+
+        f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
+    }
+
+    //Image
+    var url = figureSetsURL + "/DataView/" + f.CCForm_Shape + ".png";
+
+    var ifig = new ImageFrame(url, mapAttr.X, mapAttr.Y, true, 150, 30);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
+
+    var t2 = new Text(mapAttr.KeyOfEn, mapAttr.X, mapAttr.Y, FigureDefaults.textFont, FigureDefaults.textSize);
+    t2.style.fillStyle = FigureDefaults.textColor;
+    f.addPrimitive(t2);
+
+    f.gradientBounds = [100, 100, 200, 200];
+
+    f.finalise();
+    return f;
+}
+

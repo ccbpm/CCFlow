@@ -5523,7 +5523,7 @@ namespace BP.WF
                     //设置或改变流程发起时间.
                     this.HisGenerWorkFlow.RDT = DataType.CurrentDataTime;
                     Paras ps = new Paras();
-                    ps.SQL = "UPDATE WF_GenerWorkerlist SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                    ps.SQL = "UPDATE WF_GenerWorkerlist SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ";
                     ps.Add("RDT", this.HisGenerWorkFlow.RDT);
                     ps.Add("WorkID", this.WorkID);
                     DBAccess.RunSQL(ps);
@@ -5856,6 +5856,7 @@ namespace BP.WF
                 else
                 {
                     #region 第二步: 进入核心的流程运转计算区域. 5*5 的方式处理不同的发送情况.
+
                     // 执行节点向下发送的25种情况的判断.
                     this.NodeSend_Send_5_5();
 
@@ -5864,7 +5865,6 @@ namespace BP.WF
                     {
                         this.rptGe.WFState = WFState.Complete;
                         this.Func_DoSetThisWorkOver();
-
                         this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
                     }
                     else
@@ -6047,9 +6047,19 @@ namespace BP.WF
 
                 #region 执行抄送.
                 //执行抄送.
-                if (!this.HisNode.IsEndNode)
+                if (this.HisNode.IsEndNode==false)
                 {
-                    CCWork cc = new CCWork(this);
+                    //执行自动抄送.
+                    string ccMsg1 = WorkFlowBuessRole.DoCCAuto(this.HisNode,  this.rptGe, this.WorkID, this.HisWork.FID);
+                    //按照指定的字段抄送.
+                    string ccMsg2 = WorkFlowBuessRole.DoCCByEmps(this.HisNode, this.rptGe, this.WorkID, this.HisWork.FID);
+                    string ccMsg = ccMsg1 + ccMsg2;
+
+                    if (string.IsNullOrEmpty(ccMsg) == false)
+                    {
+                        this.addMsg("CC", "@自动抄送给:" + ccMsg);
+                        this.AddToTrack(ActionType.CC, WebUser.No, WebUser.Name, this.HisNode.NodeID, this.HisNode.Name, ccMsg1 + ccMsg2, this.HisNode);
+                    }
                 }
 
                 DBAccess.DoTransactionCommit(); //提交事务.
@@ -7175,7 +7185,7 @@ namespace BP.WF
             if (this.HisNode.IsEndNode)
             {
                 /* 如果流程完成 */
-                CCWork cc = new CCWork(this);
+             //   CCWork cc = new CCWork(this);
                 // 在流程完成锁前处理消息收听，否则WF_GenerWorkerlist就删除了。
                 if (Glo.IsEnableSysMessage)
                     this.DoRefFunc_Listens();

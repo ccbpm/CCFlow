@@ -320,6 +320,36 @@ namespace BP.WF
         DealerAsNextStepWorker
     }
     /// <summary>
+    /// 抄送到岗位计算方式
+    /// </summary>
+    public enum CCStaWay
+    {
+        /// <summary>
+        /// 仅按岗位计算
+        /// </summary>
+        StationOnly,
+        /// <summary>
+        /// 按岗位智能计算(当前节点的人员岗位)
+        /// </summary>
+        StationSmartCurrNodeWorker,
+        /// <summary>
+        /// 按岗位智能计算(接受节点的人员岗位)
+        /// </summary>
+        StationSmartNextNodeWorker,
+        /// <summary>
+        /// 按岗位与部门的交集
+        /// </summary>
+        StationAdndDept,
+        /// <summary>
+        /// 按直线部门找岗位下的人员(当前节点)
+        /// </summary>
+        StationDeptUpLevelCurrNodeWorker,
+        /// <summary>
+        /// 按直线部门找岗位下的人员
+        /// </summary>
+        StationDeptUpLevelNextNodeWorker
+    }
+    /// <summary>
     /// 抄送数据写入规则
     /// </summary>
     public enum CCWriteTo

@@ -1037,20 +1037,65 @@ namespace BP.Sys
 		/// <summary>
 		/// 表单图数据
 		/// </summary>
-		public string FormJson
-		{
-			get
-			{
-				string str= this.GetBigTextFromDB("FormJson");
-                if (str == null)
+        public string FormJson
+        {
+            get
+            {
+               // return this.GenerHisFrm();
+                string str = this.GetBigTextFromDB("FormJson");
+                if (str == null || str=="" )
+                {
                     return "";
+                }
                 return str;
-			}
-			set
-			{
-				this.SaveBigTxtToDB("FormJson", value);
-			}
-		}
+            }
+            set
+            {
+                this.SaveBigTxtToDB("FormJson", value);
+            }
+        }
+        /// <summary>
+        /// 生成Frm
+        /// </summary>
+        /// <returns></returns>
+        public string GenerHisFrm()
+        {
+            string body = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Body.txt");
+
+            //替换高度宽度.
+            body = body.Replace("@FrmH", this.FrmH.ToString());
+            body = body.Replace("@FrmW", this.FrmW.ToString());
+
+            string labTemplate = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Label.txt");
+            string myLabs = "";
+            FrmLabs labs = new FrmLabs(this.No);
+            foreach (FrmLab lab in labs)
+            {
+                string labTxt = labTemplate.Clone() as string;
+
+                labTxt = labTxt.Replace("@MyPK", lab.MyPK);
+
+                labTxt = labTxt.Replace("@Label", lab.Text);
+                labTxt = labTxt.Replace("@X", lab.X.ToString());
+                labTxt = labTxt.Replace("@Y", lab.Y.ToString());
+
+                float y1 = lab.Y - 20;
+                labTxt = labTxt.Replace("@Y1", y1.ToString());
+                myLabs += labTxt + ",";
+            }
+
+            if (myLabs == "")
+            {
+                body = body.Replace("@Labels", myLabs);
+            }
+            else
+            {
+                myLabs = myLabs.Substring(0, myLabs.Length - 1);
+                body = body.Replace("@Labels", myLabs);
+            }
+
+            return body;
+        }
 		#endregion
 
 		#region 属性

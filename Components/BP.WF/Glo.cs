@@ -127,7 +127,6 @@ namespace BP.WF
         /// <returns></returns>
         public static string UpdataCCFlowVer()
         {
-             
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
             updataNote += "20170217.影子字段";
@@ -190,6 +189,7 @@ namespace BP.WF
 
                 //删除枚举.
                 DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='TodolistModel'");
+                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='CCStaWay'");
                 DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='TWay'");
 
                 // 运行升级SQL. D:\ccflow\CCFlow\WF\Data\UpdataCCFlowVer.sql

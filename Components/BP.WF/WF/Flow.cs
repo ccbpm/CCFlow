@@ -7002,7 +7002,7 @@ namespace BP.WF
             return (System.Collections.Generic.IList<Flow>)this;
         }
         /// <summary>
-        /// 转化成list
+        /// 转化成 list
         /// </summary>
         /// <returns>List</returns>
         public System.Collections.Generic.List<Flow> Tolist()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using BP.DA;
@@ -1460,6 +1461,231 @@ namespace BP.WF
         }
         #endregion 找到下一个节点的接受人员
 
+        #region 执行抄送.
+        /// <summary>
+        /// 执行抄送.
+        /// </summary>
+        /// <param name="rpt"></param>
+        /// <param name="workid"></param>
+        /// <returns></returns>
+        public static string DoCCAuto(Node node, GERpt rpt, Int64 workid, Int64 fid)
+        {
+
+            if (node.HisCCRole == CCRole.AutoCC
+              || node.HisCCRole == CCRole.HandAndAuto)
+            {
+            }
+            else
+            {
+                return "";
+            }
+
+            CC ccEn = new CC(node.NodeID); 
+
+            /*如果是自动抄送*/
+
+            //执行抄送.
+            DataTable dt = ccEn.GenerCCers(rpt, workid);
+            if (dt.Rows.Count == 0)
+                return "@设置的抄送规则，没有找到抄送人员。";
+
+            string ccMsg = "@消息自动抄送给";
+            string basePath = BP.WF.Glo.HostURL;
+
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                string toUserNo = dr[0].ToString();
+              
+
+                string toUserName = dr[1].ToString();
+
+                //生成标题与内容.
+                string ccTitle = ccEn.CCTitle.Clone() as string;
+                ccTitle = BP.WF.Glo.DealExp(ccTitle, rpt, null);
+
+                string ccDoc = ccEn.CCDoc.Clone() as string;
+                ccDoc = BP.WF.Glo.DealExp(ccDoc, rpt, null);
+
+                ccDoc = ccDoc.Replace("@Accepter", toUserNo);
+                ccTitle = ccTitle.Replace("@Accepter", toUserNo);
+
+                //抄送信息.
+                ccMsg += "(" + toUserNo + " - " + toUserName + ");";
+                CCList list = new CCList();
+                list.MyPK =  workid + "_" + node.NodeID  + "_" + dr[0].ToString();
+                list.FK_Flow = node.FK_Flow;
+                list.FlowName = node.FlowName;
+                list.FK_Node = node.NodeID;
+                list.NodeName = node.Name;
+                list.Title = ccTitle;
+                list.Doc = ccDoc;
+                list.CCTo = dr[0].ToString();
+                list.CCToName = dr[1].ToString();
+                list.RDT = DataType.CurrentDataTime;
+                list.Rec = WebUser.No;
+                list.WorkID = workid;
+                list.FID = fid;
+
+                // if (this.HisNode.CCWriteTo == CCWriteTo.Todolist)
+                list.InEmpWorks =node.CCWriteTo == CCWriteTo.CCList ? false : true;    //added by liuxc,2015.7.6
+
+                //写入待办和写入待办与抄送列表,状态不同
+                if (node.CCWriteTo == CCWriteTo.All || node.CCWriteTo == CCWriteTo.Todolist)
+                {
+                    //如果为写入待办则抄送列表中置为已读，原因：只为不提示有未读抄送。
+                    list.HisSta = node.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                }
+                //结束节点只写入抄送列表
+                if (node.IsEndNode == true)
+                {
+                    list.HisSta = CCSta.UnRead;
+                    list.InEmpWorks = false;
+                }
+                try
+                {
+                    list.Insert();
+                }
+                catch
+                {
+                    list.Update();
+                }
+
+                if (BP.WF.Glo.IsEnableSysMessage == true)
+                {
+                    //     //写入消息提示.
+                    //     ccMsg += list.CCTo + "(" + dr[1].ToString() + ");";
+                    //     BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
+                    //     string sid = list.CCTo + "_" + list.WorkID + "_" + list.FK_Node + "_" + list.RDT;
+                    //     string url = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid;
+                    //     string urlWap = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid + "&IsWap=1";
+                    //     string mytemp = mailTemp.Clone() as string;
+                    //     mytemp = string.Format(mytemp, wfemp.Name, WebUser.Name, url, urlWap);
+                    //     string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅",
+                    //this.HisNode.FlowName, this.HisNode.Name, WebUser.Name);
+                    //     BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.Sys.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID);
+                }
+            }
+
+
+            //写入日志.
+
+            return ccMsg;
+        }
+        /// <summary>
+        /// 按照指定的字段执行抄送.
+        /// </summary>
+        /// <param name="nd"></param>
+        /// <param name="rptGE"></param>
+        /// <param name="workid"></param>
+        /// <param name="fid"></param>
+        /// <returns></returns>
+        public static string DoCCByEmps(Node nd, GERpt rptGE, Int64 workid, Int64 fid)
+        {
+            if (nd.HisCCRole != CCRole.BySysCCEmps)
+                return "";
+
+            CC cc = nd.HisCC;
+
+            //生成标题与内容.
+            string ccTitle = cc.CCTitle.Clone() as string;
+            ccTitle = BP.WF.Glo.DealExp(ccTitle, rptGE, null);
+
+            string ccDoc = cc.CCDoc.Clone() as string;
+            ccDoc = BP.WF.Glo.DealExp(ccDoc, rptGE, null);
+
+            //取出抄送人列表
+            string ccers = rptGE.GetValStrByKey("SysCCEmps");
+            if (string.IsNullOrEmpty(ccers) == false)
+                return "";
+
+            string[] cclist = ccers.Split('|');
+            Hashtable ht = new Hashtable();
+            foreach (string item in cclist)
+            {
+                string[] tmp = item.Split(',');
+                ht.Add(tmp[0], tmp[1]);
+            }
+            string ccMsg = "@消息自动抄送给";
+            string basePath = BP.WF.Glo.HostURL;
+
+            string mailTemp = BP.DA.DataType.ReadTextFile2Html(BP.Sys.SystemConfig.PathOfDataUser + "\\EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
+            foreach (DictionaryEntry item in ht)
+            {
+                ccDoc = ccDoc.Replace("@Accepter", item.Value.ToString());
+                ccTitle = ccTitle.Replace("@Accepter", item.Value.ToString());
+                //抄送信息.
+                ccMsg += "(" + item.Value.ToString() + " - " + item.Value.ToString() + ");";
+
+                #region 如果是写入抄送列表.
+                CCList list = new CCList();
+                list.MyPK = DBAccess.GenerGUID();  // workid + "_" + node.NodeID + "_" + item.Key.ToString();
+                list.FK_Flow = nd.FK_Flow;
+                list.FlowName = nd.FlowName;
+                list.FK_Node = nd.NodeID;
+                list.NodeName = nd.Name;
+                list.Title = ccTitle;
+                list.Doc = ccDoc;
+                list.CCTo = item.Key.ToString();
+                list.CCToName = item.Value.ToString();
+                list.RDT = DataType.CurrentDataTime;
+                list.Rec = WebUser.No;
+                list.WorkID = workid;
+                list.FID = fid;
+                list.InEmpWorks = nd.CCWriteTo == CCWriteTo.CCList ? false : true;    //added by liuxc,2015.7.6
+                //写入待办和写入待办与抄送列表,状态不同
+                if (nd.CCWriteTo == CCWriteTo.All || nd.CCWriteTo == CCWriteTo.Todolist)
+                {
+                    //如果为写入待办则抄送列表中置为已读，原因：只为不提示有未读抄送。
+                    list.HisSta = nd.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                }
+                //如果为结束节点，只写入抄送列表
+                if (nd.IsEndNode == true)
+                {
+                    list.HisSta = CCSta.UnRead;
+                    list.InEmpWorks = false;
+                }
+
+                //执行保存或更新
+                try
+                {
+                    list.Insert();
+                }
+                catch
+                {
+                    list.CheckPhysicsTable();
+                    list.Update();
+                }
+                #endregion 如果要写入抄送
+
+                #region 写入消息机制.
+                if (BP.WF.Glo.IsEnableSysMessage == true)
+                {
+                    ccMsg += list.CCTo + "(" + item.Value.ToString() + ");";
+                    BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
+
+                    string sid = list.CCTo + "_" + list.WorkID + "_" + list.FK_Node + "_" + list.RDT;
+                    string url = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid;
+                    url = url.Replace("//", "/");
+                    url = url.Replace("//", "/");
+
+                    string urlWap = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid + "&IsWap=1";
+                    urlWap = urlWap.Replace("//", "/");
+                    urlWap = urlWap.Replace("//", "/");
+
+                    string mytemp = mailTemp.Clone() as string;
+                    mytemp = string.Format(mytemp, wfemp.Name, WebUser.Name, url, urlWap);
+
+                    string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", nd.FlowName, nd.Name, WebUser.Name);
+
+                    BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.WF.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID);
+                }
+                #endregion 写入消息机制.
+            }
+
+            return ccMsg;
+        }
+        #endregion 执行抄送.
     }
 
 }

@@ -539,7 +539,8 @@ namespace BP.Sys
         /// <param name="jsonStrOfH5Frm"></param>
         public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
         {
-            //  BP.DA.DataType.WriteFile("D:\\AAA.JSON", jsonStrOfH5Frm);
+             BP.DA.DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
+             return;
 
             JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
             if (jd.IsObject == false)

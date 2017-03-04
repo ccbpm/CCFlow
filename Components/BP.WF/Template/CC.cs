@@ -7,28 +7,6 @@ using BP.Port;
 
 namespace BP.WF.Template
 {
-    /// <summary>
-    /// 抄送控制方式
-    /// </summary>
-    public enum CtrlWay
-    {
-        /// <summary>
-        /// 按照岗位
-        /// </summary>
-        ByStation,
-        /// <summary>
-        /// 按部门
-        /// </summary>
-        ByDept,
-        /// <summary>
-        /// 按人员
-        /// </summary>
-        ByEmp,
-        /// <summary>
-        /// 按SQL
-        /// </summary>
-        BySQL
-    }
 	/// <summary>
 	/// 抄送属性
 	/// </summary>
@@ -44,18 +22,29 @@ namespace BP.WF.Template
         /// </summary>
         public const string CCDoc = "CCDoc";
         /// <summary>
-        /// 抄送控制方式
+        /// 是否启用抄送到岗位
         /// </summary>
-        public const string CCCtrlWay = "CCCtrlWay";
+        public const string CCIsStations = "CCIsStations";
         /// <summary>
-        /// 抄送对象
+        /// 按照岗位计算方式
+        /// </summary>
+        public const string CCStaWay = "CCStaWay";
+        /// <summary>
+        /// 是否抄送到部门
+        /// </summary>
+        public const string CCIsDepts = "CCIsDepts";
+        /// <summary>
+        /// 是否抄送到人员
+        /// </summary>
+        public const string CCIsEmps = "CCIsEmps";
+        /// <summary>
+        /// 是否启用按照SQL抄送.
+        /// </summary>
+        public const string CCIsSQLs = "CCIsSQLs";
+        /// <summary>
+        /// 要抄送的SQL
         /// </summary>
         public const string CCSQL = "CCSQL";
-
-        public const string CCIsStations = "CCIsStations";
-        public const string CCIsDepts = "CCIsDepts";
-        public const string CCIsEmps = "CCIsEmps";
-        public const string CCIsSQLs = "CCIsSQLs";
         #endregion
     }
 	/// <summary>
@@ -69,104 +58,171 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="rpt"></param>
         /// <returns></returns>
-        public DataTable GenerCCers(Entity rpt)
+        public DataTable GenerCCers(Entity rpt, Int64 workid)
         {
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("No", typeof(string)));
+            dt.Columns.Add(new DataColumn("Name", typeof(string)));
+
+            DataTable mydt = new DataTable();
             string sql = "";
-            string ccSql = "";
-            ccSql += this.CCSQL.Clone() as string;
-            ccSql = ccSql.Replace("@WebUser.No", BP.Web.WebUser.No);
-            ccSql = ccSql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            ccSql = ccSql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-            switch (this.CCCtrlWay)
+            if (this.CCIsDepts == true)
             {
-                case CtrlWay.ByDept:
-                    sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
-                    break;
-                case CtrlWay.ByEmp:
-                    sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM WF_CCEmp WHERE FK_Node=" + this.NodeID + ")";
-                    break;
-                case CtrlWay.ByStation:
-                    sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ( SELECT FK_Station FROM WF_CCStation WHERE FK_Node=" + this.NodeID + "))";
-                    break;
-                case CtrlWay.BySQL:
-                    if (this.CCIsStations == true)
-                    {
-                        sql = "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + ""
-                        + " WHERE FK_Station IN ( SELECT FK_Station FROM WF_CCStation WHERE FK_Node=" + this.NodeID + "))"
-                        + " AND NO IN(" + ccSql + ") ";
-                    }
-                    if (this.CCIsEmps == true)
-                    {
-                        sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM WF_CCEmp WHERE FK_Node=" + this.NodeID + ")"
-                            + " AND NO IN(" + ccSql + ")";
-                    }
+                /*如果抄送到部门. */
+                if (Glo.OSModel == BP.Sys.OSModel.OneOne)
+                    sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B WHERE  A.FK_Dept=B.FK_Dept AND B.FK_Node=" + this.NodeID;
+                else
+                    sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B, Port_EmpDept C WHERE  A.No=C.FK_Emp AND B.FK_Dept=C.FK_Dept AND B.FK_Node=" + this.NodeID;
 
-                    if (this.CCIsDepts == true)
-                    {
-                        sql += "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))"
-                        + " AND NO IN(" + ccSql + ")";
-                    }
-                    if (this.CCIsSQLs == true)
-                    {
-                        sql = ccSql;
-                    }
-                    break;
+                //sql = "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
+
+                mydt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow mydr in mydt.Rows)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = mydr["No"];
+                    dr["Name"] = mydr["Name"];
+                    dt.Rows.Add(dr);
+                }
             }
 
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count == 0)
+            if (this.CCIsEmps == true)
             {
-                BP.DA.Log.DebugWriteWarning("@流程节点设计错误，未找到抄送人员，NodeID=[" + this.NodeID + "]。 SQL:" + sql);
-                return dt;
+                /*如果抄送到人员. */
+                sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCEmp B WHERE A.No=B.FK_Emp AND B.FK_Node=" + this.NodeID;
+                mydt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow mydr in mydt.Rows)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = mydr["No"];
+                    dr["Name"] = mydr["Name"];
+                    dt.Rows.Add(dr);
+                }
             }
+
+            if (this.CCIsStations == true)
+            {
+                if (this.CCStaWay == WF.CCStaWay.StationOnly)
+                {
+                    /* 如果抄送到岗位. */
+                    if (Glo.OSModel == Sys.OSModel.OneOne)
+                        sql = "SELECT No,Name FROM Port_Emp A, Port_EmpStation B, WF_CCStation C  WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+this.NodeID;
+                    else
+                        sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C  WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node=" + this.NodeID;
+
+                    mydt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow mydr in mydt.Rows)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["No"] = mydr["No"];
+                        dr["Name"] = mydr["Name"];
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                if (this.CCStaWay == WF.CCStaWay.StationSmartCurrNodeWorker || this.CCStaWay == WF.CCStaWay.StationSmartNextNodeWorker)
+                {
+                    /*按岗位智能计算*/
+                    string deptNo = "";
+                    if (this.CCStaWay == WF.CCStaWay.StationSmartCurrNodeWorker)
+                        deptNo = BP.Web.WebUser.FK_Dept;
+                    else
+                        deptNo = DBAccess.RunSQLReturnStringIsNull("SELECT FK_Dept FROM WF_GenerWorkerlist WHERE WorkID=" + workid + " AND IsEnable=1 AND IsPass=0", BP.Web.WebUser.FK_Dept);
+
+                    /* 抄送到当前登陆人. */
+                    if (Glo.OSModel == Sys.OSModel.OneOne)
+                        sql = "SELECT No,Name FROM Port_Emp A, Port_EmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID + " AND A.FK_Dept='" + deptNo + "'";
+                    else
+                        sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID + " AND B.FK_Dept='" + deptNo + "'";
+
+                    mydt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow mydr in mydt.Rows)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["No"] = mydr["No"];
+                        dr["Name"] = mydr["Name"];
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                if (this.CCStaWay == WF.CCStaWay.StationAdndDept)
+                {
+                    /* 如果抄送到岗位与部门的交集. */
+                    if (Glo.OSModel == Sys.OSModel.OneOne)
+                        sql = "SELECT No,Name FROM Port_Emp A, Port_EmpStation B, WF_CCStation C, WF_CCDept D WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND C.FK_Node=D.FK_Node AND D.FK_Node="+this.NodeID;
+                    else
+                        sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C, WF_CCDept D WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND B.FK_Dept=D.FK_Dept AND C.FK_Node="+this.NodeID+" AND D.FK_Node="+this.NodeID;
+
+                    mydt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow mydr in mydt.Rows)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["No"] = mydr["No"];
+                        dr["Name"] = mydr["Name"];
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                if (this.CCStaWay == CCStaWay.StationDeptUpLevelCurrNodeWorker ||
+                    this.CCStaWay == CCStaWay.StationDeptUpLevelNextNodeWorker )
+                {
+                    // 求当事人的部门编号.
+                    string deptNo = "";
+
+                    if (this.CCStaWay == CCStaWay.StationDeptUpLevelCurrNodeWorker)
+                        deptNo = BP.Web.WebUser.FK_Dept;
+
+                    if (this.CCStaWay == CCStaWay.StationDeptUpLevelNextNodeWorker)
+                        deptNo = DBAccess.RunSQLReturnStringIsNull("SELECT FK_Dept FROM WF_GenerWorkerlist WHERE WorkID="+workid+" AND IsEnable=1 AND IsPass=0", BP.Web.WebUser.FK_Dept);
+
+                    while (true)
+                    {
+                        BP.Port.Dept dept = new Dept(deptNo);
+
+                        /* 抄送到当前登陆人. */
+                        if (Glo.OSModel == Sys.OSModel.OneOne)
+                            sql = "SELECT No,Name FROM Port_Emp A, Port_EmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node="+this.NodeID+" AND A.FK_Dept='"+deptNo+"'";
+                        else
+                            sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node="+this.NodeID+" AND B.FK_Dept='"+deptNo+"'";
+
+                        mydt = DBAccess.RunSQLReturnTable(sql);
+                        foreach (DataRow mydr in mydt.Rows)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr["No"] = mydr["No"];
+                            dr["Name"] = mydr["Name"];
+                            dt.Rows.Add(dr);
+                        }
+
+                        if (dept.ParentNo == "0")
+                            break;
+
+                        deptNo = dept.ParentNo;
+                    }
+                }
+            }
+
+            if (this.CCIsSQLs == true)
+            {
+                sql += this.CCSQL.Clone() as string;
+                sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                if (sql.Contains("@") == true)
+                    sql = BP.WF.Glo.DealExp(sql, rpt, null);
+
+                /*按照SQL抄送. */
+                mydt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow mydr in mydt.Rows)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = mydr["No"];
+                    dr["Name"] = mydr["Name"];
+                    dt.Rows.Add(dr);
+                }
+            }
+
             return dt;
-            //string sql = "";
-            //if (this.CCIsSQLs == true)
-            //{
-            //    sql = "\t\n UNION    \t\n   ";
-            //    sql += this.CCSQL.Clone() as string;
-            //    sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
-            //    sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            //    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-            //    if (sql.Contains("@"))
-            //    {
-            //        foreach (Attr attr in rpt.EnMap.Attrs)
-            //        {
-            //            if (sql.Contains("@") == false)
-            //                break;
-            //            sql = sql.Replace("@" + attr.Key, rpt.GetValStrByKey(attr.Key));
-            //        }
-            //    }
-            //}
-            //if (this.CCIsEmps == true)
-            //{
-            //    sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM WF_CCEmp WHERE FK_Node=" + this.NodeID + ")";
-            //}
-
-            //if (this.CCIsDepts == true)
-            //{
-            //    if (Glo.OSModel == Sys.OSModel.OneMore)
-            //        sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
-            //    else
-            //        sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT No FROM Port_Emp WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
-            //}
-
-            //if (this.CCIsStations == true)
-            //{
-            //    sql += "\t\n UNION \t\n      SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ( SELECT FK_Station FROM WF_CCStation WHERE FK_Node=" + this.NodeID + "))";
-            //}
-
-            //if (sql.Length > 20)
-
-            //    sql = sql.Substring("\t\n UNION  \t\n  ".Length );
-
-            //DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            //if (dt.Rows.Count == 0)
-            //{
-            //    BP.DA.Log.DebugWriteWarning("@流程节点设计错误，未找到抄送人员，NodeID=[" + this.NodeID + "]。 SQL:" + sql);
-            //    return dt;
-            //}
-            //return dt;
         }
         /// <summary>
         ///节点ID
@@ -269,6 +325,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 抄送到岗位计算方式.
+        /// </summary>
+        public CCStaWay CCStaWay
+        {
+            get
+            {
+                return (CCStaWay)this.GetValIntByKey(CCAttr.CCStaWay);
+            }
+            set
+            {
+                this.SetValByKey(CCAttr.CCStaWay, (int)value);
+            }
+        }
+        /// <summary>
         /// 是否启用按照部门抄送
         /// </summary>
         public bool CCIsDepts
@@ -310,28 +380,24 @@ namespace BP.WF.Template
                 this.SetValByKey(CCAttr.CCIsSQLs, value);
             }
         }
-        /// <summary>
-        /// 抄送方式
-        /// </summary>
-        public CtrlWay CCCtrlWay
-        {
-            get
-            {
-                return (CtrlWay)this.GetValIntByKey(CCAttr.CCCtrlWay);
-            }
-            set
-            {
-                this.SetValByKey(CCAttr.CCCtrlWay, value);
-            }
-        }
+        
         #endregion
 
         #region 构造函数
         /// <summary>
-        /// CC
+        /// 抄送设置
         /// </summary>
         public CC()
         {
+        }
+        /// <summary>
+        /// 抄送设置
+        /// </summary>
+        /// <param name="nodeid"></param>
+        public CC(int nodeid)
+        {
+            this.NodeID = nodeid;
+            this.Retrieve();
         }
         /// <summary>
         /// 重写基类方法
@@ -349,17 +415,17 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10, false);
 
                 map.AddBoolean(CCAttr.CCIsStations, false, "按照岗位抄送", true, true, true);
+                map.AddDDLSysEnum(CCAttr.CCStaWay, 0, "抄送岗位计算方式", true, true, CCAttr.CCStaWay,
+                    "@0=仅按岗位计算@1=按岗位智能计算(当前节点)@2=按岗位智能计算(发送到节点)@3=按岗位与部门的交集@4=按直线上级部门找岗位下的人员(当前节点)@5=按直线上级部门找岗位下的人员(接受节点)");
+
                 map.AddBoolean(CCAttr.CCIsDepts, false, "按照部门抄送", true, true, true);
                 map.AddBoolean(CCAttr.CCIsEmps, false, "按照人员抄送", true, true, true);
                 map.AddBoolean(CCAttr.CCIsSQLs, false, "按照SQL抄送", true, true, true);
-
-                map.AddDDLSysEnum(CCAttr.CCCtrlWay, 0, "控制方式",true, true,"CtrlWay");
 
                 map.AddTBString(CCAttr.CCSQL, null, "SQL表达式", true, false, 0, 500, 10, true);
                 map.AddTBString(CCAttr.CCTitle, null, "抄送标题", true, false, 0, 500, 10,true);
                 map.AddTBStringDoc(CCAttr.CCDoc, null, "抄送内容(标题与内容支持变量)", true, false,true);
 
-                map.AddSearchAttr(CCAttr.CCCtrlWay);
 
                 // 相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
@@ -399,7 +465,6 @@ namespace BP.WF.Template
 		/// </summary>
 		public CCs(){} 		 
 		#endregion
-
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

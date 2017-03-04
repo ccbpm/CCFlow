@@ -1798,7 +1798,6 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.CCWriteTo, (int)value);
             }
         }
-
         /// <summary>
         /// Int type
         /// </summary>
@@ -1845,7 +1844,6 @@ namespace BP.WF
         #endregion
 
         #region 推算属性 (对于节点位置的判断)
-
         /// <summary>
         /// 类型
         /// </summary>

@@ -261,7 +261,6 @@
     <Compile Include="DTS\ClearDB.cs" />
     <Compile Include="DTS\RepariNodeFrmMap.cs" />
     <Compile Include="DTS\DTSCheckFlowAll.cs" />
-    <Compile Include="DTS\GenerTemplate.cs" />
     <Compile Include="DTS\DTSDominInfo.cs" />
     <Compile Include="DTS\ReLoadNDxxxxxxRpt.cs" />
     <Compile Include="DTS\PackAutoErrFields.cs" />
@@ -319,7 +318,6 @@
     <Compile Include="WF\TransferCustom.cs" />
     <Compile Include="WF.cs" />
     <Compile Include="WFEnum.cs" />
-    <Compile Include="WF\CCWork.cs" />
     <Compile Include="WF\GenerWorkFlow.cs" />
     <Compile Include="Template\FrmSubFlow.cs" />
     <Compile Include="WF\FlowEventBase.cs" />

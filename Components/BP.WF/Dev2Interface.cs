@@ -124,62 +124,6 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 获取抄送人员的
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public static string GetNode_CCList(WorkNode wn)
-        {
-            string ccers = null;
-
-            if (wn.HisNode.HisCCRole == CCRole.AutoCC
-                   || wn.HisNode.HisCCRole == CCRole.HandAndAuto)
-            {
-                try
-                {
-                    /*如果是自动抄送*/
-                    CC cc = wn.HisNode.HisCC;
-
-                    DataTable table = cc.GenerCCers(wn.rptGe);
-                    if (table.Rows.Count > 0)
-                    {
-                        string ccMsg = "@消息自动抄送给";
-
-                        foreach (DataRow dr in table.Rows)
-                        {
-                            ccers += dr[0] + ",";
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("@处理操送时出现错误:" + ex.Message);
-                }
-            }
-
-            #region  执行抄送 BySysCCEmps
-            if (wn.HisNode.HisCCRole == CCRole.BySysCCEmps)
-            {
-                CC cc = wn.HisNode.HisCC;
-
-                //取出抄送人列表
-                string temps = wn.rptGe.GetValStrByKey("SysCCEmps");
-                if (!string.IsNullOrEmpty(temps))
-                {
-                    string[] cclist = temps.Split('|');
-                    Hashtable ht = new Hashtable();
-                    foreach (string item in cclist)
-                    {
-                        string[] tmp = item.Split(',');
-                        ccers += tmp[0] + ",";
-                    }
-                }
-            }
-            #endregion
-
-            return ccers;
-        }
-        /// <summary>
         /// 返回挂起流程数量
         /// </summary>
         public static int Todolist_HungUpNum
@@ -701,70 +645,6 @@ namespace BP.WF
 
         #region 获取能够发送或者抄送人员的列表.
         /// <summary>
-        /// 获取当前节点可抄送人员列表
-        /// </summary>
-        /// <param name="fk_node"></param>
-        /// <param name="workid"></param>
-        /// <returns></returns>
-        public static DataTable DB_CanCCEmps(int fk_node, Int64 workid)
-        {
-            DataTable table = new DataTable();
-            string ccers = null;
-
-            WorkNode node = new WorkNode(workid, fk_node);
-
-            if (node.HisNode.HisCCRole == CCRole.AutoCC
-                   || node.HisNode.HisCCRole == CCRole.HandAndAuto)
-            {
-                try
-                {
-                    /*如果是自动抄送*/
-                    CC cc = node.HisNode.HisCC;
-
-                    table = cc.GenerCCers(node.rptGe);
-
-
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("@处理操送时出现错误:" + ex.Message);
-                }
-            }
-
-            #region  执行抄送 BySysCCEmps
-            if (node.HisNode.HisCCRole == CCRole.BySysCCEmps)
-            {
-                CC cc = node.HisNode.HisCC;
-
-                //取出抄送人列表
-                string temps = node.rptGe.GetValStrByKey("SysCCEmps");
-                if (!string.IsNullOrEmpty(temps))
-                {
-                    string[] cclist = temps.Split('|');
-
-                    if (!table.Columns.Contains("No"))
-                        table.Columns.Add("No");
-                    if (!table.Columns.Contains("Name"))
-                        table.Columns.Add("Name");
-                    foreach (string item in cclist)
-                    {
-                        string[] tmp = item.Split(',');
-
-                        DataRow row = table.NewRow();
-
-                        row["No"] = tmp[0];
-                        row["Name"] = tmp[1];
-                        table.Rows.Add(row);
-                    }
-                }
-            }
-            #endregion
-
-
-
-            return table;
-        }
-        /// <summary>
         /// 获取可以执行指定节点人的列表
         /// </summary>
         /// <param name="fk_node">节点编号</param>
@@ -779,13 +659,11 @@ namespace BP.WF
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
 
-
             ps = new Paras();
             ps.SQL = "SELECT No,Name FROM Port_Dept ";
             DataTable dtDept = DBAccess.RunSQLReturnTable(ps);
             dtDept.TableName = "Depts";
             ds.Tables.Add(dtDept);
-
             return ds;
         }
         /// <summary>

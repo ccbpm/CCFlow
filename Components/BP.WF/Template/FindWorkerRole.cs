@@ -649,6 +649,7 @@ namespace BP.WF.Template
                     leader = dt.Rows[0][0] as string;
                     if (string.IsNullOrEmpty(leader))
                         throw new Exception("@系统管理员没有给(" + empNo + ")在部门(" + empDept + ")中设置直接领导.");
+
                     break;
                 case FindColleague.SpecDuty: // 特定职务级别的领导.
                     tempDeptNo = empDept.Clone() as string;

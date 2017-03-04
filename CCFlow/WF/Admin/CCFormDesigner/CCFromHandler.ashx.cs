@@ -134,6 +134,9 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                         int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
                         msg = result.ToString();
                         break;
+                    case "CcformElements"://杨玉慧 获取表单元素的JSON 字符串
+                        msg = CCForm_AllElements_ResponseJson();
+                        break;
                 }
             }
             catch (Exception ex)
@@ -519,6 +522,38 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 return exception.Message;
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// 获取流程所有元素
+        /// </summary>
+        /// <returns>json data</returns>
+        private string CCForm_AllElements_ResponseJson()
+        {
+            try
+            {
+                MapData mapData = new MapData(this.FK_MapData);
+
+                mapData.RetrieveFromDBSources();
+
+                //获取表单元素
+                string sqls = "SELECT * FROM Sys_MapAttr WHERE UIVisible=1 AND FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
+                                + "SELECT * FROM Sys_FrmBtn WHERE FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
+                                + "SELECT * FROM Sys_FrmRB WHERE FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
+                                + "SELECT * FROM Sys_FrmLab WHERE FK_MapData='" + this.FK_MapData + "';";
+                DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
+                ds.Tables[0].TableName = "MapAttr";
+                ds.Tables[1].TableName = "FrmBtn";
+                ds.Tables[2].TableName = "FrmRb";
+                ds.Tables[3].TableName = "FrmLab";
+
+                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = "", data = Newtonsoft.Json.JsonConvert.SerializeObject(ds) });
+
+            }
+            catch (Exception ex)
+            {
+                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message, data = new { } });
+            }
         }
 
         #region 将表单串格式化存入数据库

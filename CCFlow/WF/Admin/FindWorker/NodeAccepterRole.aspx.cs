@@ -28,6 +28,14 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 }
             }
         }
+        /// <summary>
+        /// 页面消息
+        /// </summary>
+        public string PageMessage
+        {
+            get;
+            set;
+        }
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -183,7 +191,7 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 NodeStations nss = new NodeStations();
                 nss.Retrieve(NodeStationAttr.FK_Node, this.NodeID);
                 if (nss.Count == 0)
-                    BP.Sys.PubClass.Alert("@您选择的是请设置岗位来计算接受人，请设置岗位没有岗位无法计算该节点的接受人。");
+                    PageMessage = "您选择的是按岗位来计算接受人，没有设置岗位无法计算该节点的接受人。";
             }
 
             if (this.RB_ByDept.Checked)
@@ -195,9 +203,7 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 NodeDepts nss = new NodeDepts();
                 nss.Retrieve(NodeStationAttr.FK_Node, this.NodeID);
                 if (nss.Count == 0)
-                    BP.Sys.PubClass.Alert("@您选择的是请设置部门来计算接受人，请设置部门没有部门无法计算该节点的接受人。");
-
-
+                    PageMessage = "您选择的是按部门来计算接受人，请设置部门没有部门无法计算该节点的接受人。";
             }
 
             if (this.RB_BySQL.Checked)
@@ -208,7 +214,7 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 nd.DirectUpdate();
                 sql = this.TB_BySQL.Text;
                 if (sql.Length <= 5)
-                    BP.Sys.PubClass.Alert("@请设置完整的SQL");
+                    PageMessage = "请设置完整的SQL";
 
                 //检查SQL是否符合要求.
                 try
@@ -219,11 +225,11 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                     sql = BP.WF.Glo.DealExp(sql, null, null);
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     if (dt.Columns.Contains("No") == false || dt.Columns.Contains("Name") == false)
-                        BP.Sys.PubClass.Alert("@查询结果集合里不包含No,Name两个列, 分别标识操作员编号，操作员名称。");
+                        PageMessage = "查询结果集合里不包含No,Name两个列, 分别标识操作员编号，操作员名称。";
                 }
                 catch (Exception ex)
                 {
-                    BP.Sys.PubClass.Alert("@设置的SQL不符合要求SQL=" + sql + ",其他信息：" + ex.Message);
+                    PageMessage = "设置的SQL不符合要求SQL=" + sql + ",其他信息：" + ex.Message;
                 }
 
             }
@@ -238,7 +244,7 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 NodeEmps nss = new NodeEmps();
                 nss.Retrieve(NodeEmpAttr.FK_Node, this.NodeID);
                 if (nss.Count == 0)
-                    BP.Sys.PubClass.Alert("@您选择的是请设置人员来计算接受人，请设置人员没有人员无法计算该节点的接受人。");
+                    PageMessage = "您选择的是按人员来计算接受人，请设置人员没有人员无法计算该节点的接受人。";
 
             }
             if (this.RB_BySelected.Checked)
@@ -291,7 +297,7 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
             {
                 sql = this.TB_BySQLAsSubThreadEmpsAndData.Text;
                 if (sql.Length <= 5)
-                    BP.Sys.PubClass.Alert("@请设置完整的SQL");
+                    PageMessage = "请设置完整的SQL";
                 //按SQL确定子线程接受人与数据源.
                 nd.HisDeliveryWay = DeliveryWay.BySQLAsSubThreadEmpsAndData;
                 nd.DeliveryParas = this.TB_BySQLAsSubThreadEmpsAndData.Text;
@@ -301,7 +307,7 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
             {
                 sql = this.TB_ByDtlAsSubThreadEmps.Text;
                 if (sql.Length <= 5)
-                    BP.Sys.PubClass.Alert("@请设置完整的SQL");
+                    PageMessage = "请设置完整的SQL";
                 //按明细表确定子线程接受人.
                 nd.HisDeliveryWay = DeliveryWay.ByDtlAsSubThreadEmps;
                 nd.DeliveryParas = this.TB_ByDtlAsSubThreadEmps.Text;

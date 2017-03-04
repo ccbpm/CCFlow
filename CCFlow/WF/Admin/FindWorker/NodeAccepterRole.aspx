@@ -904,7 +904,8 @@
                     </div>
                 </div>
             </div>
-            <div data-options="region:'south'" style="height: 50px;">
+            <div data-options="region:'south'" style="height: 50px; float:left;">
+                <div><span style="color:Red;"><%=PageMessage %></span></div>
                 <asp:Button ID="Btn_Save" runat="server" Text="保存" OnClick="Btn_Save_Click" />
                 <asp:Button ID="Btn_SaveAndClose" runat="server" Text="保存并关闭" OnClick="Btn_SaveAndClose_Click" />
             </div>

@@ -31,67 +31,76 @@ namespace CCFlow.WF.Admin.FindWorker {
         protected global::System.Web.UI.WebControls.DropDownList DDL_CCWriteTo;
         
         /// <summary>
-        /// TB_title_MB 控件。
+        /// TB_Title 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TB_title_MB;
+        protected global::System.Web.UI.WebControls.TextBox TB_Title;
         
         /// <summary>
-        /// TB_content_MB 控件。
+        /// TB_CCDoc 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TB_content_MB;
+        protected global::System.Web.UI.WebControls.TextBox TB_CCDoc;
         
         /// <summary>
-        /// CC_GW 控件。
+        /// CB_Station 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CC_GW;
+        protected global::System.Web.UI.WebControls.CheckBox CB_Station;
         
         /// <summary>
-        /// CC_DBM 控件。
+        /// DDL_CCStaWay 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CC_DBM;
+        protected global::System.Web.UI.WebControls.DropDownList DDL_CCStaWay;
         
         /// <summary>
-        /// CC_RY 控件。
+        /// CB_Dept 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CC_RY;
+        protected global::System.Web.UI.WebControls.CheckBox CB_Dept;
         
         /// <summary>
-        /// CC_SQL 控件。
+        /// CB_Emp 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CC_SQL;
+        protected global::System.Web.UI.WebControls.CheckBox CB_Emp;
         
         /// <summary>
-        /// CC_SQL1 控件。
+        /// CB_SQL 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox CC_SQL1;
+        protected global::System.Web.UI.WebControls.CheckBox CB_SQL;
+        
+        /// <summary>
+        /// TB_SQL 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TB_SQL;
         
         /// <summary>
         /// Btn_Save 控件。

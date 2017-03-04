@@ -62,7 +62,8 @@
                 标题模板
             </td>
             <td>
-                <asp:TextBox ID="TB_title_MB" runat="server" Width="421px"></asp:TextBox>
+                <asp:TextBox ID="TB_Title" runat="server" Width="521px"></asp:TextBox>
+                <font color=gray>内容支持ccbpm表达式</font>
             </td>
         </tr>
         <tr>
@@ -70,10 +71,10 @@
                 内容模版
             </td>
             <td>
+                <asp:TextBox ID="TB_CCDoc" TextMode="MultiLine" runat="server" Height="90px" 
+                    Width="521px"></asp:TextBox>
+                <font color=gray>内容支持ccbpm表达式</font>
 
-                <asp:TextBox ID="TB_content_MB" TextMode="MultiLine" runat="server" Height="90px" 
-
-                    Width="421px"></asp:TextBox>
             </td>
         </tr>
         <tr>
@@ -83,16 +84,18 @@
         </tr>
         <tr>
             <td class="style1">
-                <asp:CheckBox ID="CC_GW" Text="抄送到岗位" runat="server" />
+                <asp:CheckBox ID="CB_Station" Text="抄送到岗位" runat="server" />
             </td>
             <td>
                 <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCStations&NodeID=<%=nd.NodeID %>&r=<%=sj%>&ShowWay=None')">
                     请选择岗位(<%=nss.Count %>)</a>
+                    岗位计算规则:<asp:DropDownList ID="DDL_CCStaWay" runat="server">
+                </asp:DropDownList>
             </td>
         </tr>
         <tr>
             <td class="style1">
-                <asp:CheckBox ID="CC_DBM" Text="抄送到部门" runat="server" />
+                <asp:CheckBox ID="CB_Dept" Text="抄送到部门" runat="server" />
             </td>
             <td>
                 <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCDepts&NodeID=<%=nd.NodeID %>&r=<%=sj%>')">
@@ -101,7 +104,7 @@
         </tr>
         <tr>
             <td class="style1">
-                <asp:CheckBox ID="CC_RY" Text="抄送到人员" runat="server" />
+                <asp:CheckBox ID="CB_Emp" Text="抄送到人员" runat="server" />
             </td>
             <td>
                 <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCEmps&NodeID=<%=nd.NodeID %>&r=<%=sj%>')">
@@ -110,10 +113,14 @@
         </tr>
         <tr>
             <td class="style1">
-                <asp:CheckBox ID="CC_SQL" Text="按照SQL设置范围" runat="server" />
+                <asp:CheckBox ID="CB_SQL" Text="按照SQL设置范围" runat="server" />
             </td>
             <td>
-                <asp:TextBox ID="CC_SQL1" TextMode="MultiLine" runat="server" Width="421px"></asp:TextBox>
+                <asp:TextBox ID="TB_SQL" TextMode="MultiLine" runat="server" Width="421px"></asp:TextBox>
+                <br />
+                <font color=gray>您设置了按照SQL抄送，请您设置一个SQL语句，返回No,Name两个列,SQL支持ccbpm表达式。
+                <br>比如:SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'
+                </font>
             </td>
         </tr>
     </table>

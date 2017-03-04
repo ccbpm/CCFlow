@@ -71,9 +71,29 @@
         }    
           //删除
         function Delete() {
-            $("#TB_SQL").val(""); //设置值.
-            $("#DDL_DBSrc").val(""); //设置值.
-            Save();
+            if (!window.confirm("确定要删除此“文本框自动完成”设置吗？")) {
+                return;
+            }
+
+            //初始化表格.
+            $.ajax({
+                data: { },
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=TBFullCtrl_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    $("#TB_SQL").val(""); 
+                    $("#DDL_DBSrc").val("");
+
+                    alert(data);
+                }
+            });
         }
 
         //填充下拉框.

@@ -114,7 +114,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 ext.PopValWorkModel = PopValWorkModel.TableOnly;
             }
 
-           // ext.SetValByKey
+            // ext.SetValByKey
 
             return ext.PopValToJson();
         }
@@ -247,6 +247,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                     case "TBFullCtrl_Save":
                         msg = this.TBFullCtrl_Save();
                         break;
+                    case "TBFullCtrl_Delete":
+                        msg = this.TBFullCtrl_Delete();
+                        break;
                     case "RegularExpression_Init":
                         msg = this.RegularExpression_Init();
                         break;
@@ -278,6 +281,28 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
         }
+
+        /// <summary>
+        /// 删除文本框自动完成设置
+        /// </summary>
+        /// <returns></returns>
+        private string TBFullCtrl_Delete()
+        {
+            try
+            {
+                MapExt me = new MapExt();
+                me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
+
+                if (me.RetrieveFromDBSources() > 0)
+                    me.Delete();
+
+                return "操作成功...";
+            }
+            catch (Exception ex)
+            {
+                return "err@:" + ex.Message;
+            }
+        }
         /// <summary>
         /// 初始化
         /// </summary>
@@ -286,7 +311,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
         {
             MapExt ext = new MapExt();
             //ext.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
-            ext.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl, 
+            ext.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl,
                 MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.AttrOfOper, this.KeyOfEn);
 
             //ext.FK_MapData = this.FK_MapData;

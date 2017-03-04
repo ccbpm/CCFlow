@@ -3317,8 +3317,11 @@ function loadTempDiagram(FK_MapData) {
                // alert(data);
                // 装载表单入口.
 
-                if (data == "" || data == "")
+                if (data == "" || data == "") {
+                    //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
+                    Conver_CCForm_V1ToV2();
                     return;
+                }
 
                 var obj = eval('(' + data + ')');
 

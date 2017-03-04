@@ -159,7 +159,6 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             Node nd = new Node(gwf.FK_Node);
 
-
             #region 求的撤销的节点.
             int cancelToNodeID = 0;
 

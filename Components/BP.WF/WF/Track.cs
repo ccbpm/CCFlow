@@ -726,6 +726,23 @@ namespace BP.WF
                 BP.DA.DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
 
             #endregion 执行保存
+
+
+            //解决流程的开始日期计算错误的问题.
+            if (this.HisActionType == ActionType.Start || this.HisActionType == ActionType.StartChildenFlow)
+            {
+                Paras ps = new Paras();
+                ps.SQL = "UPDATE WF_GenerWorkerlist SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ";
+                ps.Add("RDT", this.RDT);
+                ps.Add("WorkID", this.WorkID);
+                DBAccess.RunSQL(ps);
+
+                ps = new Paras();
+                ps.SQL = "UPDATE WF_GenerWorkFlow SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ";
+                ps.Add("RDT", this.RDT);
+                ps.Add("WorkID", this.WorkID);
+                DBAccess.RunSQL(ps);
+            }
         }
 
         /// <summary>

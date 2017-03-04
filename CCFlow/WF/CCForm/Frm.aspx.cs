@@ -476,7 +476,6 @@ namespace CCFlow.WF.CCForm
                             this.UCEn1.BindCCForm(en, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
                         else
                             this.UCEn1.BindColumn4(en, this.FK_MapData);
-
                     }
                     else
                     {

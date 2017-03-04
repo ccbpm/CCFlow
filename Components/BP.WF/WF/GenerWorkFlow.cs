@@ -550,7 +550,11 @@ namespace BP.WF
 			{
 				return this.GetValStrByKey(GenerWorkFlowAttr.RDT);
 			}
-          
+            set
+            {
+                this.SetValByKey(GenerWorkFlowAttr.RDT, value);
+                this.FK_NY = value.Substring(0, 7);
+            }
 		}
         /// <summary>
         /// 节点应完成时间

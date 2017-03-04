@@ -204,7 +204,7 @@ namespace BP.WF.Template
 
             if (this.CCIsSQLs == true)
             {
-                sql += this.CCSQL.Clone() as string;
+                sql = this.CCSQL.Clone() as string;
                 sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                 sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                 sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
@@ -221,6 +221,11 @@ namespace BP.WF.Template
                     dt.Rows.Add(dr);
                 }
             }
+            //将dt中的重复数据过滤掉  
+            DataView myDataView = new DataView(dt);
+            //此处可加任意数据项组合  
+            string[] strComuns = { "No","Name" };
+            dt = myDataView.ToTable(true, strComuns);
 
             return dt;
         }

@@ -872,7 +872,7 @@
                         return node.text;
                     },
                     onClick: function (node) {
-                        if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {/*普通表单和必填表单*/
+                        if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") { /*普通表单和必填表单*/
                             var urlExt = urlExtFrm();
                             var isEdit = node.attributes.IsEdit;
                             var url = "../CCForm/Frm.aspx?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;

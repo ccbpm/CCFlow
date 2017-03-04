@@ -260,6 +260,8 @@ namespace CCFlow.WF.CCForm
                     return;
                 }
 
+           
+
                 /* 没有找到此map. */
                 MapDtl dtl = new MapDtl(this.FK_MapData);
                 GEDtl dtlEn = dtl.HisGEDtl;
@@ -299,6 +301,7 @@ namespace CCFlow.WF.CCForm
                 FrmType ft= md.HisFrmType;
                 if (frmType == "FreeFrm")
                     ft = FrmType.FreeFrm;
+
                 if (frmType == "FoolForm")
                     ft = FrmType.FoolForm;
 
@@ -325,6 +328,16 @@ namespace CCFlow.WF.CCForm
                         this.Response.Redirect(md.Url + "?" + urlParas, true);
                     return;
                 }
+
+                if (md.HisFrmType == FrmType.VSTOForExcel && this.Request.QueryString["IsFreeFrm"]==null )
+                {
+                    string no = Request.QueryString["NO"];
+                    string urlParas = "OID=" + this.OID + "&FK_MapData=" + md.No + "&NO=" + no + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
+                    string url = "FrmVSTO.aspx?1=1&" + urlParas;
+                    this.Response.Redirect(url, true);
+                    return;
+                }
+
 
                 if (md.HisFrmType == FrmType.WordFrm)
                 {
@@ -459,7 +472,7 @@ namespace CCFlow.WF.CCForm
                         if (frmType == "FoolForm")
                             ft = FrmType.FoolForm;
 
-                        if (ft == FrmType.FreeFrm)
+                        if (ft == FrmType.FreeFrm || ft== FrmType.VSTOForExcel )
                             this.UCEn1.BindCCForm(en, this.FK_MapData, !this.IsEdit, 0, this.IsLoadData);
                         else
                             this.UCEn1.BindColumn4(en, this.FK_MapData);

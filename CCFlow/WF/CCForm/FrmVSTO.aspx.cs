@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace CCFlow.WF.CCForm
 {
-    public partial class FrmVSTO : System.Web.UI.Page
+    public partial class FrmVSTO : BP.Web.WebPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {

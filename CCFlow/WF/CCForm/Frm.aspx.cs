@@ -329,11 +329,11 @@ namespace CCFlow.WF.CCForm
                     return;
                 }
 
-                if (md.HisFrmType == FrmType.VSTOForExcel && this.Request.QueryString["IsFreeFrm"]==null )
+                if (md.HisFrmType == FrmType.VSTOForExcel && this.Request.QueryString["IsFreeFrm"] == null)
                 {
-                    string no = Request.QueryString["NO"];
-                    string urlParas = "OID=" + this.OID + "&FK_MapData=" + md.No + "&NO=" + no + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
-                    string url = "FrmVSTO.aspx?1=1&" + urlParas;
+                    // string no = Request.QueryString["NO"];
+                    // string urlParas = "OID=" + this.OID + "&FK_MapData=" + md.No + "&NO=" + no + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
+                    string url = "FrmVSTO.aspx?1=1&" + this.RequestParas;
                     this.Response.Redirect(url, true);
                     return;
                 }

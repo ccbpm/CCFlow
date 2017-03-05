@@ -23,17 +23,21 @@
         string urlWS = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
         string url = "excelform://-fromccflow,App=FrmExcel,UserNo=" + userNo + ",SID=" + sid + ",FK_Flow=" + flowNo + ",FK_Node=" + nodeID + ",FrmID=" + frmID + ",WorkID="+workID+",WSUrl="+urlWS;
 
-        string urlOfFree = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
+        string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
+        string urlOfFree = "Frm.aspx?IsFreeFrm=1"+this.RequestParas;
         
          %>
 
          <br />
          <br />
 
+         <ul>
 
-    <a href="<%=url %>" >打开VSTO表单</a>
+         <li> <a href="<%=url %>" >打开VSTO表单</a></li>
 
-    <a href="<%=urlOfFree %>" >打开自由表单</a>
+    <li>  <a href="<%=urlOfFree %>" >打开自由表单</a></li>
+
+    </ul>
 
     
     </div>

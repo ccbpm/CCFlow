@@ -595,8 +595,8 @@ function TBHelp(ctrl, appPath, attrKey, enName) {
     var url = "/WF/Comm/HelperOfTBEUI.aspx?AttrKey=" + attrKey + "&WordsSort=3" + "&FK_MapData=" + enName + "&id=" + ctrl;
     var explorer = window.navigator.userAgent;
     var str = "";
-    if (explorer.indexOf("Chrome") >= 0) {
-        window.open(url, "sd", "left=200,height=500,top=150,width=600,location=yes,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no");
+    if (explorer.indexOf("Chrome") >= 0 || explorer.indexOf("Firefox") >= 0) {
+        window.open(url, "sd" + Math.random().toString(), "left=200,height=500,top=150,width=600,location=yes,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no");
     }
     else {
         str = window.showModalDialog(url, "sd", "dialogHeight:500px;dialogWidth:600px;dialogTop:150px;dialogLeft:200px;center:no;help:no");

@@ -1388,7 +1388,7 @@ namespace BP.Sys
                     sql.AppendLine("           END");
                     sql.AppendLine("       ) AS DBLength,");
                     sql.AppendLine("       sc.colid,");
-                    sql.AppendLine("       ISNULL(ep.[value], '') AS [Name]");
+                    sql.AppendLine(string.Format("       {0} AS [Name]", SqlBuilder.GetIsNullInSQL("ep.[value]", "''")));
                     sql.AppendLine("FROM   dbo.syscolumns sc");
                     sql.AppendLine("       INNER JOIN dbo.systypes st");
                     sql.AppendLine("            ON  sc.xtype = st.xusertype");
@@ -1403,7 +1403,7 @@ namespace BP.Sys
                     sql.AppendLine("       utc.DATA_TYPE   AS DBType,");
                     sql.AppendLine("       utc.CHAR_LENGTH AS DBLength,");
                     sql.AppendLine("       utc.COLUMN_ID   AS colid,");
-                    sql.AppendLine("       ucc.comments    AS Name");
+                    sql.AppendLine(string.Format("       {0}    AS Name", SqlBuilder.GetIsNullInSQL("ucc.comments", "''")));
                     sql.AppendLine("  FROM user_tab_cols utc");
                     sql.AppendLine("  LEFT JOIN user_col_comments ucc");
                     sql.AppendLine("    ON ucc.table_name = utc.TABLE_NAME");
@@ -1416,8 +1416,7 @@ namespace BP.Sys
                     sql.AppendLine("SELECT ");
                     sql.AppendLine("    column_name AS 'No',");
                     sql.AppendLine("    data_type AS 'DBType',");
-                    sql.AppendLine("    IFNULL(character_maximum_length,");
-                    sql.AppendLine("            numeric_precision) AS DBLength,");
+                    sql.AppendLine(string.Format("    {0} AS DBLength,", SqlBuilder.GetIsNullInSQL("character_maximum_length", "numeric_precision")));
                     sql.AppendLine("    ordinal_position AS colid,");
                     sql.AppendLine("    column_comment AS 'Name'");
                     sql.AppendLine("FROM");

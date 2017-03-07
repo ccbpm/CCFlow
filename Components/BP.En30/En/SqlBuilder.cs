@@ -2629,6 +2629,29 @@ namespace BP.En
                 field.Substring(1) + " ) VALUES ( " + val.Substring(1) + ")";
             return sql;
         }
+
+        /// <summary>
+        /// 获取判断指定表达式如果为空，则返回指定值的SQL表达式
+        /// <para>注：目前只对MSSQL/ORACLE/MYSQL三种数据库做兼容</para>
+        /// <para>added by liuxc,2017-03-07</para>
+        /// </summary>
+        /// <param name="expression">要判断的表达式，在SQL中的写法</param>
+        /// <param name="isNullBack">判断的表达式为NULL，返回值的表达式，在SQL中的写法</param>
+        /// <returns></returns>
+        public static string GetIsNullInSQL(string expression, string isNullBack)
+        {
+            switch(DBAccess.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    return " ISNULL(" + expression + "," + isNullBack + ")";
+                case DBType.Oracle:
+                    return " NVL(" + expression + "," + isNullBack + ")";
+                case DBType.MySQL:
+                    return " IFNULL(" + expression + "," + isNullBack + ")";
+                default:
+                    throw new Exception("GetIsNullInSQL未涉及的数据库类型");
+            }
+        }
     }
 
 }

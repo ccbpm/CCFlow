@@ -1619,7 +1619,7 @@ namespace BP.Sys
             }
 
             if (this.Idx == 0)
-                this.Idx = 999; // BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'") + 1;
+                this.Idx = BP.DA.DBAccess.RunSQLReturnValInt(string.Format("SELECT {0} FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", SqlBuilder.GetIsNullInSQL("MAX(Idx)", "0"))) + 1;
             this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             return base.beforeInsert();
         }

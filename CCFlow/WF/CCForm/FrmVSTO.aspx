@@ -12,18 +12,25 @@
 
     <%
         
-        string userNo = this.Request.QueryString["UserNo"];
-        string sid = this.Request.QueryString["SID"];
-        string nodeID = this.Request.QueryString["FK_Node"];
-        string flowNo = this.Request.QueryString["FK_Flow"];
-        string workID = this.Request.QueryString["WorkID"];
-        string fid = this.Request.QueryString["FID"];
-        string frmID = this.Request.QueryString["FK_MapData"];
+        //string userNo = this.Request.QueryString["UserNo"];
+        //string sid = this.Request.QueryString["SID"];
+        //string nodeID = this.Request.QueryString["FK_Node"];
+        //string flowNo = this.Request.QueryString["FK_Flow"];
+        //string workID = this.Request.QueryString["WorkID"];
+        //string fid = this.Request.QueryString["FID"];
+        //string frmID = this.Request.QueryString["FK_MapData"];
+
+
+        string paras = this.RequestParas;
+        paras = paras.Replace("@", ",");
 
         string urlWS = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
-        string url = "excelform://-fromccflow,App=FrmExcel,UserNo=" + userNo + ",SID=" + sid + ",FK_Flow=" + flowNo + ",FK_Node=" + nodeID + ",FrmID=" + frmID + ",WorkID="+workID+",WSUrl="+urlWS;
+        string url = "excelform://-fromccflow,App=FrmExcel" + paras + ",WSUrl=" + urlWS;
 
-        string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
+        //string urlWS = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
+        //string url = "excelform://-fromccflow,App=FrmExcel,UserNo=" + userNo + ",SID=" + sid + ",FK_Flow=" + flowNo + ",FK_Node=" + nodeID + ",FrmID=" + frmID + ",WorkID="+workID+",WSUrl="+urlWS;
+
+        ///  string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
         string urlOfFree = "Frm.aspx?IsFreeFrm=1"+this.RequestParas;
         
          %>

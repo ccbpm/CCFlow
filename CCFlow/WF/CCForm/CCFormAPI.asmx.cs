@@ -44,14 +44,15 @@ namespace CCFlow.WF.CCForm
 		/// <param name="sid"></param>
 		/// <param name="frmID"></param>
 		/// <param name="oid"></param>
+        /// <param name="atParas">参数</param>
 		/// <returns></returns>
 		[WebMethod]
-		public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid)
+		public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid,string atParas)
 		{
 			//让他登录.
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
-			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid);
+			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid,atParas);
 		}
 		/// <summary>
 		/// 执行保存

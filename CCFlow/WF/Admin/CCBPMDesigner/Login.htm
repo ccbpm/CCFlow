@@ -410,6 +410,14 @@
 
         //初始化页面函数.....
         $(function () {
+
+            if (! +[1, ]) {
+                //  alert("这是ie浏览器，您只能使用sliverlight版本浏览器。");
+                window.location.href = '../XAP/Designer.aspx';
+                return;
+            }
+
+
             var doType = GetQueryString("DoType");
             if (doType == null)
                 doType = "LoginInit";
@@ -417,7 +425,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=" + doType,       
+                url: Handler + "?DoType=" + doType,
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -425,7 +433,7 @@
                     }
 
                     if (data.indexOf('url@Default.htm') == 0) {
-                        window.location.href = data.replace('url@','');
+                        window.location.href = data.replace('url@', '');
                         return;
                     }
 

@@ -2419,7 +2419,6 @@ namespace BP.WF
                     return exp;
 
 
-
                 #region 解决排序问题.
                 Attrs attrs = en.EnMap.Attrs;
                 string mystrs = "";
@@ -3867,7 +3866,7 @@ namespace BP.WF
             ch.FK_NY = dtNow.ToString("yyyy-MM");
 
             ch.DTFrom = prvRDT;  //任务下达时间.
-            ch.DTTo = dtNow.ToString("yyyy-MM-dd HH:mm"); //时间到.
+            ch.DTTo = dtNow.ToString("yyyy-MM-dd HH:mm:ss"); //时间到.
 
             ch.SDT = sdt; //应该完成时间.
 

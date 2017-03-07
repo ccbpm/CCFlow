@@ -48,8 +48,9 @@ namespace BP.WF
 		/// </summary>
 		/// <param name="frmID">表单ID</param>
 		/// <param name="pkval">主键</param>
+        /// <param name="atParas">参数</param>
 		/// <returns>数据</returns>
-		public static DataSet GenerDBForVSTOExcelFrmModel(string frmID, int pkval)
+		public static DataSet GenerDBForVSTOExcelFrmModel(string frmID, int pkval, string atParas)
 		{
 			//数据容器,就是要返回的对象.
 			DataSet myds = new DataSet();
@@ -62,6 +63,19 @@ namespace BP.WF
 			wk.OID = pkval;
 			if (wk.RetrieveFromDBSources() == 0)
 				wk.Insert();
+
+            //把参数放入到 En 的 Row 里面。
+            if (string.IsNullOrEmpty(atParas) == false)
+            {
+                AtPara ap = new AtPara(atParas);
+                foreach (string key in ap.HisHT.Keys)
+                {
+                    if (wk.Row.ContainsKey(key) == true) //有就该变.
+                        wk.Row[key] = ap.GetValStrByKey(key);
+                    else
+                        wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                }
+            }
 
 			//属性.
 			MapExt me = null;
@@ -152,9 +166,9 @@ namespace BP.WF
                     {
                         string fullSQL = me.Doc.Clone() as string;
                         fullSQL = fullSQL.Replace("~", ",");
-                        fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
-                        dt = DBAccess.RunSQLReturnTable(fullSQL);
+                        fullSQL = BP.WF.Glo.DealExp(fullSQL, wk,null);
 
+                        dt = DBAccess.RunSQLReturnTable(fullSQL);
 
                         dt.TableName = mypk;
                         myds.Tables.Add(dt);

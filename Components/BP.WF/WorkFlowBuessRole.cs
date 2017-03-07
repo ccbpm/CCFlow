@@ -1474,6 +1474,7 @@ namespace BP.WF
             if (node.HisCCRole == CCRole.AutoCC
               || node.HisCCRole == CCRole.HandAndAuto)
             {
+
             }
             else
             {
@@ -1492,12 +1493,9 @@ namespace BP.WF
             string ccMsg = "@消息自动抄送给";
             string basePath = BP.WF.Glo.HostURL;
 
-
             foreach (DataRow dr in dt.Rows)
             {
                 string toUserNo = dr[0].ToString();
-              
-
                 string toUserName = dr[1].ToString();
 
                 //生成标题与内容.

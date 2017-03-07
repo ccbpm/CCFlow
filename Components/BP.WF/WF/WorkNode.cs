@@ -5047,7 +5047,7 @@ namespace BP.WF
                 return true;
             }
 
-            throw new Exception("@不应该运行到这里。");
+            throw new Exception("@不应该运行到这里，DealTeamUpNode。");
         }
         /// <summary>
         /// 如果是协作
@@ -5100,9 +5100,8 @@ namespace BP.WF
 
                 // 检查完成条件。
                 if (this.HisNode.IsEndNode == false)
-                {
                     this.CheckCompleteCondition();
-                }
+                
                 //写入日志.
                 this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
                 this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);

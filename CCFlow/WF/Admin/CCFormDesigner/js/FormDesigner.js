@@ -364,11 +364,13 @@ function Conver_CCForm_V1ToV2() {
             for (var mapAtrrIndex in flow_Data.MapAttr) {
                 var mapAttr = flow_Data.MapAttr[mapAtrrIndex];
                 var createdFigure = figure_MapAttr_Template(mapAttr);
-                //move it into position
-                createdFigure.transform(Matrix.translationMatrix(mapAttr.X - createdFigure.rotationCoords[0].x, mapAttr.Y - createdFigure.rotationCoords[0].y))
-                createdFigure.style.lineWidth = defaultLineWidth;
-                //add to STACK
-                STACK.figureAdd(createdFigure);
+                if (createdFigure != undefined) {
+                    //move it into position
+                    createdFigure.transform(Matrix.translationMatrix(mapAttr.X - createdFigure.rotationCoords[0].x, mapAttr.Y - createdFigure.rotationCoords[0].y))
+                    createdFigure.style.lineWidth = defaultLineWidth;
+                    //add to STACK
+                    STACK.figureAdd(createdFigure);
+                }
             }
 
             //循环FrmLab
@@ -383,15 +385,23 @@ function Conver_CCForm_V1ToV2() {
             }
 
             //循环FrmRB
-            //for (var i in flow_Data.FrmRb) {
-            //    var frmRb = flow_Data.FrmRb[i];
-            //    var createdFigure = figure_Template_Rb(frmRb);
-            //    //move it into position
-            //    createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
-            //    createdFigure.style.lineWidth = defaultLineWidth;
-            //    //add to STACK
-            //    STACK.figureAdd(createdFigure);
-            //}
+            for (var i in flow_Data.FrmRb) {
+                var frmRb = flow_Data.FrmRb[i];
+                if (i == 0) {
+                    var createdFigure = figure_Template_Rb(frmRb);
+                    //move it into position
+                    createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
+                    createdFigure.style.lineWidth = defaultLineWidth;
+                    //add to STACK
+                    STACK.figureAdd(createdFigure);
+                }
+                 createdFigure = figure_Template_RbLab(frmRb);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
 
             //循环FrmBtn
             for (var i in flow_Data.FrmBtn) {
@@ -403,6 +413,61 @@ function Conver_CCForm_V1ToV2() {
                 //add to STACK
                 STACK.figureAdd(createdFigure);
             }
+
+            //循环Image
+            for (var i in flow_Data.Sys_FrmImg) {
+                var frmImg = flow_Data.Sys_FrmImg[i];
+                var createdFigure = figure_Template_Image(frmImg);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(frmImg.X - createdFigure.rotationCoords[0].x, frmImg.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
+
+            //循环 Link
+            for (var i in flow_Data.Sys_FrmLink) {
+                var frmLink = flow_Data.Sys_FrmLink[i];
+                var createdFigure = figure_Template_HyperLink(frmLink);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(frmLink.X - createdFigure.rotationCoords[0].x, frmLink.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
+
+            //循环 图片附件
+            for (var i in flow_Data.Sys_FrmImgAth) {
+                var frmImgAth = flow_Data.Sys_FrmImgAth[i];
+                var createdFigure = figure_Template_ImageAth(frmImgAth);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(frmImgAth.X - createdFigure.rotationCoords[0].x, frmImgAth.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
+            //循环 附件
+            for (var i in flow_Data.Sys_FrmAttachment) {
+                var frmAttachment = flow_Data.Sys_FrmAttachment[i];
+                var createdFigure = figure_Template_Attachment(frmAttachment);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(frmAttachment.X - createdFigure.rotationCoords[0].x, frmAttachment.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
+
+            //循环 从表
+            for (var i in flow_Data.Sys_MapDtl) {
+                var frmMapDtl = flow_Data.Sys_MapDtl[i];
+                var createdFigure = figure_Template_Dtl(frmMapDtl);
+                //move it into position
+                createdFigure.transform(Matrix.translationMatrix(frmMapDtl.X - createdFigure.rotationCoords[0].x, frmMapDtl.Y - createdFigure.rotationCoords[0].y))
+                createdFigure.style.lineWidth = defaultLineWidth;
+                //add to STACK
+                STACK.figureAdd(createdFigure);
+            }
+
             redraw = true;
             draw();
             //save(false);
@@ -467,6 +532,10 @@ function figure_MapAttr_Template(mapAttr) {
             propertyVale = property.DefVal;
         }
 
+        if (property.proName == "AutoFullDLL" || property.proName == "ActiveDDL" || property.proName == "DDLFullCtrl") {
+            propertyVale = propertyVale.replace(new RegExp(/@FrmID@/g), frmRb.FK_MapData);
+            propertyVale = propertyVale.replace(new RegExp(/@KeyOfEn@/g), frmRb.KeyOfEn);
+        }
         f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
     }
 
@@ -518,9 +587,9 @@ function figure_Template_Label(frmLab) {
 }
 
 //初始化按钮
-function figure_Template_Btn(frmLab) {
+function figure_Template_Btn(frmBtn) {
     var f = new Figure("Button");
-    f.CCForm_MyPK = frmLab.MyPK;
+    f.CCForm_MyPK = frmBtn.MyPK;
     //ccform Property
     f.CCForm_Shape = CCForm_Controls.Button;
 
@@ -536,12 +605,12 @@ function figure_Template_Btn(frmLab) {
 
     f.properties.push(new BuilderProperty('控件属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    f.properties.push(new BuilderProperty('按钮标签', 'primitives.1.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLab.Text));
-    f.properties.push(new BuilderProperty('按钮事件', 'ButtonEvent', BuilderProperty.CCFormEnum, frmLab.EventType));
-    f.properties.push(new BuilderProperty('事件内容', 'BtnEventDoc', BuilderProperty.TYPE_TEXT,frmLab.EventContext));
+    f.properties.push(new BuilderProperty('按钮标签', 'primitives.1.str', BuilderProperty.TYPE_SINGLE_TEXT, frmBtn.Text));
+    f.properties.push(new BuilderProperty('按钮事件', 'ButtonEvent', BuilderProperty.CCFormEnum, frmBtn.EventType));
+    f.properties.push(new BuilderProperty('事件内容', 'BtnEventDoc', BuilderProperty.TYPE_TEXT, frmBtn.EventContext));
 
-    var x = frmLab.X;
-    var y = frmLab.Y;
+    var x = frmBtn.X;
+    var y = frmBtn.Y;
     var p = new Path();
     var hShrinker = 12;
     var vShrinker = 15;
@@ -585,7 +654,7 @@ function figure_Template_Btn(frmLab) {
     p.addPrimitive(c4);
     f.addPrimitive(p);
 
-    var t2 = new Text(frmLab.Text, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentShortSize / 2 + FigureDefaults.corner, FigureDefaults.textFont, FigureDefaults.textSize);
+    var t2 = new Text(frmBtn.Text, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentShortSize / 2 + FigureDefaults.corner, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = FigureDefaults.textColor;
 
     f.addPrimitive(t2);
@@ -593,38 +662,58 @@ function figure_Template_Btn(frmLab) {
     f.finalise();
     return f;
 }
+
 //初始化单选按钮
-function figure_Template_Rb(frmLab) {
+function figure_Template_Rb(frmRb) {
+    //需要初始化3个东西  1个TextBox 1个 Label
     var f = new Figure("RadioButton");
     f.CCForm_Shape = "RadioButton";
-    f.name = "Label";
-    f.CCForm_MyPK = mapAttr.KeyOfEn;
+    f.name = 'TextBox';
+    f.CCForm_MyPK = frmRb.MyPK + '=' + frmRb.Lab;
     f.style.fillStyle = FigureDefaults.fillStyle;
     f.style.strokeStyle = FigureDefaults.strokeStyle;
     f.properties.push(new BuilderProperty('控件属性-' + f.CCForm_Shape, 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-
+//    f.properties.push(new BuilderProperty('中文名', 'FieldText', "SingleText", "吞吞吐吐"));
+//    f.properties.push(new BuilderProperty('英文名', 'KeyOfEn', "SingleTextReadOnly", null));
+//    f.properties.push(new BuilderProperty('枚举键', 'UIBindKey', "SingleTextReadOnly", frmRb.EnumKey));
+//    f.properties.push(new BuilderProperty('默认值', 'DefVal', "SingleText", null));
+//    f.properties.push(new BuilderProperty('设置列表过滤', 'AutoFullDLL', "linkButton", "/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.aspx?FK_MapData=ND7701&ExtType=AutoFull&RefNo=ND7701_"));
+//    f.properties.push(new BuilderProperty('设置联动(如:省份，城市联动)', 'ActiveDDL', "/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.aspx?FK_MapData=ND7701&ExtType=AutoFull&RefNo=ND7701_"
+//));
+//    f.properties.push(new BuilderProperty('设置下拉框自动完成', 'DDLFullCtrl', "linkButton", "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.aspx?FK_MapData=ND7701&ExtType=AutoFull&RefNo=ND7701_"
+    //));
     for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
         var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
-        var propertyVale = mapAttr[property.proName];
+        var propertyVale = frmRb[property.proName];
         if (property.proName == 'FieldText') {
-            propertyVale = mapAttr["Name"];
+            propertyVale = frmRb["Lab"];
         }
+        if (property.proName == 'No') {
+            propertyVale = frmRb["CtrlID"];
+        }
+        if (property.proName == 'UIBindKey') {
+            propertyVale = frmRb["EnumKey"];
+        }
+
         if (propertyVale == undefined) {
             propertyVale = property.DefVal;
         }
 
+        if (property.proName == "AutoFullDLL" || property.proName == "ActiveDDL" || property.proName == "DDLFullCtrl") {
+            propertyVale = propertyVale.replace(new RegExp(/@FrmID@/g), frmRb.FK_MapData);
+            propertyVale = propertyVale.replace(new RegExp(/@KeyOfEn@/g), frmRb.KeyOfEn);
+        }
         f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
     }
-
     //Image
-    var url = figureSetsURL + "/DataView/" + f.CCForm_Shape + ".png";
+    var url = figureSetsURL  + "/DataView/TextBoxStr.png";
 
-    var ifig = new ImageFrame(url, mapAttr.X, mapAttr.Y, true, 150, 30);
+    var ifig = new ImageFrame(url, frmRb.X - 100, frmRb.Y, true, 30, 30);
     ifig.debug = true;
     f.addPrimitive(ifig);
 
-    var t2 = new Text(mapAttr.KeyOfEn, mapAttr.X, mapAttr.Y, FigureDefaults.textFont, FigureDefaults.textSize);
+    var t2 = new Text(frmRb.KeyOfEn, frmRb.X-100, frmRb.Y, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = FigureDefaults.textColor;
     f.addPrimitive(t2);
 
@@ -634,3 +723,277 @@ function figure_Template_Rb(frmLab) {
     return f;
 }
 
+//初始化单选按钮
+function figure_Template_RbLab(frmRb) {
+    var f = new Figure('Label');
+    //ccform Property
+    f.CCForm_Shape = "Label";
+    f.style.fillStyle = FigureDefaults.fillStyle;
+   
+    
+    f.name = "Label";
+    var x = frmRb.X;
+    var y = frmRb.Y;
+    f.properties.push(new BuilderProperty('基本属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT, frmRb.Text));
+    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE, frmRb.FontSize));
+    f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY, frmRb.FontName));
+    //f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
+    f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
+    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT, frmRb.IsBold));
+    f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR, frmRb.FontColor));
+
+    var t2 = new Text("*" + frmRb.Lab, frmRb.X, frmRb.Y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    t2.style.fillStyle = FigureDefaults.textColor;
+
+    f.addPrimitive(t2);
+
+    f.finalise();
+    return f;
+}
+
+//初始化超链接
+function figure_Template_HyperLink(frmLin) {
+    var f = new Figure('HyperLink');
+    //ccform Property
+    f.CCForm_MyPK = frmLin.MyPK;
+    f.CCForm_Shape = CCForm_Controls.HyperLink;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+
+    f.properties.push(new BuilderProperty('基本属性-HyperLink', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT,frmLin.Text));
+    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE,frmLin.FontSize));
+    f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY, frmLin.FontName));
+    //f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
+    f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
+    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT,frmLin.IsBold));
+    f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR,frmLin.FontColor));
+
+    f.properties.push(new BuilderProperty('控件属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    f.properties.push(new BuilderProperty('连接地址', 'URL', BuilderProperty.TYPE_SINGLE_TEXT,frmLin.URL));
+    f.properties.push(new BuilderProperty('打开窗口', 'WinOpenModel', BuilderProperty.CCFormEnum,frmLin.Target));
+
+    var x = frmLin.X;
+    var y = frmLin.Y;
+    var t2 = new Text("我的超连接.", x, y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    t2.style.fillStyle = "#0000ff";
+    t2.underlined = true;
+
+    f.addPrimitive(t2);
+
+    f.finalise();
+    return f;
+}
+
+//初始化 IMAGE
+function figure_Template_Image(frmImage) {
+    var f = new Figure("Image");
+    //ccform Property
+    f.CCForm_Shape = CCForm_Controls.Image;
+    f.CCForm_MyPK = frmImage.MyPK;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+    f.style.strokeStyle = FigureDefaults.strokeStyle;
+
+    //Image
+    var url = figureSetsURL + "/basic/TempleteFile.png";
+    var x = frmImage.X;
+    var y = frmImage.Y;
+    var ifig = new ImageFrame(url, x, y, true, 120, 140);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
+
+    //Text
+    f.properties.push(new BuilderProperty('控件属性-Image', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    f.properties.push(new BuilderProperty('应用类型', 'ImgAppType', BuilderProperty.CCFormEnum, frmImage.ImageAppType));
+    f.properties.push(new BuilderProperty('上传图片', 'ImgURL', BuilderProperty.CCFormUpload, frmImage.ImageURL));
+    f.properties.push(new BuilderProperty('指定路径', 'ImgPath', BuilderProperty.TYPE_SINGLE_TEXT, frmImage.ImgPath));
+    f.properties.push(new BuilderProperty('图片连接到', 'LinkURL', BuilderProperty.TYPE_SINGLE_TEXT, frmImage.LinkURL));
+    f.properties.push(new BuilderProperty('打开窗口', 'WinOpenModel', BuilderProperty.CCFormEnum, frmImage.LinkTarget));
+
+    //var x = frmImage.X;
+    //var y = frmImage.Y;
+    //var t2 = new Text("", x, y + 36, FigureDefaults.textFont, FigureDefaults.textSize);
+    //t2.style.fillStyle = FigureDefaults.textColor;
+    //f.addPrimitive(t2);
+
+    f.finalise();
+    return f;
+}
+
+//初始化 IMAGE
+function figure_Template_ImageAth(frmImageAth) {
+    var f = new Figure("AthImg");
+    //ccform Property
+    f.CCForm_Shape = CCForm_Controls.Image;
+    f.CCForm_MyPK = frmImageAth.CtrlID;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+    f.style.strokeStyle = FigureDefaults.strokeStyle;
+
+    //Image
+    var url = figureSetsURL + "/DataView/AthImg.png";
+    var x = frmImageAth.X;
+    var y = frmImageAth.Y;
+    var ifig = new ImageFrame(url, x, y, true, frmImageAth.W, frmImageAth.H);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
+
+    //Text
+    //f.properties.push(new BuilderProperty('控件属性-Image', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    //f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    //f.properties.push(new BuilderProperty('应用类型', 'ImgAppType', BuilderProperty.CCFormEnum, frmImage.ImageAppType));
+    //f.properties.push(new BuilderProperty('上传图片', 'ImgURL', BuilderProperty.CCFormUpload, frmImage.ImageURL));
+    //f.properties.push(new BuilderProperty('指定路径', 'ImgPath', BuilderProperty.TYPE_SINGLE_TEXT, frmImage.ImgPath));
+    //f.properties.push(new BuilderProperty('图片连接到', 'LinkURL', BuilderProperty.TYPE_SINGLE_TEXT, frmImage.LinkURL));
+    //f.properties.push(new BuilderProperty('打开窗口', 'WinOpenModel', BuilderProperty.CCFormEnum, frmImage.LinkTarget));
+    for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
+        var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
+        var propertyVale = frmAttachment[property.proName];
+        if (property.proName == 'FieldText') {
+            propertyVale = frmAttachment["Name"];
+        }
+        if (property.proName == 'No') {
+            propertyVale = frmAttachment["CtrlID"];
+        }
+        if (property.proName == 'Name') {
+            propertyVale = frmAttachment["CtrlID"];
+        }
+        if (propertyVale == undefined) {
+            propertyVale = property.DefVal;
+        }
+
+        f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
+    }
+
+    
+    f.finalise();
+    return f;
+}
+
+//初始化 附件
+function figure_Template_Attachment(frmAttachment) {
+    var f = undefined;
+    if (frmAttachment.UploadType == 0) {
+        f = new Figure("AthSingle");
+    } else if (frmAttachment.UploadType == 1) {
+        f = new Figure("AthMulti");
+    }
+    //ccform Property
+    if (frmAttachment.UploadType == 0) {
+        f.CCForm_Shape = CCForm_Controls.AthSingle;
+    } else if (frmAttachment.UploadType == 1) {
+        f.CCForm_Shape = CCForm_Controls.AthMulti;
+    }
+    f.name = "Square";
+    f.CCForm_MyPK = frmAttachment.NoOfObj;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+    f.style.strokeStyle = FigureDefaults.strokeStyle;
+
+    //Image
+    var url = undefined;
+    if (frmAttachment.UploadType == 0) {
+        url = figureSetsURL + "/DataView/AthSingle.png";
+    } else if (frmAttachment.UploadType == 1) {
+        url = figureSetsURL + "/DataView/AthMulti.png";
+    }
+    var x = frmAttachment.X;
+    var y = frmAttachment.Y;
+    var ifig = new ImageFrame(url, x - 80, y, true, 150, 30);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
+
+    f.properties.push(new BuilderProperty('控件属性-Image', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
+        var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
+        var propertyVale = frmAttachment[property.proName];
+        if (property.proName == 'FieldText') {
+            propertyVale = frmAttachment["Name"];
+        }
+        if (property.proName == 'No') {
+            propertyVale = frmAttachment["NoOfObj"];
+        }
+        if (propertyVale == undefined) {
+            propertyVale = property.DefVal;
+        }
+
+        if (property.proName == "Set") {
+            propertyVale = propertyVale.replace("@FrmID@", frmAttachment.FK_MapData);
+            propertyVale = propertyVale.replace("@KeyOfEn@", frmAttachment.NoOfObj);
+        }
+
+        f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
+    }
+    //Text
+
+    //f.properties.push(new BuilderProperty('应用类型', 'ImgAppType', BuilderProperty.CCFormEnum, frmImage.ImageAppType));
+    //f.properties.push(new BuilderProperty('上传图片', 'ImgURL', BuilderProperty.CCFormUpload, frmImage.ImageURL));
+    //f.properties.push(new BuilderProperty('指定路径', 'ImgPath', BuilderProperty.TYPE_SINGLE_TEXT, frmImage.ImgPath));
+    //f.properties.push(new BuilderProperty('图片连接到', 'LinkURL', BuilderProperty.TYPE_SINGLE_TEXT, frmImage.LinkURL));
+    //f.properties.push(new BuilderProperty('打开窗口', 'WinOpenModel', BuilderProperty.CCFormEnum, frmImage.LinkTarget));
+
+    var x = frmAttachment.X;
+    var y = frmAttachment.Y;
+    var t2 = new Text(frmAttachment.Name, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
+    t2.style.fillStyle = FigureDefaults.textColor;
+    f.addPrimitive(t2);
+
+    f.finalise();
+    return f;
+}
+
+//初始化从表
+function figure_Template_Dtl(frmDtl) {
+    var f = new Figure("Dtl");
+    //ccform Property
+    f.CCForm_Shape = CCForm_Controls.Dtl;
+    f.name = "TextBox";
+    f.CCForm_MyPK = frmDtl.NoOfObj;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+    f.style.strokeStyle = FigureDefaults.strokeStyle;
+
+    //Image
+    var url = figureSetsURL + "/DataView/Dtl.png";
+    var x = frmDtl.X;
+    var y = frmDtl.Y;
+    var ifig = new ImageFrame(url, x - 80, y, true, 150, 30);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
+
+    f.properties.push(new BuilderProperty('控件属性-Dtl', 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
+        var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
+        var propertyVale = frmDtl[property.proName];
+        
+        if (propertyVale == undefined) {
+            propertyVale = property.DefVal;
+        }
+
+        if (property.proName == "Set") {
+            propertyVale = propertyVale.replace("@FrmID@", frmDtl.FK_MapData);
+            propertyVale = propertyVale.replace("@KeyOfEn@", frmDtl.No);
+        }
+
+        f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
+    }
+    //Text
+
+    //f.properties.push(new BuilderProperty('应用类型', 'ImgAppType', BuilderProperty.CCFormEnum, frmImage.ImageAppType));
+    //f.properties.push(new BuilderProperty('上传图片', 'ImgURL', BuilderProperty.CCFormUpload, frmImage.ImageURL));
+    //f.properties.push(new BuilderProperty('指定路径', 'ImgPath', BuilderProperty.TYPE_SINGLE_TEXT, frmImage.ImgPath));
+    //f.properties.push(new BuilderProperty('图片连接到', 'LinkURL', BuilderProperty.TYPE_SINGLE_TEXT, frmImage.LinkURL));
+    //f.properties.push(new BuilderProperty('打开窗口', 'WinOpenModel', BuilderProperty.CCFormEnum, frmImage.LinkTarget));
+
+    var x = frmDtl.X;
+    var y = frmDtl.Y;
+    var t2 = new Text(frmDtl.Name, x, y , FigureDefaults.textFont, FigureDefaults.textSize);
+    t2.style.fillStyle = FigureDefaults.textColor;
+    f.addPrimitive(t2);
+
+    f.finalise();
+    return f;
+}

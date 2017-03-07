@@ -249,7 +249,6 @@ namespace BP.Web
             else
                 SystemConfig.IsBSsystem = true;
 
-
             WebUser.No = userNo;
             WebUser.Name = userName;
             if (string.IsNullOrEmpty(authNo) == false)

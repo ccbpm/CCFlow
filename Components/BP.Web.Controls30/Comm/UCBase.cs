@@ -353,8 +353,12 @@ namespace BP.Web.UC
 
             #region 判断外部数据。
             foreach (string paramKey in Request.Params.AllKeys)
+            {
+                if (paramKey == null)
+                    continue;
                 en.SetValByKey(paramKey, Request[paramKey]);
-            #endregion
+            }
+            #endregion 判断外部数据
 
             foreach (System.Web.UI.Control ctl in this.Controls)
             {

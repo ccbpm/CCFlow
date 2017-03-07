@@ -127,6 +127,9 @@ namespace BP.Sys
         /// <param name="msg">消息</param>
         public static void WriteUserLog(string logType, string empNo, string msg)
         {
+            //为了提高运行效率，把这个地方屏蔽了。
+            return;
+
             UserLog ul = new UserLog();
             ul.MyPK = DBAccess.GenerGUID();
             ul.FK_Emp = empNo;

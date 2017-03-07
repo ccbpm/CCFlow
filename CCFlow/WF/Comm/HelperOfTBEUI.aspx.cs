@@ -140,13 +140,13 @@ namespace CCFlow.WF.Comm
             string str = getUTF8ToString("str");
 
 
-            string sql = "select * from sys_defval where LB='2' and FK_Emp='" + WebUser.No
+            string sql = "select * from Sys_UserRegedit where LB='2' and FK_Emp='" + WebUser.No
                         + "' and FK_MapData='" + enName + "' and AttrKey='" + AttrKey + "' and CurValue='" + str + "'";
 
             if (DBAccess.RunSQLReturnCOUNT(sql) != 0)//禁止添加重复数据
                 return "false";
 
-            sql = "select * from sys_defval where LB='2' and FK_Emp='" + WebUser.No
+            sql = "select * from Sys_UserRegedit where LB='2' and FK_Emp='" + WebUser.No
                         + "' and FK_MapData='" + enName + "' and AttrKey='" + AttrKey + "'";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -285,7 +285,7 @@ namespace CCFlow.WF.Comm
             }
 
             string addQue = " and FK_MapData='" + enName + "' and AttrKey='" + AttrKey + "' and CurValue='" + text + "'";
-            string sql = "select * from sys_defval where LB='" + lbStr + "' and FK_Emp='" + fk_emp + "'" + addQue;
+            string sql = "select * from Sys_UserRegedit where LB='" + lbStr + "' and FK_Emp='" + fk_emp + "'" + addQue;
             if (DBAccess.RunSQLReturnCOUNT(sql) != 0)
                 return "false";
 
@@ -302,7 +302,7 @@ namespace CCFlow.WF.Comm
             catch
             {
                 DefVal dv = new DefVal();
-                dv.RunSQL("drop table Sys_DefVal");
+                dv.RunSQL("drop table Sys_UserRegedit");
                 dv.CheckPhysicsTable();
             }
 
@@ -331,19 +331,19 @@ namespace CCFlow.WF.Comm
                 addQue = " and FK_MapData='" + enName + "' and AttrKey='" + AttrKey + "'";
 
                 if (lb == "myWords")//我的词汇
-                    sql = "select * from sys_defval where LB='1' and FK_Emp='" + WebUser.No + "'" + addQue;
+                    sql = "select * from Sys_UserRegedit where LB='1' and FK_Emp='" + WebUser.No + "'" + addQue;
 
                 if (lb == "hisWords")//历史词汇
-                    sql = "select * from sys_defval where LB='2' and FK_Emp='" + WebUser.No + "'" + addQue;
+                    sql = "select * from Sys_UserRegedit where LB='2' and FK_Emp='" + WebUser.No + "'" + addQue;
 
                 if (lb == "sysWords")//系统词汇
                     switch (DBAccess.AppCenterDBType)
                     {
                         case DBType.Oracle:
-                            sql = "select * from sys_defval where LB='3' and FK_Emp is null" + addQue;
+                            sql = "select * from Sys_UserRegedit where LB='3' and FK_Emp is null" + addQue;
                             break;
                             case DBType.MSSQL:
-                            sql = "select * from sys_defval where LB='3' and FK_Emp=''" + addQue;
+                            sql = "select * from Sys_UserRegedit where LB='3' and FK_Emp=''" + addQue;
                             break;
 
                     }
@@ -361,9 +361,9 @@ namespace CCFlow.WF.Comm
                 {
                     case DBType.Oracle:
                     case DBType.MSSQL:
-                        return DBPaging("(" + sql + ")sqlStr", iPageNumber, iPageSize, "OID", "OID");
+                        return DBPaging("(" + sql + ")sqlStr", iPageNumber, iPageSize, "MyPK", "MyPK");
                     case DBType.MySQL:
-                        return DBPaging("(" + sql + " order by OID DESC )sqlStr", iPageNumber, iPageSize, "OID", "");
+                        return DBPaging("(" + sql + " order by MyPK DESC )sqlStr", iPageNumber, iPageSize, "MyPK", "");
                     default:
                         throw new Exception("暂不支持您的数据库类型.");
                 }

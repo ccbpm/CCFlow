@@ -217,8 +217,12 @@
             queryData(params, function (js, scope) {
                 $('#win').window('close');
                 if (js == "true") {
-                    if (insEdit)
+                    alert(js);
+                    if (insEdit) {
+                        alert('loadgrid');
                         LoadGridData(1, 15);
+                    }
+
                     RefreshGrid();
                 } else {
                     $.messager.alert("提示", "操作失败", "info");

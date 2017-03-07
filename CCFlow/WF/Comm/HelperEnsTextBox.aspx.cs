@@ -45,7 +45,7 @@ namespace CCFlow.WF.Comm
 
 
             //求设置的默认值。
-            string sql = "SELECT a.CurValue, 1 as IsDef FROM Sys_DefVal a  WHERE (A.FK_Emp='"+WebUser.No+"' OR A.FK_Emp='admin') AND FK_MapData='"+this.EnsName+"' AND NodeAttrKey='"+this.Field+"' ";
+            string sql = "SELECT a.CurValue, 1 as IsDef FROM Sys_UserRegedit a  WHERE (A.FK_Emp='" + WebUser.No + "' OR A.FK_Emp='admin') AND FK_MapData='" + this.EnsName + "' AND NodeAttrKey='" + this.Field + "' ";
             DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {

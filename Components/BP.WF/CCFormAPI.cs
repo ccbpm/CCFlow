@@ -44,11 +44,11 @@ namespace BP.WF
 			rtf.MakeDoc(templeteFullFile, saveToDir, saveFileName, null, false);
 		}
 		/// <summary>
-		/// 仅仅获取数据
+		/// 仅获取数据
 		/// </summary>
 		/// <param name="frmID">表单ID</param>
 		/// <param name="pkval">主键</param>
-        /// <param name="atParas">参数</param>
+		/// <param name="atParas">参数</param>
 		/// <returns>数据</returns>
 		public static DataSet GenerDBForVSTOExcelFrmModel(string frmID, int pkval, string atParas)
 		{
@@ -64,18 +64,18 @@ namespace BP.WF
 			if (wk.RetrieveFromDBSources() == 0)
 				wk.Insert();
 
-            //把参数放入到 En 的 Row 里面。
-            if (string.IsNullOrEmpty(atParas) == false)
-            {
-                AtPara ap = new AtPara(atParas);
-                foreach (string key in ap.HisHT.Keys)
-                {
-                    if (wk.Row.ContainsKey(key) == true) //有就该变.
-                        wk.Row[key] = ap.GetValStrByKey(key);
-                    else
-                        wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
-                }
-            }
+			//把参数放入到 En 的 Row 里面。
+			if (string.IsNullOrEmpty(atParas) == false)
+			{
+				AtPara ap = new AtPara(atParas);
+				foreach (string key in ap.HisHT.Keys)
+				{
+					if (wk.Row.ContainsKey(key) == true) //有就该变.
+						wk.Row[key] = ap.GetValStrByKey(key);
+					else
+						wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+				}
+			}
 
 			//属性.
 			MapExt me = null;
@@ -83,13 +83,13 @@ namespace BP.WF
 			MapExts mes = null;
 
 
-			#region 表单模版信息.
+			#region 表单模版信息.（含主、从表，以及从表的枚举/外键相关数据）
 
-            //增加表单字段描述.
-            string sql = "SELECT * FROM Sys_MapData WHERE No='" + frmID + "' ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_MapData";
-            myds.Tables.Add(dt);
+			//增加表单字段描述.
+			string sql = "SELECT * FROM Sys_MapData WHERE No='" + frmID + "' ";
+			DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+			dt.TableName = "Sys_MapData";
+			myds.Tables.Add(dt);
 
 			//增加表单字段描述.
 			sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "' ";
@@ -104,97 +104,96 @@ namespace BP.WF
 			dt.TableName = "Sys_MapExt";
 			myds.Tables.Add(dt);
 
-            #region 加载从表表单描述信息
-            foreach (MapDtl item in md.MapDtls)
-            {
-                //明细表的主表描述
-                sql = "SELECT * FROM Sys_MapDtl WHERE No='" + item.No + "'";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "Sys_MapDtl_For_" + item.No;
-                myds.Tables.Add(dt);
+			#region 加载从表表单模版信息.
+			foreach (MapDtl item in md.MapDtls)
+			{
+				//明细表的主表描述
+				sql = "SELECT * FROM Sys_MapDtl WHERE No='" + item.No + "'";
+				dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+				dt.TableName = "Sys_MapDtl_For_" + item.No;
+				myds.Tables.Add(dt);
 
-                //明细表的表单描述
-                sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + item.No + "'";
-                dtMapAttr = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dtMapAttr.TableName = "Sys_MapAttr_For_" + item.No;
-                myds.Tables.Add(dtMapAttr);
+				//明细表的表单描述
+				sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + item.No + "'";
+				dtMapAttr = BP.DA.DBAccess.RunSQLReturnTable(sql);
+				dtMapAttr.TableName = "Sys_MapAttr_For_" + item.No;
+				myds.Tables.Add(dtMapAttr);
 
-                //明细表的配置信息.
-                sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + item.No + "'";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "Sys_MapExt_For_" + item.No;
-                myds.Tables.Add(dt);
+				//明细表的配置信息.
+				sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + item.No + "'";
+				dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+				dt.TableName = "Sys_MapExt_For_" + item.No;
+				myds.Tables.Add(dt);
 
-                #region 把主表的- 外键表/枚举 加入 DataSet.
-                mes = new MapExts(item.No);
-                foreach (DataRow dr in dtMapAttr.Rows)
-                {
-                    string lgType = dr["LGType"].ToString();
-                    //不是枚举/外键字段
-                    if (lgType == "0")
-                        continue;
+				#region 把从表的- 外键表/枚举 加入 DataSet.
+				mes = new MapExts(item.No);
+				foreach (DataRow dr in dtMapAttr.Rows)
+				{
+					string lgType = dr["LGType"].ToString();
+					//不是枚举/外键字段
+					if (lgType == "0")
+						continue;
 
-                    string uiBindKey = dr["UIBindKey"].ToString();
-                    var mypk = dr["MyPK"].ToString();
+					string uiBindKey = dr["UIBindKey"].ToString();
+					var mypk = dr["MyPK"].ToString();
 
-                    #region 枚举字段
-                    if (lgType == "1")
-                    {
-                        // 如果是枚举值, 判断是否存在.
-                        if (myds.Tables.Contains(uiBindKey) == true)
-                            continue;
+					#region 枚举字段
+					if (lgType == "1")
+					{
+						// 如果是枚举值, 判断是否存在.
+						if (myds.Tables.Contains(uiBindKey) == true)
+							continue;
 
-                        string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
-                        DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
-                        dtEnum.TableName = uiBindKey;
-                        myds.Tables.Add(dtEnum);
-                        continue;
-                    }
-                    #endregion
+						string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
+						DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
+						dtEnum.TableName = uiBindKey;
+						myds.Tables.Add(dtEnum);
+						continue;
+					}
+					#endregion
 
-                    #region 外键字段
-                    string UIIsEnable = dr["UIIsEnable"].ToString();
-                    if (UIIsEnable == "0") //字段未启用
-                        continue;
+					#region 外键字段
+					string UIIsEnable = dr["UIIsEnable"].ToString();
+					if (UIIsEnable == "0") //字段未启用
+						continue;
 
-                    // 检查是否有下拉框自动填充。
-                    string keyOfEn = dr["KeyOfEn"].ToString();
+					// 检查是否有下拉框自动填充。
+					string keyOfEn = dr["KeyOfEn"].ToString();
 
-                    #region 处理下拉框数据范围. for 小杨.
-                    me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
-                    if (me != null) //有范围限制时
-                    {
-                        string fullSQL = me.Doc.Clone() as string;
-                        fullSQL = fullSQL.Replace("~", ",");
-                        fullSQL = BP.WF.Glo.DealExp(fullSQL, wk,null);
+					#region 处理下拉框数据范围. for 小杨.
+					me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+					if (me != null) //有范围限制时
+					{
+						string fullSQL = me.Doc.Clone() as string;
+						fullSQL = fullSQL.Replace("~", ",");
+						fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
 
-                        dt = DBAccess.RunSQLReturnTable(fullSQL);
+						dt = DBAccess.RunSQLReturnTable(fullSQL);
 
-                        dt.TableName = mypk;
-                        myds.Tables.Add(dt);
-                        continue;
-                    }
-                    #endregion 处理下拉框数据范围.
-                    else //无范围限制时
-                    {
-                        // 判断是否存在.
-                        if (myds.Tables.Contains(uiBindKey) == true)
-                            continue;
+						dt.TableName = mypk;
+						myds.Tables.Add(dt);
+						continue;
+					}
+					#endregion 处理下拉框数据范围.
+					else //无范围限制时
+					{
+						// 判断是否存在.
+						if (myds.Tables.Contains(uiBindKey) == true)
+							continue;
 
-                        myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
-                    }
-                    #endregion
-                }
-                #endregion End把外键表加入DataSet
+						myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+					}
+					#endregion 外键字段
+				}
+				#endregion 把从表的- 外键表/枚举 加入 DataSet.
 
-            }
-            #endregion 加载从表信息.
-            
+			}
+			#endregion 加载从表表单模版信息.
 
-            #endregion
+			#endregion 表单模版信息.
 
-            #region 把主从表数据放入里面.
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
+			#region 把主表数据放入.
+			if (BP.Sys.SystemConfig.IsBSsystem == true)
 			{
 				// 处理传递过来的参数。
 				foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
@@ -227,7 +226,9 @@ namespace BP.WF
 			mainTable.TableName = "MainTable";
 			myds.Tables.Add(mainTable);
 
-#region  把从表的数据放入.
+			#endregion 把主表数据放入.
+
+			#region  把从表的数据放入.
 			foreach (MapDtl dtl in md.MapDtls)
 			{
 				GEDtls dtls = new GEDtls(dtl.No);
@@ -273,7 +274,7 @@ namespace BP.WF
 				dtDtl.TableName = dtl.No; //修改明细表的名称.
 				myds.Tables.Add(dtDtl); //加入这个明细表, 如果没有数据，xml体现为空.
 			}
-			#endregion
+			#endregion 把从表的数据放入.
 
 			#region 把主表的- 外键表/枚举 加入 DataSet.
 			dtMapAttr = myds.Tables["Sys_MapAttr"];
@@ -322,14 +323,12 @@ namespace BP.WF
 				#endregion 处理下拉框数据范围.
 
 				dt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
-                dt.TableName = uiBindKey;
+				dt.TableName = uiBindKey;
 				myds.Tables.Add(dt);
-            }
-            #endregion  把从表的数据放入.
+			}
+			#endregion 把主表的- 外键表/枚举 加入 DataSet.
 
-            #endregion End把外键表加入DataSet
-
-            //返回生成的dataset.
+			//返回生成的dataset.
 			return myds;
 		}
 	}

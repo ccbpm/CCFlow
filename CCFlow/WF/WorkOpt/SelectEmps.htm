@@ -72,7 +72,7 @@
             }
             //返回节点数组
             var initNodeData = function (data,fk_dept2) {
-                data = JSON.parse(data);
+                data = eval('(' + data + ')');
                 var fk_dept = fk_dept2;//pageData.FK_Dept;
                 var parentNo = undefined;
                 var fkDeptObj = $.grep(data.Depts, function (value) {

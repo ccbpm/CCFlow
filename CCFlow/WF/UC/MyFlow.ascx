@@ -11,7 +11,7 @@
 </div>
 
 <script type="text/javascript">
-
+    var winSelectAccepter;
     //发送按钮，当
     function SendBtnCondClick(flowNo, nodeid, workID, fid) {
 
@@ -33,7 +33,11 @@
             if (selectNodeID.indexOf('.') != -1) {  //发送之前，需要调用选择人接收器.
                 selectNodeID = selectNodeID.replace('.1', '');
                 var url = "./WorkOpt/Accepter.htm?WorkID=" + workID + "&ToNode=" + selectNodeID + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2&DoType=AccepterSave";
-                winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
+                if (winSelectAccepter != null && winSelectAccepter.close != undefined) {
+                    winSelectAccepter.close();
+                }
+                winSelectAccepter = window.open(url, "winSelectAccepter", 'height=600, width=600,scrollbars=yes');
+
 
             } else {
                 //开始调用发送按钮.

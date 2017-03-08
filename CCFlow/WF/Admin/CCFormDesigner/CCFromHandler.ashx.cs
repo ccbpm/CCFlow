@@ -525,7 +525,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
         }
 
         /// <summary>
-        /// 获取流程所有元素
+        /// 获取自由表单所有元素
         /// </summary>
         /// <returns>json data</returns>
         private string CCForm_AllElements_ResponseJson()
@@ -540,12 +540,23 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 string sqls = "SELECT * FROM Sys_MapAttr WHERE UIVisible=1 AND FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
                                 + "SELECT * FROM Sys_FrmBtn WHERE FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
                                 + "SELECT * FROM Sys_FrmRB WHERE FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
-                                + "SELECT * FROM Sys_FrmLab WHERE FK_MapData='" + this.FK_MapData + "';";
+                                + "SELECT * FROM Sys_FrmLab WHERE FK_MapData='" + this.FK_MapData + "';"
+                                + "SELECT * FROM Sys_FrmLink WHERE FK_MapData='" + this.FK_MapData + "';"
+                                + "SELECT * FROM Sys_FrmImg WHERE FK_MapData='" + this.FK_MapData + "';"
+                                + "SELECT * FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FK_MapData + "';"
+                                + "SELECT * FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "';"
+                                 + "SELECT * FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_MapData + "';"
+                                ;
                 DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
                 ds.Tables[0].TableName = "MapAttr";
                 ds.Tables[1].TableName = "FrmBtn";
                 ds.Tables[2].TableName = "FrmRb";
                 ds.Tables[3].TableName = "FrmLab";
+                ds.Tables[4].TableName = "Sys_FrmLink";
+                ds.Tables[5].TableName = "Sys_FrmImg";
+                ds.Tables[6].TableName = "Sys_FrmImgAth";
+                ds.Tables[7].TableName = "Sys_FrmAttachment";
+                ds.Tables[8].TableName = "Sys_MapDtl";
 
                 return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = "", data = Newtonsoft.Json.JsonConvert.SerializeObject(ds) });
 

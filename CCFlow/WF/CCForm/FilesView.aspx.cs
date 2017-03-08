@@ -474,7 +474,7 @@ namespace CCFlow.WF.CCForm
             {
 
                 int num = dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment,
-                      FrmAttachmentDBAttr.RefPKVal, this.PKVal, "Idx");
+                      FrmAttachmentDBAttr.RefPKVal, this.PKVal, "rdt");
                 if (num == 0 && this.IsCC == "1")
                 {
                     CCList cc = new CCList();

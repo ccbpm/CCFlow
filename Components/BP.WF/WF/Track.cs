@@ -367,6 +367,8 @@ namespace BP.WF
                     return "队列发送";
                 case ActionType.FlowBBS:
                     return "评论";
+                case ActionType.TeampUp:
+                    return "协作";
                 default:
                     return "未知";
             }

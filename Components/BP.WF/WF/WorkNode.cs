@@ -5632,9 +5632,9 @@ namespace BP.WF
                         }
 
                         if (this.HisNode.ThreadKillRole == ThreadKillRole.ByHand)
-                            infoErr += "@请通知它们处理完成,或者强制删除子流程您才能向下发送.";
+                            infoErr += "@请通知他们处理完成,或者强制删除子流程您才能向下发送.";
                         else
-                            infoErr += "@请通知它们处理完成,您才能向下发送.";
+                            infoErr += "@请通知他们处理完成,您才能向下发送.";
 
                         //抛出异常阻止它向下运动。
                         throw new Exception(infoErr);
@@ -5642,6 +5642,7 @@ namespace BP.WF
 
                     if (this.HisNode.ThreadKillRole == ThreadKillRole.ByAuto)
                     {
+
                         //删除每个子线程，然后向下运动。
                         foreach (DataRow dr in dtWL.Rows)
                             BP.WF.Dev2Interface.Flow_DeleteSubThread(this.HisFlow.No, Int64.Parse(dr[0].ToString()), "合流点发送时自动删除");
@@ -5656,7 +5657,7 @@ namespace BP.WF
             this.rptGe.SetValByKey("OID", this.WorkID);
             this.rptGe.RetrieveFromDBSources();
 
-            //检查是否有子流程存在, 如果有就让子流程发送下去. and 2015-01-23. for gaoling.
+            //检查阻塞模式
             this.CheckBlockModel();
 
             // 检查FormTree必填项目,如果有一些项目没有填写就抛出异常.

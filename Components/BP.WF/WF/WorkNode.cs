@@ -5326,7 +5326,8 @@ namespace BP.WF
             {
                 /*按 sql 判断阻塞*/
                 decimal d = DBAccess.RunSQLReturnValDecimal(Glo.DealExp(this.HisNode.BlockExp, this.rptGe, null), 0, 1);
-                if (d >= 0)
+                //如果值大于0进行阻塞
+                if (d > 0)
                     throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
                 return true;
             }

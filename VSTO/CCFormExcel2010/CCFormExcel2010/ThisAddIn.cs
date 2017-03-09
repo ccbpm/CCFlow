@@ -34,8 +34,7 @@ namespace CCFormExcel2010
 		/// </summary>
 		private Hashtable _htSubTables = new Hashtable(); //excel中的子表信息
 
-		private Excel.Range _rangeChangedByCode; //记录最后一个【在代码中修改了值】的range，以便在【SheetChang】事件中过滤该range
-		private bool _ignoreOneTime = false; //忽略一次【SheetChang】事件
+		private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件
 
 		private bool _isDebug = false;
 
@@ -67,21 +66,71 @@ namespace CCFormExcel2010
 			Glo.WSUrl = "http://localhost/WF/CCForm/CCFormAPI.asmx";
 		}
 
+		public Dictionary<string, string> InitTesterArgsString()
+		{
+			//2149 染源废水监测采样记录-2017-03-06 10:18 //主表值没了
+			//string argstr = "-fromccflow,App=FrmExcel,UserNo=anjian,SID=3plkqun55bx0o42azhclyxpc,FK_Flow=002,FK_Node=202,FrmID=CY_6501,WorkID=2149,WSUrl=http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
+			//2073 污染源废水监测采样记录-2017-03-01 23:53
+			string argstr = "-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=0,IsPrint=0,WorkID=2073,FK_Flow=002,FK_Node=202,UserNo=anjian,FID=0,SID=3plkqun55bx0o42azhclyxpc,PWorkID=1923,PFlowNo=001,IsLoadData=1,CWorkID=0,IsRead=0,T=ss,Paras=@Frms,WSUrl=http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
+			string prefix = "-fromccflow,";
+			int beginidx = -1;
+			Dictionary<string, string> args = new Dictionary<string, string>();
+
+			beginidx = argstr.IndexOf(prefix);
+
+			if (beginidx == -1 || (beginidx + prefix.Length) == argstr.Length - 1)
+			{
+				args.Add("fromccflow", "false");
+				return args;
+			}
+
+			beginidx = beginidx + prefix.Length;
+			argstr = argstr.Substring(beginidx);
+
+			if (argstr.IndexOf(' ') != -1)
+				argstr = argstr.Substring(0, argstr.IndexOf(' '));
+
+			Glo.AtParas = "@" + argstr.Replace(",", "@");
+			string[] argsArr = argstr.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+			string[] ars = null;
+
+			args.Add("fromccflow", "true");
+
+			foreach (string arg in argsArr)
+			{
+				ars = arg.Split('=');
+
+				if (ars.Length == 1)
+					continue;
+
+				args.Add(ars[0], ars[1]);
+			}
+
+			return args;
+		}
+
 		private void ThisAddIn_Startup(object sender, System.EventArgs e)
 		{
+
+#if DEBUG
+			this._isDebug = true;
+#endif
 
 			#region 获得外部参数, 这是通过外部传递过来的参数.
 			try
 			{
-				Dictionary<string, string> args = Glo.GetArguments();
+				Dictionary<string, string> args = _isDebug ? InitTesterArgsString() : Glo.GetArguments();
 				Glo.LoadSuccessful = args["fromccflow"] == "true";
+				if (args.ContainsKey("IsReadonly"))
+					Glo.IsReadonly = args["IsReadonly"] == "1";
 				//	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
 				Glo.UserNo = args["UserNo"];
 				Glo.SID = args["SID"];
 				Glo.FK_Flow = args["FK_Flow"];
 				Glo.FK_Node = int.Parse(args["FK_Node"]);
-				Glo.FrmID = args["FrmID"];
+				Glo.FrmID = args["FK_MapData"];//FrmID
 				Glo.WorkID = int.Parse(args["WorkID"]);
+				Glo.PWorkID = int.Parse(args["PWorkID"]);
 				Glo.WSUrl = args["WSUrl"];
 			}
 			catch (Exception ex)
@@ -90,8 +139,8 @@ namespace CCFormExcel2010
 			}
 			#endregion 获得外部参数, 这是通过外部传递过来的参数.
 
-			// 测试当前数据.
-			this.InitTester();
+			//// 测试当前数据.
+			//this.InitTester();
 
 			//init base class
 			_base = new ExcelFormBase(Application);
@@ -111,10 +160,10 @@ namespace CCFormExcel2010
 				BP.Excel.Glo.WriteFile(tempFile, bytes);
 
 				//打开文件
-				Globals.ThisAddIn.Application.Workbooks.Open("C:\\CCFlow\\temp.xlsx");
+				Globals.ThisAddIn.Application.Workbooks.Open("C:\\CCFlow\\temp.xlsx", ReadOnly: Glo.IsReadonly);
 
 				//获得该表单的，物理数据.
-				_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
+				_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, Glo.AtParas);
 
 				//如果打开的是模板，则还需填充数据
 				if (isExistDbFile == false)
@@ -170,9 +219,6 @@ namespace CCFormExcel2010
 				return;
 			}
 
-			if (range.Worksheet.Name == _rangeChangedByCode.Worksheet.Name && range.Address == _rangeChangedByCode.Address)
-				return;
-
 			if (_base.IsSingle(range)) //是单个单元格
 			{
 				var strBelongDtlName = _base.GetBelongDtlName(range);
@@ -185,7 +231,7 @@ namespace CCFormExcel2010
 					if (_base.IsValidList(range)) //是下拉
 					{
 						//?是否增加判断：值是否匹配数据有效性规则？
-
+						#region 设置级联的下拉
 						string listName;
 						var type = GetFieldType("MainTable", range.Name.Name, out listName);
 						if (type == FieldType.CascadeParentList) //是级联的父级字段
@@ -217,10 +263,11 @@ namespace CCFormExcel2010
 								UpdateMetaList(strListAreaName, dt);
 
 								//清除关联的子级的值
-								_rangeChangedByCode = rangeAim;
+								_ignoreOneTime = true;
 								rangeAim.Value2 = null;
 							}
 						}
+						#endregion
 					}
 					//不是下拉//不是级联-父级：终止执行
 				}
@@ -245,12 +292,12 @@ namespace CCFormExcel2010
 					if (colName == null) //单元格无绑定列
 						return;
 					//↓有绑定列时：
-					#region copy
+					#region 设置级联的下拉 copy from
 					string listName;
 					var type = GetFieldType(strBelongDtlName, colName, out listName);
 					if (type == FieldType.CascadeParentList) //是级联的父级字段
 					{
-						var drs = _originData.Tables["Sys_MapExt"].Select("AttrOfOper='" + range.Name.Name + "'");
+						var drs = _originData.Tables["Sys_MapExt_For_" + strBelongDtlName].Select("AttrOfOper='" + range.Name.Name + "'");
 						foreach (DataRow dr in drs) //可能有多个子级？
 						{
 							//填充数据（序列）
@@ -280,7 +327,7 @@ namespace CCFormExcel2010
 							UpdateMetaList(strListAreaName, dt);
 
 							//清除关联的子级的值
-							_rangeChangedByCode = rangeAim;
+							_ignoreOneTime = true;
 							rangeAim.Value2 = null;
 						}
 					}
@@ -293,20 +340,26 @@ namespace CCFormExcel2010
 				{
 					//监听“插入行”“删除行”操作
 					//判断操作行数
-					//x判断各子表Range是否有变化:已保存的range会实时变化
+					//x判断各子表Range是否有变化:已保存到SubTable中的range会实时变化
 					foreach (DictionaryEntry st in _htSubTables)
 					{
 						if (_base.IsIntersect(range, ((SubTable)st.Value).Range)) //!若插入/删除的行在子表中，则此时SubTable.Range已经变化
 						{
-							if (range.Rows.Count > 1) //若是针对多行操作
+							if (range.Rows.Count > 1) //若是针对多行操作，不允许同时删除多行
 							{
 								_ignoreOneTime = true;
-								_rangeChangedByCode = range;
 								Application.Undo();
 								return;
 							}
 
-							//?如何判断是否插入行还是删除行
+							if (((SubTable)st.Value).IsInsertRow)//如果是插入行
+							{
+								((SubTable)st.Value).InsertRow(range.Row);
+							}
+							else if (((SubTable)st.Value).IsDeteteRow) //如果是删除行
+							{
+								((SubTable)st.Value).DeleteRow(range.Row);
+							}
 
 							//如果是插入行（删除行操作的撤销？）
 							//1.set Connection
@@ -320,9 +373,13 @@ namespace CCFormExcel2010
 							//2.2.1本行字段的 Validation 设置
 							//如果是删除行（插入行操作的撤销？）
 						}
+
+						((SubTable)st.Value).RefreshConnection();
 					}
 
-					//插入/删除的行不在任何子表中的情况
+					//↓插入/删除的行不在任何子表中的情况
+					//受影响的子表行数顺延（）
+					//if()
 					_ignoreOneTime = true;
 					Application.Undo();
 					return;//暂时不做处理
@@ -335,7 +392,6 @@ namespace CCFormExcel2010
 						if (_base.IsIntersect(range, ((SubTable)st.Value).Range)) //!若插入/删除的列在子表中，则此时SubTable.Range已经变化
 						{
 							_ignoreOneTime = true;
-							_rangeChangedByCode = range;
 							Application.Undo();
 							return;
 						}
@@ -374,9 +430,10 @@ namespace CCFormExcel2010
 			//保存到服务器
 			CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
 			client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
+			MessageBox.Show("保存成功，表单数据已成功保存到服务器！");
 
 			//获取新的子表数据，绑定行对应关系
-			_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID);
+			_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, Glo.AtParas);
 			//保存成功后用『新数据』替换『旧数据』
 			foreach (DictionaryEntry st in _htSubTables)
 			{
@@ -409,9 +466,11 @@ namespace CCFormExcel2010
 				//创建Sheet(MetaData):
 				Excel.Worksheet wsheet = Application.Sheets.Add();
 				wsheet.Name = "MetaData";
-				wsheet.Visible = Excel.XlSheetVisibility.xlSheetHidden;//.xlSheetVeryHidden;
+				wsheet.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
 				return false;
 			}
+
+			ws.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
 
 			//遍历命名区域.
 			foreach (Excel.Name name in Application.Names)
@@ -455,7 +514,7 @@ namespace CCFormExcel2010
 					var location = Application.Names.Item(dc.ColumnName).RefersToLocal; //=Sheet1!$B$2
 					if (Regex.IsMatch(location, _base.regexRangeSingle)) //是单个单元格
 					{
-						_rangeChangedByCode = range;
+						_ignoreOneTime = true;
 						range.Value2 = GetDisplayValue(tableName: "MainTable", keyOfEn: dc.ColumnName, value: dt.Rows[0][dc.ColumnName].ToString(), rangeCell: range);
 					}
 				}
@@ -506,11 +565,12 @@ namespace CCFormExcel2010
 			var intTableHeadHeight = (int)st.Columns["TableHeadHeight"];
 			if (dt.Rows.Count > range.Rows.Count - intTableHeadHeight) //表单实际数据中『子表行数』多于excel文档子表『区域行数』时
 			{
-				//插入行（在区域最后一行上方） //TODO: 待验证 ：插入行后range的范围是否扩大了？（后面要用到range）A:手动插入行时扩大了；
+				//插入行（在区域最后一行上方） //已验证 ：插入行后range的范围是否扩大了？（后面要用到range）A:手动插入行时扩大了；
 				int addRowsCount = dt.Rows.Count - (range.Rows.Count - intTableHeadHeight);
 				var rangeLastRow = range.Worksheet.get_Range(_base.ConvertInt2Letter(range.Column) + (range.Row + range.Rows.Count - 1), missing);
 				while (addRowsCount > 0)
 				{
+					_ignoreOneTime = true;
 					rangeLastRow.Insert();
 					addRowsCount--;
 				}
@@ -800,7 +860,9 @@ namespace CCFormExcel2010
 					if (drs.Length == 1)
 					{
 						var i = st.Data.Rows.IndexOf(drs[0]);
-
+						//保存关联行号
+						st.Data.Rows[i]["RowInExcel"] = r;
+						//保存所有字段
 						foreach (DictionaryEntry col in st.Columns)
 						{
 							if (col.Key == "TableHeadHeight") continue;
@@ -816,15 +878,16 @@ namespace CCFormExcel2010
 				else
 				{
 					dr = st.Data.NewRow();
+					//保存关联行号
 					dr["RowInExcel"] = r;
-
+					//保存所有字段
 					foreach (DictionaryEntry col in st.Columns)
 					{
 						if (col.Key == "TableHeadHeight") continue;
 						var rangeCell = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter((int)col.Key) + r, missing);
 						dr[(string)col.Value] = GetSaveValue(st.Data.TableName, (string)col.Value, rangeCell);
 					}
-					dr["OID"] = 0;
+					dr["OID"] = 0; //标记为新建行
 					st.Data.Rows.Add(dr);
 				}
 				#endregion
@@ -868,7 +931,7 @@ namespace CCFormExcel2010
 			}
 			if (rangeCell != null)
 			{
-				_rangeChangedByCode = rangeCell;
+				_ignoreOneTime = true;
 				rangeCell.Value2 = displayValue;
 			}
 			return displayValue;
@@ -1235,7 +1298,7 @@ namespace CCFormExcel2010
 			if (dt.Rows.Count == 0)
 			{
 				var rangeCcRx = ws.get_Range(colL + 1, missing);
-				_rangeChangedByCode = rangeCcRx;
+				_ignoreOneTime = true;
 				rangeCcRx.Value2 = null;
 				Application.Names.Add(strListName, "=MetaData!$" + colL + "$1"); // +":$c$1"?
 			}
@@ -1245,7 +1308,7 @@ namespace CCFormExcel2010
 				for (; r <= dt.Rows.Count; r++)
 				{
 					var rangeCcRx = ws.get_Range(colL + r, missing);
-					_rangeChangedByCode = rangeCcRx;
+					_ignoreOneTime = true;
 					rangeCcRx.Value2 = dt.Rows[r - 1]["Name"].ToString();
 				}
 				Application.Names.Add(strListName, "=MetaData!$" + colL + "$1:$" + colL + "$" + (r - 1));
@@ -1305,7 +1368,7 @@ namespace CCFormExcel2010
 			if (dt.Rows.Count == 0)
 			{
 				var rangeCcRx = range.Worksheet.get_Range(colL + 1, missing);
-				_rangeChangedByCode = rangeCcRx;
+				_ignoreOneTime = true;
 				rangeCcRx.Value2 = null;
 				Application.Names.Add(name, "=MetaData!$" + colL + "$1"); // +":$c$1"?
 				return true;
@@ -1316,7 +1379,7 @@ namespace CCFormExcel2010
 				for (; r <= dt.Rows.Count; r++)
 				{
 					var rangeCcRx = range.Worksheet.get_Range(colL + r, missing);
-					_rangeChangedByCode = rangeCcRx;
+					_ignoreOneTime = true;
 					rangeCcRx.Value2 = dt.Rows[r - 1]["Name"].ToString();
 				}
 				Application.Names.Add(name, "=MetaData!$" + colL + "$1:$" + colL + "$" + (r - 1));
@@ -1366,8 +1429,8 @@ namespace CCFormExcel2010
 
 		public void Show(string msg)
 		{
-			if (_isDebug)
-				MessageBox.Show(msg);
+			//if (_isDebug)
+			//	MessageBox.Show(msg);
 		}
 
 		#region VSTO generated code

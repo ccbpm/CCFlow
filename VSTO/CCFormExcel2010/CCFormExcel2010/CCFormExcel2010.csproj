@@ -179,8 +179,8 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="ExcelFormBase.cs" />
     <Compile Include="Glo.cs" />
-    <Compile Include="MapAttr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -193,9 +193,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="CCFormExcel2010_TemporaryKey.pfx" />
     <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -209,10 +212,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="SubTable.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="Service References\CCForm\CCFormAPI.wsdl" />
+    <None Include="Service References\CCForm\CCFormAPI1.wsdl" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -228,8 +232,7 @@
     </None>
     <None Include="Service References\CCForm\configuration.svcinfo" />
     <None Include="Service References\CCForm\configuration91.svcinfo" />
-    <None Include="Service References\CCForm\CCFormAPI.disco" />
-    <Content Include="Tester.htm" />
+    <None Include="Service References\CCForm\CCFormAPI1.disco" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

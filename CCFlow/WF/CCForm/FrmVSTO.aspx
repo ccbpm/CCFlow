@@ -20,7 +20,7 @@
 
 
 			string paras = this.RequestParas;
-			paras = paras.Replace("@", ",");
+			paras = paras.Replace("&", ",");
 
 			string urlWS = "http://" + this.Request.Url.Authority + "/WF/CCForm/CCFormAPI.asmx";
 			string url = "excelform://-fromccflow,App=FrmExcel" + paras + ",WSUrl=" + urlWS;
@@ -36,6 +36,7 @@
 		<br />
 		<ul>
 			<li><a href="<%=url %>">打开VSTO表单</a></li>
+			<li><a href="http://<%= this.Request.Url.Authority %>/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip">点击此处下载VSTO表单插件</a></li>
 			<li><a href="<%=urlOfFree %>">打开自由表单</a></li>
 		</ul>
 	</div>

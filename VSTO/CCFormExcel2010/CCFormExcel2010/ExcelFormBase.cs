@@ -119,7 +119,7 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
-		/// 判断连个区域是否有交集
+		/// 判断两个区域是否有交集
 		/// </summary>
 		/// <param name="range1"></param>
 		/// <param name="range2"></param>

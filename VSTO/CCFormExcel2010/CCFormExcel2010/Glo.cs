@@ -77,10 +77,12 @@ namespace BP.Excel
 		/// 当前工作ID
 		/// </summary>
 		public static int WorkID = 1000;
+		public static int PWorkID = 1000;
 		/// <summary>
 		/// 当前Excel表单绑定的节点ID
 		/// </summary>
 		public static int FK_Node = 301;
+		public static string AtParas = "";
 		/// <summary>
 		/// 插件引用的服务地址
 		/// </summary>
@@ -91,6 +93,7 @@ namespace BP.Excel
 		/// 参数是否加载成功，加载不成功，所有插件功能不启用
 		/// </summary>
 		public static bool LoadSuccessful = false;
+		public static bool IsReadonly = false;
 
 		#region 方法.
 		/// <summary>
@@ -162,6 +165,8 @@ namespace BP.Excel
 
 			if (argstr.IndexOf(' ') != -1)
 				argstr = argstr.Substring(0, argstr.IndexOf(' '));
+
+			Glo.AtParas = "@" + argstr.Replace(",", "@");
 
 			string[] argsArr = argstr.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 			string[] ars = null;

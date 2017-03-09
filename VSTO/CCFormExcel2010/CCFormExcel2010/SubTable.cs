@@ -19,6 +19,8 @@ namespace CCFormExcel2010
 
 		private string _name;
 		private Excel.Range _range; //子表区域
+		private int _Ro; //子表开始行数
+		private int _rangeRows; //子表区域行数
 		private DataTable _originData; //原始数据
 		private DataTable _newData; //新数据
 		private Hashtable _columns; //表头信息：col:KeyOfEn
@@ -46,7 +48,7 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
-		/// Excel中数据行数（实时）//TODO: 不准确，因为有可能出现子表区域有10行数据，但实际有效数据只有5行的情况，此时不进行“插入行”操作，直接在空行中填入数据，也是新建行，但是不会触发this.InsertRow()，也就不会修改RowsConnection
+		/// Excel中数据行数（实时）// 先TODO: 不准确，因为有可能出现子表区域有10行数据，但实际有效数据只有5行的情况，此时不进行“插入行”操作，直接在空行中填入数据，也是新建行，但是不会触发this.InsertRow()，也就不会修改RowsConnection
 		/// </summary>
 		public int RowsCount
 		{
@@ -79,6 +81,15 @@ namespace CCFormExcel2010
 			set { _originData = value; }
 		}
 
+
+		public bool IsInsertRow
+		{
+			get { return this._rangeRows < this.Range.Rows.Count; }
+		}
+		public bool IsDeteteRow
+		{
+			get { return this._rangeRows > this.Range.Rows.Count; }
+		}
 		#endregion
 
 		#region 方法
@@ -91,6 +102,8 @@ namespace CCFormExcel2010
 		public SubTable(Excel.Range range, DataTable data, Hashtable columns)
 		{
 			this._range = range;
+			this._Ro = range.Row;
+			this._rangeRows = range.Rows.Count;
 			this._originData = data.Copy();
 			this._newData = data.Copy();
 			this._name = data.TableName;
@@ -159,6 +172,29 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
+		/// 刷新行关联（用于在子表前插入行时更新行关联）
+		/// </summary>
+		public void RefreshConnection()
+		{
+			if (this.Range.Row != this._Ro) //在子表前插入行时
+			{
+				var diff = this.Range.Row - this._Ro;
+				this._rowsConnection = new Hashtable();
+				foreach (DataRow dr in this.Data.Rows)
+				{
+					if (!string.IsNullOrEmpty(dr["RowInExcel"].ToString()))
+					{
+						dr["RowInExcel"] = (int)dr["RowInExcel"] + diff;
+						_rowsConnection.Add(dr["RowInExcel"], dr["OID"]);
+					}
+				}
+			}
+			//else if (this._rangeRows != this.Range.Rows.Count) //在子表中插入行时 //无法判断是在第几行插入的，所以无法处理这种情况
+			//{}
+
+		}
+
+		/// <summary>
 		/// 获取RowInExcel关联的OID
 		/// </summary>
 		/// <param name="rowInExcel"></param>
@@ -216,7 +252,7 @@ namespace CCFormExcel2010
 		/// 新建行操作
 		/// </summary>
 		/// <param name="rowInExcel"></param>
-		public void InsertRow(int rowInExcel, Excel.Range range)
+		public void InsertRow(int rowInExcel, Excel.Range range = null)
 		{
 			//记录操作
 			_operations.Push(new RowOperation(rowInExcel, (string)_rowsConnection[rowInExcel], OperationType.New));
@@ -233,7 +269,8 @@ namespace CCFormExcel2010
 			_rowsConnection.Remove(point);
 
 			//更新子表区域
-			_range = range;
+			if (range != null)
+				_range = range;
 		}
 
 		/// <summary>
@@ -241,7 +278,7 @@ namespace CCFormExcel2010
 		/// </summary>
 		/// <param name="rowInExcel"></param>
 		/// <param name="range"></param>
-		private void UndoInsertRow(int rowInExcel, Excel.Range range)
+		private void UndoInsertRow(int rowInExcel, Excel.Range range = null)
 		{
 			//更改行关联（所有）
 			var point = rowInExcel; //指向当前行（被撤销的『新增行』）
@@ -253,14 +290,15 @@ namespace CCFormExcel2010
 			_rowsConnection.Remove(point);
 
 			//更新子表区域
-			_range = range;
+			if (range != null)
+				_range = range;
 		}
 
 		/// <summary>
 		/// 删除行操作
 		/// </summary>
 		/// <param name="rowInExcel"></param>
-		public void DeleteRow(int rowInExcel, Excel.Range range)
+		public void DeleteRow(int rowInExcel, Excel.Range range = null)
 		{
 			//TODO: 删除多行的情况
 			//记录操作
@@ -279,7 +317,8 @@ namespace CCFormExcel2010
 			_rowsConnection.Remove(point);
 
 			//更新子表区域
-			_range = range;
+			if (range != null)
+				_range = range;
 		}
 
 		/// <summary>
@@ -288,7 +327,7 @@ namespace CCFormExcel2010
 		/// <param name="rowInExcel"></param>
 		/// <param name="oid"></param>
 		/// <param name="range"></param>
-		private void UndoDeleteRow(int rowInExcel, string oid, Excel.Range range)
+		private void UndoDeleteRow(int rowInExcel, string oid, Excel.Range range = null)
 		{
 			//更改newDataTalble中的Status: _newData.Select("OID={0}")[0][RowInExcel or RowStatus]
 			_newData.Select(string.Format("OID='{0}'", (string)_rowsConnection[rowInExcel]))[0]["RowInExcel"] = RowStatus.Origin.ToString();
@@ -304,24 +343,32 @@ namespace CCFormExcel2010
 			_rowsConnection[rowInExcel] = oid;
 
 			//更新子表区域
-			_range = range;
+			if (range != null)
+				_range = range;
 		}
 
 		/// <summary>
 		/// 撤销操作
 		/// </summary>
 		/// <param name="range"></param>
-		public void Undo(Excel.Range range)
+		public void Undo(Excel.Range range = null)
 		{
 			if (_operations.Count == 0) return;
 			RowOperation oper = (RowOperation)_operations.Pop();
 			if (oper.OperationType == OperationType.New)
 			{
-				this.UndoInsertRow(oper.Row + 1, range);
+				if (range != null)
+					this.UndoInsertRow(oper.Row + 1, range);
+				else
+					this.UndoInsertRow(oper.Row + 1);
 			}
 			else if (oper.OperationType == OperationType.Delete)
 			{
-				this.UndoDeleteRow(oper.Row, oper.OID, range);
+				if (range != null)
+					this.UndoDeleteRow(oper.Row, oper.OID, range);
+				else
+					this.UndoDeleteRow(oper.Row, oper.OID);
+
 			}
 		}
 

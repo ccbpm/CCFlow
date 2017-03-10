@@ -180,6 +180,8 @@
     <Compile Include="Template\FrmTransferCustom.cs" />
     <Compile Include="Template\MapFrmExcel.cs" />
     <Compile Include="Template\MapFrmFree.cs" />
+    <Compile Include="WebContral\WebContralBase.cs" />
+    <Compile Include="WebContral\WF_Admin_CCFormDesigner.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

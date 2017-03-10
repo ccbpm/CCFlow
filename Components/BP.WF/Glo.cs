@@ -320,9 +320,7 @@ namespace BP.WF
                 #endregion 其他.
 
                 #region 判断WF_Flow中是否含有FlowJson字段，没有则增加此字段，edited by liuxc,2016-2-25
-
-                DataTable columns = src.GetColumns("WF_Flow");
-                if (columns.Select("No='FlowJson'").Length == 0)
+                if (BP.DA.DBAccess.IsExitsTableCol("WF_Flow", "FlowJson") == false)
                 {
                     switch (src.HisDBType)
                     {
@@ -464,7 +462,6 @@ namespace BP.WF
                 sql += "@UPDATE WF_Node SET SF_H=0 WHERE SF_H IS NULL";
                 BP.DA.DBAccess.RunSQLs(sql);
                 #endregion 执行更新.
-                 
 
                 #region 升级站内消息表 2013-10-20
                 BP.WF.SMS sms = new SMS();
@@ -674,16 +671,18 @@ namespace BP.WF
                 #endregion
 
                 #region 20161104.附件删除规则修复
-                try
-                {
-                    columns = src.GetColumns("Sys_FrmAttachment");
-                    if (columns.Select("No='DeleteWay'").Length > 0 && columns.Select("No='IsDelete'").Length > 0)
-                    {
-                        DBAccess.RunSQL("UPDATE SYS_FRMATTACHMENT SET DeleteWay=IsDelete WHERE DeleteWay IS NULL");
-                    }
-                }
-                catch { 
-                }
+
+                
+                //try
+                //{
+                //    DataColumn columns = src.GetColumns("Sys_FrmAttachment");
+                //    if (columns.Select("No='DeleteWay'").Length > 0 && columns.Select("No='IsDelete'").Length > 0)
+                //    {
+                //        DBAccess.RunSQL("UPDATE SYS_FRMATTACHMENT SET DeleteWay=IsDelete WHERE DeleteWay IS NULL");
+                //    }
+                //}
+                //catch { 
+                //}
                 #endregion
 
                 #region 密码加密
@@ -745,7 +744,6 @@ namespace BP.WF
                 string err = "问题出处:" + ex.Message + "<hr>" + msg + "<br>详细信息:@" + ex.StackTrace + "<br>@<a href='../DBInstall.aspx' >点这里到系统升级界面。</a>";
                 BP.DA.Log.DebugWriteError("系统升级错误:" + err);
                 return "0";
-                //return "升级失败,详细请查看日志.\\DataUser\\Log\\";
             }
         }
         /// <summary>

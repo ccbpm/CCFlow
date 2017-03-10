@@ -1160,6 +1160,17 @@ namespace BP.Sys
 				this.SetValByKey(MapDataAttr.FrmType, (int)value);
 			}
 		}
+        /// <summary>
+        /// 表单类型名称
+        /// </summary>
+        public string HisFrmTypeText
+        {
+            get
+            {
+                SysEnum se = new SysEnum("FrmType", this.HisFrmTypeInt);
+                return se.Lab;
+            }
+        }
 		/// <summary>
 		/// 备注
 		/// </summary>
@@ -1232,6 +1243,16 @@ namespace BP.Sys
 				this.SetValByKey(MapDataAttr.FK_FormTree, value);
 			}
 		}
+        /// <summary>
+        /// 类别名称
+        /// </summary>
+        public string FK_FormTreeText
+        {
+            get
+            {
+                return DBAccess.RunSQLReturnStringIsNull("SELECT Name FROM Sys_FormTree WHERE No='"+this.No+"'", "数据无");
+            }
+        }
 		/// <summary>
 		/// 从表集合.
 		/// </summary>

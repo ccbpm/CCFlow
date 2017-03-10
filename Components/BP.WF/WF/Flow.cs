@@ -4796,9 +4796,6 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.FlowDeleteRole, 0, "流程实例删除规则", true, false);
 
 
-
-
-
                 //参数.
                 map.AddTBAtParas(1000);
 

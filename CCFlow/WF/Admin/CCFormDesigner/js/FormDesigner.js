@@ -532,8 +532,8 @@ function figure_MapAttr_Template(mapAttr) {
         }
 
         if (property.proName == "AutoFullDLL" || property.proName == "ActiveDDL" || property.proName == "DDLFullCtrl") {
-            propertyVale = propertyVale.replace(new RegExp(/@FrmID@/g), frmRb.FK_MapData);
-            propertyVale = propertyVale.replace(new RegExp(/@KeyOfEn@/g), frmRb.KeyOfEn);
+            propertyVale = propertyVale.replace(new RegExp(/@FrmID@/g), mapAttr.FK_MapData);
+            propertyVale = propertyVale.replace(new RegExp(/@KeyOfEn@/g), mapAttr.KeyOfEn);
         }
         f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
     }

@@ -1036,7 +1036,6 @@
     <Content Include="WF\Admin\CCFormDesigner\FormDesigner.htm" />
     <Content Include="WF\Admin\CCFormDesigner\FrmAttr.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
-    <Content Include="WF\Admin\CCFormDesigner\Home.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Home.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Img\CH.png" />
     <Content Include="WF\Admin\CCFormDesigner\Img\DBSrc.png" />
@@ -8784,13 +8783,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Home.aspx.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Home.aspx.designer.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

@@ -23,7 +23,7 @@ namespace BP.WF.WebContral
         }
 
 
-        public  string Home_Int()
+        public string Home_Init()
         {
             string no = this.GetRequestVal("No");
 
@@ -38,16 +38,14 @@ namespace BP.WF.WebContral
             ht.Add("FrmTreeName", md.FK_FormTreeText);
 
             //统计信息.
-            ht.Add("SumDataNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM "+md.PTable )); //数据量.
+            ht.Add("SumDataNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + md.PTable)); //数据量.
             ht.Add("SumAttrNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "'")); //字段数量.
             ht.Add("SumAttrFK", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "' AND LGType=2 ")); //外键.
             ht.Add("SumAttrEnum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "' AND LGType=1 ")); //外键.
 
-
-            ht.Add("MapFrmFrees","/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFrees&PK="+no ) ; //自由表单属性.
+            ht.Add("MapFrmFrees", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFrees&PK=" + no); //自由表单属性.
             ht.Add("MapFrmFools", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFools&PK=" + no); //傻瓜表单属性.
-            ht.Add("MapFrmExcels", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmExcels&PK=" + no); //傻瓜表单属性.
-            ht.Add("MapFrmFools", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFools&PK=" + no);  //Excel表单属性.
+            ht.Add("MapFrmExcels", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmExcels&PK=" + no); //Excel表单属性.
             ht.Add("MapDataURLs", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataURLs&PK=" + no);  //嵌入式表单属性.
 
             return BP.DA.DataType.ToJsonEntityModel(ht);
@@ -60,7 +58,6 @@ namespace BP.WF.WebContral
         /// <returns></returns>
         public string FiledsList_Init()
         {
-            //DataSet ds = new DataSet();
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData);
             foreach (MapAttr item in attrs)
@@ -94,13 +91,11 @@ namespace BP.WF.WebContral
             {
                 return "删除成功！";
             }
-            else
-            {
-                return "err@删除失败！";
-            }
+
+            throw new Exception("删除失败！");
         }
         #endregion 字段列表 的操作
 
-         
+
     }
 }

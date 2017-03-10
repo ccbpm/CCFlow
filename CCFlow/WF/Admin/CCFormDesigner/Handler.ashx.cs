@@ -12,37 +12,22 @@ using BP.En;
 namespace CCFlow.WF.Admin.CCFormDesigner
 {
 	/// <summary>
-	/// Handler 的摘要说明
+	/// 实例说明：
+    /// 1.Handler.ashx.cs只需继承BP.WF.WebContral.HttpHandler类，实现CtrlType属性，返回此“Handler业务处理类”的Type；
+    /// 2.“Handler业务处理类”必须继承自BP.WF.WebContral.WebControlBase类，必须声明含有1个HttpContext类型参数的构造函数；
+    /// 3.“Handler业务处理类”中编写JS端要调用的业务逻辑方法，JS调用此方法时，传递DoType=该业务逻辑方法名即可；
 	/// </summary>
-	public class Handler : IHttpHandler
+	public class Handler : BP.WF.WebContral.HttpHandler
 	{
-        public void ProcessRequest(HttpContext mycontext)
+        /// <summary>
+        /// 获取 “Handler业务处理类”的Type
+        /// </summary>
+        public override Type CtrlType
         {
-            //创建 contral 对象.
-            BP.WF.WebContral.WF_Admin_CCFormDesigner ctrl =
-                new BP.WF.WebContral.WF_Admin_CCFormDesigner(mycontext);
-            try
+            get
             {
-                //获得执行的方法.
-                string doType = mycontext.Request.QueryString["DoType"];
-
-                //执行方法返回json.
-                string msg = ctrl.DoMethod(ctrl, doType); 
-                
-                //返回执行的结果.
-                mycontext.Response.Write(msg);
-            }
-            catch (Exception ex)
-            {
-                mycontext.Response.Write("err@" + ex.Message);
+                return typeof (BP.WF.WebContral.WF_Admin_CCFormDesigner);
             }
         }
-		public bool IsReusable
-		{
-			get
-			{
-				return false;
-			}
-		}
-	}
+    }
 }

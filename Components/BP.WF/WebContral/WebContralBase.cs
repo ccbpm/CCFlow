@@ -232,25 +232,27 @@ namespace BP.WF.WebContral
                 throw new Exception("@对象实例[" + tp.FullName + "]中没有找到方法[" + methodName + "]！");
 
             object[] paras = null;
+
             try
             {
                 return mp.Invoke(this, paras) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             }
-            catch (System.Reflection.TargetException ex)
+            catch (Exception ex)
             {
-                string strs = "";
-                if (paras == null)
-                {
-                    throw new Exception(ex.Message);
-                }
-                else
-                {
-                    foreach (object obj in paras)
-                    {
-                        strs += "para= " + obj.ToString() + " type=" + obj.GetType().ToString() + "\n<br>";
-                    }
-                }
-                throw new Exception(ex.Message + "  more info:" + strs);
+                throw new Exception(ex.InnerException.Message);
+                //string strs = "";
+                //if (paras == null)
+                //{
+                //    throw new Exception(ex.Message);
+                //}
+                //else
+                //{
+                //    foreach (object obj in paras)
+                //    {
+                //        strs += "para= " + obj.ToString() + " type=" + obj.GetType().ToString() + "\n<br>";
+                //    }
+                //}
+                //throw new Exception(ex.Message + "  more info:" + strs);
             }
         }
     }

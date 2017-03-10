@@ -28,19 +28,15 @@
                  url: Handler + "?DoType=Home_Init&No=" + getQueryStringByName("FK_MapData") + "&m=" + Math.random(),
                  dataType: 'html',
                  success: function (data) {
+                     data = JSON.parse(data);
 
-                     alert(data);
-
-                     if (data.indexOf('err@') == 0) {
-                         alert(data);
+                     if (!data.success) {
+                         alert(data.msg);
                          return;
                      }
 
-                     data = JSON.parse(data);
-
                      //调用公共类库的方法:执行批量主表赋值
-                     GenerFullAllCtrlsVal(data);
-                     return;
+                     GenerFullAllCtrlsVal(data.data);
                  }
              });
 

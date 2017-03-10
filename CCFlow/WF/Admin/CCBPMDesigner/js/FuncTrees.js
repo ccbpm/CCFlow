@@ -177,7 +177,7 @@ functrees.push({
 											},
 											
                                           //  { Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID", LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
-                                            { Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/Home.aspx?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID", LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
+                                            { Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/Home.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID", LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
 
                                                 { Type: "Node", Id: "RelatedFunction", ParentId: null, Name: "相关功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [

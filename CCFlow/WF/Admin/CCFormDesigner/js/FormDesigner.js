@@ -241,7 +241,6 @@ function Show_HidenField_Panel() {
         var win = document.getElementById(dgId).contentWindow;
         var frmVal = win.GetFrmInfo();
 
-
         if (frmVal.Name == null || frmVal.Name.length == 0) {
             $.messager.alert('错误', '字段名称不能为空。', 'error');
         }

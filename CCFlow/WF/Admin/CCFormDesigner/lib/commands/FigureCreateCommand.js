@@ -79,10 +79,17 @@ FigureCreateCommand.prototype = {
                     canAddFigure = false; // 需要弹出对话框创建.
                     this.PublicNoNameCtrlCreate(createdFigure, this.x, this.y, createFigureName);
                     break;
+                case CCForm_Controls.FrmCheck:
+
+                    alert(createFigureName);
+                    alert(CCForm_FK_MapData);
+
+                    createdFigure.CCForm_MyPK = CCForm_FK_MapData + "_FrmCheck";
+                    break;
                 default: //按照通用的接受编号，名称的方式来创建.
                     //canAddFigure = false; // 需要弹出对话框创建.
                     //this.PublicNoNameCtrlCreate(createdFigure, this.x, this.y, createFigureName);
-                    alert('没有判断的控件类型{' + createFigureName + '}.');
+                    alert('没有判断的控件类型{' + createFigureName + '}，或者该功能为实现。');
                     return;
             }
 
@@ -269,14 +276,18 @@ FigureCreateCommand.prototype = {
     PublicNoNameCtrlCreate: function (createdFigure, x, y, ctrlType) {
 
         var dgId = "iframeRadioButton";
-        var url = "DialogCtr/PublicNoNameCtrlCreate.htm?DataType=&s=" + Math.random();
+        var url = "DialogCtr/PublicNoNameCtrlCreate.htm?CtrlType=" + ctrlType + "&s=" + Math.random();
         var funIsExist = this.IsExist;
 
         var lab = '创建从表';
 
+        var note = '<ul>';
+
         switch (ctrlType) {
             case "Dtl":
                 lab = "创建从表";
+                note += '<li>从表</li>';
+                note += '<li>ddd</li>';
                 break;
             case "Fieldset":
                 lab = "创建分组";
@@ -309,7 +320,7 @@ FigureCreateCommand.prototype = {
                 return false;
             }
 
-            //判断主键是否存在
+            //判断主键是否存在?
             var isExit = funIsExist(frmVal.No);
             if (isExit == true) {
                 $.messager.alert("错误", "@已存在ID为(" + frmVal.No + ")的元素，不允许添加同名元素！", "error");

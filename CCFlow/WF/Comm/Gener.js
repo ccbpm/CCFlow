@@ -208,7 +208,9 @@ function GenerFullAllCtrlsVal(data) {
         // textbox
         var tb = document.getElementById('TB_' + attr);
         if (tb != null) {
+
             tb.value = val;
+            tb.innerHTML = val;
             continue;
         }
 
@@ -281,7 +283,7 @@ function GenerFullAllCtrlsVal(data) {
         unSetCtrl += "@" + attr + " = " + val;
     }
 
-    // alert('没有找到的控件类型:' + unSetCtrl);
+   //  alert('没有找到的控件类型:' + unSetCtrl);
 }
 
 

@@ -71,7 +71,7 @@ functrees.push({
                                                 },
                                                 { Type: "Node", Id: "TestFrmFunc", ParentId: null, Name: "实验中的功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
-						                                { Type: "Node", Id: "FormHome", ParentId: "TestFrmFunc", Name: "表单主页", TType: "NORMAL", DType: "-1", IconCls: "icon-Home", Inherits: ["fk_frm"], Url: "../CCFormDesigner/Home.aspx?FK_MapData=@@fk_frm" },
+						                                { Type: "Node", Id: "FormHome", ParentId: "TestFrmFunc", Name: "表单主页", TType: "NORMAL", DType: "-1", IconCls: "icon-Home", Inherits: ["fk_frm"], Url: "../CCFormDesigner/Home.htm?FK_MapData=@@fk_frm" },
                                                         { Type: "Node", Id: "BasicData", ParentId: "TestFrmFunc", Name: "原始数据", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../CCFormDesigner/BasicData.htm?FK_MapData=@@fk_frm", },
                                                         ]
                                                 }

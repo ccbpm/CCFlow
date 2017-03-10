@@ -2471,7 +2471,11 @@ namespace BP.WF
             {
                 /*如果是bs*/
                 foreach (string key in System.Web.HttpContext.Current.Request.QueryString.Keys)
+                {
+                    if (string.IsNullOrEmpty(key))
+                        continue;
                     exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
+                }
             }
 
             exp = exp.Replace("~", "'");

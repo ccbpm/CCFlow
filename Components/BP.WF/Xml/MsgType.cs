@@ -98,4 +98,14 @@ namespace BP.WF.XML
 		#endregion
 		 
 	}
+    #region 为了适应自动翻译成java的需要,把实体转换成List.
+        /// <summary>
+        /// 转化成 java list,C#不能调用.
+        /// </summary>
+        /// <returns>List</returns>
+        public System.Collections.Generic.IList<MsgType> ToJavaList()
+        {
+            return (System.Collections.Generic.IList<MsgType>)this;
+        }
+    #endregion
 }

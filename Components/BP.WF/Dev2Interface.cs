@@ -2000,9 +2000,7 @@ namespace BP.WF
                         case RunModel.Ordinary:
                         default:
                             throw new Exception("流程设计异常，子线程的上一个节点不能是普通节点。");
-                            break;
                     }
-
                     if (ndFrom.NodeID == fk_node)
                         continue;
 
@@ -2047,7 +2045,6 @@ namespace BP.WF
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " ORDER BY a.RDT";
 
                     return DBAccess.RunSQLReturnTable(sql);
-                    break;
                 case ReturnRole.ReturnPreviousNode:
                     WorkNode mywnP = wn.GetPreviousWorkNode();
                     

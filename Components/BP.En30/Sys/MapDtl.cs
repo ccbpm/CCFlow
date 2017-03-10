@@ -1703,13 +1703,11 @@ namespace BP.Sys
                 }
                 else
                 {
-                    DBAccess.RunSQL("DROP TABLE " + this.PTable);
+                    // edit by zhoupeng 误删已经有数据的表. 
+                    if (DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + this.PTable + " WHERE 1=1 ") == 0)
+                        DBAccess.RunSQL("DROP TABLE " + this.PTable);
                 }
             }
-
-            //if (DBAccess.IsExitsObject(this.PTable))
-            //    DBAccess.RunSQL("DROP TABLE " + this.PTable);
-
             return base.beforeDelete();
         }
     }

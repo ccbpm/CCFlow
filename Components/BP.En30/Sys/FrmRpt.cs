@@ -1205,7 +1205,8 @@ namespace BP.Sys
             DBAccess.RunSQLs(sql);
             try
             {
-                BP.DA.DBAccess.RunSQL("DROP TABLE " + this.PTable);
+                if (DBAccess.RunSQLReturnValInt("SELECT COUNT(*) as Num FROM " + this.PTable + " WHERE 1=1 ") == 0)
+                    BP.DA.DBAccess.RunSQL("DROP TABLE " + this.PTable);
             }
             catch
             {

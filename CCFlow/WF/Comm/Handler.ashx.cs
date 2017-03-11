@@ -15,7 +15,6 @@ namespace CCFlow.WF.Comm
     /// </summary>
     public class Handler : IHttpHandler
     {
-
         #region 执行.
         public HttpContext context = null;
         /// <summary>

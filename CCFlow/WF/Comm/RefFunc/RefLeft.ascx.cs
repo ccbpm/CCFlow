@@ -238,6 +238,8 @@ namespace CCFlow.WF.Comm.RefFunc
                 return;
 
             en.PKVal = this.PK;
+            en.RetrieveFromDBSources();
+
             string keys = "&" + en.PK + "=" + this.PK + "&r=" + DateTime.Now.ToString("MMddhhmmss");
 
             string titleKey = "";
@@ -348,6 +350,9 @@ namespace CCFlow.WF.Comm.RefFunc
                 if (func.RefMethodType != RefMethodType.Func)
                 {
                     string myurl = func.Do(null) as string;
+                    if (myurl == null)
+                        continue;
+
                     int h = func.Height;
 
                     if (func.RefMethodType == RefMethodType.RightFrameOpen)

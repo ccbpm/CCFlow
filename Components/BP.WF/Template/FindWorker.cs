@@ -381,11 +381,11 @@ namespace BP.WF.Template
                 if (string.IsNullOrEmpty(specEmpFields))
                     specEmpFields = "SysSendEmps";
 
-                if (this.currWn.HisWork.EnMap.Attrs.Contains(specEmpFields) == false)
-                    throw new Exception("@您设置的当前节点按照指定的人员，决定下一步的接受人员，但是你没有在节点表单中设置该表单" + specEmpFields + "字段。");
+                if (this.currWn.rptGe.EnMap.Attrs.Contains(specEmpFields) == false)
+                    throw new Exception("@您设置的接受人规则是按照表单指定的字段，决定下一步的接受人员，该字段{" + specEmpFields + "}已经删除或者丢失。");
 
                 //获取接受人并格式化接受人, 
-                string emps = this.currWn.HisWork.GetValStringByKey(specEmpFields);
+                string emps = this.currWn.rptGe.GetValStringByKey(specEmpFields);
                 emps = emps.Replace(" ", ""); //去掉空格.
 
                 if (emps.Contains(",") && emps.Contains(";"))

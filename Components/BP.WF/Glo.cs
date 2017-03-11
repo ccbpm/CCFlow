@@ -2458,6 +2458,16 @@ namespace BP.WF
                         exp = exp.Replace("@" + key, en.GetValStrByKey(key));
                 }
                 #endregion
+
+                if (exp.Contains("@") == false)
+                    return exp;
+
+                //替换全部的变量.
+                foreach (string key in row.Keys)
+                {
+                    if (exp.Contains("@" + key))
+                        exp = exp.Replace("@" + key, row[key].ToString());
+                }
             }
 
             // 处理Para的替换.

@@ -2417,7 +2417,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.Step, (int)NodeWorkType.Work, "流程步骤", true, false);
 
                 //头像. "/WF/Data/NodeIcon/审核.png"  "/WF/Data/NodeIcon/前台.png"
-                map.AddTBString(NodeAttr.ICON, null, "节点ICON图片路径", true, false, 0, 50, 10);
+                map.AddTBString(NodeAttr.ICON, null, "节点ICON图片路径", true, false, 0, 70, 10);
 
                 map.AddTBInt(NodeAttr.NodeWorkType, 0, "节点类型", false, false);
                 map.AddTBInt(NodeAttr.SubThreadType, 0, "子线程ID", false, false);

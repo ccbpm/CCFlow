@@ -34,6 +34,11 @@ namespace BP.WF.WebContral
             {
                 //获得执行的方法.
                 string doType = context.Request.QueryString["DoType"];
+                if (doType==null)
+                    doType = context.Request.QueryString["Action"];
+                if (doType == null)
+                    doType = context.Request.QueryString["Method"];
+
 
                 //执行方法返回json.
                 data = ctrl.DoMethod(ctrl, doType);
@@ -50,5 +55,31 @@ namespace BP.WF.WebContral
             //返回执行的结果.
             context.Response.Write(string.Format(re, success, msg, data));
         }
+
+        public void ProcessRequest_del(HttpContext context)
+        {
+            //创建 ctrl 对象.
+            WebContralBase ctrl = Activator.CreateInstance(CtrlType, context) as WebContralBase;
+
+            //组织返回结果字符串
+            string msg = string.Empty;
+            try
+            {
+                //获得执行的方法.
+                string doType = context.Request.QueryString["DoType"];
+
+                //执行方法返回json.
+                msg = ctrl.DoMethod(ctrl, doType);
+
+            }
+            catch (Exception ex)
+            {
+                msg = "err@" + ex.Message;
+            }
+
+            //返回执行的结果.
+            context.Response.Write(msg);
+        }
+
     }
 }

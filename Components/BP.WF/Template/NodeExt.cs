@@ -702,9 +702,10 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "抄送人规则";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Menu/CC.png";
-                rm.ClassMethodName = this.ToString() + ".DoCCer";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.ClassMethodName = this.ToString() + ".DoCCer";  //要执行的方法名.
+                rm.RefMethodType = RefMethodType.RightFrameOpen; // 功能类型
                 map.AddRefMethod(rm);
+
 
 
                  rm = new RefMethod();

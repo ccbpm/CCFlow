@@ -10,8 +10,6 @@ namespace BP.En
 	/// </summary>
 	public class EnDtl
 	{
-
-	
 		/// <summary>
 		/// 明细
 		/// </summary>
@@ -39,7 +37,7 @@ namespace BP.En
 		/// <summary>
 		/// 明细
 		/// </summary>
-		public Entities _Ens=null;
+		private Entities _Ens=null;
 		/// <summary>
 		/// 获取或设置 他的集合
 		/// </summary>

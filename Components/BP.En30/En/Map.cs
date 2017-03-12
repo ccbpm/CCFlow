@@ -797,7 +797,6 @@ namespace BP.En
             {
                 if (this._RefMethods == null)
                     _RefMethods = new RefMethods();
-
                 return _RefMethods;
             }
         }

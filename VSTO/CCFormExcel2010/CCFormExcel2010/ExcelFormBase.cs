@@ -15,6 +15,7 @@ namespace CCFormExcel2010
 		public readonly string regexRangeArea = "^\\=\\S+\\!\\$\\D+\\$\\d+\\:\\$\\D+\\$\\d+$"; //=Sheet1!$B$2:$C$3
 		public readonly string regexAddressRows = "^\\$\\d+\\:\\$\\d+$"; //$2:$2
 		public readonly string regexAddressColumns = "^\\$\\D+\\:\\$\\D+$"; //$C:$C
+		public readonly string regexAddressCell = "^\\$\\D+\\$\\d+$"; //$C$4
 		private Excel.Application _app;
 
 		#endregion
@@ -221,6 +222,28 @@ namespace CCFormExcel2010
 			try
 			{
 				return _app.Names.Item(strName);
+			}
+			catch (Exception exp)
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// 获取区域命名（用于形如“=Sheet1!$A$1:$A$1”这种由单元格“冒充”区域设置的命名的名称）
+		/// </summary>
+		/// <param name="range"></param>
+		/// <returns></returns>
+		public string GetNameFakeArea(Excel.Range range)
+		{
+			try
+			{
+				foreach (Excel.Name name in _app.Names)
+				{
+					if (name.RefersToLocal == "=" + range.Worksheet.Name + "!" + range.Address + ":" + range.Address)
+						return name.NameLocal;
+				}
+				return null;
 			}
 			catch (Exception exp)
 			{

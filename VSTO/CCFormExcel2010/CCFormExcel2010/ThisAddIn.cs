@@ -68,10 +68,7 @@ namespace CCFormExcel2010
 
 		public Dictionary<string, string> InitTesterArgsString()
 		{
-			//2149 染源废水监测采样记录-2017-03-06 10:18 //主表值没了
-			//string argstr = "-fromccflow,App=FrmExcel,UserNo=anjian,SID=3plkqun55bx0o42azhclyxpc,FK_Flow=002,FK_Node=202,FrmID=CY_6501,WorkID=2149,WSUrl=http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
-			//2073 污染源废水监测采样记录-2017-03-01 23:53
-			string argstr = "-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=0,IsPrint=0,WorkID=2073,FK_Flow=002,FK_Node=202,UserNo=anjian,FID=0,SID=3plkqun55bx0o42azhclyxpc,PWorkID=1923,PFlowNo=001,IsLoadData=1,CWorkID=0,IsRead=0,T=ss,Paras=@Frms,WSUrl=http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
+			string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=1,IsPrint=0,WorkID=2366,FK_Flow=002,FK_Node=201,UserNo=fengshunsheng,FID=0,SID=cqyeqwmfb2abgggvzpmz1d0k,PWorkID=2364,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6501,IsCheckGuide=1,FK_CaiYangFangFa=010,WSUrl=http://localhost:26508/WF/CCForm/CCFormAPI.asmx";
 			string prefix = "-fromccflow,";
 			int beginidx = -1;
 			Dictionary<string, string> args = new Dictionary<string, string>();
@@ -109,18 +106,20 @@ namespace CCFormExcel2010
 			return args;
 		}
 
-		private void ThisAddIn_Startup(object sender, System.EventArgs e)
+		/// <summary>
+		/// 获得外部参数, 这是通过外部传递过来的参数.
+		/// </summary>
+		/// <returns></returns>
+		private bool GetArgs()
 		{
-
-#if DEBUG
-			this._isDebug = true;
-#endif
-
 			#region 获得外部参数, 这是通过外部传递过来的参数.
 			try
 			{
 				Dictionary<string, string> args = _isDebug ? InitTesterArgsString() : Glo.GetArguments();
 				Glo.LoadSuccessful = args["fromccflow"] == "true";
+				//若插件没有加载成功：直接跳出
+				if (!Glo.LoadSuccessful)
+					return false;
 				if (args.ContainsKey("IsReadonly"))
 					Glo.IsReadonly = args["IsReadonly"] == "1";
 				//	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
@@ -132,12 +131,28 @@ namespace CCFormExcel2010
 				Glo.WorkID = int.Parse(args["WorkID"]);
 				Glo.PWorkID = int.Parse(args["PWorkID"]);
 				Glo.WSUrl = args["WSUrl"];
+				return true;
 			}
 			catch (Exception ex)
 			{
-				//MessageBox.Show("加载期间出现错误", ex.Message);
+				MessageBox.Show("加载期间出现错误：", ex.Message);
+				return false;
 			}
 			#endregion 获得外部参数, 这是通过外部传递过来的参数.
+
+		}
+
+		private void ThisAddIn_Startup(object sender, System.EventArgs e)
+		{
+
+#if DEBUG
+			this._isDebug = true;
+#endif
+			//获得外部参数
+			if (!GetArgs()) return;
+
+			//若插件没有加载成功：直接跳出
+			if (!Glo.LoadSuccessful) return;
 
 			//// 测试当前数据.
 			//this.InitTester();
@@ -209,9 +224,10 @@ namespace CCFormExcel2010
 		/// <param name="range"></param>
 		void Application_SheetChange(object sh, Excel.Range range)
 		{
-			//Microsoft.Office.Interop.Excel.UndoRecord	
-			//Application.UndoRecord;
 			Show(range.Address);
+
+			//若插件没有加载成功：直接跳出
+			if (!Glo.LoadSuccessful) return;
 
 			if (_ignoreOneTime)
 			{
@@ -466,11 +482,13 @@ namespace CCFormExcel2010
 				//创建Sheet(MetaData):
 				Excel.Worksheet wsheet = Application.Sheets.Add();
 				wsheet.Name = "MetaData";
-				wsheet.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
+				//wsheet.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
+				wsheet.Visible = Excel.XlSheetVisibility.xlSheetVisible;//TODO：测试期间不隐藏metadata
 				return false;
 			}
 
-			ws.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
+			//ws.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
+			ws.Visible = Excel.XlSheetVisibility.xlSheetVisible;//TODO：测试期间不隐藏metadata
 
 			//遍历命名区域.
 			foreach (Excel.Name name in Application.Names)
@@ -771,12 +789,12 @@ namespace CCFormExcel2010
 			//填充数据
 			DataRow dr;
 			var intTableHeadHeight = Convert.ToInt32(htColumns["TableHeadHeight"]);
-			if (!dt.Columns.Contains("RowInExcel"))
-				dt.Columns.Add("RowInExcel");
+			if (!dt.Columns.Contains("Idx"))
+				dt.Columns.Add("Idx");
 			for (var r = range.Row + intTableHeadHeight; r < range.Row + range.Rows.Count; r++)//遍历单元格的行
 			{
 				dr = dt.NewRow();
-				dr["RowInExcel"] = r;
+				dr["Idx"] = r;
 
 				foreach (DictionaryEntry col in htColumns)
 				{
@@ -823,9 +841,9 @@ namespace CCFormExcel2010
 			//删除『已标记为删除的行』
 			foreach (DataRow dr1 in st.Data.Rows)
 			{
-				if (dr1["RowInExcel"] == RowStatus.Deleted.ToString())
+				if (dr1["Idx"] == RowStatus.Deleted.ToString())
 					st.Data.Rows.Remove(dr1);
-				//else if (dr["RowInExcel"] == RowStatus.New.ToString()) //此时还没有dr["RowInExcel"]="new"的行
+				//else if (dr["Idx"] == RowStatus.New.ToString()) //此时还没有dr["Idx"]="new"的行
 				//	dr["OID"] = "0";
 			}
 
@@ -856,12 +874,12 @@ namespace CCFormExcel2010
 
 				if (!string.IsNullOrEmpty(bindOid)) //『整行删除又填入数据』时作为修改处理
 				{
-					var drs = st.Data.Select(string.Format("OID='{0}'", bindOid)); //!注意插入行时不能设置RowInExcel="new"的关联信息
+					var drs = st.Data.Select(string.Format("OID='{0}'", bindOid)); //!注意插入行时不能设置Idx="new"的关联信息
 					if (drs.Length == 1)
 					{
 						var i = st.Data.Rows.IndexOf(drs[0]);
 						//保存关联行号
-						st.Data.Rows[i]["RowInExcel"] = r;
+						st.Data.Rows[i]["Idx"] = r;
 						//保存所有字段
 						foreach (DictionaryEntry col in st.Columns)
 						{
@@ -879,7 +897,7 @@ namespace CCFormExcel2010
 				{
 					dr = st.Data.NewRow();
 					//保存关联行号
-					dr["RowInExcel"] = r;
+					dr["Idx"] = r;
 					//保存所有字段
 					foreach (DictionaryEntry col in st.Columns)
 					{
@@ -976,7 +994,7 @@ namespace CCFormExcel2010
 			else if (_base.IsValidList(rangeCell) && fieldType == FieldType.TrueOrFalse) //是否型字段
 				return rangeCell.Value2 == "是" ? "1" : "0";
 			else
-				return rangeCell.Value2;
+				return rangeCell.Value2.ToString();
 		}
 
 		public enum FieldType
@@ -1363,7 +1381,11 @@ namespace CCFormExcel2010
 				return false;
 			if (!dt.Columns.Contains("Name"))
 				return false;
-			var name = range.Name.Name;
+			string name;
+			if (Regex.IsMatch(range.Address, _base.regexAddressCell))
+				name = _base.GetNameFakeArea(range);
+			else
+				name = range.Name.Name;
 			var colL = _base.ConvertInt2Letter(range.Column);
 			if (dt.Rows.Count == 0)
 			{

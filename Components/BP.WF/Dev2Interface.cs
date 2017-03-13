@@ -4147,13 +4147,17 @@ namespace BP.WF
         /// <param name="info">删除信息</param>
         public static string Flow_DeleteSubThread(string flowNo, Int64 workid, string info)
         {
-            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.SetValByKey(GenerWorkFlowAttr.WorkID, workid);
+            if (gwf.RetrieveFromDBSources() > 0)
+            {
+                WorkFlow wf = new WorkFlow(flowNo, workid);
+                string msg = wf.DoDeleteWorkFlowByReal(false);
 
-            WorkFlow wf = new WorkFlow(flowNo, workid);
-            string msg = wf.DoDeleteWorkFlowByReal(false);
-
-            BP.WF.Dev2Interface.WriteTrackInfo(flowNo, gwf.FK_Node, gwf.FID, 0, info, "删除子线程");
-            return msg;
+                BP.WF.Dev2Interface.WriteTrackInfo(flowNo, gwf.FK_Node, gwf.FID, 0, info, "删除子线程");
+                return msg;
+            }
+            return null;
         }
         /// <summary>
         /// 执行工作催办

@@ -65,6 +65,38 @@ namespace BP.Tools
             //   TODO:   在此处添加构造函数逻辑   
             //   
         }
+
+        /// <summary>
+        /// 将中文字符串转换成助记码形式，如将“中国”转换成ZG
+        /// <para>added by liuxc,2017-03-10</para>
+        /// </summary>
+        /// <param name="str">中文字符串</param>
+        /// <returns></returns>
+        public static string ConvertStr2Code(string str)
+        {
+            try
+            {
+                string _Temp = string.Empty;
+                string _code = string.Empty;
+
+                for (int i = 0; i < str.Length; i++)
+                {
+                    _code = BP.Tools.chs2py.convert(str[i].ToString());
+
+                    if (string.IsNullOrWhiteSpace(_code))
+                        continue;
+
+                    _Temp = _Temp + _code.Substring(0, 1);
+                }
+
+                return _Temp;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("@错误：" + str + "，不能转换成拼音助记码。");
+            }
+        }
+
         public static string ConvertWordFirst(string str)
         {
             try
@@ -121,6 +153,10 @@ namespace BP.Tools
                 }
 
                 array = System.Text.Encoding.Default.GetBytes(nowchar[j].ToString());
+
+                if (array.Length < 2)
+                    return chrstr;
+
                 i1 = (short)(array[0]);
                 i2 = (short)(array[1]);
 

@@ -324,6 +324,7 @@ _48.checkState=["unchecked","checked","indeterminate"][_49];
 _48.checked=(_48.checkState=="checked");
 ck.removeClass("tree-checkbox0 tree-checkbox1 tree-checkbox2");
 ck.addClass("tree-checkbox"+_49);
+_4a.onCascadeCheck.call(_47,_48,_49);
 };
 function _3d(_4b,_4c){
 var pd=_4d(_4b,$("#"+_4c.domId)[0]);
@@ -1228,6 +1229,7 @@ return data;
 },onCollapse:function(node){
 },onBeforeCheck:function(node,_12f){
 },onCheck:function(node,_130){
+},onCascadeCheck:function(node,_130) {
 },onBeforeSelect:function(node){
 },onSelect:function(node){
 },onContextMenu:function(e,node){

@@ -183,6 +183,7 @@
     <Compile Include="WebContral\HttpHandler.cs" />
     <Compile Include="WebContral\WebContralBase.cs" />
     <Compile Include="WebContral\WF_Admin_CCFormDesigner.cs" />
+    <Compile Include="WebContral\WF_Comm_RefFunc.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

@@ -336,10 +336,10 @@ namespace BP.WF.Template
                     DeptAttr.Name, DeptAttr.No, "节点岗位");
 
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
-                DeptAttr.No, "节点部门");
+                DeptAttr.No, "节点部门", Dot2DotModel.TreeDept);
 
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeEmps(), new BP.WF.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
-                    DeptAttr.No, "接受人员");
+                    DeptAttr.No, "接受人员", Dot2DotModel.TreeDeptEmp);
 
 
                 this._enMap = map;

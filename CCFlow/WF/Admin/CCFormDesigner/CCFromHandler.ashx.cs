@@ -546,6 +546,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                                 + "SELECT * FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FK_MapData + "';"
                                 + "SELECT * FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "';"
                                  + "SELECT * FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_MapData + "';"
+                                 + "SELECT * FROM Sys_FrmLine WHERE FK_MapData='" + this.FK_MapData + "';"
                                 ;
                 DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
                 ds.Tables[0].TableName = "MapAttr";
@@ -557,6 +558,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
                 ds.Tables[6].TableName = "Sys_FrmImgAth";
                 ds.Tables[7].TableName = "Sys_FrmAttachment";
                 ds.Tables[8].TableName = "Sys_MapDtl";
+                ds.Tables[9].TableName = "Sys_FrmLine";
 
                 return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = "", data = Newtonsoft.Json.JsonConvert.SerializeObject(ds) });
 

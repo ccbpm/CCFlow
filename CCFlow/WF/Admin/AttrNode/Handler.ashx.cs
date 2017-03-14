@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Linq;
 using System.Web;
-using BP.WF;
-using BP.Web;
-using BP.Sys;
-using BP.DA;
-using BP.En;
-using BP.WF.Template;
-using Newtonsoft.Json.Converters;
 
-namespace CCFlow.WF.Admin.AttrFlow
+namespace CCFlow.WF.Admin.AttrNode
 {
+    /// <summary>
+    /// Handler 的摘要说明
+    /// </summary>
     public class Handler : BP.WF.HttpHandler.HttpHandlerBase
     {
+
         /// <summary>
         /// 获取 “Handler业务处理类”的Type
         /// </summary>
@@ -25,5 +22,4 @@ namespace CCFlow.WF.Admin.AttrFlow
             }
         }
     }
-
 }

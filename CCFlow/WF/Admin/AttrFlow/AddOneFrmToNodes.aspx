@@ -35,8 +35,8 @@
 <fieldset>
 <legend>请从表单库里选择一个要绑定的表单</legend>
 <%
-    BP.Sys.SysFormTrees trees = new BP.Sys.SysFormTrees();
-    trees.RetrieveAll();
+    //BP.Sys.SysFormTrees trees = new BP.Sys.SysFormTrees();
+    //trees.RetrieveAll();
 %>
 </fieldset>
 
@@ -44,8 +44,8 @@
 <fieldset>
 <legend>选择要绑定的节点</legend>
 <%
-    BP.WF.Nodes nds = new BP.WF.Nodes(flowNo);
-    nds.RetrieveAll();
+    //BP.WF.Nodes nds = new BP.WF.Nodes(flowNo);
+    //nds.RetrieveAll();
 %>
 </fieldset>
 

@@ -210,7 +210,12 @@ function GenerFullAllCtrlsVal(data) {
         if (tb != null) {
 
             tb.value = val;
-            tb.innerHTML = val;
+
+            //  try{
+            //  tb.innerHTML = val;
+            //   }catch
+            //  {
+            //  }
             continue;
         }
 

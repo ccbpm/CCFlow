@@ -386,22 +386,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                         }
                         mygf.Update();
                         break;
-                    //case "AthDoUp":
-                    //    FrmAttachment frmAth = new FrmAttachment(this.MyPK);
-                    //    if (frmAth.RowIdx > 0)
-                    //    {
-                    //        frmAth.RowIdx = frmAth.RowIdx - 1;
-                    //        frmAth.Update();
-                    //    }
-                    //    break;
-                    //case "AthDoDown":
-                    //    FrmAttachment frmAthD = new FrmAttachment(this.MyPK);
-                    //    if (frmAthD.RowIdx < 10)
-                    //    {
-                    //        frmAthD.RowIdx = frmAthD.RowIdx + 1;
-                    //        frmAthD.Update();
-                    //    }
-                    //    break;
                     case "M2MDoUp":
                         MapM2M ddtl1 = new MapM2M(this.MyPK);
                         if (ddtl1.RowIdx > 0)
@@ -575,8 +559,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
             BP.Sys.CCFormAPI.CreateCheckGroup(this.FK_MapData, lab, prx);
             return "创建成功...";
         }
-
-
         /// <summary>
         /// 
         /// 删除分组

@@ -156,7 +156,7 @@ namespace CCFlow.WF.SDKComponents
                     if (item.TodoEmps.Contains("" + WebUser.No + "," + WebUser.Name + ";") == true)
                     {
                         this.AddTD("style='word-break:break-all;' title='" + item.Title + "'",
-                            "<a href=\"javascript:OpenIt('../MyFlow.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&&IsCheckGuide=1&Frms="+item.Paras_Frms+"&FK_Node="+item.FK_Node+"&PNodeID="+item.PNodeID+"')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                            "<a href=\"javascript:OpenIt('../MyFlow.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&&IsCheckGuide=1&Frms="+item.Paras_Frms+"&FK_Node="+item.FK_Node+"&PNodeID="+item.PNodeID+"&PWorkID="+item.PWorkID+"')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
                     }
                     else
                     {

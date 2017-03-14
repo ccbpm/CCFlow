@@ -1,9 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" CodeBehind="APICode.aspx.cs" Inherits="CCFlow.WF.Admin.AttrFlow.APICode" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-
-<style type="text/css">
- 
-</style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 <%
@@ -34,10 +30,7 @@
 <font color=green>
  // 如下代码需要写入您的系统校验密码与用户名之后。</font>
 <br />
-<%
-    //string userNo = "zhangsan";
-    //BP.WF.Dev2Interface.Port_Login(userNo);
- %>
+ 
 
   <font color=blue> string</font>  userNo = <font color=red>"zhangsan"; </font>
   <br />

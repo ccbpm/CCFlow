@@ -33,6 +33,9 @@ namespace CCFlow.WF.CCForm
                 return context.Request.QueryString["FK_MapExt"];
             }
         }
+        /// <summary>
+        /// 类名称
+        /// </summary>
         public string EnsName
         {
             get
@@ -40,6 +43,9 @@ namespace CCFlow.WF.CCForm
                 return context.Request.QueryString["EnsName"];
             }
         }
+        /// <summary>
+        /// 流程编号
+        /// </summary>
         public string FK_Flow
         {
             get
@@ -105,15 +111,8 @@ namespace CCFlow.WF.CCForm
         {
             context = mycontext;
             context.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
-            //string attachPk = context.Request["AttachPK"];
-            //string workid = context.Request["WorkID"];
-            //string fid = context.Request["FID"];
-            //string fk_node = context.Request["FK_Node"];
-            //string ensName = context.Request["EnsName"];
-            //string fk_flow = context.Request["FK_Flow"];
-            //string pkVal = context.Request["PKVal"];
             string message = "true";
-            //判断是否包含附件，包含附件则是上传，否则是功能执行
+            //判断是否包含附件，包含附件则是上传，否则是功能执行。
             if (context.Request.Files.Count > 0)
             {
                 switch (this.DoType)

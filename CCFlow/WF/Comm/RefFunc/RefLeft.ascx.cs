@@ -276,6 +276,12 @@ namespace CCFlow.WF.Comm.RefFunc
             {
                 foreach (AttrOfOneVSM vsM in oneVsM)
                 {
+                    //判断该dot2dot是否显示？
+                    Entity enMM = vsM.EnsOfMM.GetNewEntity;
+                    enMM.SetValByKey(vsM.AttrOfOneInMM, this.PK);
+                    if (enMM.HisUAC.IsView == false)
+                        continue;
+
                     string url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
                     try
                     {
@@ -456,8 +462,14 @@ namespace CCFlow.WF.Comm.RefFunc
             EnDtls enDtls = en.EnMap.Dtls;
             foreach (EnDtl enDtl in enDtls)
             {
-                string url = "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.PK + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() + keys;
 
+                //判断该dtl是否要显示?
+                Entity myEnDtl = enDtl.Ens.GetNewEntity; //获取他的en
+                myEnDtl.SetValByKey(enDtl.RefKey, this.PK);  //给refpk赋值
+                if (myEnDtl.HisUAC.IsView == false)
+                    continue;
+
+                string url = "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.PK + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() + keys;
                 try
                 {
                     i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "='" + en.PKVal + "'");

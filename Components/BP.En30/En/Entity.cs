@@ -399,7 +399,7 @@ namespace BP.En
             {
                 QueryObject qo = new QueryObject(dtl.Ens);
                 MapDtl md = new MapDtl();
-                md.No = dtl.EnsName;
+                md.No = dtl.Ens.GetNewEntity.ClassID;
                 if (md.RetrieveFromDBSources() == 0)
                 {
                     qo.AddWhere(dtl.RefKey, this.PKVal.ToString());

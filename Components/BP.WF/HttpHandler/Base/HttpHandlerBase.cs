@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace BP.WF.WebContral
+namespace BP.WF.HttpHandler
 {
-    abstract public class HttpHandler : IHttpHandler
+    abstract public class HttpHandlerBase : IHttpHandler
     {
         /// <summary>
         /// 获取 “Handler业务处理类”的Type
@@ -56,30 +56,7 @@ namespace BP.WF.WebContral
             context.Response.Write(string.Format(re, success, msg, data));
         }
 
-        public void ProcessRequest_del(HttpContext context)
-        {
-            //创建 ctrl 对象.
-            WebContralBase ctrl = Activator.CreateInstance(CtrlType, context) as WebContralBase;
-
-            //组织返回结果字符串
-            string msg = string.Empty;
-            try
-            {
-                //获得执行的方法.
-                string doType = context.Request.QueryString["DoType"];
-
-                //执行方法返回json.
-                msg = ctrl.DoMethod(ctrl, doType);
-
-            }
-            catch (Exception ex)
-            {
-                msg = "err@" + ex.Message;
-            }
-
-            //返回执行的结果.
-            context.Response.Write(msg);
-        }
+        
 
     }
 }

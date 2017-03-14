@@ -157,6 +157,7 @@
     <Compile Include="DTS\DocFieldAddLengthTo1000.cs" />
     <Compile Include="CCFlowAPI.cs" />
     <Compile Include="DTS\ResetSortMapAttr.cs" />
+    <Compile Include="HttpHandler\WF_Admin_AttrFlow.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />
@@ -180,10 +181,11 @@
     <Compile Include="Template\FrmTransferCustom.cs" />
     <Compile Include="Template\MapFrmExcel.cs" />
     <Compile Include="Template\MapFrmFree.cs" />
-    <Compile Include="WebContral\HttpHandler.cs" />
-    <Compile Include="WebContral\WebContralBase.cs" />
-    <Compile Include="WebContral\WF_Admin_CCFormDesigner.cs" />
-    <Compile Include="WebContral\WF_Comm_RefFunc.cs" />
+    <Compile Include="HttpHandler\Base\HttpHandlerBase.cs" />
+    <Compile Include="HttpHandler\Base\WebContralBase.cs" />
+    <Compile Include="HttpHandler\WF_Admin_CCFormDesigner.cs" />
+    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner.cs" />
+    <Compile Include="HttpHandler\WF_Comm_RefFunc.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

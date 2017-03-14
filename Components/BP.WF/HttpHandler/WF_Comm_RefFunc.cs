@@ -9,7 +9,7 @@ using BP.Sys;
 
 namespace BP.WF.WebContral
 {
-    public class WF_Comm_RefFunc : WebContralBase
+    public class WF_Comm_RefFunc : BP.WF.HttpHandler.WebContralBase
     {
         /// <summary>
         /// 初始化数据

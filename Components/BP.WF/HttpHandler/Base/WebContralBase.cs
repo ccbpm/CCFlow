@@ -19,12 +19,24 @@ using BP.DA;
 using BP.En;
 using System.Reflection;
 
-
-namespace BP.WF.WebContral
+namespace BP.WF.HttpHandler
 {
     abstract public class WebContralBase
     {
         #region 属性.
+        /// <summary>
+        /// 编号
+        /// </summary>
+        public string No
+        {
+            get
+            {
+                string str = context.Request.QueryString["No"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -83,11 +95,27 @@ namespace BP.WF.WebContral
                 return str;
             }
         }
+        /// <summary>
+        /// FK_MapData
+        /// </summary>
         public string FK_MapData
         {
             get
             {
                 string str = context.Request.QueryString["FK_MapData"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+        /// <summary>
+        /// 流程编号
+        /// </summary>
+        public string FK_Flow
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_Flow"];
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -103,7 +131,19 @@ namespace BP.WF.WebContral
                 return int.Parse(str);
             }
         }
-
+        /// <summary>
+        /// 节点ID
+        /// </summary>
+        public int FK_Node
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_Node"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return int.Parse(str);
+            }
+        }
         /// <summary>
         /// 框架ID
         /// </summary>
@@ -115,19 +155,6 @@ namespace BP.WF.WebContral
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
-            }
-        }
-        /// <summary>
-        ///  节点ID.
-        /// </summary>
-        public int FK_Node
-        {
-            get
-            {
-                string str = context.Request.QueryString["FK_Node"];
-                if (str == null || str == "" || str == "null")
-                    return 0;
-                return int.Parse(str);
             }
         }
         /// <summary>

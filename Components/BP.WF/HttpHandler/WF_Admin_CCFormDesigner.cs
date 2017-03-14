@@ -9,9 +9,9 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 
-namespace BP.WF.WebContral
+namespace BP.WF.HttpHandler
 {
-    public class WF_Admin_CCFormDesigner : WebContralBase
+    public class WF_Admin_CCFormDesigner : BP.WF.HttpHandler.WebContralBase
     {
         /// <summary>
         /// 初始化数据
@@ -21,7 +21,6 @@ namespace BP.WF.WebContral
         {
             this.context = mycontext;
         }
-
 
         public string Home_Init()
         {

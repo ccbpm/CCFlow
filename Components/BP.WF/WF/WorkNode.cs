@@ -5942,6 +5942,7 @@ namespace BP.WF
 
                                 //把当前work的Dtl 数据放进去了。
                                 System.Collections.Generic.List<Entities> al = this.HisWork.GetDtlsDatasOfList();
+
                                 foreach (Entities ens in al)
                                     rtf.AddDtlEns(ens);
                                 #endregion 把数据放入 单据引擎。

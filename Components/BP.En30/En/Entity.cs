@@ -395,11 +395,47 @@ namespace BP.En
 
         public Entities GetDtlEnsDa(EnDtl dtl)
         {
-
             try
             {
                 QueryObject qo = new QueryObject(dtl.Ens);
-                qo.AddWhere(dtl.RefKey, this.PKVal.ToString());
+                MapDtl md = new MapDtl();
+                md.No = dtl.EnsName;
+                if (md.RetrieveFromDBSources() == 0)
+                {
+                    qo.AddWhere(dtl.RefKey, this.PKVal.ToString());
+                    qo.DoQuery();
+                    return dtl.Ens;
+                }
+
+                //如果是freefrm 就考虑他的权限控制问题. 
+                switch (md.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        qo.AddWhere(GEDtlAttr.RefPK, this.PKVal.ToString());
+                        qo.addAnd();
+                        qo.AddWhere(GEDtlAttr.Rec, BP.Web.WebUser.No);
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        qo.AddWhere(GEDtlAttr.RefPK, this.PKVal.ToString());
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.这里不允许修改，如需修改则加新case.
+                        //if (nd == null)
+                        //    throw new Exception("@当前您是配置的权限是FID,但是当前没有节点ID.");
+
+                        //if (nd.HisNodeWorkType == BP.WF.NodeWorkType.SubThreadWork)
+                        //    qo.AddWhere(GEDtlAttr.RefPK, this.FID); //edit by zhoupeng 2016.04.23
+                        //else
+                            qo.AddWhere(GEDtlAttr.FID, this.PKVal.ToString() );
+                        break;
+                }
+
+                if (md.FilterSQLExp != "")
+                {
+                    string[] strs = md.FilterSQLExp.Split('=');
+                    qo.addAnd();
+                    qo.AddWhere(strs[0], strs[1]);
+                }
+
                 qo.DoQuery();
                 return dtl.Ens;
             }

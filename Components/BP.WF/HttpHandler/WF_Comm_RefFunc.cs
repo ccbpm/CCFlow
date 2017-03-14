@@ -7,9 +7,9 @@ using System.Web;
 using BP.DA;
 using BP.Sys;
 
-namespace BP.WF.WebContral
+namespace BP.WF.HttpHandler
 {
-    public class WF_Comm_RefFunc : BP.WF.HttpHandler.WebContralBase
+    public class WF_Comm_RefFunc : WebContralBase
     {
         /// <summary>
         /// 初始化数据
@@ -220,6 +220,7 @@ namespace BP.WF.WebContral
                     parent.attributes.Name = parentdept.Name;
                     parent.attributes.ParentNo = parentdept.ParentNo;
                     parent.attributes.TType = parentid == currparentid ? "CDEPT" : "PDEPT";
+                    parent.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(parentdept.Name);
                     parent.state = "open";
                     parent.children = new List<EasyuiTreeNode>();
 
@@ -258,6 +259,7 @@ namespace BP.WF.WebContral
                     node.attributes.Name = dept.Name;
                     node.attributes.ParentNo = dept.ParentNo;
                     node.attributes.TType = "DEPT";
+                    node.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(dept.Name);
                     node.state = "closed";
                     node.children = new List<EasyuiTreeNode>();
                     node.children.Add(new EasyuiTreeNode());
@@ -310,6 +312,7 @@ namespace BP.WF.WebContral
                     parent.attributes.Name = parentdept.Name;
                     parent.attributes.ParentNo = parentdept.ParentNo;
                     parent.attributes.TType = parentid == currparentid ? "CDEPT" : "PDEPT";
+                    parent.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(parentdept.Name);
                     parent.state = "open";
                     parent.children = new List<EasyuiTreeNode>();
 
@@ -351,6 +354,7 @@ namespace BP.WF.WebContral
                     node.attributes.Name = dept.Name;
                     node.attributes.ParentNo = dept.ParentNo;
                     node.attributes.TType = "DEPT";
+                    node.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(dept.Name);
                     node.state = "closed";
                     node.children = new List<EasyuiTreeNode>();
                     node.children.Add(new EasyuiTreeNode());
@@ -454,6 +458,319 @@ namespace BP.WF.WebContral
         }
         #endregion Dot2DotTreeDeptEmpModel.htm（部门人员选择）
 
+        #region Dot2DotTreeDeptModel.htm（部门选择）
+
+        /// <summary>
+        /// 保存节点绑定部门信息
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2DotTreeDeptModel_SaveNodeDepts()
+        {
+            JsonResultInnerData jr = new JsonResultInnerData();
+            string nodeid = this.GetRequestVal("nodeid");
+            string data = this.GetRequestVal("data");
+            string partno = this.GetRequestVal("partno");
+            bool lastpart = false;
+            int partidx = 0;
+            int partcount = 0;
+            int nid = 0;
+
+            if (string.IsNullOrWhiteSpace(nodeid) || int.TryParse(nodeid, out nid) == false)
+                throw new Exception("参数nodeid不正确");
+
+            if (string.IsNullOrWhiteSpace(data))
+                throw new Exception("参数data不能为空");
+
+            BP.WF.Template.NodeDepts ndepts = new BP.WF.Template.NodeDepts();
+            string[] deptNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+            //提交内容过长时，采用分段式提交
+            if (string.IsNullOrWhiteSpace(partno))
+            {
+                ndepts.Delete(BP.WF.Template.NodeDeptAttr.FK_Node, nid);
+            }
+            else
+            {
+                string[] parts = partno.Split("/".ToCharArray());
+
+                if (parts.Length != 2)
+                    throw new Exception("参数partno不正确");
+
+                partidx = int.Parse(parts[0]);
+                partcount = int.Parse(parts[1]);
+
+                deptNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                if (partidx == 1)
+                    ndepts.Delete(BP.WF.Template.NodeDeptAttr.FK_Node, nid);
+
+                lastpart = partidx == partcount;
+            }
+
+            DataTable dtDepts = DBAccess.RunSQLReturnTable("SELECT No FROM Port_Dept");
+            BP.WF.Template.NodeDept nemp = null;
+
+            foreach (string deptNo in deptNos)
+            {
+                if (dtDepts.Select(string.Format("No='{0}'", deptNo)).Length == 0)
+                    continue;
+
+                nemp = new BP.WF.Template.NodeDept();
+                nemp.FK_Node = nid;
+                nemp.FK_Dept = deptNo;
+                nemp.Insert();
+            }
+
+            if (string.IsNullOrWhiteSpace(partno))
+            {
+                jr.Msg = "保存成功";
+            }
+            else
+            {
+                jr.InnerData = new { lastpart, partidx, partcount };
+
+                if (lastpart)
+                    jr.Msg = "保存成功";
+                else
+                    jr.Msg = string.Format("第{0}/{1}段保存成功", partidx, partcount);
+            }
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+        }
+        /// <summary>
+        /// 获取指定部门下一级子部门列表
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2DotTreeDeptModel_GetSubDepts()
+        {
+            JsonResultInnerData jr = new JsonResultInnerData();
+
+            EasyuiTreeNode node = null;
+            JsonResultEmp jrdept = null;
+            List<JsonResultEmp> jrdepts = new List<JsonResultEmp>();
+            List<EasyuiTreeNode> d = new List<EasyuiTreeNode>();
+            List<EasyuiTreeNode> parentNodes = new List<EasyuiTreeNode>();
+            EasyuiTreeNode parent = null;
+            string rootid = this.GetRequestVal("rootid");
+            string parentid = this.GetRequestVal("parentid");
+            string nid = this.GetRequestVal("nodeid");
+            string currparentid = parentid;
+            BP.WF.Template.NodeDepts sdepts = new BP.WF.Template.NodeDepts();
+
+            if (string.IsNullOrWhiteSpace(rootid))
+                throw new Exception("参数rootid不能为空");
+            if (string.IsNullOrWhiteSpace(parentid))
+                throw new Exception("参数parentid不能为空");
+            if (string.IsNullOrWhiteSpace(nid))
+                throw new Exception("参数nodeid不能为空");
+
+            sdepts.Retrieve(BP.WF.Template.NodeDeptAttr.FK_Node, int.Parse(nid));
+
+            if (BP.WF.Glo.OSModel == OSModel.OneOne)
+            {
+                //逐级计算当前部门下的所有父级部门
+                do
+                {
+                    BP.Port.Dept parentdept = new BP.Port.Dept(parentid);
+
+                    parent = new EasyuiTreeNode();
+                    parent.id = "DEPT_" + parentdept.No;
+                    parent.text = parentdept.Name;
+                    parent.iconCls = "icon-department";
+                    parent.attributes = new EasyuiTreeNodeAttributes();
+                    parent.attributes.No = parentdept.No;
+                    parent.attributes.Name = parentdept.Name;
+                    parent.attributes.ParentNo = parentdept.ParentNo;
+                    parent.attributes.TType = parentid == currparentid ? "CDEPT" : "PDEPT";
+                    parent.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(parentdept.Name);
+                    parent.state = "open";
+                    parent.children = new List<EasyuiTreeNode>();
+
+                    parentNodes.Add(parent);
+                    parentid = parentdept.ParentNo;
+                } while (parent.attributes.No != rootid);
+
+                //生成父级tree结构
+                for (int i = parentNodes.Count - 1; i >= 0; i--)
+                {
+                    parent = parentNodes[i];
+
+                    if (i == parentNodes.Count - 1)
+                        d.Add(parent);
+
+                    if (i == 0)
+                        break;
+
+                    parent.children.Add(parentNodes[i - 1]);
+                }
+
+                BP.Port.Depts depts = new BP.Port.Depts();
+                depts.Retrieve(BP.Port.DeptAttr.ParentNo, parent.attributes.No, BP.Port.DeptAttr.Name);
+
+                //增加部门
+                foreach (BP.Port.Dept dept in depts)
+                {
+                    node = new EasyuiTreeNode();
+                    node.id = "DEPT_" + dept.No;
+                    node.text = dept.Name;
+                    node.iconCls = "icon-department";
+                    node.@checked = sdepts.GetEntityByKey(BP.WF.Template.NodeDeptAttr.FK_Dept, dept.No) != null;
+                    node.attributes = new EasyuiTreeNodeAttributes();
+                    node.attributes.No = dept.No;
+                    node.attributes.Name = dept.Name;
+                    node.attributes.ParentNo = dept.ParentNo;
+                    node.attributes.TType = "DEPT";
+                    node.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(dept.Name);
+                    node.state = "closed";
+                    node.children = new List<EasyuiTreeNode>();
+                    node.children.Add(new EasyuiTreeNode());
+                    node.children[0].text = "loading...";
+
+                    parent.children.Add(node);
+
+                    jrdept = new JsonResultEmp();
+                    jrdept.No = dept.No;
+                    jrdept.Name = dept.Name;
+                    jrdept.DeptNo = dept.ParentNo;
+                    jrdept.DeptName = parent.attributes.Name;
+                    jrdept.Checked = node.@checked;
+                    jrdept.Code = node.attributes.Code;
+
+                    jrdepts.Add(jrdept);
+                }
+            }
+            else
+            {
+                //逐级计算当前部门下的所有父级部门
+                do
+                {
+                    BP.GPM.Dept parentdept = new BP.GPM.Dept(parentid);
+
+                    parent = new EasyuiTreeNode();
+                    parent.id = "DEPT_" + parentdept.No;
+                    parent.text = parentdept.Name;
+                    parent.iconCls = "icon-department";
+                    parent.attributes = new EasyuiTreeNodeAttributes();
+                    parent.attributes.No = parentdept.No;
+                    parent.attributes.Name = parentdept.Name;
+                    parent.attributes.ParentNo = parentdept.ParentNo;
+                    parent.attributes.TType = parentid == currparentid ? "CDEPT" : "PDEPT";
+                    parent.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(parentdept.Name);
+                    parent.state = "open";
+                    parent.children = new List<EasyuiTreeNode>();
+
+                    parentNodes.Add(parent);
+                    parentid = parentdept.ParentNo;
+                } while (parent.attributes.No != rootid);
+
+                //生成父级tree结构
+                for (int i = parentNodes.Count - 1; i >= 0; i--)
+                {
+                    parent = parentNodes[i];
+
+                    if (i == parentNodes.Count - 1)
+                        d.Add(parent);
+
+                    if (i == 0)
+                        break;
+
+                    parent.children.Add(parentNodes[i - 1]);
+                }
+
+                BP.GPM.Depts depts = new BP.GPM.Depts();
+                depts.Retrieve(BP.GPM.DeptAttr.ParentNo, parent.attributes.No);
+
+                //增加部门
+                foreach (BP.GPM.Dept dept in depts)
+                {
+                    node = new EasyuiTreeNode();
+                    node.id = "DEPT_" + dept.No;
+                    node.text = dept.Name;
+                    node.iconCls = "icon-department";
+                    node.@checked = sdepts.GetEntityByKey(BP.WF.Template.NodeDeptAttr.FK_Dept, dept.No) != null;
+                    node.attributes = new EasyuiTreeNodeAttributes();
+                    node.attributes.No = dept.No;
+                    node.attributes.Name = dept.Name;
+                    node.attributes.ParentNo = dept.ParentNo;
+                    node.attributes.TType = "DEPT";
+                    node.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(dept.Name);
+                    node.state = "closed";
+                    node.children = new List<EasyuiTreeNode>();
+                    node.children.Add(new EasyuiTreeNode());
+                    node.children[0].text = "loading...";
+
+                    parent.children.Add(node);
+
+                    jrdept = new JsonResultEmp();
+                    jrdept.No = dept.No;
+                    jrdept.Name = dept.Name;
+                    jrdept.DeptNo = dept.ParentNo;
+                    jrdept.DeptName = parent.attributes.Name;
+                    jrdept.Checked = node.@checked;
+                    jrdept.Code = node.attributes.Code;
+
+                    jrdepts.Add(jrdept);
+                }
+            }
+
+            jr.InnerData = new { TreeData = d, Depts = jrdepts };
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+        }
+
+        /// <summary>
+        /// 获取节点绑定人员信息列表
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2DotTreeDeptModel_GetNodeDepts()
+        {
+            JsonResultInnerData jr = new JsonResultInnerData();
+
+            DataTable dt = null;
+            string nid = this.GetRequestVal("nodeid");
+            string sql = "SELECT pd.No,pd.Name,pd1.No DeptNo,pd1.Name DeptName FROM WF_NodeDept wnd "
+                         + "  INNER JOIN Port_Dept pd ON pd.No = wnd.FK_Dept "
+                         + "  LEFT JOIN Port_Dept pd1 ON pd1.No = pd.ParentNo "
+                         + "WHERE wnd.FK_Node = " + nid + " ORDER BY pd.Name";
+
+            dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
+            dt.Columns.Add("Code", typeof(string));
+            dt.Columns.Add("Checked", typeof(bool));
+
+            foreach (DataRow row in dt.Rows)
+            {
+                row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["Name"] as string);
+                row["Checked"] = true;
+            }
+
+            //对Oracle数据库做兼容性处理
+            if (DBAccess.AppCenterDBType == DBType.Oracle)
+            {
+                foreach (DataColumn col in dt.Columns)
+                {
+                    switch (col.ColumnName)
+                    {
+                        case "NO":
+                            col.ColumnName = "No";
+                            break;
+                        case "NAME":
+                            col.ColumnName = "Name";
+                            break;
+                        case "DEPTNO":
+                            col.ColumnName = "DeptNo";
+                            break;
+                        case "DEPTNAME":
+                            col.ColumnName = "DeptName";
+                            break;
+                    }
+                }
+            }
+
+            jr.InnerData = dt;
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+        }
+        #endregion Dot2DotTreeDeptModel.htm（部门选择）
 
         #region 辅助实体定义
 
@@ -493,17 +810,8 @@ namespace BP.WF.WebContral
 
         public class JsonResultInnerData
         {
-            public string Msg
-            {
-                get;
-                set;
-            }
-
-            public object InnerData
-            {
-                get;
-                set;
-            }
+            public string Msg { get; set; }
+            public object InnerData { get; set; }
         }
         #endregion 辅助实体定义
     }

@@ -11,7 +11,7 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 获取 “Handler业务处理类”的Type
         /// <para></para>
-        /// <para>注意： “Handler业务处理类”必须继承自BP.WF.WebContral.WebContralBase</para>
+        /// <para>注意： “Handler业务处理类”必须继承自BP.WF.HttpHandler.WebContralBase</para>
         /// </summary>
         public abstract Type CtrlType { get; }
 

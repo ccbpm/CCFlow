@@ -537,24 +537,29 @@ body{
 .navlist li div
 {
     border:1px dashed #F6F6F6;
-    background-repeat:no-repeat;
+    background-repeat:no-repeat !important;
     background-position:left;
-    background-size:136px 26px; 
-    height:26px;
-    width:145px;
+    /*background-size:136px 26px; */
+    height:24px;
+    width:137px;
+    background:white;
 }
 .navlistspan
 {
     margin-left:30px;
+    font-family: Microsoft YaHei;
+    font-size:13px;
+
 }
 .navlist li div.hover
 {
     border:1px dashed #99BBE8; 
     background:#E0ECFF;
     cursor:pointer;
-    background-repeat:no-repeat;
+    background-repeat:no-repeat !important;
     background-position:left;
-    background-size:136px 26px; 
+    /*background-size:136px 26px; */
+    background:white;
 }
 .navlist li div.selected
 {
@@ -562,7 +567,8 @@ body{
     background:#E0ECFF;
     cursor:default;
     font-weight:bold;
-    background-repeat:no-repeat;
+    background-repeat:no-repeat !important;
     background-position:left;
-    background-size:136px 26px; 
+    /*background-size:136px 26px; */
+    background:white;
 }

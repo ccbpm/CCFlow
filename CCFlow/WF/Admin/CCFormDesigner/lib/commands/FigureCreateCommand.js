@@ -86,6 +86,10 @@ FigureCreateCommand.prototype = {
 
                     createdFigure.CCForm_MyPK = CCForm_FK_MapData + "_FrmCheck";
                     break;
+                case CCForm_Controls.FlowChart:
+                    alert('轨迹图')
+
+                    break;
                 default: //按照通用的接受编号，名称的方式来创建.
                     //canAddFigure = false; // 需要弹出对话框创建.
                     //this.PublicNoNameCtrlCreate(createdFigure, this.x, this.y, createFigureName);
@@ -479,7 +483,87 @@ FigureCreateCommand.prototype = {
 
         // set properties panel to canvas because current figure doesn't exist anymore
         setUpEditPanel(canvasProps);
-    }
+    },
+    /**创建流程控件 杨玉慧**/
+    FlowFieldCreate: function (createdFigure, x, y) {
+
+    var dgId = "iframeTextBox";
+    var url = "DialogCtr/FrmTextBox.htm?DataType=" + createFigureName + "&s=" + Math.random();
+    var funIsExist = this.IsExist;
+
+    OpenEasyUiDialog(url, dgId, '新建文本字段', 600, 394, 'icon-new', true, function (HidenFieldFun) {
+        var win = document.getElementById(dgId).contentWindow;
+        var frmVal = win.GetFrmInfo();
+
+        if (frmVal.Name == null || frmVal.Name.length == 0) {
+            $.messager.alert('错误', '字段名称不能为空。', 'error');
+            return false;
+        }
+        if (frmVal.KeyOfEn == null || frmVal.KeyOfEn.length == 0) {
+            $.messager.alert('错误', '英文字段不能为空。', 'error');
+            return false;
+        }
+        //判断主键是否存在
+        var isExit = funIsExist(frmVal.KeyOfEn);
+        if (isExit == true) {
+            $.messager.alert("错误", "已存在ID为(" + frmVal.KeyOfEn + ")的元素，不允许添加同名元素！", "error");
+            return false;
+        }
+
+        //控件数据类型
+        if (frmVal.FieldType == "1") {
+            createdFigure.CCForm_Shape = "TextBoxStr";
+        } else if (frmVal.FieldType == "2") {
+            createdFigure.CCForm_Shape = "TextBoxInt";
+        } else if (frmVal.FieldType == "3") {
+            createdFigure.CCForm_Shape = "TextBoxFloat";
+        } else if (frmVal.FieldType == "4") {
+            createdFigure.CCForm_Shape = "TextBoxBoolean";
+        } else if (frmVal.FieldType == "5") {
+            createdFigure.CCForm_Shape = "TextBoxDouble";
+        } else if (frmVal.FieldType == "6") {
+            createdFigure.CCForm_Shape = "TextBoxDate";
+        } else if (frmVal.FieldType == "7") {
+            createdFigure.CCForm_Shape = "TextBoxDateTime";
+        } else if (frmVal.FieldType == "8") {
+            createdFigure.CCForm_Shape = "TextBoxMoney";
+        }
+
+        //如果为隐藏字段
+        if (frmVal.IsHidenField == true) {
+            HidenFieldFun(frmVal);
+        } else {
+
+
+            //根据信息创建不同类型的数字控件
+            var transField = new TransFormDataField(createdFigure, frmVal, x, y);
+
+            // 定义参数，让其保存到数据库里。
+            var param = {
+                action: "DoType",
+                DoType: "NewField",
+                FrmID: CCForm_FK_MapData,
+                KeyOfEn: frmVal.KeyOfEn,
+                Name: frmVal.Name,
+                FieldType: frmVal.FieldType,
+                x: x,
+                y: y
+            };
+
+            ajaxService(param, function (json) {
+                if (json == "true") {
+                    //开始画这个-元素.
+                    transField.paint();
+
+                } else {
+                    Designer_ShowMsg(json);
+                }
+            }, this);
+        }
+    }, this.HidenFieldCreate);
+
+    return false;
+},
 }
 
 /**数据字段处理

@@ -129,6 +129,7 @@ function buildPanel() {
             var figureFunctionName = 'figure_' + figure.figureFunction;
             var figureThumbURL = figureSetsURL + '/' + setName + '/' + figure.image;
             var figureName = figure.name;
+            var cnName = figure.CNName;
             var eFigure = document.createElement('li');
             var eFigure_div = document.createElement('div');
             eFigure_div.setAttribute('id', figure.name);
@@ -137,7 +138,7 @@ function buildPanel() {
             var eFigure_span = document.createElement('span');
             eFigure_span.className = "navlistspan";
             //eFigure_span.innerHTML = figure.image;
-
+            eFigure_span.textContent = cnName;
             eFigure_div.appendChild(eFigure_span);
             eFigure.appendChild(eFigure_div);
 
@@ -156,7 +157,7 @@ function buildPanel() {
             }, false);
 
             eFigure.style.cursor = 'pointer';
-            eFigure.style.marginRight = '5px';
+            //eFigure.style.marginRight = '5px';
             eFigure.style.marginTop = '2px';
 
             figures_UL.appendChild(eFigure);

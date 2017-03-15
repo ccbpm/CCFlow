@@ -45,13 +45,13 @@ figureSets["basic"] = {
     name: '基本控件',
     description: 'A basic set of Controls',
     figures: [
-        { figureFunction: null, name: "Poiner", image: "Poiner.png" },
-        { figureFunction: null, name: CCForm_Controls.Line, image: "Line.png" },
-        { figureFunction: "Label", name: CCForm_Controls.Label, image: "Label.png" },
-        { figureFunction: "Button", name: CCForm_Controls.Button, image: "Button.png" },
-        { figureFunction: "HyperLink", name: CCForm_Controls.HyperLink, image: "HyperLink.png" },
-        { figureFunction: "Image", name: CCForm_Controls.Image, image: "Img.png" },
-        { figureFunction: "Fieldset", name: CCForm_Controls.Fieldset, image: "Fieldset.png" }
+        { figureFunction: null, name: "Poiner", image: "Poiner.png", CNName: "指针" },
+        { figureFunction: null, name: CCForm_Controls.Line, image: "Line.png", CNName: "直线" },
+        { figureFunction: "Label", name: CCForm_Controls.Label, image: "Label.png", CNName: "文字" },
+        { figureFunction: "Button", name: CCForm_Controls.Button, image: "Button.png", CNName: "按钮" },
+        { figureFunction: "HyperLink", name: CCForm_Controls.HyperLink, image: "HyperLink.png", CNName: "超链接" },
+        { figureFunction: "Image", name: CCForm_Controls.Image, image: "Img.png", CNName: "图片" },
+        { figureFunction: "Fieldset", name: CCForm_Controls.Fieldset, image: "Fieldset.png", CNName: "分组" }
 
     ]
 };
@@ -225,19 +225,19 @@ figureSets["Data"] = {
     name: '字段控件',
     description: 'A Data set of Controls',
     figures: [
-        { figureFunction: "TextBox", name: CCForm_Controls.TextBox, image: "TextBox.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxInt, image: "TextBoxInt.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxMoney, image: "TextBoxMoney.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxFloat, image: "TextBoxFloat.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.Date, image: "TextBoxDate.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.DateTime, image: "TextBoxDateTime.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.CheckBox, image: "Checkbox.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.RadioButton, image: "Radiobutton.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.DropDownListEnum, image: "DropDownListEnum.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.DropDownListTable, image: "DropDownListTable.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png" },
-        { figureFunction: "TextBox", name: CCForm_Controls.Dtl, image: "Dtl.png" },      
-        { figureFunction: "TextBox", name: CCForm_Controls.HiddendField, image: "HiddendField.png" }
+        { figureFunction: "TextBox", name: CCForm_Controls.TextBox, image: "TextBox.png",CNName:"文本类型" },
+        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxInt, image: "TextBoxInt.png",CNName:"数值类型" },
+        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxMoney, image: "TextBoxMoney.png", CNName: "金额类型" },
+        { figureFunction: "TextBox", name: CCForm_Controls.TextBoxFloat, image: "TextBoxFloat.png", CNName: "浮点类型" },
+        { figureFunction: "TextBox", name: CCForm_Controls.Date, image: "TextBoxDate.png", CNName: "日期类型" },
+        { figureFunction: "TextBox", name: CCForm_Controls.DateTime, image: "TextBoxDateTime.png", CNName: "日期时间类型" },
+        { figureFunction: "TextBox", name: CCForm_Controls.CheckBox, image: "Checkbox.png", CNName: "选择框" },
+        { figureFunction: "TextBox", name: CCForm_Controls.RadioButton, image: "Radiobutton.png", CNName: "单选按钮" },
+        { figureFunction: "TextBox", name: CCForm_Controls.DropDownListEnum, image: "DropDownListEnum.png", CNName: "枚举下拉框" },
+        { figureFunction: "TextBox", name: CCForm_Controls.DropDownListTable, image: "DropDownListTable.png", CNName: "外键下拉框" },
+        { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png", CNName: "外链下拉框" },
+        { figureFunction: "TextBox", name: CCForm_Controls.Dtl, image: "Dtl.png", CNName: "明细表" },
+        { figureFunction: "TextBox", name: CCForm_Controls.HiddendField, image: "HiddendField.png", CNName: "隐藏字段" }
     ]
 };
 
@@ -272,9 +272,9 @@ figureSets["Ath"] = {
     name: '附件控件',
     description: '附件类控件',
     figures: [
-        { figureFunction: "Square", name: "AthMulti", image: "AthMulti.png" },
-        { figureFunction: "Square", name: "AthSingle", image: "AthSingle.png" },
-        { figureFunction: "Square", name: "AthImg", image: "AthImg.png" }
+        { figureFunction: "Square", name: "AthMulti", image: "AthMulti.png", CNName: "多附件" },
+        { figureFunction: "Square", name: "AthSingle", image: "AthSingle.png", CNName: "单附件" },
+        { figureFunction: "Square", name: "AthImg", image: "AthImg.png", CNName: "图片附件" }
     ]
 };
 
@@ -283,11 +283,11 @@ figureSets["ccbpm"] = {
     name: '流程控件',
     description: '流程组件',
     figures: [
-        { figureFunction: "Square", name: "CheckGroup", image: "CheckGroup.png" },
-        { figureFunction: "Square", name: "FlowChart", image: "FlowChart.png" },
-        { figureFunction: "Square", name: "FrmCheck", image: "FrmCheck.png" },
-        { figureFunction: "Square", name: "SubFlowDtl", image: "SubFlowDtl.png" },
-        { figureFunction: "Square", name: "ThreadDtl", image: "ThreadDtl.png" }
+        { figureFunction: "Square", name: "CheckGroup", image: "CheckGroup.png", CNName: "审核分组" },
+        { figureFunction: "Square", name: "FlowChart", image: "FlowChart.png", CNName: "轨迹图" },
+        { figureFunction: "Square", name: "FrmCheck", image: "FrmCheck.png", CNName: "审核组件" },
+        { figureFunction: "Square", name: "SubFlowDtl", image: "SubFlowDtl.png", CNName: "子流程" },
+        { figureFunction: "Square", name: "ThreadDtl", image: "ThreadDtl.png", CNName: "子线程" }
     ]
 };
 

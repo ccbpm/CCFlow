@@ -204,8 +204,8 @@
                 }
 
                 nodeemps = redata.data.InnerData;
-
                 $("#save").linkbutton("enable");
+                ShowSelectedEmps();
             }, this);
         }
 
@@ -403,8 +403,8 @@
                     var redata = eval('(' + data + ')');
 
                     $("#save").linkbutton("enable");
-
                     alert(redata.msg);
+                    ShowSelectedEmps();
                 }, this);
                 return;
             }
@@ -432,6 +432,7 @@
                     $("#save").linkbutton("enable");
                     partidx = 0;
                     partcount = 0;
+                    ShowSelectedEmps();
                     return;
                 }
 

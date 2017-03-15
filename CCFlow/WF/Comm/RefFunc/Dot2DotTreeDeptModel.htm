@@ -228,8 +228,8 @@
                 }
 
                 nodedepts = redata.data.InnerData;
-
                 $("#save").linkbutton("enable");
+                ShowSelectedDepts();
             }, this);
         }
 
@@ -444,8 +444,8 @@
                     var redata = eval('(' + data + ')');
 
                     $("#save").linkbutton("enable");
-
                     alert(redata.msg);
+                    ShowSelectedDepts();
                 }, this);
                 return;
             }
@@ -473,6 +473,7 @@
                     $("#save").linkbutton("enable");
                     partidx = 0;
                     partcount = 0;
+                    ShowSelectedDepts();
                     return;
                 }
 

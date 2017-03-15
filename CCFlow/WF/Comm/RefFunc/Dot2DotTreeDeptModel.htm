@@ -444,7 +444,13 @@
                     var redata = eval('(' + data + ')');
 
                     $("#save").linkbutton("enable");
-                    alert(redata.msg);
+
+                    if (!redata.success) {
+                        alert(redata.msg);
+                        return;
+                    }
+
+                    alert(redata.data.Msg);
                     ShowSelectedDepts();
                 }, this);
                 return;

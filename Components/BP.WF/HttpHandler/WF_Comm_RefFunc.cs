@@ -41,7 +41,7 @@ namespace BP.WF.HttpHandler
                 throw new Exception("参数nodeid不正确");
 
             if (string.IsNullOrWhiteSpace(data))
-                throw new Exception("参数data不能为空");
+                data = "";
 
             BP.WF.Template.NodeEmps nemps = new BP.WF.Template.NodeEmps();
             string[] empNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -479,7 +479,7 @@ namespace BP.WF.HttpHandler
                 throw new Exception("参数nodeid不正确");
 
             if (string.IsNullOrWhiteSpace(data))
-                throw new Exception("参数data不能为空");
+                data = "";
 
             BP.WF.Template.NodeDepts ndepts = new BP.WF.Template.NodeDepts();
             string[] deptNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);

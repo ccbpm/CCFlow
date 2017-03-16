@@ -16,7 +16,7 @@
         function ResizeWindow() {
             if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     
                 var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽     
-                var myh = screen.availHeight - 30;  //定义一个myw，接受到当前全屏的高     
+                var myh = screen.availHeight - 5;  //定义一个myw，接受到当前全屏的高     
                 window.moveTo(0, 0);           //把window放在左上角     
                 window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
             }
@@ -521,6 +521,7 @@
                                         onClose: function () {
                                             $('#send').linkbutton({ disabled: false });
                                             $("#selectaccepter").remove();
+                                            closeWin();
                                         },
                                         buttons: [{
                                             text: '确定',
@@ -546,6 +547,7 @@
                                     onClose: function () {
                                         $('#send').linkbutton({ disabled: false });
                                         $("#selectToNode").remove();
+                                        closeWin();
                                     },
                                     buttons: [{
                                         text: '关闭',
@@ -704,9 +706,26 @@
                 if (js) {
                     var str = js;
                     if (str == "删除成功") {
-                        $.messager.alert('提示', '删除成功！');
-                        window.returnValue = "true";
-                        closeWin();
+                        $("<div id='deleteresultinfo'></div>").append($("<div style='margin-left:5px; margin-top:5px;'>删除成功！</div>")).dialog({
+                            title: "提示",
+                            width: 200,
+                            height: 105,
+                            autoOpen: true,
+                            modal: true,
+                            resizable: false,
+                            onClose: function () {
+                                $("#deleteresultinfo").remove();
+                                window.returnValue = "true";
+                                closeWin();
+                            },
+                            buttons: [{
+                                text: '确定',
+                                iconCls: 'icon-ok',
+                                handler: function () {
+                                    $('#deleteresultinfo').dialog("close");
+                                }
+                            }]
+                        });
                     }
                     else {
                         window.open("/" + str + strTimeKey, "删除窗口", " height=500, width=400,scrollbars=yes");
@@ -910,6 +929,7 @@
                 $("#send").show();
                 $("#save").show();
                 $("#A6").show();
+                ResizeWindow();
             }, this);
             var urlExt = urlExtFrm();
             //addTab("trackid", "流程日志", "../WorkOpt/OneWork/TruckOnly.aspx?1=1" + urlExt);

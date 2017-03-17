@@ -315,8 +315,8 @@ function printFrom() {
    
     LODOP.SET_PRINT_STYLEA(0, "HOrient", 3);
     LODOP.SET_PRINT_STYLEA(0, "VOrient", 3);
-    //LODOP.SET_PRINT_PAGESIZE(0, 0, 0, "");
-    LODOP.SET_PRINT_PAGESIZE(2, 2400, 2970, "A4");
+    LODOP.SET_PRINT_PAGESIZE(0, 0, 0, "");
+    //LODOP.SET_PRINT_PAGESIZE(2, 2400, 2970, "A4");
     //		LODOP.SET_SHOW_MODE("MESSAGE_GETING_URL",""); //该语句隐藏进度条或修改提示信息
     //		LODOP.SET_SHOW_MODE("MESSAGE_PARSING_URL","");//该语句隐藏进度条或修改提示信息
     //  LODOP.PREVIEW();

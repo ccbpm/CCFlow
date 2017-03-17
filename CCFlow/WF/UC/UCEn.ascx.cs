@@ -4115,8 +4115,9 @@ namespace CCFlow.WF.UC
                 {
                     src += "&DoType=View";
                 }
+
                 src += "&r=q" + paras;
-                this.Add("<iframe ID='FWC" + subFlow.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + subFlow.SF_W + "' height='" + subFlow.SF_H + "'   scrolling=auto/></iframe>");
+                this.Add("<iframe ID='FSF" + subFlow.No + "' " + fwcOnload + "  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + subFlow.SF_W + "' height='" + subFlow.SF_H + "'   scrolling=auto/></iframe>");
 
 
                 this.Add("</span>");

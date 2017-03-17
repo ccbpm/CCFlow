@@ -217,18 +217,16 @@
             queryData(params, function (js, scope) {
                 $('#win').window('close');
                 if (js == "true") {
-                    alert(js);
                     if (insEdit) {
-                        alert('loadgrid');
                         LoadGridData(1, 15);
                     }
-
                     RefreshGrid();
                 } else {
                     $.messager.alert("提示", "操作失败", "info");
                 }
             }, this);
         }
+
         var againText;
         var oid;
         //编辑词汇
@@ -294,7 +292,7 @@
         //返回数据
         function btnOk() {
             var rows = $('#newsGrid').datagrid('getChecked');
-
+            
             if (rows.length == 0) {
                 $.messager.alert("提示", "请选择数据", "info");
                 return;
@@ -336,12 +334,13 @@
                 $.messager.alert("提示", "1.没有选中项<br />2.选中的文件不包含任何数据!", "info");
                 return;
             }
+            
             saveHistoryWords(str); //保存历史
 
             //兼容
             var explorer = window.navigator.userAgent;
-            if (explorer.indexOf("Chrome") >= 0) {//谷歌
-                window.close();
+            var id = Application.common.getArgsFromHref("id");
+            if (explorer.indexOf("Chrome") >= 0 || explorer.indexOf("Firefox") >= 0) {//谷歌,火狐
                 if (window.opener.document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_UCEn1_" + id)) {
                     window.opener.document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_UCEn1_" + id).value = str;
                 }
@@ -357,6 +356,7 @@
                 if (window.opener.document.getElementById("ContentPlaceHolder1_UCEn1_" + id)) {
                     window.opener.document.getElementById("ContentPlaceHolder1_UCEn1_" + id).value = str;
                 }
+                window.close();
             }
             else {//IE...
                 window.returnValue = str;
@@ -384,33 +384,24 @@
     </script>
 </head>
 <body class="easyui-layout body">
-    <div id="pageloading">
-    </div>
+    <div id="pageloading"></div>
     <div data-options="region:'north'" style="height: 60px; border: none;">
         <div id="tt" class="easyui-tabs" style="width: auto; height: 30px;">
-            <div title="我的词汇" style="padding: 20px;">
-            </div>
-            <div title="历史词汇" style="padding: 20px;">
-            </div>
-            <div title="系统词汇" style="padding: 20px;">
-            </div>
-            <div title="读取文件" style="padding: 20px;">
-            </div>
+            <div title="我的词汇" style="padding: 20px;"></div>
+            <div title="历史词汇" style="padding: 20px;"></div>
+            <div title="系统词汇" style="padding: 20px;"></div>
+            <div title="读取文件" style="padding: 20px;"></div>
         </div>
         <div style="background-color: #F4F4F4;">
             <div style="text-align: left; float: left;">
-                <a href='javascript:void(0)' id="btnAdd" onclick='btnOpenWindow()' class='easyui-linkbutton'
-                    data-options="plain:true,iconCls:'icon-add'" style='margin-left: 10px; color: blue;'>
-                    添加数据</a> <a id="btnEdit" href='javascript:void(0)' onclick='btnEdit()' class='easyui-linkbutton'
-                        data-options="plain:true,iconCls:'icon-edit'" style='margin-left: 10px; color: blue;'>
-                        编辑</a><a href='javascript:void(0)' onclick='btnDelete()' id='btnDelete' class='easyui-linkbutton'
-                            data-options="plain:true,iconCls:'icon-delete'" style='margin-left: 10px; color: blue;'>删除</a></div>
+                <a href='javascript:void(0)' id="btnAdd" onclick='btnOpenWindow()' class='easyui-linkbutton' data-options="plain:true,iconCls:'icon-add'" style='margin-left: 10px; color: blue;'>添加数据</a> 
+                <a id="btnEdit" href='javascript:void(0)' onclick='btnEdit()' class='easyui-linkbutton' data-options="plain:true,iconCls:'icon-edit'" style='margin-left: 10px; color: blue;'>编辑</a>
+                <a href='javascript:void(0)' onclick='btnDelete()' id='btnDelete' class='easyui-linkbutton' data-options="plain:true,iconCls:'icon-delete'" style='margin-left: 10px; color: blue;'>删除</a>
+            </div>
             <div style="text-align: right;">
-                <a href='javascript:void(0)' onclick='btnOk()' id='btnOk' class='easyui-linkbutton'
-                    data-options="plain:true,iconCls:'icon-ok'" style='margin-right: 10px; color: blue;'>
-                    确定</a> <a href='javascript:void(0)' onclick='btnClose()' id='btnClose' class='easyui-linkbutton'
-                        data-options="plain:true,iconCls:'icon-cancel'" style='margin-right: 20px; color: blue;'>
-                        取消</a></div>
+                <a href='javascript:void(0)' onclick='btnOk()' id='btnOk' class='easyui-linkbutton' data-options="plain:true,iconCls:'icon-ok'" style='margin-right: 10px; color: blue;'>确定</a>
+                <a href='javascript:void(0)' onclick='btnClose()' id='btnClose' class='easyui-linkbutton' data-options="plain:true,iconCls:'icon-cancel'" style='margin-right: 20px; color: blue;'>取消</a>
+            </div>
         </div>
     </div>
     <div data-options="region:'center'" style="padding: 5px;">
@@ -421,13 +412,10 @@
         overflow: hidden;" data-options="iconCls:'icon-save',modal:true,collapsible:false,minimizable:false,maximizable:false">
         <div class="easyui-layout" data-options="fit:true">
             <div data-options="region:'center'" style="text-align: center;">
-                <textarea id="TextArea" cols="20" rows="2" style="width: 350px; height: 150px; margin-top: 5px;
-                    overflow: hidden;"></textarea>
+                <textarea id="TextArea" cols="20" rows="2" style="width: 350px; height: 150px; margin-top: 5px;overflow: hidden;"></textarea>
                 <div style="width: auto; height: 20px; margin-bottom: 0px; text-align: center;">
-                    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true"
-                        onclick="btnAddData()">保存</a> <a href="javascript:void(0)" class="easyui-linkbutton"
-                            data-options="iconCls:'icon-cancel',plain:true" onclick="$('#win').window('close');">
-                            取消</a>
+                    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="btnAddData()">保存</a> 
+                    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true" onclick="$('#win').window('close');">取消</a>
                 </div>
             </div>
         </div>

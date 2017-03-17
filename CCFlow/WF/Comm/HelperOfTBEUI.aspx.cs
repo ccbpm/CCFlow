@@ -133,7 +133,7 @@ namespace CCFlow.WF.Comm
         {
             string lb = getUTF8ToString("lb");
             if (lb == "readWords" || lb == "hisWords")
-                return "false";
+                return "true";
 
             string enName = getUTF8ToString("FK_MapData");
             string AttrKey = getUTF8ToString("AttrKey");
@@ -144,7 +144,7 @@ namespace CCFlow.WF.Comm
                         + "' and FK_MapData='" + enName + "' and AttrKey='" + AttrKey + "' and CurValue='" + str + "'";
 
             if (DBAccess.RunSQLReturnCOUNT(sql) != 0)//禁止添加重复数据
-                return "false";
+                return "true";
 
             sql = "select * from Sys_UserRegedit where LB='2' and FK_Emp='" + WebUser.No
                         + "' and FK_MapData='" + enName + "' and AttrKey='" + AttrKey + "'";

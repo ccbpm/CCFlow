@@ -48,7 +48,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
 
             this.Pub1.AddTable("class='Table' cellspacing='0' cellpadding='0' border='0' style='width:100%'");
 
-            this.Pub1.AddCaption("内置JavaScript脚本" + BP.WF.Glo.GenerHelpCCForm("帮助", "", ""));
+          //  this.Pub1.AddCaption("内置JavaScript脚本" + BP.WF.Glo.GenerHelpCCForm("帮助", "", ""));
 
             TextBox tb = new TextBox();
             tb.ID = "TB_Doc";

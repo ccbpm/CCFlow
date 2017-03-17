@@ -8,7 +8,7 @@ namespace BP.Sys
     /// <summary>
     /// 属性
     /// </summary>
-    public class DefValAttr : EntityOIDAttr
+    public class DefValAttr : EntityMyPKAttr
     {
         /// <summary>
         /// 父节点编号

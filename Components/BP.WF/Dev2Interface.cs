@@ -76,7 +76,7 @@ namespace BP.WF
                 }
 
                 /*如果是授权状态, 获取当前委托人的信息. */
-                WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+                BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
                 switch (emp.HisAuthorWay)
                 {
                     case Port.AuthorWay.All:

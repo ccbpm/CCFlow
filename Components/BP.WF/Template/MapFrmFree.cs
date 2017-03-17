@@ -271,7 +271,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "内置JavaScript脚本"; // "设计表单";
+                rm.Title = "JS编程"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoInitScript";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Script.png";
                 rm.Visable = true;

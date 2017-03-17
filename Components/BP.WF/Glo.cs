@@ -854,23 +854,29 @@ namespace BP.WF
                 {
                     continue;
                 }
-                switch (table)
-                {
-                    case "WF_EmpWorks":
-                    case "WF_GenerEmpWorkDtls":
-                    case "WF_GenerEmpWorks":
-                    case "V_FlowData":
-                    case "Port_EmpDept":
-                        continue;
-                    case "Sys_Enum":
-                        en.CheckPhysicsTable();
-                        break;
-                    default:
-                        en.CheckPhysicsTable();
-                        break;
-                }
 
-                en.CheckPhysicsTable();
+                try
+                {
+                    switch (table)
+                    {
+                        case "WF_EmpWorks":
+                        case "WF_GenerEmpWorkDtls":
+                        case "WF_GenerEmpWorks":
+                        case "V_FlowData":
+                        case "Port_EmpDept":
+                            continue;
+                        case "Sys_Enum":
+                            en.CheckPhysicsTable();
+                            break;
+                        default:
+                            en.CheckPhysicsTable();
+                            break;
+                    }
+                    en.CheckPhysicsTable();
+                }
+                catch
+                {
+                }
                 //en.PKVal = "123";
                 //try
                 //{
@@ -932,7 +938,8 @@ namespace BP.WF
                 frmSort.No = "01";
                 frmSort.Name = "表单类别1";
                 frmSort.ParentNo = "0";
-                frmSort.Insert();
+                if (frmSort.IsExits == false)
+                    frmSort.Insert();
             }
 
             //删除这个数据, 没有找到，初始化这些数据失败的原因.

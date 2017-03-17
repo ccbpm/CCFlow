@@ -1868,7 +1868,6 @@
     <Content Include="WF\App\EasyUI\Menu\Setting.jpg" />
     <Content Include="WF\App\EasyUI\Menu\Start.jpg" />
     <Content Include="WF\App\EasyUI\MonthPlanCollect.aspx" />
-    <Content Include="WF\App\EasyUI\MonthPlanRePort.aspx" />
     <Content Include="WF\App\EasyUI\ProjectCheck.aspx" />
     <Content Include="WF\App\EasyUI\ProjectDelInfo.aspx" />
     <Content Include="WF\App\EasyUI\ProjectInfo.aspx" />
@@ -1881,7 +1880,6 @@
     <Content Include="WF\App\EasyUI\Start.aspx" />
     <Content Include="WF\App\EasyUI\StartHistory.aspx" />
     <Content Include="WF\App\EasyUI\StartTree.aspx" />
-    <Content Include="WF\App\EasyUI\UC\pub.ascx" />
     <Content Include="WF\App\EasyUI\Welcome.aspx" />
     <Content Include="WF\App\Setting\Auto.aspx" />
     <Content Include="WF\App\Setting\AutoDtl.aspx" />
@@ -10272,13 +10270,6 @@
     <Compile Include="WF\App\EasyUI\MonthPlanCollect.aspx.designer.cs">
       <DependentUpon>MonthPlanCollect.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\App\EasyUI\MonthPlanRePort.aspx.cs">
-      <DependentUpon>MonthPlanRePort.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\EasyUI\MonthPlanRePort.aspx.designer.cs">
-      <DependentUpon>MonthPlanRePort.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\App\EasyUI\ProjectCheck.aspx.cs">
       <DependentUpon>ProjectCheck.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10362,13 +10353,6 @@
     </Compile>
     <Compile Include="WF\App\EasyUI\StartTree.aspx.designer.cs">
       <DependentUpon>StartTree.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\EasyUI\UC\pub.ascx.cs">
-      <DependentUpon>pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\EasyUI\UC\pub.ascx.designer.cs">
-      <DependentUpon>pub.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\App\EasyUI\Welcome.aspx.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>

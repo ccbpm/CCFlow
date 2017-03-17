@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -135,6 +136,7 @@
     <Compile Include="UnitTesting\SendCase\Test001.cs" />
     <Compile Include="UnitTesting\TestCaseTemplete.cs" />
     <Compile Include="UnitTesting\SendMessage.cs" />
+    <Compile Include="WebContral\SDKFlowDemo_BPFramework_DataInputJQ.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

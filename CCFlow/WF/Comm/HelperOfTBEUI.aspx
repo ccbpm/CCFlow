@@ -103,7 +103,7 @@
                     { checkbox: true },
                     { field: 'CURVALUE', title: '', width: 100, align: 'left' }
                     ]],
-                    idField: 'OID',
+                    idField: 'MYPK',
                     selectOnCheck: false,
                     checkOnSelect: true,
                     singleSelect: true,
@@ -237,7 +237,7 @@
             var rows = $('#newsGrid').datagrid('getChecked');
             if (rows.length == 1) {
                 againText = rows[0].CURVALUE;
-                oid = rows[0].OID;
+                oid = rows[0].MYPK;
                 $('#TextArea').val(rows[0].CURVALUE);
                 $('#win').window('open');
                 $('#TextArea').focus();
@@ -264,7 +264,7 @@
                     if (r) {
                         var oids = '';
                         $.each(rows, function (n, value) {
-                            oids += value.OID + ",";
+                            oids += value.MYPK + ",";
                         });
                         params = {
                             method: "deleteData",

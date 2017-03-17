@@ -166,7 +166,7 @@ namespace CCFlow.WF.Comm
                     }
 
                     dv = new DefVal();
-                    dv.RetrieveByAttr(DefValAttr.OID, minOid);
+                    dv.RetrieveByAttr(DefValAttr.MyPK, minOid);
 
                     dv.Delete();
                 }
@@ -212,7 +212,7 @@ namespace CCFlow.WF.Comm
                         continue;
 
                     DefVal dv = new DefVal();
-                    dv.RetrieveByAttr(DefValAttr.OID, oid);
+                    dv.RetrieveByAttr(DefValAttr.MyPK, oid);
 
                     dv.Delete();
                 }
@@ -239,7 +239,7 @@ namespace CCFlow.WF.Comm
             try
             {
                 DefVal dv = new DefVal();
-                dv.RetrieveByAttr(DefValAttr.OID, oid);
+                dv.RetrieveByAttr(DefValAttr.MyPK, oid);
                 dv.CurValue = text;
                 dv.Update();
 

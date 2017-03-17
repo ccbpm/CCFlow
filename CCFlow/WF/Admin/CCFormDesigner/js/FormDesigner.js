@@ -550,17 +550,17 @@ function figure_MapAttr_Template(mapAttr) {
     //Image
     var url = figureSetsURL + "/DataView/" + f.CCForm_Shape + ".png";
 
-    var ifig = new ImageFrame(url, mapAttr.X  + mapAttr.UIWidth/2, mapAttr.Y  + mapAttr.UIHeight / 2, true, mapAttr.UIWidth, mapAttr.UIHeight);
+    var ifig = new ImageFrame(url, mapAttr.X + mapAttr.UIWidth / 2, mapAttr.Y + mapAttr.UIHeight / 2, true, mapAttr.UIWidth, mapAttr.UIHeight);
     ifig.debug = true;
     f.addPrimitive(ifig);
 
-    var t2 = new Text(mapAttr.KeyOfEn, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + FigureDefaults.radiusSize / 2 + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
-    t2.style.fillStyle = FigureDefaults.textColor;
-    f.addPrimitive(t2);
+    //var t2 = new Text(mapAttr.KeyOfEn, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + FigureDefaults.radiusSize / 2 + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    //t2.style.fillStyle = FigureDefaults.textColor;
+    //f.addPrimitive(t2);
 
     f.gradientBounds = [mapAttr.X, mapAttr.Y,
-        mapAttr.X + mapAttr.UIWidth + FigureDefaults.radiusSize,
-        mapAttr.Y + mapAttr.UIHeight + FigureDefaults.radiusSize];
+        mapAttr.X + mapAttr.UIWidth,
+        mapAttr.Y + mapAttr.UIHeight];
 
 
     f.finalise();
@@ -572,28 +572,53 @@ function figure_Template_Label(frmLab) {
     var f = new Figure('Label');
     //ccform Property
     f.CCForm_Shape = "Label";
-    f.style.fillStyle = FigureDefaults.fillStyle;
-   
+    //f.style.fillStyle = FigureDefaults.fillStyle;
+
     f.CCForm_MyPK = frmLab.MyPK;
     f.name = "Label";
     var x = frmLab.X;
     var y = frmLab.Y;
     f.properties.push(new BuilderProperty('基本属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT,frmLab.Text));
-    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE,frmLab.FontSize));
-    f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY,frmLab.FontName));
-    //f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
+    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLab.Text));
+    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE, "26px"));
+    f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY, frmLab.FontName));
+    f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
     f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
-    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT,frmLab.IsBold));
+    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT, (frmLab.IsBold == 1 ? "bold" : "normal")));
     f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR, frmLab.FontColor));
 
-    var t2 = new Text(frmLab.Text, frmLab.X + FigureDefaults.radiusSize / 2, frmLab.Y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
-    //var t2 = new Text(frmLab.Text, frmLab.X, frmLab.Y , FigureDefaults.textFont, FigureDefaults.textSize);
-    t2.style.fillStyle = FigureDefaults.textColor;
 
+    //var t2 = new Text(labelText, frmLab.X +  FigureDefaults.radiusSize / 2, frmLab.Y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    var labelText = frmLab.Text.replace(new RegExp(/@/g), "\n");
+    labelText = labelText.replace(new RegExp(/&nbsp;/g), " ");
+    var x = (frmLab.FontSize * getXByteLen(labelText)) / 4 + frmLab.X;
+    var y = ((frmLab.FontSize + 5) * getYByteLen(labelText)) / 2 + frmLab.Y;
+
+    var t2 = new Text(labelText, x, y, frmLab.FontName, frmLab.FontSize);
+    console.log(t2)
+    y = ((frmLab.FontSize + t2.lineSpacing) * getYByteLen(labelText)) / 2 + frmLab.Y;
+    t2 = new Text(labelText, x, y, frmLab.FontName, frmLab.FontSize);
+    var fontColor = frmLab.FontColor;
+    if (fontColor.indexOf('#') == 0 && fontColor.length == 9) {
+        fontColor = '#' + fontColor.substr(3);
+    }
+
+    if (frmLab.IsBold == 1) {
+        frmLab.FontWeight = "bold";
+    } else {
+        frmLab.FontWeight = "normal";
+    }
+    t2.style.fillStyle = fontColor//frmLab.FontColor;
+    t2.size = frmLab.FontSize;
+    t2.font = frmLab.FontName;
+    t2.fontWeight = frmLab.FontWeight;
+    t2.align = "left";
     f.addPrimitive(t2);
 
+    f.gradientBounds = [frmLab.X, frmLab.Y,
+        frmLab.X + (frmLab.FontSize * getXByteLen(labelText) / 2)+50,
+        frmLab.Y + ((frmLab.FontSize + 5) * getYByteLen(labelText))+50];
     f.finalise();
     return f;
 }
@@ -804,7 +829,7 @@ function figure_Template_Image(frmImage) {
     var url = figureSetsURL + "/basic/TempleteFile.png";
     var x = frmImage.X+frmImage.W/2;
     var y = frmImage.Y+frmImage.H/2;
-    var ifig = new ImageFrame(url, x , y , true, frmImage.H, frmImage.W);
+    var ifig = new ImageFrame(url, x , y , true, frmImage.W, frmImage.H);
     ifig.debug = true;
     f.addPrimitive(ifig);
 
@@ -982,9 +1007,9 @@ function figure_Template_Dtl(frmDtl) {
     ifig.debug = true;
     f.addPrimitive(ifig);
     //Text
-    var t2 = new Text(frmDtl.Name, x + frmDtl.W / 2 + FigureDefaults.radiusSize / 2, y + frmDtl.H / 2 + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
-    t2.style.fillStyle = FigureDefaults.textColor;
-    f.addPrimitive(t2);
+    //var t2 = new Text(frmDtl.Name, x + frmDtl.W / 2 + FigureDefaults.radiusSize / 2, y + frmDtl.H / 2 + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    //t2.style.fillStyle = FigureDefaults.textColor;
+    //f.addPrimitive(t2);
 
     f.finalise();
     return f;
@@ -1011,4 +1036,32 @@ function connector_Template_Line(frmLine) {
     //connector.properties.push(new BuilderProperty('粗细', "LineWidth", 'style.lineWidth',frmLine.BorderWidth));
     //connector.properties.push(new BuilderProperty('颜色', "Color", 'style.strokeStyle', frmLine.Color));
 
+}
+
+function getXByteLen(valObj) {
+    var valArr = valObj.split('\n');
+    var resultLen = 0;
+    var len = 0;
+    for (var j = 0; j < valArr.length; j++) {
+        var val = valArr[j];
+        for (var i = 0; i < val.length; i++) {
+            var length = val.charCodeAt(i);
+            if (length >= 0 && length <= 128) {
+                len += 1;
+            }
+            else {
+                len += 2;
+            }
+        }
+        if (len > resultLen) {
+            resultLen = len;
+        }
+        len = 0;
+    }
+    return resultLen;
+}
+
+function getYByteLen(valObj) {
+    var valArr = valObj.split('\n');
+    return valArr.length;
 }

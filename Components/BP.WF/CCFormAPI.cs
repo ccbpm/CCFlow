@@ -256,6 +256,14 @@ namespace BP.WF
 					dtls.GetNewEntity.CheckPhysicsTable();
 				}
 
+                //条件过滤.
+                if (dtl.FilterSQLExp != "")
+                {
+                    string[] strs = dtl.FilterSQLExp.Split('=');
+                    qo.addAnd();
+                    qo.AddWhere(strs[0], strs[1]);
+                }
+
 				//从表
 				DataTable dtDtl = qo.DoQueryToTable();
 

@@ -5,6 +5,20 @@ using BP.En;
 namespace BP.Sys
 {
     /// <summary>
+    /// 运行模式
+    /// </summary>
+    public enum AthRunModel
+    {
+        /// <summary>
+        /// 记录模式
+        /// </summary>
+        RecordModel,
+        /// <summary>
+        /// 固定模式
+        /// </summary>
+        FixModel
+    }
+    /// <summary>
     /// 上传校验,方式.
     /// </summary>
     public enum UploadFileNumCheck
@@ -124,6 +138,10 @@ namespace BP.Sys
         /// 主表
         /// </summary>
         public const string FK_MapData = "FK_MapData";
+        /// <summary>
+        /// 运行模式
+        /// </summary>
+        public const string AthRunModel = "AthRunModel";
         /// <summary>
         /// 节点ID
         /// </summary>
@@ -250,7 +268,6 @@ namespace BP.Sys
         /// 附件删除方式
         /// </summary>
         public const string DeleteWay = "DeleteWay";
-
 
         #region weboffice属性。
         /// <summary>
@@ -411,6 +428,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmAttachmentAttr.FK_Node, value);
+            }
+        }
+        /// <summary>
+        /// 运行模式？
+        /// </summary>
+        public AthRunModel AthRunModel
+        {
+            get
+            {
+                return (AthRunModel)this.GetValIntByKey(FrmAttachmentAttr.AthRunModel);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.AthRunModel, (int)value);
             }
         }
         /// <summary>
@@ -1083,6 +1114,9 @@ namespace BP.Sys
                 map.AddTBString(FrmAttachmentAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
                 map.AddTBString(FrmAttachmentAttr.NoOfObj, null, "附件编号", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentAttr.FK_Node, 0, "节点控制(对sln有效)", false, false);
+
+                //for渔业厅增加.
+                map.AddTBInt(FrmAttachmentAttr.AthRunModel, 0, "运行模式", false, false);
 
                 map.AddTBString(FrmAttachmentAttr.Name, null, "名称", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "要求上传的格式", true, false, 0, 50, 20);

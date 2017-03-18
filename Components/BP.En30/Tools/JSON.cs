@@ -342,45 +342,20 @@ namespace BP.Tools
         public static string ToJson(Hashtable ht)
         {
             bool isNoNameFormat = false;
-            if (isNoNameFormat == true)
+
+            DataTable dt = new DataTable();
+            foreach (string key in ht.Keys)
             {
-                /*如果是datatable 模式. */
-                DataTable dt = new DataTable();
-                dt.TableName = "HT";  //此表名不能修改.
-                dt.Columns.Add(new DataColumn("No", typeof(string)));
-                dt.Columns.Add(new DataColumn("Name", typeof(string)));
-                foreach (string key in ht.Keys)
-                {
-                    if (key == null || key == "")
-                        continue;
-
-                    DataRow dr = dt.NewRow();
-                    dr["No"] = key;
-
-                    var v = ht[key] as string;
-                    if (v == null)
-                        v = "";
-                    dr["Name"] = v;
-                    dt.Rows.Add(dr);
-                }
-                return ToJson(dt);
+                dt.Columns.Add(key);
             }
-            else
+
+            List<object> l = new List<object>();
+            foreach (string key in ht.Keys)
             {
-                DataTable dt = new DataTable();
-                foreach (string key in ht.Keys)
-                {
-                    dt.Columns.Add(key);
-                }
-
-                List<object> l = new List<object>();
-                foreach (string key in ht.Keys)
-                {
-                    l.Add(ht[key]);
-                }
-                dt.Rows.Add(l.ToArray());
-                return ToJson(dt);
+                l.Add(ht[key]);
             }
+            dt.Rows.Add(l.ToArray());
+            return ToJson(dt);
         }
         /// <summary>
         /// Datatable转换为Json

@@ -1474,8 +1474,6 @@ namespace BP.En
         {
             if (this.EnMap.DepositaryOfEntity != Depositary.Application)
                 return;
-
-
             ///删除缓存。
             BP.DA.CashEntity.Delete(this.ToString(), this.PKVal.ToString());
             return;

@@ -250,14 +250,25 @@ namespace BP.WF.HttpHandler
         }
         #endregion 属性.
 
-
         public string DoMethod(object myEn,  string methodName)
         {
+            
             Type tp = myEn.GetType();
             MethodInfo mp = tp.GetMethod(methodName);
             if (mp == null)
-                throw new Exception("@对象实例[" + tp.FullName + "]中没有找到方法[" + methodName + "]！");
+            {
+                /* 没有找到方法名字，就执行默认的方法. */
+                try
+                {
+                    return this.DoDefaultMethod();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.InnerException.Message);
+                }
+            }
 
+            //执行该方法.
             object[] paras = null;
             try
             {
@@ -267,6 +278,14 @@ namespace BP.WF.HttpHandler
             {
                 throw new Exception(ex.InnerException.Message);
             }
+        }
+        /// <summary>
+        /// 执行默认的方法名称
+        /// </summary>
+        /// <returns>返回执行的结果</returns>
+        protected virtual string DoDefaultMethod()
+        {
+            return null;
         }
     }
 }

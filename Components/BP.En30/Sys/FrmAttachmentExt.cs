@@ -780,7 +780,11 @@ namespace BP.Sys
                 map.AddTBString(FrmAttachmentAttr.NoOfObj, null, "附件编号", true, true, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentAttr.FK_Node, 0, "节点控制(对sln有效)", false, false);
 
-                map.AddTBString(FrmAttachmentAttr.Name, null, "附件名称", true, false, 0, 50, 20);
+                //for渔业厅增加.
+                map.AddDDLSysEnum(FrmAttachmentAttr.AthRunModel, 0, "运行模式", true, true, FrmAttachmentAttr.AthRunModel,
+                  "@0=流水模式@1=固定模式");
+
+                map.AddTBString(FrmAttachmentAttr.Name, null, "附件名称", true, false, 0, 50, 20,true);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "文件格式(*.*,*.doc)", true, false, 0, 50, 20, true, null);
                 
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20,true,null);
@@ -809,7 +813,8 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsAutoSize, true, "自动控制大小", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsNote, true, "是否增加备注", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", true, true);
-                map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false, FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
+                map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false,
+                    FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
 
                 //对于父子流程有效.
                  //map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", true, false);
@@ -863,12 +868,26 @@ namespace BP.Sys
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "类别设置";
+                rm.ClassMethodName = this.ToString() + ".DoSettingSort";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
 
+        /// <summary>
+        /// 固定模式类别设置
+        /// </summary>
+        /// <returns></returns>
+        public string DoSettingSort()
+        {
+            return "/WF/Admin/FoolFormDesigner/AttachmentSortSetting.htm?FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&Ath=" + this.NoOfObj;
+        }
         /// <summary>
         /// 执行高级设置.
         /// </summary>

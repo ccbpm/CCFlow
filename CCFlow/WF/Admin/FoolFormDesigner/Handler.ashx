@@ -1,1 +1,1 @@
-﻿<%@ WebHandler Language="C#" CodeBehind="Handler.ashx.cs" Class="CCFlow.WF.Admin.FoolFormDesigner.Handler" %>
+﻿<%@ WebHandler Language="C#" CodeBehind="Handler.ashx.cs" Class="CCFlow.WF.Admin.AttrFlow.Handler" %>

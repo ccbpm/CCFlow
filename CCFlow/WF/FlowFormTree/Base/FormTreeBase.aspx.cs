@@ -795,7 +795,10 @@ namespace CCFlow.WF.FlowFormTree
                         break;
                     case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
                         string frms = this.Request.QueryString["Frms"];
-                        if (frms != null && frms.Contains(frmNode.FK_Frm) == true)
+                        if (frms != null && frms.Contains(",")==false)
+                            frms = frms + ",";
+
+                        if (frms != null && frms.Contains(frmNode.FK_Frm+",") == true)
                         {
                             /*包含这个表单.*/
                         }

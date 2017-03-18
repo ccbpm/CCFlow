@@ -82,7 +82,7 @@ namespace CCFlow.WF.SheetTree
                 {
                     if (this.Request.QueryString["WorkID"] != null)
                     {
-                        string sql = "SELECT FK_Node from  WF_GenerWorkFlow where WorkID=" + this.WorkID;
+                        string sql = "SELECT FK_Node FROM  WF_GenerWorkFlow WHERE WorkID=" + this.WorkID;
                         _FK_Node = DBAccess.RunSQLReturnValInt(sql,0);
                         if (_FK_Node == 0)
                             _FK_Node= int.Parse(this.FK_Flow + "01");

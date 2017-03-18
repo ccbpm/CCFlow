@@ -259,6 +259,20 @@ namespace BP.Sys
                 this.SetPara("IsRichText", value);
             }
         }
+        /// <summary>
+        /// 是否启用二维码？
+        /// </summary>
+        public bool IsEnableQrCode
+        {
+            get
+            {
+                return this.GetParaBoolen("IsEnableQrCode", false);
+            }
+            set
+            {
+                this.SetPara("IsEnableQrCode", value);
+            }
+        }
         #endregion
 
         #region 数值字段参数属性,2017-1-9,liuxc

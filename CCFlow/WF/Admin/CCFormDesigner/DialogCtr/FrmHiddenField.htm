@@ -21,15 +21,19 @@
                 return;
             }
 
-            records = DataSet.KeyOfEn;
-          
-            var params = {
-                action: "HiddenFieldDelete",
-                FK_MapData: FK_MapData,
-                records: records
-            };
+            $.messager.confirm('警告', '请确认是否删除', function (e) {
+                if (e) {
+                    records = DataSet.KeyOfEn;
 
-            ajaxService(params, DeleteInformation, this);
+                    var params = {
+                        action: "HiddenFieldDelete",
+                        FK_MapData: FK_MapData,
+                        records: records
+                    };
+
+                    ajaxService(params, DeleteInformation, this);
+                }
+            })
 
         }
         //删除反馈信息

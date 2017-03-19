@@ -33,6 +33,7 @@ $(function () {
 function InitContexMenu() {
     //画板右键
     $("#a").bind('contextmenu', function (ev) {
+        dd = ev;
         var coords = getCanvasXY(ev);
         var x = coords[0];
         var y = coords[1];
@@ -554,9 +555,11 @@ function figure_MapAttr_Template(mapAttr) {
     ifig.debug = true;
     f.addPrimitive(ifig);
 
-    //var t2 = new Text(mapAttr.KeyOfEn, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + FigureDefaults.radiusSize / 2 + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
-    //t2.style.fillStyle = FigureDefaults.textColor;
-    //f.addPrimitive(t2);
+    if (f.CCForm_Shape == "TextBoxBoolean") {
+        var t2 = new Text(mapAttr.Name, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + FigureDefaults.radiusSize / 2 + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+        t2.style.fillStyle = FigureDefaults.textColor;
+        f.addPrimitive(t2);
+    }
 
     f.gradientBounds = [mapAttr.X, mapAttr.Y,
         mapAttr.X + mapAttr.UIWidth,
@@ -578,15 +581,26 @@ function figure_Template_Label(frmLab) {
     f.name = "Label";
     var x = frmLab.X;
     var y = frmLab.Y;
+    var fontColor = frmLab.FontColor;
+    if (fontColor.indexOf('#') == 0 && fontColor.length == 9) {
+        fontColor = '#' + fontColor.substr(3);
+    }
+
+    if (frmLab.IsBold == 1) {
+        frmLab.FontWeight = "bold";
+    } else {
+        frmLab.FontWeight = "normal";
+    }
+
     f.properties.push(new BuilderProperty('基本属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
     f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLab.Text));
-    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE, "26px"));
+    f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE, frmLab.FontSize));
     f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY, frmLab.FontName));
     f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
     f.properties.push(new BuilderProperty('下划线', 'primitives.0.underlined', BuilderProperty.TYPE_TEXT_UNDERLINED));
-    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT, (frmLab.IsBold == 1 ? "bold" : "normal")));
-    f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR, frmLab.FontColor));
+    f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT, frmLab.FontWeight));
+    f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR, fontColor));
 
 
     //var t2 = new Text(labelText, frmLab.X +  FigureDefaults.radiusSize / 2, frmLab.Y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
@@ -599,16 +613,7 @@ function figure_Template_Label(frmLab) {
     console.log(t2)
     y = ((frmLab.FontSize + t2.lineSpacing) * getYByteLen(labelText)) / 2 + frmLab.Y;
     t2 = new Text(labelText, x, y, frmLab.FontName, frmLab.FontSize);
-    var fontColor = frmLab.FontColor;
-    if (fontColor.indexOf('#') == 0 && fontColor.length == 9) {
-        fontColor = '#' + fontColor.substr(3);
-    }
-
-    if (frmLab.IsBold == 1) {
-        frmLab.FontWeight = "bold";
-    } else {
-        frmLab.FontWeight = "normal";
-    }
+    
     t2.style.fillStyle = fontColor//frmLab.FontColor;
     t2.size = frmLab.FontSize;
     t2.font = frmLab.FontName;
@@ -975,7 +980,8 @@ function figure_Template_Dtl(frmDtl) {
     //ccform Property
     f.CCForm_Shape = CCForm_Controls.Dtl;
     f.name = "TextBox";
-    f.CCForm_MyPK = frmDtl.NoOfObj;
+
+    f.CCForm_MyPK = frmDtl.No;
     f.style.fillStyle = FigureDefaults.fillStyle;
     f.style.strokeStyle = FigureDefaults.strokeStyle;
 
@@ -1031,8 +1037,8 @@ function connector_Template_Line(frmLine) {
 
     var connectorCreate = CONNECTOR_MANAGER.connectorGetById(cId);
     connectorCreate.properties[2].PropertyValue = frmLine.BorderWidth;
-    connectorCreate.properties[3].PropertyValue = frmLine.Color;
-    draw();
+    connectorCreate.properties[3].PropertyValue = frmLine.BorderColor;
+    //draw();
     //connector.properties.push(new BuilderProperty('粗细', "LineWidth", 'style.lineWidth',frmLine.BorderWidth));
     //connector.properties.push(new BuilderProperty('颜色', "Color", 'style.strokeStyle', frmLine.Color));
 

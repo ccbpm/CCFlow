@@ -110,7 +110,7 @@ CCForm_Control_Propertys = {
     TextBoxInt: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '0', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
-                  { proName: 'UIIsEnable', ProText: '是否可编辑', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'UIVisible', ProText: '是否可见', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   //{ proName: 'WinPOP', ProText: '设置开窗返回值', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/PopVal.aspx?FK_MapData=@FrmID@&RefNo=@KeyOfEn@&MyPK=PopVal_@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'Expression', ProText: '正则表达式', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.aspx?FK_MapData=@FrmID@&RefNo=@KeyOfEn@&OperAttrKey=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
@@ -120,7 +120,7 @@ CCForm_Control_Propertys = {
     TextBoxFloat: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '0', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
-                  { proName: 'UIIsEnable', ProText: '是否可编辑', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   //{ proName: 'UIVisible', ProText: '是否可见', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'Expression', ProText: '正则表达式', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.aspx?FK_MapData=@FrmID@&RefNo=@KeyOfEn@&OperAttrKey=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'AutoFull', ProText: '自动计算', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
@@ -128,7 +128,7 @@ CCForm_Control_Propertys = {
     TextBoxMoney: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '0.00', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
-                  { proName: 'UIIsEnable', ProText: '是否可编辑', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   //{ proName: 'UIVisible', ProText: '是否可见', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'Expression', ProText: '正则表达式', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.aspx?FK_MapData=@FrmID@&RefNo=@KeyOfEn@&OperAttrKey=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'AutoFull', ProText: '自动计算', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
@@ -136,7 +136,7 @@ CCForm_Control_Propertys = {
     TextBoxDate: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '@RDT', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
-                  { proName: 'UIIsEnable', ProText: '是否可编辑', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   //{ proName: 'UIVisible', ProText: '是否可见', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'Expression', ProText: '正则表达式', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.aspx?FK_MapData=@FrmID@&RefNo=@KeyOfEn@&OperAttrKey=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'AutoFull', ProText: '自动计算', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
@@ -144,7 +144,7 @@ CCForm_Control_Propertys = {
     TextBoxDateTime: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '@RDT', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
-                  { proName: 'UIIsEnable', ProText: '是否可编辑', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                  // { proName: 'UIVisible', ProText: '是否可见', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'Expression', ProText: '正则表达式', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.aspx?FK_MapData=@FrmID@&RefNo=@KeyOfEn@&OperAttrKey=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'AutoFull', ProText: '自动计算', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
@@ -152,7 +152,7 @@ CCForm_Control_Propertys = {
     TextBoxBoolean: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '0', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
-                  { proName: 'UIIsEnable', ProText: '是否可编辑', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'AutoFull', ProText: '自动计算', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
                  ],
     DropDownListEnum: [{ proName: 'FieldText', ProText: '中文名', DefVal: 'FieldText', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
@@ -160,6 +160,7 @@ CCForm_Control_Propertys = {
                   { proName: 'UIBindKey', ProText: '枚举键', DefVal: 'UIBindKey', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
                   { proName: 'AutoFullDLL', ProText: '设置列表过滤', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'ActiveDDL', ProText: '设置联动(如:省份，城市联动)', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'DDLFullCtrl', ProText: '设置下拉框自动完成', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
                  ],
@@ -167,6 +168,7 @@ CCForm_Control_Propertys = {
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'UIBindKey', ProText: '枚举键', DefVal: 'UIBindKey', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'AutoFullDLL', ProText: '设置列表过滤', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'ActiveDDL', ProText: '设置联动(如:省份，城市联动)', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'DDLFullCtrl', ProText: '设置下拉框自动完成', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }
@@ -175,6 +177,7 @@ CCForm_Control_Propertys = {
                   { proName: 'KeyOfEn', ProText: '英文名', DefVal: 'KeyOfEn', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'UIBindKey', ProText: '外键/外部表', DefVal: 'UIBindKey', DType: 'string', ProType: BuilderProperty.TYPE_SINGLE_TEXT_ReadOnly },
                   { proName: 'DefVal', ProText: '默认值', DefVal: '0', DType: 'int', ProType: BuilderProperty.TYPE_SINGLE_TEXT },
+                  { proName: 'UIIsEnable', ProText: '是否可编辑', DefVal: '1', DType: 'enum', ProType: BuilderProperty.CCFormEnum },
                   { proName: 'AutoFullDLL', ProText: '设置列表过滤', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'ActiveDDL', ProText: '设置联动(如:省份，城市联动)', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink },
                   { proName: 'DDLFullCtrl', ProText: '设置下拉框自动完成', DefVal: '/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.aspx?FK_MapData=@FrmID@&ExtType=AutoFull&RefNo=@FrmID@_@KeyOfEn@', DType: 'href', ProType: BuilderProperty.CCFormLink }

@@ -277,7 +277,6 @@ ImageFrame.prototype = {
     paint : function(context){
         if(this.loaded){
             context.save();
-
             //get rotation angle
             var angle = Util.getAngle(this.vector[0],this.vector[1]);
 
@@ -300,6 +299,9 @@ ImageFrame.prototype = {
             //find new scalled width and height
             var imgScaledWidth = this.image.width * ratio;
             var imgScaleHeight = this.image.height * ratio;
+            //重新设置，使背景图片平铺显示
+            imgScaledWidth = this.frameWidth;
+            imgScaleHeight = this.frameHeight;
             Log.info("ImageFrame.paint(): imgScaledWidth: " + imgScaledWidth + " imgScaleHeight: " + imgScaleHeight);
 
             //draw image

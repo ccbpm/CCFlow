@@ -7,7 +7,7 @@
 $.messager.defaults.ok = "确定";
 $.messager.defaults.cancel = "取消";
 
-function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs, dockObj) {
+function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs, dockObj, dlgClosedFunc) {
     ///<summary>使用EasyUiDialog打开一个页面</summary>
     ///<param name="url" type="String">页面链接</param>
     ///<param name="iframeId" type="String">嵌套url页面的iframe的id，在okBtnFunc中，可以通过document.getElementById('eudlgframe').contentWindow获取该页面，然后直接调用该页面的方法，比如获取选中值</param>
@@ -19,6 +19,7 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
     ///<param name="okBtnFunc" type="Function">点击“确定”按钮调用的方法</param>
     ///<param name="okBtnFuncArgs" type="Object">okBtnFunc方法使用的参数</param>
     ///<param name="dockObj" type="Object">Dialog绑定的dom对象，随此dom对象有尺寸变化而变化，如：document.getElementById('mainDiv')</param>
+    ///<param name="dlgClosedFunc" type="Function">窗体关闭调用的方法（注意：此方法中不能再调用dialog中页面的内容）</param>
 
     //    var inIframe = window.frameElement != null && window.frameElement.nodeName == 'IFRAME',
     //        doc = inIframe ? window.parent.document : window.document;
@@ -70,6 +71,10 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
         onClose: function () {
             /*防止缓存，切换页面不能显示问题*/
             $("#eudlg").remove();
+
+            if (dlgClosedFunc) {
+                dlgClosedFunc();
+            }
         },
         cache: false
     });
@@ -100,6 +105,10 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
             buttons: null,
             onClose: function () {
                 dlg.find("iframe").attr('src', '');
+
+                if (dlgClosedFunc) {
+                    dlgClosedFunc();
+                }
             }
         });
     }

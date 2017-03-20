@@ -23,6 +23,50 @@ namespace BP.WF.HttpHandler
 {
     abstract public class WebContralBase
     {
+        /// <summary>
+        /// 执行方法
+        /// </summary>
+        /// <param name="obj">对象名</param>
+        /// <param name="methodName">方法</param>
+        /// <returns>返回执行的结果，执行错误抛出异常</returns>
+        public string DoMethod(WebContralBase myEn, string methodName)
+        {
+            Type tp = myEn.GetType();
+            MethodInfo mp = tp.GetMethod(methodName);
+            if (mp == null)
+            {
+                /* 没有找到方法名字，就执行默认的方法. */
+                try
+                {
+                    return myEn.DoDefaultMethod();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("@执行:DoDefaultMethod[" + myEn.ToString() + "]出现错误" + ex.InnerException.Message);
+                }
+            }
+
+            //执行该方法.
+            object[] paras = null;
+            try
+            {
+                return mp.Invoke(this, paras) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("@执行:[" + myEn.ToString() + "]" + ex.InnerException.Message);
+            }
+        }
+        /// <summary>
+        /// 执行默认的方法名称
+        /// </summary>
+        /// <returns>返回执行的结果</returns>
+        protected virtual string DoDefaultMethod()
+        {
+            return "err@执行类["+this.ToString()+"]没有找到要执行的标记:" + this.DoType;
+        }
+
+
         #region 属性.
         /// <summary>
         /// 编号
@@ -250,42 +294,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 属性.
 
-        public string DoMethod(object myEn,  string methodName)
-        {
-            
-            Type tp = myEn.GetType();
-            MethodInfo mp = tp.GetMethod(methodName);
-            if (mp == null)
-            {
-                /* 没有找到方法名字，就执行默认的方法. */
-                try
-                {
-                    return this.DoDefaultMethod();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.InnerException.Message);
-                }
-            }
-
-            //执行该方法.
-            object[] paras = null;
-            try
-            {
-                return mp.Invoke(this, paras) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.InnerException.Message);
-            }
-        }
-        /// <summary>
-        /// 执行默认的方法名称
-        /// </summary>
-        /// <returns>返回执行的结果</returns>
-        protected virtual string DoDefaultMethod()
-        {
-            return null;
-        }
+      
     }
 }

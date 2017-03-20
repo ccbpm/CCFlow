@@ -269,7 +269,10 @@ namespace BP.WF.HttpHandler
             }
             return "保存成功";
         }
-
+        /// <summary>
+        /// 保存分组
+        /// </summary>
+        /// <returns></returns>
         public string GroupField_SaveCheck()
         {
             string lab = this.GetValFromFrmByKey("TB_Check_Name");
@@ -373,7 +376,6 @@ namespace BP.WF.HttpHandler
 
             return "保存成功.";
         }
-
         /// <summary>
         /// 框架信息.
         /// </summary>

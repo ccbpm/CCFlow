@@ -25,7 +25,6 @@ namespace BP.WF.HttpHandler
             //创建 ctrl 对象.
             WebContralBase ctrl = Activator.CreateInstance(CtrlType, context) as WebContralBase;
 
-
             try
             {
                 //获得执行的方法.

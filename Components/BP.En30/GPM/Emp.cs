@@ -57,6 +57,15 @@ namespace BP.GPM
         /// </summary>
         public const string Leader = "Leader";
         #endregion
+
+        /// <summary>
+        /// 部门描述
+        /// </summary>
+        public const string DeptDesc = "DeptDesc";
+        /// <summary>
+        /// 岗位描述
+        /// </summary>
+        public const string StaDesc = "StaDesc";
     }
     /// <summary>
     /// 操作员 的摘要说明。
@@ -202,6 +211,48 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.Email, value);
             }
         }
+        /// <summary>
+        /// 部门描述
+        /// </summary>
+        public string DeptDesc
+        {
+            get
+            {
+                return this.GetValStrByKey(EmpAttr.DeptDesc);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.DeptDesc, value);
+            }
+        }
+        /// <summary>
+        /// 岗位描述
+        /// </summary>
+        public string StaDesc
+        {
+            get
+            {
+                return this.GetValStrByKey(EmpAttr.StaDesc);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.StaDesc, value);
+            }
+        }
+        /// <summary>
+        /// 部门数量
+        /// </summary>
+        public int NumOfDept
+        {
+            get
+            {
+                return this.GetValIntByKey(EmpAttr.NumOfDept);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.NumOfDept, value);
+            }
+        }
 
         public string Leader
         {
@@ -332,6 +383,9 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
                 map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132);
+
+                map.AddTBString(EmpAttr.DeptDesc, null, "部门描述", true, false, 0, 300, 132);
+                map.AddTBString(EmpAttr.StaDesc, null, "岗位描述", true, false, 0, 300, 132);
                 map.AddTBInt(EmpAttr.NumOfDept, 0, "部门数量", true, false);
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
@@ -358,6 +412,43 @@ namespace BP.GPM
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            DeptEmpStations des = new DeptEmpStations();
+            des.Retrieve(DeptEmpStationAttr.FK_Emp, this.No);
+
+            string depts = "";
+            string stas = "";
+
+            foreach (DeptEmpStation item in des)
+            {
+                BP.GPM.Dept dept = new BP.GPM.Dept();
+                dept.No = item.FK_Dept;
+                if (dept.RetrieveFromDBSources() == 0)
+                {
+                    item.Delete();
+                    continue;
+                }
+
+                BP.Port.Station sta = new Port.Station();
+                sta.No = item.FK_Station;
+                if (sta.RetrieveFromDBSources() == 0)
+                {
+                    item.Delete();
+                    continue;
+                }
+
+                stas += "@" + dept.NameOfPath + "|" + sta.Name;
+                depts += "@" + dept.NameOfPath;
+
+            }
+
+            this.DeptDesc = depts;
+            this.StaDesc = stas;
+
+            return base.beforeUpdateInsertAction();
         }
 
         /// <summary>

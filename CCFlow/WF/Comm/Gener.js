@@ -101,7 +101,7 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
         success: function (data) {
             data = JSON.parse(data);
             //绑定枚举值.
-            GenerBindDDL(ctrlDDLId, data, "IntKey", "Lab");
+            GenerBindDDL(ctrlDDLId, data, "IntKey", "Lab", selectVal);
             return;
         }
     });
@@ -208,14 +208,13 @@ function GenerFullAllCtrlsVal(data) {
         // textbox
         var tb = document.getElementById('TB_' + attr);
         if (tb != null) {
+            if (tb.tagName.toLowerCase() != "input") {
+                tb.innerHTML = val;
+            }
+            else {
+                tb.value = val;
+            }
 
-            tb.value = val;
-
-            //  try{
-            //  tb.innerHTML = val;
-            //   }catch
-            //  {
-            //  }
             continue;
         }
 

@@ -113,14 +113,13 @@
             };
 
             Handler_AjaxQueryData(param, function (data, scope) {
-                var treeData = eval('(' + data + ')');
-
-                if (!treeData.success) {
-                    alert(treeData.msg);
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
                     return;
                 }
 
-                $("#treeEmps").tree("loadData", treeData.data.InnerData);
+                var treeData = eval('(' + data + ')');
+                $("#treeEmps").tree("loadData", treeData.InnerData);
 
                 //获取当前节点绑定的人员
                 GetNodeEmps(PAGESIZE, 1);
@@ -152,14 +151,13 @@
             }
 
             Handler_AjaxQueryData(param, function (data, scope) {
-                var redata = eval('(' + data + ')');
-
-                if (!redata.success) {
-                    alert(redata.msg);
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
                     return;
                 }
 
-                deptemps = redata.data.InnerData.DeptEmps;
+                var redata = eval('(' + data + ')');
+                deptemps = redata.InnerData.DeptEmps;
 
                 //更新部门人员中的选中状态
                 var idx = -1;
@@ -170,18 +168,18 @@
                     if (this.Checked) {
                         if (idx == -1) {
                             this.Checked = false;
-                            SetEmpChecked(redata.data.InnerData.TreeData[0], this.No, false);
+                            SetEmpChecked(redata.InnerData.TreeData[0], this.No, false);
                         }
                     }
                     else {
                         if (idx != -1) {
                             this.Checked = true;
-                            SetEmpChecked(redata.data.InnerData.TreeData[0], this.No, true);
+                            SetEmpChecked(redata.InnerData.TreeData[0], this.No, true);
                         }
                     }
                 });
 
-                $("#treeEmps").tree("loadData", redata.data.InnerData.TreeData);
+                $("#treeEmps").tree("loadData", redata.InnerData.TreeData);
             }, this);
         }
 
@@ -196,14 +194,13 @@
             $("#save").linkbutton("disable");
 
             Handler_AjaxQueryData(param, function (data, scope) {
-                var redata = eval('(' + data + ')');
-
-                if (!redata.success) {
-                    alert(redata.msg);
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
                     return;
                 }
 
-                nodeemps = redata.data.InnerData;
+                var redata = eval('(' + data + ')');
+                nodeemps = redata.InnerData;
                 $("#save").linkbutton("enable");
                 ShowSelectedEmps();
             }, this);
@@ -400,16 +397,15 @@
                 param.data = savedatas.shift();
 
                 Handler_AjaxQueryData(param, function (data, scope) {
-                    var redata = eval('(' + data + ')');
-
                     $("#save").linkbutton("enable");
 
-                    if (!redata.success) {
-                        alert(redata.msg);
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
                         return;
                     }
 
-                    alert(redata.data.Msg);
+                    var redata = eval('(' + data + ')');
+                    alert(redata.Msg);
                     ShowSelectedEmps();
                 }, this);
                 return;
@@ -425,16 +421,17 @@
 
         function SavePart(param) {
             Handler_AjaxQueryData(param, function (data, scope) {
-                var redata = eval('(' + data + ')');
-
-                if (!redata.success) {
-                    alert(redata.msg);
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
                     alert("保存过程中出现错误，已经保存部分数据，请手动刷新本页面，重新设置！");
+                    $("#save").linkbutton("enable");
                     return;
                 }
 
-                if (redata.data.InnerData.lastpart) {
-                    alert(redata.data.Msg);
+                var redata = eval('(' + data + ')');
+
+                if (redata.InnerData.lastpart) {
+                    alert(redata.Msg);
                     $("#save").linkbutton("enable");
                     partidx = 0;
                     partcount = 0;

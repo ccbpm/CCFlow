@@ -807,12 +807,6 @@ namespace BP.WF.HttpHandler
             public bool Checked { get; set; }
             public string Code { get; set; }
         }
-
-        public class JsonResultInnerData
-        {
-            public string Msg { get; set; }
-            public object InnerData { get; set; }
-        }
         #endregion 辅助实体定义
     }
 }

@@ -18,7 +18,7 @@ namespace CCFlow.WF.Admin.AttrNode
         {
             get
             {
-                return typeof(BP.WF.HttpHandler.WF_Admin_AttrFlow);
+                return typeof(BP.WF.HttpHandler.WF_Admin_AttrNode);
             }
         }
     }

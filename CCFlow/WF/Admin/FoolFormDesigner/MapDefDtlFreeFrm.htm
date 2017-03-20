@@ -210,7 +210,9 @@
         }
 
         function EditDtlHtm(fk_mapData, dtlKey) {
+
             var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + dtlKey;
+            //  window.location.href = url; //  window.location.href;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
             window.location.href = window.location.href;
         }

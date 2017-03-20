@@ -24,6 +24,8 @@
               //明细表ID.
               var fk_mapDtl = GetQueryString("FK_MapDtl");
 
+              var myurl = Handler + "?DoType=DtlAttrs&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&m=" + Math.random();
+
               //初始化 GroupID.
               $.ajax({
                   type: 'post',
@@ -33,8 +35,6 @@
                   success: function (data) {
 
                       data = JSON.parse(data);
-
-                     // this.Pub1.Add(dtl.MTR);
 
                       $("#trTitle").append("<th>序</th>");
 
@@ -64,7 +64,7 @@
                           if (lgType == 2) {
                               nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
                           }
-                          var col = "<th><a href=\"javascript:Up('"+fk_mapData+"','" + mypk + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('"+fk_mapData+"','" + mypk + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
+                          var col = "<th><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
                           $("#trTitle").append(col);
                       }
 
@@ -84,7 +84,7 @@
                       }
 
 
-                    
+
                   }
               });
 

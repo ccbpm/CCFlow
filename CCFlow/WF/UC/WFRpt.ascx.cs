@@ -344,7 +344,9 @@ namespace CCFlow.WF.UC
                 /* 涉及到多个表单的情况...*/
                 if (nd.HisFormType == NodeFormType.SheetTree)
                 {
-                    Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?WorkID=" + workid + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + "&FK_Node=" + nd.NodeID + "&CWorkID=" + this.CWorkID);
+                   // Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?WorkID=" + workid + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + "&FK_Node=" + nd.NodeID + "&CWorkID=" + this.CWorkID);
+                    Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?3=3"+this.RequestParas);
+                    return;
                 }
                 else if (nd.HisFormType != NodeFormType.DisableIt)
                 {

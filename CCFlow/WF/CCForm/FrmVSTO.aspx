@@ -20,6 +20,12 @@
 
 
 			string paras = this.RequestParas;
+            if (paras.Contains("SID") == false)
+                paras += "&SID=" + BP.Web.WebUser.SID;
+		    
+            if (paras.Contains("UserNo") == false)
+                paras += "&UserNo=" + BP.Web.WebUser.No;    
+                        
 			paras = paras.Replace("&", ",");
 
 			string urlWS = "http://" + this.Request.Url.Authority + "/WF/CCForm/CCFormAPI.asmx";
@@ -27,7 +33,6 @@
 
 			//string urlWS = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
 			//string url = "excelform://-fromccflow,App=FrmExcel,UserNo=" + userNo + ",SID=" + sid + ",FK_Flow=" + flowNo + ",FK_Node=" + nodeID + ",FrmID=" + frmID + ",WorkID="+workID+",WSUrl="+urlWS;
-
 			///  string urlOfFree1 = "Frm.aspx?IsFreeFrm=1&UseNo="+userNo+"&SID="+sid+"&FK_MapData="+frmID+"&FK_Flow="+flowNo+"&FK_Node="+nodeID+"&FrmID="+frmID+"&WorkID="+workID+"&OID="+workID+"&FID="+fid;
 			string urlOfFree = "Frm.aspx?IsFreeFrm=1" + this.RequestParas;
 		
@@ -36,9 +41,15 @@
 		<br />
 		<ul>
 			<li><a href="<%=url %>">打开VSTO表单</a></li>
-			<li><a href="http://<%= this.Request.Url.Authority %>/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip">点击此处下载VSTO表单插件</a></li>
 			<li><a href="<%=urlOfFree %>">打开自由表单</a></li>
 		</ul>
+
+        <fieldset>
+        <legend>插件安装说明</legend>
+        <ul>
+			<li><a href="http://<%= this.Request.Url.Authority %>/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip">点击此处下载VSTO表单插件</a></li>
+		</ul>
+        </fieldset>
 	</div>
 	</form>
 </body>

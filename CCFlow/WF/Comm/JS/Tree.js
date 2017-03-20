@@ -173,6 +173,8 @@ function EditNode() {
 
 //删除节点
 function DeleteNode() {
+    if (!confirm("是否真的需要删除?"))
+        return;
     var node = $('#enTree').tree('getSelected');
     if (node) {
         //删除

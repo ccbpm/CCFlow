@@ -241,6 +241,7 @@ namespace CCFlow.WF.CCForm
         {
             MapDtl mdtl = new MapDtl(this.EnsName);
             BP.WF.Node nd = null;
+
             if (this.FK_Node != 0 && mdtl.FK_MapData!="Temp" && this.EnsName.Contains("ND" + this.FK_Node) ==false)
             {
                 nd = new BP.WF.Node(this.FK_Node);
@@ -422,7 +423,8 @@ namespace CCFlow.WF.CCForm
             #endregion 生成数据.
 
             #region 生成翻页
-            if (mdtl.IsEnableGroupField == true || mdtl.HisWhenOverSize == WhenOverSize.None || mdtl.HisWhenOverSize == WhenOverSize.AddRow)
+            if (mdtl.IsEnableGroupField == true || mdtl.HisWhenOverSize == WhenOverSize.None 
+                || mdtl.HisWhenOverSize == WhenOverSize.AddRow)
             {
                 /*如果 是分组显示模式 .*/
                 try

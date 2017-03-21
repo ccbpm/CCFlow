@@ -52,6 +52,7 @@ namespace CCFlow.WF.CCForm
 			//让他登录.
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
+            //解析这个表单.
 			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid,atParas);
 		}
 		/// <summary>

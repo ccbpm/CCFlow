@@ -1,0 +1,672 @@
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Collections;
+using System.Data;
+using System.Text;
+using System.Web;
+using BP.DA;
+using BP.Sys;
+using BP.Port;
+using BP.Web;
+using BP.WF.Template;
+
+namespace BP.WF.HttpHandler
+{
+    /// <summary>
+    /// 表单功能界面
+    /// </summary>
+    public class WF_CCForm : WebContralBase
+    {
+        #region 执行父类的重写方法.
+        /// <summary>
+        /// 表单功能界面
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_CCForm(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+        /// <summary>
+        /// 默认执行的方法
+        /// </summary>
+        /// <returns></returns>
+        protected override string DoDefaultMethod()
+        {
+            switch (this.DoType)
+            {
+                case "DtlFieldUp": //字段上移
+                    return "执行成功.";
+                default:
+                    break;
+            }
+
+            //找不不到标记就抛出异常.
+            throw new Exception("@标记[" + this.DoType + "]，没有找到.");
+        }
+        #endregion 执行父类的重写方法.
+
+        /// <summary>
+        /// 初始化从表数据
+        /// </summary>
+        /// <returns>返回结果数据</returns>
+        public string Dtl_Init()
+        {
+            #region 组织参数.
+            MapDtl mdtl = new MapDtl(this.EnsName);
+            if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp" && this.EnsName.Contains("ND" + this.FK_Node) == false)
+            {
+                Node nd = new BP.WF.Node(this.FK_Node);
+                /*如果
+                 * 1,传来节点ID, 不等于0.
+                 * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
+
+                BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, mdtl.FK_MapData);
+                int i = fn.Retrieve(FrmNodeAttr.FK_Frm, mdtl.FK_MapData, FrmNodeAttr.FK_Node, this.FK_Node);
+                if (i != 0 && fn.FrmSln != 0)
+                {
+                    /*使用了自定义的方案.
+                     * 并且，一定为dtl设定了自定义方案，就用自定义方案.
+                     */
+                    mdtl.No = this.EnsName + "_" + this.FK_Node;
+                    mdtl.RetrieveFromDBSources();
+                }
+            }
+
+            string strs = this.RequestParas;
+            strs = strs.Replace("?", "@");
+            strs = strs.Replace("&", "@");
+            #endregion 组织参数.
+
+
+            //获得他的描述,与数据.
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData,mdtl, this.RefOID, strs);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 处理SQL的表达式.
+        /// </summary>
+        /// <param name="exp">表达式</param>
+        /// <returns>从from里面替换的表达式.</returns>
+        public string DealExpByFromVals(string exp)
+        {
+            foreach (string strKey in context.Request.Form.AllKeys)
+            {
+                if (exp.Contains("@") == false)
+                    return exp;
+                string str = strKey.Replace("TB_", "").Replace("CB_", "").Replace("DDL_", "").Replace("RB_", "");
+
+                exp = exp.Replace("@" + str, context.Request.Form[strKey]);
+            }
+            return exp;
+        }
+        /// <summary>
+        /// 初始化树的接口
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public string InitPopValTree()
+        {
+            string mypk = context.Request.QueryString["FK_MapExt"];
+
+            MapExt me = new MapExt();
+            me.MyPK = mypk;
+            me.Retrieve();
+
+            //获得配置信息.
+            Hashtable ht = me.PopValToHashtable();
+            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+
+            string parentNo = context.Request.QueryString["ParentNo"];
+            if (parentNo == null)
+                parentNo = me.PopValTreeParentNo;
+
+            DataSet resultDs = new DataSet();
+            string sqlObjs = me.PopValTreeSQL;
+            sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+            sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
+            sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+            dt.TableName = "DTObjs";
+            resultDs.Tables.Add(dt);
+
+            //doubleTree
+            if (me.PopValWorkModel == PopValWorkModel.TreeDouble && parentNo != me.PopValTreeParentNo)
+            {
+                sqlObjs = me.PopValDoubleTreeEntitySQL;
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
+                sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+                DataTable entityDt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                entityDt.TableName = "DTEntitys";
+                resultDs.Tables.Add(entityDt);
+            }
+
+            return BP.Tools.Json.ToJson(resultDs);
+        }
+
+        /// <summary>
+        /// 初始化PopVal的值
+        /// </summary>
+        /// <returns></returns>
+        public string InitPopVal()
+        {
+            MapExt me = new MapExt();
+            me.MyPK = this.FK_MapExt;
+            me.Retrieve();
+
+            //数据对象，将要返回的.
+            DataSet ds = new DataSet();
+
+            //获得配置信息.
+            Hashtable ht = me.PopValToHashtable();
+            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+
+            //增加到数据源.
+            ds.Tables.Add(dtcfg);
+
+            if (me.PopValWorkModel == PopValWorkModel.SelfUrl)
+                return "@SelfUrl" + me.PopValUrl;
+
+            if (me.PopValWorkModel == PopValWorkModel.TableOnly)
+            {
+                string sqlObjs = me.PopValEntitySQL;
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                dt.TableName = "DTObjs";
+                ds.Tables.Add(dt);
+                return BP.Tools.Json.ToJson(ds);
+            }
+
+            if (me.PopValWorkModel == PopValWorkModel.TablePage)
+            {
+                /* 分页的 */
+                //key
+                string key = context.Request.QueryString["Key"];
+                if (string.IsNullOrEmpty(key) == true)
+                    key = "";
+
+                //取出来查询条件.
+                string[] conds = me.PopValSearchCond.Split('$');
+
+                string countSQL = me.PopValTablePageSQLCount;
+
+                //固定参数.
+                countSQL = countSQL.Replace("@WebUser.No", BP.Web.WebUser.No);
+                countSQL = countSQL.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                countSQL = countSQL.Replace("@Key", key);
+                countSQL = this.DealExpByFromVals(countSQL);
+
+                //替换其他参数.
+                foreach (string cond in conds)
+                {
+                    if (cond == null || cond == "")
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(5, cond.IndexOf("#") - 5);
+                    string val = context.Request.QueryString[para];
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
+                            val = "all";
+                        else
+                            val = "";
+                    }
+
+                    if (val == "all")
+                    {
+
+                        countSQL = countSQL.Replace(para + "=@" + para, "1=1");
+                        countSQL = countSQL.Replace(para + "='@" + para + "'", "1=1");
+
+                        //找到para 前面表的别名   如 t.1=1 把t. 去掉
+                        int startIndex = 0;
+                        while (startIndex != -1 && startIndex < countSQL.Length)
+                        {
+                            int index = countSQL.IndexOf("1=1", startIndex + 1);
+                            if (index > 0 && countSQL.Substring(startIndex, index - startIndex).Trim().EndsWith("."))
+                            {
+                                int lastBlankIndex = countSQL.Substring(startIndex, index - startIndex).LastIndexOf(" ");
+
+
+                                countSQL = countSQL.Remove(lastBlankIndex + startIndex + 1, index - lastBlankIndex - 1);
+
+                                startIndex = (startIndex + lastBlankIndex) + 3;
+                            }
+                            else
+                            {
+                                startIndex = index;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //要执行两次替换有可能是，有引号.
+                        countSQL = countSQL.Replace("@" + para, val);
+                    }
+                }
+
+
+                string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
+
+                //pageSize
+                string pageSize = context.Request.QueryString["pageSize"];
+                if (string.IsNullOrEmpty(pageSize))
+                    pageSize = "10";
+
+                //pageIndex
+                string pageIndex = context.Request.QueryString["pageIndex"];
+                if (string.IsNullOrEmpty(pageIndex))
+                    pageIndex = "1";
+
+                string sqlObjs = me.PopValTablePageSQL;
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                sqlObjs = sqlObjs.Replace("@Key", key);
+
+                //三个固定参数.
+                sqlObjs = sqlObjs.Replace("@PageCount", ((int.Parse(pageIndex) - 1) * int.Parse(pageSize)).ToString());
+                sqlObjs = sqlObjs.Replace("@PageSize", pageSize);
+                sqlObjs = sqlObjs.Replace("@PageIndex", pageIndex);
+                sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+                //替换其他参数.
+                foreach (string cond in conds)
+                {
+                    if (cond == null || cond == "")
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(5, cond.IndexOf("#") - 5);
+                    string val = context.Request.QueryString[para];
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
+                            val = "all";
+                        else
+                            val = "";
+                    }
+                    if (val == "all")
+                    {
+                        sqlObjs = sqlObjs.Replace(para + "=@" + para, "1=1");
+                        sqlObjs = sqlObjs.Replace(para + "='@" + para + "'", "1=1");
+
+                        int startIndex = 0;
+                        while (startIndex != -1 && startIndex < sqlObjs.Length)
+                        {
+                            int index = sqlObjs.IndexOf("1=1", startIndex + 1);
+                            if (index > 0 && sqlObjs.Substring(startIndex, index - startIndex).Trim().EndsWith("."))
+                            {
+                                int lastBlankIndex = sqlObjs.Substring(startIndex, index - startIndex).LastIndexOf(" ");
+
+
+                                sqlObjs = sqlObjs.Remove(lastBlankIndex + startIndex + 1, index - lastBlankIndex - 1);
+
+                                startIndex = (startIndex + lastBlankIndex) + 3;
+                            }
+                            else
+                            {
+                                startIndex = index;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //要执行两次替换有可能是，有引号.
+                        sqlObjs = sqlObjs.Replace("@" + para, val);
+                    }
+                }
+
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                dt.TableName = "DTObjs";
+                ds.Tables.Add(dt);
+
+                DataTable dtCount = new DataTable("DTCout");
+                dtCount.TableName = "DTCout";
+                dtCount.Columns.Add("Count", typeof(int));
+                dtCount.Rows.Add(new[] { count });
+                ds.Tables.Add(dtCount);
+
+
+                //处理查询条件.
+                //$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'
+                //$Para=XB#Label=性别#EnumKey=XB
+                //$Para=DTFrom#Label=注册日期从#DefVal=@Now-30
+                //$Para=DTTo#Label=到#DefVal=@Now
+
+
+                foreach (string cond in conds)
+                {
+                    if (string.IsNullOrEmpty(cond) == true)
+                        continue;
+
+                    string sql = null;
+                    if (cond.Contains("#ListSQL=") == true)
+                    {
+                        sql = cond.Substring(cond.IndexOf("ListSQL") + 8);
+                        sql = sql.Replace("@WebUser.No", WebUser.No);
+                        sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                        sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                        sql = this.DealExpByFromVals(sql);
+                    }
+
+                    if (cond.Contains("#EnumKey=") == true)
+                    {
+                        string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
+                        sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
+                    }
+
+                    //处理日期的默认值
+                    //DefVal=@Now-30
+                    //if (cond.Contains("@Now"))
+                    //{
+                    //    int nowIndex = cond.IndexOf(cond);
+                    //    if (cond.Trim().Length - nowIndex > 5)
+                    //    {
+                    //        char optStr = cond.Trim()[nowIndex + 5];
+                    //        int day = 0;
+                    //        if (int.TryParse(cond.Trim().Substring(nowIndex + 6), out day)) {
+                    //            cond = cond.Substring(0, nowIndex) + DateTime.Now.AddDays(-1 * day).ToString("yyyy-MM-dd HH:mm");
+                    //        }
+                    //    }
+                    //}
+
+                    if (sql == null)
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(5, cond.IndexOf("#") - 5);
+                    if (ds.Tables.Contains(para) == true)
+                        throw new Exception("@配置的查询,参数名有冲突不能命名为:" + para);
+
+                    //查询出来数据，就把他放入到dataset里面.
+                    DataTable dtPara = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dtPara.TableName = para;
+                    ds.Tables.Add(dtPara); //加入到参数集合.
+                }
+
+
+                return BP.Tools.Json.ToJson(ds);
+            }
+
+            if (me.PopValWorkModel == PopValWorkModel.Group)
+            {
+                /*
+                 *  分组的.
+                 */
+
+                string sqlObjs = me.PopValGroupSQL;
+                if (sqlObjs.Length > 10)
+                {
+                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+
+                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                    dt.TableName = "DTGroup";
+                    ds.Tables.Add(dt);
+                }
+
+                sqlObjs = me.PopValEntitySQL;
+                if (sqlObjs.Length > 10)
+                {
+                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+
+                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                    dt.TableName = "DTEntity";
+                    ds.Tables.Add(dt);
+                }
+                return BP.Tools.Json.ToJson(ds);
+            }
+
+            //返回数据.
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        //单附件上传方法
+        private void SingleAttach(HttpContext context, string attachPk, Int64 workid, Int64 fid, int fk_node, string ensName)
+        {
+            FrmAttachment frmAth = new FrmAttachment();
+            frmAth.MyPK = attachPk;
+            frmAth.RetrieveFromDBSources();
+
+            string athDBPK = attachPk + "_" + workid;
+
+            BP.WF.Node currND = new BP.WF.Node(fk_node);
+            BP.WF.Work currWK = currND.HisWork;
+            currWK.OID = workid;
+            currWK.Retrieve();
+            //处理保存路径.
+            string saveTo = frmAth.SaveTo;
+
+            if (saveTo.Contains("*") || saveTo.Contains("@"))
+            {
+                /*如果路径里有变量.*/
+                saveTo = saveTo.Replace("*", "@");
+                saveTo = BP.WF.Glo.DealExp(saveTo, currWK, null);
+            }
+
+            try
+            {
+                saveTo = context.Server.MapPath("~/" + saveTo);
+            }
+            catch
+            {
+                //saveTo = saveTo;
+            }
+
+            if (System.IO.Directory.Exists(saveTo) == false)
+                System.IO.Directory.CreateDirectory(saveTo);
+
+
+            saveTo = saveTo + "\\" + athDBPK + "." + context.Request.Files[0].FileName.Substring(context.Request.Files[0].FileName.LastIndexOf('.') + 1);
+            context.Request.Files[0].SaveAs(saveTo);
+
+            FileInfo info = new FileInfo(saveTo);
+
+            FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+            dbUpload.MyPK = athDBPK;
+            dbUpload.FK_FrmAttachment = attachPk;
+            dbUpload.RefPKVal = this.WorkID.ToString();
+            dbUpload.FID = fid;
+            dbUpload.FK_MapData = ensName;
+
+            dbUpload.FileExts = info.Extension;
+
+            #region 处理文件路径，如果是保存到数据库，就存储pk.
+            if (frmAth.SaveWay == 0)
+            {
+                //文件方式保存
+                dbUpload.FileFullName = saveTo;
+            }
+
+            if (frmAth.SaveWay == 1)
+            {
+                //保存到数据库
+                dbUpload.FileFullName = dbUpload.MyPK;
+            }
+            #endregion 处理文件路径，如果是保存到数据库，就存储pk.
+
+
+            dbUpload.FileName = context.Request.Files[0].FileName;
+            dbUpload.FileSize = (float)info.Length;
+            dbUpload.Rec = WebUser.No;
+            dbUpload.RecName = WebUser.Name;
+            dbUpload.RDT = BP.DA.DataType.CurrentDataTime;
+
+            dbUpload.NodeID = fk_node.ToString();
+            dbUpload.Save();
+
+            if (frmAth.SaveWay == 1)
+            {
+                //执行文件保存.
+                BP.DA.DBAccess.SaveFileToDB(saveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
+            }
+
+        }
+
+        //多附件上传方法
+        public void MoreAttach(HttpContext context, string attachPk, Int64 workid, Int64 fid, int fk_node, string ensNamestring, string fk_flow, string pkVal)
+        {
+            // 多附件描述.
+            BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
+
+            for (int i = 0; i < context.Request.Files.Count; i++)
+            {
+                string savePath = athDesc.SaveTo;
+                if (savePath.Contains("@") == true || savePath.Contains("*") == true)
+                {
+                    /*如果有变量*/
+                    savePath = savePath.Replace("*", "@");
+                    GEEntity en = new GEEntity(athDesc.FK_MapData);
+                    en.PKVal = pkVal;
+                    en.Retrieve();
+                    savePath = BP.WF.Glo.DealExp(savePath, en, null);
+
+                    if (savePath.Contains("@") && this.FK_Node != 0)
+                    {
+                        /*如果包含 @ */
+                        BP.WF.Flow flow = new BP.WF.Flow(fk_flow);
+                        BP.WF.Data.GERpt myen = flow.HisGERpt;
+                        myen.OID = this.WorkID;
+                        myen.RetrieveFromDBSources();
+                        savePath = BP.WF.Glo.DealExp(savePath, myen, null);
+                    }
+                    if (savePath.Contains("@") == true)
+                        throw new Exception("@路径配置错误,变量没有被正确的替换下来." + savePath);
+                }
+                else
+                {
+                    savePath = athDesc.SaveTo + "\\" + pkVal;
+                }
+
+                //替换关键的字串.
+                savePath = savePath.Replace("\\\\", "\\");
+                try
+                {
+                    savePath = context.Server.MapPath("~/" + savePath);
+                }
+                catch (Exception)
+                {
+                }
+
+                try
+                {
+                    if (System.IO.Directory.Exists(savePath) == false)
+                        System.IO.Directory.CreateDirectory(savePath);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + context.Server.MapPath("~/" + savePath) + "===" + savePath + "@技术问题:" + ex.Message);
+                }
+
+
+                string exts = System.IO.Path.GetExtension(context.Request.Files[i].FileName).ToLower().Replace(".", "");
+
+
+                string guid = BP.DA.DBAccess.GenerGUID();
+                string fileName = context.Request.Files[i].FileName.Substring(0, context.Request.Files[i].FileName.LastIndexOf('.'));
+                string ext = System.IO.Path.GetExtension(context.Request.Files[i].FileName);
+                string realSaveTo = savePath + "/" + guid + "." + fileName + ext;
+
+                realSaveTo = realSaveTo.Replace("~", "-");
+                realSaveTo = realSaveTo.Replace("'", "-");
+                realSaveTo = realSaveTo.Replace("*", "-");
+
+
+                context.Request.Files[i].SaveAs(realSaveTo);
+
+                FileInfo info = new FileInfo(realSaveTo);
+
+                FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+                dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
+                dbUpload.NodeID = fk_node.ToString();
+                dbUpload.FK_FrmAttachment = attachPk;
+                dbUpload.FK_MapData = athDesc.FK_MapData;
+                dbUpload.FK_FrmAttachment = attachPk;
+                dbUpload.FileExts = info.Extension;
+
+                #region 处理文件路径，如果是保存到数据库，就存储pk.
+                if (athDesc.SaveWay == 0)
+                {
+                    //文件方式保存
+                    dbUpload.FileFullName = realSaveTo;
+                }
+
+                if (athDesc.SaveWay == 1)
+                {
+                    //保存到数据库
+                    dbUpload.FileFullName = dbUpload.MyPK;
+                }
+                #endregion 处理文件路径，如果是保存到数据库，就存储pk.
+
+                dbUpload.FileName = context.Request.Files[i].FileName;
+                dbUpload.FileSize = (float)info.Length;
+                dbUpload.RDT = DataType.CurrentDataTimess;
+                dbUpload.Rec = BP.Web.WebUser.No;
+                dbUpload.RecName = BP.Web.WebUser.Name;
+                dbUpload.RefPKVal = pkVal;
+                dbUpload.FID = this.FID;
+
+                //if (athDesc.IsNote)
+                //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
+
+                //if (athDesc.Sort.Contains(","))
+                //    dbUpload.Sort = this.Pub1.GetDDLByID("ddl").SelectedItemStringVal;
+
+                dbUpload.UploadGUID = guid;
+                dbUpload.Insert();
+
+                if (athDesc.SaveWay == 1)
+                {
+                    //执行文件保存.
+                    BP.DA.DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 删除附件
+        /// </summary>
+        /// <param name="MyPK"></param>
+        /// <returns></returns>
+        private string DelWorkCheckAttach(string MyPK)
+        {
+            FrmAttachmentDB athDB = new FrmAttachmentDB();
+            athDB.RetrieveByAttr(FrmAttachmentDBAttr.MyPK, MyPK);
+            //删除文件
+            if (athDB.FileFullName != null)
+            {
+                if (File.Exists(athDB.FileFullName) == true)
+                    File.Delete(athDB.FileFullName);
+            }
+            int i = athDB.Delete(FrmAttachmentDBAttr.MyPK, MyPK);
+            if (i > 0)
+                return "true";
+            return "false";
+        }
+    }
+}

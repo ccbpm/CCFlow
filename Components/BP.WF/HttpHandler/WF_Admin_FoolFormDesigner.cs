@@ -44,108 +44,102 @@ namespace BP.WF.HttpHandler
         protected override string DoDefaultMethod()
         {
             string msg = "";
-            try
-            {
-                switch (this.DoType)
-                {
-                   
-                    case "DtlFieldUp": //字段上移
-                        MapAttr attrU = new MapAttr(this.MyPK);
-                        attrU.DoUpForMapDtl();
-                        msg = "";
-                        break;
-                    case "DtlFieldDown": //字段下移.
-                        MapAttr attrD = new MapAttr(this.MyPK);
-                        attrD.DoDownForMapDtl();
-                        msg = "";
-                        break;
-                    case "HidAttr": //获得隐藏的字段.
-                        MapAttrs attrs = new MapAttrs();
-                        attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData,
-                            MapAttrAttr.UIVisible, 0);
-                        msg = attrs.ToJson();
-                        break;
-                    case "Up": //移动位置..
-                        MapAttr attr = new MapAttr(this.MyPK);
-                        attr.DoUp();
-                        break;
-                    case "Down": //移动位置.
-                        MapAttr attrDown = new MapAttr(this.MyPK);
-                        attrDown.DoDown();
-                        break;
-                    case "GFDoUp":
-                        GroupField gf = new GroupField(this.RefOID);
-                        gf.DoUp();
-                        gf.Retrieve();
-                        if (gf.Idx == 0)
-                            return "";
 
-                        int oidIdx = gf.Idx;
-                        gf.Idx = gf.Idx - 1;
-                        GroupField gfUp = new GroupField();
-                        if (gfUp.Retrieve(GroupFieldAttr.EnName, gf.EnName, GroupFieldAttr.Idx, gf.Idx) == 1)
-                        {
-                            gfUp.Idx = oidIdx;
-                            gfUp.Update();
-                        }
-                        gf.Update();
-                        break;
-                    case "GFDoDown":
-                        GroupField mygf = new GroupField(this.RefOID);
-                        mygf.DoDown();
-                        mygf.Retrieve();
-                        int oidIdx1 = mygf.Idx;
-                        mygf.Idx = mygf.Idx + 1;
-                        GroupField gfDown = new GroupField();
-                        if (gfDown.Retrieve(GroupFieldAttr.EnName, mygf.EnName, GroupFieldAttr.Idx, mygf.Idx) == 1)
-                        {
-                            gfDown.Idx = oidIdx1;
-                            gfDown.Update();
-                        }
-                        mygf.Update();
-                        break;
-                    case "M2MDoUp":
-                        MapM2M ddtl1 = new MapM2M(this.MyPK);
-                        if (ddtl1.RowIdx > 0)
-                        {
-                            ddtl1.RowIdx = ddtl1.RowIdx - 1;
-                            ddtl1.Update();
-                        }
-                        break;
-                    case "M2MDoDown":
-                        MapM2M ddtl2 = new MapM2M(this.MyPK);
-                        if (ddtl2.RowIdx < 10)
-                        {
-                            ddtl2.RowIdx = ddtl2.RowIdx + 1;
-                            ddtl2.Update();
-                        }
-                        break;
-                    case "FrameDoUp":
-                        //MapFrame frame1 = new MapFrame(this.MyPK);
-                        //if (frame1.RowIdx > 0)
-                        //{
-                        //    frame1.RowIdx = frame1.RowIdx - 1;
-                        //    frame1.Update();
-                        //}
-                        break;
-                    case "FrameDoDown":
-                        //MapFrame frame2 = new MapFrame(this.MyPK);
-                        //if (frame2.RowIdx < 10)
-                        //{
-                        //    frame2.RowIdx = frame2.RowIdx + 1;
-                        //    frame2.Update();
-                        //}
-                        break;
-                    default:
-                        throw new Exception("没有判断的执行类型：" + this.DoType);
-                        break;
-                }
-                return msg;
-            }
-            catch (Exception ex)
+            switch (this.DoType)
             {
-                return "err@执行标记["+this.DoType+"]时出现错误:" + ex.Message;
+
+                case "DtlFieldUp": //字段上移
+                    MapAttr attrU = new MapAttr(this.MyPK);
+                    attrU.DoUpForMapDtl();
+                    msg = "";
+                    break;
+                case "DtlFieldDown": //字段下移.
+                    MapAttr attrD = new MapAttr(this.MyPK);
+                    attrD.DoDownForMapDtl();
+                    msg = "";
+                    break;
+                case "HidAttr": //获得隐藏的字段.
+                    MapAttrs attrs = new MapAttrs();
+                    attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData,
+                        MapAttrAttr.UIVisible, 0);
+                    msg = attrs.ToJson();
+                    break;
+                case "Up": //移动位置..
+                    MapAttr attr = new MapAttr(this.MyPK);
+                    attr.DoUp();
+                    break;
+                case "Down": //移动位置.
+                    MapAttr attrDown = new MapAttr(this.MyPK);
+                    attrDown.DoDown();
+                    break;
+                case "GFDoUp":
+                    GroupField gf = new GroupField(this.RefOID);
+                    gf.DoUp();
+                    gf.Retrieve();
+                    if (gf.Idx == 0)
+                        return "";
+
+                    int oidIdx = gf.Idx;
+                    gf.Idx = gf.Idx - 1;
+                    GroupField gfUp = new GroupField();
+                    if (gfUp.Retrieve(GroupFieldAttr.EnName, gf.EnName, GroupFieldAttr.Idx, gf.Idx) == 1)
+                    {
+                        gfUp.Idx = oidIdx;
+                        gfUp.Update();
+                    }
+                    gf.Update();
+                    break;
+                case "GFDoDown":
+                    GroupField mygf = new GroupField(this.RefOID);
+                    mygf.DoDown();
+                    mygf.Retrieve();
+                    int oidIdx1 = mygf.Idx;
+                    mygf.Idx = mygf.Idx + 1;
+                    GroupField gfDown = new GroupField();
+                    if (gfDown.Retrieve(GroupFieldAttr.EnName, mygf.EnName, GroupFieldAttr.Idx, mygf.Idx) == 1)
+                    {
+                        gfDown.Idx = oidIdx1;
+                        gfDown.Update();
+                    }
+                    mygf.Update();
+                    break;
+                case "M2MDoUp":
+                    MapM2M ddtl1 = new MapM2M(this.MyPK);
+                    if (ddtl1.RowIdx > 0)
+                    {
+                        ddtl1.RowIdx = ddtl1.RowIdx - 1;
+                        ddtl1.Update();
+                    }
+                    break;
+                case "M2MDoDown":
+                    MapM2M ddtl2 = new MapM2M(this.MyPK);
+                    if (ddtl2.RowIdx < 10)
+                    {
+                        ddtl2.RowIdx = ddtl2.RowIdx + 1;
+                        ddtl2.Update();
+                    }
+                    break;
+                case "FrameDoUp":
+                    //MapFrame frame1 = new MapFrame(this.MyPK);
+                    //if (frame1.RowIdx > 0)
+                    //{
+                    //    frame1.RowIdx = frame1.RowIdx - 1;
+                    //    frame1.Update();
+                    //}
+                    break;
+                case "FrameDoDown":
+                    //MapFrame frame2 = new MapFrame(this.MyPK);
+                    //if (frame2.RowIdx < 10)
+                    //{
+                    //    frame2.RowIdx = frame2.RowIdx + 1;
+                    //    frame2.Update();
+                    //}
+                    break;
+                default:
+                    throw new Exception("没有判断的执行类型：" + this.DoType);
+                    break;
             }
+            return msg;
         }
 
         public string Designer_NewMapDtl()

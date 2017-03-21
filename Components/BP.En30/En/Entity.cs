@@ -210,9 +210,18 @@ namespace BP.En
                  *  */
                 if (attr.MyFieldType == FieldType.FK
                     || attr.MyFieldType == FieldType.PKFK)
+                {
                     dr[attr.Key] = this.GetValByKey(attr.Key).ToString().Trim();
+                }
                 else
-                    dr[attr.Key] = this.GetValByKey(attr.Key);
+                {
+
+                    var obj = this.GetValByKey(attr.Key);
+                    if (obj == null && attr.IsNum)
+                        obj = 0;
+
+                    dr[attr.Key] = obj;
+                }
             }
 
             if (this.Row.ContainsKey("AtPara") == true)

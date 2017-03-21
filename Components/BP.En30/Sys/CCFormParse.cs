@@ -48,7 +48,6 @@ namespace BP.Sys
         /// <param name="y">位置y</param>
         public static string SaveFrmRadioButton(string fk_mapdata, string ctrlID, float x, float y)
         {
-
             FrmRB en = new FrmRB();
             en.MyPK = fk_mapdata + "_" + ctrlID;
             int i= en.RetrieveFromDBSources();

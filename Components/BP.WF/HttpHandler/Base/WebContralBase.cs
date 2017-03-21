@@ -23,6 +23,7 @@ namespace BP.WF.HttpHandler
 {
     abstract public class WebContralBase
     {
+        #region 执行方法.
         /// <summary>
         /// 执行方法
         /// </summary>
@@ -31,31 +32,21 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果，执行错误抛出异常</returns>
         public string DoMethod(WebContralBase myEn, string methodName)
         {
+
             Type tp = myEn.GetType();
             MethodInfo mp = tp.GetMethod(methodName);
+
+
             if (mp == null)
             {
                 /* 没有找到方法名字，就执行默认的方法. */
-                try
-                {
-                    return myEn.DoDefaultMethod();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("@执行:DoDefaultMethod[" + myEn.ToString() + "]出现错误" + ex.InnerException.Message);
-                }
+                return myEn.DoDefaultMethod();
             }
 
             //执行该方法.
             object[] paras = null;
-            try
-            {
-                return mp.Invoke(this, paras) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("@执行:[" + myEn.ToString() + "]" + ex.InnerException.Message);
-            }
+            return mp.Invoke(this, paras) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+
         }
         /// <summary>
         /// 执行默认的方法名称
@@ -63,11 +54,40 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果</returns>
         protected virtual string DoDefaultMethod()
         {
-            return "err@执行类["+this.ToString()+"]没有找到要执行的标记:" + this.DoType;
+            return "@子类没有重写该["+this.DoType+"]方法.";
         }
+        #endregion 执行方法.
 
+        #region 公共方法.
+        /// <summary>
+        /// 获得参数.
+        /// </summary>
+        public string RequestParas
+        {
+            get
+            {
+                string urlExt = "";
+                string rawUrl = this.context.Request.RawUrl;
+                rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
+                string[] paras = rawUrl.Split('&');
+                foreach (string para in paras)
+                {
+                    if (para == null
+                        || para == ""
+                        || para.Contains("=") == false)
+                        continue;
 
-        #region 属性.
+                    if (para == "1=1")
+                        continue;
+
+                    urlExt += "&" + para;
+                }
+                return urlExt;
+            }
+        }
+        #endregion
+
+        #region 属性参数.
         /// <summary>
         /// 编号
         /// </summary>
@@ -94,6 +114,17 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
+        public string EnsName
+        {
+            get
+            {
+                string str = context.Request.QueryString["EnsName"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+        
         public string MyPK
         {
             get
@@ -153,6 +184,19 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 扩展信息
+        /// </summary>
+        public string FK_MapExt
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_MapExt"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+        /// <summary>
         /// 流程编号
         /// </summary>
         public string FK_Flow
@@ -183,6 +227,26 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = context.Request.QueryString["FK_Node"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return int.Parse(str);
+            }
+        }
+        public Int64 FID
+        {
+            get
+            {
+                string str = context.Request.QueryString["FID"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return int.Parse(str);
+            }
+        }
+        public Int64 WorkID
+        {
+            get
+            {
+                string str = context.Request.QueryString["WorkID"];
                 if (str == null || str == "" || str == "null")
                     return 0;
                 return int.Parse(str);
@@ -294,6 +358,5 @@ namespace BP.WF.HttpHandler
         }
         #endregion 属性.
 
-      
     }
 }

@@ -584,6 +584,7 @@ namespace BP.WF.Data
 
                 #region 计算属性.
                 map.AddTBString(CHAttr.TimeLimit, null, "规定限期", true, true, 0, 50, 5);
+                map.AddTBFloat(CHAttr.OverMinutes, 0, "逾期分钟", false, true);
                 map.AddTBFloat(CHAttr.UseDays, 0, "实际使用天", false, true);
                 map.AddTBFloat(CHAttr.OverDays, 0, "逾期天", false, true);
                 map.AddTBInt(CHAttr.CHSta, 0, "状态", true, true);

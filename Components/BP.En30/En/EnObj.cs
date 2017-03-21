@@ -1217,6 +1217,18 @@ namespace BP.En
                 string pks = "";
                 foreach (Attr attr in this.EnMap.Attrs)
                 {
+                    switch (attr.Key)
+                    {
+                        case "No":
+                            return "No";
+                        case "OID":
+                            return "OID";
+                        case "MyPK":
+                            return "MyPK";
+                        default:
+                            break;
+                    }
+
                     if (attr.MyFieldType == FieldType.PK
                         || attr.MyFieldType == FieldType.PKEnum || attr.MyFieldType == FieldType.PKFK)
                         pks += attr.Key + ",";
@@ -1233,11 +1245,24 @@ namespace BP.En
             {
                 foreach (Attr attr in this.EnMap.Attrs)
                 {
+                    switch (attr.Key)
+                    {
+                        case "No":
+                            return attr.Field;
+                        case "OID":
+                            return attr.Field;
+                        case "MyPK":
+                            return attr.Field;
+                        default:
+                            break;
+                    }
+
                     if (attr.MyFieldType == FieldType.PK
                         || attr.MyFieldType == FieldType.PKEnum
                         || attr.MyFieldType == FieldType.PKFK)
                         return attr.Field;
                 }
+
                 throw new Exception("@没有给【" + this.EnDesc + "】定义主键。");
             }
         }

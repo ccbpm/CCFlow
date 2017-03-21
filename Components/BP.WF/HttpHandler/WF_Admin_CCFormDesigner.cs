@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
@@ -21,7 +22,73 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 从本机装载表单模版
+        /// </summary>
+        /// <param name="fileByte">文件流</param>
+        /// <param name="fk_mapData">表单模版ID</param>
+        /// <param name="isClear">是否清空？</param>
+        /// <returns>执行结果</returns>
+        public string Imp_LoadFrmTempleteFromLocalFiel(byte[] fileByte, string fk_mapData, bool isClear)
+        {
+            //文件路径.
+            string file = "\\Temp\\" + fk_mapData + ".xml";
+            string path = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file;
 
+            //保存到服务器，指定的位置.
+            BP.DA.DataType.WriteFile(path, fileByte);
+
+            //读取文件.
+            DataSet ds = new DataSet();
+            ds.ReadXml(file);
+
+            //执行装载.
+            MapData.ImpMapData(fk_mapData, ds, true);
+
+            if (fk_mapData.Contains("ND"))
+            {
+                /* 判断是否是节点表单 */
+                int nodeID = 0;
+                try
+                {
+                    nodeID = int.Parse(fk_mapData.Replace("ND", ""));
+                }
+                catch
+                {
+                    return "执行成功.";
+                }
+
+                Node nd = new Node(nodeID);
+                nd.RepareMap();
+            }
+            return "执行成功.";
+        }
+        /// <summary>
+        /// 从节点上Copy
+        /// </summary>
+        /// <param name="fromMapData">从表单ID</param>
+        /// <param name="fk_mapdata">到表单ID</param>
+        /// <param name="isClear">是否清楚现有的元素？</param>
+        /// <param name="isSetReadonly">是否设置为只读？</param>
+        /// <returns>执行结果</returns>
+        public string Imp_CopyFrm(string fromMapData, string fk_mapdata, bool isClear, bool isSetReadonly)
+        {
+            MapData md = new MapData(fromMapData);
+
+            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet(md.No), isSetReadonly);
+
+            // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
+            if (fk_mapdata.Contains("ND") == true)
+            {
+                string fk_node = fk_mapdata.Replace("ND", "");
+                Node nd = new Node(int.Parse(fk_node));
+                nd.RepareMap();
+            }
+            return "执行成功.";
+        }
+
+
+        #region 方法 Home
         public string Home_Init()
         {
             string no = this.GetRequestVal("No");
@@ -49,6 +116,7 @@ namespace BP.WF.HttpHandler
 
             return BP.DA.DataType.ToJsonEntityModel(ht);
         }
+        #endregion 方法 Home
 
         #region 字段列表 的操作
         /// <summary>
@@ -94,7 +162,5 @@ namespace BP.WF.HttpHandler
             throw new Exception("删除失败！");
         }
         #endregion 字段列表 的操作
-
-
     }
 }

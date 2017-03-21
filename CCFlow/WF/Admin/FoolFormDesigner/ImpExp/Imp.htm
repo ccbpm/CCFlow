@@ -1,22 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>学生信息维护</title>
-    <style type="text/css">
-        .style1
-        {
-            width: 105px;
-        }
-        #Text4
-        {
-            width: 447px;
-        }
-        #TB_Addr
-        {
-            width: 450px;
-        }
-    </style>
-
+    <title>表单导入</title>
     <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -27,7 +12,6 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
     <script type="text/javascript" src="/WF/Scripts/config.js"></script>
-
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
         $(function () {
@@ -35,7 +19,6 @@
             $("#Msg").html("正在加载,请稍后......");
             var frmID = GetQueryString("FK_MapData");
             var flowNo = GetQueryString("FK_Flow");
-
 
             /*
             *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
@@ -48,22 +31,25 @@
                 dataType: 'html',
                 success: function (db) {
 
-                    db = JSON.parse(db);
-
-                    if (db.success == 'false') {
-                        alert(db.msg);
+                    if (db.indexOf("err@") > -1) {
+                        alert(db);
                         return;
                     }
 
-                    // 开始绑定标签页.
+                    db = JSON.parse(db);
 
-                    //调用公共类库的方法:执行批量主表赋值
-                    //GenerFullAllCtrlsVal(db.data);
+                    //节点表单.
+                    var WF_Node = db["WF_Node"];
 
-                    return;
+                    //行程部门与人员的关系.
+                    var Sys_FormTree = db["Sys_FormTree"];
+                    var Sys_MapData = db["Sys_MapData"];
+
                 }
             });
 
+
+            //加载完成.
             $("#Msg").html("");
         });
     </script>
@@ -80,78 +66,7 @@
 </ul>
 
 <div id="Msg"> </div>
-<script type="text/javascript">
 
-    function SaveAndNew() {
-        this.Save();
-        this.New();
-    }
-
-    function New() {
-        window.location.href = 'Student.htm';
-    }
-    function Save() {
-
-        $("#Msg").html("正在保存,请稍后......");
-
-        var no = GetQueryString("No");
-
-        var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-        // alert(CheckBoxIDs);
-        var frmData = $("#cc").serialize();
-        //alert(frmData);
-        $.ajax({
-            data: frmData,
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=Imp_Save&CheckBoxIDs=" + checkBoxIDs + "&No=" + no + "&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
-
-                data = JSON.parse(data);
-
-                if (data.success == 'false') {
-                    $("#Msg").html("<font color=red>" + data.msg + "</font>");
-                    return;
-                }
-
-                $("#Msg").html("<font color=green>" + data.msg + "</font>");
-
-                var no = $('#TB_No').val();
-                window.location.href = 'Student.htm?No=' + no;
-                return;
-            }
-        });
-    }
-    function SaveAndClose() {
-        this.Save();
-        window.close();
-    }
-    function Close() {
-        window.close();
-    }
-    function Delete() {
-        var name = $("#TB_Name").val();
-        if (window.confirm('您确定要删除[' + name + ']吗？') == false)
-            return false;
-        var no = $("#TB_No").val();
-        $.ajax({
-            type: 'post',
-            async: true,
-            url: Handler + "?DoType=StudentDelete&No=" + no + "&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
-                if (data.indexOf("err@") >= 0) {
-                    alert(data);
-                    return;
-                }
-                alert(data);
-                window.close();
-                return;
-            }
-        });
-    }
-</script>
 
 </form>
 

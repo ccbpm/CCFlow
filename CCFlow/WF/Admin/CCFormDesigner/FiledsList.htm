@@ -37,6 +37,7 @@
 			    success: function (data) {
 			        if (data.indexOf("err@") > -1) {
 			            alert(data);
+			            return;
 			        } else {
 			            //$("#Msg").html(data);	//for test
 			            data = JSON.parse(data);

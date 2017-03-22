@@ -223,6 +223,12 @@ namespace CCFlow.WF.MapDef
                 default:
                     break;
             }
+
+            //增加默认的分组名为节点名,added by liuxc,2017-03-22
+            if(!IsPostBack && this.GroupField == 0)
+            {
+                this.TB_Blank_Name.Text = new BP.WF.Node(this.FK_MapData.TrimStart("ND".ToCharArray())).Name;
+            }
         }
 
         public void btn_SaveBlank_Click(object sender, EventArgs e)
@@ -243,7 +249,12 @@ namespace CCFlow.WF.MapDef
                 en.Update();
             }
 
-            this.Response.Redirect("GroupField.aspx?FK_MapData=" + this.FK_MapData + "&GroupField=" + en.OID, true);
+            string url = "GroupField.aspx?FK_MapData=" + this.FK_MapData + "&GroupField=" + en.OID;
+
+            if(Request.QueryString["inlayer"] == "1")
+                url += "&inlayer=1";
+
+            this.Response.Redirect(url, true);
 
 
             //Btn btn = sender as Btn;
@@ -289,7 +300,7 @@ namespace CCFlow.WF.MapDef
         protected void Btn_Edit_SaveAndClose_Click(object sender, EventArgs e)
         {
             Btn_Edit_Save_Click(null, null);
-            this.WinClose();
+            this.WinClose(this.GroupField.ToString());
         }
 
         protected void Btn_Edit_Del_Click(object sender, EventArgs e)
@@ -300,7 +311,7 @@ namespace CCFlow.WF.MapDef
 
             BP.WF.Template.MapFrmFool md = new BP.WF.Template.MapFrmFool(this.FK_MapData);
             md.DoCheckFixFrmForUpdateVer();
-            this.WinClose(); 
+            this.WinClose(this.GroupField.ToString()); 
         }
 
         protected void Btn_Edit_DelAll_Click(object sender, EventArgs e)
@@ -320,7 +331,7 @@ namespace CCFlow.WF.MapDef
             gf.OID = this.GroupField;
             gf.Delete();
 
-            this.WinClose();// ("删除成功。");
+            this.WinClose(this.GroupField.ToString());// ("删除成功。");
         }
 
         

@@ -26,16 +26,25 @@
         }
         //新增分组名称
         function GroupFieldNew(ensName) {
-            var url = '../FoolFormDesigner/GroupField.aspx?DoType=NewGroup&RefNo=' + ensName;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = '../FoolFormDesigner/GroupField.aspx?DoType=NewGroup&RefNo=' + ensName + "&inlayer=1";
+
+            OpenEasyUiDialog(url, "eudlgframe", "新建分组", 600, 550, "icon-new", false, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
         //编辑分组名称
         function GroupField(fk_mapdata, OID) {
-            var url = '../FoolFormDesigner/GroupField.aspx?FK_MapData=' + fk_mapdata + "&GroupField=" + OID;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = '../FoolFormDesigner/GroupField.aspx?FK_MapData=' + fk_mapdata + "&GroupField=" + OID + "&inlayer=1";
+
+            OpenEasyUiDialog(url, "eudlgframe", "编辑分组", 600, 550, "icon-edit", false, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
+        //.net保存并关闭层所用函数
+        function closeDlg() {
+            $('#eudlg').dialog("close");
+        }
+
         //编辑明细表
         function EditDtl(mypk, dtlKey) {
             var url = '../FoolFormDesigner/MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;

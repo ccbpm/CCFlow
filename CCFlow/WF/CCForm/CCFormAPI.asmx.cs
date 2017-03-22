@@ -225,5 +225,15 @@ namespace CCFlow.WF.CCForm
 			}
 			return BP.DA.DBAccess.RunSQLReturnTable(sql);
 		}
+
+		/// <summary>
+		/// 获取VSTO插件版本号
+		/// </summary>
+		/// <returns></returns>
+		[WebMethod]
+		public String GetVstoExtensionVersion()
+		{
+			return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];
+		}
 	}
 }

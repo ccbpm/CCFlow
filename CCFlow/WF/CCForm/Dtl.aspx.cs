@@ -1967,15 +1967,6 @@ namespace CCFlow.WF.CCForm
                 dtls.AddEntity(dt);
             }
 
-            //if (num == mdtl.RowsOfList)
-            //{
-            //    BP.Sys.GEDtl dt1 = new GEDtl(this.EnsName);
-            //    dt1.ResetDefaultVal();
-            //    dt1.OID = mdtl.RowsOfList + 1;
-            //    dtls.AddEntity(dt1);
-            //}
-
-
             Map map = dtls.GetNewEntity.EnMap;
             bool isTurnPage = false;
             string err = "";

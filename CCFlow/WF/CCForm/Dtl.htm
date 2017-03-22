@@ -83,6 +83,37 @@
                 }
             });
         }
+
+
+
+        function Save() {
+
+            $("#Msg").html("正在保存,请稍后......");
+
+            var frmData = $("#cc").serialize();
+
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Dtl_Save&No=" + no + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') >= 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+
+                 //   $("#Msg").html("<font color=green>" + data + "</font>");
+
+
+                   // var no = $('#TB_No').val();
+                   // window.location.href = 'Student.htm?No=' + no;
+                    return;
+                }
+            });
+        }
        
      </script>
 </head>

@@ -102,18 +102,17 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FieldTypeSelect&Name=" + encodeURIComponent(name) + "&FType=" + fType + "&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + no + "&GroupField="+groupID+"&m=" + Math.random(),
+                url: Handler + "?DoType=FieldTypeSelect&Name=" + encodeURIComponent(name) + "&FType=" + fType + "&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + no + "&GroupField=" + groupID + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
-                    if (data.indexOf("err@") >=0 ) {
+                    if (data.indexOf("err@") >= 0) {
                         alert(data);
                         return;
                     }
 
                     var url = data.replace('url@', '');
                     window.location.href = url;
-
                 }
             });
         }

@@ -232,11 +232,11 @@ figureSets["Data"] = {
         { figureFunction: "TextBox", name: CCForm_Controls.Date, image: "TextBoxDate.png", CNName: "日期类型" },
         { figureFunction: "TextBox", name: CCForm_Controls.DateTime, image: "TextBoxDateTime.png", CNName: "日期时间类型" },
         { figureFunction: "TextBox", name: CCForm_Controls.CheckBox, image: "Checkbox.png", CNName: "选择框" },
-        { figureFunction: "TextBox", name: CCForm_Controls.RadioButton, image: "Radiobutton.png", CNName: "单选按钮" },
+        { figureFunction: "TextBox", name: CCForm_Controls.RadioButton, image: "Radiobutton.png", CNName: "枚举单选按钮" },
         { figureFunction: "TextBox", name: CCForm_Controls.DropDownListEnum, image: "DropDownListEnum.png", CNName: "枚举下拉框" },
         { figureFunction: "TextBox", name: CCForm_Controls.DropDownListTable, image: "DropDownListTable.png", CNName: "外键下拉框" },
-        { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png", CNName: "外链下拉框" },
-        { figureFunction: "TextBox", name: CCForm_Controls.Dtl, image: "Dtl.png", CNName: "明细表" },
+        { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png", CNName: "外部数据源" },
+        { figureFunction: "TextBox", name: CCForm_Controls.Dtl, image: "Dtl.png", CNName: "明细表/从表" },
         { figureFunction: "TextBox", name: CCForm_Controls.HiddendField, image: "HiddendField.png", CNName: "隐藏字段" }
     ]
 };
@@ -280,8 +280,8 @@ figureSets["Ath"] = {
 
 /**Controls set declaration*/
 figureSets["ccbpm"] = {
-    name: '流程控件',
-    description: '流程组件',
+    name: '流程组件',
+    description: '与ccbpm相关的流程组件',
     figures: [
         { figureFunction: "Square", name: "CheckGroup", image: "CheckGroup.png", CNName: "审核分组" },
         { figureFunction: "Square", name: "FlowChart", image: "FlowChart.png", CNName: "轨迹图" },

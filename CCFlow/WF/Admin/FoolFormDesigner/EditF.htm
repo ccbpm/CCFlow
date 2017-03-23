@@ -68,8 +68,8 @@
                 fType = parseInt(fType);
 
             if (fType != AppString) {
-                 //非string类型，就默认把他屏蔽掉. 
-                 //必填项都放出来 杨玉慧
+                //非string类型，就默认把他屏蔽掉. 
+                //必填项都放出来 杨玉慧
                 // document.getElementById("tr0").style.display = 'none';
                 document.getElementById("tr1").style.display = 'none';
                 document.getElementById("tr2").style.display = 'none';
@@ -77,8 +77,8 @@
                 //document.getElementById("tr4").style.display = 'none';
                 $('#tr4 td:nth(1)').css('display', 'none');
                 $('#tr4 td:nth(2)').css('display', 'none');
-             //  document.getElementById("tr5").style.display = 'none';
-              //  document.getElementById("tr6").style.display = 'none';
+                //  document.getElementById("tr5").style.display = 'none';
+                //  document.getElementById("tr6").style.display = 'none';
             }
 
             switch(fType) {
@@ -298,16 +298,12 @@
 
 
 <tr> 
-<td>是否可编辑 </td>
-<td><input  type="radio" id="RB_UIIsEnable_1" name="RB_UIIsEnable" value="1" /> <label for="RB_UIIsEnable_1">可编辑</label> </td>
-<td><input  type="radio" id="RB_UIIsEnable_0" name="RB_UIIsEnable" value="0" /> <label for="RB_UIIsEnable_0">不可编辑</label> </td>
+<td colspan=2><input  type="radio" id="RB_UIIsEnable_1" name="RB_UIIsEnable" value="1" /> <label for="RB_UIIsEnable_1">可编辑</label> <input  type="radio" id="RB_UIIsEnable_0" name="RB_UIIsEnable" value="0" /> <label for="RB_UIIsEnable_0">不可编辑</label></td>
+<td>
+<input  type="radio" id="RB_UIVisible_1" name="RB_UIVisible" value="1" /> <label for="RB_UIVisible_1">否界可见</label> <input  type="radio" id="RB_UIVisible_0" name="RB_UIVisible" value="0" /> <label for="RB_UIVisible_0">否界不可见</label>
+ </td>
 </tr>
-
-<tr id='tr0' > 
-<td>是否界面可见</td>
-<td><input  type="radio" id="RB_UIVisible_1" name="RB_UIVisible" value="1" /> <label for="RB_UIVisible_1">可见</label> </td>
-<td><input  type="radio" id="RB_UIVisible_0" name="RB_UIVisible" value="0" /> <label for="RB_UIVisible_0">不可见</label> </td>
-</tr>
+ 
 
 <tr id='tr1' > 
 <td>最小长度 </td>

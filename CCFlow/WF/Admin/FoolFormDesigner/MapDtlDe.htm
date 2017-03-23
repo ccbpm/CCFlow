@@ -54,11 +54,13 @@
                           var name = data[i].Name;
                           var lgType = data[i].LGType;
                           var uiBindKey = data[i].UIBindKey;
+                          var uiContralType = data[i].UIContralType; //控件类型.
 
                           var nameLink = "";
-                          if (lgType == 0) {
-                              nameLink = "<a href=\"javascript:Edit('" + fk_mapDtl + "','" + mypk + "','" + dataType + "')\" > " + name + "</a>";
+                          if (lgType == 0 ) {
+                              nameLink = "<a href=\"javascript:Edit('" + fk_mapDtl + "','" + mypk + "','" + dataType + "','" + uiContralType + "')\" > " + name + "</a>";
                           }
+
                           if (lgType == 1) {
                               nameLink = "<a href=\"javascript:EditEnum('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
                           }
@@ -115,46 +117,75 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
             //  window.location.href = window.location.href;
         }
-        function Edit(fk_mapdata, mypk, ftype) {
+        function Edit(fk_mapdata, mypk, ftype, uiCtrlType) {
+
             var parentwin = parent.window;
+            if (parentwin && parentwin.document.getElementById("F").contentWindow
+            && parentwin.document.getElementById("F").contentWindow.location.href == location.href) {
 
-            if (parentwin && parentwin.document.getElementById("F").contentWindow && parentwin.document.getElementById("F").contentWindow.location.href == location.href) {
-                parentwin.Edit(fk_mapdata, mypk, ftype);
+                parentwin.Edit(fk_mapdata, mypk, ftype, uiCtrlType);
+                return;
             }
-            else {
-                var url = 'EditF.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype + '&s=' + Math.random();
 
-                OpenEasyUiDialog(url, "eudlgframe", "编辑字段", 800, 500, "icon-edit", true, null, null, null, function () {
-                    window.location.href = window.location.href;
-                });
+            var url = "";
+
+
+
+            //普通字段类型.
+            if (ftype == "1" && uiCtrlType == 0) {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrStrings&PK=" + mypk;
             }
+
+            //外键类型.
+            if (ftype == "1" && uiCtrlType != 0) {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrSFTables&PK=" + mypk;
+            }
+
+            //日期类型.
+            if (ftype == "6" || ftype == "7") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrDTs&PK=" + mypk;
+            }
+
+            // boolen 类型.
+            if (ftype == "4") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrBoolens&PK=" + mypk;
+            }
+
+            OpenEasyUiDialog(url, "eudlgframe", "字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
-        function EditEnum(fk_mapdata, mypk,enumKey) {
+
+        function EditEnum(fk_mapdata, mypk, enumKey) {
+
             var parentwin = parent.window;
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
 
             if (parentwin && parentwin.document.getElementById("F").contentWindow && parentwin.document.getElementById("F").contentWindow.location.href == location.href) {
                 parentwin.EditEnum(fk_mapdata, mypk, enumKey);
+                return;
             }
-            else {
-                var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&s=' + Math.random();
-                OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
-                    window.location.href = window.location.href;
-                });
-            }
+
+            OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
-        function EditTable(fk_mapdata, mypk,fk_sfTable) {
+        function EditTable(fk_mapdata, mypk, fk_sfTable) {
+
             var parentwin = parent.window;
-
-            if (parentwin && parentwin.document.getElementById("F").contentWindow && parentwin.document.getElementById("F").contentWindow.location.href == location.href) {
+            if (parentwin && parentwin.document.getElementById("F").contentWindow
+               && parentwin.document.getElementById("F").contentWindow.location.href == location.href) {
                 parentwin.EditTable(fk_mapdata, mypk, fk_sfTable);
+                return;
             }
-            else {
-                var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + fk_sfTable + '&s=' + Math.random();
 
-                OpenEasyUiDialog(url, "eudlgframe", "编辑外键字段", 800, 500, "icon-edit", true, null, null, null, function () {
-                    window.location.href = window.location.href;
-                });
-            }
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
 
         function Up(fk_mapdata, mypk) {

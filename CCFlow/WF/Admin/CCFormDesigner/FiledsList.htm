@@ -164,18 +164,21 @@
 			//WF/Admin/FoolFormDesigner/EditTableField.htm?DoType=Edit&FK_MapData=WoDeZiADun&FK_MapDtl=WoDeZiADun&MyPK=WoDeZiADun_CN_PQ&FK_SFTable=CN_PQ
 			var url;
 			if (type == 0) {
-				url = "/WF/Admin/FoolFormDesigner/EditF.htm?MyPK=" + no + "&FK_MapData=" + FK_MapData +"&KeyOfEn=" + KeyOfEn;
+			    url = "/WF/Admin/FoolFormDesigner/EditF.htm?MyPK=" + no + "&FK_MapData=" + FK_MapData + "&KeyOfEn=" + KeyOfEn;
 			}
 			else if (type == 1) {
-				url = "/WF/Admin/FoolFormDesigner/EditEnum.htm?DoType=Edit&MyPK=" + no + "&FK_MapData=" + FK_MapData + "&KeyOfEn=" + KeyOfEn + "&EnumKey=" + EnumKey;
+			    // url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+
+			    url = "/WF/Admin/FoolFormDesigner/EditEnum.htm?DoType=Edit&MyPK=" + no + "&FK_MapData=" + FK_MapData + "&KeyOfEn=" + KeyOfEn + "&EnumKey=" + EnumKey;
 			}
 			else if (type == 2) {
-				url = "/WF/Admin/FoolFormDesigner/EditTableField.htm?DoType=Edit&MyPK=" + no + "&FK_MapData=" + FK_MapData + "&KeyOfEn=" + KeyOfEn + "&FK_MapDtl=" + KeyOfEn;
+			    url = "/WF/Admin/FoolFormDesigner/EditTable.htm?DoType=Edit&MyPK=" + no + "&FK_MapData=" + FK_MapData + "&KeyOfEn=" + KeyOfEn + "&FK_MapDtl=" + KeyOfEn;
 			} else {
-				//alert(typeof(type));
-				alert("字段类型错误！");
-				return;
+			    //alert(typeof(type));
+			    alert("字段类型错误！");
+			    return;
 			}
+
 			var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
 			//WinOpen(url);	//for test
 			window.location.href = window.location.href;

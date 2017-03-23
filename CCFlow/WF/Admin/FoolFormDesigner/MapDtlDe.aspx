@@ -43,12 +43,16 @@
             window.location.href = window.location.href;
         }
         function EditEnum(fk_mapdata, mypk, enumKey) {
-            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&s=' + Math.random();
+
+           // alert(mypk);
+
+            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+          //  var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function EditTable(fk_mapdata, mypk,sfTable) {
-            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&s=' + Math.random();
+            var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

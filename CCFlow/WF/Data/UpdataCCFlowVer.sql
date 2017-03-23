@@ -4,6 +4,7 @@ DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTrackSta';
 
+
 -- 更新枚举值;
 DELETE FROM Sys_Enum WHERE EnumKey ='CodeStruct';
 DELETE FROM Sys_Enum WHERE EnumKey ='DBSrcType';
@@ -26,6 +27,22 @@ DELETE FROM Sys_Enum WHERE EnumKey ='NodeFormType';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmType';
 DELETE FROM Sys_Enum WHERE EnumKey ='FTCSta';
 DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
+
+
+DELETE FROM Sys_GloVar WHERE GroupKey='DefVal';
+
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('','选择系统约定默认值','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.No','登陆人员账号','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.Name','登陆人员名称','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_Dept','登陆人员部门编号','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_DeptName','登陆人员部门名称','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_DeptFullName','登陆人员部门全称','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yyyy年MM月dd日','当前日期(yyyy年MM月dd日)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日','当前日期(yy年MM月dd日)','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可处理人员','DefVal');
+
 
 
 -- 升级数据源 2016.0

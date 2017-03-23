@@ -113,14 +113,16 @@
             window.location.href = window.location.href;
         }
 
-        function EditEnum(fk_mapdata,keyOfEn, mypk, enumKey, gf ) {
-            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&KeyOfEn=' + keyOfEn+ '&GroupField=' + gf;
+        function EditEnum(fk_mapdata, keyOfEn, mypk, enumKey, gf) {
+
+            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+           // var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&KeyOfEn=' + keyOfEn+ '&GroupField=' + gf;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function EditTable(fk_mapdata, keyOfEn, mypk, sfTable,gf) {
-            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn+ '&GroupField=' + gf;
+            var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn + '&GroupField=' + gf;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
@@ -296,7 +298,7 @@
         ///编辑从表.
         function EditDtl(fk_mapdata, mypk) {
 
-            var url = '../../Comm/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&FK_MapData=' + fk_mapdata + '&No=' + mypk;
+            var url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&FK_MapData=' + fk_mapdata + '&No=' + mypk;
 
             //var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
 

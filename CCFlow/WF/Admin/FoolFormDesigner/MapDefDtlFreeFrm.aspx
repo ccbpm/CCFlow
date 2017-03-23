@@ -197,7 +197,11 @@
     }
 
   function EditDtl(mypk, dtlKey) {
-      var url = 'MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
+
+      //var url = 'MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
+
+      var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=' + dtlKey;
+
       var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
      // var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 800px;center: yes; help:no;resizable:yes');
       window.location.href = window.location.href;

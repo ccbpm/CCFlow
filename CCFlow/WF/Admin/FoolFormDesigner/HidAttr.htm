@@ -23,13 +23,16 @@
               window.location.href = window.location.href;
           }
           function EditEnum(mypk, refno, ftype) {
-              var url = 'EditEnum.htm?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
+             // var url = 'EditEnum.htm?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
+
+              var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+
               var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             //  window.close();
               window.location.href = window.location.href;
           }
           function EditTable(mypk, refno, ftype) {
-              var url = 'EditTableField.htm?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
+              var url = 'EditTable.htm?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
               var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
              // window.close();
               window.location.href = window.location.href;

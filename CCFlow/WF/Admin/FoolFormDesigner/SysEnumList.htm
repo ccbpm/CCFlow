@@ -2,13 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>枚举值列表</title>
-     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
      <base target="_self" /> 
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+
+    <link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="/DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+
 
     <script language="javascript" type="text/javascript" >
         /* ESC Key Down */
@@ -63,14 +69,35 @@
             });
         }
 
-        //增加到枚举到表单.
-        function AddFrm(enumKey, fk_mapData) {
-            //window.open("EditEnum.htm?FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey, "", "");
-            var groupID = GetQueryString("GroupField");
-            if (groupID == "null")
-                groupID = 0;
+        function AddFrm( enumID, fk_mapdata) {
 
-            WinOpen("EditEnum.htm?FK_MapData=" + fk_mapData + "&EnumKey=" + enumKey + "&KeyOfEn=" + enumKey + "&GroupField=" + groupID);
+            var url = '';
+            var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
+            if (str == null)
+                return;
+
+            var groupField = GetQueryString("GroupField");
+            if (groupField == null)
+                groupField = "0";
+
+            url = Handler + "?DoType=SysEnumList_SaveEnumField&KeyOfEn=" + str + "&FK_MapData=" + fk_mapdata + "&GroupFeid=" + groupField + "&EnumKey=" + enumID + "&m=" + Math.random(),
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf("err@") >= 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.MapAttrEnums&PK=" + data;
+                    window.location.href = url;
+                }
+            });
         }
      </script>
 </head>

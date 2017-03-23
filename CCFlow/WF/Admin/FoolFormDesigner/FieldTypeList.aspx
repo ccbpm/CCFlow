@@ -90,7 +90,7 @@
 <td colspan="2">
 
 <ul>
-<li><a href='SysEnumList.aspx?DoType=AddSysEnum&FK_MapData=<%=this.FK_MapData %>&Idx=&GroupField=<%=this.GroupField %>'><b>枚举型</b></a> -  比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li> 	
+<li><a href='SysEnumList.htm?DoType=AddSysEnum&FK_MapData=<%=this.FK_MapData %>&Idx=&GroupField=<%=this.GroupField %>'><b>枚举型</b></a> -  比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。</li> 	
 <li> <a href="SysEnum.aspx?DoType=New&FK_MapData=<%=this.FK_MapData  %>&Idx=&GroupField=<%=this.GroupField %>"  >新建枚举 </a> </li>
 </ul>	
 

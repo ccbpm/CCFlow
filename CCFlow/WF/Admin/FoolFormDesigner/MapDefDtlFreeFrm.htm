@@ -43,12 +43,13 @@
             window.location.href = window.location.href;
         }
         function Insert(fk_mapdata, idx) {
-            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&IDX=' + idx;
+            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&IDX=' + idx;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function AddF(fk_mapdata) {
-            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
+
+            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", "插入列", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
@@ -105,21 +106,53 @@
             window.location.href = window.location.href;
         }
 
-        function Edit(fk_mapdata, mypk, ftype) {
-            var url = 'EditF.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype + '&s=' + Math.random();
-            OpenEasyUiDialog(url, "eudlgframe", "编辑字段", 800, 500, "icon-edit", true, null, null, null, function () {
-                ReloadDtlFrame();
+        function Edit(fk_mapdata, mypk, ftype, uiCtrlType) {
+
+
+            var url = "";
+
+            //普通字段类型.
+            if (ftype == "1" && uiCtrlType == 0) {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrStrings&PK=" + mypk;
+            }
+
+            //外键类型.
+            if (ftype == "1" && uiCtrlType != 0) {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrSFTables&PK=" + mypk;
+            }
+
+            //日期类型.
+            if (ftype == "6" || ftype == "7") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrDTs&PK=" + mypk;
+            }
+
+            // boolen 类型.
+            if (ftype == "4") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrBoolens&PK=" + mypk;
+            }
+
+            OpenEasyUiDialog(url, "eudlgframe", "字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
             });
+             
         }
+
         function EditEnum(fk_mapdata, mypk, enumKey) {
-            var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&s=' + Math.random();
+           // var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&s=' + Math.random();
+
+            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+
             OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });
         }
         function EditTable(fk_mapdata, mypk, fk_sfTable) {
-            var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + fk_sfTable + '&s=' + Math.random();
-            OpenEasyUiDialog(url, "eudlgframe", "编辑外键字段", 800, 500, "icon-edit", true, null, null, null, function () {
+         //   var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + fk_sfTable + '&s=' + Math.random();
+
+
+           var  url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrSFTables&PK=" + mypk;
+
+            OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });
         }
@@ -225,7 +258,9 @@
         }
 
         function EditDtl(fk_mapData, dtlKey) {
-            var url = 'MapDtl.aspx?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + dtlKey;
+
+            var url = "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=" + dtlKey;
+          //  var url = 'MapDtl.aspx?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + dtlKey;
 
             OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -233,7 +268,10 @@
         }
 
         function EditDtlHtm(fk_mapData, dtlKey) {
-            var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + dtlKey;
+
+            var url = "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=" + dtlKey;
+
+            //var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + dtlKey;
 
             OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -290,8 +328,7 @@
  <div class='easyui-layout' data-options='fit:true'>
         <div data-options="region:'north',noheader:true,split:false,border:false" style='height:30px;overflow-y:hidden'>
             <div style='float:left'>
-                <a href="javascript:EditDtl(fk_mapData,fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-edit',plain:true">属性aspx</a>
-                <a href="javascript:EditDtlHtm(fk_mapData,fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-edit',plain:true">属性htm</a>
+                <a href="javascript:EditDtlHtm(fk_mapData,fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-edit',plain:true">属性</a>
             </div>
             <div style='float:right'>
                 <a href="javascript:AddF(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-new',plain:true">插入列</a>

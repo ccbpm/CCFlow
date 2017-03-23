@@ -7,6 +7,10 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+
+    <script src="/WF/Scripts/EasyUIUtility.js" type="text/javascript"></script>
+
+    
      <base target="_self" /> 
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
 
@@ -94,15 +98,53 @@
             alert(key);
         }
 
-        function AddSFTable(key) {
+        function AddSFTable(sfTable) {
 
-            var groupID = GetQueryString("GroupField");
-            if (groupID == "null")
-                groupID = 0;
             var fk_mapData = GetQueryString("FK_MapData");
 
-            var url = 'EditTableField.htm?FK_MapData=' + fk_mapData + '&FK_SFTable=' + key + '&GroupField=' + groupID;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
+            if (fk_mapData == '' || fk_mapData == null) {
+                window.location.href = '/WF/Admin/FoolFormDesigner/SFSQLDataView.aspx?FK_SFTable=' + sfTable;
+                return;
+            }
+
+            var url = '';
+            var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", sfTable);
+            if (str == null)
+                return;
+
+            var groupID = GetQueryString("GroupField");
+            if (groupID == null || groupID=="null" )
+                groupID = "0";
+
+            url = Handler + "?DoType=SFList_SaveSFField&KeyOfEn=" + str + "&FK_MapData=" + fk_mapData + "&GroupField=" + groupID + "&SFTable=" + sfTable + "&m=" + Math.random(),
+
+            alert(url);
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf("err@") >= 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data);
+
+                    url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrSFTables&PK=" + data;
+                    window.location.href = url;
+                }
+            });
+
+
+            var url = 'EditTable.htm?FK_MapData=' + fk_mapData + '&FK_SFTable=' + key + '&GroupField=' + groupID;
+            window.location.href = url;
+            return;
+
+
         }
         function AddSFSQL(mypk, idx, key) {
 

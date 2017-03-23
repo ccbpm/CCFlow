@@ -22,6 +22,8 @@ $(function () {
     showGrid();
     //右键菜单
     InitContexMenu();
+    //鼠标双击
+    InitDbClick();
     //初始节点元素
     buildPanel();
     //设置属性高度
@@ -89,6 +91,28 @@ function InitContexMenu() {
         }
     });
 }
+
+//画板双击事件绑定
+function InitDbClick() {
+    $('#a').bind('dblclick', function (ev) {
+        var coords = getCanvasXY(ev); var x = coords[0];
+        var y = coords[1];
+        var figureIndex = STACK.figureGetByXY(x, y);
+        if (figureIndex != -1) {
+            var figure = STACK.figureGetById(figureIndex);
+            ondbclickCallBackFun(figure);
+        }
+    })
+}
+
+//画板元素双击时的回掉方法
+function ondbclickCallBackFun(figure) {
+    var pk = figure.CCForm_MyPK;
+    var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=ND7803_' + pk;
+
+    CCForm_ShowDialog(url, '属性');
+}
+
 
 //初始化画板元素
 function buildPanel() {

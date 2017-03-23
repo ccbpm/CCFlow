@@ -3,13 +3,14 @@ using System.Data;
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Sys;
 
-namespace BP.Sys
+namespace BP.Sys.FrmUI
 {
     /// <summary>
-    /// 日期字段
+    /// Boolen字段
     /// </summary>
-    public class MapAttrDT : EntityMyPK
+    public class MapAttrBoolen : EntityMyPK
     {
         #region 文本字段参数属性.
         /// <summary>
@@ -86,9 +87,9 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 日期字段
+        /// Boolen字段
         /// </summary>
-        public MapAttrDT()
+        public MapAttrBoolen()
         {
         }
         /// <summary>
@@ -101,7 +102,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapAttr", "日期字段");
+                Map map = new Map("Sys_MapAttr", "Boolen字段");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -113,16 +114,19 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
-                map.AddDDLSysEnum(MapAttrAttr.MyDataType, 6, "数据类型", true, false);
+                //数据类型.
+                map.AddDDLSysEnum(MapAttrAttr.MyDataType, 4, "数据类型", true, false);
 
-                map.AddTBString(MapAttrAttr.DefVal, null, "默认值(@RDT为当前日期)", true, false, 0, 100, 20);
+                //map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
+                //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
-                map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
+                map.AddBoolean(MapAttrAttr.DefVal, false, "默认值(是否选中？)", true, true);
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 4000, 20, true);
 
+             
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
@@ -138,31 +142,28 @@ namespace BP.Sys
                 #region 执行的方法.
                 RefMethod rm = new RefMethod();
 
-                rm = new RefMethod();
-                rm.Title = "自动计算";
-                rm.ClassMethodName = this.ToString() + ".DoAutoFull()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "自动计算";
+                //rm.ClassMethodName = this.ToString() + ".DoAutoFull()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "正则表达式";
-                rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "正则表达式";
+                //rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
-
-                rm = new RefMethod();
-                rm.Title = "脚本验证";
-                rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
+                //rm = new RefMethod();
+                //rm.Title = "脚本验证";
+                //rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "旧版本设置";
                 rm.ClassMethodName = this.ToString() + ".DoOldVer()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
                 #endregion 执行的方法.
 
@@ -230,7 +231,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoInputCheck()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK+"&RefNo="+this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn  +"&RefNo="+this.MyPK;
           //  return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
@@ -247,13 +248,13 @@ namespace BP.Sys
     /// <summary>
     /// 实体属性s
     /// </summary>
-    public class MapAttrDTs : EntitiesMyPK
+    public class MapAttrBoolens : EntitiesMyPK
     {
         #region 构造
         /// <summary>
         /// 实体属性s
         /// </summary>
-        public MapAttrDTs()
+        public MapAttrBoolens()
         {
         }
         /// <summary>
@@ -263,7 +264,7 @@ namespace BP.Sys
         {
             get
             {
-                return new MapAttrDT();
+                return new MapAttrBoolen();
             }
         }
         #endregion
@@ -273,20 +274,20 @@ namespace BP.Sys
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapAttrDT> ToJavaList()
+        public System.Collections.Generic.IList<MapAttrBoolen> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapAttrDT>)this;
+            return (System.Collections.Generic.IList<MapAttrBoolen>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapAttrDT> Tolist()
+        public System.Collections.Generic.List<MapAttrBoolen> Tolist()
         {
-            System.Collections.Generic.List<MapAttrDT> list = new System.Collections.Generic.List<MapAttrDT>();
+            System.Collections.Generic.List<MapAttrBoolen> list = new System.Collections.Generic.List<MapAttrBoolen>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapAttrDT)this[i]);
+                list.Add((MapAttrBoolen)this[i]);
             }
             return list;
         }

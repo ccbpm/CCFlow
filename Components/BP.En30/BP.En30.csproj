@@ -183,7 +183,8 @@
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
-    <Compile Include="Sys\MapAttrExt\MapAttrSFTable.cs" />
+    <Compile Include="Sys\FrmUI\FrmImgExt.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\ToolbarExcel.cs" />
     <Compile Include="Sys\ToolbarExcelSln.cs" />
     <Compile Include="Sys\GEEntityExcelFrm.cs" />
@@ -205,12 +206,12 @@
     </Compile>
     <Compile Include="Sys\ExtContral.cs" />
     <Compile Include="Sys\XML\SQLList.cs" />
-    <Compile Include="Sys\FrmAttachmentExt.cs" />
-    <Compile Include="Sys\MapAttrExt\MapAttrEnum.cs" />
-    <Compile Include="Sys\MapAttrExt\MapAttrString.cs" />
-    <Compile Include="Sys\MapAttrExt\MapAttrNum.cs" />
-    <Compile Include="Sys\MapAttrExt\MapAttrDT.cs" />
-    <Compile Include="Sys\MapAttrExt\MapAttrBoolen.cs" />
+    <Compile Include="Sys\FrmUI\FrmAttachmentExt.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrEnum.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrString.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrNum.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrDT.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrBoolen.cs" />
     <Compile Include="Tools\Cryptography.cs" />
     <Compile Include="Tools\DataSet2Json.cs" />
     <Compile Include="DA\EnumDA.cs" />
@@ -344,7 +345,7 @@
     <Compile Include="Sys\GEDtl.cs" />
     <Compile Include="Sys\GroupField.cs" />
     <Compile Include="Sys\MapData.cs" />
-    <Compile Include="Sys\MapAttrExt\MapAttr.cs" />
+    <Compile Include="Sys\MapAttr.cs" />
     <Compile Include="En\AttrOfSearch.cs">
       <SubType>Code</SubType>
     </Compile>

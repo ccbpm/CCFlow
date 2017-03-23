@@ -2,7 +2,9 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
-namespace BP.Sys
+using BP.Sys;
+
+namespace BP.Sys.FrmUI
 {
     /// <summary>
     /// 附件

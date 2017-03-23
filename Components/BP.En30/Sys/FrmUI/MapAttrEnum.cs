@@ -3,10 +3,10 @@ using System.Data;
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Sys;
 
-namespace BP.Sys
+namespace BP.Sys.FrmUI
 {
-      
     /// <summary>
     /// 枚举字段
     /// </summary>

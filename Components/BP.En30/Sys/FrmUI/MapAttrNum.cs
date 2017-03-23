@@ -3,8 +3,9 @@ using System.Data;
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Sys;
 
-namespace BP.Sys
+namespace BP.Sys.FrmUI
 {
     /// <summary>
     /// 数值字段
@@ -243,7 +244,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoInputCheck()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK+"&RefNo="+this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn +"&RefNo="+this.MyPK;
           //  return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>

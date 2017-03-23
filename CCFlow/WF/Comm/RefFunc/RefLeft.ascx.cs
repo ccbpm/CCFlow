@@ -86,6 +86,9 @@ namespace CCFlow.WF.Comm.RefFunc
                 if (enName == null)
                 {
                     Entities ens = ClassFactory.GetEns(this.EnsName);
+                    if (ens == null)
+                        throw new Exception("@实体类错误【"+this.EnsName+"】，没有反射出来。");
+
                     this.ViewState["EnName"] = ens.GetNewEntity.ToString();
                     enName = this.ViewState["EnName"].ToString();
                 }

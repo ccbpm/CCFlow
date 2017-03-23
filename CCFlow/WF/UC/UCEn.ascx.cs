@@ -4556,7 +4556,7 @@ namespace CCFlow.WF.UC
                     fu.SaveAs(saveTo);
 
                     //转换html，added by liuxc,2017-03-01
-                    if (new FrmAttachmentExt(frmAth.MyPK).IsTurn2Html)
+                    if (new BP.Sys.FrmUI.FrmAttachmentExt(frmAth.MyPK).IsTurn2Html)
                         ConvertOfficeFileToHtml(saveTo);
 
                     FileInfo info = new FileInfo(saveTo);

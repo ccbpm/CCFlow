@@ -115,7 +115,7 @@
 
         function EditEnum(fk_mapdata, keyOfEn, mypk, enumKey, gf) {
 
-            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
            // var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&KeyOfEn=' + keyOfEn+ '&GroupField=' + gf;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;

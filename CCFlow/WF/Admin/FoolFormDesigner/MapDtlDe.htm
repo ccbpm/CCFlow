@@ -133,22 +133,22 @@
 
             //普通字段类型.
             if (ftype == "1" && uiCtrlType == 0) {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrStrings&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + mypk;
             }
 
             //外键类型.
             if (ftype == "1" && uiCtrlType != 0) {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrSFTables&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + mypk;
             }
 
             //日期类型.
             if (ftype == "6" || ftype == "7") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrDTs&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
             }
 
             // boolen 类型.
             if (ftype == "4") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrBoolens&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=" + mypk;
             }
 
             OpenEasyUiDialog(url, "eudlgframe", "字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
@@ -159,7 +159,7 @@
         function EditEnum(fk_mapdata, mypk, enumKey) {
 
             var parentwin = parent.window;
-            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
 
             if (parentwin && parentwin.document.getElementById("F").contentWindow && parentwin.document.getElementById("F").contentWindow.location.href == location.href) {
                 parentwin.EditEnum(fk_mapdata, mypk, enumKey);
@@ -180,7 +180,7 @@
                 return;
             }
 
-            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;

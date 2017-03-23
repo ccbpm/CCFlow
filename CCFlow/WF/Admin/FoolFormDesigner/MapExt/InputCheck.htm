@@ -2,9 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-</head>
-<body>
 
-<h3>施工中....</h3>
+    <script type="text/javascript">
+        function load() {
+
+            var url = window.location.href;
+            var idx = url.indexOf('.htm?');
+            var paras = url.substring(idx + 4);
+            var myurl = 'InputCheck.aspx' + paras;
+
+            window.location.href = myurl;
+        }
+    </script>
+</head>
+<body onload="load()">
+
+
+<h2> 正在加载，请稍后。。。 </h2>
+
 </body>
 </html>

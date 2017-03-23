@@ -57,6 +57,8 @@ namespace CCFlow.WF.MapDef
                 string s = this.Request.QueryString["RefNo"];
                 if (s == null)
                     s = this.Request.QueryString["No"];
+                if (s == null)
+                    s = this.Request.QueryString["MyPK"];
                 return s;
             }
         }
@@ -103,6 +105,7 @@ namespace CCFlow.WF.MapDef
             MapExts mes = new MapExts();
             mes.Retrieve(MapExtAttr.ExtType, this.ExtType,
                 MapExtAttr.FK_MapData, this.FK_MapData);
+
             this.MapJS(mes);
         }
 

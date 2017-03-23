@@ -46,7 +46,7 @@
 
            // alert(mypk);
 
-            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
           //  var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;

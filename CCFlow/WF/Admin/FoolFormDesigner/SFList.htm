@@ -118,8 +118,6 @@
 
             url = Handler + "?DoType=SFList_SaveSFField&KeyOfEn=" + str + "&FK_MapData=" + fk_mapData + "&GroupField=" + groupID + "&SFTable=" + sfTable + "&m=" + Math.random(),
 
-            alert(url);
-
             $.ajax({
                 type: 'post',
                 async: true,
@@ -132,9 +130,7 @@
                         return;
                     }
 
-                    alert(data);
-
-                    url = "/WF/Comm/En.htm?EnsName=BP.Sys.MapAttrSFTables&PK=" + data;
+                    url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + data;
                     window.location.href = url;
                 }
             });

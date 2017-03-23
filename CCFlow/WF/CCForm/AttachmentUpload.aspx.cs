@@ -1143,7 +1143,7 @@ namespace CCFlow.WF.CCForm
                             fu.SaveAs(realSaveTo);
 
                             //转换html，added by liuxc,2017-03-01
-                            if (new FrmAttachmentExt(athDesc.MyPK).IsTurn2Html)
+                            if (new BP.Sys.FrmUI.FrmAttachmentExt(athDesc.MyPK).IsTurn2Html)
                                 ConvertOfficeFileToHtml(realSaveTo);
                         }
                         catch (Exception ex)

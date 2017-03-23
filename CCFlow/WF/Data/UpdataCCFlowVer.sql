@@ -51,8 +51,8 @@ UPDATE Sys_SFTable SET SrcType=1 WHERE (No NOT like 'BP.%') AND  (SrcType = 0 OR
 
 
 -- 2016.11.18 升级维护附件属性.;
-DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmAttachmentExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmAttachmentExt',
+DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.FrmAttachmentExt';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.FrmAttachmentExt',
 '@MyPK=基础信息,附件的基本配置.
 @DeleteWay=权限控制,控制附件的下载与上传权限.@IsRowLock=WebOffice属性,设置与公文有关系的属性配置.
 @IsToHeLiuHZ=流程相关,控制节点附件的分合流.

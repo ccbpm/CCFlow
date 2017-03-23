@@ -5710,7 +5710,7 @@ namespace BP.WF
             if (this.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
                 /* 如果是协作组长模式.*/
-                if (this.DealTeamUpNode() == true)
+                if (this.TeamupGroupLeader() == true)
                 {
                     //if (this._transferCustom != null)
                     //    _transferCustom.Delete();

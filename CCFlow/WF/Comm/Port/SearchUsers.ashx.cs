@@ -29,12 +29,12 @@ namespace CCFlow.Web.Comm.Port
             {
                 case "getdepts":
                     string s_responsetext = string.Empty;
-                    DataTable dt_dept = DBAccess.RunSQLReturnTable("select NO,NAME,ParentNo from port_dept");
-                    s_responsetext = GetTreeJsonByTable(dt_dept, "NO", "NAME", "ParentNo", "0");
+                    DataTable dt_dept = DBAccess.RunSQLReturnTable("select NO,NAME,ParentNo,IDX from port_dept");
+                    s_responsetext = GetTreeJsonByTable(dt_dept, "NO", "NAME", "ParentNo", "0","IDX");
                     if (string.IsNullOrEmpty(s_responsetext) || s_responsetext == "[]")//如果为空，使用另一种查询
                     {
                         treeResult.Clear();
-                        s_responsetext = GetTreeJsonByTable(dt_dept, "NO", "NAME", "ParentNo", "O0");
+                        s_responsetext = GetTreeJsonByTable(dt_dept, "NO", "NAME", "ParentNo", "O0", "IDX");
                     }
 
                     context.Response.Write(s_responsetext);
@@ -180,7 +180,7 @@ namespace CCFlow.Web.Comm.Port
         ///<returns>easyui tree json格式</returns>
         StringBuilder treeResult = new StringBuilder();
         StringBuilder treesb = new StringBuilder();
-        public string GetTreeJsonByTable(DataTable tabel, string idCol, string txtCol, string rela, object pId)
+        public string GetTreeJsonByTable(DataTable tabel, string idCol, string txtCol, string rela, object pId,string order = null)
         {
             string treeJson = string.Empty;
             string treeState = "close";
@@ -203,7 +203,15 @@ namespace CCFlow.Web.Comm.Port
                 {
                     filer = string.Format("{0}='{1}'", rela, pId);
                 }
-                DataRow[] rows = tabel.Select(filer);
+                DataRow[] rows = null;
+                if (order != null)
+                {
+                    rows = tabel.Select(filer, order);
+                }
+                else
+                {
+                    rows = tabel.Select(filer);
+                }
                 if (rows.Length > 0)
                 {
                     foreach (DataRow row in rows)

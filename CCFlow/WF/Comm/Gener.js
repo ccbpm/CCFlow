@@ -326,3 +326,70 @@ function ShowHidden(ctrlID) {
         ctrl.style.display = 'block';
     }
 }
+
+function OpenDialogAndCloseRefresh(url, dlgTitle, dlgWidth, dlgHeight, dlgIcon, fnClosed) {
+    ///<summary>使用EasyUiDialog打开一个页面，页面中嵌入iframe【id="eudlgframe"】</summary>
+    ///<param name="url" type="String">页面链接</param>
+    ///<param name="dlgTitle" type="String">Dialog标题</param>
+    ///<param name="dlgWidth" type="int">Dialog宽度</param>
+    ///<param name="dlgHeight" type="int">Dialog高度</param>
+    ///<param name="dlgIcon" type="String">Dialog图标，必须是一个样式class</param>
+    ///<param name="fnClosed" type="Function">窗体关闭调用的方法（注意：此方法中可以调用dialog中页面的内容；如此方法启用，则关闭窗体时的自动刷新功能会失效）</param>
+
+    var dlg = $('#eudlg');
+    var iframeId = "eudlgframe";
+
+    if (dlg.length == 0) {
+        var divDom = document.createElement('div');
+        divDom.setAttribute('id', 'eudlg');
+        document.body.appendChild(divDom);
+        dlg = $('#eudlg');
+        dlg.append("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:100%'></iframe>");
+    }
+
+    dlg.dialog({
+        title: dlgTitle,
+        width: dlgWidth,
+        height: dlgHeight,
+        iconCls: dlgIcon,
+        resizable: true,
+        modal: true,
+        onClose: function () {
+            if (fnClosed) {
+                fnClosed();
+                return;
+            }
+
+            Reload();
+        },
+        cache: false
+    });
+    
+    dlg.dialog('open');
+    $('#' + iframeId).attr('src', url);
+}
+
+function Reload() {
+    ///<summary>重新加载当前页面</summary>
+    var newurl = "";
+    var urls = window.location.href.split('?');
+    var params;
+
+    if (urls.length == 1) {
+        window.location.href = window.location.href + "?t=" + Math.random();
+    }
+
+    newurl = urls[0] + '?1=1';
+    params = urls[1].split('&');
+
+    for (var i = 0; i < params.length; i++) {
+        if (params[i].toLowerCase().indexOf("t=") == 0) {
+            newurl += "&t=" + Math.random();
+            continue;
+        }
+
+        newurl += "&" + params[i];
+    }
+
+    window.location.href = newurl;
+}

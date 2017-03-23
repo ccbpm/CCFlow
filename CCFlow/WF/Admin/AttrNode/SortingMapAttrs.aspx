@@ -10,57 +10,43 @@
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
         function ShowEditWindow(field, url) {
             if (!field || !url) {
                 return;
             }
 
-            OpenEasyUiDialog(url, "eudlgframe", "编辑字段：" + field, 600, 550, "icon-edit");
-            $('#eudlg').dialog({
-                onClose: function () {                    
-                    location.href = location.href + "&t=" + Math.random();
-                }
-            });
+            OpenDialogAndCloseRefresh(url, "编辑字段：" + field, 600, 550, "icon-edit");
         }
         //新增分组名称
         function GroupFieldNew(ensName) {
             var url = '../FoolFormDesigner/GroupField.aspx?DoType=NewGroup&RefNo=' + ensName + "&inlayer=1";
-
-            OpenEasyUiDialog(url, "eudlgframe", "新建分组", 600, 550, "icon-new", false, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
+            OpenDialogAndCloseRefresh(url, "新建分组", 600, 550, "icon-new");
         }
         //编辑分组名称
         function GroupField(fk_mapdata, OID) {
             var url = '../FoolFormDesigner/GroupField.aspx?FK_MapData=' + fk_mapdata + "&GroupField=" + OID + "&inlayer=1";
-
-            OpenEasyUiDialog(url, "eudlgframe", "编辑分组", 600, 550, "icon-edit", false, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
+            OpenDialogAndCloseRefresh(url, "编辑分组", 600, 550, "icon-edit");
         }
         //.net保存并关闭层所用函数
         function closeDlg() {
             $('#eudlg').dialog("close");
         }
-
         //编辑明细表
         function EditDtl(mypk, dtlKey) {
             var url = '../FoolFormDesigner/MapDtl.aspx?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            OpenDialogAndCloseRefresh(url, "编辑明细表", 720, 550, "icon-edit");
         }
         //编辑多附件
         function EditAthMent(fk_mapdata, athMentKey) {
             var url = '../FoolFormDesigner/Attachment.aspx?FK_MapData=' + fk_mapdata + '&Ath=' + athMentKey;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            OpenDialogAndCloseRefresh(url, "编辑多附件", 720, 550, "icon-edit");
         }
         //预览手机端
         function Form_View(FK_MapData, FK_Flow) {
             var url = '../../../CCMobile/Frm.aspx?FK_MapData=' + FK_MapData + '&IsTest=1&WorkID=0&FK_Node=999999';
-            OpenEasyUiDialog(url, "eudlgframe", "预览表单", 360, 568, "icon-search");
+            OpenDialogAndCloseRefresh(url, "预览手机端表单", 600, 550, "icon-edit", function () { });
         }
     </script>
 </head>

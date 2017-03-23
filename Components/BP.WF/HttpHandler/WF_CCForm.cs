@@ -10,6 +10,7 @@ using BP.Sys;
 using BP.Port;
 using BP.Web;
 using BP.WF.Template;
+using BP.WF.XML;
 
 namespace BP.WF.HttpHandler
 {
@@ -46,6 +47,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        #region dtl.htm 从表.
         /// <summary>
         /// 初始化从表数据
         /// </summary>
@@ -81,9 +83,45 @@ namespace BP.WF.HttpHandler
 
             //获得他的描述,与数据.
             DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData,mdtl, this.RefOID, strs);
-
             return BP.Tools.Json.ToJson(ds);
         }
+        /// <summary>
+        /// 执行从表的保存.
+        /// </summary>
+        /// <returns></returns>
+        public string Dtl_Save()
+        {
+            MapDtl mdtl = new MapDtl(this.EnsName);
+            GEDtls dtls = new GEDtls(this.EnsName);
+            FrmEvents fes = new FrmEvents(this.EnsName); //获得事件.
+            GEEntity mainEn = null;
+
+            #region 从表保存前处理事件.
+            if (fes.Count > 0)
+            {
+                mainEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, mainEn);
+                if (msg != null)
+                    throw new Exception(msg);
+            }
+            #endregion 从表保存前处理事件.
+
+            #region 保存的业务逻辑.
+
+            #endregion 保存的业务逻辑.
+
+            #region 从表保存后处理事件。
+            if (fes.Count > 0)
+            {
+                string msg = fes.DoEventNode(EventListDtlList.DtlSaveEnd, mainEn);
+                if (msg != null)
+                    throw new Exception(msg);
+            }
+            #endregion 处理事件.
+
+            return "保存成功";
+        }
+        #endregion dtl.htm 从表.
         /// <summary>
         /// 处理SQL的表达式.
         /// </summary>

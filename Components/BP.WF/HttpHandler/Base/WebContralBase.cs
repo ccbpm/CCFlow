@@ -60,6 +60,27 @@ namespace BP.WF.HttpHandler
 
         #region 公共方法.
         /// <summary>
+        /// 公共方法获取值
+        /// </summary>
+        /// <param name="param">参数名</param>
+        /// <returns></returns>
+        public string GetRequestVal(string param)
+        {
+            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
+        }
+        /// <summary>
+        /// 公共方法获取值
+        /// </summary>
+        /// <param name="param">参数名</param>
+        /// <returns></returns>
+        public int GetRequestValInt(string param)
+        {
+            string str = GetRequestVal(param);
+            if (str == null || str == "")
+                return 0;
+            return int.Parse(str);
+        }
+        /// <summary>
         /// 获得参数.
         /// </summary>
         public string RequestParas
@@ -335,26 +356,24 @@ namespace BP.WF.HttpHandler
                 return false;
             return true;
         }
-        /// <summary>
-        /// 公共方法获取值
-        /// </summary>
-        /// <param name="param">参数名</param>
-        /// <returns></returns>
-        public string GetRequestVal(string param)
+       
+        public new string RefPK
         {
-            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
+            get
+            {
+                string str = this.context.Request.QueryString["RefPK"];
+                return str;
+            }
         }
-        /// <summary>
-        /// 公共方法获取值
-        /// </summary>
-        /// <param name="param">参数名</param>
-        /// <returns></returns>
-        public int GetRequestValInt(string param)
+        public string RefPKVal
         {
-            string str = GetRequestVal(param);
-            if (str == null || str == "")
-                return 0;
-            return int.Parse(str);
+            get
+            {
+                string str = this.context.Request.QueryString["RefPKVal"];
+                if (str == null)
+                    return "1";
+                return str;
+            }
         }
         #endregion 属性.
 

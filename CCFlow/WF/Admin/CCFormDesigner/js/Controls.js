@@ -278,6 +278,21 @@ figureSets["Ath"] = {
     ]
 };
 
+
+/**Controls set declaration*/
+figureSets["mobile"] = {
+    name: '移动组件',
+    description: '与手机平板移动设备应用相关的组件',
+    figures: [
+        { figureFunction: "Square", name: "Map", image: "Map.png", CNName: "地图控件" },
+        { figureFunction: "Square", name: "Camera", image: "Camera.png", CNName: "拍照上传" },
+        { figureFunction: "Square", name: "SoundRecord", image: "SoundRecord.png", CNName: "录音" },
+        { figureFunction: "Square", name: "VideoRecord", image: "VideoRecord.png", CNName: "录像" },
+        { figureFunction: "Square", name: "QRCode", image: "QRCode.png", CNName: "二维码" }
+    ]
+};
+
+
 /**Controls set declaration*/
 figureSets["ccbpm"] = {
     name: '流程组件',

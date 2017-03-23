@@ -276,7 +276,8 @@ function CCForm_FoolFrm() {
 //表单属性
 function CCForm_Attr() {
     var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFrees&PK=' + CCForm_FK_MapData;
-    OpenWindow(url, 500,400);
+  //  OpenWindow(url, 400, 300);
+    CCForm_ShowDialog(url, '表单属性');
 }
 
 //打开页面方法
@@ -295,7 +296,10 @@ function OpenWindow(url, h, w) {
         winWidth = screen.availWidth;
         winHeight = screen.availHeight - 36;
     }
-    window.open(url, "_blank", "height=" + winHeight + ",width=" + winWidth + ",top=0,left=0,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
+
+  //  OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, winHeight, winWidth, 'icon-library', false);
+
+     window.open(url, "_blank", "height=" + winHeight + ",width=" + winWidth + ",top=0,left=0,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
 }
  
 

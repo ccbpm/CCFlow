@@ -96,8 +96,9 @@
         function Exp() {
 
             var url = "/WF/Admin/XAP/DoPort.aspx?DoType=DownFormTemplete&FK_MapData=" + CCForm_FK_MapData;
-
             window.open(url, 'exp');
+
+          //  CCForm_ShowDialog(url, '导入表单');
             //  CCForm_ShowDialog(url, '导出');
             //CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData, '导出');
             return;
@@ -142,17 +143,19 @@
             <label for="BrowserView" class="toolbarText"> 表单属性</label>
         </a>
 
-        <a style="text-decoration: none;" href="javascript:Srcipt();" title="JS编程">
+     <!--   <a style="text-decoration: none;" href="javascript:Srcipt();" title="JS编程">
             <img src="../../Img/Script.png" id="Img3" border="0" width="16" height="16" alt="" />
             <label for="ExpFrmXml" class="toolbarText">JS编程</label>
-        </a>
+        </a>-->
 
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none;" href="javascript:Exp();" title="导出表单模版">
             <img src="Img/toolbar/Exp.png" id="ExpFrmXml" border="0" width="16" height="16" alt="" />
             <label for="ExpFrmXml" class="toolbarText">导出</label>
         </a>
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+
         <a style="text-decoration: none;" href="javascript:Imp();" title="导入表单模版">
             <img src="Img/toolbar/Imp.png" id="ImpFrmXml" border="0" width="16" height="16" alt="" />
             <label for="ImpFrmXml" class="toolbarText">导入</label>
@@ -163,17 +166,22 @@
             <img src="Img/toolbar/hidenF.png" id="HField" border="0" width="16" height="16" alt="" />
             <label for="HField" class="toolbarText">隐藏字段</label>
         </a>
-        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
-        <a style="text-decoration: none; display:inline;" href="javascript:Show_HidenField_Panel();" title="左对齐">
-            <img src="Img/toolbar/Alignment_Left.png" id="Img1" border="0" alt="" />
-            <label class="toolbarText">左对齐</label>
-        </a>
+
+    
+
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
             <input type="checkbox" onclick="showGrid();" checked="checked" id="gridCheckbox" title="显示网格" style="vertical-align: middle;" />
             <label for="gridCheckbox" class="toolbarText">显示网格</label>
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
             <input type="checkbox" onclick="snapToGrid();" id="snapCheckbox" title="粘合网格线" style="vertical-align: middle;" />
             <label for="snapCheckbox" class="toolbarText">粘合网格线</label>
+
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+        <a style="text-decoration: none; display:inline;" href="http://www.ccflow.org" target=_blank title="打开官方网站在线帮助." >
+            <img src="Img/Home.png" id="Img1" border="0" alt="" />
+            <label class="toolbarText">官网</label>
+        </a>
+
         <script type="text/javascript" language="javascript">
             if (!isBrowserReady()) {
                 document.write('<span style="background-color: red;" >');

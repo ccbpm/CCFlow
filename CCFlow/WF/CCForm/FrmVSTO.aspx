@@ -18,7 +18,6 @@
 			//string fid = this.Request.QueryString["FID"];
 			//string frmID = this.Request.QueryString["FK_MapData"];
 
-
 			string paras = this.RequestParas;
             if (paras.Contains("SID") == false)
                 paras += "&SID=" + BP.Web.WebUser.SID;

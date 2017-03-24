@@ -210,8 +210,7 @@ function ondbclickCallBackFun(figure) {
     }
 
 
-
-    alert('没有判断的双击类型:' + shap);
+  //  alert('没有判断的双击类型:' + shap);
 
 }
 

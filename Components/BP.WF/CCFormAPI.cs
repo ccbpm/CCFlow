@@ -43,6 +43,102 @@ namespace BP.WF
 
 			rtf.MakeDoc(templeteFullFile, saveToDir, saveFileName, null, false);
 		}
+
+        /// <summary>
+        /// 仅获取表单数据
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="pkval"></param>
+        /// <param name="atParas"></param>
+        /// <param name="specDtlFrmID"></param>
+        /// <returns></returns>
+        private static DataSet GenerDBForVSTOExcelFrmModelOfEntity(string enName, object pkval, string atParas, string specDtlFrmID = null)
+        {
+            DataSet myds = new DataSet();
+
+            // 创建表单.
+            Entity en = BP.En.ClassFactory.GetEn(enName);
+            en.PKVal = pkval;
+            en.RetrieveFromDBSources();
+
+            //增加表单字段描述.
+
+            #region 增加 mapdata 数据.
+            string sql = "SELECT * FROM Sys_MapData WHERE 1=2 ";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapData";
+
+            Map map = en.EnMapInTime;
+            DataRow dr = dt.NewRow();
+            dr[MapDataAttr.No] = enName;
+            dr[MapDataAttr.Name] = map.EnDesc;
+            dr[MapDataAttr.PTable] = map.PhysicsTable;
+            dt.Rows.Add(dr);
+            myds.Tables.Add(dt);
+            #endregion 增加 mapdata 数据.
+
+            #region 增加 mapattr 数据.
+            sql = "SELECT * FROM Sys_MapAttr WHERE 1=2 ";
+            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapAttr";
+            foreach (Attr attr in map.Attrs)
+            {
+                dr = dt.NewRow();
+                dr[MapAttrAttr.MyPK] = enName + "_" + attr.Key;
+                dr[MapAttrAttr.Name] = attr.Desc;
+
+                dr[MapAttrAttr.MyDataType] = attr.MyDataType;   //数据类型.
+                dr[MapAttrAttr.MinLen] = attr.MinLength;   //最小长度.
+                dr[MapAttrAttr.MaxLen] = attr.MaxLength;   //最大长度.
+
+                // 设置他的逻辑类型.
+                dr[MapAttrAttr.LGType] = 0; //逻辑类型.
+                switch (attr.MyFieldType)
+                {
+                    case FieldType.Enum:
+                        dr[MapAttrAttr.LGType] = 1;
+                        dr[MapAttrAttr.UIBindKey] = attr.UIBindKey;
+
+                        //增加枚举字段.
+                        if (myds.Tables.Contains(attr.UIBindKey) == false)
+                        {
+                            string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' ORDER BY IntKey ";
+                            DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
+                            dtEnum.TableName = attr.UIBindKey;
+                            myds.Tables.Add(dtEnum);
+                        }
+
+                        break;
+                    case FieldType.FK:
+                        dr[MapAttrAttr.LGType] = 2;
+                        dr[MapAttrAttr.UIBindKey] = attr.HisFKEns.ToString();
+                        break;
+                    default:
+                        break;
+                }
+
+                // 设置控件类型.
+                dr[MapAttrAttr.UIContralType] = (int)attr.UIContralType;
+                dt.Rows.Add(dr);
+            }
+            myds.Tables.Add(dt);
+            #endregion 增加 mapattr 数据.
+
+            #region 扩展  Sys_MapExt 属性
+            //主表的配置信息.
+            sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + enName + "'";
+            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapExt";
+            myds.Tables.Add(dt);
+            #endregion 扩展  Sys_MapExt 属性
+
+            #region 增加从表.
+
+            #endregion 增加从表.
+
+
+            return myds;
+        }
 		/// <summary>
 		/// 仅获取表单数据
 		/// </summary>
@@ -51,8 +147,12 @@ namespace BP.WF
 		/// <param name="atParas">参数</param>
         /// <param name="specDtlFrmID">指定明细表的参数，如果为空就标识主表数据，否则就是从表数据.</param>
 		/// <returns>数据</returns>
-		public static DataSet GenerDBForVSTOExcelFrmModel(string frmID, int pkval, string atParas, string specDtlFrmID=null)
+        public static DataSet GenerDBForVSTOExcelFrmModel(string frmID, object pkval, string atParas, string specDtlFrmID = null)
 		{
+            //如果是一个实体类.
+            if (frmID.Contains("BP."))
+                return GenerDBForVSTOExcelFrmModelOfEntity(frmID, pkval, atParas, specDtlFrmID = null);
+
 			//数据容器,就是要返回的对象.
 			DataSet myds = new DataSet();
 
@@ -61,22 +161,22 @@ namespace BP.WF
 
 			//实体.
 			GEEntity wk = new GEEntity(frmID);
-			wk.OID = pkval;
+			wk.OID = int.Parse( pkval.ToString() );
 			if (wk.RetrieveFromDBSources() == 0)
 				wk.Insert();
 
 			//把参数放入到 En 的 Row 里面。
-			if (string.IsNullOrEmpty(atParas) == false)
-			{
-				AtPara ap = new AtPara(atParas);
-				foreach (string key in ap.HisHT.Keys)
-				{
-					if (wk.Row.ContainsKey(key) == true) //有就该变.
-						wk.Row[key] = ap.GetValStrByKey(key);
-					else
-						wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
-				}
-			}
+            if (string.IsNullOrEmpty(atParas) == false)
+            {
+                AtPara ap = new AtPara(atParas);
+                foreach (string key in ap.HisHT.Keys)
+                {
+                    if (wk.Row.ContainsKey(key) == true) //有就该变.
+                        wk.Row[key] = ap.GetValStrByKey(key);
+                    else
+                        wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                }
+            }
 
 			//属性.
 			MapExt me = null;

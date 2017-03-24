@@ -118,8 +118,14 @@
                         return;
                     }
 
-                    var url = data.replace('url@', '');
-                    window.location.href = url;
+                    if (confirm('创建成功') == true) {
+                        var url = data.replace('url@', '');
+                        window.location.href = url;
+                    } else {
+
+                        $("#TB_No").val('');
+                        $("#TB_Name").val('');
+                    }
                 }
             });
         }
@@ -166,7 +172,9 @@
 <tr>
   <td colspan="2" > 
 
-  <a href="#"  onclick="Create();"  class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">创建新字段</a>
+  <a href="#"  onclick="Create();"  class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">创建字段</a>
+  <!--<a href="#"  onclick="CreateAndNew();"  class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">保存+创建</a>-->
+
   <!--<input type="button" id="Btn_Create" value="创建新字段" name="Btn_Create"  onclick="Create();" />-->
   </td>
 </tr>

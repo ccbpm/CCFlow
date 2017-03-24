@@ -98,19 +98,121 @@ function InitDbClick() {
         var coords = getCanvasXY(ev); var x = coords[0];
         var y = coords[1];
         var figureIndex = STACK.figureGetByXY(x, y);
+
         if (figureIndex != -1) {
             var figure = STACK.figureGetById(figureIndex);
             ondbclickCallBackFun(figure);
+            return;
         }
+
+        //打开表单属性.
+        CCForm_Attr();
+        return;
     })
 }
 
 //画板元素双击时的回掉方法
 function ondbclickCallBackFun(figure) {
-    var pk = figure.CCForm_MyPK;
-    var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=ND7803_' + pk;
 
-    CCForm_ShowDialog(url, '属性');
+    var v = figure.CCForm_Shape;
+    var shap = figure.CCForm_Shape;
+
+    if (shap == 'TextBoxStr') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段String属性');
+        return;
+    }
+
+    if ( shap == 'TextBoxDate') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段Date属性');
+        return;
+    }
+
+    if (shap == 'TextBoxDateTime' ) {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段DateTime属性');
+        return;
+    }
+
+    if (shap == 'TextBoxMoney') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段Money属性');
+        return;
+    }
+
+    if (shap == 'TextBoxDouble') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段Double属性');
+        return;
+    }
+
+    if (shap == 'TextBoxInt') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段Int属性');
+        return;
+    }
+
+    if (shap == 'TextBoxFloat') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段Float属性');
+        return;
+    }
+
+    if (shap == 'DropDownListEnum') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段Enum属性');
+        return;
+    }
+
+    if (shap == 'TextBoxBoolean') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBooleans&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段Boolean属性');
+        return;
+    }
+
+    if (shap == 'Dtl') {
+        var url = '/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_MapDtl=' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '从表/明细表' + figure.CCForm_MyPK + '属性');
+        return;
+    }
+
+    if (shap == 'Image') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmImgs&PK=' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '图片' + figure.CCForm_MyPK + '属性');
+        return;
+    }
+
+    if (shap == 'Button') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmBtns&PK=' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '按钮' + figure.CCForm_MyPK + '属性');
+        return;
+    }
+
+
+    // 附件类的属性 .... 
+    if (shap == 'AthSingle') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '单附件属性');
+        return;
+    }
+
+    if (shap == 'AthMulti') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '多附件属性');
+        return;
+    }
+
+    if (shap == 'AthImg') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmImgAths&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '图片附件');
+        return;
+    }
+
+
+
+    alert('没有判断的双击类型:' + shap);
+
 }
 
 
@@ -328,6 +430,7 @@ function OpenWindow(url, h, w) {
  
 
 function GetDateString() {
+
     var strTimeKey = "";
     var date = new Date();
     strTimeKey += date.getFullYear(); //年

@@ -109,21 +109,52 @@
         function Edit(fk_mapdata, mypk, ftype, uiCtrlType) {
 
 
-            var url = "";
+            var url = '';
+            var title = ''
 
             //普通字段类型.
-            if (ftype == "1" && uiCtrlType == 0) {
+            if (ftype == "1") {
                 url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + mypk;
+                title = '字段String属性';
             }
 
-            //外键类型.
-            if (ftype == "1" && uiCtrlType != 0) {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + mypk;
+            //数值字段类型.
+            if (ftype == "2") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                title = '字段Int属性';
             }
 
-            //日期类型.
-            if (ftype == "6" || ftype == "7") {
+            //数值字段类型.
+            if (ftype == "3") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                title = '字段Float属性';
+            }
+
+
+            //数值字段类型.
+            if (ftype == "5") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                title = '字段Double属性';
+            }
+
+            //数值字段类型.
+            if (ftype == "8") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                title = '字段Moeny属性';
+            }
+
+
+            //日期类型date.
+            if (ftype == "6") {
                 url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
+                title = '字段Date属性';
+
+            }
+
+            //日期类型datetime.
+            if (ftype == "7") {
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
+                title = '字段DateTime属性';
             }
 
             // boolen 类型.
@@ -131,7 +162,12 @@
                 url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=" + mypk;
             }
 
-            OpenEasyUiDialog(url, "eudlgframe", "字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
+            if (url == '') {
+                alert('@没有判断的类型' + ftype);
+                return;
+            }
+
+            OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
              

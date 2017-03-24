@@ -434,7 +434,7 @@ namespace BP.En
                         //if (nd.HisNodeWorkType == BP.WF.NodeWorkType.SubThreadWork)
                         //    qo.AddWhere(GEDtlAttr.RefPK, this.FID); //edit by zhoupeng 2016.04.23
                         //else
-                            qo.AddWhere(GEDtlAttr.FID, this.PKVal.ToString() );
+                        qo.AddWhere(GEDtlAttr.FID, this.PKVal.ToString());
                         break;
                 }
 
@@ -751,11 +751,11 @@ namespace BP.En
                 if (myNo == pkval)
                     isMeet = true;
 
-               sqls+="@ UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'";
+                sqls += "@ UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'";
             }
 
-            sqls+="@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "'";
-            sqls+="@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "'";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "'";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "'";
 
             BP.DA.DBAccess.RunSQLs(sqls);
         }
@@ -786,11 +786,11 @@ namespace BP.En
                 if (myNo == pkval)
                     isMeet = true;
 
-                sqls+="@UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "' AND  (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) ";
+                sqls += "@UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "' AND  (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) ";
             }
 
-            sqls+="@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
-            sqls+="@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + groupKeyVal + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
 
             BP.DA.DBAccess.RunSQLs(sqls);
         }
@@ -1419,7 +1419,7 @@ namespace BP.En
                         throw new Exception("没有涉及到的类型。");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.CheckPhysicsTable();
                 throw ex;
@@ -1558,7 +1558,7 @@ namespace BP.En
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public int GetParaInt(string key,int isNullAsVal=0)
+        public int GetParaInt(string key, int isNullAsVal = 0)
         {
             return atPara.GetValIntByKey(key, isNullAsVal);
         }
@@ -1720,11 +1720,22 @@ namespace BP.En
                 string enName = this.ToString();
                 string rdt = BP.DA.DataType.CurrentDataTime;
 
+                //edited by liuxc,2017-03-24,增加判断，如果相同主键的数据曾被删除掉，再次被增加时，会延续被删除时的版本，原有逻辑报错
                 EnVer ver = new EnVer();
-                ver.No = enName;
-                ver.PKValue = this.PKVal.ToString();
+                ver.MyPK = enName + "_" + this.PKVal;
+
+                if (ver.RetrieveFromDBSources() == 0)
+                {
+                    ver.No = enName;
+                    ver.PKValue = this.PKVal.ToString();
+                    ver.Name = this.EnMap.EnDesc;
+                }
+                else
+                {
+                    ver.EVer++;
+                }
+
                 ver.RDT = rdt;
-                ver.Name = this.EnMap.EnDesc;
                 ver.Rec = BP.Web.WebUser.Name;
                 ver.Save();
 
@@ -2756,7 +2767,7 @@ namespace BP.En
                         }
                         break;
                     default:
-                      //  throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
+                        //  throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
                         break;
                 }
                 #endregion
@@ -3106,7 +3117,7 @@ namespace BP.En
                     || attr.MyDataType == DataType.AppFloat
                     || attr.MyDataType == DataType.AppInt
                     || attr.MyDataType == DataType.AppMoney
-                    || attr.MyDataType == DataType.AppBoolean )
+                    || attr.MyDataType == DataType.AppBoolean)
                     continue;
 
                 int maxLen = attr.MaxLength;
@@ -3768,7 +3779,7 @@ namespace BP.En
             }
             return false;
         }
-       
+
         /// <summary>
         /// 创建一个该集合的元素的类型的新实例
         /// </summary>
@@ -4856,7 +4867,7 @@ namespace BP.En
         /// ToJson.
         /// </summary>
         /// <returns></returns>
-        public string ToJson(string dtName="dt")
+        public string ToJson(string dtName = "dt")
         {
             return BP.Tools.Json.ToJson(this.ToDataTableField(dtName));
         }
@@ -4870,7 +4881,7 @@ namespace BP.En
             ds.Tables.Add(this.ToDataTableField());
             return ds;
         }
-        
+
         public DataTable ToDataTableStringField()
         {
             return ToDataTableStringField("dt");
@@ -4911,7 +4922,7 @@ namespace BP.En
         /// 把当前实体集合的数据库转换成Table。
         /// </summary>
         /// <returns>DataTable</returns>
-        public DataTable ToDataTableField(string tableName="dt")
+        public DataTable ToDataTableField(string tableName = "dt")
         {
             DataTable dt = this.ToEmptyTableField();
 

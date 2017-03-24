@@ -9,8 +9,8 @@
     <script src="/WF/Scripts/config.js" type="text/javascript"></script>
      <base target="_self" /> 
     <link href="/WF/Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="/WF/Scripts/easyUI15/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="/WF/Scripts/easyUI15/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/WF/Scripts/easyUI15/themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="/WF/Scripts/easyUI15/themes/icon.css" />
     <script type="text/javascript" src="/WF/Scripts/easyUI15/jquery.min.js"></script>
 	<script type="text/javascript" src="/WF/Scripts/easyUI15/jquery.easyui.min.js"></script>
     <script language="javascript" type="text/javascript" >
@@ -62,8 +62,8 @@
                         $("#Msg").html(data);
                         return;
                     }
-                    //$("#Msg").html(data);
 
+                    //$("#Msg").html(data);
 
                     //解析.
                     data = JSON.parse(data);
@@ -94,7 +94,6 @@
                     $('#dg').datagrid({
                         columns: [cols]
                     });
-
 
                 }
             });
@@ -181,45 +180,62 @@
 
 	    //动态拼接表
 	    function gridTitle(obj, datax) {
-	        
+
 	        var hid = false; //1
 	        if (obj.UIIsEnable == 0) {
 	            hid = true;
-            }
-	        if (obj.UIIsEnable==1) {//可编辑UIIsEnable : 0
-	            //根据数据类型设定组件类型
-	            if (obj.UIContralType == 0) {//文本
-	                if (obj.MyDataType == 1) {//string
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'text', options: {} }, hidden: hid};
-	                } else if (obj.MyDataType == 2) {//int
+	        }
+
+	        //根据数据类型设定组件类型
+	        if (obj.UIContralType == 0 ) {//文本
+
+	            switch (obj.MyDataType) {
+
+	                case obj.MyDataType == 1: //文本类型.
+	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.Width, editor: { type: 'text', options: {} }, hidden: hid };
+	                case obj.MyDataType == 2: //Int 类型.
+	                case obj.MyDataType == 3: // float 类型.
 	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	                } else if (obj.MyDataType == 3) {//float
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	                } else if (obj.MyDataType == 4) {//AppBoolean
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'text', options: {} }, hidden: hid };
-	                } else if (obj.MyDataType == 5) {//AppDouble
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	                } else if (obj.MyDataType == 6) {//AppDate
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'datebox', options: {} }, hidden: hid };
-	                } else if (obj.MyDataType == 7) {//AppDateTime
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'datetimebox', options: {} }, hidden: hid };
-	                } else if (obj.MyDataType == 8) {//AppMoney
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	                } else if (obj.MyDataType == 9) {//率百分比
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	                } else {
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'text', options: {} }, hidden: hid }; 
-                    }
-	            } else if (obj.UIContralType == 1) {//下拉框UIBindKey
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey]} }, hidden: hid };
-	            } else if (obj.UIContralType == 2) {//选择框
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'checkbox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey]} }, hidden: hid };
-	            } else if (obj.UIContralType == 3) {//单选
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'checkbox', options: { on: '1', off: '0'} }, hidden: hid };
+	                default:
+	                    break;
 	            }
-            }
-	    return { field: obj.KeyOfEn, title: obj.Name, width: 80, hidden: hid };  
-        }
+
+	            if (obj.MyDataType == 1) { //string
+	            } else if (obj.MyDataType == 2) {//int
+	            } else if (obj.MyDataType == 3) {//float
+	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
+	            } else if (obj.MyDataType == 4) {//AppBoolean
+	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'text', options: {} }, hidden: hid };
+	            } else if (obj.MyDataType == 5) {//AppDouble
+	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
+	            } else if (obj.MyDataType == 6) {//AppDate
+	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'datebox', options: {} }, hidden: hid };
+	            } else if (obj.MyDataType == 7) {//AppDateTime
+	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'datetimebox', options: {} }, hidden: hid };
+	            } else if (obj.MyDataType == 8) {//AppMoney
+	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
+	            } else if (obj.MyDataType == 9) {//率百分比
+	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
+	            } else {
+	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'text', options: {} }, hidden: hid };
+	            }
+	        }
+
+	        if (obj.UIContralType == 1 || obj.UIContralType == 3 ) {  //下拉框UIBindKey
+
+	            return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey]} }, hidden: hid };
+	        }
+
+	        if (obj.UIContralType == 2) { //选择框
+	            return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'checkbox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey]} }, hidden: hid };
+	        }
+
+//	        if (obj.UIContralType == 3) { //单选
+//	            return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'checkbox', options: { on: '1', off: '0'} }, hidden: hid };
+//	        }
+
+	        return { field: obj.KeyOfEn, title: obj.Name, width: 80, hidden: hid };
+	    }
 	</script>
 <div id="Msg"></div>
 </body>

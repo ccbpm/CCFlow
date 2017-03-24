@@ -183,7 +183,9 @@
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
-    <Compile Include="Sys\FrmUI\FrmImgExt.cs" />
+    <Compile Include="Sys\FrmUI\FrmBtn.cs" />
+    <Compile Include="Sys\FrmUI\FrmImg.cs" />
+    <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\ToolbarExcel.cs" />
     <Compile Include="Sys\ToolbarExcelSln.cs" />

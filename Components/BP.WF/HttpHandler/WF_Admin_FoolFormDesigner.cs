@@ -174,11 +174,8 @@ namespace BP.WF.HttpHandler
             return attr.MyPK; 
         }
 
-        
-
         public string SysEnumList_SaveEnumField()
         {
-
             MapAttr attr = new Sys.MapAttr();
             attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             if (attr.RetrieveFromDBSources() != 0)
@@ -187,8 +184,13 @@ namespace BP.WF.HttpHandler
             attr.FK_MapData = this.FK_MapData;
             attr.KeyOfEn = this.KeyOfEn;
             attr.UIBindKey = this.GetRequestVal("EnumKey");
+
             attr.GroupID = this.GetRequestValInt("GroupFeid");
+
             attr.UIContralType = En.UIContralType.DDL;
+
+            attr.MyDataType = DataType.AppInt;
+            attr.LGType = En.FieldTypeS.Enum; 
 
             SysEnumMain sem = new Sys.SysEnumMain();
             sem.No = attr.UIBindKey;

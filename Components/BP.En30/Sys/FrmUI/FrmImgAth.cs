@@ -2,50 +2,10 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
-namespace BP.Sys
+using BP.Sys;
+
+namespace BP.Sys.FrmUI
 {
-    /// <summary>
-    /// 图片附件 属性
-    /// </summary>
-    public class FrmImgAthAttr : EntityMyPKAttr
-    {
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public const string Name = "Name";
-        /// <summary>
-        /// 主表
-        /// </summary>
-        public const string FK_MapData = "FK_MapData";
-        /// <summary>
-        /// X
-        /// </summary>
-        public const string X = "X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string Y = "Y";
-        /// <summary>
-        /// W
-        /// </summary>
-        public const string W = "W";
-        /// <summary>
-        /// H
-        /// </summary>
-        public const string H = "H";
-        /// <summary>
-        /// 控件ID
-        /// </summary>
-        public const string CtrlID = "CtrlID";
-        /// <summary>
-        /// 是否可编辑
-        /// </summary>
-        public const string IsEdit = "IsEdit";
-        /// <summary>
-        /// 是否必填项
-        /// </summary>
-        public const string IsRequired = "IsRequired";
-    }
     /// <summary>
     /// 图片附件
     /// </summary>

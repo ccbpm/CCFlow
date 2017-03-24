@@ -76,9 +76,16 @@ namespace BP.WF.HttpHandler
         public int GetRequestValInt(string param)
         {
             string str = GetRequestVal(param);
-            if (str == null || str == "")
+            if (str == null || str == "" || str == "null")
                 return 0;
-            return int.Parse(str);
+            try
+            {
+                return int.Parse(str);
+            }
+            catch
+            {
+                return 0;
+            }
         }
         /// <summary>
         /// 获得参数.
@@ -145,7 +152,6 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-        
         public string MyPK
         {
             get

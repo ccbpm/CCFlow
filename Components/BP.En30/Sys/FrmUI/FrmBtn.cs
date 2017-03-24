@@ -2,156 +2,10 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
-namespace BP.Sys
+using BP.Sys;
+
+namespace BP.Sys.FrmUI
 {
-    /// <summary>
-    /// 按钮事件类型 - 与sl 中设置的要相同。
-    /// </summary>
-    public enum BtnEventType
-    {
-        /// <summary>
-        /// 禁用
-        /// </summary>
-        Disable = 0,
-        /// <summary>
-        /// 运行存储过程
-        /// </summary>
-        RunSP = 1,
-        /// <summary>
-        /// 运行sql
-        /// </summary>
-        RunSQL = 2,
-        /// <summary>
-        /// 执行URL
-        /// </summary>
-        RunURL = 3,
-        /// <summary>
-        /// 运行webservices
-        /// </summary>
-        RunWS = 4,
-        /// <summary>
-        /// 运行Exe文件.
-        /// </summary>
-        RunExe = 5,
-        /// <summary>
-        /// 运行JS
-        /// </summary>
-        RunJS =6
-    }    
-    /// <summary>
-    /// 按钮访问
-    /// </summary>
-    public enum BtnUAC
-    {
-        /// <summary>
-        /// 不处理
-        /// </summary>
-        None,
-        /// <summary>
-        /// 按人员
-        /// </summary>
-        ByEmp,
-        /// <summary>
-        /// 按岗位
-        /// </summary>
-        ByStation,
-        /// <summary>
-        /// 按部门
-        /// </summary>
-        ByDept,
-        /// <summary>
-        /// 按sql
-        /// </summary>
-        BySQL
-    }
-    /// <summary>
-    /// 按钮类型
-    /// </summary>
-    public enum BtnType
-    {
-        /// <summary>
-        /// 保存
-        /// </summary>
-        Save=0,
-        /// <summary>
-        /// 打印
-        /// </summary>
-        Print=1,
-        /// <summary>
-        /// 删除
-        /// </summary>
-        Delete=2,
-        /// <summary>
-        /// 增加
-        /// </summary>
-        Add=3,
-        /// <summary>
-        /// 自定义
-        /// </summary>
-        Self=100
-    }
-    /// <summary>
-    /// 按钮
-    /// </summary>
-    public class FrmBtnAttr : EntityMyPKAttr
-    {
-        /// <summary>
-        /// Text
-        /// </summary>
-        public const string Text = "Text";
-        /// <summary>
-        /// 主表
-        /// </summary>
-        public const string FK_MapData = "FK_MapData";
-        /// <summary>
-        /// X
-        /// </summary>
-        public const string X = "X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string Y = "Y";
-        /// <summary>
-        /// 宽度
-        /// </summary>
-        public const string BtnType = "BtnType";
-        /// <summary>
-        /// 颜色
-        /// </summary>
-        public const string IsView = "IsView";
-        /// <summary>
-        /// 风格
-        /// </summary>
-        public const string IsEnable = "IsEnable";
-        /// <summary>
-        /// 字体风格
-        /// </summary>
-        public const string EventContext = "EventContext";
-        /// <summary>
-        /// 字体
-        /// </summary>
-        public const string UACContext = "UACContext";
-        /// <summary>
-        /// 是否粗体
-        /// </summary>
-        public const string EventType = "EventType";
-        /// <summary>
-        /// 控制类型
-        /// </summary>
-        public const string UAC = "UAC";
-        /// <summary>
-        /// MsgOK
-        /// </summary>
-        public const string MsgOK = "MsgOK";
-        /// <summary>
-        /// MsgErr
-        /// </summary>
-        public const string MsgErr = "MsgErr";
-        /// <summary>
-        /// GUID
-        /// </summary>
-        public const string GUID = "GUID";
-    }
     /// <summary>
     /// 按钮
     /// </summary>
@@ -384,13 +238,8 @@ namespace BP.Sys
                 map.AddTBString(FrmBtnAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
                 map.AddTBString(FrmBtnAttr.Text, null, "标签", true, false, 0, 3900, 20);
 
-                map.AddTBFloat(FrmBtnAttr.X, 5, "X", true, false);
-                map.AddTBFloat(FrmBtnAttr.Y, 5, "Y", false, false);
-
                 map.AddTBInt(FrmBtnAttr.IsView, 0, "是否可见", false, false);
                 map.AddTBInt(FrmBtnAttr.IsEnable, 0, "是否起用", false, false);
-
-              //  map.AddTBInt(FrmBtnAttr.BtnType, 0, "类型", false, false);
 
                 map.AddTBInt(FrmBtnAttr.UAC, 0, "控制类型", false, false);
                 map.AddTBString(FrmBtnAttr.UACContext, null, "控制内容", true, false, 0, 3900, 20);
@@ -420,17 +269,6 @@ namespace BP.Sys
         /// </summary>
         public FrmBtns()
         {
-        }
-        /// <summary>
-        /// 按钮s
-        /// </summary>
-        /// <param name="fk_mapdata">s</param>
-        public FrmBtns(string fk_mapdata)
-        {
-            if (SystemConfig.IsDebug)
-                this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
-            else
-                this.RetrieveFromCash(FrmLineAttr.FK_MapData, (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

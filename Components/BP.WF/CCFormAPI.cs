@@ -47,19 +47,37 @@ namespace BP.WF
         /// <summary>
         /// 仅获取表单数据
         /// </summary>
-        /// <param name="frmID"></param>
+        /// <param name="ensName"></param>
         /// <param name="pkval"></param>
         /// <param name="atParas"></param>
         /// <param name="specDtlFrmID"></param>
         /// <returns></returns>
-        private static DataSet GenerDBForVSTOExcelFrmModelOfEntity(string enName, object pkval, string atParas, string specDtlFrmID = null)
+        private static DataSet GenerDBForVSTOExcelFrmModelOfEntity(string ensName, object pkval, string atParas, string specDtlFrmID = null)
         {
             DataSet myds = new DataSet();
 
-            // 创建表单.
-            Entity en = BP.En.ClassFactory.GetEn(enName);
+            // 创建实体..
+            Entities myens = BP.En.ClassFactory.GetEns(ensName);
+
+            Entity en = myens.GetNewEntity;
             en.PKVal = pkval;
             en.RetrieveFromDBSources();
+
+            //设置外部传入的默认值.
+            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            {
+                // 处理传递过来的参数。
+                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                {
+                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                }
+            }
+
+            //主表数据放入集合.
+            DataTable mainTable = en.ToDataTableField();
+            mainTable.TableName = "MainTable";
+            myds.Tables.Add(mainTable);
+
 
             //增加表单字段描述.
 
@@ -70,7 +88,7 @@ namespace BP.WF
 
             Map map = en.EnMapInTime;
             DataRow dr = dt.NewRow();
-            dr[MapDataAttr.No] = enName;
+            dr[MapDataAttr.No] = ensName;
             dr[MapDataAttr.Name] = map.EnDesc;
             dr[MapDataAttr.PTable] = map.PhysicsTable;
             dt.Rows.Add(dr);
@@ -84,7 +102,7 @@ namespace BP.WF
             foreach (Attr attr in map.Attrs)
             {
                 dr = dt.NewRow();
-                dr[MapAttrAttr.MyPK] = enName + "_" + attr.Key;
+                dr[MapAttrAttr.MyPK] = ensName + "_" + attr.Key;
                 dr[MapAttrAttr.Name] = attr.Desc;
 
                 dr[MapAttrAttr.MyDataType] = attr.MyDataType;   //数据类型.
@@ -111,7 +129,18 @@ namespace BP.WF
                         break;
                     case FieldType.FK:
                         dr[MapAttrAttr.LGType] = 2;
-                        dr[MapAttrAttr.UIBindKey] = attr.HisFKEns.ToString();
+
+                        Entities ens = attr.HisFKEns;
+                        dr[MapAttrAttr.UIBindKey] = ens.ToString();
+
+                        //把外键字段也增加进去.
+                        if (myds.Tables.Contains(ens.ToString()) == false && attr.UIIsReadonly==false )
+                        {
+                            ens.RetrieveAll();
+                            DataTable mydt = ens.ToDataTableDescField();
+                            mydt.TableName = ens.ToString();
+                            myds.Tables.Add(mydt);
+                        }
                         break;
                     default:
                         break;
@@ -125,17 +154,105 @@ namespace BP.WF
             #endregion 增加 mapattr 数据.
 
             #region 扩展  Sys_MapExt 属性
-            //主表的配置信息.
-            sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + enName + "'";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sys_MapExt";
-            myds.Tables.Add(dt);
+            ////主表的配置信息.
+            //sql = "SELECT * FROM Sys_MapExt WHERE 1=2";
+            //dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //dt.TableName = "Sys_MapExt";
+            //myds.Tables.Add(dt);
             #endregion 扩展  Sys_MapExt 属性
 
-            #region 增加从表.
+            #region  把从表的数据放入集合.
+            foreach (EnDtl dtlDesc in map.Dtls)
+            {
+                Entities dtls = dtlDesc.Ens;
 
-            #endregion 增加从表.
+                QueryObject qo = qo = new QueryObject(dtls);
+                qo.AddWhere(dtlDesc.RefKey, pkval);
+                DataTable dtDtl= qo.DoQueryToTable();
 
+                dtDtl.TableName = dtlDesc.EnsName; //修改明细表的名称.
+                myds.Tables.Add(dtDtl); //加入这个明细表.
+            }
+            #endregion 把从表的数据放入.
+
+            #region 加载从表表单模版信息.
+            foreach (EnDtl item in map.Dtls)
+            {
+                Entities dtls = item.Ens;
+                Entity dtl = dtls.GetNewEntity;
+                map = dtl.EnMap;
+
+                //明细表的 描述 . 
+                sql = "SELECT * FROM Sys_MapDtl WHERE 1=2";
+                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "Sys_MapDtl_For_" + item.EnsName;
+
+                dr = dt.NewRow();
+                dr[MapDtlAttr.No] = item.EnsName;
+                dr[MapDtlAttr.Name] = item.Desc;
+                dr[MapDtlAttr.PTable] = dtl.EnMap.PhysicsTable;
+                dt.Rows.Add(dr);
+                myds.Tables.Add(dt);
+
+                #region 明细表的表单描述
+                sql = "SELECT * FROM Sys_MapAttr WHERE 1=2";
+                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "Sys_MapAttr_For_" + item.EnsName;
+                foreach (Attr attr in map.Attrs)
+                {
+                    dr = dt.NewRow();
+                    dr[MapAttrAttr.MyPK] = ensName + "_" + attr.Key;
+                    dr[MapAttrAttr.Name] = attr.Desc;
+
+                    dr[MapAttrAttr.MyDataType] = attr.MyDataType;   //数据类型.
+                    dr[MapAttrAttr.MinLen] = attr.MinLength;   //最小长度.
+                    dr[MapAttrAttr.MaxLen] = attr.MaxLength;   //最大长度.
+
+                    // 设置他的逻辑类型.
+                    dr[MapAttrAttr.LGType] = 0; //逻辑类型.
+                    switch (attr.MyFieldType)
+                    {
+                        case FieldType.Enum:
+                            dr[MapAttrAttr.LGType] = 1;
+                            dr[MapAttrAttr.UIBindKey] = attr.UIBindKey;
+
+                            //增加枚举字段.
+                            if (myds.Tables.Contains(attr.UIBindKey) == false)
+                            {
+                                string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' ORDER BY IntKey ";
+                                DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
+                                dtEnum.TableName = attr.UIBindKey;
+                                myds.Tables.Add(dtEnum);
+                            }
+                            break;
+                        case FieldType.FK:
+                            dr[MapAttrAttr.LGType] = 2;
+
+                            Entities ens = attr.HisFKEns;
+                            dr[MapAttrAttr.UIBindKey] = ens.ToString();
+
+                            //把外键字段也增加进去.
+                            if (myds.Tables.Contains(ens.ToString()) == false && attr.UIIsReadonly == false)
+                            {
+                                ens.RetrieveAll();
+                                DataTable mydt = ens.ToDataTableDescField();
+                                mydt.TableName = ens.ToString();
+                                myds.Tables.Add(mydt);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                    // 设置控件类型.
+                    dr[MapAttrAttr.UIContralType] = (int)attr.UIContralType;
+                    dt.Rows.Add(dr);
+                }
+                myds.Tables.Add(dt);
+                #endregion 明细表的表单描述
+
+            }
+            #endregion 加载从表表单模版信息.
 
             return myds;
         }

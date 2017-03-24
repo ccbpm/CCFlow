@@ -1864,7 +1864,7 @@ namespace CCFlow.WF.Comm.UC
                 string url = this.GenerEnUrl(en, attrs);
                 #endregion
 
-                urlExt = "\"javascript:ShowEn('../Comm/RefFunc/UIEn.aspx?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "', 'cd','" + cfg + "','" + cfg.WinCardW + "');\"";
+                urlExt = "\"javascript:ShowEn('../Comm/RefFunc/UIEn.aspx?EnsName=" + ens.ToString() + "&PK=" + en.GetValByKey(pk) + url + "&inlayer=1', 'cd','" + cfg.WinCardH + "','" + cfg.WinCardW + "');\"";
                 switch ((UIRowStyleGlo)cfg.UIRowStyleGlo)
                 {
                     case UIRowStyleGlo.None:
@@ -2601,7 +2601,8 @@ namespace CCFlow.WF.Comm.UC
             }
         }
         //		public void UIEn1ToMGroupKey(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal, string groupKey)
-        public void UIEn1ToMGroupKey(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal, string groupKey)
+        //edited by liuxc,2016-12-23,filterKeyWord:检索关键字
+        public void UIEn1ToMGroupKey(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal, string groupKey, string filterKeyWord)
         {
             this.EnableViewState = true;
             this.Controls.Clear();
@@ -2611,6 +2612,8 @@ namespace CCFlow.WF.Comm.UC
             string val = string.Empty;
             Entity seEn = null;
             Attr attr = ens.GetNewEntity.EnMap.GetAttrByKey(groupKey);
+            string text = null;
+
             if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum) // 检查是否是 enum 类型。
             {
                 BP.Sys.SysEnums eens = new BP.Sys.SysEnums(attr.Key);
@@ -2643,6 +2646,11 @@ namespace CCFlow.WF.Comm.UC
                         if (en.GetValIntByKey(attr.Key) != se.IntKey && !noEnum)
                             continue;
 
+                        text = en.GetValStringByKey(showText);
+
+                        if (!string.IsNullOrWhiteSpace(filterKeyWord) && text.IndexOf(filterKeyWord) == -1)
+                            continue;
+
                         i++;
                         if (i == 4)
                             i = 1;
@@ -2658,7 +2666,7 @@ namespace CCFlow.WF.Comm.UC
                         if (seEn != null)
                             cb.Checked = true;
 
-                        cb.Text = en.GetValStringByKey(showText);
+                        cb.Text = text;
                         cb.AccessKey = se.IntKey.ToString();
 
                         this.AddTD(cb);
@@ -2751,6 +2759,12 @@ namespace CCFlow.WF.Comm.UC
                     {
                         if (en.GetValStrByKey(attr.Key) != gVal && !noGroup)
                             continue;
+
+                        text = en.GetValStrByKey(showText);
+
+                        if (!string.IsNullOrWhiteSpace(filterKeyWord) && text.IndexOf(filterKeyWord) == -1)
+                            continue;
+
                         i++;
                         if (i == 4)
                             i = 1;
@@ -2766,7 +2780,7 @@ namespace CCFlow.WF.Comm.UC
                         if (seEn != null)
                             cb.Checked = true;
 
-                        cb.Text = en.GetValStrByKey(showText);
+                        cb.Text = text;
                         this.AddTD(cb);
 
                         ctlIDs += cb.ID + ",";
@@ -2810,7 +2824,8 @@ namespace CCFlow.WF.Comm.UC
 
         }
         //		public void UIEn1ToMGroupKey_Line(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal, string groupKey)
-        public void UIEn1ToMGroupKey_Line(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal, string groupKey)
+        //edited by liuxc,2016-12-23,filterKeyWord:检索关键字
+        public void UIEn1ToMGroupKey_Line(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal, string groupKey, string filterKeyWord)
         {
             this.EnableViewState = true;
             this.Controls.Clear();
@@ -2819,6 +2834,8 @@ namespace CCFlow.WF.Comm.UC
             Attr attr = ens.GetNewEntity.EnMap.GetAttrByKey(groupKey);
             var val = string.Empty;
             Entity seEn = null;
+            string text = null;
+
             if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum) // 检查是否是 enum 类型。
             {
                 BP.Sys.SysEnums eens = new BP.Sys.SysEnums(attr.Key);
@@ -2832,6 +2849,11 @@ namespace CCFlow.WF.Comm.UC
                         if (en.GetValIntByKey(attr.Key) != se.IntKey)
                             continue;
 
+                        text = en.GetValStrByKey(showText);
+
+                        if (!string.IsNullOrWhiteSpace(filterKeyWord) && text.IndexOf(filterKeyWord) == -1)
+                            continue;
+
                         this.AddTR();
                         CheckBox cb = new CheckBox();
                         val = en.GetValStrByKey(showVal);
@@ -2841,7 +2863,7 @@ namespace CCFlow.WF.Comm.UC
                         if (seEn != null)
                             cb.Checked = true;
 
-                        cb.Text = en.GetValStrByKey(showText);
+                        cb.Text = text;
                         this.AddTD(cb);
                         this.AddTREnd();
                     }
@@ -2864,12 +2886,17 @@ namespace CCFlow.WF.Comm.UC
                         if (en.GetValStringByKey(attr.Key) != gVal)
                             continue;
 
+                        text = en.GetValStringByKey(showText);
+
+                        if (!string.IsNullOrWhiteSpace(filterKeyWord) && text.IndexOf(filterKeyWord) == -1)
+                            continue;
+
                         this.Add("<TR>");
 
                         CheckBox cb = new CheckBox();
                         val = en.GetValStringByKey(showVal);
                         cb.ID = "CB_" + val + "_" + gVal;  //edited by liuxc,2015.1.6
-                        cb.Text = en.GetValStringByKey(showText);
+                        cb.Text = text;
 
                         seEn = selectedEns.GetEntityByKey(selecteVal, val);
                         if (seEn != null)
@@ -2905,14 +2932,22 @@ namespace CCFlow.WF.Comm.UC
         /// <param name="ens"></param>
         /// <param name="groupKey"></param>
         //		public void UIEn1ToM(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal)
-        public void UIEn1ToM(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal)
+        //edited by liuxc,2016-12-23,filterKeyWord:检索关键字
+        public void UIEn1ToM(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal, string filterKeyWord)
         {
             this.Controls.Clear();
             this.AddTable("class='Table' cellSpacing='1' cellPadding='1'  border='1' style='width:100%'");
             int i = 0;
             bool is1 = false;
+            string text = null;
+
             foreach (Entity en in ens)
             {
+                text = en.GetValStringByKey(showText);
+
+                if (!string.IsNullOrWhiteSpace(filterKeyWord) && text.IndexOf(filterKeyWord) == -1)
+                    continue;
+
                 i++;
                 if (i == 4)
                     i = 1;
@@ -2924,7 +2959,7 @@ namespace CCFlow.WF.Comm.UC
 
                 CheckBox cb = new CheckBox();
                 cb.ID = "CB_" + en.GetValStringByKey(showVal);
-                cb.Text = en.GetValStringByKey(showText);
+                cb.Text = text;
                 this.AddTD(cb);
                 if (i == 3)
                     this.AddTREnd();
@@ -2950,14 +2985,12 @@ namespace CCFlow.WF.Comm.UC
             foreach (Entity en in selectedEns)
             {
                 string key = en.GetValStringByKey(selecteVal);
-                try
-                {
-                    CheckBox bp = (CheckBox)this.FindControl("CB_" + key);
-                    bp.Checked = true;
-                }
-                catch
-                {
-                }
+                CheckBox bp = this.FindControl("CB_" + key) as CheckBox;
+
+                if (bp == null)
+                    continue;
+
+                bp.Checked = true;               
             }
         }
         public void UIEn1ToM_Tree(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal)
@@ -2993,17 +3026,25 @@ namespace CCFlow.WF.Comm.UC
         }
 
         //./././ public void UIEn1ToM_OneLine(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal)
-        public void UIEn1ToM_OneLine(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal)
+        //edited by liuxc,2016-12-23,filterKeyWord:检索关键字
+        public void UIEn1ToM_OneLine(Entities ens, string showVal, string showText, Entities selectedEns, string selecteVal, string filterKeyWord)
         {
             this.Controls.Clear();
             this.Add("<table border=0 width='500px'>");
             bool is1 = false;
+            string text = null;
+
             foreach (Entity en in ens)
             {
+                text = en.GetValStringByKey(showText);
+
+                if (!string.IsNullOrWhiteSpace(filterKeyWord) && text.IndexOf(filterKeyWord) == -1)
+                    continue;
+
                 is1 = this.AddTR(is1); //("<TR>");
                 CheckBox cb = new CheckBox();
                 cb.ID = "CB_" + en.GetValStrByKey(showVal);
-                cb.Text = en.GetValStringByKey(showText);
+                cb.Text = text;
                 this.AddTD(cb);
                 this.AddTREnd();
             }
@@ -3013,7 +3054,11 @@ namespace CCFlow.WF.Comm.UC
             foreach (Entity en in selectedEns)
             {
                 string key = en.GetValStrByKey(selecteVal);
-                CheckBox bp = (CheckBox)this.FindControl("CB_" + key);
+                CheckBox bp = this.FindControl("CB_" + key) as CheckBox;
+
+                if (bp == null)
+                    continue;
+
                 bp.Checked = true;
             }
         }

@@ -296,6 +296,7 @@ namespace CCFlow.WF.Comm.UC
             if (id == "Btn_Delete")
                 en.Attributes["onclick"] = "return confirm('您确定要执行删除吗？');";
             en.OnClientClick = js;
+            en.PostBackUrl = "javascript:void(0)";
             this.Add(en);
         }
 

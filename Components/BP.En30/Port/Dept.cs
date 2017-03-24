@@ -125,7 +125,7 @@ namespace BP.Port
 
         public string History()
         {
-            return "EnVerDtl.aspx?EnName="+this.ToString()+"&No="+this.No;
+            return "EnVerDtl.aspx?EnName="+this.ToString()+"&PK="+this.No;
         }
 
         #region 重写查询. 2015.09.31 为适应ws的查询.

@@ -45,6 +45,16 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
         }
     }
     /// <summary>
+    /// 获取当前页面是否存在于easyui-dialog的层中的标识inlayer，在层中时inlayer="1"
+    /// </summary>
+    public string InLayer
+    {
+        get
+        {
+            return Request.QueryString["inlayer"];
+        }
+    }
+    /// <summary>
     /// 类名成
     /// </summary>
     public new string EnName
@@ -385,7 +395,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
         SysFileManager sf = new SysFileManager();
         string sql = "DELETE FROM " + sf.EnMap.PhysicsTable + " WHERE " + SysFileManagerAttr.EnName + "='" + this.GetEns.GetNewEntity.ToString() + "' AND RefVal='" + this.PKVal + "' AND " + SysFileManagerAttr.AttrFileNo + "='" + id + "'";
         BP.DA.DBAccess.RunSQL(sql);
-        this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&PK=" + this.PKVal, true);
+        this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&PK=" + this.PKVal + "&inlayer=" + this.InLayer, true);
     }
     private void Btn_DelFile_Click(object sender, ImageClickEventArgs e)
     {
@@ -404,7 +414,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
         en.SetValByKey("MyFileName", "");
         en.SetValByKey("MyFilePath", "");
         en.Update();
-        this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&PK=" + this.PKVal, true);
+        this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&PK=" + this.PKVal + "&inlayer=" + this.InLayer, true);
     }
     private void ToolBar1_ButtonClick(object sender, System.EventArgs e)
     {
@@ -422,7 +432,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                     break;
                 case NamesOfBtn.New:
                     //   New();
-                    this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&EnName=" + this.EnName, true);
+                    this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&inlayer=" + this.InLayer, true);
                     break;
                 case NamesOfBtn.SaveAndNew:
                     try
@@ -435,7 +445,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                         // this.ResponseWriteBlueMsg(ex.Message);
                         return;
                     }
-                    this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&EnName=" + this.EnName, true);
+                    this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&EnName=" + this.EnName + "&inlayer=" + this.InLayer, true);
                     break;
                 case NamesOfBtn.SaveAndClose:
                     try
@@ -449,7 +459,12 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                         script += "      window.close();";
                         script += "   }";
                         script += " }";
-                        script += " ParentWindowClose();";
+
+                        if (Request.QueryString["inlayer"] == "1")
+                            script += "window.parent.closeDlg();";
+                        else
+                            script += " ParentWindowClose();";
+                        
                         this.Response.Write("<script language='JavaScript'>" + script + "</script>");
                     }
                     catch (Exception ex)
@@ -469,7 +484,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                         this.Alert(ex.Message);
                         return;
                     }
-                    this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&PK=" + this.PKVal + "&EnName=" + this.EnName + "&tab=" + Uri.EscapeDataString(GetHiddenTabTitle()), true);
+                    this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&PK=" + this.PKVal + "&EnName=" + this.EnName + "&tab=" + Uri.EscapeDataString(GetHiddenTabTitle()) + "&inlayer=" + this.InLayer, true);
                     break;
                 case NamesOfBtn.Delete:
                     try
@@ -483,7 +498,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                         //this.ToMsgPage("删除成功!!!");
                         //edited by liuxc,2015-11-10，因为删除成功后，此记录不存在，回调在Page_Load中，导致引发错误，因此使用此种方法，传递DeleteOver=1参数，在Page_Load中判断，显示删除成功的消息
                         this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&DeleteOver=1&t=" +
-                                               DateTime.Now.ToString("yyyyMMddHHmmssffffff"), true);
+                                               DateTime.Now.ToString("yyyyMMddHHmmssffffff") + "&inlayer=" + this.InLayer, true);
                         return;
                     }
                     catch (Exception ex)
@@ -560,7 +575,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
     /// </summary>
     public void New()
     {
-        this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName, true);
+        this.Response.Redirect("UIEn.aspx?EnsName=" + this.EnsName + "&inlayer=" + this.InLayer, true);
         //return;
 
         //this.CurrEn = this.GetEns.GetNewEntity;
@@ -778,7 +793,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
 
     public void EnList()
     {
-        this.Response.Redirect(this.Request.ApplicationPath + "/Comm/UIEns.aspx?EnsName=" + this.EnsName, true);
+        this.Response.Redirect(this.Request.ApplicationPath + "/Comm/UIEns.aspx?EnsName=" + this.EnsName + "&inlayer=" + this.InLayer, true);
     }
     #endregion
 }

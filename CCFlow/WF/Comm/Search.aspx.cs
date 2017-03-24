@@ -207,16 +207,16 @@ namespace CCFlow.Web.Comm
             if (uac.IsInsert == false)
                 isEdit = false;
 
-            string js = "javascript:ShowEn('./RefFunc/UIEn.aspx?EnsName=" + this.EnsName + "','cd','" + cfg.WinCardH + "' , '" + cfg.WinCardW + "');";
+            string js = "ShowEn('./RefFunc/UIEn.aspx?EnsName=" + this.EnsName + "&inlayer=1','cd','" + cfg.WinCardH + "' , '" + cfg.WinCardW + "');";
             if (isEdit)
                 this.ToolBar1.AddLinkBtn(NamesOfBtn.New, "新建", js);
 
-            js = "javascript:OpenAttrs('" + this.EnsName + "');";
+            js = "OpenAttrs('" + this.EnsName + "');";
 
             if (WebUser.No == "admin")
                 this.ToolBar1.AddLinkBtn(NamesOfBtn.Setting, "设置", js);
 
-            js = "javascript:DoExp();";
+            js = "DoExp();";
                 this.ToolBar1.AddLinkBtn(NamesOfBtn.Excel, "导出", js);
 
             #endregion

@@ -210,7 +210,7 @@ namespace CCFlow.WF.Rpt
 
             append.Append("],total:" + totalRows + "}");
             append.Append("}");
-            
+
             return ReplaceIllgalChart(append.ToString());
         }
 

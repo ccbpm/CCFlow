@@ -29,16 +29,26 @@ public partial class CCFlow_Comm_Sys_EnsAppCfg : BP.Web.WebPageAdmin
             return this.Request.QueryString["EnsName"];
         }
     }
+    /// <summary>
+    /// 获取当前页面是否存在于easyui-dialog的层中的标识inlayer，在层中时inlayer="1"
+    /// </summary>
+    public string InLayer
+    {
+        get
+        {
+            return Request.QueryString["inlayer"];
+        }
+    }
     public void BindSelectCols()
     {
         //this.UCSys1.AddTable("width=100%");
         this.UCSys1.AddTableNormal();
         this.UCSys1.AddTRGroupTitle(3,
-                                    "<a href='?EnsName=" + this.EnsName + "&T=" +
-                                    DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+                                    "<a href='?EnsName=" + this.EnsName + "&t=" +
+                                    DateTime.Now.ToString("yyyyMMddHHmmssfff") + "&inlayer=" + this.InLayer +
                                     "'>基本配置</a> - <b>选择列</b> - <a href='EnsDataIO.aspx?EnsName=" + this.EnsName +
-                                    "&T=" +
-                                    DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+                                    "&t=" +
+                                    DateTime.Now.ToString("yyyyMMddHHmmssfff") + "&inlayer=" + this.InLayer +
                                     "' >数据导入导出</a>");
 
         //this.UCSys1.AddCaptionLeftTX("<a href='?EnsName=" + this.EnsName + "&T=" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "'>基本配置</a> - <b>选择列</b> - <a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "' >数据导入导出</a>");
@@ -127,7 +137,7 @@ public partial class CCFlow_Comm_Sys_EnsAppCfg : BP.Web.WebPageAdmin
         //Button btn = sender as Button;
         LinkBtn btn = sender as LinkBtn;
         if (btn.ID.Contains("Close"))
-            this.WinClose();
+            this.WinClose("");
     }
 
     public void BindAdv()
@@ -135,10 +145,10 @@ public partial class CCFlow_Comm_Sys_EnsAppCfg : BP.Web.WebPageAdmin
         //this.UCSys1.AddTable("width=100%");
         this.UCSys1.AddTableNormal();
         this.UCSys1.AddTRGroupTitle(3,
-                                    "<b>基本配置</b> - <a href='?EnsName=" + this.EnsName + "&DoType=SelectCols&T=" +
-                                    DateTime.Now.ToString("yyyyMMddHHmmssfff") +
-                                    "'>选择列</a> - <a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "&T=" +
-                                    DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+                                    "<b>基本配置</b> - <a href='?EnsName=" + this.EnsName + "&DoType=SelectCols&t=" +
+                                    DateTime.Now.ToString("yyyyMMddHHmmssfff") + "&inlayer=" + this.InLayer +
+                                    "'>选择列</a> - <a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "&t=" +
+                                    DateTime.Now.ToString("yyyyMMddHHmmssfff") + "&inlayer=" + this.InLayer +
                                     "' >数据导入导出</a>");
         //this.UCSys1.AddCaptionLeftTX("<b>基本配置</b> - <a href='?EnsName=" + this.EnsName + "&DoType=SelectCols&T=" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + "'>选择列</a> - <a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "' >数据导入导出</a>");
 
@@ -251,9 +261,9 @@ public partial class CCFlow_Comm_Sys_EnsAppCfg : BP.Web.WebPageAdmin
             //this.UCSys1.AddCaptionLeftTX("<a href='?EnsName=" + this.EnsName + "'>基本设置</a> - <a href='?EnsName=" + this.EnsName + "&DoType=Adv'>高级设置</a> - <a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "' >导入导出</a>");
             this.UCSys1.AddTRGroupTitle(4,
                                         "<a href='?EnsName=" + this.EnsName + "'>基本设置</a> - <a href='?EnsName=" +
-                                        this.EnsName + "&DoType=Adv'>高级设置</a> - <a href='EnsDataIO.aspx?EnsName=" +
-                                        this.EnsName + "&T=" +
-                                        DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+                                        this.EnsName + "&DoType=Adv&inlayer=" + this.InLayer + "'>高级设置</a> - <a href='EnsDataIO.aspx?EnsName=" +
+                                        this.EnsName + "&t=" +
+                                        DateTime.Now.ToString("yyyyMMddHHmmssfff") + "&inlayer=" + this.InLayer +
                                         "' >导入导出</a>");
         }
         else
@@ -433,6 +443,6 @@ public partial class CCFlow_Comm_Sys_EnsAppCfg : BP.Web.WebPageAdmin
         //Button btn = sender as Button;
         LinkBtn btn = sender as LinkBtn;
         if (btn.ID.Contains("Close"))
-            this.WinClose();
+            this.WinClose("");
     }
 }

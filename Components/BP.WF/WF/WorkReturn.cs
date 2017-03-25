@@ -732,12 +732,13 @@ namespace BP.WF
             }
             rpt.Row.Add("ReturnMsg", Msg);
 
-           
+            Flow fl = this.HisNode.HisFlow;
+
             //退回前事件
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
-            string msg = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, rpt,
+            string msg = fl.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, rpt,
                 atPara);
-           
+
             if (this.HisNode.FocusField != "")
             {
                 try
@@ -758,17 +759,38 @@ namespace BP.WF
                 }
             }
 
-            // 改变当前待办工作节点。            
+
+            // 计算出来 退回到节点的应完成时间. 
+            DateTime dtOfShould;
+            if (fl.HisTimelineRole == Template.TimelineRole.ByFlow)
+            {
+                /*如果整体流程是按流程设置计算 */
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                dtOfShould = DataType.ParseSysDateTime2DateTime(gwf.SDTOfFlow);
+            }
+            else
+            {
+                //增加天数. 考虑到了节假日.             
+                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.ReturnToNode.TimeLimit,
+                    this.ReturnToNode.TSpanMinues, this.ReturnToNode.TWay);
+            }
+            // 应完成日期.
+            string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
+
+
+            // 改变当前待办工作节点。
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkFlow  SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName  WHERE  WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkFlow  SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode  WHERE  WorkID=" + dbStr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
             ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
             ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
+            ps.Add(GenerWorkFlowAttr.SDTOfNode, sdt);
             ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
             DBAccess.RunSQL(ps);
 
             ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,IsRead=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,IsRead=0,SDT=" + dbStr + "SDT WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+            ps.Add("SDT", sdt);
             ps.Add("FK_Node", this.ReturnToNode.NodeID);
             ps.Add("WorkID", this.WorkID);
             DBAccess.RunSQL(ps);
@@ -877,8 +899,8 @@ namespace BP.WF
             //}
 
             //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
-            string text = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,
-                atPara,null,gwl.FK_Emp);
+            string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,
+                atPara, null, gwl.FK_Emp);
 
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";

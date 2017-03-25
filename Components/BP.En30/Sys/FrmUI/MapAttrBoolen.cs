@@ -108,6 +108,7 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
 
                 #region 基本信息.
+
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 300, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
 
@@ -123,9 +124,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.DefVal, false, "默认值(是否选中？)", true, true);
-
-                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 4000, 20, true);
-
+                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 800, 20, true);
              
                 #endregion 基本信息.
 
@@ -164,7 +163,9 @@ namespace BP.Sys.FrmUI
                 rm.Title = "旧版本设置";
                 rm.ClassMethodName = this.ToString() + ".DoOldVer()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
+
                 #endregion 执行的方法.
 
                 this._enMap = map;

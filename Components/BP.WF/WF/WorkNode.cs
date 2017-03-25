@@ -452,7 +452,7 @@ namespace BP.WF
             // edit at 2008-01-22 , 处理预警日期的问题。
 
             DateTime dtOfShould;
-            if (this.HisFlow.HisTimelineRole == TimelineRole.ByFlow)
+            if (this.HisFlow.HisTimelineRole == BP.WF.Template.TimelineRole.ByFlow)
             {
                 /*如果整体流程是按流程设置计算。*/
                 dtOfShould = DataType.ParseSysDateTime2DateTime(this.HisGenerWorkFlow.SDTOfFlow);
@@ -461,7 +461,6 @@ namespace BP.WF
             {
                 int day = 0;
                 int hh = 0;
-
                 //增加天数. 考虑到了节假日.                
                 dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.TimeLimit,
                     this.town.HisNode.TSpanMinues, this.town.HisNode.TWay);

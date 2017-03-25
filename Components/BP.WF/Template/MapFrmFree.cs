@@ -236,6 +236,9 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
+
+
                 rm = new RefMethod();
                 rm.Title = "批量修改字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
@@ -307,6 +310,17 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "重置表单";  //"设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoReset";
+                rm.Warning = "重置就是重新让设计器还原原来的设置.";
+                rm.Visable = true;
+                rm.RefAttrLinkLabel = "重置表单";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Check.png";
+                map.AddRefMethod(rm);
+
+
                 //rm = new RefMethod();
                 //rm.Title = "节点表单组件"; // "设计表单";
                 //rm.ClassMethodName = this.ToString() + ".DoNodeFrmCompent";
@@ -373,6 +387,12 @@ namespace BP.WF.Template
         #endregion
 
         #region 节点表单方法.
+        public string DoReset()
+        {
+            string sql = "UPDATE Sys_MapData SET FormJson = null WHERE No='"+this.No+"'";
+            BP.DA.DBAccess.RunSQL(sql);
+            return "重置成功.";
+        }
         /// <summary>
         /// 启动自由表单设计器(SL)
         /// </summary>

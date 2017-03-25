@@ -212,7 +212,7 @@ namespace BP.Sys
                 foreach (GEDtl enDtl in ensDtl)
                 {
                     enDtl.RefPK = this.OID.ToString();
-                    enDtl.Insert();
+                    enDtl.InsertAsNew();
                 }
             }
 

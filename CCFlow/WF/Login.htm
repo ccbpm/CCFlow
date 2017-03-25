@@ -39,9 +39,9 @@
                     //转化成json.
                     data = JSON.parse(data);
 
-                    if (data.UserNo == "") { //没有登录的信息.
+                    if (data.USERNO == "") { //没有登录的信息.
 
-                        $("#Btn_Login").val(data.UserNo);
+                        $("#Btn_Login").val(data.USERNO);
 
                         //退出授权登录按钮不可见.
                         $("#divBtnAuth").style.display = "none";

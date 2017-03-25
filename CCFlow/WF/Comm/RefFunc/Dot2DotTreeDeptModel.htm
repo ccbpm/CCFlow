@@ -50,16 +50,16 @@
                     var rootselect = '';
 
                     if (node.attributes.TType == "CDEPT") {
-//                        if (root.id == node.id) {
-//                            if (IndexOfArray(nodedepts, "No", node.attributes.No) == -1) {
-//                                rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, true)'>[选择]</a>";
-//                            }
-//                            else {
-//                                rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, false)'>[取消]</a>";
-//                            }
+                        if (root.id == node.id) {
+                            if (IndexOfArray(nodedepts, "No", node.attributes.No) == -1) {
+                                rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, true)' title='选择根节点部门'>[选择]</a>";
+                            }
+                            else {
+                                rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, false)' title='取消选择根节点部门'>[取消]</a>";
+                            }
 
-//                            return node.text + rootselect;
-//                        }
+                            return node.text + rootselect;
+                        }
 
                         return node.text;
                     }
@@ -67,12 +67,12 @@
                     var link = "<a href='javascript:void(0)' onclick='GetSubDepts(\"" + root.attributes.No + "\",\"" + node.attributes.No + "\")'>" + node.text + "</a>";
 
                     if (root.id == node.id) {
-//                        if (IndexOfArray(nodedepts, "No", node.attributes.No) == -1) {
-//                            rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, true)'>[选择]</a>";
-//                        }
-//                        else {
-//                            rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, false)'>[取消]</a>";
-//                        }
+                        if (IndexOfArray(nodedepts, "No", node.attributes.No) == -1) {
+                            rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, true)' title='选择根节点部门'>[选择]</a>";
+                        }
+                        else {
+                            rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, false)' title='取消选择根节点部门'>[取消]</a>";
+                        }
 
                         return link + rootselect;
                     }
@@ -111,6 +111,10 @@
                         return false;
                     }
 
+                    if (node.attributes.ParentNo == 0 && node.attributes.TType == "DEPT") {
+                        return false;
+                    }
+
                     return true;
                 }
             });
@@ -128,7 +132,9 @@
                 }
             });
 
-            Init();
+            $("#save").linkbutton();
+
+            GetNodeDepts();
         });
 
         function Init() {
@@ -145,10 +151,8 @@
                 }
 
                 var treeData = eval('(' + data + ')');
+                $("#save").linkbutton("enable");
                 $("#treeDepts").tree("loadData", treeData.InnerData);
-
-                //获取当前节点绑定的人员
-                GetNodeDepts();
             }, this);
         }
 
@@ -225,8 +229,8 @@
 
                 var redata = eval('(' + data + ')');
                 nodedepts = redata.InnerData;
-                $("#save").linkbutton("enable");
                 ShowSelectedDepts();
+                Init();
             }, this);
         }
 
@@ -236,12 +240,14 @@
 
         function CheckRootNode(link, checked) {
             var root = $("#treeDepts").tree("getRoot");
+            var jlink = $(link);
 
             CheckNode(root, checked);
-            ShowSelectedDepts();            
+            ShowSelectedDepts();
 
-            $(link).text(checked ? "[取消]" : "[选择]");
-            $(link).attr("onclick", checked ? "CheckRootNode(this, false)" : "CheckRootNode(this, true)");
+            jlink.text(checked ? "[取消]" : "[选择]");
+            jlink.attr("onclick", checked ? "CheckRootNode(this, false)" : "CheckRootNode(this, true)");
+            jlink.attr("title", checked ? "取消选择根节点部门" : "选择根节点部门");
         }
 
         function CheckNode(node, checked) {
@@ -317,7 +323,7 @@
             key = key.toLowerCase();
 
             $.each(nodedepts, function () {
-                if (this.Code.indexOf(key) != -1 || this.Name.indexOf(key) != -1 || this.DeptName.indexOf(key) != -1) {
+                if (this.Code.indexOf(key) != -1 || this.Name.indexOf(key) != -1 || (this.DeptName && this.DeptName.indexOf(key) != -1)) {
                     filterdepts.push(this);
                 }
             });
@@ -542,7 +548,7 @@
     <div id="tb" style="line-height: 30px;">
         &nbsp; <a href="javascript:void(0)" onclick="ShowSelectedDepts()" class="easyui-linkbutton"
             data-options="iconCls:'icon-table'">显示已选部门</a> &nbsp;
-        <input id="kw" class="easyui-textbox" onkeyup="" style="width: 80px" />
+        <input id="kw" class="easyui-textbox" data-options="prompt:'支持汉字首字母检索'" style="width: 120px" />
         <a href="javascript:void(0)" onclick="FilterDepts($('#kw').textbox('getValue'))"
             class="easyui-linkbutton" data-options="iconCls:'icon-search'">检索</a> &nbsp;<a href="javascript:void(0)"
                 onclick="DeleteSelectedDepts(false)" class="easyui-linkbutton" data-options="iconCls:'icon-delete'">删除</a>

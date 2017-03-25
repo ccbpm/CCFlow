@@ -199,6 +199,21 @@ namespace CCFlow.WF.Comm.RefFunc
                 return this.ToolBar1.GetLinkBtnByID("Btn_SaveAndClose");
             }
         }
+        /// <summary>
+        /// 检索关键字
+        /// </summary>
+        public string Key
+        {
+            get
+            {
+                TB tb = this.ToolBar1.GetTBByID("TB_Key");
+
+                if (tb == null)
+                    return string.Empty;
+
+                return tb.Text;
+            }
+        }
         #endregion 属性.
 
         #region Page_Load
@@ -305,6 +320,20 @@ namespace CCFlow.WF.Comm.RefFunc
             }
             #endregion 处理保存权限.
 
+            #region 增加关键字过滤
+
+            TB tbKey = new TB();
+            tbKey.ID = "TB_Key";
+
+            this.ToolBar1.AddSpace(4);
+            this.ToolBar1.Add("关键字：");
+            this.ToolBar1.AddTB(tbKey);
+            this.ToolBar1.AddSpace(2);
+            this.ToolBar1.AddLinkBtn("Btn_Search", "检索");
+            this.ToolBar1.GetLinkBtnByID("Btn_Search").Click += new EventHandler(BPToolBar1_ButtonClick);
+
+            #endregion
+
             this.SetDataV2();
         }
         #endregion Page_Load
@@ -328,16 +357,16 @@ namespace CCFlow.WF.Comm.RefFunc
                 if (this.DDL_Group.SelectedValue == "None")
                 {
                     if (this.IsLine)
-                        this.UCSys1.UIEn1ToM_OneLine(ensOfM, attrOM.AttrOfMValue, attrOM.AttrOfMText, ensOfMM, attrOM.AttrOfMInMM);
+                        this.UCSys1.UIEn1ToM_OneLine(ensOfM, attrOM.AttrOfMValue, attrOM.AttrOfMText, ensOfMM, attrOM.AttrOfMInMM, this.Key);
                     else
-                        this.UCSys1.UIEn1ToM(ensOfM, attrOM.AttrOfMValue, attrOM.AttrOfMText, ensOfMM, attrOM.AttrOfMInMM);
+                        this.UCSys1.UIEn1ToM(ensOfM, attrOM.AttrOfMValue, attrOM.AttrOfMText, ensOfMM, attrOM.AttrOfMInMM, this.Key);
                 }
                 else
                 {
                     if (this.IsLine)
-                        this.UCSys1.UIEn1ToMGroupKey_Line(ensOfM, attrOM.AttrOfMValue, attrOM.AttrOfMText, ensOfMM, attrOM.AttrOfMInMM, this.DDL_Group.SelectedValue);
+                        this.UCSys1.UIEn1ToMGroupKey_Line(ensOfM, attrOM.AttrOfMValue, attrOM.AttrOfMText, ensOfMM, attrOM.AttrOfMInMM, this.DDL_Group.SelectedValue, this.Key);
                     else
-                        this.UCSys1.UIEn1ToMGroupKey(ensOfM, attrOM.AttrOfMValue, attrOM.AttrOfMText, ensOfMM, attrOM.AttrOfMInMM, this.DDL_Group.SelectedValue);
+                        this.UCSys1.UIEn1ToMGroupKey(ensOfM, attrOM.AttrOfMValue, attrOM.AttrOfMText, ensOfMM, attrOM.AttrOfMInMM, this.DDL_Group.SelectedValue, this.Key);
                 }
             }
             catch (Exception ex)
@@ -396,6 +425,9 @@ namespace CCFlow.WF.Comm.RefFunc
                 case "Btn_EditMEns":
                     this.EditMEns();
                     break;
+                case "Btn_Search":
+                    SetDataV2();
+                    break;
                 default:
                     throw new Exception("@没有找到" + btn.ID);
             }
@@ -411,13 +443,50 @@ namespace CCFlow.WF.Comm.RefFunc
         {
             AttrOfOneVSM attr = this.AttrOfOneVSM;
             Entities ensOfMM = attr.EnsOfMM;
-            ensOfMM.Delete(attr.AttrOfOneInMM, this.PK);
+            //ensOfMM.Delete(attr.AttrOfOneInMM, this.PK);
+            ensOfMM.Retrieve(attr.AttrOfOneInMM, this.PK);
+
+            //edited by liuxc,2016-12-24
+            //修改保存逻辑，此处不一次性删除原有保存的记录，只是将原有数据中，当前页未选中的删除掉，当前页选中但原有未记录的保存上
+            string val = string.Empty;
+            CheckBox tcb = null;
+            var keys = new List<string>();
+            var key = string.Empty;
+            Entity ten = null;
+
+            foreach (System.Web.UI.Control ctl in this.UCSys1.Controls)
+            {
+                if (ctl == null || ctl.ID == null)
+                    continue;
+
+                if (ctl.ID.Contains("CB_") == false)
+                    continue;
+
+                key = ctl.ID.Split('_')[1];
+
+                if (key == "EN" || key == "SE" || keys.Contains(key))
+                    continue;
+
+                //ten = ensOfMM.GetEntityByKey()
+            }
+
+            //原有保存记录中，当前页中含有但未选中的去除掉
+            foreach(Entity en in ensOfMM)
+            {
+                val = en.GetValStringByKey(attr.AttrOfMInMM);
+                tcb = this.UCSys1.GetCBByID("CB_" + val);
+
+                if (tcb == null)
+                    continue;
+
+                if (tcb.Checked == false)
+                    en.Delete();
+            }
 
             //执行保存.
             // edited by liuxc,2015.1.6
             // 增加去除相同项的逻辑，比如同一个人员属于多个部门，则保存的时候则可能会选中有多个相同选择项
-            var keys = new List<string>();
-            var key = string.Empty;
+
             foreach (System.Web.UI.Control ctl in this.UCSys1.Controls)
             {
                 if (ctl == null || ctl.ID == null)
@@ -436,6 +505,9 @@ namespace CCFlow.WF.Comm.RefFunc
                   key = ctl.ID.Split('_')[1];
 
                 if (key == "EN" || key == "SE" || keys.Contains(key))
+                    continue;
+
+                if (ensOfMM.GetEntityByKey(attr.AttrOfMInMM, key) != null)
                     continue;
 
                 Entity en1 = ensOfMM.GetNewEntity;

@@ -5736,7 +5736,7 @@ namespace BP.WF
                 {
                     /* 检查该退回是否是原路返回 ? */
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT ReturnNode,Returner,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
+                    ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
                     ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
                     DataTable mydt = DBAccess.RunSQLReturnTable(ps);
                     if (mydt.Rows.Count != 0)
@@ -5746,10 +5746,11 @@ namespace BP.WF
                         /*确认这次退回，是退回并原路返回 ,  在这里初始化它的工作人员, 与将要发送的节点. */
                         this.JumpToNode = new Node(int.Parse(mydt.Rows[0]["ReturnNode"].ToString()));
                         this.JumpToEmp = mydt.Rows[0]["Returner"].ToString();
+                        string toEmpName  = mydt.Rows[0]["ReturnerName"].ToString();
 
+                        #region 如果当前是退回, 并且当前的运行模式是按照流程图运行.
                         if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
                         {
-                            /* 如果当前是退回, 并且当前的运行模式是按照流程图运行.*/
                             if (this.JumpToNode.TodolistModel == TodolistModel.Order
                                 || this.JumpToNode.TodolistModel == TodolistModel.TeamupGroupLeader
                                 || this.JumpToNode.TodolistModel == TodolistModel.Teamup)
@@ -5757,15 +5758,19 @@ namespace BP.WF
                                 /*如果是多人处理节点.*/
                                 this.DealReturnOrderTeamup();
 
+                                //写入track.
+                                this.AddToTrack(ActionType.Forward, this.JumpToEmp, toEmpName, this.JumpToNode.NodeID, this.JumpToNode.Name, "退回后发送");
+
                                 //执行时效考核.
                                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                                 return this.HisMsgObjs;
                             }
                         }
+                        #endregion 如果当前是退回, 并且当前的运行模式是按照流程图运行.*/
 
+                        #region  如果当前是退回. 并且当前的运行模式按照自由流程设置方式运行
                         if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByWorkerSet)
                         {
-                            /* 如果当前是退回. 并且当前的运行模式按照自由流程设置方式运行。*/
                             if (this.HisGenerWorkFlow.TodolistModel == TodolistModel.Order
                                 || this.JumpToNode.TodolistModel == TodolistModel.TeamupGroupLeader
                                 || this.HisGenerWorkFlow.TodolistModel == TodolistModel.Teamup)
@@ -5773,11 +5778,16 @@ namespace BP.WF
                                 /*如果是多人处理节点.*/
                                 this.DealReturnOrderTeamup();
 
+                                //写入track.
+                                this.AddToTrack(ActionType.Forward, this.JumpToEmp, toEmpName, this.JumpToNode.NodeID, this.JumpToNode.Name, "退回后发送(按照自定义运行模式)");
+
                                 //执行时效考核.
                                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                                 return this.HisMsgObjs;
                             }
                         }
+                        #endregion  如果当前是退回. 并且当前的运行模式按照自由流程设置方式运行
+
                     }
                 }
                 #endregion 处理退回的情况.

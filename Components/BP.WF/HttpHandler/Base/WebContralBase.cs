@@ -119,6 +119,25 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 数据
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public float GetRequestValFloat(string param)
+        {
+            string str = GetRequestVal(param);
+            if (str == null || str == "" || str == "null")
+                return 0;
+            try
+            {
+                return float.Parse(str);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        /// <summary>
         /// 获得参数.
         /// </summary>
         public string RequestParas

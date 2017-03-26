@@ -82,26 +82,7 @@ namespace BP.WF.HttpHandler
                     case "DoType"://表单特殊元素保存公共方法
                         msg = DoType();
                         break;
-                    case "GetEnumerationList": //获取所有枚举
-                    case "GetSFTableList": //获取所有的外键表.
-                        string pageNumberStr = getUTF8ToString("pageNumber");
-                        int pageNumber = 1;
-                        if (string.IsNullOrEmpty(pageNumberStr) == false)
-                            pageNumber = int.Parse(pageNumberStr);
-
-                        string pageSizeStr = getUTF8ToString("pageSize");
-                        int pageSize = 9999;
-                        if (string.IsNullOrEmpty(pageSizeStr) == false)
-                            pageSize = int.Parse(pageSizeStr);
-
-                        //调用API获得数据.
-                        if (action == "GetSFTableList")
-                            msg = BP.Sys.CCFormAPI.DB_SFTableList(pageNumber, pageSize);
-                        else
-                            msg = BP.Sys.CCFormAPI.DB_EnumerationList(pageNumber, pageSize); //调用API获得数据.
-
-                        // BP.DA.DataType.WriteFile("c:\\sss.txt", msg);
-                        break;
+                
                     case "Hiddenfielddata"://获取隐藏字段.
                         msg = BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
                         break;
@@ -156,22 +137,7 @@ namespace BP.WF.HttpHandler
             {
                 switch (dotype.Trim())
                 {
-                    case "SaveEnum":
-                        string enumName = this.GetRequestVal("EnumName");
-                        string enumKey1 = this.GetRequestVal("EnumKey");
-                        string cfgVal = this.GetRequestVal("Vals");
-
-                        //调用接口执行保存.
-                        resutlStr = BP.Sys.CCFormAPI.SaveEnum(enumKey1, enumName, cfgVal, false);
-                        return resutlStr;
-                    case "NewEnum"://杨玉慧加  当枚举已经存在时，提示，不再添加
-                        string newnEumName = this.GetRequestVal("EnumName");
-                        string newEnumKey1 = this.GetRequestVal("EnumKey");
-                        string newCfgVal = this.GetRequestVal("Vals");
-
-                        //调用接口执行保存.
-                        resutlStr = BP.Sys.CCFormAPI.SaveEnum(newEnumKey1, newnEumName, newCfgVal, true);
-                        return resutlStr;
+                  
                     case "PublicNoNameCtrlCreate": //创建通用的控件.
                         string ctrlType = this.GetRequestVal("CtrlType");
                         try
@@ -205,30 +171,7 @@ namespace BP.WF.HttpHandler
                         {
                             return ex.Message;
                         }
-                    case "NewEnumField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
-                        try
-                        {
-                            UIContralType ctrl = UIContralType.RadioBtn;
-                            string ctrlDoType = GetRequestVal("ctrlDoType");
-                            if (ctrlDoType == "DDL")
-                                ctrl = UIContralType.DDL;
-                            else
-                                ctrl = UIContralType.RadioBtn;
-
-                            string fk_mapdata = this.GetRequestVal("FK_MapData");
-                            string keyOfEn = this.GetRequestVal("KeyOfEn");
-                            string fieldDesc = this.GetRequestVal("Name");
-                            string enumKeyOfBind = this.GetRequestVal("UIBindKey"); //要绑定的enumKey.
-                            x = float.Parse(this.GetRequestVal("x"));
-                            y = float.Parse(this.GetRequestVal("y"));
-
-                            BP.Sys.CCFormAPI.NewEnumField(frmID, keyOfEn, fieldDesc, enumKeyOfBind, ctrl, x, y);
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.Message;
-                        }
+                  
                     case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {
@@ -271,29 +214,7 @@ namespace BP.WF.HttpHandler
                             return "error:多选名称:" + m2mName + "，已经存在。";
                         m2m.Insert();
                         return "true";
-                    case "DelEnum":
-                        //删除空数据.
-                        BP.DA.DBAccess.RunSQL("DELETE FROM Sys_MapAttr WHERE FK_MapData IS NULL OR FK_MapData='' ");
-
-                        //获得要删除的枚举值.
-                        string enumKey = this.GetRequestVal("EnumKey");
-
-                        // 检查这个物理表是否被使用.
-                        sql = "SELECT  FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + enumKey + "'";
-                        DataTable dtEnum = DBAccess.RunSQLReturnTable(sql);
-                        string msgDelEnum = "";
-                        foreach (DataRow dr in dtEnum.Rows)
-                        {
-                            msgDelEnum += "\n 表单编号:" + dr["FK_MapData"] + " , 字段:" + dr["KeyOfEn"] + ", 名称:" + dr["Name"];
-                        }
-
-                        if (msgDelEnum != "")
-                            return "error:该枚举已经被如下字段所引用，您不能删除它。" + msgDelEnum;
-
-                        sql = "DELETE FROM Sys_EnumMain WHERE No='" + enumKey + "'";
-                        sql += "@DELETE FROM Sys_Enum WHERE EnumKey='" + enumKey + "' ";
-                        DBAccess.RunSQLs(sql);
-                        return "true";
+                 
                     case "DelSFTable": /* 删除自定义的物理表. */
                         // 检查这个物理表是否被使用。
                         sql = "SELECT FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + v1 + "'";
@@ -575,22 +496,7 @@ namespace BP.WF.HttpHandler
             {
                 switch (dotype.Trim())
                 {
-                    case "SaveEnum":
-                        string enumName = getUTF8ToString("EnumName");
-                        string enumKey1 = getUTF8ToString("EnumKey");
-                        string cfgVal = getUTF8ToString("Vals");
-
-                        //调用接口执行保存.
-                        resutlStr = BP.Sys.CCFormAPI.SaveEnum(enumKey1, enumName, cfgVal, false);
-                        return resutlStr;
-                    case "NewEnum"://杨玉慧加  当枚举已经存在时，提示，不再添加
-                        string newnEumName = getUTF8ToString("EnumName");
-                        string newEnumKey1 = getUTF8ToString("EnumKey");
-                        string newCfgVal = getUTF8ToString("Vals");
-
-                        //调用接口执行保存.
-                        resutlStr = BP.Sys.CCFormAPI.SaveEnum(newEnumKey1, newnEumName, newCfgVal, true);
-                        return resutlStr;
+                    
                     case "PublicNoNameCtrlCreate": //创建通用的控件.
                         string ctrlType = getUTF8ToString("CtrlType");
                         try
@@ -606,48 +512,8 @@ namespace BP.WF.HttpHandler
                         {
                             return ex.Message;
                         }
-                    case "NewSFTableField": //创建一个SFTable字段.
-                        try
-                        {
-                            string fk_mapdata = getUTF8ToString("FK_MapData");
-                            string keyOfEn = getUTF8ToString("KeyOfEn");
-                            string fieldDesc = getUTF8ToString("Name");
-                            string sftable = getUTF8ToString("UIBindKey");
-                            x = float.Parse(getUTF8ToString("x"));
-                            y = float.Parse(getUTF8ToString("y"));
-
-                            //调用接口,执行保存.
-                            BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.Message;
-                        }
-                    case "NewEnumField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
-                        try
-                        {
-                            UIContralType ctrl = UIContralType.RadioBtn;
-                            string ctrlDoType = getUTF8ToString("ctrlDoType");
-                            if (ctrlDoType == "DDL")
-                                ctrl = UIContralType.DDL;
-                            else
-                                ctrl = UIContralType.RadioBtn;
-
-                            string fk_mapdata = getUTF8ToString("FK_MapData");
-                            string keyOfEn = getUTF8ToString("KeyOfEn");
-                            string fieldDesc = getUTF8ToString("Name");
-                            string enumKeyOfBind = getUTF8ToString("UIBindKey"); //要绑定的enumKey.
-                            x = float.Parse(getUTF8ToString("x"));
-                            y = float.Parse(getUTF8ToString("y"));
-
-                            BP.Sys.CCFormAPI.NewEnumField(frmID, keyOfEn, fieldDesc, enumKeyOfBind, ctrl, x, y);
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.Message;
-                        }
+                  
+                    
                     case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {

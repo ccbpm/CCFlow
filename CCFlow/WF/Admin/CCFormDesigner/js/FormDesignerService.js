@@ -18,6 +18,7 @@ function ajaxService(param, callback, scope) {
         }
     });
 }
+
 //检查登录.
 function checklogin(fCallback, oScope) {
     /// <summary>检测登录信息</summary>

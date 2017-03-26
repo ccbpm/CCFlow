@@ -257,7 +257,7 @@ FigureCreateCommand.prototype = {
             // 定义参数，让其保存到数据库里。
             var param = {
                 action: "DoType",
-                DoType: "NewEnumField",
+                DoType: "FrmEnumeration_NewEnumField",
                 FK_MapData: CCForm_FK_MapData,
                 Name: frmVal.Name,
                 KeyOfEn: frmVal.KeyOfEn,

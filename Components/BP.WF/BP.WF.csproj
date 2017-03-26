@@ -165,6 +165,7 @@
     <Compile Include="HttpHandler\WF_Template.cs" />
     <Compile Include="HttpHandler\WF_CCForm.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesignerCCFromHandler.cs" />
+    <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_DialogCtr.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />

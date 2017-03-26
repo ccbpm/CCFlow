@@ -78,7 +78,6 @@ namespace BP.WF.HttpHandler
                     case "LetLogin":    //使管理员登录
                        // LetAdminLogin("CH", true);
                       //  msg = WebUser.No == "admin" ? string.Empty : 
-
                         break;
                     case "DoType"://表单特殊元素保存公共方法
                         msg = DoType();

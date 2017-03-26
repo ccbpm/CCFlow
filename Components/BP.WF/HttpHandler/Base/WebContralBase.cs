@@ -45,7 +45,6 @@ namespace BP.WF.HttpHandler
             Type tp = myEn.GetType();
             MethodInfo mp = tp.GetMethod(methodName);
 
-
             if (mp == null)
             {
                 /* 没有找到方法名字，就执行默认的方法. */
@@ -75,7 +74,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetRequestVal(string param)
         {
-            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
+            string val = context.Request[param];
+            if (val == null)
+                val = context.Request.QueryString[param];
+
+            return HttpUtility.UrlDecode(val, System.Text.Encoding.UTF8);
         }
         /// <summary>
         /// 公共方法获取值
@@ -90,6 +93,25 @@ namespace BP.WF.HttpHandler
             try
             {
                 return int.Parse(str);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 公共方法获取值
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public Int64 GetRequestValInt64(string param)
+        {
+            string str = GetRequestVal(param);
+            if (str == null || str == "" || str == "null")
+                return 0;
+            try
+            {
+                return Int64.Parse(str);
             }
             catch
             {
@@ -145,22 +167,27 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["DoType"];
+                //获得执行的方法.
+                string doType = "";
 
-                if (str == null || str == "" || str == "null")
-                    str = context.Request.QueryString["action"];
+                doType = this.GetRequestVal("DoType");
+                if (doType == null)
+                    doType = this.GetRequestVal("Action");
 
-                if (str == null || str == "" || str == "null")
-                    str = "";
+                if (doType == null)
+                    doType = this.GetRequestVal("action");
 
-                return str;
+                if (doType == null)
+                    doType = this.GetRequestVal("Method");
+
+                return doType;
             }
         }
         public string EnsName
         {
             get
             {
-                string str = context.Request.QueryString["EnsName"];
+                string str = this.GetRequestVal("EnsName");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -170,7 +197,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["MyPK"];
+                string str = this.GetRequestVal("MyPK");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -183,32 +210,31 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_SFTable"];
+                string str = this.GetRequestVal("FK_SFTable");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
-
             }
         }
         public string EnumKey
         {
             get
             {
-                string str = context.Request.QueryString["EnumKey"];
+                string str = this.GetRequestVal("EnumKey");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
-
             }
         }
         public string KeyOfEn
         {
             get
             {
-                string str = context.Request.QueryString["KeyOfEn"];
+                string str = this.GetRequestVal("KeyOfEn");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
+                 
             }
         }
         /// <summary>
@@ -218,7 +244,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_MapData"];
+                string str = this.GetRequestVal("FK_MapData");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -231,7 +257,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_MapExt"];
+                string str = this.GetRequestVal("FK_MapExt");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -244,7 +270,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_Flow"];
+                string str = this.GetRequestVal("FK_Flow");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -254,10 +280,11 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["GroupField"];
+                string str = this.GetRequestVal("GroupField");
                 if (str == null || str == "" || str == "null")
                     return 0;
-                return int.Parse(str);
+
+                return int.Parse( str);
             }
         }
         /// <summary>
@@ -267,16 +294,15 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["FK_Node"];
-                if (str == null || str == "" || str == "null")
-                    return 0;
-                return int.Parse(str);
+                return this.GetRequestValInt("FK_Node");
             }
         }
         public Int64 FID
         {
             get
             {
+                return this.GetRequestValInt("FID");
+
                 string str = context.Request.QueryString["FID"];
                 if (str == null || str == "" || str == "null")
                     return 0;

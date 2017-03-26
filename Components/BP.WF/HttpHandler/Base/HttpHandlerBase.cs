@@ -34,30 +34,18 @@ namespace BP.WF.HttpHandler
             context = mycontext;
             //创建 ctrl 对象.
             WebContralBase ctrl = Activator.CreateInstance(CtrlType, context) as WebContralBase;
-
             try
             {
-                //获得执行的方法.
-                string doType = context.Request.QueryString["DoType"];
-                if (doType == null)
-                    doType = context.Request.QueryString["Action"];
-
-                if (doType == null)
-                    doType = context.Request.QueryString["action"];
-
-                if (doType == null)
-                    doType = context.Request.QueryString["Method"];
-
                 //执行方法返回json.
-                string data = ctrl.DoMethod(ctrl, doType);
+                string data = ctrl.DoMethod(ctrl, ctrl.DoType);
 
                 //返回执行的结果.
-                context.Response.Write(data);
+                ctrl.context.Response.Write(data);
             }
             catch (Exception ex)
             {
                 //返回执行错误的结果.
-                context.Response.Write("err@在执行类["+this.CtrlType.ToString()+"]，方法["+ctrl.DoType+"]错误 \t\n @" + ex.InnerException);
+                ctrl.context.Response.Write("err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.InnerException);
             }
         }
 

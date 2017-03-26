@@ -18,7 +18,7 @@ function ajaxService(param, callback, scope) {
         }
     });
 }
-
+//检查登录.
 function checklogin(fCallback, oScope) {
     /// <summary>检测登录信息</summary>
     /// <param name="fCallback" type="Function">检测完之后，要运行的方法</param>

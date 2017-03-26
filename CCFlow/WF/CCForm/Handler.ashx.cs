@@ -13,8 +13,6 @@ using System.Web.UI;
 using BP.DA;
 using BP.WF.Template;
 using BP.WF;
-using BP.Sys;
-using CCFlow.WF.CCForm;
 
 
 namespace CCFlow.WF.CCForm

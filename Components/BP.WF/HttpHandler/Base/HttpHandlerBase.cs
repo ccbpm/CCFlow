@@ -41,6 +41,10 @@ namespace BP.WF.HttpHandler
                 string doType = context.Request.QueryString["DoType"];
                 if (doType == null)
                     doType = context.Request.QueryString["Action"];
+
+                if (doType == null)
+                    doType = context.Request.QueryString["action"];
+
                 if (doType == null)
                     doType = context.Request.QueryString["Method"];
 

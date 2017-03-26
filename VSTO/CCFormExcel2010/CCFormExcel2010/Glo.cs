@@ -60,44 +60,51 @@ namespace BP.Excel
 		/// <summary>
 		/// 当前登录用户编号
 		/// </summary>
-		public static string UserNo = "wangtao";
+		public static string UserNo = "";
 		/// <summary>
 		/// 当前登录用户SID
 		/// </summary>
-		public static string SID = "2222";
+		public static string SID = "";
 		/// <summary>
 		/// Excel表单编号
 		/// </summary>
-		public static string FrmID = "CY3023";
+		public static string FrmID = "";
 		/// <summary>
 		/// 发起流程编号
 		/// </summary>
-		public static string FK_Flow = "002";
+		public static string FK_Flow = "";
 		/// <summary>
 		/// 当前工作ID
 		/// </summary>
-		public static int WorkID = 1000;
-		public static int PWorkID = 1000;
+		public static int WorkID;
+		public static int PWorkID;
 		/// <summary>
 		/// 当前Excel表单绑定的节点ID
 		/// </summary>
-		public static int FK_Node = 301;
+		public static int FK_Node;
 		public static string AtParas = "";
 		/// <summary>
 		/// 插件引用的服务地址
 		/// </summary>
-		public static string WSUrl = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
+		public static string WSUrl = "";
+		/// <summary>
+		/// 本地保存的Excel（路径+文件名）
+		/// </summary>
+		public static string LocalFile;
 		#endregion 参数.
 
 		/// <summary>
 		/// 参数是否加载成功，加载不成功，所有插件功能不启用
 		/// </summary>
 		public static bool LoadSuccessful = false;
+		/// <summary>
+		/// 是否只读
+		/// </summary>
 		public static bool IsReadonly = false;
 
 		#region 方法.
 		/// <summary>
-		/// 得到 WebService 对象 
+		/// 得到 WebService 对象
 		/// </summary>
 		/// <returns></returns>
 		public static CCFormExcel2010.CCForm.CCFormAPISoapClient GetCCFormAPISoapClient()
@@ -127,7 +134,6 @@ namespace BP.Excel
 			return (CCFormExcel2010.CCForm.CCFormAPISoapClient)ctor.Invoke(
 				new object[] { basicBinding, endPoint });
 		}
-		#endregion 方法.
 
 		/// <summary>
 		/// 获取EXCEL的启动参数
@@ -247,6 +253,14 @@ namespace BP.Excel
 			fs.Close();
 
 			return buffer;
+		}
+		#endregion 方法.
+
+		public static string GetCurrentVersion()
+		{
+			System.Reflection.Assembly fileAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+			System.Version fileVersion = fileAssembly.GetName().Version;
+			return fileVersion.ToString();
 		}
 
 	}

@@ -22,6 +22,41 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        public string SaveForm()
+        {
+            string diagram = getUTF8ToString("diagram");//表单 H5 格式.
+            BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
+            return "保存成功..";
+        }
+
+        public string AddFlowEle()
+        {
+            string flowEle = this.GetRequestVal("FlowEle");
+            string nodeID = this.FK_MapData.Replace("ND", "");
+
+            switch (flowEle)
+            {
+             
+                case "FrmCheck":
+                    DBAccess.RunSQL("UPDATE WF_Node SET FWCSta=1 WHERE NodeID=" + nodeID);
+                    break;
+                case "FrmSubFlow":
+                    DBAccess.RunSQL("UPDATE WF_Node SET SFSta=1 WHERE NodeID=" + nodeID);
+                    break;
+                case "FrmThread":
+                    DBAccess.RunSQL("UPDATE WF_Node SET FrmThreadSta=1 WHERE NodeID=" + nodeID);
+                    break;
+                case "FrmTrack":
+                    DBAccess.RunSQL("UPDATE WF_Node SET FrmTrackSta=1 WHERE NodeID=" + nodeID);
+                    break;
+                default:
+                    throw new Exception("没有找到标记." + flowEle);
+                    break;
+            }
+
+            return "执行成功.";
+        }
         /// <summary>
         /// 从本机装载表单模版
         /// </summary>

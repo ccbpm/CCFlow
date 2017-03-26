@@ -677,6 +677,8 @@ namespace BP.Sys
                 return;
             }
 
+            string flowEle = "";
+
             //循环元素.
             for (int idx = 0, jControl = form_Controls.Count; idx < jControl; idx++)
             {
@@ -807,8 +809,47 @@ namespace BP.Sys
                 }
                 #endregion 附件.
 
+
+                //流程类的组件.
+                if (shape == "FlowChart" || shape == "FrmCheck" ||  shape == "SubFlowDtl" || shape=="ThreadDtl")
+                {
+                    flowEle += shape + ",";
+                    continue;
+                }
+
                 throw new Exception("@没有判断的类型:shape = " + shape);
             }
+
+            #region 处理节点表单。
+            string nodeID = fk_mapdata.Replace("ND", "");
+            if (BP.DA.DataType.IsNumStr(nodeID) == true)
+            {
+                if (flowEle.Contains("FlowChart") == false)
+                    DBAccess.RunSQL("UPDATE WF_Node SET FrmTrackSta=0 WHERE NodeID=" + nodeID);
+                else
+                    if (DBAccess.RunSQLReturnString("SELECT FrmTrackSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                        DBAccess.RunSQL("UPDATE WF_Node SET FrmTrackSta=1 WHERE NodeID=" + nodeID);
+
+                if (flowEle.Contains("FrmCheck") == false)
+                    DBAccess.RunSQL("UPDATE WF_Node SET FWCSta=0 WHERE NodeID=" + nodeID);
+                else
+                    if (DBAccess.RunSQLReturnString("SELECT FWCSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                        DBAccess.RunSQL("UPDATE WF_Node SET FWCSta=1 WHERE NodeID=" + nodeID);
+
+                if (flowEle.Contains("SubFlowDtl") == false)
+                    DBAccess.RunSQL("UPDATE WF_Node SET SFSta=0 WHERE NodeID=" + nodeID);
+                else
+                    if (DBAccess.RunSQLReturnString("SELECT SFSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                        DBAccess.RunSQL("UPDATE WF_Node SET SFSta=1 WHERE NodeID=" + nodeID);
+
+                if (flowEle.Contains("ThreadDtl") == false)
+                    DBAccess.RunSQL("UPDATE WF_Node SET FrmThreadSta=0 WHERE NodeID=" + nodeID);
+                else
+                    if (DBAccess.RunSQLReturnString("SELECT FrmThreadSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                        DBAccess.RunSQL("UPDATE WF_Node SET FrmThreadSta=1 WHERE NodeID=" + nodeID);
+            }
+            #endregion 处理节点表单。
+
 
             #region 删除没有替换下来的 PKs, 说明这些都已经被删除了.
             string[] pks = labelPKs.Split('@');

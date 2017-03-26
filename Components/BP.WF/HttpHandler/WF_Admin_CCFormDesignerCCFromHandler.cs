@@ -54,19 +54,7 @@ namespace BP.WF.HttpHandler
                         MapData mapData = new MapData(this.FK_MapData);
                         msg = mapData.FormJson; //要返回的值.
                         break;
-                    case "SaveForm": //保存表单数据.
-                        try
-                        {
-                            string diagram = getUTF8ToString("diagram");//表单 H5 格式.
-                            BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, diagram); //执行保存.
-                            msg = "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.DebugWriteError(ex.StackTrace);
-                            msg = "error:表单格式不正确，保存失败。" + ex.StackTrace;
-                        }
-                        break;
+                   
                     case "ParseStringToPinyin": //转拼音方法.
                         string name = getUTF8ToString("name");
                         string flag = getUTF8ToString("flag");

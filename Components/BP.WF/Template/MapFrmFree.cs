@@ -237,8 +237,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-
-
                 rm = new RefMethod();
                 rm.Title = "批量修改字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
@@ -300,7 +298,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "表单检查";  //"设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
@@ -310,11 +307,10 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "重置表单";  //"设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoReset";
-                rm.Warning = "重置就是重新让设计器还原原来的设置.";
+                rm.Warning = "重置就是重新让设计器还原原来的设置. \t\n注意:执行重置有可能会导致部分的界面元素不能按照原始的方式还原上来.";
                 rm.Visable = true;
                 rm.RefAttrLinkLabel = "重置表单";
                 rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Check.png";
@@ -352,10 +348,6 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
-
-            
-
                 #endregion 高级设置.
 
                 #region 方法 - 开发接口.
@@ -391,7 +383,7 @@ namespace BP.WF.Template
         {
             string sql = "UPDATE Sys_MapData SET FormJson = null WHERE No='"+this.No+"'";
             BP.DA.DBAccess.RunSQL(sql);
-            return "重置成功.";
+            return "重置成功,您需要关闭当前H5的表单设计器然后重新打开.";
         }
         /// <summary>
         /// 启动自由表单设计器(SL)

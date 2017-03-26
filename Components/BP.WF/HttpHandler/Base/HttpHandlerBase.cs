@@ -9,6 +9,15 @@ namespace BP.WF.HttpHandler
     abstract public class HttpHandlerBase : IHttpHandler
     {
         /// <summary>
+        /// 公共方法获取值
+        /// </summary>
+        /// <param name="param">参数名</param>
+        /// <returns></returns>
+        public string getUTF8ToString(string param)
+        {
+            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
+        }
+        /// <summary>
         /// 获取 “Handler业务处理类”的Type
         /// <para></para>
         /// <para>注意： “Handler业务处理类”必须继承自BP.WF.HttpHandler.WebContralBase</para>
@@ -19,9 +28,10 @@ namespace BP.WF.HttpHandler
         {
             get { return false; }
         }
-
-        public void ProcessRequest(HttpContext context)
+        private HttpContext context = null;
+        public void ProcessRequest(HttpContext mycontext)
         {
+            context = mycontext;
             //创建 ctrl 对象.
             WebContralBase ctrl = Activator.CreateInstance(CtrlType, context) as WebContralBase;
 
@@ -34,13 +44,11 @@ namespace BP.WF.HttpHandler
                 if (doType == null)
                     doType = context.Request.QueryString["Method"];
 
-
                 //执行方法返回json.
                 string data = ctrl.DoMethod(ctrl, doType);
 
                 //返回执行的结果.
                 context.Response.Write(data);
-
             }
             catch (Exception ex)
             {

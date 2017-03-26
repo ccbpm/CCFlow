@@ -137,8 +137,13 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = context.Request.QueryString["DoType"];
+
                 if (str == null || str == "" || str == "null")
-                    return null;
+                    str = context.Request.QueryString["action"];
+
+                if (str == null || str == "" || str == "null")
+                    str = "";
+
                 return str;
             }
         }

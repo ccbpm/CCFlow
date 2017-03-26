@@ -3185,7 +3185,7 @@ function Save(showInfo) {
     //save the URLs of figures as a CSV 
     var lMap = linkMap();
 
-    $.post(controllerURLConfig, {
+    $.post( Handler, {
         action: 'SaveForm',
         diagram: serializedDiagram,
         png: dataURL,
@@ -3193,16 +3193,14 @@ function Save(showInfo) {
         svg: "",
         FK_MapData: CCForm_FK_MapData
     }, function (data) {
-        if (data == "true") {
-            if (showInfo == true) {
-                //var btnText = document.getElementById("SaveImg");
-                //btnText.Text = '保存';
-                //    Designer_ShowMsg("保存成功！");
-                alert('保存成功!!!');
-            }
-        } else {
-            Designer_ShowMsg(data);
+
+        if (data.indexOf('err@') != -1) {
+            alert(data);
+            return;
         }
+
+        Designer_ShowMsg(data);
+
     });
 }
 

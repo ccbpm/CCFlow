@@ -15,7 +15,8 @@ namespace CCFlow.WF.Admin.CCFormDesigner.DialogCtr
         /// </summary>
         public override Type CtrlType
         {
-            get { 
+            get
+            {
                 return typeof(BP.WF.HttpHandler.WF_Admin_CCFormDesigner_DialogCtr);
             }
         }

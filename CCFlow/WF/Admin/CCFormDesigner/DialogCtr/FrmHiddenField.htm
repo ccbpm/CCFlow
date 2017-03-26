@@ -14,6 +14,27 @@
     <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../js/FormDesignerService.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
+        //公共方法
+        function AjaxServiceGener(param, callback, scope) {
+            $.ajax({
+                type: "GET", //使用GET或POST方法访问后台
+                dataType: "text", //返回json格式的数据
+                contentType: "application/json; charset=utf-8",
+                url: Handler, //要访问的后台地址
+                data: param, //要发送的数据
+                async: true,
+                cache: false,
+                complete: function () { }, //AJAX请求完成时隐藏loading提示
+                error: function (XMLHttpRequest, errorThrown) {
+                    callback(XMLHttpRequest);
+                },
+                success: function (msg) {//msg为返回的数据，在这里做数据绑定
+                    var data = msg;
+                    callback(data, scope);
+                }
+            });
+        }
+
         //向后台传删除参数
         function HiddenFieldDelete() {
             var DataSet = $('#newsGrid').datagrid('getSelected');
@@ -64,7 +85,16 @@
                     $.messager.alert('提示', '请选择一条数据。', 'error');
                     return;
                 }
-                window.open("../../FoolFormDesigner/EditF.htm?DoType=Edit&FK_MapData=" + FK_MapData + "&MyPK=" + FK_MapData + "_" + dataRow.KeyOfEn + "&FType=" + dataRow.MyDataType + "&k=" + k + "", '', 'height=530, width=560, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+
+                var ftype = dataRow.MyDataType;
+                var ensName = "";
+                if (ftype == "1")
+                    ensName = "BP.Sys.FrmUI.MapAttrStrings";
+                else
+                    ensName = "BP.Sys.FrmUI.MapAttrNums";
+
+                var url = '/WF/Comm/En.htm?EnsName=' + ensName + '&MyPK=' + FK_MapData + "_" + dataRow.KeyOfEn;
+                window.open(url, '', 'height=430, width=760, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
             }
         }
 
@@ -93,8 +123,13 @@
 
         //加载grid后回调函数
         function LoadDataGridCallBack(js, scorp) {
+
+            if (js.indexOf('err@') != -1) {
+                alert(js);
+                return;
+            }
+
             $("#pageloading").hide();
-            if (js == "") js = "[]";
 
             //系统错误
             if (js.status && js.status == 500) {
@@ -121,7 +156,6 @@
                 pageSize: scorp.pageSize,
                 pageList: [100, 200, 300, 400],
                 loadMsg: '数据加载中......'
-
 
             });
 

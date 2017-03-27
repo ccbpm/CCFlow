@@ -20,7 +20,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <table class="easyui-layout" style="width: 100%;">
         <div style="float: left">
-            数据源表： <a href="javascript:WinOpen('/WF/Comm/Sys/SFGuide.htm?DoType=New&FromApp=SL')">
+            数据源表： <a href="javascript:WinOpen('/WF/Admin/FoolFormDesigner/CreateSFGuide.htm?DoType=New&FromApp=SL')">
                 新建</a>
         </div>
         <tr>

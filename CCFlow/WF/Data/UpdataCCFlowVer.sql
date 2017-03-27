@@ -46,8 +46,8 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可
 
 
 -- 升级数据源 2016.0
-UPDATE Sys_SFTable SET SrcType=0 WHERE No like 'BP.%' AND  (SrcType = 0 OR SrcType = 1)
-UPDATE Sys_SFTable SET SrcType=1 WHERE (No NOT like 'BP.%') AND  (SrcType = 0 OR SrcType = 1)
+UPDATE Sys_SFTable SET SrcType=0 WHERE No LIKE '%.%';
+UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
 
 
 -- 2016.11.18 升级维护附件属性.;

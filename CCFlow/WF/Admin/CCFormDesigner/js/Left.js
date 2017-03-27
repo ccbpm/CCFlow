@@ -432,7 +432,8 @@ function newSrc() {
 
 //新建数据源表
 function newSrcTable() {
-    var url = "../../Comm/Sys/SFGuide.htm?DoType=New&FromApp=SL";
+    var url = "../FoolFormDesigner/CrateSFGuide.htm?DoType=New&FromApp=SL";
+//    var url = "../../Comm/Sys/SFGuide.htm?DoType=New&FromApp=SL";
     //OpenEasyUiDialog(url, "euiframeid", '新建数据源表', 800, 495, 'icon-new');
     //todo:增加数据源表后，在树上增加新结节的逻辑
     addTab("NewSrcTable", "新建数据源表", url);

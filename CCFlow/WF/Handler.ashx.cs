@@ -205,10 +205,10 @@ namespace CCFlow.WF
         /// <summary>
         /// 挂起列表
         /// </summary>
-        /// <param name="UserNo">用户编号</param>
+        /// <param name="userNo">用户编号</param>
         /// <param name="fk_flow">流程编号</param>
         /// <returns>挂起列表</returns>
-        public string HungUpList_Init(string UserNo, string fk_flow)
+        public string HungUpList_Init(string userNo, string fk_flow)
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerHungUpList();

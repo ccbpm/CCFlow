@@ -4,12 +4,14 @@
     <title>数据字典表</title>
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
 
-    <script src="/WF/Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
 
+    <script src="/WF/Scripts/EasyUIUtility.js" type="text/javascript"></script>
     
      <base target="_self" /> 
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
@@ -61,41 +63,13 @@
                         newRow += "<td>" + data[i].Name + "</td>";
                         newRow += "<td>" + data[i].FK_SFDBSrcText + "</td>";
                         newRow += "<td>" + data[i].SrcTypeText + "</td>";
-                        newRow += "<td><a href=\"javascript:Edit('" + data[i].No + "')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a></td>";
-                        newRow += "<td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td>";
-                        newRow += "<td><a href=\"javascript:Delete('" + data[i].No + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a></td>";
+                        newRow += "<td><a href=\"javascript:Edit('" + data[i].No + "','"+data[i].SrcType+"')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a></td>";
                         newRow += "</tr>";
 
                         $("#Table1 tr:last").after(newRow);
                     }
                 }
             });
-        }
-
-        function Delete(key) {
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-
-
-            //删除表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SFTableDelete&FK_SFTable=" + key + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                    } else {
-                        window.location.href = window.location.href;
-                    }
-                }
-            });
-        }
-
-        function Ref(key) {
-            alert(key);
         }
 
         function AddSFTable(sfTable) {
@@ -140,20 +114,35 @@
             window.location.href = url;
             return;
 
-
         }
         function AddSFSQL(mypk, idx, key) {
 
             var url = 'Do.aspx?DoType=AddSFSQLAttr&MyPK=' + mypk + '&IDX=' + idx + '&RefNo=' + key;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
         }
+        
+        //编辑.
+        function Edit(fk_sftable, sfType) {
 
+            var ensName = '';
+            if (sfType == "0") {
+                ensName = "BP.Sys.FrmUI.SFTables";
+            }
+
+            if (fk_sftable.indexOf('.') != -1) {
+                ensName = 'BP.Sys.FrmUI.SFTableClasss';
+            }
+
+            var url = '/WF/Comm/En.htm?EnsName=' + ensName + '&No=' + fk_sftable;
+            OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, 800, 495, 'icon-edit');
+
+        }
      </script>
 </head>
 <body onkeypress="Esc()" >
 
 <table id="Table1">
-<caption>字典列表 - <a href="javascript:WinOpen('SFGuide.htm?DoType=New&FromApp=SL')">创建字典表</a></caption>
+<caption>字典列表 - <a href="javascript:WinOpen('CreateSFGuide.htm?DoType=New&FromApp=SL')">创建字典表</a></caption>
 <tr>
 <th>序</th>
 <th>编号</th>
@@ -161,8 +150,6 @@
 <th>数据源</th>
 <th>类型</th>
 <th>编辑</th>
-<th>引用</th>
-<th>删除</th>
 </tr>
 </table>
 

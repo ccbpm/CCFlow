@@ -385,7 +385,7 @@ FigureCreateCommand.prototype = {
 
         var lab = '外键表字段';
 
-        OpenEasyUiDialog(url, dgId, lab, 650, 394, 'icon-new', true, function () {
+        OpenEasyUiDialog(url, dgId, lab, 750, 594, 'icon-new', true, function () {
             var win = document.getElementById(dgId).contentWindow;
             var frmVal = win.GetFrmInfo();
 

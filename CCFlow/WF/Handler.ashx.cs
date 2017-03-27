@@ -200,7 +200,7 @@ namespace CCFlow.WF
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerRuning();
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.FormatToJson.ToJson(dt);
         }
         /// <summary>
         /// 挂起列表
@@ -224,7 +224,7 @@ namespace CCFlow.WF
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.FormatToJson.ToJson(dt);
         }
         /// <summary>
         /// 获得待办.
@@ -234,7 +234,7 @@ namespace CCFlow.WF
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(UserNo, FK_Node);
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.FormatToJson.ToJson(dt);
         }
         #endregion 获得列表.
 
@@ -256,8 +256,7 @@ namespace CCFlow.WF
                 ht.Add("Auth", BP.Web.WebUser.Auth);
             else
                 ht.Add("Auth", "");
-
-            return BP.Tools.Json.ToJsonEntityModel(ht);
+            return BP.Tools.FormatToJson.ToJson(ht);
         }
         /// <summary>
         /// 执行登录.
@@ -322,7 +321,7 @@ namespace CCFlow.WF
         public string LoadAuthor()
         {
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + BP.Web.WebUser.No + "'");
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.FormatToJson.ToJson(dt);
         }
         /// <summary>
         /// 当前登陆人是否有授权

@@ -67,11 +67,11 @@
                     var conMenu = "";//待办列表
                     for (var i = 0; i < data.length; i++) {
                         if (i == 0) {
-                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\" class='hover'>" + data[i].Name + "的待办</li>";
+                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\" class='hover'>" + data[i].NAME + "的待办</li>";
                             conMenu += "<div id='con_menu_" + (i + 1) + "' class='hover'>";
                         }
                         else {
-                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\">" + data[i].Name + "的待办</li>";
+                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\">" + data[i].NAME + "的待办</li>";
                             conMenu += "<div id='con_menu_" + (i + 1) + "'  style='display:none'>";
                         }
 
@@ -86,31 +86,31 @@
                         $.ajax({
                             type: 'post',
                             async: false,
-                            url: Handler + "?DoType=Todolist_Author&FK_Node=" + fk_node + "&No=" + data[i].No + "&m=" + Math.random(),
+                            url: Handler + "?DoType=Todolist_Author&FK_Node=" + fk_node + "&No=" + data[i].NO + "&m=" + Math.random(),
                             dataType: 'html',
                             success: function (msg) {
                                 msg = JSON.parse(msg);
                                 for (var j = 0; j < msg.length; j++) {
-                                    var title = msg[j].Title;
-                                    var isRead = msg[j].IsRead;
-                                    var flowNo = msg[j].FK_Flow;
-                                    var flowName = msg[j].FlowName;
-                                    var nodeName = msg[j].NodeName;
-                                    var starterName = msg[j].StarterName;
+                                    var title = msg[j].TITLE;
+                                    var isRead = msg[j].ISREAD;
+                                    var flowNo = msg[j].FK_FLOW;
+                                    var flowName = msg[j].FLOWNAME;
+                                    var nodeName = msg[j].NODENAME;
+                                    var starterName = msg[j].STARTERNAME;
                                     var pri = msg[j].PRI;
-                                    var nodeID = msg[j].FK_Node;
+                                    var nodeID = msg[j].FK_NODE;
                                     var fid = msg[j].FID;
-                                    var workID = msg[j].WorkID;
-                                    var paras = msg[j].Paras;
+                                    var workID = msg[j].WORKID;
+                                    var paras = msg[j].PARAS;
                                     var cdt = getNowFormatDate();
 
                                     conMenu += "<tr > <td>" + (j + 1) + "</td>"; //序号
                                     conMenu += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
                                     var url = "";
                                     if (isRead == 0) {
-                                        url = "<a href=\"javascript:LogAs('" + data[i].No + "','" + data[i].Name + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
+                                        url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
                                     } else {
-                                        url = "<a href=\"javascript:LogAs('" + data[i].No + "','" + data[i].Name + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
+                                        url = "<a href=\"javascript:LogAs('" + data[i].NO + "','" + data[i].NAME + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
                                     }
 
                                     conMenu += "<td>" + url + "</td>"; //标题
@@ -123,14 +123,14 @@
                                     conMenu += "<td>" + msg[j].ADT + "</td>"; //接受时间
                                     conMenu += "<td>" + msg[j].SDT + "</td>"; //应完成时间
                                     //判断流程是否逾期
-                                    if (cdt > msg[j].SDT && msg[j].WFState==2) {
+                                    if (cdt > msg[j].SDT && msg[j].WFSTATE==2) {
                                         conMenu += "<td><img src='/WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
                                     }
                                     else {
                                         conMenu += "<td><img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
                                     }
                                     //待办的状态.
-                                    switch (msg[j].WFState) {
+                                    switch (msg[j].WFSTATE) {
                                         case 1:
                                             conMenu += "<td>草稿</td>";
                                             break;
@@ -162,7 +162,7 @@
                                             break;
                                     }
                                     //备注
-                                    conMenu += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FlowNote + "'>" + msg[j].FlowNote + "</div></td>";
+                                    conMenu += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + msg[j].FLOWNOTE + "'>" + msg[j].FLOWNOTE + "</div></td>";
                                     conMenu += "</tr>";
                                 }
                             }

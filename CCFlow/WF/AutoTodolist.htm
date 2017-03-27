@@ -65,13 +65,13 @@
                     var timeKey = "ss";
                     var newRow = "";//tab标签
                     var conMenu = "";//待办列表
-                    for (var i = 0; i < data.LENGTH; i++) {
+                    for (var i = 0; i < data.length; i++) {
                         if (i == 0) {
-                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.LENGTH + ")\" class='hover'>" + data[i].NAME + "的待办</li>";
+                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\" class='hover'>" + data[i].NAME + "的待办</li>";
                             conMenu += "<div id='con_menu_" + (i + 1) + "' class='hover'>";
                         }
                         else {
-                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.LENGTH + ")\">" + data[i].NAME + "的待办</li>";
+                            newRow += "<li id='menu" + (i + 1) + "' onclick=\"setTab('menu'," + (i + 1) + "," + data.length + ")\">" + data[i].NAME + "的待办</li>";
                             conMenu += "<div id='con_menu_" + (i + 1) + "'  style='display:none'>";
                         }
 
@@ -90,7 +90,7 @@
                             dataType: 'html',
                             success: function (msg) {
                                 msg = JSON.parse(msg);
-                                for (var j = 0; j < msg.LENGTH; j++) {
+                                for (var j = 0; j < msg.length; j++) {
                                     var title = msg[j].TITLE;
                                     var isRead = msg[j].ISREAD;
                                     var flowNo = msg[j].FK_FLOW;

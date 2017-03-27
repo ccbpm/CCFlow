@@ -1,23 +1,79 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <!--<link  href="./../Style/Table0.css" rel="stylesheet" type="text/css" />-->
+
+    <link href="/WF/Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    
+    <style type="text/css">
+        .style1
+        {
+            width: 105px;
+        }
+        #Text4
+        {
+            width: 447px;
+        }
+        #TB_Addr
+        {
+            width: 450px;
+        }
+
+        .panel-body-noborder {
+        text-align:center;
+        }
+
+        #ulNodeFrmImp {
+            list-style: none;
+            padding: 0px;
+        }
+
+        #ulNodeFrmImp li{
+        width:100%;
+        padding:0px;
+        }
+
+            #ulNodeFrmImp li input[type=button] {
+                width: 100%;
+                background: white;
+                margin: 0px;
+                color: black;
+            }
+
+            #ulNodeFrmImp li input[type=button]:hover {
+                width: 100%;
+                background: #E0ECFF;
+            }
+
+        .liBtnActive {
+            background: #E0ECFF !important;
+        }
+    </style>
+    <!--<link rel="stylesheet" href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <!--<link href="/WF/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />-->
+
     <title>表单导入</title>
+
     <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <!--<script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>-->
+    <script src="/WF/Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="/DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
+   
+
 
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
     <script type="text/javascript" src="/WF/Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
+        var frmID = GetQueryString("FK_MapData");
         $(function () {
-
             $("#Msg").html("正在加载,请稍后......");
-            var frmID = GetQueryString("FK_MapData");
+            
             var flowNo = GetQueryString("FK_Flow");
 
             /*
@@ -42,10 +98,31 @@
                     var WF_Node = db["WF_Node"];
 
                     //行程部门与人员的关系.
-                    var Sys_FormTree = db["Sys_FormTree"];
-                    var Sys_MapData = db["Sys_MapData"];
+                    //var Sys_FormTree = db["Sys_FormTree"];
+                    //var Sys_MapData = db["Sys_MapData"];
+                    //ulNodeFrmImp
+                    var ulHtml = '';
+                    for (var i = 0; i < WF_Node.length; i++) {
+                        var node = WF_Node[i];
+                        ulHtml += '<li><input type="button" class="btn btn-default" data-nodeid=' + node.NODEID + ' value="' + node.NAME + '" /></li>'
+                    }
+                    $('#ulNodeFrmImp').html(ulHtml);
 
-
+                    //绑定节点表单事件
+                    $('#ulNodeFrmImp li input[type="button"]').bind('click', function (obj) {
+                        var nodeId = $(obj.target).data().nodeid;
+                        $.ajax({
+                            type: 'post',
+                            async: true,
+                            url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=ND" + nodeId + "&"+$('#formCC').serialize()+"&m=" + Math.random(),
+                            dataType: 'html',
+                            success: function (db1) {
+                                alert(db1)
+                            }
+                        });
+                    });
+                    
+                    
                 }
             });
 
@@ -54,23 +131,102 @@
             $("#Msg").html("");
         });
     </script>
+
+    <script>
+        function addTab(title, url) {
+            if ($('#tt').tabs('exists', title)) {
+                $('#tt').tabs('select', title);
+            } else {
+                var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+                $('#tt').tabs('add', {
+                    title: title,
+                    content: content,
+                    closable: true
+                });
+            }
+        }
+
+        function save() {
+            //save
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (db1) {
+                    alert(db1)
+                }
+            });
+        }
+        $(function () {
+            $('#ulNodeFrmImp li input[type=button]').bind('click', function (obj) {
+                $('#ulNodeFrmImp li .liBtnActive').removeClass('liBtnActive');
+                $(obj.target).addClass('liBtnActive');
+            })
+    });
+    </script>
 </head>
-<body  >
+<body>
+    <form id="formCC" method="post" enctype="multipart/form-data">
+    <div id="Msg"> </div>
+    <div id="tt" class="easyui-tabs" style="width:100%;height:500px;">
+        <div title="从本机导入" style="padding:15px;">
+            <label style="padding-left:8px;">选择表单模板文件(*.xml),然后按确定按钮</label><br /><br />
+            <input type="file" id="localXmlFile" name="localXmlFile" />
+        </div>
+        <div title="从节点表单导入">
+            <input type="checkbox" checked="checked" id="ckClear" name="ckClear" />是否清除
+            <input type="checkbox" checked="checked" id="ckReadOnly" name="ckReadOnly" />是否只读
+            <ul id="ulNodeFrmImp">
+                <li><input type="button" class="btn btn-default" value="Step1 节点1" /></li>
+                <li><input type="button" class="btn btn-default" value="Step2 节点2" /></li>
+                <li><input type="button" class="btn btn-default" value="Step3 节点3" /></li>
+            </ul>
+        </div>
+        <div title="从表单库导入" style="padding:15px;">
+            <input type="button" class="btn btn-default" value="进入templete.ccflow.org执行导入" /><br /><br />
+            <label style="padding-left:8px;">ccflow为您提供丰富的表单共享模板，您可以轻松的创建您的BPM系统</label>
+        </div>
+        <div title="从外部数据源导入" style="padding:15px;">
+            <label style="padding-left:8px;">操作提示：制定内外部数据源中的一个已经设计好的表，把字段信息导入该表单中</label><br /><br />
+            <input type="button" class="btn btn-default" value="进入导入数据表字段向导" />
+        </div>
 
-<form id="cc" >
- 
-<ul>
-<li>从本机导入</li>
-<li>从节点表单导入</li>
-<li>从表单库导入</li>
-<li>从外部数据源导入</li>
-</ul>
-
-<div id="Msg"> </div>
-
-
+        <input type="button" value="OK" onclick="save()"/>
+    </div>
 </form>
-
+    <!--<ul id="myTab" class="nav nav-tabs">
+        <li class="active">
+            <a href="#localImp" data-toggle="tab">从本机导入</a>
+        </li>
+        <li><a href="#nodeFrmImp" data-toggle="tab">从节点表单导入</a></li>
+        <li><a href="#frmClassImp" data-toggle="tab">从表单库导入</a></li>
+        <li><a href="#outDataSourceImp" data-toggle="tab">从外部数据源导入</a></li>
+    </ul>
+    <div id="" class="tab-content">
+        <!--从本机导入-->
+        <!--<div class="tab-pane fade in active" id="localImp">
+            <input type="button" class="btn btn-default" value="进入templete.ccflow.org执行导入" />
+        </div>-->
+        <!--从节点表单导入-->
+        <!--<div class="tab-pane fade in" id="nodeFrmImp">
+            选择表单模板文件(*.xml),然后按确定按钮
+            <input type="file" />
+        </div>-->
+        <!--从表单库导入-->
+        <!--<div class="tab-pane fade in" id="frmClassImp">
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation"><a href="#">Step1 节点1</a></li>
+                <li role="presentation" class="active"><a href="#">Step2 节点2</a></li>
+                <li role="presentation"><a href="#">Step3 节点3</a></li>
+            </ul>
+        </div>-->
+        <!--从外部数据源导入-->
+        <!--<div class="tab-pane fade in" id="outDataSourceImp">
+            <label>操作提示：制定内外部数据源中的一个已经设计好的表，把字段信息导入该表单中</label>
+            <input type="button" class="btn btn-default"value="进入导入数据表字段向导"/>
+        </div>
+    </div>-->
 </body>
 </html>
  

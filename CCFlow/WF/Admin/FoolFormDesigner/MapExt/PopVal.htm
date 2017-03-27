@@ -199,19 +199,10 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-                    data = data.replace("\t\n", "");
-
-                    data = data.replace(/\n/g, "");
-                    data = data.replace(/\r/g, "");
-
                     data = JSON.parse(data);
-
+                    if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
+                        data = data[0];
+                    }
                     //设置选择的模式.
                     $("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked", "checked");
 
@@ -472,7 +463,7 @@
  <ul>
  <li>适用于表格方式数据显示，是为了避免在列表的表头上显示英文字段名对使用者不友好。</li>
  <li>可以为空，如果为空列名就按照英文名字显示。</li>
- <li>格式为: @col1=列名1@col2=列名2@col3=列名3 </li>
+ <li>格式为: @col1=列名1&style='width:200px;'&data-col='abc'@col2=列名2@col3=列名3 </li>
  </ul>
  </div>
 

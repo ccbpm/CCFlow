@@ -229,13 +229,17 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
     //设置摸态框的宽度和高度
     $('#returnPopValModal .modal-dialog').height(height);
     $('#returnPopValModal .modal-dialog').width(width);
+    $('#returnPopValModal .modal-dialog').css('margin-left', 'atuo');
+    $('#returnPopValModal .modal-dialog').css('margin-right', 'atuo');
+
+
+
     ctrl = $('#' + ctrl);
     var wfpreHref = GetLocalWFPreHref();
     url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape( getFormData(false,false))+"&m="+Math.random();
 
     //杨玉慧 模态框 先用这个
     $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().parent().prev().text());
-
     $('#iframePopModalForm').attr("src", url);
     $('#btnPopValOK').unbind('click');
     $('#btnPopValOK').bind('click', function () {
@@ -290,8 +294,23 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
             $(ctrl).val(Value);
         }
 
+        //把树等都变成不显示 解决点击一个后另一个会把原来的先显示一下的问题
+        $(frames["iframePopModalForm"].window.document.getElementById('poptablew')).css('display', 'none');
+        $(frames["iframePopModalForm"].window.document.getElementById('main')).css('display', 'none');
+        $(frames["iframePopModalForm"].window.document.getElementById('orgjstree')).css('display', 'none');
+        $(frames["iframePopModalForm"].window.document.getElementById('groupTable')).css('display', 'none');
+
         // $(".jstree-clicked").removeClass("jstree-clicked");
+
     });
+    $('#btnPopValCancel').unbind('click');
+    $('#btnPopValCancel').bind('click', function () {
+        //把树等都变成不显示 解决点击一个后另一个会把原来的先显示一下的问题
+        $(frames["iframePopModalForm"].window.document.getElementById('poptablew')).css('display', 'none');
+        $(frames["iframePopModalForm"].window.document.getElementById('main')).css('display', 'none');
+        $(frames["iframePopModalForm"].window.document.getElementById('orgjstree')).css('display', 'none');
+        $(frames["iframePopModalForm"].window.document.getElementById('groupTable')).css('display', 'none');
+    })
     $('#returnPopValModal').modal().show();
     //修改标题，失去焦点时进行保存
     if (typeof self.parent.TabFormExists != 'undefined') {

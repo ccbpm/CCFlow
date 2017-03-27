@@ -42,6 +42,10 @@
                 Message: GetQueryString('Info'),
                 FK_Flow: GetQueryString("FK_Flow")
             };
+            
+            if (pageData.Message != undefined && pageData.Message != '') {
+                $('#TB_Doc').val(pageData.Message);
+            }
 
             $.ajax({
                 type: 'post',

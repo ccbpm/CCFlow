@@ -144,6 +144,12 @@
     </style>
     <script type="text/javascript">
         $(function () {
+            //先把所有的都取消掉显示  DISPLAY:NONE
+            //$('#poptablew').hide();
+            //$('#main').hide();
+            //$('#orgjstree').hide();
+            //$('#groupTable').hide();
+
             dtTable();
             $('#test').bind('click', function () {
                 if ($('#orgjstree').css('display') == "none") {
@@ -406,19 +412,20 @@
                             //设置表格的表头
                             var tableHeader = '';
                             if (pageSetData[0].PopValSelectModel == "More") {//选择模式是单选
-                                tableHeader = "<tr data-data='true'><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=checkbox class=ck_tbody@' data-coltype='Operation1'></th>";
+                                tableHeader = "<tr data-data='true'><th data-custom='true' style='width:30px;' data-customcontent='1' data-customcontent1='input@type=checkbox class=ck_tbody@' data-coltype='Operation1'></th>";
                             } else {//选择模式是多选
-                                tableHeader = "<tr data-data='true'><th data-custom='true' data-customcontent='1' data-customcontent1='input@type=radio name=rb class=rb_tbody@' data-coltype='Operation1'></th>";
+                                tableHeader = "<tr data-data='true'><th data-custom='true' style='width:30px;' data-customcontent='1' data-customcontent1='input@type=radio name=rb class=rb_tbody@' data-coltype='Operation1'></th>";
                             }
                             var colEnCnArr = colencn.split('@');
                             colEnCnArr = $.grep(colEnCnArr, function (value) {
-                                return value != '' && value.split('=').length == 2;
+                                return value != '' && value.split('=').length >= 2;
                             });
                             if (colEnCnArr.length > 0) {
                                 for (var i = 0; i < colEnCnArr.length; i++) {
                                     var enName = colEnCnArr[i].split('=')[0];
-                                    var cnName = colEnCnArr[i].split('=')[1];
-                                    tableHeader += '<th data-colname=' + enName + '>' + cnName + '</th>';
+                                    var cnNameAndAttrStr = colEnCnArr[i].substr(enName.length + 1, colEnCnArr[i].length);
+                                    cnNameAndAttr = cnNameAndAttrStr.split('&');
+                                    tableHeader += '<th data-colname="' + enName + '"  ' + cnNameAndAttrStr.substr(cnNameAndAttr[0].length + 1, cnNameAndAttrStr.length).replace(/&/g, ' ') + '>' + cnNameAndAttr[0] + '</th>';
                                 }
                             } else {
                                 if (dataArr.length > 0) {
@@ -675,13 +682,18 @@
 
             dtTable();
         }
-
-        //初始化多个搜索条件
+        function tab() {
+            var event = window.event || arguments.callee.caller.arguments[0];
+            if (event.keyCode == "13") {
+                document.getElementById("btnSearch").click();
+                return false;
+            }
+        }
         function initMoreConSearch(conditionStr) {
-             var conditions = conditionStr.split('$');
-             var conHtml = '';
+            var conditions = conditionStr.split('$');
+            var conHtml = '';
             //先加上KEY 
-             conHtml += "<div class='searchGroup'><label>" + initPopValData.Hashtable[0].PopValSearchTip + "</label>"+"<input name='Key' id='Key' type='text'/></div>";
+            conHtml += "<div class='searchGroup'><label>" + initPopValData.Hashtable[0].PopValSearchTip + "</label>" + "<input name='Key' id='Key' type='text' onkeydown='tab()'/></div>";
             $.each(conditions, function (i, con) {
                 if (con != undefined && con.trim() != '') {
                     var paramList = con.split('#');
@@ -702,9 +714,9 @@
                             defVal = defVal.replace('<br/>', '');
                             defVal = defVal.replace('@Now', "(new Date())");
                             defVal = new Date(eval(defVal));
-                            defVal = defVal.FormateDate("yyyy-MM-dd HH:mm:ss");
+                            defVal = defVal.FormateDate("yyyy-MM-dd HH:mm");
                         }
-                        conHtml += '<input value="' + defVal + '"  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
+                        conHtml += '<input value="' + defVal + '"  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
                     }
                     conHtml += "</div>";
                 }
@@ -896,7 +908,7 @@
         <!-- BEGIN CHART PORTLET-->
         <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px; padding: 12px 0 0 20px;">
             <div>
-                <form id="searchForm">
+                <form id="searchForm" action="" onkeydown="if(event.keyCode==13){return false;}">
                     <div id="searchDiv">
                     </div>
                 </form>
@@ -971,11 +983,11 @@
             </div>
         </div>
     </div>-->
-    <div><label id="treeVal"></label></div>
-    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" >
+    <!--<div><label id="treeVal"></label></div>-->
+    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" style="">
     </div>
     <!--分组显示table-->
-    <div id="groupTable" >
+    <div id="groupTable" style="">
         <ul id="dt" data-data="true"></ul>
     </div>
 

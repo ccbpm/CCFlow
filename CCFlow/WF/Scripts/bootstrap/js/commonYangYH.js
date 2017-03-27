@@ -1,13 +1,42 @@
 ﻿//格式化日期的函数 yyyy:年 MM:月 dd:日 HH:小时 mm:分钟 ss:秒 DAY:星期几 算是Date的一个扩展方法
 $(function () {
     Date.prototype.FormateDate = function (formateStr) {
-        return formateStr.replace("yyyy", this.getFullYear()).replace("MM", (this.getMonth() + 1)).replace("dd", this.getDate()).replace("HH", this.getHours()).replace("mm", this.getMinutes()).replace("ss", this.getMilliseconds()).replace('DAY', WeekCns[this.getDay()]);
+        //return formateStr.replace("yyyy", this.getFullYear()).replace("MM",this.getMonth()<9?'0'+ (this.getMonth() + 1):(this.getMonth() + 1)).replace("dd", this.getDate()).replace("HH", this.getHours()<10?'0'+this.getHours():this.getHours()).replace("mm", this.getMinutes()<10?'0'+this.getMinutes():this.getMinutes()).replace("ss", this.getMilliseconds()<10?'0'+this.getMilliseconds():this.getMilliseconds()).replace('DAY', WeekCns[this.getDay()]);
+
+        return formateStr.replace("yyyy", this.getFullYear()).replace("MM", (this.getMonth() + 1)).replace("dd", this.getDate()).replace("HH",this.getHours()).replace("mm",  this.getMinutes()).replace("ss",  this.getMilliseconds()).replace('DAY', WeekCns[this.getDay()]);
     }
 
     var WeekCns = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日' };
+
+    
 })
 
 var Common = {};
+//为了IE9 不支持  new Date('2016-10-10 11:00')  不支持分和秒
+Common.NewDae = function (dateStr) {
+    //IE9 上的NEW date（）
+    var date = '';
+    if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
+                    (navigator.userAgent.indexOf('Trident') >= 0)) {
+        var dateStrs = dateStr.split(' ');
+        var ymd = dateStrs[0];
+        var hms = dateStrs[1];
+        var ymdArr = ymd.split('-');
+        var y = ymdArr[0];
+        var m = ymdArr[1];
+        var d = ymdArr[2];
+
+        var hmsArr = hms.split(':');
+        var h = hmsArr.length >= 1 ? hmsArr[0] : 0;
+        var m = hmsArr.length >= 2 ? hmsArr[1] : 0;
+        var s = hmsArr.length >= 3 ? hmsArr[2] : 0;
+        date = new Date(y, m, d, h, m, s);
+    } else {
+        date = new Date(dateStr);
+    }
+    return date;
+}
+
 //判断是否是管理员登录
 Common.IsAdministrator = function () {
     if ($ != undefined && $.cookie != undefined) {//先判断是否引入了$.COOKIE
@@ -17,17 +46,26 @@ Common.IsAdministrator = function () {
     }
 }
 Common.MaxLengthError = function () {
+
     if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0) ||
             (navigator.userAgent.indexOf('Trident') >= 0)) {
         $('textarea[maxlength]').bind('blur', function () {
-            var str = $(this).val();
+            var isCalendar = $(this).hasClass('TBcalendar');
+            //日期控件部做截取控制
+            if (isCalendar) { return; }
+
             var mx = parseInt($(this).attr('maxlength'));
+            var str = $(this).val();
             if (str.length > mx) {
                 $(this).val(str.substr(0, mx));
                 return false;
             }
         });
         $('input[maxlength]').bind('blur', function () {
+            var isCalendar = $(this).hasClass('TBcalendar');
+            //日期控件部做截取控制
+            if (isCalendar) { return; }
+
             var str = $(this).val();
             var mx = parseInt($(this).attr('maxlength'));
             if (str.length > mx) {
@@ -39,15 +77,15 @@ Common.MaxLengthError = function () {
 }
 //把后台返回的错误打印到控制台
 Common.ConsoleLogError = function (data, methodName) {
-    if (data == undefined || data == "") {
-        console.log(methodName + ':');
-        console.log("返回的data 为:" + data + "  ,methodName:" + methodName);
-    } else {
-        var errorData = JSON.parse(data);
-        if (errorData.Error == true) {
-            console.log(methodName + ':' + errorData.ErrorMsg);
-        }
-    }
+    //if (data == undefined || data == "") {
+    //    console.log(methodName + ':');
+    //    console.log("返回的data 为:" + data + "  ,methodName:" + methodName);
+    //} else {
+    //    var errorData = JSON.parse(data);
+    //    if (errorData.Error == true) {
+    //        console.log(methodName + ':' + errorData.ErrorMsg);
+    //    }
+    //}
 }
 
 //设置用户COOKIE
@@ -74,7 +112,7 @@ Common.SetStaffCookie = function () {
             },
             error: function (http, error) {
                 //$("body").html(http.responseText);
-                console.log(http.responseText);
+                //console.log(http.responseText);
             }
         });
     }
@@ -485,7 +523,7 @@ Common.CustomPagePlug = function (operation) {
                     }
                 }
                 html += "<td colspan='" + colSpan + "'>";
-                console.log(colSpan)
+                //console.log(colSpan)
                 html += '没有查询记录';
                 html += "</td>";
                 html += "</tr>";
@@ -529,7 +567,7 @@ Common.CustomPagePlug = function (operation) {
         }
         val = val.target;
 
-        console.log(val.nodeName+"a");
+        //console.log(val.nodeName+"a");
         if (val.nodeName == "I") {//类似冒泡的错误
             val = val.parentNode;
             //return;

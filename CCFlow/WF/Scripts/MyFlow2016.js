@@ -423,12 +423,12 @@ function ReturnVal(ctrl, url, winName) {
 
 //然浏览器最大化.
 function ResizeWindow() {
-    if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
-        var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽
-        var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高
-        window.moveTo(0, 0);           //把window放在左上角
-        window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh
-    }
+    //if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
+    //    var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽
+    //    var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高
+    //    window.moveTo(0, 0);           //把window放在左上角
+    //    window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh
+    //}
 }
 window.onload = ResizeWindow;
 
@@ -607,7 +607,7 @@ function Save() {
         formCheckResult = false;
     }
     if (!formCheckResult) {
-        alert("请检查表单必填项和正则表达式");
+        //alert("请检查表单必填项和正则表达式");
         return;
     }
     setToobarDisiable();
@@ -744,14 +744,14 @@ function initGroup(workNodeData, groupFiled) {
                 else {
                     src += "?IsReadOnly=0";
                 }
-                groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>" + '</div>';
             }
             break;
         case "Dtl":
             //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
             var src = "/WF/CCForm/Dtl.aspx?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
             src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Ath": //增加附件.
             break;
@@ -765,7 +765,7 @@ function initGroup(workNodeData, groupFiled) {
                 else
                     src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
 
-                groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             }
             break;
         case "FWC": //审核组件.
@@ -780,7 +780,7 @@ function initGroup(workNodeData, groupFiled) {
                 paras += "&DoType=View";
             }
             src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "SubFlow": //子流程..
             var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
@@ -793,7 +793,7 @@ function initGroup(workNodeData, groupFiled) {
             }
             src += "&r=q" + paras;
             src += "&IsShowTitle=0";
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Track": //轨迹图.
             var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
@@ -806,7 +806,7 @@ function initGroup(workNodeData, groupFiled) {
             src += '&WorkID=' + pageData.WorkID;
             src += '&FID=' + pageData.FID;
             //先临时写成这样的
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:500px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:500px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 
             break;
         case "Thread": //子线程.
@@ -816,7 +816,7 @@ function initGroup(workNodeData, groupFiled) {
                 paras += "&OID=" + pageData.WorkID;
             }
             src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "FTC": //流转自定义.  有问题
             var src = "/WF/WorkOpt/FTC.aspx?s=2";
@@ -825,7 +825,7 @@ function initGroup(workNodeData, groupFiled) {
                 paras += "&OID=" + pageData.WorkID;
             }
             src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         default:
             break;
@@ -844,28 +844,30 @@ function initTrackList(workNodeData) {
     workNodeData.Track = filterTrackList;
     $.each(workNodeData.Track, function (i, track) {
         //流程执行人
-        var exerNoName = track.Exer.substr(1, track.Exer.length - 2).replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+        var exerNoName = track.Exer.substr(1, track.Exer.length - 2);
+        //var exerNoName = track.Exer.substr(1, track.Exer.length - 2).replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
 
         var exerNo = exerNoName.split(',')[0];
         var exerName = exerNoName.split(',')[1];
-        var exerEmpP = (exerNo == track.EmpFrom ? "" : "<p>实际发送人：" + exerName + "</p>");
-        track.RDT = track.RDT.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+        var exerEmpP = (exerNo == track.EmpFrom ? "" : "（实际发送人：" + exerName + "）");
+        track.RDT = track.RDT;
+        //track.RDT = track.RDT.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
 
-        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + track.NDFromT + '<p>发送人:' + track.EmpFromT + '</p><p>时间:' + track.RDT + '</p>' + exerEmpP + '</a></li>';
+
         var actionType = track.ActionType;
+        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + (actionType == 5 ? track.NDToT : track.NDFromT) + '<p>发送人:' + track.EmpFromT +exerEmpP+ '</p><p>时间:' + track.RDT + '</p>' + '</a></li>';
         if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11 && actionType != 8) {
-            console.log(actionType);
             switch (actionType) {
-            case 5:
-                trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "撤消" + track.NDFromT + "发起节点;操作时间" + track.RDT + '</div></div>';
-                break;
-            case 2:
-                trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
-                break;
-            default:
-                break;
+                case 5:
+                    trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + "撤销发送信息" + '</span></div>' + "<div class='returnTackDiv' >" + track.NDToT + "撤消节点发送;时间" + track.RDT + '</div></div>';
+                    break;
+                case 2:
+                    trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
+                    break;
+                default:
+                    break;
             }
-          } else {
+        } else {
             var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
             trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
         }
@@ -927,7 +929,7 @@ function initTrackList(workNodeData) {
     } else {//新建单子时，不显示轨迹导航，表单宽度为100%
         $('#nav').css('display', 'none');
         $('#divCurrentForm').css('width', '100%');
-       $('#header').css('background','#5598f3');
+        $('#header').css('background', '#5598f3');
     }
 
     $($('#nav li')[0]).addClass('current');
@@ -991,7 +993,7 @@ function InitForm() {
                 //reloadBtn = '<label class="reloadIframe">返回轨迹图</label>'
             }
 
-            groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12" style=""><div id="groupH' + groupFiled.Idx + '"  class="group section" data-target="group' + groupFiled.Idx + '"><label class="state">+</label>' +
+            groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style=""><div id="groupH' + groupFiled.Idx + '"  class="group section" data-target="group' + groupFiled.Idx + '"><label class="state">+</label>' +
                 groupFiled.Lab + reloadBtn + '</div></div>';
 
             navGroupHtml += '<li class="scrollNav"><a href="#groupH' + groupFiled.Idx + '">' + $('<p>' + groupFiled.Lab + '</p>').text() + '</a></li>';
@@ -1004,7 +1006,7 @@ function InitForm() {
             continue;
         }
         else {//返回的值如果为 ''，就表明是字段分组  分组名称不显示
-            groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12"><div class="section group" id="groupH' + groupFiled.Idx + '"  data-target="group' + groupFiled.Idx + '"><label class="state">-</label>' +
+            groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><div class="section group" id="groupH' + groupFiled.Idx + '"  data-target="group' + groupFiled.Idx + '"><label class="state">-</label>' +
                 groupFiled.Lab + '</div></div>';
             navGroupHtml += '<li class="scrollNav"><a href="#groupH' + groupFiled.Idx + '">' + $('<p>' + groupFiled.Lab + '</p>').text() + '</a></li>';
             groupHtml += groupResultHtml;
@@ -1013,19 +1015,26 @@ function InitForm() {
 
         //解析字段
         //过滤属于本分组的字段 
-        groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12" style="clear:both;"> ' + '<input type="button" value="' + groupFiled.Lab + '"/></div>';
+        groupHtml = '<div class="col-lg-12 col-md-12 col-sm-12  col-xs-12" style="clear:both;"> ' + '<input type="button" value="' + groupFiled.Lab + '"/></div>';
         var mapAttrData = $.grep(workNodeData.Sys_MapAttr, function (value) {
             return value.GroupID == groupFiled.OID;
         });
 
         //开始解析表单字段
         var mapAttrsHtml = InitMapAttr(mapAttrData, workNodeData);
-        CCFormHtml += "<div class='col-lg-12 col-md-12 col-sm-12 ' id='" + "group" + groupFiled.Idx + "'>" + mapAttrsHtml + "</div>";
+        CCFormHtml += "<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 ' id='" + "group" + groupFiled.Idx + "'>" + mapAttrsHtml + "</div>";
 
         CCFormHtml += "</div>";
     }
 
     $('#CCForm').html(CCFormHtml);
+
+    //为 DISABLED 的 TEXTAREA 加TITLE 
+    var disabledTextAreas = $('#divCCForm textarea:disabled');
+    $.each(disabledTextAreas, function (i, obj) {
+        $(obj).attr('title', $(obj).val());
+    })
+
     //分组导航被轨迹导航征用
     //$('#nav').html(navGroupHtml);
 
@@ -1244,6 +1253,41 @@ function Col4To8() {
     if (document.body.clientWidth > 992) {//处于中屏时设置宽度最小值
         $('#CCForm').css('min-width', workNodeData.Sys_MapData[0].TableWidth);
     }
+
+    var sm2 = $('.col-sm-2');
+    var sm4 = $('.col-sm-4');
+    var sm8 = $('.col-sm-8');
+    var sm10 = $('.col-sm-10');
+    var sm12 = $('.col-sm-12');
+    alert(1)
+    $.each(sm2, function (sm, i) {
+        if (!$(sm).hasClass('col-xs-2')) {
+            $(sm).addClass('col-xs-2');
+        }
+    });
+    $.each(sm4, function (sm, i) {
+        if (!$(sm).hasClass('col-xs-4')) {
+            $(sm).addClass('col-xs-4');
+        }
+    });
+    $.each(sm8, function (sm, i) {
+        if (!$(sm).hasClass('col-xs-8')) {
+            $(sm).addClass('col-xs-8');
+        }
+    });
+    $.each(sm10, function (sm, i) {
+        if (!$(sm).hasClass('col-xs-10')) {
+            $(sm).addClass('col-xs-10');
+        }
+    });
+    $.each(sm12, function (sm, i) {
+        if (!$(sm).hasClass('col-xs-12')) {
+            $(sm).addClass('col-xs-12');
+        }
+    });
+
+    alert(1)
+
     $('#topContentDiv').css('margin-left', '15px');
     $('#topContentDiv').css('margin-right', '15px');
     $('#divCurrentForm').css('width', 'auto');
@@ -1263,6 +1307,37 @@ function Col8To4() {
     $('.col-sm-10').attr('class', 'col-lg-10 col-md-10 col-sm-10');
 
     $('#CCForm').css('min-width', 0);
+    var sm2 = $('.col-sm-2');
+    var sm4 = $('.col-sm-4');
+    var sm8 = $('.col-sm-8');
+    var sm10 = $('.col-sm-10');
+    var sm12 = $('.col-sm-12');
+    $.each(sm2, function (i,sm) {
+        if (!$(sm).hasClass('col-xs-2')) {
+            $(sm).addClass('col-xs-2');
+        }
+    });
+    $.each(sm4, function (i, sm) {
+        if (!$(sm).hasClass('col-xs-4')) {
+            $(sm).addClass('col-xs-4');
+        }
+    });
+    $.each(sm8, function (i, sm) {
+        if (!$(sm).hasClass('col-xs-8')) {
+            $(sm).addClass('col-xs-8');
+        }
+    });
+    $.each(sm10, function (i, sm) {
+        if (!$(sm).hasClass('col-xs-10')) {
+            $(sm).addClass('col-xs-10');
+        }
+    });
+    $.each(sm12, function (i, sm) {
+        if (!$(sm).hasClass('col-xs-12')) {
+            $(sm).addClass('col-xs-12');
+        }
+    });
+
     //$('#topContentDiv').css('width', '900px');
     //$('#topContentDiv').css('margin-left', 'auto');
     //$('#topContentDiv').css('margin-right', 'auto');
@@ -1318,7 +1393,8 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         }
                         if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
                             eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">1' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
+                                (workNodeData, mapAttr, defValue) + "</select>";
                             eleHtml += '</div>';
                         } else {//文本区域
                             if (mapAttr.UIHeight <= 23) {
@@ -1365,6 +1441,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     var enableAttr = '';
                     if (mapAttr.UIIsEnable == 1) {
                         enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+                        //enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
@@ -1470,7 +1547,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     }
 
                     eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr) + "</select>";
+                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
 
                     eleHtml += '</div>';
                 }
@@ -1515,7 +1592,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
             if (value == undefined) {
                 value = '';
             } else {
-                value = value.toString().replace(/：/g, ':').replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
+                //value = value.toString().replace(/：/g, ':').replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
             }
 
             //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
@@ -1791,12 +1868,12 @@ function InitDDLOperation(workNodeData, mapAttr, defVal) {
     if (mapAttr.LGType == 2) {
         if (workNodeData[mapAttr.KeyOfEn] != undefined) {
             $.each(workNodeData[mapAttr.KeyOfEn], function (i, obj) {
-                operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
         }
         else if (workNodeData[mapAttr.UIBindKey] != undefined) {
             $.each(workNodeData[mapAttr.UIBindKey], function (i, obj) {
-                operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
         }
     } else {
@@ -1831,7 +1908,7 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 
     //通过MAINTABLE返回的参数
     for (var ele in workNodeData.MainTable[0]) {
-        if (keyOfEn == ele) {
+        if (keyOfEn == ele && workNodeData.MainTable[0] != '') {
             result = workNodeData.MainTable[0][ele];
             break;
         }
@@ -1846,7 +1923,7 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
     }
 
     if (result != undefined && typeof (result) == 'string') {
-        result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+        //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
     }
     return result = unescape(result);
 }
@@ -2150,11 +2227,19 @@ function showNoticeInfo() {
     $("input[type=radio],select").bind('change', function (obj) {
         var needShowDDLids = [];
         var methodVal = obj.target.value;
+        
         for (var j = 0; j < data.length; j++) {
             var value = data[j].IntKey;
             var noticeInfo = data[j].Tip;
             var drdlColName = data[j].KeyOfEn;
-            if (methodVal == value && obj.target.name.indexOf(drdlColName) == (obj.target.name.length - drdlColName.length)) {
+
+            if (obj.target.tagName == "SELECT") {
+                drdlColName = 'DDL_' + drdlColName;
+            } else {
+                drdlColName = 'RB_' + drdlColName;
+            }
+            //if (methodVal == value &&  obj.target.name.indexOf(drdlColName) == (obj.target.name.length - drdlColName.length)) {
+            if (methodVal == value && (obj.target.name == drdlColName)) {
                 //高级JS设置;  设置表单字段的  可用 可见 不可用 
                 var fieldConfig = data[j].FieldsCfg;
                 var fieldConfigArr = fieldConfig.split('@');
@@ -2290,7 +2375,7 @@ function showTbNoticeInfo() {
             if (noticeInfo == undefined || noticeInfo == '')
                 return;
 
-            noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
+            //noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
 
             $($('#div_NoticeInfo .popover-title span')[0]).text(mapAttr[0].Name);
             $('#div_NoticeInfo .popover-content').html(noticeInfo);

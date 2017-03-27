@@ -173,7 +173,7 @@
                         return;
                     }
                     try {
-                        initData = JSON.parse(data);
+                        initData = eval('(' + data + ')');
                     }
                     catch (err) {
                         alert("转换JSON 失败" + err + data)

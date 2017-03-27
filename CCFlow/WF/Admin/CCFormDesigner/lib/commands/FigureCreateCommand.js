@@ -27,6 +27,15 @@ function FigureCreateCommand(factoryFunction, x, y) {
 FigureCreateCommand.prototype = {
     /**This method got called every time the Command must execute*/
     execute: function () {
+        if (createFigureName == "FlowChart") {
+            var funIsExist = this.IsExist;
+            var isExit = funIsExist(createFigureName);
+            if (isExit == true) {
+                $.messager.alert("错误", "@已存在ID为(" + createFigureName + ")的元素，不允许添加同名元素！", "error");
+                return false;
+            }
+        }
+
         if (this.firstExecute) {
             var canAddFigure = true;  //是否拖上去之后，就立刻创建？
             //create figure
@@ -82,7 +91,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                case CCForm_Controls.FrmCheck: //审核组件
+                //case CCForm_Controls.FrmCheck: //审核组件
+                //case CCForm_Controls.FrmCheck: // 审核组件.
+                //case CCForm_Controls.FlowChart: //轨迹图.
+                //case CCForm_Controls.SubFlowDtl: //子流程.
+                    //case CCForm_Controls.ThreadDtl: //子线城.
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -97,8 +110,6 @@ FigureCreateCommand.prototype = {
 
                     //名称都是独立的.
                     createdFigure.CCForm_MyPK = createFigureName;
-
-                    alert(createFigureName);
                     this.FlowFieldCreate(createdFigure, this.x, this.y, createFigureName);
                     break;
 
@@ -499,35 +510,38 @@ FigureCreateCommand.prototype = {
 
     /**创建流程控件 杨玉慧**/
     FlowFieldCreate: function (createdFigure, x, y, createFigureName) {
+        //判断主键是否存在?
+        createdFigure.CCForm_Shape = createFigureName;
+        var frmVal = { Name: createFigureName, No: createFigureName }
 
-        alert(createFigureName);
-
-        // alert(createFigureName);
-
-        //根据信息创建不同类型的数字控件
-        var transField = new TransFormDataField(createdFigure, createFigureName, x, y);
+        switch (createFigureName) {
+            case "FrmCheck": // 审核组件.
+                frmVal.Name = "审核组件";
+                break;
+            case "FlowChart": //轨迹图.
+                frmVal.Name = "轨迹图";
+                break;
+            case "SubFlowDtl": //子流程.
+                frmVal.Name = "子流程";
+                break;
+        }
+        //根据信息创建不同类型的数字控件.
+        var transField = new TransFormDataField(createdFigure, frmVal, x, y);
 
         // 定义参数，让其保存到数据库里。
         var param = {
             action: "DoType",
-            DoType: "NewFlowEle",
-            FrmID: CCForm_FK_MapData,
-            FlowEleType: createFigureName,
+            DoType: "PublicNoNameCtrlCreate",
+            CtrlType: createFigureName,
+            FK_MapData: CCForm_FK_MapData,
+            Name: frmVal.Name,
+            No: frmVal.No,
             x: x,
             y: y
         };
 
-        ajaxService(param, function (json) {
-
-            alert(json);
-
-            if (json == "true") {
-                //开始画这个-元素.
-                transField.paint();
-            } else {
-                Designer_ShowMsg(json);
-            }
-        }, this);
+        transField.paint();
+        return false;
     }
 }
 
@@ -563,9 +577,7 @@ TransFormDataField.prototype = {
         //change text  //设置控件上的ID文本.
         var figureText = STACK.figuresTextPrimitiveGetByFigureId(createdFigure.id);
         if (figureText != null && createdFigure.CCForm_Shape == "TextBoxBoolean") {//除了复选框，其余的都不写TEXT
-            console.log(this.dataArrary)
-            console.log(figureText)
-            if (this.dataArrary.Name != null)
+           if (this.dataArrary.Name != null)
                 figureText.setTextStr(this.dataArrary.Name);
             //if (this.dataArrary.No != null)
             //    figureText.setTextStr(this.dataArrary.No);
@@ -636,6 +648,8 @@ TransFormDataField.prototype = {
             case "TextBoxStr":
                 ctrlLab = '控件属性-文本框';
                 break;
+            case "FlowChart":
+                ctrlLab = '控件属性-轨迹图';
             default:
                 ctrlLab = '控件属性' + createdFigure.CCForm_Shape;
                 break;
@@ -819,8 +833,7 @@ TransFormDataField.prototype = {
 }
 
 function CrateRB(createdFigure, dataArrary) {
-    alert(2)
-    //把主键给他.
+   //把主键给他.
     if (this.dataArrary.KeyOfEn != null)
         createdFigure.CCForm_MyPK = this.dataArrary.KeyOfEn;
     if (this.dataArrary.No != null)

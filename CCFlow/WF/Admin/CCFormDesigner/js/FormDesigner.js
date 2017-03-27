@@ -488,7 +488,6 @@ function Conver_CCForm_V1ToV2() {
         FK_MapData: CCForm_FK_MapData
     }, function (jsonData) {
         var jData = $.parseJSON(jsonData);
-        console.log(jData)
         if (jData.success == true) {
             var flow_Data = $.parseJSON(jData.data);
             //循环MapAttr

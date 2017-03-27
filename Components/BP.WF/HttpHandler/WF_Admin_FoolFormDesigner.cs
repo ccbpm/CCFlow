@@ -1,4 +1,14 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Data;
+using System.Web.Services.Description;
+using System.Xml.Schema;
+
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
@@ -10,7 +20,7 @@ using BP.Port;
 using BP.En;
 using BP.Tools;
 
-using System;
+using System.Text;
 using System.IO;
 using System.Collections.Generic;
 using System.Collections;
@@ -45,8 +55,220 @@ namespace BP.WF.HttpHandler
         {
             string msg = "";
 
+            //通用局部变量定义
+            string resultString = string.Empty;
+            string sfno = context.Request.QueryString["sfno"];
+            SFTable sftable = null;
+            DataTable dt = null;
+            StringBuilder s = null;
+
+
             switch (this.DoType)
             {
+                case "sfguide_getinfo": //获取数据源字典表信息
+                    if (string.IsNullOrWhiteSpace(sfno))
+                        return "err@参数不正确";
+
+                    sftable = new SFTable(sfno);
+                    dt = sftable.ToDataTableField("info");
+
+                    foreach (DataColumn col in dt.Columns)
+                        col.ColumnName = col.ColumnName.ToUpper();
+
+                    return BP.Tools.Json.ToJson(dt);
+                case "sfguide_saveinfo":    //保存
+                    bool isnew = Convert.ToBoolean(context.Request.QueryString["isnew"]);
+                    sfno = context.Request.QueryString["NO"];
+                    string name = context.Request.QueryString["NAME"];
+                    int srctype = int.Parse(context.Request.QueryString["SRCTYPE"]);
+                    int codestruct = int.Parse(context.Request.QueryString["CODESTRUCT"]);
+                    string defval = context.Request.QueryString["DEFVAL"];
+                    string sfdbsrc = context.Request.QueryString["FK_SFDBSRC"];
+                    string srctable = context.Request.QueryString["SRCTABLE"];
+                    string columnvalue = context.Request.QueryString["COLUMNVALUE"];
+                    string columntext = context.Request.QueryString["COLUMNTEXT"];
+                    string parentvalue = context.Request.QueryString["PARENTVALUE"];
+                    string tabledesc = context.Request.QueryString["TABLEDESC"];
+                    string selectstatement = context.Request.QueryString["SELECTSTATEMENT"];
+
+                    //判断是否已经存在
+                    sftable = new SFTable();
+                    sftable.No = sfno;
+
+                    if (isnew && sftable.RetrieveFromDBSources() > 0)
+                        return "err@字典编号" + sfno + "已经存在，不允许重复。";
+
+                    sftable.Name = name;
+                    sftable.SrcType = (SrcType)srctype;
+                    sftable.CodeStruct = (CodeStruct)codestruct;
+                    sftable.DefVal = defval;
+                    sftable.FK_SFDBSrc = sfdbsrc;
+                    sftable.SrcTable = srctable;
+                    sftable.ColumnValue = columnvalue;
+                    sftable.ColumnText = columntext;
+                    sftable.ParentValue = parentvalue;
+                    sftable.TableDesc = tabledesc;
+                    sftable.SelectStatement = selectstatement;
+
+                    switch (sftable.SrcType)
+                    {
+                        case SrcType.BPClass:
+                            string[] nos = sftable.No.Split('.');
+                            sftable.FK_Val = "FK_" + nos[nos.Length - 1].TrimEnd('s');
+                            sftable.FK_SFDBSrc = "local";
+                            break;
+                        default:
+                            sftable.FK_Val = "FK_" + sftable.No;
+                            break;
+                    }
+
+                    sftable.Save();
+                    return "保存成功！";
+
+                case "sfguide_getclass": //获取类列表
+                    string stru = context.Request.QueryString["struct"];
+                    int st = 0;
+
+                    if (string.IsNullOrWhiteSpace(stru) || !int.TryParse(stru, out st))
+                        throw new Exception("err@参数不正确.");
+
+                    string error = string.Empty;
+                    ArrayList arr = null;
+                    SFTables sfs = new SFTables();
+                    Entities ens = null;
+                    SFTable sf = null;
+                    sfs.Retrieve(SFTableAttr.SrcType, (int)SrcType.BPClass);
+
+                    switch (st)
+                    {
+                        case 0:
+                            arr = ClassFactory.GetObjects("BP.En.EntityNoName");
+                            break;
+                        case 1:
+                            arr = ClassFactory.GetObjects("BP.En.EntitySimpleTree");
+                            break;
+                        default:
+                            arr = new ArrayList();
+                            break;
+                    }
+
+                    s = new StringBuilder("[");
+                    foreach (BP.En.Entity en in arr)
+                    {
+                        try
+                        {
+                            if (en == null)
+                                continue;
+
+                            ens = en.GetNewEntities;
+                            if (ens == null)
+                                continue;
+
+                            sf = sfs.GetEntityByKey(ens.ToString()) as SFTable;
+
+                            if ((sf != null && sf.No != sfno) ||
+                                string.IsNullOrWhiteSpace(ens.ToString()))
+                                continue;
+
+                            s.Append(string.Format(
+                                "{{\"NO\":\"{0}\",\"NAME\":\"{0}[{1}]\",\"DESC\":\"{1}\"}},", ens,
+                                en.EnDesc));
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    return s.ToString().TrimEnd(',') + "]";
+                case "sfguide_getsrcs": //获取数据源列表
+
+                    string type = context.Request.QueryString["type"];
+                    int itype;
+                    bool onlyWS = false;
+
+                    SFDBSrcs srcs = new SFDBSrcs();
+                    if (!string.IsNullOrWhiteSpace(type) && int.TryParse(type, out itype))
+                    {
+                        onlyWS = true;
+                        srcs.Retrieve(SFDBSrcAttr.DBSrcType, itype);
+                    }
+                    else
+                    {
+                        srcs.RetrieveAll();
+                    }
+
+                    dt = srcs.ToDataTableField();
+
+                    foreach (DataColumn col in dt.Columns)
+                        col.ColumnName = col.ColumnName.ToUpper();
+
+                    if (onlyWS == false)
+                    {
+                        List<DataRow> wsRows = new List<DataRow>();
+                        foreach (DataRow r in dt.Rows)
+                        {
+                            if (Equals(r["DBSRCTYPE"], (int)DBSrcType.WebServices))
+                                wsRows.Add(r);
+                        }
+
+                        foreach (DataRow r in wsRows)
+                            dt.Rows.Remove(r);
+                    }
+                    return BP.Tools.Json.ToJson(dt);
+
+                case "sfguide_gettvs": //获取表/视图列表
+                    string src = context.Request.QueryString["src"];
+
+                    SFDBSrc sr = new SFDBSrc(src);
+                    dt = sr.GetTables();
+
+                    foreach (DataColumn col in dt.Columns)
+                        col.ColumnName = col.ColumnName.ToUpper();
+
+                    return BP.Tools.Json.ToJson(dt);
+                case "sfguide_getcols": //获取表/视图的列信息
+                    src = context.Request.QueryString["src"];
+                    string table = context.Request.QueryString["table"];
+
+                    if (string.IsNullOrWhiteSpace(src))
+                        throw new Exception("err@参数不正确");
+
+
+                    if (string.IsNullOrWhiteSpace(table))
+                    {
+                        return "[]";
+                    }
+
+                    sr = new SFDBSrc(src);
+                    dt = sr.GetColumns(table);
+
+                    foreach (DataColumn col in dt.Columns)
+                        col.ColumnName = col.ColumnName.ToUpper();
+
+                    foreach (DataRow r in dt.Rows)
+                    {
+                        r["NAME"] = r["NO"] +
+                                    (r["NAME"] == null || r["NAME"] == DBNull.Value ||
+                                     string.IsNullOrWhiteSpace(r["NAME"].ToString())
+                                         ? ""
+                                         : string.Format("[{0}]", r["NAME"]));
+                    }
+
+                    return DataTableConvertJson.DataTable2Json(dt);
+
+                case "sfguide_getmtds": //获取WebService方法列表
+                    src = context.Request.QueryString["src"];
+
+                    if (string.IsNullOrWhiteSpace(src))
+                        throw new Exception("err@参数不正确");
+
+                    sr = new SFDBSrc(src);
+
+                    if (sr.DBSrcType != DBSrcType.WebServices)
+                        return "err@数据源“" + sr.Name + "”不是WebService数据源.";
+
+                    List<WSMethod> mtds = GetWebServiceMethods(sr);
+                    return LitJson.JsonMapper.ToJson(mtds);
 
                 case "DtlFieldUp": //字段上移
                     MapAttr attrU = new MapAttr(this.MyPK);
@@ -147,7 +369,7 @@ namespace BP.WF.HttpHandler
             MapAttr attr = new Sys.MapAttr();
             attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             if (attr.RetrieveFromDBSources() != 0)
-                return "err@字段名["+this.KeyOfEn+"]已经存在.";
+                return "err@字段名[" + this.KeyOfEn + "]已经存在.";
 
             attr.FK_MapData = this.FK_MapData;
             attr.KeyOfEn = this.KeyOfEn;
@@ -171,7 +393,7 @@ namespace BP.WF.HttpHandler
                 attr.Name = sf.Name;
 
             attr.Insert();
-            return attr.MyPK; 
+            return attr.MyPK;
         }
 
         public string SysEnumList_SaveEnumField()
@@ -179,7 +401,7 @@ namespace BP.WF.HttpHandler
             MapAttr attr = new Sys.MapAttr();
             attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             if (attr.RetrieveFromDBSources() != 0)
-                return "err@字段名["+this.KeyOfEn+"]已经存在.";
+                return "err@字段名[" + this.KeyOfEn + "]已经存在.";
 
             attr.FK_MapData = this.FK_MapData;
             attr.KeyOfEn = this.KeyOfEn;
@@ -190,7 +412,7 @@ namespace BP.WF.HttpHandler
             attr.UIContralType = En.UIContralType.DDL;
 
             attr.MyDataType = DataType.AppInt;
-            attr.LGType = En.FieldTypeS.Enum; 
+            attr.LGType = En.FieldTypeS.Enum;
 
             SysEnumMain sem = new Sys.SysEnumMain();
             sem.No = attr.UIBindKey;
@@ -199,7 +421,7 @@ namespace BP.WF.HttpHandler
 
             attr.Insert();
 
-            return attr.MyPK; 
+            return attr.MyPK;
         }
 
         public string Designer_NewMapDtl()
@@ -591,7 +813,7 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = UIContralType.TB;
                 attr.Insert();
                 return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-//                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                //                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
 
             }
 
@@ -611,7 +833,7 @@ namespace BP.WF.HttpHandler
 
                 return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
 
-              // return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                // return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppMoney)
@@ -717,7 +939,7 @@ namespace BP.WF.HttpHandler
                 attr.Insert();
 
                 return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-               // return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupField=" + this.GroupField;
+                // return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             return "err@没有判断的数据类型." + attr.MyDataTypeStr;
@@ -1077,7 +1299,6 @@ namespace BP.WF.HttpHandler
                 attr.Para_FontSize = this.GetValIntFromFrmByKey("TB_FontSize"); //字体大小.
                 attr.Para_Tip = this.GetValFromFrmByKey("TB_Tip"); //操作提示.
 
-
                 //默认值.
                 attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");
 
@@ -1391,25 +1612,111 @@ namespace BP.WF.HttpHandler
 
             int i = ath.RetrieveFromDBSources();
             ath = BP.Sys.PubClass.CopyFromRequestByPost(ath, context.Request) as FrmAttachment;
-
             if (i == 0)
-            {
                 ath.Save(); //执行保存.              
-            }
             else
-            {
                 ath.Update();
-            }
             return "保存成功..";
         }
         public string Attachment_Delete()
         {
             FrmAttachment ath = new FrmAttachment();
-
             ath.MyPK = this.MyPK;
-
             ath.Delete();
             return "删除成功.." + ath.MyPK;
         }
+
+        /// <summary>
+        /// 获取webservice方法列表
+        /// </summary>
+        /// <param name="dbsrc">WebService数据源</param>
+        /// <returns></returns>
+        public List<WSMethod> GetWebServiceMethods(SFDBSrc dbsrc)
+        {
+            if (dbsrc == null || string.IsNullOrWhiteSpace(dbsrc.IP)) return new List<WSMethod>();
+
+            var wsurl = dbsrc.IP.ToLower();
+            if (!wsurl.EndsWith(".asmx") && !wsurl.EndsWith(".svc"))
+                throw new Exception("@失败:" + dbsrc.No + " 中WebService地址不正确。");
+
+            wsurl += wsurl.EndsWith(".asmx") ? "?wsdl" : "?singleWsdl";
+
+            #region //解析WebService所有方法列表
+            //var methods = new Dictionary<string, string>(); //名称Name，全称Text
+            List<WSMethod> mtds = new List<WSMethod>();
+            WSMethod mtd = null;
+            var wc = new WebClient();
+            var stream = wc.OpenRead(wsurl);
+            var sd = ServiceDescription.Read(stream);
+            var eles = sd.Types.Schemas[0].Elements.Values.Cast<XmlSchemaElement>();
+            var s = new StringBuilder();
+            XmlSchemaComplexType ctype = null;
+            XmlSchemaSequence seq = null;
+            XmlSchemaElement res = null;
+
+            foreach (var ele in eles)
+            {
+                if (ele == null) continue;
+
+                var resType = string.Empty;
+                var mparams = string.Empty;
+
+                //获取接口返回元素
+                res = eles.FirstOrDefault(o => o.Name == (ele.Name + "Response"));
+
+                if (res != null)
+                {
+                    mtd = new WSMethod();
+                    //1.接口名称 ele.Name
+                    mtd.NO = ele.Name;
+                    mtd.PARAMS = new Dictionary<string, string>();
+                    //2.接口返回值类型
+                    ctype = res.SchemaType as XmlSchemaComplexType;
+                    seq = ctype.Particle as XmlSchemaSequence;
+
+                    if (seq != null && seq.Items.Count > 0)
+                        mtd.RETURN = resType = (seq.Items[0] as XmlSchemaElement).SchemaTypeName.Name;
+                    else
+                        continue;// resType = "void";   //去除不返回结果的接口
+
+                    //3.接口参数
+                    ctype = ele.SchemaType as XmlSchemaComplexType;
+                    seq = ctype.Particle as XmlSchemaSequence;
+
+                    if (seq != null && seq.Items.Count > 0)
+                    {
+                        foreach (XmlSchemaElement pe in seq.Items)
+                        {
+                            mparams += pe.SchemaTypeName.Name + " " + pe.Name + ", ";
+                            mtd.PARAMS.Add(pe.Name, pe.SchemaTypeName.Name);
+                        }
+
+                        mparams = mparams.TrimEnd(", ".ToCharArray());
+                    }
+
+                    mtd.NAME = string.Format("{0} {1}({2})", resType, ele.Name, mparams);
+                    mtds.Add(mtd);
+                    //methods.Add(ele.Name, string.Format("{0} {1}({2})", resType, ele.Name, mparams));
+                }
+            }
+
+            stream.Close();
+            stream.Dispose();
+            wc.Dispose();
+            #endregion
+
+            return mtds;
+        }
+    }
+
+    public class WSMethod
+    {
+        public string NO { get; set; }
+
+        public string NAME { get; set; }
+
+        public Dictionary<string, string> PARAMS { get; set; }
+
+        public string RETURN { get; set; }
     }
 }

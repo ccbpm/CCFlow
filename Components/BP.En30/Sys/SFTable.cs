@@ -806,7 +806,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoGuide()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFGuide.htm";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CreateSFGuide.htm";
         }
         /// <summary>
         /// 编辑数据

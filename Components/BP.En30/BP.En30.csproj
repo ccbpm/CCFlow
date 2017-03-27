@@ -188,6 +188,7 @@
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />
+    <Compile Include="Sys\FrmUI\SFTable.cs" />
     <Compile Include="Sys\ToolbarExcel.cs" />
     <Compile Include="Sys\ToolbarExcelSln.cs" />
     <Compile Include="Sys\GEEntityExcelFrm.cs" />

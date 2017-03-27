@@ -214,7 +214,7 @@ namespace BP.WF.Template
                     string sql = "SELECT FK_Emp FROM WF_GenerWorkerlist WHERE FK_Node=" + this.SpecOperPara + " AND WorkID=" + this.WorkID;
                     string fk_emp = DBAccess.RunSQLReturnStringIsNull(sql, null);
                     if (fk_emp == null)
-                        throw new Exception("@您在配置方向条件时错误，求指定的人员的时候，按照指定的节点["+this.SpecOperPara+"]，作为处理人，但是该节点上没有人员。查询SQL:"+sql);
+                        throw new Exception("@您在配置方向条件时错误，求指定的人员的时候，按照指定的节点[" + this.SpecOperPara + "]，作为处理人，但是该节点上没有人员。查询SQL:" + sql);
                     return fk_emp;
                 }
 
@@ -236,7 +236,7 @@ namespace BP.WF.Template
 
                 if (way == Template.SpecOperWay.SpenEmpNo)
                 {
-                    if (string.IsNullOrEmpty(this.SpecOperPara)==false)
+                    if (string.IsNullOrEmpty(this.SpecOperPara) == false)
                         throw new Exception("@您在配置方向条件时错误，求指定的人员的时候，按照指定的人员[" + this.SpecOperPara + "]作为处理人，但是人员参数没有设置。");
                     return this.SpecOperPara;
                 }
@@ -398,7 +398,7 @@ namespace BP.WF.Template
                 this.SetValByKey(CondAttr.CondOrAnd, (int)value);
             }
         }
-        #endregion 
+        #endregion
 
         /// <summary>
         /// 在更新与插入之前要做得操作。
@@ -615,6 +615,7 @@ namespace BP.WF.Template
                 Node nd = new Node(this.FK_Node);
                 if (this.en == null)
                 {
+                    #region 实体不存在则进行重新初始化
                     GERpt en = nd.HisFlow.HisGERpt;
                     try
                     {
@@ -629,10 +630,12 @@ namespace BP.WF.Template
                         return false;
                         //throw new Exception("@在取得判断条件实体[" + nd.EnDesc + "], 出现错误:" + ex.Message + "@错误原因是定义流程的判断条件出现错误,可能是你选择的判断条件工作类是当前工作节点的下一步工作造成,取不到该实体的实例.");
                     }
+                    #endregion
                 }
 
                 if (this.HisDataFrom == ConnDataFrom.Stas)
                 {
+                    #region 按岗位控制
                     string strs = this.OperatorValue.ToString();
                     string strs1 = "";
                     if (BP.WF.Glo.OSModel == OSModel.OneOne)
@@ -666,12 +669,14 @@ namespace BP.WF.Template
 
                     this.MsgOfCond = "@以岗位判断方向，条件为false：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + strs1;
                     return false;
+                    #endregion
                 }
 
                 if (this.HisDataFrom == ConnDataFrom.Depts)
                 {
+                    #region 按部门控制
                     string strs = this.OperatorValue.ToString();
-                    
+
                     BP.GPM.DeptEmps sts = new BP.GPM.DeptEmps();
                     if (SystemConfig.OSModel == OSModel.OneMore)
                     {
@@ -684,7 +689,7 @@ namespace BP.WF.Template
                         BP.GPM.DeptEmp myen = new BP.GPM.DeptEmp();
                         myen.FK_Dept = emp.FK_Dept;
                         myen.FK_Emp = emp.No;
-                        sts.AddEntity(myen); 
+                        sts.AddEntity(myen);
                     }
 
                     string strs1 = "";
@@ -692,7 +697,7 @@ namespace BP.WF.Template
                     {
                         if (strs.Contains("@" + st.FK_Dept + "@"))
                         {
-                            this.MsgOfCond = "@以岗位判断方向，条件为true：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + st.FK_Dept ;
+                            this.MsgOfCond = "@以岗位判断方向，条件为true：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + st.FK_Dept;
                             return true;
                         }
                         strs1 += st.FK_Dept;
@@ -700,10 +705,13 @@ namespace BP.WF.Template
 
                     this.MsgOfCond = "@以部门判断方向，条件为false：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + strs1;
                     return false;
+
+                    #endregion
                 }
 
                 if (this.HisDataFrom == ConnDataFrom.SQL)
                 {
+                    #region 按SQL 计算
                     //this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
                     string sql = this.OperatorValueStr;
                     sql = sql.Replace("~", "'");
@@ -727,10 +735,13 @@ namespace BP.WF.Template
                         return true;
 
                     throw new Exception("@您设置的sql返回值，不符合ccflow的要求，必须是0或大于等于1。");
+
+                    #endregion
                 }
 
                 if (this.HisDataFrom == ConnDataFrom.Url)
                 {
+                    #region URL 参数计算
                     string url = this.OperatorValueStr;
                     if (url.Contains("?") == false)
                         url = url + "?1=2";
@@ -756,7 +767,7 @@ namespace BP.WF.Template
                     if (url.Contains("&UserNo") == false)
                         url += "&UserNo=" + BP.Web.WebUser.No;
 
-                 
+
                     #endregion 加入必要的参数.
 
                     #region 对url进行处理.
@@ -767,7 +778,7 @@ namespace BP.WF.Template
                         if (myurl.IndexOf('?') != -1)
                             myurl = myurl.Substring(myurl.IndexOf('?'));
 
-                        myurl = myurl.Replace("?","&");
+                        myurl = myurl.Replace("?", "&");
                         string[] paras = myurl.Split('&');
                         foreach (string s in paras)
                         {
@@ -858,10 +869,13 @@ namespace BP.WF.Template
                         throw new Exception("@判断url方向出现错误:" + ex.Message + ",执行url错误:" + url);
                     }
                     #endregion 对url进行处理.
+
+                    #endregion
                 }
 
                 if (this.HisDataFrom == ConnDataFrom.Paras)
                 {
+                    #region 按系统参数计算
                     //this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
                     string exp = this.OperatorValueStr;
                     string[] strs = exp.Trim().Split(' ');
@@ -953,6 +967,7 @@ namespace BP.WF.Template
                     #endregion 开始执行判断.
 
                     // throw new Exception("@判断条件时错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val+")");
+                    #endregion
                 }
 
                 try

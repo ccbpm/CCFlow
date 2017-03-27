@@ -27,7 +27,6 @@ namespace BP.WF.HttpHandler
          
 
         #region 枚举界面.
-
         public string FrmTable_GetSFTableList()
         {
             int pageNumber = this.GetRequestValInt("pageNumber");

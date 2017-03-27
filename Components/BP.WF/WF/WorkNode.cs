@@ -1764,6 +1764,7 @@ namespace BP.WF
             gwl.WorkID = this.WorkID;
             if (gwl.RetrieveFromDBSources() == 0)
                 throw new Exception("@没有找到自己期望的数据.");
+
             gwl.IsPass = true;
             gwl.Update();
 
@@ -1773,8 +1774,33 @@ namespace BP.WF
             if (gwl.RetrieveFromDBSources() == 0)
                 throw new Exception("@没有找到接受人期望的数据.");
 
+            #region 要计算当前人员的应完成日期
+            // 计算出来 退回到节点的应完成时间. 
+            DateTime dtOfShould;
+            if (this.HisFlow.HisTimelineRole == Template.TimelineRole.ByFlow)
+            {
+                /*如果整体流程是按流程设置计算 */
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                dtOfShould = DataType.ParseSysDateTime2DateTime(gwf.SDTOfFlow);
+            }
+            else
+            {
+                //增加天数. 考虑到了节假日.             
+                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.HisNode.TimeLimit,
+                    this.HisNode.TSpanMinues, this.HisNode.TWay);
+            }
+            // 应完成日期.
+            string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
+            #endregion
+
+            //更新日期，为了考核. 
+            gwl.SDT = sdt;
+            gwl.RDT = DataType.CurrentDataTime;
+
+
             gwl.IsPass = false;
             gwl.Update();
+
             GenerWorkerLists ens = new GenerWorkerLists();
             ens.AddEntity(gwl);
             this.HisWorkerLists = ens;

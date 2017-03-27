@@ -2445,9 +2445,7 @@ namespace BP.WF
                         {
                             newRow[column.ColumnName] = row[dtColumn.ColumnName];
                         }
-
                     }
-
                 }
                 newRow["Type"] = "CC";
                 dt.Rows.Add(newRow);

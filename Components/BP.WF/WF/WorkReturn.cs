@@ -778,7 +778,7 @@ namespace BP.WF
             string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
 
 
-            // 改变当前待办工作节点。
+            // 改变当前待办工作节点
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow  SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode  WHERE  WorkID=" + dbStr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
@@ -789,8 +789,9 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,IsRead=0,SDT=" + dbStr + "SDT WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,IsRead=0,SDT=" + dbStr + "SDT, RDT=" + dbStr + "RDT WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
             ps.Add("SDT", sdt);
+            ps.Add("RDT", DataType.SysDataTimeFormat); //当前日期.
             ps.Add("FK_Node", this.ReturnToNode.NodeID);
             ps.Add("WorkID", this.WorkID);
             DBAccess.RunSQL(ps);

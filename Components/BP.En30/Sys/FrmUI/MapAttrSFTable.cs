@@ -142,50 +142,33 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
                 rm = new RefMethod();
-                rm.Title = "编辑外键";
+                rm.Title = "外键表属性";
                 rm.ClassMethodName = this.ToString() + ".DoSFTable()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.GroupName = "高级";
                 map.AddRefMethod(rm);
 
+                //rm = new RefMethod();
+                //rm.Title = "旧版本设置aspx";
+                //rm.ClassMethodName = this.ToString() + ".DoOldVerAspx()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "高级设置";
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "旧版本设置aspx";
-                rm.ClassMethodName = this.ToString() + ".DoOldVerAspx()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
 
-
-                rm = new RefMethod();
-                rm.Title = "旧版本设置htm";
-                rm.ClassMethodName = this.ToString() + ".DoOldVer()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "旧版本设置htm";
+                //rm.ClassMethodName = this.ToString() + ".DoOldVer()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "高级设置";
+                //map.AddRefMethod(rm);
                 #endregion 执行的方法.
 
                 this._enMap = map;
                 return this._enMap;
             }
-        }
-
-        protected override bool beforeUpdateInsertAction()
-        {
-            //MapAttr attr = new MapAttr();
-            //attr.MyPK = this.MyPK;
-            //attr.RetrieveFromDBSources();
-
-            ////是否启用高级js设置.
-            //attr.IsEnableJS = this.GetValBooleanByKey("IsEnableJS");
-
-            ////单选按钮的展现方式.
-            //attr.RBShowModel = this.GetValIntByKey("RBShowModel");
-
-            ////执行保存.
-            //attr.Save();
-
-            return base.beforeUpdateInsertAction();
         }
         #endregion
 
@@ -203,13 +186,12 @@ namespace BP.Sys.FrmUI
             return "/WF/Admin/FoolFormDesigner/EditTable.aspx?KeyOfEn=" + this.KeyOfEn + "&EnumKey=" + this.UIBindKey + "&MyPK=" + this.MyPK + "&UIBindKey=" + this.UIBindKey;
         }
         /// <summary>
-        /// 编辑数据
+        /// 外键表属性
         /// </summary>
         /// <returns></returns>
         public string DoSFTable()
         {
-            return "/WF/Admin/FoolFormDesigner/SFTable.aspx?FK_SFTable=" + this.UIBindKey;
-            //return "/WF/Admin/FoolFormDesigner/SFSQLDataView.aspx?FK_SFTable=" + this.UIBindKey;
+            return "/WF/Admin/FoolFormDesigner/GuideSFTableAttr.htm?FK_SFTable=" + this.UIBindKey;
         }
         /// <summary>
         /// 设置自动填充
@@ -218,22 +200,6 @@ namespace BP.Sys.FrmUI
         public string DoDDLFullCtrl()
         {
             return "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
-        }
-        /// <summary>
-        /// 设置自动填充
-        /// </summary>
-        /// <returns></returns>
-        public string DoAutoFull()
-        {
-            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
-        }
-        /// <summary>
-        /// 高级设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoRadioBtns()
-        {
-            return "/WF/Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
         /// 设置级联

@@ -18,7 +18,7 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 用户自定义表
     /// </summary>
-    public class SFTableClass : EntityNoName
+    public class SFTable : EntityNoName
     {
 
         #region 构造方法
@@ -35,7 +35,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 用户自定义表
         /// </summary>
-        public SFTableClass()
+        public SFTable()
         {
         }
         /// <summary>
@@ -55,7 +55,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
-                map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, true, SFTableAttr.SrcType,
+                map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
                     "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
@@ -66,10 +66,12 @@ namespace BP.Sys.FrmUI
 
                 //数据源.
                 map.AddDDLEntities(SFTableAttr.FK_SFDBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
+                map.AddTBString(SFTableAttr.SrcTable, null, "表/视图", true, false, 0, 200, 20);
 
-                map.AddTBString(SFTableAttr.SrcTable, null, "数据源表", false, false, 0, 200, 20);
-                map.AddTBString(SFTableAttr.ColumnValue, null, "显示的值(编号列)", false, false, 0, 200, 20);
-                map.AddTBString(SFTableAttr.ColumnText, null, "显示的文字(名称列)", false, false, 0, 200, 20);
+                map.AddTBString(SFTableAttr.ColumnValue, null, "显示的值(编号列/默认为No)", true, false, 0, 200, 20);
+                map.AddTBString(SFTableAttr.ColumnText, null, "显示的文字(名称列默认为Name)", true, false, 0, 200, 20);
+
+
                 map.AddTBString(SFTableAttr.ParentValue, null, "父级值(父级列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", false, false, 0, 1000, 600, true);
 
@@ -89,12 +91,24 @@ namespace BP.Sys.FrmUI
         #endregion
 
         /// <summary>
+        /// 更新的操作
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeUpdate()
+        {
+            BP.Sys.SFTable sf = new BP.Sys.SFTable(this.No);
+            sf.Copy(this);
+            sf.Update();
+
+            return base.beforeUpdate();
+        }
+        /// <summary>
         /// 编辑数据
         /// </summary>
         /// <returns></returns>
         public string DoEdit()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.aspx?EnsName=" + this.No;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + this.No;
         }
         /// <summary>
         /// 执行删除.
@@ -116,13 +130,13 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 用户自定义表s
     /// </summary>
-    public class SFTableClasss : EntitiesNoName
+    public class SFTables : EntitiesNoName
     {
         #region 构造
         /// <summary>
         /// 用户自定义表s
         /// </summary>
-        public SFTableClasss()
+        public SFTables()
         {
         }
         /// <summary>
@@ -132,7 +146,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new SFTableClass();
+                return new SFTable();
             }
         }
         #endregion
@@ -142,20 +156,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<SFTableClass> ToJavaList()
+        public System.Collections.Generic.IList<SFTable> ToJavaList()
         {
-            return (System.Collections.Generic.IList<SFTableClass>)this;
+            return (System.Collections.Generic.IList<SFTable>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<SFTableClass> Tolist()
+        public System.Collections.Generic.List<SFTable> Tolist()
         {
-            System.Collections.Generic.List<SFTableClass> list = new System.Collections.Generic.List<SFTableClass>();
+            System.Collections.Generic.List<SFTable> list = new System.Collections.Generic.List<SFTable>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((SFTableClass)this[i]);
+                list.Add((SFTable)this[i]);
             }
             return list;
         }

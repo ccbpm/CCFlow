@@ -7811,20 +7811,43 @@ namespace BP.WF
             //首先输出普通的节点 
             foreach (Node mynd in toNDs)
             {
+                bool bIsCanDo = true;
                 if (mynd.HisRunModel == RunModel.SubThread)
                     continue; //如果是子线程节点.
 
                 #region 判断方向条件,如果设置了方向条件，判断是否可以通过，不能通过的，就不让其显示.
-                Cond cond = new Cond();
-                int i = cond.Retrieve(CondAttr.FK_Node, nd.NodeID, CondAttr.ToNodeID, mynd.NodeID);
+                Conds conds = new Conds();
+                int i = conds.Retrieve(CondAttr.FK_Node, nd.NodeID, CondAttr.ToNodeID, mynd.NodeID);
                 // 设置方向条件，就判断它。
                 if (i > 0)
                 {
-                    cond.WorkID = workid;
-                    cond.en = rpt;
-                    if (cond.IsPassed == false)
-                        continue;
+                    foreach (Cond cond in conds)
+                    {
+                        cond.WorkID = workid;
+                        cond.en = rpt;
+                        //有一个条件成立则成立
+                        if (cond.CondOrAnd == CondOrAnd.ByOr)
+                        {
+                            bIsCanDo = false;
+                            if (cond.IsPassed == true)
+                            {
+                                bIsCanDo = true;
+                                break;
+                            }
+                        }
+
+                        //有一个条件不成立则不成立
+                        if (cond.CondOrAnd == CondOrAnd.ByAnd && cond.IsPassed == false)
+                        {
+                            bIsCanDo = false;
+                            break;
+                        }                        
+                    }
                 }
+                //条件不符合则不通过
+                if (bIsCanDo == false)
+                    continue;
+
                 #endregion
 
                 nds.AddEntity(mynd);

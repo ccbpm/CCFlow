@@ -58,7 +58,7 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
                 return int.Parse(this.Request.QueryString["FK_Node"]);
             }
         }
-       
+
         public Int64 WorkID
         {
             get
@@ -100,7 +100,7 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
             //获得上次默认选择的节点. 2015-01-15.
             int lastSelectNodeID = BP.WF.Dev2Interface.WorkOpt_ToNodes_GetLasterSelectNodeID(this.FK_Flow, this.FK_Node);
             if (lastSelectNodeID == 0 && nds.Count != 0)
-                lastSelectNodeID =int.Parse( nds[0].PKVal.ToString());
+                lastSelectNodeID = int.Parse(nds[0].PKVal.ToString());
 
             //检查是否有异表单。
             bool isSubYBD = false; //异表单?
@@ -126,10 +126,9 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
                     isSubYBD = true;
                     continue;
                 }
-
                 //已有人员直接显示到人员选择器a标签上 秦15.2.5
-                    string sql = "SELECT A.No,a.Name FROM Port_Emp A, WF_SelectAccper B WHERE A.No=B.FK_Emp AND B.FK_Node=" + mynd.NodeID + " AND B.WorkID=" + this.WorkID;
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                string sql = "SELECT A.No,a.Name FROM Port_Emp A, WF_SelectAccper B WHERE A.No=B.FK_Emp AND B.FK_Node=" + mynd.NodeID + " AND B.WorkID=" + this.WorkID;
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                 string addSpan = "";
                 if (dt.Rows.Count != 0)
@@ -200,7 +199,7 @@ namespace CCFlow.Plug_in.CCFlow.WF.WorkOpt
             this.Pub1.AddHR();
             Button btn = new Button();
             btn.ID = "To";
-            BP.WF.Template.BtnLab btnlab=new BtnLab(this.FK_Node);
+            BP.WF.Template.BtnLab btnlab = new BtnLab(this.FK_Node);
             btn.Text = "  " + btnlab.SendLab + "  ";
             this.Pub1.Add(btn);
             btn.Click += new EventHandler(btn_Click);

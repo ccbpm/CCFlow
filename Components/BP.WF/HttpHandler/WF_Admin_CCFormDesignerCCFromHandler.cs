@@ -38,7 +38,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
-          
             string action = string.Empty;
             //返回值
             string msg = string.Empty;
@@ -70,7 +69,6 @@ namespace BP.WF.HttpHandler
                     case "DoType"://表单特殊元素保存公共方法
                         msg = DoType();
                         break;
-                
                     case "Hiddenfielddata"://获取隐藏字段.
                         msg = BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
                         break;
@@ -444,6 +442,9 @@ namespace BP.WF.HttpHandler
                 ds.Tables[7].TableName = "Sys_FrmAttachment";
                 ds.Tables[8].TableName = "Sys_MapDtl";
                 ds.Tables[9].TableName = "Sys_FrmLine";
+
+              //  MapData md = new MapData(this.FK_Flow);
+               // DataSet ds = md.GetDtlsDatasOfList();
 
                 return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = "", data = Newtonsoft.Json.JsonConvert.SerializeObject(ds) });
             }

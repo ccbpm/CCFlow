@@ -23,6 +23,15 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 保存表单
+        /// </summary>
+        /// <returns></returns>
+        public string SaveForm()
+        {
+            BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, this.GetRequestVal("diagram"));
+            return "保存成功.";
+        }
 
         #region 方法 Home
         public string Home_Init()

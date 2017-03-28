@@ -258,9 +258,8 @@ namespace BP.WF.HttpHandler
 
                 case "sfguide_getmtds": //获取WebService方法列表
                     src = context.Request.QueryString["src"];
-
                     if (string.IsNullOrWhiteSpace(src))
-                        throw new Exception("err@参数不正确");
+                        return "err@系统中没有webservices类型的数据源，该类型的外键表不能创建，请维护数据源.";
 
                     sr = new SFDBSrc(src);
 
@@ -268,6 +267,7 @@ namespace BP.WF.HttpHandler
                         return "err@数据源“" + sr.Name + "”不是WebService数据源.";
 
                     List<WSMethod> mtds = GetWebServiceMethods(sr);
+
                     return LitJson.JsonMapper.ToJson(mtds);
 
                 case "DtlFieldUp": //字段上移
@@ -1633,7 +1633,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public List<WSMethod> GetWebServiceMethods(SFDBSrc dbsrc)
         {
-            if (dbsrc == null || string.IsNullOrWhiteSpace(dbsrc.IP)) return new List<WSMethod>();
+            if (dbsrc == null || string.IsNullOrWhiteSpace(dbsrc.IP)) 
+                return new List<WSMethod>();
 
             var wsurl = dbsrc.IP.ToLower();
             if (!wsurl.EndsWith(".asmx") && !wsurl.EndsWith(".svc"))

@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
             catch (Exception ex)
             {
                 //返回执行错误的结果.
-                ctrl.context.Response.Write("err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.InnerException);
+                ctrl.context.Response.Write("err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.InnerException.Message+" \t\n技术信息:"+ex.Source );
             }
         }
 

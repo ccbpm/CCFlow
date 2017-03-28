@@ -342,7 +342,7 @@ namespace BP.Tools
 
             if (dt.Rows.Count == 0)
             {
-                jsonString.Append("[{}]");
+                jsonString.Append("[]");
                 return jsonString.ToString();
             }
 

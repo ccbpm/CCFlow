@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
-using System.Linq;
 using System.Text;
 using System.Web;
 using BP.DA;
@@ -24,7 +24,66 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-         
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string PublicNoName_InitFieldVal()
+        {
+            string sql = "";
+            Hashtable ht = new Hashtable();
+
+            string ctrlType = this.GetRequestVal("CtrlType");
+            int num = 1;
+
+            switch (ctrlType)
+            {
+                case "Dtl":
+                    sql = "SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_MapData + "'";
+                    num = DBAccess.RunSQLReturnValInt(sql)+1;
+                    ht.Add("No", this.FK_MapData + "Dtl" + num);
+                    ht.Add("Name", "从表"+num);
+                    break;
+                case "AthMulti":
+                    sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "'";
+                    num = DBAccess.RunSQLReturnValInt(sql)+1;
+                    ht.Add("No",  "AthMulti" + num );
+                    ht.Add("Name", "多附件"+num);
+                    break;
+                case "AthSingle":
+                    sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "'";
+                    num = DBAccess.RunSQLReturnValInt(sql)+1;
+                    ht.Add("No", "AthSingle" + num );
+                    ht.Add("Name", "单附件"+num);
+                    break;
+                case "AthImg":
+                    sql = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FK_MapData + "'";
+                    num = DBAccess.RunSQLReturnValInt(sql)+1;
+                    ht.Add("No", "AthImg" + num );
+                    ht.Add("Name", "图片附件"+num);
+                    break;
+
+                case "HandSiganture": //手写板.
+                    sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='"+ctrlType+"'";
+                    num = DBAccess.RunSQLReturnValInt(sql)+1;
+                    ht.Add("No", "iFrame" + num);
+                    ht.Add("Name", "签字板"+num);
+                    break;
+                case "iFrame": //框架
+                    sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='" + ctrlType + "'";
+                    num = DBAccess.RunSQLReturnValInt(sql) + 1;
+                    ht.Add("No", "iFrame" + num );
+                    ht.Add("Name", "框架"+num);
+                    break;
+                default:
+                    ht.Add("No", ctrlType +1);
+                    ht.Add("Name", ctrlType+1);
+                    break;
+            }
+
+            return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
 
         #region 枚举界面.
         public string FrmTable_GetSFTableList()

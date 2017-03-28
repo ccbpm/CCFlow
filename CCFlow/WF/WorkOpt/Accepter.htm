@@ -179,15 +179,15 @@
                         alert("转换JSON 失败" + err + data)
                     }
                     
-                    var selDataArr = initData.Nodes;
-                    var dtgArr = initData.Depts;
-                    var dteArr = initData.Emps;
+                    var selDataArr = initData.NODES;
+                    var dtgArr = initData.DEPTS;
+                    var dteArr = initData.EMPS;
                     //初始化到达节点数据
                     if (firstLoad == true) {
                         firstLoad = false;
                         var html = '';
                         $.each(selDataArr, function (i, obje) {
-                            html += '<option value="' + obje.No + '">' + obje.Name + '</option>';
+                            html += '<option value="' + obje.NO + '">' + obje.NAME + '</option>';
                         });
                         $("#searchS1").html("");
                         $("#searchS1").html(html);
@@ -202,36 +202,35 @@
 
                     var selectNodeVal = $('#searchS1').val();
                     var selectNode = $.grep(selDataArr, function (value) {
-                        return value.No = selectNodeVal;
+                        return value.NO == selectNodeVal;
                     });
-
+                    
                     //通过SQL 和树的时候可以显示为树
-                    if (selectNode[0].SelectorDBShowWay == "Tree" && selectNode[0].SelectorModel == "SQL") {
+                    if (selectNode[0].SELECTORDBSHOWWAY == "Tree" && selectNode[0].SELECTORMODEL == "SQL") {
                         //树展示
                         $('#jstree').show();
                         var jsTreedata = [];
                         $.each(dtgArr, function (i, obj) {
                             //jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
-							// 2016-12-05 by tianbaoyan 人员选择器默认展开  因为数据量通过sql过滤不是很大
-                            jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name, "data": obj, state: { opened: true} });
-						})
+                            // 2016-12-05 by tianbaoyan 人员选择器默认展开  因为数据量通过sql过滤不是很大
+                            jsTreedata.push({ "id": obj.NO, "parent": (obj.PARENTNO == "0" ? '#' : obj.PARENTNO), "text": obj.NAME, "data": obj, state: { opened: true} });
+                        })
 
                         $.each(dteArr, function (i, obj) {
-                            jsTreedata.push({ children: {}, "id": "user" + obj.No, "parent": obj.FK_Dept, "text": obj.Name, "icon": "jstree-file", "data": obj });
+                            jsTreedata.push({ children: {}, "id": "user" + obj.NO, "parent": obj.FK_DEPT, "text": obj.NAME, "icon": "jstree-file", "data": obj });
                         })
 
                         //没有父节点的给到根节点
                         for (var i = 0; i < jsTreedata.length; i++) {
                             if (jsTreedata[i].parent != '#') {
-                                var pNode= $.grep(jsTreedata,function(value){
-                                return value.id==jsTreedata[i].parent;
-                                })
+                                var pNode = $.grep(jsTreedata, function (value) {
+                                    return value.id == jsTreedata[i].parent;
+                                });
                                 if (pNode.length == 0) {
-                                    jsTreedata[i].parent='#'
+                                    jsTreedata[i].parent = '#'
                                 }
                             }
                         }
-
                         
                         $('#jstree').jstree({
                             plugins: [
@@ -248,7 +247,7 @@
                         $("section").show();
                         return;
                     }
-                    if (selectNode[0].SelectorModel == "GenerUserSelecter") {//通用人员选择
+                    if (selectNode[0].SELECTORMODEL == "GenerUserSelecter") {//通用人员选择
                         $('#selectEmpsDiv').css('display', 'block');
                         $('#groupTable').css('display', 'none');
 
@@ -274,22 +273,22 @@
                     var s = "";
                     $.each(dtgArr, function (i, obje) {
                         for (var k = 0; k < dteArr.length; k++) {
-                            if (obje.No == dteArr[k][fkName]) {
+                            if (obje.NO == dteArr[k][fkName]) {
                                 ultde +=
-                                    "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
+                                    "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].NAME + "</li>";
                             }
                         }
-                        ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
+                        ultdg += "<li data-data='true' class='lif' name='" + obje.NO + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.NAME + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
                                 ultde + "</ul></li>";
                         ultde = "";
                     });
                     //
                     var groupFileds = $.grep(dteArr, function (value) {
-                        return ($('[name="' + value.FK_Dept + '"]').length != "0");
+                        return ($('[name="' + value.FK_DEPT + '"]').length != "0");
                     });
-
+                    
                     $.each(groupFileds, function (j, objj) {
-                        ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.Name + "</li>";
+                        ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.NAME + "</li>";
                     });
                     s = "<li class='lif'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>其他<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" +
                             ultdes + "</ul></li>";

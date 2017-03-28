@@ -2886,6 +2886,8 @@ namespace BP.DA
                 dc.ColumnName = dc.ColumnName.ToUpper();
                 
             }
+
+            return dt;
         }
 
         #endregion

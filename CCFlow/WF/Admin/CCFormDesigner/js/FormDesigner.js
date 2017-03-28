@@ -210,41 +210,37 @@ function ondbclickCallBackFun(figure) {
     }
 
     //流程类的组件.
-
     if (shap == 'FlowChart') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=轨迹组件';
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmTracks&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=轨迹组件';
         CCForm_ShowDialog(url, '轨迹组件');
         return;
     }
 
     if (shap == 'FrmCheck') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmWorkChecks&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '审核组件');
         return;
     }
 
     if (shap == 'SubFlowDtl') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmSubFlows&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '父子流程组件');
         return;
     }
 
-
     if (shap == 'ThreadDtl') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmThreads&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '子线程组件');
         return;
     }
 
-
     if (shap == 'FrmTransferCustom') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmTransferCustoms&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '流转自定义');
         return;
     }
 
     alert('没有判断的双击类型:' + shap);
-
 }
 
 

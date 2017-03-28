@@ -4,7 +4,6 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-
     <table style="width: 100%;">
         <caption>为文本框【<%=this.Request.QueryString["RefNo"] %>】设置自动完成. </caption>
         <tr>
@@ -48,9 +47,6 @@
                 <input value="关闭" type="button" onclick="javascript: window.close();" />
             </td>
         </tr>
-
-
-
     </table>
 
 </asp:Content>

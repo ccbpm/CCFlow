@@ -46,7 +46,6 @@
                 action: "FrmTable_GetSFTableList",
                 pageNumber: pageNumber,
                 pageSize: pageSize
-
             };
 
             AjaxServiceGener(params, LoadDataGridCallBack, this);
@@ -54,7 +53,7 @@
 
         //初始化
         $(function () {
-            LoadGridData(1, 6);
+            LoadGridData(1,8);
         });
 
         //加载grid后回调函数
@@ -123,71 +122,18 @@
             };
         }
 
-        function Del() {
-
-            var name = $.trim($("#TB_Name").val());
-            var key = $.trim($("#TB_KeyOfEn").val());
-
-            if (key == null || key == "") {
-                alert('您没有选择行.');
-                return;
-            }
-
-            var v = window.confirm("您确定要删除枚举值[" + name + " " + key + "]吗？");
-            if (v == false)
-                return;
-
-            alert('开始执行删除.');
-
-            // 定义参数，让其保存到数据库里。
-            var param = {
-                action: "DoType",
-                DoType: "FrmTable_DelSFTable",
-                EnumKey: key
-            };
-
-            $.post(Handler, param, function (data) {
-                if (data == "true") {
-                    alert('删除成功.');
-                    LoadGridData(1, 6);
-                } else {
-                    alert(data);
-                }
-            });
-        }
-
         //编辑.
         function Edit() {
-
-            var no = $.trim($("#TB_KeyOfEn").val());
-            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.SFTableClasss&No='+no;
-            OpenDialogAndCloseRefresh(url, "编辑类外键", 600, 550, "icon-new");
-
-        }
-
-        //执行保存.
-        function Save() {
-           
-            alert('尚未实现 Save , 请打开 Sys_SFTable 直接修改数据库. ');
-        }
-
-        function WinOpenIt(url) {
-            return;
+            var no = $.trim($("#TB_No").val());
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.SFTableClasss&No=' + no;
+            OpenDialogAndCloseRefresh(url, "编辑外键表", 600, 550, "icon-new");
         }
 
         //新建.
         function New() {
-
-            alert('尚未实现New, 请打开 Sys_SFTable 直接修改数据库. ');
+            var url = '/WF/Admin/FoolFormDesigner/CreateSFGuide.htm';
+            window.location.href = url;
             return;
-
-            // var url = '/WF/Comm/Sys/SFGuide.aspx?DoType=New&FromApp=SL';
-            //  alert(url);
-            //  var newWindow = window.open(url, 'z', 'scroll:1;status:1;help:1;resizable:1;dialogWidth:380px;dialogHeight:220px');
-            //var newWindow = window.open(url, 'z', 'scroll:1;status:1;help:1;resizable:1;Width:380px;Height:220px');
-            //newWindow.focus();
-            window.location.href = '/WF/Comm/Sys/SFGuide.aspx?DoType=New&FromApp=SL';
-            //  WinOpenIt();
         }
     </script>
 </head>
@@ -200,8 +146,6 @@
                     <input type="button" id="Btn_New" class="easyui-button" onclick="New()" value="新增" />
                     &nbsp;&nbsp;
                     <input type="button" id="Btn_Edit" onclick="Edit(true)" value="编辑" />
-                    &nbsp;&nbsp;
-                    <input type="button" id="Btn_DELETE" onclick="Del()" value="删除" />
                 </div>
                 
                 <table id="newsGrid" toolbar="#tb" class="easyui-datagrid">

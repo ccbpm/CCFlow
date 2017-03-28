@@ -15,8 +15,6 @@ namespace CCFlow.WF.MapDef
 {
     public partial class AutoFullUI : BP.Web.WebPage
     {
-
-
         #region 属性
         /// <summary>
         /// 执行类型
@@ -50,6 +48,7 @@ namespace CCFlow.WF.MapDef
             }
         }
         #endregion
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -84,13 +83,7 @@ namespace CCFlow.WF.MapDef
                 }
                  
                 this.TB_Exp.Text = me.Doc;
-
-
             }
-
-
-
-
         }
 
         protected void Btn_Save_Click(object sender, EventArgs e)

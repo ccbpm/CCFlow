@@ -320,7 +320,7 @@
                                 var limData = $(lifs[i]).find(".lim");
                                 for (var m = 0; m < limData.length; m++) {
                                     var lim = limData[m];
-                                    if ($(lim).text() == obj.Name && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
+                                    if ($(lim).text() == obj.NAME && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
                                         $(lim).data().data = obj;
                                         break;
                                     }
@@ -335,15 +335,9 @@
         function getSelectEmps() {
             if ($('#groupTable').css('display') != 'none') {//分组
                 var checked = $('input:checked');
-                //var selectedIdArrf = [];
-                //var selectedNodesf = [];
-                //for (var i = 0; i < checked.parent(".lif").length; i++) {
-                //    selectedIdArrf.push($(checked.parent(".lif")[i]).data().data.No);
-                //    selectedNodesf.push($(checked.parent(".lif")[i]).data().data.Name);
-                //}
                 var selectedIdArrm = [];
                 for (var i = 0; i < checked.parent(".lim").length; i++) {
-                    selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
+                    selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.NO);
                 }
                 return selectedIdArrm.join(';');
             } else if ($('#jstree').css('display') != 'none') {//树和BySql
@@ -363,7 +357,7 @@
                 });
 
                 $.each(nodeDataArrs, function (i, nodeData) {
-                    noArr.push(nodeData.No);
+                    noArr.push(nodeData.NO);
                 });
                 return noArr.join(';');
             } else {//通用人员选择器
@@ -371,7 +365,7 @@
                 var checked = $('input:checked');
                 var selectedIdArrm = [];
                 for (var i = 0; i < checked.parent(".lim").length; i++) {
-                    selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
+                    selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.NO);
                 }
                 return selectedIdArrm.join(';');
             }
@@ -396,7 +390,7 @@
             } else {
                 toNode = pageUrlParam.toNode;
             }
-
+            
             $.ajax({
                 type: 'post',
                 async: true,

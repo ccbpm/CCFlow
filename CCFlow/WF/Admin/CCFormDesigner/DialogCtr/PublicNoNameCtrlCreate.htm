@@ -16,8 +16,10 @@
     <script type="text/javascript">
         $(function () {
 
-            var ctrlType = getQueryStringByName("CtrlType");
-            var frmID = getQueryStringByName("FrmID");
+            var ctrlType = GetQueryString("CtrlType");
+            var frmID = GetQueryString("FrmID");
+            if (frmID == null)
+                frmID = GetQueryString("FK_MapData");
 
             var note = "";
             switch (ctrlType) {
@@ -67,11 +69,39 @@
             mytb.focus();
 
 
+            $.post(Handler, { DoType: 'PublicNoName_InitFieldVal', CtrlType: ctrlType, FK_MapData: frmID }, function (data) {
+
+
+
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                data = JSON.parse(data);
+                document.getElementById("TB_No").value = data.No;
+                document.getElementById("TB_Name").value = data.Name;
+
+            });
+
+
             $('#TB_Name').blur(function () //文本失去焦点时触发的事件
             {
                 var tbName = document.getElementById("TB_Name").value;
+                var tbNo = document.getElementById("TB_No").value;
+
+                // 如果有数据了, 就不自动生成拼音了。
+                if (tbNo != "") {
+                    return;
+                }
+
 
                 var val = $('input:radio[name="RB_QPJP"]:checked').val();
+
+                if (tbName == "") {
+                    document.getElementById("TB_No").value = "";
+                    return;
+                }
 
                 if (tbName == "") {
                     document.getElementById("TB_No").value = "";
@@ -84,8 +114,8 @@
                 else {
                     ParseStringToPinYin(TB_Name, false);
                 }
-
             });
+
             //点击全拼
             $('input[id=RB_QP]').change(function () {
                 var TB_Name = document.getElementById("TB_Name").value;
@@ -98,14 +128,21 @@
             });
         });
 
+      
+
         //转拼音，并去除开头为数字的字符
         function ParseStringToPinYin(parseString, parseModel) {
             parseString = $.trim(parseString);
             if (parseString != "") {
                 $.post(Handler, { action: 'FrmTextBox_ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
-                    if (data != "false") {
-                        document.getElementById("TB_No").value = data;
+
+                    if (data.indexOf('err@') != -1) {
+                        alert(data);
+                        return;
                     }
+
+                    document.getElementById("TB_No").value = data;
+
                 });
             }
         }

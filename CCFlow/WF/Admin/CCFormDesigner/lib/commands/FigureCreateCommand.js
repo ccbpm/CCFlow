@@ -27,7 +27,7 @@ function FigureCreateCommand(factoryFunction, x, y) {
 FigureCreateCommand.prototype = {
     /**This method got called every time the Command must execute*/
     execute: function () {
-        if (createFigureName == "FlowChart") {
+        if (createFigureName == "FlowChart" ) {
             var funIsExist = this.IsExist;
             var isExit = funIsExist(createFigureName);
             if (isExit == true) {
@@ -81,6 +81,8 @@ FigureCreateCommand.prototype = {
                     this.DropDownListTableCreate(createdFigure, this.x, this.y);
                     break;
                 case "Fieldset":
+                case "HandSiganture":
+                case "iFrame":
                 case CCForm_Controls.Dtl: //明细表.
                 case CCForm_Controls.AthMulti: //多附件.
                 case CCForm_Controls.AthSingle: //单附件.
@@ -303,7 +305,7 @@ FigureCreateCommand.prototype = {
     PublicNoNameCtrlCreate: function (createdFigure, x, y, ctrlType) {
 
         var dgId = "iframeRadioButton";
-        var url = "DialogCtr/PublicNoNameCtrlCreate.htm?CtrlType=" + ctrlType + "&s=" + Math.random();
+        var url = "DialogCtr/PublicNoNameCtrlCreate.htm?FrmID="+ CCForm_FK_MapData +"&CtrlType=" + ctrlType + "&s=" + Math.random();
         var funIsExist = this.IsExist;
 
         var lab = '创建从表';
@@ -328,8 +330,14 @@ FigureCreateCommand.prototype = {
             case "AthImg":
                 lab = "创建图片附件";
                 break;
+            case "HandSiganture":
+                lab = "签字板";
+                break;
+            case "iFrame":
+                lab = "框架";
+                break;
             default:
-                alert('没有判断的控件类型:' + ctrlType);
+                alert('没有判断的控件类型PublicNoNameCtrlCreate:' + ctrlType);
                 return;
         }
 

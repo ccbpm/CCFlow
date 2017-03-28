@@ -60,7 +60,7 @@
                         if (fk_mapData == null)
                             newRow = "<tr ><td class=Idx>" + i + "</td><td>" + data[i].No + "</td><td>" + data[i].Name + "</td><td>" + data[i].CfgVal + "</td><td><a href=''>编辑</a></td><td><a href=\"javascrit:Edit('" + data[i].No + "');\" >编辑</a></td><td><a href=\"javascrit:Ref('" + data[i].No + "');\" >引用</a></td></tr>";
                         else
-                            newRow = "<tr ><td class=Idx>" + i + "</td><td><a href=\"javascript:AddFrm('" + data[i].No + "','" + fk_mapData + "')\" >" + data[i].No + "</a></td><td>" + data[i].Name + "</td><td>" + data[i].CfgVal + "</td><td><a href=\"javascrit:Edit('" + data[i].No + "');\" >编辑</a></td><td><a href=\"javascrit:Ref('" + data[i].No + "');\" >引用</a></td></tr>";
+                            newRow = "<tr ><td class=Idx>" + i + "</td><td><a href=\"javascript:AddFrm('" + data[i].No + "','" + fk_mapData + "');\" >" + data[i].No + "</a></td><td>" + data[i].Name + "</td><td>" + data[i].CfgVal + "</td><td><a href=\"javascrit:Edit('" + data[i].No + "');\" >编辑</a></td><td><a href=\"javascrit:Ref('" + data[i].No + "');\" >引用</a></td></tr>";
 
                         $("#Table1 tr:last").after(newRow);
                     }
@@ -70,8 +70,12 @@
 
         function AddFrm( enumID, fk_mapdata) {
 
+
+        //    alert(enumID);
+
             var url = '';
             var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
+
             if (str == null)
                 return;
 

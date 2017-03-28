@@ -235,8 +235,7 @@ figureSets["Data"] = {
         { figureFunction: "TextBox", name: CCForm_Controls.RadioButton, image: "Radiobutton.png", CNName: "枚举单选按钮" },
         { figureFunction: "TextBox", name: CCForm_Controls.DropDownListEnum, image: "DropDownListEnum.png", CNName: "枚举下拉框" },
         { figureFunction: "TextBox", name: CCForm_Controls.DropDownListTable, image: "DropDownListTable.png", CNName: "外键下拉框" },
-        { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png", CNName: "外部数据源" },
-        { figureFunction: "TextBox", name: CCForm_Controls.Dtl, image: "Dtl.png", CNName: "明细表/从表" },
+     //   { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png", CNName: "外部数据源" },
         { figureFunction: "TextBox", name: CCForm_Controls.HiddendField, image: "HiddendField.png", CNName: "隐藏字段" }
     ]
 };
@@ -269,12 +268,15 @@ function figure_TextBox(x, y) {
 
 /**Controls set declaration*/
 figureSets["Ath"] = {
-    name: '附件控件',
-    description: '附件类控件',
+    name: '组件类',
+    description: '组件类控件',
     figures: [
+        { figureFunction: "Square", name: CCForm_Controls.Dtl, image: "Dtl.png", CNName: "明细表/从表" },
         { figureFunction: "Square", name: "AthMulti", image: "AthMulti.png", CNName: "多附件" },
         { figureFunction: "Square", name: "AthSingle", image: "AthSingle.png", CNName: "单附件" },
-        { figureFunction: "Square", name: "AthImg", image: "AthImg.png", CNName: "图片附件" }
+        { figureFunction: "Square", name: "AthImg", image: "AthImg.png", CNName: "图片附件" },
+        { figureFunction: "Square", name: "HandSiganture", image: "HandSiganture.png", CNName: "签字板" },
+        { figureFunction: "Square", name: "iFrame", image: "iFrame.png", CNName: "框架" }
     ]
 };
 

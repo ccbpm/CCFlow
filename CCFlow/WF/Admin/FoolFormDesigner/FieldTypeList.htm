@@ -118,7 +118,12 @@
                         return;
                     }
 
-                    if (confirm('创建成功') == true) {
+                    var url = data.replace('url@', '');
+                    window.location.href = url;
+                    return;
+
+
+                    if (confirm('创建成功,您还要继续创建吗？') == true) {
                         var url = data.replace('url@', '');
                         window.location.href = url;
                     } else {

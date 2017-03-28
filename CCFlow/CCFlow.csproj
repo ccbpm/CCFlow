@@ -1396,7 +1396,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\WFRptDtl.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFEdit.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SFGuide.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\SFSQL.aspx" />
@@ -7637,6 +7636,7 @@
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\CCFromHandler.ashx" />
+    <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
@@ -8768,6 +8768,9 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx.designer.cs">
       <DependentUpon>DesignerFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>

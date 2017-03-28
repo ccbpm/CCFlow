@@ -37,7 +37,7 @@
         //确定 人员选择
         function SelectEmps() {
             GetSelectedEmpsReturnVal();
-            if (returnVal.No == undefined || returnVal.No == '') {
+            if (returnVal.NO == undefined || returnVal.NO == '') {
                 alert("未选择人员");
             } else {
                 window.parent.selectEmpsWindowClose("确定");
@@ -71,47 +71,47 @@
                 ];
             }
             //返回节点数组
-            var initNodeData = function (data,fk_dept2) {
+            var initNodeData = function (data, fk_dept2) {
                 data = eval('(' + data + ')');
                 var fk_dept = fk_dept2;//pageData.FK_Dept;
                 var parentNo = undefined;
-                var fkDeptObj = $.grep(data.Depts, function (value) {
-                    return value.No == fk_dept;
+                var fkDeptObj = $.grep(data.DEPTS, function (value) {
+                    return value.NO == fk_dept;
                 });
                 if (fkDeptObj != undefined && fkDeptObj.length == 1) {
-                    parentNo = fkDeptObj[0].ParentNo;
+                    parentNo = fkDeptObj[0].PARENTNO;
                 }
                 pageData.FK_Dept = parentNo;
                 //本节点
                 var instance = $('#orgjstree').jstree(true);
-                var depts = $.grep(data.Depts, function (value) {
-                    return value.ParentNo == parentNo;
+                var depts = $.grep(data.DEPTS, function (value) {
+                    return value.PARENTNO == parentNo;
                 })
 
                 //if (instance.)
                 //子部门
-                var childDepts = $.grep(data.Depts, function (value) {
-                    return value.ParentNo == fk_dept;
+                var childDepts = $.grep(data.DEPTS, function (value) {
+                    return value.PARENTNO == fk_dept;
                 })
                 //人员
-                var emps = data.Emps;
+                var emps = data.EMPS;
 
                 var itemArr = [];
                 $.each(depts, function (i, dept) {
                     var deptNode = {
-                        "text": dept.Name,
-                        "id": dept.No,
+                        "text": dept.NAME,
+                        "id": dept.NO,
                         "children": true,
                         "data": dept
                     };
 
-                    if (dept.No == fk_dept) {//是本部门时加载子部门和人员
+                    if (dept.NO == fk_dept) {//是本部门时加载子部门和人员
                         var children = [];
                         if (childDepts.length > 0) {
                             $.each(childDepts, function (i, childDept) {
                                 var childDeptNode = {
-                                    "text": childDept.Name,
-                                    "id": childDept.No,
+                                    "text": childDept.NAME,
+                                    "id": childDept.NO,
                                     "children": true,
                                     "data": childDept
                                 };
@@ -122,13 +122,12 @@
                         if (emps.length > 0) {
                             $.each(emps, function (i, emp) {
                                 var empNode = {
-                                    "text": emp.Name,
-                                    "id": emp.No,
+                                    "text": emp.NAME,
+                                    "id": emp.NO,
                                     "children": false,
                                     "data": emp,
-                                    "icon": "jstree-file",
+                                    "icon": "jstree-file"
                                 };
-
                                 children.push(empNode);
                             });
                         }
@@ -153,7 +152,7 @@
                     'data': function (node, cb) {
                         url = Handler + "?DoType=SelectEmps&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
                         //初始化根节点
-                        if (node.id === "#") {
+                        if (node.id == "#") {
                             $.ajax({
                                 type: 'post',
                                 async: true,
@@ -164,11 +163,10 @@
                                     var fk_dept2 = pageData.FK_Dept;
                                     cb(initNodeData(data, fk_dept2));
                                 }
-                            }
-                        );
+                            });
                         }
                         else {
-                            if (node.data != undefined && node.data.childrenData != undefined && node.data.childrenData.length>0) {
+                            if (node.data != undefined && node.data.childrenData != undefined && node.data.childrenData.length > 0) {
                                 var fk_dept2 = node.id;
                                 cb(node.data.childrenData, fk_dept2);
                             }
@@ -183,7 +181,7 @@
                                     dataType: 'html',
                                     success: function (data) {
                                         var fk_dept2 = node.id;
-                                        cb(initNodeData(data,fk_dept2));
+                                        cb(initNodeData(data, fk_dept2));
                                     }
                                 });
                             }

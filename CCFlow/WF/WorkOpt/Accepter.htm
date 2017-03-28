@@ -361,7 +361,7 @@
                 });
                 return noArr.join(';');
             } else {//通用人员选择器
-                return frames["iframeSelectEmpsForm"].window.returnVal.No;
+                return frames["iframeSelectEmpsForm"].window.returnVal.NO;
                 var checked = $('input:checked');
                 var selectedIdArrm = [];
                 for (var i = 0; i < checked.parent(".lim").length; i++) {
@@ -475,7 +475,7 @@
             if (data == '取消') {
                 return;
             } else {
-                $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+                $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
             }
         }
         </script>

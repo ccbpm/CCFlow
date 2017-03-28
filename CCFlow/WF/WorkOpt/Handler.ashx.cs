@@ -655,7 +655,7 @@ namespace CCFlow.WF.WorkOpt
             dtEmps.TableName = "Emps";
             ds.Tables.Add(dtEmps);
 
-            return BP.Tools.Json.ToJson(ds);
+            return BP.Tools.FormatToJson.ToJson(ds);
         }
 
         #region 选择接受人.

@@ -302,7 +302,8 @@ figureSets["ccbpm"] = {
         { figureFunction: "Square", name: "FlowChart", image: "FlowChart.png", CNName: "轨迹图" },
         { figureFunction: "Square", name: "FrmCheck", image: "FrmCheck.png", CNName: "审核组件" },
         { figureFunction: "Square", name: "SubFlowDtl", image: "SubFlowDtl.png", CNName: "子流程" },
-        { figureFunction: "Square", name: "ThreadDtl", image: "ThreadDtl.png", CNName: "子线程" }
+        { figureFunction: "Square", name: "ThreadDtl", image: "ThreadDtl.png", CNName: "子线程" },
+        { figureFunction: "Square", name: "FrmTransferCustom", image: "FrmTransferCustom.png", CNName: "流转自定义" }
     ]
 };
 

@@ -123,13 +123,13 @@ function ondbclickCallBackFun(figure) {
         return;
     }
 
-    if ( shap == 'TextBoxDate') {
+    if (shap == 'TextBoxDate') {
         var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段Date属性');
         return;
     }
 
-    if (shap == 'TextBoxDateTime' ) {
+    if (shap == 'TextBoxDateTime') {
         var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段DateTime属性');
         return;
@@ -209,8 +209,41 @@ function ondbclickCallBackFun(figure) {
         return;
     }
 
+    //流程类的组件.
 
-  //  alert('没有判断的双击类型:' + shap);
+    if (shap == 'FlowChart') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=轨迹组件';
+        CCForm_ShowDialog(url, '轨迹组件');
+        return;
+    }
+
+    if (shap == 'FrmCheck') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        CCForm_ShowDialog(url, '审核组件');
+        return;
+    }
+
+    if (shap == 'SubFlowDtl') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        CCForm_ShowDialog(url, '父子流程组件');
+        return;
+    }
+
+
+    if (shap == 'ThreadDtl') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        CCForm_ShowDialog(url, '子线程组件');
+        return;
+    }
+
+
+    if (shap == 'FrmTransferCustom') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        CCForm_ShowDialog(url, '流转自定义');
+        return;
+    }
+
+    alert('没有判断的双击类型:' + shap);
 
 }
 

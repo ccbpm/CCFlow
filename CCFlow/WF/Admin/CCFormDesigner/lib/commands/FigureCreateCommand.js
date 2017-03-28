@@ -524,6 +524,15 @@ FigureCreateCommand.prototype = {
             case "SubFlowDtl": //子流程.
                 frmVal.Name = "子流程";
                 break;
+            case "ThreadDtl": //子流程.
+                frmVal.Name = "子线程组件";
+                break;
+            case "FrmTransferCustom": //子流程.
+                frmVal.Name = "流转自定义";
+                break;
+            default:
+                alert('未定义类型:' + createFigureName);
+                return; 
         }
         //根据信息创建不同类型的数字控件.
         var transField = new TransFormDataField(createdFigure, frmVal, x, y);

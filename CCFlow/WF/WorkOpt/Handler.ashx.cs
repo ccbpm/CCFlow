@@ -705,7 +705,7 @@ namespace CCFlow.WF.WorkOpt
             ds.Tables.Add(dtNodes);
 
             //返回json.
-            return BP.Tools.Json.ToJson(ds);
+            return BP.Tools.FormatToJson.ToJson(ds);
         }
         /// <summary>
         /// 保存.

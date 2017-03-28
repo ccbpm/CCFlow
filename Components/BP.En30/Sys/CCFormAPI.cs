@@ -539,8 +539,8 @@ namespace BP.Sys
         /// <param name="jsonStrOfH5Frm"></param>
         public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
         {
-             //BP.DA.DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
-             //return;
+            //BP.DA.DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
+            //return;
 
             JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
             if (jd.IsObject == false)
@@ -678,6 +678,12 @@ namespace BP.Sys
             }
 
             string flowEle = "";
+            string sqls = "";
+
+              string nodeIDStr = fk_mapdata.Replace("ND", "");
+              int nodeID = 0;
+              if (BP.DA.DataType.IsNumStr(nodeIDStr) == true)
+                  nodeID = int.Parse(nodeIDStr);
 
             //循环元素.
             for (int idx = 0, jControl = form_Controls.Count; idx < jControl; idx++)
@@ -810,50 +816,129 @@ namespace BP.Sys
                 #endregion 附件.
 
 
-                //流程类的组件.
-                if (shape == "FlowChart" || shape == "FrmCheck" ||  shape == "SubFlowDtl" || shape=="ThreadDtl")
+                #region 处理流程组件.
+                if (nodeID != 0)
                 {
-                    flowEle += shape + ",";
-                    continue;
+                    sqls="";
+                    switch (shape)
+                    {
+                        case "FlowChart":
+                            if (DBAccess.RunSQLReturnString("SELECT FrmTrackSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                            {
+                                /*状态是 0 就把他启用起来. */
+                                sqls += "@UPDATE WF_Node SET FrmTrackSta=1,FrmTrack_X=" + x + ",FrmTrack_Y=" + y + ",FrmTrack_H=" + height + ", FrmTrack_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            else
+                            {
+                                /* 仅仅更新位置与高度。*/
+                                sqls += "@UPDATE WF_Node SET FrmTrack_X=" + x + ",FrmTrack_Y=" + y + ",FrmTrack_H=" + height + ", FrmTrack_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            flowEle += shape + ",";
+                            continue;
+                        case "FrmCheck":
+                            if (DBAccess.RunSQLReturnString("SELECT FWCSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                            {
+                                /*状态是 0 就把他启用起来. */
+                                sqls += "@UPDATE WF_Node SET FWCSta=1,FWC_X=" + x + ",FWC_Y=" + y + ",FWC_H=" + height + ", FWC_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            else
+                            {
+                                /* 仅仅更新位置与高度。*/
+                                sqls += "@UPDATE WF_Node SET FWC_X=" + x + ",FWC_Y=" + y + ",FWC_H=" + height + ", FWC_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            flowEle += shape + ",";
+                            continue;
+                        case "SubFlowDtl": //子流程
+                            if (DBAccess.RunSQLReturnString("SELECT SFSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                            {
+                                /*状态是 0 就把他启用起来. */
+                                sqls += "@UPDATE WF_Node SET SFSta=1,SF_X=" + x + ",SF_Y=" + y + ",SF_H=" + height + ", SF_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            else
+                            {
+                                /* 仅仅更新位置与高度。*/
+                                sqls += "@UPDATE WF_Node SET SF_X=" + x + ",SF_Y=" + y + ",SF_H=" + height + ", SF_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            flowEle += shape + ",";
+                            continue;
+                        case "ThreadDtl": //子线程
+                            if (DBAccess.RunSQLReturnString("SELECT FrmThreadSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                            {
+                                /*状态是 0 就把他启用起来. */
+                                sqls += "@UPDATE WF_Node SET FrmThreadSta=1,FrmThread_X=" + x + ",FrmThread_Y=" + y + ",FrmThread_H=" + height + ",FrmThread_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            else
+                            {
+                                /* 仅仅更新位置与高度。*/
+                                sqls += "@UPDATE WF_Node SET FrmThread_X=" + x + ",FrmThread_Y=" + y + ",FrmThread_H=" + height + ", FrmThread_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            flowEle += shape + ",";
+                            continue;
+                        case "FrmTransferCustom": //流转自定义
+                            if (DBAccess.RunSQLReturnString("SELECT FTCSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
+                            {
+                                /*状态是 0 就把他启用起来. */
+                                sqls += "@UPDATE WF_Node SET FTCSta=1,FTC_X=" + x + ",FTC_Y=" + y + ",FTC_H=" + height + ",FTC_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            else
+                            {
+                                /* 仅仅更新位置与高度。*/
+                                sqls += "@UPDATE WF_Node SET FTC_X=" + x + ",FTC_Y=" + y + ",FrmThread_H=" + height + ",FTC_W=" + width + " WHERE NodeID=" + nodeIDStr;
+                            }
+                            flowEle += shape + ",";
+                            continue;
+                        default:
+                            break;
+                    }
                 }
+                #endregion 处理流程组件.
+
+                ////流程类的组件.
+                //if (shape == "FlowChart" || shape == "FrmCheck" ||  shape == "SubFlowDtl" || shape=="ThreadDtl")
+                //{
+                //    continue;
+                //}
 
                 throw new Exception("@没有判断的类型:shape = " + shape);
             }
 
+
             #region 处理节点表单。
-            string nodeID = fk_mapdata.Replace("ND", "");
-            if (BP.DA.DataType.IsNumStr(nodeID) == true)
+            if (nodeID != 0)
             {
+                //轨迹组件.
                 if (flowEle.Contains("FlowChart") == false)
-                    DBAccess.RunSQL("UPDATE WF_Node SET FrmTrackSta=0 WHERE NodeID=" + nodeID);
-                else
-                    if (DBAccess.RunSQLReturnString("SELECT FrmTrackSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                        DBAccess.RunSQL("UPDATE WF_Node SET FrmTrackSta=1 WHERE NodeID=" + nodeID);
+                    sqls += "@UPDATE WF_Node SET FrmTrackSta=0 WHERE NodeID=" + nodeID;
 
+                //审核组件.
                 if (flowEle.Contains("FrmCheck") == false)
-                    DBAccess.RunSQL("UPDATE WF_Node SET FWCSta=0 WHERE NodeID=" + nodeID);
-                else
-                    if (DBAccess.RunSQLReturnString("SELECT FWCSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                        DBAccess.RunSQL("UPDATE WF_Node SET FWCSta=1 WHERE NodeID=" + nodeID);
+                    sqls += "@UPDATE WF_Node SET FWCSta=0 WHERE NodeID=" + nodeID;
 
+                //子流程组件.
                 if (flowEle.Contains("SubFlowDtl") == false)
-                    DBAccess.RunSQL("UPDATE WF_Node SET SFSta=0 WHERE NodeID=" + nodeID);
-                else
-                    if (DBAccess.RunSQLReturnString("SELECT SFSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                        DBAccess.RunSQL("UPDATE WF_Node SET SFSta=1 WHERE NodeID=" + nodeID);
+                    sqls += "@UPDATE WF_Node SET SFSta=0 WHERE NodeID=" + nodeID;
 
+                //子线城组件.
                 if (flowEle.Contains("ThreadDtl") == false)
-                    DBAccess.RunSQL("UPDATE WF_Node SET FrmThreadSta=0 WHERE NodeID=" + nodeID);
-                else
-                    if (DBAccess.RunSQLReturnString("SELECT FrmThreadSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                        DBAccess.RunSQL("UPDATE WF_Node SET FrmThreadSta=1 WHERE NodeID=" + nodeID);
+                    sqls += "@UPDATE WF_Node SET FrmThreadSta=0 WHERE NodeID=" + nodeID;               
+
+                //自定义流程组件.
+                if (flowEle.Contains("FrmTransferCustom") == false)
+                    sqls += "@UPDATE WF_Node SET FTCSta=0 WHERE NodeID=" + nodeID;
+            }
+
+            //执行要更新的sql.
+            if (sqls != "")
+            {
+                BP.DA.DBAccess.RunSQLs(sqls);
+                sqls = "";
             }
             #endregion 处理节点表单。
 
 
             #region 删除没有替换下来的 PKs, 说明这些都已经被删除了.
             string[] pks = labelPKs.Split('@');
-            string sqls = "";
+            sqls = "";
             foreach (string pk in pks)
             {
                 if (string.IsNullOrEmpty(pk))
@@ -940,7 +1025,7 @@ namespace BP.Sys
         /// <param name="toFrmID">要导入的表单ID</param>
         /// <param name="fromds">数据源</param>
         /// <param name="isSetReadonly">是否把空间设置只读？</param>
-        public static void ImpFrmTemplate(string toFrmID,DataSet fromds, bool isSetReadonly)
+        public static void ImpFrmTemplate(string toFrmID, DataSet fromds, bool isSetReadonly)
         {
             MapData.ImpMapData(toFrmID, fromds, isSetReadonly);
         }
@@ -1118,11 +1203,11 @@ namespace BP.Sys
         /// <param name="cfg">配置 @0=xxx@1=yyyy@n=xxxxxc</param>
         /// <param name="lang">语言</param>
         /// <returns></returns>
-        public static string SaveEnum(string enumKey, string enumLab, string cfg, bool isNew,string lang = "CH")
+        public static string SaveEnum(string enumKey, string enumLab, string cfg, bool isNew, string lang = "CH")
         {
             SysEnumMain sem = new SysEnumMain();
             sem.No = enumKey;
-            int dataCount=sem.RetrieveFromDBSources();
+            int dataCount = sem.RetrieveFromDBSources();
             if (dataCount > 0 && isNew)
             {
                 return "已存在枚举" + enumKey + ",请修改枚举名字";
@@ -1154,9 +1239,10 @@ namespace BP.Sys
                 se.Lang = lang;
                 se.IntKey = int.Parse(kvs[0]);
                 //杨玉慧
-                 //解决当  枚举值含有 ‘=’号时，保存不进去的方法
+                //解决当  枚举值含有 ‘=’号时，保存不进去的方法
                 string[] kvsValues = new string[kvs.Length - 1];
-                for (int i = 0; i < kvsValues.Length; i++) {
+                for (int i = 0; i < kvsValues.Length; i++)
+                {
                     kvsValues[i] = kvs[i + 1];
                 }
                 se.Lab = string.Join("=", kvsValues);

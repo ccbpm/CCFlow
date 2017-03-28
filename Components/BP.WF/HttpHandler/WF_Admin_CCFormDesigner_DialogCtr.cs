@@ -134,23 +134,9 @@ namespace BP.WF.HttpHandler
                     return "执行成功.";
 
                 case "FrmTable_DelSFTable": /* 删除自定义的物理表. */
-
-                    string v1 = this.GetRequestVal("v1");
-
-                    // 检查这个物理表是否被使用。
-                    sql = "SELECT FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + v1 + "'";
-                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                    string msgDel = "";
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        msgDel += "\n 表单编号:" + dr["FK_MapData"] + " , 字段:" + dr["KeyOfEn"] + ", 名称:" + dr["Name"];
-                    }
-                    if (msgDel != "")
-                        return "err@:该数据表已经被如下字段所引用，您不能删除它。" + msgDel;
-
                     SFTable sfDel = new SFTable();
-                    sfDel.No = v1;
-                    sfDel.DirectDelete();
+                    sfDel.No = this.GetRequestVal("FK_SFTable");
+                    sfDel.Delete();
                     return "删除成功.";
                 default:
                     break;

@@ -126,9 +126,9 @@ namespace BP.Sys.FrmUI
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
-                //单元格数量 2013-07-24 增加。
-                map.AddDDLSQL(MapAttrAttr.ColSpan, "1", "单元格数量",
-                    "SELECT '1' AS No , '1个单元格' as Name UNION SELECT '3' AS No , '3个单元格' as Name UNION SELECT '4' AS No , '4个单元格' as Name", true);
+                //单元格数量 2013-07-24 增加
+                map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrString", 
+                    "@1=跨1个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组",

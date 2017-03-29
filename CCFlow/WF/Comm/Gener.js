@@ -393,3 +393,43 @@ function Reload() {
 
     window.location.href = newurl;
 }
+
+function ConvertDataTableFieldCase(dt, isLower) {
+    ///<summary>转换datatable的json对象中的属性名称的大小写形式</summary>
+    ///<param name="dt" type="Array">datatable json化后的[]数组</param>
+    ///<param name="isLower" type="Boolean">是否转换成小写模式，默认转换成大写</param>
+    if (!dt || !IsArray(dt)) {
+        return dt;
+    }
+
+    if (dt.length == 0 || IsObject(dt[0]) == false) {
+        return dt;
+    }
+
+    var newArr = [];
+    var obj;
+
+    for (var i = 0; i < dt.length; i++) {
+        obj = {};
+
+        for (var field in dt[i]) {
+            obj[isLower ? field.toLowerCase() : field.toUpperCase()] = dt[i][field];
+        }
+
+        newArr.push(obj);
+    }
+
+    return newArr;
+}
+
+function IsArray(obj) {
+    ///<summary>判断是否是数组</summary>
+    ///<param name="obj" type="All Type">要判断的对象</param>
+    return Object.prototype.toString.call(obj) == "[object Array]";
+}
+
+function IsObject(obj) {
+    ///<summary>判断是否是Object对象</summary>
+    ///<param name="obj" type="All Type">要判断的对象</param>
+    return typeof obj != "undefined" && obj.constructor == Object;
+}

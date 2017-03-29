@@ -4688,15 +4688,19 @@ namespace CCFlow.WF.UC
                 if(isWord)
                 {
                     wApp = new Microsoft.Office.Interop.Word.Application();
+                    wApp.DefaultWebOptions().AlwaysSaveInDefaultEncoding = false;
                     wApp.Visible = false;
                     wDoc = wApp.Documents.Open(file, false, true, Visible: false);
-                    wDoc.SaveAs(htmlFile, Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatFilteredHTML);
+                    wDoc.WebOptions.Encoding = Microsoft.Office.Core.MsoEncoding.msoEncodingUTF8;
+                    wDoc.SaveAs(htmlFile, Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatFilteredHTML, Encoding: Microsoft.Office.Core.MsoEncoding.msoEncodingUTF8);
                 }
                 else
                 {
                     xApp = new Microsoft.Office.Interop.Excel.Application();
+                    xApp.DefaultWebOptions.AlwaysSaveInDefaultEncoding = false;
                     xApp.Visible = false;
                     xDoc = xApp.Workbooks.Open(file, ReadOnly: true);
+                    xDoc.WebOptions.Encoding = Microsoft.Office.Core.MsoEncoding.msoEncodingUTF8;
                     xDoc.SaveAs(htmlFile, Microsoft.Office.Interop.Excel.XlFileFormat.xlHtml);
                 }
             }

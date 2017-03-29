@@ -37,6 +37,7 @@ namespace BP.Sys
         /// <param name="y">位置y</param>
         public static void CreatePublicNoNameCtrl(string fk_mapdata, string ctrlType, string no, string name, float x, float y)
         {
+            FrmEle fe = null;
             switch (ctrlType)
             {
                 case "Dtl":
@@ -52,7 +53,7 @@ namespace BP.Sys
                     CreateOrSaveAthImg(fk_mapdata, no, name, x, y);
                     break;
                 case "Fieldset": //分组.
-                    FrmEle fe = new FrmEle();
+                    fe = new FrmEle();
                     fe.MyPK = fk_mapdata + "_" + no;
                     if (fe.RetrieveFromDBSources() != 0)
                         throw new Exception("@创建失败，已经有同名元素[" + no + "]的控件.");
@@ -64,6 +65,23 @@ namespace BP.Sys
                     fe.Y = y;
                     fe.Insert();
                     //CreateOrSaveAthImg(fk_mapdata, no, name, x, y);
+                    break;
+
+                case "iFrame": //框架.
+                     fe = new FrmEle();
+                    fe.MyPK = fk_mapdata + "_" + no;
+                    if (fe.RetrieveFromDBSources() != 0)
+                        throw new Exception("@创建失败，已经有同名元素[" + no + "]的控件.");
+                    fe.FK_MapData = fk_mapdata;
+                    fe.EleType = "iFrame";
+                    fe.EleName = name;
+                    fe.EleID = no;
+                    fe.Tag1 = "http://ccflow.org";
+                    fe.X = x;
+                    fe.Y = y;
+                    fe.W = 400;
+                    fe.H = 600;
+                    fe.Insert();
                     break;
                 default:
                     throw new Exception("@没有判断的存储控件:" + ctrlType + ",存储该控件前,需要做判断.");

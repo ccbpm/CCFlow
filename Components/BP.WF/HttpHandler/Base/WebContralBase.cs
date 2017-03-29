@@ -359,8 +359,13 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = context.Request.QueryString["RefOID"];
+
+                if (str == null || str == "" || str == "null")
+                    str= context.Request.QueryString["OID"];
+
                 if (str == null || str == "" || str == "null")
                     return 0;
+
                 return int.Parse(str);
             }
         }

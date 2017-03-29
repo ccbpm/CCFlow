@@ -110,6 +110,60 @@ namespace BP.WF.HttpHandler
 
             #endregion 保存的业务逻辑.
 
+          
+
+            return "保存成功";
+        }
+        /// <summary>
+        /// 保存单行数据
+        /// </summary>
+        /// <returns></returns>
+        public string Dtl_SaveRow()
+        {
+            //从表.
+            MapDtl mdtl = new MapDtl(this.FK_MapDtl);
+
+            //从表实体.
+            GEDtl dtl = new GEDtl(this.FK_MapDtl);
+            int oid = this.RefOID;
+            if (oid != 0)
+            {
+                dtl.OID = oid;
+                dtl.RetrieveFromDBSources();
+            }
+
+            //获得主表事件.
+            FrmEvents fes = new FrmEvents(this.FK_MapData); //获得事件.
+            GEEntity mainEn = null;
+
+            #region 从表保存前处理事件.
+            if (fes.Count > 0)
+            {
+                mainEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, mainEn);
+                if (msg != null)
+                    throw new Exception(msg);
+            }
+            #endregion 从表保存前处理事件.
+
+            #region 给实体循环赋值/并保存.
+            BP.En.Attrs attrs = dtl.EnMap.Attrs;
+            foreach (BP.En.Attr attr in attrs)
+            {
+                dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
+            }
+
+            if (dtl.OID == 0)
+            {
+                dtl.OID = DBAccess.GenerOID();
+                dtl.Insert();
+            }
+            else
+            {
+                dtl.Update();
+            }
+            #endregion 给实体循环赋值/并保存.
+
             #region 从表保存后处理事件。
             if (fes.Count > 0)
             {
@@ -119,7 +173,19 @@ namespace BP.WF.HttpHandler
             }
             #endregion 处理事件.
 
-            return "保存成功";
+            //返回当前数据存储信息.
+            return dtl.ToJson();
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string Dtl_DeleteRow()
+        {
+            GEDtl dtl = new GEDtl(this.FK_MapDtl);
+            dtl.OID = this.RefOID;
+            dtl.Delete();
+            return "删除成功";
         }
         #endregion dtl.htm 从表.
         /// <summary>
@@ -268,7 +334,6 @@ namespace BP.WF.HttpHandler
 
                     if (val == "all")
                     {
-
                         countSQL = countSQL.Replace(para + "=@" + para, "1=1");
                         countSQL = countSQL.Replace(para + "='@" + para + "'", "1=1");
 

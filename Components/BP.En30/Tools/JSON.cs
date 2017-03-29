@@ -357,7 +357,15 @@ namespace BP.Tools
             dt.Rows.Add(l.ToArray());
             return ToJson(dt);
         }
-      
+        /// <summary>
+        /// Datatable转换为Json
+        /// </summary>
+        /// <param name="table">Datatable对象</param>
+        /// <returns>Json字符串</returns>
+        public static string ToJsonUpper(DataTable table)
+        {
+            return BP.Tools.FormatToJson.ToJson(table);
+        }
         /// <summary>
         /// Datatable转换为Json
         /// </summary>
@@ -365,8 +373,8 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToJson(DataTable table)
         {
-            string jsonStr = JsonConvert.SerializeObject(table);
-            return jsonStr;
+            // 旧版本...
+           return JsonConvert.SerializeObject(table);
 
             string jsonString = "[";
             DataRowCollection drc = table.Rows;

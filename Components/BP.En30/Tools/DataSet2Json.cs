@@ -339,7 +339,6 @@ namespace BP.Tools
         public static string ToJson(DataTable dt)
         {
             StringBuilder jsonString = new StringBuilder();
-
             if (dt.Rows.Count == 0)
             {
                 jsonString.Append("[]");

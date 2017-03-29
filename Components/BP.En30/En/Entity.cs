@@ -3287,7 +3287,9 @@ namespace BP.En
                 foreach (DataRow dr in dt.Rows)
                 {
                     //this.RunSQL("alter table " + dr["OWNER"] + "." + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " varchar2(" + attr.MaxLength + ")");
+
                     this.RunSQL("alter table " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " varchar2(" + attr.MaxLength + ")");
+
                 }
             }
             #endregion

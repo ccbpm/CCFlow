@@ -2876,20 +2876,17 @@ namespace BP.DA
         }
         #endregion 在当前Connection上执行
 
-        public static DataTable DealToUpper(DataTable dt)
+        public static DataTable  ToUpper(DataTable dt)
         {
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
                 return dt;
 
             foreach (DataColumn dc in dt.Columns)
-            {
                 dc.ColumnName = dc.ColumnName.ToUpper();
-                
-            }
+            return dt;
 
             return dt;
         }
-
         #endregion
 
 

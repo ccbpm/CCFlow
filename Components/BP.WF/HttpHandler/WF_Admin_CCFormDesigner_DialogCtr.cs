@@ -36,7 +36,6 @@ namespace BP.WF.HttpHandler
 
             string ctrlType = this.GetRequestVal("CtrlType");
             int num = 1;
-
             switch (ctrlType)
             {
                 case "Dtl":
@@ -67,7 +66,7 @@ namespace BP.WF.HttpHandler
                 case "HandSiganture": //手写板.
                     sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='"+ctrlType+"'";
                     num = DBAccess.RunSQLReturnValInt(sql)+1;
-                    ht.Add("No", "iFrame" + num);
+                    ht.Add("No", "HandSiganture" + num);
                     ht.Add("Name", "签字板"+num);
                     break;
                 case "iFrame": //框架
@@ -75,6 +74,12 @@ namespace BP.WF.HttpHandler
                     num = DBAccess.RunSQLReturnValInt(sql) + 1;
                     ht.Add("No", "iFrame" + num );
                     ht.Add("Name", "框架"+num);
+                    break;
+                case "Fieldset": //分组
+                    sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='" + ctrlType + "'";
+                    num = DBAccess.RunSQLReturnValInt(sql) + 1;
+                    ht.Add("No", "Fieldset" + num);
+                    ht.Add("Name", "分组" + num);
                     break;
                 default:
                     ht.Add("No", ctrlType +1);

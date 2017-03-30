@@ -1289,7 +1289,6 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_MapDtl", "明细");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);

@@ -26,12 +26,14 @@ namespace BP.Sys
         public static void SaveFrmEle(string fk_mapdata,string eleType, string ctrlID, float x, float y, float h, float w)
         {
             FrmEle en = new FrmEle();
-            en.MyPK = fk_mapdata + "_" + ctrlID;
-            en.RetrieveFromDBSources();
 
             en.EleType = eleType;
             en.FK_MapData = fk_mapdata;
             en.EleID = ctrlID;
+
+            en.MyPK = fk_mapdata + "_" + ctrlID;
+            if (en.RetrieveFromDBSources() == 0)
+                en.Insert();
 
             en.X = x;
             en.Y = y;
@@ -118,6 +120,21 @@ namespace BP.Sys
             dtl.W = w;
             dtl.H = h;
             dtl.Update();
+        }
+        public static void SaveiFrame(string fk_mapdata, string ctrlID, float x, float y, float h, float w)
+        {
+            FrmEle en = new FrmEle();
+            en.FK_MapData = fk_mapdata;
+            en.EleID = ctrlID;
+            en.MyPK = en.FK_MapData + "_" + en.EleID;
+            if (en.RetrieveFromDBSources() == 0)
+                en.Insert();
+
+            en.X = x;
+            en.Y = y;
+            en.W = w;
+            en.H = h;
+            en.Update();
         }
         public static void SaveMapAttr(string fk_mapdata, string fieldID, string shape, JsonData control, JsonData properties, string pks)
         {
@@ -538,13 +555,7 @@ namespace BP.Sys
             img.FK_MapData = fk_mapdata;
             img.IsEdit = 1;
             img.HisImgAppType = ImgAppType.Img;
-
-            //drImg["MYPK"] = control["CCForm_MyPK"];
-            //drImg["FK_MAPDATA"] = fk_mapdata;
-            //drImg["IMGAPPTYPE"] = "0";
-            //drImg["ISEDIT"] = "1";
-            //drImg["NAME"] = drImg["MYPK"];
-            //drImg["ENPK"] = drImg["MYPK"];
+        
             //坐标
             JsonData vector = control["style"]["gradientBounds"];
             img.X = float.Parse( vector[0].ToJson());

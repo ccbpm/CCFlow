@@ -3732,7 +3732,7 @@ namespace BP.WF
                             throw new Exception("@没有判断的节点类型(" + toND4.Name + ")");
                     }
                     break;
-                // throw new Exception("@没有判断的类型:" + this.HisNode.HisNodeWorkTypeT);
+               
                 case RunModel.SubThread:  /* 5: 子线程节点向下发送的 */
                     Node toND5 = this.NodeSend_GenerNextStepNode();
                     if (this.IsStopFlow)
@@ -3783,7 +3783,7 @@ namespace BP.WF
                     }
                     break;
                 default:
-                    throw new Exception("@没有判断的类型:" + this.HisNode.HisRunModelT);
+                    throw new Exception("@没有判断的执行节点类型:" + this.HisNode.HisRunModelT);
             }
         }
 

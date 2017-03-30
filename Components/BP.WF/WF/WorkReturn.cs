@@ -471,7 +471,7 @@ namespace BP.WF
                     }
                     break;
                 default:
-                    throw new Exception("@没有判断的类型:" + this.HisNode.HisRunModel);
+                    throw new Exception("@没有判断的退回类型:" + this.HisNode.HisRunModel);
             }
             throw new Exception("@系统出现未判断的异常.");
         }

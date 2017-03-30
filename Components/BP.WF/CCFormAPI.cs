@@ -649,6 +649,7 @@ namespace BP.WF
             sql = "SELECT * FROM Sys_MapDtl WHERE No='" + dtl.No + "'";
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapDtl";
+
             myds.Tables.Add(dt);
 
             //明细表的表单描述

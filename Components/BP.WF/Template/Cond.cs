@@ -241,7 +241,7 @@ namespace BP.WF.Template
                     return this.SpecOperPara;
                 }
 
-                throw new Exception("@配置异常，没有判断的类型。");
+                throw new Exception("@配置异常，没有判断的条件类型。");
             }
         }
         #endregion 参数属性.

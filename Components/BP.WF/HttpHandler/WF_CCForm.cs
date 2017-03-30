@@ -56,6 +56,9 @@ namespace BP.WF.HttpHandler
         {
             #region 组织参数.
             MapDtl mdtl = new MapDtl(this.EnsName);
+            mdtl.No = this.EnsName;
+            mdtl.RetrieveFromDBSources();
+
             if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp" && this.EnsName.Contains("ND" + this.FK_Node) == false)
             {
                 Node nd = new BP.WF.Node(this.FK_Node);
@@ -75,11 +78,17 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+            if (this.GetRequestVal("IsReadonly") != null)
+            {
+                mdtl.IsInsert = false;
+                mdtl.IsDelete = false;
+                mdtl.IsUpdate = false;
+            }
+
             string strs = this.RequestParas;
             strs = strs.Replace("?", "@");
             strs = strs.Replace("&", "@");
             #endregion 组织参数.
-
 
             //获得他的描述,与数据.
             DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData,mdtl, this.RefOID, strs);
@@ -109,8 +118,6 @@ namespace BP.WF.HttpHandler
             #region 保存的业务逻辑.
 
             #endregion 保存的业务逻辑.
-
-          
 
             return "保存成功";
         }

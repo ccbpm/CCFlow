@@ -794,15 +794,11 @@ namespace BP.Sys
                     continue;
                 }
 
-                if (shape == "Fieldset")
-                {
-                    //记录已经存在的ID， 需要当时保存.
-                    BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);
-                    eleIDs = eleIDs.Replace(ctrlID + "@", "@");
-                    continue;
-                }
-
-                if (shape == "Fieldset")
+                //存储到FrmEle 类的控件，都可以使用该方法保存.
+                if (shape == "Fieldset"
+                    || shape == FrmEle.iFrame
+                    || shape == FrmEle.Fieldset
+                    || shape== FrmEle.HandSiganture )
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);
@@ -832,7 +828,6 @@ namespace BP.Sys
                     continue;
                 }
                 #endregion 附件.
-
 
                 #region 处理流程组件.
                 if (nodeID != 0)
@@ -917,7 +912,7 @@ namespace BP.Sys
                 //    continue;
                 //}
 
-                throw new Exception("@没有判断的类型:shape = " + shape);
+                throw new Exception("@没有判断的ccform保存控件的类型:shape = " + shape);
             }
 
 

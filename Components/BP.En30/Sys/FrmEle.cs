@@ -533,6 +533,10 @@ namespace BP.Sys
         /// </summary>
         public const string iFrame = "iFrame";
         /// <summary>
+        /// 分组
+        /// </summary>
+        public const string Fieldset = "Fieldset";
+        /// <summary>
         /// 子线程
         /// </summary>
         public const string SubThread = "SubThread";

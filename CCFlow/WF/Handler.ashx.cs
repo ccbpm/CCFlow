@@ -224,17 +224,21 @@ namespace CCFlow.WF
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
-            return BP.Tools.FormatToJson.ToJson(dt);
+
+            //转化大写.
+            return BP.Tools.Json.ToJsonUpper(dt);
         }
         /// <summary>
         /// 获得待办.
         /// </summary>
         /// <returns></returns>
-        public string Todolist_Init(string UserNo,int FK_Node)
+        public string Todolist_Init(string userNo, int FK_Node)
         {
             DataTable dt = null;
-            dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(UserNo, FK_Node);
-            return BP.Tools.FormatToJson.ToJson(dt);
+            dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(userNo, FK_Node);
+
+            //转化大写的toJson.
+            return BP.Tools.Json.ToJsonUpper(dt);
         }
         #endregion 获得列表.
 

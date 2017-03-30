@@ -1,4 +1,12 @@
 ﻿/* ESC Key Down */
+
+
+function ToLoeo( dt ) {
+
+return dt;
+ 
+}
+
 function Esc() {
     if (event.keyCode == 27)
         window.close();

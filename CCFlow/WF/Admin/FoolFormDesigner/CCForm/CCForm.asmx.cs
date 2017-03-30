@@ -613,6 +613,7 @@ namespace BP.Web
                 return pathFile;
                 // return "../DataUser/" + realpath + strFileName + ".png";
             }
+
             //FrmEleDB db = new FrmEleDB();
             //db.MyPK= 
             //return "error";
@@ -630,7 +631,6 @@ namespace BP.Web
         {
             try
             {
-
                 string file = "\\Temp\\" + fk_mapData + ".xml";
                 UploadFile(fileByte, file);
                 string path = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file;

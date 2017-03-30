@@ -393,7 +393,7 @@ function GridLineVisible() {
 //隐藏字段显示窗体
 function Show_HidenField_Panel() {
     var url = "DialogCtr/FrmHiddenField.htm?FK_MapData=" + CCForm_FK_MapData + "&s=" + Math.random();
-    OpenEasyUiDialog(url, 'FrmHiddenField', '新建文本', 600, 394, 'icon-new', true, function (scope) {
+    OpenEasyUiDialog(url, 'FrmHiddenField', '隐藏字段', 600, 394, 'icon-new', true, function (scope) {
         var win = document.getElementById(dgId).contentWindow;
         var frmVal = win.GetFrmInfo();
 
@@ -669,7 +669,7 @@ function figure_MapAttr_Template(mapAttr) {
         //枚举下拉框
         if (mapAttr.LGType == 1) {
             f.CCForm_Shape = "DropDownListEnum";
-        }//外键下拉框
+        } //外键下拉框
         else if (mapAttr.LGType == 2) {
             f.CCForm_Shape = "DropDownListTable";
         }
@@ -679,7 +679,9 @@ function figure_MapAttr_Template(mapAttr) {
     } else if (mapAttr.UIContralType == 3) {//单选妞
         return;
     }
+
     f.name = f.CCForm_Shape;
+
     f.CCForm_MyPK = mapAttr.KeyOfEn;
     f.style.fillStyle = FigureDefaults.fillStyle;
     f.style.strokeStyle = FigureDefaults.strokeStyle;

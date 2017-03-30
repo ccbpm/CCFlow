@@ -110,10 +110,11 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                         en.PKVal = this.Request.QueryString[en.PK];
                 }
 
-
                 if (en.IsExits == false)
                 {
-                    throw new Exception("@记录{"+en.ToString()+"}{"+en.PKVal+"}不存在,或者没有保存.");
+                    BP.Sys.PubClass.Alert("@记录{"+en.ToString()+"}{"+en.PKVal+"}不存在,或者没有保存,请执行保存后在打开编辑.");
+                    return en;
+                    //throw new Exception("@记录{"+en.ToString()+"}{"+en.PKVal+"}不存在,或者没有保存.");
                 }
                 else
                 {
@@ -295,6 +296,13 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
             string pk = this.Request.QueryString["PK"];
             if (pk == null)
                 pk = this.Request.QueryString[this.CurrEn.PK];
+
+            Entity en = this.CurrEn;
+            if (en == null)
+            {
+                this.WinClose();
+                return;
+            }
 
             UAC uac = this.CurrEn.HisUAC;
             if (uac.IsView == false)

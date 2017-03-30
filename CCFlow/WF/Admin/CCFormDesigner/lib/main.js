@@ -271,10 +271,10 @@ var CCForm_Controls = {
     AthSingle: 'AthSingle',
     AthImg: 'AthImg',
     Chart: 'Chart',
-
     FrmCheck: 'FrmCheck',
     SubFlowDtl: 'SubFlowDtl',
-    ThreadDtl: 'ThreadDtl'
+    ThreadDtl: 'ThreadDtl',
+    FrmTransferCustom: 'FrmTransferCustom'
 };
 /**End - FormControl***********/
 

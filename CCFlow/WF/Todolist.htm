@@ -203,7 +203,7 @@
                         newRow += "<td>" + data[i].ADT + "</td>"; //接受时间
                         newRow += "<td>" + data[i].SDT + "</td>"; //应完成时间
                         //判断流程是否逾期
-                        if (cdt > data[i].SDT && data[i].WFSTATE==2) {
+                        if (cdt > data[i].SDT && data[i].WFSTATE == 2) {
                             newRow += "<td><img src='/WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
                         }
                         else {

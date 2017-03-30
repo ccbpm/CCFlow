@@ -71,8 +71,6 @@
 
             $.post(Handler, { DoType: 'PublicNoName_InitFieldVal', CtrlType: ctrlType, FK_MapData: frmID }, function (data) {
 
-
-
                 if (data.indexOf('err@') == 0) {
                     alert(data);
                     return;

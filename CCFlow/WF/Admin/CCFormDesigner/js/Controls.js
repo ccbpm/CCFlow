@@ -50,8 +50,7 @@ figureSets["basic"] = {
         { figureFunction: "Label", name: CCForm_Controls.Label, image: "Label.png", CNName: "文字" },
         { figureFunction: "Button", name: CCForm_Controls.Button, image: "Button.png", CNName: "按钮" },
         { figureFunction: "HyperLink", name: CCForm_Controls.HyperLink, image: "HyperLink.png", CNName: "超链接" },
-        { figureFunction: "Image", name: CCForm_Controls.Image, image: "Img.png", CNName: "图片" },
-        { figureFunction: "Fieldset", name: CCForm_Controls.Fieldset, image: "Fieldset.png", CNName: "分组" }
+        { figureFunction: "Image", name: CCForm_Controls.Image, image: "Img.png", CNName: "图片" }
 
     ]
 };
@@ -189,7 +188,7 @@ function figure_HyperLink(x, y) {
 }
 
 /**method of create image **/
-function figure_Image(x, y) {
+function figure_Image(x,  y) {
     var f = new Figure("Image");
     //ccform Property
     f.CCForm_Shape = CCForm_Controls.Image;
@@ -201,6 +200,7 @@ function figure_Image(x, y) {
 
     var ifig = new ImageFrame(url, x, y, true, 120, 140);
     ifig.debug = true;
+
     f.addPrimitive(ifig);
 
     //Text
@@ -234,9 +234,9 @@ figureSets["Data"] = {
         { figureFunction: "TextBox", name: CCForm_Controls.CheckBox, image: "Checkbox.png", CNName: "选择框" },
         { figureFunction: "TextBox", name: CCForm_Controls.RadioButton, image: "Radiobutton.png", CNName: "枚举单选按钮" },
         { figureFunction: "TextBox", name: CCForm_Controls.DropDownListEnum, image: "DropDownListEnum.png", CNName: "枚举下拉框" },
-        { figureFunction: "TextBox", name: CCForm_Controls.DropDownListTable, image: "DropDownListTable.png", CNName: "外键下拉框" },
+        { figureFunction: "TextBox", name: CCForm_Controls.DropDownListTable, image: "DropDownListTable.png", CNName: "外键下拉框" }
      //   { figureFunction: "TextBox", name: CCForm_Controls.ListBox, image: "ListBox.png", CNName: "外部数据源" },
-        { figureFunction: "TextBox", name: CCForm_Controls.HiddendField, image: "HiddendField.png", CNName: "隐藏字段" }
+        //{ figureFunction: "TextBox", name: CCForm_Controls.HiddendField, image: "HiddendField.png", CNName: "隐藏字段" }
     ]
 };
 
@@ -267,7 +267,7 @@ function figure_TextBox(x, y) {
 }
 
 /**Controls set declaration*/
-figureSets["Ath"] = {
+figureSets["Components"] = {
     name: '组件类',
     description: '组件类控件',
     figures: [
@@ -276,10 +276,10 @@ figureSets["Ath"] = {
         { figureFunction: "Square", name: "AthSingle", image: "AthSingle.png", CNName: "单附件" },
         { figureFunction: "Square", name: "AthImg", image: "AthImg.png", CNName: "图片附件" },
         { figureFunction: "Square", name: "HandSiganture", image: "HandSiganture.png", CNName: "签字板" },
-        { figureFunction: "Square", name: "iFrame", image: "iFrame.png", CNName: "框架" }
+        { figureFunction: "Square", name: "iFrame", image: "iFrame.png", CNName: "框架" },
+        { figureFunction: "Square", name: "Fieldset", image: "Fieldset.png", CNName: "分组" }
     ]
 };
-
 
 /**Controls set declaration*/
 figureSets["mobile"] = {

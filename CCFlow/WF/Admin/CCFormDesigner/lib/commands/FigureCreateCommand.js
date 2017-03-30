@@ -315,8 +315,6 @@ FigureCreateCommand.prototype = {
         switch (ctrlType) {
             case "Dtl":
                 lab = "创建从表";
-                note += '<li>从表</li>';
-                note += '<li>ddd</li>';
                 break;
             case "Fieldset":
                 lab = "创建分组";

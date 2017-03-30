@@ -14,6 +14,8 @@
     <script type="text/javascript" src="/WF/Scripts/easyUI15/jquery.min.js"></script>
 	<script type="text/javascript" src="/WF/Scripts/easyUI15/jquery.easyui.min.js"></script>
     <script language="javascript" type="text/javascript" >
+        var hjl = new Array(); //合计列名称集合
+        var mapExt;//mapExt扩展
         /* ESC Key Down */
         function Esc() {
             if (event.keyCode == 27)
@@ -30,6 +32,48 @@
 
             $("#Msg").html("");
         });
+
+        //公共方法
+        function AjaxServiceGener(param, callback, scope) {
+            $.ajax({
+                type: "GET", //使用GET或POST方法访问后台
+                dataType: "text", //返回json格式的数据
+                contentType: "application/json; charset=utf-8",
+                url: Handler, //要访问的后台地址
+                data: param, //要发送的数据
+                async: true,
+                cache: false,
+                complete: function () { }, //AJAX请求完成时隐藏loading提示
+                error: function (XMLHttpRequest, errorThrown) {
+                    callback(XMLHttpRequest);
+                },
+                success: function (msg) {//msg为返回的数据，在这里做数据绑定
+                    var data = msg;
+                    callback(data, scope);
+                }
+            });
+        }
+        var saveFlag = true;
+        function SaveRow(index) {
+            var row = $('#dg').datagrid('getData').rows[index]; // $('#dg').datagrid('selectRow', { index: rowIndex });
+            row.DoType = "Dtl_SaveRow";
+            row.FK_MapDtl = GetQueryString("EnsName");
+            //row.FK_MapData = "ND101";
+            row.RefPKVal = GetQueryString("RefPKVal");
+            AjaxServiceGener(row, SaveRowAfter, this);
+        }
+
+        function SaveRowAfter(data) {
+            if (data.indexOf('err')>-1) {
+                alert('保存失败！');
+                saveFlag = false;
+            }else{
+                $('#dg').datagrid('updateRow', data);
+                saveFlag = true;
+            }
+        }
+
+
 
         //初始化数据.
         function InitPage() {
@@ -75,40 +119,70 @@
                     var sys_MapDtl = data["Sys_MapDtl"]; //从表描述.
                     var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
                     var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
+                    mapExt = sys_mapExtDtl;
                     var dbDtl = data["DBDtl"]; //从表数据.
 
-                    //解析数据组装datagrid表
-                    //列名称数组
-                    var cols = new Array();
-                    for (var i = 0; i < sys_mapAttr.length; i++) {
-                        var clsJson = gridTitle(sys_mapAttr[i],data); //
-                        cols.push(clsJson);
-                    }
+                    /********解析数据组装datagrid表*****/
+                    /*0 否 1 是*/
+                    var IsShowSum = sys_MapDtl[0].IsShowSum == 1 ? true : false; //是否显示合计
+                    var IsShowIdx = sys_MapDtl[0].IsShowIdx == 1 ? true : false; //是否显示idx
+                    var IsReadonly = sys_MapDtl[0].IsReadonly == 1 ? true : false; //是否只读
+                    var IsDelete = sys_MapDtl[0].IsDelete == 1 ? true : false; //是否可以删除
+                    var IsInsert = sys_MapDtl[0].IsInsert == 1 ? true : false; //是否可以插入
+                    var IsUpdate = sys_MapDtl[0].IsUpdate == 1 ? true : false; //是否可以更新
+                    var IsEnablePass = sys_MapDtl[0].IsEnablePass == 1 ? true : false; //是否启用通过
+                    var IsHLDtl = sys_MapDtl[0].IsHLDtl == 1 ? true : false; //是否是合流汇总数据
+                    var IsFLDtl = sys_MapDtl[0].IsFLDtl == 1 ? true : false; //是否是分流
+                    var IsShowTitle = sys_MapDtl[0].IsShowTitle == 1 ? true : false; //是否显示标题
+                    var IsView = sys_MapDtl[0].IsView == 1 ? true : false; //是否可见
+                    var titles = IsShowTitle ? sys_MapDtl[0].Name : '';
+
                     //设置表格信息
                     $('#dg').datagrid({
                         //url: '../Test/GetDataFormSql.ashx',
-                        //width: 400,
-                        title: sys_MapDtl[0].Name
+                        //width: 900,//sys_MapDtl[0].FrmW,
+                        //height: 500,//sys_MapDtl[0].FrmH,
+                        title: titles,
+                        rownumbers: IsShowIdx,
+                        nowrap: false, //是否单行显示
+                        fitColumns: true,
+                        showFooter: IsShowSum,
+                        fit: true
+                    });
+
+                    //列名称数组
+                    var cols = new Array();
+                    for (var i = 0; i < sys_mapAttr.length; i++) {
+                        var clsJson = gridTitle(sys_mapAttr[i], data); //
+                        cols.push(clsJson);
+                    }
+                    cols.push({ field: 'operation', title: '操作', width: 100,
+                        formatter: function (value, rec, index) {
+                            var del = '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">删除</a>';
+                            return del;
+                        } 
                     });
                     //更新列名称
                     $('#dg').datagrid({
                         columns: [cols]
                     });
 
+                    //拼装数据+拼接合计  hjl IsSum = 1
+                    footSum(dbDtl);
                 }
             });
         }
      </script>
 </head>
 <body>
-
+<div id="Msg"></div>
 <table id="dg" class="easyui-datagrid" title="Row Editing in DataGrid" style="width:700px;height:auto"
 			data-options="
 				iconCls: 'icon-edit',
                 rownumbers: true,
 				singleSelect: true,
 				toolbar: '#tb',
-				url: 'datagrid_data1.json',
+				url: '',
 				method: 'get',
 				onClickRow: onClickRow
 			">
@@ -117,11 +191,11 @@
 </table>
 
 	<div id="tb" style="height:auto">
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增行</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除行</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增一行</a>
+		<!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除行</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存行</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销行</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">获取改变行</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">获取改变行</a>-->
 	</div>
 	
 	<script type="text/javascript">
@@ -129,34 +203,61 @@
 	    function endEditing() {
 	        if (editIndex == undefined) { return true }
 	        if ($('#dg').datagrid('validateRow', editIndex)) {
-	            var ed = $('#dg').datagrid('getEditor', { index: editIndex, field: 'productid' });
-	            var productname = $(ed.target).combobox('getText');
-	            $('#dg').datagrid('getRows')[editIndex]['productname'] = productname;
-	            $('#dg').datagrid('endEdit', editIndex);
-	            editIndex = undefined;
+//	            var ed = $('#dg').datagrid('getEditor', { index: editIndex, field: 'productid' });
+//	            var productname = $(ed.target).combobox('getText');
+//	            $('#dg').datagrid('getRows')[editIndex]['productname'] = productname;
+//	            $('#dg').datagrid('endEdit', editIndex);
+//	            editIndex = undefined;
 	            return true;
 	        } else {
 	            return false;
 	        }
 	    }
 	    function onClickRow(index) {
+//	        if (editIndex != index) {
+//	            if (endEditing()) {
+//	                $('#dg').datagrid('selectRow', index)
+//							.datagrid('beginEdit', index);
+//	                //setEditing(index);//暂时屏蔽，因为在numberbox动态绑定blur、change等事件存在bug，绑定不成功
+//	                editIndex = index;
+//	            } else {
+//	                $('#dg').datagrid('selectRow', editIndex);
+//	            }
+	        //	        }
 	        if (editIndex != index) {
-	            if (endEditing()) {
-	                $('#dg').datagrid('selectRow', index)
-							.datagrid('beginEdit', index);
-	                editIndex = index;
+	            if (editIndex != undefined) {
+	                SaveRow(editIndex);
 	            } else {
-	                $('#dg').datagrid('selectRow', editIndex);
+	                saveFlag = true;
+                }
+	            if (saveFlag) {
+	                $(this).datagrid('endEdit', editIndex);
+	                $(this).datagrid('beginEdit', index);
+	                editIndex = index;
 	            }
 	        }
+	        //editIndex = index;
 	    }
 	    function append() {
-	        if (endEditing()) {
-	            $('#dg').datagrid('appendRow', { status: 'P' });
+//	        if (endEditing()) {
+//	            $('#dg').datagrid('appendRow', {});
+//	            editIndex = $('#dg').datagrid('getRows').length - 1;
+//	            $('#dg').datagrid('selectRow', editIndex)
+//						.datagrid('beginEdit', editIndex);
+	        //	        }
+	        if (editIndex != undefined) {
+	            SaveRow(editIndex);
+	        } else {
+	            saveFlag = true;
+	        }
+	        
+	        if (saveFlag) {
+                $('#dg').datagrid('endEdit', editIndex);
+	            $('#dg').datagrid('appendRow', {});
 	            editIndex = $('#dg').datagrid('getRows').length - 1;
 	            $('#dg').datagrid('selectRow', editIndex)
-						.datagrid('beginEdit', editIndex);
-	        }
+						    .datagrid('beginEdit', editIndex);
+            }
 	    }
 	    function removeit() {
 	        if (editIndex == undefined) { return }
@@ -164,6 +265,31 @@
 					.datagrid('deleteRow', editIndex);
 	        editIndex = undefined;
 	    }
+	    function deleteRow(index) {
+	        var row = $('#dg').datagrid('getData').rows[index];
+	        if (row.OID > 0) {//删除操作
+	            row.DoType = "Dtl_DeleteRow";
+	            row.FK_MapDtl = GetQueryString("EnsName");
+	            //row.FK_MapData = "ND101";
+	            row.RefPKVal = GetQueryString("RefPKVal");
+	            AjaxServiceGener(row, deleteRowAfter, this);
+	        } else {
+	            if (editIndex == undefined) { return }
+	            $('#dg').datagrid('cancelEdit', editIndex)
+					.datagrid('deleteRow', editIndex);
+	            editIndex = undefined;
+            }
+	    }
+	    function deleteRowAfter(data) {
+	        if (data.indexOf('err') > -1) {
+	            alert('删除失败！');
+	        } else {
+	            if (editIndex == undefined) { return }
+	            $('#dg').datagrid('cancelEdit', editIndex)
+					.datagrid('deleteRow', editIndex);
+	            editIndex = undefined;
+	        }
+        }
 	    function accept() {
 	        if (endEditing()) {
 	            $('#dg').datagrid('acceptChanges');
@@ -178,65 +304,229 @@
 	        alert(rows.length + ' rows are changed!');
 	    }
 
+	    function onAfterEdit(rowIndex, rowData, changes) {
+	        SaveRow(rowIndex);
+        }
+	    
 	    //动态拼接表
 	    function gridTitle(obj, datax) {
+	        var hid = obj.UIVisible == 1 ? false : true; //1
+	        var isread = obj.UIIsEnable == 1 ? false : true;
+	        var req = obj.UIIsInput == 1 ? true : false;
+	        //是否是合计列
+	        if (obj.AtPara.indexOf("IsSum=1") > 0) {
+	            hjl.push(obj.KeyOfEn);
+            }
+	        //拼接之前，查询和划定ext内容
+	        /*mapExt解析*/
+	        //autoFull
+	        var docArrs = [];
+	        var AttrOfOper = [];
+	        if (mapExt != null && mapExt != undefined && mapExt != '' && mapExt.length != 0) {
+	            for (var i = 0; i < mapExt.length; i++) {
+	                switch (mapExt[i].ExtType) {
+	                    case 'AutoFull':
+	                        if (mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
+	                            break;
+	                        }
+	                        //docArrs.push(mapExt[i].Doc);
+	                        AttrOfOper.push(mapExt[i].AttrOfOper);
+	                        var ofoper = mapExt[i].AttrOfOper;
+	                        var doc = mapExt[i].Doc;
+	                        doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
+	                        docArrs.push(doc);
+	                        //var docs = doc.replace('*', '').split("@");
+	                        //var opts = $('#dg').datagrid('getColumnFields');   // get unfrozen columns
 
-	        var hid = false; //1
-	        if (obj.UIIsEnable == 0) {
-	            hid = true;
+	                }
+	            }
 	        }
-
 	        //根据数据类型设定组件类型
 	        if (obj.UIContralType == 0 ) {//文本
-
 	            switch (obj.MyDataType) {
-
-	                case obj.MyDataType == 1: //文本类型.
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.Width, editor: { type: 'text', options: {} }, hidden: hid };
-	                case obj.MyDataType == 2: //Int 类型.
-	                case obj.MyDataType == 3: // float 类型.
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
+	                case 1: //文本类型.
+	                    if (isread) {
+                            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan:1, hidden: hid, align: 'center' };
+                        }else{
+                            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan:1, editor: { type: 'text', options: {disabled:isread,required:req} }, hidden: hid, align: 'center' };
+                        }
+	                case 2: //Int 类型.
+	                case 3: // float 类型.
+	                case 5: // AppDouble
+	                case 8: // AppMoney
+	                case 9: // 率百分比
+	                    var pre = 2;
+	                    if (obj.MyDataType == 2) {
+	                        pre = 0;
+	                    }
+	                    var indexArr = [];
+	                    for (var k = 0; k < docArrs.length; k++) {
+	                        if (docArrs[k].indexOf("@" + obj.KeyOfEn) > -1) {
+	                            indexArr.push(k);
+	                        }
+	                    }
+	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'numberbox', options: { disabled: isread, required: req, precision:pre,formatter: function (value) { if (!value) { return 0.00; } else { return value } }, onChange: function (newValue, oldValue) { autoFull(newValue, obj.KeyOfEn, indexArr, docArrs, AttrOfOper) } } }, hidden: hid, align: 'center' };
+	                case 6: ////AppDate
+	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'datebox', options: { currentText: '当前', closeText: '关闭', okText: '确定', disabled: isread, required: req,formatter:formatterDate} }, hidden: hid, align: 'center' };
+	                case 7: // AppDateTime 类型.
+	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'datetimebox', options: { currentText: '当前', closeText: '关闭', okText: '确定', disabled: isread, required: req, formatter: formatterDateTime} }, hidden: hid, align: 'center' };
 	                default:
-	                    break;
-	            }
-
-	            if (obj.MyDataType == 1) { //string
-	            } else if (obj.MyDataType == 2) {//int
-	            } else if (obj.MyDataType == 3) {//float
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	            } else if (obj.MyDataType == 4) {//AppBoolean
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'text', options: {} }, hidden: hid };
-	            } else if (obj.MyDataType == 5) {//AppDouble
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	            } else if (obj.MyDataType == 6) {//AppDate
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'datebox', options: {} }, hidden: hid };
-	            } else if (obj.MyDataType == 7) {//AppDateTime
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'datetimebox', options: {} }, hidden: hid };
-	            } else if (obj.MyDataType == 8) {//AppMoney
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	            } else if (obj.MyDataType == 9) {//率百分比
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'numberbox', options: {} }, hidden: hid };
-	            } else {
-	                return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'text', options: {} }, hidden: hid };
+	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, hidden: hid ,align:'center'};
 	            }
 	        }
 
 	        if (obj.UIContralType == 1 || obj.UIContralType == 3 ) {  //下拉框UIBindKey
 
-	            return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey]} }, hidden: hid };
+	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread }, required: req }, hidden: hid, align: 'center',
+	                formatter: function (value, row) {
+	                    return row[obj.KeyOfEn + "TEXT"];
+	                }
+	            };
 	        }
 
 	        if (obj.UIContralType == 2) { //选择框
-	            return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'checkbox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey]} }, hidden: hid };
+	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'checkbox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread }, required: req }, hidden: hid, align: 'center' ,
+					formatter:function(value,row){
+
+						return row[obj.KeyOfEn + "TEXT"];
+					}};
 	        }
 
 //	        if (obj.UIContralType == 3) { //单选
-//	            return { field: obj.KeyOfEn, title: obj.Name, width: 80, editor: { type: 'checkbox', options: { on: '1', off: '0'} }, hidden: hid };
+	        //	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth,colspan:obj.ColSpan,editor: { type: 'checkbox', options: { on: '1', off: '0'} }, hidden: hid ,align:'center};
 //	        }
 
-	        return { field: obj.KeyOfEn, title: obj.Name, width: 80, hidden: hid };
+	        //return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan:obj.ColSpan,hidden: hid };
 	    }
+        //日期格式化
+	    function formatterDate(date) {
+	        var y = date.getFullYear();
+	        var m = date.getMonth() + 1;
+	        var d = date.getDate();
+	        return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d);
+	    }
+        //时间格式化
+        function formatterDateTime(date) {
+	        var y = date.getFullYear();
+	        var m = date.getMonth() + 1;
+	        var d = date.getDate();
+            var t = date.getDate();
+            var h = date.getHours();
+            var i = date.getMinutes();
+            var s = date.getSeconds();
+	        return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d) + ' ' + (h < 10 ? '0' + h : h) + ':' + (i < 10 ? '0' + i : i) + ':' + (s < 10 ? '0' + s : s);
+	    }
+        //自动计算
+	    function autoFull(value, enName, indexArr, docArrs, AttrOfOper) {
+	        if (indexArr.length > 0) {
+	            var row = $('#dg').datagrid('getSelected');
+	            if (row) {
+	                for (var i = 0; i < indexArr.length; i++) {
+	                    var name = AttrOfOper[indexArr[i]];
+                        //for()
+	                    var doc = docArrs[indexArr[i]];
+	                    var docTem = doc.replace('*',''); ;
+	                    var docArr = docTem.split('@');
+	                    for (var j = 0; j < docArr.length; j++) {
+	                        if (docArr[j] != null && docArr[j] != '' && docArr[j] != undefined) {
+	                            //alert(enName == docArr[j]);
+	                            if (enName == docArr[j]) {
+	                                doc = doc.replace('@' + docArr[j], value);
+	                            } else {
+	                                row = $('#dg').datagrid('getSelected');
+	                                doc = doc.replace('@' + docArr[j], row[docArr[j]]);
+	                            }
+                            }
+	                    }
+	                    row = $('#dg').datagrid('getSelected');
+	                    row[name] = CalculateJS(doc);
+	                    $('#dg').datagrid('updateRow', row);
+//	                    var index = $('#dg').datagrid('getRowIndex', row);
+//                        if(value==1){
+//                            $('#dg').datagrid('refreshRow', index);
+//                        }
+	                    //console.info(row);
+	                }
+	            }
+            }
+        }
+
+	    function footSum(dbDtl) {
+	        var rows = $('#dg').datagrid('getRows')//获取当前的数据行<br>
+            var total = 0;
+            var zjxx = Array();
+            var jsonStr = '{';
+            for (var j = 0; j < hjl.length; j++) {
+                for (var i = 0; i < rows.length; i++) {;
+                    if (rows[i][hjl[j]] != null && rows[i][hjl[j]] != undefined && rows[i][hjl[j]] != 'undefined') {
+                        total += Number(rows[i][hjl[j]]);
+                    }
+                }
+                jsonStr += '"' + hjl[j] + '": ' + total + ((j == hjl.length - 1) ? '' : ',');
+            }
+            jsonStr += '}';
+            zjxx.push(JSON.parse(jsonStr));
+            $('#dg').datagrid({
+                data: { "rows": dbDtl , "footer": zjxx }
+            });
+        }
+
+        //map_ext汇总 autoFull等
+        function setEditing(rowIndex) {
+            /*mapExt解析*/
+            //autoFull
+            if (mapExt == null || mapExt==undefined||mapExt==''||mapExt.length==0){
+                 return;
+             }
+             for (var i=0;i<mapExt.length;i++) {
+                 switch (mapExt[i].ExtType) {
+                     case 'AutoFull':
+                         if (mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
+                             break;
+                         }
+                         var ofoper = mapExt[i].AttrOfOper;
+                         var doc = mapExt[i].Doc;
+                         doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
+                         var docs = doc.replace('*', '').split("@");
+                         var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
+                         var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper });
+                         for (var i = 0; i < opts.length; i++) {
+                             if ($.inArray(opts[i], docs) > -1) {
+                                 var optEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: opts[i] });
+                                 optEditor.target.bind('change', function () {
+                                     //var cost = 123; //priceEditor.target.val() * amountEditor.target.val();
+                                     //获取和替换数值
+                                     doc.replace('@' + opts[i], optEditor.target.val()); //oldHtml
+                                     //替换其他数值
+                                     for (var m = 0; m < docs.length; m++) {
+                                         //console.log(docs[m]);
+                                         var tem = $('#dg').datagrid('getEditor', { index: rowIndex, field: docs[m] });
+                                         //console.log(tem);
+                                         //doc = doc.replace('@' + docs[m], tem.oldHtml);
+                                     }
+                                     //var cost = '1*2+3';
+                                     //alert(CalculateJS(doc));
+                                     $(costEditor.target).numberbox('setValue', CalculateJS(doc));
+                                 });
+                             }
+                         }
+                 }
+            }
+         }
+         //执行运算表达式  lxc提供
+         function CalculateJS(sCode) {
+             /// <summary>动态运行JS表达式，返回运行结果</summary>
+             /// <param name="sCode" type="String">JS表达式字符串</param>
+             if (!sCode || sCode.length == 0) {
+                 return "";
+             }
+
+             if (sCode.indexOf("return ") == -1) {
+                 sCode = "return " + sCode;
+             }
+             
+             return new Function(sCode)();
+         }
 	</script>
-<div id="Msg"></div>
 </body>
 </html>

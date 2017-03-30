@@ -155,7 +155,7 @@ namespace BP.WF.HttpHandler
 
             if (dtl.OID == 0)
             {
-                dtl.OID = DBAccess.GenerOID();
+                //dtl.OID = DBAccess.GenerOID();
                 dtl.Insert();
             }
             else

@@ -160,7 +160,7 @@
                         formatter: function (value, rec, index) {
                             var del = '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">删除</a>';
                             return del;
-                        } 
+                        }
                     });
                     //更新列名称
                     $('#dg').datagrid({
@@ -169,6 +169,14 @@
 
                     //拼装数据+拼接合计  hjl IsSum = 1
                     footSum(dbDtl);
+                    $('#dg').datagrid({
+                        onBeginEdit: function (rowIndex) {
+                            autoFull(rowIndex);
+                        },
+                        onAfterEdit: function (rowIndex) {
+                            SaveRow(rowIndex);
+                        }
+                    });
                 }
             });
         }
@@ -225,16 +233,19 @@
 //	            }
 	        //	        }
 	        if (editIndex != index) {
-	            if (editIndex != undefined) {
-	                SaveRow(editIndex);
-	            } else {
-	                saveFlag = true;
-                }
-	            if (saveFlag) {
-	                $(this).datagrid('endEdit', editIndex);
-	                $(this).datagrid('beginEdit', index);
-	                editIndex = index;
-	            }
+//	            if (editIndex != undefined) {
+//	                SaveRow(editIndex);
+//	            } else {
+//	                saveFlag = true;
+//                }
+//	            if (saveFlag) {
+//	                $(this).datagrid('endEdit', editIndex);
+//	                $(this).datagrid('beginEdit', index);
+//	                editIndex = index;
+//	            }
+	            $(this).datagrid('endEdit', editIndex);
+	            $(this).datagrid('beginEdit', index);
+	            editIndex = index;
 	        }
 	        //editIndex = index;
 	    }
@@ -245,19 +256,13 @@
 //	            $('#dg').datagrid('selectRow', editIndex)
 //						.datagrid('beginEdit', editIndex);
 	        //	        }
-	        if (editIndex != undefined) {
-	            SaveRow(editIndex);
-	        } else {
-	            saveFlag = true;
-	        }
 	        
-	        if (saveFlag) {
-                $('#dg').datagrid('endEdit', editIndex);
-	            $('#dg').datagrid('appendRow', {});
-	            editIndex = $('#dg').datagrid('getRows').length - 1;
-	            $('#dg').datagrid('selectRow', editIndex)
-						    .datagrid('beginEdit', editIndex);
-            }
+            $('#dg').datagrid('endEdit', editIndex);
+	        $('#dg').datagrid('appendRow', {});
+	        editIndex = $('#dg').datagrid('getRows').length - 1;
+	        $('#dg').datagrid('selectRow', editIndex)
+						.datagrid('beginEdit', editIndex);
+            
 	    }
 	    function removeit() {
 	        if (editIndex == undefined) { return }
@@ -333,7 +338,7 @@
 	                        AttrOfOper.push(mapExt[i].AttrOfOper);
 	                        var ofoper = mapExt[i].AttrOfOper;
 	                        var doc = mapExt[i].Doc;
-	                        doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
+	                        ////doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
 	                        docArrs.push(doc);
 	                        //var docs = doc.replace('*', '').split("@");
 	                        //var opts = $('#dg').datagrid('getColumnFields');   // get unfrozen columns
@@ -365,7 +370,7 @@
 	                            indexArr.push(k);
 	                        }
 	                    }
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'numberbox', options: { disabled: isread, required: req, precision:pre,formatter: function (value) { if (!value) { return 0.00; } else { return value } }, onChange: function (newValue, oldValue) { autoFull(newValue, obj.KeyOfEn, indexArr, docArrs, AttrOfOper) } } }, hidden: hid, align: 'center' };
+	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'numberbox', options: { disabled: isread, required: req, precision: pre, formatter: function (value) { if (!value) { return 0.00; } else { return value } } } }, hidden: hid, align: 'center' }; //, onChange: function (newValue, oldValue) { autoFull(newValue, obj.KeyOfEn, indexArr, docArrs, AttrOfOper) }
 	                case 6: ////AppDate
 	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'datebox', options: { currentText: '当前', closeText: '关闭', okText: '确定', disabled: isread, required: req,formatter:formatterDate} }, hidden: hid, align: 'center' };
 	                case 7: // AppDateTime 类型.
@@ -416,39 +421,57 @@
             var s = date.getSeconds();
 	        return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d) + ' ' + (h < 10 ? '0' + h : h) + ':' + (i < 10 ? '0' + i : i) + ':' + (s < 10 ? '0' + s : s);
 	    }
-        //自动计算
-	    function autoFull(value, enName, indexArr, docArrs, AttrOfOper) {
-	        if (indexArr.length > 0) {
-	            var row = $('#dg').datagrid('getSelected');
-	            if (row) {
-	                for (var i = 0; i < indexArr.length; i++) {
-	                    var name = AttrOfOper[indexArr[i]];
-                        //for()
-	                    var doc = docArrs[indexArr[i]];
-	                    var docTem = doc.replace('*',''); ;
-	                    var docArr = docTem.split('@');
-	                    for (var j = 0; j < docArr.length; j++) {
-	                        if (docArr[j] != null && docArr[j] != '' && docArr[j] != undefined) {
-	                            //alert(enName == docArr[j]);
-	                            if (enName == docArr[j]) {
-	                                doc = doc.replace('@' + docArr[j], value);
-	                            } else {
-	                                row = $('#dg').datagrid('getSelected');
-	                                doc = doc.replace('@' + docArr[j], row[docArr[j]]);
-	                            }
-                            }
+	    //自动计算
+//	    $(function () {
+//	        //var lastIndex;
+//	        $('#dg').datagrid({
+//	            onBeginEdit: function (rowIndex) {
+//	                autoFull(rowIndex);
+//	            }
+//	        });
+//	    });
+	    function autoFull(rowIndex) {
+	        /*mapExt解析*/
+	        //autoFull
+	        if (mapExt == null || mapExt == undefined || mapExt == '' || mapExt.length == 0) {
+	            return;
+	        }
+	        for (var i = 0; i < mapExt.length; i++) {
+	            switch (mapExt[i].ExtType) {
+	                case 'AutoFull':
+	                    if (mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
+	                        break;
 	                    }
-	                    row = $('#dg').datagrid('getSelected');
-	                    row[name] = CalculateJS(doc);
-	                    $('#dg').datagrid('updateRow', row);
-//	                    var index = $('#dg').datagrid('getRowIndex', row);
-//                        if(value==1){
-//                            $('#dg').datagrid('refreshRow', index);
-//                        }
-	                    //console.info(row);
-	                }
+	                    var ofoper = mapExt[i].AttrOfOper;
+	                    var doc = mapExt[i].Doc;
+	                    ////doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
+	                    var docs = doc.replace('*', '').split("@");
+	                    var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
+	                    var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper }).target;
+	                    for (var i = 0; i < opts.length; i++) {
+	                        if ($.inArray(opts[i], docs) > -1) {
+	                            var optEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: opts[i] }).target;
+	                            optEditor.numberbox({
+	                                onChange: function () {
+	                                    //获取和替换数值
+	                                    var docTem = doc;
+	                                    docTem.replace('@' + opts[i], optEditor.numberbox('getValue')); //oldHtml
+	                                    //替换其他数值
+	                                    for (var m = 0; m < docs.length; m++) {
+	                                        if (docs[m] != '' && docs[m] != null) {
+	                                            var tem = $('#dg').datagrid('getEditor', { index: rowIndex, field: docs[m] }).target;
+	                                            console.info(tem.numberbox('getValue'));
+	                                            docTem = docTem.replace('@' + docs[m], tem.numberbox('getValue'));
+	                                        }
+	                                    }
+	                                    costEditor.numberbox('setValue', CalculateJS(docTem));
+	                                }
+	                            });
+	                        }
+	                    }
+                        default:
 	            }
-            }
+	        }
         }
 
 	    function footSum(dbDtl) {
@@ -486,7 +509,7 @@
                          }
                          var ofoper = mapExt[i].AttrOfOper;
                          var doc = mapExt[i].Doc;
-                         doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
+                         ////doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
                          var docs = doc.replace('*', '').split("@");
                          var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
                          var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper });

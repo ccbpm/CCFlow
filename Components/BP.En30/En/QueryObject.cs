@@ -75,11 +75,6 @@ namespace BP.En
             }
             set
             {
-                if (value.IndexOf("(") == -1)
-                    this.IsEndAndOR = false;
-                else
-                    this.IsEndAndOR = true;
-
                 this._sql = this._sql + " " + value;
             }
         }
@@ -510,7 +505,6 @@ namespace BP.En
         public void addRightBracket()
         {
             this.SQL = " ) ";
-            this.IsEndAndOR = true;
         }
 
         public void addAnd()
@@ -860,10 +854,6 @@ namespace BP.En
                 sql1 += " ORDER BY " + attrGroup.Key;
             return DBAccess.RunSQLReturnTable(sql1);
         }
-        /// <summary>
-        /// 在尾部上是否执行了 AddAnd()方法。
-        /// </summary>
-        public bool IsEndAndOR = false;
         public string[] FullAttrs = null;
         /// <summary>
         /// 执行查询
@@ -1330,23 +1320,10 @@ namespace BP.En
             switch (this.HisDBType)
             {
                 case DBType.Oracle:
-                    if (this.IsEndAndOR == false)
+                    if (this.Top != -1)
                     {
-                        if (this.Top == -1)
-                            this.AddHD();
-                        else
-                            this.AddWhereField("RowNum", "<=", this.Top);
-                    }
-                    else
-                    {
-                        if (this.Top == -1)
-                        {
-                        }
-                        else
-                        {
-                            this.addAnd();
-                            this.AddWhereField("RowNum", "<=", this.Top);
-                        }
+                        this.addAnd();
+                        this.AddWhereField("RowNum", "<=", this.Top);
                     }
                     break;
                 case DBType.MSSQL:

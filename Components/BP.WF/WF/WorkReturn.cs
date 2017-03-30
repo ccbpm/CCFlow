@@ -791,7 +791,7 @@ namespace BP.WF
             ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,IsRead=0,SDT=" + dbStr + "SDT, RDT=" + dbStr + "RDT WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
             ps.Add("SDT", sdt);
-            ps.Add("RDT", DataType.SysDataTimeFormat); //当前日期.
+            ps.Add("RDT", DataType.CurrentDataTime); //当前日期.
             ps.Add("FK_Node", this.ReturnToNode.NodeID);
             ps.Add("WorkID", this.WorkID);
             DBAccess.RunSQL(ps);

@@ -46,6 +46,70 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        #region AutoFull 自动计算 a*b  功能界面 .
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string AutoFull_Save()
+        {
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.AutoFull,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            me.FK_MapData = this.FK_MapData;
+            me.AttrOfOper = this.KeyOfEn;
+            me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
+
+            me.ExtType = MapExtXmlList.AutoFull;
+
+            //执行保存.
+            me.MyPK = MapExtXmlList.AutoFull + "_" + me.FK_MapData + "_" + me.AttrOfOper ;
+            if (me.Update() == 0)
+                me.Insert();
+
+            return "保存成功.";
+        }
+        public string AutoFull_Delete()
+        {
+            MapExt me = new MapExt();
+            me.Delete(MapExtAttr.ExtType, MapExtXmlList.AutoFull,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            return "删除成功.";
+        }
+        public string AutoFull_Init()
+        {
+            DataSet ds = new DataSet();
+
+            // 加载mapext 数据.
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.AutoFull,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+            if (i == 0)
+            {
+                me.FK_MapData = this.FK_MapData;
+                me.AttrOfOper = this.KeyOfEn;
+                me.FK_DBSrc = "local";
+            }
+
+            if (me.FK_DBSrc == "")
+                me.FK_DBSrc = "local";
+
+            //去掉 ' 号.
+            me.SetValByKey("Doc", me.Doc);
+
+            DataTable dt = me.ToDataTableField();
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion ActiveDDL 功能界面.
+
         #region TBFullCtrl 功能界面 .
         /// <summary>
         /// 保存

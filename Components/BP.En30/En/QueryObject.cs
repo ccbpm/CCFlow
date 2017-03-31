@@ -71,6 +71,7 @@ namespace BP.En
                 sql = sql.Replace("WHERE  AND", "WHERE");
 
                 sql = sql.Replace("WHERE ORDER", "ORDER");
+
                 return sql;
             }
             set

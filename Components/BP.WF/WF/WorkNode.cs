@@ -5813,7 +5813,6 @@ namespace BP.WF
                             }
                         }
                         #endregion  如果当前是退回. 并且当前的运行模式按照自由流程设置方式运行
-
                     }
                 }
                 #endregion 处理退回的情况.

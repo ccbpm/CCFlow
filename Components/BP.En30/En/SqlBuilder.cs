@@ -470,7 +470,7 @@ namespace BP.En
             string from = " FROM " + en.EnMap.PhysicsTable;
 
             if (en.EnMap.HisFKAttrs.Count == 0)
-                return from + " WHERE ";
+                return from + " WHERE (1=1) ";
 
             string mytable = en.EnMap.PhysicsTable;
             from += ",";

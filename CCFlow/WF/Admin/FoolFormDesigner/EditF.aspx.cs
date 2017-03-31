@@ -566,7 +566,7 @@ namespace CCFlow.WF.MapDef
                     html += " - <a href=\"javascript:WinOpen('./MapExt/TBFullCtrl.htm?FK_MapData=" + mapAttr.FK_MapData + "&KeyOfEn=" + mapAttr.KeyOfEn + "&MyPK=" + mapAttr.FK_MapData + "_" + MapExtXmlList.TBFullCtrl + "_" + mapAttr.KeyOfEn + "')\">文本框自动完成</a>";
 
                 if (mapAttr.IsNum)
-                    html += " - <a href=\"javascript:WinOpen('./MapExt/AutoFull.aspx?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>";
+                    html += " - <a href=\"javascript:WinOpen('./MapExt/AutoFull.htm?FK_MapData=" + mapAttr.FK_MapData + "&ExtType=AutoFull&RefNo=" + mapAttr.MyPK + "')\">自动计算</a>";
                 html += " - <a href=\"javascript:WinOpen('./MapExt/InputCheck.aspx?FK_MapData=" + mapAttr.FK_MapData + "&RefNo=" + mapAttr.MyPK + "')\">脚本验证</a>";
 
                 this.Pub1.Add(html);

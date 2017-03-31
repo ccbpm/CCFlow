@@ -27,7 +27,7 @@ function FigureCreateCommand(factoryFunction, x, y) {
 FigureCreateCommand.prototype = {
     /**This method got called every time the Command must execute*/
     execute: function () {
-        if (createFigureName == "FlowChart" ) {
+        if (createFigureName == "FlowChart" || createFigureName == "ThreadDtl" || createFigureName == "SubFlowDtl" || createFigureName == "FrmCheck") {
             var funIsExist = this.IsExist;
             var isExit = funIsExist(createFigureName);
             if (isExit == true) {
@@ -530,10 +530,10 @@ FigureCreateCommand.prototype = {
             case "SubFlowDtl": //子流程.
                 frmVal.Name = "子流程";
                 break;
-            case "ThreadDtl": //子流程.
+            case "ThreadDtl": //子线程.
                 frmVal.Name = "子线程组件";
                 break;
-            case "FrmTransferCustom": //子流程.
+            case "FrmTransferCustom": //流转自定义.
                 frmVal.Name = "流转自定义";
                 break;
             default:
@@ -665,6 +665,12 @@ TransFormDataField.prototype = {
                 break;
             case "FlowChart":
                 ctrlLab = '控件属性-轨迹图';
+            case "ThreadDtl":
+                ctrlLab = '控件属性-子线程';
+            case "SubFlowDtl":
+                ctrlLab = '控件属性-子流程';
+            case "FrmCheck":
+                ctrlLab = '控件属性-审核组件';
             default:
                 ctrlLab = '控件属性' + createdFigure.CCForm_Shape;
                 break;

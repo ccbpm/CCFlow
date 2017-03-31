@@ -74,8 +74,12 @@
         $(function () {
             $("#Msg").html("正在加载,请稍后......");
             
-            var flowNo = GetQueryString("FK_Flow");
-
+            var flowNo = frmID.substr(2, frmID.length - 4);
+            if (flowNo > 10 && flowNo < 100) {
+                flowNo = '0'+flowNo;
+            } else if (flowNo < 10) {
+                flowNo = '00'+flowNo;
+            }
             /*
             *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
             */
@@ -109,20 +113,10 @@
                     $('#ulNodeFrmImp').html(ulHtml);
 
                     //绑定节点表单事件
-                    $('#ulNodeFrmImp li input[type="button"]').bind('click', function (obj) {
-                        var nodeId = $(obj.target).data().nodeid;
-                        $.ajax({
-                            type: 'post',
-                            async: true,
-                            url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=ND" + nodeId + "&"+$('#formCC').serialize()+"&m=" + Math.random(),
-                            dataType: 'html',
-                            success: function (db1) {
-                                alert(db1)
-                            }
-                        });
-                    });
-                    
-                    
+                    $('#ulNodeFrmImp li input[type=button]').bind('click', function (obj) {
+                        $('#ulNodeFrmImp li .liBtnActive').removeClass('liBtnActive');
+                        $(obj.target).addClass('liBtnActive');
+                    })
                 }
             });
 
@@ -146,24 +140,50 @@
             }
         }
 
-        function save() {
-            //save
+        function saveCopyFromFrmNode() {
+            var activeBtn = $('#ulNodeFrmImp li .liBtnActive');
+            var nodeId = $(activeBtn).data().nodeid;
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&m=" + Math.random(),
+                url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=ND" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (db1) {
                     alert(db1)
                 }
             });
         }
-        $(function () {
-            $('#ulNodeFrmImp li input[type=button]').bind('click', function (obj) {
-                $('#ulNodeFrmImp li .liBtnActive').removeClass('liBtnActive');
-                $(obj.target).addClass('liBtnActive');
-            })
-    });
+
+
+        function saveImpFromLocalXML() {
+            var formData = new FormData();
+            var name = $("input").val();
+            formData.append("file", $("#localXmlFile")[0].files[0]);
+            formData.append("name", name);
+            $.ajax({
+                url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&m=" + Math.random(),
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
+                    
+                },
+                success: function (responseStr) {
+                    alert(responseStr);
+                    //if (responseStr.status === 0) {
+                    //    console.log("成功" + responseStr);
+                    //} else {
+                    //    console.log("失败");
+                    //}
+                },
+                error: function (responseStr) {
+                    alert("error"+responseStr);
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -171,18 +191,26 @@
     <div id="Msg"> </div>
     <div id="tt" class="easyui-tabs" style="width:100%;height:500px;">
         <div title="从本机导入" style="padding:15px;">
-            <label style="padding-left:8px;">选择表单模板文件(*.xml),然后按确定按钮</label><br /><br />
-            <input type="file" id="localXmlFile" name="localXmlFile" />
-        </div>
+            <div style="text-align:right;margin-right:50px;">
+                <input type="button" value="模板导入" onclick="saveImpFromLocalXML()" />
+            </div>
+            <div>
+                <label style="padding-left:8px;">选择表单模板文件(*.xml),然后按确定按钮</label><br /><br />
+                <input type="file" id="localXmlFile" name="localXmlFile" />
+            </div>
+
+            </div>
         <div title="从节点表单导入">
-            <input type="checkbox" checked="checked" id="ckClear" name="ckClear" />是否清除
-            <input type="checkbox" checked="checked" id="ckReadOnly" name="ckReadOnly" />是否只读
+            <div style="text-align:right;margin-right:50px;">
+                <input type="button" value="从节点表单导入" onclick="saveCopyFromFrmNode()" id="copyFromFrmNodeSave" />
+            </div>
+            <input type="checkbox" checked="checked" id="ckClear" name="IsClear" />是否清除
+            <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" />是否只读
             <ul id="ulNodeFrmImp">
-                <li><input type="button" class="btn btn-default" value="Step1 节点1" /></li>
-                <li><input type="button" class="btn btn-default" value="Step2 节点2" /></li>
-                <li><input type="button" class="btn btn-default" value="Step3 节点3" /></li>
+                
             </ul>
-        </div>
+            
+            </div>
         <div title="从表单库导入" style="padding:15px;">
             <input type="button" class="btn btn-default" value="进入templete.ccflow.org执行导入" /><br /><br />
             <label style="padding-left:8px;">ccflow为您提供丰富的表单共享模板，您可以轻松的创建您的BPM系统</label>
@@ -191,8 +219,6 @@
             <label style="padding-left:8px;">操作提示：制定内外部数据源中的一个已经设计好的表，把字段信息导入该表单中</label><br /><br />
             <input type="button" class="btn btn-default" value="进入导入数据表字段向导" />
         </div>
-
-        <input type="button" value="OK" onclick="save()"/>
     </div>
 </form>
     <!--<ul id="myTab" class="nav nav-tabs">

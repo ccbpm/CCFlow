@@ -1337,6 +1337,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\Img\Tabs\tabrightG.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Img\TBCtrlFull.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Img\Track.png" />
+    <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Imp.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Left.aspx" />
@@ -1348,12 +1349,8 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\AutoFullDLL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\DDLFullCtrl.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\ExcelFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InitScript.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\InputCheck.aspx" />
@@ -1366,7 +1363,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_Dtl.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_List.aspx" />
@@ -7662,6 +7658,7 @@
     <Content Include="WF\Admin\XAP\WebClientDownloadHandler.ashx" />
     <Content Include="WF\App\Classic\Handler.ashx" />
     <Content Include="WF\App\EasyUI\Base\DataServices.ashx" />
+    <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <None Include="WF\App\EasyUI\jquery\lib\ligerUI\skins\icons\新建 Microsoft Office Excel 工作表.xlsx" />
     <None Include="WF\App\EasyUI\jquery\lib\user.json" />
     <Content Include="WF\App\Setting\Site.Master" />
@@ -9390,6 +9387,9 @@
     <Compile Include="WF\Admin\FoolFormDesigner\HidAttr.aspx.designer.cs">
       <DependentUpon>HidAttr.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx.cs">
       <DependentUpon>ImpTableField.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9439,13 +9439,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt.aspx.designer.cs">
       <DependentUpon>MapExt.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL.aspx.cs">
-      <DependentUpon>ActiveDDL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\ActiveDDL.aspx.designer.cs">
-      <DependentUpon>ActiveDDL.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx.cs">
       <DependentUpon>AotuGenerNo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9453,33 +9446,12 @@
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx.designer.cs">
       <DependentUpon>AotuGenerNo.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull.aspx.cs">
-      <DependentUpon>AutoFull.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AutoFull.aspx.designer.cs">
-      <DependentUpon>AutoFull.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AutoFullDLL.aspx.cs">
-      <DependentUpon>AutoFullDLL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AutoFullDLL.aspx.designer.cs">
-      <DependentUpon>AutoFullDLL.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx.cs">
       <DependentUpon>BodyAttr.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\BodyAttr.aspx.designer.cs">
       <DependentUpon>BodyAttr.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\DDLFullCtrl.aspx.cs">
-      <DependentUpon>DDLFullCtrl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\DDLFullCtrl.aspx.designer.cs">
-      <DependentUpon>DDLFullCtrl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\ExcelFrm.aspx.cs">
       <DependentUpon>ExcelFrm.aspx</DependentUpon>
@@ -9546,13 +9518,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx.designer.cs">
       <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.aspx.cs">
-      <DependentUpon>TBFullCtrl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.aspx.designer.cs">
-      <DependentUpon>TBFullCtrl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_Dtl.aspx.cs">
       <DependentUpon>TBFullCtrl_Dtl.aspx</DependentUpon>

@@ -194,6 +194,17 @@ namespace BP.WF.HttpHandler
             dtl.Delete();
             return "删除成功";
         }
+        /// <summary>
+        /// 重新获取单个ddl数据
+        /// </summary>
+        /// <returns></returns>
+        public string Dtl_ReloadDdl()
+        {
+            string Doc = context.Request.QueryString["Doc"];
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(Doc);
+            dt.TableName = "ReloadDdl";
+            return BP.Tools.Json.ToJson(dt);
+        }
         #endregion dtl.htm 从表.
         /// <summary>
         /// 处理SQL的表达式.

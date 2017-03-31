@@ -25,6 +25,30 @@ namespace BP.WF.HttpHandler
     {
         #region 执行方法.
         /// <summary>
+        /// 获得Form数据.
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <returns>返回值</returns>
+        public string GetValFromFrmByKey(string key)
+        {
+            string val = context.Request.Form[key];
+            if (val == null && key.Contains("DDL_") == false)
+            {
+                val = context.Request.Form["DDL_" + key];
+            }
+
+            if (val == null && key.Contains("TB_") == false)
+            {
+                val = context.Request.Form["TB_" + key];
+            }
+
+            if (val == null)
+                throw new Exception("@获取Form参数错误,参数集合不包含[" + key + "]");
+
+            val = val.Replace("'", "~");
+            return val;
+        }
+        /// <summary>
         /// 公共方法获取值
         /// </summary>
         /// <param name="param">参数名</param>
@@ -41,7 +65,6 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果，执行错误抛出异常</returns>
         public string DoMethod(WebContralBase myEn, string methodName)
         {
-
             Type tp = myEn.GetType();
             MethodInfo mp = tp.GetMethod(methodName);
 
@@ -54,7 +77,6 @@ namespace BP.WF.HttpHandler
             //执行该方法.
             object[] paras = null;
             return mp.Invoke(this, paras) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
-
         }
         /// <summary>
         /// 执行默认的方法名称
@@ -396,33 +418,23 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-
         public HttpContext context = null;
         /// <summary>
-        /// 获得表单的属性.
+        /// 获得Int数据
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public string GetValFromFrmByKey(string key)
-        {
-            string val = context.Request.Form[key];
-            if (val == null)
-                return null;
-            val = val.Replace("'", "~");
-            return val;
-        }
         public int GetValIntFromFrmByKey(string key)
         {
             string str = this.GetValFromFrmByKey(key);
-            if (str == null || str == "")
-                throw new Exception("@参数:" + key + " 没有取到值.");
-
+            if (str == null || str == "" || str=="0")
+                throw new Exception("@参数:" + key + "没有取到值.");
             return int.Parse(str);
         }
         public bool GetValBoolenFromFrmByKey(string key)
         {
             string val = this.GetValFromFrmByKey(key);
-            if (val == null || val == "")
+            if (val == null || val == "" || val == "0")
                 return false;
             return true;
         }

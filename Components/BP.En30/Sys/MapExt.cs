@@ -589,11 +589,14 @@ namespace BP.Sys
         {
             get
             {
-                return  this.GetValStrByKey("Doc").Replace("~","'");
+                string str=  this.GetValStrByKey("Doc").Replace("~","'");
+                str = str.Replace("~", "'");
+                return str;
             }
             set
             {
-                this.SetValByKey("Doc", value);
+                string str = value.Replace("'", "~");
+                this.SetValByKey("Doc", str);
             }
         }
 
@@ -740,8 +743,6 @@ namespace BP.Sys
                 this.SetValByKey("Tag4", value);
             }
         }
-
-        
         public int H
         {
             get
@@ -849,6 +850,32 @@ namespace BP.Sys
                 default:
                     break;
             }
+        }
+
+        protected override bool beforeUpdate()
+        {
+            this.InitPK();
+
+             switch (this.ExtType)
+            {
+                case MapExtXmlList.ActiveDDL:
+                case MapExtXmlList.DDLFullCtrl:
+                    if (this.Doc.Contains("@Key") == false)
+                        throw new Exception("@SQL表达式错误，您必须包含@Key ,这个关键字. ");
+                    break;
+                case MapExtXmlList.AutoFullDLL:
+                case MapExtXmlList.AutoFull:
+                    if (this.Doc.Length <= 20)
+                        throw new Exception("@必须填写SQL表达式. ");
+                    break;
+                case MapExtXmlList.TBFullCtrl:
+                case MapExtXmlList.PopVal:
+                    break;
+                default:
+                    break;
+            }
+
+            return base.beforeUpdate();
         }
         #endregion 
 

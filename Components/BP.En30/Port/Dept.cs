@@ -20,7 +20,7 @@ namespace BP.Port
     /// <summary>
     /// 部门
     /// </summary>
-    public class Dept : EntitySimpleTree
+    public class Dept : EntityNoName
     {
         #region 属性
         /// <summary>
@@ -175,7 +175,7 @@ namespace BP.Port
     /// <summary>
     ///部门s
     /// </summary>
-    public class Depts : EntitiesSimpleTree
+    public class Depts : EntitiesNoName
     {
         #region 初始化实体.
         /// <summary>

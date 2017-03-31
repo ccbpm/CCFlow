@@ -135,6 +135,13 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "设置显示过滤";
+                rm.ClassMethodName = this.ToString() + ".DoAutoFullDLL()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "填充其他控件";
                 rm.ClassMethodName = this.ToString() + ".DoDDLFullCtrl()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -192,12 +199,20 @@ namespace BP.Sys.FrmUI
             return "/WF/Admin/FoolFormDesigner/GuideSFTableAttr.htm?FK_SFTable=" + this.UIBindKey;
         }
         /// <summary>
-        /// 设置自动填充
+        /// 设置填充其他下拉框
         /// </summary>
         /// <returns></returns>
         public string DoDDLFullCtrl()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 设置下拉框显示过滤
+        /// </summary>
+        /// <returns></returns>
+        public string DoAutoFullDLL()
+        {
+            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 设置级联
@@ -205,7 +220,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoActiveDDL()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion 方法执行.
     }

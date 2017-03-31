@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text;
 using System.Web;
 using BP.DA;
 using BP.Sys;
+using BP.Web;
+using BP.Port;
+using BP.En;
+using BP.WF;
+using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
 {
@@ -44,11 +48,8 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        #region 功能界面 .
-
-        #endregion 功能界面方法.
-
-
+        #region xxx 界面 .
+        #endregion xxx 界面方法.
 
     }
 }

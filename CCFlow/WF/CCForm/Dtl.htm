@@ -156,12 +156,26 @@
                         var clsJson = gridTitle(sys_mapAttr[i], data); //
                         cols.push(clsJson);
                     }
-                    cols.push({ field: 'operation', title: '操作', width: 100,
-                        formatter: function (value, rec, index) {
-                            var del = '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">删除</a>';
-                            return del;
-                        }
-                    });
+                    //删除按钮
+                    if (!IsReadonly && IsDelete) {
+                        cols.push({ field: 'operation', title: '操作', width: 100,
+                            formatter: function (value, rec, index) {
+                                var del = '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">删除</a>';
+                                return del;
+                            }
+                        });
+                    }
+                    //新增按钮
+                    if (IsReadonly || !IsInsert) {
+                        $("#append").hide();
+                    }
+
+                    //更新操作
+//                    if (true) {//IsReadonly || !IsUpdate
+//                        //$('#dg').datagrid('disableEditing');
+//                        $('#dg').datagrid('disableEditing');
+//                    }
+
                     //更新列名称
                     $('#dg').datagrid({
                         columns: [cols]
@@ -199,7 +213,7 @@
 </table>
 
 	<div id="tb" style="height:auto">
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增一行</a>
+		<a href="javascript:void(0)" id="append" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增一行</a>
 		<!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除行</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存行</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销行</a>

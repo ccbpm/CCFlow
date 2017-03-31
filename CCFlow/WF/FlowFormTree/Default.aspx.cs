@@ -82,7 +82,7 @@ namespace CCFlow.WF.SheetTree
                 {
                     if (this.Request.QueryString["WorkID"] != null)
                     {
-                        string sql = "SELECT FK_Node FROM  WF_GenerWorkFlow WHERE WorkID=" + this.WorkID;
+                        string sql = "SELECT FK_Node from  WF_GenerWorkFlow where WorkID=" + this.WorkID;
                         _FK_Node = DBAccess.RunSQLReturnValInt(sql,0);
                         if (_FK_Node == 0)
                             _FK_Node= int.Parse(this.FK_Flow + "01");
@@ -147,6 +147,31 @@ namespace CCFlow.WF.SheetTree
                 ViewState["CWorkID"] = value;
             }
         }
+        /// <summary>
+        /// 是否抄送
+        /// </summary>
+        public bool IsCC
+        {
+            get
+            {
+
+                if (string.IsNullOrEmpty(this.Request.QueryString["Paras"]) == false)
+                {
+                    string myps = this.Request.QueryString["Paras"];
+
+                    if (myps.Contains("IsCC=1") == true)
+                        return true;
+                }
+                if (string.IsNullOrEmpty(this.Request.QueryString["AtPara"]) == false)
+                {
+                    string myps = this.Request.QueryString["AtPara"];
+
+                    if (myps.Contains("IsCC=1") == true)
+                        return true;
+                }
+                return false;
+            }
+        }
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -176,6 +201,19 @@ namespace CCFlow.WF.SheetTree
             int alowToolCount = 8;
             BtnLab btnLab = new BtnLab(this.FK_Node);
             this.mm3.Visible = false;
+
+            //如果为抄送
+            if (this.IsCC)
+            {
+                //审核意见
+                toolsDefault += "<a id=\"send\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-send'\" onclick=\"EventFactory('CCCheckNote')\">填写审核意见</a>";
+                //轨迹
+                toolsDefault += "<a id=\"Track\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-flowmap'\" onclick=\"EventFactory('showchart')\">" + btnLab.TrackLab + "</a>";
+                toolsDefault += "<a id=\"closeWin\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-no'\" onclick=\"EventFactory('closeWin')\">关闭</a>";
+                //添加内容
+                this.toolBars.InnerHtml = toolsDefault;
+                return;
+            }
             //发送
             if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
             {

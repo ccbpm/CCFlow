@@ -424,6 +424,17 @@
             this.WorkIDs = Application.common.getArgsFromHref("WorkIDs");
 
             this.IsLoadData = Application.common.getArgsFromHref("IsLoadData");
+            this.Paras = Application.common.getArgsFromHref("Paras");
+            this.AtPara = Application.common.getArgsFromHref("AtPara");
+            this.IsCC = "0";
+            if (this.Paras && this.Paras.indexOf("@IsCC") >= 0) {
+                this.IsCC = "1";
+                this.IsLoadData = "0";
+            }
+            if (this.AtPara && this.AtPara.indexOf("@IsCC") >= 0) {
+                this.IsCC = "1";
+                this.IsLoadData = "0";
+            }
         }
         //传参
         var urlExtFrm = function () {
@@ -668,7 +679,10 @@
                     window.open("../JumpWay.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow" + args.FK_Flow + "&s=" + strTimeKey, "跳转", "height=600, width=800,scrollbars=yes");
                     break;
                 case "Shift": //移交
-                    window.open("../WorkOpt/Forward.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FK_Dept=" + args.FK_Flow, "移交", "height=600, width=800,scrollbars=yes");
+                    window.open("../WorkOpt/Forward.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FK_Dept=" + args.FK_Dept, "移交", "height=600, width=800,scrollbars=yes");
+                    break;
+                case "CCCheckNote"://抄送
+                    window.open("../WorkOpt/CCCheckNote.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID, "抄送", "height=600, width=800,scrollbars=yes");
                     break;
                 case "closeWin":
                     closeWin();
@@ -869,6 +883,7 @@
             var i = 0;
             //表单树
             var urlExt = urlExtFrm();
+            var IsCC = args.IsCC;
             var url = "Base/FormTreeBase.aspx?1=1" + urlExt;
             Application.data.getFlowFormTree(url, function (js) {
                 var isSelect = false;
@@ -884,6 +899,7 @@
                             if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {
                                 i++;
                                 var isEdit = node.attributes.IsEdit;
+                                if (IsCC && IsCC == "1") isEdit = "0";
                                 var url = "../CCForm/Frm.aspx?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                                 addTab(node.id, node.text, url);
                             }
@@ -891,9 +907,10 @@
                         return node.text;
                     },
                     onClick: function (node) {
-                        if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") { /*普通表单和必填表单*/
+                        if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {/*普通表单和必填表单*/
                             var urlExt = urlExtFrm();
                             var isEdit = node.attributes.IsEdit;
+                            if (IsCC && IsCC == "1") isEdit = "0";
                             var url = "../CCForm/Frm.aspx?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                             addTab(node.id, node.text, url);
                         } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/
@@ -1026,16 +1043,11 @@
         </div>
     </div>
     <div id="mm" class="easyui-menu cs-tab-menu">
-        <div id="mm-tabupdate">
-            刷新</div>
-        <div class="menu-sep">
-        </div>
-        <div id="mm-tabclose">
-            关闭</div>
-        <div id="mm-tabcloseother">
-            关闭其他</div>
-        <div id="mm-tabcloseall">
-            关闭全部</div>
+        <div id="mm-tabupdate">刷新</div>
+        <div class="menu-sep"></div>
+        <div id="mm-tabclose">关闭</div>
+        <div id="mm-tabcloseother">关闭其他</div>
+        <div id="mm-tabcloseall">关闭全部</div>
     </div>
 </body>
 </html>

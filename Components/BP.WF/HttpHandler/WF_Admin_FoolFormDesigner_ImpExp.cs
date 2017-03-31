@@ -67,19 +67,11 @@ namespace BP.WF.HttpHandler
         /// <returns>执行结果</returns>
         public string Imp_LoadFrmTempleteFromLocalFile()
         {
-            byte[] fileByte=new byte[0];
             string fk_mapData = this.FK_MapData;
-            //文件路径.
-            string file = "\\Temp\\" + fk_mapData + ".xml";
-            string path = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file;
-
-            //保存到服务器，指定的位置.
-            BP.DA.DataType.WriteFile(path, fileByte);
-
-            //读取文件.
+            //读取上传的XML 文件.
             DataSet ds = new DataSet();
-            ds.ReadXml(file);
-
+            //ds.ReadXml(path);
+            ds.ReadXml(this.context.Request.Files[0].InputStream);
             //执行装载.
             MapData.ImpMapData(fk_mapData, ds, true);
 
@@ -144,7 +136,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string isClearStr = context.Request.QueryString["FK_MapData"];
+                string isClearStr = context.Request.QueryString["IsClear"];
                 bool isClear = false;
                 if (!string.IsNullOrEmpty(isClearStr) && isClearStr.ToString().ToLower() == "on")
                 {

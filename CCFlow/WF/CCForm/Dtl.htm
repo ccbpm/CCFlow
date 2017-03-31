@@ -310,6 +310,7 @@
 	    }
 
 	    function onAfterEdit(rowIndex, rowData, changes) {
+	        //alert("执行保存");
 	        SaveRow(rowIndex);
         }
 	    
@@ -338,7 +339,7 @@
 	                        AttrOfOper.push(mapExt[i].AttrOfOper);
 	                        var ofoper = mapExt[i].AttrOfOper;
 	                        var doc = mapExt[i].Doc;
-	                        ////doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
+	                        doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
 	                        docArrs.push(doc);
 	                        //var docs = doc.replace('*', '').split("@");
 	                        //var opts = $('#dg').datagrid('getColumnFields');   // get unfrozen columns
@@ -439,12 +440,13 @@
 	        for (var i = 0; i < mapExt.length; i++) {
 	            switch (mapExt[i].ExtType) {
 	                case 'AutoFull':
-	                    if (mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
+
+	                    if (mapExt[i] == undefined || mapExt[i] == null || mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
 	                        break;
 	                    }
 	                    var ofoper = mapExt[i].AttrOfOper;
 	                    var doc = mapExt[i].Doc;
-	                    ////doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
+	                    doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
 	                    var docs = doc.replace('*', '').split("@");
 	                    var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
 	                    var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper }).target;
@@ -469,7 +471,23 @@
 	                            });
 	                        }
 	                    }
-                        default:
+	                case 'ActiveDDL':
+
+	                    if (mapExt[i] == undefined || mapExt[i] == null || mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
+	                        break;
+	                    }
+	                    var ofoper = mapExt[i].AttrOfOper;
+	                    var OfActive = mapExt[i].AttrsOfActive;
+	                    var doc = mapExt[i].Doc;
+	                    var ofoperEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper }).target;
+	                    var OfActiveEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: OfActive }).target;
+	                    ofoperEditor.combobox({
+	                        onSelect: function (record) {
+	                            var docTem = doc.replace("~@Key~", record.No);
+	                            OfActiveEditor.combobox('reload', Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
+	                        }
+	                    });
+                    default:
 	            }
 	        }
         }
@@ -509,7 +527,7 @@
                          }
                          var ofoper = mapExt[i].AttrOfOper;
                          var doc = mapExt[i].Doc;
-                         ////doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
+                         doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
                          var docs = doc.replace('*', '').split("@");
                          var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
                          var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper });

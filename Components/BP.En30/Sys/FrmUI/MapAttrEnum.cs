@@ -223,7 +223,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoDDLFullCtrl()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
         /// 设置自动填充
@@ -231,7 +231,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoAutoFull()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
         /// 高级设置
@@ -247,7 +247,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoActiveDDL()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         #endregion 方法执行.
     }

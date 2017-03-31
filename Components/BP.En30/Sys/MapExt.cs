@@ -856,10 +856,11 @@ namespace BP.Sys
         {
             this.InitPK();
 
-             switch (this.ExtType)
+            switch (this.ExtType)
             {
                 case MapExtXmlList.ActiveDDL:
                 case MapExtXmlList.DDLFullCtrl:
+                case MapExtXmlList.TBFullCtrl:
                     if (this.Doc.Contains("@Key") == false)
                         throw new Exception("@SQL表达式错误，您必须包含@Key ,这个关键字. ");
                     break;
@@ -868,7 +869,6 @@ namespace BP.Sys
                     if (this.Doc.Length <= 20)
                         throw new Exception("@必须填写SQL表达式. ");
                     break;
-                case MapExtXmlList.TBFullCtrl:
                 case MapExtXmlList.PopVal:
                     break;
                 default:

@@ -27,7 +27,6 @@ namespace BP.WF.HttpHandler
         {
             switch (this.DoType)
             {
-
                 case "DtlFieldUp": //字段上移
                     return "执行成功.";
                 default:
@@ -47,8 +46,81 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        #region TBFullCtrl 功能界面 .
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string TBFullCtrl_Save()
+        {
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-        #region DDLFullCtrl 功能界面 .
+            me.FK_MapData = this.FK_MapData;
+            me.AttrOfOper = this.KeyOfEn;
+            me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
+            me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
+
+            me.ExtType = MapExtXmlList.TBFullCtrl;
+
+            //执行保存.
+            me.InitPK();
+
+            if (me.Update() == 0)
+                me.Insert();
+
+            return "保存成功.";
+        }
+        public string TBFullCtrl_Delete()
+        {
+            MapExt me = new MapExt();
+            me.Delete(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            return "删除成功.";
+        }
+        public string TBFullCtrl_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //加载数据源.
+            SFDBSrcs srcs = new SFDBSrcs();
+            srcs.RetrieveAll();
+            DataTable dtSrc = srcs.ToDataTableField();
+            dtSrc.TableName = "Sys_SFDBSrc";
+            ds.Tables.Add(dtSrc);
+
+            // 加载 mapext 数据.
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            if (i == 0)
+            {
+                me.FK_MapData = this.FK_MapData;
+                me.AttrOfOper = this.KeyOfEn;
+                me.FK_DBSrc = "local";
+            }
+
+            if (me.FK_DBSrc == "")
+                me.FK_DBSrc = "local";
+
+            //去掉 ' 号.
+            me.SetValByKey("Doc", me.Doc);
+
+            DataTable dt = me.ToDataTableField();
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion TBFullCtrl 功能界面.
+
+        #region AutoFullDLL 功能界面 .
         /// <summary>
         /// 保存
         /// </summary>
@@ -119,8 +191,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
-        #endregion DDLFullCtrl 功能界面.
-
+        #endregion AutoFullDLL 功能界面.
 
         #region DDLFullCtrl 功能界面 .
         /// <summary>
@@ -142,8 +213,9 @@ namespace BP.WF.HttpHandler
             me.ExtType = MapExtXmlList.DDLFullCtrl;
 
             //执行保存.
-            me.InitPK(); 
-            me.Save();
+            me.InitPK();
+            if (me.Update() == 0)
+                me.Insert();
 
             return "保存成功.";
         }
@@ -193,7 +265,6 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion DDLFullCtrl 功能界面.
-
 
         #region ActiveDDL 功能界面 .
         /// <summary>
@@ -274,58 +345,6 @@ namespace BP.WF.HttpHandler
         #endregion ActiveDDL 功能界面.
 
         #region xxx 界面
-        /// <summary>
-        /// 删除文本框自动完成设置
-        /// </summary>
-        /// <returns></returns>
-        private string TBFullCtrl_Delete()
-        {
-            try
-            {
-                MapExt me = new MapExt();
-                me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
-
-                if (me.RetrieveFromDBSources() > 0)
-                    me.Delete();
-
-                return "操作成功...";
-            }
-            catch (Exception ex)
-            {
-                return "err@:" + ex.Message;
-            }
-        }
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <returns></returns>
-        public string TBFullCtrl_Init()
-        {
-            MapExt ext = new MapExt();
-            //ext.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
-            ext.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl,
-                MapExtAttr.FK_MapData, this.FK_MapData, MapExtAttr.AttrOfOper, this.KeyOfEn);
-
-            return ext.ToJson();
-        }
-
-        public string TBFullCtrl_Save()
-        {
-            MapExt me = new MapExt();
-
-            System.Console.WriteLine("已执行删除");
-            me.ExtType = MapExtXmlList.TBFullCtrl;
-            me.Doc = this.GetValFromFrmByKey("TB_SQL");
-            me.AttrOfOper = this.KeyOfEn;
-            me.FK_MapData = this.FK_MapData;
-            me.FK_DBSrc = this.GetValFromFrmByKey("DDL_DBSrc");
-
-            me.InitPK(); 
-            me.Save();
-
-            return "操作成功...";
-        }
-
         /// <summary>
         /// 初始化正则表达式界面
         /// </summary>

@@ -618,7 +618,7 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.Add("<a href='" + myUrl + "' target='M" + mapAttr.KeyOfEn + "' ><img src='../../Img/Btn/Apply.gif' border=0>批处理</a>");
             }
 
-            string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
+            string url = "FieldTypeList.htm?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
             btn = new Button();
             btn.ID = "Btn_New";
             btn.CssClass = "Btn";
@@ -644,11 +644,11 @@ namespace CCFlow.WF.MapDef
             {
                 case "Btn_New":
                     MapAttr mapAttr = new MapAttr(this.MyPK);
-                    string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx + "&GroupField = " + this.GroupField + "&KeyOfEn=" + this.KeyOfEn;
+                    string url = "FieldTypeList.htm?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx + "&GroupField = " + this.GroupField + "&KeyOfEn=" + this.KeyOfEn;
                     this.Response.Redirect(url, true);
                     return;
                 case "Btn_Back":
-                    string url1 = "FieldTypeList.aspx?DoType=AddF&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&GroupField = " + this.GroupField;
+                    string url1 = "FieldTypeList.htm?DoType=AddF&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&GroupField = " + this.GroupField;
                     this.Response.Redirect(url1, true);
                     return;
                 default:
@@ -1097,7 +1097,7 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("FieldTypeList.aspx?FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&GroupField=" + attr.GroupID, true);
+                        this.Response.Redirect("FieldTypeList.htm?FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "&GroupField=" + attr.GroupID, true);
                         return;
                     default:
                         break;

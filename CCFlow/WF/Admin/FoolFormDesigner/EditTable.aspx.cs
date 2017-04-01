@@ -351,7 +351,7 @@ namespace CCFlow.WF.MapDef
                 }
             }
 
-            string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx + "&GroupField=" + this.GroupField;
+            string url = "FieldTypeList.htm?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx + "&GroupField=" + this.GroupField;
             this.Pub1.Add("<a href='" + url + "' ><img src='../../Img/Btn/New.gif' border=0>新建</a></TD>");
 
             this.Pub1.AddTDEnd();
@@ -488,7 +488,7 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField + "&FK_SFTable=" + this.FK_SFTable, true);
+                        this.Response.Redirect("FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField + "&FK_SFTable=" + this.FK_SFTable, true);
                         return;
                     default:
                         break;
@@ -505,7 +505,7 @@ namespace CCFlow.WF.MapDef
             get
             {
                 if (this.DoType == "Add")
-                    return "增加新字段向导  - <a href='FieldTypeList.aspx?DoType=ChoseFType&GroupField=" + this.GroupField + "&FK_MapData="+this.FK_MapData+"'>选择类型</a> -" + "编辑字段";
+                    return "增加新字段向导  - <a href='FieldTypeList.htm?DoType=ChoseFType&GroupField=" + this.GroupField + "&FK_MapData=" + this.FK_MapData + "'>选择类型</a> -" + "编辑字段";
                 else
                     return "编辑字段"; // "编辑字段";
             }

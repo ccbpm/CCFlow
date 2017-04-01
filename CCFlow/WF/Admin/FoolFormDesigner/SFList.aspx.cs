@@ -51,7 +51,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             this.Pub1.AddTable();
            // this.Pub1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 字典表列表 - <a href='/WF/Comm/Sys/SFGuide.aspx?DoType=New&FromApp=SL' >新建字典表</a> - <a href='SFEdit.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建表New</a>");
-            this.Pub1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 字典表列表 - <a href='/WF/Comm/Sys/SFGuide.aspx?DoType=New&FromApp=SL' >新建字典表</a>");
+            this.Pub1.AddCaption("<a href='FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 字典表列表 - <a href='/WF/Comm/Sys/SFGuide.aspx?DoType=New&FromApp=SL' >新建字典表</a>");
 
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");

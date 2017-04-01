@@ -750,7 +750,7 @@ namespace CCFlow.WF.MapDef
         {
             this.Title = "增加新字段向导";
             this.Pub1.AddTable();
-            this.Pub1.AddCaptionLeft("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif'>返回</a></a> - <a href='SysEnum.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' ><img src='../../Img/Btn/New.gif' />新建枚举</a>");
+            this.Pub1.AddCaptionLeft("<a href='FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif'>返回</a></a> - <a href='SysEnum.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' ><img src='../../Img/Btn/New.gif' />新建枚举</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");
@@ -814,7 +814,7 @@ namespace CCFlow.WF.MapDef
             this.Title = "增加新字段向导";
 
             this.Pub1.AddTable();
-            this.Pub1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 外部表列表 - <a href='SFSQL.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建外部表</a>");
+            this.Pub1.AddCaption("<a href='FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - 外部表列表 - <a href='SFSQL.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建外部表</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");
@@ -861,7 +861,7 @@ namespace CCFlow.WF.MapDef
             this.Title = "增加新WebService接口向导";
 
             this.Pub1.AddTable();
-            this.Pub1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - WebService接口列表 - <a href='SFWS.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建WebService接口</a>");
+            this.Pub1.AddCaption("<a href='FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "'><img src='/WF/Img/Btn/Back.gif' />&nbsp;返回</a> - WebService接口列表 - <a href='SFWS.aspx?DoType=New&FK_MapData=" + this.FK_MapData + "&Idx=" + this.Idx + "' >新建WebService接口</a>");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("Idx");
             this.Pub1.AddTDTitle("编号(点击增加到表单)");

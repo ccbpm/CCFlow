@@ -17,13 +17,13 @@
 	}
 	function Insert(fk_mapdata,idx)
     {
-        var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&IDX=' + idx;
+        var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&IDX=' + idx;
         var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
         window.location.href = window.location.href;
     }
     function AddF(fk_mapdata) {
 
-        var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata;
+        var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata;
         var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
 
         window.location.href = window.location.href;

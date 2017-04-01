@@ -95,9 +95,9 @@ namespace CCFlow.WF.MapDef
             else
             {
                 if (this.FK_SFTable == null)
-                    this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='FieldTypeList.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 新建表");
+                    this.Ucsys1.AddCaption("<a href='FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='FieldTypeList.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 新建表");
                 else
-                    this.Ucsys1.AddCaption("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 编辑表");
+                    this.Ucsys1.AddCaption("<a href='FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>返回</a> - <a href='Do.aspx?DoType=AddSFSQL&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>外部表</a> - 编辑表");
             }
 
             if (this.FK_SFTable == null)

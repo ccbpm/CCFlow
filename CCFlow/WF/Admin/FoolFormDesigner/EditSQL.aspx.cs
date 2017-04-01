@@ -338,7 +338,7 @@ namespace CCFlow.WF.MapDef
                 }
             }
 
-            string url = "FieldTypeList.aspx?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
+            string url = "FieldTypeList.htm?DoType=AddF&FK_MapData=" + mapAttr.FK_MapData + "&IDX=" + mapAttr.Idx;
             this.Pub1.Add("<a href='" + url + "' ><img src='../../Img/Btn/New.gif' border=0>新建</a></TD>");
 
             this.Pub1.AddTDEnd();
@@ -418,7 +418,7 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("FieldTypeList.aspx?DoType=AddF&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
+                        this.Response.Redirect("FieldTypeList.htm?DoType=AddF&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField, true);
                         return;
                     default:
                         break;

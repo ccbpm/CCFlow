@@ -58,7 +58,7 @@ function OpenFlowToCanvas(node, id, text) {
         //        }
     }
     //延时3秒
-    setTimeout(DesignerLoaded, 3000);
+    setTimeout(DesignerLoaded, 1000);
 }
 
 /// <summary>新建流程</summary>

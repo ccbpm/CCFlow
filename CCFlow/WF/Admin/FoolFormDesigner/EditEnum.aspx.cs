@@ -432,7 +432,7 @@ namespace CCFlow.WF.MapDef
                         this.WinClose();
                         return;
                     case "Btn_SaveAndNew":
-                        this.Response.Redirect("FieldTypeList.aspx?FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField + "&EnumKey="+this.EnumKey, true);
+                        this.Response.Redirect("FieldTypeList.htm?FK_MapData=" + this.FK_MapData + "&IDX=" + attr.Idx + "&GroupField=" + this.GroupField + "&EnumKey=" + this.EnumKey, true);
                         return;
                     default:
                         break;
@@ -452,7 +452,7 @@ namespace CCFlow.WF.MapDef
                 if (this.DoType == "Add")
                     return "增加新字段向导 - <a href='Do.aspx?DoType=ChoseFType&GroupField=" + this.GroupField + "&FK_MapData="+this.FK_MapData+"'>选择类型</a>";
                 else
-                    return " <a href='FieldTypeList.aspx?DoType=ChoseFType&FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&GroupField=" + this.GroupField + "'>编辑</a>";
+                    return " <a href='FieldTypeList.htm?DoType=ChoseFType&FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&GroupField=" + this.GroupField + "'>编辑</a>";
             }
         }
     }

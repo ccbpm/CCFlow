@@ -17,12 +17,12 @@
         //	    }
 
         function Insert(fk_mapdata, IDX) {
-            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&IDX=' + IDX + '&s=' + Math.random();
+            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&IDX=' + IDX + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }
         function AddF(fk_mapdata) {
-            var url = 'FieldTypeList.aspx?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
+            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
             window.location.href = window.location.href;
         }

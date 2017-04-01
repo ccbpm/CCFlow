@@ -103,9 +103,9 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
 
             this.Pub1.AddTable("width=100%");
             if (this.EnumKey == null)
-                this.Pub1.AddCaptionLeft("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>枚举字段</a> - 新建");
+                this.Pub1.AddCaptionLeft("<a href='FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>枚举字段</a> - 新建");
             else
-                this.Pub1.AddCaptionLeft("<a href='FieldTypeList.aspx?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>枚举字段</a> - 编辑");
+                this.Pub1.AddCaptionLeft("<a href='FieldTypeList.htm?DoType=AddF&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'><img src='/WF/Img/Btn/Back.gif'>&nbsp;返回</a> - <a href='Do.aspx?DoType=AddSysEnum&FK_MapData=" + this.FK_MapData + "&IDX=" + this.IDX + "'>枚举字段</a> - 编辑");
 
             if (this.EnumKey == null)
                 this.Title = "新建枚举";

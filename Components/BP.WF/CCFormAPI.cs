@@ -813,12 +813,11 @@ namespace BP.WF
                 string uiBindKey = dr["UIBindKey"].ToString();
                 string myPK = dr["MyPK"].ToString();
                 string lgType = dr["LGType"].ToString();
+                // 如果是枚举值, 判断是否存在., 
+                if (myds.Tables.Contains(uiBindKey) == true)
+                    continue;
                 if (lgType == "1")
                 {
-                    // 如果是枚举值, 判断是否存在., 
-                    if (myds.Tables.Contains(uiBindKey) == true)
-                        continue;
-
                     string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
                     DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
                     dtEnum.TableName = uiBindKey;

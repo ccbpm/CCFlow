@@ -300,9 +300,7 @@ namespace BP.WF
 			DataTable dtMapAttr = null;
 			MapExts mes = null;
 
-
-			#region 表单模版信息.（含主、从表，以及从表的枚举/外键相关数据）
-
+			#region 表单模版信息.（含主、从表，以及从表的枚举/外键相关数据）.
 			//增加表单字段描述.
 			string sql = "SELECT * FROM Sys_MapData WHERE No='" + frmID + "' ";
 			DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);

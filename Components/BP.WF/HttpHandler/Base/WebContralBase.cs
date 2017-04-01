@@ -229,8 +229,13 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = this.GetRequestVal("EnsName");
+
+                if (str == null || str == "" || str == "null")
+                    str = this.GetRequestVal("FK_MapData");
+
                 if (str == null || str == "" || str == "null")
                     return null;
+
                 return str;
             }
         }

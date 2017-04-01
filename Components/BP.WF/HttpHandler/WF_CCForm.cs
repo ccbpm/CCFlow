@@ -47,6 +47,100 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        #region frm.htm 主表.
+        /// <summary>
+        /// 执行数据初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Frm_Init()
+        {
+            MapData md = new MapData(this.EnsName);
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+
+            #region 把主表数据放入.
+            string atParas = "";
+            //主表实体.
+            GEEntity en = new GEEntity(this.EnsName);
+            en.OID = this.RefOID; ;
+            if (en.RetrieveFromDBSources() == 0)
+                en.Insert();
+
+            //把参数放入到 En 的 Row 里面。
+            if (string.IsNullOrEmpty(atParas) == false)
+            {
+                AtPara ap = new AtPara(atParas);
+                foreach (string key in ap.HisHT.Keys)
+                {
+                    if (en.Row.ContainsKey(key) == true) //有就该变.
+                        en.Row[key] = ap.GetValStrByKey(key);
+                    else
+                        en.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                }
+            }
+
+            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            {
+                // 处理传递过来的参数。
+                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                {
+                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                }
+            }
+
+            // 执行表单事件..
+            string msg = md.FrmEvents.DoEventNode(FrmEventList.FrmLoadBefore, en);
+            if (string.IsNullOrEmpty(msg) == false)
+                throw new Exception("err@错误:" + msg);
+
+            //重设默认值.
+            en.ResetDefaultVal();
+
+            //执行装载填充.
+            MapExt me = new MapExt();
+            me.MyPK = this.EnsName + "_" + MapExtXmlList.PageLoadFull;
+            if (me.RetrieveFromDBSources() == 1)
+            {
+                //执行通用的装载方法.
+                MapAttrs attrs = new MapAttrs(this.EnsName);
+                MapDtls dtls = new MapDtls(this.EnsName);
+                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+            }
+
+            //增加主表数据.
+            DataTable mainTable = en.ToDataTableField(md.No);
+            mainTable.TableName = "MainTable";
+
+            ds.Tables.Add(mainTable);
+            #endregion 把主表数据放入.
+
+            return BP.Tools.FormatToJson.ToJson(ds);
+
+            ////解析这个表单.
+            //DataSet ds= BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(this.EnsName, this.RefOID, "");
+            //return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 执行保存
+        /// </summary>
+        /// <returns></returns>
+        public string Frm_Save()
+        {
+            //保存主表数据.
+            GEEntity en = new GEEntity(this.EnsName, this.RefOID);
+            en.ResetDefaultVal();
+
+            foreach (string str in context.Request.QueryString.Keys)
+            {
+                en.SetValByKey(str, this.context.Request[str]);
+            }
+
+            en.OID = this.RefOID;
+            en.Save();
+
+            return "保存成功.";
+        }
+        #endregion frm.htm 主表.
+
         #region dtl.htm 从表.
         /// <summary>
         /// 初始化从表数据

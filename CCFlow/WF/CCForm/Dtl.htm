@@ -172,7 +172,7 @@
                     }
 
                     //更新操作
-                    if (true) {//IsReadonly || !IsUpdate
+                    if (IsReadonly || !IsUpdate) {//IsReadonly || !IsUpdate
                         //$('#dg').datagrid('disableEditing');
                         //$('#dg').datagrid('disableEditing');
                         isEditable = false;
@@ -464,7 +464,7 @@
 	                    var ofoper = mapExt[i].AttrOfOper;
 	                    var doc = mapExt[i].Doc;
 	                    doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
-	                    var docs = doc.replace('*', '').split("@");
+	                    var docs = doc.replace('*', '').replace('+', '').replace('-', '').replace('/', '').replace('^', '').replace('%', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split("@");
 	                    var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
 	                    var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper }).target;
 	                    for (var i = 0; i < opts.length; i++) {

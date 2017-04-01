@@ -468,7 +468,7 @@ namespace BP.WF
 
             //求警告日期.
             DateTime dtOfWarning = DateTime.Now;
-            if (this.town.HisNode.WarningDay == 0 && this.town.HisNode.WarningHour == 0)
+            if (this.town.HisNode.WarningDay == 0 )
             {
                 dtOfWarning = dtOfShould;
             }
@@ -476,7 +476,7 @@ namespace BP.WF
             {
                 //计算警告日期。
                 // 增加小时数. 考虑到了节假日.
-                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.WarningDay, this.town.HisNode.WarningHour, this.town.HisNode.TWay);
+                dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, this.town.HisNode.WarningDay,0, this.town.HisNode.TWay);
             }
 
             switch (this.HisNode.HisNodeWorkType)
@@ -540,7 +540,7 @@ namespace BP.WF
 
                 wl.FK_EmpText = emp.Name;
                 wl.FK_Dept = emp.FK_Dept;
-                wl.WarningHour = town.HisNode.WarningHour;
+               // wl.WarningHour = town.HisNode.WarningHour;
                 wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
 
                 wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
@@ -722,7 +722,7 @@ namespace BP.WF
 
                     wl.FK_EmpText = emp.Name;
                     wl.FK_Dept = emp.FK_Dept;
-                    wl.WarningHour = town.HisNode.WarningHour;
+                    //wl.WarningHour = town.HisNode.WarningHour;
                     wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
                     wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
                     wl.RDT = DataType.CurrentDataTime;
@@ -6763,7 +6763,7 @@ namespace BP.WF
             wl.FK_EmpText = this.ExecerName;
             wl.FK_Flow = this.HisNode.FK_Flow;
             wl.FK_Dept = this.ExecerDeptNo;
-            wl.WarningHour = this.HisNode.WarningHour;
+           // wl.WarningHour = this.HisNode.WarningHour;
             wl.SDT = DataType.CurrentDataTime;
             wl.DTOfWarning = DataType.CurrentData;
             wl.RDT = DataType.CurrentDataTime;

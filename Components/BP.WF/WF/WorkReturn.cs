@@ -1176,11 +1176,12 @@ namespace BP.WF
 
             wl.FK_Node = backtoNodeID;
             wl.FK_NodeText = nd.Name;
-            wl.WarningHour = nd.WarningHour;
+           // wl.WarningHour = nd.WarningHour;
             wl.FK_Dept = emp.FK_Dept;
 
             DateTime dtNew = DateTime.Now;
-            dtNew = dtNew.AddDays(nd.WarningHour);
+           // dtNew = dtNew.AddDays(nd.WarningHour);
+
             wl.SDT = dtNew.ToString(DataType.SysDataTimeFormat); // DataType.CurrentDataTime;
             wl.FK_Flow = this.HisNode.FK_Flow;
             wl.Insert();

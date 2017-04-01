@@ -1053,24 +1053,7 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.WarningDay, value);
             }
         }
-        /// <summary>
-        /// 预警(小时)
-        /// </summary>
-        public int WarningHour
-        {
-            get
-            {
-                int i = this.GetValIntByKey(NodeAttr.WarningHour);
-                if (i == 0)
-                    return 0;
-                return i;
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.WarningHour, value);
-            }
-        }
-
+        
         /// <summary>
         /// 预警 - 提醒规则
         /// </summary>
@@ -2447,8 +2430,8 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)"
 
                 map.AddTBFloat(NodeAttr.WarningDay, 1, "工作预警(天)", true, false);    // "警告期限(0不警告)"
-                map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
-                map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
+              //  map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
+              //  map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
 
                 map.AddTBInt(NodeAttr.WAlertRole, 0, "预警提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.WAlertWay, 0, "预警提醒方式", false, false); //"限期(天)"

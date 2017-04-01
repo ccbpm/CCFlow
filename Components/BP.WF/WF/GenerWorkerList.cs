@@ -630,7 +630,7 @@ namespace BP.WF
                 //如果是流程属性来控制的就按流程属性来计算。
                 map.AddTBDateTime(GenerWorkerListAttr.SDT, "应完成日期", false, false);
                 map.AddTBDateTime(GenerWorkerListAttr.DTOfWarning, "警告日期", false, false);
-                map.AddTBFloat(GenerWorkerListAttr.WarningHour, 0, "预警天", true, false);
+               // map.AddTBFloat(GenerWorkerListAttr.WarningHour, 0, "预警天", true, false);
                 map.AddTBDateTime(GenerWorkerListAttr.RDT, "记录时间", false, false);
                 map.AddTBDateTime(GenerWorkerListAttr.CDT, "完成时间", false, false);
                 map.AddBoolean(GenerWorkerListAttr.IsEnable, true, "是否可用", true, true);

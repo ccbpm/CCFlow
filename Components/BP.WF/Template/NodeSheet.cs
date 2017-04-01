@@ -554,8 +554,8 @@ namespace BP.WF.Template
                 map.AddTBFloat(NodeAttr.TSpanHour, 8, "小时", true, false); //"限期(天)".
 
                 map.AddTBFloat(NodeAttr.WarningDay, 0, "工作预警(天)", true, false);    // "警告期限(0不警告)"
-                map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
-                map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
+                //map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
+               // map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
                 map.AddTBFloat(NodeAttr.TCent, 1, "扣分(每延期1小时)", true, false); //"扣分(每延期1天扣)"
                 
                 //map.AddTBFloat(NodeAttr.MaxDeductCent, 0, "最高扣分", true, false);   //"最高扣分"

@@ -203,10 +203,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string WarningDay = "WarningDay";
         /// <summary>
-        /// 小时
-        /// </summary>
-        public const string WarningHour = "WarningHour";
-        /// <summary>
         /// 预警提示规则
         /// </summary>
         public const string WAlertRole = "WAlertRole";

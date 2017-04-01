@@ -1317,7 +1317,7 @@ namespace BP.WF.Template
                     gwl.RDT = dr["RDT"].ToString();
                     gwl.SDT = dr["RDT"].ToString();
                     gwl.DTOfWarning = gwf.SDTOfNode;
-                    gwl.WarningHour = nd.WarningHour;
+                   // gwl.WarningHour = nd.WarningHour;
                     gwl.IsEnable = true;
                     gwl.WhoExeIt = nd.WhoExeIt;
                     gwl.Insert();

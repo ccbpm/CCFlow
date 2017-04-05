@@ -357,6 +357,8 @@ function OpenDialogAndCloseRefresh(url, dlgTitle, dlgWidth, dlgHeight, dlgIcon, 
 
     dlg.dialog({
         title: dlgTitle,
+        left: document.body.clientWidth > dlgWidth ? (document.body.clientWidth - dlgWidth) / 2 : 0,
+        top: document.body.clientHeight > dlgHeight ? (document.body.clientHeight - dlgHeight) / 2 : 0,
         width: dlgWidth,
         height: dlgHeight,
         iconCls: dlgIcon,
@@ -391,15 +393,14 @@ function Reload() {
     params = urls[1].split('&');
 
     for (var i = 0; i < params.length; i++) {
-        if (params[i].toLowerCase().indexOf("t=") == 0) {
-            newurl += "&t=" + Math.random();
+        if (params[i].indexOf("1=1") != -1 || params[i].toLowerCase().indexOf("t=") != -1) {
             continue;
         }
 
         newurl += "&" + params[i];
     }
 
-    window.location.href = newurl;
+    window.location.href = newurl + "&t=" + Math.random();
 }
 
 function ConvertDataTableFieldCase(dt, isLower) {

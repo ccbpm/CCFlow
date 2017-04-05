@@ -268,7 +268,14 @@ namespace BP.WF
 		{
             //如果是一个实体类.
             if (frmID.Contains("BP."))
-                return GenerDBForVSTOExcelFrmModelOfEntity(frmID, pkval, atParas, specDtlFrmID = null);
+            {
+                // 执行map同步.
+                Entities ens = BP.En.ClassFactory.GetEns(frmID);
+                Entity en = ens.GetNewEntity;
+                en.DTSMapToSys_MapData();
+
+                // return GenerDBForVSTOExcelFrmModelOfEntity(frmID, pkval, atParas, specDtlFrmID = null);
+            }
 
 			//数据容器,就是要返回的对象.
 			DataSet myds = new DataSet();

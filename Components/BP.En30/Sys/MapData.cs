@@ -270,109 +270,36 @@ namespace BP.Sys
 		/// </summary>
 		public const string IsWoEnableDown = "IsWoEnableDown";
 		#endregion weboffice属性。
-	}
+
+        #region 参数属性.
+        public const string EnsName = "EnsName";
+        #endregion 参数属性.
+    }
 	/// <summary>
 	/// 映射基础
 	/// </summary>
 	public class MapData : EntityNoName
-	{
+    {
+        #region entity 相关属性(参数属性)
+        /// <summary>
+        /// 属性ens
+        /// </summary>
+        public string EnsName
+        {
+            get
+            {
+                return this.GetValStringByKey(MapDataAttr.EnsName);
+            }
+            set
+            {
+                this.SetPara(MapDataAttr.EnsName, value);
+            }
+        }
+        #endregion entity 相关操作.
 
-		/// <summary>
-		/// 升级逻辑.
-		/// </summary>
-		public void Upgrade()
-		{
-			string sql = "";
-			#region 升级ccform控件.
-			if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLine") == true)
-			{
-				//重命名.
-				BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
-				dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
 
-				/*检查是否升级.*/
-				sql = "SELECT * FROM Sys_FrmLineBak ORDER BY FK_MapData ";
-				DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-				foreach (DataRow dr in dt.Rows)
-				{
-					BP.Sys.FrmEle ele = new FrmEle();
-					ele.Copy(dr);
-					ele.EleType = BP.Sys.FrmEle.Line;
-					//ele.BorderColor = dr["BorderColor"].ToString();
-					//ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
-					if (ele.IsExits == true)
-						ele.MyPK = BP.DA.DBAccess.GenerGUID();
-					ele.Insert();
-				}
-			}
-			if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLab") == true)
-			{
-				//重命名.
-				BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
-				dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
-
-				/*检查是否升级.*/
-				sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
-				DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-				foreach (DataRow dr in dt.Rows)
-				{
-					BP.Sys.FrmEle ele = new FrmEle();
-					ele.Copy(dr);
-					ele.EleType = BP.Sys.FrmEle.Label;
-
-					ele.EleName = dr[FrmLabAttr.Text].ToString();
-
-					//ele.FontColor = dr[FrmLabAttr.FontColor].ToString();
-					//ele.FontName = dr[FrmLabAttr.FontName].ToString();
-					//ele.FontSize = int.Parse(dr[FrmLabAttr.FontSize].ToString());
-					//ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
-
-					if (ele.IsExits == true)
-						ele.MyPK = BP.DA.DBAccess.GenerGUID();
-					ele.Insert();
-				}
-			}
-			if (BP.DA.DBAccess.IsExitsObject("Sys_FrmBtn") == true)
-			{
-				//重命名.
-				BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
-				dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
-
-				/*检查是否升级.*/
-				sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
-				DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-				foreach (DataRow dr in dt.Rows)
-				{
-					BP.Sys.FrmEle ele = new FrmEle();
-					ele.Copy(dr);
-					ele.EleType = BP.Sys.FrmEle.Line;
-					//ele.BorderColor = dr["BorderColor"].ToString();
-					//ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
-					if (ele.IsExits == true)
-						ele.MyPK = BP.DA.DBAccess.GenerGUID();
-					ele.Insert();
-				}
-			}
-			#endregion 升级ccform控件.
-		}
-
-		/// <summary>
-		/// 表单设计器设计工具
-		/// </summary>
-		public string DesignerTool
-		{
-			get
-			{
-                return this.GetValStringByKey(MapDataAttr.DesignerTool, "Silverlight");
-			}
-			set
-			{
-				this.SetValByKey(MapDataAttr.DesignerTool, value);
-			}
-		}
-
-		#region weboffice文档属性(参数属性)
-		/// <summary>
+        #region weboffice文档属性(参数属性)
+        /// <summary>
 		/// 是否启用锁定行
 		/// </summary>
 		public bool IsRowLock
@@ -1017,6 +944,21 @@ namespace BP.Sys
 		}
 		#endregion
 
+        #region 基本属性.
+        /// <summary>
+        /// 表单设计器设计工具
+        /// </summary>
+        public string DesignerTool
+        {
+            get
+            {
+                return this.GetValStringByKey(MapDataAttr.DesignerTool, "Silverlight");
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.DesignerTool, value);
+            }
+        }
 		public static Boolean IsEditDtlModel
 		{
 			get
@@ -1032,9 +974,10 @@ namespace BP.Sys
 				BP.Web.WebUser.SetSessionByKey("IsEditDtlModel", "1");
 			}
 		}
+        #endregion 基本属性.
 
-		#region 表单结构数据json
-		/// <summary>
+        #region 表单结构数据json
+        /// <summary>
 		/// 表单图数据
 		/// </summary>
         public string FormJson
@@ -1093,7 +1036,6 @@ namespace BP.Sys
                 myLabs = myLabs.Substring(0, myLabs.Length - 1);
                 body = body.Replace("@Labels", myLabs);
             }
-
             return body;
         }
 		#endregion
@@ -1314,20 +1256,6 @@ namespace BP.Sys
 				this.SetValByKey(MapDataAttr.FrmW, value);
 			}
 		}
-		///// <summary>
-		///// 表单控制方案
-		///// </summary>
-		//public string Slns
-		//{
-		//    get
-		//    {
-		//        return this.GetValStringByKey(MapDataAttr.Slns);
-		//    }
-		//    set
-		//    {
-		//        this.SetValByKey(MapDataAttr.Slns, value);
-		//    }
-		//}
 		public float FrmH
 		{
 			get
@@ -1339,7 +1267,6 @@ namespace BP.Sys
 				this.SetValByKey(MapDataAttr.FrmH, value);
 			}
 		}
-
 		/// <summary>
 		/// 应用类型.  0独立表单.1节点表单
 		/// </summary>
@@ -1370,7 +1297,6 @@ namespace BP.Sys
 				this.SetValByKey(MapDataAttr.BodyAttr, value);
 			}
 		}
-
 		#endregion
 
 		#region 构造方法
@@ -1597,8 +1523,86 @@ namespace BP.Sys
 		}
 		#endregion
 
+        #region 常用方法.
+        /// <summary>
+        /// 升级逻辑.
+        /// </summary>
+        public void Upgrade()
+        {
+            string sql = "";
+            #region 升级ccform控件.
+            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLine") == true)
+            {
+                //重命名.
+                BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
+                dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
 
-		/// <summary>
+                /*检查是否升级.*/
+                sql = "SELECT * FROM Sys_FrmLineBak ORDER BY FK_MapData ";
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    BP.Sys.FrmEle ele = new FrmEle();
+                    ele.Copy(dr);
+                    ele.EleType = BP.Sys.FrmEle.Line;
+                    //ele.BorderColor = dr["BorderColor"].ToString();
+                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
+                    if (ele.IsExits == true)
+                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
+                    ele.Insert();
+                }
+            }
+            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLab") == true)
+            {
+                //重命名.
+                BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
+                dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
+
+                /*检查是否升级.*/
+                sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    BP.Sys.FrmEle ele = new FrmEle();
+                    ele.Copy(dr);
+                    ele.EleType = BP.Sys.FrmEle.Label;
+
+                    ele.EleName = dr[FrmLabAttr.Text].ToString();
+
+                    //ele.FontColor = dr[FrmLabAttr.FontColor].ToString();
+                    //ele.FontName = dr[FrmLabAttr.FontName].ToString();
+                    //ele.FontSize = int.Parse(dr[FrmLabAttr.FontSize].ToString());
+                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
+
+                    if (ele.IsExits == true)
+                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
+                    ele.Insert();
+                }
+            }
+            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmBtn") == true)
+            {
+                //重命名.
+                BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
+                dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
+
+                /*检查是否升级.*/
+                sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    BP.Sys.FrmEle ele = new FrmEle();
+                    ele.Copy(dr);
+                    ele.EleType = BP.Sys.FrmEle.Line;
+                    //ele.BorderColor = dr["BorderColor"].ToString();
+                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
+                    if (ele.IsExits == true)
+                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
+                    ele.Insert();
+                }
+            }
+            #endregion 升级ccform控件.
+        }
+        /// <summary>
 		/// 导入
 		/// </summary>
 		/// <param name="ds"></param>
@@ -1711,8 +1715,6 @@ namespace BP.Sys
 			}
 
 			string timeKey = DateTime.Now.ToString("MMddHHmmss");
-
-			// string timeKey = fk_mapdata;
 
 			#region 表单元素
 			foreach (DataTable dt in ds.Tables)
@@ -2203,7 +2205,7 @@ namespace BP.Sys
 				//   sqls += "@UPDATE Sys_MapM2M SET GroupID=" + gfFirst.OID + "        WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_MapM2M        WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "')) AS X) AND FK_MapData='" + this.No + "' ";
 				sqls += "@UPDATE Sys_FrmAttachment SET GroupID=" + gfFirst.OID + " WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_FrmAttachment WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "')) AS X) AND FK_MapData='" + this.No + "' ";
 
-#warning 这些sql 对于Oracle 有问题，但是不影响使用.
+                #warning 这些sql 对于Oracle 有问题，但是不影响使用.
 				try
 				{
 					DBAccess.RunSQLs(sqls);
@@ -2579,9 +2581,10 @@ namespace BP.Sys
 			}
 			return " alert( document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value ) ; \t\n " + left + right;
 		}
+        #endregion 常用方法.
 
-		#region 与Excel相关的操作 .
-		/// <summary>
+        #region 与Excel相关的操作 .
+        /// <summary>
 		/// 获得Excel文件流
 		/// </summary>
 		/// <param name="oid"></param>
@@ -2618,6 +2621,7 @@ namespace BP.Sys
 			BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, oid.ToString(), "DBFile");
 		}
 		#endregion 与Excel相关的操作 .
+
 	}
 	/// <summary>
 	/// 映射基础s

@@ -1304,10 +1304,6 @@ namespace BP.En
         }
         #endregion
 
-        public void domens()
-        {
-        }
-
     }
 
 }

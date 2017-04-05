@@ -6765,7 +6765,7 @@ namespace BP.WF
             wl.FK_Dept = this.ExecerDeptNo;
            // wl.WarningHour = this.HisNode.WarningHour;
             wl.SDT = DataType.CurrentDataTime;
-            wl.DTOfWarning = DataType.CurrentData;
+            wl.DTOfWarning = DataType.CurrentDataTime;
             wl.RDT = DataType.CurrentDataTime;
 
             try

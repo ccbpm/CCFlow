@@ -178,7 +178,6 @@ namespace BP.En
                 attr.UIIsLine = this.UIIsLine;
                 attr.UIHeight = 0;
 
-
                 if (this.MaxLength > 3000)
                     attr.UIHeight = 10;
 
@@ -189,6 +188,7 @@ namespace BP.En
 
                 attr.UIRefKeyText = this.UIRefKeyText;
                 attr.UIVisible = this.UIVisible;
+
                 //if (this.IsPK)
                 //    attr.MyDataType =  = FieldType.PK;
                 //    attr.MyFieldType = FieldType.PK;

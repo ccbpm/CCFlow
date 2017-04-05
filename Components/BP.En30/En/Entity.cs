@@ -44,18 +44,19 @@ namespace BP.En
                 return _GetNewEntities;
             }
         }
-        protected virtual string CashKey_Del
-        {
-            get
-            {
-                return null;
-            }
-        }
         public virtual string ClassID
         {
             get
             {
                 return this.ToString();
+            }
+        }
+        public virtual string ClassIDOfShort
+        {
+            get
+            {
+                string clsID = this.ClassID;
+                return clsID.Substring(  clsID.LastIndexOf('.')+1 );
             }
         }
         #endregion
@@ -172,7 +173,6 @@ namespace BP.En
                     continue;
                 }
             }
-
             return BP.Tools.Json.ToJson(ds);
         }
 
@@ -1243,10 +1243,9 @@ namespace BP.En
         }
         #endregion
 
-        #region delete
+        #region 删除.
         private bool CheckDB()
         {
-
             #region 检查数据.
             //CheckDatas  ens=new CheckDatas(this.EnMap.PhysicsTable);
             //foreach(CheckData en in ens)
@@ -1280,26 +1279,8 @@ namespace BP.En
         /// <returns></returns>
         protected virtual bool beforeDelete()
         {
-            if (this.EnMap.Attrs.Contains("MyFileName"))
-                this.DeleteHisFiles();
-
             this.CheckDB();
             return true;
-        }
-        /// <summary>
-        /// 删除它的文件
-        /// </summary>
-        public void DeleteHisFiles()
-        {
-            //  BP.DA.DBAccess.RunSQL("SELECT * FROM sys_filemanager WHERE EnName='" + this.ToString() + "' AND RefVal='" + this.PKVal + "'");
-
-            try
-            {
-                BP.DA.DBAccess.RunSQL("DELETE FROM sys_filemanager WHERE EnName='" + this.ToString() + "' AND RefVal='" + this.PKVal + "'");
-            }
-            catch
-            {
-            }
         }
         /// <summary>
         /// 删除它关连的实体．
@@ -2403,43 +2384,6 @@ namespace BP.En
 
         #region 关于数据库的处理
         /// <summary>
-        /// 把系统日期转换为 Oracle 能够存储的日期类型.
-        /// </summary>
-        protected void TurnSysDataToOrData()
-        {
-            Map map = this.EnMap;
-            string val = "";
-            foreach (Attr attr in map.Attrs)
-            {
-                try
-                {
-                    val = this.GetValStringByKey(attr.Key);
-                    switch (attr.MyDataType)
-                    {
-                        case DataType.AppDateTime:
-                            if (val.ToUpper().IndexOf("_DATE") > 0)
-                                continue;
-                            this.SetValByKey(attr.Key, " TO_DATE('" + val + "', '" + DataType.SysDataTimeFormat + "') ");
-                            break;
-                        case DataType.AppDate:
-                            if (val.ToUpper().IndexOf("_DATE") > 0)
-                                continue;
-
-                            if (val.Length > 10)
-                                val = val.Substring(0, 10);
-                            this.SetValByKey(attr.Key, " TO_DATE('" + val + "', '" + DataType.SysDataFormat + "'    )");
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("执行日期转换期间出现错误:EnName=" + this.ToString() + " TurnSysDataToOrData@ Attr=" + attr.Key + " , Val=" + this.GetValStringByKey(attr.Key) + " Message=" + ex.Message);
-                }
-            }
-        }
-        /// <summary>
         /// 检查是否是日期
         /// </summary>
         protected void CheckDateAttr()
@@ -2454,7 +2398,7 @@ namespace BP.En
             }
         }
         /// <summary>
-        /// 建立物理表
+        /// 创建物理表
         /// </summary>
         protected void CreatePhysicsTable()
         {
@@ -3529,6 +3473,142 @@ namespace BP.En
 
         }
         #endregion
+
+        /// <summary>
+        /// 调度
+        /// </summary>
+        public void DTSMapToSys_MapData()
+        {
+            Map map=this.EnMap;
+
+            //获得短的类名称.
+            string fk_mapdata = this.ClassIDOfShort;
+
+            #region 更新主表信息.
+            MapData md = new MapData();
+            md.No = fk_mapdata;
+            if (md.RetrieveFromDBSources() == 0)
+                md.Insert();
+
+            md.EnPK = this.PK; //主键
+            md.EnsName = this.ClassID; //类名.
+            md.Name = map.EnDesc;
+            md.PTable = map.PhysicsTable;
+            md.Update();
+            #endregion 更新主表信息.
+
+            //同步属性 mapattr.
+            DTSMapToSys_MapData_InitMapAttr(map.Attrs, fk_mapdata);
+
+            #region 同步从表.
+            //同步从表.
+            EnDtls dtls = map.Dtls;
+            foreach (EnDtl dtl in dtls)
+            {
+                MapDtl mdtl = new MapDtl();
+
+                Entity enDtl = dtl.Ens.GetNewEntity;
+
+                mdtl.No = enDtl.ClassIDOfShort;
+                if (mdtl.RetrieveFromDBSources() == 0)
+                    mdtl.Insert();
+
+                mdtl.Name = enDtl.EnDesc;
+                mdtl.FK_MapData = fk_mapdata;
+                mdtl.Update();
+
+                //同步字段.
+                DTSMapToSys_MapData_InitMapAttr(enDtl.EnMap.Attrs, enDtl.ClassIDOfShort);
+            }
+            #endregion 同步从表.
+
+        }
+        /// <summary>
+        /// 同步字段属性
+        /// </summary>
+        /// <param name="attrs"></param>
+        /// <param name="fk_mapdata"></param>
+        private void DTSMapToSys_MapData_InitMapAttr(Attrs attrs, string fk_mapdata)
+        {
+            foreach (Attr attr in attrs)
+            {
+                if (attr.IsRefAttr)
+                    continue;
+
+                MapAttr mattr = new MapAttr();
+                mattr.KeyOfEn = attr.Key;
+                mattr.FK_MapData = fk_mapdata;
+                mattr.MyPK = mattr.FK_MapData + "_" + mattr.KeyOfEn;
+                mattr.RetrieveFromDBSources();
+
+                mattr.Name = attr.Desc;
+                mattr.DefVal = attr.DefaultVal.ToString();
+                mattr.KeyOfEn = attr.Field;
+
+                mattr.MaxLen = attr.MaxLength;
+                mattr.MinLen = attr.MinLength;
+                mattr.UIBindKey = attr.UIBindKey;
+                mattr.UIIsLine = attr.UIIsLine;
+                mattr.UIHeight = 0;
+
+                if (attr.MaxLength > 3000)
+                    mattr.UIHeight = 10;
+
+                mattr.UIWidth = attr.UIWidth;
+                mattr.MyDataType = attr.MyDataType;
+
+                mattr.UIRefKey = attr.UIRefKeyValue;
+
+                mattr.UIRefKeyText = attr.UIRefKeyText;
+                mattr.UIVisible = attr.UIVisible;
+
+                switch (attr.MyFieldType)
+                {
+                    case FieldType.Enum:
+                    case FieldType.PKEnum:
+                        mattr.UIContralType = attr.UIContralType;
+                        mattr.LGType = FieldTypeS.Enum;
+                        mattr.UIIsEnable = attr.UIIsReadonly;
+                        break;
+                    case FieldType.FK:
+                    case FieldType.PKFK:
+                        mattr.UIContralType = attr.UIContralType;
+                        mattr.LGType = FieldTypeS.FK;
+                        //attr.MyDataType = (int)FieldType.FK;
+                        mattr.UIRefKey = "No";
+                        mattr.UIRefKeyText = "Name";
+                        mattr.UIIsEnable = attr.UIIsReadonly;
+                        break;
+                    default:
+                        mattr.UIContralType = UIContralType.TB;
+                        mattr.LGType = FieldTypeS.Normal;
+                        mattr.UIIsEnable = !attr.UIIsReadonly;
+                        switch (attr.MyDataType)
+                        {
+                            case DataType.AppBoolean:
+                                mattr.UIContralType = UIContralType.CheckBok;
+                                mattr.UIIsEnable = attr.UIIsReadonly;
+                                break;
+                            case DataType.AppDate:
+                                //if (this.Tag == "1")
+                                //    attr.DefaultVal = DataType.CurrentData;
+                                break;
+                            case DataType.AppDateTime:
+                                //if (this.Tag == "1")
+                                //    attr.DefaultVal = DataType.CurrentData;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                }
+
+             
+
+                if (mattr.Update() == 0)
+                    mattr.Insert();
+            }
+        }
 
     }
     /// <summary>

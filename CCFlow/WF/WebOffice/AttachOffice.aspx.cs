@@ -187,7 +187,7 @@ namespace CCFlow.WF.WebOffice
                 return;
             }
 
-            if (!IsPostBack)
+            if (IsPostBack==false)
             {
                 string type = Request["action"];
                 if (string.IsNullOrEmpty(type))
@@ -237,7 +237,8 @@ namespace CCFlow.WF.WebOffice
                 {
                 }
             }
-            if (!isCompleate)
+
+            if (isCompleate==false)
             {
                 try
                 {
@@ -247,15 +248,13 @@ namespace CCFlow.WF.WebOffice
                 }
                 catch
                 {
-
                 }
-
             }
 
             FrmAttachment attachment = new FrmAttachment();
             int result = 0;
             //表单编号与节点不为空
-            if (this.FK_MapData != null && this.FK_Node != null)
+            if (this.FK_MapData != null && this.FK_Node != 0)
             {
                 BP.En.QueryObject objInfo = new BP.En.QueryObject(attachment);
                 objInfo.AddWhere(FrmAttachmentAttr.FK_MapData, this.FK_MapData);

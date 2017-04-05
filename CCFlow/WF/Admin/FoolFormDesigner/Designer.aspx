@@ -14,6 +14,12 @@
         }
     </style>
 
+     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <%--<link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />--%>
+  <%--  <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>--%>
+
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
@@ -24,6 +30,11 @@
     <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js" ></script>
     <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
+
+      <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+     <script src="../../Scripts/config.js" type="text/javascript" > </script>
+
     <script language="javascript" type="text/javascript">
         function FrmEvent(mypk) {
             var url = 'FrmEvent.htm?FK_MapData=' + mypk;
@@ -108,21 +119,59 @@
         }
 
         function Edit(fk_mapdata, mypk, ftype, gf) {
+
             var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata + '&GroupField=' + gf;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+            
+            var title = '';
+            if (ftype == 1) {
+                title = '字段String属性';
+                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
+                title = '字段Num属性';
+                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 6 || ftype == 7) {
+                title = '字段 date 属性';
+
+                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 6 || ftype == 7) {
+                title = '字段 datetime 属性';
+
+                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 4) {
+                title = '字段 boolen 属性';
+                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=' + mypk + '&s=' + Math.random();
+            }
+
+            OpenDialogAndCloseRefresh(url, title, 720, 550, "icon-edit");
+
+         //   OpenDialogAndCloseRefresh(url, title, 500, 500);
+
+            //  CCForm_ShowDialog(url, '导入表单');
+            //  var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
         function EditEnum(fk_mapdata, keyOfEn, mypk, enumKey, gf) {
 
             var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
-           // var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&KeyOfEn=' + keyOfEn+ '&GroupField=' + gf;
+
+            // var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }
 
-        function EditTable(fk_mapdata, keyOfEn, mypk, sfTable,gf) {
-            var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn + '&GroupField=' + gf;
+        function EditTable(fk_mapdata, keyOfEn, mypk, sfTable, gf) {
+
+            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
+            // var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn + '&GroupField=' + gf;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
             window.location.href = window.location.href;
         }

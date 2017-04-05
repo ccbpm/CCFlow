@@ -14,7 +14,6 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
     <script type="text/javascript" src="/WF/Scripts/config.js"></script>
-
     <script language="javascript" type="text/javascript" >
         /* ESC Key Down */
         function Esc() {
@@ -52,7 +51,6 @@
                     }
 
                     data = JSON.parse(data);
-
 
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
@@ -97,7 +95,7 @@
                         return;
                     }
 
-                    url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=" + data;
+                    url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=" + data;
                     window.location.href = url;
                 }
             });

@@ -355,6 +355,19 @@ namespace BP.WF.HttpHandler
                 return int.Parse(str);
             }
         }
+        public Int64 PWorkID
+        {
+            get
+            {
+                return this.GetRequestValInt("PWorkID");
+
+                string str = context.Request.QueryString["PWorkID"];
+                if (str == null || str == "" || str == "null")
+                    return 0;
+                return int.Parse(str);
+            }
+        }
+        
         public Int64 WorkID
         {
             get
@@ -379,6 +392,19 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// SID
+        /// </summary>
+        public string SID
+        {
+            get
+            {
+                string str = context.Request.QueryString["SID"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+        /// <summary>
         ///   RefOID
         /// </summary>
         public int RefOID
@@ -389,6 +415,20 @@ namespace BP.WF.HttpHandler
 
                 if (str == null || str == "" || str == "null")
                     str= context.Request.QueryString["OID"];
+
+                if (str == null || str == "" || str == "null")
+                    return 0;
+
+                return int.Parse(str);
+            }
+        }
+        public int OID
+        {
+            get
+            {
+                string str = context.Request.QueryString["RefOID"];
+                if (str == null || str == "" || str == "null")
+                    str = context.Request.QueryString["OID"];
 
                 if (str == null || str == "" || str == "null")
                     return 0;

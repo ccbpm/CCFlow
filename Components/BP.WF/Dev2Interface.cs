@@ -3849,6 +3849,14 @@ namespace BP.WF
                         ps.Add("FK_Node", nd.NodeID);
                         num = DBAccess.RunSQLReturnValInt(ps);
                         break;
+                    case DeliveryWay.ByDeptAndStation:
+                        string sql="SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, "+Glo.EmpDept+" B, WF_NodeStation C, "+Glo.EmpStation+" D";
+                        sql += " WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=101 AND B.FK_Emp=" + dbstr + "FK_Emp AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp=" + dbstr + "FK_Emp";
+                        ps.SQL = sql;
+                        ps.Add("FK_Node", nd.NodeID);
+                        ps.Add("FK_Emp", userNo);
+                        num = DBAccess.RunSQLReturnValInt(ps);
+                        break;
                     case DeliveryWay.BySelected:
                         num = 1;
                         break;

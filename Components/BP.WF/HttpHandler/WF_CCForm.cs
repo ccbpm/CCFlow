@@ -55,13 +55,96 @@ namespace BP.WF.HttpHandler
         public string Frm_Init()
         {
             MapData md = new MapData(this.EnsName);
+
+            #region 判断是否是返回的URL.
+            if (md.HisFrmType == FrmType.Url)
+            {
+                string no = this.GetRequestVal("NO");
+                string urlParas = "OID=" + this.RefOID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
+
+                string url = "";
+                /*如果是URL.*/
+                if (md.Url.Contains("?") == true)
+                    url = md.Url + "&" + urlParas;
+                else
+                    url = md.Url + "?" + urlParas;
+
+                return "url@" + url;
+            }
+
+            if (md.HisFrmType == FrmType.VSTOForExcel && this.GetRequestVal("IsFreeFrm") == null)
+            {
+                string url = "FrmVSTO.aspx?1=1&" + this.RequestParas;
+                return "url@" + url;
+            }
+
+            if (md.HisFrmType == FrmType.WordFrm)
+            {
+                string no = this.GetRequestVal("NO");
+                string urlParas = "OID=" + this.RefOID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID + "&FK_MapData=" + this.FK_MapData + "&OIDPKVal=" + this.OID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+                /*如果是URL.*/
+                string requestParas = this.RequestParas;
+                string[] parasArrary = this.RequestParas.Split('&');
+                foreach (string str in parasArrary)
+                {
+                    if (string.IsNullOrEmpty(str) || str.Contains("=") == false)
+                        continue;
+                    string[] kvs = str.Split('=');
+                    if (urlParas.Contains(kvs[0]))
+                        continue;
+                    urlParas += "&" + kvs[0] + "=" + kvs[1];
+                }
+                if (md.Url.Contains("?") == true)
+                    return "url@FrmWord.aspx?1=2" + "&" + urlParas;
+                else
+                    return "url@FrmWord.aspx" + "?" + urlParas;
+            }
+            if (md.HisFrmType == FrmType.ExcelFrm)
+            {
+                return "url@FrmExcel.aspx?1=2" + this.RequestParas;
+            }
+            #endregion 判断是否是返回的URL.
+
+
             DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
             #region 把主表数据放入.
             string atParas = "";
             //主表实体.
             GEEntity en = new GEEntity(this.EnsName);
-            en.OID = this.RefOID; ;
+
+            #region 求出 who is pk 值.
+            Int64 pk = this.RefOID;
+            string nodeid = this.FK_Node.ToString();
+            if (nodeid != "0" && string.IsNullOrEmpty(this.FK_Flow) == false)
+            {
+                /*说明是流程调用它， 就要判断谁是表单的PK.*/
+                FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                switch (fn.WhoIsPK)
+                {
+                    case WhoIsPK.FID:
+                        pk = this.FID;
+                        if (pk == 0)
+                            throw new Exception("@没有接收到参数FID");
+                        break;
+                    //case WhoIsPK.CWorkID: /*延续流程ID*/
+                    //    pk = this.CWorkID;
+                    //    if (pk == 0)
+                    //        throw new Exception("@没有接收到参数CWorkID");
+                    //    break;
+                    case WhoIsPK.PWorkID: /*父流程ID*/
+                        pk = this.PWorkID;
+                        if (pk == 0)
+                            throw new Exception("@没有接收到参数PWorkID");
+                        break;
+                    case WhoIsPK.OID:
+                    default:
+                        break;
+                }
+            }
+            #endregion  求who is PK.
+
+            en.OID = pk;
             if (en.RetrieveFromDBSources() == 0)
                 en.Insert();
 
@@ -114,10 +197,6 @@ namespace BP.WF.HttpHandler
             #endregion 把主表数据放入.
 
             return BP.Tools.FormatToJson.ToJson(ds);
-
-            ////解析这个表单.
-            //DataSet ds= BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(this.EnsName, this.RefOID, "");
-            //return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
         /// 执行保存

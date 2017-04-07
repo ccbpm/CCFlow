@@ -452,7 +452,13 @@
                     }
 
                     var redata = eval('(' + data + ')');
-                    alert(redata.Msg);
+
+                    $.messager.show({
+                        title: " ",
+                        msg: redata.Msg,
+                        timeout: 1000
+                    });
+
                     ShowSelectedDepts();
                 }, this);
                 return;
@@ -478,7 +484,12 @@
                 var redata = eval('(' + data + ')');
 
                 if (redata.InnerData.lastpart) {
-                    alert(redata.Msg);
+                    $.messager.show({
+                        title: " ",
+                        msg: redata.Msg,
+                        timeout: 1000
+                    });
+
                     $("#save").linkbutton("enable");
                     partidx = 0;
                     partcount = 0;

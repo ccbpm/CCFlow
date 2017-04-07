@@ -477,6 +477,7 @@
         var fk_mapData = GetQueryString("FK_MapData");
         var groupID = GetQueryString("GroupField");
         var fType = GetQueryString("FType");
+        var inlayer = GetQueryString("inlayer");
 
         if (fType == null || fType == "")
             fType = AppString;
@@ -497,16 +498,32 @@
 
                 if (btnCtl.id == 'Btn_SaveAndClose') {
                     $("#Msg").html("<font color=green>" + data + "</font>");
-                    window.close();
+
+                    if (inlayer == "1") {
+                        var pwin = window.parent;
+                        while (pwin) {
+                            if (pwin.closeDlg) {
+                                pwin.closeDlg();
+                                break;
+                            }
+                            else {
+                                pwin = pwin.parent;
+                            }
+                        }
+                    }
+                    else {
+                        window.close();
+                    }
+
                     return;
                 }
 
                 if (btnCtl.id == 'Btn_SaveAndNew') {
-                   // alert(data);
+                    // alert(data);
                     $("#Msg").html("<font color=green>" + data + "</font>");
 
                     //#warning 这里一直弹出窗口,怎么解?
-                    window.location.href = 'FieldTypeList.htm?GroupID=' + groupID + '&FK_MapData=' + fk_mapData + '&FType='+fType;
+                    window.location.href = 'FieldTypeList.htm?GroupID=' + groupID + '&FK_MapData=' + fk_mapData + '&FType=' + fType;
                     return;
                 }
             }

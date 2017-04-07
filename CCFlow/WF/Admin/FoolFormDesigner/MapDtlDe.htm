@@ -133,52 +133,52 @@
 
             //普通字段类型.
             if (ftype == "1") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&inlayer=1&PK=" + mypk;
                 title = '字段String属性';
             }
 
             //数值字段类型.
             if (ftype == "2") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
                 title = '字段Int属性';
             }
 
             //数值字段类型.
             if (ftype == "3") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
                 title = '字段Float属性';
             }
 
 
             //数值字段类型.
             if (ftype == "5") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
                 title = '字段Double属性';
             }
 
             //数值字段类型.
             if (ftype == "8") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
                 title = '字段Moeny属性';
             }
 
 
             //日期类型date.
             if (ftype == "6") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&inlayer=1&PK=" + mypk;
                 title = '字段Date属性';
 
             }
 
             //日期类型datetime.
             if (ftype == "7") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&inlayer=1&PK=" + mypk;
                 title = '字段DateTime属性';
             }
 
             // boolen 类型.
             if (ftype == "4") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=" + mypk;
+                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&inlayer=1&PK=" + mypk;
                 title = '字段Boolen属性';
             }
 
@@ -193,35 +193,41 @@
         }
 
         function EditEnum(fk_mapdata, mypk, enumKey) {
-
             var parentwin = parent.window;
-            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
-
-            if (parentwin && parentwin.document.getElementById("F").contentWindow && parentwin.document.getElementById("F").contentWindow.location.href == location.href) {
-                parentwin.EditEnum(fk_mapdata, mypk, enumKey);
-                return;
+            if (parentwin) {
+                var iFrame = parentwin.document.getElementById("F");
+                if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
+                    parentwin.EditEnum(fk_mapdata, mypk, enumKey);
+                    return;
+                }
             }
+
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&inlayer=1&PK=' + mypk + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
-
         }
         function EditTable(fk_mapdata, mypk, fk_sfTable) {
-
             var parentwin = parent.window;
-            if (parentwin && parentwin.document.getElementById("F").contentWindow
-               && parentwin.document.getElementById("F").contentWindow.location.href == location.href) {
-                parentwin.EditTable(fk_mapdata, mypk, fk_sfTable);
-                return;
+            if (parentwin) {
+                var iFrame = parentwin.document.getElementById("F");
+                if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
+                    parentwin.EditTable(fk_mapdata, mypk, fk_sfTable);
+                    return;
+                }
             }
 
-            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&inlayer=1&PK=' + mypk + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
 
+        }
+
+        function closeDlg() {
+            $("#eudlg").dialog("close");
         }
 
         function Up(fk_mapdata, mypk) {

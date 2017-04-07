@@ -350,6 +350,7 @@
         var groupID = GetQueryString("GroupField");
         var fType = GetQueryString("FType");
         var enumKey = GetQueryString("EnumKey");
+        var inlayer = GetQueryString("inlayer");
        
         var frmData = $("#cc").serialize();
         $.ajax({
@@ -376,7 +377,23 @@
 
                 if (btnCtl.id == 'Btn_SaveAndClose') {
                     $("#Msg").html("<font color=green>" + data + "</font>");
-                    window.close();
+
+                    if (inlayer == "1") {
+                        var pwin = window.parent;
+                        while (pwin) {
+                            if (pwin.closeDlg) {
+                                pwin.closeDlg();
+                                break;
+                            }
+                            else {
+                                pwin = pwin.parent;
+                            }
+                        }
+                    }
+                    else {
+                        window.close();
+                    }
+
                     return;
                 }
 

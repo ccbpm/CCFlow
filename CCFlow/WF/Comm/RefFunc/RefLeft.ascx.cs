@@ -122,6 +122,17 @@ namespace CCFlow.WF.Comm.RefFunc
         /// 功能个数
         /// </summary>
         public int ItemCount { get; set; }
+        
+        /// <summary>
+        /// easyui-dialog关闭处理参数，2017-04-07，added by liuxc
+        /// </summary>
+        public string InLayer
+        {
+            get
+            {
+                return Request.QueryString["inlayer"] == "1" ? "&inlayer=1" : "";
+            }
+        }
         #endregion
 
         #region Private Property,added by liuxc,2014-10-23
@@ -243,7 +254,7 @@ namespace CCFlow.WF.Comm.RefFunc
             en.PKVal = this.PK;
             en.RetrieveFromDBSources();
 
-            string keys = "&" + en.PK + "=" + this.PK + "&r=" + DateTime.Now.ToString("MMddhhmmss");
+            string keys = "&" + en.PK + "=" + this.PK + InLayer + "&r=" + DateTime.Now.ToString("MMddhhmmss");
 
             string titleKey = "";
 
@@ -267,7 +278,7 @@ namespace CCFlow.WF.Comm.RefFunc
             //AddLi(
             //    string.Format("<div><a href='UIEn.aspx?EnName={0}&PK={1}'>{4}<span class='nav'>{2}</span></a></div>{3}", EnName, PK, titleKey == "Title" ? "主页" : desc, Environment.NewLine, GetIcon(IconFirstDefault)));
             AddGroupedLeftItem(dictDefs, "默认组", new LeftMenuItem(CCFlowPath, (titleKey == "Title" ? "主页" : desc),
-                                                                 string.Format("UIEn.aspx?EnName={0}&PK={1}", EnName, PK),
+                                                                 string.Format("UIEn.aspx?EnName={0}&PK={1}" + InLayer, EnName, PK),
                                                                  IconFirstDefault, false));
 
             #region 加入一对多的实体编辑
@@ -362,6 +373,7 @@ namespace CCFlow.WF.Comm.RefFunc
                     if (myurl == null)
                         continue;
 
+                    myurl += InLayer;
                     int h = func.Height;
 
                     if (func.RefMethodType == RefMethodType.RightFrameOpen)

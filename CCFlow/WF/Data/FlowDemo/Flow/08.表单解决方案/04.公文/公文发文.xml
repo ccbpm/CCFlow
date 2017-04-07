@@ -9201,24 +9201,6 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>DDLFullCtrl_ND15004_FWLX</MyPK>
-    <FK_MapData>ND15004</FK_MapData>
-    <ExtType>DDLFullCtrl</ExtType>
-    <DoWay>0</DoWay>
-    <AttrOfOper>FWLX</AttrOfOper>
-    <AttrsOfActive />
-    <Doc />
-    <Tag />
-    <Tag1 />
-    <Tag2 />
-    <Tag3 />
-    <AtPara />
-    <DBSrc />
-    <H>500</H>
-    <W>400</W>
-    <PRI>0</PRI>
-  </Sys_MapExt>
-  <Sys_MapExt>
     <MyPK>DDLFullCtrl_ND15005_FaWenLeiXing</MyPK>
     <FK_MapData>ND15005</FK_MapData>
     <ExtType>DDLFullCtrl</ExtType>
@@ -9229,24 +9211,6 @@
 +~[~+datename(year,getdate())+~]~
  + CAST((CAST(REPLACE(ISNULL(REPLACE((SELECT top 1 FaWenWenHao FROM ND150Rpt WHERE FaWenLeiXing = @Key AND WFState &lt;&gt; 0 AND WFState &lt;&gt; 1 AND FaWenWenHao IS NOT NULL AND len(FaWenWenHao) &gt; 0 ORDER BY LEN(FaWenWenHao) DESC, FaWenWenHao DESC)
 , (SELECT Lab+~[~+datename(year,getdate())+~]~ FROM Sys_Enum WHERE EnumKey = ~FaWenLeiXing~ AND IntKey = @Key), ~~),~0号~),~号~,~~) AS INT) + 1) AS NVARCHAR) + ~号~ AS FaWenWenHao</Doc>
-    <Tag />
-    <Tag1 />
-    <Tag2 />
-    <Tag3 />
-    <AtPara />
-    <DBSrc />
-    <H>500</H>
-    <W>400</W>
-    <PRI>0</PRI>
-  </Sys_MapExt>
-  <Sys_MapExt>
-    <MyPK>DDLFullCtrl_ND15005_FWLX</MyPK>
-    <FK_MapData>ND15005</FK_MapData>
-    <ExtType>DDLFullCtrl</ExtType>
-    <DoWay>0</DoWay>
-    <AttrOfOper>FWLX</AttrOfOper>
-    <AttrsOfActive />
-    <Doc />
     <Tag />
     <Tag1 />
     <Tag2 />
@@ -9279,24 +9243,6 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>DDLFullCtrl_ND15006_FWLX</MyPK>
-    <FK_MapData>ND15006</FK_MapData>
-    <ExtType>DDLFullCtrl</ExtType>
-    <DoWay>0</DoWay>
-    <AttrOfOper>FWLX</AttrOfOper>
-    <AttrsOfActive />
-    <Doc />
-    <Tag />
-    <Tag1 />
-    <Tag2 />
-    <Tag3 />
-    <AtPara />
-    <DBSrc />
-    <H>500</H>
-    <W>400</W>
-    <PRI>0</PRI>
-  </Sys_MapExt>
-  <Sys_MapExt>
     <MyPK>DDLFullCtrl_ND15007_FaWenLeiXing</MyPK>
     <FK_MapData>ND15007</FK_MapData>
     <ExtType>DDLFullCtrl</ExtType>
@@ -9307,24 +9253,6 @@
 +~[~+datename(year,getdate())+~]~
  + CAST((CAST(REPLACE(ISNULL(REPLACE((SELECT top 1 FaWenWenHao FROM ND150Rpt WHERE FaWenLeiXing = @Key AND WFState &lt;&gt; 0 AND WFState &lt;&gt; 1 AND FaWenWenHao IS NOT NULL AND len(FaWenWenHao) &gt; 0 ORDER BY LEN(FaWenWenHao) DESC, FaWenWenHao DESC)
 , (SELECT Lab+~[~+datename(year,getdate())+~]~ FROM Sys_Enum WHERE EnumKey = ~FaWenLeiXing~ AND IntKey = @Key), ~~),~0号~),~号~,~~) AS INT) + 1) AS NVARCHAR) + ~号~ AS FaWenWenHao</Doc>
-    <Tag />
-    <Tag1 />
-    <Tag2 />
-    <Tag3 />
-    <AtPara />
-    <DBSrc />
-    <H>500</H>
-    <W>400</W>
-    <PRI>0</PRI>
-  </Sys_MapExt>
-  <Sys_MapExt>
-    <MyPK>DDLFullCtrl_ND15007_FWLX</MyPK>
-    <FK_MapData>ND15007</FK_MapData>
-    <ExtType>DDLFullCtrl</ExtType>
-    <DoWay>0</DoWay>
-    <AttrOfOper>FWLX</AttrOfOper>
-    <AttrsOfActive />
-    <Doc />
     <Tag />
     <Tag1 />
     <Tag2 />

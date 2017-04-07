@@ -48,7 +48,7 @@ namespace BP.WF.HttpHandler
 
         #region AutoFull 自动计算 a*b  功能界面 .
         /// <summary>
-        /// 保存
+        /// 保存(自动计算: @单价*@数量 模式.)
         /// </summary>
         /// <returns></returns>
         public string AutoFull_Save()
@@ -60,7 +60,7 @@ namespace BP.WF.HttpHandler
 
             me.FK_MapData = this.FK_MapData;
             me.AttrOfOper = this.KeyOfEn;
-            me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
+            me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的表达式.
 
             me.ExtType = MapExtXmlList.AutoFull;
 

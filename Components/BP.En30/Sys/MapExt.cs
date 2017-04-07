@@ -865,9 +865,12 @@ namespace BP.Sys
                         throw new Exception("@SQL表达式错误，您必须包含@Key ,这个关键字. ");
                     break;
                 case MapExtXmlList.AutoFullDLL:
-                case MapExtXmlList.AutoFull:
-                    if (this.Doc.Length <= 20)
+                    if (this.Doc.Length <= 13)
                         throw new Exception("@必须填写SQL表达式. ");
+                    break;
+                case MapExtXmlList.AutoFull:
+                    if (this.Doc.Length <= 3)
+                        throw new Exception("@必须填写表达式. 比如 @单价;*@数量; ");
                     break;
                 case MapExtXmlList.PopVal:
                     break;

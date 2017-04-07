@@ -1087,63 +1087,6 @@
     <AtPara />
   </Sys_MapAttr>
   <Sys_MapExt>
-    <MyPK>ActiveDDL_LXSQS_FK_City</MyPK>
-    <FK_MapData>LXSQS</FK_MapData>
-    <ExtType>ActiveDDL</ExtType>
-    <DoWay>0</DoWay>
-    <AttrOfOper>FK_SF</AttrOfOper>
-    <AttrsOfActive>FK_City</AttrsOfActive>
-    <FK_DBSrc />
-    <Doc>select No,Name from fk_city  where FK_SF=~@key~</Doc>
-    <Tag />
-    <Tag1 />
-    <Tag2 />
-    <Tag3 />
-    <AtPara />
-    <DBSrc />
-    <H>500</H>
-    <W>400</W>
-    <PRI>0</PRI>
-  </Sys_MapExt>
-  <Sys_MapExt>
-    <MyPK>ActiveDDL_LXSQS_FK_Xian</MyPK>
-    <FK_MapData>LXSQS</FK_MapData>
-    <ExtType>ActiveDDL</ExtType>
-    <DoWay>0</DoWay>
-    <AttrOfOper>FK_City</AttrOfOper>
-    <AttrsOfActive>FK_Xian</AttrsOfActive>
-    <FK_DBSrc />
-    <Doc>select No,Name from fk_Xian  where FK_City=~@key~</Doc>
-    <Tag />
-    <Tag1 />
-    <Tag2 />
-    <Tag3 />
-    <AtPara />
-    <DBSrc />
-    <H>500</H>
-    <W>400</W>
-    <PRI>0</PRI>
-  </Sys_MapExt>
-  <Sys_MapExt>
-    <MyPK>DDLFullCtrl_LXSQS_FK_SF</MyPK>
-    <FK_MapData>LXSQS</FK_MapData>
-    <ExtType>DDLFullCtrl</ExtType>
-    <DoWay>0</DoWay>
-    <AttrOfOper>FK_SF</AttrOfOper>
-    <AttrsOfActive />
-    <FK_DBSrc />
-    <Doc>select NO,name from fk_sf where name like ~%山东%~</Doc>
-    <Tag />
-    <Tag1 />
-    <Tag2 />
-    <Tag3 />
-    <AtPara />
-    <DBSrc />
-    <H>500</H>
-    <W>400</W>
-    <PRI>0</PRI>
-  </Sys_MapExt>
-  <Sys_MapExt>
     <MyPK>PopVal_LXSQS_JBXX_XZQMC</MyPK>
     <FK_MapData>LXSQS</FK_MapData>
     <ExtType>PopVal</ExtType>

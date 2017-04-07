@@ -20,12 +20,11 @@
             $("#Msg").html("正在加载,请稍后......");
 
             //初始化groupID.
-            var no = GetQueryString("No");
-
+            var no = GetQueryString("FK_MapData");
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Frm_Init&No=" + no + "&m=" + Math.random(),
+                url: Handler + "?DoType=Frm_Init&FK_MapData=" + no + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -33,11 +32,16 @@
                         alert(data);
                         return;
                     }
-
+                    //$("#Msg").html(data);
                     data = JSON.parse(data);
-
+                    //console.log(data);
+                    var mainTable = data.MAINTABLE; //主表单
+                    var sysFrmLine = data.SYS_FRMLINE; //线
+                    var sysFrmLab = data.SYS_FRMLAB; //lab
+                    addLines(sysFrmLine);
+                    addLabels(sysFrmLab);
                     //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data);
+                    //GenerFullAllCtrlsVal(data);
                     return;
                 }
             });
@@ -108,13 +112,7 @@
     }
 </script>
 
-</td>
-</tr>
-</table>
-
-
-
-<fieldset>
+<!--<fieldset>
 <legend>开发约定与说明</legend>
 
 <ul>
@@ -128,9 +126,66 @@
 
 </ul>
 
-</fieldset> 
+</fieldset> -->
 
 </form>
 
 </body>
+<script type="text/javascript">
+    function addLines(lines) {
+        var wtX = 0;
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (line.X1 == line.X2) {
+                /* 一道竖线 */
+                var h = line.Y1 - line.Y2;
+                h = Math.abs(h);
+                if (line.Y1 < line.Y2)
+                {
+                    x = line.X1 + wtX;
+                    $("#cc").append("\t\n<img id='" + line.MYPK + "'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y1 + "px; width:" + line.BORDERWIDTH + "px; height:" + h + "px;background-color:" + line.BORDERCOLOR + "\" />");
+                }
+                else
+                {
+                    x = line.X2 + wtX;
+                    $("#cc").append("\t\n<img id='" + line.MYPK + "'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y2 + "px; width:" + line.BORDERWIDTH + "px; height:" + h + "px;background-color:" + line.BORDERCOLOR + "\" />");
+                }
+            }
+            else {
+                /* 一道横线 */
+                var w = line.X2 - line.X1;
+
+                if (line.X1 < line.X2)
+                {
+                    x = line.X1 + wtX;
+                    $("#cc").append("\t\n<img id='" + line.MYPK + "'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y1 + "px; width:" + w + "px; height:" + line.BORDERWIDTH + "px;background-color:" + line.BORDERCOLOR + "\" />");
+                }
+                else
+                {
+                    x = line.X2 + wtX;
+                    $("#cc").append("\t\n<img id='" + line.MYPK + "'  style=\"padding:0px;position:absolute; left:" + x + "px; top:" + line.Y2 + "px; width:" + w + "px; height:" + line.BORDERWIDTH + "px;background-color:" + line.BORDERCOLOR + "\" />");
+                }
+           }
+        }
+    }
+
+    function addLabels(labs) {
+        console.info(labs);
+        for (var i = 0; i < labs.length;i++ ) {
+            var lab = labs[i];
+            colorX(lab.FONTCOLOR);
+            //$("#cc").append("\t\n<DIV id=u2 style='position:absolute;left:" + x + "px;top:" + lab.Y + "px;text-align:left;' >");
+            //$("#cc").append("\t\n<span style='color:" + lab.FontColorHtml + ";font-family: " + lab.FontName + ";font-size: " + lab.FontSize + "px;' >" + lab.TextHtml + "</span>");
+            //$("#cc").append("\t\n</DIV>");
+            $("#cc").append("\t\n<label style='position:absolute;left:" + lab.X + "px;top:" + lab.Y + "px;text-align:left;color:" + colorX(lab.FONTCOLOR) + ";font-family: " + lab.FONTNAME + ";font-size: " + lab.FONTSIZE + "px;' >" + lab.TEXT + "</label>");
+        }
+    }
+    function colorX(col) {
+        if (col.length == 9) {
+            return '#' + col.substring(3,9);
+        }
+        return col;
+    }
+</script>
+
 </html>

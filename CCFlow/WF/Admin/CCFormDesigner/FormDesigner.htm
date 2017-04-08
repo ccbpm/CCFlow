@@ -99,7 +99,6 @@
 
             var url = "/WF/Admin/XAP/DoPort.aspx?DoType=DownFormTemplete&FK_MapData=" + CCForm_FK_MapData;
             window.open(url, 'exp');
-
           //  CCForm_ShowDialog(url, '导入表单');
             //  CCForm_ShowDialog(url, '导出');
             //CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData, '导出');
@@ -108,18 +107,32 @@
 
         function Imp() {
 
-            alert('施工中...');
             var url = "/WF/Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
+
+           // window.location.href = url;
+
             // window.open(url, 'exp');
-            CCForm_ShowDialog(url, '导入表单');
+           CCForm_ShowDialog(url, '导入表单');
+            return;
+        }
+
+        function FoolFormDesigner() {
+
+            var url = "/WF/Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
+            CCForm_ShowDialog(url, '傻瓜表单设计器');
+            return;
+        }
+
+        function Mobile() {
+            //var url="WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=&FK_MapData=ND201&t=2017-04-08 17:47&s=0.4465966680578477
+            var url = "/WF/Admin/AttrNode/SortingMapAttrs.aspx?s=34&FK_MapData=" + CCForm_FK_MapData + "&FK_Flow=";
+            CCForm_ShowDialog(url, '手机表单设计器');
             return;
         }
 
         function Srcipt() {
 
             var url = "/WF/Admin/FoolFormDesigner/MapExt/InitScript.aspx?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
-
-          //  CCForm_ShowDialog('./DialogCtr/Exp.htm?FK_MapData=' + CCForm_FK_MapData, 'Javascript编程');
 
             CCForm_ShowDialog(url, 'JavaScript编程');
 
@@ -169,7 +182,6 @@
             <label for="HField" class="toolbarText">隐藏字段</label>
         </a>
 
-    
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
             <input type="checkbox" onclick="showGrid();" checked="checked" id="gridCheckbox" title="显示网格" style="vertical-align: middle;" />
@@ -177,6 +189,18 @@
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
             <input type="checkbox" onclick="snapToGrid();" id="snapCheckbox" title="粘合网格线" style="vertical-align: middle;" />
             <label for="snapCheckbox" class="toolbarText">粘合网格线</label>
+
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+        <a style="text-decoration: none; display:inline;" href="javascript:FoolFormDesigner()" target=_blank title="手机表单." >
+            <img src="Img/Home.png" id="Img4" border="0" alt="" />
+            <label class="toolbarText">傻瓜</label>
+        </a>
+
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+        <a style="text-decoration: none; display:inline;" href="javascript:Mobile()" target=_blank title="手机表单." >
+            <img src="Img/Home.png" id="Img3" border="0" alt="" />
+            <label class="toolbarText">手机</label>
+        </a>
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <input type="checkbox" onclick="propertyForm();" id="propertyCheckbox" title="属性窗口" style="vertical-align: middle;" />

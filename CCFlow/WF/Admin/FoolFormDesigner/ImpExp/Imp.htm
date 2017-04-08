@@ -73,7 +73,9 @@
         //页面启动函数.
         var frmID = GetQueryString("FK_MapData");
         $(function () {
+
             $("#Msg").html("正在加载,请稍后......");
+
             
             var flowNo = frmID.substr(2, frmID.length - 4);
             if (flowNo > 10 && flowNo < 100) {
@@ -81,6 +83,7 @@
             } else if (flowNo < 10) {
                 flowNo = '00'+flowNo;
             }
+
             /*
             *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
             */
@@ -101,16 +104,12 @@
 
                     //节点表单.
                     var WF_Node = db["WF_Node"];
-
-                    //行程部门与人员的关系.
-                    //var Sys_FormTree = db["Sys_FormTree"];
-                    //var Sys_MapData = db["Sys_MapData"];
-                    //ulNodeFrmImp
                     var ulHtml = '';
                     for (var i = 0; i < WF_Node.length; i++) {
                         var node = WF_Node[i];
-                        ulHtml += '<li><input type="button" class="btn btn-default" data-nodeid=' + node.NODEID + ' value="' + node.NAME + '" /></li>'
+                        ulHtml += '<li><input type="button" class="btn btn-default" data-nodeid=' + node.NODEID + ' value="ID:' +node.NODEID + ' - ' + node.NAME + '" /></li>'
                     }
+
                     $('#ulNodeFrmImp').html(ulHtml);
 
                     //绑定节点表单事件
@@ -200,23 +199,37 @@
     <div id="tt" class="easyui-tabs" style="width:100%;height:500px;">
         <div title="从本机导入" style="padding:15px;">
             <div style="text-align:right;margin-right:50px;">
-                <input type="button" value="模板导入" onclick="saveImpFromLocalXML()" />
             </div>
             <div>
-                <label style="padding-left:8px;">选择表单模板文件(*.xml),然后按确定按钮</label><br /><br />
+
+            <fieldset>
+            <legend>选择表单模板文件(*.xml),然后按确定按钮 </legend>
+
+                 <label style="padding-left:8px;"></label><br /><br />
                 <input type="file" id="localXmlFile" name="localXmlFile" />
+                 <input type="button" value="模板导入" onclick="saveImpFromLocalXML()" />
+            </fieldset>
+
             </div>
 
             </div>
         <div title="从节点表单导入">
-            <div style="text-align:right;margin-right:50px;">
-                <input type="button" value="从节点表单导入" onclick="saveCopyFromFrmNode()" id="copyFromFrmNodeSave" />
-            </div>
-            <input type="checkbox" checked="checked" id="ckClear" name="IsClear" />是否清除
-            <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" />是否只读
+           
+          
+
+            <fieldset>
+            <legend>请选择一个节点表单</legend>
+            <!-- 节点表单列表 -->
             <ul id="ulNodeFrmImp">
-                
             </ul>
+
+            <hr />
+
+
+              <input type="checkbox" checked="checked" id="ckClear" name="IsClear" />是否清除
+            <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" />是否只读
+                <input type="button" value="从节点表单导入" onclick="saveCopyFromFrmNode()" id="copyFromFrmNodeSave" />
+            </fieldset>
             
             </div>
         <div title="从表单库导入" style="padding:15px;">

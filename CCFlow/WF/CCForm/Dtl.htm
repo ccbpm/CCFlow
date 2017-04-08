@@ -61,17 +61,20 @@
             row.FK_MapDtl = GetQueryString("EnsName");
             //row.FK_MapData = "ND101";
             row.RefPKVal = GetQueryString("RefPKVal");
+
             AjaxServiceGener(row, SaveRowAfter, this);
         }
 
         function SaveRowAfter(data) {
-            if (data.indexOf('err')>-1) {
+
+            if (data.indexOf('err') > -1) {
                 alert('保存失败！');
                 saveFlag = false;
-            }else{
-                $('#dg').datagrid('updateRow', data);
-                saveFlag = true;
+                return;
             }
+
+            $('#dg').datagrid('updateRow', data);
+            saveFlag = true;
         }
 
 

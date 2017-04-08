@@ -62,7 +62,7 @@
 <td colspan="3" >
 <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
 <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-<a href="javascript:ShowHidden('sqlexp')"  >填充SQL帮助:</a>
+<a href="javascript:ShowHidden('sqlexp')"  >填充表达式帮助:</a>
  </td>
 </tr>
 
@@ -70,8 +70,8 @@
 <td colspan="3" >
 <div id='sqlexp'  style='color:Gray; display:none'>
  <ul>
-   <li>1.如果是从表: 表达式就是列之间的计算，比如: @DanJia;*@ShuLiang; </li>
-   <li>2.如果是主表: 就是主表字段之间的计算。 </li>
+   <li>1.如果是从表: 表达式就是列之间的计算，比如: @A;+@B; </li>
+   <li>2.如果是主表: 就是主表字段之间的计算,比如: @DanJia;*@ShuLiang; 或者 @单价*@数量 </li>
  </ul>
 </div>
  </td>

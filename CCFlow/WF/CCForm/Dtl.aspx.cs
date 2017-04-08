@@ -239,6 +239,13 @@ namespace CCFlow.WF.CCForm
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //string url = this.Request.RawUrl;
+            //url = url.Replace(".aspx", ".htm");
+            //this.Response.Redirect(url, true);
+            //return;
+
+
+
             MapDtl mdtl = new MapDtl(this.EnsName);
             BP.WF.Node nd = null;
 

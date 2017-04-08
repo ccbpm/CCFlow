@@ -1691,6 +1691,7 @@ namespace BP.WF.Template
 
             //更新缓存数据。
             Flow fl = new Flow(this.No);
+            fl.RetrieveFromDBSources();
             fl.Copy(this);
 
             #region 检查数据完整性 - 同步业务表数据。

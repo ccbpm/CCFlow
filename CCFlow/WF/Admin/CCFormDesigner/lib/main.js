@@ -297,6 +297,9 @@ var gridVisible = false;
 /**Makes figure snap to grid*/
 var snapTo = false;
 
+/*show propertyWin show or hide*/
+var propertyWinVisible = false;
+
 /**Keeps last coodinates while dragging*/
 var lastClick = [];
 
@@ -718,7 +721,21 @@ function snapToGrid() {
     }
 }
 
+/**是否显示属性窗口*/
+function propertyForm() {
+    Log.info("propertyForm show or hidden;");
+    propertyWinVisible = !propertyWinVisible;
 
+    if (propertyWinVisible) {
+        $('#right').show();
+        document.getElementById("propertyCheckbox").checked = true;
+        $('#container').css('right', '247px');
+    } else {
+        $('#right').hide();
+        document.getElementById("propertyCheckbox").checked = false;
+        $('#container').css('right', '0px');
+    }
+}
 /**Makes grid visible or invisible, depedinding of previous value
 *If the "snap to" was active and grid made invisible the "snap to"
 *will be disabled

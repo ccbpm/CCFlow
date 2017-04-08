@@ -24,6 +24,8 @@ $(function () {
     InitContexMenu();
     //鼠标双击
     InitDbClick();
+    //鼠标移动
+    InitonMouseMove();
     //初始节点元素
     buildPanel();
     //设置属性高度
@@ -35,7 +37,11 @@ $(function () {
 function InitContexMenu() {
     //画板右键
     $("#a").bind('contextmenu', function (ev) {
-        dd = ev;
+        //阻止右键菜单弹出
+        ev.preventDefault();
+        //将下面的 RETURN 注释去掉 就不会弹出右键菜单【删除--属性】
+        //return;
+
         var coords = getCanvasXY(ev);
         var x = coords[0];
         var y = coords[1];
@@ -45,7 +51,6 @@ function InitContexMenu() {
 
         //find Connector at (x,y)
         var cId = CONNECTOR_MANAGER.connectorGetByXY(x, y);
-
         // check if we clicked a connector
         if (cId != -1) {
             textPrimitiveId = 0; // (0 by default)
@@ -56,28 +61,22 @@ function InitContexMenu() {
             if (cId != -1) {
                 textPrimitiveId = 0; // (0 by default)
             } else {
+
                 //find Figure at (x,y)
                 var fId = STACK.figureGetByXY(x, y);
-
                 // check if we clicked a figure
                 if (fId != -1) {
-                    var figure = STACK.figureGetById(fId);
-                    var tId = STACK.textGetByFigureXY(fId, x, y);
-                    // if we clicked text primitive inside of figure
-                    if (tId !== -1) {
-                        textPrimitiveId = tId;
-                        $('#textMenu').menu({ onShow: function () {
-                            $("#HD_BPMN_NodeID").val("");
-                            $("#HD_BPMN_FigureID").val(fId);
-                        }, onClick: TextProperty_Funs
-                        });
-                        //弹出右键菜单
-                        ev.preventDefault();
-                        $('#textMenu').menu('show', {
-                            left: ev.pageX,
-                            top: ev.pageY
-                        });
-                    }
+                    $('#figureMenu').menu({
+                        onShow: function () {
+                            $("#HD_FigureID").val(fId);
+                        }, onClick: FigureProperty_Funs
+                    });
+                    //弹出右键菜单
+                    ev.preventDefault();
+                    $('#figureMenu').menu('show', {
+                        left: ev.pageX,
+                        top: ev.pageY
+                    });
                 } else {
                     //find Container at (x,y)
                     var contId = STACK.containerGetByXY(x, y);
@@ -95,25 +94,62 @@ function InitContexMenu() {
 //画板双击事件绑定
 function InitDbClick() {
     $('#a').bind('dblclick', function (ev) {
-        var coords = getCanvasXY(ev); var x = coords[0];
+        window.getSelection().removeAllRanges();
+        var coords = getCanvasXY(ev);
+        var x = coords[0];
         var y = coords[1];
-        var figureIndex = STACK.figureGetByXY(x, y);
-
-        if (figureIndex != -1) {
-            var figure = STACK.figureGetById(figureIndex);
+        var figureId = STACK.figureGetByXY(x, y);
+        if (figureId != -1) {
+            var figure = STACK.figureGetById(figureId);
             ondbclickCallBackFun(figure);
             return;
         }
-
         //打开表单属性.
         CCForm_Attr();
+        
         return;
     })
 }
 
+var figureIdMouseMove = -1;
+var dealWhithMouseMove = false;
+//画板鼠标悬浮事件绑定
+function InitonMouseMove() {
+    $('#a').bind('mousemove', function (ev) {
+        if (!dealWhithMouseMove) {
+            dealWhithMouseMove = true;
+            var coords = getCanvasXY(ev);
+            var x = coords[0];
+            var y = coords[1];
+            var figureId = STACK.figureGetByXY(x, y);
+            if (figureIdMouseMove != figureId) {
+                figureIdMouseMove = figureId;
+                console.log(figureId)
+                if (figureId != -1) {
+                    var figure = STACK.figureGetById(figureId);
+                    mouseHoverCallBackFun(figure, x, y);
+                }
+            }
+            dealWhithMouseMove = false;
+        }
+    })
+}
+function mouseHoverCallBackFun(figure, x, y) {
+    var keyOfEnPro = $.grep(figure.properties, function (p) { return p.property == "KeyOfEn" });
+    if (keyOfEnPro.length == 1) {
+        $('#figureTip').css('top', y).css('left', x).text(keyOfEnPro[0].PropertyValue).show();
+    }
+    //5S后消失
+    setTimeout("$('#figureTip').hide()", 5000);
+}
+
 //画板元素双击时的回掉方法
 function ondbclickCallBackFun(figure) {
+    showFigurePropertyWin(figure);
+}
 
+//打开元素的属性窗口
+function showFigurePropertyWin(figure) {
     var v = figure.CCForm_Shape;
     var shap = figure.CCForm_Shape;
 
@@ -320,31 +356,18 @@ function buildPanel() {
     }
 }
 
-function TextProperty_Funs(item) {
-    var figureId = $("#HD_BPMN_FigureID").val();
+function FigureProperty_Funs(item) {
+    var figureId = $("#HD_FigureID").val();
+    var figure = STACK.figureGetById(figureId);
 
     //根据事件名称进行执行
     switch (item.name) {
-        case "text_edit": //编辑文本
-            var figure = STACK.figureGetById(figureId);
-            // check if we clicked a text primitive inside of shape
-            // deselect current figure
-            selectedFigureId = -1;
-            // deselect current container
-            selectedContainerId = -1;
-            // deselect current connector
-            selectedConnectorId = -1;
-            // set current state
-            state = STATE_TEXT_EDITING;
-            // set up text editor
-            setUpTextEditorPopup(figure, 0);
-            redraw = true;
+        case "figure_delete": //删除元素
+            STACK.figureRemoveById(figureId)
             draw();
             break;
-        case "text_delete": //删除文本
-            var cmdDelFig = new FigureDeleteCommand(figureId);
-            cmdDelFig.execute();
-            draw();
+        case "figure_property"://打开属性窗口
+            showFigurePropertyWin(figure);
             break;
     }
 }

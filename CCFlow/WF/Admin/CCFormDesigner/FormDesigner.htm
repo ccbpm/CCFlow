@@ -179,11 +179,15 @@
             <label for="snapCheckbox" class="toolbarText">粘合网格线</label>
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+        <input type="checkbox" onclick="propertyForm();" id="propertyCheckbox" title="属性窗口" style="vertical-align: middle;" />
+        <label for="propertyCheckbox" class="toolbarText">属性窗口</label>
+
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none; display:inline;" href="http://www.ccflow.org" target=_blank title="打开官方网站在线帮助." >
             <img src="Img/Home.png" id="Img1" border="0" alt="" />
             <label class="toolbarText">驰骋官网</label>
         </a>
-
+        
         <script type="text/javascript" language="javascript">
             if (!isBrowserReady()) {
                 document.write('<span style="background-color: red;" >');
@@ -208,10 +212,15 @@
                 </div>
                 <div id="text-editor-tools">
                 </div>
+
+
+                <span id="figureTip" style="">
+                    fafdsfas
+                </span>
             </div>
         </div>
         <!--Right panel-->
-        <div id="right">
+        <div id="right" style="display:none;">
             <div style="background-color: #eae9e9; padding: 3px; background-image:url(Img/Form.png); background-repeat:no-repeat; background-position:left;background-size:16px 16px;">
                 <span style="margin-left:15px; font-size:small;">属性设置</span>
             </div>
@@ -234,8 +243,10 @@
             <span id="div_gridvisible">隐藏网格</span>
         </div>
     </div>
-    <div id="textMenu" class="easyui-menu" style="width: 180px;">
-        <div data-options="iconCls:'icon-delete',name:'text_delete'">删除</div>
+    <div id="figureMenu" class="easyui-menu" style="width: 180px;">
+        <input type="hidden" id="HD_FigureID"/>
+        <div data-options="iconCls:'icon-delete',name:'figure_delete'">删除</div>
+        <div data-options="iconCls:'icon-property',name:'figure_property'">属性</div>
     </div>
 </body>
 </html>

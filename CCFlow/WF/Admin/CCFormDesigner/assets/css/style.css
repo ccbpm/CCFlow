@@ -105,7 +105,7 @@ body{
     top: 38px;
     bottom: 0px;
     left: 168px;
-    right: 247px;
+    right: 0px;
     /*height: 600px;*/
 }
 #right{
@@ -571,4 +571,15 @@ body{
     background-position:left;
     /*background-size:136px 26px; */
     background:white;
+}
+
+#figureTip {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    z-index: 1000;
+    border: 2px lightgray;
+    border-style: outset;
+    color: darkgray;
+    padding:3px;
 }

@@ -69,6 +69,7 @@
     <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
     <script type="text/javascript" src="/WF/Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
+        console.log(window.parent)
         //页面启动函数.
         var frmID = GetQueryString("FK_MapData");
         $(function () {
@@ -148,8 +149,11 @@
                 async: true,
                 url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=ND" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
                 dataType: 'html',
-                success: function (db1) {
-                    alert(db1)
+                success: function (data) {
+                    alert(data)
+                    if (responseStr.indexOf("执行成功") != -1) {
+                        window.parent[0].Reload();
+                    }
                 }
             });
         }
@@ -173,6 +177,10 @@
                 },
                 success: function (responseStr) {
                     alert(responseStr);
+                    console.log(window.parent)
+                    if (responseStr.indexOf("执行成功")!=-1) {
+                        window.parent[0].Reload();
+                    }
                     //if (responseStr.status === 0) {
                     //    console.log("成功" + responseStr);
                     //} else {

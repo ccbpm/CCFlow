@@ -32,22 +32,6 @@
         width:100%;
         padding:0px;
         }
-
-            #ulNodeFrmImp li input[type=button] {
-                width: 100%;
-                background: white;
-                margin: 0px;
-                color: black;
-            }
-
-            #ulNodeFrmImp li input[type=button]:hover {
-                width: 100%;
-                background: #E0ECFF;
-            }
-
-        .liBtnActive {
-            background: #E0ECFF !important;
-        }
     </style>
     <!--<link rel="stylesheet" href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -72,8 +56,12 @@
         console.log(window.parent)
         //页面启动函数.
         var frmID = GetQueryString("FK_MapData");
+        var fk_flow = GetQueryString("FK_Flow");
+        var fk_node = GetQueryString("FK_Node");
         $(function () {
-
+            if (fk_node == null) {//如果当前不是节点表单 就隐藏节点表单导入
+                //$('#divUlNodeFrmImp').hide();
+            }
             $("#Msg").html("正在加载,请稍后......");
 
             
@@ -107,16 +95,10 @@
                     var ulHtml = '';
                     for (var i = 0; i < WF_Node.length; i++) {
                         var node = WF_Node[i];
-                        ulHtml += '<li><input type="button" class="btn btn-default" data-nodeid=' + node.NODEID + ' value="ID:' +node.NODEID + ' - ' + node.NAME + '" /></li>'
+                        ulHtml += '<li><input id="nd' + node.NODEID + '" type="radio" name="node" class="btn btn-default" data-nodeid=' + node.NODEID + '><label for="nd' + node.NODEID + '">ID:' + node.NODEID + ' - ' + node.NAME + '<label/></li>'
                     }
 
                     $('#ulNodeFrmImp').html(ulHtml);
-
-                    //绑定节点表单事件
-                    $('#ulNodeFrmImp li input[type=button]').bind('click', function (obj) {
-                        $('#ulNodeFrmImp li .liBtnActive').removeClass('liBtnActive');
-                        $(obj.target).addClass('liBtnActive');
-                    })
                 }
             });
 
@@ -141,8 +123,7 @@
         }
 
         function saveCopyFromFrmNode() {
-            var activeBtn = $('#ulNodeFrmImp li .liBtnActive');
-            var nodeId = $(activeBtn).data().nodeid;
+            var nodeId = $('#ulNodeFrmImp input:checked').data().nodeid;
             $.ajax({
                 type: 'post',
                 async: true,
@@ -213,25 +194,21 @@
             </div>
 
             </div>
-        <div title="从节点表单导入">
-           
-          
-
+        <div title="从节点表单导入" id="divUlNodeFrmImp">
             <fieldset>
-            <legend>请选择一个节点表单</legend>
-            <!-- 节点表单列表 -->
-            <ul id="ulNodeFrmImp">
-            </ul>
+                <legend>请选择一个节点表单</legend>
+                <!-- 节点表单列表 -->
+                <ul id="ulNodeFrmImp"></ul>
 
-            <hr />
+                <hr />
 
 
-              <input type="checkbox" checked="checked" id="ckClear" name="IsClear" />是否清除
-            <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" />是否只读
+                <input type="checkbox" checked="checked" id="ckClear" name="IsClear" />是否清除
+                <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" />是否只读
                 <input type="button" value="从节点表单导入" onclick="saveCopyFromFrmNode()" id="copyFromFrmNodeSave" />
             </fieldset>
-            
-            </div>
+
+        </div>
         <div title="从表单库导入" style="padding:15px;">
             <input type="button" class="btn btn-default" value="进入templete.ccflow.org执行导入" /><br /><br />
             <label style="padding-left:8px;">ccflow为您提供丰富的表单共享模板，您可以轻松的创建您的BPM系统</label>

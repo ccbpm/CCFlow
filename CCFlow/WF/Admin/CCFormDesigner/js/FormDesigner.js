@@ -25,7 +25,7 @@ $(function () {
     //鼠标双击
     InitDbClick();
     //鼠标移动
-    InitonMouseMove();
+    //InitonMouseMove();
     //初始节点元素
     buildPanel();
     //设置属性高度
@@ -537,7 +537,8 @@ function Conver_CCForm_V1ToV2() {
     //transe old CCForm to new
     $.post(controllerURLConfig, {
         action: 'CcformElements',
-        FK_MapData: CCForm_FK_MapData
+        FK_MapData: CCForm_FK_MapData,
+        FK_Node: CCForm_FK_MapData.substr(2, CCForm_FK_MapData.length)
     }, function (jsonData) {
         var jData = $.parseJSON(jsonData);
         if (jData.success == true) {
@@ -655,6 +656,12 @@ function Conver_CCForm_V1ToV2() {
                 var frmLine = flow_Data.Sys_FrmLine[i];
                 var createdConnector = connector_Template_Line(frmLine);
             }
+
+            //循环组件 轨迹图 审核组件 子流程 子线程
+            //for (var i in flow_Data.FigureCom) {
+            //    var figureCom = flow_Data.FigureCom[i];
+            //    var createdConnector = figure_Template_FigureCom(figureCom);
+            //}
             redraw = true;
             draw();
             //save(false);
@@ -1193,6 +1200,57 @@ function figure_Template_Dtl(frmDtl) {
     var x = frmDtl.X + frmDtl.W / 2;
     var y = frmDtl.Y + frmDtl.H / 2;
     var ifig = new ImageFrame(url, x , y , true, frmDtl.W, frmDtl.H);
+    ifig.debug = true;
+    f.addPrimitive(ifig);
+    //Text
+    //var t2 = new Text(frmDtl.Name, x + frmDtl.W / 2 + FigureDefaults.radiusSize / 2, y + frmDtl.H / 2 + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    //t2.style.fillStyle = FigureDefaults.textColor;
+    //f.addPrimitive(t2);
+
+    f.finalise();
+    return f;
+}
+
+//初始化轨迹图 审核组件 子流程 子线程
+function figure_Template_FigureCom(figureCom) {
+    if (figureCom.Sta == 0) {//未启用该组件
+        return;
+    }
+    var f = new Figure("frmFigureName");
+    var figureName = figureCom.FigrueName;
+    //ccform Property
+    f.CCForm_Shape = figureName;
+    f.name = figureName;
+
+    f.CCForm_MyPK = figureName;
+    f.style.fillStyle = FigureDefaults.fillStyle;
+    f.style.strokeStyle = FigureDefaults.strokeStyle;
+
+
+
+    f.properties.push(new BuilderProperty('控件属性-' + figureCom.FigureCnName, 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
+    for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
+        var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
+        var propertyVale = frmCom[property.proName];
+
+        if (propertyVale == undefined) {
+            propertyVale = property.DefVal;
+        }
+
+        if (property.proName == "Set") {
+            propertyVale = propertyVale.replace("@FrmID@", frmCom.FK_MapData);
+            propertyVale = propertyVale.replace("@KeyOfEn@", frmCom.No);
+        }
+
+        f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
+    }
+
+    //Image
+    var url = figureSetsURL + "/DataView/" + createdFigure.CCForm_Shape + ".png"; 
+    var x = frmCom.X + frmCom.W / 2;
+    var y = frmCom.Y + frmCom.H / 2;
+    var ifig = new ImageFrame(url, x, y, true, frmCom.W, frmCom.H);
     ifig.debug = true;
     f.addPrimitive(ifig);
     //Text

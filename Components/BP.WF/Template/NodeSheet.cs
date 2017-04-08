@@ -442,7 +442,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.JumpWayLab, "跳转", "跳转按钮标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(NodeAttr.JumpWay, 0, "跳转规则", true, true, NodeAttr.JumpWay);
-                map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 200, 10, true);
+                map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 100, 10, true);
                 map.SetHelperUrl(NodeAttr.JumpWay, "http://ccbpm.mydoc.io/?v=5404&t=16261"); //增加帮助.
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
@@ -464,19 +464,19 @@ namespace BP.WF.Template
              true, true, NodeAttr.CCWriteTo, "@0=写入抄送列表@1=写入待办@2=写入待办与抄送列表", true);
                 map.SetHelperUrl(NodeAttr.CCWriteTo, "http://ccbpm.mydoc.io/?v=5404&t=17976"); //增加帮助
 
-                map.AddTBString(BtnAttr.ShiftLab, "移交", "移交按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.ShiftLab, "移交", "移交按钮标签", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.ShiftEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.ShiftLab, "http://ccbpm.mydoc.io/?v=5404&t=16257"); //增加帮助.note:none
 
-                map.AddTBString(BtnAttr.DelLab, "删除", "删除按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.DelLab, "删除", "删除按钮标签", true, false, 0, 20, 10);
                 map.AddDDLSysEnum(BtnAttr.DelEnable, 0, "删除规则", true, true, BtnAttr.DelEnable);
                 map.SetHelperUrl(BtnAttr.DelLab, "http://ccbpm.mydoc.io/?v=5404&t=17992"); //增加帮助.
 
-                map.AddTBString(BtnAttr.EndFlowLab, "结束流程", "结束流程按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.EndFlowLab, "结束流程", "结束流程按钮标签", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.EndFlowEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.EndFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17989"); //增加帮助
 
-                map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 20, 10);
                 map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "打印方式", true,
                     true, BtnAttr.PrintDocEnable, "@0=不打印@1=打印网页@2=打印RTF模板@3=打印Word模版");
                 map.SetHelperUrl(BtnAttr.PrintDocEnable, "http://ccbpm.mydoc.io/?v=5404&t=17979"); //增加帮助
@@ -486,39 +486,39 @@ namespace BP.WF.Template
                 //map.AddDDLSysEnum(NodeAttr.FJOpen, 0, this.ToE("FJOpen", "附件权限"), true, true, 
                 //    NodeAttr.FJOpen, "@0=关闭附件@1=操作员@2=工作ID@3=流程ID");
 
-                map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.TrackEnable, true, "是否启用", true, true);
                 //map.SetHelperUrl(BtnAttr.TrackLab, this[SYS_CCFLOW, "轨迹"]); //增加帮助
                 map.SetHelperUrl(BtnAttr.TrackLab, "http://ccbpm.mydoc.io/?v=5404&t=24369");
 
-                map.AddTBString(BtnAttr.HungLab, "挂起", "挂起按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.HungLab, "挂起", "挂起按钮标签", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.HungEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.HungLab, "http://ccbpm.mydoc.io/?v=5404&t=16267"); //增加帮助.
 
-                map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 20, 10);
                 map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "工作方式",
           true, true, BtnAttr.SelectAccepterEnable);
                 map.SetHelperUrl(BtnAttr.SelectAccepterLab, "http://ccbpm.mydoc.io/?v=5404&t=16256"); //增加帮助
 
 
-                map.AddTBString(BtnAttr.SearchLab, "查询", "查询按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.SearchLab, "查询", "查询按钮标签", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.SearchEnable, false, "是否启用", true, true);
                 //map.SetHelperUrl(BtnAttr.SearchLab, this[SYS_CCFLOW, "查询"]); //增加帮助
                 map.SetHelperUrl(BtnAttr.SearchLab, "http://ccbpm.mydoc.io/?v=5404&t=24373");
 
-                map.AddTBString(BtnAttr.WorkCheckLab, "审核", "审核按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.WorkCheckLab, "审核", "审核按钮标签", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.WorkCheckEnable, false, "是否启用", true, true);
 
-                map.AddTBString(BtnAttr.BatchLab, "批处理", "批处理按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.BatchLab, "批处理", "批处理按钮标签", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.BatchLab, "http://ccbpm.mydoc.io/?v=5404&t=17920"); //增加帮助
 
-                map.AddTBString(BtnAttr.AskforLab, "加签", "加签按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.AskforLab, "加签", "加签按钮标签", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.AskforLab, "http://ccbpm.mydoc.io/?v=5404&t=16258");
 
                 // add by 周朋 2014-11-21. 让用户可以自己定义流转.
-                map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.TCEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.TCEnable, "http://ccbpm.mydoc.io/?v=5404&t=17978");
 
@@ -526,23 +526,23 @@ namespace BP.WF.Template
                 //map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
 
                // map.SetHelperUrl(BtnAttr.AskforLab, this[SYS_CCFLOW, "加签"]); //增加帮助
-                map.AddTBString(BtnAttr.WebOfficeLab, "公文", "文档按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.WebOfficeLab, "公文", "文档按钮标签", true, false, 0, 20, 10);
                 //  map.AddBoolean(BtnAttr.WebOfficeEnable, false, "是否启用", true, true);
                 map.AddDDLSysEnum(BtnAttr.WebOfficeEnable, 0, "文档启用方式", true, true, BtnAttr.WebOfficeEnable,
                   "@0=不启用@1=按钮方式@2=表单在前@3=公文在前");//edited by liuxc,2016-01-18,from xc
                 map.SetHelperUrl(BtnAttr.WebOfficeLab, "http://ccbpm.mydoc.io/?v=5404&t=17993");
 
                 // add by 周朋 2015-08-06. 重要性.
-                map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2015-08-06. 节点时限.
-                map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.CHEnable, false, "是否启用", true, true);
 
 
                 // add by 周朋 2015-12-24. 节点时限.
-                map.AddTBString(BtnAttr.FocusLab, "关注", "关注", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.FocusLab, "关注", "关注", true, false, 0, 20, 10);
                 map.AddBoolean(BtnAttr.FocusEnable, true, "是否启用", true, true);
 
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);

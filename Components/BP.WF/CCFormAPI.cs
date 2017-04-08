@@ -658,7 +658,7 @@ namespace BP.WF
             myds.Tables.Add(dt);
 
             //明细表的表单描述
-            sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + dtl.No + "'";
+            sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + dtl.No + "' ORDER BY Idx";
             dtMapAttr = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtMapAttr.TableName = "Sys_MapAttr";
             myds.Tables.Add(dtMapAttr);

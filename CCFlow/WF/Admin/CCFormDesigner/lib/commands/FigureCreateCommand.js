@@ -636,14 +636,17 @@ TransFormDataField.prototype = {
         //  alert(shap_src);
         //  alert(figureSetsURL);
         //  alert(figureSetsURL + shap_src);
-
         propertys = CCForm_Control_Propertys[createdFigure.CCForm_Shape];
+        var defaultProVals = CCForm_Control_DefaultPro[createdFigure.CCForm_Shape];
         //shap image
         if (createdFigure.CCForm_Shape != "RadioButton") {
             var imageFrame = STACK.figuresImagePrimitiveGetByFigureId(createdFigure.id);
             if (imageFrame != null) {
                 //alert(figureSetsURL + shap_src);
                 imageFrame.setUrl(figureSetsURL + shap_src);
+                //设置宽高
+                imageFrame.frameWidth = defaultProVals.DefaultWidth;
+                imageFrame.frameHeight = defaultProVals.DefaultHeight;
             }
         }
 

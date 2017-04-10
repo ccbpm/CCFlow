@@ -437,7 +437,9 @@
 	            }, required: req
 	            }, hidden: hid, align: 'center',
 	                formatter: function (value, row) {
-	                    return row[obj.KeyOfEn + "TEXT"];
+	                    console.info(obj.KeyOfEn);
+	                    console.info(row);
+	                    return row[obj.KeyOfEn + "Text"];
 	                }
 	            };
 	        }

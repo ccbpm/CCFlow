@@ -34,12 +34,15 @@
                     }
                     //$("#Msg").html(data);
                     data = JSON.parse(data);
-                    //console.log(data);
                     var mainTable = data.MAINTABLE; //主表单
                     var sysFrmLine = data.SYS_FRMLINE; //线
                     var sysFrmLab = data.SYS_FRMLAB; //lab
+                    var sysFrmBtn = data.SYS_FRMBTN; //BTN
+                    var sysFrmMapAttr = data.SYS_MAPATTR; //组件
                     addLines(sysFrmLine);
                     addLabels(sysFrmLab);
+                    addBtns(sysFrmBtn);
+                    addMapAttr(sysFrmMapAttr);
                     //调用公共类库的方法:执行批量主表赋值
                     //GenerFullAllCtrlsVal(data);
                     return;
@@ -132,6 +135,9 @@
 
 </body>
 <script type="text/javascript">
+    /**
+        线
+    **/
     function addLines(lines) {
         var wtX = 0;
         for (var i = 0; i < lines.length; i++) {
@@ -168,23 +174,80 @@
            }
         }
     }
-
+    /**
+       标签
+    **/
     function addLabels(labs) {
-        console.info(labs);
         for (var i = 0; i < labs.length;i++ ) {
             var lab = labs[i];
-            colorX(lab.FONTCOLOR);
-            //$("#cc").append("\t\n<DIV id=u2 style='position:absolute;left:" + x + "px;top:" + lab.Y + "px;text-align:left;' >");
-            //$("#cc").append("\t\n<span style='color:" + lab.FontColorHtml + ";font-family: " + lab.FontName + ";font-size: " + lab.FontSize + "px;' >" + lab.TextHtml + "</span>");
-            //$("#cc").append("\t\n</DIV>");
             $("#cc").append("\t\n<label style='position:absolute;left:" + lab.X + "px;top:" + lab.Y + "px;text-align:left;color:" + colorX(lab.FONTCOLOR) + ";font-family: " + lab.FONTNAME + ";font-size: " + lab.FONTSIZE + "px;' >" + lab.TEXT + "</label>");
         }
     }
+    //解析颜色
     function colorX(col) {
         if (col.length == 9) {
             return '#' + col.substring(3,9);
         }
         return col;
+    }
+    /**
+        按钮
+    **/
+    function addBtns(btns) {
+        var doDoc = "";
+        for (var i = 0; i < btns.length; i++) {
+            var btn = btns[i];
+            var str = "\t\n<DIV id=u2 style='position:absolute;left:" + btn.X + "px;top:" + btn.Y + "px;text-align:left;' >";
+            str += "<span><button type='button' disabled=true onclick=\"" + functionBtn(btn) + "\" >" + btn.TEXT + "</button></span>";
+            str += "\t\n</DIV>";
+            $("#cc").append(str);
+        }
+    }
+
+    /**
+        按钮事件处理
+    **/
+    function functionBtn(btn) {
+        //console.info(btn);
+    }
+
+    /**
+       处理mapattr 
+    **/
+    var isread = false;
+    function addMapAttr(mapAttrs) {
+        console.info(mapAttrs);
+        for (var i = 0; i < mapAttrs.length;i++ ) {
+            var obj = mapAttrs[i];
+            //console.info(obj);
+            if (obj.UICONTRALTYPE == 0) {//文本
+                console.info(obj.MYDATATYPE);
+                switch (obj.MYDATATYPE) {
+               
+               
+                    case 1: //文本类型.
+                        if (isread) {
+                            ///return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, hidden: hid, align: 'center' };
+                            $("#cc").append("<input class='easyui-textbox' data-options='' style='position:absolute;left:" + obj.X + "px;top:" + obj.Y + "px;text-align:left;'  />");
+                        } else {
+                            ///return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan:1, editor: { type: 'text', options: {disabled:isread,required:req} }, hidden: hid, align: 'center' };
+                            $("#cc").append("<input class='easyui-textbox' data-options='' style='position:absolute;left:" + obj.X + "px;top:" + obj.Y + "px;text-align:left;width:" + obj.UIWIDTH + "px'  />");
+                        }
+                    case 2: //Int 类型.
+                    case 3: // float 类型.
+                    case 5: // AppDouble
+                    case 8: // AppMoney
+                    case 9: // 率百分比
+                        ///return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'numberbox', options: { disabled: isread, required: req, precision: pre, formatter: function (value) { if (!value) { return 0.00; } else { return value } } } }, hidden: hid, align: 'center' }; //, onChange: function (newValue, oldValue) { autoFull(newValue, obj.KeyOfEn, indexArr, docArrs, AttrOfOper) }
+                    case 6: ////AppDate
+                        ///return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'datebox', options: { currentText: '当前', closeText: '关闭', okText: '确定', disabled: isread, required: req,formatter:formatterDate} }, hidden: hid, align: 'center' };
+                    case 7: // AppDateTime 类型.
+                        ///return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'datetimebox', options: { currentText: '当前', closeText: '关闭', okText: '确定', disabled: isread, required: req, formatter: formatterDateTime} }, hidden: hid, align: 'center' };
+                    default:
+                        ///return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, hidden: hid ,align:'center'};
+               }
+          }
+        }
     }
 </script>
 

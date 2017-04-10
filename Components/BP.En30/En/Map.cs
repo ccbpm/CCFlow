@@ -577,6 +577,10 @@ namespace BP.En
         }
         public bool IsHaveFJ = false;
         /// <summary>
+        /// 附件存储位置
+        /// </summary>
+        public string FJSavePath = null;
+        /// <summary>
         /// 移动到显示方式
         /// </summary>
         public string TitleExt = null;
@@ -2089,24 +2093,14 @@ namespace BP.En
         /// <summary>
         /// 增加一个附件
         /// </summary>
-        public void AddMyFile()
+        /// <param name="fileDesc">附件描述</param>
+        /// <param name="ext">附件ID</param>
+        /// <param name="savePath">保存位置(默认为:\datauser\ensName\)</param>
+        public void AddMyFile(string fileDesc=null, string ext=null, string savePath=null)
         {
-            this.AddTBString(EntityNoMyFileAttr.MyFileName, null, "附件或图片", false, false, 0, 100, 200);
-            this.AddTBString(EntityNoMyFileAttr.MyFilePath, null, "MyFilePath", false, false, 0, 100, 200);
-            this.AddTBString(EntityNoMyFileAttr.MyFileExt, null, "MyFileExt", false, false, 0, 10, 10);
-            this.AddTBString(EntityNoMyFileAttr.WebPath, null, "WebPath", false, false, 0, 200, 10);
+            if (fileDesc==null)
+                fileDesc="附件或图片";
 
-            this.AddTBInt(EntityNoMyFileAttr.MyFileH, 0, "MyFileH", false, false);
-            this.AddTBInt(EntityNoMyFileAttr.MyFileW, 0, "MyFileW", false, false);
-            this.AddTBFloat("MyFileSize", 0, "MyFileSize", false, false);
-            this.IsHaveFJ = true;
-        }
-        /// <summary>
-        /// 增加一个附件
-        /// </summary>
-        /// <param name="fileDesc">描述</param>
-        public void AddMyFile(string fileDesc)
-        {
             this.AddTBString(EntityNoMyFileAttr.MyFileName, null, fileDesc, false, false, 0, 100, 200);
             this.AddTBString(EntityNoMyFileAttr.MyFilePath, null, "MyFilePath", false, false, 0, 100, 200);
             this.AddTBString(EntityNoMyFileAttr.MyFileExt, null, "MyFileExt", false, false, 0, 10, 10);
@@ -2115,6 +2109,7 @@ namespace BP.En
             this.AddTBInt(EntityNoMyFileAttr.MyFileW, 0, "MyFileW", false, false);
             this.AddTBFloat("MyFileSize", 0, "MyFileSize", false, false);
             this.IsHaveFJ = true;
+            this.FJSavePath = savePath;
         }
         private AttrFiles _HisAttrFiles = null;
         public AttrFiles HisAttrFiles

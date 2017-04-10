@@ -188,17 +188,14 @@ namespace BP.Sys.FrmUI
         {
             return "/WF/Admin/FoolFormDesigner/EditF.htm?KeyOfEn=" + this.KeyOfEn + "&FType="+this.MyDataType+"&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
         }
-
         /// <summary>
         /// 自动计算
         /// </summary>
         /// <returns></returns>
         public string DoAutoFull()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&RefNo=" + this.MyPK;
-            //return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn;
         }
-
         /// <summary>
         /// 设置开窗返回值
         /// </summary>

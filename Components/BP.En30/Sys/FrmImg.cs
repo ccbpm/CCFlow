@@ -86,7 +86,7 @@ namespace BP.Sys
         /// <summary>
         /// 数据来源类型 0=本地 , 1=外部.
         /// </summary>
-        public const string SrcType = "SrcType";
+        public const string ImgSrcType = "ImgSrcType";
         /// <summary>
         /// 是否可以编辑
         /// </summary>
@@ -165,15 +165,15 @@ namespace BP.Sys
         /// <summary>
         /// 数据来源
         /// </summary>
-        public int SrcType
+        public int ImgSrcType
         {
             get
             {
-                return this.GetValIntByKey(FrmImgAttr.SrcType);
+                return this.GetValIntByKey(FrmImgAttr.ImgSrcType);
             }
             set
             {
-                this.SetValByKey(FrmImgAttr.SrcType, value);
+                this.SetValByKey(FrmImgAttr.ImgSrcType, value);
             }
         }
         
@@ -188,6 +188,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmImgAttr.Tag0, value);
             }
         }
+       
         public string LinkTarget
         {
             get
@@ -369,7 +370,7 @@ namespace BP.Sys
 
                 //如果是 seal 就是岗位集合。
                 map.AddTBString(FrmImgAttr.Tag0, null, "参数", true, false, 0, 500, 20);
-                map.AddTBInt(FrmImgAttr.SrcType, 0, "图片来源0=本地,1=URL", true, false);
+                map.AddTBInt(FrmImgAttr.ImgSrcType, 0, "图片来源0=本地,1=URL", true, false);
                 map.AddTBInt(FrmImgAttr.IsEdit, 0, "是否可以编辑", true, false);
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, false, 0, 500, 20);
                 map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);

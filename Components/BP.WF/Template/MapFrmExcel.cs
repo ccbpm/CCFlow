@@ -191,7 +191,7 @@ namespace BP.WF.Template
                 map.AddTBInt(MapFrmExcelAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
 
-                map.AddMyFile("表单模版");
+                map.AddMyFile("表单模版", null, SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\");
 
                 //查询条件.
                 map.AddSearchAttr(MapFrmExcelAttr.DBSrc);

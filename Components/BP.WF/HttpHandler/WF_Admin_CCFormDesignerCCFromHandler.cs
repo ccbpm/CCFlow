@@ -340,6 +340,7 @@ namespace BP.WF.HttpHandler
                         else
                             myfn.DoDown();
                         return "true";
+                     
                     default:
                         return "error:" + dotype + " , 后台执行错误，未设置此标记.";
                 }
@@ -501,8 +502,6 @@ namespace BP.WF.HttpHandler
                         {
                             return ex.Message;
                         }
-                  
-                    
                     case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {
@@ -705,6 +704,20 @@ namespace BP.WF.HttpHandler
                             myfn.DoUp();
                         else
                             myfn.DoDown();
+                        return "true";
+                    case "NewSFTableField": //创建一个SFTable字段.
+
+                        //string fk_mapdata = getUTF8ToString("FK_MapData");
+                        //string keyOfEn = getUTF8ToString("KeyOfEn");
+                        //string fieldDesc = getUTF8ToString("Name");
+                        //string sftable = getUTF8ToString("UIBindKey");
+                        //x = float.Parse(getUTF8ToString("x"));
+                        //y = float.Parse(getUTF8ToString("y"));
+
+                        //调用接口,执行保存.
+                        BP.Sys.CCFormAPI.SaveFieldSFTable(this.FK_MapData, this.KeyOfEn, this.GetRequestVal("Name"),
+                            this.GetRequestVal("UIBindKey"), this.GetRequestValFloat("x"), this.GetRequestValFloat("y"));
+
                         return "true";
                     default:
                         return "error:" + dotype + " , 后台执行错误，未设置此标记.";

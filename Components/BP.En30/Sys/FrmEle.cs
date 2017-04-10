@@ -69,6 +69,10 @@ namespace BP.Sys
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public const string SrcType = "SrcType";
     }
     /// <summary>
     /// 表单元素扩展
@@ -449,11 +453,11 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaInt(FrmImgAttr.SrcType);
+                return this.GetParaInt(FrmEleAttr.SrcType);
             }
             set
             {
-                this.SetPara(FrmImgAttr.SrcType, value);
+                this.SetPara(FrmEleAttr.SrcType, value);
             }
         }
         /// <summary>

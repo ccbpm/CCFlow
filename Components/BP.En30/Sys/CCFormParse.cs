@@ -590,8 +590,8 @@ namespace BP.Sys
                 }
                 else if (property["property"].ToString() == "ImgAppType")
                 {
-                    //应用类型：0本地图片，1指定路径
-                    img.SrcType = property["PropertyValue"] == null ? 0 : int.Parse( property["PropertyValue"].ToString());
+                    //应用类型：0本地图片，1指定路径.
+                    img.ImgSrcType = property["PropertyValue"] == null ? 0 : int.Parse(property["PropertyValue"].ToString());
                 }
                 else if (property["property"].ToString() == "ImgPath")
                 {

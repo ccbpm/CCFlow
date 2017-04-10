@@ -57,7 +57,8 @@ namespace BP.Sys.FrmUI
 
                 map.AddMyPK();
 
-                map.AddDDLSysEnum(FrmImgAttr.SrcType, 0, "装饰图片来源", true, true, FrmImgAttr.SrcType, "@0=本地@1=URL");
+                map.AddDDLSysEnum(FrmImgAttr.ImgSrcType, 0, "装饰图片来源", true, true, FrmImgAttr.ImgSrcType, "@0=本地@1=URL");
+
                 map.AddTBString(FrmImgAttr.ImgURL, null, "装饰图片URL", true, false, 0, 200, 20);
                 map.AddTBString(FrmImgAttr.ImgPath, null, "装饰图片路径", true, false, 0, 200, 20);
                 

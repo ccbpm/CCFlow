@@ -665,10 +665,13 @@ function Conver_CCForm_V1ToV2() {
             }
 
             //循环组件 轨迹图 审核组件 子流程 子线程
-            //for (var i in flow_Data.FigureCom) {
-            //    var figureCom = flow_Data.FigureCom[i];
-            //    var createdConnector = figure_Template_FigureCom(figureCom);
-            //}
+            for (var i in flow_Data.FigureCom) {
+                var figureCom = flow_Data.FigureCom[i];
+                var createdFigure = figure_Template_FigureCom(figureCom);
+                if (createdFigure != undefined) {
+                    STACK.figureAdd(createdFigure);
+                }
+            }
             redraw = true;
             draw();
             //save(false);
@@ -1223,8 +1226,8 @@ function figure_Template_FigureCom(figureCom) {
     if (figureCom.Sta == 0) {//未启用该组件
         return;
     }
-    var f = new Figure("frmFigureName");
-    var figureName = figureCom.FigrueName;
+    var f = new Figure(figureCom.No);
+    var figureName = figureCom.No;
     //ccform Property
     f.CCForm_Shape = figureName;
     f.name = figureName;
@@ -1235,33 +1238,33 @@ function figure_Template_FigureCom(figureCom) {
 
 
 
-    f.properties.push(new BuilderProperty('控件属性-' + figureCom.FigureCnName, 'group', BuilderProperty.TYPE_GROUP_LABEL));
+    f.properties.push(new BuilderProperty('控件属性-' + figureCom.Name, 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
     for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
         var property = CCForm_Control_Propertys[f.CCForm_Shape][i];
-        var propertyVale = frmCom[property.proName];
+        var propertyVale = figureCom[property.proName];
 
         if (propertyVale == undefined) {
             propertyVale = property.DefVal;
         }
 
         if (property.proName == "Set") {
-            propertyVale = propertyVale.replace("@FrmID@", frmCom.FK_MapData);
-            propertyVale = propertyVale.replace("@KeyOfEn@", frmCom.No);
+            propertyVale = propertyVale.replace("@FrmID@", figureCom.FK_MapData);
+            propertyVale = propertyVale.replace("@KeyOfEn@", figureCom.No);
         }
 
         f.properties.push(new BuilderProperty(property.ProText, property.proName, property.ProType, propertyVale));
     }
 
     //Image
-    var url = figureSetsURL + "/DataView/" + createdFigure.CCForm_Shape + ".png"; 
-    var x = frmCom.X + frmCom.W / 2;
-    var y = frmCom.Y + frmCom.H / 2;
-    var ifig = new ImageFrame(url, x, y, true, frmCom.W, frmCom.H);
+    var url = figureSetsURL + "/DataView/" + f.CCForm_Shape + ".png"; 
+    var x = figureCom.X + figureCom.W / 2;
+    var y = figureCom.Y + figureCom.H / 2;
+    var ifig = new ImageFrame(url, x, y, true, figureCom.W, figureCom.H);
     ifig.debug = true;
     f.addPrimitive(ifig);
     //Text
-    //var t2 = new Text(frmDtl.Name, x + frmDtl.W / 2 + FigureDefaults.radiusSize / 2, y + frmDtl.H / 2 + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    //var t2 = new Text(figureCom.Name, x + figureCom.W / 2 + FigureDefaults.radiusSize / 2, y + figureCom.H / 2 + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     //t2.style.fillStyle = FigureDefaults.textColor;
     //f.addPrimitive(t2);
 

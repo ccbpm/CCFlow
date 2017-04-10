@@ -228,7 +228,7 @@ namespace BP.WF.Rpt
             if (col > maxs[2])
                 throw new Exception("列序号不正确，超出最大值");
 
-            int alphaCount = 0;
+            int alphaCount = 1;
 
             foreach(int m in maxs)
             {

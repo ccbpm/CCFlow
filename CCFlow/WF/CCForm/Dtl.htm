@@ -112,7 +112,7 @@
                     }
 
                     //$("#Msg").html(data);
-
+                    
                     //解析.
                     data = JSON.parse(data);
 
@@ -193,9 +193,13 @@
                     $('#dg').datagrid({
                         onBeginEdit: function (rowIndex) {
                             autoFull(rowIndex);
+
                         },
                         onAfterEdit: function (rowIndex) {
                             SaveRow(rowIndex);
+                        },
+                        onClickCell: function (rowIndex, field, value) {
+                            fieldMM = field;
                         }
                     });
                 }
@@ -348,6 +352,7 @@
 	        //autoFull
 	        var docArrs = [];
 	        var AttrOfOper = [];
+	        var ddlMap = {};
 	        if (mapExt != null && mapExt != undefined && mapExt != '' && mapExt.length != 0) {
 	            for (var i = 0; i < mapExt.length; i++) {
 	                switch (mapExt[i].ExtType) {
@@ -363,7 +368,11 @@
 	                        docArrs.push(doc);
 	                        //var docs = doc.replace('*', '').split("@");
 	                        //var opts = $('#dg').datagrid('getColumnFields');   // get unfrozen columns
-
+	                    case 'ActiveDDL':
+	                        if (mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
+	                            break;
+	                        }
+	                        ddlMap[mapExt[i].AttrOfOper] = mapExt[i].AttrsOfActive + "&" + mapExt[i].Doc
 	                }
 	            }
 	        }
@@ -402,8 +411,28 @@
 	        }
 
 	        if (obj.UIContralType == 1 || obj.UIContralType == 3 ) {  //下拉框UIBindKey
-
-	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread }, required: req }, hidden: hid, align: 'center',
+	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread, onSelect: function (record) {
+	                //更改触发事件
+	                if (ddlMap[obj.KeyOfEn] != null && ddlMap[obj.KeyOfEn] != '' && ddlMap[obj.KeyOfEn] != undefined) {
+	                    var docTem = ddlMap[obj.KeyOfEn].replace("~@Key~", "'" + record.No + "'");
+	                    var OfActive = docTem.split('&')[0];
+	                    docTem = docTem.split('&')[1];
+	                    var temx = docTem.split('~');
+	                    var rowIndex = $('#dg').datagrid('getRowIndex', $('#dg').datagrid('getSelected'))
+	                    for (var m = 0; m < temx.length; m++) {
+	                        if (temx[m].indexOf('@') > -1) {
+	                            var nax = temx[m].replace('@', '');
+	                            var x = $('#dg').datagrid('getEditor', { index: rowIndex, field: nax }).target;
+	                            docTem = docTem.replace("~@" + nax + "~", "'" + x.combobox('getValue') + "'");
+	                        }
+	                    }
+	                    var OfActiveEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: OfActive }).target;
+	                    OfActiveEditor.combobox('reload', Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
+	                }
+	                //更改触发事件
+	            }
+	            }, required: req
+	            }, hidden: hid, align: 'center',
 	                formatter: function (value, row) {
 	                    return row[obj.KeyOfEn + "TEXT"];
 	                }
@@ -411,11 +440,11 @@
 	        }
 
 	        if (obj.UIContralType == 2) { //选择框
-	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'checkbox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread }, required: req }, hidden: hid, align: 'center' ,
-					formatter:function(value,row){
-
-						return row[obj.KeyOfEn + "TEXT"];
-					}};
+	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'checkbox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread }, required: req }, hidden: hid, align: 'center',
+	                formatter: function (value, row) {
+	                    return row[obj.KeyOfEn + "TEXT"];
+	                }
+	            };
 	        }
 
 //	        if (obj.UIContralType == 3) { //单选
@@ -492,26 +521,51 @@
 	                        }
 	                    }
 	                case 'ActiveDDL':
-
-	                    if (mapExt[i] == undefined || mapExt[i] == null || mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
+	                    break;
+	                    /*if (mapExt[i] == undefined || mapExt[i] == null || mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
 	                        break;
 	                    }
 	                    var ofoper = mapExt[i].AttrOfOper;
 	                    var OfActive = mapExt[i].AttrsOfActive;
 	                    var doc = mapExt[i].Doc;
+	                    docMM[ofoper] = doc;
 	                    var ofoperEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper }).target;
+	                    opMM.push(ofoper);
 	                    var OfActiveEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: OfActive }).target;
+	                    acMM.push(OfActive);
 	                    ofoperEditor.combobox({
 	                        onSelect: function (record) {
-	                            var docTem = doc.replace("~@Key~", record.No);
+	                            //console.info(fieldMM);
+	                            console.info(ofoperEditor.closest('td[field]').attr('field'));
+	                            var docTem = docMM[fieldMM].replace("~@Key~", "'" + record.No + "'");
+	                            var temx = docTem.split('~');
+	                            for (var m = 0; m < temx.length; m++) {
+	                                if (temx[m].indexOf('@') > -1) {
+	                                    //var rowT = $('#dg').datagrid('getSelected');
+	                                    var nax = temx[m].replace('@', '');
+	                                    var x = $('#dg').datagrid('getEditor', { index: rowIndex, field: nax }).target;
+	                                    //console.info(x.combobox('getValue'));
+	                                    docTem = docTem.replace("~@" + nax + "~", "'" + x.combobox('getValue') + "'");
+	                                }
+	                                //docTem = docTem.replace("~@Key~", record.No);
+	                            }
+	                            //console.info(Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
+	                            console.info(docTem);
+	                            console.info("edit" + acMM[opMM.indexOf(fieldMM)]);
+	                            //var edit = $('#dg').datagrid('getEditor', { index: rowIndex, field: acMM[opMM.indexOf(fieldMM)] }).target;
 	                            OfActiveEditor.combobox('reload', Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
 	                        }
-	                    });
+	                    });*/
                     default:
 	            }
-	        }
+            }
         }
+        var docMM = {};
+        var fieldMM;
+        var opMM = [];
+        var acMM = [];
 
+        var docArr = [];
 	    function footSum(dbDtl) {
 	        var rows = $('#dg').datagrid('getRows')//获取当前的数据行<br>
             var total = 0;

@@ -228,7 +228,13 @@ namespace BP.WF.Rpt
             if (col > maxs[2])
                 throw new Exception("列序号不正确，超出最大值");
 
-            var alphaCount = maxs.Where(m => m < col).Count() + 1;
+            int alphaCount = 0;
+
+            foreach(int m in maxs)
+            {
+                if (m < col)
+                    alphaCount++;
+            }
 
             switch (alphaCount)
             {

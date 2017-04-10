@@ -172,3 +172,27 @@ CCForm_Control_Propertys = {
 };
 
 
+/*控件的一些默认值  如宽、高  中英文 名称互换*/
+CCForm_Control_DefaultPro = {
+    TextBoxStr: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    TextBoxInt: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    TextBoxFloat: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    TextBoxMoney: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    TextBoxDate: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    TextBoxDateTime: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    TextBoxBoolean: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    DropDownListEnum: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    RadioButton: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    DropDownListTable: { "DefaultWidth": 120, DefaultHeight: 23, ControlLab: "" },
+    Dtl: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
+    Fieldset: { "DefaultWidth": 100, DefaultHeight: 200, ControlLab: "" },
+    AthMulti: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
+    AthSingle: { "DefaultWidth": 100, DefaultHeight: 200, ControlLab: "" },
+    AthImg: { "DefaultWidth": 200, DefaultHeight: 200, ControlLab: "" },
+    FlowChart: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
+    ThreadDtl: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
+    SubFlowDtl: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
+    FrmCheck: { "DefaultWidth": 500, DefaultHeight: 120, ControlLab: "" },
+};
+
+

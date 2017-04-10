@@ -112,7 +112,7 @@
                     }
 
                     //$("#Msg").html(data);
-                    
+
                     //解析.
                     data = JSON.parse(data);
 
@@ -165,10 +165,14 @@
                         cols.push({ field: 'operation', title: '操作', width: 100,
                             formatter: function (value, rec, index) {
                                 var del = '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">删除</a>';
-                                return del;
+                                //console.info(rec.operation);
+                                if (rec.operation!=0) {
+                                    return del;
+                                }
                             }
                         });
                     }
+
                     //新增按钮
                     if (IsReadonly || !IsInsert) {
                         $("#append").hide();
@@ -193,7 +197,6 @@
                     $('#dg').datagrid({
                         onBeginEdit: function (rowIndex) {
                             autoFull(rowIndex);
-
                         },
                         onAfterEdit: function (rowIndex) {
                             SaveRow(rowIndex);
@@ -579,8 +582,14 @@
                 }
                 jsonStr += '"' + hjl[j] + '": ' + total + ((j == hjl.length - 1) ? '' : ',');
             }
+            if (hjl.length==0) {
+                jsonStr += '"operation": 0';
+            }else{
+                jsonStr += ',"operation": 0';
+            }
             jsonStr += '}';
             zjxx.push(JSON.parse(jsonStr));
+            console.info(jsonStr);
             $('#dg').datagrid({
                 data: { "rows": dbDtl , "footer": zjxx }
             });

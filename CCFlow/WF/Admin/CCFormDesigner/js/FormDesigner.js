@@ -207,6 +207,13 @@ function showFigurePropertyWin(figure) {
         return;
     }
 
+    if (shap == 'DropDownListTable') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段外键属性');
+        return;
+    }
+
+
     if (shap == 'Dtl') {
         var url = '/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_MapDtl=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '从表/明细表' + figure.CCForm_MyPK + '属性');

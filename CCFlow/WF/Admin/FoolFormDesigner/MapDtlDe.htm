@@ -121,11 +121,15 @@
         function Edit(fk_mapdata, mypk, ftype, uiCtrlType) {
             var parentwin = parent.window;
             if (parentwin) {
+
                 var iFrame = parentwin.document.getElementById("F");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
                     parentwin.Edit(fk_mapdata, mypk, ftype, uiCtrlType);
                     return;
                 }
+                parentwin.Edit(fk_mapdata, mypk, ftype, uiCtrlType);
+                //alert("err");
+                return;
             }
 
             var url = '';
@@ -148,7 +152,6 @@
                 url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&inlayer=1&PK=" + mypk;
                 title = '字段Float属性';
             }
-
 
             //数值字段类型.
             if (ftype == "5") {
@@ -197,9 +200,11 @@
             if (parentwin) {
                 var iFrame = parentwin.document.getElementById("F");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
-                    parentwin.EditEnum(fk_mapdata, mypk, enumKey);
+                    parentwin.EditEnum(fk_mapdata, enumKey, mypk );
                     return;
                 }
+                parentwin.EditEnum(fk_mapdata,enumKey, mypk);
+                return;
             }
 
             var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&inlayer=1&PK=' + mypk + '&s=' + Math.random();
@@ -209,16 +214,21 @@
             });
         }
         function EditTable(fk_mapdata, mypk, fk_sfTable) {
+
             var parentwin = parent.window;
             if (parentwin) {
                 var iFrame = parentwin.document.getElementById("F");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
-                    parentwin.EditTable(fk_mapdata, mypk, fk_sfTable);
+                    parentwin.EditTable(fk_mapdata, fk_sfTable, mypk);
                     return;
                 }
+                parentwin.EditTable(fk_mapdata, fk_sfTable, mypk);
+                return;
             }
 
             var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&inlayer=1&PK=' + mypk + '&s=' + Math.random();
+
+            alert(url);
 
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;

@@ -22,33 +22,50 @@
 
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script src="../../Scripts/Config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="JavaScript" type="text/javascript" src="MapDef.js" ></script>
+
 
     <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js" ></script>
     <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
 
-      <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-     <script src="../../Scripts/config.js" type="text/javascript" > </script>
+    <script src="../../Scripts/config.js" type="text/javascript" > </script>
 
     <script language="javascript" type="text/javascript">
+
+        //公共方法
+        function AjaxServiceGener(param,extUrl,callbackFunc, scope) {
+            $.ajax({
+                type: "GET", //使用GET或POST方法访问后台
+                dataType: "text", //返回json格式的数据
+                contentType: "application/json; charset=utf-8",
+                url: Handler+extUrl, //要访问的后台地址
+                data: param, //要发送的数据
+                async: true,
+                cache: false,
+                complete: function () { }, //AJAX请求完成时隐藏loading提示
+                error: function (XMLHttpRequest, errorThrown) {
+                    callback(XMLHttpRequest);
+                },
+                success: function (msg) { //msg为返回的数据，在这里做数据绑定
+                    var data = msg;
+                    callbackFunc(data, scope);
+                }
+            });
+        }
+
         function FrmEvent(mypk) {
             var url = 'FrmEvent.htm?FK_MapData=' + mypk;
+
+
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         }
-        function HelpGroup() {
-            var msg = '字段分组：就是把类似的字段放在一起，让用户操作更友好。\t\n比如：我们纳税人设计一个基础信息采集节点。';
-            msg += '在登记纳税人基础信息时，我们可以把基础信息、车船信息、房产信息、投资人信息分组。\t\n \t\n分组的格式为:@从字段名称1=分组名称1@从字段名称2=分组名称2 ,\t\n比如：节点信息设置，@NodeID=基本信息@LitData=考核信息。';
-            alert(msg);
-        }
-        function DoGroupF(enName) {
-            var b = window.showModalDialog('GroupTitle.htm?EnName=' + enName, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
+       
+       
         function Insert(mypk, IDX) {
             var url = 'FieldTypeList.htm?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
@@ -68,48 +85,66 @@
             window.location.href = window.location.href;
         }
         function AddField(fk_mapdata, groupID) {
+
             var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '增加字段', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+             
         }
         function AddTable(mypk) {
             var url = 'EditCells.htm?MyPK=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '新建', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
-        function MapExt(mypk) {
-            var url = 'MapExt.htm?FK_MapData=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 800px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
+       
         function BatchEdit(mypk) {
             var url = 'BatchEdit.htm?FK_MapData=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 800px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '批处理', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+
+            });
         }
 
         function CopyFieldFromNode(mypk) {
             var url = 'CopyFieldFromNode.htm?DoType=AddF&FK_Node=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '复制', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
         function GroupFieldNew(mypk) {
             var url = 'GroupField.htm?FK_MapData=' + mypk + "&RefOID=0&DoType=FunList";
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+
+            OpenEasyUiDialog(url, "eudlgframe", '新建', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+
+            });
+
+
         }
         function ExpImp(fk_mapdata, fk_flow) {
             var url = 'ExpImp.htm?FK_MapData=' + fk_mapdata + "&DoType=FunList&FK_Flow=" + fk_flow;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '导入导出', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         function GroupField(mypk, OID) {
 
             // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
-            var url = "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.GroupFields&PK=" + OID;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = "../../Comm/En.htm?EnsName=BP.Sys.GroupFields&PK=" + OID;
+
+            OpenEasyUiDialog(url, "eudlgframe", '分组', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
 
         function GroupFieldDel(mypk, refoid) {
@@ -121,90 +156,84 @@
         function Edit(fk_mapdata, mypk, ftype, gf) {
 
             var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata + '&GroupField=' + gf;
-            
             var title = '';
             if (ftype == 1) {
                 title = '字段String属性';
-                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=' + mypk + '&s=' + Math.random();
+                url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=' + mypk + '&s=' + Math.random();
             }
 
             if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
                 title = '字段Num属性';
-                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + mypk + '&s=' + Math.random();
+                url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + mypk + '&s=' + Math.random();
             }
 
             if (ftype == 6 || ftype == 7) {
                 title = '字段 date 属性';
 
-                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
+                url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
             }
 
             if (ftype == 6 || ftype == 7) {
                 title = '字段 datetime 属性';
 
-                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
+                url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
             }
 
             if (ftype == 4) {
                 title = '字段 boolen 属性';
-                url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=' + mypk + '&s=' + Math.random();
+                url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=' + mypk + '&s=' + Math.random();
             }
 
-            OpenDialogAndCloseRefresh(url, title, 720, 550, "icon-edit");
+            OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
 
-         //   OpenDialogAndCloseRefresh(url, title, 500, 500);
-
-            //  CCForm_ShowDialog(url, '导入表单');
-            //  var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
+           // OpenEasyUiDialog(url, "dd", title, 730, 500);
+            return;
         }
 
         function EditEnum(fk_mapdata, keyOfEn, mypk, enumKey, gf) {
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
 
-            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
-
-            // var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
+            OpenEasyUiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         function EditTable(fk_mapdata, keyOfEn, mypk, sfTable, gf) {
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
 
-            var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
-            // var url = 'EditTable.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + sfTable + '&KeyOfEn=' + keyOfEn + '&GroupField=' + gf;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
+            OpenEasyUiDialog(url, "eudlgframe", '外键' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
+        // 向上移动.
         function Up(fk_mapdata, mypk, idx, t) {
-            var url = 'Do.htm?DoType=Up&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
-            //window.location.href ='Designer.htm?PK='+mypk+'&IsOpen=1';
-            window.location.href = window.location.href;
+            var url = '?DoType=Up&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
+            AjaxServiceGener(null, url, ReLoad, this);
         }
-        function Down(fk_mapdata, mypk, idx) {
-            var url = 'Do.htm?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=xx';
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
+        //向下移动.
+        function Down(fk_mapdata, mypk, idx,t) {
+            var url = '?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
+            AjaxServiceGener(null, url, ReLoad, this);
+        }
+        function ReLoad(data) {
             window.location.href = window.location.href;
         }
         function GFDoUp(refoid) {
-            var url = 'Do.htm?DoType=GFDoUp&RefOID=' + refoid;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = '?DoType=GFDoUp&RefOID=' + refoid;
+            AjaxServiceGener(null, url, ReLoad, this);
         }
         function GFDoDown(refoid) {
-            var url = 'Do.htm?DoType=GFDoDown&RefOID=' + refoid;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 50px; dialogWidth: 50px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = '?DoType=GFDoDown&RefOID=' + refoid;
+            AjaxServiceGener(null, url, ReLoad, this);
         }
-
 
         function Del(mypk, refoid) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-
-            var url = 'Do.htm?DoType=Del&MyPK=' + mypk + '&RefOID=' + refoid;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = '?DoType=Del&MyPK=' + mypk + '&RefOID=' + refoid;
+            AjaxServiceGener(null, url, ReLoad, this);
         }
         function Esc() {
             if (event.keyCode == 27)
@@ -242,78 +271,103 @@
 
         function CopyFieldFromNode(mypk) {
             var url = 'CopyFieldFromNode.htm?FK_Node=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '复制', 730, 900, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         // 子线程.
         function EditFrmThread(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmTrack&PK=' + mypk;
+
+            OpenEasyUiDialog(url, "eudlgframe", '子线程', 400, 700, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         // 轨迹图.
         function EditTrack(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmTrack&PK=' + mypk
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmTrack&PK=' + mypk;
+
+            OpenEasyUiDialog(url, "eudlgframe", '轨迹图', 400, 700, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
 
 
         /// 审核组件.
         function EditFWC(mypk) {
             //http: //localhost:41466/WF/Comm/RefFunc/UIEn.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=7901&EnName=BP.WF.Template.FrmNodeComponent&tab=%E7%88%B6%E5%AD%90%E6%B5%81%E7%A8%8B%E7%BB%84%E4%BB%B6
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=审核组件';
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=审核组件';
+
+            OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
         //子流程.
         function EditSubFlow(mypk) {
-            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=父子流程组件';
+
+            OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         //子线程.
         function EditThread(mypk) {
-            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=子线程组件';
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=子线程组件';
+
+            OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
 
         //流转自定义.
         function EditFTC(mypk) {
-            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=流转自定义';
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=流转自定义';
+
+            OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
 
         //轨迹组件.
         function EditTrack(mypk) {
-            // var url = '../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=轨迹组件';
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk + '&tab=轨迹组件';
+
+
+            OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
 
-
         function MapDataEdit(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.MapFrmFool&PK=' + mypk
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 850px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PK=' + mypk;
+
+            OpenEasyUiDialog(url, "eudlgframe", '属性', 500, 850, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
 
         function FrmNodeComponent(mypk) {
-            var url = '../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 850px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk;
+
+            OpenEasyUiDialog(url, "eudlgframe", '组件', 500, 850, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
-        //新增附件.
+        //新增从表.
         function NewMapDtl(fk_mapdata) {
             var val = prompt('请输入从表ID，要求表单唯一。', fk_mapdata + 'Dtl1');
             if (val == null) {
@@ -336,50 +390,57 @@
                         alert(data);
                         return;
                     }
-                    var url = '../../Comm/UIEn.aspx?EnsName=BP.WF.Template.MapDtlExts&FK_MapData=' + fk_mapdata + '&No=' + data;
-                    var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-                    window.location.href = window.location.href;
+
+                    var url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&FK_MapData=' + fk_mapdata + '&No=' + data;
+                    OpenEasyUiDialog(url, "eudlgframe", '从表属性', 800, 500, "icon-edit", true, null, null, null, function () {
+                        window.location.href = window.location.href;
+                    });
+
                     return;
                 }
             });
         }
+
         
         ///编辑从表.
         function EditDtl(fk_mapdata, mypk) {
-
             var url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&FK_MapData=' + fk_mapdata + '&No=' + mypk;
 
-            //var url = 'MapDtl.htm?DoType=Edit&FK_MapData=' + mypk + '&FK_MapDtl=' + dtlKey;
-
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            window.location.href = window.location.href;
+            OpenEasyUiDialog(url, "eudlgframe", '从表', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         function EditM2M(mypk, dtlKey) {
             var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + mypk + '&NoOfObj=' + dtlKey;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+            // OpenEasyUiDialog(url, 'dtl', '属性', 800, 500, "icon-edit");
         }
 
 
         /// 多选.
         function MapM2M(mypk) {
             var url = 'MapM2M.htm?DoType=List&FK_MapData=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '多选', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         function MapM2MM(mypk) {
             var url = 'MapM2MM.htm?FK_MapData=' + mypk;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '多选', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         //修改附件.
         function EditAth(fk_mapdata, ath) {
-            var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.FrmAttachmentExts&FK_MapData=' + fk_mapdata + '&MyPK='+ fk_mapdata+"_"+ ath;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 800px;center: yes; help: no');
-            window.location.href = window.location.href;
+            var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&FK_MapData=' + fk_mapdata + '&MyPK=' + fk_mapdata + "_" + ath;
+
+            OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         //新增附件.
@@ -403,9 +464,12 @@
                         alert(data);
                         return;
                     }
-                    var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.FrmAttachmentExts&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
-                    var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-                    window.location.href = window.location.href;
+
+                    var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
+                    OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
+                        window.location.href = window.location.href;
+                    });
+
                     return;
                 }
             });
@@ -436,8 +500,10 @@
                     }
 
                     var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.MapFrames&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
-                    var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-                    window.location.href = window.location.href;
+
+                    OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
+                        window.location.href = window.location.href;
+                    });
                     return;
                 }
             });
@@ -445,24 +511,37 @@
 
         function EditFrame(fk_mapdata, myPK) {
             var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.MapFrames&FK_MapData=' + fk_mapdata + '&MyPK=' + myPK;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
         function MapFrame(fk_mapdata) {
             var url = 'MapFrame.htm?FK_MapData=' + fk_mapdata;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         function HidAttr(fk_mapData) {
             var url = 'HidAttr.htm?FK_MapData=' + fk_mapData;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            window.location.href = window.location.href;
+
+            OpenEasyUiDialog(url, "eudlgframe", '隐藏字段', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
+           // var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+           // window.location.href = window.location.href;
         }
         function EnableAthM(fk_MapDtl) {
             var url = '../CCForm/AttachmentUpload.htm?IsBTitle=1&PKVal=0&Ath=AthMDtl&FK_MapData=' + fk_MapDtl + '&FK_FrmAttachment=' + fk_MapDtl + '_AthMDtl';
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-            //  window.location.href = window.location.href;
+
+
+            OpenEasyUiDialog(url, "eudlgframe", '多附件', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
         function Sln(fk_mapdata) {
             var url = 'Sln.htm?IsBTitle=1&PKVal=0&Ath=AthM&FK_MapData=' + fk_mapdata + '&FK_FrmAttachment=' + fk_mapdata + '_AthM';

@@ -3052,14 +3052,14 @@ namespace CCFlow.WF.UC
                 if (img.HisImgAppType == ImgAppType.Img)
                 {
                     //数据来源为本地.
-                    if (img.SrcType == 0)
+                    if (img.ImgSrcType == 0)
                     {
                         if (img.ImgPath.Contains(";") == false)
                             imgSrc = img.ImgPath;
                     }
 
                     //数据来源为指定路径.
-                    if (img.SrcType == 1)
+                    if (img.ImgSrcType == 1)
                     {
                         //图片路径不为默认值
                         imgSrc = img.ImgURL;

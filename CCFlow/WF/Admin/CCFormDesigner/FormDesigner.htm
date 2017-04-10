@@ -107,12 +107,12 @@
 
         function Imp() {
 
-            var url = "/WF/Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
-
-           // window.location.href = url;
-
+            var url = "/WF/Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0&FK_Flow=";
             // window.open(url, 'exp');
-           CCForm_ShowDialog(url, '导入表单');
+            CCForm_ShowDialog(url, '导入表单');
+
+            //OpenEasyUiDialog(url,"frm",'表单导入',400,600,"icon-edit",false, null,null,
+            //window.location.href = window.location.href;
             return;
         }
 
@@ -124,8 +124,7 @@
         }
 
         function Mobile() {
-            //var url="WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=&FK_MapData=ND201&t=2017-04-08 17:47&s=0.4465966680578477
-            var url = "/WF/Admin/AttrNode/SortingMapAttrs.aspx?s=34&FK_MapData=" + CCForm_FK_MapData + "&FK_Flow=";
+            var url = "/WF/Admin/AttrNode/SortingMapAttrs.aspx?s=34&FK_MapData=" + CCForm_FK_MapData + "&FK_Flow="+GetDateString();
             CCForm_ShowDialog(url, '手机表单设计器');
             return;
         }
@@ -142,21 +141,27 @@
 </head>
 <body id="body">
     <div id="actions" class="actions" style="font-size: 12px;">
+
+        <a style="text-decoration: none;" href="javascript:CCForm_Attr();" title="表单属性">
+            <img src="Img/toolbar/property.png" id="Img2" border="0" width="16" height="16" alt="" />
+            <label for="BrowserView" class="toolbarText"> 表单属性</label>
+        </a>
+
+
+        <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt='预览表单工作模式.' />
         <a style="text-decoration: none;" href="javascript:Save(true);" title="保存(Ctrl-S)">
             <img src="assets/images/icon_save.jpg" id="SaveImg" border="0" width="16" height="16" />
             <label for="SaveImg" id="SaveText" class="toolbarText">保存</label>
         </a>
+
+
+
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt='预览表单工作模式.' />
         <a style="text-decoration: none;" href="javascript:CCForm_BrowserView();" title="预览">
             <img src="Img/toolbar/View.png" id="BrowserView" border="0" width="16" height="16" alt="" />
             <label for="BrowserView" class="toolbarText">预览</label>
         </a>
-
-    <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" alt='表单属性.' />
-        <a style="text-decoration: none;" href="javascript:CCForm_Attr();" title="表单属性">
-            <img src="Img/toolbar/Attr.png" id="Img2" border="0" width="16" height="16" alt="" />
-            <label for="BrowserView" class="toolbarText"> 表单属性</label>
-        </a>
+   
 
      <!--   <a style="text-decoration: none;" href="javascript:Srcipt();" title="JS编程">
             <img src="../../Img/Script.png" id="Img3" border="0" width="16" height="16" alt="" />
@@ -170,7 +175,6 @@
         </a>
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
-
         <a style="text-decoration: none;" href="javascript:Imp();" title="导入表单模版">
             <img src="Img/toolbar/Imp.png" id="ImpFrmXml" border="0" width="16" height="16" alt="" />
             <label for="ImpFrmXml" class="toolbarText">导入</label>
@@ -205,6 +209,14 @@
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <input type="checkbox" onclick="propertyForm();" id="propertyCheckbox" title="属性窗口" style="vertical-align: middle;" />
         <label for="propertyCheckbox" class="toolbarText">属性窗口</label>-->
+
+
+         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+        <a style="text-decoration: none;" href="javascript:Mobile();" title="手机表单">
+            <img src="Img/toolbar/mobile.png" id="Img4" border="0" width="16" height="16" alt="" />
+            <label for="ImpFrmXml" class="toolbarText">手机</label>
+        </a>
+         
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none; display:inline;" href="http://www.ccflow.org" target=_blank title="打开官方网站在线帮助." >

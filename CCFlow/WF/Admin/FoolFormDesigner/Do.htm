@@ -40,6 +40,13 @@
                         return;
                     }
 
+                    if (data.indexOf('url@') == 0) {
+                        var url = data.replace('url@', '');
+                        window.location.href = url;
+                        //$("#Msg").html(data);
+                        return;
+                    }
+
                     // alert(data);
                     //data = JSON.parse(data);
                 }

@@ -4,17 +4,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 <base target="_self" />
 <script type="text/javascript" language="javascript">
-	function HelpGroup()
-	{
-	   var msg='字段分组：就是把类似的字段放在一起，让用户操作更友好。\t\n比如：我们纳税人设计一个基础信息采集节点。';
-	   msg+='在登记纳税人基础信息时，我们可以把基础信息、车船信息、房产信息、投资人信息分组。\t\n \t\n分组的格式为:@从字段名称1=分组名称1@从字段名称2=分组名称2 ,\t\n比如：节点信息设置，@NodeID=基本信息@LitData=考核信息。';
-       alert( msg);
-	}
-	function DoGroupF( enName)
-	{
-	    var b=window.showModalDialog( 'GroupTitle.aspx?EnName='+enName , 'ass' ,'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no'); 
-        window.location.href = window.location.href;
-	}
+	 
+	 
 	function Insert(fk_mapdata,idx)
     {
         var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&IDX=' + idx;

@@ -668,16 +668,21 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                 HtmlInputFile file = this.UCEn1.FindControl("file") as HtmlInputFile;
                 if (file != null && file.Value.IndexOf(".") != -1)
                 {
-                    BP.Sys.EnCfg cfg = new EnCfg(en.ToString());
-                    if (System.IO.Directory.Exists(cfg.FJSavePath) == false)
-                        System.IO.Directory.CreateDirectory(cfg.FJSavePath);
+                    //求出保存路径.
+                    string path = en.EnMap.FJSavePath;
+
+                    if (path == "" || path == null || path == string.Empty)
+                        path= BP.Sys.SystemConfig.PathOfDataUser +en.ToString() + "\\";
+
+
+                    if (System.IO.Directory.Exists(path) == false)
+                        System.IO.Directory.CreateDirectory(path);
 
                     /* 如果包含这二个字段。*/
                     string fileName = file.PostedFile.FileName;
                     fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
 
-                    string filePath = cfg.FJSavePath;
-                    en.SetValByKey("MyFilePath", filePath);
+                    en.SetValByKey("MyFilePath", path);
 
                     string ext = "";
                     if (fileName.IndexOf(".") != -1)
@@ -685,9 +690,9 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
 
                     en.SetValByKey("MyFileExt", ext);
                     en.SetValByKey("MyFileName", fileName);
-                    en.SetValByKey("WebPath", cfg.FJWebPath + en.PKVal + "." + ext);
+                    en.SetValByKey("WebPath", "//DataUser//"+ path + en.PKVal + "." + ext);
 
-                    string fullFile = filePath + "/" + en.PKVal + "." + ext;
+                    string fullFile = path + "/" + en.PKVal + "." + ext;
 
                     file.PostedFile.SaveAs(fullFile);
                     file.PostedFile.InputStream.Close();

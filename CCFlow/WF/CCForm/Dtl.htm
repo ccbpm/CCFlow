@@ -13,6 +13,7 @@
 	<link rel="stylesheet" type="text/css" href="/WF/Scripts/easyUI15/themes/icon.css" />
     <script type="text/javascript" src="/WF/Scripts/easyUI15/jquery.min.js"></script>
 	<script type="text/javascript" src="/WF/Scripts/easyUI15/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/easyUI15/locale/easyui-lang-zh_CN.js"></script>
     <script language="javascript" type="text/javascript" >
         var hjl = new Array(); //合计列名称集合
         var mapExt; //mapExt扩展
@@ -147,7 +148,7 @@
                         //url: '../Test/GetDataFormSql.ashx',
                         //width: 900,//sys_MapDtl[0].FrmW,
                         //height: 500,//sys_MapDtl[0].FrmH,
-                        title: titles,
+                        title: '', //titles,
                         rownumbers: IsShowIdx,
                         nowrap: false, //是否单行显示
                         fitColumns: true,
@@ -165,14 +166,22 @@
                     if (!IsReadonly && IsDelete) {
                         cols.push({ field: 'operation', title: '操作', width: 100,
                             formatter: function (value, rec, index) {
-                                var del = '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">删除</a>';
-                                if (rec.operation!=0) {
-                                    return del;
+                                if (isEmpty(rec)) {
+                                    return '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">X</a>';
+                                }
+                                
+                                if (rec.operation != 0) {
+                                    return '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">删除</a>';
                                 }
                             }
                         });
                     }
-
+                    function isEmpty(obj) {
+                        for (var name in obj) {
+                            return false;
+                        }
+                        return true;
+                    };
                     //新增按钮
                     if (IsReadonly || !IsInsert) {
                         $("#append").hide();
@@ -299,19 +308,23 @@
 	        editIndex = undefined;
 	    }
 	    function deleteRow(index) {
-	        var row = $('#dg').datagrid('getData').rows[index];
-	        if (row.OID > 0) {//删除操作
-	            row.DoType = "Dtl_DeleteRow";
-	            row.FK_MapDtl = GetQueryString("EnsName");
-	            //row.FK_MapData = "ND101";
-	            row.RefPKVal = GetQueryString("RefPKVal");
-	            AjaxServiceGener(row, deleteRowAfter, this);
-	        } else {
-	            if (editIndex == undefined) { return }
-	            $('#dg').datagrid('cancelEdit', editIndex)
+	        $.messager.confirm('删除确认', '确定要删除吗?', function (r) {
+	            if (r) {
+	                var row = $('#dg').datagrid('getData').rows[index];
+	                if (row.OID > 0) {//删除操作
+	                    row.DoType = "Dtl_DeleteRow";
+	                    row.FK_MapDtl = GetQueryString("EnsName");
+	                    //row.FK_MapData = "ND101";
+	                    row.RefPKVal = GetQueryString("RefPKVal");
+	                    AjaxServiceGener(row, deleteRowAfter, this);
+	                } else {
+	                    if (editIndex == undefined) { return }
+	                    $('#dg').datagrid('cancelEdit', editIndex)
 					.datagrid('deleteRow', editIndex);
-	            editIndex = undefined;
-            }
+	                    editIndex = undefined;
+	                }
+	            } 
+	        });
 	    }
 	    function deleteRowAfter(data) {
 	        if (data.indexOf('err') > -1) {
@@ -416,30 +429,33 @@
 
 	        if (obj.UIContralType == 1 || obj.UIContralType == 3) {  //下拉框UIBindKey
 	            comboboxArr.push(obj.KeyOfEn);
-	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread, onSelect: function (record) {
-	                //更改触发事件
-	                if (ddlMap[obj.KeyOfEn] != null && ddlMap[obj.KeyOfEn] != '' && ddlMap[obj.KeyOfEn] != undefined) {
-	                    var docTem = ddlMap[obj.KeyOfEn].replace("~@Key~", "'" + record.No + "'");
-	                    var OfActive = docTem.split('&')[0];
-	                    docTem = docTem.split('&')[1];
-	                    var temx = docTem.split('~');
-	                    var rowIndex = $('#dg').datagrid('getRowIndex', $('#dg').datagrid('getSelected'))
-	                    for (var m = 0; m < temx.length; m++) {
-	                        if (temx[m].indexOf('@') > -1) {
-	                            var nax = temx[m].replace('@', '');
-	                            var x = $('#dg').datagrid('getEditor', { index: rowIndex, field: nax }).target;
-	                            docTem = docTem.replace("~@" + nax + "~", "'" + x.combobox('getValue') + "'");
+	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread,
+	                onSelect: function (record) {
+	                    //更改触发事件
+	                    if (ddlMap[obj.KeyOfEn] != null && ddlMap[obj.KeyOfEn] != '' && ddlMap[obj.KeyOfEn] != undefined) {
+	                        var docTem = ddlMap[obj.KeyOfEn].replace("~@Key~", "'" + record.No + "'");
+	                        var OfActive = docTem.split('&')[0];
+	                        docTem = docTem.split('&')[1];
+	                        var temx = docTem.split('~');
+	                        var rowIndex = $('#dg').datagrid('getRowIndex', $('#dg').datagrid('getSelected'))
+	                        for (var m = 0; m < temx.length; m++) {
+	                            if (temx[m].indexOf('@') > -1) {
+	                                var nax = temx[m].replace('@', '');
+	                                var x = $('#dg').datagrid('getEditor', { index: rowIndex, field: nax }).target;
+	                                docTem = docTem.replace("~@" + nax + "~", "'" + x.combobox('getValue') + "'");
+	                            }
 	                        }
+	                        var OfActiveEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: OfActive }).target;
+	                        //清空被选项
+	                        //OfActiveEditor.combobox('setValue', '');
+	                        //OfActiveEditor.combobox('clear');
+	                        OfActiveEditor.combobox('reload', Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
 	                    }
-	                    var OfActiveEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: OfActive }).target;
-	                    OfActiveEditor.combobox('reload', Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
+	                    //更改触发事件
 	                }
-	                //更改触发事件
-	            }
 	            }, required: req
 	            }, hidden: hid, align: 'center',
 	                formatter: function (value, row) {
-	                    //console.info("执行formatter");
 	                    return row[obj.KeyOfEn + "Text"];
 	                }
 	            };

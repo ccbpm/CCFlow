@@ -138,7 +138,6 @@ namespace BP.Sys.FrmUI
 
                 #region 执行的方法.
                 RefMethod rm = new RefMethod();
-              
 
                 rm = new RefMethod();
                 rm.Title = "设置联动";
@@ -156,14 +155,6 @@ namespace BP.Sys.FrmUI
                 rm.Title = "编辑枚举值";
                 rm.ClassMethodName = this.ToString() + ".DoSysEnum()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "旧版本设置";
-                rm.ClassMethodName = this.ToString() + ".DoOldVer()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
 
 
@@ -201,14 +192,6 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 方法执行.
-        /// <summary>
-        /// 旧版本设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoOldVer()
-        {
-            return "/WF/Admin/FoolFormDesigner/EditEnum.htm?KeyOfEn="+this.KeyOfEn+"&EnumKey=" + this.UIBindKey+"&MyPK="+this.MyPK+"&UIBindKey="+this.UIBindKey;
-        }
         /// <summary>
         /// 编辑枚举值
         /// </summary>

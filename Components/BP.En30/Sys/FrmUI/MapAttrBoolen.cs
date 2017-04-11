@@ -118,9 +118,6 @@ namespace BP.Sys.FrmUI
                 //数据类型.
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 4, "数据类型", true, false);
 
-                //map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
-                //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
-
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.DefVal, false, "默认值(是否选中？)", true, true);
@@ -141,29 +138,10 @@ namespace BP.Sys.FrmUI
                 #region 执行的方法.
                 RefMethod rm = new RefMethod();
 
-                //rm = new RefMethod();
-                //rm.Title = "自动计算";
-                //rm.ClassMethodName = this.ToString() + ".DoAutoFull()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "正则表达式";
-                //rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "脚本验证";
-                //rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "旧版本设置";
                 rm.ClassMethodName = this.ToString() + ".DoOldVer()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
 
                 #endregion 执行的方法.
@@ -171,11 +149,6 @@ namespace BP.Sys.FrmUI
                 this._enMap = map;
                 return this._enMap;
             }
-        }
-
-        protected override bool beforeUpdateInsertAction()
-        {
-            return base.beforeUpdateInsertAction();
         }
         #endregion
 
@@ -187,59 +160,6 @@ namespace BP.Sys.FrmUI
         public string DoOldVer()
         {
             return "/WF/Admin/FoolFormDesigner/EditF.htm?KeyOfEn=" + this.KeyOfEn + "&FType="+this.MyDataType+"&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
-        }
-        /// <summary>
-        /// 自动计算
-        /// </summary>
-        /// <returns></returns>
-        public string DoAutoFull()
-        {
-            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn;
-        }
-        /// <summary>
-        /// 设置开窗返回值
-        /// </summary>
-        /// <returns></returns>
-        public string DoPopVal()
-        {
-            return "/WF/Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
-        }
-
-        /// <summary>
-        /// 正则表达式
-        /// </summary>
-        /// <returns></returns>
-        public string DoRegularExpression()
-        {
-            return "/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
-        }
-        /// <summary>
-        /// 文本框自动完成
-        /// </summary>
-        /// <returns></returns>
-        public string DoTBFullCtrl()
-        {
-            return "/WF/Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
-            //return "/WF/Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
-        }
-
-        /// <summary>
-        /// 设置级联
-        /// </summary>
-        /// <returns></returns>
-        public string DoInputCheck()
-        {
-            return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn  +"&RefNo="+this.MyPK;
-          //  return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
-        }
-        /// <summary>
-        /// 扩展控件
-        /// </summary>
-        /// <returns></returns>
-        public string DoEditFExtContral()
-        {
-            return "/WF/Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
-            //  return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         #endregion 方法执行.
     }

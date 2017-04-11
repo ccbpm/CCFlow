@@ -238,7 +238,6 @@ namespace BP.WF.HttpHandler
                     if (btnLab.SaveEnable && isAskFor == false)
                     {
                         toolbar += "<input name='Save' type=button value='" + btnLab.SaveLab + "' enable=true onclick=\"SaveSelfFrom();\" />";
-                        //  toolbar.Add("<input type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\" SaveSelfFrom();\" />");
                     }
                 }
                 else
@@ -264,15 +263,6 @@ namespace BP.WF.HttpHandler
                             {
                                 /*如果启用了选择人窗口的模式是【选择既发送】.*/
                                 toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if (OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; Send(); \" />";
-                                //toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
-                                //Btn_Send.Style.Add("display", "none");
-                                //this.Btn_Send.UseSubmitBehavior = false;
-                                //if (this.currND.HisFormType == NodeFormType.DisableIt)
-                                //    this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                                //else
-                                //    this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;SaveDtlAll();KindEditerSync();"; //this.disabled='disabled'; return true;";
-                                ////   this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                                //this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                             }
                             else
                             {
@@ -329,14 +319,11 @@ namespace BP.WF.HttpHandler
                     /*挂起*/
                     string urlr = appPath + "WF/WorkOpt/HungUp.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button  value='" + btnLab.HungLab + "' enable=true onclick=\"WinOpen('" + urlr + "'); \" />";
-                    //toolbar.Add("<input type=button  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />");
                 }
 
                 if (btnLab.ShiftEnable && isAskFor == false)
                 {
                     /*移交*/
-                    // toolbar.AddBtn("Btn_Shift", btnLab.ShiftLab);
-                    //   this.Btn_Shift.Click += new System.EventHandler(ToolBar1_ButtonClick);
                     string url12 = "./WorkOpt/Forward.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + "移交原因.";
                     toolbar += "<input name='Shift' type=button  value='" + btnLab.ShiftLab + "' enable=true onclick=\"To('" + url12 + "'); \" />";
                 }
@@ -344,7 +331,6 @@ namespace BP.WF.HttpHandler
                 if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
                 {
                     /* 抄送 */
-                    // toolbar.Add("<input type=button value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Msg/Write.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "','ds'); \" />");
                     toolbar += "<input name='CC' type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CC.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','ds'); \" />";
                 }
 
@@ -375,13 +361,7 @@ namespace BP.WF.HttpHandler
                 if (btnLab.EndFlowEnable && this.currND.IsStartNode == false && isAskFor == false)
                 {
                     toolbar += "<input type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"To('./WorkOpt/StopFlow.htm?&DoType=StopFlow&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "'); \" />";
-                    //toolbar.AddBtn("Btn_EndFlow", btnLab.EndFlowLab);
-                    //toolbar.GetBtnByID("Btn_EndFlow").OnClientClick = "return confirm('" + this.ToE("AYS", "将要执行终止流程，您确认吗？") + "')";
-                    //toolbar.GetBtnByID("Btn_EndFlow").Click += new System.EventHandler(ToolBar1_ButtonClick);
                 }
-
-                //if (btnLab.RptEnable)
-                //    toolbar.Add("<input type=button  value='" + btnLab.RptLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "','ds0'); \" />");
 
                 if (btnLab.PrintDocEnable && isAskFor == false)
                 {
@@ -435,7 +415,6 @@ namespace BP.WF.HttpHandler
                     /*加签 */
                     string urlr3 = appPath + "WF/WorkOpt/Askfor.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button name='Askfor'  value='" + btnLab.AskforLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
-                    //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
                 }
 
                 if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
@@ -443,7 +422,6 @@ namespace BP.WF.HttpHandler
                     /*公文正文 */
                     string urlr = appPath + "WF/WorkOpt/WebOffice.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button name='WebOffice'  value='" + btnLab.WebOfficeLab + "' enable=true onclick=\"WinOpen('" + urlr + "','公文正文'); \" />";
-                    //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
                 }
 
                 if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
@@ -451,7 +429,6 @@ namespace BP.WF.HttpHandler
                     /* 启用了数据重置功能 */
                     string urlr3 = appPath + "WF/MyFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsDeleteDraft=1&s=" + tKey;
                     toolbar += "<input type=button  value='数据重置' enable=true onclick=\"To('" + urlr3 + "','ds'); \" />";
-                    //toolbar.Add("<input type=button  value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />");
                 }
 
                 if (btnLab.SubFlowEnable == true)
@@ -507,7 +484,7 @@ namespace BP.WF.HttpHandler
             catch (Exception ex)
             {
                 BP.DA.Log.DefaultLogWriteLineError(ex);
-                toolbar = "@err" + ex.Message;
+                toolbar = "err@" + ex.Message;
             }
             return toolbar;
         }

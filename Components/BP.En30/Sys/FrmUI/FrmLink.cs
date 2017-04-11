@@ -277,9 +277,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(FrmLinkAttr.Text, "New Link", "标签", true, false, 0, 500, 20, true);
                 map.AddTBString(FrmLinkAttr.URL, null, "URL", true, false, 0, 500, 20, true);
-
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
-
 
                 this._enMap = map;
                 return this._enMap;

@@ -202,8 +202,8 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'TextBoxBoolean') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBooleans&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
-        CCForm_ShowDialog(url, '字段Boolean属性');
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '字段 Boolen 属性');
         return;
     }
 
@@ -280,6 +280,12 @@ function showFigurePropertyWin(figure) {
     if (shap == 'FrmTransferCustom') {
         var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmTransferCustoms&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '流转自定义');
+        return;
+    }
+
+    if (shap == 'HyperLink') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmLinks&PK=' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '超链接属性');
         return;
     }
 

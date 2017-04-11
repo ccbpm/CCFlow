@@ -200,10 +200,10 @@
             if (parentwin) {
                 var iFrame = parentwin.document.getElementById("F");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
-                    parentwin.EditEnum(fk_mapdata, enumKey, mypk );
+                    parentwin.EditEnum(fk_mapdata, mypk, enumKey);
                     return;
                 }
-                parentwin.EditEnum(fk_mapdata,enumKey, mypk);
+                parentwin.EditEnum(fk_mapdata, mypk, enumKey);
                 return;
             }
 
@@ -227,8 +227,6 @@
             }
 
             var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&inlayer=1&PK=' + mypk + '&s=' + Math.random();
-
-            alert(url);
 
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;

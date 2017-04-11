@@ -12,6 +12,7 @@
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
+
         function ShowEditWindow(field, url) {
             if (!field || !url) {
                 return;

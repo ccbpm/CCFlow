@@ -105,7 +105,6 @@
 
         function Edit(fk_mapdata, mypk, ftype, uiCtrlType) {
 
-
             var url = '';
             var title = ''
 
@@ -126,7 +125,6 @@
                 url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
                 title = '字段Float属性';
             }
-
 
             //数值字段类型.
             if (ftype == "5") {
@@ -172,22 +170,15 @@
         }
 
         function EditEnum(fk_mapdata, mypk, enumKey) {
-           // var url = 'EditEnum.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&EnumKey=' + enumKey + '&s=' + Math.random();
 
             var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
-
             OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });
         }
-        function EditTable(fk_mapdata,fk_sfTable, mypk) {
-         //   var url = 'EditTableField.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + fk_mapdata + '&MyPK=' + mypk + '&FK_SFTable=' + fk_sfTable + '&s=' + Math.random();
-
-
-            alert(mypk);
+        function EditTable(fk_mapdata, fk_sfTable, mypk) {
 
             var url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + mypk;
-
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });

@@ -204,6 +204,7 @@ namespace CCFlow.WF.Admin
                 pub1.AddTREnd();
 
                 #endregion
+
                 //检索全部字段，查找出没有分组或分组信息不正确的字段，存入“无分组”集合
                 dtNoGroupAttrs = dt_Attr.Clone();
 
@@ -367,10 +368,10 @@ namespace CCFlow.WF.Admin
                         pub1.AddTR();
                         pub1.AddTDBegin("colspan='5' style='color:red'");
                         pub1.AddSpace(1);
-                        pub1.Add("该分组下面没有任何字段");
+                        pub1.Add("@该分组下面没有任何字段");
                         pub1.AddTDEnd();
                         pub1.AddTREnd();
-                        #endregion
+                        #endregion 
                     }
                     gidx++;
                 }

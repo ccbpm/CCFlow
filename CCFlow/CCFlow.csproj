@@ -1311,10 +1311,8 @@
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditTable.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditTableField.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EleBatch.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\ExpImp.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\GroupField.aspx" />
@@ -9355,13 +9353,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\ExpImp.aspx.designer.cs">
       <DependentUpon>ExpImp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx.cs">
-      <DependentUpon>FieldTypeList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\FieldTypeList.aspx.designer.cs">
-      <DependentUpon>FieldTypeList.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx.cs">
       <DependentUpon>FrmEvent.aspx</DependentUpon>

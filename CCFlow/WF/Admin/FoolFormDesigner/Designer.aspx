@@ -57,14 +57,14 @@
                 }
             });
         }
+        function ReLoad(data) {
+            window.location.href = window.location.href;
+        }
 
         function FrmEvent(mypk) {
             var url = 'FrmEvent.htm?FK_MapData=' + mypk;
-
-
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
         }
-       
        
         function Insert(mypk, IDX) {
             var url = 'FieldTypeList.htm?DoType=AddF&MyPK=' + mypk + '&IDX=' + IDX;
@@ -217,9 +217,7 @@
             var url = '?DoType=Down&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&ToIdx=' + idx + '&T=' + t;
             AjaxServiceGener(null, url, ReLoad, this);
         }
-        function ReLoad(data) {
-            window.location.href = window.location.href;
-        }
+     
         function GFDoUp(refoid) {
             var url = '?DoType=GFDoUp&RefOID=' + refoid;
             AjaxServiceGener(null, url, ReLoad, this);
@@ -516,6 +514,7 @@
                 window.location.href = window.location.href;
             });
         }
+
         function MapFrame(fk_mapdata) {
             var url = 'MapFrame.htm?FK_MapData=' + fk_mapdata;
 

@@ -26,7 +26,6 @@ namespace BP.Web
     public class CCForm : System.Web.Services.WebService
     {
         #region 公用方法
-
         /// <summary>
         /// 获取值
         /// </summary>

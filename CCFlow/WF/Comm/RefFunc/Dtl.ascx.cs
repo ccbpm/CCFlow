@@ -94,7 +94,9 @@ namespace CCFlow.WF.Comm.RefFunc
         protected void Page_Load(object sender, EventArgs e)
         {
             this.ToolBar1.AddLinkBtn(NamesOfBtn.Save);
+
             //    this.ToolBar1.AddLinkBtn(NamesOfBtn.SaveAndClose);
+            
             this.ToolBar1.AddLinkBtn(NamesOfBtn.Delete);
             //    this.ToolBar1.AddLinkBtn(NamesOfBtn.Excel, "导出Excel");
 
@@ -117,6 +119,9 @@ namespace CCFlow.WF.Comm.RefFunc
         {
             #region 生成标题
             Entity en = this.HisEn;
+            en.SetValByKey(this.RefKey, this.RefVal);
+
+
             Map map = this.HisEn.EnMap;
             Attrs attrs = map.Attrs;
 
@@ -156,6 +161,7 @@ namespace CCFlow.WF.Comm.RefFunc
             Entities dtls = this.HisEns;
             QueryObject qo = new QueryObject(dtls);
             qo.AddWhere(this.RefKey, this.RefVal);
+
 
             #region 生成翻页
             this.ucsys2.Clear();

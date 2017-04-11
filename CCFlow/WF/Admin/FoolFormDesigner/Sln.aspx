@@ -92,7 +92,7 @@
 
     //编辑Dtl的原始属性.
     function EditDtlYuanShi(fk_mapdata, dtlKey) {
-        var url = 'MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlKey + '&DoType=Edit';
+        var url = 'MapDefDtlFreeFrm.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlKey + '&DoType=Edit';
         //  var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
         WinOpen(url,'ss');
         //window.location.href = url; //  window.location.href;
@@ -100,7 +100,7 @@
 
     //编辑附件在该节点权限.
     function EditDtl(fk_node, fk_mapdata, dtlNo) {
-        var url = 'MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlNo + '&FK_Node=' + fk_node;
+        var url = 'MapDefDtlFreeFrm.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlNo + '&FK_Node=' + fk_node;
     //    WinOpen(url,"dtl");
         var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
         window.location.href = window.location.href;

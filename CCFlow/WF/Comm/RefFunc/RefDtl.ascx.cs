@@ -116,6 +116,8 @@ namespace CCFlow.WF.Comm.RefFunc
         {
             #region 生成标题
             Entity en = this.HisEn;
+            en.SetValByKey(this.RefKey, this.RefVal);
+
             Map map = this.HisEn.EnMap;
             Attrs attrs = map.Attrs;
             bool isFJ = false;
@@ -125,7 +127,6 @@ namespace CCFlow.WF.Comm.RefFunc
             bool isOpenCard = false;
             if (attrs.Count > 12)
                 isOpenCard = true;
-
 
             this.ucsys1.AddTable("class='Table' cellSpacing='1' cellPadding='1' border='1' style='width:100%'");
             this.ucsys1.AddTR();
@@ -153,6 +154,8 @@ namespace CCFlow.WF.Comm.RefFunc
             Entities dtls = this.HisEns;
             QueryObject qo = new QueryObject(dtls);
             qo.AddWhere(this.RefKey, this.RefVal);
+
+
 
             #region 生成翻页
             this.ucsys2.Clear();

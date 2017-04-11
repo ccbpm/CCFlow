@@ -156,12 +156,7 @@
 
 		//编辑字段
 		function Edit(no, type, KeyOfEn, EnumKey) {
-			//普通类型的字段.
-			//WF/Admin/FoolFormDesigner/EditF.htm?MyPK=WoDeZiADun_WoDeZiDuan&FK_MapData=WoDeZiADun&KeyOfEn=WoDeZiDuan
-			//枚举类型
-			//WF/Admin/FoolFormDesigner/EditEnum.htm?DoType=Edit&FK_MapData=WoDeZiADun&MyPK=WoDeZiADun_FaWenLeiXing&EnumKey=FaWenLeiXing&s=0.6022623278189881
-			//外键.
-			//WF/Admin/FoolFormDesigner/EditTableField.htm?DoType=Edit&FK_MapData=WoDeZiADun&FK_MapDtl=WoDeZiADun&MyPK=WoDeZiADun_CN_PQ&FK_SFTable=CN_PQ
+
 			var url;
 			if (type == 0) {
 			    url = "/WF/Admin/FoolFormDesigner/EditF.htm?MyPK=" + no + "&FK_MapData=" + FK_MapData + "&KeyOfEn=" + KeyOfEn;

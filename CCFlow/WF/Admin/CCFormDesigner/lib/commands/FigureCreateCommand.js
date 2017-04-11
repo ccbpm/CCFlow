@@ -721,11 +721,12 @@ TransFormDataField.prototype = {
     },
     /**创建控件对应的标签**/
     LabelCreateForFigure: function () {
-        var x = this.x;
-        var y = this.y;
+       var defaultVals=CCForm_Control_DefaultPro[this.figure.CCForm_Shape];
+
+       var x = this.x - defaultVals.DefaultWidth / 2;
+       var y = this.y;//- defaultVals.DefaultHeight / 2;
         //计算位移
-        var moveX = (this.dataArrary.Name.length * 12) + 60;
-        moveX = moveX < 90 ? 90 : moveX;
+       var moveX = (this.dataArrary.Name.length * 12);
         x = x - moveX;
         y = y - 15;
         //假如X,Y <5px 会靠边看不到，设置为5px;

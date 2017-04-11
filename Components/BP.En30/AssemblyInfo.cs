@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("济南驰骋信息技术有限公司")]
 [assembly: AssemblyProduct("BP.En30")]
-[assembly: AssemblyCopyright("驰骋软件2003-2014")]
+[assembly: AssemblyCopyright("驰骋软件2003-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]	
 
@@ -28,7 +28,7 @@ using System.Runtime.InteropServices;
 // 您可以指定所有这些值，也可以使用“修订号”和“内部版本号”的默认值，方法是按
 // 如下所示使用 '*':
 
-[assembly: AssemblyVersion("2014.11.8.0")]
+[assembly: AssemblyVersion("2017.4.8.0")]
 
 
 //

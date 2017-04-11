@@ -354,7 +354,9 @@ namespace BP.WF.HttpHandler
             #endregion 处理事件.
 
             //返回当前数据存储信息.
-            return dtl.ToJson();
+            string str= dtl.ToJson();
+           // BP.DA.DataType.WriteFile("c:\\cc.txt", str);
+            return str;
         }
         /// <summary>
         /// 删除

@@ -160,7 +160,6 @@ namespace BP.WF.HttpHandler
             }
         }
 
-
         public string FromMapData
         {
             get

@@ -186,6 +186,7 @@
     <Compile Include="Sys\FrmUI\FrmBtn.cs" />
     <Compile Include="Sys\FrmUI\FrmImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
+    <Compile Include="Sys\FrmUI\FrmLink.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />
     <Compile Include="Sys\FrmUI\SFTable.cs" />

@@ -96,7 +96,6 @@ namespace BP.Sys
 
 
         #region 与 label 相关的属性 都存储到 AtParas 里面.
-         
         /// <summary>
         /// 文本
         /// </summary>

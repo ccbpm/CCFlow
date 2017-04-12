@@ -222,7 +222,7 @@ functrees.push({
 //			},
 			{ Type: "Node", Id: "FormRef", ParentId: null, Name: "表单相关", Opened: true, TType: "FORMREF", IconCls: "icon-tree_folder",
 			    Nodes: [
-						{ Type: "Node", Id: "Tabs", ParentId: "FormRef", Name: "数据源表", TType: "ENUMS", IconCls: "icon-srctable", Url: "../CCFormDesigner/Tables.aspx?t=" + Math.random() },
+						{ Type: "Node", Id: "Tabs", ParentId: "FormRef", Name: "数据源表", TType: "ENUMS", IconCls: "icon-srctable", Url: "../CCFormDesigner/Tables.htm?t=" + Math.random() },
 						{ Type: "Node", Id: "Enums", ParentId: "FormRef", Name: "枚举列表", TType: "ENUMS", IconCls: "icon-enum", Url: "../../Comm/Sys/EnumList.aspx?t=" + Math.random() },
 						{ Type: "Node", Id: "JSLib", ParentId: "FormRef", Name: "JS验证库", TType: "JSLIB", IconCls: "icon-js", Url: "../../Comm/Sys/FuncLib.aspx?t=" + Math.random() }
 					  ]

@@ -81,7 +81,7 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            //删除学生.
+            //删除.
             $.ajax({
                 type: 'post',
                 async: true,
@@ -103,7 +103,7 @@
         }
 
         function Edit(no) {
-            var url = 'Student.htm?No=' + no;
+            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.SFTables&No=' + no;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
             window.location.href = window.location.href;
         }

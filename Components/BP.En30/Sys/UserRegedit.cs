@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using BP.DA;
 using BP.En;
 using BP;
@@ -397,6 +398,33 @@ namespace BP.Sys
             return base.beforeUpdateInsertAction();
         }
         #endregion 重写
+
+        /// <summary>
+        /// 获取键/值对集合
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, string> GetVals()
+        {
+            if (string.IsNullOrWhiteSpace(this.Vals))
+                return new Dictionary<string, string>();
+
+            string[] arr = null;
+            string[] strs = this.Vals.Split("@".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            int idx = -1;
+            Dictionary<string, string> kvs = new Dictionary<string, string>();
+
+            foreach(string str in strs)
+            {
+                idx = str.IndexOf('=');
+
+                if (idx == -1)
+                    continue;
+
+                kvs.Add(str.Substring(0, idx), idx == str.Length - 1 ? "" : str.Substring(idx + 1));
+            }
+
+            return kvs;
+        }
     }
 	/// <summary>
 	/// 用户注册表s

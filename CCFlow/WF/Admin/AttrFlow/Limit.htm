@@ -33,14 +33,24 @@
 			$("#Msg").html("正在加载,请稍后......");
 			InitPage();
 		});
-		function InitPage() {
-			FK_Flow = GetQueryString("FK_Flow");
+function InitPage() {
+
+
+    alert(Handler);
+    return;
+
+
+		    FK_Flow = GetQueryString("FK_Flow");
+
+
+		    var  myurl = Handler+"?DoType=Limit_Init&FK_Flow=" + FK_Flow + "&m=" + Math.random();
+            
 			//获取数据
 			//绑定值
 			$.ajax({
 				type: 'post',
 				async: true,
-				url: Handler + "?DoType=Limit_Init&FK_Flow=" + FK_Flow + "&m=" + Math.random(),
+				url: myurl,
 				dataType: 'html',
 				success: function (data) {
 					if (data.indexOf("err@") == 0) {

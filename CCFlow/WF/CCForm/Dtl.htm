@@ -443,8 +443,9 @@
 	                        }
 	                        var OfActiveEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: OfActive }).target;
 	                        //清空被选项
-	                        //OfActiveEditor.combobox('setValue', '');
-	                        //OfActiveEditor.combobox('clear');
+	                        //OfActiveEditor.combobox('setValue', '请选择');
+	                        OfActiveEditor.combobox('clear');
+                            //重新加载下拉
 	                        OfActiveEditor.combobox('reload', Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
 	                    }
 	                    //更改触发事件
@@ -490,14 +491,6 @@
 	        return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d) + ' ' + (h < 10 ? '0' + h : h) + ':' + (i < 10 ? '0' + i : i) + ':' + (s < 10 ? '0' + s : s);
 	    }
 	    //自动计算
-//	    $(function () {
-//	        //var lastIndex;
-//	        $('#dg').datagrid({
-//	            onBeginEdit: function (rowIndex) {
-//	                autoFull(rowIndex);
-//	            }
-//	        });
-//	    });
 	    function autoFull(rowIndex) {
 	        /*mapExt解析*/
 	        //autoFull
@@ -513,7 +506,6 @@
 	                    }
 	                    var ofoper = mapExt[i].AttrOfOper;
 	                    var doc = mapExt[i].Doc;
-	                    doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
 	                    var docs = doc.replace('*', '').replace('+', '').replace('-', '').replace('/', '').replace('^', '').replace('%', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split("@");
 	                    var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
 	                    var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper }).target;
@@ -538,41 +530,7 @@
 	                        }
 	                    }
 	                case 'ActiveDDL':
-	                    break;
-	                    /*if (mapExt[i] == undefined || mapExt[i] == null || mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
-	                        break;
-	                    }
-	                    var ofoper = mapExt[i].AttrOfOper;
-	                    var OfActive = mapExt[i].AttrsOfActive;
-	                    var doc = mapExt[i].Doc;
-	                    docMM[ofoper] = doc;
-	                    var ofoperEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper }).target;
-	                    opMM.push(ofoper);
-	                    var OfActiveEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: OfActive }).target;
-	                    acMM.push(OfActive);
-	                    ofoperEditor.combobox({
-	                        onSelect: function (record) {
-	                            //console.info(fieldMM);
-	                            console.info(ofoperEditor.closest('td[field]').attr('field'));
-	                            var docTem = docMM[fieldMM].replace("~@Key~", "'" + record.No + "'");
-	                            var temx = docTem.split('~');
-	                            for (var m = 0; m < temx.length; m++) {
-	                                if (temx[m].indexOf('@') > -1) {
-	                                    //var rowT = $('#dg').datagrid('getSelected');
-	                                    var nax = temx[m].replace('@', '');
-	                                    var x = $('#dg').datagrid('getEditor', { index: rowIndex, field: nax }).target;
-	                                    //console.info(x.combobox('getValue'));
-	                                    docTem = docTem.replace("~@" + nax + "~", "'" + x.combobox('getValue') + "'");
-	                                }
-	                                //docTem = docTem.replace("~@Key~", record.No);
-	                            }
-	                            //console.info(Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
-	                            console.info(docTem);
-	                            console.info("edit" + acMM[opMM.indexOf(fieldMM)]);
-	                            //var edit = $('#dg').datagrid('getEditor', { index: rowIndex, field: acMM[opMM.indexOf(fieldMM)] }).target;
-	                            OfActiveEditor.combobox('reload', Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
-	                        }
-	                    });*/
+	                    break;//在拼接时实现
                     default:
 	            }
             }
@@ -623,7 +581,6 @@
                          }
                          var ofoper = mapExt[i].AttrOfOper;
                          var doc = mapExt[i].Doc;
-                         doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
                          var docs = doc.replace('*', '').split("@");
                          var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
                          var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper });
@@ -636,13 +593,8 @@
                                      doc.replace('@' + opts[i], optEditor.target.val()); //oldHtml
                                      //替换其他数值
                                      for (var m = 0; m < docs.length; m++) {
-                                         //console.log(docs[m]);
                                          var tem = $('#dg').datagrid('getEditor', { index: rowIndex, field: docs[m] });
-                                         //console.log(tem);
-                                         //doc = doc.replace('@' + docs[m], tem.oldHtml);
                                      }
-                                     //var cost = '1*2+3';
-                                     //alert(CalculateJS(doc));
                                      $(costEditor.target).numberbox('setValue', CalculateJS(doc));
                                  });
                              }

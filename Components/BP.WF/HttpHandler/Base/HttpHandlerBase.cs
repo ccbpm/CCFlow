@@ -32,8 +32,9 @@ namespace BP.WF.HttpHandler
         public void ProcessRequest(HttpContext mycontext)
         {
             context = mycontext;
-            //创建 ctrl 对象.
-            WebContralBase ctrl = Activator.CreateInstance(CtrlType, context) as WebContralBase;
+
+            //创建 ctrl 对象, 获得业务实体类.
+            WebContralBase ctrl = Activator.CreateInstance(this.CtrlType, context) as WebContralBase;
             try
             {
                 //执行方法返回json.

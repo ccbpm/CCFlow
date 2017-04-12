@@ -22,10 +22,25 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 自动发起.
+        /// <summary>
+        /// 执行初始化
+        /// </summary>
+        /// <returns></returns>
+        public string AutoStart_Init()
+        {
+            BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
+            return en.ToJson();
+        }
+        /// <summary>
+        /// 执行保存
+        /// </summary>
+        /// <returns></returns>
         public string AutoStart_Save()
         {
             //执行保存.
             BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
+
             //if (this.RB_HandWork.Checked)
             //{
             //    en.HisFlowRunWay = BP.WF.FlowRunWay.HandWork;
@@ -36,6 +51,8 @@ namespace BP.WF.HttpHandler
             //    en.HisFlowRunWay = BP.WF.FlowRunWay.SpecEmp;
             //    en.RunObj = this.TB_SpecEmp.Text;
             //}
+
+            en.RunObj = this.GetRequestVal("TB_SpecEmp");
 
             //if (this.RB_DataModel.Checked)
             //{
@@ -50,7 +67,7 @@ namespace BP.WF.HttpHandler
             en.DirectUpdate();
             return "保存成功.";
         }
-
+        #endregion 自动发起.
 
         #region 节点属性（列表）的操作
         /// <summary>

@@ -497,7 +497,6 @@ namespace BP.WF.HttpHandler
             Hashtable htMain = new Hashtable();
             foreach (string key in this.context.Request.Form.Keys)
             {
-
                 if (key == null)
                     continue;
 
@@ -704,7 +703,7 @@ namespace BP.WF.HttpHandler
             catch (Exception ex)
             {
                 BP.DA.Log.DefaultLogWriteLineError(ex);
-                json = "@err" + ex.Message;
+                json = "err@" + ex.Message;
             }
             return json;
         }

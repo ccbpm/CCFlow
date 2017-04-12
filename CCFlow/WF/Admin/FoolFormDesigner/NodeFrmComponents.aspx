@@ -161,7 +161,6 @@
 <%} %>
 
 
-
 <% if (this.Request.QueryString["DoType"] == "FrmFTC")
    { %>
    <table  style="width:100%; height:100%;">

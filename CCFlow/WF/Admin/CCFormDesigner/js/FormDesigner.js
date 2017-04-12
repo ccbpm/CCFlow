@@ -548,7 +548,7 @@ function ReSetEditDivCss() {
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
 function Conver_CCForm_V1ToV2() {
     //transe old CCForm to new
-    $.post(controllerURLConfig, {
+    $.post("CCFrom" + Handler, {
         action: 'CcformElements',
         FK_MapData: CCForm_FK_MapData,
         FK_Node: CCForm_FK_MapData.substr(2, CCForm_FK_MapData.length)

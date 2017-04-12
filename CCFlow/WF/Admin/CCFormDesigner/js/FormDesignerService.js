@@ -4,7 +4,7 @@ function ajaxService(param, callback, scope) {
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据
         contentType: "application/json; charset=utf-8",
-        url: controllerURLConfig, //要访问的后台地址
+        url: "CCFrom" + Handler, //要访问的后台地址
         data: param, //要发送的数据
         async: true,
         cache: false,

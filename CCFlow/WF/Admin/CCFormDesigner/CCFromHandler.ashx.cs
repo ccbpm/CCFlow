@@ -21,7 +21,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner.common
 {
     /// <summary>
     /// FormDesignerController 的摘要说明
-    /// by dgq FormDesiner service
     /// </summary>
     public class FormDesignerController :  BP.WF.HttpHandler.HttpHandlerBase
     {

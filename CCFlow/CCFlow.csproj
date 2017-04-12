@@ -1034,7 +1034,6 @@
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Excel.js" />
     <Content Include="WF\Admin\CCFormDesigner\FiledsList.htm" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesigner.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\FrmAttr.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
     <Content Include="WF\Admin\CCFormDesigner\Home.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Img\CH.png" />
@@ -1155,7 +1154,6 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\style.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\text.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
-    <Content Include="WF\Admin\CCFormDesigner\Login.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Login.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.aspx" />
@@ -1170,12 +1168,11 @@
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\modernizr.custom.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\notificationFx.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\readme.txt" />
-    <Content Include="WF\Admin\CCFormDesigner\SearchForm.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\CreateTableDataEdit.htm" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\CreateTreeDataEdit.html" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\Tree.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\Tables.htm" />
     <Content Include="WF\Admin\CCFormDesigner\TableRef.aspx" />
-    <Content Include="WF\Admin\CCFormDesigner\Tables.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Welcome.htm" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
@@ -8752,22 +8749,8 @@
     <Compile Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\FrmAttr.aspx.cs">
-      <DependentUpon>FrmAttr.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\FrmAttr.aspx.designer.cs">
-      <DependentUpon>FrmAttr.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\NewFrmGuide.aspx.cs">
       <DependentUpon>NewFrmGuide.aspx</DependentUpon>
@@ -8790,13 +8773,6 @@
     <Compile Include="WF\Admin\CCFormDesigner\NewFrmGuidEntity.aspx.designer.cs">
       <DependentUpon>NewFrmGuidEntity.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\SearchForm.aspx.cs">
-      <DependentUpon>SearchForm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\SearchForm.aspx.designer.cs">
-      <DependentUpon>SearchForm.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\SFTable\SFTableHandler.ashx.cs">
       <DependentUpon>SFTableHandler.ashx</DependentUpon>
     </Compile>
@@ -8813,13 +8789,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\TableRef.aspx.designer.cs">
       <DependentUpon>TableRef.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Tables.aspx.cs">
-      <DependentUpon>Tables.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Tables.aspx.designer.cs">
-      <DependentUpon>Tables.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Clound\DictData.aspx.cs">
       <DependentUpon>DictData.aspx</DependentUpon>

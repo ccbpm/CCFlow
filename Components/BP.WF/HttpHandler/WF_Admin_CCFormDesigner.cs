@@ -63,6 +63,15 @@ namespace BP.WF.HttpHandler
                 return ex.Message;
             }
         }
+
+        public string TableRef_Init()
+        {
+            BP.Sys.MapAttrs mapAttrs = new BP.Sys.MapAttrs();
+            mapAttrs.RetrieveByAttr(BP.Sys.MapAttrAttr.UIBindKey, this.FK_SFTable);
+
+            DataTable dt = mapAttrs.ToDataTableField();
+            return BP.Tools.Json.ToJson(dt);
+          }
         #endregion
 
         #region 方法 Home

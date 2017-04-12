@@ -970,56 +970,6 @@
     <Content Include="WF\Admin\CCFormDesigner\assets\javascript\json2.js" />
     <Content Include="WF\Admin\CCFormDesigner\BasicData.htm" />
     <Content Include="WF\Admin\CCFormDesigner\CCFormDesignerSL.aspx" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthImg.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthMulti.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Ath\AthSingle.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\basic\Button.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\basic\Fieldset.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\basic\HyperLink.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\basic\Img.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\basic\Label.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\basic\Line.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\basic\Poiner.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\basic\TempleteFile.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\CheckGroup.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\FlowChart.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\FrmCheck.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\SubFlowDtl.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\ccbpm\ThreadDtl.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\AthImg.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\AthMulti.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\AthSingle.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Datetime.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\DropDownListEnum.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\DropDownListTable.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Dtl.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Fieldset.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\Radiobutton.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\TextBoxBoolean.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\TextBoxDate.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\TextBoxDateTime.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\TextBoxFloat.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\TextBoxInt.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\TextBoxMoney.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\DataView\TextBoxStr.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\Checkbox.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\Checkboxlist.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\Datetime.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\DropDownListEnum.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\DropDownListTable.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\Dtl.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\Fieldset.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\HiddendField.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\ListBox.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\Radiobutton.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\RBL.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\TextBox.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\TextBoxDate.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\TextBoxDateTime.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\TextBoxFloat.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\TextBoxInt.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\Data\TextBoxMoney.png" />
-    <Content Include="WF\Admin\CCFormDesigner\Controls\readme.txt" />
     <Content Include="WF\Admin\CCFormDesigner\Default.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\DesignerFrm.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Exp.htm" />
@@ -1331,7 +1281,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Imp.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\Left.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDef.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtl.htm" />
@@ -1375,7 +1324,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\S7_PowerOfDept.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\WFRptDtl.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SFEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\SFSQL.aspx" />
@@ -9318,13 +9266,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx.designer.cs">
       <DependentUpon>ImpTableFieldSelectBindKey.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx.cs">
       <DependentUpon>AotuGenerNo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9575,13 +9516,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Rpt\WFRptDtl.aspx.designer.cs">
       <DependentUpon>WFRptDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFEdit.aspx.cs">
-      <DependentUpon>SFEdit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFEdit.aspx.designer.cs">
-      <DependentUpon>SFEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SFList.aspx.cs">
       <DependentUpon>SFList.aspx</DependentUpon>

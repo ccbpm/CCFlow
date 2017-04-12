@@ -1,10 +1,7 @@
 ﻿
 //  For .net 后台的调用的url ,  java的与.net的不同.
-var controllerURLConfig = '/WF/Admin/CCFormDesigner/CCFromHandler.ashx';
 var plant = 'CCFlow'; //运行平台.
-
-//处理器,一般来说，都放在与当前处理程序的相同的目录下。
-var Handler = "Handler.ashx";
+var Handler = "Handler.ashx"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。
 
 
 //公共方法

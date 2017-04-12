@@ -33,6 +33,38 @@ namespace BP.WF.HttpHandler
             return "保存成功.";
         }
 
+        #region tables
+        public string Tables_Init()
+        {
+            BP.Sys.SFTables tabs = new BP.Sys.SFTables();
+            tabs.RetrieveAll();
+            DataTable dt = tabs.ToDataTableField();
+            dt.Columns.Add("RefNum", typeof(int));
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                //求引用数量.
+                int refNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE UIBindKey='" + dr["No"] + "'", 0);
+                dr["RefNum"] = refNum;
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+        public string Tables_Delete()
+        {
+            try
+            {
+                BP.Sys.SFTable tab = new BP.Sys.SFTable();
+                tab.No = this.No;
+                tab.Delete();
+                return "删除成功.";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        #endregion
+
         #region 方法 Home
         public string Home_Init()
         {

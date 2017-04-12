@@ -59,7 +59,6 @@
                     case BP.WF.Data. GERptAttr.Title:
                     case BP.WF.Data. GERptAttr.WFSta:
                     case BP.WF.Data.GERptAttr.WFState:
-                        
                         break;
                     default:
                         continue;

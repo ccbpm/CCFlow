@@ -33,92 +33,86 @@
 			$("#Msg").html("正在加载,请稍后......");
 			InitPage();
 		});
-function InitPage() {
 
+		function InitPage() {
 
-    alert(Handler);
-    return;
+		    var fk_flow = GetQueryString("FK_Flow");
+		    var myurl = Handler + "?DoType=Limit_Init&FK_Flow=" + fk_flow + "&m=" + Math.random();
 
+		    //获取数据，绑定值。
 
-		    FK_Flow = GetQueryString("FK_Flow");
+		    $.ajax({
+		        type: 'post',
+		        async: true,
+		        url: myurl,
+		        dataType: 'html',
+		        success: function (data) {
+		            if (data.indexOf("err@") == 0) {
+		                alert(data);
+		            } else {
+		                //$("#Msg").html(data); //for test
 
-
-		    var  myurl = Handler+"?DoType=Limit_Init&FK_Flow=" + FK_Flow + "&m=" + Math.random();
-            
-			//获取数据
-			//绑定值
-			$.ajax({
-				type: 'post',
-				async: true,
-				url: myurl,
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf("err@") == 0) {
-						alert(data);
-					} else {
-						//$("#Msg").html(data); //for test
-
-						data = JSON.parse(data);
-						_StartLimitRole = data.StartLimitRole[0];
-						var dat = data.main[0];
-						//alert(typeof(_StartLimitRole.None)); //for test
-						//debugger;
-						$("#TB_Alert").val(dat.StartLimitAlert);	//限制提示信息
-						switch (dat.StartLimitRole) {
-							case _StartLimitRole.None: //不限制
-								$("#RB_None").attr("checked", true);
-								//$("input[name=xzgz][value=RB_None]").attr("checked", true); 
-								$("#TB_ByTimePara").val(dat.StartLimitPara);	//for test
-								break;
-							case _StartLimitRole.Day:	//天
-								$("#RB_ByTime").attr("checked", true);
-								$("#TB_ByTimePara").val(dat.StartLimitPara);
-								$("#DDL_ByTime").val(0);
-								break;
-							case _StartLimitRole.Week:	//周
-								$("#RB_ByTime").attr("checked", true);
-								$("#TB_ByTimePara").val(dat.StartLimitPara);
-								$("#DDL_ByTime").val(1);
-								break;
-							case _StartLimitRole.Month:	//月份
-								$("#RB_ByTime").attr("checked", true);
-								$("#TB_ByTimePara").val(dat.StartLimitPara);
-								$("#DDL_ByTime").val(2);
-								break;
-							case _StartLimitRole.JD:		//月份？
-								$("#RB_ByTime").attr("checked", true);
-								$("#TB_ByTimePara").val(dat.StartLimitPara);
-								$("#DDL_ByTime").val(3);
-								break;
-							case _StartLimitRole.Year:	//年度
-								$("#RB_ByTime").attr("checked", true);
-								$("#TB_ByTimePara").val(dat.StartLimitPara);
-								$("#DDL_ByTime").val(4);
-								break;
-							case _StartLimitRole.OnlyOneSubFlow: 	//为子流程时仅仅只能被调用1此
-								$("#RB_OnlyOneSubFlow").attr("checked", true);
-								break;
-							case _StartLimitRole.ColNotExit: 		//发起的列不能重复,(多个列可以用逗号分开)
-								$("#RB_ColNotExit").attr("checked", true);
-								$("#TB_ColNotExit_Fields").val(dat.StartLimitPara);
-								break;
-							case _StartLimitRole.ResultIsZero:		//<=0
-								$("#RB_SQL").attr("checked", true);
-								$("#TB_SQL_Para").val(dat.StartLimitPara);
-								$("#DDL_SQL").val(0);
-								break;
-							case _StartLimitRole.ResultIsNotZero:	//>0
-								$("#RB_SQL").attr("checked", true);
-								$("#TB_SQL_Para").val(dat.StartLimitPara);
-								$("#DDL_SQL").val(1);
-								break;
-							default:
-								break;
-						}
-						$("#Msg").html("");
-					}
-				}
-			});
+		                data = JSON.parse(data);
+		                _StartLimitRole = data.StartLimitRole[0];
+		                var dat = data.main[0];
+		                //alert(typeof(_StartLimitRole.None)); //for test
+		                //debugger;
+		                $("#TB_Alert").val(dat.StartLimitAlert); //限制提示信息
+		                switch (dat.StartLimitRole) {
+		                    case _StartLimitRole.None: //不限制
+		                        $("#RB_None").attr("checked", true);
+		                        //$("input[name=xzgz][value=RB_None]").attr("checked", true); 
+		                        $("#TB_ByTimePara").val(dat.StartLimitPara); //for test
+		                        break;
+		                    case _StartLimitRole.Day: //天
+		                        $("#RB_ByTime").attr("checked", true);
+		                        $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                        $("#DDL_ByTime").val(0);
+		                        break;
+		                    case _StartLimitRole.Week: //周
+		                        $("#RB_ByTime").attr("checked", true);
+		                        $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                        $("#DDL_ByTime").val(1);
+		                        break;
+		                    case _StartLimitRole.Month: //月份
+		                        $("#RB_ByTime").attr("checked", true);
+		                        $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                        $("#DDL_ByTime").val(2);
+		                        break;
+		                    case _StartLimitRole.JD: 	//月份？
+		                        $("#RB_ByTime").attr("checked", true);
+		                        $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                        $("#DDL_ByTime").val(3);
+		                        break;
+		                    case _StartLimitRole.Year: //年度
+		                        $("#RB_ByTime").attr("checked", true);
+		                        $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                        $("#DDL_ByTime").val(4);
+		                        break;
+		                    case _StartLimitRole.OnlyOneSubFlow: 	//为子流程时仅仅只能被调用1此
+		                        $("#RB_OnlyOneSubFlow").attr("checked", true);
+		                        break;
+		                    case _StartLimitRole.ColNotExit: 		//发起的列不能重复,(多个列可以用逗号分开)
+		                        $("#RB_ColNotExit").attr("checked", true);
+		                        $("#TB_ColNotExit_Fields").val(dat.StartLimitPara);
+		                        break;
+		                    case _StartLimitRole.ResultIsZero: 	//<=0
+		                        $("#RB_SQL").attr("checked", true);
+		                        $("#TB_SQL_Para").val(dat.StartLimitPara);
+		                        $("#DDL_SQL").val(0);
+		                        break;
+		                    case _StartLimitRole.ResultIsNotZero: //>0
+		                        $("#RB_SQL").attr("checked", true);
+		                        $("#TB_SQL_Para").val(dat.StartLimitPara);
+		                        $("#DDL_SQL").val(1);
+		                        break;
+		                    default:
+		                        break;
+		                }
+		                $("#Msg").html("");
+		            }
+		        }
+		    });
 		}
 
 		function onclick_btnSave(parameters) {

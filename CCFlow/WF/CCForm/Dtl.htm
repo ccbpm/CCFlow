@@ -59,6 +59,7 @@
         var updateRowIndex;
         function SaveRow(index) {
             var row = $('#dg').datagrid('getData').rows[Number(index)]; // $('#dg').datagrid('selectRow', { index: rowIndex });
+            console.info(row);
             row.DoType = "Dtl_SaveRow";
             row.FK_MapDtl = GetQueryString("EnsName");
             //row.FK_MapData = "ND101";
@@ -221,7 +222,7 @@
 </head>
 <body>
 <div id="Msg"></div>
-<table id="dg" class="easyui-datagrid" title="Row Editing in DataGrid" style="width:700px;height:auto"
+<table id="dg" class="easyui-datagrid" title="" style="width:700px;height:auto"
 			data-options="
 				iconCls: 'icon-edit',
                 rownumbers: true,
@@ -237,7 +238,8 @@
 </table>
 
 	<div id="tb" style="height:auto">
-		<a href="javascript:void(0)" id="append" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增一行</a>
+		<a href="javascript:void(0)" id="append" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
 		<!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除行</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存行</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销行</a>
@@ -287,13 +289,6 @@
 	        editIndex = index;
 	    }
 	    function append() {
-//	        if (endEditing()) {
-//	            $('#dg').datagrid('appendRow', {});
-//	            editIndex = $('#dg').datagrid('getRows').length - 1;
-//	            $('#dg').datagrid('selectRow', editIndex)
-//						.datagrid('beginEdit', editIndex);
-	        //	        }
-	        
             $('#dg').datagrid('endEdit', editIndex);
 	        $('#dg').datagrid('appendRow', {});
 	        editIndex = $('#dg').datagrid('getRows').length - 1;
@@ -336,10 +331,11 @@
 	            editIndex = undefined;
 	        }
         }
-	    function accept() {
-	        if (endEditing()) {
-	            $('#dg').datagrid('acceptChanges');
-	        }
+        function accept() {
+            var rowIndex = $('#dg').datagrid('getRowIndex', $('#dg').datagrid('getSelected'))
+            //endEditing();
+            //SaveRow(rowIndex);
+            $('#dg').datagrid("endEdit", rowIndex);
 	    }
 	    function reject() {
 	        $('#dg').datagrid('rejectChanges');

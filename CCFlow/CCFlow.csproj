@@ -801,9 +801,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\normalize\readme.txt" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\SelectNodeIcon.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\truck\FlowDesignerSvr.asmx" />
-    <Content Include="WF\Admin\CCBPMDesigner\truck\Truck.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx" />
     <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
     <Content Include="WF\Admin\CCFormDesigner\APICode.htm" />
@@ -1122,7 +1119,6 @@
     <Content Include="WF\Admin\CCFormDesigner\SFTable\CreateTreeDataEdit.html" />
     <Content Include="WF\Admin\CCFormDesigner\SFTable\Tree.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Tables.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\TableRef.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\Welcome.htm" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesignerSingle.xap" />
@@ -1210,7 +1206,6 @@
     <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
     <Content Include="WF\Admin\CondPRI.aspx" />
     <Content Include="WF\Admin\CondStation.aspx" />
-    <Content Include="WF\Admin\CreateFlowGuide\S1.aspx" />
     <Content Include="WF\Admin\DBInstall.aspx" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\DoType.aspx" />
@@ -1304,7 +1299,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_List.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapFrame.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Pub.ascx" />
     <Content Include="WF\Admin\FoolFormDesigner\RETemplete.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\Card.aspx" />
@@ -7565,7 +7559,6 @@
     <Content Include="WF\Admin\CCFormDesigner\SFTable\SFTableHandler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Site.Master" />
     <Content Include="WF\Admin\Condition.Master" />
-    <Content Include="WF\Admin\CreateFlowGuide\Site.Master" />
     <Content Include="WF\Admin\EventEntity\Site.Master" />
     <Content Include="WF\Admin\FindWorker\Site.Master" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
@@ -8649,17 +8642,6 @@
     <Compile Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx.cs">
       <DependentUpon>svg.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\truck\FlowDesignerSvr.asmx.cs">
-      <DependentUpon>FlowDesignerSvr.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx.cs">
-      <DependentUpon>TruckSimple.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\truck\TruckSimple.aspx.designer.cs">
-      <DependentUpon>TruckSimple.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx.cs">
       <DependentUpon>ChartWorks.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8730,13 +8712,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\TableRef.aspx.cs">
-      <DependentUpon>TableRef.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\TableRef.aspx.designer.cs">
-      <DependentUpon>TableRef.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Clound\DictData.aspx.cs">
       <DependentUpon>DictData.aspx</DependentUpon>
@@ -8933,20 +8908,6 @@
     </Compile>
     <Compile Include="WF\Admin\CondStation.aspx.designer.cs">
       <DependentUpon>CondStation.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CreateFlowGuide\S1.aspx.cs">
-      <DependentUpon>S1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CreateFlowGuide\S1.aspx.designer.cs">
-      <DependentUpon>S1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CreateFlowGuide\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CreateFlowGuide\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\DBInstall.aspx.cs">
       <DependentUpon>DBInstall.aspx</DependentUpon>
@@ -9373,13 +9334,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MasterPage.master.designer.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.aspx.cs">
-      <DependentUpon>NodeFrmComponents.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.aspx.designer.cs">
-      <DependentUpon>NodeFrmComponents.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

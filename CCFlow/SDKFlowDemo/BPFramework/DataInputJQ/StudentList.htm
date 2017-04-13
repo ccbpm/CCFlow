@@ -83,17 +83,13 @@
 
                     $("#Msg").html(data);
 
-
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
-
-                    } else {
-                        
-                        alert(data);
-
-                        window.location.href = window.location.href;
                     }
+
+                    alert(data);
+                    window.location.href = window.location.href;
                 }
             });
         }

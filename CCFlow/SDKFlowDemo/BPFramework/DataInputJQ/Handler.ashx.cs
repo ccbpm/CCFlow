@@ -61,6 +61,19 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
             {
                 switch (this.DoType)
                 {
+                    case "Login_Submit":
+                        string userNo = this.context.Request.Form["TB_UserNo"];
+                        string password = this.context.Request.Form["TB_Pass"];
+
+                        string sql = "SELECT Pass FROM Port_Emp WHERE No='"+userNo+"'";
+                        string val = BP.DA.DBAccess.RunSQLReturnString(sql);
+
+                        if (val == password)
+                            msg = "url@StudentList.htm";
+                        else
+                            msg = "err@用户名或者密码错误.";
+
+                        break;
                     case "Student_Init": //初始化实体demo.
                         msg = this.Student_Init();
                         break;

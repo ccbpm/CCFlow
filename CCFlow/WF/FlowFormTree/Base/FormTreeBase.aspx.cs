@@ -157,7 +157,7 @@ namespace CCFlow.WF.FlowFormTree
             }
             catch (Exception ex)
             {
-                s_responsetext = "err@doType=" + method + " err="+ex.Message;
+                s_responsetext = "err@doType=" + method + " err=" + ex.Message;
             }
 
             //组装ajax字符串格式,返回调用客户端
@@ -192,7 +192,10 @@ namespace CCFlow.WF.FlowFormTree
                     BP.WF.Flow fl = new Flow(this.FK_Flow);
                     if (node.IsStartNode == true && fl.DraftRole != DraftRole.None)
                     {
-                        BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
+                        if (fl.DraftRole == DraftRole.SaveToDraftList)
+                            BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
+                        if (fl.DraftRole == DraftRole.SaveToTodolist)
+                            BP.WF.Dev2Interface.Node_SetDraft2Todolist(this.FK_Flow, this.WorkID);
                     }
                 }
 
@@ -795,10 +798,7 @@ namespace CCFlow.WF.FlowFormTree
                         break;
                     case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
                         string frms = this.Request.QueryString["Frms"];
-                        if (frms != null && frms.Contains(",")==false)
-                            frms = frms + ",";
-
-                        if (frms != null && frms.Contains(frmNode.FK_Frm+",") == true)
+                        if (frms != null && frms.Contains(frmNode.FK_Frm) == true)
                         {
                             /*包含这个表单.*/
                         }
@@ -822,10 +822,11 @@ namespace CCFlow.WF.FlowFormTree
 
                         mysql = mysql.Replace("@WebUser.No", WebUser.No);
                         mysql = mysql.Replace("@WebUser.Name", WebUser.Name);
+                        mysql = mysql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
 
 
                         //替换特殊字符.
-                        mysql =mysql.Replace("~", "'");
+                        mysql = mysql.Replace("~", "'");
 
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;
@@ -883,7 +884,7 @@ namespace CCFlow.WF.FlowFormTree
                         {
                             BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
                             nodeFolder.No = formTree.No;
-                            nodeFolder.ParentNo = root.No;
+                            nodeFolder.ParentNo = formTree.ParentNo;
                             nodeFolder.Name = formTree.Name;
                             nodeFolder.NodeType = "folder";
                             appFlowFormTree.AddEntity(nodeFolder);
@@ -911,6 +912,8 @@ namespace CCFlow.WF.FlowFormTree
                     appFlowFormTree.AddEntity(nodeForm);
                 }
             }
+            //找上级表单文件夹
+            AppendFolder(formTrees);
             #endregion
 
             //扩展工具，显示位置为表单树类型
@@ -945,6 +948,81 @@ namespace CCFlow.WF.FlowFormTree
             TansEntitiesToGenerTree(appFlowFormTree, root.No, "");
             return appendMenus.ToString();
         }
+        /// <summary>
+        /// 拼接文件夹
+        /// </summary>
+        /// <param name="formTrees"></param>
+        private void AppendFolder(SysFormTrees formTrees)
+        {
+            BP.WF.Template.FlowFormTrees parentFolders = new BP.WF.Template.FlowFormTrees();
+            //二级目录
+            foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
+            {
+                if (string.IsNullOrEmpty(folder.NodeType) || !folder.NodeType.Equals("folder"))
+                    continue;
+
+                foreach (SysFormTree item in formTrees)
+                {
+                    //排除根节点
+                    if (item.ParentNo.Equals("0"))
+                        continue;
+                    if (parentFolders.Contains("No", item.No) == true)
+                        continue;
+                    //文件夹
+                    if (folder.ParentNo.Equals(item.No))
+                    {
+                        if (parentFolders.Contains("No", item.No) == true)
+                            continue;
+                        if (item.ParentNo.Equals("0") == true)
+                            continue;
+
+                        BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
+                        nodeFolder.No = item.No;
+                        nodeFolder.ParentNo = item.ParentNo;
+                        nodeFolder.Name = item.Name;
+                        nodeFolder.NodeType = "folder";
+                        parentFolders.AddEntity(nodeFolder);
+                    }
+                }
+            }
+            //找到父级目录添加到集合
+            foreach (BP.WF.Template.FlowFormTree folderapp in parentFolders)
+            {
+                appFlowFormTree.AddEntity(folderapp);
+            }
+            //求出没有父节点的文件夹
+            parentFolders.Clear();
+            foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
+            {
+                if (string.IsNullOrEmpty(folder.NodeType) || folder.NodeType.Equals("folder") == false)
+                    continue;
+
+                bool bHave = false;
+                foreach (BP.WF.Template.FlowFormTree child in appFlowFormTree)
+                {
+                    if (folder.ParentNo.Equals(child.No) == true)
+                    {
+                        bHave = true;
+                        break;
+                    }
+                }
+                //没有父节点的文件夹
+                if (bHave == false && parentFolders.Contains("No", folder.No) == false)
+                {
+                    parentFolders.AddEntity(folder);
+                }
+            }
+            //修改根节点编号
+            foreach (BP.WF.Template.FlowFormTree folder in parentFolders)
+            {
+                foreach (BP.WF.Template.FlowFormTree folderApp in appFlowFormTree)
+                {
+                    if (folderApp.No.Equals(folder.No) == false)
+                        continue;
+                    folderApp.ParentNo = "00";
+                }
+            }
+        }
 
         /// <summary>
         /// 将实体转为树形
@@ -971,6 +1049,7 @@ namespace CCFlow.WF.FlowFormTree
                 url = url.Replace("/", "|");
                 appendMenus.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
             }
+            appendMenus.Append(",iconCls:\"icon-Wave\"");
             // 增加它的子级.
             appendMenus.Append(",\"children\":");
             AddChildren(root, ens, checkIds);
@@ -1001,20 +1080,36 @@ namespace CCFlow.WF.FlowFormTree
                 {
                     string url = formTree.Url == null ? "" : formTree.Url;
                     string ico = "icon-tree_folder";
+                    if (SystemConfig.SysNo == "YYT")
+                    {
+                        ico = "icon-boat_16";
+                    }
                     url = url.Replace("/", "|");
                     appendMenuSb.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
                     //图标
                     if (formTree.NodeType == "form|0")
                     {
                         ico = "form0";
+                        if (SystemConfig.SysNo == "YYT")
+                        {
+                            ico = "icon-Wave";
+                        }
                     }
                     if (formTree.NodeType == "form|1")
                     {
                         ico = "form1";
+                        if (SystemConfig.SysNo == "YYT")
+                        {
+                            ico = "icon-Shark_20";
+                        }
                     }
                     if (formTree.NodeType.Contains("tools"))
                     {
                         ico = "icon-4";
+                        if (SystemConfig.SysNo == "YYT")
+                        {
+                            ico = "icon-Wave";
+                        }
                     }
                     appendMenuSb.Append(",iconCls:\"");
                     appendMenuSb.Append(ico);

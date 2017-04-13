@@ -187,5 +187,150 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 与业务表数据同步
+        /// <summary>
+        /// 与业务表数据同步
+        /// </summary>
+        /// <returns></returns>
+        public string DTSBTbale_Init() {
+            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
+            return fl.ToJson();
+        }
+        #endregion
+
+        #region 前置导航
+        /// <summary>
+        /// 前置导航
+        /// </summary>
+        /// <returns></returns>
+        public string StartGuide_Init(){
+            string str = "{";
+            BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
+            en.No = this.FK_Flow;
+            en.RetrieveFromDBSources();
+
+            //右侧的超链接.
+            str += "\"TB_GuideLink\":" + "\""+en.StartGuideLink+"\"";
+            str += ",\"TB_GuideLab\":" + "\"" + en.StartGuideLab + "\"";
+            Boolean RB_None = false; Boolean RB_ByHistoryUrl = false; Boolean RB_SelfUrl = false;
+            Boolean RB_BySQLOne = false; Boolean RB_FrmList = false; Boolean RB_SubFlow = false; Boolean RB_SubFlowShow = false;
+            string TB_ByHistoryUrl=""; string TB_SelfURL = ""; string TB_BySQLOne1="";
+            string TB_BySQLOne2 = ""; string TB_SubFlow1 = ""; string TB_SubFlow2="";
+            switch (en.StartGuideWay)
+            {
+                case BP.WF.Template.StartGuideWay.None://无
+                    RB_None = true;
+                    break;
+                case BP.WF.Template.StartGuideWay.ByHistoryUrl: //从开始节点Copy数据
+                    RB_ByHistoryUrl= true;
+                    TB_ByHistoryUrl = en.StartGuidePara1;
+                    break;
+                case BP.WF.Template.StartGuideWay.BySelfUrl://按自定义的Url
+                    RB_SelfUrl = true;
+                    TB_SelfURL = en.StartGuidePara1;
+                    break;
+                case BP.WF.Template.StartGuideWay.BySQLOne: //按照参数.
+                    RB_BySQLOne = true;
+                    TB_BySQLOne1 = en.StartGuidePara1;
+                    TB_BySQLOne2 = en.StartGuidePara2;
+                    break;
+                case BP.WF.Template.StartGuideWay.ByFrms:
+                    RB_FrmList = true;
+                    break;
+                case BP.WF.Template.StartGuideWay.SubFlowGuide: //子父流程多条模式- 合卷审批.
+                    RB_SubFlow = true;
+                    TB_SubFlow1 = en.StartGuidePara1;
+                    TB_SubFlow2 = en.StartGuidePara2;
+                    break;
+                default:
+                    break;
+            }
+
+            BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
+            if (fns.Count>2)
+            {
+                RB_SubFlowShow = true;
+            }
+            str += ",\"RB_None\":" + "\"" + RB_None + "\"";
+            str += ",\"RB_ByHistoryUrl\":" + "\"" + RB_ByHistoryUrl + "\"";
+            str += ",\"RB_SelfUrl\":" + "\"" + RB_SelfUrl + "\"";
+            str += ",\"RB_BySQLOne\":" + "\"" + RB_BySQLOne + "\"";
+            str += ",\"RB_FrmList\":" + "\"" + RB_FrmList + "\"";
+            str += ",\"RB_SubFlow\":" + "\"" + RB_SubFlow + "\"";
+            str += ",\"RB_SubFlowShow\":" + "\"" + RB_SubFlowShow + "\"";
+            str += ",\"TB_ByHistoryUrl\":" + "\"" + TB_ByHistoryUrl + "\"";
+            str += ",\"TB_SelfURL\":" + "\"" + TB_SelfURL + "\"";
+            str += ",\"TB_BySQLOne1\":" + "\"" + TB_BySQLOne1 + "\"";
+            str += ",\"TB_BySQLOne2\":" + "\"" + TB_BySQLOne2 + "\"";
+            str += ",\"TB_SubFlow1\":" + "\"" + TB_SubFlow1 + "\"";
+            str += ",\"TB_SubFlow2\":" + "\"" + TB_SubFlow2 + "\"";
+            str += ",\"userId\":" + "\"" + BP.Web.WebUser.SID + "\"";
+            return str+"}";
+
+        }
+        #endregion
+
+    #region 前置导航save
+        /// <summary>
+        /// 前置导航save
+        /// </summary>
+        /// <returns></returns>
+        public void StartGuide_Save(){
+            BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
+            en.No = this.FK_Flow;
+            en.RetrieveFromDBSources();
+
+            /*if (this.RB_None.Checked)
+            {
+                en.StartGuideWay = BP.WF.Template.StartGuideWay.None;
+            }
+
+            if (this.RB_ByHistoryUrl.Checked)
+            {
+                en.StartGuidePara1 = this.TB_ByHistoryUrl.Value;
+                en.StartGuidePara2 = "";
+                en.StartGuideWay = BP.WF.Template.StartGuideWay.ByHistoryUrl;
+            }
+
+            if (this.RB_SelfUrl.Checked)
+            {
+                en.StartGuidePara1 = this.TB_SelfURL.Value;
+                en.StartGuidePara2 = "";
+                en.StartGuideWay = BP.WF.Template.StartGuideWay.BySelfUrl;
+            }
+
+            //单条模式.
+            if (this.RB_BySQLOne.Checked)
+            {
+                en.StartGuidePara1 = this.TB_BySQLOne1.Value;  //查询语句.
+                en.StartGuidePara2 = this.TB_BySQLOne2.Value;  //列表语句.
+                en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
+            }
+
+            //多条-子父流程-合卷审批.
+            if (this.RB_SubFlow.Checked)
+            {
+                en.StartGuidePara1 = this.TB_SubFlow1.Value;  //查询语句.
+                en.StartGuidePara2 = this.TB_SubFlow2.Value;  //列表语句.
+                en.StartGuideWay = BP.WF.Template.StartGuideWay.SubFlowGuide;
+            }
+
+
+
+            BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
+            if (fns.Count >= 2)
+            {
+                if (this.RB_FrmList.Checked)
+                    en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
+            }
+
+            //右侧的超链接.
+            en.StartGuideLink = this.TB_GuideLink.Text;
+            en.StartGuideLab = this.TB_GuideLab.Text;*/
+
+            en.Update();
+            en.DirectUpdate();
+        }
+        #endregion
     }
 }

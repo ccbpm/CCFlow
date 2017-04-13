@@ -200,10 +200,11 @@
             //            var doType = GetQueryString("UserNo");
             //            if (doType == null)
             //                doType = "LoginInit";
+
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=DefaultInit&m=" + Math.random(),
+                url: Handler + "?DoType=Default_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -213,7 +214,8 @@
                     }
 
                     if (data.indexOf('url@') == 0) {
-                        window.location.href = 'Login.htm?DoType=Logout';
+                        var url = data.replace('url@', '');
+                        window.location.href = url;  
                         return;
                     }
 

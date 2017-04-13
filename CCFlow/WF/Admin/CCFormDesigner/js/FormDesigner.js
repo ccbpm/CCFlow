@@ -289,6 +289,18 @@ function showFigurePropertyWin(figure) {
         return;
     }
 
+    if (shap == 'HyperLink') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmLinks&PK=' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '超链接属性');
+        return;
+    }
+
+    if (shap == 'iFrame') {
+        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.iFrames&PK=' + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '框架');
+        return;
+    }
+
     alert('没有判断的双击类型:' + shap);
 }
 

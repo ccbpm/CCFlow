@@ -83,7 +83,7 @@ functrees.push({
                                                 },
                                                 { Type: "Node", Id: "DevAPI", ParentId: null, Name: "开发接口(API)", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
                                                     Nodes: [
-						                                { Type: "Node", Id: "FlowField", ParentId: "DevAPI", Name: "字段视图", TType: "NORMAL", DType: "-1", IconCls: "icon-Field", Inherits: ["fk_flow"], Url: "../AttrFlow/FlowFields.aspx?FK_Flow=@@fk_flow" },
+						                                { Type: "Node", Id: "FlowField", ParentId: "DevAPI", Name: "字段视图", TType: "NORMAL", DType: "-1", IconCls: "icon-Field", Inherits: ["fk_flow"], Url: "../AttrFlow/FlowFields.htm?FK_Flow=@@fk_flow" },
 						                                { Type: "Node", Id: "AsyncBusinessTable", ParentId: "DevAPI", Name: "与业务表同步", TType: "NORMAL", DType: "-1", IconCls: "icon-DTS", Inherits: ["fk_flow"], Url: "../AttrFlow/DTSBTable.aspx?FK_Flow=@@fk_flow&FK_Node=&DoType=Name" },
 						                                { Type: "Node", Id: "URLAPI", ParentId: "DevAPI", Name: "URL调用接口", TType: "NORMAL", DType: "-1", IconCls: "icon-URL", Inherits: ["fk_flow"], Url: "../AttrFlow/API.aspx?FK_Flow=@@fk_flow&DoType=Url" },
 						                                { Type: "Node", Id: "SDKAPI", ParentId: "DevAPI", Name: "SDK开发接口", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_flow"], Url: "../AttrFlow/APICode.aspx?FK_Flow=@@fk_flow&DoType=SDK" },
@@ -125,7 +125,7 @@ functrees.push({
 						{ Type: "Node", Id: "FlowMonitor", ParentId: "FlowFunc", Name: "流程监控", Opened: false, TType: "FLOWMONITOR", DType: "-1", IconCls: "icon-tree_folder",
 						    Nodes: [
 						            { Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "监控面板", TType: "WORKPANEL", DType: "-1", IconCls: "icon-Monitor", Url: "../CCBPMDesigner/App/Welcome.aspx?anaTime=slMouth&flowSort=slFlow&" },
-						            { Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "流程列表", TType: "WORKPANEL", DType: "-1", IconCls: "icon-flows", Url: "../CCBPMDesigner/Flows.aspx" },
+						            { Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "流程列表", TType: "WORKPANEL", DType: "-1", IconCls: "icon-flows", Url: "../CCBPMDesigner/Flows.htm" },
 						            { Type: "Node", Id: "SearchByKey", ParentId: "FlowMonitor", Name: "全文检索", TType: "SEARCHBYKEY", DType: "-1", IconCls: "icon-SearchKey", Url: "../../KeySearch.aspx" },
 						            { Type: "Node", Id: "SynthSearch", ParentId: "FlowMonitor", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews" },
 						            { Type: "Node", Id: "SynthAnalysis", ParentId: "FlowMonitor", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews" },

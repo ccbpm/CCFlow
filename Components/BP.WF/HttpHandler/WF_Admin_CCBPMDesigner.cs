@@ -199,9 +199,7 @@ namespace BP.WF.HttpHandler
                         }
 
                         break;
-                    case "Login":
-                        msg = this.Login();
-                        break;
+                  
                     case "load"://获取流程图表数据
                         msg = Flow_LoadFlowJsonData();
                         break;
@@ -494,6 +492,46 @@ namespace BP.WF.HttpHandler
             return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
         }
 
+        #region 主页.
+        /// <summary>
+        /// 初始化登录界面.
+        /// </summary>
+        /// <returns></returns>
+        public string Default_Init()
+        {
+            //让admin登录
+            if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.No != "admin")
+                return "url@Login.htm?DoType=Logout";
+
+            //如果没有流程表，就执行安装.
+            if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)
+                return "url@../DBInstall.htm";
+
+            Hashtable ht = new Hashtable();
+            if (BP.WF.Glo.OSModel == OSModel.OneOne)
+                ht.Add("OSModel", "0");
+            else
+                ht.Add("OSModel", "1");
+
+            try
+            {
+                // 执行升级
+                string str = BP.WF.Glo.UpdataCCFlowVer();
+                if (str == null)
+                    str = "";
+                ht.Add("Msg", str);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+            //生成Json.
+            return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
+        #endregion
+
+        #region 登录窗口.
         /// <summary>
         /// 初始化登录界面.
         /// </summary>
@@ -531,9 +569,8 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }
 
-        public string Login()
+        public string Login_Submit()
         {
-
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = this.GetValFromFrmByKey("TB_UserNo");
 
@@ -548,6 +585,8 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.Port_Login(emp.No);
             return "SID=" + emp.SID + "&UserNo=" + emp.No;
         }
+        #endregion 登录窗口.
+
 
 
         #region 流程相关 Flow

@@ -1570,9 +1570,8 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCheck()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/CheckFlow.aspx?FK_Flow=" + this.No + "&Lang=CH";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-
         /// <summary>
         /// 启动限制规则
         /// </summary>

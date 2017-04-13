@@ -1113,7 +1113,7 @@ namespace BP.WF.Template
             //fl.No = this.No;
             //fl.RetrieveFromDBSources();
 
-            return "/WF/Admin/AttrFlow/CheckFlow.aspx?FK_Flow=" + this.No;
+            return "/WF/Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + this.No;
 
             //return fl.DoCheck();
         }

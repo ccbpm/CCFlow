@@ -35,6 +35,8 @@ namespace BP.WF.HttpHandler
 
             //创建 ctrl 对象, 获得业务实体类.
             WebContralBase ctrl = Activator.CreateInstance(this.CtrlType, context) as WebContralBase;
+            ctrl.context = mycontext;
+
             try
             {
                 //执行方法返回json.

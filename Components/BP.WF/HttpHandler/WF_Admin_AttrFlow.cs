@@ -24,6 +24,17 @@ namespace BP.WF.HttpHandler
 
         #region 流程字段列表
         /// <summary>
+        /// 执行流程检查.
+        /// </summary>
+        /// <returns></returns>
+        public string CheckFlow_Init()
+        {
+            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
+            string str= fl.DoCheck();
+            str = str.Replace("@", "<BR>@");
+            return str;
+        }
+        /// <summary>
         /// 流程字段列表
         /// </summary>
         /// <returns></returns>

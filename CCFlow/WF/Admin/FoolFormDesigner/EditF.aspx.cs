@@ -755,7 +755,13 @@ namespace CCFlow.WF.MapDef
             cb.ID = "CB_IsRichText";
             cb.Checked = mapAttr.IsRichText;
             this.Pub1.AddTD(cb);
-            this.Pub1.AddTD("");
+
+            cb = new CheckBox();
+            cb.Text = "是否启用二维码？";
+            cb.ID = "CB_IsEnableQrCode";
+            cb.Checked = mapAttr.IsEnableQrCode;
+            this.Pub1.AddTD(cb);
+
             this.Pub1.AddTREnd();
 
 
@@ -1045,6 +1051,7 @@ namespace CCFlow.WF.MapDef
                         attr.UIHeightInt = this.Pub1.GetDDLByID("DDL_UIRows").SelectedItemIntVal * 23;
                         attr.IsSupperText = this.Pub1.GetCBByID("CB_IsSupperText").Checked;
                         attr.IsRichText = this.Pub1.GetCBByID("CB_IsRichText").Checked;
+                        attr.IsEnableQrCode = this.Pub1.GetCBByID("CB_IsEnableQrCode").Checked;
                         if (attr.TBModel == TBModel.SupperText)
                         {
                             attr.UIBindKey = "1";

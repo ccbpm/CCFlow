@@ -1317,7 +1317,7 @@ namespace CCFlow.WF.CCForm
                                                 #region 检查是否有 sql 过滤填充?
                                                 foreach (MapExt me in mes)
                                                 {
-                                                    if (me.ExtType != MapExtXmlList.AutoFullDLL)
+                                                    if (me.AttrOfOper != attr.KeyOfEn || me.ExtType != MapExtXmlList.AutoFullDLL)
                                                         continue;
 
                                                     //如果没有数据了，就删除他.
@@ -1568,7 +1568,7 @@ namespace CCFlow.WF.CCForm
                     foreach (MapExt me in mes)
                     {
 #warning 此处需要优化
-                        string ddlC = "DDL" + me.AttrOfOper.Replace(me.FK_MapData,"") + "_" + mydtl.OID;
+                        string ddlC = "DDL_" + me.AttrOfOper.Replace(me.FK_MapData,"") + "_" + mydtl.OID;
                         switch (me.ExtType)
                         {
                             case MapExtXmlList.DDLFullCtrl: // 自动填充.

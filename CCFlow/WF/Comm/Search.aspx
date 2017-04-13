@@ -100,9 +100,6 @@
     <form id="Form1" method="post" runat="server">
     <table id="Table1" align="left" cellspacing="0" cellpadding="0" border="0" topmargin="0"
         leftmargin="0" width="100%">
-        <%-- <caption  class="CaptionMsg" >
-						<asp:Label id="Label1" runat="server">Label</asp:Label>
-                        </caption>--%>
         <tr>
             <td class="ToolBar" topmargin="0" leftmargin="0">
                 <uc2:ToolBar ID="ToolBar1" runat="server" />
@@ -127,8 +124,7 @@
             提示：如果没有正常导出文件，请手动点击下方按钮进行下载。
             <br />
             <br />
-            <a id="downLoad" href="" class="easyui-linkbutton" data-options="iconCls:'icon-save'">
-                点击下载</a>
+            <a id="downLoad" href="" class="easyui-linkbutton" data-options="iconCls:'icon-save'">点击下载</a>
         </div>
     </div>
     <input type="hidden" id="expFileName" runat="server" />

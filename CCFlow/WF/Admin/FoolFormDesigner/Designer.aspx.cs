@@ -245,7 +245,7 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                         this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + fwc.No + "' height='" + fwc.FWC_H + "px' width='100%' >");
 
-                        src = "NodeFrmComponents.aspx?DoType=FWC&FK_MapData=" + fwc.NodeID;
+                        src = "NodeFrmComponents.htm?DoType=FWC&FK_MapData=" + fwc.NodeID;
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + fwc.FWC_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
@@ -269,7 +269,7 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                         this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + subflow.No + "' height='" + subflow.SF_H + "px' width='100%' >");
 
-                        src = "NodeFrmComponents.aspx?DoType=SubFlow&FK_MapData=" + subflow.NodeID;
+                        src = "NodeFrmComponents.htm?DoType=SubFlow&FK_MapData=" + subflow.NodeID;
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + subflow.SF_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
@@ -293,7 +293,7 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                         this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFWC" + track.No + "' height='" + track.FrmTrack_H + "px' width='100%' >");
 
-                        src = "NodeFrmComponents.aspx?DoType=FrmTrack&FK_MapData=" + track.NodeID;
+                        src = "NodeFrmComponents.htm?DoType=FrmTrack&FK_MapData=" + track.NodeID;
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + track.FrmTrack_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
@@ -318,7 +318,7 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                         this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDThread" + thread.No + "' height='" + thread.FrmThread_H + "px' width='100%' >");
 
-                        src = "NodeFrmComponents.aspx?DoType=FrmThread&FK_MapData=" + thread.NodeID;
+                        src = "NodeFrmComponents.htm?DoType=FrmThread&FK_MapData=" + thread.NodeID;
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + thread.FrmThread_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();
@@ -343,7 +343,7 @@ namespace CCFlow.WF.MapDef
                         this.Pub1.AddTR(" ID='" + currGF.Idx + "_" + myidx + "' ");
                         this.Pub1.Add("<TD colspan=" + md.TableCol + " ID='TDFTC" + ftc.No + "' height='" + ftc.FTC_H + "px' width='100%' >");
 
-                        src = "NodeFrmComponents.aspx?DoType=FrmFTC&FK_MapData=" + ftc.NodeID;
+                        src = "NodeFrmComponents.htm?DoType=FrmFTC&FK_MapData=" + ftc.NodeID;
                         this.Pub1.Add("<iframe ID='F" + gf.CtrlID + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' width='100%' height='" + ftc.FTC_H + "px' scrolling=auto  /></iframe>");
                         this.Pub1.AddTDEnd();
                         this.Pub1.AddTREnd();

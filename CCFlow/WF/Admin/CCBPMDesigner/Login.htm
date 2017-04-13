@@ -399,10 +399,12 @@
                 success: function (data) {
 
                     alert(data);
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
+
                     window.location.href = 'Default.htm?' + data;
                 }
             });
@@ -433,7 +435,7 @@
                     }
 
                     if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@');
+                        var url = data.replace('url@', '');
                         window.location.href = url;
                         return;
                     }

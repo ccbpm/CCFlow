@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace CCFlow.WF.Admin.AttrFlow
 {
-    public partial class CheckFlow : System.Web.UI.Page
+    public partial class CheckFlow1 : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

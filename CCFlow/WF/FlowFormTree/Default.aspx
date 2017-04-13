@@ -454,13 +454,13 @@
                 extUrl += "&FID=" + args.FID;
             if (args.SID != "")
                 extUrl += "&SID=" + args.SID;
-
             if (args.PWorkID != "")
                 extUrl += "&PWorkID=" + args.PWorkID;
             if (args.PFlowNo != "")
                 extUrl += "&PFlowNo=" + args.PFlowNo;
-            if (args.IsLoadData != "")
+            if (args.IsLoadData != "") {
                 extUrl += "&IsLoadData=" + args.IsLoadData;
+            }
 
             //获取其他参数
             var sHref = window.location.href;
@@ -498,6 +498,7 @@
             switch (event) {
                 case "send": //发送
                     if (confirm("是否真的需要提交发送?")) {
+                        //发送按钮置为不可用
                         $('#send').linkbutton({ disabled: true });
                         $('.tabs-inner span').each(function (i, n) {
                             var t = $(n).text();
@@ -519,7 +520,7 @@
                         //接收人规则检查
                         Application.data.checkAccepter(args.FK_Node, args.WorkID, args.FID, function (js) {
                             if (js == "byselected") {/*有用户选择接收人*/
-                                var url = "../WorkOpt/Accepter.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1";
+                                var url = "../WorkOpt/Accepter.htm?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1";
                                 var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
                                 if (isChrome) {
                                     $("<div id='selectaccepter'></div>").append($("<iframe width='100%' height='100%' frameborder=0 src='" + url + "'/>")).dialog({
@@ -625,7 +626,7 @@
                     window.open("../WorkOpt/ReturnWork.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "退回窗口", "height=400, width=800,top=80,left=160,scrollbars=yes");
                     break;
                 case "selectaccepter": //选择接收人
-                    window.open("../WorkOpt/Accepter.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1", "选择收件人", "height=600, width=800,scrollbars=yes");
+                    window.open("../WorkOpt/Accepter.htm?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1", "选择收件人", "height=600, width=800,scrollbars=yes");
                     break;
                 case "showchart": //轨迹
                     WinOpenPage("_blank", "../WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&FK_Node=" + args.FK_Node + "&s=" + strTimeKey, "轨迹图");
@@ -888,6 +889,7 @@
             Application.data.getFlowFormTree(url, function (js) {
                 var isSelect = false;
                 var pushData = eval('(' + js + ')');
+                //pushData = pushData[0].children;
                 //加载类别树
                 $("#flowFormTree").tree({
                     data: pushData,
@@ -1016,7 +1018,7 @@
         <div id="mm3" style="width: 150px;" runat="server">
         </div>
     </div>
-    <div region="west" border="true" split="true" title="资料树" class="cs-west">
+    <div region="west" border="true" split="true" title=" " class="cs-west">
         <ul id="flowFormTree" class="easyui-tree" data-options="animate:true,dnd:false">
         </ul>
     </div>

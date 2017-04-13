@@ -22,6 +22,18 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 流程字段列表
+        /// <summary>
+        /// 流程字段列表
+        /// </summary>
+        /// <returns></returns>
+        public string FlowFields_Init()
+        {
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
+            return attrs.ToJson();
+        }
+        #endregion
+
         #region 自动发起.
         /// <summary>
         /// 执行初始化

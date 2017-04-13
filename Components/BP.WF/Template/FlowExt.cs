@@ -1109,7 +1109,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFlowFields()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/FlowFields.aspx?FK_Flow=" + this.No;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/FlowFields.htm?FK_Flow=" + this.No;
         }
         /// <summary>
         /// 与业务表数据同步

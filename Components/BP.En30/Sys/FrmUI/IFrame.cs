@@ -47,11 +47,21 @@ namespace BP.Sys.FrmUI
 
                 map.AddMyPK();
                 map.AddTBString(FrmBtnAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
-                map.AddTBString(FrmEleAttr.EleType, null, "类型", true, false, 0, 30, 20);
+                map.AddTBString(FrmBtnAttr.Text, null, "标签", true, false, 0, 3900, 20);
 
-                map.AddTBString(FrmEleAttr.EleID, null, "ID", true, false, 0, 30, 20);
-                map.AddTBString(FrmEleAttr.EleName, null, "名称", true, false, 0, 30, 20);
-                map.AddTBString(FrmEleAttr.Tag1, null, "连接", true, false, 0, 30, 20,true);
+                map.AddTBInt(FrmBtnAttr.IsView, 0, "是否可见", false, false);
+                map.AddTBInt(FrmBtnAttr.IsEnable, 0, "是否起用", false, false);
+
+                map.AddTBInt(FrmBtnAttr.UAC, 0, "控制类型", false, false);
+                map.AddTBString(FrmBtnAttr.UACContext, null, "控制内容", true, false, 0, 3900, 20);
+
+                map.AddTBInt(FrmBtnAttr.EventType, 0, "事件类型", false, false);
+                map.AddTBString(FrmBtnAttr.EventContext, null, "事件内容", true, false, 0, 3900, 20);
+
+                map.AddTBString(FrmBtnAttr.MsgOK, null, "运行成功提示", true, false, 0, 500, 20);
+                map.AddTBString(FrmBtnAttr.MsgErr, null, "运行失败提示", true, false, 0, 500, 20);
+
+                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
              
                 this._enMap = map;
                 return this._enMap;

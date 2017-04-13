@@ -361,6 +361,7 @@ namespace CCFlow.WF.Admin
                             default:
                                 break;
                         }
+
                         attrNs.AddEntity(attr);
                     }
                     //添加到页面中

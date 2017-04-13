@@ -228,6 +228,11 @@ namespace CCFlow.WF.CCForm
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            string urlR = this.Request.RawUrl;
+            urlR = urlR.Replace(".aspx", ".htm");
+            this.Response.Redirect(urlR, true);
+            return;
+
             #region  属性
             string sealName = null;
             #endregion 属性

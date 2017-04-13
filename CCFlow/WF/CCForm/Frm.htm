@@ -27,11 +27,19 @@
                 url: Handler + "?DoType=Frm_Init&FK_MapData=" + no + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
+                    
                     if (data.indexOf('err@') == 0) {
-                        alert(data);
+                        alert(data); //如果是异常，就提提示.
                         return;
                     }
+
+                    if (data.indexOf('url@') == 0) {
+                        data = data.replace('url@', ''); //如果返回url，就直接转向.
+                        window.location.href = data;
+                        return;
+                    }
+
+
                     //$("#Msg").html(data);
                     data = JSON.parse(data);
                     var mainTable = data.MAINTABLE; //主表单
@@ -39,10 +47,13 @@
                     var sysFrmLab = data.SYS_FRMLAB; //lab
                     var sysFrmBtn = data.SYS_FRMBTN; //BTN
                     var sysFrmMapAttr = data.SYS_MAPATTR; //组件
-                    addLines(sysFrmLine);
-                    addLabels(sysFrmLab);
-                    addBtns(sysFrmBtn);
-                    addMapAttr(sysFrmMapAttr);
+                    
+
+                    addLines(sysFrmLine); //增加line.
+                    addLabels(sysFrmLab); //增加label
+                    addBtns(sysFrmBtn); //增加按钮.
+                    addMapAttr(sysFrmMapAttr); //增加字段属性.
+
                     //调用公共类库的方法:执行批量主表赋值
                     //GenerFullAllCtrlsVal(data);
                     return;
@@ -57,7 +68,6 @@
 
 <form id="cc">
 <div id="Msg"> </div>
-
 
 <script type="text/javascript">
 
@@ -186,7 +196,7 @@
     //解析颜色
     function colorX(col) {
         if (col.length == 9) {
-            return '#' + col.substring(3,9);
+            return '#' + col.substring(3, 9);
         }
         return col;
     }
@@ -223,7 +233,6 @@
             if (obj.UICONTRALTYPE == 0) {//文本
                 console.info(obj.MYDATATYPE);
                 switch (obj.MYDATATYPE) {
-               
                
                     case 1: //文本类型.
                         if (isread) {

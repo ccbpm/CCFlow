@@ -6,9 +6,12 @@
    string flowNo = this.Request.QueryString["FK_Flow"];
    if (flowNo == null)
         flowNo = "001";
+    
     BP.WF.Flow fl = new BP.WF.Flow(flowNo);
     int flowID = int.Parse(flowNo);
-     %>
+    
+    
+ %>
 
 <table style="width:100%;">
 <caption >开发API <div style=" float:right" > <a href="API.aspx">URL调用接口</a> |  <a href="APICode.aspx">代码开发API</a> |  <a href="APICodeFEE.aspx?FK_Flow=<%=flowNo %>">FEE开发API</a>  </div>  </caption> 

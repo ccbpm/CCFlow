@@ -981,7 +981,6 @@
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Excel.js" />
     <Content Include="WF\Admin\CCFormDesigner\FiledsList.htm" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesigner.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\Helper\InitScript.txt" />
     <Content Include="WF\Admin\CCFormDesigner\Home.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Img\CH.png" />
     <Content Include="WF\Admin\CCFormDesigner\Img\DBSrc.png" />

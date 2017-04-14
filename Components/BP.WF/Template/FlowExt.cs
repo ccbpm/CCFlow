@@ -1586,7 +1586,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoStartGuide()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/StartGuide.aspx?FK_Flow=" + this.No + "&Lang=CH";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/StartGuide.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 执行数据同步

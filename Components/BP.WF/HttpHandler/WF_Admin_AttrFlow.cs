@@ -448,84 +448,37 @@ namespace BP.WF.HttpHandler
             if (string.IsNullOrEmpty(FK_Flow))
                 {
                     throw new Exception("流程编号为空");
+                    return "err@流程编号为空";
                 }
                 else
                 {
-                    string str = "{";
                     BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
-                    if (en.PStarter==true)
-                    {
-                      str+="\"CB_FQR\":"+"\"true\",";
-                    }
-                    if (en.PWorker==true)
-                    {
-                        str+="\"CB_CYR\":"+"\"true\",";
-                    }
-                    if (en.PCCer==true)
-                    {
-                        str+="\"CB_CSR\":"+"\"true\",";
-                    }
-
-                    if (en.PMyDept==true)
-                    {
-                        str+="\"CB_BBM\":"+"\"true\",";
-                    }
-                    if (en.PPMyDept==true)
-                    {
-                        str+="\"CB_ZSSJ\":"+"\"true\",";
-                    }
-                    if (en.PPDept==true)
-                    {
-                        str+="\"CB_SJ\":"+"\"true\",";
-                    }
-
-                    if (en.PSameDept==true)
-                    {
-                        str+="\"CB_PJ\":"+"\"true\",";
-                    }
-                    if ( en.PSpecDept==true)
-                    {
-                        str+="\"QY_ZDBM\":"+"\"true\",";
-                    }
-                    if (string.IsNullOrEmpty(en.PSpecDeptExt))
-                    {
-                        str+="\"TB_ZDBM\":"+"\""+en.PSpecDeptExt+"\",";
-                    }
-                    if (en.PSpecSta == true)
-                    {
-                        str+="\"QY_ZDGW\":"+"\"true\",";
-                    }
-                    if (string.IsNullOrEmpty(en.PSpecStaExt))
-                    {
-                        str+="\"TB_ZDGW\":"+"\""+en.PSpecStaExt+"\",";
-                    }
-                    if (en.PSpecGroup == true)
-                    {
-                        str+="\"QY_ZDQXZ\":"+"\"true\",";
-
-                    }
-                    if (string.IsNullOrEmpty(en.PSpecGroupExt))
-                    {
-                        str+="\"TB_ZDQXZ\":"+"\""+en.PSpecGroupExt+"\",";
-                    }
-                    if (en.PSpecEmp == true)
-                    {
-                        str+="\"QY_ZDQXZ\":"+"\"true\",";
-                    }
-
-                    if (string.IsNullOrEmpty(en.PSpecEmpExt))
-                    {
-                        str += "\"TB_ZDRY\":" + "\"" + en.PSpecEmpExt + "\",";
-                    }
-                    if (str.Length>2)
-                    {
-                        str = str.Substring(0,str.Length-1);
-                    }
-                    str += "}";
-                    return str;
+                    en.Retrieve();
+                    return en.ToJson();
                 }
+        }
+        #endregion 流程轨迹查看权限save
+
+        #region 流程轨迹查看权限
+        /// <summary>
+        /// 流程轨迹查看权限
+        /// </summary>
+        /// <returns></returns>
+        public string TruckViewPower_Save()
+        {
+            try {
+                BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
+                en.Retrieve();
+
+                en = BP.Sys.PubClass.CopyFromRequestByPost(en, context.Request) as BP.WF.Template.TruckViewPower;
+                en.Save();  //执行保存.
+                return "保存成功";
+            }
+            catch {
+                return "err@保存失败";
+            }
             
         }
-        #endregion 流程轨迹查看权限
+        #endregion 流程轨迹查看权限save
     }
 }

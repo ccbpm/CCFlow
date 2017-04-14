@@ -125,7 +125,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=StartGuide_Save&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                url: Handler + "?DoType=StartGuide_Save&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
                 dataType: 'html',
                 data: { TB_ByHistoryUrl: TB_ByHistoryUrl, xz: xz, TB_SelfURL: TB_SelfURL, TB_BySQLOne1: TB_BySQLOne1, TB_BySQLOne2: TB_BySQLOne2, TB_GuideLink: TB_GuideLink, TB_GuideLab: TB_GuideLab, TB_SubFlow1: TB_SubFlow1, TB_SubFlow2: TB_SubFlow2 },
                 error: function (data) {
@@ -292,7 +292,7 @@
         <td>
         </td>
             <td>
-                <input type="button" class="easyui-linkbutton" id="Btn_Save" runat="server" value="保存" OnClick="onSave" />
+                <input type="button" class="easyui-linkbutton" id="Btn_Save" runat="server" value="保存" onclick="onSave()" />
                 | <span id="dtsbt"><a href="../TestFlow.htm?FK_Flow=flowNo&SID=userId&Lang=CH" target="_blank" >运行测试</a></span>
             </td>
 

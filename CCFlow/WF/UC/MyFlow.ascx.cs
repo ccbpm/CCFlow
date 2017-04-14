@@ -968,7 +968,7 @@ namespace CCFlow.WF.UC
                         break;
                     case StartGuideWay.SubFlowGuide:
                     case StartGuideWay.SubFlowGuideEntity:
-                        this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
+                        this.Response.Redirect("StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
                         break;
                     case StartGuideWay.ByHistoryUrl: // 历史数据.
                         if (this.currFlow.IsLoadPriData == true)
@@ -976,7 +976,7 @@ namespace CCFlow.WF.UC
                             this.ToMsg("流程配置错误，您不能同时启用前置导航，自动装载上一笔数据两个功能。", "Info");
                             return;
                         }
-                        this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
+                        this.Response.Redirect("StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
                         break;
                     case StartGuideWay.BySystemUrlOneEntity:
                     case StartGuideWay.BySQLOne:

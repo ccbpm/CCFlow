@@ -477,7 +477,7 @@ namespace CCFlow.WF
                         break;
                     case StartGuideWay.SubFlowGuide:
                     case StartGuideWay.SubFlowGuideEntity:
-                        this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No, true);
+                        this.Response.Redirect("StartGuide.htm?FK_Flow=" + this.currFlow.No, true);
                         break;
                     case StartGuideWay.ByHistoryUrl: // 历史数据.
                         if (this.currFlow.IsLoadPriData == true)
@@ -486,7 +486,7 @@ namespace CCFlow.WF
                             return;
                         }
 
-                        this.Response.Redirect("StartGuide.aspx?FK_Flow=" + this.currFlow.No, true);
+                        this.Response.Redirect("StartGuide.htm?FK_Flow=" + this.currFlow.No, true);
                         break;
                     case StartGuideWay.BySystemUrlOneEntity:
                     case StartGuideWay.BySQLOne:

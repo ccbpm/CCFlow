@@ -12,6 +12,7 @@
     <script type="text/javascript" src="/WF/Scripts/config.js"></script>
 
     <script type="text/javascript" language="javascript" >
+
         //页面启动函数.
         $(function () {
 
@@ -34,24 +35,15 @@
 
                     data = JSON.parse(data);
 
-                    alert(data.Name);
+                    GenerFullAllCtrlsVal(data);
 
-                   var = FlowRunWay=data.FlowRunWay;
+                    if (data.FlowRunWay == 1)
+                        document.getElementById("TB_SpecEmp").value = data.RunObj;
 
-                   if (FlowRunWay==0)
-                      document.getElementById("RB_HandWork").checked=true;
+                    if (data.FlowRunWay == 2)
+                        document.getElementById("TB_DataModel").value = data.RunObj;
 
-                   if (FlowRunWay==1)
 
-                      document.getElementById("RB_SpecEmp").checked=true;
-                   if (FlowRunWay==2)
-
-                      document.getElementById("RB_DataModel").checked=true;
-                   if (FlowRunWay==3)
-
-                      document.getElementById("RB_InsertModel").checked=true;
-                    //调用公共类库的方法:执行批量主表赋值
-                  //  GenerFullAllCtrlsVal(data);
                     return;
                 }
             });
@@ -69,7 +61,6 @@
             var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             // alert(CheckBoxIDs);
             var frmData = $("#cc").serialize();
-            //alert(frmData);
             $.ajax({
                 data: frmData,
                 type: 'post',
@@ -83,8 +74,9 @@
                         return;
                     }
 
-
-                    $("#Msg").html("<font color=green>" + data + "</font>");
+                    alert(data);
+                    window.location.href = window.location.href;
+                    //$("#Msg").html("<font color=green>" + data + "</font>");
                     return;
                 }
             });
@@ -94,6 +86,7 @@
 
 </head>
 <body>
+ <form id="cc">
  <table style="width: 100%">
         <caption>自动发起</caption>
         <tr>
@@ -114,9 +107,9 @@
             <td valign="top">
                 <fieldset>
                     <legend>
-                    <input type=radio  value=""  id="RB_HandWork"  name="RB_0" />手工启动（默认）
+                    <input id="RB_FlowRunWay_0" type="radio" name="RB_FlowRunWay" value="0"  /><label for="RB_FlowRunWay_0">手工启动（默认）</label>
+                    </legend>
 
-                        <!-- <asp:RadioButton ID="RB_HandWork" Text="手工启动（默认）" GroupName="xzgz" runat="server" Checked="true" /></legend>-->
                         <ul>
                         <li>
                      <font color="gray">说明：就是说工作人员从流程发起列表里，点流程，就发起流程。</font>
@@ -125,9 +118,9 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                    <input type=radio  value=""  id="RB_SpecEmp"  name="RB_0" />指定人员按时启动
-                        <!-- <asp:RadioButton ID="RB_SpecEmp" Text="指定人员按时启动" runat="server" GroupName="xzgz" /></legend> -->
-                        
+                    <input id="RB_FlowRunWay_1" type="radio" name="RB_FlowRunWay" value="1"  /><label for="RB_FlowRunWay_1">指定人员按时启动</label>
+                    </legend>
+
                          <a href="javascript:ShowHidden('emps')">操作员参数设置:</a>
               <div id="emps" style=" display:none;color:Gray">
                <ul>
@@ -139,19 +132,23 @@
                <li>比如：zhangshan@01:01@12:01  让张三在每天的 1点零1分，与12点零1分发起此流程。</li>
                <li>比如：zhangshan@-01 01:01  让张三在每月1号的1点零1分发起此流程。</li>
                <li>比如：zhangshan@06-01 01:01  让张三在每年的6月1号的1点零1分发起此流程。</li>
-
                <li>cc的日期格式为：yyyy-MM-dd HH:mm 如果时间匹配到您设置的时间点，那么系统就会触发流程，多个时间点用@符号隔开。</li>
                </ul>
                </div>
+
+               <br />
                
                <input type="text" style="width:95%"  id="TB_SpecEmp" name="TB_SpecEmp" />
                 </fieldset>
 
-
                 <fieldset>
                     <legend>
-                    <input type=radio  value=""  id="RB_DataModel"  name="RB_0" />数据集按时启动
-                        <!--<asp:RadioButton ID="RB_DataModel" Text="数据集按时启动" runat="server" GroupName="xzgz" /></legend> -->
+
+                    <input id="RB_FlowRunWay_2" type="radio" name="RB_FlowRunWay" value="2"  /><label for="RB_FlowRunWay_2">数据集按时启动</label>
+
+                    </legend>
+
+
                         <a href="javascript:ShowHidden('sql')">SQL参数设置:</a>
               <div id="sql" style=" display:none;color:Gray">
                <ul>
@@ -163,14 +160,17 @@
                <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
                </ul>
                </div>
+               <br />
 
                <input type=text style="width:95%"  id="TB_DataModel" name="TB_DataModel" />
                 </fieldset>
 
                 <fieldset>
                     <legend>
-                    <input type=radio  value=""  id="RB_InsertModel"  name="RB_0" />触发式启动
-                        <!-- <asp:RadioButton ID="RB_InsertModel" Text="触发式启动" runat="server" GroupName="xzgz" /></legend>-->
+
+                    <input id="RB_FlowRunWay_3" type="radio" name="RB_FlowRunWay" value="3"  /><label for="RB_FlowRunWay_3">触发式启动</label>
+                    </legend>
+                     
                         <ul style="color:Gray">
                         <li>说明:第三方软件向特定的表 WF_Task 中写入数据，每写入一条数据系统就会自动发起一条流程。</li>
                         <li>ccBPM就会读取这张表来完成流程的发起，发起成功后就把这条记录设置成已经发起的状态。</li>
@@ -191,5 +191,6 @@
 
 <div id="Msg"> </div>
 
+</form>
 </body>
 </html>

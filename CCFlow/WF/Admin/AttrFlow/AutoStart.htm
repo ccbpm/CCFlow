@@ -39,11 +39,17 @@
                    var = FlowRunWay=data.FlowRunWay;
 
                    if (FlowRunWay==0)
-                      document.getElementById("RB_0").checked=true;
+                      document.getElementById("RB_HandWork").checked=true;
 
                    if (FlowRunWay==1)
-                      document.getElementById("RB_0").checked=true;
 
+                      document.getElementById("RB_SpecEmp").checked=true;
+                   if (FlowRunWay==2)
+
+                      document.getElementById("RB_DataModel").checked=true;
+                   if (FlowRunWay==3)
+
+                      document.getElementById("RB_InsertModel").checked=true;
                     //调用公共类库的方法:执行批量主表赋值
                   //  GenerFullAllCtrlsVal(data);
                     return;
@@ -108,8 +114,9 @@
             <td valign="top">
                 <fieldset>
                     <legend>
-                    <input type=radio  value="0"  id="RB_0"  name="RB_0" />
-                        <asp:RadioButton ID="RB_HandWork" Text="手工启动（默认）" GroupName="xzgz" runat="server" Checked="true" /></legend>
+                    <input type=radio  value=""  id="RB_HandWork"  name="RB_0" />手工启动（默认）
+
+                        <!-- <asp:RadioButton ID="RB_HandWork" Text="手工启动（默认）" GroupName="xzgz" runat="server" Checked="true" /></legend>-->
                         <ul>
                         <li>
                      <font color="gray">说明：就是说工作人员从流程发起列表里，点流程，就发起流程。</font>
@@ -118,7 +125,8 @@
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <asp:RadioButton ID="RB_SpecEmp" Text="指定人员按时启动" runat="server" GroupName="xzgz" /></legend>
+                    <input type=radio  value=""  id="RB_SpecEmp"  name="RB_0" />指定人员按时启动
+                        <!-- <asp:RadioButton ID="RB_SpecEmp" Text="指定人员按时启动" runat="server" GroupName="xzgz" /></legend> -->
                         
                          <a href="javascript:ShowHidden('emps')">操作员参数设置:</a>
               <div id="emps" style=" display:none;color:Gray">
@@ -142,7 +150,8 @@
 
                 <fieldset>
                     <legend>
-                        <asp:RadioButton ID="RB_DataModel" Text="数据集按时启动" runat="server" GroupName="xzgz" /></legend>
+                    <input type=radio  value=""  id="RB_DataModel"  name="RB_0" />数据集按时启动
+                        <!--<asp:RadioButton ID="RB_DataModel" Text="数据集按时启动" runat="server" GroupName="xzgz" /></legend> -->
                         <a href="javascript:ShowHidden('sql')">SQL参数设置:</a>
               <div id="sql" style=" display:none;color:Gray">
                <ul>
@@ -160,7 +169,8 @@
 
                 <fieldset>
                     <legend>
-                        <asp:RadioButton ID="RB_InsertModel" Text="触发式启动" runat="server" GroupName="xzgz" /></legend>
+                    <input type=radio  value=""  id="RB_InsertModel"  name="RB_0" />触发式启动
+                        <!-- <asp:RadioButton ID="RB_InsertModel" Text="触发式启动" runat="server" GroupName="xzgz" /></legend>-->
                         <ul style="color:Gray">
                         <li>说明:第三方软件向特定的表 WF_Task 中写入数据，每写入一条数据系统就会自动发起一条流程。</li>
                         <li>ccBPM就会读取这张表来完成流程的发起，发起成功后就把这条记录设置成已经发起的状态。</li>
@@ -171,8 +181,8 @@
                 </fieldset>
 
                 <input type=button value="保存" onclick="Save();" />
-                <asp:Button  class="easyui-linkbutton" ID="Btn_Save" runat="server" Text="保存" OnClick="BtnSave_Click" />
-               <%-- <asp:Button  class="easyui-linkbutton" ID="Btn_AutoStart" runat="server" Text="手工启动定时任务" OnClick="BtnStart_Click" />--%>
+               <!--<asp:Button  class="easyui-linkbutton" ID="Btn_Save" runat="server" Text="保存" OnClick="BtnSave_Click" /> --> 
+              
 
                 <a style=" float:right" href="javascript: if ( confirm('您确定要执行吗? 注意:对于数据量交大的数据因为web上执行时间的限时问题，会造成执行失败。') ) { WinOpen('/WF/Comm/Refmethod.aspx?Index=7&EnsName=BP.WF.Template.FlowSheets&No=<%=FK_Flow %>&r=1208095548','_blank') }" tooltip="">手动启用定时任务</a>
             </td>

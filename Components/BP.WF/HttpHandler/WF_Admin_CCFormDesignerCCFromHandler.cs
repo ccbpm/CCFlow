@@ -88,6 +88,7 @@ namespace BP.WF.HttpHandler
             {
                 msg = "err@" + ex.Message;
             }
+
             if (string.IsNullOrEmpty(msg))
                 msg = "";
 
@@ -438,6 +439,7 @@ namespace BP.WF.HttpHandler
                                 ;
 
                 DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
+
                 ds.Tables[0].TableName = "MapAttr";
                 ds.Tables[1].TableName = "FrmBtn";
                 ds.Tables[2].TableName = "FrmRb";
@@ -451,12 +453,6 @@ namespace BP.WF.HttpHandler
                 ds.Tables[10].TableName = "FigureCom";
 
                 return BP.Tools.Json.ToJson(ds);
-
-
-              //  MapData md = new MapData(this.FK_Flow);
-               // DataSet ds = md.GetDtlsDatasOfList();
-
-                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = "", data = Newtonsoft.Json.JsonConvert.SerializeObject(ds) });
             }
             catch (Exception ex)
             {

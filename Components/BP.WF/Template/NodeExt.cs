@@ -722,12 +722,11 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "父子流程";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Menu/SubFlows.png";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlow";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
 
@@ -1001,7 +1000,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSubFlow()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/SubFlows.aspx?FK_Node=" + this.NodeID;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/En.htm?EnsName=BP.WF.Template.FrmSubFlows&PK=" + this.NodeID;
         }
         /// <summary>
         /// 接受人规则

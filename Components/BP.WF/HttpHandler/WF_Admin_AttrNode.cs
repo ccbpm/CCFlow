@@ -22,35 +22,38 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
-        public string AutoStart_Save()
+        #region 考核规则.
+        public string CHRole_Init()
         {
-            //执行保存.
-            BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
-
-            //if (this.RB_HandWork.Checked)
-            //{
-            //    en.HisFlowRunWay = BP.WF.FlowRunWay.HandWork;
-            //}
-
-            //if (this.RB_SpecEmp.Checked)
-            //{
-            //    en.HisFlowRunWay = BP.WF.FlowRunWay.SpecEmp;
-            //    en.RunObj = this.TB_SpecEmp.Text;
-            //}
-
-            //if (this.RB_DataModel.Checked)
-            //{
-            //    en.RunObj = this.TB_DataModel.Text;
-            //    en.HisFlowRunWay = BP.WF.FlowRunWay.DataModel;
-            //}
-
-            //if (this.RB_InsertModel.Checked)
-            //{
-            //    en.HisFlowRunWay = BP.WF.FlowRunWay.InsertModel;
-            //}
-            en.DirectUpdate();
-            return "保存成功.";
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            return nd.ToJson();
         }
+
+        public string CHRole_Save()
+        {
+            BP.WF.Node nd = new BP.WF.Node();
+            nd.NodeID = this.FK_Node;
+            nd.RetrieveFromDBSources();
+
+            nd.HisCHWay = (CHWay)this.GetRequestValInt("RB_CHWay");  //考核方式.
+
+            nd.TimeLimit = this.GetRequestValInt("TB_TimeLimit");
+            nd.WarningDay = this.GetRequestValInt("TB_WarningDay");
+            nd.TCent = this.GetRequestValInt("TB_TCent");
+
+            nd.TWay = (BP.DA.TWay)this.GetRequestValInt("DDL_TWay");  //节假日计算方式.
+
+            if (this.GetRequestValInt("CB_IsEval") == 1)
+                nd.IsEval = true;
+            else
+                nd.IsEval = false;
+
+            nd.Update();
+
+            return "保存成功...";
+        }
+        #endregion 考核规则.
+
 
 
         #region 节点属性（列表）的操作

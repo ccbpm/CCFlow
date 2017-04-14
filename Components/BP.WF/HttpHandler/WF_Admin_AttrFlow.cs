@@ -30,7 +30,7 @@ namespace BP.WF.HttpHandler
         public string CheckFlow_Init()
         {
             BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
-            string str= fl.DoCheck();
+            string str = fl.DoCheck();
             str = str.Replace("@", "<BR>@");
             return str;
         }
@@ -192,7 +192,8 @@ namespace BP.WF.HttpHandler
         /// 与业务表数据同步
         /// </summary>
         /// <returns></returns>
-        public string DTSBTbale_Init() {
+        public string DTSBTbale_Init()
+        {
             BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
             return fl.ToJson();
         }
@@ -203,26 +204,28 @@ namespace BP.WF.HttpHandler
         /// 前置导航
         /// </summary>
         /// <returns></returns>
-        public string StartGuide_Init(){
-            string str = "{";
+        public string StartGuide_Init()
+        {
             BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
             en.No = this.FK_Flow;
             en.RetrieveFromDBSources();
+            return en.ToJson();
 
+            string str = "{";
             //右侧的超链接.
-            str += "\"TB_GuideLink\":" + "\""+en.StartGuideLink+"\"";
+            str += "\"TB_GuideLink\":" + "\"" + en.StartGuideLink + "\"";
             str += ",\"TB_GuideLab\":" + "\"" + en.StartGuideLab + "\"";
             Boolean RB_None = false; Boolean RB_ByHistoryUrl = false; Boolean RB_SelfUrl = false;
             Boolean RB_BySQLOne = false; Boolean RB_FrmList = false; Boolean RB_SubFlow = false; Boolean RB_SubFlowShow = false;
-            string TB_ByHistoryUrl=""; string TB_SelfURL = ""; string TB_BySQLOne1="";
-            string TB_BySQLOne2 = ""; string TB_SubFlow1 = ""; string TB_SubFlow2="";
+            string TB_ByHistoryUrl = ""; string TB_SelfURL = ""; string TB_BySQLOne1 = "";
+            string TB_BySQLOne2 = ""; string TB_SubFlow1 = ""; string TB_SubFlow2 = "";
             switch (en.StartGuideWay)
             {
                 case BP.WF.Template.StartGuideWay.None://无
                     RB_None = true;
                     break;
                 case BP.WF.Template.StartGuideWay.ByHistoryUrl: //从开始节点Copy数据
-                    RB_ByHistoryUrl= true;
+                    RB_ByHistoryUrl = true;
                     TB_ByHistoryUrl = en.StartGuidePara1;
                     break;
                 case BP.WF.Template.StartGuideWay.BySelfUrl://按自定义的Url
@@ -247,7 +250,7 @@ namespace BP.WF.HttpHandler
             }
 
             BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
-            if (fns.Count>2)
+            if (fns.Count > 2)
             {
                 RB_SubFlowShow = true;
             }
@@ -265,7 +268,8 @@ namespace BP.WF.HttpHandler
             str += ",\"TB_SubFlow1\":" + "\"" + TB_SubFlow1 + "\"";
             str += ",\"TB_SubFlow2\":" + "\"" + TB_SubFlow2 + "\"";
             str += ",\"userId\":" + "\"" + BP.Web.WebUser.SID + "\"";
-            return str+"}";
+
+            return str + "}";
 
         }
         #endregion
@@ -275,61 +279,97 @@ namespace BP.WF.HttpHandler
         /// 前置导航save
         /// </summary>
         /// <returns></returns>
-        public void StartGuide_Save(){
-            BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
-            en.No = this.FK_Flow;
-            en.RetrieveFromDBSources();
-
-            if ("RB_None" == this.GetRequestVal("xz"))
+        public string StartGuide_Save()
+        {
+            try
             {
-                en.StartGuideWay = BP.WF.Template.StartGuideWay.None;
+                Flow fl = new Flow();
+                fl.No = this.FK_Flow;
+                fl.Retrieve();
+
+                int val=this.GetRequestValInt("RB_StartGuideWay");
+
+                fl.SetValByKey(BP.WF.Template.FlowAttr.StartGuideWay, val);
+
+                if (fl.StartGuideWay == Template.StartGuideWay.None)
+                {
+                }
+
+
+                if (fl.StartGuideWay == Template.StartGuideWay.ByHistoryUrl)
+                {
+                    fl.StartGuidePara1 = this.GetRequestVal("TB_ByHistoryUrl");
+                    fl.StartGuidePara2 = "";
+                }
+
+                fl.Update();
+                return "sss保存成功.........";
             }
-
-            if ("RB_ByHistoryUrl" == this.GetRequestVal("xz"))
+            catch(Exception ex)
             {
-                en.StartGuidePara1 = this.GetRequestVal("TB_ByHistoryUrl");
-                en.StartGuidePara2 = "";
-                en.StartGuideWay = BP.WF.Template.StartGuideWay.ByHistoryUrl;
-            }
-
-            if ("RB_SelfUrl" == this.GetRequestVal("xz"))
-            {
-                en.StartGuidePara1 = this.GetRequestVal("TB_SelfURL");
-                en.StartGuidePara2 = "";
-                en.StartGuideWay = BP.WF.Template.StartGuideWay.BySelfUrl;
-            }
-
-            //单条模式.
-            if ("RB_BySQLOne" == this.GetRequestVal("xz"))
-            {
-                en.StartGuidePara1 = this.GetRequestVal("TB_BySQLOne1");  //查询语句.
-                en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
-                en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
-            }
-
-            //多条-子父流程-合卷审批.
-            if ("RB_SubFlow" == this.GetRequestVal("xz"))
-            {
-                en.StartGuidePara1 = this.GetRequestVal("TB_SubFlow1");  //查询语句.
-                en.StartGuidePara2 = this.GetRequestVal("TB_SubFlow2");  //列表语句.
-                en.StartGuideWay = BP.WF.Template.StartGuideWay.SubFlowGuide;
+                return "err@" + ex.Message;
             }
 
 
+            //fl.SetValByKey( GenerWorkFlowAtt
 
-            BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
-            if (fns.Count >= 2)
-            {
-                if ("RB_FrmList" == this.GetRequestVal("xz"))
-                    en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
-            }
+            //fl = BP.Sys.PubClass.CopyFromRequestByPost(fl, context.Request) as Flow;
+            //fl.Save();  //执行保存
 
-            //右侧的超链接.
-            en.StartGuideLink = this.GetRequestVal("TB_GuideLink");
-            en.StartGuideLab = this.GetRequestVal("TB_GuideLab");
+            //BP.WF.Flow en = new BP.WF.Flow(this.FK_Flow);
+            //en.No = this.FK_Flow;
+            //en.RetrieveFromDBSources();
 
-            en.Update();
-            en.DirectUpdate();
+            //if ("RB_None" == this.GetRequestVal("xz"))
+            //{
+            //    en.StartGuideWay = BP.WF.Template.StartGuideWay.None;
+            //}
+
+            //if ("RB_ByHistoryUrl" == this.GetRequestVal("xz"))
+            //{
+            //    en.StartGuidePara1 = this.GetRequestVal("TB_ByHistoryUrl");
+            //    en.StartGuidePara2 = "";
+            //    en.StartGuideWay = BP.WF.Template.StartGuideWay.ByHistoryUrl;
+            //}
+
+            //if ("RB_SelfUrl" == this.GetRequestVal("xz"))
+            //{
+            //    en.StartGuidePara1 = this.GetRequestVal("TB_SelfURL");
+            //    en.StartGuidePara2 = "";
+            //    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySelfUrl;
+            //}
+
+            ////单条模式.
+            //if ("RB_BySQLOne" == this.GetRequestVal("xz"))
+            //{
+            //    en.StartGuidePara1 = this.GetRequestVal("TB_BySQLOne1");  //查询语句.
+            //    en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
+            //    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
+            //}
+
+            ////多条-子父流程-合卷审批.
+            //if ("RB_SubFlow" == this.GetRequestVal("xz"))
+            //{
+            //    en.StartGuidePara1 = this.GetRequestVal("TB_SubFlow1");  //查询语句.
+            //    en.StartGuidePara2 = this.GetRequestVal("TB_SubFlow2");  //列表语句.
+            //    en.StartGuideWay = BP.WF.Template.StartGuideWay.SubFlowGuide;
+            //}
+
+
+
+            //BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
+            //if (fns.Count >= 2)
+            //{
+            //    if ("RB_FrmList" == this.GetRequestVal("xz"))
+            //        en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
+            //}
+
+            ////右侧的超链接.
+            //en.StartGuideLink = this.GetRequestVal("TB_GuideLink");
+            //en.StartGuideLab = this.GetRequestVal("TB_GuideLab");
+
+            //en.Update();
+            //en.DirectUpdate();
         }
         #endregion
 

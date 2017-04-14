@@ -49,13 +49,58 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        #region 登录界面.
+        #region 控制台.
+        /// <summary>
+        /// 控制台信息.
+        /// </summary>
+        /// <returns></returns>
+        public string Index_Init()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing); //运行中.
+            ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks); //待办
+            ht.Add("Todolist_CCWorks", BP.WF.Dev2Interface.Todolist_CCWorks); //抄送.
 
+            //本周.
+            ht.Add("TodayNum", BP.WF.Dev2Interface.Todolist_CCWorks); //抄送.
+
+
+
+            return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
+        #endregion 控制台.
+
+
+        #region 登录界面.
+        /// <summary>
+        /// 登录.
+        /// </summary>
+        /// <returns></returns>
+        public string Login_Submit()
+        {
+            string userNo = this.GetRequestVal("TB_UserNo");
+            string pass = this.GetRequestVal("TB_Pass");
+
+            BP.Port.Emp emp = new Emp();
+            emp.No = userNo;
+            if (emp.RetrieveFromDBSources() ==0)
+                return "err@用户名或者密码错误.";
+
+            if (emp.Pass !=pass )
+                return "err@用户名或者密码错误.";
+
+            //调用登录方法.
+            BP.WF.Dev2Interface.Port_Login(emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText);
+
+            return "登录成功.";
+
+        }
         public string Login_Init()
         {
             Hashtable ht = new Hashtable();
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);
+            ht.Add("UserNo", WebUser.No);
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }

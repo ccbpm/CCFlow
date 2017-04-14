@@ -36,14 +36,19 @@ function GenerCheckIDs() {
 
     var checkBoxIDs = "";
     var arrObj = document.all;
+
+
     for (var i = 0; i < arrObj.length; i++) {
         if (arrObj[i].type != 'checkbox')
             continue;
+
         var cid = arrObj[i].name;
         if (cid == null || cid == "" || cid == '')
             continue;
+
         checkBoxIDs += arrObj[i].id + ',';
     }
+
     return checkBoxIDs;
 }
 
@@ -107,6 +112,7 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
         url: "/WF/Comm/Handler.ashx?DoType=EnumList&EnumKey=" + enumKey + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
+
             data = JSON.parse(data);
             //绑定枚举值.
             GenerBindDDL(ctrlDDLId, data, "IntKey", "Lab", selectVal);
@@ -213,6 +219,12 @@ function GenerFullAllCtrlsVal(data) {
 
         var val = json[attr]; //值
 
+        var div = document.getElementById(attr);
+        if (div != null) {
+            div.innerHTML = val;
+        }
+
+
         // textbox
         var tb = document.getElementById('TB_' + attr);
         if (tb != null) {
@@ -294,8 +306,6 @@ function GenerFullAllCtrlsVal(data) {
 
         unSetCtrl += "@" + attr + " = " + val;
     }
-
-   //  alert('没有找到的控件类型:' + unSetCtrl);
 }
 
 

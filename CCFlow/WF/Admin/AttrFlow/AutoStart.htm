@@ -55,14 +55,15 @@
 
             var fk_flow = GetQueryString("FK_Flow");
 
-            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+           // var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+
             // alert(CheckBoxIDs);
             var frmData = $("#cc").serialize();
             $.ajax({
                 data: frmData,
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=AutoStart_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                url: Handler + "?DoType=AutoStart_Save&FK_Flow=" + fk_flow + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

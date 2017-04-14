@@ -795,6 +795,7 @@ function figure_MapAttr_Template(mapAttr) {
 
 //升级表单元素 初始化Label
 function figure_Template_Label(frmLab) {
+
     var f = new Figure('Label');
     //ccform Property
     f.CCForm_Shape = "Label";

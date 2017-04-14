@@ -23,7 +23,7 @@
         <li> <a href="../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=<%=nodeID %>" target="Doc" >审核组件</a> </li>
         <li> <a href="../FoolFormDesigner/Attachment.aspx?FK_MapData=ND<%=nodeID %>&Ath=DocMultiAth&FK_Node=<%=nodeID %>" target="Doc">多附件</a> </li>
         <li> <a href="../FoolFormDesigner/Attachment.aspx?FK_MapData=ND<%=nodeID %>&Ath=DocMainAth&FK_Node=<%=nodeID %>" target="Doc">单附件</a> </li>
-        <li> <a href="SubFlows.aspx?FK_Node=<%=nodeID %>" target="Doc">父子流程</a> </li>
+        <li> <a href="SubFlows.htm?FK_Node=<%=nodeID %>" target="Doc">父子流程</a> </li>
 
         <li> <a href="../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.BtnLab&PK=<%=nodeID %>" target="Doc">工具栏</a> </li>
         

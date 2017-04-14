@@ -85,7 +85,7 @@
 
         // 按钮权限配置.
         function OpenSubFlows(nodeID) {
-            var url = "../AttrNode/SubFlows.aspx?FK_Node=" + nodeID;
+            var url = "../AttrNode/SubFlows.htm?FK_Node=" + nodeID;
             window.parent.closeTab('SubFlows');
             window.parent.addTab('SubFlows', '调起子流程', url, 'icon-SubFlows');
         }

@@ -270,7 +270,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-    #region 前置导航save
+        #region 前置导航save
         /// <summary>
         /// 前置导航save
         /// </summary>
@@ -280,38 +280,38 @@ namespace BP.WF.HttpHandler
             en.No = this.FK_Flow;
             en.RetrieveFromDBSources();
 
-            /*if (this.RB_None.Checked)
+            if ("RB_None" == this.GetRequestVal("xz"))
             {
                 en.StartGuideWay = BP.WF.Template.StartGuideWay.None;
             }
 
-            if (this.RB_ByHistoryUrl.Checked)
+            if ("RB_ByHistoryUrl" == this.GetRequestVal("xz"))
             {
-                en.StartGuidePara1 = this.TB_ByHistoryUrl.Value;
+                en.StartGuidePara1 = this.GetRequestVal("TB_ByHistoryUrl");
                 en.StartGuidePara2 = "";
                 en.StartGuideWay = BP.WF.Template.StartGuideWay.ByHistoryUrl;
             }
 
-            if (this.RB_SelfUrl.Checked)
+            if ("RB_SelfUrl" == this.GetRequestVal("xz"))
             {
-                en.StartGuidePara1 = this.TB_SelfURL.Value;
+                en.StartGuidePara1 = this.GetRequestVal("TB_SelfURL");
                 en.StartGuidePara2 = "";
                 en.StartGuideWay = BP.WF.Template.StartGuideWay.BySelfUrl;
             }
 
             //单条模式.
-            if (this.RB_BySQLOne.Checked)
+            if ("RB_BySQLOne" == this.GetRequestVal("xz"))
             {
-                en.StartGuidePara1 = this.TB_BySQLOne1.Value;  //查询语句.
-                en.StartGuidePara2 = this.TB_BySQLOne2.Value;  //列表语句.
+                en.StartGuidePara1 = this.GetRequestVal("TB_BySQLOne1");  //查询语句.
+                en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
                 en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
             }
 
             //多条-子父流程-合卷审批.
-            if (this.RB_SubFlow.Checked)
+            if ("RB_SubFlow" == this.GetRequestVal("xz"))
             {
-                en.StartGuidePara1 = this.TB_SubFlow1.Value;  //查询语句.
-                en.StartGuidePara2 = this.TB_SubFlow2.Value;  //列表语句.
+                en.StartGuidePara1 = this.GetRequestVal("TB_SubFlow1");  //查询语句.
+                en.StartGuidePara2 = this.GetRequestVal("TB_SubFlow2");  //列表语句.
                 en.StartGuideWay = BP.WF.Template.StartGuideWay.SubFlowGuide;
             }
 
@@ -320,17 +320,106 @@ namespace BP.WF.HttpHandler
             BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
             if (fns.Count >= 2)
             {
-                if (this.RB_FrmList.Checked)
+                if ("RB_FrmList" == this.GetRequestVal("xz"))
                     en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
             }
 
             //右侧的超链接.
-            en.StartGuideLink = this.TB_GuideLink.Text;
-            en.StartGuideLab = this.TB_GuideLab.Text;*/
+            en.StartGuideLink = this.GetRequestVal("TB_GuideLink");
+            en.StartGuideLab = this.GetRequestVal("TB_GuideLab");
 
             en.Update();
             en.DirectUpdate();
         }
         #endregion
+
+        #region 流程轨迹查看权限
+        /// <summary>
+        /// 流程轨迹查看权限
+        /// </summary>
+        /// <returns></returns>
+        public string TruckViewPower_Init() { 
+            if (string.IsNullOrEmpty(FK_Flow))
+                {
+                    throw new Exception("流程编号为空");
+                }
+                else
+                {
+                    string str = "{";
+                    BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
+                    if (en.PStarter==true)
+                    {
+                      str+="\"CB_FQR\":"+"\"true\",";
+                    }
+                    if (en.PWorker==true)
+                    {
+                        str+="\"CB_CYR\":"+"\"true\",";
+                    }
+                    if (en.PCCer==true)
+                    {
+                        str+="\"CB_CSR\":"+"\"true\",";
+                    }
+
+                    if (en.PMyDept==true)
+                    {
+                        str+="\"CB_BBM\":"+"\"true\",";
+                    }
+                    if (en.PPMyDept==true)
+                    {
+                        str+="\"CB_ZSSJ\":"+"\"true\",";
+                    }
+                    if (en.PPDept==true)
+                    {
+                        str+="\"CB_SJ\":"+"\"true\",";
+                    }
+
+                    if (en.PSameDept==true)
+                    {
+                        str+="\"CB_PJ\":"+"\"true\",";
+                    }
+                    if ( en.PSpecDept==true)
+                    {
+                        str+="\"QY_ZDBM\":"+"\"true\",";
+                    }
+                    if (string.IsNullOrEmpty(en.PSpecDeptExt))
+                    {
+                        str+="\"TB_ZDBM\":"+"\""+en.PSpecDeptExt+"\",";
+                    }
+                    if (en.PSpecSta == true)
+                    {
+                        str+="\"QY_ZDGW\":"+"\"true\",";
+                    }
+                    if (string.IsNullOrEmpty(en.PSpecStaExt))
+                    {
+                        str+="\"TB_ZDGW\":"+"\""+en.PSpecStaExt+"\",";
+                    }
+                    if (en.PSpecGroup == true)
+                    {
+                        str+="\"QY_ZDQXZ\":"+"\"true\",";
+
+                    }
+                    if (string.IsNullOrEmpty(en.PSpecGroupExt))
+                    {
+                        str+="\"TB_ZDQXZ\":"+"\""+en.PSpecGroupExt+"\",";
+                    }
+                    if (en.PSpecEmp == true)
+                    {
+                        str+="\"QY_ZDQXZ\":"+"\"true\",";
+                    }
+
+                    if (string.IsNullOrEmpty(en.PSpecEmpExt))
+                    {
+                        str += "\"TB_ZDRY\":" + "\"" + en.PSpecEmpExt + "\",";
+                    }
+                    if (str.Length>2)
+                    {
+                        str = str.Substring(0,str.Length-1);
+                    }
+                    str += "}";
+                    return str;
+                }
+            
+        }
+        #endregion 流程轨迹查看权限
     }
 }

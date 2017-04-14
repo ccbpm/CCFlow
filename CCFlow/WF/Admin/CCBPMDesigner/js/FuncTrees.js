@@ -63,7 +63,7 @@ functrees.push({
 
 
 						                                { Type: "Node", Id: "FlowAction", ParentId: "RelatedFunction", Name: "流程事件消息", TType: "NORMAL", DType: "-1", IconCls: "icon-Event", Inherits: ["fk_flow"], Url: "../Action.aspx?NodeID=0&FK_Flow=@@fk_flow" },
-						                                { Type: "Node", Id: "TruckViewPower", ParentId: "RelatedFunction", Name: "轨迹查看权限", TType: "NORMAL", DType: "-1", IconCls: "icon-Setting", Inherits: ["fk_flow"], Url: "../AttrFlow/TruckViewPower.aspx?FK_Flow=@@fk_flow" },
+						                                { Type: "Node", Id: "TruckViewPower", ParentId: "RelatedFunction", Name: "轨迹查看权限", TType: "NORMAL", DType: "-1", IconCls: "icon-Setting", Inherits: ["fk_flow"], Url: "../AttrFlow/TruckViewPower.htm?FK_Flow=@@fk_flow" },
 						                                { Type: "Node", Id: "TruckViewPower", ParentId: "RelatedFunction", Name: "模版导入", TType: "NORMAL", DType: "-1", IconCls: "icon-redo", Inherits: ["fk_flow"], Url: "../AttrFlow/Imp.aspx?FK_Flow=@@fk_flow" },
 						                                { Type: "Node", Id: "TruckViewPower", ParentId: "RelatedFunction", Name: "模版导出", TType: "NORMAL", DType: "-1", IconCls: "icon-unredo", Inherits: ["fk_flow"], Url: "../AttrFlow/Exp.aspx?FK_Flow=@@fk_flow" }
                                                         ]

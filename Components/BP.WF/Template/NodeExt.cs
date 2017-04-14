@@ -1073,7 +1073,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRunModel()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeRunModel.aspx?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeRunModel.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
                    this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
       

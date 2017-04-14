@@ -450,6 +450,9 @@ namespace BP.WF.HttpHandler
                 ds.Tables[9].TableName = "Sys_FrmLine";
                 ds.Tables[10].TableName = "FigureCom";
 
+                return BP.Tools.Json.ToJson(ds);
+
+
               //  MapData md = new MapData(this.FK_Flow);
                // DataSet ds = md.GetDtlsDatasOfList();
 

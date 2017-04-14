@@ -1121,7 +1121,7 @@ namespace BP.WF.Template
         }
         public string DoAPI()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/API.aspx?FK_Flow=" + this.No;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/API.htm?FK_Flow=" + this.No;
         }
         public string DoAPICode()
         {
@@ -1176,7 +1176,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTruckRight()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/TruckViewPower.aspx?FK_Flow=" + this.No;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/TruckViewPower.htm?FK_Flow=" + this.No;
         }
         /// <summary>
         /// 批量发起字段

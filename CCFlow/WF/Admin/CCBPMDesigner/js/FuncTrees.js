@@ -85,7 +85,7 @@ functrees.push({
                                                     Nodes: [
 						                                { Type: "Node", Id: "FlowField", ParentId: "DevAPI", Name: "字段视图", TType: "NORMAL", DType: "-1", IconCls: "icon-Field", Inherits: ["fk_flow"], Url: "../AttrFlow/FlowFields.htm?FK_Flow=@@fk_flow" },
 						                                { Type: "Node", Id: "AsyncBusinessTable", ParentId: "DevAPI", Name: "与业务表同步", TType: "NORMAL", DType: "-1", IconCls: "icon-DTS", Inherits: ["fk_flow"], Url: "../AttrFlow/DTSBTable.aspx?FK_Flow=@@fk_flow&FK_Node=&DoType=Name" },
-						                                { Type: "Node", Id: "URLAPI", ParentId: "DevAPI", Name: "URL调用接口", TType: "NORMAL", DType: "-1", IconCls: "icon-URL", Inherits: ["fk_flow"], Url: "../AttrFlow/API.aspx?FK_Flow=@@fk_flow&DoType=Url" },
+						                                { Type: "Node", Id: "URLAPI", ParentId: "DevAPI", Name: "URL调用接口", TType: "NORMAL", DType: "-1", IconCls: "icon-URL", Inherits: ["fk_flow"], Url: "../AttrFlow/API.htm?FK_Flow=@@fk_flow&DoType=Url" },
 						                                { Type: "Node", Id: "SDKAPI", ParentId: "DevAPI", Name: "SDK开发接口", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_flow"], Url: "../AttrFlow/APICode.aspx?FK_Flow=@@fk_flow&DoType=SDK" },
 						                                { Type: "Node", Id: "FEEAPI", ParentId: "DevAPI", Name: "代码事件开发接口", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_flow"], Url: "../AttrFlow/APICodeFEE.aspx?FK_Flow=@@fk_flow&FK_Node=&DoType=Name" }
                                                         ]
@@ -112,7 +112,7 @@ functrees.push({
 //                                                },
                                                 { Type: "Node", Id: "BindForm", ParentId: null, Name: "绑定表单", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
                                                     Nodes: [
-						                                { Type: "Node", Id: "AddOneFrmToNodes", ParentId: "BindForm", Name: "加入表单", TType: "ADDTONODES", DType: "-1", IconCls: "", Inherits: ["fk_flow"], Url: "../AttrFlow/AddOneFrmToNodes.aspx?FK_Flow=@@fk_flow" },
+						                                { Type: "Node", Id: "AddOneFrmToNodes", ParentId: "BindForm", Name: "加入表单", TType: "ADDTONODES", DType: "-1", IconCls: "", Inherits: ["fk_flow"], Url: "../AttrFlow/AddOneFrmToNodes.htm?FK_Flow=@@fk_flow" },
 						                                { Type: "Service", ServiceMethod: "GetBindingForms", MethodParams: { fk_flow: "@@fk_flow" }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null, IconCls: "icon-form", Url: "../AttrFlow/BindingForms.aspx?FK_MapData=`'@@id'.split('@')[0]`&FK_Flow=@@fk_flow" }
                                                         ]
                                                 }

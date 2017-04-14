@@ -559,143 +559,148 @@ function ReSetEditDivCss() {
 
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
 function Conver_CCForm_V1ToV2() {
+
     //transe old CCForm to new
     $.post("CCFrom" + Handler, {
         action: 'CcformElements',
         FK_MapData: CCForm_FK_MapData,
         FK_Node: CCForm_FK_MapData.substr(2, CCForm_FK_MapData.length)
     }, function (jsonData) {
-        var jData = $.parseJSON(jsonData);
-        if (jData.success == true) {
-            var flow_Data = $.parseJSON(jData.data);
-            //循环MapAttr
-            for (var mapAtrrIndex in flow_Data.MapAttr) {
-                var mapAttr = flow_Data.MapAttr[mapAtrrIndex];
-                var createdFigure = figure_MapAttr_Template(mapAttr);
-                if (createdFigure != undefined) {
-                    //move it into position
-                    //createdFigure.transform(Matrix.translationMatrix(mapAttr.X - createdFigure.rotationCoords[0].x, mapAttr.Y - createdFigure.rotationCoords[0].y))
-                    createdFigure.style.lineWidth = defaultLineWidth;
-                    //add to STACK
-                    STACK.figureAdd(createdFigure);
-                }
-            }
 
-            //循环FrmLab
-            for (var i in flow_Data.FrmLab) {
-                var frmLab = flow_Data.FrmLab[i];
-                var createdFigure = figure_Template_Label(frmLab);
+
+        if (jsonData.indexOf('err@') == 0) {
+            alert(jsonData);
+            return;
+        }
+
+        var flow_Data = $.parseJSON(jsonData);
+
+        //循环MapAttr
+        for (var mapAtrrIndex in flow_Data.MapAttr) {
+            var mapAttr = flow_Data.MapAttr[mapAtrrIndex];
+            var createdFigure = figure_MapAttr_Template(mapAttr);
+            if (createdFigure != undefined) {
                 //move it into position
-                //createdFigure.transform(Matrix.translationMatrix(frmLab.X - createdFigure.rotationCoords[0].x, frmLab.Y - createdFigure.rotationCoords[0].y))
+                //createdFigure.transform(Matrix.translationMatrix(mapAttr.X - createdFigure.rotationCoords[0].x, mapAttr.Y - createdFigure.rotationCoords[0].y))
                 createdFigure.style.lineWidth = defaultLineWidth;
                 //add to STACK
                 STACK.figureAdd(createdFigure);
             }
+        }
 
-            //循环FrmRB
-            for (var i in flow_Data.FrmRb) {
-                var frmRb = flow_Data.FrmRb[i];
-                if (i == 0) {
-                    var createdFigure = figure_Template_Rb(frmRb);
-                    //move it into position
-                    //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
-                    createdFigure.style.lineWidth = defaultLineWidth;
-                    //add to STACK
-                    STACK.figureAdd(createdFigure);
-                }
-                 createdFigure = figure_Template_RbLab(frmRb);
+        //循环FrmLab
+        for (var i in flow_Data.FrmLab) {
+            var frmLab = flow_Data.FrmLab[i];
+            var createdFigure = figure_Template_Label(frmLab);
+            //move it into position
+            //createdFigure.transform(Matrix.translationMatrix(frmLab.X - createdFigure.rotationCoords[0].x, frmLab.Y - createdFigure.rotationCoords[0].y))
+            createdFigure.style.lineWidth = defaultLineWidth;
+            //add to STACK
+            STACK.figureAdd(createdFigure);
+        }
+
+        //循环FrmRB
+        for (var i in flow_Data.FrmRb) {
+            var frmRb = flow_Data.FrmRb[i];
+            if (i == 0) {
+                var createdFigure = figure_Template_Rb(frmRb);
                 //move it into position
                 //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
                 createdFigure.style.lineWidth = defaultLineWidth;
                 //add to STACK
                 STACK.figureAdd(createdFigure);
             }
-
-            //循环FrmBtn
-            for (var i in flow_Data.FrmBtn) {
-                var frmBtn = flow_Data.FrmBtn[i];
-                var createdFigure = figure_Template_Btn(frmBtn);
-                //move it into position
-                //createdFigure.transform(Matrix.translationMatrix(frmBtn.X - createdFigure.rotationCoords[0].x, frmBtn.Y - createdFigure.rotationCoords[0].y))
-                createdFigure.style.lineWidth = defaultLineWidth;
-                //add to STACK
-                STACK.figureAdd(createdFigure);
-            }
-
-            //循环Image
-            for (var i in flow_Data.Sys_FrmImg) {
-                var frmImg = flow_Data.Sys_FrmImg[i];
-                var createdFigure = figure_Template_Image(frmImg);
-                //move it into position
-                //createdFigure.transform(Matrix.translationMatrix(frmImg.X - createdFigure.rotationCoords[0].x, frmImg.Y - createdFigure.rotationCoords[0].y))
-                createdFigure.style.lineWidth = defaultLineWidth;
-                //add to STACK
-                STACK.figureAdd(createdFigure);
-            }
-
-            //循环 Link
-            for (var i in flow_Data.Sys_FrmLink) {
-                var frmLink = flow_Data.Sys_FrmLink[i];
-                var createdFigure = figure_Template_HyperLink(frmLink);
-                //move it into position
-                //createdFigure.transform(Matrix.translationMatrix(frmLink.X - createdFigure.rotationCoords[0].x, frmLink.Y - createdFigure.rotationCoords[0].y))
-                createdFigure.style.lineWidth = defaultLineWidth;
-                //add to STACK
-                STACK.figureAdd(createdFigure);
-            }
-
-            //循环 图片附件
-            for (var i in flow_Data.Sys_FrmImgAth) {
-                var frmImgAth = flow_Data.Sys_FrmImgAth[i];
-                var createdFigure = figure_Template_ImageAth(frmImgAth);
-                //move it into position
-                //createdFigure.transform(Matrix.translationMatrix(frmImgAth.X - createdFigure.rotationCoords[0].x, frmImgAth.Y - createdFigure.rotationCoords[0].y))
-                createdFigure.style.lineWidth = defaultLineWidth;
-                //add to STACK
-                STACK.figureAdd(createdFigure);
-            }
-            //循环 附件
-            for (var i in flow_Data.Sys_FrmAttachment) {
-                var frmAttachment = flow_Data.Sys_FrmAttachment[i];
-                var createdFigure = figure_Template_Attachment(frmAttachment);
-                //move it into position
-                //createdFigure.transform(Matrix.translationMatrix(frmAttachment.X - createdFigure.rotationCoords[0].x, frmAttachment.Y - createdFigure.rotationCoords[0].y))
-                //createdFigure.style.lineWidth = defaultLineWidth;
-                //add to STACK
-                STACK.figureAdd(createdFigure);
-            }
-
-            //循环 从表
-            for (var i in flow_Data.Sys_MapDtl) {
-                var frmMapDtl = flow_Data.Sys_MapDtl[i];
-                var createdFigure = figure_Template_Dtl(frmMapDtl);
-                //move it into position
-                //createdFigure.transform(Matrix.translationMatrix(frmMapDtl.X - createdFigure.rotationCoords[0].x, frmMapDtl.Y - createdFigure.rotationCoords[0].y))
-                createdFigure.style.lineWidth = defaultLineWidth;
-                //add to STACK
-                STACK.figureAdd(createdFigure);
-            }
-
-            //循环线
-            for (var i in flow_Data.Sys_FrmLine) {
-                var frmLine = flow_Data.Sys_FrmLine[i];
-                var createdConnector = connector_Template_Line(frmLine);
-            }
-
-            //循环组件 轨迹图 审核组件 子流程 子线程
-            for (var i in flow_Data.FigureCom) {
-                var figureCom = flow_Data.FigureCom[i];
-                var createdFigure = figure_Template_FigureCom(figureCom);
-                if (createdFigure != undefined) {
-                    STACK.figureAdd(createdFigure);
-                }
-            }
-            redraw = true;
-            draw();
-            //save(false);
-        } else {
-            Designer_ShowMsg('错误: ' + jData.msg);
+            createdFigure = figure_Template_RbLab(frmRb);
+            //move it into position
+            //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))
+            createdFigure.style.lineWidth = defaultLineWidth;
+            //add to STACK
+            STACK.figureAdd(createdFigure);
         }
+
+        //循环FrmBtn
+        for (var i in flow_Data.FrmBtn) {
+            var frmBtn = flow_Data.FrmBtn[i];
+            var createdFigure = figure_Template_Btn(frmBtn);
+            //move it into position
+            //createdFigure.transform(Matrix.translationMatrix(frmBtn.X - createdFigure.rotationCoords[0].x, frmBtn.Y - createdFigure.rotationCoords[0].y))
+            createdFigure.style.lineWidth = defaultLineWidth;
+            //add to STACK
+            STACK.figureAdd(createdFigure);
+        }
+
+        //循环Image
+        for (var i in flow_Data.Sys_FrmImg) {
+            var frmImg = flow_Data.Sys_FrmImg[i];
+            var createdFigure = figure_Template_Image(frmImg);
+            //move it into position
+            //createdFigure.transform(Matrix.translationMatrix(frmImg.X - createdFigure.rotationCoords[0].x, frmImg.Y - createdFigure.rotationCoords[0].y))
+            createdFigure.style.lineWidth = defaultLineWidth;
+            //add to STACK
+            STACK.figureAdd(createdFigure);
+        }
+
+        //循环 Link
+        for (var i in flow_Data.Sys_FrmLink) {
+            var frmLink = flow_Data.Sys_FrmLink[i];
+            var createdFigure = figure_Template_HyperLink(frmLink);
+            //move it into position
+            //createdFigure.transform(Matrix.translationMatrix(frmLink.X - createdFigure.rotationCoords[0].x, frmLink.Y - createdFigure.rotationCoords[0].y))
+            createdFigure.style.lineWidth = defaultLineWidth;
+            //add to STACK
+            STACK.figureAdd(createdFigure);
+        }
+
+        //循环 图片附件
+        for (var i in flow_Data.Sys_FrmImgAth) {
+            var frmImgAth = flow_Data.Sys_FrmImgAth[i];
+            var createdFigure = figure_Template_ImageAth(frmImgAth);
+            //move it into position
+            //createdFigure.transform(Matrix.translationMatrix(frmImgAth.X - createdFigure.rotationCoords[0].x, frmImgAth.Y - createdFigure.rotationCoords[0].y))
+            createdFigure.style.lineWidth = defaultLineWidth;
+            //add to STACK
+            STACK.figureAdd(createdFigure);
+        }
+        //循环 附件
+        for (var i in flow_Data.Sys_FrmAttachment) {
+            var frmAttachment = flow_Data.Sys_FrmAttachment[i];
+            var createdFigure = figure_Template_Attachment(frmAttachment);
+            //move it into position
+            //createdFigure.transform(Matrix.translationMatrix(frmAttachment.X - createdFigure.rotationCoords[0].x, frmAttachment.Y - createdFigure.rotationCoords[0].y))
+            //createdFigure.style.lineWidth = defaultLineWidth;
+            //add to STACK
+            STACK.figureAdd(createdFigure);
+        }
+
+        //循环 从表
+        for (var i in flow_Data.Sys_MapDtl) {
+            var frmMapDtl = flow_Data.Sys_MapDtl[i];
+            var createdFigure = figure_Template_Dtl(frmMapDtl);
+            //move it into position
+            //createdFigure.transform(Matrix.translationMatrix(frmMapDtl.X - createdFigure.rotationCoords[0].x, frmMapDtl.Y - createdFigure.rotationCoords[0].y))
+            createdFigure.style.lineWidth = defaultLineWidth;
+            //add to STACK
+            STACK.figureAdd(createdFigure);
+        }
+
+        //循环线
+        for (var i in flow_Data.Sys_FrmLine) {
+            var frmLine = flow_Data.Sys_FrmLine[i];
+            var createdConnector = connector_Template_Line(frmLine);
+        }
+
+        //循环组件 轨迹图 审核组件 子流程 子线程
+        for (var i in flow_Data.FigureCom) {
+            var figureCom = flow_Data.FigureCom[i];
+            var createdFigure = figure_Template_FigureCom(figureCom);
+            if (createdFigure != undefined) {
+                STACK.figureAdd(createdFigure);
+            }
+        }
+        redraw = true;
+        draw();
+        //save(false);
+
     });
 }
 

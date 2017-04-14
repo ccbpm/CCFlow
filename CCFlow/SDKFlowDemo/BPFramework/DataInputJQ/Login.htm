@@ -1,42 +1,35 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-
-    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
+    <title>登录</title>
+     <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
-<!--
     <link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="/DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />-->
+    <link href="/DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
 
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
     <script type="text/javascript" src="/WF/Scripts/config.js"></script>
 
-    <script type="text/javascript">
-        //登录.
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("");
+        });
+
         function Login() {
 
-            var userNo = document.getElementById("TB_UserNo").value;
-            var passWord = document.getElementById("TB_Pass").value;
-
-            if (userNo == "" || passWord == "") {
-                alert('请输入用户名或密码');
-                return;
-            }
+            $("#Msg").html("正在验证请稍候....");
 
             var frmData = $("#cc").serialize();
-
-            var url=
 
             $.ajax({
                 data: frmData,
                 type: 'post',
                 async: true,
                 url: Handler + "?DoType=Login_Submit&m=" + Math.random(),
-
                 dataType: 'html',
                 success: function (data) {
 
@@ -45,45 +38,38 @@
                         return;
                     }
 
-                    if (data.indexOf('url@') == 0) {
-                        var myurl = data.replace('url@', '');
-
-                         
-                        window.location.href = myurl;
-                        return;
-                    }
-
-                    alert(data);
+                    window.location.href = 'Default.htm';
                     return;
                 }
             });
-
-
-
         }
     </script>
 </head>
 <body>
 
-<form id="cc"  >
-<table>
+<form id="cc" >
+
+<div id="Msg"></div>
+
+<center>
+<table  style=" text-align:center" >
 <tr>
-<td>用户名 </td>
-<td> <input type="text" value=""  id="TB_UserNo" name="TB_UserNo" /> </td>
+<td> 用户名</td>
+<td> <input type=text  id="TB_UserNo" name="TB_UserNo" /> </td>
 </tr>
 
 <tr>
-<td>密码 </td>
-<td> <input type="text" value=""  id="TB_Pass" name="TB_Pass" /> </td>
+<td> 密码</td>
+<td> <input type=text  id="TB_Pass" name="TB_Pass" /> </td>
 </tr>
-
 
 <tr>
-<td colspan=2 > <input type=button value="Login" onclick="Login()" /> </td>
+<td colspan=2>  <input type=button  id="btn_Submit" value="登录"  onclick="Login();"  /> </td>
 </tr>
-
-
+ 
 </table>
+
+</center>
 
 </form>
 

@@ -73,7 +73,6 @@
 %>
 </table>
 
-
  <fieldset style=" border:0px;">
          <%--   <legend><a href="javascript:ShowHidden('state')">新建消息</a></legend>--%>
               <input type="button" value="新建消息" id="Btn_Save" onclick="ShowHidden('state')" />

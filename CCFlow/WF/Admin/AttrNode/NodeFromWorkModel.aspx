@@ -158,7 +158,7 @@
                         <li>该表单必须有javascript 的 Save保存方法，该Save方法里如果需要执行存盘，并验证。</li>
                         <li>如果使用绝对路径可以使用ccbpm的全局变量@SDKFromServHost ，比如: @SDKFromServHost/MyFile.aspx </li>
                         <li>ccbpm团队为您提供了一个嵌入式表单的 demo ，位于:\\流程树\\表单解决方案\\嵌入式表单. </li>
-                         <li> <a href="javascript:WinOpen('SDKComponents.aspx?DoType=FrmCheck&FK_Node=<%=nodeID%>')">组件属性</a></li>
+                         <li> <a href="javascript:WinOpen('/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK=<%=nodeID%>')">组件属性</a></li>
                     </ul>
                 </font>
             </td>

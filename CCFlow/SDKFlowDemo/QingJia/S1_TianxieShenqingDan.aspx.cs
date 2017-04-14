@@ -116,13 +116,11 @@ namespace CCFlow.SDKFlowDemo.QingJia
                 return;
             }
 
-
             foreach (BP.WF.SendReturnObj obj in objs)
             {
                 this.Response.Write("<font color=red>"+obj.MsgFlag+":" + obj.MsgOfHtml  + "</font><br>");
             }
            // objs.va
-
         //    objs.v
             /*
              这里注意：

@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="S12901.aspx.cs" Inherits="CCFlow.SDKFlowDemo.SDK.F129.S12901" %>
-<%@ Register src="../../../WF/SDKComponents/FrmCheck.ascx" tagname="FrmCheck" tagprefix="uc1" %>
+<%--<%@ Register src="../../../WF/SDKComponents/FrmCheck.ascx" tagname="FrmCheck" tagprefix="uc1" %>
+--%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -109,10 +110,11 @@
      %>
 <tr>
 <td> 
+<%--
 <fieldset>
 <legend><font color=green ><b>审批区域</b></font></legend>
     <uc1:FrmCheck ID="FrmCheck1" runat="server" />
-</fieldset>
+</fieldset>--%>
 </td>
 </tr>
 <%  } %>

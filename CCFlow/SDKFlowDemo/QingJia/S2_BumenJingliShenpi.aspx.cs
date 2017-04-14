@@ -53,6 +53,7 @@ namespace CCFlow.SDKFlowDemo.QingJia
         }
         #endregion 接受4大参数(这四大参数是有ccflow传递到此页面上的).
 
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (this.IsPostBack == false)
@@ -88,13 +89,12 @@ namespace CCFlow.SDKFlowDemo.QingJia
             en.Retrieve();
 
             Hashtable ht = new Hashtable();
-            ht.Add("JinE",1000);
+            ht.Add("JinE", 1000);
 
             ht.Add("QingJiaTianShu", en.QingJiaTianShu);
             ht.Add("SysIsReadReceipts", 1); //是否需要回执.
 
-            objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID,ht);
-
+            objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht);
 
             /*
              这里注意： 
@@ -109,9 +109,8 @@ namespace CCFlow.SDKFlowDemo.QingJia
              * 
              */
 
-           
 
-         //   objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 0, null, ht);
+            objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
 
             ///***发送后，流程转向问题 BY HZM ******/
             if (en.QingJiaTianShu > 10)
@@ -119,14 +118,11 @@ namespace CCFlow.SDKFlowDemo.QingJia
             else
                 objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 1899, null);
 
-
-            BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 102, "zhangsna,lisi", false);
-            BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 103, "wangwu,zhaoliu", false);
-            BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 105, "wsxx,dd", false);
-
+            //BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 102, "zhangsna,lisi", false);
+            //BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 103, "wangwu,zhaoliu", false);
+            //BP.WF.Dev2Interface.Node_AddNextStepAccepters(1000, 105, "wsxx,dd", false);
 
             ///***修改结束******/
-
 
             BP.Demo.SDK.ND018Rpt rpt = new BP.Demo.SDK.ND018Rpt();
 

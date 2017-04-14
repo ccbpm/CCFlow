@@ -44,20 +44,21 @@ namespace CCFlow.SDKFlowDemo.GuestApp
                 if (BP.Web.GuestUser.No != null)
                     BP.WF.Dev2InterfaceGuest.Port_LoginOunt();
 
-                //让用户登录.
-                BP.Demo.BPFramework.Student sp = new BP.Demo.BPFramework.Student();
-                sp.No = user;
-
-                if (sp.RetrieveFromDBSources() == 0)
+                string sql = "SELECT vPassword FROM tEnterpriseUser where vUserName='" + user + "'";
+                string password = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
+                if (password == null)
                 {
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "error1", "alert('用户名密码错误，注意密码区分大小写，请检查是否按下了CapsLock.。');", true);
                     return;
                 }
 
-                if (sp.PWD == pass)
+                if (password  == pass)
                 {
+                    sql = "SELECT vEnterpriseName FROM tEnterpriseUser where vUserName='" + user + "'";
+                    string userName = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
+
                     //这里是密码明文校验, 让用户登录.
-                    BP.WF.Dev2InterfaceGuest.Port_Login(sp.No, sp.Name);
+                    BP.WF.Dev2InterfaceGuest.Port_Login(user, userName);
 
                     //把当前的参数也传递过去.
                     this.Response.Redirect("Home.aspx", false);

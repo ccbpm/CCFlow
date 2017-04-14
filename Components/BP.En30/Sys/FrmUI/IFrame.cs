@@ -62,6 +62,11 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmBtnAttr.MsgErr, null, "运行失败提示", true, false, 0, 500, 20);
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+
+
+                //显示的分组.
+                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
+                    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE EnName='@FK_MapData'", true);
              
                 this._enMap = map;
                 return this._enMap;

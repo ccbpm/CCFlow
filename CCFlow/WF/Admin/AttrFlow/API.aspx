@@ -2,6 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
 <%
     
    string flowNo = this.Request.QueryString["FK_Flow"];
@@ -76,7 +77,7 @@
 <legend>查询相关接口</legend>
 
 <ul>
- <li> 查询:   <font color="Blue"><b> /WF/Rpt/Search.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt</b> </font>  </li> 
+ <li> 查询:  <font color="Blue"><b> /WF/Rpt/Search.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt</b> </font>  </li> 
  <li>高级查询: <font color="Blue"><b> /WF/Rpt/SearchAdv.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt</b> </font>  </li> 
  <li>分组分析:<font color="Blue"><b> /WF/Rpt/Group.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt  </b> </font>  </li> 
  <li>交叉报表:<font color="Blue"><b> /WF/Rpt/D3.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt  </b> </font>  </li> 

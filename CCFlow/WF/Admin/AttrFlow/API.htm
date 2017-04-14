@@ -36,126 +36,94 @@
             $("#Msg").html("正在加载,请稍后......");
 
             //初始化groupID.
-            var no = GetQueryString("No");
+            var flowNo = GetQueryString("FK_Flow");
 
-            /*
-            *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
-            */
-            //调用公共类库的方法:  绑定枚举, 性别.
-            GenerBindEnumKey("DDL_XB", "XB");
-
-            //调用公共类库的方法: 绑定外键表. 班级.
-            GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Student_Init&No=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    data = JSON.parse(data);
-
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data);
-                    return;
-                }
-            });
+            $("#Caption").html("<a href='API.htm?FK_Flow=" + flowNo + "' > URL调用接口</a> |  <a href='APICode.aspx?FK_Flow=" + flowNo + "'>代码开发API</a> |  <a href='APICodeFEE.aspx?FK_Flow=" + flowNo + "' >FEE开发API</a> ");
 
             $("#Msg").html("");
+
         });
     </script>
 </head>
 <body  >
 
-<form id="cc">
-<table style="width:80%;">
-<caption>学生信息卡片维护</caption>
-<tr>
-<td class="style1"> 学号</td>
-<td> <input type="text" id="TB_No" /> </td>
-<td> 姓名</td>
-<td> <input type="text" id="TB_Name" name="TB_Name" /> </td>
-</tr>
+<table style="width:100%;">
+<caption >开发API <div style=" float:right" id="Caption" >  </div> </caption> 
 
 <tr>
-<td>性别</td>
-<td>
-<select name="DDL_XB" id="DDL_XB" > 
-</select> 
+<th colspan="2"> URL调用接口 </th>
+</tr>
+<tr>
+
+<td valign="top"  style="width:20%;" >
+
+<ol>
+<li>ccbpm提供页面级的功能组件，这些功能组件在/WF/下面。</li>
+<li>比如：发起、待办、抄送、查询。</li>
+<li>这些功能可以以明文的方式传输调用。</li>
+<li>他的安全性是需要系统调用登录方法才可以，调用以上的URL。</li>
+<li>如何调用登录方法，请参考下面的API。</li>
+</ol>
 </td>
 
-<td> 整治面貌</td>
 <td>
-
-<!--  必须使用 RB_ 枚举值命名. -->
-
-<input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0"  /><label for="RB_ZZMM_0">少先队员</label>
-<input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1"  /><label for="RB_ZZMM_1">团员</label>
-<input id="RB_ZZMM_2" type="radio" name="RB_ZZMM" value="2"  /><label for="RB_ZZMM_2">党员</label>
-
-</td>
-</tr>
-
-
-
-<tr>
-<td class="style1"> 电话</td>
-<td><input type="text" id="TB_Tel" name="TB_Tel" /> </td>
-<td> 邮件</td>
-<td> <input type="text" id="TB_Email" name="TB_Email" /></td>
-</tr>
-
-
-<tr>
-<td class="style1"> 地址</td>
-<td colspan="3" ><input type="text" id="TB_Addr" name="TB_Addr" /> </td>
-</tr>
-
-
-<tr>
-<td>所在班级</td>
-<td colspan=3>
-<select name="DDL_FK_BanJi" id="DDL_FK_BanJi" > 
-</select> 
- </td>
- </tr>
-
-<tr>
-<td > <input type="checkbox" value="" id="CB_IsDuShengZi" name="CB_IsDuShengZi" /><label for="CB_IsDuShengZi">是否是独生子？</label></td>
-<td > <input type="checkbox" value="" id="CB_IsJiBing" name="CB_IsJiBing" /><label for="CB_IsJiBing">是否有重大疾病？</label></td>
-<td > <input type="checkbox" value="" id="CB_IsPianYuanShanQu" name="CB_IsPianYuanShanQu" /><label for="CB_IsPianYuanShanQu">是否偏远山区？</label></td>
-<td > <input type="checkbox" value="" id="CB_IsTeKunSheng" name="CB_IsTeKunSheng" /><label for="CB_IsTeKunSheng">是否是特困生？</label></td>
-</tr>
-
-</table>
-
-
-<div id="Msg"> </div>
 
 
 <fieldset>
-<legend>开发约定与说明</legend>
-
+<legend>菜单列表</legend>
 <ul>
-    
-<li>需要对 /WF/Comm/Gener.js  进行引用.</li>
-<li>控件的命名必须以 TB_ , DDL_, CB, RB_ 开头, 后半部分，必须与实体类的字段名称保持一致。</li>
-<li>按钮必须以 Btn_ 开头, 常用的按钮名称需要保持一致，比如： Btn_Save  Btn_SaveAndClose , Btn_Close , Btn_Delete </li>
-<li>常用的函数名必须保持一致，比如： Save()  SaveAncClose() Delete() Close() ...</li>
-<li>每个控件的name 的值，都不能为空，否则会导致数据传递不过去，并且checkbox的ids 取不出来。</li>
-<li>该界面是一个jq与bp框架的entity结合的实体信息存储，适用方面广，设计与实现比较容易，籍希望各位同事按照这个模式进行开发。</li>
+<li>流程发起: <font color="Blue"><b> /WF/Start.aspx </b></font> 获得当前操作员的流程发起的列表，每个操作员的权限不同能发起的流程列表也不同。</li>
+<li>工作待办: <font color="Blue"><b>/WF/EmpWorks.aspx  </b></font> 获得当前操作员的所有的待办列表，<font color="Blue"><b>/WF/EmpWorks.aspx?FK_Flow=<%=flowNo %>  </b></font>当前操作员的指定流程的待办。 </li>
+<li>在途: <font color="Blue"><b>/WF/Runing.aspx  </b></font>  当前工作人员的所有在途，<font color="Blue"><b> /WF/Runing.aspx?FK_Flow=<%=flowNo %>  </b></font>当前操作员的指定流程的在途。在途定义：一个操作员的参与的流程，但是流程还没有完成，就叫在途。</li>
+<li>抄送: <font color="Blue"><b>/WF/CC.aspx  </b></font>  抄送来的工作，当前人员没有处理权限，但是可以查看。</li>
+<li>查询: <font color="Blue"><b>/WF/Search.aspx  </b></font>  对完成或者未完成的流程进行查询。</li>
 
 </ul>
+</fieldset>
 
-</fieldset> 
 
-</form>
+<fieldset>
+<legend>流程【<%=fl.Name %>】发起</legend>
+<ul>
+<li>发起URL: <font color="Blue"><b>/WF/MyFlow.aspx?FK_Flow=<%=flowNo %> </b></font>  ，您可以把该URL 放入到自己的系统菜单里，或者列表里。</li>
+<li>该页面组件名叫：“工作处理器”，该处理器可以接受很多参数，可以向工作处理器里传入很多参数，格式与约定请参考说明书。</li>
+</ul>
+</fieldset>
+ 
+<fieldset>
+<legend>工作待办</legend>
+<ul>
+<li> 当前流程工作待办:<font color="Blue"><b> /WF/EmpWorks.aspx?FK_Flow=<%=flowNo %> </b></font></li>
+<li> 所有流程工作待办:<font color="Blue"><b> /WF/EmpWorks.aspx </b></font> </li>
+</ul>
+</fieldset>
+ 
+<fieldset>
+<legend>在途工作(也成为未完成)</legend>
+<ul>
+ <li>当前流程工作在途:<font color="Blue"><b> /WF/Runing.aspx?FK_Flow=<%=flowNo %> </b> </font></li>
+ <li>所有流程工作在途: <font color="Blue"><b> /WF/Runing.aspx </b></font></li>
+</ul>
+ </fieldset>
+
+ 
+<fieldset>
+<legend>查询相关接口</legend>
+
+<ul>
+ <li> 查询:  <font color="Blue"><b> /WF/Rpt/Search.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt</b> </font>  </li> 
+ <li>高级查询: <font color="Blue"><b> /WF/Rpt/SearchAdv.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt</b> </font>  </li> 
+ <li>分组分析:<font color="Blue"><b> /WF/Rpt/Group.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt  </b> </font>  </li> 
+ <li>交叉报表:<font color="Blue"><b> /WF/Rpt/D3.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt  </b> </font>  </li> 
+ <li>对比分析: <font color="Blue"><b> /WF/Rpt/Contrast.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt </b> </font> </li> 
+</ul>
+
+ </fieldset>
+</td>
+</tr>
+
+
+</table>
 
 </body>
 </html>

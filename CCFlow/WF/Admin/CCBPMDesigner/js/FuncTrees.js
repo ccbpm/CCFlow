@@ -59,7 +59,7 @@ functrees.push({
 
 						                                { Type: "Node", Id: "f1", ParentId: "RelatedFunction", Name: "发起前置列表", TType: "NORMAL", DType: "-1", IconCls: "icon-StartGuide", Inherits: ["fk_flow"], Url: "../AttrFlow/StartGuide.htm?NodeID=0&FK_Flow=@@fk_flow" },
 						                                { Type: "Node", Id: "f2", ParentId: "RelatedFunction", Name: "发起限制规则", TType: "NORMAL", DType: "-1", IconCls: "icon-limit", Inherits: ["fk_flow"], Url: "../AttrFlow/Limit.aspx?NodeID=0&FK_Flow=@@fk_flow" },
-						                                { Type: "Node", Id: "f3", ParentId: "RelatedFunction", Name: "自动发起", TType: "NORMAL", DType: "-1", IconCls: "icon-AutoStart", Inherits: ["fk_flow"], Url: "../AttrFlow/AutoStart.aspx?NodeID=0&FK_Flow=@@fk_flow" },
+						                                { Type: "Node", Id: "f3", ParentId: "RelatedFunction", Name: "自动发起", TType: "NORMAL", DType: "-1", IconCls: "icon-AutoStart", Inherits: ["fk_flow"], Url: "../AttrFlow/AutoStart.htm?NodeID=0&FK_Flow=@@fk_flow" },
 
 
 						                                { Type: "Node", Id: "FlowAction", ParentId: "RelatedFunction", Name: "流程事件消息", TType: "NORMAL", DType: "-1", IconCls: "icon-Event", Inherits: ["fk_flow"], Url: "../Action.aspx?NodeID=0&FK_Flow=@@fk_flow" },

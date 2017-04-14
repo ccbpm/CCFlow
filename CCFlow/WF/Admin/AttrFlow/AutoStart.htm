@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>自动发起</title>
-      <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
     <link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -10,9 +10,7 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
     <script type="text/javascript" src="/WF/Scripts/config.js"></script>
-
     <script type="text/javascript" language="javascript" >
-
         //页面启动函数.
         $(function () {
 
@@ -50,7 +48,6 @@
 
             $("#Msg").html("");
         });
-
 
         function Save() {
 
@@ -121,7 +118,8 @@
                     <input id="RB_FlowRunWay_1" type="radio" name="RB_FlowRunWay" value="1"  /><label for="RB_FlowRunWay_1">指定人员按时启动</label>
                     </legend>
 
-                         <a href="javascript:ShowHidden('emps')">操作员参数设置:</a>
+                         <a href="javascript:ShowHidden('emps')">操作员参数设置帮助:</a>
+
               <div id="emps" style=" display:none;color:Gray">
                <ul>
                <li>说明：指定的人员指定的发起时间点自动启动流程。</li>
@@ -149,14 +147,13 @@
                     </legend>
 
 
-                        <a href="javascript:ShowHidden('sql')">SQL参数设置:</a>
+                        <a href="javascript:ShowHidden('sql')">SQL参数设置帮助:</a>
               <div id="sql" style=" display:none;color:Gray">
                <ul>
                <li>请设置一个SQL语句，该语句返回一个数据源。</li>
                <li>系统就会对每一条数据发起一条流程，这就是按照数据源的模式自动发起流程。</li>
                <li>该数据源的列名如果与开始节点表单的字段名一致，就会自动赋值。</li>
                <li>该参数支持ccbpm的表达式。</li>
-               <li><a href="javascript:WinOpen('/WF/Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND<%=Convert.ToInt32(FK_Flow)%>01&ExtType=StartFlow&RefNo=8')">配置数据源</a></li>
                <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
                </ul>
                </div>
@@ -183,8 +180,9 @@
                 <input type=button value="保存" onclick="Save();" />
                <!--<asp:Button  class="easyui-linkbutton" ID="Btn_Save" runat="server" Text="保存" OnClick="BtnSave_Click" /> --> 
               
-
+<!--
                 <a style=" float:right" href="javascript: if ( confirm('您确定要执行吗? 注意:对于数据量交大的数据因为web上执行时间的限时问题，会造成执行失败。') ) { WinOpen('/WF/Comm/Refmethod.aspx?Index=7&EnsName=BP.WF.Template.FlowSheets&No=<%=FK_Flow %>&r=1208095548','_blank') }" tooltip="">手动启用定时任务</a>
+-->
             </td>
         </tr>
     </table>

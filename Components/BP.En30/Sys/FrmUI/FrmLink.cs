@@ -279,6 +279,12 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmLinkAttr.URL, null, "URL", true, false, 0, 500, 20, true);
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
 
+
+                //显示的分组.
+                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
+                    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE EnName='@FK_MapData'", true);
+
+
                 this._enMap = map;
                 return this._enMap;
             }

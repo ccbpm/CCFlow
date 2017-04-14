@@ -151,13 +151,32 @@ namespace BP.Sys
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
+        /// <summary>
+        /// 分组
+        /// </summary>
+        public const string GroupID = "GUID";
     }
     /// <summary>
     /// 按钮
     /// </summary>
     public class FrmBtn : EntityMyPK
     {
+
         #region 属性
+        /// <summary>
+        /// 所在的分组
+        /// </summary>
+        public int GroupID
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmBtnAttr.GroupID);
+            }
+            set
+            {
+                this.SetValByKey(FrmBtnAttr.GroupID, value);
+            }
+        }
         public string MsgOK
         {
             get
@@ -402,6 +421,9 @@ namespace BP.Sys
                 map.AddTBString(FrmBtnAttr.MsgErr, null, "运行失败提示", true, false, 0, 500, 20);
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+
+                map.AddTBInt(FrmBtnAttr.GroupID, 0, "所在分组", false, false);
+
              
                 this._enMap = map;
                 return this._enMap;

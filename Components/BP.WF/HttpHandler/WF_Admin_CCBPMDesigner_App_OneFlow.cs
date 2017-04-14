@@ -14,15 +14,15 @@ using BP.WF.Template;
 namespace BP.WF.HttpHandler
 {
     /// <summary>
-    /// 页面功能实体
+    /// 初始化函数
     /// </summary>
-    public class WF_Template : WebContralBase
+    public class WF_Admin_CCBPMDesigner_App_OneFlow : WebContralBase
     {
         /// <summary>
-        /// 页面功能实体
+        /// 初始化函数
         /// </summary>
         /// <param name="mycontext"></param>
-        public WF_Template(HttpContext mycontext)
+        public WF_Admin_CCBPMDesigner_App_OneFlow(HttpContext mycontext)
         {
             this.context = mycontext;
         }

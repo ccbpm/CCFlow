@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -14,15 +15,15 @@ using BP.WF.Template;
 namespace BP.WF.HttpHandler
 {
     /// <summary>
-    /// 页面功能实体
+    /// 初始化函数
     /// </summary>
-    public class WF_Template : WebContralBase
+    public class WF_App_ACE : WebContralBase
     {
         /// <summary>
-        /// 页面功能实体
+        /// 初始化函数
         /// </summary>
         /// <param name="mycontext"></param>
-        public WF_Template(HttpContext mycontext)
+        public WF_App_ACE(HttpContext mycontext)
         {
             this.context = mycontext;
         }
@@ -48,8 +49,18 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        #region xxx 界面 .
-        #endregion xxx 界面方法.
+        #region 登录界面.
+
+        public string Login_Init()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("SysName", SystemConfig.SysName);
+            ht.Add("ServiceTel", SystemConfig.ServiceTel);
+
+            return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
+
+        #endregion 登录界面.
 
     }
 }

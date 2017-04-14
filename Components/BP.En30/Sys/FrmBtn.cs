@@ -154,7 +154,7 @@ namespace BP.Sys
         /// <summary>
         /// 分组
         /// </summary>
-        public const string GroupID = "GUID";
+        public const string GroupID = "GroupID";
     }
     /// <summary>
     /// 按钮

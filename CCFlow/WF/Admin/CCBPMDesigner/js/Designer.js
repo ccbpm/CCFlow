@@ -404,14 +404,6 @@ function NodeProperty_Funs(item) {
                 WinOpen(url);
             }
             break;
-        case "Listion": // 消息收听..
-            url = "../Listen.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
-            if (window.parent) {
-                window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "消息收听" + FK_Node, url, item.iconCls);
-            } else {
-                WinOpen(url);
-            }
-            break;
         case "SelfToolbar": // 自定义工具栏..
             url = "../Cond.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
             if (window.parent) {

@@ -70,11 +70,7 @@
             window.parent.addTab('Cond', '流程完成条件', url);
 
         }
-        function Listen(nodeID, flowNo) {
-            var url = "../Listen.aspx?FK_Node=" + nodeID + "&DoType=New";
-          //  window.open(url, 'Listen', 'height=680, width=730, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
-            window.parent.addTab('Listen', '消息收听', url);
-        }
+       
 
         // 按钮权限配置.
         function OpenButtonControl(nodeID) {
@@ -135,7 +131,6 @@
             <th><img src="../CCBPMDesigner/Img/Menu/CC.png" alt="设置处理人" class="Icon" />设置抄送人</th>
             <th><img src="../../Img/Event.png" alt="消息&事件" class="Icon" />消息&事件</th>
             <th><img src="../CCBPMDesigner/Img/Menu/Cond.png" alt="流程完成条件" class="Icon" />流程完成条件</th>
-            <th><img src="../CCBPMDesigner/Img/Menu/Listion.png" alt="消息收听" class="Icon" />消息收听</th>
             <th><img src="../CCBPMDesigner/Img/Menu/CheckFlow.png" alt="按钮权限控制" class="Icon" />按钮权限</th>
             <th><img src="../CCBPMDesigner/Img/Menu/SubFlows.png" alt="父子流程" class="Icon" />子流程</th>
         </tr>
@@ -257,13 +252,7 @@
                 %>
                 <a href="javascript:Cond('<%=nd.NodeID %>','<%=flowNo %>');">流程完成条件(<%=conds.Count%>)</a>
             </td>
-            <!-- 消息收听 -->
-            <td>
-                <%
-                    BP.WF.Template.Listens lns = new BP.WF.Template.Listens(nd.NodeID);  
-                %>
-                <a href="javascript:Listen('<%=nd.NodeID %>','<%=flowNo %>');">消息收听(<%=lns.Count%>)</a>
-            </td>
+           
             <!-- 按钮权限控制 -->
             <td>
                 <a href="javascript:OpenButtonControl('<%=nd.NodeID %>');">设置</a>

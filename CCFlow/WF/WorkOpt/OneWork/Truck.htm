@@ -102,6 +102,20 @@
             });
         });
 
+        function getMaxSize(nodes) {
+            /// <summary>获取所有节点坐标最大值</summary>
+            /// <param name="nodes" Type="Array">节点数组</param>
+            var xmax = 0;
+            var ymax = 0;
+
+            $.each(nodes, function () {
+                xmax = Math.max(xmax, this.X);
+                ymax = Math.max(ymax, this.Y);
+            });
+
+            return { X: xmax, Y: ymax };
+        }
+
         function drawStart(datas) {
             /// <summary>加载时绘制流程图/轨迹</summary>
             /// <param name="datas" Type="Object">绘制的数据，包含flow/nodes/labels/dirs/tracks，均为Array</param>
@@ -109,12 +123,13 @@
             $('#holder').css('background-color', STYLE_CANVAS_COLOR);
             var width = $(document).width();
             var height = $(document).height();
+            var max = getMaxSize(datas.WF_NODE);
 
             if (height < 600) {
                 height = 600;
             }
 
-            r = Raphael('holder', width, height);
+            r = Raphael('holder', Math.max(width, max.X) + 100, Math.max(height, max.Y) + 50);
             var rNode, rDir, rBorder, rImage, rText, rLabel, rPath;
 
             rFlow = new RFlow(fk_Flow);

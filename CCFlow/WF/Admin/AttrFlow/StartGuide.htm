@@ -8,6 +8,8 @@
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
     <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+
      <base target="_self" /> 
     <link href="/WF/Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     
@@ -60,15 +62,31 @@
                 url: Handler + "?DoType=StartGuide_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
 
                     data = JSON.parse(data);
+
+                    var way = data.StartGuideWay;
+                    if (way == 1) {
+                        document.getElementById("TB_ByHistoryUrl").value = data.StartGuidePara1;
+                    }
+
+                    GenerFullAllCtrlsVal(data);
+                    return;
+
+
                     var check = "";
                     //根据获取信息
                     userId = data.userId;
+
+
+                    //给控件赋值.
+
+
                     if (data.RB_None == "True") {
                         check = "RB_None";
                     }
@@ -111,6 +129,7 @@
 
         //ajax 提交
         function onSave() {
+
             var keys = "";
             var xz = $("input[name=xzgz]:checked").attr("id");
             var TB_ByHistoryUrl = $("#TB_ByHistoryUrl").val();
@@ -122,17 +141,24 @@
             var TB_GuideLab = $("#TB_GuideLab").val();
             var TB_SubFlow1 = $("#TB_SubFlow1").val();
             var TB_SubFlow2 = $("#TB_SubFlow2").val();
+
+
+            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+
+
+            var frmData = $("#cc").serialize(); //序列化frm.
+
+            alert('frmData:' + frmData);
+
+
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=StartGuide_Save&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
+                url: Handler + "?DoType=StartGuide_Save&FK_Flow=" + GetQueryString("FK_Flow") + "&CheckBoxIDs=" + checkBoxIDs + "&m=" + Math.random(),
                 dataType: 'html',
-                data: { TB_ByHistoryUrl: TB_ByHistoryUrl, xz: xz, TB_SelfURL: TB_SelfURL, TB_BySQLOne1: TB_BySQLOne1, TB_BySQLOne2: TB_BySQLOne2, TB_GuideLink: TB_GuideLink, TB_GuideLab: TB_GuideLab, TB_SubFlow1: TB_SubFlow1, TB_SubFlow2: TB_SubFlow2 },
-                error: function (data) {
-                    alert("保存失败");
-                },
+                data: frmData,
                 success: function (data) {
-                    alert("保存成功");
+                    alert(data);
                 }
             });
         }  
@@ -140,6 +166,7 @@
 </head>
 <body onkeypress="Esc()" >
 
+<form id="cc">
 <table style="width:98%">
         <caption>发起前置导航</caption>
         <tr>
@@ -155,17 +182,22 @@
                     </ul>
                 </fieldset>
             </td>
-
             <td valign="top">
                 <fieldset>
                     <legend>
-                        <input type='radio' id="RB_None"  name="xzgz" checked="checked" />无（默认）</legend>
+<input id="RB_StartGuideWay_0" type="radio" name="RB_StartGuideWay" value="0"  /><label for="RB_StartGuideWay_0">无（默认）</label>
+                        
+                        </legend>
+
+
                     <font color="gray">不设置任何前置导航，发起流程直接进入开始节点表单。</font>
                 </fieldset>
 
                 <fieldset>
                     <legend>
-                        <input type='radio' id="RB_ByHistoryUrl" name="xzgz" />从开始节点Copy数据(查询历史记录)</legend>
+
+<input id="RB_StartGuideWay_1" type="radio" name="RB_StartGuideWay" value="1"  /><label for="RB_StartGuideWay_1">从开始节点Copy数据(查询历史记录)</label>
+                    </legend>
                       
                     <a href="javascript:ShowHidden('ByHistoryUrl')">请设置SQL</a>: 
                     <div id="ByHistoryUrl" style="display:none;color:gray">
@@ -175,14 +207,20 @@
                     <li>比如：SELECT  Title ,OID FROM ND1001 WHERE No LIKE '%@key%' OR Name LIKE '%@key%'</li>
                     </ul>
                     </div>
+
+                    <input type="text" value="" id="TB_ByHistoryUrl" name="TB_ByHistoryUrl" style="width:98%; height: 24px" />
                     
-                    <Textarea id="TB_ByHistoryUrl" runat="server" style="width:98%; height: 24px"></Textarea><br />
+                    <!--<Textarea id="TB_ByHistoryUrl" runat="server" style="width:98%; height: 24px"></Textarea>-->
+                    <br />
                 </fieldset>
 
 
                 <fieldset>
                     <legend>
-                        <input type='radio' id="RB_SelfUrl" name="xzgz" />按自定义的Url</legend>
+
+                    <input id="RB_StartGuideWay_2" type="radio" name="RB_StartGuideWay" value="2"  /><label for="RB_StartGuideWay_2">按自定义的Url</label>
+                        
+                        </legend>
                     
                     <a href="javascript:ShowHidden('ByUrl')">请设置URL:</a>
                     <div id="ByUrl" style="display:none;color:gray">
@@ -201,7 +239,9 @@
 
                 <fieldset>
                     <legend>
-                        <input type='radio' id="RB_BySQLOne" name="xzgz" />按设置的SQL-单条模式</legend>
+                    <input id="RB_StartGuideWay_3" type="radio" name="RB_StartGuideWay" value="3"  /><label for="RB_StartGuideWay_3">按设置的SQL-单条模式</label>
+
+                        </legend>
                     
                     <a href="javascript:ShowHidden('Paras1')">查询参数:</a>
                     <div id="Paras1" style="display:none;color:gray">
@@ -230,7 +270,12 @@
 
                  <fieldset>
                     <legend>
-                        <input type='radio' id="RB_SubFlow" name="xzgz" />子流程实例列表模式-多条</legend>
+                         
+
+                        <input id="RB_StartGuideWay_4" type="radio" name="RB_StartGuideWay" value="4"  /><label for="RB_StartGuideWay_4">子流程实例列表模式-多条</label>
+                        
+                        
+                        </legend>
                     
                     <a href="javascript:ShowHidden('SubFlowParas1')">查询参数:</a>
                     <div id="SubFlowParas1" style="display:none;color:gray">
@@ -260,7 +305,9 @@
 
                 <fieldset id="isShow">
                     <legend>
-                        <input type='radio' id="RB_FrmList" name="xzgz" />开始节点绑定的独立表单列表</legend>
+                        <input id="RB_StartGuideWay_5" type="radio" name="RB_StartGuideWay" value="5"  /><label for="RB_StartGuideWay_5">开始节点绑定的独立表单列表</label>
+                        </legend>
+
                         <font color="gray">
                         <ul>
                         <li> 流程启动的时候，系统会把流程引擎绑定的开始节点表单列出来让操作员去选择。 </li>
@@ -298,6 +345,7 @@
 
         </tr>
     </table>
+    </form>
 </body>
 <script type="text/javascript">
     //动态修改参数

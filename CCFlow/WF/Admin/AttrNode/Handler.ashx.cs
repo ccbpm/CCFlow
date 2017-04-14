@@ -10,7 +10,6 @@ namespace CCFlow.WF.Admin.AttrNode
     /// </summary>
     public class Handler : BP.WF.HttpHandler.HttpHandlerBase
     {
-
         /// <summary>
         /// 获取 “Handler业务处理类”的Type
         /// </summary>
@@ -18,8 +17,7 @@ namespace CCFlow.WF.Admin.AttrNode
         {
             get
             {
-                return typeof(BP.WF.HttpHandler.WF_Admin_AttrNode);
-
+                return  typeof(BP.WF.HttpHandler.WF_Admin_AttrNode);
             }
         }
     }

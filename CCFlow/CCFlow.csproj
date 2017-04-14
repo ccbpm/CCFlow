@@ -376,18 +376,20 @@
     <Content Include="WF\Admin\ActionPush2Spec.aspx" />
     <Content Include="WF\Admin\AttrFlow\AddOneFrmToNodes.aspx" />
     <Content Include="WF\Admin\AttrFlow\API.aspx" />
+    <Content Include="WF\Admin\AttrFlow\API.htm" />
     <Content Include="WF\Admin\AttrFlow\APICode.aspx" />
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.aspx" />
     <Content Include="WF\Admin\AttrFlow\AutoStart.aspx" />
+    <Content Include="WF\Admin\AttrFlow\AutoStart.htm" />
     <Content Include="WF\Admin\AttrFlow\BindingForms.aspx" />
-    <Content Include="WF\Admin\AttrFlow\CheckFlow.aspx" />
     <Content Include="WF\Admin\AttrFlow\DoFunc.aspx" />
     <Content Include="WF\Admin\AttrFlow\DTSBTable.aspx" />
     <Content Include="WF\Admin\AttrFlow\DTSBTableExt.aspx" />
     <Content Include="WF\Admin\AttrFlow\Exp.aspx" />
     <Content Include="WF\Admin\AttrFlow\FeatureSet.ascx" />
     <Content Include="WF\Admin\AttrFlow\FeatureSetUI.aspx" />
-    <Content Include="WF\Admin\AttrFlow\FlowFields.aspx" />
+    <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
+    <Content Include="WF\Admin\AttrFlow\StartGuide.htm" />
     <Content Include="WF\Admin\AttrFlow\Imp.aspx" />
     <Content Include="WF\Admin\AttrFlow\ImpExp.aspx" />
     <Content Include="WF\Admin\AttrFlow\Limit.aspx" />
@@ -395,13 +397,13 @@
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.aspx" />
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
     <Content Include="WF\Admin\AttrFlow\Rollback.htm" />
-    <Content Include="WF\Admin\AttrFlow\StartGuide.aspx" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.aspx" />
     <Content Include="WF\Admin\AttrNode\BatchStartFields.aspx" />
     <Content Include="WF\Admin\AttrNode\BlockModel.aspx" />
     <Content Include="WF\Admin\AttrNode\Btns.aspx" />
     <Content Include="WF\Admin\AttrNode\CH.aspx" />
     <Content Include="WF\Admin\AttrNode\CHOvertimeRole.aspx" />
+    <Content Include="WF\Admin\AttrNode\CHOvertimeRole.htm" />
     <Content Include="WF\Admin\AttrNode\CHRole.aspx" />
     <Content Include="WF\Admin\AttrNode\FullSA.aspx" />
     <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
@@ -7540,6 +7542,7 @@
     <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx" />
+    <Content Include="WF\Admin\AttrNode\Handler.ashx" />
     <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.woff" />
@@ -8287,13 +8290,6 @@
     <Compile Include="WF\Admin\AttrFlow\BindingForms.aspx.designer.cs">
       <DependentUpon>BindingForms.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrFlow\CheckFlow.aspx.cs">
-      <DependentUpon>CheckFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\CheckFlow.aspx.designer.cs">
-      <DependentUpon>CheckFlow.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrFlow\DoFunc.aspx.cs">
       <DependentUpon>DoFunc.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8336,13 +8332,6 @@
     <Compile Include="WF\Admin\AttrFlow\FeatureSetUI.aspx.designer.cs">
       <DependentUpon>FeatureSetUI.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrFlow\FlowFields.aspx.cs">
-      <DependentUpon>FlowFields.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\FlowFields.aspx.designer.cs">
-      <DependentUpon>FlowFields.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -8373,13 +8362,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrFlow\NodeAttrs.aspx.designer.cs">
       <DependentUpon>NodeAttrs.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\StartGuide.aspx.cs">
-      <DependentUpon>StartGuide.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\StartGuide.aspx.designer.cs">
-      <DependentUpon>StartGuide.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrFlow\TruckViewPower.aspx.cs">
       <DependentUpon>TruckViewPower.aspx</DependentUpon>
@@ -8436,6 +8418,9 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\FullSA.aspx.designer.cs">
       <DependentUpon>FullSA.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\AttrNode\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Mobile.aspx.cs">
       <DependentUpon>Mobile.aspx</DependentUpon>

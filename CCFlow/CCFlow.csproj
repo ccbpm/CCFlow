@@ -382,6 +382,7 @@
     <Content Include="WF\Admin\AttrFlow\AutoStart.aspx" />
     <Content Include="WF\Admin\AttrFlow\AutoStart.htm" />
     <Content Include="WF\Admin\AttrFlow\BindingForms.aspx" />
+    <Content Include="WF\Admin\AttrFlow\CheckFlow.htm" />
     <Content Include="WF\Admin\AttrFlow\DoFunc.aspx" />
     <Content Include="WF\Admin\AttrFlow\DTSBTable.aspx" />
     <Content Include="WF\Admin\AttrFlow\DTSBTableExt.aspx" />
@@ -398,6 +399,7 @@
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
     <Content Include="WF\Admin\AttrFlow\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.aspx" />
+    <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
     <Content Include="WF\Admin\AttrNode\BatchStartFields.aspx" />
     <Content Include="WF\Admin\AttrNode\BlockModel.aspx" />
     <Content Include="WF\Admin\AttrNode\Btns.aspx" />

@@ -84,7 +84,7 @@
                                  [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
                                 设计自由表单(Silverlight)</a>]
 
-                                  [<a href="javascript:WinOpen('../AttrNode/SortingMapAttrs.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
+                                  [<a href="javascript:WinOpen('../AttrNode/SortingMapAttrs.htm?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
                                 手机表单</a>]
                                  <%--- [<a href="javascript:alert('我们在以后会启用。');">设计傻瓜表单</a>]--%>
 

@@ -122,7 +122,6 @@ namespace CCFlow.WF.Admin
             if (Request["CB_Node"] != null)
             {
                 sbatchparas = Request["CB_Node"].ToString();
-
             }
             nd.BatchParas = sbatchparas;
             nd.Update();

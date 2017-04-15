@@ -62,6 +62,9 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
             {
                 switch (this.DoType)
                 {
+                    case "StudentV1_Save":
+                        msg = StudentV1_Save();
+                        break;
                     case "Login_Submit":
 
                         string userNo = mycontext.Request.Form["TB_UserNo"];
@@ -103,6 +106,25 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
 
             context.Response.ContentType = "text/plain";
             context.Response.Write(msg);
+        }
+
+        public string StudentV1_Save()
+        {
+            string no = context.Request.Form["TB_No"];
+            string name = context.Request.Form["TB_Name"];
+            string xb = context.Request.Form["RB_XB"];
+            string isPK = context.Request.Form["CB_IsPK"];
+            string addr = context.Request.Form["TB_Addr"];
+
+            string sql = "SELECT * FROM Demo_Student where No='"+no+"' ";
+            System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count != 0)
+                return "err@编号"+no+"已经存在.";
+
+            sql = "INSERT INTO Demo_Student (No,Name,XB,Addr) VALUES ('" + no + "','" + name + "'," + xb + ",'" + addr + "' )";
+            BP.DA.DBAccess.RunSQL(sql);
+
+            return "保存成功...";
         }
 
 

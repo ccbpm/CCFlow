@@ -12,7 +12,7 @@
         }
         // 表单方案.
         function OpenFrmAttr(nodeID) {
-            var url = "../AttrNode/NodeFromWorkModel.aspx?FK_Node=" + nodeID;
+            var url = "../AttrNode/NodeFromWorkModel.htm?FK_Node=" + nodeID;
            // window.open(url, 'OpenFrmAttr', 'height=670, width=997, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
             window.parent.addTab('OpenFrmAttr', '自由表单', url);
         }

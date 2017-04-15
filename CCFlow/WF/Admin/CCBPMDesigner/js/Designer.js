@@ -413,7 +413,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "NodeFromWorkModel": // 设置表单. NodeFromWorkModel
-            url = "../AttrNode/NodeFromWorkModel.aspx?FK_Node=" + FK_Node + "&Lang=CH";
+            url = "../AttrNode/NodeFromWorkModel.htm?FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "设置表单" + FK_Node, url, item.iconCls);
             } else {

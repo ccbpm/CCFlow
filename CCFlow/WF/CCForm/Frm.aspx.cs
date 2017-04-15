@@ -499,7 +499,7 @@ namespace CCFlow.WF.CCForm
                                     info.AddWhere(MapAttrAttr.UIIsEnable, "1");
                                     if (info.DoQuery() > 0)
                                     {
-                                        sealName = en.GetValStrByKey(attr.KeyOfEn);
+                                        string sealName = en.GetValStrByKey(attr.KeyOfEn);
                                     }
                                 }
 

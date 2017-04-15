@@ -53,7 +53,6 @@ functrees.push({
 //						                                { Type: "Node", Id: "FlowAttrs", ParentId: "RelatedFunction", Name: "流程属性", TType: "NORMAL", DType: "-1", IconCls: "icon-property", Inherits: ["fk_flow"], Url: "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSheets&No=@@fk_flow" },
 						                                { Type: "Node", Id: "FlowAttrs", ParentId: "RelatedFunction", Name: "流程属性", TType: "NORMAL", DType: "-1", IconCls: "icon-property", Inherits: ["fk_flow"], Url: "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowExts&No=@@fk_flow" },
 						                                { Type: "Node", Id: "NodeAttrs", ParentId: "RelatedFunction", Name: "节点设置", TType: "NORMAL", DType: "-1", IconCls: "icon-Node", Inherits: ["fk_flow"], Url: "../AttrFlow/NodeAttrs.htm?FK_Flow=@@fk_flow" },
-                                                    //						                                { Type: "Node", Id: "BatchEditNode", ParentId: "RelatedFunction", Name: "批量修改节点属性", TType: "NORMAL", DType: "-1", IconCls: "icon-edit", Inherits: ["fk_flow"], Url: "../AttrFlow/FeatureSetUI.aspx?FK_Flow=@@fk_flow&FK_Node=&DoType=Name" },
 						                                {Type: "Node", Id: "RunFlow", ParentId: "RelatedFunction", Name: "运行流程", TType: "NORMAL", DType: "-1", IconCls: "icon-RunFlow", Inherits: ["fk_flow"], Url: "../TestFlow.aspx?FK_Flow=@@fk_flow&UserNo=admin&SID=@@WebUser.SID", Target: "_blank" },
 						                                { Type: "Node", Id: "FlowCheck", ParentId: "RelatedFunction", Name: "流程检查", TType: "NORMAL", DType: "-1", IconCls: "icon-CheckFlow", Inherits: ["fk_flow"], Url: "../AttrFlow/CheckFlow.htm?FK_Flow=@@fk_flow" },
 
@@ -254,7 +253,7 @@ functrees.push({
 						{ Type: "Node", Id: "HolidaySetting", ParentId: "BasicSetting2", Name: "节假日设置", IconCls: "icon-Config", Url: "../../Comm/Sys/Holiday.aspx" },
 						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "表结构", IconCls: "icon-Config", Url: "../../Comm/Sys/SystemClass.aspx" },
 //						{ Type: "Node", Id: "SysVal", ParentId: "BasicSetting2", Name: "系统变量", IconCls: "icon-Config", Url: "javascript:void(0)" },
-						{ Type: "Node", Id: "FlowPrevSetting", ParentId: "BasicSetting2", Name: "流程预先审批设置", IconCls: "icon-Config", Url: "../GetTask.aspx" },
+						{ Type: "Node", Id: "FlowPrevSetting", ParentId: "BasicSetting2", Name: "流程预先审批设置", IconCls: "icon-Config", Url: "../AttrFlow/GetTask.htm" },
 						{ Type: "Node", Id: "FuncDown", ParentId: "BasicSetting2", Name: "功能执行", IconCls: "icon-Config", Url: "../../Comm/MethodLink.aspx" }
 					  ]
 			},

@@ -381,8 +381,6 @@
     <Content Include="WF\Admin\AttrFlow\DTSBTable.aspx" />
     <Content Include="WF\Admin\AttrFlow\DTSBTableExt.aspx" />
     <Content Include="WF\Admin\AttrFlow\Exp.aspx" />
-    <Content Include="WF\Admin\AttrFlow\FeatureSet.ascx" />
-    <Content Include="WF\Admin\AttrFlow\FeatureSetUI.aspx" />
     <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
     <Content Include="WF\Admin\AttrFlow\StartGuide.htm" />
     <Content Include="WF\Admin\AttrFlow\Imp.aspx" />
@@ -421,6 +419,7 @@
     <Content Include="WF\Admin\AttrNode\TurnToDeal.aspx" />
     <Content Include="WF\Admin\BindFrms.aspx" />
     <Content Include="WF\Admin\BindFrms.htm" />
+    <Content Include="WF\Admin\BindFrmsFrmEnableRole.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
@@ -1188,7 +1187,7 @@
     <Content Include="WF\Admin\CondBySQL.aspx" />
     <Content Include="WF\Admin\CondByUrl.aspx" />
     <Content Include="WF\Admin\CondDept.aspx" />
-    <Content Include="WF\Admin\Condition.aspx" />
+    <Content Include="WF\Admin\AttrNode\Condition.aspx" />
     <Content Include="WF\Admin\ConditionLine.aspx" />
     <Content Include="WF\Admin\ConditionSubFlow.aspx" />
     <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
@@ -1197,8 +1196,6 @@
     <Content Include="WF\Admin\DBInstall.aspx" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\DoType.aspx" />
-    <Content Include="WF\Admin\FeatureSetUI.aspx" />
-    <Content Include="WF\Admin\FileUploadEUI.aspx" />
     <Content Include="WF\Admin\FindWorker\ByDept.aspx" />
     <Content Include="WF\Admin\FindWorker\Leader.aspx" />
     <Content Include="WF\Admin\FindWorker\List.aspx" />
@@ -1213,7 +1210,6 @@
     <Content Include="WF\Admin\FlowDB\InstanceWarning.aspx" />
     <Content Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx" />
     <Content Include="WF\Admin\FlowDB\流程按月分析.png" />
-    <Content Include="WF\Admin\FlowFormTree.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment.htm" />
@@ -1319,7 +1315,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\TabIdx.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\UpdataEleXY.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx" />
-    <Content Include="WF\Admin\GetTask.aspx" />
+    <Content Include="WF\Admin\AttrFlow\GetTask.aspx" />
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Info.aspx" />
@@ -1929,6 +1925,7 @@
     <Content Include="WF\Comm\CSS\jquery.bitmapcutter.css" />
     <Content Include="WF\Comm\DataHelp.htm" />
     <Content Include="WF\Comm\Do.aspx" />
+    <Content Include="WF\Comm\En.htm" />
     <Content Include="WF\Comm\Ens.aspx" />
     <Content Include="WF\Comm\Gener.js" />
     <Content Include="WF\Comm\Group.aspx" />
@@ -8241,20 +8238,6 @@
     <Compile Include="WF\Admin\AttrFlow\Exp.aspx.designer.cs">
       <DependentUpon>Exp.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrFlow\FeatureSet.ascx.cs">
-      <DependentUpon>FeatureSet.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\FeatureSet.ascx.designer.cs">
-      <DependentUpon>FeatureSet.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\FeatureSetUI.aspx.cs">
-      <DependentUpon>FeatureSetUI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\FeatureSetUI.aspx.designer.cs">
-      <DependentUpon>FeatureSetUI.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -8288,12 +8271,14 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Action.aspx.cs">
       <DependentUpon>Action.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Action.aspx.designer.cs">
       <DependentUpon>Action.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\ActionEvent.aspx.cs">
       <DependentUpon>ActionEvent.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\ActionEvent.aspx.designer.cs">
       <DependentUpon>ActionEvent.aspx</DependentUpon>
@@ -8307,6 +8292,7 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Bill.aspx.cs">
       <DependentUpon>Bill.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Bill.aspx.designer.cs">
       <DependentUpon>Bill.aspx</DependentUpon>
@@ -8320,12 +8306,14 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\CanCancelNodes.aspx.cs">
       <DependentUpon>CanCancelNodes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\CanCancelNodes.aspx.designer.cs">
       <DependentUpon>CanCancelNodes.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\CanReturnNodes.aspx.cs">
       <DependentUpon>CanReturnNodes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\CanReturnNodes.aspx.designer.cs">
       <DependentUpon>CanReturnNodes.aspx</DependentUpon>
@@ -8342,12 +8330,14 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\NodeAccepterRole.aspx.cs">
       <DependentUpon>NodeAccepterRole.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\NodeAccepterRole.aspx.designer.cs">
       <DependentUpon>NodeAccepterRole.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\NodeCCRole.aspx.cs">
       <DependentUpon>NodeCCRole.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\NodeCCRole.aspx.designer.cs">
       <DependentUpon>NodeCCRole.aspx</DependentUpon>
@@ -8396,6 +8386,7 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\TurnTo.aspx.cs">
       <DependentUpon>TurnTo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\TurnTo.aspx.designer.cs">
       <DependentUpon>TurnTo.aspx</DependentUpon>
@@ -8413,6 +8404,13 @@
     </Compile>
     <Compile Include="WF\Admin\BindFrms.aspx.designer.cs">
       <DependentUpon>BindFrms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\BindFrmsFrmEnableRole.aspx.cs">
+      <DependentUpon>BindFrmsFrmEnableRole.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\BindFrmsFrmEnableRole.aspx.designer.cs">
+      <DependentUpon>BindFrmsFrmEnableRole.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx.cs">
       <DependentUpon>ByFlows.aspx</DependentUpon>
@@ -8707,11 +8705,11 @@
     <Compile Include="WF\Admin\CondDept.aspx.designer.cs">
       <DependentUpon>CondDept.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\Condition.aspx.cs">
+    <Compile Include="WF\Admin\AttrNode\Condition.aspx.cs">
       <DependentUpon>Condition.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Admin\Condition.aspx.designer.cs">
+    <Compile Include="WF\Admin\AttrNode\Condition.aspx.designer.cs">
       <DependentUpon>Condition.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Condition.Master.cs">
@@ -8776,20 +8774,6 @@
     </Compile>
     <Compile Include="WF\Admin\DoType.aspx.designer.cs">
       <DependentUpon>DoType.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FeatureSetUI.aspx.cs">
-      <DependentUpon>FeatureSetUI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FeatureSetUI.aspx.designer.cs">
-      <DependentUpon>FeatureSetUI.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FileUploadEUI.aspx.cs">
-      <DependentUpon>FileUploadEUI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FileUploadEUI.aspx.designer.cs">
-      <DependentUpon>FileUploadEUI.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FindWorker\ByDept.aspx.cs">
       <DependentUpon>ByDept.aspx</DependentUpon>
@@ -8888,13 +8872,6 @@
     </Compile>
     <Compile Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx.designer.cs">
       <DependentUpon>InstanceWarningOneFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowFormTree.aspx.cs">
-      <DependentUpon>FlowFormTree.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowFormTree.aspx.designer.cs">
-      <DependentUpon>FlowFormTree.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Action.aspx.cs">
       <DependentUpon>Action.aspx</DependentUpon>
@@ -9360,11 +9337,11 @@
     <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.master.designer.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\GetTask.aspx.cs">
+    <Compile Include="WF\Admin\AttrFlow\GetTask.aspx.cs">
       <DependentUpon>GetTask.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Admin\GetTask.aspx.designer.cs">
+    <Compile Include="WF\Admin\AttrFlow\GetTask.aspx.designer.cs">
       <DependentUpon>GetTask.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Handler.ashx.cs">

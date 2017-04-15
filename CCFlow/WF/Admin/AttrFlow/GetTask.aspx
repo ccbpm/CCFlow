@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.Admin.WF_Admin_Personalize_GetTask" Codebehind="GetTask.aspx.cs" %>
-<%@ Register src="../UC/Pub.ascx" tagname="Pub" tagprefix="uc1" %>
+<%@ Register src="../../UC/Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 <script type="text/javascript">
     function EditIt(fk_flow, nodeid) {

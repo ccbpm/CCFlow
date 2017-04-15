@@ -7,7 +7,6 @@ using System.Web.UI.WebControls;
 
 namespace CCFlow.WF.Admin.AttrNode
 {
-
     public partial class BlockModelUI : System.Web.UI.Page
     {
         #region 属性.

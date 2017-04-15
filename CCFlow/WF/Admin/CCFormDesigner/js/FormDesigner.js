@@ -561,7 +561,7 @@ function ReSetEditDivCss() {
 function Conver_CCForm_V1ToV2() {
 
     //transe old CCForm to new
-    $.post("CCFrom" + Handler, {
+    $.post( Handler, {
         action: 'CcformElements',
         FK_MapData: CCForm_FK_MapData,
         FK_Node: CCForm_FK_MapData.substr(2, CCForm_FK_MapData.length)
@@ -572,6 +572,7 @@ function Conver_CCForm_V1ToV2() {
             alert(jsonData);
             return;
         }
+
 
         var flow_Data = $.parseJSON(jsonData);
 

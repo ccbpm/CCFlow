@@ -45,7 +45,7 @@
                         <ItemTemplate>
                             <li>
                                 <div>
-                                    <a id='a<%# Eval("ToNode") %>' href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, 'Condition.aspx?CondType=<%=this.CondType %>&FK_Flow=<%=this.FK_Flow %>&FK_MainNode=<%# Eval("Node") %>&FK_Node=<%# Eval("Node") %>&FK_Attr=<%=this.FK_Attr %>&DirType=<%# Eval("DirType") %>&ToNodeID=<%# Eval("ToNode") %>')">
+                                    <a id='a<%# Eval("ToNode") %>' href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, 'Condition.htm?CondType=<%=this.CondType %>&FK_Flow=<%=this.FK_Flow %>&FK_MainNode=<%# Eval("Node") %>&FK_Node=<%# Eval("Node") %>&FK_Attr=<%=this.FK_Attr %>&DirType=<%# Eval("DirType") %>&ToNodeID=<%# Eval("ToNode") %>')">
                                         <span class="nav">到:<%# Eval("ToNodeName") %></span></a></div>
                             </li>
                         </ItemTemplate>

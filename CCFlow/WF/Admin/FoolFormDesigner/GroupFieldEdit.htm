@@ -47,7 +47,7 @@
         function ParseStringToPinYin(parseString, parseModel) {
             parseString = $.trim(parseString);
             if (parseString != "") {
-                $.post("CCFrom" + Handler, { action: 'ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
+                $.post(  Handler, { action: 'ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
                     if (data != "false") {
                         document.getElementById("TB_No").value = data;
                     }

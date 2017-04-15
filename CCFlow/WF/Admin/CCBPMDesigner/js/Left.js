@@ -389,7 +389,7 @@ function newFrm() {
         return;
     }
 
-    var url = "../CCFormDesigner/NewFrmGuide.aspx?Step=0";
+    var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0";
     if (node.attributes) {
         if (node.attributes.TTYPE == "SRC") {
             url += "&Src=" + node.id;
@@ -421,7 +421,7 @@ function designFrm() {
         return;
     }
 
-    addTab("DesignerFrm" + node.id, "设计表单-" + node.text, "../CCFormDesigner/DesignerFrm.aspx?FK_MapData=" + node.id);
+    addTab("DesignerFrm" + node.id, "设计表单-" + node.text, "../CCFormDesigner/DesignerFrm.htm?FK_MapData=" + node.id);
 }
 
 //新建数据源，added by liuxc,2015-10-7

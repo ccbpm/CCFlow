@@ -52,8 +52,6 @@
         BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
     %>
     <table style="width: 100%;">
-        <caption>
-            <img src="../CCBPMDesigner/Img/Menu/Form.png" border="0" />节点[<%=nd.Name %>]表单解决方案</caption>
         <!-- =================================== 使用ccbpm内置的节点表单 -->
         <tr>
             <th colspan="2">

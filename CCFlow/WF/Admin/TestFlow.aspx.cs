@@ -352,6 +352,7 @@ namespace CCFlow.WF.Admin
 
                 ids += ctl.ID.Replace("CB_", "") + ",";
             }
+
             if (string.IsNullOrEmpty(ids) == true)
             {
                 this.Response.Write("请选择要模拟发起的工作人员");

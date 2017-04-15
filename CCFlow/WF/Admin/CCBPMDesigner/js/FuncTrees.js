@@ -136,9 +136,9 @@ functrees.push({
 					              ]
 						},
                         { Type: "Node", Id: "TimeCheck", ParentId: "FlowFunc", Name: "时效考核", TType: "TIMECHECK", DType: "-1", IconCls: "icon-tree_folder", Nodes: [
-                            { Type: "Node", Id: "FlowAnalysis", ParentId: "TimeCheck", Name: "按流程分析", TType: "FLOWANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/ByFlows.aspx" },
-                            { Type: "Node", Id: "DeptAnalysis", ParentId: "TimeCheck", Name: "按部门分析", TType: "DEPTANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/ByDepts.aspx" },
-                            { Type: "Node", Id: "AvgAnalysis", ParentId: "TimeCheck", Name: "排名列表", TType: "AVGANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/List.aspx" }
+                            { Type: "Node", Id: "FlowAnalysis", ParentId: "TimeCheck", Name: "按流程分析", TType: "FLOWANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/ByFlows.htm" },
+                            { Type: "Node", Id: "DeptAnalysis", ParentId: "TimeCheck", Name: "按部门分析", TType: "DEPTANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/ByDepts.htm" },
+                            { Type: "Node", Id: "AvgAnalysis", ParentId: "TimeCheck", Name: "排名列表", TType: "AVGANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/List.htm" }
                         ]
                         },
                         { Type: "Node", Id: "PDevAPI", ParentId: "FlowFunc", Name: "开发接口", TType: "PDEVAPI", DType: "-1", IconCls: "icon-tree_folder", Nodes: [

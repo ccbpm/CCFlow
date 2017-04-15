@@ -48,7 +48,6 @@ line-height: 30px !important;
     <uc1:Pub ID="Pub1" runat="server" />
     </form>
     <script type="text/javascript">
-
         window.onload = function () {
             var tableWidth = document.getElementsByTagName("table")[0].offsetWidth;
             document.getElementsByTagName("table")[0].Width = tableWidth;

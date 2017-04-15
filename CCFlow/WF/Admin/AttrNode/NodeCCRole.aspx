@@ -31,9 +31,6 @@
         nEmps.Retrieve(BP.WF.Template.CCEmpAttr.FK_Node, this.FK_Node);
     %>
     <table style="width: 100%;">
-        <caption>
-            抄送设置
-        </caption>
         <tr>
             <th colspan="2">
                 基本设置

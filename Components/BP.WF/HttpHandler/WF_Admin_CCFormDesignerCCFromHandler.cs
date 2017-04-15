@@ -124,7 +124,7 @@ namespace BP.WF.HttpHandler
             {
                 switch (dotype.Trim())
                 {
-                  
+
                     case "PublicNoNameCtrlCreate": //创建通用的控件.
                         string ctrlType = this.GetRequestVal("CtrlType");
                         try
@@ -158,7 +158,7 @@ namespace BP.WF.HttpHandler
                         {
                             return ex.Message;
                         }
-                  
+
                     case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {
@@ -201,7 +201,7 @@ namespace BP.WF.HttpHandler
                             return "error:多选名称:" + m2mName + "，已经存在。";
                         m2m.Insert();
                         return "true";
-                 
+
                     case "DelSFTable": /* 删除自定义的物理表. */
                         // 检查这个物理表是否被使用。
                         sql = "SELECT FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + v1 + "'";
@@ -341,7 +341,7 @@ namespace BP.WF.HttpHandler
                         else
                             myfn.DoDown();
                         return "true";
-                     
+
                     default:
                         return "error:" + dotype + " , 后台执行错误，未设置此标记.";
                 }
@@ -384,7 +384,7 @@ namespace BP.WF.HttpHandler
             {
                 if (en != null)
                     en.CheckPhysicsTable();
-                return "Error:" + ex.Message;
+                return "err:" + ex.Message;
             }
         }
         /// <summary>

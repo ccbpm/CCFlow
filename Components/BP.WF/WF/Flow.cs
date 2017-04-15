@@ -2577,9 +2577,6 @@ namespace BP.WF
             LabNotes labs = new LabNotes(this.No);
             ds.Tables.Add(labs.ToDataTableField("WF_LabNote"));
 
-            // 消息监听.
-            Listens lts = new Listens(this.No);
-            ds.Tables.Add(lts.ToDataTableField("WF_Listen"));
 
             // 可退回的节点。
             sql = "SELECT * FROM WF_NodeReturn WHERE FK_Node IN (" + sqlin + ")";
@@ -5829,56 +5826,6 @@ namespace BP.WF
                                 ns.SetValByKey(dc.ColumnName, val);
                             }
                             ns.Insert();
-                        }
-                        break;
-                    case "WF_Listen": // 信息侦听。
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            Listen li = new Listen();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-
-                                switch (dc.ColumnName.ToLower())
-                                {
-                                    case "oid":
-                                        continue;
-                                        break;
-                                    case "fk_node":
-                                        if (val.Length == 3)
-                                            val = flowID + val.Substring(1);
-                                        else if (val.Length == 4)
-                                            val = flowID + val.Substring(2);
-                                        else if (val.Length == 5)
-                                            val = flowID + val.Substring(3);
-                                        break;
-                                    case "nodes":
-                                        string[] nds = val.Split('@');
-                                        string valExt = "";
-                                        foreach (string nd in nds)
-                                        {
-                                            if (nd == "" || nd == null)
-                                                continue;
-                                            string ndExt = nd.Clone() as string;
-                                            if (ndExt.Length == 3)
-                                                ndExt = flowID + ndExt.Substring(1);
-                                            else if (val.Length == 4)
-                                                ndExt = flowID + ndExt.Substring(2);
-                                            else if (val.Length == 5)
-                                                ndExt = flowID + ndExt.Substring(3);
-                                            ndExt = "@" + ndExt;
-                                            valExt += ndExt;
-                                        }
-                                        val = valExt;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                li.SetValByKey(dc.ColumnName, val);
-                            }
-                            li.Insert();
                         }
                         break;
                     case "Sys_Enum": //RptEmps.xml。

@@ -587,7 +587,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSortingMapAttrs()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=&FK_MapData=" +
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=&FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -664,7 +664,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoEvent()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/Action.aspx?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
         }
         /// <summary>
         /// 导出

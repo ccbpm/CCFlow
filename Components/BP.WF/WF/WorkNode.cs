@@ -4482,67 +4482,6 @@ namespace BP.WF
         }
         #endregion
 
-        #region 相关功能.
-        /// <summary>
-        /// 执行消息收听相关功能
-        /// </summary>
-        public void DoRefFunc_Listens()
-        {
-            Listens lts = new Listens();
-            lts.RetrieveByLike(ListenAttr.Nodes, "%" + this.HisNode.NodeID + "%");
-            string info = "";
-            foreach (Listen lt in lts)
-            {
-                ps = new Paras();
-                ps.SQL = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerList WHERE IsEnable=1 AND IsPass=1 AND FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
-                ps.Add("FK_Node", lt.FK_Node);
-                ps.Add("WorkID", this.WorkID);
-                DataTable dtRem = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                foreach (DataRow dr in dtRem.Rows)
-                {
-                    string FK_Emp = dr["FK_Emp"] as string;
-
-                    string title = lt.Title.Clone() as string;
-                    title = title.Replace("@WebUser.No", this.Execer);
-                    title = title.Replace("@WebUser.Name", this.ExecerName);
-                    title = title.Replace("@WebUser.FK_Dept", this.ExecerDeptNo);
-                    title = title.Replace("@WebUser.FK_DeptName", this.ExecerDeptName);
-
-                    string doc = lt.Doc.Clone() as string;
-                    doc = doc.Replace("@WebUser.No", this.Execer);
-                    doc = doc.Replace("@WebUser.Name", this.ExecerName);
-                    doc = doc.Replace("@WebUser.FK_Dept", this.ExecerDeptNo);
-                    doc = doc.Replace("@WebUser.FK_DeptName", this.ExecerDeptName);
-
-                    Attrs attrs = this.rptGe.EnMap.Attrs;
-                    foreach (Attr attr in attrs)
-                    {
-                        title = title.Replace("@" + attr.Key, this.rptGe.GetValStrByKey(attr.Key));
-                        doc = doc.Replace("@" + attr.Key, this.rptGe.GetValStrByKey(attr.Key));
-                    }
-
-                    if (this.town == null)
-                        BP.WF.Dev2Interface.Port_SendMsg(FK_Emp, title, doc,
-                            "LS" + FK_Emp + "_" + this.WorkID, BP.WF.SMSMsgType.Self,
-                            this.HisFlow.No, this.HisNode.NodeID, this.WorkID, 0);
-                    else
-                        BP.WF.Dev2Interface.Port_SendMsg(FK_Emp, title, doc,
-                            "LS" + FK_Emp + "_" + this.WorkID, BP.WF.SMSMsgType.Self,
-                        this.HisFlow.No, this.town.HisNode.NodeID, this.WorkID, 0);
-
-                    info += dr[GenerWorkerListAttr.FK_EmpText].ToString() + "、";
-                }
-            }
-
-            if (string.IsNullOrEmpty(info) == false)
-            {
-                //this.addMsg(SendReturnMsgFlag.End, "@流程已经走到最后一个节点，流程成功结束。");
-                //去掉最后一个符号
-                info = info.Remove(info.Length - 1);
-                this.addMsg(SendReturnMsgFlag.ListenInfo, "@当前执行已经通知给:" + info);
-            }
-        }
-        #endregion 相关功能.
 
         /// <summary>
         /// 工作流发送业务处理
@@ -5929,10 +5868,6 @@ namespace BP.WF
 
                 #endregion 处理子流程
 
-                #region 处理收听。
-                if (Glo.IsEnableSysMessage && this.IsStopFlow == false)
-                    this.DoRefFunc_Listens(); // 如果已经终止workflow,消息收听已经调用了.
-                #endregion
 
                 #region 生成单据
                 if (this.HisNode.HisPrintDocEnable == PrintDocEnable.PrintRTF && this.HisNode.BillTemplates.Count > 0)
@@ -7213,9 +7148,7 @@ namespace BP.WF
                 /* 如果流程完成 */
              //   CCWork cc = new CCWork(this);
                 // 在流程完成锁前处理消息收听，否则WF_GenerWorkerlist就删除了。
-                if (Glo.IsEnableSysMessage)
-                    this.DoRefFunc_Listens();
-
+              
 
                 if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
                 {
@@ -7240,8 +7173,6 @@ namespace BP.WF
                 if (this.HisNode.HisToNodes.Count == 0 && this.HisNode.IsStartNode)
                 {
                     // 在流程完成锁前处理消息收听，否则WF_GenerWorkerlist就删除了。
-                    if (Glo.IsEnableSysMessage)
-                        this.DoRefFunc_Listens();
 
                     /* 如果流程完成 */
                     this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, "符合流程完成条件", this.HisNode, this.rptGe);
@@ -7253,10 +7184,6 @@ namespace BP.WF
 
                 if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.IsPass)
                 {
-                    // 在流程完成锁前处理消息收听，否则WF_GenerWorkerlist就删除了。
-                    if (Glo.IsEnableSysMessage)
-                        this.DoRefFunc_Listens();
-
                     string stopMsg = this.HisFlowCompleteConditions.ConditionDesc;
                     /* 如果流程完成 */
                     string overMsg = this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, "符合流程完成条件:" + stopMsg, this.HisNode, this.rptGe);

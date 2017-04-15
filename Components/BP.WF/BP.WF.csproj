@@ -172,6 +172,7 @@
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_App_OneFlow.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_App_CH.cs" />
     <Compile Include="HttpHandler\WF_App_ACE.cs" />
+    <Compile Include="HttpHandler\WF_Admin.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />
@@ -299,7 +300,6 @@
     <Compile Include="Template\FlowNode.cs" />
     <Compile Include="Template\SysFormTree.cs" />
     <Compile Include="Template\Frm.cs" />
-    <Compile Include="Template\Listen.cs" />
     <Compile Include="Template\FlowSheet.cs" />
     <Compile Include="Template\NodeSheet.cs" />
     <Compile Include="Template\LabNote.cs" />
@@ -416,7 +416,6 @@
     <Compile Include="Xml\FlowBar.cs" />
     <Compile Include="Xml\EventList.cs" />
     <Compile Include="Xml\FeatureSet.cs" />
-    <Compile Include="Xml\SDK.cs" />
     <Compile Include="Xml\CondTypeXml.cs" />
     <Compile Include="Xml\WorkOpt.cs" />
     <Compile Include="Xml\WorkOptDtl.cs" />

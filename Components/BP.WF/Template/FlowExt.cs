@@ -1140,7 +1140,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/Action.aspx?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/Action.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
         public string DoDBSrc()
         {
@@ -1168,7 +1168,7 @@ namespace BP.WF.Template
         }
         public string DoBindFlowExt()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/BindFrms.aspx?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow";
         }
         /// <summary>
         /// 轨迹查看权限
@@ -1184,7 +1184,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/BatchStartFields.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow";
         }
         /// <summary>
         /// 执行流程数据表与业务表数据手工同步

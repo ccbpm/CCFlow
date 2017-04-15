@@ -691,7 +691,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/Action.aspx?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/Action.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
         public string DoDBSrc()
         {
@@ -711,7 +711,7 @@ namespace BP.WF.Template
         }
         public string DoBindFlowSheet()
         {
-            PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/Admin/BindFrms.aspx?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
+            PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/Admin/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
             return null;
         }
         /// <summary>
@@ -720,7 +720,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/BatchStartFields.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
+            PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
             return null;
         }
         /// <summary>

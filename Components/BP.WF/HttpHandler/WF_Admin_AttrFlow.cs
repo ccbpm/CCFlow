@@ -193,7 +193,6 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("HisCCRoleText");
             dt.Columns.Add("HisFrmEventsCount");	//消息&事件Count
             dt.Columns.Add("HisFinishCondsCount");	//流程完成条件Count
-            dt.Columns.Add("HisListensCount");	//消息收听Count
             DataRow dr;
             foreach (Node node in nodes)
             {
@@ -244,9 +243,6 @@ namespace BP.WF.HttpHandler
                 BP.WF.Template.Conds conds = new BP.WF.Template.Conds(BP.WF.Template.CondType.Flow, node.NodeID);
                 dr["HisFinishCondsCount"] = conds.Count;
 
-                //消息收听Count
-                BP.WF.Template.Listens lns = new BP.WF.Template.Listens(node.NodeID);
-                dr["HisListensCount"] = lns.Count;
 
                 dt.Rows.Add(dr);
             }

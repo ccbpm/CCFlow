@@ -969,14 +969,7 @@ namespace BP.WF.Template
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Message32.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
               //  map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "消息收听"; // "调用事件接口";
-                rm.ClassMethodName = this.ToString() + ".DoListen";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+ 
 
                 rm = new RefMethod();
                 rm.Title = "流程完成条件"; // "流程完成条件";
@@ -1067,7 +1060,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSortingMapAttrs()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
                    this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -1115,7 +1108,7 @@ namespace BP.WF.Template
             BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             if (nd.HisDeliveryWay != DeliveryWay.ByCCFlowBPM)
                 return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/NodeAccepterRole.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeAccepterRole.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 找人规则
@@ -1134,7 +1127,7 @@ namespace BP.WF.Template
         }
         public string DoTurn()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/TurnTo.aspx?FK_Node=" + this.NodeID;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID;
             //, "节点完成转向处理", "FrmTurn", 800, 500, 200, 300);
             //BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             //return nd.DoTurn();
@@ -1171,7 +1164,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCanReturnNodes()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/CanReturnNodes.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/CanReturnNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 撤销发送的节点
@@ -1179,7 +1172,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCanCancelNodes()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/CanCancelNodes.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/CanCancelNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
         }
         /// <summary>
         /// DXReport
@@ -1189,30 +1182,11 @@ namespace BP.WF.Template
         {
             return BP.WF.Glo.CCFlowAppPath + "WF/Admin/DXReport.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
-        public string DoPush2Current()
-        {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Listen.aspx?CondType=0&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=";
-        }
-        public string DoPush2Spec()
-        {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Listen.aspx?CondType=0&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=";
-        }
-        /// <summary>
-        /// 执行消息收听
-        /// </summary>
-        /// <returns></returns>
-        public string DoListen()
-        {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Listen.aspx?CondType=0&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=";
-        }
         public string DoFeatureSet()
         {
             return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FeatureSetUI.aspx?CondType=0&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=";
         }
-        public string DoShowSheets()
-        {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/ShowSheets.aspx?CondType=0&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=";
-        }
+       
         public string DoCond()
         {
             return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Condition.aspx?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
@@ -1239,7 +1213,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormTree()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/BindFrms.aspx?ShowType=FlowFrms&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&Lang=CH";
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&Lang=CH";
         }
         
         public string DoMapData()
@@ -1262,7 +1236,7 @@ namespace BP.WF.Template
         }
         public string DoAction()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Action.aspx?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/Action.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
         /// 单据打印
@@ -1270,7 +1244,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBill()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Bill.aspx?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/Bill.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 设置

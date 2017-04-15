@@ -546,27 +546,18 @@ namespace BP.WF.HttpHandler
             if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)
                 return "url@../DBInstall.htm";
 
-            Hashtable ht = new Hashtable();
-            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                ht.Add("OSModel", "0");
-            else
-                ht.Add("OSModel", "1");
-
             try
             {
                 // 执行升级
                 string str = BP.WF.Glo.UpdataCCFlowVer();
                 if (str == null)
                     str = "";
-                ht.Add("Msg", str);
+                return str;
             }
             catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
-
-            //生成Json.
-            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
 
         public string Login_Submit()

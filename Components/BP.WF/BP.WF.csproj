@@ -164,7 +164,6 @@
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_ImpExp.cs" />
     <Compile Include="HttpHandler\WF_Template.cs" />
     <Compile Include="HttpHandler\WF_CCForm.cs" />
-    <Compile Include="HttpHandler\WF_Admin_CCFormDesignerCCFromHandler.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_DialogCtr.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_MapExt.cs" />
     <Compile Include="HttpHandler\WF_MyFlow.cs" />

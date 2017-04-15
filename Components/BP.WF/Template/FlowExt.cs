@@ -544,12 +544,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = "批量修改节点属性";
-                //rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
-                //rm.ClassMethodName = this.ToString() + ".DoFeatureSetUI()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
+             
 
                 rm = new RefMethod();
                 rm.Title = "流程事件&消息"; // "调用事件接口";
@@ -1150,14 +1145,7 @@ namespace BP.WF.Template
         {
             return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/DTSBTable.aspx?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
-        /// <summary>
-        /// 批量修改节点属性.
-        /// </summary>
-        /// <returns></returns>
-        public string DoFeatureSetUI()
-        {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FeatureSetUI.aspx?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
-        }
+       
         /// <summary>
         /// 批量修改节点属性
         /// </summary>
@@ -1562,7 +1550,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRunIt()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/TestFlow.aspx?FK_Flow=" + this.No + "&Lang=CH";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/TestFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 执行检查

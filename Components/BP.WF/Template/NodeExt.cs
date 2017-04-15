@@ -911,13 +911,13 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "设置独立表单树权限";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
-                rm.ClassMethodName = this.ToString() + ".DoNodeFormTree";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "设置独立表单树权限";
+                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                //rm.ClassMethodName = this.ToString() + ".DoNodeFormTree";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "实验中的功能";
+                //map.AddRefMethod(rm);
 
 
                 rm = new RefMethod();
@@ -1079,15 +1079,7 @@ namespace BP.WF.Template
             PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "WF/Comm/Port/DeptTree.aspx?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&RefNo=" + DataType.CurrentDataTime, 500, 550);
             return null;
         }
-        /// <summary>
-        /// 设置独立表单树权限
-        /// </summary>
-        /// <returns></returns>
-        public string DoNodeFormTree()
-        {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" +
-                   this.NodeID + "&RefNo=" + DataType.CurrentDataTime;
-        }
+       
         /// <summary>
         /// 制度
         /// </summary>
@@ -1190,14 +1182,10 @@ namespace BP.WF.Template
             return BP.WF.Glo.CCFlowAppPath + "WF/Admin/DXReport.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
       
-        public string DoFeatureSet()
-        {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FeatureSetUI.aspx?CondType=0&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=";
-        }
       
         public string DoCond()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Condition.aspx?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Condition.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
         }
         /// <summary>
         /// 设计傻瓜表单

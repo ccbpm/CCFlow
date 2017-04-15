@@ -413,11 +413,8 @@
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.aspx" />
-    <Content Include="WF\Admin\Bill.aspx" />
     <Content Include="WF\Admin\BindFrms.aspx" />
     <Content Include="WF\Admin\BindFrms.htm" />
-    <Content Include="WF\Admin\CanCancelNodes.aspx" />
-    <Content Include="WF\Admin\CanReturnNodes.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
@@ -1195,7 +1192,6 @@
     <Content Include="WF\Admin\DBInstall.aspx" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\DoType.aspx" />
-    <Content Include="WF\Admin\DoUrlTest.aspx" />
     <Content Include="WF\Admin\FeatureSetUI.aspx" />
     <Content Include="WF\Admin\FileUploadEUI.aspx" />
     <Content Include="WF\Admin\FindWorker\ByDept.aspx" />
@@ -8395,33 +8391,12 @@
     <Compile Include="WF\Admin\AttrNode\TurnToDeal.aspx.designer.cs">
       <DependentUpon>TurnToDeal.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\Bill.aspx.cs">
-      <DependentUpon>Bill.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Bill.aspx.designer.cs">
-      <DependentUpon>Bill.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\BindFrms.aspx.cs">
       <DependentUpon>BindFrms.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\BindFrms.aspx.designer.cs">
       <DependentUpon>BindFrms.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CanCancelNodes.aspx.cs">
-      <DependentUpon>CanCancelNodes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CanCancelNodes.aspx.designer.cs">
-      <DependentUpon>CanCancelNodes.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CanReturnNodes.aspx.cs">
-      <DependentUpon>CanReturnNodes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CanReturnNodes.aspx.designer.cs">
-      <DependentUpon>CanReturnNodes.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx.cs">
       <DependentUpon>ByFlows.aspx</DependentUpon>
@@ -8792,13 +8767,6 @@
     </Compile>
     <Compile Include="WF\Admin\DoType.aspx.designer.cs">
       <DependentUpon>DoType.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\DoUrlTest.aspx.cs">
-      <DependentUpon>DoUrlTest.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\DoUrlTest.aspx.designer.cs">
-      <DependentUpon>DoUrlTest.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FeatureSetUI.aspx.cs">
       <DependentUpon>FeatureSetUI.aspx</DependentUpon>

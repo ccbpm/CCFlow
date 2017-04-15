@@ -31,50 +31,21 @@
         //页面启动函数.
         $(function () {
 
-            //            if (plant == "CCFlow") {
-            //                window.location.href = "";
-            //                return;
-            //            } else {
-            //                window.location.href = "";
-            //                return;
-            //            }
-
-
-            $("#Msg").html("正在加载,请稍后......");
-
             //初始化groupID.
-            var no = GetQueryString("No");
+            var flowNo = GetQueryString("FK_Flow");
+            var nodeID = GetQueryString("FK_Node");
 
-            /*
-            *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
-            */
-            //调用公共类库的方法:  绑定枚举, 性别.
-            GenerBindEnumKey("DDL_XB", "XB");
+            var url = window.location.href;
 
-            //调用公共类库的方法: 绑定外键表. 班级.
-            GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Student_Init&No=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    data = JSON.parse(data);
-
-                    //调用公共类库的方法:执行批量主表赋值
-                    GenerFullAllCtrlsVal(data);
-                    return;
-                }
-            });
-
-            $("#Msg").html("");
+            if (plant == "CCFlow") {
+                url = url.replace('.htm', '.aspx');
+                window.location.href = url;
+                return;
+            } else {
+                url = url.replace('.htm', '.jsp');
+                window.location.href = url;
+                return;
+            }
         });
     </script>
 </head>

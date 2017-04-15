@@ -8,7 +8,6 @@
     <title>CCForm 表单设计器 For Html5 </title>
 
     <!-- 引用配置文件.-->
-    <script src="./js/config.js" type="text/javascript" ></script>
 
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/default/easyui.css" />
@@ -97,7 +96,7 @@
 
         function Exp() {
 
-            var url = "/WF/Admin/XAP/DoPort.aspx?DoType=DownFormTemplete&FK_MapData=" + CCForm_FK_MapData;
+            var url = "../../Admin/XAP/DoPort.aspx?DoType=DownFormTemplete&FK_MapData=" + CCForm_FK_MapData;
             window.open(url, 'exp');
           //  CCForm_ShowDialog(url, '导入表单');
             //  CCForm_ShowDialog(url, '导出');
@@ -107,7 +106,7 @@
 
         function Imp() {
 
-            var url = "/WF/Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0&FK_Flow=";
+            var url = "../../Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0&FK_Flow=";
             // window.open(url, 'exp');
             CCForm_ShowDialog(url, '导入表单');
 
@@ -118,20 +117,20 @@
 
         function FoolFormDesigner() {
 
-            var url = "/WF/Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
+            var url = "../../Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
             CCForm_ShowDialog(url, '傻瓜表单设计器');
             return;
         }
 
         function Mobile() {
-            var url = "/WF/Admin/AttrNode/SortingMapAttrs.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&FK_Flow=" + GetDateString();
+            var url = "../../Admin/AttrNode/SortingMapAttrs.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&FK_Flow=" + GetDateString();
             CCForm_ShowDialog(url, '手机表单设计器');
             return;
         }
 
         function Srcipt() {
 
-            var url = "/WF/Admin/FoolFormDesigner/MapExt/InitScript.aspx?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
+            var url = "../../Admin/FoolFormDesigner/MapExt/InitScript.aspx?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
 
             CCForm_ShowDialog(url, 'JavaScript编程');
 

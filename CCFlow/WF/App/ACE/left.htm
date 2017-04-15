@@ -1,9 +1,329 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
+﻿<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>驰骋工作流引擎</title>
+		<meta name="keywords" content="驰骋工作流引擎" />
+		<meta name="description" content="驰骋工作流引擎" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- basic styles -->
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+
+        <script type="text/javascript">
+            function ShowErr() {
+
+                alert('该功能为二次开发提供的装饰功能.');
+            }
+        </script>
+	</head>
+
 <body>
 
+		<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar">
+					<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+						<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+							<button class="btn btn-success" onclick="ShowErr()">
+								<i class="icon-signal"></i>
+							</button>
+
+							<button class="btn btn-info" onclick="ShowErr()">
+								<i class="icon-pencil"></i>
+							</button>
+
+							<button class="btn btn-warning" onclick="ShowErr()">
+								<i class="icon-group"></i>
+							</button>
+
+							<button class="btn btn-danger" onclick="ShowErr()">
+								<i class="icon-cogs"></i>
+							</button>
+						</div>
+
+						<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+							<span class="btn btn-success"></span>
+
+							<span class="btn btn-info"></span>
+
+							<span class="btn btn-warning"></span>
+
+							<span class="btn btn-danger"></span>
+						</div>
+					</div><!-- #sidebar-shortcuts -->
+
+					<ul class="nav nav-list">
+						<li class="active">
+							<a href="welcome.htm" target="main">
+								<i class="icon-dashboard"></i>
+								<span class="menu-text"> 控制台 </span>
+							</a>
+						</li>
+
+						<li>
+							<a href="Start.htm" target="main">
+								<i class="icon-text-width"></i>
+								<span class="menu-text"> 发起 </span>
+							</a>
+						</li>
+
+
+                       <li>
+							<a href="Todolist.htm" target="main" >
+								<i class="icon-text-width"></i>
+								<span class="menu-text"> 待办 </span>
+							</a>
+						</li>
+
+                       
+                       <li>
+							<a href="runing.htm" target="main" >
+								<i class="icon-text-width"></i>
+								<span class="menu-text"> 在途 </span>
+							</a>
+						</li>
+
+
+                        <li>
+							<a href="search.htm" target="main" >
+								<i class="icon-text-width"></i>
+								<span class="menu-text"> 查询 </span>
+							</a>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 高级功能 </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="tables.html">
+										<i class="icon-double-angle-right"></i>
+										简单 &amp; 动态
+									</a>
+								</li>
+
+								<li>
+									<a href="jqgrid.html">
+										<i class="icon-double-angle-right"></i>
+										jqGrid plugin
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-edit"></i>
+								<span class="menu-text"> 表单 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="form-elements.html">
+										<i class="icon-double-angle-right"></i>
+										表单组件
+									</a>
+								</li>
+
+								<li>
+									<a href="form-wizard.html">
+										<i class="icon-double-angle-right"></i>
+										向导提示 &amp; 验证
+									</a>
+								</li>
+
+								<li>
+									<a href="wysiwyg.html">
+										<i class="icon-double-angle-right"></i>
+										编辑器
+									</a>
+								</li>
+
+								<li>
+									<a href="dropzone.html">
+										<i class="icon-double-angle-right"></i>
+										文件上传
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="widgets.html">
+								<i class="icon-list-alt"></i>
+								<span class="menu-text"> 插件 </span>
+							</a>
+						</li>
+
+						<li>
+							<a href="calendar.html">
+								<i class="icon-calendar"></i>
+
+								<span class="menu-text">
+									日历
+									<span class="badge badge-transparent tooltip-error" title="2&nbsp;Important&nbsp;Events">
+										<i class="icon-warning-sign red bigger-130"></i>
+									</span>
+								</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="gallery.html">
+								<i class="icon-picture"></i>
+								<span class="menu-text"> 相册 </span>
+							</a>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-tag"></i>
+								<span class="menu-text"> 更多页面 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="profile.html">
+										<i class="icon-double-angle-right"></i>
+										用户信息
+									</a>
+								</li>
+
+								<li>
+									<a href="inbox.html">
+										<i class="icon-double-angle-right"></i>
+										收件箱
+									</a>
+								</li>
+
+								<li>
+									<a href="pricing.html">
+										<i class="icon-double-angle-right"></i>
+										售价单
+									</a>
+								</li>
+
+								<li>
+									<a href="invoice.html">
+										<i class="icon-double-angle-right"></i>
+										购物车
+									</a>
+								</li>
+
+								<li>
+									<a href="timeline.html">
+										<i class="icon-double-angle-right"></i>
+										时间轴
+									</a>
+								</li>
+
+								<li>
+									<a href="login.html">
+										<i class="icon-double-angle-right"></i>
+										登录 &amp; 注册
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-file-alt"></i>
+
+								<span class="menu-text">
+									其他页面
+									<span class="badge badge-primary ">5</span>
+								</span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="faq.html">
+										<i class="icon-double-angle-right"></i>
+										帮助
+									</a>
+								</li>
+
+								<li>
+									<a href="error-404.html">
+										<i class="icon-double-angle-right"></i>
+										404错误页面
+									</a>
+								</li>
+
+								<li>
+									<a href="error-500.html">
+										<i class="icon-double-angle-right"></i>
+										500错误页面
+									</a>
+								</li>
+
+								<li>
+									<a href="grid.html">
+										<i class="icon-double-angle-right"></i>
+										网格
+									</a>
+								</li>
+
+								<li>
+									<a href="blank.html">
+										<i class="icon-double-angle-right"></i>
+										空白页面
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul><!-- /.nav-list -->
+
+					<div class="sidebar-collapse" id="sidebar-collapse">
+						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+					</div>
+				 
+				</div>
+				 
+			</div>
+		 
 </body>
 </html>
+

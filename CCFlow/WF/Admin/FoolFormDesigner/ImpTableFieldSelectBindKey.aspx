@@ -13,6 +13,7 @@
 <legend>枚举类型</legend>
 <ul>
 <% 
+    
    BP.Sys.SysEnumMains ens = new BP.Sys.SysEnumMains();
    ens.RetrieveAll();
     

@@ -61,50 +61,50 @@
 
             //普通字段类型.
             if (ftype == "1") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + mypk;
+                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + mypk;
                 title = '字段String属性';
             }
 
             //数值字段类型.
             if (ftype == "2") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
                 title = '字段Int属性';
             }
 
             //数值字段类型.
             if (ftype == "3") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
                 title = '字段Float属性';
             }
 
             //数值字段类型.
             if (ftype == "5") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
                 title = '字段Double属性';
             }
 
             //数值字段类型.
             if (ftype == "8") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
+                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=" + mypk;
                 title = '字段Moeny属性';
             }
 
 
             //日期类型date.
             if (ftype == "6") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
+                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
                 title = '字段Date属性';
             }
 
             //日期类型datetime.
             if (ftype == "7") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
+                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=" + mypk;
                 title = '字段DateTime属性';
             }
 
             // boolen 类型.
             if (ftype == "4") {
-                url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=" + mypk;
+                url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=" + mypk;
                 title = '字段Boolen属性';
             }
 
@@ -120,14 +120,14 @@
 
         function EditEnum(fk_mapdata, mypk, enumKey) {
 
-            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+            var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
             OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });
         }
         function EditTable(fk_mapdata, fk_sfTable, mypk) {
 
-            var url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + mypk;
+            var url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + mypk;
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });
@@ -141,7 +141,7 @@
         var isInser = "";
         function EditDtl(fk_mapData, dtlKey) {
 
-            var url = "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=" + dtlKey;
+            var url = "../../Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=" + dtlKey;
 
             OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -150,7 +150,7 @@
 
         function EditMapDtl(dtlKey) {
 
-            var url = "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=" + dtlKey;
+            var url = "../../Comm/En.htm?EnsName=BP.WF.Template.MapDtlExts&PK=" + dtlKey;
 
             OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;

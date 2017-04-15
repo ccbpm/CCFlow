@@ -79,7 +79,7 @@
                             [<a href="javascript:WinOpen('../CCFormDesigner/FormDesigner.htm?FK_MapData=ND<%=nodeIDstr %>');">
                                 设计自由表单(Html5)</a>]
 
-                                 [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
+                                 [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.htm?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
                                 设计自由表单(Silverlight)</a>]
 
                                   [<a href="javascript:WinOpen('../AttrNode/SortingMapAttrs.htm?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
@@ -250,7 +250,7 @@
                          [<a href="javascript:WinOpen('../CCFormDesigner/FormDesigner.htm?FK_MapData=ND<%=nodeIDstr %>');">
                                 设计自由表单(Html5)</a>]
 
-                                 [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
+                                 [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.htm?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
                                 设计自由表单(Silverlight)</a>]
                                 [手机表单]-[设计傻瓜表单]
                           </li>

@@ -84,7 +84,7 @@
                 <asp:CheckBox ID="CB_Station" Text="抄送到岗位" runat="server" />
             </td>
             <td>
-                <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCStations&NodeID=<%=nd.NodeID %>&r=<%=sj%>&ShowWay=None')">
+                <a href="javascript:WinOpen('../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCStations&NodeID=<%=nd.NodeID %>&r=<%=sj%>&ShowWay=None')">
                     请选择岗位(<%=nss.Count %>)</a>
                     岗位计算规则:<asp:DropDownList ID="DDL_CCStaWay" runat="server">
                 </asp:DropDownList>
@@ -95,7 +95,7 @@
                 <asp:CheckBox ID="CB_Dept" Text="抄送到部门" runat="server" />
             </td>
             <td>
-                <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCDepts&NodeID=<%=nd.NodeID %>&r=<%=sj%>')">
+                <a href="javascript:WinOpen('../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCDepts&NodeID=<%=nd.NodeID %>&r=<%=sj%>')">
                     请选择部门(<%=ndepts.Count %>)</a>
             </td>
         </tr>
@@ -104,7 +104,7 @@
                 <asp:CheckBox ID="CB_Emp" Text="抄送到人员" runat="server" />
             </td>
             <td>
-                <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCEmps&NodeID=<%=nd.NodeID %>&r=<%=sj%>')">
+                <a href="javascript:WinOpen('../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.CCs&EnName=BP.WF.Template.CC&AttrKey=BP.WF.Template.CCEmps&NodeID=<%=nd.NodeID %>&r=<%=sj%>')">
                 请选择人员(<%=nEmps.Count %>)</a>
             </td>
         </tr>

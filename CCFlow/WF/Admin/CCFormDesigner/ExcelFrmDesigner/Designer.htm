@@ -3,8 +3,8 @@
 <head>
 	<title></title>
 	<meta charset="utf-8">
-	<link href="/WF/Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-	<link href="/WF/Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+	<link href="../../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+	<link href="../../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
 	<!--<link href="/WF/Comm/JS/EasyUI/themes/default/layout.css" rel="stylesheet" type="text/css" />-->
 	<style>
 		html, body
@@ -29,11 +29,11 @@
 			background-color: #eeeeff;
 		}
 	</style>
-	<script src="/WF/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
-	<script src="/WF/Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
-	<script src="/WF/Scripts/EasyUIUtility.js" type="text/javascript"></script>
-	<script type="text/javascript" src="/WF/Scripts/QueryString.js"></script>
-	<script type="text/javascript" src="/WF/Scripts/config.js"></script>
+	<script src="../../WF/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="../../WF/Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+	<script src="../../WF/Scripts/EasyUIUtility.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../WF/Scripts/QueryString.js"></script>
+	<script type="text/javascript" src="../../WF/Scripts/config.js"></script>
 	<script type="text/javascript" src="./Excel.js"></script>
 	<script type="text/javascript">
 		var Events = {
@@ -251,7 +251,7 @@
 		//初始化grid
 		function InitTable(tableId, id) {
 			$("#" + tableId).datagrid({
-				url: "/WF/Admin/CCFormDesigner/handler.ashx?DoType=FiledsList_Init&FK_MapData=" + id + "&m=" + Math.random(), //TODO: 改成专用的？
+				url: "../handler.ashx?DoType=FiledsList_Init&FK_MapData=" + id + "&m=" + Math.random(), //TODO: 改成专用的？
 				idField: 'KeyOfEn',
 				striped: true,
 				showFooter: false,
@@ -310,7 +310,7 @@
 
 		//打开【字段列表】页面
 		function OpenFieldsList() {
-			var url = "/WF/Admin/CCFormDesigner/FiledsList.htm?FK_MapData=" + _FormNo;
+			var url = "../FiledsList.htm?FK_MapData=" + _FormNo;
 			var w = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
 			alert("重新加载【字段列表】");
 		}
@@ -540,7 +540,7 @@
 			//TODO: 需要注意：字段“英文名”不能和单元格地址类似，例如 ZD1
 
 			var FK_MapData = table == "main" ? _FormNo : table;
-			var url = "/WF/Admin/FoolFormDesigner/FieldTypeList.htm?FK_MapData=" + FK_MapData;
+			var url = "../FieldTypeList.htm?FK_MapData=" + FK_MapData;
 
 			//打开新建子表页面
 			// var newcolumn = showModalDialog(url);

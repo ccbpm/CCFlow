@@ -431,9 +431,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "DesignerNodeFormSL": //设计表单
-            //url = "../CCFormDesigner/FormDesigner.aspx?FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
-            url = "../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
-           // url = "../CCFormDesigner/CCFormDesignerSL.aspx?FK_MapData=ND201&UserNo=admin&SID=uwk4xzkwrofapals2rziof4u";
+            url = "../CCFormDesigner/CCFormDesignerSL.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
             if (window.parent && 1==3) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "自由表单" + FK_Node, url, item.iconCls);
             } else {

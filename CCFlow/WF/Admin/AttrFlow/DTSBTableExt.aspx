@@ -56,7 +56,7 @@
     font-family: 黑体;
     font-weight: bolder;
     color: #FFFFFF;
-    background: url('/DataUser/Style/Img/TitleMsgLong.png');
+    background: url('../../../DataUser/Style/Img/TitleMsgLong.png');
     width: 238px;
     margin-left: -10px;
     padding-left: 0px;

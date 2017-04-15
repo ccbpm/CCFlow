@@ -89,7 +89,7 @@ namespace CCFlow.WF.Admin.FindWorker
 
             cc.CCIsStations = this.CB_Station.Checked; //到岗位.
             //抄送到岗位的计算方式?
-            cc.CCStaWay = (CCStaWay) this.DDL_CCStaWay.SelectedIndex; 
+            cc.CCStaWay = (CCStaWay)this.DDL_CCStaWay.SelectedIndex;
 
             cc.CCIsDepts = this.CB_Dept.Checked; //抄送到部门.
             cc.CCIsEmps = this.CB_Emp.Checked; // 抄送到人员.
@@ -98,7 +98,7 @@ namespace CCFlow.WF.Admin.FindWorker
             cc.CCIsSQLs = this.CB_SQL.Checked;
             cc.CCSQL = this.TB_SQL.Text;
 
-            if (this.CB_SQL.Checked && cc.CCSQL.Length==0)
+            if (this.CB_SQL.Checked && cc.CCSQL.Length == 0)
             {
                 BP.Sys.PubClass.Alert("@您设置了按照SQL抄送，请您设置一个SQL语句，返回No,Name两个列,SQL支持表达式。");
                 return;

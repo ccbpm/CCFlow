@@ -1,4 +1,4 @@
-﻿<%@ Page Title="表单启用规则" Language="C#" MasterPageFile="~/WF/Admin/WinOpen.master" AutoEventWireup="true" CodeBehind="FrmEnableRole.aspx.cs" Inherits="CCFlow.WF.Admin.FlowFrm.FrmEnableRole" %>
+﻿<%@ Page Title="表单启用规则" Language="C#" MasterPageFile="~/WF/Admin/WinOpen.master" AutoEventWireup="true" CodeBehind="BindFrmsFrmEnableRole.aspx.cs" Inherits="CCFlow.WF.Admin.FlowFrm.FrmEnableRole" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
 <style  type="text/css" >

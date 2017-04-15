@@ -35,7 +35,7 @@
 
         //显示处理人.
         function FindWorker(nodeID) {
-            var url = "../FindWorker/NodeAccepterRole.aspx?FK_Node=" + nodeID;
+            var url = "../AttrNode/NodeAccepterRole.htm?FK_Node=" + nodeID;
             window.open(url, 'FindWorker', 'height=720, width=1200, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
         }
         function FindWorkerByStations(nodeID) {
@@ -52,12 +52,12 @@
         }
 
         function NodeCCRole(nodeID) {
-            var url = "../FindWorker/NodeCCRole.aspx?FK_Node=" + nodeID;
+            var url = "../AttrNode/NodeCCRole.htm?FK_Node=" + nodeID;
             window.open(url, 'NodeCCRole', 'height=560, width=660, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
         }
 
         function Action(nodeID, flowNo) {
-            var url = "../Action.aspx?NodeID=" + nodeID + '&FK_Flow=' + flowNo;
+            var url = "../AttrNode/Action.htm?NodeID=" + nodeID + '&FK_Flow=' + flowNo;
             window.open(url, 'Action', 'height=auto, width=1050, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
             window.parent.addTab('Action', '消息&事件', url);
 

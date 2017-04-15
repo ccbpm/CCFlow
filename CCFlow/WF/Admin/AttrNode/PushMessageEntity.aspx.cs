@@ -264,12 +264,12 @@ namespace CCFlow.WF.Admin.AttrNode
             }
 
             //转向他.
-            this.Response.Redirect("PushMessage.aspx?FK_Node=" + this.FK_Node + "&FK_Event=" + this.FK_Event + "&MyPK" + this.MyPK, true);
+            this.Response.Redirect("PushMessage.htm?FK_Node=" + this.FK_Node + "&FK_Event=" + this.FK_Event + "&MyPK" + this.MyPK, true);
         }
 
         protected void Btn_Back_Click(object sender, EventArgs e)
         {
-            this.Response.Redirect("PushMessage.aspx?FK_Node=" + this.FK_Node + "&FK_Event=" + this.FK_Event + "&MyPK" + this.MyPK, true);
+            this.Response.Redirect("PushMessage.htm?FK_Node=" + this.FK_Node + "&FK_Event=" + this.FK_Event + "&MyPK" + this.MyPK, true);
         }
     }
 }

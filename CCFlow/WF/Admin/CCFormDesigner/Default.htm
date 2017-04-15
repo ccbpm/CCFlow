@@ -1,6 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CCFlow.WF.Admin.ccformDesigner.Default" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta charset="UTF-8" />
@@ -196,7 +194,7 @@
 
                 if (url.indexOf('AppMenu.aspx') == 0) {
                     url = '../../../GPM/' + url;
-                } 
+                }
             }
 
             if ($('#tabs').tabs('exists', title)) {
@@ -213,15 +211,15 @@
                     });
                 }
                 //此处暂时屏掉刷新当前已经打开的页，发现如果切换非当前的已经打开的流程设计图时，会导致IE崩溃
-//                else {
-//                    var iwin = $("#tabs div[id='" + id + "']").find("iframe")[0].contentWindow;
-//                    if (iwin.location.href != url) {
-//                        iwin.location.href = url;
-//                    }
-//                    else {
-//                        iwin.location.reload();  //此处重新刷新当前页面
-//                    }
-//                }
+                //                else {
+                //                    var iwin = $("#tabs div[id='" + id + "']").find("iframe")[0].contentWindow;
+                //                    if (iwin.location.href != url) {
+                //                        iwin.location.href = url;
+                //                    }
+                //                    else {
+                //                        iwin.location.reload();  //此处重新刷新当前页面
+                //                    }
+                //                }
             } else {
                 var content = createFrame(url);
                 $('#tabs').tabs('add', {

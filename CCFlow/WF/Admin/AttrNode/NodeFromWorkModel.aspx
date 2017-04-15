@@ -206,8 +206,8 @@
                 呈现风格：
                 <asp:RadioButton ID="RB_tree" runat="server" Checked=true Text="表单树" GroupName="x22axy" />
                 <asp:RadioButton ID="RB_tab" runat="server" Text="Tab标签页" GroupName="x22axy" />
-                [<a href="javascript:WinOpen('/WF/Admin/BindFrms.aspx?FK_Node=<%=nd.NodeID%>&FK_Flow=<%=nd.FK_Flow%>&DoType=SelectedFrm')">
-                    绑定/取消绑定</a> ] [ <a href="javascript:WinOpen('/WF/Admin/BindFrms.aspx?FK_Node=<%=nd.NodeID%>&FK_Flow=<%=nd.FK_Flow%>')">
+                [<a href="javascript:WinOpen('/WF/Admin/BindFrms.htm?FK_Node=<%=nd.NodeID%>&FK_Flow=<%=nd.FK_Flow%>&DoType=SelectedFrm')">
+                    绑定/取消绑定</a> ] [ <a href="javascript:WinOpen('/WF/Admin/BindFrms.htm?FK_Node=<%=nd.NodeID%>&FK_Flow=<%=nd.FK_Flow%>')">
                         设置表单字段控件权限</a>]
                 <br />
                 <font color="gray">
@@ -243,7 +243,7 @@
                 <asp:RadioButton ID="RB_WebOffice_FoolForm" runat="server" Text="傻瓜表单显示" GroupName="RBFRm" />
 
                 <ul>
-                <li> <a href="javascript:WinOpen('/WF/Admin/BindFrms.aspx?FK_Node=<%=nd.NodeID%>&FK_Flow=<%=nd.FK_Flow%>&DoType=SelectedFrm')">
+                <li> <a href="javascript:WinOpen('/WF/Admin/BindFrms.htm?FK_Node=<%=nd.NodeID%>&FK_Flow=<%=nd.FK_Flow%>&DoType=SelectedFrm')">
                     设置附件权限</a>  - 
                     <a href="javascript:WinOpen('/WF/Comm/UIEn.aspx?EnName=BP.WF.Template.BtnLabExtWebOffice&PK=<%=nd.NodeID%>&FK_Flow=<%=nd.FK_Flow%>')" >
                         设置公文按钮权限</a>

@@ -383,7 +383,7 @@ namespace CCFlow.WF.Admin
                 //ddl.SetSelectItem(fn.FrmEnableRoleInt); //设置权限控制方案.
                 //this.Pub1.AddTD(ddl);
 
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('FrmEnableRole.aspx?FK_Node=" + fn.FK_Node + "&FK_MapData=" + fn.FK_Frm + "')\">设置(" + fn.FrmEnableRoleText + ")</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('BindFrmsFrmEnableRole.aspx?FK_Node=" + fn.FK_Node + "&FK_MapData=" + fn.FK_Frm + "')\">设置(" + fn.FrmEnableRoleText + ")</a>");
 
                 CheckBox cb = new CheckBox();
                 //cb.ID = "CB_IsEdit_" + md.No;

@@ -358,7 +358,7 @@ function NodeProperty_Funs(item) {
             break;
      
         case "NodeAccepterRole": // 工作处理人. NodeFromWorkModel
-            url = "../FindWorker/NodeAccepterRole.aspx?FK_Node=" + FK_Node + "&Lang=CH";
+            url = "../AttrNode/NodeAccepterRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "接收人" + FK_Node, url, item.iconCls);
             } else {
@@ -371,7 +371,7 @@ function NodeProperty_Funs(item) {
             break;
            // Glo.OpenDialog(Glo.BPMHost + url, "执行", 500, 400);
         case "NodeCCRole": // 抄送人规则.
-            url = "../FindWorker/NodeCCRole.aspx?FK_Node=" + FK_Node + "&Lang=CH";
+            url = "../AttrNode/NodeCCRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "抄送人规则" + FK_Node, url, item.iconCls);
             } else {
@@ -379,7 +379,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "NodeEvent": // 节点事件.
-            url = "./../Action.aspx?NodeID=" + FK_Node + "&FK_Flow=" + CCBPM_Data_FK_Flow;
+            url = "./../AttrNode/Action.htm?NodeID=" + FK_Node + "&FK_Flow=" + CCBPM_Data_FK_Flow;
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "节点事件" + FK_Node, url, item.iconCls);
             } else {
@@ -449,7 +449,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "bindflowfrms": //绑定独立表单
-            url = "../BindFrms.aspx?ShowType=FlowFrms&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
+            url = "../BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "FRM", "绑定独立表单" + FK_Node, url, item.iconCls);
             } else {

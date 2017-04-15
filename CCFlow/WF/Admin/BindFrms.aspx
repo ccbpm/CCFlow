@@ -7,7 +7,7 @@
     }
 
     function BindFrms(nodeid, fk_flow) {
-        var url = "BindFrms.htm?FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=SelectedFrm';
+        var url = "BindFrmsDtl.htm?FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=SelectedFrm';
         window.location.href = url;
     }
 

@@ -19,10 +19,6 @@ namespace CCFlow.WF.Admin.FindWorker
 
             this.Pub1.MenuSelfBegin();
 
-            if (pageID == "WorkFlow")
-                this.Pub1.MenuSelfItem("WorkFlow.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + FK_node, "常用模式", "_self", true);
-            else
-                this.Pub1.MenuSelfItem("WorkFlow.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + FK_node, "常用模式", "_self", false);
 
             if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
             {
@@ -41,10 +37,6 @@ namespace CCFlow.WF.Admin.FindWorker
                 else
                     this.Pub1.MenuSelfItem("ByDept.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + FK_node, "按部门", "_self", false);
 
-                if (pageID == "Etc")
-                    this.Pub1.MenuSelfItem("Etc.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + FK_node, "特定人员", "_self", true);
-                else
-                    this.Pub1.MenuSelfItem("Etc.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + FK_node, "特定人员", "_self", false);
             }
             this.Pub1.MenuSelfEnd();
         }

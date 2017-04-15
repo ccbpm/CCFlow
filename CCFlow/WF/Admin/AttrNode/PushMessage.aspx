@@ -10,7 +10,7 @@
         }
         if (window.confirm('您确定要删除吗?') == false)
             return;
-        window.location.href = 'PushMessage.aspx?MyPK='+mypk+'&DoType=Del&FK_Node='+nodeid;
+        window.location.href = 'PushMessage.htm?MyPK='+mypk+'&DoType=Del&FK_Node='+nodeid;
     }
 </script>
 </asp:Content>

@@ -142,10 +142,10 @@ namespace CCFlow.WF.Admin.XAP
                             //this.Response.Redirect("./Comm/RefFunc/UIEn.aspx?EnsName=" + this.EnsName + "&No=" + this.PK, true);
                     }
                 case "FrmLib": //"表单库"
-                    this.Response.Redirect("../BindFrms.aspx?ShowType=SelectedFrm&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&Lang=" + BP.Web.WebUser.SysLang, true);
+                    this.Response.Redirect("../BindFrms.htm?ShowType=SelectedFrm&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&Lang=" + BP.Web.WebUser.SysLang, true);
                     break;
                 case "FlowFrms": //"独立表单"
-                    this.Response.Redirect("../BindFrms.aspx?ShowType=FlowFrms&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&Lang=" + BP.Web.WebUser.SysLang, true);
+                    this.Response.Redirect("../BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&Lang=" + BP.Web.WebUser.SysLang, true);
                     break;
                 case "StaDef": // 节点岗位.
                     this.Response.Redirect("../../Comm/RefFunc/Dot2Dot.aspx?EnName=BP.WF.Template.NodeSheet&AttrKey=BP.WF.Template.NodeStations&PK=" + this.PK + "&NodeID=" + this.PK + "&RunModel=0&FLRole=0&FJOpen=0&r=" + this.PK, true);

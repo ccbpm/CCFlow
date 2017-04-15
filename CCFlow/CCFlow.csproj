@@ -372,7 +372,9 @@
     <Content Include="WF\Activex\WebOffice6.cab" />
     <Content Include="WF\Admin\AttrFlow\API.htm" />
     <Content Include="WF\Admin\AttrFlow\APICode.aspx" />
+    <Content Include="WF\Admin\AttrFlow\APICode.htm" />
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.aspx" />
+    <Content Include="WF\Admin\AttrFlow\APICodeFEE.htm" />
     <Content Include="WF\Admin\AttrFlow\AutoStart.htm" />
     <Content Include="WF\Admin\AttrFlow\BindingForms.aspx" />
     <Content Include="WF\Admin\AttrFlow\CheckFlow.htm" />

@@ -68,6 +68,11 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+
+        public string CCFormDesignerSL_Init()
+        {
+            return BP.WF.Glo.SilverlightDownloadUrl;
+        }
         public string DesignerFrm_Init()
         {
             //根据不同的表单类型转入不同的表单设计器上去.

@@ -406,7 +406,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDesignerSL()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/CCFormDesigner/CCFormDesignerSL.aspx?FK_MapData="+this.No+"&UserNo="+Web.WebUser.No+"&SID="+BP.Web.WebUser.SID;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/CCFormDesigner/CCFormDesignerSL.htm?FK_MapData="+this.No+"&UserNo="+Web.WebUser.No+"&SID="+BP.Web.WebUser.SID;
         }
         /// <summary>
         /// 启动自由表单设计器(h5)

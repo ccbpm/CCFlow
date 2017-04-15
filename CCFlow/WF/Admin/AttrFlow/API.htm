@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>学生信息查看</title>
+    <title>开发API</title>
     <style type="text/css">
         .style1
         {
@@ -37,10 +37,22 @@
 
             //初始化groupID.
             var flowNo = GetQueryString("FK_Flow");
+            var flowName = GetQueryString("FK_Name");
+            var flowID = GetQueryString("FID");
 
-            $("#Caption").html("<a href='API.htm?FK_Flow=" + flowNo + "' > URL调用接口</a> |  <a href='APICode.aspx?FK_Flow=" + flowNo + "'>代码开发API</a> |  <a href='APICodeFEE.aspx?FK_Flow=" + flowNo + "' >FEE开发API</a> ");
-
-            $("#Msg").html("");
+            $("#TB_Caption").html("<a href='API.htm?FK_Flow=" + flowNo + "' > URL调用接口</a> |  <a href='APICode.htm?FK_Flow=" + flowNo + "'>代码开发API</a> |  <a href='APICodeFEE.htm?FK_Flow=" + flowNo + "' >FEE开发API</a> ");
+            $("#TB_LCFQ").html("流程" + flowName + "发起");
+            $("#TB_GZDB").html("工作待办:<font color='Blue'><b>/WF/EmpWorks.htm</b></font> 获得当前操作员的所有的待办列表，<font color='Blue'><b>/WF/EmpWorks.htm?FK_Flow=" + flowNo + "</b></font> 当前操作员的指定流程的待办。");
+            $("#TB_ZT").html("在途:<font color='Blue'><b>/WF/Runing.htm</b></font> 当前工作人员的所有在途,<font color='Blue'><b>/WF/Runing.htm?FK_Flow =" + flowNo + "</b></font>当前操作员的指定流程的在途。在途定义：一个操作员的参与的流程，但是流程还没有完成，就叫在途。");
+            $("#TB_FQURL").html("发起URL:<font color='Blue'><b> /WF/MyFlow.htm?FK_Flow=" + flowNo + "</b></font>，您可以把该URL 放入到自己的系统菜单里，或者列表里。");
+            $("#TB_GZDB_DQ").html("当前流程工作待办:<font color='Blue'><b>/WF/EmpWorks.htm?FK_Flow=" + flowNo + "</b></font>");
+            $("#TB_ZTGZ_DQ").html("当前流程工作在途: <font color='Blue'><b>/WF/Runing.htm?FK_Flow= " + flowNo + "</b></font>");
+            $("#TB_CX").html("查询:<font color='Blue'><b>/WF/Rpt/Search.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
+            $("#TB_GJCX").html("高级查询:<font color='Blue'><b>/WF/Rpt/SearchAdv.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
+            $("#TB_FZFX").html("分组分析:<font color='Blue'><b>/WF/Rpt/Group.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
+            $("#TB_JXBB").html("交叉报表:<font color='Blue'><b>/WF/Rpt/D3.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
+            $("#TB_DBFX").html("对比分析:<font color='Blue'><b>/WF/Rpt/Contrast.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
+            $("#Msg").html();
 
         });
     </script>
@@ -48,7 +60,7 @@
 <body  >
 
 <table style="width:100%;">
-<caption >开发API <div style=" float:right" id="Caption" >  </div> </caption> 
+<caption>开发API <div style=" float:right" id="TB_Caption" ></div> </caption> 
 
 <tr>
 <th colspan="2"> URL调用接口 </th>
@@ -69,23 +81,22 @@
 <td>
 
 
-<fieldset>
-<legend>菜单列表</legend>
+<fieldset> 
+<legend>菜单列表<div style=" float:right" id="CDLB" ></div></legend>
 <ul>
-<li>流程发起: <font color="Blue"><b> /WF/Start.aspx </b></font> 获得当前操作员的流程发起的列表，每个操作员的权限不同能发起的流程列表也不同。</li>
-<li>工作待办: <font color="Blue"><b>/WF/EmpWorks.aspx  </b></font> 获得当前操作员的所有的待办列表，<font color="Blue"><b>/WF/EmpWorks.aspx?FK_Flow=<%=flowNo %>  </b></font>当前操作员的指定流程的待办。 </li>
-<li>在途: <font color="Blue"><b>/WF/Runing.aspx  </b></font>  当前工作人员的所有在途，<font color="Blue"><b> /WF/Runing.aspx?FK_Flow=<%=flowNo %>  </b></font>当前操作员的指定流程的在途。在途定义：一个操作员的参与的流程，但是流程还没有完成，就叫在途。</li>
-<li>抄送: <font color="Blue"><b>/WF/CC.aspx  </b></font>  抄送来的工作，当前人员没有处理权限，但是可以查看。</li>
-<li>查询: <font color="Blue"><b>/WF/Search.aspx  </b></font>  对完成或者未完成的流程进行查询。</li>
-
+<li>流程发起: <font color="Blue"><b> /WF/Start.htm </b></font> 获得当前操作员的流程发起的列表，每个操作员的权限不同能发起的流程列表也不同。</li>
+<li id ="TB_GZDB"></li>
+<li id = "TB_ZT"></li>
+<li>抄送: <font color="Blue"><b>/WF/CC.htm  </b></font>  抄送来的工作，当前人员没有处理权限，但是可以查看。</li>
+<li>查询: <font color="Blue"><b>/WF/Search.htm  </b></font>  对完成或者未完成的流程进行查询。</li>
 </ul>
 </fieldset>
 
 
 <fieldset>
-<legend>流程【<%=fl.Name %>】发起</legend>
+<legend id = "TB_LCFQ"></legend>
 <ul>
-<li>发起URL: <font color="Blue"><b>/WF/MyFlow.aspx?FK_Flow=<%=flowNo %> </b></font>  ，您可以把该URL 放入到自己的系统菜单里，或者列表里。</li>
+<li id = "TB_FQURL"></li>
 <li>该页面组件名叫：“工作处理器”，该处理器可以接受很多参数，可以向工作处理器里传入很多参数，格式与约定请参考说明书。</li>
 </ul>
 </fieldset>
@@ -93,16 +104,16 @@
 <fieldset>
 <legend>工作待办</legend>
 <ul>
-<li> 当前流程工作待办:<font color="Blue"><b> /WF/EmpWorks.aspx?FK_Flow=<%=flowNo %> </b></font></li>
-<li> 所有流程工作待办:<font color="Blue"><b> /WF/EmpWorks.aspx </b></font> </li>
+<li id="TB_GZDB_DQ"> </li>
+<li id="TB_GZDB_SY"> 所有流程工作待办:<font color="Blue"><b> /WF/EmpWorks.htm </b></font> </li>
 </ul>
 </fieldset>
  
 <fieldset>
 <legend>在途工作(也成为未完成)</legend>
 <ul>
- <li>当前流程工作在途:<font color="Blue"><b> /WF/Runing.aspx?FK_Flow=<%=flowNo %> </b> </font></li>
- <li>所有流程工作在途: <font color="Blue"><b> /WF/Runing.aspx </b></font></li>
+ <li id="TB_ZTGZ_DQ"></li>
+ <li>所有流程工作在途: <font color="Blue"><b> /WF/Runing.htm </b></font></li>
 </ul>
  </fieldset>
 
@@ -111,11 +122,11 @@
 <legend>查询相关接口</legend>
 
 <ul>
- <li> 查询:  <font color="Blue"><b> /WF/Rpt/Search.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt</b> </font>  </li> 
- <li>高级查询: <font color="Blue"><b> /WF/Rpt/SearchAdv.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt</b> </font>  </li> 
- <li>分组分析:<font color="Blue"><b> /WF/Rpt/Group.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt  </b> </font>  </li> 
- <li>交叉报表:<font color="Blue"><b> /WF/Rpt/D3.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt  </b> </font>  </li> 
- <li>对比分析: <font color="Blue"><b> /WF/Rpt/Contrast.aspx?FK_Flow=<%=flowNo %>&RptNo=ND<%= flowID%>MyRpt </b> </font> </li> 
+ <li id="TB_CX"></li> 
+ <li id="TB_GJCX"></li> 
+ <li id="TB_FZFX"></li> 
+ <li id="TB_JXBB"></li> 
+ <li id="TB_DBFX"></li> 
 </ul>
 
  </fieldset>

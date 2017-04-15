@@ -228,17 +228,6 @@ namespace CCFlow.WF.CCForm
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            string urlR = this.Request.RawUrl;
-            urlR = urlR.Replace(".aspx", ".htm");
-            this.Response.Redirect(urlR, true);
-            return;
-
-            #region  属性
-            string sealName = null;
-            #endregion 属性
-
-#warning 没有缓存经常预览与设计不一致
-
             MapData md = new MapData();
             md.No = this.FK_MapData;
             if (this.Request.QueryString["IsTest"] == "1")

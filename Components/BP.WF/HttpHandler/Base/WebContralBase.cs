@@ -372,7 +372,11 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["WorkID"];
+                //string str = context.Request.QueryString["WorkID"];
+                //if (str == null || str == "" || str == "null")
+                //    return 0;
+                //杨玉慧
+                string str = this.GetRequestVal("WorkID");
                 if (str == null || str == "" || str == "null")
                     return 0;
                 return int.Parse(str);

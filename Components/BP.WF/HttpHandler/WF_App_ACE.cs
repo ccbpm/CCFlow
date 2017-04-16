@@ -27,6 +27,58 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 获得发起流程
+        /// </summary>
+        /// <returns></returns>
+        public string Start_Init()
+        {
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(WebUser.No);
+            return BP.Tools.Json.ToJsonUpper(dt);
+        }
+        /// <summary>
+        /// 获得待办
+        /// </summary>
+        /// <returns></returns>
+        public string Todolist_Init()
+        {
+            string fk_node = this.GetRequestVal("FK_Node");
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node);
+            return BP.Tools.Json.ToJsonUpper(dt);
+        }
+        /// <summary>
+        /// 运行
+        /// </summary>
+        /// <param name="UserNo">人员编号</param>
+        /// <param name="fk_flow">流程编号</param>
+        /// <returns>运行中的流程</returns>
+        public string Runing_Init()
+        {
+            DataTable dt = null;
+            dt = BP.WF.Dev2Interface.DB_GenerRuning();
+            return BP.Tools.Json.ToJsonUpper(dt);
+        }
+
+        /// <summary>
+        /// 初始化赋值.
+        /// </summary>
+        /// <returns></returns>
+        public string Top_Init()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("UserNo", BP.Web.WebUser.No);
+            ht.Add("UserName", BP.Web.WebUser.Name);
+
+            //系统名称.
+            ht.Add("SysName", BP.Sys.SystemConfig.SysName);
+
+
+            ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
+            ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
+            ht.Add("Todolist_Sharing", BP.WF.Dev2Interface.Todolist_Sharing);
+
+            return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
 
         #region 执行父类的重写方法.
         /// <summary>

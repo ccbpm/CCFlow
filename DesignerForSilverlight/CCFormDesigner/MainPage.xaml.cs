@@ -1719,22 +1719,28 @@ namespace CCForm
         public void Save()
         {
             loadingWindow.Show();
-            if (!Glo.ViewNeedSave)
+            if (Glo.ViewNeedSave==false)
             {
             }
+
             Glo.ViewNeedSave = false;
+
             try
             {
                 this.SetSelectedTool(ToolBox.Mouse);
 
                 if (dsLatest == null)
+                {
                     initDataSource();
+                }
                 else
+                {
                     foreach (DataTable item in dsLatest.Tables)
                     {
                         if (item != null)
                             item.Rows.Clear();
                     }
+                }
 
                 this.checkBound();
 
@@ -2775,7 +2781,8 @@ namespace CCForm
                 {
                     isDesignerSizeChanged = false;
                     loadingWindow.DialogResult = true;
-                    #region
+
+                    #region 执行保存.
                     if (ee.Error != null)
                     {
                         BP.SL.LoggerHelper.Write(ee.Error);

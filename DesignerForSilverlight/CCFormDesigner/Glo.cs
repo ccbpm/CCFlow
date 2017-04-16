@@ -1014,7 +1014,7 @@ namespace CCForm
         }
         public static void OpenDtl(string FK_MapData, string FK_MapDtl)
         {
-            string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=" + FK_MapData + "&FK_MapDtl=" + FK_MapDtl;
+            string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?DoType=Edit&FK_MapData=" + FK_MapData + "&FK_MapDtl=" + FK_MapDtl;
             Glo.WinOpen(url, 700, 1100);
         }
         public static void OpenM2M(string FK_MapData, string FK_MapM2M)

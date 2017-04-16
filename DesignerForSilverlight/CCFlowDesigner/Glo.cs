@@ -469,7 +469,7 @@ namespace BP
                     Glo.OpenDialog(Glo.BPMHost + url, "方向条件", 670, 1050);
                     break;
                 case UrlFlag.RunFlow: // 运行流程。
-                    url = "/WF/Admin/TestFlow.aspx?FK_Flow=" + fk_flow + "&Lang=CH";
+                    url = "/WF/Admin/TestFlow.htm?FK_Flow=" + fk_flow + "&Lang=CH";
                     Glo.OpenWindow(Glo.BPMHost + url, "运行流程", 670, 1050);
                     return;
                 case UrlFlag.FlowCheck: // 流程设计。

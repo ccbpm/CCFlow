@@ -147,5 +147,56 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 发送后转向处理规则
+        public string TurnToDeal_Init() {
+
+            BP.WF.Node nd = new BP.WF.Node();
+            nd.NodeID = this.FK_Node;
+            nd.RetrieveFromDBSources();
+            return nd.ToJson();
+        }
+        #endregion
+
+        #region 发送后转向处理规则Save
+        /// <summary>
+        /// 前置导航save
+        /// </summary>
+        /// <returns></returns>
+        public string TurnToDeal_Save()
+        {
+            try
+            {
+                int nodeID = int.Parse(this.FK_Node.ToString());
+                BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
+                BP.WF.Node nd = new BP.WF.Node(nodeID);
+
+                int val = this.GetRequestValInt("TurnToDeal");
+                
+                //遍历页面radiobutton
+                if (0 == val)
+                {
+                    nd.HisTurnToDeal = BP.WF.TurnToDeal.CCFlowMsg;
+                }
+                else if (1 == val)
+                {
+                    nd.HisTurnToDeal = BP.WF.TurnToDeal.SpecMsg;
+                    nd.TurnToDealDoc = this.GetRequestVal("TB_SpecMsg");
+                }
+                else
+                {
+                    nd.HisTurnToDeal = BP.WF.TurnToDeal.SpecUrl;
+                    nd.TurnToDealDoc = this.GetRequestVal("TB_SpecURL");
+                }
+                //执行保存操作
+                nd.Update();
+
+                return "保存成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        #endregion
     }
 }

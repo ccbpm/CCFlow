@@ -16,29 +16,152 @@
         //页面启动函数.
         $(function () {
 
-            //初始化groupID.
-            var flowNo = GetQueryString("FK_Flow");
-            var nodeID = GetQueryString("FK_Node");
+            $("#Msg").html("正在加载,请稍后......");
 
-            var url = window.location.href;
+            InitPage();
 
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
+            $("#Msg").html("");
         });
+        //初始化数据.
+        function InitPage() {
+
+            var fk_node = GetQueryString("FK_Node");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=TurnToDeal_Init&FK_Node=" + fk_node + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    data = JSON.parse(data);
+                    //调用公共类库的方法:执行批量主表赋值
+                    GenerFullAllCtrlsVal(data);
+                    switch (data.TurnToDeal) {
+                        case '0':
+                        case '1': $('#TB_SpecMsg').val(data.TurnToDealDoc); break;
+                        case '2': 
+                        case '3': $('#TB_SpecURL').val(data.TurnToDealDoc); break;
+                        default:
+
+                    }
+                    rb_onchange(data.TurnToDeal);
+                    return;
+                }
+            });
+        }
+
+
+        //ajax 提交
+        function Btn_Save_Click() {
+            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            var frmData = $("#cc").serialize();
+            //alert(frmData);
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=TurnToDeal_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    return;
+                }
+            });
+        }
+
+        function rb_onchange(obj) {
+            
+            if (obj == 1) {
+                document.getElementById("TB_SpecURL").value = "";
+                document.getElementById("TB_SpecURL").readOnly = true;
+                document.getElementById("TB_SpecMsg").readOnly = false;
+            } else if (obj == 2) {
+                document.getElementById("TB_SpecMsg").value = "";
+                document.getElementById("TB_SpecMsg").readOnly = true;
+                document.getElementById("TB_SpecURL").readOnly = false;
+            } else {
+                document.getElementById("TB_SpecMsg").value = "";
+                document.getElementById("TB_SpecMsg").readOnly = true;
+                document.getElementById("TB_SpecURL").value = "";
+                document.getElementById("TB_SpecURL").readOnly = true;
+            }
+            
+        } 
     </script>
 </head>
 <body  >
 
 <form id="cc">
  
- <h3> 正在加载，请稍后。。。</h3>
+ <table style="width: 100%">
+        <caption>
+            发送后转向处理规则
+            <tr>
+                <td valign="top" style="width:70%">
+                    <fieldset>
+                        <legend>
+                            <input type="radio" ID="RB_TurnToDeal_0" name="TurnToDeal" runat="server" value="0"
+                                onclick="rb_onchange(0)" />提示ccflow默认信息</legend>
+                        <ul style="color: Gray">
+                            <li>默认为不设置，按照机器自动生成的语言提示，这是标准的信息提示。</li>
+                            <li>比如：您的当前的工作已经处理完成。下一步工作自动启动，已经提交给xxx处理。 </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                            <input type="radio" ID="RB_TurnToDeal_1" name="TurnToDeal" runat="server" value="1"
+                                onClick="rb_onchange(1)" />提示指定信息
+                        </legend><a href="javascript:ShowHidden('SpecMsg')">输入提示的信息:</a>
+                        <div id="SpecMsg" style="display: none">
+                            <ul style="color: Gray">
+                                <li>按照您定义的信息格式，提示给已经操作完成的用户。</li>
+                                <li>比如：您的申请已经发送至XXX用户进行审批。 </li>
+                                <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
+                            </ul>
+                        </div>
+                        <input type="text" ID="TB_SpecMsg" name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3  style="width:90%"/>
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                            <input type="radio" ID="RB_TurnToDeal_2" name="TurnToDeal" runat="server" value="2"
+                                onClick="rb_onchange(2)" />转向指定的URL
+                        </legend><a href="javascript:ShowHidden('SpecUrl')">输入提示的信息:</a>
+                        <div id="SpecUrl" style="display: none">
+                            <ul style="color: Gray">
+                                <li>按照您定义的url转向，可处理较为复杂的业务逻辑处理。</li>
+                                <li>比如：URL为MyFlow.aspx页面或www.baidu.com。 </li>
+                                <li>该URL支持ccbpm参数形式，具体传值参考右侧帮助。 </li>
+                            </ul>
+                        </div>
+                        <input type="text" ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%"/>
+                    </fieldset>
+                </td>
+                <td valign="top" style="width:28%">
+                    <fieldset>
+                        <legend>帮助</legend>
+                        <ul style="color: Gray">
+                            <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">提示ccflow默认信息</a></li>
+                            <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">提示指定信息</a></li>
+                            <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">转向指定的URL</a></li>
+                        </ul>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
+                </td>
+            </tr>
+    </table>
 
 </form>
 

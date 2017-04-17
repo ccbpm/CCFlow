@@ -184,6 +184,13 @@
                         var pWorkID = data[i].PWORKID;
                         var paras = data[i].ATPARA;
 
+                        if (paras != '') {
+                            paras = paras.replace("'", "\\'");
+                            paras = paras.replace('@', '&');
+                            paras = "1" + paras;
+                        }
+
+
                         newRow += "<tr > <td>" + (i + 1) + "</td>"; //序号
                         newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
                         var url = "";

@@ -1,9 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="FrmCheck.ascx.cs" Inherits="CCFlow.WF.App.Comm.FrmCheck" %>
-<%@ Register src="FrmCheck.ascx" tagname="FrmCheck" tagprefix="uc1" %>
-<%@ Register src="FTC.ascx" tagname="FTC" tagprefix="uc2" %>
-<%@ Register src="AccepterCCerSelecter.ascx" tagname="AccepterCCerSelecter" tagprefix="uc3" %>
-<%@ Register assembly="CCFlow" namespace="CCFlow.WF.WorkOpt" tagprefix="cc1" %>
 <%@ Register assembly="BP.Web.Controls" namespace="BP.Web.Controls" tagprefix="cc2" %>
+
 <%
     string enName = "ND" + this.Request.QueryString["FK_Node"];
     string src = "/WF/WorkOpt/WorkCheck.aspx?FID=" + this.Request.QueryString["FID"];
@@ -30,6 +27,7 @@
 
     </div>
 </div>
+<%--
 <uc1:FrmCheck ID="FrmCheck1" runat="server" />
 <uc2:FTC ID="FTC1" runat="server" />
 <uc3:AccepterCCerSelecter ID="AccepterCCerSelecter1" runat="server" />
@@ -37,6 +35,6 @@
 <cc2:BPRadioButtonList ID="BPRadioButtonList1" runat="server">
 </cc2:BPRadioButtonList>
 <cc2:DatePicker ID="DatePicker1" runat="server" />
-<cc2:LineChart ID="LineChart1" runat="server" />
+<cc2:LineChart ID="LineChart1" runat="server" />--%>
 
 <% } %>

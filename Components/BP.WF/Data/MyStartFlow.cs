@@ -757,6 +757,7 @@ namespace BP.WF.Data
                 rm.Title = "流程轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -768,8 +769,8 @@ namespace BP.WF.Data
 		#region 执行诊断
         public string DoTrack()
         {
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return null;
+            //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
+            return Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
         }
 		#endregion
 	}

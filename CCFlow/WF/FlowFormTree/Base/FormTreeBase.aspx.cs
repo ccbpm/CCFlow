@@ -964,7 +964,7 @@ namespace CCFlow.WF.FlowFormTree
                 foreach (SysFormTree item in formTrees)
                 {
                     //排除根节点
-                    if (item.ParentNo.Equals("0"))
+                    if (item.ParentNo.Equals("0") || item.No.Equals("0"))
                         continue;
                     if (parentFolders.Contains("No", item.No) == true)
                         continue;

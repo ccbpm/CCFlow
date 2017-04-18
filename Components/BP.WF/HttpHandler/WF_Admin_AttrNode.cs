@@ -284,5 +284,57 @@ namespace BP.WF.HttpHandler
             return "保存成功.";
         }
         #endregion
+
+        #region 发送阻塞模式
+        public string BlockModel_Init()
+        {
+
+            BP.WF.Node nd = new BP.WF.Node();
+            nd.NodeID = this.FK_Node;
+            nd.RetrieveFromDBSources();
+
+            return nd.ToJson();
+        }
+        #endregion
+
+        #region 发送阻塞模式save
+        public string BlockModel_Save()
+        {
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            nd.BlockAlert = this.GetRequestVal("TB_Alert"); //提示信息.
+            int val = this.GetRequestValInt("RB_BlockModel");
+            nd.SetValByKey(BP.WF.Template.NodeAttr.BlockModel, val);
+            if (nd.BlockModel == BP.WF.BlockModel.None)
+                nd.BlockModel = BP.WF.BlockModel.None;
+
+            if (nd.BlockModel == BP.WF.BlockModel.CurrNodeAll)
+            {
+                nd.BlockModel = BP.WF.BlockModel.CurrNodeAll;
+            }
+
+            if (nd.BlockModel == BP.WF.BlockModel.SpecSubFlow)
+            {
+                nd.BlockModel = BP.WF.BlockModel.SpecSubFlow;
+                nd.BlockExp = this.GetRequestVal("TB_SpecSubFlow");
+            }
+
+            if (nd.BlockModel == BP.WF.BlockModel.BySQL)
+            {
+                nd.BlockModel = BP.WF.BlockModel.BySQL;
+                nd.BlockExp = this.GetRequestVal("TB_SQL");
+            }
+
+            if (nd.BlockModel == BP.WF.BlockModel.ByExp)
+            {
+                nd.BlockModel = BP.WF.BlockModel.ByExp;
+                nd.BlockExp = this.GetRequestVal("TB_Exp");
+            }
+
+            nd.BlockAlert = this.GetRequestVal("TB_Alert");
+            nd.Update();
+
+            return "保存成功.";
+        }
+        #endregion
     }
 }

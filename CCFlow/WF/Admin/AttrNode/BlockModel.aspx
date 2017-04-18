@@ -11,7 +11,7 @@
 
 <td valign="top"> 
 <fieldset>
-<legend><asp:RadioButton ID="RB_None" Text="不阻塞" GroupName="xxx" runat="server" />
+<legend><asp:RadioButton ID="RB_None" Text="不阻塞" name="xxx" runat="server" />
     </legend>
  <ul  style="color:Gray;">
  <li>默认模式，不阻塞。</li>
@@ -21,7 +21,7 @@
 
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_CurrNodeAll" Text="当前节点有未完成的子流程时" runat="server"  GroupName="xxx" /></legend>
+<legend><asp:RadioButton ID="RB_CurrNodeAll" Text="当前节点有未完成的子流程时" runat="server"  name="xxx" /></legend>
  <ul  style="color:Gray;">
  <li> 当前节点吊起了子流程，并且有未完成的子流程时就不能向下运动。</li>
  </ul>
@@ -29,7 +29,7 @@
 
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_SpecSubFlow" Text="按约定格式阻塞未完成子流程" runat="server"  GroupName="xxx" /></legend>
+<legend><asp:RadioButton ID="RB_SpecSubFlow" Text="按约定格式阻塞未完成子流程" runat="server"  name="xxx" /></legend>
 <a href="javascript:ShowHidden('flows')">请设置表达式:</a>
 
 <div id="flows" style="color:Gray; display:none">
@@ -44,7 +44,7 @@
 
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_SQL" Text="按照SQL阻塞" runat="server"  GroupName="xxx" /></legend>
+<legend><asp:RadioButton ID="RB_SQL" Text="按照SQL阻塞" runat="server"  name="xxx" /></legend>
 <a href="javascript:ShowHidden('sql')">请输入SQL:</a>
 <div id="sql" style="color:Gray; display:none">
  <ul>
@@ -57,7 +57,7 @@
 </fieldset>
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_Exp" Text="按照表达式阻塞" runat="server"   GroupName="xxx" /></legend>
+<legend><asp:RadioButton ID="RB_Exp" Text="按照表达式阻塞" runat="server"   name="xxx" /></legend>
  
 <a href="javascript:ShowHidden('exp')">请输入表达式:</a>
 <div id="exp" style="color:Gray; display:none">

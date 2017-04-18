@@ -53,7 +53,7 @@
                         return;
                     }
 
-                    data = JSON.parse(data);
+                    var data = eval('(' + data + ')');
 
                     $.each(data, function () {
                         //增加标签

@@ -1,7 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="QingJia.ascx.cs" Inherits="CCFlow.App.F001.Apply" %>
 
-<%@ Register src="../../../WF/SDKComponents/FrmCheck.ascx" tagname="FrmCheck" tagprefix="uc1" %>
-
+ 
 <%@ Register src="../../../WF/SDKComponents/DocMainAth.ascx" tagname="DocMainAth" tagprefix="uc2" %>
 <%@ Register src="../../../WF/SDKComponents/DocMultiAth.ascx" tagname="DocMultiAth" tagprefix="uc3" %>
 
@@ -26,25 +25,7 @@
 </fieldset>
  </td>
 </tr>
-
-<tr>
-<td> 
-
-<% 
-    string str = this.Request.QueryString["FK_Node"];
-    if (str != "11001" && 1==3)
-    {
-       /*如果不是开始节点，就不它显示审核按钮. */
-     %>
-
-<fieldset>
-<legend>审批区域</legend>
-    <uc1:FrmCheck ID="FrmCheck1" runat="server" />
-</fieldset>
-
-<%} %>
-</td>
-</tr>
+ 
 
 
 <tr>

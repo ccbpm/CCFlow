@@ -116,12 +116,12 @@ namespace CCFlow.SDKFlowDemo.QingJia
                 return;
             }
 
+            //循环输出变量信息.
             foreach (BP.WF.SendReturnObj obj in objs)
             {
-                this.Response.Write("<font color=red>"+obj.MsgFlag+":" + obj.MsgOfHtml  + "</font><br>");
+                this.Response.Write("<font font=red>" + obj.MsgFlag + "</font>:" + obj.MsgOfHtml + "<br>");
             }
-           // objs.va
-        //    objs.v
+
             /*
              这里注意：
              * 1,发送api有多个, 根据不同的场景使用不同的api 但是常用的就那1个，您可以产看该参数使用说明.

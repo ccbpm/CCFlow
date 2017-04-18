@@ -162,8 +162,7 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    data = JSON.parse(data);
-
+                    data = eval('(' + data + ')');
                     var timeKey = "ss";
                     //获取当前时间
                     var cdt = getNowFormatDate();

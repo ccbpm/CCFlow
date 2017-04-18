@@ -231,5 +231,58 @@ namespace BP.WF.HttpHandler
             return "";//toJson
         }
         #endregion
+
+        #region 批量发起规则设置
+        public string BatchStartFields_Init()
+        {
+
+            int nodeID = int.Parse(this.FK_Node.ToString());
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
+            BP.WF.Node nd = new BP.WF.Node(nodeID);
+
+            BP.Sys.SysEnums ses = new BP.Sys.SysEnums(BP.WF.Template.NodeAttr.BatchRole);
+            
+            string a = "{\"nd\":" + nd.ToJson() + ",\"ses\":" + ses.ToJson() + "}";
+            return "{\"nd\":" + nd.ToJson() + ",\"ses\":" + ses.ToJson() + ",\"attrs\":" + attrs.ToJson() + "}";
+        }
+        #endregion
+
+        #region 批量发起规则设置save
+        public string BatchStartFields_Save()
+        {
+
+            int nodeID = int.Parse(this.FK_Node.ToString());
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
+            BP.WF.Node nd = new BP.WF.Node(nodeID);
+
+            //给变量赋值.
+            //批处理的类型
+            int selectval = int.Parse(this.GetRequestVal("DDL_BRole"));
+            switch (selectval)
+            {
+                case 0:
+                    nd.HisBatchRole = BP.WF.BatchRole.None;
+                    break;
+                case 1:
+                    nd.HisBatchRole = BP.WF.BatchRole.Ordinary;
+                    break;
+                default:
+                    nd.HisBatchRole = BP.WF.BatchRole.Group;
+                    break;
+            }
+            //批处理的数量
+            nd.BatchListCount = int.Parse(this.GetRequestVal("TB_BatchListCount"));
+            //批处理的参数 
+            string sbatchparas = "";
+            if (this.GetRequestVal("CB_Node") != null)
+            {
+                sbatchparas = this.GetRequestVal("CB_Node");
+            }
+            nd.BatchParas = sbatchparas;
+            nd.Update();
+
+            return "保存成功.";
+        }
+        #endregion
     }
 }

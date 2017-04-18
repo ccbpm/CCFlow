@@ -434,7 +434,6 @@
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
     <Content Include="WF\Admin\AttrNode\TurnTo.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnTo.htm" />
-    <Content Include="WF\Admin\AttrNode\TurnToDeal.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
     <Content Include="WF\Admin\BindFrms.aspx" />
     <Content Include="WF\Admin\BindFrms.htm" />
@@ -8398,13 +8397,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\TurnTo.aspx.designer.cs">
       <DependentUpon>TurnTo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\TurnToDeal.aspx.cs">
-      <DependentUpon>TurnToDeal.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\TurnToDeal.aspx.designer.cs">
-      <DependentUpon>TurnToDeal.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\BindFrms.aspx.cs">
       <DependentUpon>BindFrms.aspx</DependentUpon>

@@ -16,29 +16,133 @@
         //页面启动函数.
         $(function () {
 
-            //初始化groupID.
-            var flowNo = GetQueryString("FK_Flow");
-            var nodeID = GetQueryString("FK_Node");
+            $("#Msg").html("正在加载,请稍后......");
 
-            var url = window.location.href;
+            InitPage();
 
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
+            $("#Msg").html("");
         });
+        //初始化数据.
+        function InitPage() {
+
+            var fk_node = GetQueryString("FK_Node");
+            
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=BatchStartFields_Init&FK_Node=" + fk_node + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    data = JSON.parse(data);
+                    attrs = data.attrs;
+                    ses = data.ses;
+                    data = data.nd;
+                    
+                    //调用公共类库的方法:执行批量主表赋值
+                    GenerFullAllCtrlsVal(data);
+                    GenerBindDDL("DDL_BRole", ses, "IntKey", "Lab", data.BatchRole);
+
+                    //增加处理.
+                    for (var i = 0; i < attrs.length; i++) {
+                        var item = attrs[i];
+                        var newRow = "";
+                        newRow = "<tr ><td class=Idx>" + i + "</td>";
+                        if (data.BatchParas.indexOf(item.KeyOfEn) > -1) {
+                            newRow += "<td>" + "<input name='CB_Node' type='checkbox' value='" + item.KeyOfEn + "' checked='checked' />" + item.KeyOfEn + "</td>";
+                        } else {
+                            newRow += "<td>" + "<input name='CB_Node' type='checkbox' value='" + item.KeyOfEn + "' />" + item.KeyOfEn + "</td>";
+                        }
+                        newRow += "<td>" + item.Name + "</td>";
+                        newRow += "<td>" + item.LGTypeText + "</td>";
+                        newRow += "</tr>";
+                        $("#table1 tr:last").after(newRow);
+                    }
+                    return;
+                }
+            });
+        }
+
+
+        //ajax 提交
+        function Btn_Save_Click() {
+            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            var frmData = $("#cc").serialize();
+            //alert(frmData);
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=BatchStartFields_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    return;
+                }
+            });
+        }
     </script>
 </head>
 <body  >
 
 <form id="cc">
  
- <h3> 正在加载，请稍后。。。</h3>
+ <table style="width: 70%;">
+        <caption>批量发起规则设置</caption>
+        <tr>
+            <td colspan="1">规则设置：</td>
+            <td colspan="2"> 
+                <select ID="DDL_BRole" name="DDL_BRole" runat="server" style="width:130px"/>              
+            </td>
+            <td><a href="http://ccbpm.mydoc.io/?v=5404&t=17920" target="_blank">帮助</a> </td>
+        </tr>
+         <tr>
+            <td colspan="1">显示的行数：</td>
+
+            <td colspan="2">
+                <input type="text" ID="TB_BatchListCount" name="TB_BatchListCount" runat="server" style="width:56px" />
+            </td>
+
+            <td> 0表示显示所有</td>
+            </tr>
+        <tr>
+            <td class="Sum" colspan="4">
+                批量发起字段(需要填写的字段.)
+            </td>
+        </tr>
+
+
+        <tr> 
+        <td colspan="4"> 
+
+        <table style=" width:100%;" id="table1">
+         <tr>
+            <th>序</th>
+            <th>字段</th>
+            <th>名称 </th>
+            <th>类型</th>
+        </tr>
+        
+
+        </table>
+
+        </td>
+        </tr>
+       
+        <tr>
+            <td colspan="4">
+                <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
+            </td>
+        </tr>
+    </table>
 
 </form>
 

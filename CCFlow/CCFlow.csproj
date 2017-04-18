@@ -398,7 +398,6 @@
     <Content Include="WF\Admin\AttrNode\Action.aspx" />
     <Content Include="WF\Admin\AttrNode\Action.htm" />
     <Content Include="WF\Admin\AttrNode\ActionEvent.aspx" />
-    <Content Include="WF\Admin\AttrNode\BatchStartFields.aspx" />
     <Content Include="WF\Admin\AttrNode\BatchStartFields.htm" />
     <Content Include="WF\Admin\AttrNode\Bill.aspx" />
     <Content Include="WF\Admin\AttrNode\BlockModel.aspx" />
@@ -8289,13 +8288,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\ActionEvent.aspx.designer.cs">
       <DependentUpon>ActionEvent.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\BatchStartFields.aspx.cs">
-      <DependentUpon>BatchStartFields.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\BatchStartFields.aspx.designer.cs">
-      <DependentUpon>BatchStartFields.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Bill.aspx.cs">
       <DependentUpon>Bill.aspx</DependentUpon>

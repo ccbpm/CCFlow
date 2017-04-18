@@ -138,6 +138,11 @@
     <%
         string FK_Flow = this.Request.QueryString["FK_Flow"];
 
+       int nodeID=0;
+       if (string.IsNullOrEmpty( this.Request.QueryString["FK_Node"])==false)
+           nodeID = int.Parse(  this.Request.QueryString["FK_Node"]);
+        
+
         string HungUp = this.Request.QueryString["IsHungUp"];
         bool IsHungUp = true;
         if (string.IsNullOrEmpty(HungUp))
@@ -167,7 +172,7 @@
         else
         {
             if (string.IsNullOrEmpty(FK_Flow))
-                dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
+                dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, nodeID);
             else
                 dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, FK_Flow);
         }
@@ -216,6 +221,7 @@
         sBuilder.Append("<th >接受日期</th>");
         sBuilder.Append("<th >应完成日期</th>");
         sBuilder.Append("<th >状态</th>");
+        sBuilder.Append("<th >类型</th>");
         sBuilder.Append("<th >备注</th>");
         sBuilder.Append("</tr>");
 
@@ -316,18 +322,51 @@
                 {
                     if (cdt.ToString("yyyy-MM-dd") == mysdt.ToString("yyyy-MM-dd"))
                     {
-                        sBuilder.Append("<td align=center nowrap >" + "<img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font>" + "</td>");
+                        sBuilder.Append("<td align=center nowrap ><img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font>" + "</td>");
                     }
                     else
                     {
-                        sBuilder.Append("<td align=center nowrap >" + "<img src='/WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font>" + "</td>");
+                        sBuilder.Append("<td align=center nowrap ><img src='/WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font>" + "</td>");
                     }
                 }
                 else
                 {
-                    sBuilder.Append("<td align=center nowrap >" + "<img src='/WF/Img/TolistSta/0.png'class='Icon'/>&nbsp;<font color=green>正常</font>" + "</td>");
+                    sBuilder.Append("<td align=center nowrap ><img src='/WF/Img/TolistSta/0.png'class='Icon'/>&nbsp;<font color=green>正常</font>" + "</td>");
                 }
 
+
+                BP.WF.WFState ws = (BP.WF.WFState)dr["WFState"];
+                string lab = "";
+                switch (ws)
+                {
+                    case BP.WF.WFState.Complete:
+                        lab = "已完成";
+                        break;
+                    case BP.WF.WFState.Runing:
+                        if (paras.Contains("CC") == true)
+                            lab = "抄送";
+                        else
+                            lab = "待办";
+                        break;
+                    case BP.WF.WFState.HungUp:
+                        lab = "挂起";
+                        break;
+                    case BP.WF.WFState.Askfor:
+                        lab = "加签";
+                        break;
+                    case BP.WF.WFState.ReturnSta:
+                        lab = "退回";
+                        break;
+                    case BP.WF.WFState.Draft:
+                        lab = "草稿";
+                        break;
+                    default:
+                        lab = "未判断";
+                        break;
+                }
+                
+                sBuilder.Append("<td>"+  lab +"</td>");
+                
                 sBuilder.Append("<td width='200'><div style='width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + dr["FlowNote"] + "'>" + dr["FlowNote"] + "</div></td>");
                 sBuilder.Append("</tr>");
             }

@@ -198,5 +198,38 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion
+
+        #region 特别控件特别用户权限
+        public string SepcFiledsSepcUsers_Init()
+        {
+
+            /*string fk_mapdata = this.GetRequestVal("FK_MapData");
+            if (string.IsNullOrEmpty(fk_mapdata))
+                fk_mapdata = "ND101";
+
+            string fk_node = this.GetRequestVal("FK_Node");
+            if (string.IsNullOrEmpty(fk_node))
+                fk_mapdata = "101";
+
+
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs(fk_mapdata);
+
+            BP.Sys.FrmImgs imgs = new BP.Sys.FrmImgs(fk_mapdata);
+
+            BP.Sys.MapExts exts = new BP.Sys.MapExts();
+            int mecount = exts.Retrieve(BP.Sys.MapExtAttr.FK_MapData, fk_mapdata,
+                BP.Sys.MapExtAttr.Tag, this.GetRequestVal("FK_Node"),
+                BP.Sys.MapExtAttr.ExtType, "SepcFiledsSepcUsers");
+
+            BP.Sys.FrmAttachments aths = new BP.Sys.FrmAttachments(fk_mapdata);
+
+            exts = new BP.Sys.MapExts();
+            exts.Retrieve(BP.Sys.MapExtAttr.FK_MapData, fk_mapdata,
+                BP.Sys.MapExtAttr.Tag, this.GetRequestVal("FK_Node"),
+                BP.Sys.MapExtAttr.ExtType, "SepcAthSepcUsers");
+            */
+            return "";//toJson
+        }
+        #endregion
     }
 }

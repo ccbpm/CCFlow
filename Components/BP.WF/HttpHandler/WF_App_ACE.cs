@@ -63,7 +63,7 @@ namespace BP.WF.HttpHandler
         /// 初始化赋值.
         /// </summary>
         /// <returns></returns>
-        public string Top_Init()
+        public string Home_Init()
         {
             Hashtable ht = new Hashtable();
             ht.Add("UserNo", BP.Web.WebUser.No);
@@ -78,6 +78,31 @@ namespace BP.WF.HttpHandler
             ht.Add("Todolist_Sharing", BP.WF.Dev2Interface.Todolist_Sharing);
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
+        /// <summary>
+        /// 转换成菜单.
+        /// </summary>
+        /// <returns></returns>
+        public string Home_Menu()
+        {
+            DataSet ds = new DataSet();
+
+            BP.WF.XML.ClassicMenus menus = new XML.ClassicMenus();
+            menus.RetrieveAll();
+
+           DataTable dtMain=  menus.ToDataTable();
+           dtMain.TableName = "ClassicMenus";
+
+           ds.Tables.Add(dtMain);
+
+           BP.WF.XML.ClassicMenuAdvFuncs advMenms = new XML.ClassicMenuAdvFuncs();
+           advMenms.RetrieveAll();
+
+           DataTable dtMenuAdv = advMenms.ToDataTable();
+           dtMenuAdv.TableName = "ClassicMenusAdv";
+           ds.Tables.Add(dtMenuAdv);
+
+           return BP.Tools.Json.ToJson(ds);
         }
 
         #region 执行父类的重写方法.

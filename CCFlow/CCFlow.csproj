@@ -400,7 +400,6 @@
     <Content Include="WF\Admin\AttrNode\ActionEvent.aspx" />
     <Content Include="WF\Admin\AttrNode\BatchStartFields.htm" />
     <Content Include="WF\Admin\AttrNode\Bill.aspx" />
-    <Content Include="WF\Admin\AttrNode\BlockModel.aspx" />
     <Content Include="WF\Admin\AttrNode\BlockModel.htm" />
     <Content Include="WF\Admin\AttrNode\CanCancelNodes.aspx" />
     <Content Include="WF\Admin\AttrNode\CanCancelNodes.htm" />
@@ -8295,13 +8294,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Bill.aspx.designer.cs">
       <DependentUpon>Bill.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\BlockModel.aspx.cs">
-      <DependentUpon>BlockModel.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\BlockModel.aspx.designer.cs">
-      <DependentUpon>BlockModel.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\CanCancelNodes.aspx.cs">
       <DependentUpon>CanCancelNodes.aspx</DependentUpon>

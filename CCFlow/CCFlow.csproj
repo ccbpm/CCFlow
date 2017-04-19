@@ -2407,9 +2407,6 @@
     <Content Include="WF\BatchSelfDeal.aspx" />
     <Content Include="WF\BatchStart.aspx" />
     <Content Include="WF\BatchStartGroup.aspx" />
-    <Content Include="WF\BPR.aspx" />
-    <Content Include="WF\Calendar.aspx" />
-    <Content Include="WF\CallSubFlow.aspx" />
     <Content Include="WF\CC.aspx" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\API.aspx" />
@@ -10538,27 +10535,6 @@
     </Compile>
     <Compile Include="WF\BatchStartGroup.aspx.designer.cs">
       <DependentUpon>BatchStartGroup.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\BPR.aspx.cs">
-      <DependentUpon>BPR.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\BPR.aspx.designer.cs">
-      <DependentUpon>BPR.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Calendar.aspx.cs">
-      <DependentUpon>Calendar.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Calendar.aspx.designer.cs">
-      <DependentUpon>Calendar.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CallSubFlow.aspx.cs">
-      <DependentUpon>CallSubFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CallSubFlow.aspx.designer.cs">
-      <DependentUpon>CallSubFlow.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CC.aspx.cs">
       <DependentUpon>CC.aspx</DependentUpon>

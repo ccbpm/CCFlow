@@ -249,6 +249,16 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
+        public string FK_Event
+        {
+            get
+            {
+                string str = this.GetRequestVal("FK_Event");
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
         /// <summary>
         /// 字典表
         /// </summary>

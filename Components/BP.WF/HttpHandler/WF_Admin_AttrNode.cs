@@ -385,5 +385,60 @@ namespace BP.WF.HttpHandler
             return "设置成功.";
         }
         #endregion
+
+        #region 消息事件
+        public string PushMessage_Init()
+        {
+            BP.WF.Template.PushMsg enDel = new BP.WF.Template.PushMsg();
+            enDel.FK_Node = this.FK_Node;
+            enDel.RetrieveFromDBSources();
+            return enDel.ToJson();
+        }
+
+        public string PushMessage_Delete()
+        {
+            BP.WF.Template.PushMsg enDel = new BP.WF.Template.PushMsg();
+            enDel.MyPK = this.MyPK; ;
+            enDel.Delete();
+            return "删除成功";
+        }
+
+        public string PushMessage_ShowHidden()
+        {
+            BP.WF.XML.EventLists xmls = new BP.WF.XML.EventLists();
+            xmls.RetrieveAll();
+            foreach (BP.WF.XML.EventList item in xmls)
+            {
+                if (item.IsHaveMsg == false)
+                    continue;
+
+            }
+            return BP.Tools.Json.ToJson(xmls);
+
+
+        }
+
+        public string PushMessageEntity_Init()
+        {
+            var fk_node = GetRequestVal("FK_Node");
+            BP.WF.Template.PushMsg en = new BP.WF.Template.PushMsg();
+            en.MyPK = this.MyPK;
+            en.FK_Event = this.FK_Event;
+            en.RetrieveFromDBSources();
+            return en.ToJson();
+        }
+        public string PushMessageEntity_Save()
+        {
+            BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
+            msg.MyPK = this.MyPK;
+            msg.RetrieveFromDBSources();
+            msg.FK_Event = this.FK_Event;
+            msg.FK_Node = this.FK_Node;
+            // msg = BP.Sys.PubClass.CopyFromRequestByPost(msg, context.Request) as BP.WF.Template.PushMsg;
+            msg.Save();  //执行保存.
+
+            return "保存成功...";
+        }
+        #endregion
     }
 }

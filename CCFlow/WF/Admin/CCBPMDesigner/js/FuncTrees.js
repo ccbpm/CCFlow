@@ -85,8 +85,8 @@ functrees.push({
 						                                { Type: "Node", Id: "FlowField", ParentId: "DevAPI", Name: "字段视图", TType: "NORMAL", DType: "-1", IconCls: "icon-Field", Inherits: ["fk_flow"], Url: "../AttrFlow/FlowFields.htm?FK_Flow=@@fk_flow" },
 						                                { Type: "Node", Id: "AsyncBusinessTable", ParentId: "DevAPI", Name: "与业务表同步", TType: "NORMAL", DType: "-1", IconCls: "icon-DTS", Inherits: ["fk_flow"], Url: "../AttrFlow/DTSBTable.aspx?FK_Flow=@@fk_flow&FK_Node=&DoType=Name" },
 						                                { Type: "Node", Id: "URLAPI", ParentId: "DevAPI", Name: "URL调用接口", TType: "NORMAL", DType: "-1", IconCls: "icon-URL", Inherits: ["fk_flow"], Url: "../AttrFlow/API.htm?FK_Flow=@@fk_flow&DoType=Url" },
-						                                { Type: "Node", Id: "SDKAPI", ParentId: "DevAPI", Name: "SDK开发接口", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_flow"], Url: "../AttrFlow/APICode.aspx?FK_Flow=@@fk_flow&DoType=SDK" },
-						                                { Type: "Node", Id: "FEEAPI", ParentId: "DevAPI", Name: "代码事件开发接口", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_flow"], Url: "../AttrFlow/APICodeFEE.aspx?FK_Flow=@@fk_flow&FK_Node=&DoType=Name" }
+						                                { Type: "Node", Id: "SDKAPI", ParentId: "DevAPI", Name: "SDK开发接口", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_flow"], Url: "../AttrFlow/APICode.htm?FK_Flow=@@fk_flow&DoType=SDK" },
+						                                { Type: "Node", Id: "FEEAPI", ParentId: "DevAPI", Name: "代码事件开发接口", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_flow"], Url: "../AttrFlow/APICodeFEE.htm?FK_Flow=@@fk_flow&FK_Node=&DoType=Name" }
                                                         ]
                                                 },
                                                 { Type: "Node", Id: "DataManage", ParentId: null, Name: "流程报表", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],

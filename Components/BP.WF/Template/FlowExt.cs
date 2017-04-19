@@ -1120,11 +1120,11 @@ namespace BP.WF.Template
         }
         public string DoAPICode()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/APICode.aspx?FK_Flow=" + this.No;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/APICode.htm?FK_Flow=" + this.No;
         }
         public string DoAPICodeFEE()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/APICodeFEE.aspx?FK_Flow=" + this.No;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/APICodeFEE.htm?FK_Flow=" + this.No;
         }
         #endregion 开发接口
 

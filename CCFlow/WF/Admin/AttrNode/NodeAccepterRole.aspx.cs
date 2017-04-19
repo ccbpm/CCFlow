@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using BP.Sys;
 using BP.WF.Template;
 using BP.WF;
 using BP.DA;
@@ -353,7 +354,8 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
         public void bindDDL_5()
         {
             string str = this.NodeID.ToString().Substring(0, this.NodeID.ToString().Length - 2);
-            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + str + "Rpt");
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, "ND" + str + "Rpt", MapAttrAttr.KeyOfEn);
 
             foreach (BP.Sys.MapAttr item in attrs)
             {

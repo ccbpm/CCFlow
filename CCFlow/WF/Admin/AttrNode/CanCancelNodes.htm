@@ -16,29 +16,103 @@
         //页面启动函数.
         $(function () {
 
-            //初始化groupID.
-            var flowNo = GetQueryString("FK_Flow");
-            var nodeID = GetQueryString("FK_Node");
+            $("#Msg").html("正在加载,请稍后......");
 
-            var url = window.location.href;
+            InitPage();
 
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
+            $("#Msg").html("");
         });
+        //初始化数据.
+        function InitPage() {
+
+            var fk_node = GetQueryString("FK_Node");
+            var fk_flow = GetQueryString("FK_Flow");
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=CanCancelNodes_Init&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    data = JSON.parse(data);
+
+                    var nds = data.nds;
+                    var rnds = data.rnds;
+                    //调用公共类库的方法:执行批量主表赋值
+                    GenerFullAllCtrlsVal(data.mynd);
+                    //GenerBindDDL("DDL_BRole", ses, "IntKey", "Lab", data.BatchRole);
+                    $("#titl").text(data.mynd.Name);
+                    var rndsArr = [];
+                    rnds.forEach(function (i) {
+                        rndsArr.push(i.CancelTo);
+                    });
+
+                    for (var i = 0; i < nds.length; i++) {
+                        nd = nds[i];
+                        if (nd.NodeID == GetQueryString("FK_Node")) {
+
+                        }
+                        else {
+                            var newRow = "";
+                            newRow = "<tr style='width:100%'><td class=Idx style='width:10%'>" + i + "</td>";
+                            newRow += "<td style='width:40%'>第" + nd.Step + "步</td>";
+                            if ($.inArray(nd.NodeID, rndsArr) > -1) {
+                                newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID+"' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' checked='checked' />" + nd.Name + "</td>";
+                            } else {
+                                newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' />" + nd.Name + "</td>";
+                            }
+                            newRow += "</tr>";
+                            $("#table1 tr:last").after(newRow);
+                        }
+                    }
+                    var newBtn = "<TR class='TRSum' ><TD >&nbsp;</TD><TD ><input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()'/></TD><TD >&nbsp;</TD>";
+                    $("#table1 tr:last").after(newBtn);
+                    return;
+                }
+            });
+        }
+
+
+        //ajax 提交
+        function Btn_Save_Click() {
+            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            var frmData = $("#cc").serialize();
+            //alert(checkBoxIDs);
+            //alert(frmData);
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=CanCancelNodes_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.location.href = window.location.href;
+                    return;
+                }
+            });
+        }
     </script>
 </head>
 <body  >
 
 <form id="cc">
  
- <h3> 正在加载，请稍后。。。</h3>
+<table width='100%' id="table1" >
+<Caption  style="text-align:center">为'<span id="titl"></span>', 设置可撤销的节点。</Caption>
+    <tr></tr>
+</table>
+<fieldset class='FieldsetInfo' ><legend>&nbsp;特别说明:&nbsp;</legend>1，只有节点属性的撤销规则被设置成撤销制订的节点，此功能才有效。<br> 2，设置撤销的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，撤销时才做检查。</fieldset>
+
 
 </form>
 

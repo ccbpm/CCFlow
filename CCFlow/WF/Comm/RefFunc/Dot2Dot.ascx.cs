@@ -449,37 +449,15 @@ namespace CCFlow.WF.Comm.RefFunc
             //edited by liuxc,2016-12-24
             //修改保存逻辑，此处不一次性删除原有保存的记录，只是将原有数据中，当前页未选中的删除掉，当前页选中但原有未记录的保存上
             string val = string.Empty;
-            CheckBox tcb = null;
             var keys = new List<string>();
             var key = string.Empty;
-            Entity ten = null;
-
-            foreach (System.Web.UI.Control ctl in this.UCSys1.Controls)
-            {
-                if (ctl == null || ctl.ID == null)
-                    continue;
-
-                if (ctl.ID.Contains("CB_") == false)
-                    continue;
-
-                key = ctl.ID.Split('_')[1];
-
-                if (key == "EN" || key == "SE" || keys.Contains(key))
-                    continue;
-
-                //ten = ensOfMM.GetEntityByKey()
-            }
 
             //原有保存记录中，当前页中含有但未选中的去除掉
             foreach(Entity en in ensOfMM)
             {
                 val = en.GetValStringByKey(attr.AttrOfMInMM);
-                tcb = this.UCSys1.GetCBByID("CB_" + val);
 
-                if (tcb == null)
-                    continue;
-
-                if (tcb.Checked == false)
+                if (IsChecked(val) == false)
                     en.Delete();
             }
 
@@ -519,7 +497,6 @@ namespace CCFlow.WF.Comm.RefFunc
             }
 
             //更新entity ,防止有业务逻辑出现.
-            string msg = "";
             Entity enP = ClassFactory.GetEn(this.EnName);
             if (enP.EnMap.EnType != EnType.View)
             {
@@ -531,7 +508,6 @@ namespace CCFlow.WF.Comm.RefFunc
                 }
                 catch (Exception ex)
                 {
-                    msg += "执行更新错误：" + enP.EnDesc + " " + ex.Message;
                 }
             }
         }
@@ -590,6 +566,30 @@ namespace CCFlow.WF.Comm.RefFunc
             ////    this.BindTree();
         }
         #endregion
+
+        public bool IsChecked(string val)
+        {
+            CheckBox cb = null;
+            string prefix = "CB_" + val;
+
+            if (this.DDL_Group.SelectedValue != "None")
+                prefix += "_";
+
+            foreach (Control ctrl in this.UCSys1.Controls)
+            {
+                cb = ctrl as CheckBox;
+
+                if (cb == null)
+                    continue;
+
+                if (cb.ID.StartsWith(prefix) == false)
+                    continue;
+
+                return cb.Checked;
+            }
+
+            return false;
+        }
     }
 
 

@@ -119,7 +119,7 @@
                         alert(data);
                         return;
                     }
-
+                    console.info(data);
                     data = JSON.parse(data);
 
                     var ClassicMenus = data["ClassicMenus"];
@@ -128,11 +128,11 @@
 
                         var no = ClassicMenus[i].No;
                         var name = ClassicMenus[i].CH;
-                        var url = ClassicMenus[i].ACEUrl;
-
+                        var url = "../WF/" + ClassicMenus[i].ACEUrl;
+                        var No = ClassicMenus[i].No;
                         var li = "";
                         li += "\t\n <li id=menu>";
-                        li += "\t\n <a href='#maincontent' style='cursor:pointer;' onclick=\"openMenu('1','menu2','menu1','" + name + "','" + url + "')\" >";
+                        li += "\t\n <a href='#maincontent' style='cursor:pointer;' onclick=\"openMenu('1','" + No + "','menu1','" + name + "','" + url + "')\" >";
                         li += "\t\n <i class='icon-double-angle-right'></i>";
                         li += "\t\n <span class='menu-text'>";
                         li += "\t\n <i class='icon-user-md'></i>&nbsp;&nbsp;" + name + "</span></a></li>";
@@ -147,11 +147,11 @@
 
                         var no = ClassicMenusAdv[i].No;
                         var name = ClassicMenusAdv[i].CH;
-                        var url = ClassicMenusAdv[i].ACEUrl;
-
+                        var url = "../WF/" + ClassicMenusAdv[i].ACEUrl;
+                        var No = ClassicMenusAdv[i].No;
                         var li = "";
                         li += "\t\n <li id=menu>";
-                        li += "\t\n <a href='#maincontent' style='cursor:pointer;' onclick=\"openMenu('1','menu2','menu1','" + name + "','" + url + "')\" >";
+                        li += "\t\n <a href='#maincontent' style='cursor:pointer;' onclick=\"openMenu('1','" + No + "','menu13','" + name + "','" + url + "')\" >";
                         li += "\t\n <i class='icon-double-angle-right'></i>";
                         li += "\t\n <span class='menu-text'>";
                         li += "\t\n <i class='icon-user-md'></i>&nbsp;&nbsp;" + name + "</span></a></li>";

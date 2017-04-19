@@ -357,9 +357,6 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
 
             foreach (BP.Sys.MapAttr item in attrs)
             {
-                if (item.UIVisible == false)
-                    continue;
-
                 this.DDL_ByPreviousNodeFormEmpsField.Items.Add(new ListItem(item.KeyOfEn + " " + item.Name, item.KeyOfEn));
             }
         }

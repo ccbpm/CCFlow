@@ -1,0 +1,82 @@
+@CHARSET "UTF-8";
+body{background-color:#FFFFFF}
+.row .form-inline select{font-weight: bold;color: #707070;}
+.form-inline label{font-weight: bold;color: #707070;}
+.font-bold{font-weight: bold;}
+form .isSelect147{width:147px;}
+form .isSelect145{width:145px;}
+form .isSelect135{width:135px;}form .isSelect125{width:125px;}form .isSelect115{width:115px;}
+form .isSelect105{width:105px;}form .isSelect95{width:95px;}form .isSelect85{width:85px;}
+form .isSelect75{width:75px;}form .isSelect65{width:65px;}form .isSelect55{width:55px;}
+button, input, select, textarea {margin: 1px;}
+.dataTables_paginate .pagination .choseJPage{height:30px;width:55px;text-align:center;float:left;}
+.aBtnNoTD{cursor:pointer;text-decoration:none;}
+.aBtnNoTD:hover{cursor: pointer;text-decoration:none;}
+.aBtnNoTD:focus{cursor: pointer;text-decoration:none;}
+.customBtn a{cursor: pointer;text-decoration:none;}
+.customBtn a:hover{ text-decoration:none; }
+.customBtn a:focus{ text-decoration:none; }
+.customTable{width: 100%;}
+.customTable .FormData > td{padding-bottom: 6px;padding-top: 6px;font-family: "Open Sans";}
+.customTable .CaptionTD{color: #666;font-size: 12px;text-align: right;}
+.lrspace1{margin-left:1px;margin-right:1px;}
+.lrspace2{margin-left:2px;margin-right:2px;}
+.lrspace3{margin-left:3px;margin-right:3px;}
+.lrspace4{margin-left:4px;margin-right:4px;}
+.lrspace5{margin-left:5px;margin-right:5px;}
+.lrspace6{margin-left:6px;margin-right:6px;}
+/*弹出框样式修改 */
+.title-no-close .ui-dialog-titlebar-close{display: none;}
+.loading-no-close .ui-dialog-titlebar{display: none;}
+.loading-no-close{background:#fff;filter: alpha(opacity = 50);background-color: rgba(0,0,0,0.5) !important;color:#ff892a;border:0px !important;}
+.loading-no-close .ui-dialog-content{padding: 0 !important;margin-top: 2px;margin-bottom: 2px;}
+/* 菜单管理css */
+.tree-indent{display:inline-block;width: 16px;}
+.tree-hit{cursor:pointer;font-size:115%;}
+.tree-expanded{color:#898989 !important;}
+.tree-expanded:HOVER{color: #6fb3e0 !important;}
+.table td i{margin-left:2px;margin-right:2px;}
+.table .menuicon{color:#87b87f}
+.joinMiddle{vertical-align: middle;}
+ul.ztree{background: none repeat scroll 0 0 #f0f6e4;border: 1px solid #617775;height:200px;margin-top: 10px;overflow-x: auto;overflow-y: scroll;width: 220px;}
+.accountRoleTree{margin-top: 0 !important; width: 150px !important;height:150px !important;}
+.preOrgTree{margin-top: 0 !important; width: 150px !important;height:150px !important;}
+.resourcesTree{margin-top: 0 !important; width: 150px !important;}
+.authorityTree{height:300px !important;width:270px !important;margin-top:0px !important;background: none repeat scroll 0 0 #fff !important;border:0 !important;}
+/* 按钮颜色 */
+/*浅黄  */ .color-pale-yellow{color:#fee188 !important;}
+/*黄  */   .color-yellow{color:#ffb752 !important;}
+/*浅橙色 */.color-pale-orange{color:#ff892a !important;}
+/*浅红 */  .color-pale-red{color:#d15b47 !important;}
+/*红*/     .color-red{color:#dd5a43 !important;}
+/*粉红色 */.color-pink{color:#d6487e !important;}
+/*鲜红 */  .color-bright-red {color:#d12723 !important;}
+/*浅蓝色 */.color-pale-blue{color:#6fb3e0 !important;}
+/*蓝色 */  .color-blue{color:#428bca !important;}
+/*鲜蓝色 */.color-bright-blue{color:#009393 !important;}	
+/*浅绿色 */.color-pale-green{color:#87b87f !important;}
+/*绿色 */  .color-green{color:#69aa46 !important;} 
+/*深绿色 */.color-dark-green{color:#468847 !important;}
+/*浅灰色 */.color-pale-gray{color:#abbac3 !important;}
+/*浅紫 */  .color-pale-purple{color:#a069c3 !important;}
+/*紫 */    .color-purple{color:#9585bf !important;}
+/*灰色 */  .color-gray{color:#777 !important;}
+/*深蓝色 */.color-dark-blue{color:#4d6878 !important;}
+/*啡黄  */ .color-pale-brown{color:#963 !important;}
+/*深灰色 */.color-dark-gray{color:#555 !important;}
+/* 按钮颜色end */
+/* 颜色框 */
+.iconColorSelect{width:100%}
+.iconColorSelect td{width: 20px; height: 20px;border: 1px solid rgb(0, 0, 0);cursor:pointer;}
+/* 图标框 */
+.comIconSelectul{width:100%;height:25px;}
+.comIconSelectul li{height:25px;width:25px;cursor:pointer;border:0 none !important;margin-left:1px;margin-right:1px;}
+.comIconSelectul li i{font-size: 140%;}
+.iconSelectul{overflow-y:scroll;width:100%;height:110px;}
+.iconSelectul li{height:25px;width:25px;cursor:pointer;border:0 none !important;margin-left:1px;margin-right:1px;}
+.iconSelectul li i{font-size: 140%;}
+.previewFont{font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:18px;font-weight:bold;}
+/* 480端 */
+@media only screen and (max-width:480px){.orgTree{width:100% !important;height:100px !important;background: none repeat scroll 0 0 #fff !important;border:1px solid #ddd !important;}}
+/* PC端 */
+@media only screen and (min-width:480px){.orgTree{width:100% !important;height:350px !important;background: none repeat scroll 0 0 #fff !important;border:1px solid #ddd !important;}}

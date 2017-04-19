@@ -1,0 +1,7 @@
+@CHARSET "UTF-8";
+.font-bold{font-weight: bold;}
+.login-bg{background:url('images/loginbg.jpg') no-repeat center fixed;margin-top:0px;background-attachment:fixed;background-size:100% 100%;}
+.title-no-close .ui-dialog-titlebar-close{display: none;}
+.loading-no-close .ui-dialog-titlebar{display: none;}
+.loading-no-close{background:#fff;filter: alpha(opacity = 50);background-color: rgba(0,0,0,0.5) !important;color:#ff892a;border:0px !important;}
+.loading-no-close .ui-dialog-content{padding: 0 !important;margin-top: 2px;margin-bottom: 2px;}

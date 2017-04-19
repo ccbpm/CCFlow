@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+.menu_preview_area ul, ol {list-style-type: none;padding-left: 0;}
+.menu_preview_area h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, fieldset, textarea {margin: 0;}
+.menu_preview_area input, textarea, button, a {outline: 0 none;}
+.menu_preview_area .size1of1 {width: 100%;}
+.menu_preview_area .size1of2 {width: 50%;}
+.menu_preview_area .size1of3 {width: 33.33%;}
+.menu_preview_area .grid_item {float: left;}
+.menu_preview_area .grid_line::after {clear: both;content:"​";display: block;height: 0;}
+.menu_preview_area .mobile_menu_preview {background: url("images/bg_mobile_head_default.png") no-repeat scroll 0 0 transparent;border: 1px solid #e7e7eb;height: 480px;position: relative;width: 317px;}
+.menu_preview_area .mobile_menu_preview .mobile_hd {color: #fff;font-size: 15px;margin: 0 30px;overflow: hidden;padding-top: 30px;text-align: center;text-overflow: ellipsis;white-space: nowrap;width: auto;word-wrap: normal;}
+.menu_preview_area .container_box.cell_layout .col_side, .container_box.cell_layout .col_main {word-break: break-all;word-wrap: break-word;}
+.menu_preview_area .pre_menu_item {float: left;line-height: 38px;position: relative;text-align: center;}
+.menu_preview_area .pre_menu_item a {color: #616161;display: block;overflow: hidden;text-decoration: none;text-overflow: ellipsis;white-space: nowrap;width: auto;word-wrap: normal;}
+.menu_preview_area .pre_menu_link {border-left: 1px solid #e7e7eb;}
+.menu_preview_area .pre_menu_item .icon_menu_dot {background: url("images/index_z.png") no-repeat scroll 0 -48px rgba(0, 0, 0, 0);display: inline-block;height: 7px;margin-right: 2px;margin-top: -2px;vertical-align: middle;width: 7px;}
+.menu_preview_area .dn {display: none;}
+.menu_preview_area .icon20_common {display: inline-block;height: 20px;line-height: 100px;overflow: hidden;vertical-align: middle;width: 20px;}
+.menu_preview_area .icon20_common.sort_gray {background: url("images/base_z.png") no-repeat scroll 0 -5809px rgba(0, 0, 0, 0);}
+.menu_preview_area .sub_pre_menu_box {background-color: #fff;border: 1px solid #d0d0d0;bottom: 50px;left: 0;position: absolute;width: 100%;}
+.menu_preview_area .sub_pre_menu_list li {line-height: 30px;}
+.menu_preview_area .sub_pre_menu_list li a {padding: 0 0.5em;}
+.menu_preview_area .sub_pre_menu_box .arrow_out {border-color: #d0d0d0 transparent transparent;border-right: 6px dashed transparent;border-style: solid dashed dashed;border-width: 6px 6px 0;bottom: -6px;display: inline-block;height: 0;width: 0;}
+.menu_preview_area .sub_pre_menu_box .arrow {left: 50%;margin-left: -6px;position: absolute;}
+.menu_preview_area .sub_pre_menu_box .arrow_in {border-color: #fafafa transparent transparent;border-right: 6px dashed transparent;border-style: solid dashed dashed;border-width: 6px 6px 0;bottom: -5px;display: inline-block;height: 0;width: 0;}
+.menu_preview_area .pre_menu_list {background: url("images/bg_mobile_foot_default.png") no-repeat scroll 0 0 transparent;border-top: 1px solid #e7e7eb;bottom: 0;left: 0;padding-left: 43px;position: absolute;right: 0;}
+.menu_preview_area .sub_pre_menu_list li:first-child {border-top: 1px solid #d0d0d0;}
+.menu_preview_area .sub_pre_menu_list li:first-child .sub_pre_menu_inner {border-top-width: 0;}
+
+.menu_preview_area li.jsMenu.current {background-color: #fff;border: 1px solid #f4b178;line-height: 45px;position: relative;z-index: 1;}
+.menu_preview_area li.jsMenu.current a.pre_menu_link {color: #f4b178;}
+
+.menu_preview_area .sub_pre_menu_list li.current {background-color: #fff;border: 1px solid #44b549;line-height: 45px;position: relative;z-index: 1;}
+.menu_preview_area .sub_pre_menu_list li.current a {color: #44b549;}
+.menu_preview_area .sub_pre_menu_list li.current .sub_pre_menu_inner {border-top-width: 0;}
+.menu_preview_area .sub_pre_menu_list li {border: 1px solid transparent;line-height: 44px;margin: 0 -1px -1px;}
+.menu_preview_area .sub_pre_menu_box {background-color: #fafafa;border-top-width: 0;bottom: 60px;}
+.menu_preview_area .sub_pre_menu_inner {border-top: 1px solid #e7e7eb;cursor: pointer;display: block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: auto;word-wrap: normal;}
+.menu_preview_area .icon14_menu_add {background: url("images//index_z.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);display: inline-block;height: 14px;margin-top: -2px;vertical-align: middle;width: 14px;}
+.menu_preview_area .pre_menu_item {line-height: 50px;}
+.menu_preview_area .pre_menu_list .sort_gray {margin-top:-4px;display:none;}
+.menu_preview_area .pre_menu_item:first-child .pre_menu_link {border-left-width: 0;}

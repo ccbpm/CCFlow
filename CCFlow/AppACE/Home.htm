@@ -1,0 +1,488 @@
+﻿
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0"/>
+
+<title>test</title>
+
+
+<script>
+    var jypath = '/jsys';
+</script>
+<!--[if !IE]> -->
+<script src="static/js/jquery/jquery-2.0.3.min.js"></script>
+<!-- <![endif]-->
+<!--[if IE]>
+<script src="static/js/jquery/jquery.ie.min.js"></script>
+<![endif]-->
+
+<!--[if lte IE 8]>
+<script src="static/js/bootstrap/respond.js"></script>
+<script src="static/js/bootstrap/html5.js"></script>
+<script src="static/js/bootstrap/jquery.placeholder.min.js"></script>
+<script src="static/js/bootstrap/jy-ie8.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+			if("ontouchend" in document) {
+				//手机适应;
+				document.write("<script src='"+jypath+"/static/js/jquery/jquery.mobile.custom.min.js'><"+"/script>");
+				//document.write("<script src='"+jypath+"/static/js/jquery/jquery.mobile-1.4.5.min.js'><"+"/script>");
+			}
+</script>
+<!--提示组件start-->
+<script type="text/javascript" src="static/js/jquery/jquery.tips.js"></script>
+<!--提示组件end-->
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="bookmark" href="favicon.ico" type="image/x-icon" />
+
+<script type="text/javascript" src="static/js/jquery/jquery.cookie.js"></script>
+<link rel="stylesheet" href="static/css/system/bootstrap/bootstrap.min.css" />
+<link rel="stylesheet" href="static/css/system/ace/font-awesome.min.css" />
+<link rel="stylesheet" href="static/css/system/jquery/jquery-ui.min.css" type="text/css" />
+<!--[if IE 7]>
+	<link rel="stylesheet" href="static/css/system/ace/font-awesome-ie7.min.css" />
+<![endif]-->
+<link rel="stylesheet" href="static/css/system/bootstrap/bootstrap-responsive.min.css" />
+<!-- ace styles -->
+<link rel="stylesheet" href="static/css/system/ace/ace.min.css" /> 
+<!--[if lte IE 8]>
+	<link rel="stylesheet" href="static/css/system/ace/ace-ie.min.css" />
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="static/css/system/ace/ace-rtl.min.css" />
+<link type="text/css" rel="stylesheet" href="static/css/system/ace/ace-responsive.min.css" /> 
+<link type="text/css" rel="stylesheet" href="static/css/system/ace/ace-skins.min.css" />
+<!-- 日期控件 -->
+
+<link type="text/css" rel="stylesheet" href="static/plugins/tabs/css/tab-control.min.css" />
+<link type="text/css" rel="stylesheet" href="static/css/system/system/index.css" />
+
+
+<!-- 装载 ccbpm 程序-->
+<script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Home_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    //调用公共类库的方法:执行批量主表赋值
+                    GenerFullAllCtrlsVal(data);
+
+                    var img = document.getElementById('UserICON');
+
+                    img.src = '/DataUser/UserIcon/' + data.UserNo + '.png';
+                    img.onerror = "this.src='/DataUser/ICON/CCFlow/LogBig.png'";
+
+                    document.title = data.SysName;
+                    return;
+                }
+            });
+
+            //初始化菜单.
+            InitMenun();
+
+        });
+
+
+        function InitMenun() {
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Home_Menu&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    var ClassicMenus = data["ClassicMenus"];
+
+                    for (var i = 0; i < ClassicMenus.length; i++) {
+
+                        var no = ClassicMenus[i].No;
+                        var name = ClassicMenus[i].CH;
+                        var url = ClassicMenus[i].ACEUrl;
+
+                        var li = "";
+                        li += "\t\n <li id=menu>";
+                        li += "\t\n <a href='#maincontent' style='cursor:pointer;' onclick=\"openMenu('1','menu2','menu1','" + name + "','" + url + "')\" >";
+                        li += "\t\n <i class='icon-double-angle-right'></i>";
+                        li += "\t\n <span class='menu-text'>";
+                        li += "\t\n <i class='icon-user-md'></i>&nbsp;&nbsp;" + name + "</span></a></li>";
+                        li += "\t\n </li>";
+                        $("#ul1").append(li);
+
+                    }
+
+                    var ClassicMenusAdv = data["ClassicMenusAdv"];
+
+                    for (var i = 0; i < ClassicMenusAdv.length; i++) {
+
+                        var no = ClassicMenusAdv[i].No;
+                        var name = ClassicMenusAdv[i].CH;
+                        var url = ClassicMenusAdv[i].ACEUrl;
+
+                        var li = "";
+                        li += "\t\n <li id=menu>";
+                        li += "\t\n <a href='#maincontent' style='cursor:pointer;' onclick=\"openMenu('1','menu2','menu1','" + name + "','" + url + "')\" >";
+                        li += "\t\n <i class='icon-double-angle-right'></i>";
+                        li += "\t\n <span class='menu-text'>";
+                        li += "\t\n <i class='icon-user-md'></i>&nbsp;&nbsp;" + name + "</span></a></li>";
+                        li += "\t\n </li>";
+                        $("#ul2").append(li);
+
+                    }
+
+                    return;
+                }
+            });
+        }
+
+        function ShowIt() {
+
+            //var div = document.getElementById('menu');
+
+            ShowHidden('menu');
+
+        }
+
+     </script>
+
+</head>
+<body id='indexBody'>
+	<div class="navbar navbar-default" id="navbar">
+		<div class="navbar-container" id="navbar-container">
+			<div class="navbar-header pull-left">
+				<a href="#" class="navbar-brand">
+					<small>
+						<i class="icon-leaf"><div id="SysName" style=" float:right" ></div> </i>
+					</small>
+				</a><!-- /.brand -->
+			</div><!-- /.navbar-header -->
+			<!-- 头部右边 -->
+
+				<div class="navbar-header pull-right" >
+				<!-- 	<div class="navbar-header pull-right" role="navigation"> -->
+					<ul class="nav ace-nav">
+						<li class="grey">
+							<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:openUrl('待办','todolist.htm')"  >
+								<i class="icon-tasks"></i><span class="badge badge-grey"><div id="Todolist_EmpWorks"></div></span>
+							</a>
+						<!--	<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+								<li class="dropdown-header"><i class="icon-ok"></i>还有0个任务完成</li>
+							</ul>-->
+						</li>
+						<li class="purple">
+							<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:openUrl('共享任务','sharing.htm')" >
+								<i class="icon-bell-alt icon-animated-bell"></i>
+								<span class="badge badge-important"><div id="Todolist_Sharing"></div> </span>
+							</a>
+							<ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+								<li class="dropdown-header"><i class="icon-warning-sign"></i>条通知</li>
+							</ul>
+						</li>
+						<li class="green">
+							<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+								<i class="icon-envelope icon-animated-vertical"></i>
+								<span class="badge badge-success"><div id="Todolist_Runing"></div></span>
+							</a>
+							<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+								<li class="dropdown-header"><i class="icon-envelope-alt"></i>0条消息</li>
+							</ul>
+						</li>
+						<li class="userperLi">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" id="UserICON" src="static/images/system/user/hpic0.jpg" />
+								<span class="user-info">
+									<small>欢迎光临,</small> 
+									<span id="user-info-name">
+										
+										<div id="UserName"></div>
+										 
+									</span>									
+								</span>
+								<i class="icon-caret-down"></i>
+							</a>
+							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li><a href="javascript:void(0);" onclick="perData();" ><i class="icon-user"></i>个人设置</a></li>
+								<li><a href="javascript:void(0);" onclick="perSetting();" ><i class="icon-cog"></i>系统设置</a></li>		
+													
+								<li class="divider"></li>
+								<li><a href="javascript:void(0);" onclick="logout();"><i class="icon-off"></i>退出</a></li>
+							</ul>
+						</li>
+					</ul><!-- /.ace-nav -->
+				</div><!-- /.navbar-header -->
+				<!-- 头部右边 end-->
+		</div><!-- /.container  -->
+	</div>
+	<div class="main-container" id="main-container">
+		<div class="main-container-inner">
+			<a class="menu-toggler" id="menu-toggler" href="#">
+				<span class="menu-text"></span>
+			</a>
+		<div class="sidebar" id="sidebar">
+			<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+				<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">	
+					<button title="基础功能"  class="btn"             onclick="getMenu('1','y')"><i class="icon-desktop"></i></button>					
+					<button title="系统功能"  class="btn btn-primary" onclick="getMenu('2','y')"><i class="icon-th"></i></button>		
+					<button title="个人功能"  class="btn btn-success" onclick="getMenu('3','y')"><i class="icon-user"></i></button>					
+					<button title="监控功能"  class="btn btn-warning" onclick="getMenu('4','y')"><i class="icon-bitbucket"></i></button>
+				</div>
+				<!--左边 导航 小图标  -->
+				<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+					<span title="基础功能" class="btn"              onclick="getMenu('1','y')"></span>
+					<span title="系统功能" class="btn btn-primary"  onclick="getMenu('2','y')"></span>
+					<span title="个人功能" class="btn btn-success"  onclick="getMenu('3','y')"></span>
+					<span title="监控功能" class="btn btn-warning"  onclick="getMenu('4','y')" ></span>
+				</div>
+				<!--左边 导航 小图标  end-->
+			</div><!-- #sidebar-shortcuts -->
+			<!--左边 导航 菜单 -->
+			
+			<ul class="nav nav-list" id="menu_li_id">
+<li id="menu11" class="active">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menu11','menu0','主页','welcome.htm')">
+<i class="icon-windows"></i>
+<span class="menu-text">主页</span></a></li>
+
+<li id="menu1" class="active">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menu1','menu0','业务流程','noset')" target="mainFrame" class="dropdown-toggle">
+<i class="icon-qrcode"></i>
+<span class="menu-text">业务流程</span><b class="arrow icon-angle-down"></b></a>
+<ul class="submenu" style="display: block;" id="ul1">
+
+<!--<li id="menu2">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menu2','menu1','发起','start.htm')">
+<i class="icon-double-angle-right"></i>
+<span class="menu-text">
+<i class="icon-group"></i>&nbsp;&nbsp;发起</span></a></li>
+
+
+<li id="menu3">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menu3','menu1','待办','todolist.htm')">
+<i class="icon-double-angle-right"></i>
+<span class="menu-text">
+<i class="icon-github-alt"></i>&nbsp;&nbsp;待办</span></a></li>
+
+<li id="menuc73d630ab1004b5a9b71836e8b000de9">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menuc73d630ab1004b5a9b71836e8b000de9','menu1','在途','runing.htm')">
+<i class="icon-double-angle-right"></i>
+<span class="menu-text">
+<i class="icon-user-md"></i>&nbsp;&nbsp;在途</span></a></li>
+
+
+<li id="menu4">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menu4','menu1','查询','search.htm')">
+<i class="icon-double-angle-right"></i>
+<span class="menu-text">
+<i class="icon-th-large"></i>&nbsp;&nbsp;查询</span></a></li>-->
+</ul></li>
+
+
+<li id="menu13">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menu13','menu0','高级功能','noset')" target="mainFrame" class="dropdown-toggle">
+<i class="icon-book"></i>
+<span class="menu-text">高级功能</span><b class="arrow icon-angle-down"></b></a>
+
+<ul class="submenu" id="ul2">
+<!--<li id="menu10">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menu10','menu13','抄送','cc.htm')">
+<i class="icon-double-angle-right"></i>
+<span class="menu-text">
+<i class="icon-dropbox"></i>&nbsp;&nbsp;抄送</span></a></li>
+
+
+<li id="menu14">
+<a href="#maincontent" style="cursor:pointer;" onclick="openMenu('1','menu14','menu13','共享任务','sharing.htm')">
+<i class="icon-double-angle-right"></i>
+<span class="menu-text">
+<i class="icon-stackexchange"></i>&nbsp;&nbsp;共享任务</span></a></li>-->
+</ul></li>
+
+
+
+
+</ul>
+
+
+
+			<!--左边 导航 菜单  end-->
+			<div class="sidebar-collapse" id="sidebar-collapse">
+					<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+			</div>					
+		</div>
+		<!-- 主要界面 右边 -->
+		<div class="main-content" id="maincontent" >
+			<div class="page-content ">	
+				<div class="tab-control">		
+					<div  class="tab simple">
+						<form>
+							<input class="prev" type="button" /> 
+							<input class="next" type="button" /> 
+							<input class="find" type="button" />
+						</form>
+						<ul class="tabul"></ul>
+					</div>
+					<!-- 标签查找 -->
+					<div class="tab-find hidden ">
+						<form><input class="text" type="text" /></form>
+						<ul></ul>
+					</div>
+					<!-- 主体 -->
+					<div class="main"></div>			
+				</div>	
+			</div>
+			<!-- /.main-content -->
+			<!-- 设置栏 -->
+			
+
+<!--系统设置-->
+<div id="perSetting" class="hide">
+<form id="perSettingFrom" method="POST" onsubmit="return false;">
+	<div class="tabbable">
+	<input id='userSkin' type="hidden" value="skin-0" >
+    <ul class="nav nav-tabs">
+    	<li class="active"><a data-toggle="tab" href="#skinSetting"><i id='skinSettingIcon1' class="icon-github-alt bigger-110"></i> 皮肤</a></li>
+        <li><a data-toggle="tab" href="#proSetting"><i id='skinSettingIcon2' class="icon-magnet bigger-110"></i> 个性化</a></li>
+    </ul>
+    <div class="tab-content noline tabCenter">
+		<div id="skinSetting" class="tab-pane in active">
+			<table  class="customTable">
+				<tr class="FormData">
+					<td>
+						<span class="radSkin skinBlue"></span>
+						<label><input type="radio" class="ace" name="skin" value="skin-0" checked="checked" ><span class="lbl"> 经典蓝</span></label>
+					</td>
+					<td>
+						<span class="radSkin skinBlack"></span>
+						<label><input type="radio" class="ace" name="skin" value="skin-1" ><span class="lbl"> 机械黑</span></label>
+					</td>
+					<td>
+						<span class="radSkin skinPurple"></span>
+						<label><input type="radio" class="ace" name="skin" value="skin-2" ><span class="lbl"> 炫丽紫</span></label>
+					</td>
+					<td>
+						<span class="radSkin skinGray" ></span>
+						<label><input type="radio" class="ace" name="skin" value="skin-3" ><span class="lbl"> 清新灰</span></label>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="proSetting" class="tab-pane">
+			  <table  class="customTable">
+			  	<tr>
+			  		<td class="red">(个性化设置保存在cookie)</td>
+			  	</tr>	  
+			  	<!-- <tr class="FormData">
+					<td>
+					<input id="jy-settings-navbar" name="fixNavbar" class="ace ace-checkbox-2" type="checkbox"> 
+					<label class="lbl" for="jy-settings-navbar"> 固定导航条 <b></b></label>
+					</td>
+			  	</tr> -->
+			  	<!-- <tr class="FormData">
+					<td>
+					<input id="jy-settings-fixMenu" name="fixMenu" class="ace ace-checkbox-2" type="checkbox"> 
+					<label class="lbl" for="jy-settings-fixMenu"> 固定菜单栏 <b></b></label>
+					</td>
+			  	</tr> -->
+			  	<tr class="FormData">
+					<td>
+					<input id="jy-settings-add-container" name="narWinMenu" class="ace ace-checkbox-2" type="checkbox"> 
+					<label class="lbl" for="jy-settings-add-container"> 切换窄屏幕 <b></b></label>
+					</td>
+			  	</tr>
+			  	<tr class="FormData">
+					<td>
+					<input id="jy-settings-sfMenu" name="sfMenu" class="ace ace-checkbox-2" type="checkbox"> 
+					<label class="lbl" for="jy-settings-sfMenu"> 缩放菜单栏 <b></b></label>
+					</td>
+			  	</tr>			  	
+			  	<tr class="FormData">
+					<td>
+				  		<input id="jy-settings-rtl" name="posMenu" class="ace ace-checkbox-2" type="checkbox">
+						<label class="lbl" for="ace-settings-rtl"> 切换右菜单</label>
+			  		</td>
+			  	</tr>
+			  </table>
+			</div>
+         </div> 
+	</div>
+</form>
+</div>
+
+<!-- #dialog-confirm -->
+<div id="jyConfirm" class="hide">
+	<div class="center">
+		<h4><i class="icon-hand-right blue bigger-120"></i> <span id="jyConfirmStr"></span></h4>
+	</div>
+</div>
+<div id="jyInfo" class="hide">
+	<div class="center">
+		<h4><i class="icon-info-sign blue bigger-120"></i> <span id="jyInfoStr"></span></h4>
+	</div>
+</div>
+<div id="jyError" class="hide">
+	<div class="center">
+		<h4><i class="icon-warning-sign red bigger-120"></i> <span id="jyErrorStr"></span></h4>
+	</div>
+</div>
+<div id="jyLoading" class="hide">
+	<div class="center">
+		<h4><img alt="loading" src="static/images/system/loading.gif"><span id="jyLoadingStr"></span></h4>
+	</div>
+</div>
+				<!-- 个人设置栏end -->
+				<!-- 主要界面 右边 end-->
+				<!-- 右边设置栏 -->
+				<!-- <div class="ace-settings-container" id="ace-settings-container"></div> -->
+				<!-- /#ace-settings-container -->
+		</div><!-- /.main-container-inner -->
+			<!-- 重回最上按钮 -->
+			<!-- <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a> -->
+	</div><!-- /.main-container -->
+</div>	
+<script src="static/js/ace/ace-extra.min.js"></script>
+<script src="static/js/bootstrap/bootstrap.min.js"></script>
+<script src="static/js/ace/typeahead-bs2.min.js"></script>
+<script src="static/js/ace/ace-elements.min.js"></script>
+<script src="static/js/ace/ace.min.js"></script>
+<script src="static/js/jquery/jquery-ui.min.js"></script>
+<script src="static/js/jquery/jquery.md5.js"></script>
+
+
+<script src="static/plugins/tabs/js/tab-control.min.js"></script>
+<script src="static/js/system/jy/jy.main.js"></script>
+<script src="Home.js"></script>
+
+</body>
+</html>

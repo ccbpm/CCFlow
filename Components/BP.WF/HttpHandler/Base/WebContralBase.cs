@@ -332,6 +332,20 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
+        /// <summary>
+        /// 表单ID
+        /// </summary>
+        public string FrmID
+        {
+            get
+            {
+                string str = this.GetRequestVal("FrmID");
+                if (str == null || str == "" || str == "null")
+                    return this.GetRequestVal("FK_MapData");
+
+                return str;
+            }
+        }
         public int GroupField
         {
             get

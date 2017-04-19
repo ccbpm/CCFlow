@@ -127,12 +127,14 @@
                     for (var i = 0; i < ClassicMenus.length; i++) {
 
                         var no = ClassicMenus[i].No;
+                        if (no == "AdvFunc" || no == "Tools")
+                            continue;
+
                         var name = ClassicMenus[i].CH;
-                        var url = "../WF/" + ClassicMenus[i].ACEUrl;
-                        var No = ClassicMenus[i].No;
+                        var url = ClassicMenus[i].ACEUrl;
                         var li = "";
                         li += "\t\n <li id=menu>";
-                        li += "\t\n <a href='#maincontent' style='cursor:pointer;' onclick=\"openMenu('1','" + No + "','menu1','" + name + "','" + url + "')\" >";
+                        li += "\t\n <a href='#maincontent' style='cursor:pointer;' onclick=\"openMenu('1','" + no + "','menu1','" + name + "','" + url + "')\" >";
                         li += "\t\n <i class='icon-double-angle-right'></i>";
                         li += "\t\n <span class='menu-text'>";
                         li += "\t\n <i class='icon-user-md'></i>&nbsp;&nbsp;" + name + "</span></a></li>";
@@ -147,7 +149,7 @@
 
                         var no = ClassicMenusAdv[i].No;
                         var name = ClassicMenusAdv[i].CH;
-                        var url = "../WF/" + ClassicMenusAdv[i].ACEUrl;
+                        var url = ClassicMenusAdv[i].ACEUrl;
                         var No = ClassicMenusAdv[i].No;
                         var li = "";
                         li += "\t\n <li id=menu>";

@@ -775,7 +775,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Delete.gif";
-                rm.Title = "删除全部流程数据"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
+                rm.Title = "删除该流程全部数据"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
                 rm.Warning = "您确定要执行删除流程数据吗? \t\n该流程的数据删除后，就不能恢复，请注意删除的内容。";// "您确定要执行删除流程数据吗？";
                 rm.ClassMethodName = this.ToString() + ".DoDelData";
                 rm.GroupName = "流程维护";

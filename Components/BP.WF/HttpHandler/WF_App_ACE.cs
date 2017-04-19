@@ -141,11 +141,18 @@ namespace BP.WF.HttpHandler
             //本周.
             ht.Add("TodayNum", BP.WF.Dev2Interface.Todolist_CCWorks); //抄送.
 
-
-
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }
         #endregion 控制台.
+
+        /// <summary>
+        /// 设置
+        /// </summary>
+        /// <returns></returns>
+        public string Setting_Init()
+        {
+            return "";
+        }
 
 
         #region 登录界面.

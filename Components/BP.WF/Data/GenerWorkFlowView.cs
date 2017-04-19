@@ -623,6 +623,10 @@ namespace BP.WF.Data
                         return "挂起";
                     case WF.WFState.Askfor:
                         return "加签";
+                    case WF.WFState.ReturnSta:
+                        return "退回";
+                    case WF.WFState.Draft:
+                        return "草稿";
                     default:
                         return "未判断";
                 }

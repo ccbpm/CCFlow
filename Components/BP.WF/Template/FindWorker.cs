@@ -225,7 +225,12 @@ namespace BP.WF.Template
                     ps = new Paras();
                     ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
                     ps.Add("FK_Node", int.Parse(strs));
-                    ps.Add("OID", this.WorkID);
+
+                    if (currWn.HisNode.HisRunModel == RunModel.SubThread)
+                        ps.Add("OID", currWn.HisWork.FID);
+                    else
+                        ps.Add("OID", this.WorkID);
+
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 1)
                         return dt;

@@ -671,7 +671,7 @@
                     WinOpenPage("_blank", "../Rpt/Search.aspx?RptNo=ND" + parseInt(args.FK_Flow) + "MyRpt&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "查询");
                     break;
                 case "batchworkcheck": //批量审核
-                    window.open("../Batch.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "批量审核", "height=600, width=800,scrollbars=yes");
+                    window.open("../Batch.htm?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "批量审核", "height=600, width=800,scrollbars=yes");
                     break;
                 case "childline": //子线程
                     window.open("../WorkOpt/ThreadDtl.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "子线程", "height=600, width=800,scrollbars=yes");

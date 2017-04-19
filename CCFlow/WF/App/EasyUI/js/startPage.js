@@ -52,7 +52,7 @@ function StartCallBack(jsonData, scope) {
                     { field: 'ISBATCHSTART', title: '批量发起', formatter: function (value, rec) {
                         var h = "";
                         if (rec.ISBATCHSTART == "1") {
-                            h = "../../BatchStart.aspx?FK_Flow=" + rec.NO;
+                            h = "../../BatchStart.htm?FK_Flow=" + rec.NO;
                             h = "<a href='javascript:void(0);' onclick=WinOpenIt('" + rec.NO + "Batch','批量发起" + rec.NAME + "','" + h + "')>批量发起</a>";
                         }
                         return h;

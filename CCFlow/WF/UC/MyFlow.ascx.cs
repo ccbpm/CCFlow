@@ -1129,7 +1129,7 @@ namespace CCFlow.WF.UC
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyFlow.htm";
+                string url = "MyFlowFool.htm";
 
                 //处理连接.
                 url = this.DealUrl(currND, url);

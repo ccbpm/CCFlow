@@ -14,7 +14,7 @@
 
     <table style="width:100%;"> 
     <%--<caption class="CaptionMsgLong" >流程查询</caption>--%>
-<caption  class=CaptionMsgLong> <a href="../FlowRpt.aspx"> 按流程查询</a> - 高级查询</a> </caption>
+<caption  class=CaptionMsgLong> <a href="../FlowRpt.s"> 按流程查询</a> - 高级查询</a> </caption>
     <tr>
     
     <td>

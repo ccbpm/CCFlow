@@ -1027,6 +1027,7 @@
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
+    <Content Include="WF\Admin\AttrNode\PushMessageEntity.htm" />
     <Content Include="WF\Admin\AttrNode\TurnTo.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnTo.htm" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
@@ -1716,6 +1717,7 @@
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\modernizr.custom.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\js\notificationFx.js" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\readme.txt" />
+    <Content Include="WF\Admin\CCFormDesigner\TableRef.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Tables.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Welcome.htm" />
     <Content Include="WF\Admin\ClientBin\CCFlowDesigner.xap" />
@@ -3374,7 +3376,9 @@
     <Content Include="WF\Data\XML\EnumInfo.xml" />
     <Content Include="WF\Data\XML\Enum\Map.xml" />
     <Content Include="WF\Data\XML\Enum\WFV4.xml" />
-    <Content Include="WF\Data\XML\EventList.xml" />
+    <Content Include="WF\Data\XML\EventList.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="WF\Data\XML\FeatureSet.xml" />
     <Content Include="WF\Data\XML\FrmEle.xml" />
     <Content Include="WF\Data\XML\MapExt.xml" />

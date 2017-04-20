@@ -272,16 +272,6 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.StartLimitRole, (int)value);
             }
         }
-        ///// <summary>
-        ///// 发起限制文本
-        ///// </summary>
-        //public string StartLimitRoleText
-        //{
-        //    get
-        //    {
-        //        return  this.GetValRefTextByKey(FlowAttr.StartLimitRole);
-        //    }
-        //}
         /// <summary>
         /// 发起内容
         /// </summary>

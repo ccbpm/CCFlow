@@ -65,6 +65,13 @@ namespace BP.WF.HttpHandler
 
             switch (this.DoType)
             {
+                case "ParseStringToPinyin": //转拼音方法.
+                    string name = getUTF8ToString("name");
+                    string flag = getUTF8ToString("flag");
+                    if (flag == "true")
+                        return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
+                    else
+                        return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
                 case "sfguide_getinfo": //获取数据源字典表信息
                     if (string.IsNullOrWhiteSpace(sfno))
                         return "err@参数不正确";
@@ -79,7 +86,7 @@ namespace BP.WF.HttpHandler
                 case "sfguide_saveinfo":    //保存
                     bool isnew = Convert.ToBoolean(context.Request.QueryString["isnew"]);
                     sfno = context.Request.QueryString["NO"];
-                    string name = context.Request.QueryString["NAME"];
+                    string myname = context.Request.QueryString["NAME"];
                     int srctype = int.Parse(context.Request.QueryString["SRCTYPE"]);
                     int codestruct = int.Parse(context.Request.QueryString["CODESTRUCT"]);
                     string defval = context.Request.QueryString["DEFVAL"];
@@ -98,7 +105,7 @@ namespace BP.WF.HttpHandler
                     if (isnew && sftable.RetrieveFromDBSources() > 0)
                         return "err@字典编号" + sfno + "已经存在，不允许重复。";
 
-                    sftable.Name = name;
+                    sftable.Name = myname;
                     sftable.SrcType = (SrcType)srctype;
                     sftable.CodeStruct = (CodeStruct)codestruct;
                     sftable.DefVal = defval;

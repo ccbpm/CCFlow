@@ -4571,8 +4571,38 @@ namespace BP.WF
             }
             #endregion 按照时间的必须是，在表单加载后判断, 不管用户设置是否正确.
 
+
+            //为子流程的时候，该子流程只能被调用一次.
+            if (role == StartLimitRole.OnlyOneSubFlow)
+            {
+
+                if (BP.Sys.SystemConfig.IsBSsystem == true)
+                {
+
+                    string pflowNo = BP.Sys.Glo.Request.QueryString["PFlowNo"];
+                    string pworkid = BP.Sys.Glo.Request.QueryString["PWorkID"];
+
+                    if (pworkid == null)
+                        return true;
+
+                    sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkid + " AND FK_Flow='" + flow.No + "'";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    if (dt.Rows.Count == 0 || dt.Rows.Count == 1)
+                        return true;
+
+                    //  string title = dt.Rows[0]["Title"].ToString();
+                    string starter = dt.Rows[0]["Starter"].ToString();
+                    string rdt = dt.Rows[0]["RDT"].ToString();
+
+                    return false;
+
+                    //throw new Exception(flow.StartLimitAlert + "@该子流程已经被[" + starter + "], 在[" + rdt + "]发起，系统只允许发起一次。");
+                }
+            }
+
             return true;
         }
+        
         /// <summary>
         /// 当要发送是检查流程是否可以允许发起.
         /// </summary>
@@ -4640,6 +4670,27 @@ namespace BP.WF
                 else
                     return false;
             }
+
+            //为子流程的时候，该子流程只能被调用一次.
+            if (role == StartLimitRole.OnlyOneSubFlow)
+            {
+                sql = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + wk.OID;
+                string pWorkidStr = DBAccess.RunSQLReturnStringIsNull(sql, "0");
+                if (pWorkidStr == "0")
+                    return true;
+
+                sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pWorkidStr + " AND FK_Flow='" + flow.No + "'";
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 0 || dt.Rows.Count == 1)
+                    return true;
+
+                //  string title = dt.Rows[0]["Title"].ToString();
+                string starter = dt.Rows[0]["Starter"].ToString();
+                string rdt = dt.Rows[0]["RDT"].ToString();
+
+                throw new Exception(flow.StartLimitAlert + "@该子流程已经被[" + starter + "], 在[" + rdt + "]发起，系统只允许发起一次。");
+            }
+
             return true;
         }
 

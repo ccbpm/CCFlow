@@ -839,7 +839,7 @@ namespace BP.Sys
             switch (this.ExtType)
             {
                 case MapExtXmlList.ActiveDDL:
-                    this.MyPK =  MapExtXmlList.ActiveDDL +"_"+this.FK_MapData + "_" + this.AttrsOfActive;
+                    this.MyPK = MapExtXmlList.ActiveDDL + "_" + this.FK_MapData + "_" + this.AttrsOfActive;
                     break;
                 case MapExtXmlList.DDLFullCtrl:
                     this.MyPK = MapExtXmlList.DDLFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper;
@@ -847,7 +847,21 @@ namespace BP.Sys
                 case MapExtXmlList.PopVal:
                     this.MyPK = MapExtXmlList.PopVal + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
+                case MapExtXmlList.TBFullCtrl:
+                    this.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    break;
+                case MapExtXmlList.AutoFull:
+                    this.MyPK = MapExtXmlList.AutoFull + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    break;
+                case MapExtXmlList.InputCheck:
+                    this.MyPK = MapExtXmlList.InputCheck + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    break;
+                case MapExtXmlList.PageLoadFull:
+                    this.MyPK = MapExtXmlList.PageLoadFull + "_" + this.FK_MapData;
+                    break;
                 default:
+                    throw new Exception("@没有判断的扩展类型." + this.ExtType);
+                    // this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
             }
         }

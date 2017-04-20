@@ -48,7 +48,8 @@ functrees.push({
                                                 { Value: "1", IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=2" },
                                                 { IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=1" }
                                             ], LazyLoad: true, Nodes: [
-                                                { Type: "Node", Id: "RelatedFunction", ParentId: null, Name: "基础功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
+                                                {
+                                                 Type: "Node", Id: "RelatedFunction", ParentId: null, Name: "基础功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
                                                     Nodes: [
 //						                                { Type: "Node", Id: "FlowAttrs", ParentId: "RelatedFunction", Name: "流程属性", TType: "NORMAL", DType: "-1", IconCls: "icon-property", Inherits: ["fk_flow"], Url: "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSheets&No=@@fk_flow" },
 						                                { Type: "Node", Id: "FlowAttrs", ParentId: "RelatedFunction", Name: "流程属性", TType: "NORMAL", DType: "-1", IconCls: "icon-property", Inherits: ["fk_flow"], Url: "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowExts&No=@@fk_flow" },
@@ -69,15 +70,9 @@ functrees.push({
                                                 }, 
                                                 { Type: "Node", Id: "JianK", ParentId: null, Name: "流程监控", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
                                                     Nodes: [
-//						            { Type: "Node", Id: "WorkPanel", ParentId: "JianK", Name: "监控面板", TType: "WORKPANEL", DType: "-1", IconCls: "icon-Monitor", Url: "../CCBPMDesigner/App/OneFlow/Welcome.aspx?FK_Flow=@@fk_flow" },
-//						            { Type: "Node", Id: "list", ParentId: "JianK", Name: "节点列表", TType: "WORKPANEL", DType: "-1", IconCls: "icon-flows", Url: "../CCBPMDesigner/App/OneFlow/Nodes.aspx?FK_Flow=@@fk_flow" },
-						            { Type: "Node", Id: "SynthSearch", ParentId: "JianK", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=@@fk_flow&WFSta=all" },
-						            { Type: "Node", Id: "SynthAnalysis", ParentId: "JianK", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=@@fk_flow&WFSta=all" },
-                                    { Type: "Node", Id: "SearchByFlow", ParentId: "JianK", Name: "实例增长分析", TType: "SEARCHBYFLOW", DType: "-1", IconCls: "icon-Grow", Url: "../FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow=@@fk_flow" },
-                                    { Type: "Node", Id: "FlowRunning", ParentId: "JianK", Name: "逾期未完成实例", TType: "FLOWRUNNING", DType: "-1", IconCls: "icon-Warning", Url: "../FlowDB/InstanceWarning.aspx?FK_Flow=@@fk_flow" },
-                                    { Type: "Node", Id: "FlowExpired", ParentId: "JianK", Name: "逾期已完成实例", TType: "FLOWEXPIRED", DType: "-1", IconCls: "icon-overtime", Url: "../FlowDB/InstanceOverTimeOneFlow.aspx?anaTime=mouth&FK_Flow=@@fk_flow" },
-						            { Type: "Node", Id: "DeleteLog", ParentId: "JianK", Name: "删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=@@fk_flow" },
-						            { Type: "Node", Id: "Rptorder", ParentId: "JianK", Name: "数据订阅", TType: "DATARECEIVE", DType: "-1", IconCls: "icon-RptOrder", Url: "../CCBPMDesigner/App/RptOrder.aspx?FK_Flow=@@fk_flow" }
+						            { Type: "Node", Id: "SynthSearch", ParentId: "JianK", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=@@fk_flow&WFSta=all" },
+						            { Type: "Node", Id: "SynthAnalysis", ParentId: "JianK", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=@@fk_flow&WFSta=all" },
+						            { Type: "Node", Id: "DeleteLog", ParentId: "JianK", Name: "删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=@@fk_flow" },
 					              ]
                                                 },
                                                 { Type: "Node", Id: "DevAPI", ParentId: null, Name: "开发接口(API)", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
@@ -126,12 +121,12 @@ functrees.push({
 						            { Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "监控面板", TType: "WORKPANEL", DType: "-1", IconCls: "icon-Monitor", Url: "../CCBPMDesigner/App/Welcome.aspx?anaTime=slMouth&flowSort=slFlow&" },
 						            { Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "流程列表", TType: "WORKPANEL", DType: "-1", IconCls: "icon-flows", Url: "../CCBPMDesigner/Flows.htm" },
 						            { Type: "Node", Id: "SearchByKey", ParentId: "FlowMonitor", Name: "全文检索", TType: "SEARCHBYKEY", DType: "-1", IconCls: "icon-SearchKey", Url: "../../KeySearch.aspx" },
-						            { Type: "Node", Id: "SynthSearch", ParentId: "FlowMonitor", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews" },
-						            { Type: "Node", Id: "SynthAnalysis", ParentId: "FlowMonitor", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews" },
+						            { Type: "Node", Id: "SynthSearch", ParentId: "FlowMonitor", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" },
+						            { Type: "Node", Id: "SynthAnalysis", ParentId: "FlowMonitor", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" },
                                     { Type: "Node", Id: "SearchByFlow", ParentId: "FlowMonitor", Name: "实例增长分析", TType: "SEARCHBYFLOW", DType: "-1", IconCls: "icon-Grow", Url: "../FlowDB/InstanceGrow.aspx?anaTime=mouth" },
                                     { Type: "Node", Id: "FlowRunning", ParentId: "FlowMonitor", Name: "逾期未完成实例", TType: "FLOWRUNNING", DType: "-1", IconCls: "icon-Warning", Url: "../FlowDB/InstanceWarning.aspx" },
                                     { Type: "Node", Id: "FlowExpired", ParentId: "FlowMonitor", Name: "逾期已完成实例", TType: "FLOWEXPIRED", DType: "-1", IconCls: "icon-overtime", Url: "../FlowDB/InstanceOverTime.aspx?anaTime=mouth" },
-						            { Type: "Node", Id: "DeleteLog", ParentId: "FlowMonitor", Name: "流程删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs" }
+						            { Type: "Node", Id: "DeleteLog", ParentId: "FlowMonitor", Name: "流程删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs" }
 						            //{ Type: "Node", Id: "Rptorder", ParentId: "FlowMonitor", Name: "数据订阅", TType: "DELETELOG", DType: "-1", IconCls: "icon-RptOrder", Url: "../CCBPMDesigner/App/RptOrder.aspx" }
 					              ]
 						}
@@ -173,8 +168,8 @@ functrees.push({
                                                 { Type: "Node", Id: "DevAPI", ParentId: null, Name: "API接口", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
 						                                { Type: "Node", Id: "NEWAPI", ParentId: "DevAPI", Name: "新建/增加", TType: "NORMAL", DType: "-1", IconCls: "icon-URL", Inherits: ["fk_frm"], Url: "../../CCForm/Frm.aspx?FK_MapData=@@fk_frm&IsTest=1" },
-						                                { Type: "Node", Id: "SEARCHAPI", ParentId: "DevAPI", Name: "列表/查询", TType: "NORMAL", DType: "-1", IconCls: "icon-Search", Inherits: ["fk_frm"], Url: "../../Comm/Search.aspx?EnsName=@@fk_frm" },
-						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "分组分析", TType: "NORMAL", DType: "-1", IconCls: "icon-Group", Inherits: ["fk_frm"], Url: "../../Comm/Group.aspx?EnsName=@@fk_frm" },
+						                                { Type: "Node", Id: "SEARCHAPI", ParentId: "DevAPI", Name: "列表/查询", TType: "NORMAL", DType: "-1", IconCls: "icon-Search", Inherits: ["fk_frm"], Url: "../../Comm/Search.htm?EnsName=@@fk_frm" },
+						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "分组分析", TType: "NORMAL", DType: "-1", IconCls: "icon-Group", Inherits: ["fk_frm"], Url: "../../Comm/Group.htm?EnsName=@@fk_frm" },
 						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "代码事例", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_frm"], Url: "../CCFormDesigner/APICode.htm?FK_MapData=@@fk_frm" }
 
                                                         ]

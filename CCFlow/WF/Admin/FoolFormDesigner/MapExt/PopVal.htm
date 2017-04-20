@@ -212,6 +212,7 @@
 
                     switch (data.PopValWorkModel) {
                         case "SelfUrl":
+                        case "0":
                             $("#TB_Url").val(data.URL);
                             break;
                         case "TableOnly": //仅仅表格.
@@ -240,7 +241,7 @@
                             $("#TB_DoubleTreeEntitySQL").val(data.DoubleTreeEntitySQL);
                             break;
                         default:
-                            alert('没有判断的元素.');
+                            alert('没有判断的元素.PopValWorkModel=' + data.PopValWorkModel);
                             break;
                     }
 

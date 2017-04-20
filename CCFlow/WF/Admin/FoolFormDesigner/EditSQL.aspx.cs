@@ -165,7 +165,7 @@ namespace CCFlow.WF.MapDef
             if (mapAttr.UIBindKey.Contains("."))
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('../Comm/Search.aspx?EnsName=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
             else
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.htm?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >打开</a>");
             this.Pub1.AddTREnd();
 
             isItem = this.Pub1.AddTR(isItem);

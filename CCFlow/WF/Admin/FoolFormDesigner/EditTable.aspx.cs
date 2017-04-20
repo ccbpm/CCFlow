@@ -178,7 +178,7 @@ namespace CCFlow.WF.MapDef
             {
                 SFTable sf = new SFTable(mapAttr.UIBindKey);
                 if (sf.SrcType == SrcType.TableOrView)
-                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >数据维护</a>");
+                    this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.htm?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >数据维护</a>");
                 else
                     this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFSQLDataView.aspx?FK_SFTable=" + mapAttr.UIBindKey + "','df');\" >查看</a>");
             }

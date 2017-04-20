@@ -317,8 +317,8 @@ namespace CCFlow.WF.WorkOpt
                                     tb.ReadOnly = true;
                                 }
                                 tb.Text = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.NodeID);
-                                if (tb.Text == "同意")
-                                    tb.Text = "";
+                                //if (tb.Text == "同意")
+                                //    tb.Text = "";
 
                                 switch (wcDesc.HisFrmWorkShowModel)//可编辑框全局唯一
                                 {
@@ -755,8 +755,8 @@ namespace CCFlow.WF.WorkOpt
                     tb.ReadOnly = true;
                 }
                 tb.Text = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.NodeID);
-                if (tb.Text == "同意")
-                    tb.Text = "";
+                //if (tb.Text == "同意")
+                //    tb.Text = "";
 
                 if (string.IsNullOrEmpty(tb.Text))
                 {

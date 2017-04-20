@@ -1510,8 +1510,8 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
 
             // songhonggang (2014-06-15) 删除连线的时候删除表单条件
             Conds conds =new Conds();
-            conds.Delete(CondAttr.FK_Node, dir.Node);
-            
+            conds.Delete(CondAttr.FK_Node, dir.Node, CondAttr.ToNodeID, to, CondAttr.CondType, 2);
+
             return true;
         }
 

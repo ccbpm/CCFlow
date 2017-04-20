@@ -58,12 +58,12 @@
 
                         var newRow = "";
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + data[i].FK_FLOW + "&FID=0&WorkID=" + data[i].WORKID + "&FK_Node=" + data[i].FK_FLOW + "01&IsRead=0&T=" + timeKey + "');\" >" + data[i].TITLE + "</a></td>";
+                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + data[i].FK_FLOW + "&FID=0&WorkID=" + data[i].WORKID + "&FK_Node=" + data[i].FK_FLOW + "01&IsRead=0&T=" + timeKey + "');\" >" + data[i].TITLE + "</a></td>";
                         newRow += "<td>" + data[i].FLOWNAME + "</td>";
                         newRow += "<td>" + data[i].RDT + "</td>";
                         newRow += "<td>" + data[i].FLOWNOTE + "</td>";
                         newRow += "<td>";
-                        newRow += "<a href=\"javascript:Delete('" + data[i].WORKID + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                        newRow += "<a href=\"javascript:Delete('" + data[i].WORKID + "')\"><img src='./Img/Btn/Delete.gif' border=0 />删除</a>";
                         newRow += "</td>";
                         newRow += "</tr>";
 

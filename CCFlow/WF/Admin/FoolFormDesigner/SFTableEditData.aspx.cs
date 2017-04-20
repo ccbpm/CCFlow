@@ -170,6 +170,7 @@ namespace CCFlow.WF.MapDef
             if (name.Length > 0)
             {
                 en.Name = name;
+                en.EnMap.CodeStruct = "3";
                 en.No = en.GenerNewNo;
                 en.Insert();
                 this.Response.Redirect("SFTableEditData.aspx?FK_SFTable=" + this.FK_SFTable + "&PageIdx=" + this.PageIdx, true);

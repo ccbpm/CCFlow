@@ -48,7 +48,7 @@
     <base target="_self" />
 </head>
 <body onkeypress="Esc()" class="easyui-layout">
-    <div data-options="region:'center',title:'<a href=\'SFTable.aspx?RefNo=<%= this.Request["RefNo"] %>&FromApp=SL\'>字典表属性</a> - <%=this.Title %>'" style="padding: 5px;">
+    <div data-options="region:'center',title:'<%=this.Title %>'" style="padding: 5px;">
         <form id="form1" runat="server">
         <uc1:Pub ID="Pub1" runat="server" />
         <uc1:Pub ID="Pub2" runat="server" />

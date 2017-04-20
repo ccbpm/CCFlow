@@ -307,7 +307,7 @@
             .addTD('r2', 'c20', CONST_GROUPTITLE, '字典编号：')
             .addTD('r2', 'c21')
             .addTextbox('c21', 'No', null, sftable.NO ? sftable.NO : '')
-            .addTD('r2', 'c22', null, '创建字典表的英文名称')
+            .addTD('r2', 'c22', null, '创建字典表的英文名称,不要以数字开头否则创建表出错.')
             .addTR(null, 'r3')
             .addTD('r3', 'c30', CONST_GROUPTITLE, '字典名称：')
             .addTD('r3', 'c31')

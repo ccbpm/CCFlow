@@ -151,6 +151,12 @@ namespace CCFlow.WF.Admin.AttrFlow
                 fl.StartLimitPara = this.TB_ColNotExit_Fields.Text;
             }
 
+            if (this.RB_OnlyOneSubFlow.Checked)//按照发起字段不能重复规则
+            {
+                fl.StartLimitRole = StartLimitRole.OnlyOneSubFlow;
+             //   fl.StartLimitPara = this.TB_ColNotExit_Fields.Text;
+            }
+
             if (this.RB_SQL.Checked ==true)
             {
                 //字段参数.

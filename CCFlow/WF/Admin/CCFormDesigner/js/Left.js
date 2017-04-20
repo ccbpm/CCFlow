@@ -475,7 +475,7 @@ function srcTableData() {
         return;
     }
 
-    var url = "../FoolFormDesigner/SFTableEditData.aspx?FK_SFTable=" + srcTableNode.id; //todo:此处BP.Pub.Days样式的，页面报错
+    var url = "../FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + srcTableNode.id; //todo:此处BP.Pub.Days样式的，页面报错
     //OpenEasyUiDialog(url, "euiframeid", srcTableNode.text + ' 数据编辑', 800, 495, 'icon-edit');
     addTab(srcTableNode.id, srcTableNode.text + ' 数据编辑', url, srcTableNode.iconCls);
 }

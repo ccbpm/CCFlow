@@ -125,13 +125,13 @@ namespace CCFlow.WF.MapDef
                         switch (mattr.LGType)
                         {
                             case BP.En.FieldTypeS.Enum:
-                                this.Response.Redirect("EditEnum.aspx?FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK, true);
+                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK, true);
                                 return;
                             case BP.En.FieldTypeS.Normal:
-                                this.Response.Redirect("EditF.aspx?DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
+                                this.Response.Redirect("EditFieldGuide.htm?DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
                                 return;
                             case BP.En.FieldTypeS.FK:
-                                this.Response.Redirect("EditTable.aspx?DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
+                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
                                 return;
                             default:
                                 break;
@@ -142,13 +142,13 @@ namespace CCFlow.WF.MapDef
                         switch (ma.LGType)
                         {
                             case FieldTypeS.Normal:
-                                this.Response.Redirect("EditF.aspx?RefNo=" + this.RefNo, true);
+                                this.Response.Redirect("EditFieldGuide.aspx?MyPK=" + ma.MyPK + "&FType=" + ma.MyDataType, true);
                                 return;
                             case FieldTypeS.FK:
-                                this.Response.Redirect("EditTable.aspx?RefNo=" + this.RefNo, true);
+                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&MyPK=" + ma.MyPK, true);
                                 return;
                             case FieldTypeS.Enum:
-                                this.Response.Redirect("EditEnum.aspx?RefNo=" + this.RefNo, true);
+                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&MyPK=" + ma.MyPK, true);
                                 return;
                             default:
                                 return;
@@ -716,7 +716,7 @@ namespace CCFlow.WF.MapDef
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppString;
                 attr.DirectInsert();
-                this.Response.Redirect("EditF.aspx?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppString + "&DoType=Edit", true);
+                this.Response.Redirect("EditFieldGuide.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppString + "&DoType=Edit", true);
             }
         }
 

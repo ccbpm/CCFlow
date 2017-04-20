@@ -1290,13 +1290,13 @@ namespace CCFlow.WF.Admin
             switch ((FieldTypeS)drAttr[MapAttrAttr.LGType])
             {
                 case BP.En.FieldTypeS.Enum:
-                    url += "EditEnum.aspx?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
+                    url = "../../Comm/En.htm?Ens=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 case BP.En.FieldTypeS.Normal:
-                    url += "EditF.aspx?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
+                    url += "EditFieldGuide.htm?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 case BP.En.FieldTypeS.FK:
-                    url += "EditTable.aspx?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" +
+                    url = "../../Comm/En.htm?Ens=BP.Sys.FrmUI.MapAttrSFTables&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" +
                            drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 default:

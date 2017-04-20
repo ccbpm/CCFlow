@@ -37,7 +37,7 @@
                     //绑定左侧的列表值
                     var ulListValuesLiHtml = '';
                     $.each(initData.Sys_FrmRB, function (i, rb) {
-                        ulListValuesLiHtml += '<li>' + '<input id="RB_' + rb.KeyOfEn + rb.IntKey + '"' + (rb.IntKey == pageData.selectIntKey ? ' checked="true" ' : '') + '     type="radio" name="' + pageData.KeyOfEn + '" value="' + rb.IntKey + '" />' + rb.Lab + '</li>';
+                        ulListValuesLiHtml += '<li>' + '<input id="RB_' + rb.KeyOfEn + rb.IntKey + '"' + (rb.IntKey == pageData.selectIntKey ? ' checked="true" ' : '') + '     type="radio" name="' + pageData.KeyOfEn + '" value="' + rb.IntKey + '" /> <label for="RB_' + rb.KeyOfEn + rb.IntKey + '" > ' + rb.Lab + '</label></li>';
                     })
                     $('#ulListValues').html(ulListValuesLiHtml);
 
@@ -50,7 +50,7 @@
                     //绑定表单的所有字段
                     var mapAttrHtml = '';
                     $.each(initData.Sys_MapAttr, function (i, attr) {
-                        mapAttrHtml += '<tr><td>' + (i + 1) + '</td><td>' + attr.KeyOfEn + '</td><td>' + attr.Name + '</td><td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/>不设置</td><td><input type="radio" id="' + attr.KeyOfEn + '1" name="' + attr.KeyOfEn + '" value="1"/>可用</td><td><input type="radio" id="' + attr.KeyOfEn + '2" name="' + attr.KeyOfEn + '" value="2"/>可见</td></td><td><input type="radio" id="' + attr.KeyOfEn + '3" name="' + attr.KeyOfEn + '" value="3"/>不可见</td></tr>';
+                        mapAttrHtml += '<tr><td>' + (i + 1) + '</td><td>' + attr.KeyOfEn + '</td><td>' + attr.Name + '</td><td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td><td><input type="radio" id="' + attr.KeyOfEn + '1" name="' + attr.KeyOfEn + '" value="1"/><label for="' + attr.KeyOfEn + '1" >可用</label></td><td><input type="radio" id="' + attr.KeyOfEn + '2" name="' + attr.KeyOfEn + '" value="2"/><label for="' + attr.KeyOfEn + '2" >可见</label></td></td><td><input type="radio" id="' + attr.KeyOfEn + '3" name="' + attr.KeyOfEn + '" value="3"/> <label for="' + attr.KeyOfEn + '3" >不可见</label></td></tr>';
                     })
                     $('#Fields tbody').html(mapAttrHtml);
 
@@ -209,7 +209,7 @@
                                         <th>不设置</th>
                                         <th>可用</th>
                                         <th>可见</th>
-                                        <td>不可见</td>
+                                        <th>不可见</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

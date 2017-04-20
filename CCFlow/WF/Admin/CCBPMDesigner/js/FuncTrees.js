@@ -69,8 +69,8 @@ functrees.push({
                                                 }, 
                                                 { Type: "Node", Id: "JianK", ParentId: null, Name: "流程监控", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
                                                     Nodes: [
-						            { Type: "Node", Id: "WorkPanel", ParentId: "JianK", Name: "监控面板", TType: "WORKPANEL", DType: "-1", IconCls: "icon-Monitor", Url: "../CCBPMDesigner/App/OneFlow/Welcome.aspx?FK_Flow=@@fk_flow" },
-						            { Type: "Node", Id: "list", ParentId: "JianK", Name: "节点列表", TType: "WORKPANEL", DType: "-1", IconCls: "icon-flows", Url: "../CCBPMDesigner/App/OneFlow/Nodes.aspx?FK_Flow=@@fk_flow" },
+//						            { Type: "Node", Id: "WorkPanel", ParentId: "JianK", Name: "监控面板", TType: "WORKPANEL", DType: "-1", IconCls: "icon-Monitor", Url: "../CCBPMDesigner/App/OneFlow/Welcome.aspx?FK_Flow=@@fk_flow" },
+//						            { Type: "Node", Id: "list", ParentId: "JianK", Name: "节点列表", TType: "WORKPANEL", DType: "-1", IconCls: "icon-flows", Url: "../CCBPMDesigner/App/OneFlow/Nodes.aspx?FK_Flow=@@fk_flow" },
 						            { Type: "Node", Id: "SynthSearch", ParentId: "JianK", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=@@fk_flow&WFSta=all" },
 						            { Type: "Node", Id: "SynthAnalysis", ParentId: "JianK", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=@@fk_flow&WFSta=all" },
                                     { Type: "Node", Id: "SearchByFlow", ParentId: "JianK", Name: "实例增长分析", TType: "SEARCHBYFLOW", DType: "-1", IconCls: "icon-Grow", Url: "../FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow=@@fk_flow" },

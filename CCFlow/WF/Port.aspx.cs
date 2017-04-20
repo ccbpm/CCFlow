@@ -157,9 +157,9 @@ namespace BP.Web.Port
                     break;
                 case DoWhatList.StartSimple: // 极速模式的方式发起工作
                     if (this.FK_Flow == null)
-                        this.Response.Redirect(this.AppPath + "WF/App/Simple/Default.aspx", true);
+                        this.Response.Redirect(this.AppPath + "AppSimple/Default.aspx", true);
                     else
-                        this.Response.Redirect(this.AppPath + "WF/App/Simple/Default.aspx?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
+                        this.Response.Redirect(this.AppPath + "AppSimple/Default.aspx?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
                     break;
                 case DoWhatList.Start5: // 发起工作
                 case "StartClassic": // 发起工作

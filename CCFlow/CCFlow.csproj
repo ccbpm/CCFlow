@@ -731,6 +731,20 @@
     <Content Include="AppACE\welcome.htm" />
     <Content Include="AppACE\widgets.html" />
     <Content Include="AppACE\wysiwyg.html" />
+    <Content Include="AppSimple\CC.aspx" />
+    <Content Include="AppSimple\Complete.aspx" />
+    <Content Include="AppSimple\Default.aspx" />
+    <Content Include="AppSimple\Do.aspx" />
+    <Content Include="AppSimple\Help.aspx" />
+    <Content Include="AppSimple\Info.aspx" />
+    <Content Include="AppSimple\Left.aspx" />
+    <Content Include="AppSimple\Login.aspx" />
+    <Content Include="AppSimple\Readme.txt" />
+    <Content Include="AppSimple\Runing.aspx" />
+    <Content Include="AppSimple\Search.aspx" />
+    <Content Include="AppSimple\Start.aspx" />
+    <Content Include="AppSimple\ToDoList.aspx" />
+    <Content Include="AppSimple\Top.aspx" />
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -2380,29 +2394,6 @@
     <Content Include="WF\App\EasyUI\StartHistory.aspx" />
     <Content Include="WF\App\EasyUI\StartTree.aspx" />
     <Content Include="WF\App\EasyUI\Welcome.aspx" />
-    <Content Include="WF\App\Setting\Auto.aspx" />
-    <Content Include="WF\App\Setting\AutoDtl.aspx" />
-    <Content Include="WF\App\Setting\AutoLog.aspx" />
-    <Content Include="WF\App\Setting\AutoLogin.aspx" />
-    <Content Include="WF\App\Setting\Default.aspx" />
-    <Content Include="WF\App\Setting\EditPerInfo.aspx" />
-    <Content Include="WF\App\Setting\Password.aspx" />
-    <Content Include="WF\App\Setting\PerPng.aspx" />
-    <Content Include="WF\App\Setting\Siganture.aspx" />
-    <Content Include="WF\App\Simple\CC.aspx" />
-    <Content Include="WF\App\Simple\Complete.aspx" />
-    <Content Include="WF\App\Simple\Default.aspx" />
-    <Content Include="WF\App\Simple\Do.aspx" />
-    <Content Include="WF\App\Simple\Help.aspx" />
-    <Content Include="WF\App\Simple\Info.aspx" />
-    <Content Include="WF\App\Simple\Left.aspx" />
-    <Content Include="WF\App\Simple\Login.aspx" />
-    <Content Include="WF\App\Simple\Readme.txt" />
-    <Content Include="WF\App\Simple\Runing.aspx" />
-    <Content Include="WF\App\Simple\Search.aspx" />
-    <Content Include="WF\App\Simple\Start.aspx" />
-    <Content Include="WF\App\Simple\ToDoList.aspx" />
-    <Content Include="WF\App\Simple\Top.aspx" />
     <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\AutoTodolist.htm" />
     <Content Include="WF\Batch.aspx" />
@@ -2464,23 +2455,6 @@
     <Content Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx" />
     <Content Include="WF\CCForm\UploadFile.aspx" />
     <Content Include="WF\CH.aspx" />
-    <Content Include="WF\CH\ByDepts.aspx" />
-    <Content Include="WF\CH\ByEmps.aspx" />
-    <Content Include="WF\CH\ByNodes.aspx" />
-    <Content Include="WF\CH\css\flowch.css" />
-    <Content Include="WF\CH\Default.aspx" />
-    <Content Include="WF\CH\FenZhong.png" />
-    <Content Include="WF\CH\FlowCH.aspx" />
-    <Content Include="WF\CH\FlowOne.aspx" />
-    <Content Include="WF\CH\images\button2.gif" />
-    <Content Include="WF\CH\images\down.png" />
-    <Content Include="WF\CH\images\mainleft1_1.gif" />
-    <Content Include="WF\CH\images\up.png" />
-    <Content Include="WF\CH\images\zj_gl5.gif" />
-    <Content Include="WF\CH\images\zj_gl6.gif" />
-    <Content Include="WF\CH\images\zj_gl7.gif" />
-    <Content Include="WF\CH\ShuLiang.png" />
-    <Content Include="WF\CH\TodoSta.aspx" />
     <Content Include="WF\Comm\Batch.aspx" />
     <Content Include="WF\Comm\Charts\css\prettify.css" />
     <Content Include="WF\Comm\Charts\css\Style.css" />
@@ -3396,9 +3370,6 @@
     <Content Include="WF\Draft.htm" />
     <Content Include="WF\EmpWorks.aspx" />
     <Content Include="WF\ErrorPage.aspx" />
-    <Content Include="WF\FlowCheck\MyFlow.aspx" />
-    <Content Include="WF\FlowCheck\Site.Master" />
-    <Content Include="WF\FlowCheck\test.png" />
     <Content Include="WF\FlowFormTree\Base\FormTreeBase.aspx" />
     <Content Include="WF\FlowFormTree\Default.aspx" />
     <Content Include="WF\FlowFormTree\FlowFormTreeEdit.aspx" />
@@ -3427,28 +3398,6 @@
     <Content Include="WF\FlowSearchMyWork.aspx" />
     <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Focus.htm" />
-    <Content Include="WF\FrmTree\Default.aspx" />
-    <Content Include="WF\FrmTree\FlowFormTreeEdit.aspx" />
-    <Content Include="WF\FrmTree\FlowFormTreeView.aspx" />
-    <Content Include="WF\FrmTree\Handler.ashx" />
-    <Content Include="WF\FrmTree\Images\Banal.png" />
-    <Content Include="WF\FrmTree\Images\folder.gif" />
-    <Content Include="WF\FrmTree\Images\func.gif" />
-    <Content Include="WF\FrmTree\Images\logo.png" />
-    <Content Include="WF\FrmTree\Images\Menu\application.png" />
-    <Content Include="WF\FrmTree\Images\Menu\archive.png" />
-    <Content Include="WF\FrmTree\Images\Menu\collaboration.png" />
-    <Content Include="WF\FrmTree\Images\Menu\credit_card.png" />
-    <Content Include="WF\FrmTree\Images\Menu\customers.png" />
-    <Content Include="WF\FrmTree\Images\Menu\desktop_2.png" />
-    <Content Include="WF\FrmTree\Images\Menu\feed.png" />
-    <Content Include="WF\FrmTree\Images\Menu\forward.png" />
-    <Content Include="WF\FrmTree\Images\Menu\my_account.png" />
-    <Content Include="WF\FrmTree\Images\Menu\shipping.png" />
-    <Content Include="WF\FrmTree\Images\Menu\sitemap.png" />
-    <Content Include="WF\FrmTree\Images\Menu\sysset.png" />
-    <Content Include="WF\FrmTree\Images\Menu\user1.png" />
-    <Content Include="WF\FrmTree\Images\Menu\window.png" />
     <Content Include="WF\GetTask.aspx" />
     <Content Include="WF\HungUpList.aspx" />
     <Content Include="WF\HungUpList.htm" />
@@ -3854,32 +3803,10 @@
     <Content Include="WF\Login.htm" />
     <Content Include="WF\Messages.aspx" />
     <Content Include="WF\MessagesReplay.aspx" />
-    <Content Include="WF\Msg\Msg.js" />
-    <Content Include="WF\Msg\Read.aspx" />
-    <Content Include="WF\Msg\SMS.aspx" />
-    <Content Include="WF\Msg\Write.aspx" />
     <Content Include="WF\MyFlow.aspx" />
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\MyFlowInfo.aspx" />
     <Content Include="WF\MyFlowView.aspx" />
-    <Content Include="WF\OneFlow\Archive.aspx" />
-    <Content Include="WF\OneFlow\Cancel.aspx" />
-    <Content Include="WF\OneFlow\Do.aspx" />
-    <Content Include="WF\OneFlow\Draft.aspx" />
-    <Content Include="WF\OneFlow\EmpWorks.aspx" />
-    <Content Include="WF\OneFlow\HanderMapExt.ashx" />
-    <Content Include="WF\OneFlow\HungUp.aspx" />
-    <Content Include="WF\OneFlow\MasterPage.master" />
-    <Content Include="WF\OneFlow\MsgAlert.js" />
-    <Content Include="WF\OneFlow\MyFlow.aspx" />
-    <Content Include="WF\OneFlow\MyFlowInfo.aspx" />
-    <Content Include="WF\OneFlow\Runing.aspx" />
-    <Content Include="WF\OneFlow\Start.aspx" />
-    <Content Include="WF\OneFlow\UC\Runing.ascx" />
-    <Content Include="WF\OneFlow\UC\StartList.ascx" />
-    <Content Include="WF\OneFlow\UC\Working.ascx" />
-    <Content Include="WF\OneFlow\WorkFlowTrack.asmx" />
-    <Content Include="WF\OneFlow\Working.aspx" />
     <Content Include="WF\Port.aspx" />
     <Content Include="WF\PortDemo.htm" />
     <Content Include="WF\PrintSample.aspx" />
@@ -8134,6 +8061,7 @@
     <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.svg" />
     <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.ttf" />
     <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.woff" />
+    <Content Include="AppSimple\SiteMenu.Master" />
     <None Include="Service References\CloundWS\WS.wsdl" />
     <None Include="web.config">
       <SubType>Designer</SubType>
@@ -8182,8 +8110,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <None Include="WF\App\EasyUI\jquery\lib\ligerUI\skins\icons\新建 Microsoft Office Excel 工作表.xlsx" />
     <None Include="WF\App\EasyUI\jquery\lib\user.json" />
-    <Content Include="WF\App\Setting\Site.Master" />
-    <Content Include="WF\App\Simple\SiteMenu.Master" />
     <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\CCForm\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
@@ -8228,6 +8154,104 @@
   <ItemGroup>
     <Compile Include="AppACE\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\CC.aspx.cs">
+      <DependentUpon>CC.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\CC.aspx.designer.cs">
+      <DependentUpon>CC.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Complete.aspx.cs">
+      <DependentUpon>Complete.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Complete.aspx.designer.cs">
+      <DependentUpon>Complete.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Do.aspx.cs">
+      <DependentUpon>Do.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Do.aspx.designer.cs">
+      <DependentUpon>Do.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Help.aspx.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Help.aspx.designer.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Info.aspx.cs">
+      <DependentUpon>Info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Info.aspx.designer.cs">
+      <DependentUpon>Info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Left.aspx.cs">
+      <DependentUpon>Left.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Left.aspx.designer.cs">
+      <DependentUpon>Left.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Runing.aspx.cs">
+      <DependentUpon>Runing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Runing.aspx.designer.cs">
+      <DependentUpon>Runing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\SiteMenu.Master.cs">
+      <DependentUpon>SiteMenu.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\SiteMenu.Master.designer.cs">
+      <DependentUpon>SiteMenu.Master</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Start.aspx.cs">
+      <DependentUpon>Start.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Start.aspx.designer.cs">
+      <DependentUpon>Start.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\ToDoList.aspx.cs">
+      <DependentUpon>ToDoList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\ToDoList.aspx.designer.cs">
+      <DependentUpon>ToDoList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Top.aspx.cs">
+      <DependentUpon>Top.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Top.aspx.designer.cs">
+      <DependentUpon>Top.aspx</DependentUpon>
     </Compile>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
       <DependentUpon>FrmEventHandle.aspx</DependentUpon>
@@ -10335,174 +10359,6 @@
     <Compile Include="WF\App\EasyUI\Welcome.aspx.designer.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\App\Setting\Auto.aspx.cs">
-      <DependentUpon>Auto.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\Auto.aspx.designer.cs">
-      <DependentUpon>Auto.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\AutoDtl.aspx.cs">
-      <DependentUpon>AutoDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\AutoDtl.aspx.designer.cs">
-      <DependentUpon>AutoDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\AutoLog.aspx.cs">
-      <DependentUpon>AutoLog.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\AutoLog.aspx.designer.cs">
-      <DependentUpon>AutoLog.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\AutoLogin.aspx.cs">
-      <DependentUpon>AutoLogin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\AutoLogin.aspx.designer.cs">
-      <DependentUpon>AutoLogin.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\EditPerInfo.aspx.cs">
-      <DependentUpon>EditPerInfo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\EditPerInfo.aspx.designer.cs">
-      <DependentUpon>EditPerInfo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\Password.aspx.cs">
-      <DependentUpon>Password.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\Password.aspx.designer.cs">
-      <DependentUpon>Password.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\PerPng.aspx.cs">
-      <DependentUpon>PerPng.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\PerPng.aspx.designer.cs">
-      <DependentUpon>PerPng.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\Siganture.aspx.cs">
-      <DependentUpon>Siganture.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\Siganture.aspx.designer.cs">
-      <DependentUpon>Siganture.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Setting\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Setting\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\CC.aspx.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\CC.aspx.designer.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Complete.aspx.cs">
-      <DependentUpon>Complete.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Complete.aspx.designer.cs">
-      <DependentUpon>Complete.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Help.aspx.cs">
-      <DependentUpon>Help.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Help.aspx.designer.cs">
-      <DependentUpon>Help.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Info.aspx.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Info.aspx.designer.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Runing.aspx.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Runing.aspx.designer.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\SiteMenu.Master.cs">
-      <DependentUpon>SiteMenu.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\SiteMenu.Master.designer.cs">
-      <DependentUpon>SiteMenu.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Start.aspx.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Start.aspx.designer.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\ToDoList.aspx.cs">
-      <DependentUpon>ToDoList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\ToDoList.aspx.designer.cs">
-      <DependentUpon>ToDoList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Simple\Top.aspx.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Simple\Top.aspx.designer.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\AutoTodolist.aspx.cs">
       <DependentUpon>AutoTodolist.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10782,55 +10638,6 @@
     </Compile>
     <Compile Include="WF\CH.aspx.designer.cs">
       <DependentUpon>CH.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CH\ByDepts.aspx.cs">
-      <DependentUpon>ByDepts.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CH\ByDepts.aspx.designer.cs">
-      <DependentUpon>ByDepts.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CH\ByEmps.aspx.cs">
-      <DependentUpon>ByEmps.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CH\ByEmps.aspx.designer.cs">
-      <DependentUpon>ByEmps.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CH\ByNodes.aspx.cs">
-      <DependentUpon>ByNodes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CH\ByNodes.aspx.designer.cs">
-      <DependentUpon>ByNodes.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CH\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CH\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CH\FlowCH.aspx.cs">
-      <DependentUpon>FlowCH.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CH\FlowCH.aspx.designer.cs">
-      <DependentUpon>FlowCH.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CH\FlowOne.aspx.cs">
-      <DependentUpon>FlowOne.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CH\FlowOne.aspx.designer.cs">
-      <DependentUpon>FlowOne.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CH\TodoSta.aspx.cs">
-      <DependentUpon>TodoSta.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CH\TodoSta.aspx.designer.cs">
-      <DependentUpon>TodoSta.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Batch.aspx.cs">
       <DependentUpon>Batch.aspx</DependentUpon>
@@ -11449,20 +11256,6 @@
     <Compile Include="WF\ErrorPage.aspx.designer.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FlowCheck\MyFlow.aspx.cs">
-      <DependentUpon>MyFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowCheck\MyFlow.aspx.designer.cs">
-      <DependentUpon>MyFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FlowCheck\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowCheck\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
     <Compile Include="WF\FlowFormTree\Base\FormTreeBase.aspx.cs">
       <DependentUpon>FormTreeBase.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -11526,30 +11319,6 @@
     <Compile Include="WF\Focus.aspx.designer.cs">
       <DependentUpon>Focus.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FrmTree\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FrmTree\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FrmTree\FlowFormTreeEdit.aspx.cs">
-      <DependentUpon>FlowFormTreeEdit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FrmTree\FlowFormTreeEdit.aspx.designer.cs">
-      <DependentUpon>FlowFormTreeEdit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FrmTree\FlowFormTreeView.aspx.cs">
-      <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FrmTree\FlowFormTreeView.aspx.designer.cs">
-      <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FrmTree\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
     <Compile Include="WF\GetTask.aspx.cs">
       <DependentUpon>GetTask.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -11595,27 +11364,6 @@
     <Compile Include="WF\MessagesReplay.aspx.designer.cs">
       <DependentUpon>MessagesReplay.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Msg\Read.aspx.cs">
-      <DependentUpon>Read.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Msg\Read.aspx.designer.cs">
-      <DependentUpon>Read.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Msg\SMS.aspx.cs">
-      <DependentUpon>SMS.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Msg\SMS.aspx.designer.cs">
-      <DependentUpon>SMS.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Msg\Write.aspx.cs">
-      <DependentUpon>Write.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Msg\Write.aspx.designer.cs">
-      <DependentUpon>Write.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\MyFlow.ashx.cs">
       <DependentUpon>MyFlow.ashx</DependentUpon>
     </Compile>
@@ -11639,115 +11387,6 @@
     </Compile>
     <Compile Include="WF\MyFlowView.aspx.designer.cs">
       <DependentUpon>MyFlowView.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\Archive.aspx.cs">
-      <DependentUpon>Archive.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\Archive.aspx.designer.cs">
-      <DependentUpon>Archive.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\Cancel.aspx.cs">
-      <DependentUpon>Cancel.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\Cancel.aspx.designer.cs">
-      <DependentUpon>Cancel.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\Draft.aspx.cs">
-      <DependentUpon>Draft.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\Draft.aspx.designer.cs">
-      <DependentUpon>Draft.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\EmpWorks.aspx.cs">
-      <DependentUpon>EmpWorks.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\EmpWorks.aspx.designer.cs">
-      <DependentUpon>EmpWorks.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\HungUp.aspx.cs">
-      <DependentUpon>HungUp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\HungUp.aspx.designer.cs">
-      <DependentUpon>HungUp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\MasterPage.master.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\MasterPage.master.designer.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\MyFlow.aspx.cs">
-      <DependentUpon>MyFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\MyFlow.aspx.designer.cs">
-      <DependentUpon>MyFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\MyFlowInfo.aspx.cs">
-      <DependentUpon>MyFlowInfo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\MyFlowInfo.aspx.designer.cs">
-      <DependentUpon>MyFlowInfo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\Runing.aspx.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\Runing.aspx.designer.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\Start.aspx.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\Start.aspx.designer.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\UC\Runing.ascx.cs">
-      <DependentUpon>Runing.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\UC\Runing.ascx.designer.cs">
-      <DependentUpon>Runing.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\UC\StartList.ascx.cs">
-      <DependentUpon>StartList.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\UC\StartList.ascx.designer.cs">
-      <DependentUpon>StartList.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\UC\Working.ascx.cs">
-      <DependentUpon>Working.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\UC\Working.ascx.designer.cs">
-      <DependentUpon>Working.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\OneFlow\WorkFlowTrack.asmx.cs">
-      <DependentUpon>WorkFlowTrack.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\Working.aspx.cs">
-      <DependentUpon>Working.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\OneFlow\Working.aspx.designer.cs">
-      <DependentUpon>Working.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Port.aspx.cs">
       <DependentUpon>Port.aspx</DependentUpon>
@@ -12796,7 +12435,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>24933</DevelopmentServerPort>
+          <DevelopmentServerPort>8937</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

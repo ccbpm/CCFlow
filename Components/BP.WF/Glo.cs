@@ -815,6 +815,9 @@ namespace BP.WF
 
             NodeExt ne = new NodeExt();
             ne.CheckPhysicsTable();
+
+            MapAttr attr = new MapAttr();
+            attr.CheckPhysicsTable();
             #endregion 先创建表，否则列的顺序就会变化.
 
             #region 1, 创建or修复表

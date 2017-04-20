@@ -859,8 +859,15 @@ namespace BP.Sys
                 case MapExtXmlList.PageLoadFull:
                     this.MyPK = MapExtXmlList.PageLoadFull + "_" + this.FK_MapData;
                     break;
+                case MapExtXmlList.RegularExpression:
+                    this.MyPK = MapExtXmlList.RegularExpression + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    break;
+                case MapExtXmlList.Link:
+                    this.MyPK = MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    break;
                 default:
-                    throw new Exception("@没有判断的扩展类型." + this.ExtType);
+                    this.MyPK = MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    // throw new Exception("@没有判断的扩展类型." + this.ExtType);
                     // this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
             }

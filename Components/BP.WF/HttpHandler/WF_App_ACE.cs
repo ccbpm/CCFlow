@@ -191,5 +191,17 @@ namespace BP.WF.HttpHandler
 
         #endregion 登录界面.
 
+        #region 草稿.
+        /// <summary>
+        /// 草稿.
+        /// </summary>
+        /// <returns></returns>
+        public string Draft_Init()
+        {
+            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable(this.FK_Flow);
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion 草稿.
     }
 }

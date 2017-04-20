@@ -1017,26 +1017,6 @@
     <Content Include="WF\Admin\BindFrms.aspx" />
     <Content Include="WF\Admin\BindFrms.htm" />
     <Content Include="WF\Admin\BindFrmsFrmEnableRole.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\CH\List.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Nodes.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Nodes.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps0.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps0.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps1.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps1.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps2.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps2.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\SearchKey.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\SearchKey.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\RptOrder.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\content-background.jpg" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\css\ajaxfileupload.css" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\css\colorPicker_new.css" />
@@ -1391,7 +1371,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\normalize\readme.txt" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\SelectNodeIcon.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx" />
     <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
     <Content Include="WF\Admin\CCFormDesigner\APICode.htm" />
     <Content Include="WF\Admin\CCFormDesigner\assets\content-background.jpg" />
@@ -1690,7 +1669,6 @@
     <Content Include="WF\Admin\CCFormDesigner\Login.htm" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuidEntity.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-style-bar.css" />
@@ -1754,30 +1732,6 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\采购.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\销售.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
-    <Content Include="WF\Admin\Clound\DictData.aspx" />
-    <Content Include="WF\Admin\Clound\imgs\Dir.gif" />
-    <Content Include="WF\Admin\Clound\imgs\Download.png" />
-    <Content Include="WF\Admin\Clound\imgs\Flow.png" />
-    <Content Include="WF\Admin\Clound\imgs\ImportFlow.png" />
-    <Content Include="WF\Admin\Clound\imgs\NoTempleteImg.png" />
-    <Content Include="WF\Admin\Clound\imgs\PriCloud.png" />
-    <Content Include="WF\Admin\Clound\js\loading.js" />
-    <Content Include="WF\Admin\Clound\Login.aspx" />
-    <Content Include="WF\Admin\Clound\PriFlow.aspx" />
-    <Content Include="WF\Admin\Clound\PriFlowTemImp.aspx" />
-    <Content Include="WF\Admin\Clound\PriFlowTemOne.aspx" />
-    <Content Include="WF\Admin\Clound\PriForm.aspx" />
-    <Content Include="WF\Admin\Clound\PriFormTemOne.aspx" />
-    <Content Include="WF\Admin\Clound\Pub.ascx" />
-    <Content Include="WF\Admin\Clound\PubFlow.aspx" />
-    <Content Include="WF\Admin\Clound\PubFlowTemImp.aspx" />
-    <Content Include="WF\Admin\Clound\PubFlowTemOne.aspx" />
-    <Content Include="WF\Admin\Clound\PubForm.aspx" />
-    <Content Include="WF\Admin\Clound\PubFormTemOne.aspx" />
-    <Content Include="WF\Admin\Clound\RegUser.aspx" />
-    <Content Include="WF\Admin\Clound\SaveFlowToPriTem.aspx" />
-    <Content Include="WF\Admin\Clound\SaveFormToPriTem.aspx" />
-    <Content Include="WF\Admin\Clound\Working.png" />
     <Content Include="WF\Admin\Cond.aspx" />
     <Content Include="WF\Admin\CondByPara.aspx" />
     <Content Include="WF\Admin\CondBySQL.aspx" />
@@ -1791,20 +1745,6 @@
     <Content Include="WF\Admin\DBInstall.aspx" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\DoType.aspx" />
-    <Content Include="WF\Admin\FindWorker\ByDept.aspx" />
-    <Content Include="WF\Admin\FindWorker\Leader.aspx" />
-    <Content Include="WF\Admin\FindWorker\List.aspx" />
-    <Content Include="WF\Admin\FindWorker\SpecEmps.aspx" />
-    <Content Include="WF\Admin\FlowDB\FlowDB.aspx" />
-    <Content Include="WF\Admin\FlowDB\FlowShift.aspx" />
-    <Content Include="WF\Admin\FlowDB\FlowSkip.aspx" />
-    <Content Include="WF\Admin\FlowDB\InstanceGrow.aspx" />
-    <Content Include="WF\Admin\FlowDB\InstanceGrowOneFlow.aspx" />
-    <Content Include="WF\Admin\FlowDB\InstanceOverTime.aspx" />
-    <Content Include="WF\Admin\FlowDB\InstanceOverTimeOneFlow.aspx" />
-    <Content Include="WF\Admin\FlowDB\InstanceWarning.aspx" />
-    <Content Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx" />
-    <Content Include="WF\Admin\FlowDB\流程按月分析.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment.htm" />
@@ -1913,11 +1853,6 @@
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Info.aspx" />
-    <Content Include="WF\Admin\Org\Integration.aspx" />
-    <Content Include="WF\Admin\Org\IntegrationAD.aspx" />
-    <Content Include="WF\Admin\Org\IntegrationDB.aspx" />
-    <Content Include="WF\Admin\Org\IntegrationWS.aspx" />
-    <Content Include="WF\Admin\Org\Working.png" />
     <Content Include="WF\Admin\Pub.ascx" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
@@ -2369,8 +2304,6 @@
     <Content Include="WF\BatchStartGroup.aspx" />
     <Content Include="WF\CC.aspx" />
     <Content Include="WF\CC.htm" />
-    <Content Include="WF\CCForm\API.aspx" />
-    <Content Include="WF\CCForm\APIDemo.htm" />
     <Content Include="WF\CCForm\AttachmentUpload.aspx" />
     <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
     <Content Include="WF\CCForm\BPPaint.aspx" />
@@ -8040,9 +7973,6 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\CH\Handler.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\Handler.ashx" />
-    <Content Include="WF\Admin\CCBPMDesigner\App\OneFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx" />
     <Content Include="WF\Admin\AttrNode\Handler.ashx" />
@@ -8058,7 +7988,6 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
     <Content Include="WF\Admin\CCFormDesigner\Site.Master" />
     <Content Include="WF\Admin\Condition.Master" />
-    <Content Include="WF\Admin\FindWorker\Site.Master" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
@@ -8069,7 +7998,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Rpt\RptGuide.Master" />
     <Content Include="WF\Admin\FoolFormDesigner\WinOpen.master" />
     <Content Include="WF\Admin\Handler.ashx" />
-    <Content Include="WF\Admin\Org\Site.Master" />
     <Content Include="WF\Admin\WinOpen.master" />
     <Content Include="WF\Admin\XAP\WebClientDownloadHandler.ashx" />
     <Content Include="WF\App\Classic\Handler.ashx" />
@@ -9010,78 +8938,6 @@
     <Compile Include="WF\Admin\BindFrmsFrmEnableRole.aspx.designer.cs">
       <DependentUpon>BindFrmsFrmEnableRole.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx.cs">
-      <DependentUpon>ByFlows.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\CH\ByFlows.aspx.designer.cs">
-      <DependentUpon>ByFlows.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\CH\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\Nodes.aspx.cs">
-      <DependentUpon>Nodes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\Nodes.aspx.designer.cs">
-      <DependentUpon>Nodes.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps.aspx.cs">
-      <DependentUpon>NodesDtlEmps.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps.aspx.designer.cs">
-      <DependentUpon>NodesDtlEmps.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps0.aspx.cs">
-      <DependentUpon>NodesDtlEmps0.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps0.aspx.designer.cs">
-      <DependentUpon>NodesDtlEmps0.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps1.aspx.cs">
-      <DependentUpon>NodesDtlEmps1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps1.aspx.designer.cs">
-      <DependentUpon>NodesDtlEmps1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps2.aspx.cs">
-      <DependentUpon>NodesDtlEmps2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\NodesDtlEmps2.aspx.designer.cs">
-      <DependentUpon>NodesDtlEmps2.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\SearchKey.aspx.cs">
-      <DependentUpon>SearchKey.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\SearchKey.aspx.designer.cs">
-      <DependentUpon>SearchKey.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\OneFlow\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Flows.aspx.cs">
       <DependentUpon>Flows.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9094,13 +8950,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx.cs">
       <DependentUpon>svg.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx.cs">
-      <DependentUpon>ChartWorks.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCBPMDesigner\UC\ChartWorks.ascx.designer.cs">
-      <DependentUpon>ChartWorks.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
@@ -9118,131 +8967,12 @@
     <Compile Include="WF\Admin\CCFormDesigner\NewFrmGuide.aspx.designer.cs">
       <DependentUpon>NewFrmGuide.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\NewFrmGuidEntity.aspx.cs">
-      <DependentUpon>NewFrmGuidEntity.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\NewFrmGuidEntity.aspx.designer.cs">
-      <DependentUpon>NewFrmGuidEntity.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\DictData.aspx.cs">
-      <DependentUpon>DictData.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\DictData.aspx.designer.cs">
-      <DependentUpon>DictData.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriFlow.aspx.cs">
-      <DependentUpon>PriFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriFlow.aspx.designer.cs">
-      <DependentUpon>PriFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriFlowTemImp.aspx.cs">
-      <DependentUpon>PriFlowTemImp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriFlowTemImp.aspx.designer.cs">
-      <DependentUpon>PriFlowTemImp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriFlowTemOne.aspx.cs">
-      <DependentUpon>PriFlowTemOne.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriFlowTemOne.aspx.designer.cs">
-      <DependentUpon>PriFlowTemOne.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriForm.aspx.cs">
-      <DependentUpon>PriForm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriForm.aspx.designer.cs">
-      <DependentUpon>PriForm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriFormTemOne.aspx.cs">
-      <DependentUpon>PriFormTemOne.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PriFormTemOne.aspx.designer.cs">
-      <DependentUpon>PriFormTemOne.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubFlow.aspx.cs">
-      <DependentUpon>PubFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubFlow.aspx.designer.cs">
-      <DependentUpon>PubFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubFlowTemImp.aspx.cs">
-      <DependentUpon>PubFlowTemImp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubFlowTemImp.aspx.designer.cs">
-      <DependentUpon>PubFlowTemImp.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubFlowTemOne.aspx.cs">
-      <DependentUpon>PubFlowTemOne.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubFlowTemOne.aspx.designer.cs">
-      <DependentUpon>PubFlowTemOne.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubForm.aspx.cs">
-      <DependentUpon>PubForm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubForm.aspx.designer.cs">
-      <DependentUpon>PubForm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubFormTemOne.aspx.cs">
-      <DependentUpon>PubFormTemOne.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\PubFormTemOne.aspx.designer.cs">
-      <DependentUpon>PubFormTemOne.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\RegUser.aspx.cs">
-      <DependentUpon>RegUser.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\RegUser.aspx.designer.cs">
-      <DependentUpon>RegUser.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\SaveFlowToPriTem.aspx.cs">
-      <DependentUpon>SaveFlowToPriTem.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\SaveFlowToPriTem.aspx.designer.cs">
-      <DependentUpon>SaveFlowToPriTem.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\SaveFormToPriTem.aspx.cs">
-      <DependentUpon>SaveFormToPriTem.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Clound\SaveFormToPriTem.aspx.designer.cs">
-      <DependentUpon>SaveFormToPriTem.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Cond.aspx.cs">
       <DependentUpon>Cond.aspx</DependentUpon>
@@ -9341,104 +9071,6 @@
     </Compile>
     <Compile Include="WF\Admin\DoType.aspx.designer.cs">
       <DependentUpon>DoType.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\ByDept.aspx.cs">
-      <DependentUpon>ByDept.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\ByDept.aspx.designer.cs">
-      <DependentUpon>ByDept.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\Leader.aspx.cs">
-      <DependentUpon>Leader.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\Leader.aspx.designer.cs">
-      <DependentUpon>Leader.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\List.aspx.cs">
-      <DependentUpon>List.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\List.aspx.designer.cs">
-      <DependentUpon>List.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\SpecEmps.aspx.cs">
-      <DependentUpon>SpecEmps.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FindWorker\SpecEmps.aspx.designer.cs">
-      <DependentUpon>SpecEmps.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\FlowDB.aspx.cs">
-      <DependentUpon>FlowDB.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\FlowDB.aspx.designer.cs">
-      <DependentUpon>FlowDB.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\FlowShift.aspx.cs">
-      <DependentUpon>FlowShift.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\FlowShift.aspx.designer.cs">
-      <DependentUpon>FlowShift.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\FlowSkip.aspx.cs">
-      <DependentUpon>FlowSkip.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\FlowSkip.aspx.designer.cs">
-      <DependentUpon>FlowSkip.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceGrow.aspx.cs">
-      <DependentUpon>InstanceGrow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceGrow.aspx.designer.cs">
-      <DependentUpon>InstanceGrow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceGrowOneFlow.aspx.cs">
-      <DependentUpon>InstanceGrowOneFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceGrowOneFlow.aspx.designer.cs">
-      <DependentUpon>InstanceGrowOneFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceOverTime.aspx.cs">
-      <DependentUpon>InstanceOverTime.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceOverTime.aspx.designer.cs">
-      <DependentUpon>InstanceOverTime.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceOverTimeOneFlow.aspx.cs">
-      <DependentUpon>InstanceOverTimeOneFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceOverTimeOneFlow.aspx.designer.cs">
-      <DependentUpon>InstanceOverTimeOneFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceWarning.aspx.cs">
-      <DependentUpon>InstanceWarning.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceWarning.aspx.designer.cs">
-      <DependentUpon>InstanceWarning.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx.cs">
-      <DependentUpon>InstanceWarningOneFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FlowDB\InstanceWarningOneFlow.aspx.designer.cs">
-      <DependentUpon>InstanceWarningOneFlow.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Action.aspx.cs">
       <DependentUpon>Action.aspx</DependentUpon>
@@ -9914,41 +9546,6 @@
     <Compile Include="WF\Admin\Info.aspx.designer.cs">
       <DependentUpon>Info.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\Org\Integration.aspx.cs">
-      <DependentUpon>Integration.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Org\Integration.aspx.designer.cs">
-      <DependentUpon>Integration.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Org\IntegrationAD.aspx.cs">
-      <DependentUpon>IntegrationAD.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Org\IntegrationAD.aspx.designer.cs">
-      <DependentUpon>IntegrationAD.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Org\IntegrationDB.aspx.cs">
-      <DependentUpon>IntegrationDB.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Org\IntegrationDB.aspx.designer.cs">
-      <DependentUpon>IntegrationDB.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Org\IntegrationWS.aspx.cs">
-      <DependentUpon>IntegrationWS.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Org\IntegrationWS.aspx.designer.cs">
-      <DependentUpon>IntegrationWS.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Org\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Org\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10367,13 +9964,6 @@
     </Compile>
     <Compile Include="WF\CC.aspx.designer.cs">
       <DependentUpon>CC.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CCForm\API.aspx.cs">
-      <DependentUpon>API.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\API.aspx.designer.cs">
-      <DependentUpon>API.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\AttachmentUpload.aspx.cs">
       <DependentUpon>AttachmentUpload.aspx</DependentUpon>

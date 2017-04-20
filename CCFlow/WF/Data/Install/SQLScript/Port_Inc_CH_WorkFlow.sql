@@ -6,7 +6,7 @@ DELETE FROM Port_DeptEmp;
 
 
 -- Port_Dept ;
-INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1','总经理室','0');
+INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('1','驰骋软件','0');
 INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('2','市场部','1')  ;
 INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('3','研发部','1')  ;
 INSERT INTO Port_Dept (No,Name,ParentNo) VALUES('4','服务部','1')  ;

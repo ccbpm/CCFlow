@@ -131,12 +131,32 @@ functrees.push({
                                     { Type: "Node", Id: "SearchByFlow", ParentId: "FlowMonitor", Name: "实例增长分析", TType: "SEARCHBYFLOW", DType: "-1", IconCls: "icon-Grow", Url: "../FlowDB/InstanceGrow.aspx?anaTime=mouth" },
                                     { Type: "Node", Id: "FlowRunning", ParentId: "FlowMonitor", Name: "逾期未完成实例", TType: "FLOWRUNNING", DType: "-1", IconCls: "icon-Warning", Url: "../FlowDB/InstanceWarning.aspx" },
                                     { Type: "Node", Id: "FlowExpired", ParentId: "FlowMonitor", Name: "逾期已完成实例", TType: "FLOWEXPIRED", DType: "-1", IconCls: "icon-overtime", Url: "../FlowDB/InstanceOverTime.aspx?anaTime=mouth" },
-						            { Type: "Node", Id: "DeleteLog", ParentId: "FlowMonitor", Name: "流程删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs" }
-						            //{ Type: "Node", Id: "Rptorder", ParentId: "FlowMonitor", Name: "数据订阅", TType: "DELETELOG", DType: "-1", IconCls: "icon-RptOrder", Url: "../CCBPMDesigner/App/RptOrder.aspx" }
+						            { Type: "Node", Id: "DeleteLog", ParentId: "FlowMonitor", Name: "流程删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs" },
+						            { Type: "Node", Id: "Rptorder", ParentId: "FlowMonitor", Name: "数据订阅", TType: "DELETELOG", DType: "-1", IconCls: "icon-RptOrder", Url: "../CCBPMDesigner/App/RptOrder.aspx" }
 					              ]
-						}
+						},
+                        { Type: "Node", Id: "TimeCheck", ParentId: "FlowFunc", Name: "时效考核", TType: "TIMECHECK", DType: "-1", IconCls: "icon-tree_folder", Nodes: [
+                            { Type: "Node", Id: "FlowAnalysis", ParentId: "TimeCheck", Name: "按流程分析", TType: "FLOWANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/ByFlows.htm" },
+                            { Type: "Node", Id: "DeptAnalysis", ParentId: "TimeCheck", Name: "按部门分析", TType: "DEPTANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/ByDepts.htm" },
+                            { Type: "Node", Id: "AvgAnalysis", ParentId: "TimeCheck", Name: "排名列表", TType: "AVGANALYSIS", DType: "-1", IconCls: "", Url: "../CCBPMDesigner/App/CH/List.htm" }
+                        ]
+                        },
+                        { Type: "Node", Id: "PDevAPI", ParentId: "FlowFunc", Name: "开发接口", TType: "PDEVAPI", DType: "-1", IconCls: "icon-tree_folder", Nodes: [
+                            { Type: "Node", Id: "StructureIntegration", ParentId: "TimeCheck", Name: "组织结构集成", TType: "STRUCTUREINTEGRATION", DType: "-1", IconCls: "", Url: "../Org/Integration.aspx" },
+                            { Type: "Node", Id: "CodeIntegrationAPI", ParentId: "TimeCheck", Name: "代码集成接口", TType: "CODEINTEGRATIONAPI", DType: "-1", IconCls: "", Url: "" },
+                            { Type: "Node", Id: "CodeGeneration", ParentId: "TimeCheck", Name: "代码生成", TType: "CODEGENERATION", DType: "-1", IconCls: "", Url: "" },
+                            { Type: "Node", Id: "FormComponent", ParentId: "TimeCheck", Name: "表单组件", TType: "FORMCOMPONENT", DType: "-1", IconCls: "", Url: "" }
+                        ]
+                        }
 					  ]
             }
+//            ,
+//			{ Type: "Node", Id: "FlowCloud", ParentId: null, Name: "流程云", Opened: true, TType: "FLOWCLOUD", DType: "-1", IconCls: "icon-flowcloud",
+//			    Nodes: [
+//						{ Type: "Node", Id: "ShareFlow", ParentId: "FlowCloud", Name: "共有流程云", TType: "SHAREFLOW", DType: "-1", IconCls: "icon-flowpublic", Url: "../Clound/PubFlow.aspx" },
+//						{ Type: "Node", Id: "PriFlow", ParentId: "FlowCloud", Name: "私有流程云", TType: "PRIFLOW", DType: "-1", IconCls: "icon-flowprivate", Url: "../Clound/PriFlow.aspx" }
+//					  ]
+//			}
 		  ]
 });
 //2.表单库
@@ -206,7 +226,13 @@ functrees.push({
 						{ Type: "Node", Id: "Enums", ParentId: "FormRef", Name: "枚举列表", TType: "ENUMS", IconCls: "icon-enum", Url: "../../Comm/Sys/EnumList.aspx?t=" + Math.random() },
 						{ Type: "Node", Id: "JSLib", ParentId: "FormRef", Name: "JS验证库", TType: "JSLIB", IconCls: "icon-js", Url: "../../Comm/Sys/FuncLib.aspx?t=" + Math.random() }
 					  ]
-			} 
+			},
+			{ Type: "Node", Id: "CloundData", ParentId: null, Name: "表单云", Opened: true, TType: "CLOUNDDATA", IconCls: "icon-formcloud",
+			    Nodes: [
+						{ Type: "Node", Id: "PriForm", ParentId: "CloundData", Name: "共有表单云", TType: "PRIFORM", IconCls: "icon-flowpublic", Url: "../Clound/PubForm.aspx" },
+						{ Type: "Node", Id: "ShareForm", ParentId: "CloundData", Name: "私有表单云", TType: "SHAREFORM", IconCls: "icon-flowprivate", Url: "../Clound/PriForm.aspx" }
+					  ]
+			}
 		  ]
 });
 //3.组织结构
@@ -220,8 +246,9 @@ functrees.push({
 //4.系统维护
 functrees.push({
     Id: "sysTree",
-    Name: "系统",
+    Name: "系统维护",
     Nodes: [
+			 
 			{ Type: "Node", Id: "BasicSetting2", ParentId: null, Name: "基础设置", Opened: true, IconCls: "icon-tree_folder",
 			    Nodes: [
 						{ Type: "Node", Id: "HolidaySetting", ParentId: "BasicSetting2", Name: "节假日设置", IconCls: "icon-Config", Url: "../../Comm/Sys/Holiday.aspx" },
@@ -229,6 +256,12 @@ functrees.push({
 //						{ Type: "Node", Id: "SysVal", ParentId: "BasicSetting2", Name: "系统变量", IconCls: "icon-Config", Url: "javascript:void(0)" },
 						{ Type: "Node", Id: "FlowPrevSetting", ParentId: "BasicSetting2", Name: "流程预先审批设置", IconCls: "icon-Config", Url: "../AttrFlow/GetTask.htm" },
 						{ Type: "Node", Id: "FuncDown", ParentId: "BasicSetting2", Name: "功能执行", IconCls: "icon-Config", Url: "../../Comm/MethodLink.aspx" }
+					  ]
+			},
+			{ Type: "Node", Id: "SysLog", ParentId: null, Name: "系统日志", Opened: true, IconCls: "icon-tree_folder",
+			    Nodes: [
+						{ Type: "Node", Id: "LoginLog", ParentId: "SysLog", Name: "登录日志", IconCls: "icon-View", Url: "javascript:void(0)" },
+						{ Type: "Node", Id: "ExceptionLog", ParentId: "SysLog", Name: "异常日志", IconCls: "icon-View", Url: "javascript:void(0)" }
 					  ]
 			}
 		  ]

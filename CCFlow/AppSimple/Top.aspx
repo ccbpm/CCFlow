@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WF/App/Simple/SiteMenu.Master" AutoEventWireup="true" CodeBehind="Top.aspx.cs" Inherits="CCFlow.WF.App.Simple.Top" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="SiteMenu.Master" AutoEventWireup="true" CodeBehind="Top.aspx.cs" Inherits="CCFlow.WF.App.Simple.Top" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 <base target="_parent" />
 </asp:Content>

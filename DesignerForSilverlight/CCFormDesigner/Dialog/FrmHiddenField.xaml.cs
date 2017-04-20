@@ -70,7 +70,7 @@ namespace CCForm
                 MessageBox.Show("在您选择字段类型后，注意设置字段隐藏属性。",
                     "提示", MessageBoxButton.OK);
 
-                url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Do.aspx?DoType=AddF&MyPK=" + Glo.FK_MapData + tKey;
+                url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Do.htm?DoType=AddF&MyPK=" + Glo.FK_MapData + tKey;
                 if (Glo.Platform == Platform.JFlow)
                     url = url.Replace(".aspx", ".jsp");
 

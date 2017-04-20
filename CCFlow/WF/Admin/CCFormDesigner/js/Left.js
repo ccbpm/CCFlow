@@ -297,7 +297,7 @@ function ImpFlow() {
         return;
     }
     var fk_flow = currFlow.id;
-    url = "./../AttrFlow/Imp.aspx?FK_Flow=" + fk_flow + "&Lang=CH";
+    url = "./../AttrFlow/Imp.htm?FK_Flow=" + fk_flow + "&Lang=CH";
     addTab(fk_flow + "PO", "导入流程模版", url);
 }
 
@@ -319,7 +319,7 @@ function ImpFlowBySort() {
     var currFlow = $('#flowTree').tree('getSelected');
     var fk_flowSort = currFlow.id;
     fk_flowSort = fk_flowSort.replace("F", "");
-    url = "./../AttrFlow/Imp.aspx?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
+    url = "./../AttrFlow/Imp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
     addTab(fk_flowSort + "PO", "导入流程模版", url);
 }
 

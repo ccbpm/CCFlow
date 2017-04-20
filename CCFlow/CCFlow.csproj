@@ -992,6 +992,8 @@
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
     <Content Include="WF\Admin\AttrFlow\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
+    <Content Include="WF\Admin\AttrFlow\Imp.htm" />
+    <Content Include="WF\Admin\AttrFlow\ImpExp.htm" />
     <Content Include="WF\Admin\AttrNode\Action.aspx" />
     <Content Include="WF\Admin\AttrNode\Action.htm" />
     <Content Include="WF\Admin\AttrNode\ActionEvent.aspx" />

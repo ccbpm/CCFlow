@@ -24,7 +24,7 @@
 
             if (plant == "CCFlow") {
                 url = url.replace('.htm', '.aspx');
-                window.location.href = url;
+                window.location.href = "NodeCCRole.aspx?FK_Node="+nodeID;
                 return;
             } else {
                 url = url.replace('.htm', '.jsp');

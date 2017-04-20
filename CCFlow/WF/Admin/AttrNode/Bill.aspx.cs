@@ -73,7 +73,7 @@ namespace CCFlow.WF.Admin
             this.Ucsys1.Clear();
             BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             this.Ucsys1.AddTable();
-            this.Ucsys1.AddCaptionLeft("<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "' >" + "返回" + "</a> - <a href=Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&DoType=New ><img  border=0 src='../Img/Btn/New.gif' />新建</a>");
+            this.Ucsys1.AddCaptionLeft("<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "' >" + "返回" + "</a> - <a href=Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&DoType=New ><img  border=0 src='../../Img/Btn/New.gif' />新建</a>");
             this.Ucsys1.AddTR();
             this.Ucsys1.AddTDTitle("项目");
             this.Ucsys1.AddTDTitle("输入");
@@ -101,7 +101,7 @@ namespace CCFlow.WF.Admin
             ddl.BindEntities(ens);
             ddl.SetSelectItem(bill.FK_BillType);
             this.Ucsys1.AddTD(ddl);
-            this.Ucsys1.AddTD("<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&DoType=EditType'><img src='../Img/Btn/Edit.gif' border=0/>类别维护</a>");
+            this.Ucsys1.AddTD("<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&DoType=EditType'><img src='../../Img/Btn/Edit.gif' border=0/>类别维护</a>");
             this.Ucsys1.AddTREnd();
 
             this.Ucsys1.AddTR();
@@ -177,7 +177,7 @@ namespace CCFlow.WF.Admin
             }
 
             if (this.RefNo != null)
-                url = "<a href='../../DataUser/CyclostyleFile/" + bill.Url + "." + fileType + "'><img src='../Img/Btn/save.gif' border=0/> 模板下载</a>";
+                url = "<a href='../../DataUser/CyclostyleFile/" + bill.Url + "." + fileType + "'><img src='../../Img/Btn/save.gif' border=0/> 模板下载</a>";
 
             this.Ucsys1.Add(url + "</TD>");
             this.Ucsys1.AddTREnd();
@@ -468,7 +468,7 @@ namespace CCFlow.WF.Admin
             this.Title = nd.Name + " - " + "单据管理";  //单据管理
             this.Ucsys1.AddTable();
             if (this.RefNo == null)
-                this.Ucsys1.AddCaptionLeft("<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&DoType=New'><img src='../Img/Btn/New.gif' border=0/>新建</a> -<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&DoType=EditType'><img src='../Img/Btn/Edit.gif' border=0/>类别维护</a>");
+                this.Ucsys1.AddCaptionLeft("<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&DoType=New'><img src='../../Img/Btn/New.gif' border=0/>新建</a> -<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&DoType=EditType'><img src='../../Img/Btn/Edit.gif' border=0/>类别维护</a>");
             this.Ucsys1.AddTR();
             this.Ucsys1.AddTDTitle("IDX");
             this.Ucsys1.AddTDTitle("编号");
@@ -502,17 +502,17 @@ namespace CCFlow.WF.Admin
                     //}
                     fileUrl = "<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID +
                               "&DoType=Edit&RefNo=" + Bill.No +
-                              "'><img src='../Img/Btn/Edit.gif' border=0/编辑/a>|<a href='../../../DataUser/CyclostyleFile/" +
-                              Bill.Url + ".grf'><img src='../Img/Btn/Save.gif' border=0/> 模板下载</a>|<a href='javascript:openEidt(\"" + name + "\")'  ><img src='../Img/Btn/Edit.gif' />编辑模版</a>";
+                              "'><img src='../../Img/Btn/Edit.gif' border=0/编辑/a>|<a href='../../../DataUser/CyclostyleFile/" +
+                              Bill.Url + ".grf'><img src='../../Img/Btn/Save.gif' border=0/> 模板下载</a>|<a href='javascript:openEidt(\"" + name + "\")'  ><img src='../../Img/Btn/Edit.gif' />编辑模版</a>";
                 }
                 else
                 {
                     fileUrl = "<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID +
                             "&DoType=Edit&RefNo=" + Bill.No +
-                            "'><img src='../Img/Btn/Edit.gif' border=0/编辑/a>|<a href='../../DataUser/CyclostyleFile/" +
-                            Bill.Url + ".rtf'><img src='../Img/Btn/save.gif' border=0/> 模板下载</a>";
+                            "'><img src='../../Img/Btn/Edit.gif' border=0/编辑/a>|<a href='../../DataUser/CyclostyleFile/" +
+                            Bill.Url + ".rtf'><img src='../../Img/Btn/save.gif' border=0/> 模板下载</a>";
                 }
-                this.Ucsys1.AddTD("<img src='../Img/Btn/Word.gif' >" + Bill.Name);
+                this.Ucsys1.AddTD("<img src='../../Img/Btn/Word.gif' >" + Bill.Name);
                 this.Ucsys1.AddTD(fileUrl);
                 this.Ucsys1.AddTREnd();
             }

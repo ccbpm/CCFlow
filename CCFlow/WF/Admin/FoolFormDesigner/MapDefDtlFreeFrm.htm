@@ -132,6 +132,10 @@
                 ReloadDtlFrame();
             });
         }
+        //刷新.
+        function ReloadDtlFrame() {
+            window.location.href = window.location.href;
+        }
         function Esc() {
             if (event.keyCode == 27)
                 window.close();

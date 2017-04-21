@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="GB2312" />
+		<meta charset="UTF-8" />
 		<title>登录页面 - 驰骋工作流引擎</title>
 		<meta name="keywords" content="驰骋工作流引擎" />
 		<meta name="description" content="驰骋工作流引擎" />
@@ -35,12 +35,12 @@
 		<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
      
-    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
-    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../WF/Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
         $(function () {
@@ -321,7 +321,7 @@
 
 		<!--[if !IE]> -->
 		<script type="text/javascript">
-			window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		    window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
 		</script>
 
 		<!-- <![endif]-->
@@ -333,16 +333,16 @@
 <![endif]-->
 
 		<script type="text/javascript">
-			if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		    if ("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 		</script>
 
 		<!-- inline scripts related to this page -->
 
 		<script type="text/javascript">
-			function show_box(id) {
-			 jQuery('.widget-box.visible').removeClass('visible');
-			 jQuery('#'+id).addClass('visible');
-			}
+		    function show_box(id) {
+		        jQuery('.widget-box.visible').removeClass('visible');
+		        jQuery('#' + id).addClass('visible');
+		    }
 		</script>
 
 	<div style="display:none"></div>

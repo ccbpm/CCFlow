@@ -123,9 +123,9 @@ functrees.push({
 						            { Type: "Node", Id: "SearchByKey", ParentId: "FlowMonitor", Name: "全文检索", TType: "SEARCHBYKEY", DType: "-1", IconCls: "icon-SearchKey", Url: "../../KeySearch.aspx" },
 						            { Type: "Node", Id: "SynthSearch", ParentId: "FlowMonitor", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" },
 						            { Type: "Node", Id: "SynthAnalysis", ParentId: "FlowMonitor", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" },
-                                    { Type: "Node", Id: "SearchByFlow", ParentId: "FlowMonitor", Name: "实例增长分析", TType: "SEARCHBYFLOW", DType: "-1", IconCls: "icon-Grow", Url: "../FlowDB/InstanceGrow.aspx?anaTime=mouth" },
-                                    { Type: "Node", Id: "FlowRunning", ParentId: "FlowMonitor", Name: "逾期未完成实例", TType: "FLOWRUNNING", DType: "-1", IconCls: "icon-Warning", Url: "../FlowDB/InstanceWarning.aspx" },
-                                    { Type: "Node", Id: "FlowExpired", ParentId: "FlowMonitor", Name: "逾期已完成实例", TType: "FLOWEXPIRED", DType: "-1", IconCls: "icon-overtime", Url: "../FlowDB/InstanceOverTime.aspx?anaTime=mouth" },
+                                    //{ Type: "Node", Id: "SearchByFlow", ParentId: "FlowMonitor", Name: "实例增长分析", TType: "SEARCHBYFLOW", DType: "-1", IconCls: "icon-Grow", Url: "../FlowDB/InstanceGrow.aspx?anaTime=mouth" },
+                                    ///{ Type: "Node", Id: "FlowRunning", ParentId: "FlowMonitor", Name: "逾期未完成实例", TType: "FLOWRUNNING", DType: "-1", IconCls: "icon-Warning", Url: "../FlowDB/InstanceWarning.aspx" },
+                                    //{ Type: "Node", Id: "FlowExpired", ParentId: "FlowMonitor", Name: "逾期已完成实例", TType: "FLOWEXPIRED", DType: "-1", IconCls: "icon-overtime", Url: "../FlowDB/InstanceOverTime.aspx?anaTime=mouth" },
 						            { Type: "Node", Id: "DeleteLog", ParentId: "FlowMonitor", Name: "流程删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs" }
 						            //{ Type: "Node", Id: "Rptorder", ParentId: "FlowMonitor", Name: "数据订阅", TType: "DELETELOG", DType: "-1", IconCls: "icon-RptOrder", Url: "../CCBPMDesigner/App/RptOrder.aspx" }
 					              ]

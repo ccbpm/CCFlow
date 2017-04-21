@@ -334,8 +334,16 @@
                     sBuilder.Append("<td align=center nowrap ><img src='/WF/Img/TolistSta/0.png'class='Icon'/>&nbsp;<font color=green>正常</font>" + "</td>");
                 }
 
-
-                BP.WF.WFState ws = (BP.WF.WFState)dr["WFState"];
+                
+                BP.WF.WFState ws = BP.WF.WFState.Runing;
+                try
+                {
+                     ws = (BP.WF.WFState)dr["WFState"];
+                }
+                catch
+                {
+                }
+                
                 string lab = "";
                 switch (ws)
                 {

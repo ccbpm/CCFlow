@@ -92,7 +92,6 @@ namespace BP.WF.HttpHandler
 
            DataTable dtMain=  menus.ToDataTable();
            dtMain.TableName = "ClassicMenus";
-
            ds.Tables.Add(dtMain);
 
            BP.WF.XML.ClassicMenuAdvFuncs advMenms = new XML.ClassicMenuAdvFuncs();

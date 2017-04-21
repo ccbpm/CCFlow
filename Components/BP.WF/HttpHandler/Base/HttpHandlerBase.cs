@@ -47,11 +47,15 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
+                string err = "";
                 //返回执行错误的结果.
                 if (ex.InnerException != null)
-                    ctrl.context.Response.Write("err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.InnerException.Message + " \t\n @技术信息:" + ex.StackTrace);
+                    err = "err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.InnerException.Message + " \t\n @技术信息:" + ex.StackTrace;
                 else
-                    ctrl.context.Response.Write("err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.Message + " \t\n @技术信息:" + ex.StackTrace);
+                    err = "err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.Message + " \t\n @技术信息:" + ex.StackTrace;
+
+                //记录错误日志以方便分析
+                BP.DA.Log.DebugWriteError(err);
             }
         }
 

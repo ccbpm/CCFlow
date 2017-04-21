@@ -948,15 +948,19 @@ namespace BP.WF.HttpHandler
             ht.Add("FrmTreeName", md.FK_FormTreeText);
 
             //统计信息.
-            ht.Add("SumDataNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + md.PTable)); //数据量.
+            if (DBAccess.IsExitsObject(md.PTable) == true)
+                ht.Add("SumDataNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + md.PTable)); //数据量.
+            else
+                ht.Add("SumDataNum", 0); //数据量.
+
             ht.Add("SumAttrNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "'")); //字段数量.
             ht.Add("SumAttrFK", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "' AND LGType=2 ")); //外键.
             ht.Add("SumAttrEnum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "' AND LGType=1 ")); //外键.
 
-            ht.Add("MapFrmFrees", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFrees&PK=" + no); //自由表单属性.
-            ht.Add("MapFrmFools", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFools&PK=" + no); //傻瓜表单属性.
-            ht.Add("MapFrmExcels", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmExcels&PK=" + no); //Excel表单属性.
-            ht.Add("MapDataURLs", "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataURLs&PK=" + no);  //嵌入式表单属性.
+            ht.Add("MapFrmFrees", "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=" + no); //自由表单属性.
+            ht.Add("MapFrmFools", "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmFools&PK=" + no); //傻瓜表单属性.
+            ht.Add("MapFrmExcels", "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + no); //Excel表单属性.
+            ht.Add("MapDataURLs", "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapDataURLs&PK=" + no);  //嵌入式表单属性.
 
             return BP.DA.DataType.ToJsonEntityModel(ht);
         }

@@ -47,7 +47,7 @@ functrees.push({
 											{ Value: "FLOW", ColDefine: "DTYPE", Defines: [
                                                 { Value: "1", IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=2" },
                                                 { IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=1" }
-                                            ], LazyLoad: true, Nodes: [
+                                            ]/*, LazyLoad: true, Nodes: [
                                                 {
                                                  Type: "Node", Id: "RelatedFunction", ParentId: null, Name: "基础功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_flow"],
                                                     Nodes: [
@@ -110,7 +110,7 @@ functrees.push({
 						                                { Type: "Service", ServiceMethod: "GetBindingForms", MethodParams: { fk_flow: "@@fk_flow" }, ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null, IconCls: "icon-form", Url: "../AttrFlow/BindingForms.aspx?FK_MapData=`'@@id'.split('@')[0]`&FK_Flow=@@fk_flow" }
                                                         ]
                                                 }
-                                            ]
+                                            ]*/
 											}
 										  ]
 			},
@@ -152,7 +152,7 @@ functrees.push({
 											},
 											
                                           //  { Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID", LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
-                                            { Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/Home.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID", LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
+                                            { Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/Home.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID"/*, LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
 
                                                 { Type: "Node", Id: "RelatedFunction", ParentId: null, Name: "相关功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
@@ -180,7 +180,7 @@ functrees.push({
                                                         { Type: "Node", Id: "BasicData", ParentId: "TestFrmFunc", Name: "原始数据", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../CCFormDesigner/BasicData.htm?FK_MapData=@@fk_frm", },
                                                         ]
                                                 }
-                                           ]
+                                           ]*/
 											},
                                             { Value: "SRC", IconCls: "icon-src", MenuId: "mFormSrc" }
 										  ]

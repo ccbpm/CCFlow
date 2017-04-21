@@ -643,7 +643,7 @@ function GenerStructureTree(parentrootid, pnodeid, treeid) {
                 id: "DEPT_" + data[0].NO,
                 text: data[0].NAME,
                 state: "closed",
-                attributes: {TType: "DEPT", IsLoad: false},
+                attributes: { TType: "DEPT", IsLoad: false },
                 children: [{
                     text: "加载中..."
                 }]
@@ -655,6 +655,8 @@ function GenerStructureTree(parentrootid, pnodeid, treeid) {
                 ShowSubDepts(node, treeid);
             }
         });
+
+        $("#" + treeid).tree("expand", $("#" + treeid).tree("getChildren", "DEPT_" + data[0].NO)[0].target);
     });
 }
 

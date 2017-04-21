@@ -185,10 +185,10 @@ namespace BP.WF.HttpHandler
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);
             ht.Add("UserNo", WebUser.No);
+            ht.Add("UserName", WebUser.Name);
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }
-
         #endregion 登录界面.
 
         #region 草稿.

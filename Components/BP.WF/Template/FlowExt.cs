@@ -817,13 +817,13 @@ namespace BP.WF.Template
 
                 #region 流程监控.
 
-                rm = new RefMethod();
-                rm.Title = "监控面板";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Monitor.png";
-                rm.ClassMethodName = this.ToString() + ".DoDataManger_Welcome()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程监控";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "监控面板";
+                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Monitor.png";
+                //rm.ClassMethodName = this.ToString() + ".DoDataManger_Welcome()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "流程监控";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "流程查询";
@@ -833,13 +833,13 @@ namespace BP.WF.Template
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "节点列表";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/flows.png";
-                rm.ClassMethodName = this.ToString() + ".DoDataManger_Nodes()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程监控";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "节点列表";
+                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/flows.png";
+                //rm.ClassMethodName = this.ToString() + ".DoDataManger_Nodes()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "流程监控";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "综合查询";
@@ -941,21 +941,21 @@ namespace BP.WF.Template
         #endregion
 
         #region 流程监控.
-        public string DoDataManger_Welcome()
-        {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/App/OneFlow/Welcome.aspx?FK_Flow=" + this.No;
-        }
-        public string DoDataManger_Nodes()
-        {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/App/OneFlow/Nodes.aspx?FK_Flow=" + this.No;
-        }
+        //public string DoDataManger_Welcome()
+        //{
+        //    return SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/App/OneFlow/Welcome.aspx?FK_Flow=" + this.No;
+        //}
+        //public string DoDataManger_Nodes()
+        //{
+        //    return SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/App/OneFlow/Nodes.aspx?FK_Flow=" + this.No;
+        //}
         public string DoDataManger_Search()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
         public string DoDataManger_Group()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Group.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
 
         public string DoDataManger_InstanceGrowOneFlow()

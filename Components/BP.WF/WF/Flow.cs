@@ -5673,7 +5673,7 @@ namespace BP.WF
                     case "WF_Node": //导入节点信息.
                         foreach (DataRow dr in dt.Rows)
                         {
-                            BP.WF.Template.NodeSheet nd = new BP.WF.Template.NodeSheet();
+                            BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
 
                             BP.WF.Template.CC cc = new CC(); // 抄送相关的信息.
                             BP.WF.Template.FrmWorkCheck fwc = new FrmWorkCheck();

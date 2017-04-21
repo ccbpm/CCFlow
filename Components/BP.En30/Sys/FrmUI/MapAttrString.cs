@@ -241,7 +241,6 @@ namespace BP.Sys.FrmUI
         {
             return "/WF/Admin/FoolFormDesigner/EleBatch.aspx?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
         }
-
         public string DoOldVerAspx()
         {
             return "/WF/Admin/FoolFormDesigner/EditF.aspx?DoType=Edit&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;

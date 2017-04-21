@@ -285,7 +285,7 @@ namespace BP.WF
                     BP.Web.WebUser.SignInOfGener(emp);
                 }
 
-                BP.WF.Template.NodeSheet nd = new BP.WF.Template.NodeSheet();
+                BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
                 nd.NodeID = fk_node;
                 nd.Retrieve();
 

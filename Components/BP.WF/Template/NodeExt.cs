@@ -1118,11 +1118,11 @@ namespace BP.WF.Template
             BP.WF.Node nd = new BP.WF.Node(this.NodeID);
 
             if (nd.HisDeliveryWay != DeliveryWay.ByCCFlowBPM)
-                return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
+                return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
             //    return "节点访问规则您没有设置按照bpm模式，所以您能执行该操作。要想执行该操作请选择节点属性中节点规则访问然后选择按照bpm模式计算，点保存按钮。";
 
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
-         //   return null;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            //   return null;
         }
         public string DoTurn()
         {

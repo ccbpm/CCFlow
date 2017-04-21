@@ -365,7 +365,7 @@ namespace BP.WF
                 #region 把节点的toolbarExcel, word 信息放入mapdata
                 BP.WF.Template.NodeSheets nss = new Template.NodeSheets();
                 nss.RetrieveAll();
-                foreach (BP.WF.Template.NodeSheet ns in nss)
+                foreach (BP.WF.Template.NodeExt ns in nss)
                 {
                     ToolbarExcel te = new ToolbarExcel();
                     te.No = "ND" + ns.NodeID;

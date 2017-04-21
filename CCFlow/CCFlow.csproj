@@ -1017,6 +1017,8 @@
     <Content Include="WF\Admin\BindFrms.aspx" />
     <Content Include="WF\Admin\BindFrms.htm" />
     <Content Include="WF\Admin\BindFrmsFrmEnableRole.aspx" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
+    <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\content-background.jpg" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\css\ajaxfileupload.css" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\css\colorPicker_new.css" />
@@ -1737,6 +1739,7 @@
     <Content Include="WF\Admin\CondBySQL.aspx" />
     <Content Include="WF\Admin\CondByUrl.aspx" />
     <Content Include="WF\Admin\CondDept.aspx" />
+    <Content Include="WF\Admin\Condition.aspx" />
     <Content Include="WF\Admin\ConditionLine.aspx" />
     <Content Include="WF\Admin\ConditionSubFlow.aspx" />
     <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
@@ -8938,6 +8941,12 @@
     <Compile Include="WF\Admin\BindFrmsFrmEnableRole.aspx.designer.cs">
       <DependentUpon>BindFrmsFrmEnableRole.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.cs">
+      <DependentUpon>Welcome.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.designer.cs">
+      <DependentUpon>Welcome.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\Flows.aspx.cs">
       <DependentUpon>Flows.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9008,6 +9017,12 @@
     </Compile>
     <Compile Include="WF\Admin\CondDept.aspx.designer.cs">
       <DependentUpon>CondDept.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Condition.aspx.cs">
+      <DependentUpon>Condition.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Condition.aspx.designer.cs">
+      <DependentUpon>Condition.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Condition.Master.cs">
       <DependentUpon>Condition.Master</DependentUpon>

@@ -24,6 +24,8 @@ $(function () {
     InitContexMenu();
     //鼠标双击
     InitDbClick();
+
+    InitClick();
     //鼠标移动
     //InitonMouseMove();
     //初始节点元素
@@ -91,7 +93,7 @@ function InitContexMenu() {
     });
 }
 
-//画板双击事件绑定
+//画板单击事件绑定
 function InitDbClick() {
     $('#a').bind('dblclick', function (ev) {
         window.getSelection().removeAllRanges();
@@ -104,10 +106,24 @@ function InitDbClick() {
             ondbclickCallBackFun(figure);
             return;
         }
+        //看看有没有线
+        var connectorIndex = CONNECTOR_MANAGER.connectorGetByXY(x, y);
+        if (connectorIndex >= 0) {
+            $('#right').css('display', 'display');
+            $('#container').css('right','auto');
+            return;
+        }
         //打开表单属性.
         CCForm_Attr();
         
         return;
+    })
+}
+
+function InitClick() {
+    $('#a').bind('click', function () {
+        $('#right').css('display', 'none');
+        $('#container').css('right', '0px');
     })
 }
 
@@ -298,6 +314,12 @@ function showFigurePropertyWin(figure) {
     if (shap == 'iFrame') {
         var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.iFrames&PK=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '框架');
+        return;
+    }
+
+    if (shap == 'Label') {
+        $('#right').css('display', 'block');
+        $('#container').css('right', 'auto');
         return;
     }
 
@@ -742,6 +764,9 @@ function figure_MapAttr_Template(mapAttr) {
         f.CCForm_Shape = "TextBoxBoolean";
     } else if (mapAttr.UIContralType == 3) {//单选妞
         return;
+    } else {
+        alert(mapAttr)
+        console.log(mapAttr)
     }
 
     f.name = f.CCForm_Shape;
@@ -751,7 +776,6 @@ function figure_MapAttr_Template(mapAttr) {
     f.style.strokeStyle = FigureDefaults.strokeStyle;
     f.properties.push(new BuilderProperty('控件属性-' + f.CCForm_Shape, 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-
 
     for (var i = 0; i < CCForm_Control_Propertys[f.CCForm_Shape].length; i++) {
         var property = CCForm_Control_Propertys[f.CCForm_Shape][i];

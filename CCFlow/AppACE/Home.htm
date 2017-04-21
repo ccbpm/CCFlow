@@ -64,10 +64,10 @@ r<!--[if !IE]> -->
 
 
     <!-- 装载 ccbpm 程序-->
-    <script type="text/javascript" src="/WF/Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/QueryString.js"></script>
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
         $(function () {
@@ -91,8 +91,8 @@ r<!--[if !IE]> -->
 
                     var img = document.getElementById('UserICON');
 
-                    img.src = '/DataUser/UserIcon/' + data.UserNo + '.png';
-                    img.onerror = "this.src='/DataUser/ICON/CCFlow/LogBig.png'";
+                    img.src = '../DataUser/UserIcon/' + data.UserNo + '.png';
+                    img.onerror = "this.src='../DataUser/ICON/CCFlow/LogBig.png'";
 
                     document.title = data.SysName;
                     return;

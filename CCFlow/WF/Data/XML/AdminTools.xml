@@ -115,7 +115,7 @@
 
   <AdminTools>
     <ICON>../../Images/System/Admin.gif </ICON>
-    <URL> ../MethodLink.aspx</URL>
+    <URL> ../MethodLink.htm</URL>
     <Name>方法执行</Name>
     <DESC>方法执行</DESC>
     <DFor>开发人员</DFor>

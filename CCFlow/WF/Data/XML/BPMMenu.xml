@@ -27,7 +27,7 @@
     <Item No="0303" Name="数据源" Url="/WF/Comm/Sys/SFTableList.aspx" Img="Images/Menu/customers.png" />
     <Item No="0304" Name="编码表" Url="/WF/Comm/Sys/SFTableList.aspx" Img="Images/Menu/feed.png" />
     <Item No="0305" Name="JS校验库" Url="/WF/Comm/Sys/FuncLib.aspx" Img="Images/Menu/sitemap.png" />
-    <Item No="0306" Name="功能执行" Url="/WF/Comm/MethodLink.aspx" Img="Images/Menu/sitemap.png" />
+    <Item No="0306" Name="功能执行" Url="/WF/Comm/MethodLink.htm" Img="Images/Menu/sitemap.png" />
     <Item No="0307" Name="节假日设置" Url="/WF/Comm/Sys/Holiday.aspx" Img="Images/Menu/sitemap.png" />
     <Item No="0308" Name="预先审批权规则设置" Url="/WF/Admin/AttrNode/GetTask.htm" Img="Images/Menu/sitemap.png" />
     <Item No="0309" Name="文件上传" Url="/WF/Admin/FileUploadEUI.aspx" Img="Images/Menu/sitemap.png" /> 

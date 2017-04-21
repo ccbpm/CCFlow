@@ -1259,7 +1259,7 @@ namespace CCForm
                                                     imgUrl = dr["IMGURL"];
                                                 }
                                                 //本地图片
-                                                if (dr["SRCTYPE"] == 0)
+                                                if (dr["IMGSRCTYPE"] == 0)
                                                 {
                                                     img.SrcType = 0;
                                                     //判断图片路径是否修改
@@ -1273,7 +1273,7 @@ namespace CCForm
                                                         img.HisPng = png;
                                                     }
                                                 }
-                                                else if (dr["SRCTYPE"] == 1)//指定路径
+                                                else if (dr["IMGSRCTYPE"] == 1)//指定路径
                                                 {
                                                     img.SrcType = 1;
                                                     //判断图片路径不为空，并且不包含ccflow表达式
@@ -1845,7 +1845,7 @@ namespace CCForm
 
             dtImg.Columns.Add(new DataColumn("LINKURL", typeof(string)));
             dtImg.Columns.Add(new DataColumn("LINKTARGET", typeof(string)));
-            dtImg.Columns.Add(new DataColumn("SRCTYPE", typeof(int))); //图片来源类型.
+            dtImg.Columns.Add(new DataColumn("IMGSRCTYPE", typeof(int))); //图片来源类型.
             dtImg.Columns.Add(new DataColumn("IMGAPPTYPE", typeof(int))); //应用类型 0=图片，1签章..
             dtImg.Columns.Add(new DataColumn("Tag0", typeof(string)));
             dtImg.Columns.Add(new DataColumn("ISEDIT", typeof(int)));
@@ -2144,7 +2144,7 @@ namespace CCForm
 
                         drImg["LINKURL"] = img.LinkURL;
                         drImg["LINKTARGET"] = img.LinkTarget;
-                        drImg["SRCTYPE"] = img.SrcType.ToString();
+                        drImg["IMGSRCTYPE"] = img.SrcType.ToString();
 
                         drImg["IMGPATH"] = png.UriSource.ToString().Contains("DataUser") ? png.UriSource.ToString().Replace(Glo.BPMHost, "") : png.UriSource.ToString();
                         drImg["IMGURL"] = img.ImgURL;

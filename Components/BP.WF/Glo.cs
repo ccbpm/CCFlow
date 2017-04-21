@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20170223";
+        public static string Ver = "20170421";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -129,6 +129,7 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+            updataNote += "20170421.升级表单，给FrmImg中的ImgSrcType赋值 by:liuxianchen";
             updataNote += "20170217.影子字段";
             updataNote += "20161104.附件删除规则修复";
             updataNote += "20161101.升级表单，增加图片附件必填验证 by:liuxianchen";
@@ -520,6 +521,11 @@ namespace BP.WF
                 #region 升级Img
                 FrmImg img = new FrmImg();
                 img.CheckPhysicsTable();
+                #endregion
+
+                #region 判断Sys_FrmImg中ImgSrcType字段，从SrcType复制值，edited by liuxc,2017-4-21
+                DBAccess.RunSQL("UPDATE Sys_FrmImg SET ImgSrcType = SrcType WHERE ImgSrcType IS NULL");
+                DBAccess.RunSQL("UPDATE Sys_FrmImg SET ImgSrcType = 0 WHERE ImgSrcType IS NULL");
                 #endregion
 
                 #region 修复 mapattr UIHeight, UIWidth 类型错误.

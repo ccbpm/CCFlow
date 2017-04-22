@@ -2453,12 +2453,15 @@ function GenerWorkNode() {
 
             }
 
+            InitToNodeDDL();
+           alert(1)
 
+            Common.MaxLengthError();
 
-            //处理下拉框级联等扩展信息
+                //处理下拉框级联等扩展信息
                 AfterBindEn_DealMapExt();
 
-            //设置默认值
+                //设置默认值
                 for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
                     var mapAttr = workNodeData.Sys_MapAttr[j];
                     //添加 label
@@ -2470,36 +2473,6 @@ function GenerWorkNode() {
                         $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                     }
                 }
-            //绑定扩展附件
-                $('.divAth').bind('click', function (obj) {
-                    var keyOfEn = $(obj.target).data().target;
-                    var tbObj = $('#TB_' + keyOfEn);
-                    var divObj = $(obj.target);
-                    var atParamObj = AtParaToJson(tbObj.data().target);
-                    var athRefObj = atParamObj.AthRefObj;
-                    var divId = 'DIV_' + keyOfEn;
-                    var tbId = 'TB_' + keyOfEn;
-                    var ath = $.grep(workNodeData.Sys_FrmAttachment, function (value) {
-                        return value.MyPK == athRefObj;
-                    })
-                    if (ath.length > 0) {
-                        ath = ath[0];
-                        var src = "";
-                        if (pageData.IsReadonly)
-                            src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
-                        else
-                            src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
-                        $('#iframeAthForm').attr('src', src);
-                        atParamObj["tbId"] = tbId;
-                        atParamObj["divId"] = divId;
-                        $('#iframeAthForm').data(atParamObj);
-                        $('#athModal .modal-title').text("上传附件：" + $(obj.target).parent().prev().children('label').text());
-                        $('#athModal').modal().show();
-                    }
-                });
-            
-
-
                 showNoticeInfo();
 
                 showTbNoticeInfo();
@@ -2648,8 +2621,9 @@ function figure_MapAttr_Template( mapAttr) {
         //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
         eleHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'></input>";
     }
-    eleHtml=$(eleHtml);
-    eleHtml.css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight).css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
+    eleHtml = $('<div>' + eleHtml + '</div>');
+    eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
+    eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
     return eleHtml;
 }
 
@@ -2702,7 +2676,7 @@ function figure_Template_HyperLink(frmLin) {
 function figure_Template_Image(frmImage) {
     var eleHtml = '';
     eleHtml = '<image/>';
-    eleHtml = $(eleHtml);
+    eleHtml = $('<div>' + eleHtml + '</div>');
     eleHtml.attr("src", frmImage.ImgPath).attr('href', frmImage.LinkURL).attr('_target', frmImage.LinkTarget);
     eleHtml.css('position', 'absolute').css('top', frmImage.Y).css('left', frmImage.X).css('width', frmImage.W).css('height', frmImage.H);
     return eleHtml;
@@ -2715,7 +2689,19 @@ function figure_Template_ImageAth(frmImageAth) {
 
 //初始化 附件
 function figure_Template_Attachment(frmAttachment) {
-    return "";
+    var eleHtml = '';
+    var ath=frmAttachment;
+    var src = "";
+    if (pageData.IsReadonly)
+        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+    else
+        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+
+    eleHtml += '<div>' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    eleHtml=$(eleHtml);
+    eleHtml.css('position', 'absolute').css('top', eleHtml.Y).css('left', eleHtml.X).css('width', eleHtml.W).css('height', eleHtml.H);
+       
+    return eleHtml
 }
 
 function connector_Template_Line(frmLine) {
@@ -2734,7 +2720,12 @@ function connector_Template_Line(frmLine) {
 
 //初始化从表
 function figure_Template_Dtl(frmDtl) {
-    return "";
+    var eleHtml = '';
+    var src = "/WF/CCForm/Dtl.aspx?s=2&EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
+    src += "&r=q" + paras;
+    eleHtml += '<div >' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    eleHtml.css('position', 'absolute').css('top', frmDtl.Y).css('left', frmDtl.X).css('width', frmDtl.W).css('height', frmDtl.H);
+    return eleHtml;
 }
 
 //初始化轨迹图 审核组件 子流程 子线程
@@ -2742,5 +2733,138 @@ function figure_Template_FigureCom(figureCom) {
     return "";
 }
 
+//初始化从表
+function figure_Template_IFrame(frmIframe) {
+    var frameHtml = '';
+    var fram = frmIframe;
+    //将 中文的  冒号转成英文的冒号
+    var src = fram.URL.replace(new RegExp(/(：)/g), ':');
+    var params = '&FID=' + pageData.FID;
+    params += '&WorkID=' + groupFiled.OID;
+
+
+    if (src.indexOf("?") > 0) {
+        var params = getQueryStringFromUrl(src);
+        if (params != null && params.length > 0) {
+            $.each(params, function (i, param) {
+                if (param.indexOf('@') == 0) {//是需要替换的参数
+                    paramArr = param.split('=');
+                    if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                        if (paramArr[1].indexOf('@WebUser.') == 0) {
+                            params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr('@WebUser.'.length)];
+                        }
+                        if (workNodeData.MainTable[0][paramArr[1].substr(1)] != undefined) {
+                            params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr(1)];
+                        }
+
+
+                        //使用URL中的参数
+                        var pageParams = getQueryString();
+                        var pageParamObj = {};
+                        $.each(pageParams, function (i, pageParam) {
+                            if (pageParam.indexOf('@') == 0) {
+                                var pageParamArr = pageParam.split('=');
+                                pageParamObj[pageParamArr[0].substring(1, pageParamArr[0].length)] = pageParamArr[1];
+                            }
+                        });
+                        var result = "";
+                        //通过MAINTABLE返回的参数
+                        for (var ele in workNodeData.MainTable[0]) {
+                            if (paramArr[0].substring(1) == ele) {
+                                result = workNodeData.MainTable[0][ele];
+                                break;
+                            }
+                        }
+                        //通过URL参数传过来的参数
+                        for (var pageParam in pageParamObj) {
+                            if (pageParam == paramArr[0].substring(1)) {
+                                result = pageParamObj[pageParam];
+                                break;
+                            }
+                        }
+
+                        if (result != '') {
+                            params[i] = paramArr[0].substring(1) + "=" + unescape(result);
+                        }
+                    }
+                }
+            });
+            src = src.substr(0, src.indexOf('?')) + "?" + params.join('&');
+        }
+        src += "&IsReadOnly=0";
+    }
+    else {
+        src += "?IsReadOnly=0";
+    }
+    frameHtml += '<div>' + "<iframe  style='width:"+fram.W+"; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>" + '</div>';
+    frameHtml = $(frameHtml);
+    frameHtml.css('position', 'absolute').css('top', frmIframe.Y).css('left', frmIframe.X).css('width', frmIframe.W).css('height', frmIframe.H);
+    return frameHtml;
+}
+
+/*
+switch (groupFiled.CtrlType) {
+    case "FWC": //审核组件.
+        var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
+        var paras = pageParamToUrl();
+        if (paras.indexOf('OID') < 0) {
+            paras += "&OID=" + pageData.WorkID;
+        }
+
+
+        if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
+            paras += "&DoType=View";
+        }
+        src += "&r=q" + paras;
+        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+        break;
+    case "SubFlow": //子流程..
+        var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
+        var paras = pageParamToUrl();
+        if (paras.indexOf('OID') < 0) {
+            paras += "&OID=" + pageData.WorkID;
+        }
+        if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
+            paras += "&DoType=View";
+        }
+        src += "&r=q" + paras;
+        src += "&IsShowTitle=0";
+        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+        break;
+    case "Track": //轨迹图.
+        var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
+        //var paras = pageParamToUrl();
+        //if (paras.indexOf('OID') < 0) {
+        //    paras += "&OID=" + pageData.WorkID;
+        //}
+        src += '&FK_Flow=' + pageData.FK_Flow;
+        src += '&FK_Node=' + pageData.FK_Node;
+        src += '&WorkID=' + pageData.WorkID;
+        src += '&FID=' + pageData.FID;
+        //先临时写成这样的
+        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:500px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+
+        break;
+    case "Thread": //子线程.
+        var src = "/WF/WorkOpt/Thread.aspx?s=2";
+        var paras = pageParamToUrl();
+        if (paras.indexOf('OID') < 0) {
+            paras += "&OID=" + pageData.WorkID;
+        }
+        src += "&r=q" + paras;
+        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+        break;
+    case "FTC": //流转自定义.  有问题
+        var src = "/WF/WorkOpt/FTC.aspx?s=2";
+        var paras = pageParamToUrl();
+        if (paras.indexOf('OID') < 0) {
+            paras += "&OID=" + pageData.WorkID;
+        }
+        src += "&r=q" + paras;
+        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+        break;
+    default:
+        break;
+}*/
 var colVisibleJsonStr = ''
-var jsonStr = '"{"Sys_GroupField":[{"OID":4696,"Lab":"表单信息","EnName":"ND7501","Idx":1,"GUID":"","CtrlType":"","CtrlID":"","AtPara":""}],"Sys_Enum":[{"MyPK":"IsAppend_CH_0","Lab":"否","EnumKey":"IsAppend","IntKey":0,"Lang":"CH"},{"MyPK":"IsAppend_CH_1","Lab":"是","EnumKey":"IsAppend","IntKey":1,"Lang":"CH"}],"Sys_MapData":[{"No":"ND7501","Name":"版本单提交","FrmW":900,"FrmH":1200,"TableWidth":800,"TableHeight":900,"TableCol":4}],"Sys_MapAttr":[{"MyPK":"ND7501_Title","FK_MapData":"ND7501","KeyOfEn":"Title","Name":"标题","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":251.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":1,"UIIsLine":1,"UIIsInput":0,"Idx":-1,"IsSigan":0,"X":171.2,"Y":68.4,"GUID":"","Tag":"","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_BillNo","FK_MapData":"ND7501","KeyOfEn":"BillNo","Name":"申请单号","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100.0,"UIHeight":44.6,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"Idx":1,"IsSigan":0,"X":557.87,"Y":52.21,"GUID":"","Tag":"","EditType":0,"AtPara":"@IsRichText=0@Tip=@IsSupperText=0@FontSize=12","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_SystemName","FK_MapData":"ND7501","KeyOfEn":"SystemName","Name":"系统名称","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":157.61,"UIHeight":51.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"Idx":3,"IsSigan":0,"X":715.49,"Y":133.82,"GUID":"","Tag":"","EditType":0,"AtPara":"@IsRichText=0@Tip=@IsSupperText=0@FontSize=12","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_VesionState","FK_MapData":"ND7501","KeyOfEn":"VesionState","Name":"发布单状态","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":273.62,"UIHeight":75.81,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"Idx":6,"IsSigan":0,"X":117.01,"Y":461.86,"GUID":"","Tag":"","EditType":0,"AtPara":"@IsRichText=0@Tip=@IsSupperText=0@FontSize=12","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_IsAotoMate","FK_MapData":"ND7501","KeyOfEn":"IsAotoMate","Name":"是否自动化","DefVal":"0","UIContralType":1,"MyDataType":2,"LGType":1,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"IsAppend","UIRefKey":"NO","UIRefKeyText":"NAME","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"Idx":8,"IsSigan":0,"X":521.87,"Y":127.42,"GUID":"","Tag":"","EditType":0,"AtPara":"@IsEnableJS=0@RBShowModel=0@FontSize=12","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_DispatchDate","FK_MapData":"ND7501","KeyOfEn":"DispatchDate","Name":"调度会时间","DefVal":"@RDT","UIContralType":0,"MyDataType":7,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"Idx":11,"IsSigan":0,"X":520.27,"Y":174.62,"GUID":"","Tag":"","EditType":0,"AtPara":"@Tip=@FontSize=12","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_Summary","FK_MapData":"ND7501","KeyOfEn":"Summary","Name":"上板摘要","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":250.0,"UIHeight":46.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"Idx":14,"IsSigan":0,"X":432.26,"Y":235.43,"GUID":"","Tag":"","EditType":0,"AtPara":"@IsRichText=0@Tip=@IsSupperText=0@FontSize=12","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_Reason","FK_MapData":"ND7501","KeyOfEn":"Reason","Name":"上版原因","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":500.0,"UIHeight":46.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":1,"UIIsEnable":1,"UIIsLine":0,"UIIsInput":0,"Idx":16,"IsSigan":0,"X":108.21,"Y":357.05,"GUID":"","Tag":"","EditType":0,"AtPara":"@IsRichText=0@Tip=@IsSupperText=0@FontSize=12","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_Rec","FK_MapData":"ND7501","KeyOfEn":"Rec","Name":"发起人","DefVal":"@WebUser.No","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_CDT","FK_MapData":"ND7501","KeyOfEn":"CDT","Name":"发起时间","DefVal":"@RDT","UIContralType":0,"MyDataType":7,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"1","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_Emps","FK_MapData":"ND7501","KeyOfEn":"Emps","Name":"Emps","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_FID","FK_MapData":"ND7501","KeyOfEn":"FID","Name":"FID","DefVal":"0","UIContralType":0,"MyDataType":2,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_FK_Dept","FK_MapData":"ND7501","KeyOfEn":"FK_Dept","Name":"操作员部门","DefVal":"","UIContralType":1,"MyDataType":1,"LGType":2,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"Port_Dept","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_FK_NY","FK_MapData":"ND7501","KeyOfEn":"FK_NY","Name":"年月","DefVal":"","UIContralType":0,"MyDataType":1,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_MyNum","FK_MapData":"ND7501","KeyOfEn":"MyNum","Name":"个数","DefVal":"1","UIContralType":0,"MyDataType":2,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_OID","FK_MapData":"ND7501","KeyOfEn":"OID","Name":"OID","DefVal":"0","UIContralType":0,"MyDataType":2,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"","EditType":2,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null},{"MyPK":"ND7501_RDT","FK_MapData":"ND7501","KeyOfEn":"RDT","Name":"更新时间","DefVal":"@RDT","UIContralType":0,"MyDataType":7,"LGType":0,"UIWidth":100.0,"UIHeight":23.0,"UIBindKey":"","UIRefKey":"","UIRefKeyText":"","UIVisible":0,"UIIsEnable":0,"UIIsLine":0,"UIIsInput":0,"Idx":999,"IsSigan":0,"X":5.0,"Y":5.0,"GUID":"","Tag":"1","EditType":1,"AtPara":"","ExtDefVal":null,"ExtDefValText":null,"MinLen":null,"MaxLen":null,"ExtRows":null,"IsRichText":null,"IsSupperText":null,"Tip":null,"ColSpan":null,"ColSpanText":null,"GroupID":"4696","GroupIDText":null}],"Sys_MapExt":[],"Sys_FrmLine":[{"MyPK":"LE_1_ND7501","FK_MapData":"ND7501","X1":81.55,"X2":718.82,"Y1":80.0,"Y2":80.0,"BorderColor":"Black","BorderWidth":2.0},{"MyPK":"LE_2_ND7501","FK_MapData":"ND7501","X1":81.82,"X2":81.82,"Y1":40.0,"Y2":480.91,"BorderColor":"Black","BorderWidth":2.0},{"MyPK":"LE_3_ND7501","FK_MapData":"ND7501","X1":81.82,"X2":720.0,"Y1":481.82,"Y2":481.82,"BorderColor":"Black","BorderWidth":2.0},{"MyPK":"LE_4_ND7501","FK_MapData":"ND7501","X1":83.36,"X2":717.91,"Y1":40.91,"Y2":40.91,"BorderColor":"Black","BorderWidth":2.0},{"MyPK":"LE_5_ND7501","FK_MapData":"ND7501","X1":83.36,"X2":717.91,"Y1":120.91,"Y2":120.91,"BorderColor":"Black","BorderWidth":2.0},{"MyPK":"LE_6_ND7501","FK_MapData":"ND7501","X1":719.09,"X2":719.09,"Y1":40.0,"Y2":482.73,"BorderColor":"Black","BorderWidth":2.0}],"Sys_FrmLink":[],"Sys_FrmBtn":[],"Sys_FrmImg":[{"MyPK":"Img_1_ND7501","FK_MapData":"ND7501","ImgAppType":0,"X":579.26,"Y":-2.55,"H":40.0,"W":137.0,"ImgURL":"/ccform;component/Img/LogoBig.png","ImgPath":"/CCFormDesigner;component/Img/Logo/CCFlow/LogoBig.png","LinkURL":"http://ccflow.org","LinkTarget":"_blank","GUID":"","Tag0":"","SrcType":0,"IsEdit":1,"Name":"","EnPK":"","ImgSrcType":null}],"Sys_FrmLab":[{"MyPK":"LB_1_ND7501","FK_MapData":"ND7501","Text":"填写xxxx申请单","X":688.55,"Y":258.7,"FontColor":"#FF000000","FontName":"Portable User Interface","FontSize":23,"FontStyle":"Normal","FontWeight":"normal","IsBold":0,"IsItalic":0},{"MyPK":"LB_2_ND7501","FK_MapData":"ND7501","Text":"Made&nbsp;by&nbsp;ccform","X":605.0,"Y":490.0,"FontColor":"#FF000000","FontName":"Portable User Interface","FontSize":14,"FontStyle":"Normal","FontWeight":"","IsBold":0,"IsItalic":0}],"Sys_FrmRB":[],"Sys_FrmEle":[],"Sys_MapFrame":[],"Sys_FrmAttachment":[],"Sys_FrmImgAth":[],"Sys_MapDtl":[],"MainTable":[{"Title":"系统管理室-zhhujie,胡捷在2017-04-16 09:20发起.","BillNo":"","SystemName":"","VesionState":"","IsAotoMate":0,"IsAotoMateText":"否","DispatchDate":"2017-04-11 23:29","Summary":"","Reason":"","Rec":"zhhujie","CDT":"2017-04-16 09:20","Emps":"zhhujie","FID":0,"FK_Dept":"0001.02.000000001091","FK_DeptText":"系统管理室","FK_NY":"2017-04","MyNum":1,"OID":37533,"RDT":"2017-04-16 09:20"}],"AlertMsg":[],"WF_GenerWorkFlow":[],"WF_Node":[{"NodeID":7501,"Name":"版本单提交","Step":1,"FK_Flow":"075","CheckNodes":null,"DeliveryWay":14,"FWCSta":1,"FWCShowModel":1,"FWCType":0,"FWCNodeName":"","FWCAth":0,"FWCTrackEnable":1,"FWCListEnable":1,"FWCIsShowAllStep":0,"FWCOpLabel":"审核","FWCDefInfo":"同意","SigantureEnabel":0,"FWCIsFullInfo":1,"FWC_X":22.6,"FWC_Y":17.0,"FWC_H":300.0,"FWC_W":400.0,"FWCFields":"","Tip":"","IsExpSender":0,"DeliveryParas":"","WhoExeIt":0,"TurnToDeal":0,"TurnToDealDoc":"","ReadReceipts":0,"CondModel":0,"CancelRole":0,"BatchRole":0,"BatchListCount":12,"BatchParas":"","IsTask":1,"IsRM":1,"DTFrom":"2016-08-03 13:06","DTTo":"2016-08-03 13:06","IsBUnit":0,"FormType":1,"NodeFrmID":"","FormUrl":"http://","FocusField":"上版原因:@Reason","SaveModel":0,"RunModel":0,"SubThreadType":0,"PassRate":100.0,"SubFlowStartWay":0,"SubFlowStartParas":"","TodolistModel":0,"BlockModel":0,"BlockExp":"","BlockAlert":"","IsAllowRepeatEmps":0,"IsGuestNode":0,"AutoJumpRole0":0,"AutoJumpRole1":0,"AutoJumpRole2":0,"WhenNoWorker":0,"SendLab":"发送","SendJS":"","SaveLab":"保存","SaveEnable":1,"ThreadLab":"子线程","ThreadEnable":0,"ThreadKillRole":0,"SubFlowLab":"子流程","SubFlowCtrlRole":0,"JumpWayLab":"跳转","JumpWay":0,"JumpToNodes":"","ReturnLab":"退回","ReturnRole":0,"IsBackTracking":0,"ReturnField":"","CCLab":"抄送","CCRole":0,"CCWriteTo":0,"ShiftLab":"移交","ShiftEnable":0,"DelLab":"删除","DelEnable":0,"EndFlowLab":"结束流程","EndFlowEnable":0,"PrintDocLab":"打印单据","PrintDocEnable":0,"TrackLab":"轨迹","TrackEnable":0,"HungLab":"挂起","HungEnable":0,"SelectAccepterLab":"接受人","SelectAccepterEnable":0,"SearchLab":"查询","SearchEnable":0,"WorkCheckLab":"审核","WorkCheckEnable":0,"BatchLab":"批处理","BatchEnable":0,"AskforLab":"加签","AskforEnable":0,"TCLab":"流转自定义","TCEnable":0,"WebOffice":"公文","WebOfficeEnable":0,"PRILab":"重要性","PRIEnable":0,"CHLab":"节点时限","CHEnable":0,"FocusLab":"关注","FocusEnable":0,"TSpanDay":0.0,"TSpanHour":8.0,"WarningDay":0.0,"WarningHour":4.0,"TCent":2.0,"CHWay":0,"IsEval":0,"OutTimeDeal":0,"DoOutTime":"","DoOutTimeCond":"","SFSta":0,"SFShowModel":1,"SFCaption":"","SFDefInfo":"","SFActiveFlows":"","SFFields":"","SF_X":0.0,"SF_Y":0.0,"SF_H":0.0,"SF_W":0.0,"OfficeOpen":"打开本地","OfficeOpenEnable":0,"OfficeOpenTemplate":"打开模板","OfficeOpenTemplateEnable":0,"OfficeSave":"保存","OfficeSaveEnable":1,"OfficeAccept":"接受修订","OfficeAcceptEnable":0,"OfficeRefuse":"拒绝修订","OfficeRefuseEnable":0,"OfficeOver":"套红按钮","OfficeOverEnable":0,"OfficeMarks":1,"OfficeReadOnly":0,"OfficePrint":"打印按钮","OfficePrintEnable":0,"OfficeSeal":"签章按钮","OfficeSealEnabel":0,"OfficeInsertFlow":"插入流程","OfficeInsertFlowEnabel":0,"OfficeNodeInfo":0,"OfficeReSavePDF":0,"OfficeDownLab":"下载","OfficeIsDown":0,"OfficeIsMarks":1,"OfficeTemplate":"","OfficeIsParent":1,"OfficeIsTrueTH":0,"OfficeTHTemplate":"","MPhone_WorkModel":0,"MPhone_SrcModel":0,"MPad_WorkModel":0,"MPad_SrcModel":0,"SelectorDBShowWay":0,"SelectorModel":5,"SelectorP1":"","SelectorP2":"","ICON":"前台","NodeWorkType":1,"FlowName":"版本单管理","FK_FlowSort":"","FK_FlowSortT":"","FrmAttr":"","TAlertRole":0,"TAlertWay":0,"WAlertRole":0,"WAlertWay":0,"Doc":"","ReturnReasonsItems":"","ReturnAlert":"","IsCanRpt":1,"IsCanOver":0,"IsSecret":0,"IsCanDelFlow":0,"IsHandOver":0,"NodePosType":0,"IsCCFlow":0,"HisStas":"@51","HisDeptStrs":"@51","HisToNDs":"@7502","HisBillIDs":"","HisSubFlows":"","PTable":"","ShowSheets":"","GroupStaNDs":"@7501","X":200,"Y":150,"AtPara":"","DocLeftWord":"","DocRightWord":"","AutoRunEnable":0,"AutoRunParas":"","CCIsStations":0,"CCIsDepts":0,"CCIsEmps":0,"CCIsSQLs":0,"CCCtrlWay":0,"CCSQL":"","CCTitle":"","CCDoc":"","SelfParas":"","OfficeOpenLab":"打开本地","OfficeOpenTemplateLab":"打开模板","OfficeSaveLab":"保存","OfficeAcceptLab":"接受修订","OfficeRefuseLab":"拒绝修订","OfficeOverLab":"套红","OfficeMarksEnable":1,"OfficePrintLab":"打印","OfficeSealLab":"签章","OfficeSealEnable":0,"OfficeInsertFlowLab":"插入流程","OfficeInsertFlowEnable":0,"OfficeDownEnable":0,"OfficeTHEnable":0,"FWCLab":"审核信息","SFLab":"子流程","FrmThreadLab":"子线程","FrmThreadSta":1,"FrmThread_X":5.0,"FrmThread_Y":5.0,"FrmThread_H":300.0,"FrmThread_W":400.0,"FrmTrackLab":"轨迹","FrmTrackSta":1,"FrmTrack_X":5.0,"FrmTrack_Y":5.0,"FrmTrack_H":300.0,"FrmTrack_W":400.0,"FTCLab":"流转自定义","FTCSta":1,"FTCWorkModel":0,"FTC_X":5.0,"FTC_Y":5.0,"FTC_H":300.0,"FTC_W":400.0,"SFShowCtrl":0,"SubFlowEnable":0,"SFDeleteRole":0,"SFOpenType":0,"ThreadIsCanDel":0,"ThreadIsCanShift":0,"FWCIsShowTruck":0,"TimeLimit":2.0,"TWay":0,"AccepterDBSort":0}],"Track":[{"MyPK":1154884557,"ActionType":22,"ActionTypeText":"审核","FID":0,"WorkID":37533,"NDFrom":7501,"NDFromT":"版本单提交","NDTo":7501,"NDToT":"版本单提交","EmpFrom":"zhhujie","EmpFromT":"胡捷","EmpTo":"zhhujie","EmpToT":"胡捷","RDT":"2017-04-13 20:43:36","WorkTimeSpan":0.0,"Msg":"同意","NodeData":"","Exer":"(zhhujie,胡捷)","Tag":"37533_7501_37533_0_zhhujie"}]}"';
+var jsonStr = '';

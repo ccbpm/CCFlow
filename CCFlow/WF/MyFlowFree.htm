@@ -4,7 +4,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="utf-8" />
     <title></title>
-    <script src="Scripts/JavaScript1.js"></script>
+    <!--<script src="Scripts/JavaScript1.js"></script>-->
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
 
     <script src="./Comm/JScript.js" type="text/javascript"></script>
@@ -131,6 +131,9 @@
             position: absolute;
             top: 56px;
             left: 50px;
+
+            margin-left:auto !important;
+            margin-right:auto !important;
         }
 
         .navbars {
@@ -191,6 +194,10 @@
         float:none;
         width:auto;
         }
+
+        input[type=text], select ,textarea, iframe[src*="AttachmentUpload.aspx"]{
+        margin:4px 0px !important;
+        }
     </style>
 
     <!--杨玉慧 -->
@@ -231,17 +238,17 @@
                 var move;
                 $("#nav").css("top", top);
             }
-            nav.init();
-            $(".navbars").css("margin-top", ($(window).height() - $(".navbars").height()) / 2);
-            if (navigator.userAgent.indexOf('Chrome') >= 0) {
-                $(".navbars i").click(function () {
-                    $("#nav").removeClass("s");
-                });
-                $("#nav").bind("mouseover", function () {
-                    $("#nav").addClass("s");
-                    $("#nav").css("top", "30px");
-                });
-            }
+            //nav.init();
+            //$(".navbars").css("margin-top", ($(window).height() - $(".navbars").height()) / 2);
+            //if (navigator.userAgent.indexOf('Chrome') >= 0) {
+            //    $(".navbars i").click(function () {
+            //        $("#nav").removeClass("s");
+            //    });
+            //    $("#nav").bind("mouseover", function () {
+            //        $("#nav").addClass("s");
+            //        $("#nav").css("top", "30px");
+            //    });
+            //}
 
             $('#btnCloseMsg').bind('click', function () {
                 $('.Message').hide();
@@ -258,36 +265,15 @@
         <button type="button" id="btnCloseMsg" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
         <div id='Message'></div>
     </div>
-    <!--分组导航-->
-    <div class="navbars" style="display: none;">
-        <div style="width: 100%; height: 30px; position: absolute; z-index: 10; background: #fff;">
-            <i class="top_disabled"></i>
-        </div>
-        <div style="width: 100%; height: 30px; position: absolute; z-index: 10; background: #fff; bottom: 0px;">
-            <i class="bottom"></i>
-        </div>
-        <ul class="pageScroll left" id="nav"></ul>
-    </div>
 
-    <!--轨迹导航-->
-    <ul class="pageScroll left" id="navTrackList" style="display: none;"></ul>
-    <div id="divTrack"></div>
-    <div id="divCurrentForm" name="track13" style="background: #E3E7F4; position: relative;">
-        <!--标题-->
-        <div id="header">
-            <b></b><span></span>
-            <div id="showCol">
-                <input type="radio" name="showCol" id="rdShow4" value="4" /> <label for="rdShow4">4列展示</label>
-                <input type="radio" value="8" id="rdShow8" name="showCol" /> <label for="rdShow8">8列展示</label>
-            </div>
+    <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
+        <!--底部功能按钮 发送、移交-->
+        <div id="topToolBar" style="text-align:left;display: block;margin:0px auto;height:50px;background:rgb(157, 159, 175);padding-top:5px;" class="Bar">
         </div>
         <!--上半部分表单-->
-        <div id="topContentDiv" class="row" style="padding: 0px 5px;">
-            <i></i>
+        <div id="topContentDiv" class="row" style="padding: 20px 5px;margin:0px auto;">
+            <i style="display:none;"></i>
             <div id="contentDiv">
-                <!--底部功能按钮 发送、移交-->
-                <div id="topToolBar" style="display: block;float:right;" class="Bar">
-                </div>
                 <form id="divCCForm" action="MyFlow.ashx?method=login" method="post">
                     <!--LODOP_OB 先放着 不知道具体是什么-->
                     <div>
@@ -323,10 +309,10 @@
                     <!--DIVINFO-->
                     <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; align: left'></div>
                 </form>
-                <!--底部功能按钮 发送、移交-->
-                <div id="bottomToolBar" style="display: none;" class="Bar">
-                </div>
             </div>
+        </div>
+        <!--底部功能按钮 发送、移交-->
+        <div id="bottomToolBar" style="display: none;height:50px;width:100%;background:rgb(157, 159, 175);padding-top:5px;" class="Bar">
         </div>
     </div>
     <!--杨玉慧加 暂时解决POP窗不好用的问题-->
